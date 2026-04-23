@@ -446,6 +446,18 @@ describe('Test users admin API validators', function () {
       })
     })
 
+    it('Should fail to update user role for a moderator', async function () {
+      const fields = { role: UserRole.MODERATOR }
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + userId,
+        token: moderatorToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
     it('Should succeed to update a user with a moderator', async function () {
       const fields = {
         videoQuota: 42
@@ -460,12 +472,12 @@ describe('Test users admin API validators', function () {
       })
     })
 
-    it('Should succeed with the correct params', async function () {
+    it('Should succeed with the correct params for an admin', async function () {
       const fields = {
         email: 'email@example.com',
         emailVerified: true,
         videoQuota: 42,
-        role: UserRole.USER
+        role: UserRole.MODERATOR
       }
 
       await makePutBodyRequest({
