@@ -92,21 +92,26 @@ export {
 async function processTorrentImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportTorrentPayload) {
   logger.info('Processing torrent video import in job %s.', job.id)
 
-  const options = { type: payload.type, generateTranscription: payload.generateTranscription, videoImportId: payload.videoImportId }
-
   const target = {
     torrentName: videoImport.torrentName
       ? getSecureTorrentName(videoImport.torrentName)
       : undefined,
     uri: videoImport.magnetUri
   }
-  return processFile(() => downloadWebTorrentVideo(target, JOB_TTL['video-import']), videoImport, options)
+
+  const user = await UserModel.loadById(videoImport.userId)
+
+  return processFile({
+    downloader: () => downloadWebTorrentVideo(target, JOB_TTL['video-import']),
+    videoImport,
+    type: payload.type,
+    generateTranscription: payload.generateTranscription,
+    user
+  })
 }
 
 async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportYoutubeDLPayload) {
   logger.info('Processing youtubeDL video import in job %s.', job.id)
-
-  const options = { type: payload.type, generateTranscription: payload.generateTranscription, videoImportId: videoImport.id }
 
   const youtubeDL = new YoutubeDLWrapper(
     videoImport.targetUrl,
@@ -114,11 +119,17 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
     CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
   )
 
-  return processFile(
-    () => youtubeDL.downloadVideo(payload.fileExt, JOB_TTL['video-import']),
+  const user = await UserModel.loadById(videoImport.userId)
+
+  return processFile({
+    downloader: () => {
+      return youtubeDL.downloadVideo({ fileExt: payload.fileExt, timeout: JOB_TTL['video-import'], userLanguage: user.getLanguage() })
+    },
     videoImport,
-    options
-  )
+    type: payload.type,
+    generateTranscription: payload.generateTranscription,
+    user
+  })
 }
 
 async function getVideoImportOrDie (payload: VideoImportPayload) {
@@ -138,12 +149,15 @@ async function getVideoImportOrDie (payload: VideoImportPayload) {
   return videoImport
 }
 
-type ProcessFileOptions = {
+async function processFile (options: {
+  downloader: () => Promise<string>
+  videoImport: MVideoImportDefault
+  user: MUserId
   type: VideoImportYoutubeDLPayloadType | VideoImportTorrentPayloadType
   generateTranscription: boolean
-  videoImportId: number
-}
-async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
+}) {
+  const { downloader, videoImport, user, type, generateTranscription } = options
+
   let tmpVideoPath: string
   let videoFile: MVideoFile
 
@@ -153,7 +167,6 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     // Get information about this video
     const stats = await stat(tmpVideoPath)
-    const user = await UserModel.loadByVideoId(videoImport.videoId)
 
     const isAble = await isUserQuotaValid({ channelUserId: user.id, uploadSize: stats.size })
     if (isAble === false) {
@@ -172,7 +185,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     videoFile = await buildNewFile({ mode: 'web-video', ffprobe, path: tmpVideoPath })
     videoFile.videoId = videoImport.videoId
 
-    const hookName = options.type === 'youtube-dl'
+    const hookName = type === 'youtube-dl'
       ? 'filter:api.video.post-import-url.accept.result'
       : 'filter:api.video.post-import-torrent.accept.result'
 
@@ -254,7 +267,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
         video,
         videoFile,
         user: videoImport.User,
-        generateTranscription: options.generateTranscription
+        generateTranscription
       })
     } finally {
       videoFileLockReleaser()

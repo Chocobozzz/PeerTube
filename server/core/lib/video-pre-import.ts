@@ -263,7 +263,7 @@ export async function buildYoutubeDLImport (options: {
   })
 
   // Get video subtitles
-  await processYoutubeSubtitles(youtubeDL, targetUrl, video)
+  await processYoutubeSubtitles({ youtubeDL, targetUrl, video, userLanguage: user.getLanguage() })
 
   let fileExt = `.${youtubeDLInfo.ext}`
   if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
@@ -316,9 +316,16 @@ async function processThumbnails (options: {
   return []
 }
 
-async function processYoutubeSubtitles (youtubeDL: YoutubeDLWrapper, targetUrl: string, video: MVideo) {
+async function processYoutubeSubtitles (options: {
+  youtubeDL: YoutubeDLWrapper
+  targetUrl: string
+  video: MVideo
+  userLanguage: string
+}) {
+  const { youtubeDL, targetUrl, video, userLanguage } = options
+
   try {
-    const subtitles = await youtubeDL.getSubtitles()
+    const subtitles = await youtubeDL.getSubtitles({ userLanguage })
 
     logger.info('Found %s subtitles candidates from youtube-dl import %s.', subtitles.length, targetUrl)
 
