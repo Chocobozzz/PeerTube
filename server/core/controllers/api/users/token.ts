@@ -4,7 +4,7 @@ import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { OTP } from '@server/initializers/constants.js'
-import { getAuthNameFromRefreshGrant, getBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth.js'
+import { getAuthNameFromRefreshGrant, consumeBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth.js'
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model.js'
 import { handleOAuthToken, MissingTwoFactorError } from '@server/lib/auth/oauth.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -196,7 +196,7 @@ async function buildByPassLogin (req: express.Request, grantType: string): Promi
 
   if (req.body.externalAuthToken) {
     // Consistency with the getBypassFromPasswordGrant promise
-    return getBypassFromExternalAuth(req.body.username, req.body.externalAuthToken)
+    return consumeBypassFromExternalAuth(req.body.username, req.body.externalAuthToken)
   }
 
   return getBypassFromPasswordGrant(req.body.username, req.body.password)
