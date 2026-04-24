@@ -9,6 +9,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
+  stopFfmpeg,
   testFfmpegStreamError,
   waitJobs
 } from '@peertube/peertube-server-commands'
@@ -272,7 +273,7 @@ describe('Test transcoding plugins', function () {
 
       const liveVideoId = await createLiveWrapper(server)
 
-      await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
+      const ffmpegCommand = await server.live.sendRTMPStreamInVideo({ videoId: liveVideoId, fixtureName: 'video_short2.webm' })
       await server.live.waitUntilPublished({ videoId: liveVideoId })
       await waitJobs([ server ])
 
@@ -287,6 +288,9 @@ describe('Test transcoding plugins', function () {
           expect(videoProbe.codec_name).to.equal('h264')
         }
       }
+
+      await stopFfmpeg(ffmpegCommand)
+      await server.live.waitUntilPublished({ videoId: liveVideoId })
     })
   })
 

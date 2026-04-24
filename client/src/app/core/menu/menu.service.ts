@@ -18,8 +18,6 @@ export class MenuService {
   private menuCollapsed = false
   private menuChangedByUser = false
 
-  private collapsedBeforeUrl: boolean
-
   constructor () {
     // Do not display menu on small screens
     if (this.screenService.isInMenuOverlayView() || this.hasMenuCollapsedByUrl(window.location.pathname)) {
@@ -36,11 +34,6 @@ export class MenuService {
         if (this.hasMenuCollapsedByUrl(e.url) || this.hasMenuCollapsedByUrl(e.urlAfterRedirects)) {
           this.collapseByUrl()
           return
-        }
-
-        if (this.collapsedBeforeUrl !== undefined) {
-          this.setMenuCollapsed(this.collapsedBeforeUrl)
-          this.collapsedBeforeUrl = undefined
         }
       })
   }
@@ -68,7 +61,6 @@ export class MenuService {
   private collapseByUrl () {
     if (this.menuCollapsed) return
 
-    this.collapsedBeforeUrl = this.menuCollapsed
     this.setMenuCollapsed(true)
   }
 
