@@ -107,6 +107,7 @@ export class VideoBlockListComponent implements OnInit {
         {
           label: entries => formatICU($localize`{count, plural, =1 {Delete video} other {Delete videos}}`, { count: entries.length }),
           handler: entries => this.deleteVideos(entries),
+          isDisplayed: videoBlock => videoBlock.video?.isLocal === true,
           enableBulk: true
         }
       ]
