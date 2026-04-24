@@ -2883,25 +2883,25 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7036955472108988787" datatype="html">
+      <trans-unit id="7036955472108988787" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> doesn't allow for user registration. You may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find a PeerTube platform that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple platforms at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> doesn't allow for user registration. You may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find a PeerTube platform that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple platforms at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Το <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> δεν επιτρέπει την εγγραφή χρηστών. Μπορείτε να ανατρέξετε στους <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Όρους Χρήσης<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Όρους Χρήσης<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> για περισσότερες λεπτομέρειες ή να βρείτε μια πλατφόρμα PeerTube που σας δίνει τη δυνατότητα να δημιουργήσετε λογαριασμό και να ανεβάσετε τα βίντεό σας εκεί. Βρείτε τη δική σας ανάμεσα σε πολλές πλατφόρμες στις διευθύνσεις: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>, https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8994506181143828992" datatype="html">
+      <trans-unit id="8994506181143828992" datatype="html" xml:space="preserve">
         <source>Request new verification email</source>
-        <target state="new">Request new verification email</target>
+        <target state="translated">Ζητήστε νέο email επαλήθευσης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">38,39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3257605143052145807" datatype="html">
+      <trans-unit id="3257605143052145807" datatype="html" xml:space="preserve">
         <source>Reset your password</source>
-        <target state="new"> Reset your password </target>
+        <target state="translated">Επαναφορά κωδικού πρόσβασης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">44</context>
@@ -2991,28 +2991,25 @@
           <context context-type="linenumber">138</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="87327320394367488" datatype="html">
+      <trans-unit id="87327320394367488" datatype="html" xml:space="preserve">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="new">
-      We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
-    </target>
+        <target state="translated">Λυπούμαστε, αλλά δεν μπορείτε να ανακτήσετε τον κωδικό πρόσβασής σας, καθώς ο διαχειριστής της οντότητας σας δεν έχει ρυθμίσει το σύστημα ηλεκτρονικού ταχυδρομείου του PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3188014010833256853" datatype="html">
+      <trans-unit id="3188014010833256853" datatype="html" xml:space="preserve">
         <source>Enter your email address and we will send you a link to reset your password.</source>
-        <target state="new"> Enter your email address and we will send you a link to reset your password. </target>
+        <target state="translated">Εισάγετε τη διεύθυνση email σας και θα σας στείλουμε έναν σύνδεσμο για να επαναφέρετε τον κωδικό πρόσβασής σας.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1190256911880544559" datatype="html">
+      <trans-unit id="1190256911880544559" datatype="html" xml:space="preserve">
         <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
-The link will expire within 1 hour.</target>
+        <target state="translated">Θα σταλεί ένα email με τις οδηγίες για την επαναφορά του κωδικού πρόσβασης στη διεύθυνση <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Ο σύνδεσμος θα λήξει σε 1 ώρα.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">190</context>
@@ -3131,33 +3128,33 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4319634264526091601" datatype="html">
+      <trans-unit id="4319634264526091601" datatype="html" xml:space="preserve">
         <source>on this instance</source>
-        <target state="new">on this instance</target>
+        <target state="translated">σ' αυτήν την οντότητα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="761579517995454927" datatype="html">
+      <trans-unit id="761579517995454927" datatype="html" xml:space="preserve">
         <source>on the vidiverse</source>
-        <target state="new">on the vidiverse</target>
+        <target state="translated">στο vidiverse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8434369348784683733" datatype="html">
+      <trans-unit id="8434369348784683733" datatype="html" xml:space="preserve">
         <source>for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="new">for <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">για <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;search-value&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ currentSearch }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4163272119298020373" datatype="html">
+      <trans-unit id="4163272119298020373" datatype="html" xml:space="preserve">
         <source>Filters</source>
-        <target state="new">Filters</target>
+        <target state="translated">Φίλτρα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">28</context>
@@ -3216,97 +3213,97 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3772536059362630823" datatype="html">
+      <trans-unit id="3772536059362630823" datatype="html" xml:space="preserve">
         <source>Create a channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Create a channel to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Δημιουργήστε ένα κανάλι για να <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>δημοσιεύετε βίντεο<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2750704831338623812" datatype="html">
+      <trans-unit id="2750704831338623812" datatype="html" xml:space="preserve">
         <source>Do you use Mastodon, ActivityPub or an RSS feed aggregator?</source>
-        <target state="new">Do you use Mastodon, ActivityPub or an RSS feed aggregator?</target>
+        <target state="translated">Χρησιμοποιείτε το Mastodon, το ActivityPub ή κάποιο πρόγραμμα συγκέντρωσης RSS;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">36,38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1257029815550886575" datatype="html">
+      <trans-unit id="1257029815550886575" datatype="html" xml:space="preserve">
         <source>You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</source>
-        <target state="new">You can already follow <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> using your favorite tool.</target>
+        <target state="translated">Μπορείτε ήδη να ακολουθήσετε το <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> χρησιμοποιώντας το αγαπημένο σας εργαλείο.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4421489306990745770" datatype="html">
+      <trans-unit id="4421489306990745770" datatype="html" xml:space="preserve">
         <source>This website is a GAFAM alternative</source>
-        <target state="new">This website is a GAFAM alternative</target>
+        <target state="translated">Αυτός ο ιστότοπος αποτελεί μια εναλλακτική λύση έναντι των GAFAM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">47,49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6894693536499461258" datatype="html">
+      <trans-unit id="6894693536499461258" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a French non-profit organization that offers alternatives to Big Tech's digital tools </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> has been created using <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, a video creation platform developed by Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is a French non-profit organization that offers alternatives to Big Tech's digital tools </target>
+        <target state="translated">Το <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> δημιουργήθηκε με τη χρήση του <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://joinpeertube.org&quot;&gt;"/>PeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, μιας πλατφόρμας δημιουργίας βίντεο που αναπτύχθηκε από τη Framasoft. <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot; href=&quot;https://framasoft.org&quot;&gt;"/>Η Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> είναι ένας γαλλικός μη κερδοσκοπικός οργανισμός που προσφέρει εναλλακτικές λύσεις στα ψηφιακά εργαλεία των μεγάλων εταιρειών τεχνολογίας </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">50,53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2864997292120720545" datatype="html">
+      <trans-unit id="2864997292120720545" datatype="html" xml:space="preserve">
         <source>If you want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/>, you must create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> If you want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/>, you must create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Αν θέλετε να <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>δημοσιεύσετε βίντεο<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> στο <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/>, πρέπει να δημιουργήσετε το πρώτο σας <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>κανάλι<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">3,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1335686739562009265" datatype="html">
+      <trans-unit id="1335686739562009265" datatype="html" xml:space="preserve">
         <source>You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </source>
-        <target state="new"> You might want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>create a channel by theme:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> for example, you can create a channel named "SweetMelodies" to publish your piano concerts and another one "Ecology" in which you publish your videos talking about ecology. </target>
+        <target state="translated">Ίσως θέλετε να <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>δημιουργήσετε ένα κανάλι ανά θέμα:<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> για παράδειγμα, μπορείτε να δημιουργήσετε ένα κανάλι με το όνομα «SweetMelodies» για να δημοσιεύετε τις συναυλίες σας στο πιάνο και ένα άλλο με το όνομα «Ecology», στο οποίο θα δημοσιεύετε τα βίντεό σας σχετικά με την οικολογία. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5716290603546738313" datatype="html">
+      <trans-unit id="5716290603546738313" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrators allow you to publish up to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> of videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on their website. </target>
+        <target state="translated">Οι διαχειριστές του <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> σάς επιτρέπουν να δημοσιεύσετε έως και <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ videoQuota | bytes: 0 }}"/> βίντεο<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> στον ιστότοπό τους. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8149121824813323170" datatype="html">
+      <trans-unit id="8149121824813323170" datatype="html" xml:space="preserve">
         <source>Search index is unavailable. Retrying with local platform results instead.</source>
-        <target state="new">Search index is unavailable. Retrying with local platform results instead.</target>
+        <target state="translated">Ο δείκτης αναζήτησης δεν είναι διαθέσιμος. Θα γίνει νέα προσπάθεια με τα αποτελέσματα της τοπικής πλατφόρμας.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="199127249622290422" datatype="html">
+      <trans-unit id="199127249622290422" datatype="html" xml:space="preserve">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="new">Upload or import videos, parse logs, prune storage directories, reset user password...</target>
+        <target state="translated">Ανεβάστε ή εισαγάγετε βίντεο, αναλύστε αρχεία καταγραφής, καθαρίστε τους καταλόγους αποθήκευσης, επαναφέρετε τον κωδικό πρόσβασης χρήστη...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="304750832760838492" datatype="html">
+      <trans-unit id="304750832760838492" datatype="html" xml:space="preserve">
         <source>Fill platform information</source>
-        <target state="new">Fill platform information</target>
+        <target state="translated">Συμπληρώστε τα στοιχεία της πλατφόρμας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4779080266057522972" datatype="html">
+      <trans-unit id="4779080266057522972" datatype="html" xml:space="preserve">
         <source>STEP <x id="INTERPOLATION" equiv-text="{{ currentStep() }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ totalSteps() }}"/></source>
-        <target state="new">STEP <x id="INTERPOLATION" equiv-text="{{ currentStep() }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ totalSteps() }}"/></target>
+        <target state="translated">ΒΗΜΑ <x id="INTERPOLATION" equiv-text="{{ currentStep() }}"/>/<x id="INTERPOLATION_1" equiv-text="{{ totalSteps() }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">9,10</context>
@@ -3320,49 +3317,49 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="123842545276072825" datatype="html">
+      <trans-unit id="123842545276072825" datatype="html" xml:space="preserve">
         <source>General information</source>
-        <target state="new">General information</target>
+        <target state="translated">Γενικές πληροφορίες</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2810794032670562031" datatype="html">
+      <trans-unit id="2810794032670562031" datatype="html" xml:space="preserve">
         <source>You can edit this information later</source>
-        <target state="new">You can edit this information later</target>
+        <target state="translated">Μπορείτε να επεξεργαστείτε αυτές τις πληροφορίες αργότερα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="149227559940853875" datatype="html">
+      <trans-unit id="149227559940853875" datatype="html" xml:space="preserve">
         <source>Platform name</source>
-        <target state="new">Platform name</target>
+        <target state="translated">Όνομα πλατφόρμας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8513759773687345464" datatype="html">
+      <trans-unit id="8513759773687345464" datatype="html" xml:space="preserve">
         <source>Platform icon</source>
-        <target state="new">Platform icon</target>
+        <target state="translated">Εικονίδιο πλατφόρμας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7511449611399836691" datatype="html">
+      <trans-unit id="7511449611399836691" datatype="html" xml:space="preserve">
         <source>Used in various places such as on the website, mobile application and social media</source>
-        <target state="new">Used in various places such as on the website, mobile application and social media</target>
+        <target state="translated">Χρησιμοποιείται σε διάφορα μέρη, όπως στον ιστότοπο, στην εφαρμογή για κινητά και στα μέσα κοινωνικής δικτύωσης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8890553633144307762" datatype="html">
+      <trans-unit id="8890553633144307762" datatype="html" xml:space="preserve">
         <source>Back</source>
-        <target state="new">Back</target>
+        <target state="translated">Πίσω</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">55</context>
@@ -3376,17 +3373,17 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="168761137939271501" datatype="html">
+      <trans-unit id="168761137939271501" datatype="html" xml:space="preserve">
         <source>Next step</source>
-        <target state="new">Next step</target>
+        <target state="translated">Επόμενο βήμα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="178210321115752683" datatype="html">
+      <trans-unit id="178210321115752683" datatype="html" xml:space="preserve">
         <source>Ignore for now</source>
-        <target state="new">Ignore for now</target>
+        <target state="translated">Αγνόηση προς το παρόν</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-edit-info.component.html</context>
           <context context-type="linenumber">59</context>
@@ -3400,129 +3397,129 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1452446159629727078" datatype="html">
+      <trans-unit id="1452446159629727078" datatype="html" xml:space="preserve">
         <source>My platform is more like...</source>
-        <target state="new">My platform is more like...</target>
+        <target state="translated">Η πλατφόρμα μου είναι περισσότερο...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5155290888522084933" datatype="html">
+      <trans-unit id="5155290888522084933" datatype="html" xml:space="preserve">
         <source>Community-based</source>
-        <target state="new">Community-based</target>
+        <target state="translated">με βάση την κοινότητα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">32,34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7688216686590994502" datatype="html">
+      <trans-unit id="7688216686590994502" datatype="html" xml:space="preserve">
         <source>Enable a community to publish content and interact together.</source>
-        <target state="new">Enable a community to publish content and interact together.</target>
+        <target state="translated">Δώστε τη δυνατότητα σε μια κοινότητα να δημοσιεύει περιεχόμενο και να αλληλεπιδρά μεταξύ των μελών της.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">34,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9053431081731437649" datatype="html">
+      <trans-unit id="9053431081731437649" datatype="html" xml:space="preserve">
         <source>Institutional</source>
-        <target state="new">Institutional</target>
+        <target state="translated">Θεσμική</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">48,50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3627851297496094146" datatype="html">
+      <trans-unit id="3627851297496094146" datatype="html" xml:space="preserve">
         <source>To broadcast your videos. Recommended for public institutions, association and companies.</source>
-        <target state="new">To broadcast your videos. Recommended for public institutions, association and companies.</target>
+        <target state="translated">Για τη μετάδοση των βίντεό σας. Συνιστάται για δημόσιους φορείς, ενώσεις και εταιρείες.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">50,51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3867965101763494594" datatype="html">
+      <trans-unit id="3867965101763494594" datatype="html" xml:space="preserve">
         <source>Only certain people can access content. Recommended for families and closed communities.</source>
-        <target state="new">Only certain people can access content. Recommended for families and closed communities.</target>
+        <target state="translated">Μόνο συγκεκριμένα άτομα έχουν πρόσβαση στο περιεχόμενο. Συνιστάται για οικογένειες και κλειστές κοινότητες.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">66,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6894497431455747153" datatype="html">
+      <trans-unit id="6894497431455747153" datatype="html" xml:space="preserve">
         <source>Preview configuration</source>
-        <target state="new">Preview configuration</target>
+        <target state="translated">Προεπισκόπηση ρυθμίσεων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-form.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1843196826036466911" datatype="html">
+      <trans-unit id="1843196826036466911" datatype="html" xml:space="preserve">
         <source>If you confirm, PeerTube will:</source>
-        <target state="new">If you confirm, PeerTube will:</target>
+        <target state="translated">Εάν επιβεβαιώσετε, το PeerTube θα:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">15,17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4915702577741089907" datatype="html">
+      <trans-unit id="4915702577741089907" datatype="html" xml:space="preserve">
         <source>If you want finer settings control, your platform configuration can be easily changed after the pre-configuration wizard!</source>
-        <target state="new"> If you want finer settings control, your platform configuration can be easily changed after the pre-configuration wizard! </target>
+        <target state="translated">Αν επιθυμείτε πιο λεπτομερή έλεγχο των ρυθμίσεων, μπορείτε να τροποποιήσετε εύκολα τη διαμόρφωση της πλατφόρμας σας μετά την ολοκλήρωση του οδηγού προδιαμόρφωσης!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7106510114370231860" datatype="html">
+      <trans-unit id="7106510114370231860" datatype="html" xml:space="preserve">
         <source>Confirm this configuration</source>
-        <target state="new">Confirm this configuration</target>
+        <target state="translated">Επιβεβαίωση αυτής της ρύθμισης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5397011431963692760" datatype="html">
+      <trans-unit id="5397011431963692760" datatype="html" xml:space="preserve">
         <source>Welcome to PeerTube</source>
-        <target state="new">Welcome to PeerTube</target>
+        <target state="translated">Καλώς ήρθατε στο PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">7,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6505095755481996135" datatype="html">
+      <trans-unit id="6505095755481996135" datatype="html" xml:space="preserve">
         <source>dear administrator!</source>
-        <target state="new">dear administrator!</target>
+        <target state="translated">Αγαπητέ διαχειριστή!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">9,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4023399618862728868" datatype="html">
+      <trans-unit id="4023399618862728868" datatype="html" xml:space="preserve">
         <source>Sepia, the cuttlefish, has a few questions to help you <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quickly pre-configure your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</source>
-        <target state="new">Sepia, the cuttlefish, has a few questions to help you <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quickly pre-configure your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
+        <target state="translated">Η Sepia, η σουπιά, έχει μερικές ερωτήσεις που θα σας βοηθήσουν <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>να προρυθμίσετε γρήγορα την πλατφόρμα σας<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1443195823760151170" datatype="html">
+      <trans-unit id="1443195823760151170" datatype="html" xml:space="preserve">
         <source>Let's go!</source>
-        <target state="new">Let's go!</target>
+        <target state="translated">Πάμε!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3848077896245199337" datatype="html">
+      <trans-unit id="3848077896245199337" datatype="html" xml:space="preserve">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="new">Setup your account, managing video playlists, discover third-party applications...</target>
+        <target state="translated">Δημιουργήστε τον λογαριασμό σας, διαχειριστείτε τις λίστες αναπαραγωγής βίντεο, ανακαλύψτε εφαρμογές τρίτων...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1202582215608581565" datatype="html">
+      <trans-unit id="1202582215608581565" datatype="html" xml:space="preserve">
         <source>CLI:</source>
-        <target state="new">CLI:</target>
+        <target state="translated">CLI:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -3536,57 +3533,57 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3736279079808209047" datatype="html">
+      <trans-unit id="3736279079808209047" datatype="html" xml:space="preserve">
         <source>Official PeerTube website:</source>
-        <target state="new">Official PeerTube website:</target>
+        <target state="translated">Επίσημος ιστότοπος του PeerTube:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">28,30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8833059586949417355" datatype="html">
+      <trans-unit id="8833059586949417355" datatype="html" xml:space="preserve">
         <source>Blog post, get help or discover PeerTube</source>
-        <target state="new">Blog post, get help or discover PeerTube</target>
+        <target state="translated">Δημοσίευση στο blog, ζητήστε βοήθεια ή ανακαλύψτε το PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">30,31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="931415109224027105" datatype="html">
+      <trans-unit id="931415109224027105" datatype="html" xml:space="preserve">
         <source>Public PeerTube index:</source>
-        <target state="new">Public PeerTube index:</target>
+        <target state="translated">Δημόσιος κατάλογος PeerTube:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">34,36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498251075459491982" datatype="html">
+      <trans-unit id="1498251075459491982" datatype="html" xml:space="preserve">
         <source>Put your platform on the official PeerTube public index</source>
-        <target state="new">Put your platform on the official PeerTube public index</target>
+        <target state="translated">Προσθέστε την πλατφόρμα σας στον επίσημο δημόσιο κατάλογο του PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4895326106573044490" datatype="html">
+      <trans-unit id="4895326106573044490" datatype="html" xml:space="preserve">
         <source>Documentation</source>
-        <target state="new">Documentation</target>
+        <target state="translated">Τεκμηρίωση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">42,44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1498236237234691799" datatype="html">
+      <trans-unit id="1498236237234691799" datatype="html" xml:space="preserve">
         <source>Admin:</source>
-        <target state="new">Admin:</target>
+        <target state="translated">Διαχειριστής:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">46,48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1561366846864007609" datatype="html">
+      <trans-unit id="1561366846864007609" datatype="html" xml:space="preserve">
         <source>Managing users, following other platforms, dealing with spammers, configure object storage or remote transcoding...</source>
-        <target state="new">Managing users, following other platforms, dealing with spammers, configure object storage or remote transcoding...</target>
+        <target state="translated">Διαχείριση χρηστών, παρακολούθηση άλλων πλατφορμών, αντιμετώπιση των spammers, ρύθμιση της αποθήκευσης αντικειμένων ή της απομακρυσμένης διακωδικοποίησης...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">48,49</context>
@@ -3600,33 +3597,33 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="795989016417948119" datatype="html">
+      <trans-unit id="795989016417948119" datatype="html" xml:space="preserve">
         <source>Do not display again</source>
-        <target state="new">Do not display again</target>
+        <target state="translated">Να μην εμφανιστεί ξανά</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-welcome.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9079166010714549602" datatype="html">
+      <trans-unit id="9079166010714549602" datatype="html" xml:space="preserve">
         <source>Registration policy</source>
-        <target state="new">Registration policy</target>
+        <target state="translated">Πολιτική εγγραφής</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4252012934127630804" datatype="html">
+      <trans-unit id="4252012934127630804" datatype="html" xml:space="preserve">
         <source>Video quota for new users</source>
-        <target state="new">Video quota for new users</target>
+        <target state="translated">Όριο βίντεο για νέους χρήστες</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">9,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6113440087593374795" datatype="html">
+      <trans-unit id="6113440087593374795" datatype="html" xml:space="preserve">
         <source>Video import and synchronization</source>
-        <target state="new">Video import and synchronization</target>
+        <target state="translated">Εισαγωγή και συγχρονισμός βίντεο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">15,17</context>
@@ -3636,65 +3633,65 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">3,5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5103781513612689881" datatype="html">
+      <trans-unit id="5103781513612689881" datatype="html" xml:space="preserve">
         <source>My community can stream lives</source>
-        <target state="new">My community can stream lives</target>
+        <target state="translated">Η κοινότητά μου μπορεί να κάνει ζωντανή μετάδοση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.html</context>
           <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7593555694782789615" datatype="html">
+      <trans-unit id="7593555694782789615" datatype="html" xml:space="preserve">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Άνοιγμα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1560828454806370515" datatype="html">
+      <trans-unit id="1560828454806370515" datatype="html" xml:space="preserve">
         <source>Anyone can register and use the platform</source>
-        <target state="new">Anyone can register and use the platform</target>
+        <target state="translated">Οποιοσδήποτε μπορεί να εγγραφεί και να χρησιμοποιήσει την πλατφόρμα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8247087079730523783" datatype="html">
+      <trans-unit id="8247087079730523783" datatype="html" xml:space="preserve">
         <source>Requires approval</source>
-        <target state="new">Requires approval</target>
+        <target state="translated">Απαιτείται έγκριση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8305610685019836481" datatype="html">
+      <trans-unit id="8305610685019836481" datatype="html" xml:space="preserve">
         <source>Anyone can register, but a moderator must approve their account before they can use the platform</source>
-        <target state="new">Anyone can register, but a moderator must approve their account before they can use the platform</target>
+        <target state="translated">Οποιοσδήποτε μπορεί να εγγραφεί, αλλά ο λογαριασμός του πρέπει να εγκριθεί από έναν συντονιστή προτού μπορέσει να χρησιμοποιήσει την πλατφόρμα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7860418101283165917" datatype="html">
+      <trans-unit id="7860418101283165917" datatype="html" xml:space="preserve">
         <source>Closed</source>
-        <target state="new">Closed</target>
+        <target state="translated">Κλειστή</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2224797757421461675" datatype="html">
+      <trans-unit id="2224797757421461675" datatype="html" xml:space="preserve">
         <source>Only an administrator can create users on the platform</source>
-        <target state="new">Only an administrator can create users on the platform</target>
+        <target state="translated">Μόνο ένας διαχειριστής μπορεί να δημιουργεί χρήστες στην πλατφόρμα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8779076495329736288" datatype="html">
+      <trans-unit id="8779076495329736288" datatype="html" xml:space="preserve">
         <source>Save a copy of the uploaded video</source>
-        <target state="new">Save a copy of the uploaded video</target>
+        <target state="translated">Αποθηκεύστε ένα αντίγραφο του βίντεο που ανεβάσατε</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -3704,25 +3701,25 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">15,17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5858148127589953031" datatype="html">
+      <trans-unit id="5858148127589953031" datatype="html" xml:space="preserve">
         <source>Welcome introduction</source>
-        <target state="new">Welcome introduction</target>
+        <target state="translated">Εισαγωγή καλωσορίσματος</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="874940026211412710" datatype="html">
+      <trans-unit id="874940026211412710" datatype="html" xml:space="preserve">
         <source>Edit general information</source>
-        <target state="new">Edit general information</target>
+        <target state="translated">Επεξεργασία γενικών πληροφοριών</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5218253483948833494" datatype="html">
+      <trans-unit id="5218253483948833494" datatype="html" xml:space="preserve">
         <source>Usage type</source>
-        <target state="new">Usage type</target>
+        <target state="translated">Τύπος χρήσης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -3732,9 +3729,9 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5674681810331219328" datatype="html">
+      <trans-unit id="5674681810331219328" datatype="html" xml:space="preserve">
         <source>Configuration preview</source>
-        <target state="new">Configuration preview</target>
+        <target state="translated">Προεπισκόπηση ρυθμίσεων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">25,26</context>
@@ -3744,73 +3741,73 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">12,14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7312794732031642219" datatype="html">
+      <trans-unit id="7312794732031642219" datatype="html" xml:space="preserve">
         <source>Post configuration documentation</source>
-        <target state="new">Post configuration documentation</target>
+        <target state="translated">Τεκμηρίωση μετά τη διαμόρφωση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/admin-config-wizard-modal.component.html</context>
           <context context-type="linenumber">34,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="855735721940425245" datatype="html">
+      <trans-unit id="855735721940425245" datatype="html" xml:space="preserve">
         <source>Congratulations</source>
-        <target state="new">Congratulations</target>
+        <target state="translated">Συγχαρητήρια</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">8,10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3654500320542675985" datatype="html">
+      <trans-unit id="3654500320542675985" datatype="html" xml:space="preserve">
         <source>Your platform has been configured!</source>
-        <target state="new">Your platform has been configured!</target>
+        <target state="translated">Η πλατφόρμα σας έχει ρυθμιστεί!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8900807565018046089" datatype="html">
+      <trans-unit id="8900807565018046089" datatype="html" xml:space="preserve">
         <source>It's time to add information about your platform! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of website they are. </source>
-        <target state="new"> It's time to add information about your platform! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your platform<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of website they are. </target>
+        <target state="translated">Ήρθε η ώρα να προσθέσετε πληροφορίες για την πλατφόρμα σας! <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Η δημιουργία μιας περιγραφής<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, στην οποία θα διευκρινίζετε <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>ποιοι είστε<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, γιατί <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>δημιουργήσατε την πλατφόρμα σας<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> και <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>για πόσο καιρό<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> σκοπεύετε να <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>τη διατηρήσετε<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> είναι πολύ σημαντική, ώστε οι επισκέπτες να κατανοήσουν σε τι είδους ιστότοπο βρίσκονται. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-documentation.component.html</context>
           <context context-type="linenumber">16,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5850698978356573024" datatype="html">
+      <trans-unit id="5850698978356573024" datatype="html" xml:space="preserve">
         <source>Confirm your password</source>
-        <target state="new">Confirm your password</target>
+        <target state="translated">Επιβεβαιώστε τον κωδικό πρόσβασής σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/confirm.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9005121595859995793" datatype="html">
+      <trans-unit id="9005121595859995793" datatype="html" xml:space="preserve">
         <source>Configuration warning!</source>
-        <target state="new">Configuration warning!</target>
+        <target state="translated">Προειδοποίηση για τη διαμόρφωση!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8901933019590352016" datatype="html">
+      <trans-unit id="8901933019590352016" datatype="html" xml:space="preserve">
         <source>You enabled user registration on your instance but did not configure the following fields:</source>
-        <target state="new">You enabled user registration on your instance but did not configure the following fields:</target>
+        <target state="translated">Ενεργοποιήσατε την εγγραφή χρηστών στην οντότητα σας, αλλά δεν διαμορφώσατε τα ακόλουθα πεδία:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8948444690892731948" datatype="html">
+      <trans-unit id="8948444690892731948" datatype="html" xml:space="preserve">
         <source>Instance name</source>
-        <target state="new">Instance name</target>
+        <target state="translated">Όνομα οντότητας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="966824924873033885" datatype="html">
+      <trans-unit id="966824924873033885" datatype="html" xml:space="preserve">
         <source>Instance short description</source>
-        <target state="new">Instance short description</target>
+        <target state="translated">Σύντομη περιγραφή της οντότητας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">19</context>
@@ -3824,33 +3821,33 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5026256683194518810" datatype="html">
+      <trans-unit id="5026256683194518810" datatype="html" xml:space="preserve">
         <source>How long you plan to maintain your instance</source>
-        <target state="new">How long you plan to maintain your instance</target>
+        <target state="translated">Για πόσο καιρό σκοπεύετε να συντηρείτε την οντότητά σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1909672990242291785" datatype="html">
+      <trans-unit id="1909672990242291785" datatype="html" xml:space="preserve">
         <source>How you plan to pay for keeping your instance running</source>
-        <target state="new">How you plan to pay for keeping your instance running</target>
+        <target state="translated">Πώς σκοπεύετε να καλύψετε το κόστος λειτουργίας της οντότητάς σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="869943508869906576" datatype="html">
+      <trans-unit id="869943508869906576" datatype="html" xml:space="preserve">
         <source>How you will moderate your instance</source>
-        <target state="new">How you will moderate your instance</target>
+        <target state="translated">Πώς θα συντονίζετε την οντότητά σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5032335000394561521" datatype="html">
+      <trans-unit id="5032335000394561521" datatype="html" xml:space="preserve">
         <source>Instance terms</source>
-        <target state="new">Instance terms</target>
+        <target state="translated">Όροι οντότητας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">36</context>
@@ -3864,33 +3861,25 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1420294365005204590" datatype="html">
+      <trans-unit id="1420294365005204590" datatype="html" xml:space="preserve">
         <source>These settings apply only to your session on this instance.</source>
-        <target state="new">These settings apply only to your session on this instance.</target>
+        <target state="translated">Αυτές οι ρυθμίσεις ισχύουν μόνο για τη συνεδρία σας σε αυτήν την οντότητα.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5330788940795142335" datatype="html">
+      <trans-unit id="5330788940795142335" datatype="html" xml:space="preserve">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="new">
-      Please consider configuring these fields to help people to choose
-          <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance
-          <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
-      Without them, your instance may not be referenced on the
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website
-          <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-
-        </target>
+        <target state="translated">Σας παρακαλούμε να εξετάσετε το ενδεχόμενο να συμπληρώσετε αυτά τα πεδία, ώστε να βοηθήσετε τους χρήστες να επιλέξουν <x id="START_TAG_STRONG"/>την κατάλληλη οντότητα<x id="CLOSE_TAG_STRONG"/>. Χωρίς αυτά, η οντότητα σας ενδέχεται να μην εμφανίζεται στον ιστότοπο <x id="START_LINK"/>JoinPeerTube<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2728623642717111613" datatype="html">
+      <trans-unit id="2728623642717111613" datatype="html" xml:space="preserve">
         <source>Don't show me this warning anymore</source>
-        <target state="new">Don't show me this warning anymore</target>
+        <target state="translated">Να μην εμφανίζεται πια αυτή η προειδοποίηση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">49</context>
@@ -3916,49 +3905,49 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1698989071064321491" datatype="html">
+      <trans-unit id="1698989071064321491" datatype="html" xml:space="preserve">
         <source>Set up</source>
-        <target state="new">Set up</target>
+        <target state="translated">Ρύθμιση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">42,43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1254225561962113354" datatype="html">
+      <trans-unit id="1254225561962113354" datatype="html" xml:space="preserve">
         <source>Server too slow</source>
-        <target state="new">Server too slow</target>
+        <target state="translated">Πολύ αργός διακομιστής</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2282206332894760489" datatype="html">
+      <trans-unit id="2282206332894760489" datatype="html" xml:space="preserve">
         <source>Live blocked by the platform</source>
-        <target state="new">Live blocked by the platform</target>
+        <target state="translated">Η ζωντανή μετάδοση έχει αποκλειστεί από την πλατφόρμα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5274374742436838139" datatype="html">
+      <trans-unit id="5274374742436838139" datatype="html" xml:space="preserve">
         <source>Max duration exceeded</source>
-        <target state="new">Max duration exceeded</target>
+        <target state="translated">Υπερβαίθηκε η μέγιστη διάρκεια</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1677142486230902467" datatype="html">
+      <trans-unit id="1677142486230902467" datatype="html" xml:space="preserve">
         <source>Server error</source>
-        <target state="new">Server error</target>
+        <target state="translated">Σφάλμα διακομιστή</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="189546967059369850" datatype="html">
+      <trans-unit id="189546967059369850" datatype="html" xml:space="preserve">
         <source>Quota exceeded</source>
-        <target state="new">Quota exceeded</target>
+        <target state="translated">Υπέρβαση ορίου</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
           <context context-type="linenumber">41</context>
