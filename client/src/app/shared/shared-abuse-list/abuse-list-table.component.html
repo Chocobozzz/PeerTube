@@ -28,7 +28,7 @@
             </div>
           </a>
 
-          <my-account-block-badges class="d-inline-block ms-3" [account]="abuse.reporterAccount"></my-account-block-badges>
+          <my-account-block-badges class="d-inline-block ms-3" [account]="abuse.reporterAccount" platformOnly="true"></my-account-block-badges>
         } @else {
           <span i18n>Deleted account</span>
         }
@@ -52,7 +52,7 @@
         </td>
       } @else {
         <td>
-          <my-video-cell [video]="abuse.video" size="small">
+          <my-video-cell [video]="abuse.video" [accountBlockBadges]="abuse.flaggedAccount" size="small" accountBlockBadgesPlatformOnly="true">
             <div>
               @if (abuse.count > 1) {
                 <span class="pt-badge badge-secondary me-1" i18n-title title="This video has been reported multiple times" i18n>
@@ -76,6 +76,8 @@
 
         @if (abuse.flaggedAccount) {
           <div class="comment-flagged-account">by {{ abuse.flaggedAccount.displayName }}</div>
+
+          <my-account-block-badges class="d-inline-block ms-3 align-top" [account]="abuse.flaggedAccount" platformOnly="true"></my-account-block-badges>
         }
       </td>
     } @else if(abuse.flaggedAccount) {
@@ -87,7 +89,7 @@
           <div class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</div>
         </a>
 
-        <my-account-block-badges class="d-inline-block ms-3 align-top" [account]="abuse.flaggedAccount"></my-account-block-badges>
+        <my-account-block-badges class="d-inline-block ms-3 align-top" [account]="abuse.flaggedAccount" platformOnly="true"></my-account-block-badges>
         </div>
       </td>
     } @else {
