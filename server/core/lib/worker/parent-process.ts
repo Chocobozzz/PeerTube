@@ -16,7 +16,7 @@ export function parallelHTTPBroadcastFromWorker (options: Parameters<typeof http
   if (!parallelHTTPBroadcastWorker) {
     parallelHTTPBroadcastWorker = new Piscina({
       filename: new URL(join('workers', 'http-broadcast.js'), import.meta.url).href,
-      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
+      // Keep it sync with job concurrency so the worker will accept all the requests sent by the job
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast-parallel'],
       maxThreads: 1,
       minThreads: 1,
@@ -39,7 +39,7 @@ export function sequentialHTTPBroadcastFromWorker (
   if (!sequentialHTTPBroadcastWorker) {
     sequentialHTTPBroadcastWorker = new Piscina({
       filename: new URL(join('workers', 'http-broadcast.js'), import.meta.url).href,
-      // Keep it sync with job concurrency so the worker will accept all the requests sent by the parallelized jobs
+      // Keep it sync with job concurrency so the worker will accept all the requests sent by the job
       concurrentTasksPerWorker: JOB_CONCURRENCY['activitypub-http-broadcast'],
       maxThreads: 1,
       minThreads: 1,

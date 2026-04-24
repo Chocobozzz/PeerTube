@@ -147,7 +147,13 @@ function processDeleteVideoComment (byActor: MActorSignature, videoComment: MCom
     if (videoComment.Video.isLocal()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
-      await forwardVideoRelatedActivity({ activity, transaction: t, followersException: exceptions, video: videoComment.Video })
+      await forwardVideoRelatedActivity({
+        activity,
+        transaction: t,
+        followersException: exceptions,
+        video: videoComment.Video,
+        parallelizable: false
+      })
     }
 
     logger.info('Remote video comment %s removed.', videoComment.url)

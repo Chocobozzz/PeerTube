@@ -136,7 +136,7 @@ async function processUndoCacheFile (
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 
-      await forwardVideoRelatedActivity({ activity, transaction: t, followersException: exceptions, video })
+      await forwardVideoRelatedActivity({ activity, transaction: t, followersException: exceptions, video, parallelizable: false })
     }
   })
 }
@@ -157,7 +157,13 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 
-      await forwardVideoRelatedActivity({ activity: announceActivity, transaction: t, followersException: exceptions, video: share.Video })
+      await forwardVideoRelatedActivity({
+        activity: announceActivity,
+        transaction: t,
+        followersException: exceptions,
+        video: share.Video,
+        parallelizable: false
+      })
     }
   })
 }

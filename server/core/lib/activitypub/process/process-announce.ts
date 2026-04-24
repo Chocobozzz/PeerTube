@@ -55,7 +55,7 @@ async function processVideoShare (actorAnnouncer: MActorSignature, activity: Act
       // Don't resend the activity to the sender
       const exceptions = [ actorAnnouncer ]
 
-      await forwardVideoRelatedActivity({ activity, transaction: t, followersException: exceptions, video })
+      await forwardVideoRelatedActivity({ activity, transaction: t, followersException: exceptions, video, parallelizable: false })
     }
 
     return undefined
