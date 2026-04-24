@@ -5,7 +5,7 @@ import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserExport } from '@server/types/models/index.js'
-import archiver, { Archiver } from 'archiver'
+import type { Archiver } from 'archiver'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
 import { join, parse } from 'path'
@@ -104,22 +104,28 @@ export class UserExporter {
 
     let activityPubOutboxStore: ExportResult<any>['activityPubOutbox'] = []
 
-    this.archive = archiver('zip', {
-      zlib: {
-        level: 9
-      }
-    })
-
     return new Promise<void>(async (res, rej) => {
-      this.archive.on('warning', err => {
-        logger.warn('Warning to archive a file in ' + exportModel.filename, { ...lTags(), err })
-      })
+      try {
+        const archiver = await import('archiver')
 
-      this.archive.on('error', err => {
-        rej(err)
-      })
+        this.archive = archiver.default('zip', {
+          zlib: {
+            level: 9
+          }
+        })
 
-      this.archive.pipe(output)
+        this.archive.on('warning', err => {
+          logger.warn('Warning to archive a file in ' + exportModel.filename, { ...lTags(), err })
+        })
+
+        this.archive.on('error', err => {
+          rej(err)
+        })
+
+        this.archive.pipe(output)
+      } catch (err) {
+        return rej(err)
+      }
 
       try {
         for (const { exporter, jsonFilename } of this.buildExporters(exportModel, user)) {
