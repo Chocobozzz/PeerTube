@@ -4,6 +4,8 @@ import { formatICU } from '@app/helpers'
 import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { AccountBlockBadgeInput } from '@app/shared/shared-moderation/account-block-badges.component'
+import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
@@ -42,6 +44,7 @@ export class VideoBlockListComponent implements OnInit {
   private serverService = inject(ServerService)
   private confirmService = inject(ConfirmService)
   private videoBlocklistService = inject(VideoBlockService)
+  private blocklistService = inject(BlocklistService)
   private markdownRenderer = inject(MarkdownService)
   private videoService = inject(VideoService)
 
@@ -72,6 +75,9 @@ export class VideoBlockListComponent implements OnInit {
     { id: 'unfederated', label: $localize`Unfederated`, sortable: false },
     { id: 'createdAt', label: $localize`Date`, sortable: true }
   ]
+
+  // Key is account id
+  accountBlocklist = new Map<number, AccountBlockBadgeInput>()
 
   dataLoader: typeof this._dataLoader
 
@@ -238,6 +244,48 @@ export class VideoBlockListComponent implements OnInit {
       aspectRatio: entry.video.aspectRatio,
       embedTitle: entry.video.name
     })
+  }
+
+  onDataLoaded () {
+    this.loadBlockStatus()
+  }
+
+  loadBlockStatus () {
+    const videos = this.table().data.map(entry => entry.video)
+
+    const accounts = this.getUniqueAccounts(videos)
+    const hosts = this.getUniqueHosts(accounts)
+
+    this.blocklistService.getStatus({ accounts: accounts.map(a => a.name + '@' + a.host), hosts })
+      .subscribe(status => {
+        this.accountBlocklist = new Map()
+
+        for (const a of accounts) {
+          const handle = a.name + '@' + a.host
+
+          this.accountBlocklist.set(a.id, {
+            mutedByInstance: status.accounts[handle]?.blockedByServer ?? false,
+            mutedServerByInstance: status.hosts[a.host]?.blockedByServer ?? false
+          })
+        }
+      })
+  }
+
+  private getUniqueAccounts (videos: { account: { id: number, name: string, host: string } }[]) {
+    const accountsDone = new Set<number>()
+
+    return videos
+      .map(video => {
+        if (!video.account || accountsDone.has(video.account.id)) return null
+
+        accountsDone.add(video.account.id)
+        return video.account
+      })
+      .filter(a => !!a)
+  }
+
+  private getUniqueHosts (accounts: { host: string }[]) {
+    return Array.from(new Set(accounts.map(a => a.host)))
   }
 
   private _dataLoader (options: DataLoaderOptionsBase & { type?: VideoBlacklistType_Type }) {

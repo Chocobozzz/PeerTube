@@ -9,6 +9,7 @@
   [inputFilters]="inputFilters"
   [bulkActions]="bulkActions"
   searchInput="true"
+  (dataLoaded)="onDataLoaded()"
   >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No video} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}</ng-container>
@@ -16,7 +17,12 @@
 
   <ng-template #tableCells let-videoBlock>
     <td>
-      <my-video-cell [video]="videoBlock.video" size="small">
+      <my-video-cell
+        [video]="videoBlock.video"
+        [accountBlockBadges]="videoBlock.video.account ? accountBlocklist.get(videoBlock.video.account.id) : undefined"
+        accountBlockBadgesPlatformOnly="true"
+        size="small"
+      >
         <div>
           @if (videoBlock.type === 2) {
             <span i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info badge-small" i18n>Auto block</span>
