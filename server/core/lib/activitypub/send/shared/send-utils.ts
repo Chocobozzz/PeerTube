@@ -197,7 +197,7 @@ function broadcastTo (options: {
 
   // Bad URIs could be slow to respond, prefer to process them in a dedicated queue
   for (const uri of uris) {
-    if (ActorFollowHealthCache.Instance.isBadInbox(uri)) {
+    if (ActorFollowHealthCache.Instance.isLastBadInbox(uri)) {
       unicastUris.push(uri)
     } else {
       broadcastUris.push(uri)

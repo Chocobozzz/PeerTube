@@ -1,4 +1,3 @@
-import { ACTOR_FOLLOW_SCORE } from '../initializers/constants.js'
 import { logger } from '../helpers/logger.js'
 
 // Cache follows scores, instead of writing them too often in database
@@ -6,13 +5,13 @@ import { logger } from '../helpers/logger.js'
 export class ActorFollowHealthCache {
   private static instance: ActorFollowHealthCache
 
-  private pendingFollowsScore: { [url: string]: number } = {}
-
   private readonly pendingBadServer = new Set<number>()
   private readonly pendingGoodServer = new Set<number>()
 
   private readonly badInboxes = new Set<string>()
   private readonly goodInboxes = new Set<string>()
+
+  private readonly lastBatchBadInboxes = new Set<string>()
 
   private constructor () {}
 
@@ -21,7 +20,7 @@ export class ActorFollowHealthCache {
   }
 
   updateActorFollowsHealth (goodInboxes: string[], badInboxes: string[]) {
-    this.badInboxes.clear()
+    this.lastBatchBadInboxes.clear()
 
     if (goodInboxes.length === 0 && badInboxes.length === 0) return
 
@@ -33,22 +32,20 @@ export class ActorFollowHealthCache {
     )
 
     for (const goodInbox of goodInboxes) {
-      if (this.pendingFollowsScore[goodInbox] === undefined) this.pendingFollowsScore[goodInbox] = 0
-
-      this.pendingFollowsScore[goodInbox] += ACTOR_FOLLOW_SCORE.BONUS
+      this.goodInboxes.add(goodInbox)
     }
 
     for (const badInbox of badInboxes) {
-      if (this.pendingFollowsScore[badInbox] === undefined) this.pendingFollowsScore[badInbox] = 0
-
-      this.pendingFollowsScore[badInbox] += ACTOR_FOLLOW_SCORE.PENALTY
       this.badInboxes.add(badInbox)
+      this.lastBatchBadInboxes.add(badInbox)
     }
   }
 
-  isBadInbox (inboxUrl: string) {
-    return this.badInboxes.has(inboxUrl)
+  isLastBadInbox (inboxUrl: string) {
+    return this.lastBatchBadInboxes.has(inboxUrl)
   }
+
+  // ---------------------------------------------------------------------------
 
   getBadInboxes () {
     return new Set(this.badInboxes)
