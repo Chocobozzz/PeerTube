@@ -37,7 +37,6 @@
     /* What it does: Tells the email client that only light styles are provided but the client can transform them to dark. A duplicate of meta color-scheme meta tag above. */
     :root {
       color-scheme: light;
-      supported-color-schemes: light;
     }
     /* What it does: Remove spaces around the email design added by some email clients. */
     /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
@@ -148,7 +147,7 @@
 </head>
 
 <body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; color: {{fg}}; background-color: {{bg}};">
-  <center role="article" aria-roledescription="email" lang="en" style="width: 100%; background-color: {{bg}};">
+  <center role="article" aria-roledescription="email" lang="en" style="width: 100%; color: {{fg}}; background-color: {{bg}};">
     <!--[if mso | IE]>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #fff;">
       <tr>
