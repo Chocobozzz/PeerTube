@@ -1,6 +1,8 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserCreate, UserCreateResult, UserRight, UserUpdate } from '@peertube/peertube-models'
 import { tokensRouter } from '@server/controllers/api/users/token.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { getResetPasswordUrl } from '@server/lib/client-urls.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
@@ -19,6 +21,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  buildRateLimiter,
   ensureUserHasRight,
   paginationValidator,
   setDefaultPagination,
@@ -48,10 +51,14 @@ import { registrationsRouter } from './registrations.js'
 import { twoFactorRouter } from './two-factor.js'
 import { userExportsRouter } from './user-exports.js'
 import { userImportRouter } from './user-imports.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 
 const auditLogger = auditLoggerFactory('users')
 const lTags = loggerTagsFactory('api', 'users')
+
+const askResetPasswordRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
+})
 
 const usersRouter = express.Router()
 
@@ -126,9 +133,18 @@ usersRouter.delete(
   asyncMiddleware(removeUser)
 )
 
-usersRouter.post('/ask-reset-password', asyncMiddleware(usersAskResetPasswordValidator), asyncMiddleware(askResetUserPassword))
+usersRouter.post(
+  '/ask-reset-password',
+  askResetPasswordRateLimiter,
+  asyncMiddleware(usersAskResetPasswordValidator),
+  asyncMiddleware(askResetUserPassword)
+)
 
-usersRouter.post('/:id/reset-password', asyncMiddleware(usersResetPasswordValidator), asyncMiddleware(resetUserPassword))
+usersRouter.post(
+  '/:id/reset-password',
+  asyncMiddleware(usersResetPasswordValidator),
+  asyncMiddleware(resetUserPassword)
+)
 
 // ---------------------------------------------------------------------------
 
