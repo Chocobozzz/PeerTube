@@ -55,9 +55,12 @@
     @if (videoBlock) {
       <div class="d-flex moderation-expanded">
         <div class="left">
-          <span class="moderation-expanded-label" i18n>Block reason:</span>
-          <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+          @if (videoBlock.reasonHtml) {
+            <span class="moderation-expanded-label" i18n>Block reason:</span>
+            <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+          }
         </div>
+
         <div class="right">
           <my-embed [video]="videoBlock.video"></my-embed>
         </div>
