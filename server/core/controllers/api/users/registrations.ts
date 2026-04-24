@@ -139,12 +139,7 @@ async function requestRegistration (req: express.Request, res: express.Response)
 
   Hooks.runAction('action:api.user.requested-registration', { body, registration, req, res })
 
-  return res.json({
-    state: {
-      id: UserRegistrationState.PENDING,
-      label: USER_REGISTRATION_STATES[UserRegistrationState.PENDING]
-    }
-  })
+  return res.json(registration.toFormattedJSON())
 }
 
 // ---------------------------------------------------------------------------
