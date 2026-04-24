@@ -8,6 +8,7 @@ import { ActorFollowHealthCache } from '../actor-follow-health-cache.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 const lTags = loggerTagsFactory('schedulers')
+
 const FOLLOW_RESEND_STALE_MS = 1000 * 60 * 60 * 24 * 7 // 7 days
 const FOLLOW_RESEND_BATCH_SIZE = 100
 
@@ -23,7 +24,7 @@ export class ActorFollowScheduler extends AbstractScheduler {
   protected async internalExecute () {
     // Run too often in test/dev instances
     if (isProdInstance()) {
-      logger.info('Processing pending actor follow scores.', lTags())
+      logger.info('Processing actor follows scheduler.', lTags())
     }
 
     await this.processPendingScores()
@@ -34,20 +35,30 @@ export class ActorFollowScheduler extends AbstractScheduler {
   }
 
   private async processPendingScores () {
-    const pendingScores = ActorFollowHealthCache.Instance.getPendingFollowsScore()
+    const goodInboxes = ActorFollowHealthCache.Instance.getGoodInboxes()
+    const badInboxes = ActorFollowHealthCache.Instance.getBadInboxes()
     const badServerIds = ActorFollowHealthCache.Instance.getBadFollowingServerIds()
     const goodServerIds = ActorFollowHealthCache.Instance.getGoodFollowingServerIds()
 
-    ActorFollowHealthCache.Instance.clearPendingFollowsScore()
+    ActorFollowHealthCache.Instance.clearGoodInboxes()
+    ActorFollowHealthCache.Instance.clearBadInboxes()
     ActorFollowHealthCache.Instance.clearBadFollowingServerIds()
     ActorFollowHealthCache.Instance.clearGoodFollowingServerIds()
 
-    for (const inbox of Object.keys(pendingScores)) {
-      await ActorFollowModel.updateScore(inbox, pendingScores[inbox])
+    for (const goodInbox of goodInboxes) {
+      if (badInboxes.has(goodInbox)) continue
+
+      await ActorFollowModel.updateScore(goodInbox, ACTOR_FOLLOW_SCORE.BONUS)
     }
 
-    await ActorFollowModel.updateScoreByFollowingServers(badServerIds, ACTOR_FOLLOW_SCORE.PENALTY)
-    await ActorFollowModel.updateScoreByFollowingServers(goodServerIds, ACTOR_FOLLOW_SCORE.BONUS)
+    for (const badInbox of badInboxes) {
+      if (goodInboxes.has(badInbox)) continue
+
+      await ActorFollowModel.updateScore(badInbox, ACTOR_FOLLOW_SCORE.PENALTY)
+    }
+
+    await ActorFollowModel.updateScoreByFollowingServers(Array.from(badServerIds), ACTOR_FOLLOW_SCORE.PENALTY)
+    await ActorFollowModel.updateScoreByFollowingServers(Array.from(goodServerIds), ACTOR_FOLLOW_SCORE.BONUS)
   }
 
   private async removeBadActorFollows () {

@@ -120,8 +120,9 @@ describe('Test handle downs', function () {
     await killallServers([ servers[1] ])
 
     // Remove server 2 follower
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 7; i++) {
       await servers[0].videos.upload({ attributes: videoAttributes })
+      await wait(1000)
     }
 
     await waitJobs([ servers[0], servers[2] ])
@@ -149,8 +150,6 @@ describe('Test handle downs', function () {
     }
 
     await waitJobs(servers[0])
-    // Wait scheduler
-    await wait(11000)
 
     // Only server 3 is still a follower of server 1
     const body = await servers[0].follows.getFollowers({ start: 0, count: 2, sort: 'createdAt' })
@@ -192,12 +191,10 @@ describe('Test handle downs', function () {
   })
 
   it('Should send an update to server 3, and automatically fetch the video', async function () {
-    this.timeout(15000)
-
     {
       const { data } = await servers[2].videos.list()
       expect(data).to.be.an('array')
-      expect(data).to.have.lengthOf(11)
+      expect(data).to.have.lengthOf(8)
     }
 
     await servers[0].videos.update({ id: missedVideo1.uuid })
@@ -209,7 +206,7 @@ describe('Test handle downs', function () {
       const { data } = await servers[2].videos.list()
       expect(data).to.be.an('array')
       // 1 video is unlisted
-      expect(data).to.have.lengthOf(12)
+      expect(data).to.have.lengthOf(9)
     }
 
     // Check unlisted video
@@ -218,8 +215,6 @@ describe('Test handle downs', function () {
   })
 
   it('Should send comments on a video to server 3, and automatically fetch the video', async function () {
-    this.timeout(25000)
-
     await commentCommands[0].addReply({ videoId: missedVideo2.uuid, toCommentId: commentIdServer1, text: 'comment 1-3' })
 
     await waitJobs(servers)
@@ -295,12 +290,12 @@ describe('Test handle downs', function () {
     }
 
     await waitJobs(servers)
-    await sqlCommands[1].setActorFollowScores(20)
+    await sqlCommands[1].setActorFollowScores(2000)
 
     // Wait video expiration
     await wait(11000)
 
-    // Refresh video -> score + 10 = 30
+    // Refresh video -> score + 1000 = 3000
     await servers[1].videos.get({ id: videoIdsServer1[0] })
 
     await waitJobs(servers)
@@ -314,7 +309,7 @@ describe('Test handle downs', function () {
     // Wait video expiration
     await wait(11000)
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       try {
         await servers[1].videos.get({ id: videoIdsServer1[i] })
         await waitJobs([ servers[1] ])

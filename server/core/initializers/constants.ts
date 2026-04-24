@@ -191,9 +191,9 @@ export const ROUTE_CACHE_LIFETIME = {
 
 // Number of points we add/remove after a successful/bad request
 export const ACTOR_FOLLOW_SCORE = {
-  PENALTY: -10,
-  BONUS: 10,
-  BASE: 1000,
+  PENALTY: -1000,
+  BONUS: 1000,
+  BASE: 5000,
   MAX: 10000
 }
 
@@ -359,7 +359,7 @@ export const REQUEST_TIMEOUTS = {
 
 export const SCHEDULER_INTERVALS_MS = {
   RUNNER_JOB_WATCH_DOG: Math.min(CONFIG.REMOTE_RUNNERS.STALLED_JOBS.VOD, CONFIG.REMOTE_RUNNERS.STALLED_JOBS.LIVE),
-  ACTOR_FOLLOW_SCORES: 60000 * 60, // 1 hour
+  ACTOR_FOLLOW_SCORES: 60000 * 60 * 20, // 20 hours
   REMOVE_OLD_JOBS: 60000 * 60, // 1 hour
   UPDATE_VIDEOS: 60000, // 1 minute
   UPDATE_TOKEN_SESSION: 60000, // 1 minute
@@ -1278,8 +1278,6 @@ export const MAX_SQL_DELETE_ITEMS = 10000
 if (process.env.PRODUCTION_CONSTANTS !== 'true') {
   if (isTestOrDevInstance()) {
     PRIVATE_RSA_KEY_SIZE = 1024
-
-    ACTOR_FOLLOW_SCORE.BASE = 20
 
     REMOTE_SCHEME.HTTP = 'http'
     REMOTE_SCHEME.WS = 'ws'
