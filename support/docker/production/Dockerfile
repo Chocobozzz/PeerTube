@@ -1,4 +1,4 @@
-FROM node:20-trixie-slim
+FROM node:22-trixie-slim
 
 ARG ALREADY_BUILT=0
 

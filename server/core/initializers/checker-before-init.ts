@@ -331,15 +331,11 @@ export function checkNodeVersion () {
 
   logger.debug(`Checking NodeJS version ${v}`)
 
-  if (major < 20) {
-    throw new Error(`Your NodeJS version ${v} is not supported. Please upgrade.`)
-  }
-
-  if (major === 20 && minor < 19) {
-    throw new Error(`NodeJS v20.19 and above is required`)
+  if (major < 22) {
+    throw new Error(`Your NodeJS version ${v} is not supported. Please upgrade to NodeJS 22 or NodeJS 24`)
   }
 
   if (major === 22 && minor < 12) {
-    throw new Error(`NodeJS v22.12 and above is required`)
+    throw new Error(`NodeJS >= v22.12 or NodeJS 24 is required`)
   }
 }

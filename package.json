@@ -5,7 +5,7 @@
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
-    "node": ">=20.x",
+    "node": ">=22.x",
     "pnpm": ">=10.9"
   },
   "type": "module",

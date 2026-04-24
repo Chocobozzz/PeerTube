@@ -45,7 +45,7 @@ handled via FFmpeg, with optional distributed runners.
 
 ### Prerequisites
 
-- Node.js >= 20.x
+- Node.js >= 22.x
 - pnpm >= 10.9 (do **not** use npm or yarn for install)
 - PostgreSQL >= 10 with `pg_trgm` and `unaccent` extensions
 - Redis >= 6.x
@@ -278,7 +278,7 @@ docker run -p 8082:8080 \
 ### CI pipeline
 
 GitHub Actions (`.github/workflows/test.yml`), Ubuntu 22.04, Node.js
-20.x. Matrix strategy runs suites in parallel: `types-package`,
+22.x. Matrix strategy runs suites in parallel: `types-package`,
 `client`, `api-1`–`api-5`, `cli-plugin`, `lint`, `transcription`,
 `external-plugins`.
 
