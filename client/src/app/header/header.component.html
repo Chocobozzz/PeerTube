@@ -10,7 +10,7 @@
 }
 
 <div class="root" [ngClass]="{ 'search-hidden': searchHidden }">
-  <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()">
+  <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()" title="Go to homepage" i18n-title>
     <img [src]="getLogoUrl()" alt="" [title]="instanceName" class="logo" />
 
     @if (isInstanceNameDisplayed()) {
@@ -105,7 +105,7 @@
     }
   </div>
 
-  <my-button theme="tertiary" rounded="true" class="menu-button margin-button" icon="menu" (click)="toggleMenu()"></my-button>
+  <my-button title="Open menu" i18n-title theme="tertiary" rounded="true" class="menu-button margin-button" icon="menu" (click)="toggleMenu()"></my-button>
 </div>
 
 <my-quick-settings #quickSettingsModal></my-quick-settings>

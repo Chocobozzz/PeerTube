@@ -13,13 +13,13 @@
 
     @if (isMenuDisplayed()) {
       @if (isInMobileView) {
-        <button type="button" class="peertube-button tertiary-button p-0 list-overflow-menu overflow-button" (click)="toggleModal()">
+        <button title="See more menu items" i18n-title type="button" class="peertube-button tertiary-button p-0 list-overflow-menu overflow-button" (click)="toggleModal()">
           <span class="chevron-down"></span>
         </button>
       }
 
       <div [hidden]="isInMobileView" class="list-overflow-menu" ngbDropdown container="body" #dropdown="ngbDropdown">
-        <button class="peertube-button tertiary-button p-0 overflow-button" ngbDropdownToggle type="button">
+        <button title="See more menu items" i18n-title class="peertube-button tertiary-button p-0 overflow-button" ngbDropdownToggle type="button">
           <span class="chevron-down"></span>
         </button>
 
