@@ -6845,6 +6845,12 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        -
+          name: subscriptionName
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -6918,6 +6924,12 @@ paths:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
+        -
+          name: subscriptionName
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -6979,6 +6991,104 @@ paths:
           description: successful operation
         '404':
           description: server block does not exist
+
+  /api/v1/server/blocklist/subscriptions:
+    get:
+      tags:
+        - Server Blocklist
+      summary: List server blocklist subscriptions
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BlocklistSubscription'
+    post:
+      tags:
+        - Server Blocklist
+      summary: Add a server blocklist subscription
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: url
+              required:
+                - url
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlocklistSubscription'
+        '409':
+          description: subscription already exists
+
+  '/api/v1/server/blocklist/subscriptions/{id}':
+    delete:
+      tags:
+        - Server Blocklist
+      summary: Delete a server blocklist subscription
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: subscription does not exist
+
+  /api/v1/server/blocklist/public-log:
+    get:
+      tags:
+        - Server Blocklist
+      summary: List publicly shared server blocklist log entries
+      parameters:
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutoMuteList'
+        '403':
+          description: public log is disabled
 
   /api/v1/server/redundancy/{host}:
     put:
@@ -9685,6 +9795,8 @@ components:
             properties:
               blockedByServer:
                 type: boolean
+              blockedByServerSubscription:
+                type: string
               blockedByUser:
                 type: boolean
         hosts:
@@ -9695,6 +9807,8 @@ components:
             properties:
               blockedByServer:
                 type: boolean
+              blockedByServerSubscription:
+                type: string
               blockedByUser:
                 type: boolean
 
@@ -10389,6 +10503,9 @@ components:
         blockedAccount:
           $ref: '#/components/schemas/Account'
           type: boolean
+        blocklistSubscription:
+          $ref: '#/components/schemas/BlocklistSubscriptionSummary'
+          nullable: true
         createdAt:
           type: string
           format: date-time
@@ -10402,9 +10519,78 @@ components:
             host:
               type: string
               format: hostname
+        blocklistSubscription:
+          $ref: '#/components/schemas/BlocklistSubscriptionSummary'
+          nullable: true
         createdAt:
           type: string
           format: date-time
+    BlocklistSubscription:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          type: string
+        url:
+          type: string
+          format: url
+        mutedAccountsCount:
+          type: integer
+          minimum: 0
+        mutedServersCount:
+          type: integer
+          minimum: 0
+        lastSyncAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    BlocklistSubscriptionSummary:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          type: string
+        url:
+          type: string
+          format: url
+    BlocklistLog:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        action:
+          type: string
+          enum:
+            - add
+            - delete
+        target:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    AutoMuteList:
+      properties:
+        name:
+          type: string
+        actions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - block
+                  - unblock
+              target:
+                type: string
+              createdAt:
+                type: string
+                format: date-time
     CommentAutoTagPolicies:
       properties:
         review:
@@ -11226,6 +11412,14 @@ components:
                   properties:
                     enabled:
                       type: boolean
+        blocklist:
+          type: object
+          properties:
+            publicLog:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         avatar:
           type: object
           properties:
@@ -11736,6 +11930,14 @@ components:
                   properties:
                     enabled:
                       type: boolean
+        blocklist:
+          type: object
+          properties:
+            publicLog:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
         followers:
           type: object
           properties:
@@ -13031,6 +13233,8 @@ components:
         - 29
         - 30
         - 31
+        - 32
+        - 33
       description: >
         Notification type. One of the following values:
 
@@ -13095,6 +13299,8 @@ components:
           - `30` CHANNEL_OWNERSHIP_CHANGED_ACCEPTED
 
           - `31` CHANNEL_OWNERSHIP_CHANGED_REJECTED
+
+          - `32` AUTOMATIC_BLOCKLIST_UPDATE
 
     NewFeatureInfoType:
       type: integer

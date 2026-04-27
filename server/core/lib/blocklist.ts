@@ -1,68 +1,126 @@
-import { sequelizeTypescript } from '@server/initializers/database.js'
-import { getServerActor } from '@server/models/application/application.js'
-import { MAccountBlocklist, MAccountId, MAccountHost, MServerBlocklist } from '@server/types/models/index.js'
-import { AccountBlocklistModel } from '../models/account/account-blocklist.js'
-import { ServerBlocklistModel } from '../models/server/server-blocklist.js'
-import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { logger } from '@server/helpers/logger.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { AccountModel } from '@server/models/account/account.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { ServerModel } from '@server/models/server/server.js'
+import { UserNotificationModel } from '@server/models/user/user-notification.js'
+import {
+  MAccountBlocklist,
+  MAccountDefault,
+  MAccountHost,
+  MAccountId,
+  MBlocklistSubscription,
+  MServer,
+  MServerBlocklist
+} from '@server/types/models/index.js'
+import { AccountBlocklistModel } from '../models/blocklist/account-blocklist.js'
+import { BlocklistLogModel } from '../models/blocklist/blocklist-log.js'
+import { ServerBlocklistModel } from '../models/blocklist/server-blocklist.js'
 
-async function addAccountInBlocklist (options: {
+export async function addAccountInBlocklist (options: {
   byAccountId: number
-  targetAccountId: number
+  targetAccount: MAccountDefault
+  blocklistSubscription?: MBlocklistSubscription
 
   removeNotificationOfUserId: number | null // If blocked by a user
 }) {
-  const { byAccountId, targetAccountId, removeNotificationOfUserId } = options
+  const { byAccountId, targetAccount, blocklistSubscription, removeNotificationOfUserId } = options
 
   await sequelizeTypescript.transaction(async t => {
-    return AccountBlocklistModel.upsert({
-      accountId: byAccountId,
-      targetAccountId
-    }, { transaction: t })
+    const existing = await AccountBlocklistModel.loadByAccountAndTarget(byAccountId, targetAccount.id, t)
+
+    if (!existing) {
+      await AccountBlocklistModel.create({
+        accountId: byAccountId,
+        targetAccountId: targetAccount.id,
+        blocklistSubscriptionId: blocklistSubscription?.id
+      }, { transaction: t })
+
+      await BlocklistLogModel.create({
+        action: 'add',
+        accountId: byAccountId,
+        blocklistSubscriptionId: blocklistSubscription?.id,
+        automaticallyCreated: !!blocklistSubscription,
+        target: targetAccount.Actor.getFullIdentifier()
+      }, { transaction: t })
+    }
   })
 
   UserNotificationModel.removeNotificationsOf({
-    id: targetAccountId,
+    id: targetAccount.id,
     type: 'account',
     forUserId: removeNotificationOfUserId
   }).catch(err => logger.error('Cannot remove notifications after an account mute.', { err }))
 }
 
-async function addServerInBlocklist (options: {
+export async function addServerInBlocklist (options: {
   byAccountId: number
-  targetServerId: number
-
+  targetServer: MServer
+  blocklistSubscription?: MBlocklistSubscription
   removeNotificationOfUserId: number | null
 }) {
-  const { byAccountId, targetServerId, removeNotificationOfUserId } = options
+  const { byAccountId, targetServer, blocklistSubscription, removeNotificationOfUserId } = options
 
   await sequelizeTypescript.transaction(async t => {
-    return ServerBlocklistModel.upsert({
-      accountId: byAccountId,
-      targetServerId
-    }, { transaction: t })
+    const existing = await ServerBlocklistModel.loadByAccountAndTarget(byAccountId, targetServer.id, t)
+
+    if (!existing) {
+      await ServerBlocklistModel.create({
+        accountId: byAccountId,
+        targetServerId: targetServer.id,
+        blocklistSubscriptionId: blocklistSubscription?.id
+      }, { transaction: t })
+
+      await BlocklistLogModel.create({
+        action: 'add',
+        accountId: byAccountId,
+        blocklistSubscriptionId: blocklistSubscription?.id,
+        automaticallyCreated: !!blocklistSubscription,
+        target: targetServer.host
+      }, { transaction: t })
+    }
   })
 
   UserNotificationModel.removeNotificationsOf({
-    id: targetServerId,
+    id: targetServer.id,
     type: 'server',
     forUserId: removeNotificationOfUserId
   }).catch(err => logger.error('Cannot remove notifications after a server mute.', { err }))
 }
 
-function removeAccountFromBlocklist (accountBlock: MAccountBlocklist) {
+export function removeAccountFromBlocklist (accountBlock: MAccountBlocklist) {
   return sequelizeTypescript.transaction(async t => {
+    const targetAccount = await AccountModel.load(accountBlock.targetAccountId, t)
+
+    await BlocklistLogModel.create({
+      action: 'delete',
+      accountId: accountBlock.accountId,
+      blocklistSubscriptionId: accountBlock.blocklistSubscriptionId,
+      automaticallyCreated: !!accountBlock.blocklistSubscriptionId,
+      target: targetAccount.Actor.getFullIdentifier()
+    }, { transaction: t })
+
     return accountBlock.destroy({ transaction: t })
   })
 }
 
-function removeServerFromBlocklist (serverBlock: MServerBlocklist) {
+export function removeServerFromBlocklist (serverBlock: MServerBlocklist) {
   return sequelizeTypescript.transaction(async t => {
+    const targetServer = await ServerModel.load(serverBlock.targetServerId, t)
+
+    await BlocklistLogModel.create({
+      action: 'delete',
+      accountId: serverBlock.accountId,
+      blocklistSubscriptionId: serverBlock.blocklistSubscriptionId,
+      automaticallyCreated: !!serverBlock.blocklistSubscriptionId,
+      target: targetServer.host
+    }, { transaction: t })
+
     return serverBlock.destroy({ transaction: t })
   })
 }
 
-async function isBlockedByServerOrAccount (targetAccount: MAccountHost, userAccount?: MAccountId) {
+export async function isBlockedByServerOrAccount (targetAccount: MAccountHost, userAccount?: MAccountId) {
   const serverAccountId = (await getServerActor()).Account.id
   const sourceAccounts = [ serverAccountId ]
 
@@ -79,12 +137,4 @@ async function isBlockedByServerOrAccount (targetAccount: MAccountHost, userAcco
   }
 
   return false
-}
-
-export {
-  addAccountInBlocklist,
-  addServerInBlocklist,
-  removeAccountFromBlocklist,
-  removeServerFromBlocklist,
-  isBlockedByServerOrAccount
 }

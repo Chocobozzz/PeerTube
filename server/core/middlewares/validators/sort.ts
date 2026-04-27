@@ -22,6 +22,7 @@ export const instanceFollowingSortValidator = checkSortFactory(SORTABLE_COLUMNS.
 export const userSubscriptionsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_SUBSCRIPTIONS)
 export const accountsBlocklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNTS_BLOCKLIST)
 export const serversBlocklistSortValidator = checkSortFactory(SORTABLE_COLUMNS.SERVERS_BLOCKLIST)
+export const blocklistSubscriptionsSortValidator = checkSortFactory(SORTABLE_COLUMNS.BLOCKLIST_SUBSCRIPTIONS)
 export const userNotificationsSortValidator = checkSortFactory(SORTABLE_COLUMNS.USER_NOTIFICATIONS)
 export const videoPlaylistsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PLAYLISTS)
 export const pluginsSortValidator = checkSortFactory(SORTABLE_COLUMNS.PLUGINS)

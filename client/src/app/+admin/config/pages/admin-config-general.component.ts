@@ -152,6 +152,12 @@ type Form = {
     }>
   }>
 
+  blocklist: FormGroup<{
+    publicLog: FormGroup<{
+      enabled: FormControl<boolean>
+    }>
+  }>
+
   followings: FormGroup<{
     instance: FormGroup<{
       autoFollowBack: FormGroup<{
@@ -403,6 +409,11 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
           manualApproval: null
         },
         channels: {
+          enabled: null
+        }
+      },
+      blocklist: {
+        publicLog: {
           enabled: null
         }
       },

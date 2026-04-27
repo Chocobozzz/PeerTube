@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, inject, OnInit, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { VideoChannelSyncService } from '@app/shared/shared-main/channel/video-channel-sync.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { ActorCellComponent } from '@app/shared/shared-tables/actor-cell.component'
-import { HTMLServerConfig, VideoChannelSync, VideoChannelSyncState, VideoChannelSyncStateType } from '@peertube/peertube-models'
+import { getStateBadgeClasses } from '@app/shared/shared-tables/state-badge'
+import { HTMLServerConfig, StreamSyncStateType, VideoChannelSync } from '@peertube/peertube-models'
 import { first, mergeMap } from 'rxjs'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { ActionDropdownComponent, DropdownAction } from '../../shared/shared-main/buttons/action-dropdown.component'
@@ -36,13 +37,6 @@ export class MyVideoChannelSyncsComponent implements OnInit {
   readonly table = viewChild<TableComponent<VideoChannelSync>>('table')
 
   videoChannelSyncActions: DropdownAction<VideoChannelSync>[][] = []
-
-  private static STATE_CLASS_BY_ID = {
-    [VideoChannelSyncState.FAILED]: 'badge-red',
-    [VideoChannelSyncState.PROCESSING]: 'badge-blue',
-    [VideoChannelSyncState.SYNCED]: 'badge-green',
-    [VideoChannelSyncState.WAITING_FIRST_RUN]: 'badge-yellow'
-  }
 
   private serverConfig: HTMLServerConfig
 
@@ -136,8 +130,8 @@ export class MyVideoChannelSyncsComponent implements OnInit {
     return '/my-library/video-channel-syncs/create'
   }
 
-  getSyncStateClass (stateId: VideoChannelSyncStateType) {
-    return [ 'pt-badge', MyVideoChannelSyncsComponent.STATE_CLASS_BY_ID[stateId] ]
+  getSyncStateClass (stateId: StreamSyncStateType) {
+    return getStateBadgeClasses(stateId)
   }
 
   getChannelUrl (name: string) {

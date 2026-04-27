@@ -1,6 +1,6 @@
 import { FunctionProperties, PickWith } from '@peertube/peertube-typescript-utils'
 import { ServerModel } from '../../../models/server/server.js'
-import { MAccountBlocklistId } from '../account/index.js'
+import { MAccountBlocklistId } from '../blocklist/account-blocklist.js'
 
 type Use<K extends keyof ServerModel, M> = PickWith<ServerModel, K, M>
 

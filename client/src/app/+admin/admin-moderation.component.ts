@@ -45,24 +45,34 @@ export class AdminModerationComponent implements OnInit {
       })
     }
 
-    if (this.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST) || this.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
+    if (
+      this.hasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST) || this.hasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST) ||
+      this.hasRight(UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS)
+    ) {
       const item: HorizontalMenuEntry = {
         label: $localize`Mutes`,
         routerLink: '',
         children: []
       }
 
-      if (this.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)) {
+      if (this.hasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST)) {
         item.children.push({
           label: $localize`Muted accounts`,
           routerLink: '/admin/moderation/blocklist/accounts'
         })
       }
 
-      if (this.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
+      if (this.hasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST)) {
         item.children.push({
           label: $localize`Muted servers`,
           routerLink: '/admin/moderation/blocklist/servers'
+        })
+      }
+
+      if (this.hasRight(UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS)) {
+        item.children.push({
+          label: $localize`Blocklist subscriptions`,
+          routerLink: '/admin/moderation/blocklist/subscriptions'
         })
       }
 

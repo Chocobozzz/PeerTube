@@ -8,10 +8,18 @@
 
 @if (!platformOnly()) {
   @if (account().mutedByInstance) {
-    <span class="pt-badge badge-danger" i18n>Muted by your platform</span>
+    <span
+      class="pt-badge badge-danger"
+      [title]="getSubscriptionTitle(account().mutedByInstanceSubscription)"
+      i18n
+    >Muted by your platform</span>
   }
 
   @if (account().mutedServerByInstance) {
-    <span class="pt-badge badge-danger" i18n>Platform muted by your platform</span>
+    <span
+      class="pt-badge badge-danger"
+      [title]="getSubscriptionTitle(account().mutedServerByInstanceSubscription)"
+      i18n
+    >Platform muted by your platform</span>
   }
 }

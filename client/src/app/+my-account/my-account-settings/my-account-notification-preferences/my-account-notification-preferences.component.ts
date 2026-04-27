@@ -59,7 +59,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           'abuseNewMessage',
           'abuseAsModerator',
           'videoAutoBlacklistAsModerator',
-          'newUserRegistration'
+          'newUserRegistration',
+          'automaticBlocklist'
         ]
       },
 
@@ -81,7 +82,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,
       autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION,
       newPeerTubeVersion: UserRight.MANAGE_DEBUG,
-      newPluginVersion: UserRight.MANAGE_DEBUG
+      newPluginVersion: UserRight.MANAGE_DEBUG,
+      automaticBlocklist: UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS
     }
   }
 
@@ -107,7 +109,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newPeerTubeVersion: $localize`A new PeerTube version is available`,
       newPluginVersion: $localize`One of your plugin/theme has a new available version`,
       myVideoStudioEditionFinished: $localize`Processing of edits has finished`,
-      myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`
+      myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`,
+      automaticBlocklist: $localize`An account or server was automatically blocked/unblocked by a blocklist subscription`
     }
 
     this.loadNotificationSettings()

@@ -6,9 +6,16 @@ export class AccountBlock implements AccountBlockServer {
   blockedAccount: Account
   createdAt: Date | string
 
+  blocklistSubscription?: {
+    id: number
+    name: string
+    url: string
+  }
+
   constructor (block: AccountBlockServer) {
     this.byAccount = new Account(block.byAccount)
     this.blockedAccount = new Account(block.blockedAccount)
     this.createdAt = block.createdAt
+    this.blocklistSubscription = block.blocklistSubscription
   }
 }

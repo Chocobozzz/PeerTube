@@ -1,6 +1,6 @@
-import 'multer'
-import express from 'express'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import express from 'express'
+import 'multer'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
   addAccountInBlocklist,
@@ -24,12 +24,13 @@ import {
   serversBlocklistSortValidator,
   unblockServerByAccountValidator
 } from '../../../middlewares/validators/index.js'
-import { AccountBlocklistModel } from '../../../models/account/account-blocklist.js'
-import { ServerBlocklistModel } from '../../../models/server/server-blocklist.js'
+import { AccountBlocklistModel } from '../../../models/blocklist/account-blocklist.js'
+import { ServerBlocklistModel } from '../../../models/blocklist/server-blocklist.js'
 
 const myBlocklistRouter = express.Router()
 
-myBlocklistRouter.get('/me/blocklist/accounts',
+myBlocklistRouter.get(
+  '/me/blocklist/accounts',
   authenticate,
   paginationValidator,
   accountsBlocklistSortValidator,
@@ -38,19 +39,22 @@ myBlocklistRouter.get('/me/blocklist/accounts',
   asyncMiddleware(listBlockedAccounts)
 )
 
-myBlocklistRouter.post('/me/blocklist/accounts',
+myBlocklistRouter.post(
+  '/me/blocklist/accounts',
   authenticate,
   asyncMiddleware(blockAccountValidator),
   asyncRetryTransactionMiddleware(blockAccount)
 )
 
-myBlocklistRouter.delete('/me/blocklist/accounts/:accountName',
+myBlocklistRouter.delete(
+  '/me/blocklist/accounts/:accountName',
   authenticate,
   asyncMiddleware(unblockAccountByAccountValidator),
   asyncRetryTransactionMiddleware(unblockAccount)
 )
 
-myBlocklistRouter.get('/me/blocklist/servers',
+myBlocklistRouter.get(
+  '/me/blocklist/servers',
   authenticate,
   paginationValidator,
   serversBlocklistSortValidator,
@@ -59,13 +63,15 @@ myBlocklistRouter.get('/me/blocklist/servers',
   asyncMiddleware(listBlockedServers)
 )
 
-myBlocklistRouter.post('/me/blocklist/servers',
+myBlocklistRouter.post(
+  '/me/blocklist/servers',
   authenticate,
   asyncMiddleware(blockServerValidator),
   asyncRetryTransactionMiddleware(blockServer)
 )
 
-myBlocklistRouter.delete('/me/blocklist/servers/:host',
+myBlocklistRouter.delete(
+  '/me/blocklist/servers/:host',
   authenticate,
   asyncMiddleware(unblockServerByAccountValidator),
   asyncRetryTransactionMiddleware(unblockServer)
@@ -95,7 +101,11 @@ async function blockAccount (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const accountToBlock = res.locals.account
 
-  await addAccountInBlocklist({ byAccountId: user.Account.id, targetAccountId: accountToBlock.id, removeNotificationOfUserId: user.id })
+  await addAccountInBlocklist({
+    byAccountId: user.Account.id,
+    targetAccount: accountToBlock,
+    removeNotificationOfUserId: user.id
+  })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -128,7 +138,7 @@ async function blockServer (req: express.Request, res: express.Response) {
 
   await addServerInBlocklist({
     byAccountId: user.Account.id,
-    targetServerId: serverToBlock.id,
+    targetServer: serverToBlock,
     removeNotificationOfUserId: user.id
   })
 

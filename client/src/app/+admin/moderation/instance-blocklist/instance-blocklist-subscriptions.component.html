@@ -1,0 +1,115 @@
+<my-table
+  #table
+  key="InstanceBlocklistSubscriptionsComponent"
+  i18n-paginatorText
+  paginatorText="subscriptions per page"
+  [defaultColumns]="columns"
+  [dataLoader]="dataLoader"
+  columnConfig="false"
+  searchInput="true"
+>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n
+    >{ totalRecords, plural, =0 {No subscription} =1 {1 subscription} other {{{ totalRecords | myNumberFormatter }} subscriptions}}</ng-container>
+  </ng-template>
+
+  <ng-template #captionRight>
+    <button class="peertube-create-button" (click)="openAddModal()" (keyup.enter)="openAddModal()">
+      <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+      <ng-container i18n>Add a subscription</ng-container>
+    </button>
+  </ng-template>
+
+  <ng-template #tableCells let-subscription>
+    <td>{{ subscription.name }}</td>
+
+    <td>
+      <a [href]="subscription.url" target="_blank" rel="noopener noreferrer">
+        {{ subscription.url }}
+        <my-global-icon iconName="external-link"></my-global-icon>
+      </a>
+    </td>
+
+    <td>
+      <span [ngClass]="getStateClass(subscription.state.id)">
+        {{ subscription.state.label }}
+      </span>
+    </td>
+
+    <td>{{ subscription.lastSyncAt ? (subscription.lastSyncAt | ptDate: 'short') : '-'  }}</td>
+
+    <td>
+      <a
+        [routerLink]="getServerBlocklistUrl()"
+        [queryParams]="{ subscriptionName: subscription.name }"
+        i18n-title
+        title="Open muted servers filtered by this subscription"
+      >{{ subscription.mutedServersCount }}</a>
+    </td>
+
+    <td>
+      <a
+        [routerLink]="getAccountBlocklistUrl()"
+        [queryParams]="{ subscriptionName: subscription.name }"
+        i18n-title
+        title="Open muted accounts filtered by this subscription"
+      >{{ subscription.mutedAccountsCount }}</a>
+    </td>
+
+    <td>{{ subscription.createdAt | ptDate: 'short'  }}</td>
+  </ng-template>
+
+  <ng-template #actionCell let-subscription>
+    <button class="peertube-button secondary-button" (click)="removeSubscription(subscription)" i18n>Delete</button>
+  </ng-template>
+
+  <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
+    @if (search || hasFilters) {
+      <ng-container i18n>No subscription found matching current filters.</ng-container>
+    } @else {
+      <ng-container i18n>No subscription found.</ng-container>
+    }
+  </ng-template>
+</my-table>
+
+<ng-template #addModal let-hide="close">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h4 class="modal-title" i18n>Add a blocklist subscription</h4>
+
+      <button class="border-0 p-0" (click)="hide()" i18n-title title="Close">
+        <my-global-icon iconName="cross"></my-global-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <p i18n>Enter the URL of the blocklist to subscribe to. The list will be fetched periodically and accounts/servers will be automatically muted.</p>
+
+      <div class="form-group">
+        <label i18n for="subscriptionUrl">Blocklist URL</label>
+        <input
+          type="url"
+          id="subscriptionUrl"
+          class="form-control"
+          [formField]="addSubscriptionForm['url']"
+          i18n-placeholder
+          placeholder="https://example.com/blocklist.json"
+        >
+
+        <my-form-error [field]="addSubscriptionForm.url()"></my-form-error>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="peertube-button secondary-button" (click)="hide()" i18n>Cancel</button>
+
+      <my-button
+        theme="primary"
+        [loading]="addingSubscription"
+        [disabled]="!addSubscriptionForm().valid() || addingSubscription"
+        (click)="submitAddModal()"
+        i18n
+      >Subscribe</my-button>
+    </div>
+  </div>
+</ng-template>

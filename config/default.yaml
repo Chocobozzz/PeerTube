@@ -1096,6 +1096,11 @@ followings:
       # Host your own using https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow
       index_url: ''
 
+blocklist:
+  # Enable /api/v1/server/blocklist/public-log endpoint on your instance to share your blocklist with other instances
+  public_log:
+    enabled: false
+
 theme:
   default: 'default'
 

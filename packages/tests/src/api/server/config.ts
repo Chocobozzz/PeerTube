@@ -130,6 +130,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.import.videoChannelSynchronization.enabled).to.be.false
   expect(data.import.users.enabled).to.be.true
   expect(data.autoBlacklist.videos.ofUsers.enabled).to.be.false
+  expect(data.blocklist.publicLog.enabled).to.be.false
 
   expect(data.followers.instance.enabled).to.be.true
   expect(data.followers.instance.manualApproval).to.be.false
@@ -416,6 +417,11 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         }
       }
     },
+    blocklist: {
+      publicLog: {
+        enabled: true
+      }
+    },
     broadcastMessage: {
       enabled: true,
       level: 'error',
@@ -530,6 +536,7 @@ describe('Test config', function () {
       expect(data.views.videos.watchingInterval.users).to.equal(5000)
 
       expect(data.webrtc.stunServers).to.include('stun:stun.framasoft.org')
+      expect(data.blocklist.publicLog.enabled).to.be.false
     })
 
     it('Should have a correct config on a server with registration enabled', async function () {

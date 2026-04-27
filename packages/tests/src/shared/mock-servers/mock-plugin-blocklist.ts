@@ -10,7 +10,7 @@ type BlocklistResponse = {
   }[]
 }
 
-export class MockBlocklist {
+export class MockPluginBlocklist {
   private body: BlocklistResponse
   private server: Server
 

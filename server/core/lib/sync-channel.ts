@@ -1,4 +1,4 @@
-import { VideoChannelSyncState } from '@peertube/peertube-models'
+import { StreamSyncState } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -24,7 +24,7 @@ export async function synchronizeChannel (options: {
   const channelUsername = channel.Actor.preferredUsername
 
   if (channelSync) {
-    channelSync.state = VideoChannelSyncState.PROCESSING
+    channelSync.state = StreamSyncState.PROCESSING
     channelSync.lastSyncAt = new Date()
     await channelSync.save()
   }
@@ -123,7 +123,7 @@ export async function synchronizeChannel (options: {
     logger.error(`Failed to import ${externalChannelUrl} in channel ${channelUsername}`, { err, ...rootLTags() })
 
     if (channelSync) {
-      channelSync.state = VideoChannelSyncState.FAILED
+      channelSync.state = StreamSyncState.FAILED
       await channelSync.save()
     }
   }

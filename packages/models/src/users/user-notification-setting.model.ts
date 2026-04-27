@@ -33,4 +33,6 @@ export interface UserNotificationSetting {
   myVideoStudioEditionFinished: UserNotificationSettingValueType
 
   myVideoTranscriptionGenerated: UserNotificationSettingValueType
+
+  automaticBlocklist: UserNotificationSettingValueType
 }

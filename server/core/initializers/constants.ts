@@ -28,8 +28,8 @@ import {
   VideoChannelActivityTargetType,
   VideoChannelCollaboratorState,
   VideoChannelCollaboratorStateType,
-  VideoChannelSyncState,
-  VideoChannelSyncStateType,
+  StreamSyncState,
+  StreamSyncStateType,
   VideoCommentPolicy,
   VideoCommentPolicyType,
   VideoEmbedPrivacyPolicy,
@@ -155,6 +155,7 @@ export const SORTABLE_COLUMNS = {
 
   ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
   SERVERS_BLOCKLIST: [ 'createdAt' ],
+  BLOCKLIST_SUBSCRIPTIONS: [ 'name', 'createdAt', 'lastSyncAt' ],
 
   WATCHED_WORDS_LISTS: [ 'createdAt', 'updatedAt', 'listName' ],
 
@@ -374,7 +375,8 @@ export const SCHEDULER_INTERVALS_MS = {
   REMOVE_EXPIRED_USER_EXPORTS: 1000 * 3600, // 1 hour
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
-  CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL
+  CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL,
+  BLOCKLIST_SUBSCRIPTIONS_SYNC: 60000 * 60 // 1 hour
 }
 
 // ---------------------------------------------------------------------------
@@ -662,11 +664,11 @@ export const VIDEO_IMPORT_STATES: { [id in VideoImportStateType]: string } = {
   [VideoImportState.PROCESSING]: 'Processing'
 }
 
-export const VIDEO_CHANNEL_SYNC_STATE: { [id in VideoChannelSyncStateType]: string } = {
-  [VideoChannelSyncState.FAILED]: 'Failed',
-  [VideoChannelSyncState.SYNCED]: 'Synchronized',
-  [VideoChannelSyncState.PROCESSING]: 'Processing',
-  [VideoChannelSyncState.WAITING_FIRST_RUN]: 'Waiting first run'
+export const STREAM_SYNC_STATE: { [id in StreamSyncStateType]: string } = {
+  [StreamSyncState.FAILED]: 'Failed',
+  [StreamSyncState.SYNCED]: 'Synchronized',
+  [StreamSyncState.PROCESSING]: 'Processing',
+  [StreamSyncState.WAITING_FIRST_RUN]: 'Waiting first run'
 }
 
 export const ABUSE_STATES: { [id in AbuseStateType]: string } = {
@@ -1290,6 +1292,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_HISTORY = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS = 5000
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
+    SCHEDULER_INTERVALS_MS.BLOCKLIST_SUBSCRIPTIONS_SYNC = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
     SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000

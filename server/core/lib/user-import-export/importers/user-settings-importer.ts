@@ -108,7 +108,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
       newPeerTubeVersion: settingsImportData.newPeerTubeVersion,
       newPluginVersion: settingsImportData.newPluginVersion,
       myVideoStudioEditionFinished: settingsImportData.myVideoStudioEditionFinished,
-      myVideoTranscriptionGenerated: settingsImportData.myVideoTranscriptionGenerated
+      myVideoTranscriptionGenerated: settingsImportData.myVideoTranscriptionGenerated,
+      automaticBlocklist: settingsImportData.automaticBlocklist
     }
 
     await UserNotificationSettingModel.updateUserSettings(values, this.user.id)

@@ -113,7 +113,7 @@ export const customConfigUpdateValidator = [
   body('broadcastMessage.message').exists(),
   body('broadcastMessage.level').exists(),
   body('broadcastMessage.dismissable').isBoolean(),
-
+  body('blocklist.publicLog.enabled').isBoolean(),
   body('live.enabled').isBoolean(),
   body('live.allowReplay').isBoolean(),
   body('defaults.live.saveReplay').isBoolean(),

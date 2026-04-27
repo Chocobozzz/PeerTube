@@ -1,5 +1,4 @@
 <div myPluginSelector pluginSelectorId="about-instance-moderation">
-
   @if (aboutHTML.moderationInformation) {
     <div class="block moderation-information">
       <h4 i18n class="section-title">Moderation information</h4>
@@ -14,4 +13,20 @@
     </div>
   }
 
+  @if (isPublicBlocklistEnabled()) {
+    <div class="block public-blocklist">
+      <h4 i18n class="section-title">Public blocklist</h4>
+
+      <div>
+        <div i18n>
+          {{ instanceName }} publicly shares <a href="/api/v1/server/blocklist/public-log" target="_blank" rel="noopener noreferrer">its instance blocklist
+            <my-global-icon iconName="external-link"></my-global-icon></a>.
+        </div>
+
+        <div i18n>
+          Other platforms can subscribe to it to automatically mute the same accounts and servers.
+        </div>
+      </div>
+    </div>
+  }
 </div>

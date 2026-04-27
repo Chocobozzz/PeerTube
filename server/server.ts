@@ -140,6 +140,7 @@ import { PluginManager } from './core/lib/plugins/plugin-manager.js'
 import { Redis } from './core/lib/redis.js'
 import { ActorFollowScheduler } from './core/lib/schedulers/actor-follow-scheduler.js'
 import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-index-instances.js'
+import { BlocklistSubscriptionsScheduler } from './core/lib/schedulers/blocklist-subscriptions-scheduler.js'
 import { GeoIPUpdateScheduler } from './core/lib/schedulers/geo-ip-update-scheduler.js'
 import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
@@ -322,6 +323,7 @@ async function startApplication () {
   PluginsCheckScheduler.Instance.enable()
   PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
+  BlocklistSubscriptionsScheduler.Instance.enable()
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
   VideoChannelSyncLatestScheduler.Instance.enable()
   VideoStatsBufferScheduler.Instance.enable()

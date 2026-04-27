@@ -32,6 +32,7 @@ import {
   AbstractNotification,
   AbuseStateChangeForReporter,
   AutoFollowForInstance,
+  AutomaticBlocklistForModerators,
   ChannelChangeOwnershipAccepted,
   ChannelChangeOwnershipRejected,
   CommentMention,
@@ -94,6 +95,8 @@ class Notifier {
 
     newPeertubeVersion: [ NewPeerTubeVersionForAdmins ],
     newPluginVersion: [ NewPluginVersionForAdmins ],
+
+    automaticBlocklist: [ AutomaticBlocklistForModerators ],
 
     channelCollaboratorInvitation: [ InvitedToCollaborateToChannel ],
     channelCollaborationAccepted: [ AcceptedToCollaborateToChannel ],
@@ -300,6 +303,20 @@ class Notifier {
 
     this.sendNotifications(models, plugin)
       .catch(err => logger.error('Cannot notify on new plugin version %s.', plugin.name, { err }))
+  }
+
+  notifyOfAutomaticBlocklist (options: {
+    blockedAccountsCount: number
+    blockedHostsCount: number
+    unblockedAccountsCount: number
+    unblockedHostsCount: number
+  }) {
+    const models = this.notificationModels.automaticBlocklist
+
+    logger.debug(`Notify on automatic blocklist subscription update`, { ...options, ...lTags() })
+
+    this.sendNotifications(models, options)
+      .catch(err => logger.error(`Cannot notify on automatic blocklist update.`, { err, ...options }))
   }
 
   notifyOfFinishedVideoStudioEdition (video: MVideoFull) {

@@ -1,7 +1,7 @@
-import { VideoChannelSync, VideoChannelSyncState, type VideoChannelSyncStateType } from '@peertube/peertube-models'
+import { VideoChannelSync, StreamSyncState, type StreamSyncStateType } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isVideoChannelSyncStateValid } from '@server/helpers/custom-validators/video-channel-syncs.js'
-import { CONSTRAINTS_FIELDS, VIDEO_CHANNEL_SYNC_STATE } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, STREAM_SYNC_STATE } from '@server/initializers/constants.js'
 import { MChannelSync, MChannelSyncChannel, MChannelSyncFormattable } from '@server/types/models/index.js'
 import { Op } from 'sequelize'
 import {
@@ -47,10 +47,10 @@ export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel>
   declare externalChannelUrl: string
 
   @AllowNull(false)
-  @Default(VideoChannelSyncState.WAITING_FIRST_RUN)
+  @Default(StreamSyncState.WAITING_FIRST_RUN)
   @Is('VideoChannelSyncState', value => throwIfNotValid(value, isVideoChannelSyncStateValid, 'state'))
   @Column
-  declare state: VideoChannelSyncStateType
+  declare state: StreamSyncStateType
 
   @AllowNull(true)
   @Column(DataType.DATE)
@@ -147,7 +147,7 @@ export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel>
       id: this.id,
       state: {
         id: this.state,
-        label: VIDEO_CHANNEL_SYNC_STATE[this.state]
+        label: STREAM_SYNC_STATE[this.state]
       },
       externalChannelUrl: this.externalChannelUrl,
       createdAt: this.createdAt.toISOString(),

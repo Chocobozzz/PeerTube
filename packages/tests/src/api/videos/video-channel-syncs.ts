@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { VideoChannelSyncState, VideoImportState, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
+import { StreamSyncState, VideoImportState, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
 import { areHttpImportTestsDisabled, areYoutubeImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -140,7 +140,7 @@ describe('Test channel synchronizations', function () {
         expect(videoChannelSync.externalChannelUrl).to.equal(externalChannelUrl)
         expect(videoChannelSync.channel.id).to.equal(servers[0].store.channel.id)
         expect(videoChannelSync.channel.name).to.equal('root_channel')
-        expect(videoChannelSync.state.id).to.equal(VideoChannelSyncState.WAITING_FIRST_RUN)
+        expect(videoChannelSync.state.id).to.equal(StreamSyncState.WAITING_FIRST_RUN)
         expect(new Date(videoChannelSync.createdAt)).to.be.above(startTestDate).and.to.be.at.most(new Date())
       })
 
@@ -161,7 +161,7 @@ describe('Test channel synchronizations', function () {
         const { data } = await servers[0].channelSyncs.listByAccount({ accountName: userInfo.username })
 
         expect(data[0].state).to.contain({
-          id: VideoChannelSyncState.WAITING_FIRST_RUN,
+          id: StreamSyncState.WAITING_FIRST_RUN,
           label: 'Waiting first run'
         })
       })
@@ -186,7 +186,7 @@ describe('Test channel synchronizations', function () {
           expect(data[0]).to.deep.contain({
             externalChannelUrl: FIXTURE_URLS.youtubeChannel,
             state: {
-              id: VideoChannelSyncState.SYNCED,
+              id: StreamSyncState.SYNCED,
               label: 'Synchronized'
             }
           })
@@ -204,7 +204,7 @@ describe('Test channel synchronizations', function () {
           expect(data[0]).to.deep.contain({
             externalChannelUrl: FIXTURE_URLS.youtubeChannel + '?baz=qux',
             state: {
-              id: VideoChannelSyncState.SYNCED,
+              id: StreamSyncState.SYNCED,
               label: 'Synchronized'
             }
           })
@@ -256,7 +256,7 @@ describe('Test channel synchronizations', function () {
           {
             const { data } = await servers[0].channelSyncs.listByAccount({ accountName: 'root' })
             const sync = data.find(s => s.id === rootChannelSyncId)
-            expect(sync.state.id).to.equal(VideoChannelSyncState.FAILED)
+            expect(sync.state.id).to.equal(StreamSyncState.FAILED)
           }
         }
 
@@ -272,7 +272,7 @@ describe('Test channel synchronizations', function () {
         {
           const { data } = await servers[0].channelSyncs.listByAccount({ accountName: 'root' })
           const sync = data.find(s => s.id === rootChannelSyncId)
-          expect(sync.state.id).to.equal(VideoChannelSyncState.SYNCED)
+          expect(sync.state.id).to.equal(StreamSyncState.SYNCED)
         }
       })
 

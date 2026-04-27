@@ -1,17 +1,20 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { areValidActorHandles } from '@server/helpers/custom-validators/activitypub/actor.js'
-import { toArray } from '@server/helpers/custom-validators/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { isDateValid, isIdValid, toArray } from '@server/helpers/custom-validators/misc.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers.js'
 import { WEBSERVER } from '../../initializers/constants.js'
-import { AccountBlocklistModel } from '../../models/account/account-blocklist.js'
-import { ServerBlocklistModel } from '../../models/server/server-blocklist.js'
+import { AccountBlocklistModel } from '../../models/blocklist/account-blocklist.js'
+import { BlocklistSubscriptionModel } from '../../models/blocklist/blocklist-subscription.js'
+import { ServerBlocklistModel } from '../../models/blocklist/server-blocklist.js'
 import { ServerModel } from '../../models/server/server.js'
 import { areValidationErrors, doesAccountHandleExist } from './shared/index.js'
 
-const blockAccountValidator = [
+export const blockAccountValidator = [
   body('accountName')
     .exists(),
 
@@ -34,7 +37,7 @@ const blockAccountValidator = [
   }
 ]
 
-const unblockAccountByAccountValidator = [
+export const unblockAccountByAccountValidator = [
   param('accountName')
     .exists(),
 
@@ -50,7 +53,7 @@ const unblockAccountByAccountValidator = [
   }
 ]
 
-const unblockAccountByServerValidator = [
+export const unblockAccountByServerValidator = [
   param('accountName')
     .exists(),
 
@@ -66,7 +69,7 @@ const unblockAccountByServerValidator = [
   }
 ]
 
-const blockServerValidator = [
+export const blockServerValidator = [
   body('host')
     .custom(isHostValid),
 
@@ -90,7 +93,7 @@ const blockServerValidator = [
   }
 ]
 
-const unblockServerByAccountValidator = [
+export const unblockServerByAccountValidator = [
   param('host')
     .custom(isHostValid),
 
@@ -104,7 +107,7 @@ const unblockServerByAccountValidator = [
   }
 ]
 
-const unblockServerByServerValidator = [
+export const unblockServerByServerValidator = [
   param('host')
     .custom(isHostValid),
 
@@ -118,7 +121,7 @@ const unblockServerByServerValidator = [
   }
 ]
 
-const blocklistStatusValidator = [
+export const blocklistStatusValidator = [
   query('hosts')
     .optional()
     .customSanitizer(toArray)
@@ -136,18 +139,69 @@ const blocklistStatusValidator = [
   }
 ]
 
+export const addBlocklistSubscriptionValidator = [
+  body('url')
+    .custom(isUrlValid).withMessage('Should have a valid URL'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    const serverActor = await getServerActor()
+
+    const existingSubscription = await BlocklistSubscriptionModel.loadByUrl({
+      accountId: serverActor.Account.id,
+      url: req.body.url
+    })
+
+    if (existingSubscription) {
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: req.t('Subscription with URL {{url}} already exists', { url: req.body.url })
+      })
+    }
+
+    return next()
+  }
+]
+
+export const deleteBlocklistSubscriptionValidator = [
+  param('id')
+    .custom(isIdValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    const subscription = await BlocklistSubscriptionModel.loadById(+req.params.id)
+    if (!subscription) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: req.t('Blocklist subscription not found')
+      })
+    }
+
+    res.locals.blocklistSubscription = subscription
+    return next()
+  }
+]
+
+export const publicBlocklistLogValidator = [
+  query('startDate')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a start date that conforms to ISO 8601'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    if (CONFIG.BLOCKLIST.PUBLIC_LOG.ENABLED !== true) {
+      return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
-
-export {
-  blockAccountValidator,
-  blocklistStatusValidator,
-  blockServerValidator,
-  unblockAccountByAccountValidator,
-  unblockAccountByServerValidator,
-  unblockServerByAccountValidator,
-  unblockServerByServerValidator
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function doesUnblockAccountExist (accountId: number, targetAccountId: number, res: express.Response) {

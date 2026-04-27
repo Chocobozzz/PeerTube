@@ -1,12 +1,12 @@
+import { pick } from '@peertube/peertube-core-utils'
 import { BlocklistExportJSON } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { AbstractUserImporter } from './abstract-user-importer.js'
-import { addAccountInBlocklist, addServerInBlocklist } from '@server/lib/blocklist.js'
-import { ServerModel } from '@server/models/server/server.js'
-import { AccountModel } from '@server/models/account/account.js'
 import { isValidActorHandle } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { isHostValid } from '@server/helpers/custom-validators/servers.js'
-import { pick } from '@peertube/peertube-core-utils'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { addAccountInBlocklist, addServerInBlocklist } from '@server/lib/blocklist.js'
+import { AccountModel } from '@server/models/account/account.js'
+import { ServerModel } from '@server/models/server/server.js'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -45,7 +45,7 @@ export class BlocklistImporter extends AbstractUserImporter<BlocklistExportJSON,
 
     await addAccountInBlocklist({
       byAccountId: this.user.Account.id,
-      targetAccountId: accountToBlock.id,
+      targetAccount: accountToBlock,
       removeNotificationOfUserId: this.user.id
     })
 
@@ -57,7 +57,7 @@ export class BlocklistImporter extends AbstractUserImporter<BlocklistExportJSON,
 
     await addServerInBlocklist({
       byAccountId: this.user.Account.id,
-      targetServerId: serverToBlock.id,
+      targetServer: serverToBlock,
       removeNotificationOfUserId: this.user.id
     })
 

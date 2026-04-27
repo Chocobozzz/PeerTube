@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router'
 import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
-import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
+import {
+  InstanceAccountBlocklistComponent,
+  InstanceBlocklistSubscriptionsComponent,
+  InstanceServerBlocklistComponent
+} from '@app/+admin/moderation/instance-blocklist'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@peertube/peertube-models'
@@ -99,7 +103,7 @@ export const moderationRoutes: Routes = [
         component: InstanceAccountBlocklistComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
+          userRight: UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST,
           meta: {
             title: $localize`Muted accounts`
           }
@@ -110,9 +114,21 @@ export const moderationRoutes: Routes = [
         component: InstanceServerBlocklistComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
+          userRight: UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST,
           meta: {
             title: $localize`Muted platforms`
+          }
+        }
+      },
+
+      {
+        path: 'blocklist/subscriptions',
+        component: InstanceBlocklistSubscriptionsComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS,
+          meta: {
+            title: $localize`Blocklist subscriptions`
           }
         }
       },

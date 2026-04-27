@@ -1,34 +1,12 @@
-import { Op, QueryTypes } from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
-import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models/index.js'
 import { ServerBlock } from '@peertube/peertube-models'
+import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models/index.js'
+import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
+import { ServerModel } from '../server/server.js'
 import { SequelizeModel, createSafeIn, getSort, searchAttribute } from '../shared/index.js'
-import { ServerModel } from './server.js'
+import { BlocklistSubscriptionModel } from './blocklist-subscription.js'
 
-enum ScopeNames {
-  WITH_ACCOUNT = 'WITH_ACCOUNT',
-  WITH_SERVER = 'WITH_SERVER'
-}
-
-@Scopes(() => ({
-  [ScopeNames.WITH_ACCOUNT]: {
-    include: [
-      {
-        model: AccountModel,
-        required: true
-      }
-    ]
-  },
-  [ScopeNames.WITH_SERVER]: {
-    include: [
-      {
-        model: ServerModel,
-        required: true
-      }
-    ]
-  }
-}))
 @Table({
   tableName: 'serverBlocklist',
   indexes: [
@@ -72,6 +50,19 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     onDelete: 'CASCADE'
   })
   declare BlockedServer: Awaited<ServerModel>
+
+  @ForeignKey(() => BlocklistSubscriptionModel)
+  @Column
+  declare blocklistSubscriptionId: number
+
+  @BelongsTo(() => BlocklistSubscriptionModel, {
+    foreignKey: {
+      name: 'blocklistSubscriptionId',
+      allowNull: true
+    },
+    onDelete: 'CASCADE'
+  })
+  declare BlocklistSubscription: Awaited<BlocklistSubscriptionModel>
 
   static isServerMutedByAccounts (accountIds: number[], targetServerId: number) {
     const query = {
@@ -117,6 +108,17 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     return ServerBlocklistModel.findOne(query)
   }
 
+  static loadByAccountAndTarget (accountId: number, targetServerId: number, transaction?: Transaction): Promise<MServerBlocklist> {
+    const query = {
+      where: {
+        accountId,
+        targetServerId
+      }
+    }
+
+    return ServerBlocklistModel.findOne(query)
+  }
+
   static listHostsBlockedBy (accountIds: number[]): Promise<string[]> {
     const query = {
       attributes: [],
@@ -138,10 +140,15 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
       .then(entries => entries.map(e => e.BlockedServer.host))
   }
 
-  static getBlockStatus (byAccountIds: number[], hosts: string[]): Promise<{ host: string, accountId: number }[]> {
-    const rawQuery = `SELECT "server"."host", "serverBlocklist"."accountId" ` +
+  static getBlockStatus (
+    byAccountIds: number[],
+    hosts: string[]
+  ): Promise<{ host: string, accountId: number, blocklistSubscriptionName: string }[]> {
+    const rawQuery =
+      `SELECT "server"."host", "serverBlocklist"."accountId", "blocklistSubscription"."name" as "blocklistSubscriptionName" ` +
       `FROM "serverBlocklist" ` +
       `INNER JOIN "server" ON "server"."id" = "serverBlocklist"."targetServerId" ` +
+      `LEFT JOIN "blocklistSubscription" ON "serverBlocklist"."blocklistSubscriptionId" = "blocklistSubscription"."id" ` +
       `WHERE "server"."host" IN (:hosts) ` +
       `AND "serverBlocklist"."accountId" IN (${createSafeIn(ServerBlocklistModel.sequelize, byAccountIds)})`
 
@@ -156,11 +163,12 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     count: number
     sort: string
     search?: string
+    subscriptionName?: string
     accountId: number
   }) {
-    const { start, count, sort, search, accountId } = parameters
+    const { start, count, sort, search, subscriptionName, accountId } = parameters
 
-    const query = {
+    const baseQuery: FindOptions = {
       offset: start,
       limit: count,
       order: getSort(sort),
@@ -171,9 +179,46 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
       }
     }
 
+    const withSubscriptionFilter = subscriptionName
+      ? {
+        model: BlocklistSubscriptionModel,
+        required: true,
+        where: { name: subscriptionName }
+      }
+      : {
+        model: BlocklistSubscriptionModel,
+        required: false
+      }
+
     return Promise.all([
-      ServerBlocklistModel.scope(ScopeNames.WITH_SERVER).count(query),
-      ServerBlocklistModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_SERVER ]).findAll<MServerBlocklistAccountServer>(query)
+      ServerBlocklistModel.count({
+        ...baseQuery,
+
+        include: [
+          {
+            model: ServerModel,
+            required: true
+          },
+          withSubscriptionFilter
+        ]
+      }),
+
+      ServerBlocklistModel.findAll<MServerBlocklistAccountServer>({
+        ...baseQuery,
+
+        include: [
+          {
+            model: AccountModel,
+            required: true
+          },
+          {
+            model: ServerModel,
+            required: true
+          },
+
+          withSubscriptionFilter
+        ]
+      })
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
@@ -181,6 +226,9 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     return {
       byAccount: this.ByAccount.toFormattedJSON(),
       blockedServer: this.BlockedServer.toFormattedJSON(),
+      blocklistSubscription: this.BlocklistSubscription
+        ? this.BlocklistSubscription.toFormattedSummaryJSON()
+        : null,
       createdAt: this.createdAt
     }
   }

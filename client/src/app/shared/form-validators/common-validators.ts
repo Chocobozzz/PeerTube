@@ -1,6 +1,10 @@
 import { Validators } from '@angular/forms'
 import { BuildFormValidator } from './form-validator.model'
 
+export const urlPattern = /^https?:\/\//
+
+// ---------------------------------------------------------------------------
+
 export const REQUIRED_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required ],
   MESSAGES: {
@@ -9,7 +13,7 @@ export const REQUIRED_VALIDATOR: BuildFormValidator = {
 }
 
 export const URL_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.pattern(/^https?:\/\//) ],
+  VALIDATORS: [ Validators.pattern(urlPattern) ],
   MESSAGES: {
     pattern: $localize`This field must be a URL`
   }

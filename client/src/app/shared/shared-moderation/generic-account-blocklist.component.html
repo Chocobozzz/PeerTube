@@ -7,6 +7,7 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   searchInput="true"
+  [inputFilters]="isInstanceMode() ? inputFilters : undefined"
 >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No account} =1 {1 account} other {{{ totalRecords | myNumberFormatter }} accounts}}</ng-container>
@@ -27,6 +28,21 @@
     </td>
 
     <td>{{ account.createdAt | ptDate: 'short' }}</td>
+
+    @if (table.isColumnDisplayed('subscriptionName')) {
+      <td>
+        @if (account.blocklistSubscription) {
+          <a
+            [routerLink]="getBlocklistUrl()"
+            [queryParams]="{ subscriptionName: account.blocklistSubscription.name }"
+            i18n-title
+            title="Filter muted accounts by this subscription"
+          >
+            <span class="pt-badge" [class]="getSubscriptionBadge(account.blocklistSubscription.name)">{{ account.blocklistSubscription.name }}</span>
+          </a>
+        }
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-account>

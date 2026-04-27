@@ -11,7 +11,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { MockBlocklist } from '../shared/mock-servers/mock-plugin-blocklist.js'
+import { MockPluginBlocklist } from '../shared/mock-servers/mock-plugin-blocklist.js'
 
 async function check (server: PeerTubeServer, videoUUID: string, exists = true) {
   const { data } = await server.videos.list()
@@ -24,7 +24,7 @@ async function check (server: PeerTubeServer, videoUUID: string, exists = true) 
 
 describe('Official plugin auto-block videos', function () {
   let servers: PeerTubeServer[]
-  let blocklistServer: MockBlocklist
+  let blocklistServer: MockPluginBlocklist
   let server1Videos: Video[] = []
   let server2Videos: Video[] = []
   let port: number
@@ -39,7 +39,7 @@ describe('Official plugin auto-block videos', function () {
       await server.plugins.install({ npmName: 'peertube-plugin-auto-block-videos' })
     }
 
-    blocklistServer = new MockBlocklist()
+    blocklistServer = new MockPluginBlocklist()
     port = await blocklistServer.initialize()
 
     await servers[0].videos.quickUpload({ name: 'video server 1' })

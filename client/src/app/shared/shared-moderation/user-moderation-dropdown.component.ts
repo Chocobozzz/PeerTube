@@ -360,9 +360,9 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       authUser.canManageUser(this.user())
 
     const hasAccountBlocklistRight = this.account() && displayOptions.instanceAccount &&
-      authUser.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)
+      authUser.hasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST)
     const hasServerBlocklistRight = this.account() && displayOptions.instanceAccount &&
-      authUser.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)
+      authUser.hasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST)
     const hasBulkRemoveCommentsRight = this.account() && displayOptions.instanceAccount &&
       authUser.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)
 

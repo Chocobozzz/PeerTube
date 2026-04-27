@@ -190,6 +190,15 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
   @Column
   declare myVideoTranscriptionGenerated: UserNotificationSettingValueType
 
+  @AllowNull(false)
+  @Default(null)
+  @Is(
+    'UserNotificationSettingAutomaticBlocklist',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'automaticBlocklist')
+  )
+  @Column
+  declare automaticBlocklist: UserNotificationSettingValueType
+
   @ForeignKey(() => UserModel)
   @Column
   declare userId: number
@@ -255,7 +264,8 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
       newPeerTubeVersion: this.newPeerTubeVersion,
       myVideoStudioEditionFinished: this.myVideoStudioEditionFinished,
       myVideoTranscriptionGenerated: this.myVideoTranscriptionGenerated,
-      newPluginVersion: this.newPluginVersion
+      newPluginVersion: this.newPluginVersion,
+      automaticBlocklist: this.automaticBlocklist
     }
   }
 }

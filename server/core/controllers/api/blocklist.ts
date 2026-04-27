@@ -1,9 +1,9 @@
 import express from 'express'
 import { handleToNameAndHost } from '@server/helpers/actors.js'
 import { logger } from '@server/helpers/logger.js'
-import { AccountBlocklistModel } from '@server/models/account/account-blocklist.js'
+import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
+import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
 import { MActorAccountId, MUserAccountId } from '@server/types/models/index.js'
 import { BlockStatus } from '@peertube/peertube-models'
 import { apiRateLimiter, asyncMiddleware, blocklistStatusValidator, optionalAuthenticate } from '../../middlewares/index.js'
@@ -98,9 +98,16 @@ async function populateAccountBlocklistStatus (options: {
   }
 }
 
-function getStatus (blocks: { accountId: number }[], serverActor: MActorAccountId, user?: MUserAccountId) {
+function getStatus (
+  blocks: { accountId: number, blocklistSubscriptionName: string }[],
+  serverActor: MActorAccountId,
+  user?: MUserAccountId
+) {
+  const serverBlock = blocks.find(block => block.accountId === serverActor.Account.id)
+
   return {
-    blockedByServer: blocks.some(block => block.accountId === serverActor.Account.id),
+    blockedByServer: !!serverBlock,
+    blockedByServerSubscription: serverBlock?.blocklistSubscriptionName ?? null,
     blockedByUser: blocks.some(block => block.accountId === user?.Account.id)
   }
 }

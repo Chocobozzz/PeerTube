@@ -7,7 +7,7 @@ import { MUserDefault, MUserWithNotificationSetting } from '@server/types/models
 import { MChangeOwnershipFull } from '@server/types/models/video/change-ownership.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 import { buildChangeOwnershipNotification } from './change-ownership-utils.js'
-import { AccountBlocklistModel } from '@server/models/account/account-blocklist.js'
+import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 
 export class RequestVideoChangeOwnership extends AbstractNotification<MChangeOwnershipFull> {
   private user: MUserDefault

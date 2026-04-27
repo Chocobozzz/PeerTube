@@ -22,6 +22,7 @@ const userRoleRights: { [id in UserRoleType]: UserRightType[] } = {
     UserRight.SEE_ALL_VIDEOS,
     UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST,
     UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST,
+    UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS,
     UserRight.MANAGE_USERS,
     UserRight.SEE_ALL_COMMENTS,
     UserRight.MANAGE_REGISTRATIONS,

@@ -5,10 +5,10 @@ import { buildLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { AccountBlocklistModel } from '@server/models/account/account-blocklist.js'
+import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
+import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoBlacklistModel } from '@server/models/video/video-blacklist.js'
@@ -172,7 +172,7 @@ function buildModerationHelpers () {
 
       await addServerInBlocklist({
         byAccountId: options.byAccountId,
-        targetServerId: serverToBlock.id,
+        targetServer: serverToBlock,
         removeNotificationOfUserId: user?.id
       })
     },
@@ -192,7 +192,7 @@ function buildModerationHelpers () {
 
       await addAccountInBlocklist({
         byAccountId: options.byAccountId,
-        targetAccountId: accountToBlock.id,
+        targetAccount: accountToBlock,
         removeNotificationOfUserId: user?.id
       })
     },

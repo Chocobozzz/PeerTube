@@ -1,13 +1,14 @@
-import { FindOptions, Op, QueryTypes } from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountBlock } from '@peertube/peertube-models'
 import { handlesToNameAndHost } from '@server/helpers/actors.js'
+import { WEBSERVER } from '@server/initializers/constants.js'
 import { MAccountBlocklist, MAccountBlocklistFormattable } from '@server/types/models/index.js'
+import { FindOptions, Includeable, Op, QueryTypes, Transaction } from 'sequelize'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { ActorModel } from '../actor/actor.js'
+import { BlocklistSubscriptionModel } from './blocklist-subscription.js'
 import { ServerModel } from '../server/server.js'
 import { SequelizeModel, createSafeIn, getSort, searchAttribute } from '../shared/index.js'
-import { AccountModel } from './account.js'
-import { WEBSERVER } from '@server/initializers/constants.js'
+import { AccountModel } from '../account/account.js'
 
 @Table({
   tableName: 'accountBlocklist',
@@ -56,6 +57,19 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
   })
   declare BlockedAccount: Awaited<AccountModel>
 
+  @ForeignKey(() => BlocklistSubscriptionModel)
+  @Column
+  declare blocklistSubscriptionId: number | null
+
+  @BelongsTo(() => BlocklistSubscriptionModel, {
+    foreignKey: {
+      name: 'blocklistSubscriptionId',
+      allowNull: true
+    },
+    onDelete: 'CASCADE'
+  })
+  declare BlocklistSubscription: Awaited<BlocklistSubscriptionModel>
+
   static isAccountMutedByAccounts (accountIds: number[], targetAccountId: number) {
     const query = {
       attributes: [ 'accountId', 'id' ],
@@ -81,12 +95,13 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
       })
   }
 
-  static loadByAccountAndTarget (accountId: number, targetAccountId: number): Promise<MAccountBlocklist> {
+  static loadByAccountAndTarget (accountId: number, targetAccountId: number, transaction?: Transaction): Promise<MAccountBlocklist> {
     const query = {
       where: {
         accountId,
         targetAccountId
-      }
+      },
+      transaction
     }
 
     return AccountBlocklistModel.findOne(query)
@@ -97,9 +112,10 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     count: number
     sort: string
     search?: string
+    subscriptionName?: string
     accountId: number
   }) {
-    const { start, count, sort, search, accountId } = parameters
+    const { start, count, sort, search, subscriptionName, accountId } = parameters
 
     const getQuery = (forCount: boolean) => {
       const query: FindOptions = {
@@ -108,6 +124,8 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
         order: getSort(sort),
         where: { accountId }
       }
+
+      const include: Includeable[] = []
 
       if (search) {
         Object.assign(query.where, {
@@ -118,8 +136,9 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
         })
       }
 
+      // Fetch more data for list
       if (forCount !== true) {
-        query.include = [
+        include.push(
           {
             model: AccountModel,
             required: true,
@@ -130,9 +149,10 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
             required: true,
             as: 'BlockedAccount'
           }
-        ]
-      } else if (search) { // We need some joins when counting with search
-        query.include = [
+        )
+      } else if (search) {
+        // For the where
+        include.push(
           {
             model: AccountModel.unscoped(),
             required: true,
@@ -144,8 +164,23 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
               }
             ]
           }
-        ]
+        )
       }
+
+      if (subscriptionName) {
+        include.push({
+          model: BlocklistSubscriptionModel.unscoped(),
+          required: true,
+          where: { name: subscriptionName }
+        })
+      } else if (!forCount) {
+        include.push({
+          model: BlocklistSubscriptionModel,
+          required: false
+        })
+      }
+
+      query.include = include
 
       return query
     }
@@ -198,7 +233,10 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
       })
   }
 
-  static getBlockStatus (byAccountIds: number[], handles: string[]): Promise<{ name: string, host: string, accountId: number }[]> {
+  static getBlockStatus (
+    byAccountIds: number[],
+    handles: string[]
+  ): Promise<{ name: string, host: string, accountId: number, blocklistSubscriptionName: string }[]> {
     const sanitizedHandles = handlesToNameAndHost(handles)
 
     const localHandles = sanitizedHandles.filter(h => !h.host)
@@ -217,11 +255,13 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
       handlesWhere.push(`(("actor"."preferredUsername", "server"."host") IN (:remoteHandles))`)
     }
 
-    const rawQuery = `SELECT "accountBlocklist"."accountId", "actor"."preferredUsername" AS "name", "server"."host" ` +
+    const rawQuery =
+      `SELECT "accountBlocklist"."accountId", "blocklistSubscription"."name" AS "blocklistSubscriptionName", "actor"."preferredUsername" AS "name", "server"."host" ` +
       `FROM "accountBlocklist" ` +
       `INNER JOIN "account" ON "account"."id" = "accountBlocklist"."targetAccountId" ` +
       `INNER JOIN "actor" ON "actor"."accountId" = "account"."id" ` +
       `LEFT JOIN "server" ON "server"."id" = "actor"."serverId" ` +
+      `LEFT JOIN "blocklistSubscription" ON "accountBlocklist"."blocklistSubscriptionId" = "blocklistSubscription"."id" ` +
       `WHERE "accountBlocklist"."accountId" IN (${createSafeIn(AccountBlocklistModel.sequelize, byAccountIds)}) ` +
       `AND (${handlesWhere.join(' OR ')})`
 
@@ -235,6 +275,11 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     return {
       byAccount: this.ByAccount.toFormattedJSON(),
       blockedAccount: this.BlockedAccount.toFormattedJSON(),
+
+      blocklistSubscription: this.BlocklistSubscription
+        ? this.BlocklistSubscription.toFormattedSummaryJSON()
+        : null,
+
       createdAt: this.createdAt
     }
   }

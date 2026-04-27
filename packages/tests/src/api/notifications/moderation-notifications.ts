@@ -1,14 +1,16 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { AbuseState, UserNotification, UserRole, VideoPrivacy } from '@peertube/peertube-models'
+import { AbuseState, UserNotification, UserNotificationType, UserRole, VideoPrivacy } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { cleanupTests, PeerTubeServer, waitJobs } from '@peertube/peertube-server-commands'
+import { MockCoreBlocklist } from '@tests/shared/mock-servers/mock-core-blocklist.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { MockInstancesIndex } from '@tests/shared/mock-servers/mock-instances-index.js'
 import { checkAutoInstanceFollowing, checkNewInstanceFollower } from '@tests/shared/notifications/check-follow-notifications.js'
 import {
   checkAbuseStateChange,
+  checkAutomaticBlocklistForModerators,
   checkNewAbuseMessage,
   checkNewAccountAbuseForModerators,
   checkNewBlacklistOnMyVideo,
@@ -17,7 +19,7 @@ import {
   checkVideoAutoBlacklistForModerators
 } from '@tests/shared/notifications/check-moderation-notifications.js'
 import { checkMyVideoIsPublished, checkNewVideoFromSubscription } from '@tests/shared/notifications/check-video-notifications.js'
-import { prepareNotificationsTest } from '@tests/shared/notifications/notifications-common.js'
+import { prepareNotificationsTest, waitUntilNotification } from '@tests/shared/notifications/notifications-common.js'
 import { CheckerBaseParams } from '@tests/shared/notifications/shared/notification-checker.js'
 
 describe('Test moderation notifications', function () {
@@ -576,6 +578,86 @@ describe('Test moderation notifications', function () {
     after(async () => {
       await servers[0].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
       await servers[1].subscriptions.remove({ uri: 'user_1_channel@' + servers[0].host })
+    })
+  })
+
+  describe('Subscription auto blocklist notifications', function () {
+    let mockServer: MockCoreBlocklist
+    let mockPort: number
+
+    before(async function () {
+      mockServer = new MockCoreBlocklist()
+      mockPort = await mockServer.initialize()
+    })
+
+    it('Should notify moderators when subscriptions auto block/unblock targets', async function () {
+      this.timeout(120000)
+
+      const targetHandle = `user2@${servers[1].host}`
+      const targetHost = servers[1].host
+      const targetHost2 = 'example.com'
+
+      await servers[0].accounts.get({ accountName: targetHandle })
+
+      const { id: subscriptionId } = await servers[0].blocklist.addServerBlocklistSubscription({
+        subscriptionUrl: `http://127.0.0.1:${mockPort}/list.json`
+      })
+
+      const baseParams: CheckerBaseParams = {
+        server: servers[0],
+        emails,
+        socketNotifications: adminNotifications,
+        token: servers[0].accessToken
+      }
+
+      const now = Date.now()
+
+      mockServer.setActions([
+        { type: 'block', target: targetHandle, createdAt: new Date(now - 1000).toISOString() },
+        { type: 'block', target: targetHost2, createdAt: new Date(now - 1000).toISOString() }
+      ])
+
+      await waitUntilNotification({
+        server: servers[0],
+        token: servers[0].accessToken,
+        notificationType: UserNotificationType.AUTOMATIC_BLOCKLIST_UPDATE,
+        fromDate: new Date(now)
+      })
+
+      await checkAutomaticBlocklistForModerators({
+        ...baseParams,
+
+        expectedBlockedAccountsCount: 1,
+        expectedBlockedHostsCount: 1,
+        expectedUnblockedAccountsCount: 0,
+        expectedUnblockedHostsCount: 0,
+        checkType: 'presence'
+      })
+
+      mockServer.setActions([
+        { type: 'block', target: targetHandle, createdAt: new Date(now - 1000).toISOString() },
+        { type: 'block', target: targetHost, createdAt: new Date(now + 1000).toISOString() },
+        { type: 'unblock', target: targetHost, createdAt: new Date(now + 2000).toISOString() },
+        { type: 'unblock', target: targetHost2, createdAt: new Date(now + 2000).toISOString() }
+      ])
+
+      await wait(8000)
+
+      await checkAutomaticBlocklistForModerators({
+        ...baseParams,
+
+        expectedBlockedAccountsCount: 0,
+        expectedBlockedHostsCount: 0,
+        expectedUnblockedAccountsCount: 0,
+        expectedUnblockedHostsCount: 1,
+        checkType: 'presence'
+      })
+
+      await servers[0].blocklist.removeServerBlocklistSubscription({ id: subscriptionId })
+    })
+
+    after(async function () {
+      await mockServer.terminate()
     })
   })
 

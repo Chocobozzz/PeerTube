@@ -124,6 +124,14 @@ const CONFIG = {
     ENABLED: config.get<boolean>('nsfw_flags_settings.enabled')
   },
 
+  BLOCKLIST: {
+    PUBLIC_LOG: {
+      get ENABLED () {
+        return config.get<boolean>('blocklist.public_log.enabled')
+      }
+    }
+  },
+
   DOWNLOAD: {
     MAX_TOTAL_BYTES_PER_SECOND: config.get<string | number | null>('download.max_total_bytes_per_second') === null
       ? null
