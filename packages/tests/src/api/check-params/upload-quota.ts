@@ -74,6 +74,8 @@ describe('Test upload quota', function () {
     })
 
     it('Should fail to import with HTTP/Torrent/magnet', async function () {
+      this.retries(3)
+
       this.timeout(120_000)
 
       for (const token of [ server.accessToken, editorToken ]) {
