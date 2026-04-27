@@ -1,12 +1,12 @@
 import { UserRight, UserRightType, UserRole, UserRoleType } from '@peertube/peertube-models'
 
-export const USER_ROLE_LABELS: { [ id in UserRoleType ]: string } = {
+export const USER_ROLE_LABELS: { [id in UserRoleType]: string } = {
   [UserRole.USER]: 'User',
   [UserRole.MODERATOR]: 'Moderator',
   [UserRole.ADMINISTRATOR]: 'Administrator'
 }
 
-const userRoleRights: { [ id in UserRoleType ]: UserRightType[] } = {
+const userRoleRights: { [id in UserRoleType]: UserRightType[] } = {
   [UserRole.ADMINISTRATOR]: [
     UserRight.ALL
   ],
@@ -20,8 +20,8 @@ const userRoleRights: { [ id in UserRoleType ]: UserRightType[] } = {
     UserRight.MANAGE_ANY_VIDEO_COMMENT,
     UserRight.UPDATE_ANY_VIDEO,
     UserRight.SEE_ALL_VIDEOS,
-    UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
-    UserRight.MANAGE_SERVERS_BLOCKLIST,
+    UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST,
+    UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST,
     UserRight.MANAGE_USERS,
     UserRight.SEE_ALL_COMMENTS,
     UserRight.MANAGE_REGISTRATIONS,

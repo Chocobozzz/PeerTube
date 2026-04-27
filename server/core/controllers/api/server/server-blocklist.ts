@@ -31,9 +31,10 @@ import { ServerBlocklistModel } from '../../../models/server/server-blocklist.js
 
 const serverBlocklistRouter = express.Router()
 
-serverBlocklistRouter.get('/blocklist/accounts',
+serverBlocklistRouter.get(
+  '/blocklist/accounts',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST),
+  ensureUserHasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST),
   paginationValidator,
   accountsBlocklistSortValidator,
   setDefaultSort,
@@ -41,23 +42,26 @@ serverBlocklistRouter.get('/blocklist/accounts',
   asyncMiddleware(listBlockedAccounts)
 )
 
-serverBlocklistRouter.post('/blocklist/accounts',
+serverBlocklistRouter.post(
+  '/blocklist/accounts',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST),
+  ensureUserHasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST),
   asyncMiddleware(blockAccountValidator),
   asyncRetryTransactionMiddleware(blockAccount)
 )
 
-serverBlocklistRouter.delete('/blocklist/accounts/:accountName',
+serverBlocklistRouter.delete(
+  '/blocklist/accounts/:accountName',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST),
+  ensureUserHasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST),
   asyncMiddleware(unblockAccountByServerValidator),
   asyncRetryTransactionMiddleware(unblockAccount)
 )
 
-serverBlocklistRouter.get('/blocklist/servers',
+serverBlocklistRouter.get(
+  '/blocklist/servers',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_SERVERS_BLOCKLIST),
+  ensureUserHasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST),
   paginationValidator,
   serversBlocklistSortValidator,
   setDefaultSort,
@@ -65,16 +69,18 @@ serverBlocklistRouter.get('/blocklist/servers',
   asyncMiddleware(listBlockedServers)
 )
 
-serverBlocklistRouter.post('/blocklist/servers',
+serverBlocklistRouter.post(
+  '/blocklist/servers',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_SERVERS_BLOCKLIST),
+  ensureUserHasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST),
   asyncMiddleware(blockServerValidator),
   asyncRetryTransactionMiddleware(blockServer)
 )
 
-serverBlocklistRouter.delete('/blocklist/servers/:host',
+serverBlocklistRouter.delete(
+  '/blocklist/servers/:host',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_SERVERS_BLOCKLIST),
+  ensureUserHasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST),
   asyncMiddleware(unblockServerByServerValidator),
   asyncRetryTransactionMiddleware(unblockServer)
 )
