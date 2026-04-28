@@ -4701,17 +4701,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6323654987364970496" datatype="html">
+      <trans-unit id="6323654987364970496" datatype="html" xml:space="preserve">
         <source>Search "<x id="PH" equiv-text="this.result.text"/>" in this instance's network</source>
-        <target state="new">Search "<x id="PH" equiv-text="this.result.text"/>" in this instance's network</target>
+        <target state="translated">Αναζήτηση για «<x id="PH" equiv-text="this.result.text"/>» στην οντότητα αυτού του δικτύου</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2820857203884114586" datatype="html">
+      <trans-unit id="2820857203884114586" datatype="html" xml:space="preserve">
         <source>Search "<x id="PH" equiv-text="this.result.text"/>" in the vidiverse</source>
-        <target state="new">Search "<x id="PH" equiv-text="this.result.text"/>" in the vidiverse</target>
+        <target state="translated">Αναζήτηση για «<x id="PH" equiv-text="this.result.text"/>» στο βιντεοσύμπαν</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -4905,33 +4905,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5143793904897598509" datatype="html">
+      <trans-unit id="5143793904897598509" datatype="html" xml:space="preserve">
         <source>PeerTube instance host</source>
-        <target state="new">PeerTube instance host</target>
+        <target state="translated">Φιλοξενία οντότητας PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8244789432276387088" datatype="html">
+      <trans-unit id="8244789432276387088" datatype="html" xml:space="preserve">
         <source>Result types</source>
-        <target state="new">Result types</target>
+        <target state="translated">Τύποι αποτελεσμάτων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="283421392567624698" datatype="html">
+      <trans-unit id="283421392567624698" datatype="html" xml:space="preserve">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">Αναζήτηση στόχου</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2489767671380266270" datatype="html">
+      <trans-unit id="2489767671380266270" datatype="html" xml:space="preserve">
         <source>Vidiverse</source>
-        <target state="new">Vidiverse</target>
+        <target state="translated">Βιντεοσύμπαν</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">259</context>
@@ -5007,9 +5007,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="518619112264710096" datatype="html">
+      <trans-unit id="518619112264710096" datatype="html" xml:space="preserve">
         <source>Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</source>
-        <target state="new">Edit caption "<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/>"</target>
+        <target state="translated">Επεξεργασία λεζάντας «<x id="INTERPOLATION" equiv-text="{{ videoCaption.language.label }}"/> »</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5023,33 +5023,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5203899665906572487" datatype="html">
+      <trans-unit id="5203899665906572487" datatype="html" xml:space="preserve">
         <source>Add a new segment</source>
-        <target state="new">Add a new segment</target>
+        <target state="translated">Προσθήκη νέου τμήματος</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="936472574168973902" datatype="html">
+      <trans-unit id="936472574168973902" datatype="html" xml:space="preserve">
         <source>Segment start timestamp</source>
-        <target state="new">Segment start timestamp</target>
+        <target state="translated">Χρονοσήμανση έναρξης τμήματος</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2831765880579689127" datatype="html">
+      <trans-unit id="2831765880579689127" datatype="html" xml:space="preserve">
         <source>Use video current time as start time</source>
-        <target state="new">Use video current time as start time</target>
+        <target state="translated">Χρησιμοποίησε την τρέχουσα ώρα του βίντεο ως ώρα έναρξης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1031856574257335431" datatype="html">
+      <trans-unit id="1031856574257335431" datatype="html" xml:space="preserve">
         <source>Segment end timestamp</source>
-        <target state="new">Segment end timestamp</target>
+        <target state="translated">Χρονοσήμανση λήξης τμήματος</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">78</context>
@@ -5059,49 +5059,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2534468682040754093" datatype="html">
+      <trans-unit id="2534468682040754093" datatype="html" xml:space="preserve">
         <source>Use video current time as end time</source>
-        <target state="new">Use video current time as end time</target>
+        <target state="translated">Χρήση της τρέχουσας ώρας του βίντεο ως ώρα λήξης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1989971680596153649" datatype="html">
+      <trans-unit id="1989971680596153649" datatype="html" xml:space="preserve">
         <source>Edit this caption</source>
-        <target state="new">Edit this caption</target>
+        <target state="translated">Επεξεργασία αυτής της λεζάντας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4592694974533956701" datatype="html">
+      <trans-unit id="4592694974533956701" datatype="html" xml:space="preserve">
         <source>Start segment must be before end segment time</source>
-        <target state="new">Start segment must be before end segment time</target>
+        <target state="translated">Η ώρα έναρξης του τμήματος πρέπει να είναι πριν από την ώρα λήξης του</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9131593410297043344" datatype="html">
+      <trans-unit id="9131593410297043344" datatype="html" xml:space="preserve">
         <source>Segment must have a text content</source>
-        <target state="new">Segment must have a text content</target>
+        <target state="translated">Το τμήμα πρέπει να περιέχει κείμενο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7846454630805382470" datatype="html">
+      <trans-unit id="7846454630805382470" datatype="html" xml:space="preserve">
         <source>Cannot parse subtitles</source>
-        <target state="new">Cannot parse subtitles</target>
+        <target state="translated">Δεν είναι δυνατή η ανάλυση των υπότιτλων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4777421441933211511" datatype="html">
+      <trans-unit id="4777421441933211511" datatype="html" xml:space="preserve">
         <source>A segment is being edited. Save or cancel your edits first.</source>
-        <target state="new">A segment is being edited. Save or cancel your edits first.</target>
+        <target state="translated">Γίνεται επεξεργασία ενός τμήματος. Αποθηκεύστε ή ακυρώστε πρώτα τις αλλαγές σας.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.ts</context>
           <context context-type="linenumber">343</context>
@@ -5131,9 +5131,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6691672602205005718" datatype="html">
+      <trans-unit id="6691672602205005718" datatype="html" xml:space="preserve">
         <source>Use a comma (,) to add a tag</source>
-        <target state="new">Use a comma (,) to add a tag</target>
+        <target state="translated">Χρησιμοποιήστε κόμμα (,) για να προσθέσετε μια ετικέτα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-tags.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -5151,33 +5151,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6259523075362402245" datatype="html">
+      <trans-unit id="6259523075362402245" datatype="html" xml:space="preserve">
         <source>Upload a new banner</source>
-        <target state="new">Upload a new banner</target>
+        <target state="translated">Ανεβάστε ένα νέο μπάνερ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1117672957968812680" datatype="html">
+      <trans-unit id="1117672957968812680" datatype="html" xml:space="preserve">
         <source>Change your banner</source>
-        <target state="new">Change your banner</target>
+        <target state="translated">Αλλάξτε το μπάνερ σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3394080812181176794" datatype="html">
+      <trans-unit id="3394080812181176794" datatype="html" xml:space="preserve">
         <source>Remove banner</source>
-        <target state="new">Remove banner</target>
+        <target state="translated">Αφαίρεση μπάνερ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7306351600905511107" datatype="html">
+      <trans-unit id="7306351600905511107" datatype="html" xml:space="preserve">
         <source>ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></source>
-        <target state="new">ratio 6/1, recommended size: 1920x317, max size: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, extensions: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
+        <target state="translated">αναλογία 6/1, συνιστώμενο μέγεθος: 1920x317, μέγιστο μέγεθος: <x id="PH" equiv-text="getBytes(this.maxBannerSize)"/>, επεκτάσεις: <x id="PH_1" equiv-text="this.bannerExtensions"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor-image-edit/actor-banner-edit.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -5231,33 +5231,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="283609029522452529" datatype="html">
+      <trans-unit id="283609029522452529" datatype="html" xml:space="preserve">
         <source>Error in channel miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in channel miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Σφάλμα στο στοιχείο μικρογραφίας καναλιού: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3059355667050002541" datatype="html">
+      <trans-unit id="3059355667050002541" datatype="html" xml:space="preserve">
         <source>Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in playlist miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Σφάλμα στο στοιχείο μικρογραφίας της λίστας αναπαραγωγής: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/playlist-miniature-markup.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="863691161959989717" datatype="html">
+      <trans-unit id="863691161959989717" datatype="html" xml:space="preserve">
         <source>Error in video miniature component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in video miniature component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Σφάλμα στο στοιχείο μικρογραφίας βίντεο: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/video-miniature-markup.component.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1247256698916587400" datatype="html">
+      <trans-unit id="1247256698916587400" datatype="html" xml:space="preserve">
         <source>Error in videos list component: <x id="PH" equiv-text="err.message"/></source>
-        <target state="new">Error in videos list component: <x id="PH" equiv-text="err.message"/></target>
+        <target state="translated">Σφάλμα στο στοιχείο λίστας βίντεο: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -5459,25 +5459,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7902116364830754147" datatype="html">
+      <trans-unit id="7902116364830754147" datatype="html" xml:space="preserve">
         <source>No registrations found matching current filters.</source>
-        <target state="new">No registrations found matching current filters.</target>
+        <target state="translated">Δεν βρέθηκαν εγγραφές που να ανταποκρίνονται στα τρέχοντα κριτήρια φιλτραρίσματος.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="178076727880316864" datatype="html">
+      <trans-unit id="178076727880316864" datatype="html" xml:space="preserve">
         <source>No registrations found.</source>
-        <target state="new">No registrations found.</target>
+        <target state="translated">Δεν βρέθηκαν εγγραφές.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6096602245926393232" datatype="html">
+      <trans-unit id="6096602245926393232" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</target>
+        <target state="translated">Θέλετε πραγματικά να διαγράψετε {count, plural, =1 {<x id="username"/> αίτημα εγγραφής;} other {<x id="count"/> αιτήματα εγγραφής;}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">168</context>
@@ -5499,49 +5499,49 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5762774516857408346" datatype="html">
+      <trans-unit id="5762774516857408346" datatype="html" xml:space="preserve">
         <source>Publish video after transcoding</source>
-        <target state="new">Publish video after transcoding</target>
+        <target state="translated">Δημοσίευση βίντεο μετά τη διακωδικοποίηση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1922792486639674435" datatype="html">
+      <trans-unit id="1922792486639674435" datatype="html" xml:space="preserve">
         <source>Describe what makes your content sensitive</source>
-        <target state="new">Describe what makes your content sensitive</target>
+        <target state="translated">Περιγράψτε τι καθιστά το περιεχόμενό σας ευαίσθητο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6062065192661217089" datatype="html">
+      <trans-unit id="6062065192661217089" datatype="html" xml:space="preserve">
         <source>Help viewers identify your sensitive content</source>
-        <target state="new">Help viewers identify your sensitive content</target>
+        <target state="translated">Βοηθήστε τους χρήστες να αναγνωρίσουν το ευαίσθητο περιεχόμενο σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1540765026346951304" datatype="html">
+      <trans-unit id="1540765026346951304" datatype="html" xml:space="preserve">
         <source>Potentially violent content</source>
-        <target state="new">Potentially violent content</target>
+        <target state="translated">Πιθανώς βίαιο περιεχόμενο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8289970439779040385" datatype="html">
+      <trans-unit id="8289970439779040385" datatype="html" xml:space="preserve">
         <source>Potentially sexually explicit content</source>
-        <target state="new">Potentially sexually explicit content</target>
+        <target state="translated">Πιθανώς σεξουαλικό περιεχόμενο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2849879057149700533" datatype="html">
+      <trans-unit id="2849879057149700533" datatype="html" xml:space="preserve">
         <source>Replace file</source>
-        <target state="new">Replace file</target>
+        <target state="translated">Αντικατάσταση αρχείου</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5555,9 +5555,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6220453864421244663" datatype="html">
+      <trans-unit id="6220453864421244663" datatype="html" xml:space="preserve">
         <source>Current uploaded file:</source>
-        <target state="new">Current uploaded file:</target>
+        <target state="translated">Τρέχον αρχείο που έχει μεταφορτωθεί:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">13</context>
@@ -5571,9 +5571,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1891940258070841377" datatype="html">
+      <trans-unit id="1891940258070841377" datatype="html" xml:space="preserve">
         <source>Change ownership of your video</source>
-        <target state="new">Change ownership of your video</target>
+        <target state="translated">Αλλάξτε τον κάτοχο του βίντεό σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">201</context>
@@ -5587,9 +5587,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="227121252510918433" datatype="html">
+      <trans-unit id="227121252510918433" datatype="html" xml:space="preserve">
         <source>Transfer ownership</source>
-        <target state="new">Transfer ownership</target>
+        <target state="translated">Μεταβίβαση ιδιοκτησίας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">148</context>
@@ -5611,25 +5611,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">209,211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7413914705059866493" datatype="html">
+      <trans-unit id="7413914705059866493" datatype="html" xml:space="preserve">
         <source>Delete your channel</source>
-        <target state="new">Delete your channel</target>
+        <target state="translated">Διαγραφή του καναλιού σου</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">167,168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3717862857627538007" datatype="html">
+      <trans-unit id="3717862857627538007" datatype="html" xml:space="preserve">
         <source>Delete your video</source>
-        <target state="new">Delete your video</target>
+        <target state="translated">Διαγράψτε το βίντεό σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2364932147716378858" datatype="html">
+      <trans-unit id="2364932147716378858" datatype="html" xml:space="preserve">
         <source>Warning: this is a definitive action!</source>
-        <target state="new">Warning: this is a definitive action!</target>
+        <target state="translated">Προειδοποίηση: αυτή είναι μια οριστική ενέργεια!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">168</context>
@@ -5647,9 +5647,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4784303436041135088" datatype="html">
+      <trans-unit id="4784303436041135088" datatype="html" xml:space="preserve">
         <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</source>
-        <target state="new">Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</target>
+        <target state="translated">Ανεβάστηκε στις <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">50</context>
@@ -5663,9 +5663,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8541869921865486762" datatype="html">
+      <trans-unit id="8541869921865486762" datatype="html" xml:space="preserve">
         <source>Will be edited on update</source>
-        <target state="new">Will be edited on update</target>
+        <target state="translated">Θα τροποποιηθεί κατά την ενημέρωση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">26</context>
