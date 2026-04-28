@@ -125,7 +125,6 @@ export class Html5Hlsjs {
   private metadata: ManifestParsedData = null
 
   private isLive: boolean = null
-  private liveDvrEnabled = false
   private dvrDuration: number = null
   private edgeMargin: number = null
 
@@ -194,11 +193,6 @@ export class Html5Hlsjs {
       if (!this.isLive) {
         return this.vjs.time.createTimeRanges(0, this.hls.media.duration)
       }
-
-      // if (this.liveDvrEnabled && !isNaN(this.dvrDuration)) {
-      //   const endTime = Math.max(0, Math.round(this.dvrDuration - this.edgeMargin))
-      //   return this.vjs.time.createTimeRanges(0, endTime)
-      // }
 
       // Video.js doesn't seem to like floating point timeranges
       const startTime = Math.round(this.hls.media.duration - this.dvrDuration)
@@ -429,8 +423,6 @@ export class Html5Hlsjs {
     this.liveEnded = false
 
     this.buildBaseConfig()
-
-    this.liveDvrEnabled = this.hlsjsConfig?.liveDvrEnabled === true
 
     if ([ '', 'auto' ].includes(this.videoElement.preload) && !this.videoElement.autoplay && this.hlsjsConfig.autoStartLoad === undefined) {
       this.hlsjsConfig.autoStartLoad = false
