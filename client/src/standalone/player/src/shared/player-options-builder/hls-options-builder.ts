@@ -1,4 +1,4 @@
-import { getResolutionAndFPSLabel, getResolutionLabel, timeToInt } from '@peertube/peertube-core-utils'
+import { exists, getResolutionAndFPSLabel, getResolutionLabel, timeToInt } from '@peertube/peertube-core-utils'
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -217,7 +217,9 @@ export class HLSOptionsBuilder {
     const base: HLSPluginOptions = {
       capLevelToPlayerSize: true,
       autoStartLoad: false,
-      startPosition: timeToInt(this.options.startTime),
+      startPosition: exists(this.options.startTime)
+        ? timeToInt(this.options.startTime)
+        : 0,
 
       p2pMediaLoaderOptions: p2pMediaLoaderConfig.loader,
 
