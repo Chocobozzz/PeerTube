@@ -256,7 +256,7 @@ export class HLSOptionsBuilder {
     const latencyMode = this.options.liveOptions.latencyMode
     const liveSyncDurationCountMap = {
       [LiveVideoLatencyMode.SMALL_LATENCY]: 2,
-      [LiveVideoLatencyMode.DEFAULT]: 2,
+      [LiveVideoLatencyMode.DEFAULT]: 5,
       [LiveVideoLatencyMode.HIGH_LATENCY]: 10
     }
 
