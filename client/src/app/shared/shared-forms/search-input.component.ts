@@ -1,5 +1,6 @@
 import { NgClass } from '@angular/common'
-import { AfterViewInit, Component, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
+import { AfterViewInit, Component, DestroyRef, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import debug from 'debug'
@@ -21,6 +22,7 @@ const debugLogger = debug('peertube:SearchInputComponent')
 export class SearchInputComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute)
   private router = inject(Router)
+  private destroyRef = inject(DestroyRef)
 
   readonly placeholder = input($localize`Filter...`)
   readonly inputId = input('search-input')
@@ -72,6 +74,7 @@ export class SearchInputComponent implements OnInit, AfterViewInit {
 
   private listenToRouteSearchChange () {
     this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
         const search = params['search'] || ''
 
@@ -90,7 +93,8 @@ export class SearchInputComponent implements OnInit, AfterViewInit {
     this.searchStream
       .pipe(
         debounceTime(300),
-        distinctUntilChanged()
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
         this.setQueryParam(this.searchValue)

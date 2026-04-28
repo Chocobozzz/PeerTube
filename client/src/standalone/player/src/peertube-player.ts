@@ -140,7 +140,14 @@ export class PeerTubePlayer {
   }
 
   destroy () {
-    if (this.player) this.player.dispose()
+    if (this.player) {
+      this.disposeDynamicPluginsIfNeeded()
+      this.player.dispose()
+    }
+
+    this.player = undefined
+    this.currentLoadOptions = undefined
+    this.pluginsManager = undefined
   }
 
   setPoster (thumbnails: Thumbnail[]) {

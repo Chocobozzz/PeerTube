@@ -82,6 +82,8 @@ export class CustomMarkupService {
 
     const loadedPromises: Promise<boolean>[] = []
 
+    const componentRefs: ComponentRef<CustomMarkupComponent>[] = []
+
     for (const selector of Object.keys(this.angularBuilders)) {
       rootElement.querySelectorAll(selector)
         .forEach((e: HTMLElement) => {
@@ -89,6 +91,7 @@ export class CustomMarkupService {
             const { component, loadedPromise } = this.execAngularBuilder(selector, e)
             if (loadedPromise) loadedPromises.push(loadedPromise)
 
+            componentRefs.push(component)
             this.dynamicElementService.injectElement(e, component)
           } catch (err) {
             logger.error(`Cannot inject component ${selector}`, err)
@@ -96,7 +99,7 @@ export class CustomMarkupService {
         })
     }
 
-    return { rootElement, componentsLoaded: Promise.all(loadedPromises) }
+    return { rootElement, componentsLoaded: Promise.all(loadedPromises), componentRefs }
   }
 
   private getSupportedTags () {

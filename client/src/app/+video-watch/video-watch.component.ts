@@ -190,6 +190,32 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private hotkeys: Hotkey[] = []
 
+  // ---------------------------------------------------------------------------
+
+  private readonly onPlayerTimeUpdate = () => {
+    const player = this.peertubePlayer?.getPlayer()
+    if (!player) return
+
+    const newTime = Math.floor(player.currentTime())
+
+    // Update only if we have at least 1 second difference
+    if (!this.currentTime || Math.abs(newTime - this.currentTime) >= 1) {
+      debugLogger('Updating current time to ' + newTime)
+
+      this.zone.run(() => this.currentTime = newTime)
+    }
+  }
+
+  private readonly onPlayerEnded = () => {
+    this.zone.run(() => this.endLive())
+  }
+
+  private readonly onPlayerTheaterChange = (_: any, enabled: boolean) => {
+    this.zone.run(() => this.theaterEnabled = enabled)
+  }
+
+  // ---------------------------------------------------------------------------
+
   get authUser () {
     return this.authService.getUser()
   }
@@ -197,6 +223,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   get anonymousUser () {
     return this.userService.getAnonymousUser()
   }
+
+  // ---------------------------------------------------------------------------
 
   async ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
@@ -222,6 +250,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
+    this.unbindPlayerEventListeners()
+
     if (this.peertubePlayer) this.peertubePlayer.destroy()
 
     // Unsubscribe subscriptions
@@ -235,6 +265,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.revertMetaTags()
   }
+
+  // ---------------------------------------------------------------------------
 
   getCurrentTime () {
     return this.currentTime
@@ -622,26 +654,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       const player = this.peertubePlayer.getPlayer()
 
-      player.on('timeupdate', () => {
-        const newTime = Math.floor(player.currentTime())
-
-        // Update only if we have at least 1 second difference
-        if (!this.currentTime || Math.abs(newTime - this.currentTime) >= 1) {
-          debugLogger('Updating current time to ' + newTime)
-
-          this.zone.run(() => this.currentTime = newTime)
-        }
-      })
-
-      if (this.video.isLive) {
-        player.one('ended', () => {
-          this.zone.run(() => this.endLive())
-        })
-      }
-
-      player.on('theater-change', (_: any, enabled: boolean) => {
-        this.zone.run(() => this.theaterEnabled = enabled)
-      })
+      this.bindPlayerEventListeners(player, this.video.isLive)
 
       this.hooks.runAction('action:video-watch.player.loaded', 'video-watch', {
         player,
@@ -651,6 +664,26 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         video: this.video
       })
     })
+  }
+
+  private bindPlayerEventListeners (player: VideojsPlayer, isLive: boolean) {
+    this.unbindPlayerEventListeners(player)
+
+    player.on('timeupdate', this.onPlayerTimeUpdate)
+    player.on('theater-change', this.onPlayerTheaterChange)
+
+    if (isLive) {
+      player.one('ended', this.onPlayerEnded)
+    }
+  }
+
+  private unbindPlayerEventListeners (player?: VideojsPlayer) {
+    const playerInstance = player ?? this.peertubePlayer?.getPlayer()
+    if (!playerInstance) return
+
+    playerInstance.off('timeupdate', this.onPlayerTimeUpdate)
+    playerInstance.off('theater-change', this.onPlayerTheaterChange)
+    playerInstance.off('ended', this.onPlayerEnded)
   }
 
   private hasNextVideo () {

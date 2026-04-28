@@ -18,7 +18,7 @@ class PeerTubeLinkButton extends Component {
   }
 
   dispose () {
-    if (this.el()) return
+    if (!this.el()) return
 
     this.el().removeEventListener('mouseenter', this.mouseEnterHandler)
     this.el().removeEventListener('click', this.clickHandler)
