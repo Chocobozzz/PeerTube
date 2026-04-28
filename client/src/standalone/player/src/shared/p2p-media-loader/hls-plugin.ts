@@ -185,7 +185,7 @@ export class Html5Hlsjs {
     if (this._duration === Infinity) return Infinity
     if (!isNaN(this.videoElement.duration)) return this.videoElement.duration
 
-    return this._duration || 0
+    return this._duration || this.hlsjsConfig.durationPlaceholder || 0
   }
 
   seekable () {

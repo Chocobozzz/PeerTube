@@ -33,6 +33,7 @@ type ConstructorOptions =
     | 'p2pEnabled'
     | 'hls'
     | 'startTime'
+    | 'duration'
   >
 
 export class HLSOptionsBuilder {
@@ -220,6 +221,7 @@ export class HLSOptionsBuilder {
       startPosition: exists(this.options.startTime)
         ? timeToInt(this.options.startTime)
         : 0,
+      durationPlaceholder: this.options.duration,
 
       p2pMediaLoaderOptions: p2pMediaLoaderConfig.loader,
 

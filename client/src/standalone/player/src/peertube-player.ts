@@ -215,7 +215,8 @@ export class PeerTubePlayer {
         'isLive',
         'p2pEnabled',
         'liveOptions',
-        'hls'
+        'hls',
+        'duration'
       ])
     })
 

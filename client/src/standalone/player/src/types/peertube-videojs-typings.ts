@@ -201,7 +201,14 @@ export type HLSLoaderClass = {
 
   getEngine(): HlsJsP2PEngine
 }
-export type HLSPluginOptions = Partial<HlsConfig & { cueHandler: any, p2pMediaLoaderOptions: CoreConfig, liveDvrEnabled?: boolean }>
+export type HLSPluginOptions = Partial<
+  HlsConfig & {
+    cueHandler: any
+    p2pMediaLoaderOptions: CoreConfig
+    liveDvrEnabled?: boolean
+    durationPlaceholder?: number
+  }
+>
 
 export type P2PMediaLoaderPluginOptions = {
   redundancyUrlManager: RedundancyUrlManager | null
