@@ -274,8 +274,6 @@ export class HLSOptionsBuilder {
   }
 
   private getHLSVODOptions () {
-    return {
-      liveSyncDurationCount: 5
-    }
+    return {}
   }
 }
