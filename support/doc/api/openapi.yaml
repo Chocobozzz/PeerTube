@@ -463,7 +463,7 @@ paths:
         '404':
           description: not found
 
-  '/download/videos/generate/{videoId}':
+  '/download/videos/generate/{videoIdOrUUID}':
     get:
       tags:
         - Video Download
@@ -471,12 +471,7 @@ paths:
       description: Generate a mp4 container that contains at most 1 video stream and at most 1 audio stream.
         Mainly used to merge the HLS audio only video file and the HLS video only resolution file.
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          description: The video id
-          schema:
-            $ref: '#/components/schemas/Video/properties/id'
+        - $ref: '#/components/parameters/videoIdOrUUID'
         - name: videoFileIds
           in: query
           required: true
@@ -2375,7 +2370,7 @@ paths:
                     description: The user video quota used today in bytes
                     example: 1681014151
 
-  '/api/v1/users/me/videos/{videoId}/rating':
+  '/api/v1/users/me/videos/{videoIdOrUUID}/rating':
     get:
       summary: Get rate of my user for a video
       security:
@@ -2384,12 +2379,7 @@ paths:
         - My User
         - Video Rates
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          description: The video id
-          schema:
-            $ref: '#/components/schemas/Video/properties/id'
+        - $ref: '#/components/parameters/videoIdOrUUID'
       responses:
         '200':
           description: successful operation
@@ -2705,7 +2695,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
-  /api/v1/users/me/history/videos/{videoId}:
+  /api/v1/users/me/history/videos/{videoIdOrUUID}:
     delete:
       summary: Delete history element
       security:
@@ -2713,11 +2703,7 @@ paths:
       tags:
         - My History
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/Video/properties/id'
+        - $ref: '#/components/parameters/videoIdOrUUID'
       responses:
         '204':
           description: successful operation
@@ -3083,7 +3069,7 @@ paths:
         '404':
           description: video ownership change not found
 
-  '/api/v1/videos/{videoId}/ownership':
+  '/api/v1/videos/{videoIdOrUUID}/ownership':
     get:
       summary: List ownership change requests for a video
       description: List all ownership change requests for a specific video. The authenticated user must be able to manage the video.
@@ -3092,15 +3078,7 @@ paths:
       security:
         - OAuth2: []
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          description: The video id, uuid or short uuid
-          schema:
-            oneOf:
-              - $ref: '#/components/schemas/id'
-              - $ref: '#/components/schemas/UUIDv4'
-              - $ref: '#/components/schemas/shortUUID'
+        - $ref: '#/components/parameters/videoIdOrUUID'
         - name: state
           in: query
           required: false
@@ -3137,7 +3115,7 @@ paths:
         '404':
           description: video not found
 
-  '/api/v1/videos/{videoId}/give-ownership':
+  '/api/v1/videos/{videoIdOrUUID}/give-ownership':
     post:
       summary: Request ownership change
       tags:
@@ -3145,15 +3123,7 @@ paths:
       security:
         - OAuth2: []
       parameters:
-        - name: videoId
-          in: path
-          required: true
-          description: The video id, uuid or short uuid
-          schema:
-            oneOf:
-              - $ref: '#/components/schemas/id'
-              - $ref: '#/components/schemas/UUIDv4'
-              - $ref: '#/components/schemas/shortUUID'
+        - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
         content:
@@ -7963,7 +7933,7 @@ paths:
         '204':
           description: successful operation
 
-  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/max-quality/audio:
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/max-quality/audio:
     post:
       summary: Download the max-quality audio file for a job video
       description: API used by PeerTube runners.
@@ -7972,6 +7942,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/jobUUID'
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
         content:
@@ -7997,7 +7968,7 @@ paths:
         '403':
           description: the job is not associated with this video
 
-  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/max-quality:
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/max-quality:
     post:
       summary: Download the max-quality video file for a job video
       description: API used by PeerTube runners.
@@ -8006,6 +7977,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/jobUUID'
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
         content:
@@ -8031,7 +8003,7 @@ paths:
         '403':
           description: the job is not associated with this video
 
-  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/thumbnails/max-quality:
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/thumbnails/max-quality:
     post:
       summary: Download the max-quality thumbnail for a job video
       description: API used by PeerTube runners.
@@ -8040,6 +8012,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/jobUUID'
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
         content:
@@ -8065,7 +8038,7 @@ paths:
         '403':
           description: the job is not associated with this video
 
-  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/previews/max-quality:
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/previews/max-quality:
     post:
       summary: Download the max-quality preview for a job video
       description: API used by PeerTube runners.
@@ -8074,6 +8047,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/jobUUID'
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
         content:
@@ -8099,7 +8073,7 @@ paths:
         '403':
           description: the job is not associated with this video
 
-  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/studio/task-files/{filename}:
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/studio/task-files/{filename}:
     post:
       summary: Download a video studio task file for a job video
       description: API used by PeerTube runners.
@@ -8108,6 +8082,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/jobUUID'
         - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/videoIdOrUUID'
         - name: filename
           in: path
           required: true
@@ -8982,6 +8957,16 @@ components:
       description: Playlist id
       schema:
         $ref: '#/components/schemas/VideoPlaylist/properties/id'
+    videoIdOrUUID:
+      name: videoIdOrUUID
+      in: path
+      required: true
+      description: Video id or UUID
+      schema:
+        oneOf:
+          - $ref: '#/components/schemas/id'
+          - $ref: '#/components/schemas/UUIDv4'
+          - $ref: '#/components/schemas/shortUUID'
     playlistElementId:
       name: playlistElementId
       in: path
