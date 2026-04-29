@@ -1503,6 +1503,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return queryBuilder.queryVideo({ id, transaction, type: 'api', userId })
   }
 
+  // ---------------------------------------------------------------------------
+
   static async getStats () {
     const serverActor = await getServerActor()
 
@@ -1533,13 +1535,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
     }
 
-    const { total: totalLocalVideos } = await VideoModel.listForApi({
-      ...baseOptions,
-
-      isLocal: true
-    })
-
     const { total: totalVideos } = await VideoModel.listForApi(baseOptions)
+
+    const totalLocalVideos = await VideoModel.getTotalLocalVideosByPrivacy(VideoPrivacy.PUBLIC)
 
     return {
       totalLocalVideos,
@@ -1548,6 +1546,22 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       totalVideos
     }
   }
+
+  static async getTotalLocalVideosByPrivacy (videoPrivacy: VideoPrivacyType) {
+    const { total } = await VideoModel.listForApi({
+      start: 0,
+      count: 0,
+      sort: '-publishedAt',
+      nsfw: null,
+      isLocal: true,
+      displayOnlyForFollower: null,
+      privacyOneOf: [ videoPrivacy ]
+    })
+
+    return total
+  }
+
+  // ---------------------------------------------------------------------------
 
   static loadByNameAndChannel (channel: MChannelId, name: string): Promise<MVideo> {
     return VideoModel.unscoped().findOne({

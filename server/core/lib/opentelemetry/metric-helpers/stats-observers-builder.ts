@@ -1,8 +1,10 @@
 import memoizee from 'memoizee'
 import { Meter } from '@opentelemetry/api'
-import { MEMOIZE_TTL } from '@server/initializers/constants.js'
+import { MEMOIZE_TTL, VIDEO_PRIVACIES } from '@server/initializers/constants.js'
 import { buildAvailableActivities } from '@server/lib/activitypub/activity.js'
 import { StatsManager } from '@server/lib/stat-manager.js'
+import { VideoModel } from '@server/models/video/video.js'
+import { getAllPrivacies } from '@peertube/peertube-core-utils'
 
 export class StatsObserversBuilder {
   private readonly getInstanceStats = memoizee(() => {
@@ -69,7 +71,12 @@ export class StatsObserversBuilder {
     }).addCallback(async observableResult => {
       const stats = await this.getInstanceStats()
 
-      observableResult.observe(stats.totalLocalVideos, { videoOrigin: 'local' })
+      for (const videoPrivacy of getAllPrivacies()) {
+        const total = await VideoModel.getTotalLocalVideosByPrivacy(videoPrivacy)
+
+        observableResult.observe(total, { videoOrigin: 'local', privacy: VIDEO_PRIVACIES[videoPrivacy] })
+      }
+
       observableResult.observe(stats.totalVideos - stats.totalLocalVideos, { videoOrigin: 'remote' })
     })
 

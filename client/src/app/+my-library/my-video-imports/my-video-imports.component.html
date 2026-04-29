@@ -9,6 +9,7 @@
   searchInput="true"
   [inputFilters]="inputFilters"
   refreshButton="true"
+  [hasExpandedRow]="hasExpandedRow"
 >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No import} =1 {1 import} other {{{ totalRecords | myNumberFormatter }} imports}}</ng-container>

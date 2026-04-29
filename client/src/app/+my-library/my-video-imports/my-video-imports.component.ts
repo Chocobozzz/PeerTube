@@ -70,9 +70,11 @@ export class MyVideoImportsComponent implements OnInit {
   ]
 
   dataLoader: typeof this._dataLoader
+  hasExpandedRow: typeof this._hasExpandedRow
 
   constructor () {
     this.dataLoader = this._dataLoader.bind(this)
+    this.hasExpandedRow = this._hasExpandedRow.bind(this)
   }
 
   ngOnInit () {
@@ -187,5 +189,9 @@ export class MyVideoImportsComponent implements OnInit {
     }
   ) {
     return this.videoImportService.listMyVideoImports({ ...options, includeCollaborations: true })
+  }
+
+  private _hasExpandedRow (videoImport: VideoImport) {
+    return !!videoImport.error
   }
 }
