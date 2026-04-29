@@ -1555,7 +1555,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       nsfw: null,
       isLocal: true,
       displayOnlyForFollower: null,
-      privacyOneOf: [ videoPrivacy ]
+      privacyOneOf: [ videoPrivacy ],
+      skipPrivateIncludeCheck: true
     })
 
     return total

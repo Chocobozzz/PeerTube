@@ -1,11 +1,12 @@
 import { CommonModule, NgClass } from '@angular/common'
 import { Component, inject, viewChild } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
+import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
 import { ActionDropdownComponent, DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
+import { Video } from '@app/shared/shared-main/video/video.model'
 import { ActorCellComponent } from '@app/shared/shared-tables/actor-cell.component'
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '@app/shared/shared-tables/table.component'
 import { ChangeOwnership, ChangeOwnershipState, ChangeOwnershipStateType } from '@peertube/peertube-models'
@@ -55,6 +56,16 @@ export class MyVideoOwnershipChangesComponent {
     const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<ChangeOwnership>([
       [
         {
+          label: () => $localize`Manage video`,
+          linkBuilder: changeOwnership => [ Video.buildManageUrl(changeOwnership.video) ],
+          isDisplayed: changeOwnership =>
+            (this.isReceiver(changeOwnership) && changeOwnership.state.id === ChangeOwnershipState.ACCEPTED) ||
+            (this.isInitiator(changeOwnership) && changeOwnership.state.id !== ChangeOwnershipState.ACCEPTED),
+          enableBulk: false
+        }
+      ],
+      [
+        {
           label: () => $localize`Accept`,
           handler: changeOwnership => this.openAcceptModal(changeOwnership),
           isDisplayed: changeOwnership => this.canAcceptOrReject(changeOwnership),
@@ -79,6 +90,10 @@ export class MyVideoOwnershipChangesComponent {
 
   isReceiver (changeOwnership: ChangeOwnership) {
     return changeOwnership.nextOwnerAccount.id === this.authService.getUser().account.id
+  }
+
+  isInitiator (changeOwnership: ChangeOwnership) {
+    return changeOwnership.initiatorAccount.id === this.authService.getUser().account.id
   }
 
   getStateClass (status: ChangeOwnershipStateType) {

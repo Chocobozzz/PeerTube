@@ -149,7 +149,7 @@ export class MyVideoImportsComponent implements OnInit {
   }
 
   getEditVideoUrl (video: { uuid: string }) {
-    return Video.buildUpdateUrl(video)
+    return Video.buildManageUrl(video)
   }
 
   deleteImport (videoImport: VideoImport) {
