@@ -239,8 +239,7 @@ tags:
       Favor using resumable uploads in any of the following cases:
       - You are transferring large files
       - The likelihood of a network interruption is high
-      - Uploads are originating from a device with a low-bandwidth or unstable Internet connection,
-        such as a mobile device
+      - Uploads are originating from a device with a low-bandwidth or unstable Internet connection, such as a mobile device
 
       ### Import
 
@@ -287,6 +286,8 @@ tags:
     description: Server syndication feeds of videos
   - name: Video Download
     description: Download video files
+  - name: Logs
+    description: Operations dealing with client, server and audit logs.
   - name: Search
     description: |
       The search helps to find _videos_ or _channels_ from within the instance and beyond.
@@ -295,7 +296,7 @@ tags:
       the advanced search.
 
       Administrators can also enable the use of a remote search system, indexing
-      videos and channels not could be not federated by the instance.
+      videos and channels that may not be federated by the instance.
   - name: Homepage
     description: Get and update the custom homepage
   - name: Video Mirroring
@@ -306,13 +307,21 @@ tags:
   - name: Stats
     description: |
       Statistics
+  - name: Contact
+    description: Send a message to the instance administrators.
+  - name: Debug
+    description: Administrative debug endpoints.
   - name: Runner Registration Token
     description: |
-      Manage runner registration token
+      Manage runner registration tokens.
+  - name: Runner Jobs
+    description: Manage runner jobs and runner-side job execution.
+  - name: Runners
+    description: Register, list and remove remote runners.
   - name: Video Passwords
-    description: Operation on video passwords
+    description: Operations on video passwords.
   - name: Client Config
-    description: Configuration of the web client
+    description: Configuration of the web client.
 
 x-tagGroups:
   - name: Static endpoints
@@ -539,6 +548,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/VideoCommentsForXML'
+
               examples:
                 nightly:
                   externalValue: https://peertube2.cpy.re/feeds/video-comments.xml?scope=local
@@ -5091,7 +5101,7 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
       responses:
-        '204':
+        '200':
           description: successful operation
           content:
             application/json:
@@ -5148,7 +5158,7 @@ paths:
         '400':
           description: video is not password protected
 
-  /api/v1/videos/{id}/passwords/{videoPasswordId}:
+  /api/v1/videos/{id}/passwords/{passwordId}:
     delete:
       summary: Delete a video password
       description: "**PeerTube >= 6.0**"
@@ -5160,7 +5170,7 @@ paths:
         - Video Passwords
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPasswordId'
+        - $ref: '#/components/parameters/passwordId'
       responses:
         '204':
           description: successful operation
@@ -7129,6 +7139,115 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerStats'
 
+  /api/v1/server/contact:
+    post:
+      tags:
+        - Contact
+      summary: Contact the instance administrators
+      operationId: contactAdministrator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromName:
+                  type: string
+                  description: Display name of the sender
+                fromEmail:
+                  type: string
+                  format: email
+                  description: Email address of the sender
+                subject:
+                  type: string
+                  description: Subject of the message
+                body:
+                  type: string
+                  description: Message body
+              required:
+                - fromName
+                - fromEmail
+                - body
+      responses:
+        '204':
+          description: successful operation
+        '403':
+          description: a contact form was already sent recently from this IP address
+        '409':
+          description: contact form or SMTP is not configured on this instance
+
+  /api/v1/server/debug:
+    get:
+      tags:
+        - Debug
+      summary: Get debug information
+      description: Retrieve internal debug information for administrators.
+      operationId: getDebug
+      security:
+        - OAuth2:
+          - admin
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ip:
+                    type: string
+                  activityPubMessagesWaiting:
+                    type: integer
+
+  /api/v1/server/debug/run-command:
+    post:
+      tags:
+        - Debug
+      summary: Run a debug command
+      description: Run an internal debug command as an administrator.
+      operationId: runDebugCommand
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    command:
+                      type: string
+                      enum:
+                        - remove-dandling-resumable-uploads
+                        - remove-expired-user-exports
+                        - process-video-stats-buffer
+                        - process-video-viewers
+                        - process-update-videos-scheduler
+                        - process-video-channel-sync-latest
+                        - process-remove-old-stats
+                  required:
+                    - command
+                - type: object
+                  properties:
+                    command:
+                      type: string
+                      enum:
+                        - test-emails
+                    email:
+                      type: string
+                      format: email
+                  required:
+                    - command
+                    - email
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: invalid command or invalid email
+
   /api/v1/server/logs/client:
     post:
       tags:
@@ -7844,8 +7963,186 @@ paths:
         '204':
           description: successful operation
 
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/max-quality/audio:
+    post:
+      summary: Download the max-quality audio file for a job video
+      description: API used by PeerTube runners.
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+              required:
+                - runnerToken
+                - jobToken
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '403':
+          description: the job is not associated with this video
+
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/max-quality:
+    post:
+      summary: Download the max-quality video file for a job video
+      description: API used by PeerTube runners.
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+              required:
+                - runnerToken
+                - jobToken
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '403':
+          description: the job is not associated with this video
+
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/thumbnails/max-quality:
+    post:
+      summary: Download the max-quality thumbnail for a job video
+      description: API used by PeerTube runners.
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+              required:
+                - runnerToken
+                - jobToken
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '403':
+          description: the job is not associated with this video
+
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/previews/max-quality:
+    post:
+      summary: Download the max-quality preview for a job video
+      description: API used by PeerTube runners.
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+              required:
+                - runnerToken
+                - jobToken
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '403':
+          description: the job is not associated with this video
+
+  /api/v1/runners/jobs/{jobUUID}/files/videos/{videoId}/studio/task-files/{filename}:
+    post:
+      summary: Download a video studio task file for a job video
+      description: API used by PeerTube runners.
+      tags:
+        - Runner Jobs
+      parameters:
+        - $ref: '#/components/parameters/jobUUID'
+        - $ref: '#/components/parameters/idOrUUID'
+        - name: filename
+          in: path
+          required: true
+          description: Name of the task file to download
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                runnerToken:
+                  type: string
+                jobToken:
+                  type: string
+              required:
+                - runnerToken
+                - jobToken
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: the file is not associated with this edition task
+        '403':
+          description: the job is not associated with this video
+
   /api/v1/runners/jobs/{jobUUID}/cancel:
-    get:
+    post:
       summary: Cancel a job
       security:
         - OAuth2:
@@ -8248,9 +8545,11 @@ paths:
       tags:
         - Client Config
       summary: Update client language
-      description: Set a cookie so that, the next time the client refreshes the HTML of the web interface, PeerTube will use the next language
+      description: Set a cookie so that the next time the client refreshes the HTML of the web interface, PeerTube uses the selected language.
       operationId: updateClientLanguage
+      deprecated: true
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -8258,7 +8557,33 @@ paths:
               properties:
                 language:
                   type: string
+                  nullable: true
                   description: Language code to set
+                  example: 'en-US'
+              required:
+                - language
+      responses:
+        '204':
+          description: successful operation
+
+  /api/v1/client-config/update-interface-language:
+    post:
+      tags:
+        - Client Config
+      summary: Update client language
+      description: Set a cookie so that the next time the client refreshes the HTML of the web interface, PeerTube uses the selected language.
+      operationId: updateClientInterfaceLanguage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language:
+                  type: string
+                  nullable: true
+                  description: Language code to set, or `null` to clear the preference
                   example: 'en-US'
               required:
                 - language
@@ -8270,7 +8595,7 @@ paths:
     get:
       tags:
         - Video Channels
-      summary: "*List channel collaborators"
+      summary: List channel collaborators
       description: "**PeerTube >= 8.0**"
       operationId: listVideoChannelCollaborators
       security:
@@ -9087,8 +9412,8 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/UUIDv4'
-    videoPasswordId:
-      name: videoPasswordId
+    passwordId:
+      name: passwordId
       in: path
       required: true
       description: The video password id
