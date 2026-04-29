@@ -218,9 +218,11 @@ export class HLSOptionsBuilder {
     const base: HLSPluginOptions = {
       capLevelToPlayerSize: true,
       autoStartLoad: false,
+
       startPosition: exists(this.options.startTime)
         ? timeToInt(this.options.startTime)
-        : 0,
+        : -1,
+
       durationPlaceholder: this.options.duration,
 
       p2pMediaLoaderOptions: p2pMediaLoaderConfig.loader,
