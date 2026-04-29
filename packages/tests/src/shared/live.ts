@@ -81,9 +81,9 @@ async function testLiveVideoResolutions (options: {
   } = options
 
   // Live is always audio/video splitted
-  const splittedAudio = transcoded
+  const splittedAudio = hasAudio && hasVideo
 
-  const resolutions = splittedAudio && options.resolutions.length > 1 && !options.resolutions.includes(VideoResolution.H_NOVIDEO)
+  const resolutions = splittedAudio && options.resolutions.length !== 0 && !options.resolutions.includes(VideoResolution.H_NOVIDEO)
     ? [ VideoResolution.H_NOVIDEO, ...options.resolutions ]
     : [ ...options.resolutions ]
 
