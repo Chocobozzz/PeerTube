@@ -77,7 +77,9 @@ export async function synchronizeChannel (options: {
           if (
             err.code === YoutubeDlImportErrorCode.SKIP_PUBLICATION_DATE ||
             err.code === YoutubeDlImportErrorCode.IS_LIVE ||
-            err.isUnavailableVideoError()
+            err.isUnavailableVideoError() ||
+            err.isAgeLimitError() ||
+            err.isRemovedVideoError()
           ) {
             continue
           }

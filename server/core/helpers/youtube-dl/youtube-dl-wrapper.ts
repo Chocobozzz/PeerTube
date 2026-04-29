@@ -18,7 +18,8 @@ export const YoutubeDlImportErrorCode = {
   FETCH_ERROR: 0,
   NOT_ONLY_UNICAST_URL: 1,
   SKIP_PUBLICATION_DATE: 2,
-  IS_LIVE: 3
+  IS_LIVE: 3,
+  AGE_RESTRICTION: 4
 }
 
 export type YoutubeDlImportErrorCodeType = typeof YoutubeDlImportErrorCode[keyof typeof YoutubeDlImportErrorCode]
@@ -48,21 +49,25 @@ export class YoutubeDlImportError extends Error {
   isUnavailableVideoError () {
     const stderr = this.getStderr()
 
-    if (stderr.includes('Video unavailable') || stderr.includes(' 429 ')) {
-      return true
-    }
+    return stderr.includes('Video unavailable') || stderr.includes(' 429 ')
+  }
 
-    return false
+  isAgeLimitError () {
+    const stderr = this.getStderr()
+
+    return stderr.includes('Sign in to confirm your age')
+  }
+
+  isRemovedVideoError () {
+    const stderr = this.getStderr()
+
+    return stderr.includes('This video has been removed')
   }
 
   isRateLimitError () {
     const stderr = this.getStderr()
 
-    if (stderr.includes('Sign in to confirm you’re not a bot')) {
-      return true
-    }
-
-    return false
+    return stderr.includes('Sign in to confirm you’re not a bot')
   }
 
   private getStderr () {

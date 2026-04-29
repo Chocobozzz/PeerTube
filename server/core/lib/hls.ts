@@ -164,7 +164,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
         content: masterPlaylistContent
       })
 
-      logger.info(`Updated master playlist file of video ${video.uuid} to object storage ${playlist.playlistUrl}`, lTags(video.uuid))
+      logger.info(`Updated master playlist file of video ${video.uuid} to object storage`, lTags(video.uuid))
     } else {
       const masterPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.playlistFilename)
       await writeFile(masterPlaylistPath, masterPlaylistContent)
