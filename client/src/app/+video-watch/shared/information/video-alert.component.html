@@ -6,11 +6,11 @@
 
 @if (isWaitingForLive()) {
   <my-alert type="primary">
-    <ng-container i18n>This live is not currently streaming.</ng-container>
+    <div i18n>This live is not currently streaming.</div>
     @if (scheduledLiveDate()) {
-      <ng-container i18n>
+      <div i18n>
       It will start on {{ scheduledLiveDate() | ptDate: 'short' }}.
-    </ng-container>
+    </div>
     }
   </my-alert>
 }
