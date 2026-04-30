@@ -62,8 +62,6 @@ describe('Playlist thumbnail', function () {
   })
 
   it('Should automatically update the thumbnail when adding an element', async function () {
-    this.timeout(30000)
-
     const created = await servers[1].playlists.create({
       attributes: {
         displayName: 'playlist without thumbnail',

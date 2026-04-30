@@ -486,11 +486,9 @@ export async function checkThumbnails (options: {
 
     expect(toCheck).to.have.lengthOf(5)
   } else {
-    expect(toCheck).to.deep.include.members([
+    expect(toCheck).to.deep.equal([
       { width: 280, height: 157, aspectRatio: '16:9' }
     ])
-
-    expect(toCheck).to.have.lengthOf(1)
   }
 
   for (const thumbnail of thumbnails) {
