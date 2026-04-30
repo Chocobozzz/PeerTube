@@ -40,13 +40,20 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentNam
     uploadLimit: 5_000_000
   } as any)
 
-  return new Promise<string>((res, rej) => {
+  return new Promise<string>(async (res, rej) => {
     let file: TorrentFile
 
     const torrentId = target.uri || join(CONFIG.STORAGE.TORRENTS_DIR, target.torrentName)
+    let torrentInput: string | Buffer
+
+    try {
+      torrentInput = target.uri || await readFile(torrentId)
+    } catch (err) {
+      return rej(new Error('Cannot read torrent file ' + torrentId + ': ' + (err as Error).message))
+    }
 
     const options = { path: directoryPath }
-    const torrent = webtorrent.add(torrentId, options, torrent => {
+    const torrent = webtorrent.add(torrentInput, options, torrent => {
       if (torrent.files.length !== 1) {
         if (timer) clearTimeout(timer)
 

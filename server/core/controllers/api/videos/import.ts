@@ -242,9 +242,7 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
   await move(torrentfile.path, newTorrentPath, { overwrite: true })
   torrentfile.path = newTorrentPath
 
-  const buf = await readFile(torrentfile.path)
-  // FIXME: typings: parseTorrent now returns an async result
-  const parsedTorrent = await (parseTorrent(buf) as unknown as Promise<Instance>)
+  const parsedTorrent = await parseTorrentPromise(torrentfile.path)
 
   if (parsedTorrent.files.length !== 1) {
     cleanUpReqFiles(req)
@@ -274,4 +272,10 @@ function processMagnetURI (body: VideoImportCreate) {
 
 function extractNameFromArray (name: string | string[]) {
   return isArray(name) ? name[0] : name
+}
+
+async function parseTorrentPromise (torrentFilePath: string) {
+  const buf = await readFile(torrentFilePath)
+
+  return parseTorrent(buf) as Instance
 }

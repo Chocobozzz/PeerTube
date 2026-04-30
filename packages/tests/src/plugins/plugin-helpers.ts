@@ -326,10 +326,8 @@ describe('Test plugin helpers', function () {
         expect(await pathExists(miniature.path)).to.be.true
         await makeRawRequest({ url: miniature.url, expectedStatus: HttpStatusCode.OK_200 })
 
-        const preview = body.thumbnails.find(t => t.type === 2)
+        const preview = body.thumbnails.find(t => t.type === 2 && t.width === 850 && t.height === 480)
         expect(preview).to.exist
-        expect(preview.width).to.equal(850)
-        expect(preview.height).to.equal(480)
         expect(await pathExists(preview.path)).to.be.true
         await makeRawRequest({ url: preview.url, expectedStatus: HttpStatusCode.OK_200 })
       }
