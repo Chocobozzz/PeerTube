@@ -7941,7 +7941,6 @@ paths:
         - Runner Jobs
       parameters:
         - $ref: '#/components/parameters/jobUUID'
-        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
@@ -7976,7 +7975,6 @@ paths:
         - Runner Jobs
       parameters:
         - $ref: '#/components/parameters/jobUUID'
-        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
@@ -8011,7 +8009,6 @@ paths:
         - Runner Jobs
       parameters:
         - $ref: '#/components/parameters/jobUUID'
-        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
@@ -8046,7 +8043,6 @@ paths:
         - Runner Jobs
       parameters:
         - $ref: '#/components/parameters/jobUUID'
-        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/videoIdOrUUID'
       requestBody:
         required: true
@@ -8081,7 +8077,6 @@ paths:
         - Runner Jobs
       parameters:
         - $ref: '#/components/parameters/jobUUID'
-        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/videoIdOrUUID'
         - name: filename
           in: path
