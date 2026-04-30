@@ -357,6 +357,7 @@ async function assignReplayFilesToVideo (options: {
       await generateHlsPlaylistResolutionFromTS({
         video,
         inputFileMutexReleaser: null, // Already locked in parent
+        preventInputFileLocking: true,
         concatenatedTsFilePath,
         resolution,
         fps,
