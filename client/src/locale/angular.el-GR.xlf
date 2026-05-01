@@ -5483,9 +5483,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9152096266184328708" datatype="html">
+      <trans-unit id="9152096266184328708" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="new">Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</target>
+        <target state="translated">Αφαιρέθηκε {count, plural, =1 {το αίτημα εγγραφής του χρήστη <x id="username"/>} other {<x id="count"/> αιτήματα εγγραφής}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -5563,9 +5563,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1124038634267013139" datatype="html">
+      <trans-unit id="1124038634267013139" datatype="html" xml:space="preserve">
         <source>The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</source>
-        <target state="new">The video may be unplayable during the transcoding process. It's the reason why we prefer to publish publicly the video after transcoding.</target>
+        <target state="translated">Το βίντεο ενδέχεται να μην μπορεί να αναπαραχθεί κατά τη διάρκεια της διακωδικοποίησης. Αυτός είναι ο λόγος για τον οποίο προτιμούμε να δημοσιεύουμε το βίντεο μετά τη διακωδικοποίηση.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">189</context>
@@ -5679,9 +5679,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8107526517508236784" datatype="html">
+      <trans-unit id="8107526517508236784" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel editing <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Cancel creation <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Cancel editing <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Cancel deletion <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_CASE" equiv-text="@case ('CREATE') {"/> Ακύρωση δημιουργίας <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_1" equiv-text="@case ('UPDATE') {"/> Ακύρωση επεξεργασίας <x id="CLOSE_BLOCK_CASE" equiv-text="}"/><x id="START_BLOCK_CASE_2" equiv-text="@case ('REMOVE') {"/> Ακύρωση διαγραφής <x id="CLOSE_BLOCK_CASE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">35</context>
@@ -5697,9 +5697,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8212436567578143551" datatype="html">
+      <trans-unit id="8212436567578143551" datatype="html" xml:space="preserve">
         <source>Add a caption</source>
-        <target state="new">Add a caption</target>
+        <target state="translated">Προσθήκη υποτίτλου</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
           <context context-type="linenumber">67</context>
@@ -5737,9 +5737,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7840115150430999864" datatype="html">
+      <trans-unit id="7840115150430999864" datatype="html" xml:space="preserve">
         <source>Timecode</source>
-        <target state="new">Timecode</target>
+        <target state="translated">Χρονοκώδικας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/chapters/video-chapters.component.html</context>
           <context context-type="linenumber">23</context>
@@ -5793,17 +5793,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1760429801169166597" datatype="html">
+      <trans-unit id="1760429801169166597" datatype="html" xml:space="preserve">
         <source>Live configuration is unavailable because you are streaming in this live.</source>
-        <target state="new">Live configuration is unavailable because you are streaming in this live.</target>
+        <target state="translated">Η ρύθμιση παραμέτρων ζωντανής μετάδοσης δεν είναι διαθέσιμη, καθώς αυτή τη στιγμή είστε σ' αυτή τη ζωντανή μετάδοση.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8775708050219693192" datatype="html">
+      <trans-unit id="8775708050219693192" datatype="html" xml:space="preserve">
         <source>Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </source>
-        <target state="new"> Max live duration configured on <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> is <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. If your live reaches this limit, it will be automatically terminated. </target>
+        <target state="translated">Η μέγιστη διάρκεια ζωντανής μετάδοσης που έχει ρυθμιστεί στο <x id="INTERPOLATION" equiv-text="{{ getInstanceName() }}"/> είναι <x id="INTERPOLATION_1" equiv-text="{{ getMaxLiveDuration() | myTimeDurationFormatter }}"/>. Εάν η ζωντανή μετάδοσή σας φτάσει αυτό το όριο, θα τερματιστεί αυτόματα. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">21</context>
@@ -5817,9 +5817,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4964217545822568684" datatype="html">
+      <trans-unit id="4964217545822568684" datatype="html" xml:space="preserve">
         <source>Privacy of the new replay</source>
-        <target state="new">Privacy of the new replay</target>
+        <target state="translated">Ιδιωτικότητα της νέας ανασκόπησης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">135</context>
@@ -5841,9 +5841,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6927421881663431816" datatype="html">
+      <trans-unit id="6927421881663431816" datatype="html" xml:space="preserve">
         <source>This date is used for displaying the live in your channel when it's not currently streaming. Scheduling a live does not prevent you from starting the live at a different time.</source>
-        <target state="new"> This date is used for displaying the live in your channel when it's not currently streaming. Scheduling a live does not prevent you from starting the live at a different time. </target>
+        <target state="translated">Αυτή η ημερομηνία χρησιμοποιείται για την εμφάνιση της ζωντανής μετάδοσης στο κανάλι σας όταν δεν βρίσκεται σε εξέλιξη η ροή. Ο προγραμματισμός μιας ζωντανής μετάδοσης δεν σας εμποδίζει να την ξεκινήσετε σε διαφορετική ώρα.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">165</context>
@@ -5901,17 +5901,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3233726805394397544" datatype="html">
+      <trans-unit id="3233726805394397544" datatype="html" xml:space="preserve">
         <source>Handle copied</source>
-        <target state="new">Handle copied</target>
+        <target state="translated">Αντιγράφηκε πλήρες όνομα χρήστη</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5121874940679887597" datatype="html">
+      <trans-unit id="5121874940679887597" datatype="html" xml:space="preserve">
         <source>Copy channel handle</source>
-        <target state="new">Copy channel handle</target>
+        <target state="translated">Αντιγραφή πλήρους ονόματος καναλιού</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.html</context>
           <context context-type="linenumber">73</context>
@@ -5949,11 +5949,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="50985514722149155" datatype="html">
+      <trans-unit id="50985514722149155" datatype="html" xml:space="preserve">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="new">
-                    This is the date when the content was originally published (e.g. the release date for a film)
-                  </target>
+        <target state="translated">Αυτή είναι η ημερομηνία κατά την οποία το περιεχόμενο δημοσιεύτηκε αρχικά (π.χ. η πρεμιέρα μιας ταινίας)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5967,25 +5965,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6206893322435329922" datatype="html">
+      <trans-unit id="6206893322435329922" datatype="html" xml:space="preserve">
         <source>You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Μπορείτε να ορίσετε την έγκριση των σχολίων ανάλογα με τις <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>πολιτικές αυτόματης προσθήκης ετικετών<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4272969253403748136" datatype="html">
+      <trans-unit id="4272969253403748136" datatype="html" xml:space="preserve">
         <source>Restrict embed to the following domains</source>
-        <target state="new">Restrict embed to the following domains</target>
+        <target state="translated">Περιορισμός της ενσωμάτωσης στους ακόλουθους τομείς</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4520053292376276280" datatype="html">
+      <trans-unit id="4520053292376276280" datatype="html" xml:space="preserve">
         <source>Allowed domains</source>
-        <target state="new">Allowed domains</target>
+        <target state="translated">Επιτρεπόμενοι τομείς</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -6107,25 +6105,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">18,19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4094023877159391225" datatype="html">
+      <trans-unit id="4094023877159391225" datatype="html" xml:space="preserve">
         <source>You can format your description using the <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>: </source>
-        <target state="new"> You can format your description using the <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>: </target>
+        <target state="translated">Μπορείτε να μορφοποιήσετε την περιγραφή σας χρησιμοποιώντας <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/> : </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3603659973330861834" datatype="html">
+      <trans-unit id="3603659973330861834" datatype="html" xml:space="preserve">
         <source>For example, to put <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>text in bold<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**text in bold**) or <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>text in italic<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*text in italic*)</source>
-        <target state="new">For example, to put <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>text in bold<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**text in bold**) or <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>text in italic<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*text in italic*)</target>
+        <target state="translated">Για παράδειγμα, για να εμφανίσετε το κείμενο <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>με έντονη γραφή<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> (**κείμενο με έντονη γραφή**) ή <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>με πλάγια γραφή<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> (*κείμενο με πλάγια γραφή*)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="566903689838278643" datatype="html">
+      <trans-unit id="566903689838278643" datatype="html" xml:space="preserve">
         <source>You can also create a link to a specific timecode of the video (e.g. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> by simply writing 00:05) or <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>a classic link<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([title of my link](https://example.com))</source>
-        <target state="new">You can also create a link to a specific timecode of the video (e.g. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> by simply writing 00:05) or <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>a classic link<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([title of my link](https://example.com))</target>
+        <target state="translated">Μπορείτε επίσης να δημιουργήσετε έναν σύνδεσμο προς έναν συγκεκριμένο χρονοκώδικα του βίντεο (π.χ. <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>00:05<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> απλά γράφοντας 00:05) ή <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span class=&quot;fake-link&quot;&gt;"/>έναν κλασικό σύνδεσμο<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> ([τίτλος του συνδέσμου μου](https://example.com))</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">35</context>
