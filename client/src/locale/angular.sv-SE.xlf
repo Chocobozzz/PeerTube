@@ -10431,7 +10431,7 @@
       </trans-unit>
       <trans-unit id="1722554034307231103" datatype="html" xml:space="preserve">
         <source>Exclude comments from muted accounts</source>
-        <target state="translated">Visa ej  kommentarer från tystade konton</target>
+        <target state="translated">Visa ej kommentarer från tystade konton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">253</context>
@@ -17144,7 +17144,7 @@ color: red;
       </trans-unit>
       <trans-unit id="769280935524762114" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Server muted} other {<x id="count"/> servers muted}}</source>
-        <target state="translated">{count, plural, =1 {Servern har tystats} other {De  <x id="count"/> servrarna har tystats}}</target>
+        <target state="translated">{count, plural, =1 {Servern har tystats} other {De <x id="count"/> servrarna har tystats}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/blocklist.service.ts</context>
           <context context-type="linenumber">243</context>
@@ -17991,57 +17991,57 @@ color: red;
           <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7197879989894863275" datatype="html">
+      <trans-unit id="7197879989894863275" datatype="html" xml:space="preserve">
         <source>Mute reporter {count, plural, =1 {platform} other {platforms}}</source>
-        <target state="new">Mute reporter {count, plural, =1 {platform} other {platforms}}</target>
+        <target state="translated">Tysta rapporterande {count, plural, =1 {plattform} other {plattformar}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">434</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7394226533516335523" datatype="html">
+      <trans-unit id="7394226533516335523" datatype="html" xml:space="preserve">
         <source>Actions for the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Actions for the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Åtgärder för {count, plural, =1 {videon} other {videorna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127978769406607253" datatype="html">
+      <trans-unit id="127978769406607253" datatype="html" xml:space="preserve">
         <source>Block the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Block the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Blockera {count, plural, =1 {videon} other {videorna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">453</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4121384633096511327" datatype="html">
+      <trans-unit id="4121384633096511327" datatype="html" xml:space="preserve">
         <source>Unblock the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Unblock the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Lås upp {count, plural, =1 {videon} other {videorna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">459</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="360751696384645624" datatype="html">
+      <trans-unit id="360751696384645624" datatype="html" xml:space="preserve">
         <source>Delete the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Delete the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Radera {count, plural, =1 {videon} other {videorna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">465</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7476104506257949513" datatype="html">
+      <trans-unit id="7476104506257949513" datatype="html" xml:space="preserve">
         <source>Actions for {count, plural, =1 {the comment} other {the comments}}</source>
-        <target state="new">Actions for {count, plural, =1 {the comment} other {the comments}}</target>
+        <target state="translated">Åtgärder för {count, plural, =1 {kommentaren} other {kommentarerna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">479</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8870282537679260686" datatype="html">
+      <trans-unit id="8870282537679260686" datatype="html" xml:space="preserve">
         <source>Delete {count, plural, =1 {comment} other {comments}}</source>
-        <target state="new">Delete {count, plural, =1 {comment} other {comments}}</target>
+        <target state="translated">Radera {count, plural, =1 {kommentaren} other {kommentarerna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">487</context>
@@ -18135,9 +18135,9 @@ color: red;
           <context context-type="linenumber">574</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="82990740698454566" datatype="html">
+      <trans-unit id="82990740698454566" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Delete video} other {Delete videos}}</source>
-        <target state="new">{count, plural, =1 {Delete video} other {Delete videos}}</target>
+        <target state="translated">Radera {count, plural, =1 {videon} other {videorna}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -18780,9 +18780,9 @@ color: red;
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6296290397836859464" datatype="html">
+      <trans-unit id="6296290397836859464" datatype="html" xml:space="preserve">
         <source>Go to homepage</source>
-        <target state="new">Go to homepage</target>
+        <target state="translated">Gå till startsidan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">13</context>
@@ -20890,17 +20890,17 @@ color: red;
           <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1990743270860913672" datatype="html">
+      <trans-unit id="1990743270860913672" datatype="html" xml:space="preserve">
         <source>Server <x id="PH" equiv-text="host"/> muted.</source>
-        <target state="new">Server <x id="PH" equiv-text="host"/> muted.</target>
+        <target state="translated">Server <x id="PH" equiv-text="host"/> är tystad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3494132403413285893" datatype="html">
+      <trans-unit id="3494132403413285893" datatype="html" xml:space="preserve">
         <source>Server <x id="PH" equiv-text="host"/> unmuted.</source>
-        <target state="new">Server <x id="PH" equiv-text="host"/> unmuted.</target>
+        <target state="translated">Server <x id="PH" equiv-text="host"/> har avtystats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">387</context>
@@ -26519,49 +26519,49 @@ color: red;
           <context context-type="linenumber">644</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8292657852687129852" datatype="html">
+      <trans-unit id="8292657852687129852" datatype="html" xml:space="preserve">
         <source>Mute platform</source>
-        <target state="new">Mute platform</target>
+        <target state="translated">Tysta plattformen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">655</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3103598276832461257" datatype="html">
+      <trans-unit id="3103598276832461257" datatype="html" xml:space="preserve">
         <source>Unmute platform</source>
-        <target state="new">Unmute platform</target>
+        <target state="translated">Avtysta plattformen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">665</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2880545536287028596" datatype="html">
+      <trans-unit id="2880545536287028596" datatype="html" xml:space="preserve">
         <source>Mute account by your platform</source>
-        <target state="new">Mute account by your platform</target>
+        <target state="translated">Tysta kontot via din plattform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">678</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1262787684941465230" datatype="html">
+      <trans-unit id="1262787684941465230" datatype="html" xml:space="preserve">
         <source>Unmute account by your platform</source>
-        <target state="new">Unmute account by your platform</target>
+        <target state="translated">Avtysta kontot via din plattform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">688</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3101825142319654318" datatype="html">
+      <trans-unit id="3101825142319654318" datatype="html" xml:space="preserve">
         <source>Mute platform by your platform</source>
-        <target state="new">Mute platform by your platform</target>
+        <target state="translated">Tysta plattformen via din plattform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">699</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1185859426297585190" datatype="html">
+      <trans-unit id="1185859426297585190" datatype="html" xml:space="preserve">
         <source>Unmute platform by your platform</source>
-        <target state="new">Unmute platform by your platform</target>
+        <target state="translated">Avtysta plattformen via din plattform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">709</context>
@@ -28211,9 +28211,9 @@ color: red;
           <context context-type="linenumber">1022</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1887788831759691756" datatype="html">
+      <trans-unit id="1887788831759691756" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Videos feed</source>
-        <target state="new"><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Videos feed</target>
+        <target state="translated"><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Videoflöde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1052</context>
@@ -28223,17 +28223,17 @@ color: red;
           <context context-type="linenumber">1066</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="513070917830516194" datatype="html">
+      <trans-unit id="513070917830516194" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.playlist.displayName"/> - Podcast feed</source>
-        <target state="new"><x id="PH" equiv-text="this.playlist.displayName"/> - Podcast feed</target>
+        <target state="translated"><x id="PH" equiv-text="this.playlist.displayName"/> - Podd-flöde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1053</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5232693393816852420" datatype="html">
+      <trans-unit id="5232693393816852420" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="video.name"/> - Comments feed</source>
-        <target state="new"><x id="PH" equiv-text="video.name"/> - Comments feed</target>
+        <target state="translated"><x id="PH" equiv-text="video.name"/> - Kommentarsflöde</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1067</context>
