@@ -10441,7 +10441,7 @@
       </trans-unit>
       <trans-unit id="5414463732514599361" datatype="html" xml:space="preserve">
         <source>Comment scope</source>
-        <target state="needs-translation">Kommentarbereich</target>
+        <target state="translated">Kommentarbereich</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">238</context>
@@ -17923,9 +17923,9 @@
           <context context-type="linenumber">352</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7306208116385748361" datatype="html">
+      <trans-unit id="7306208116385748361" datatype="html" xml:space="preserve">
         <source>Switch to manual block</source>
-        <target state="new">Switch to manual block</target>
+        <target state="translated">Zum manuellen Blockieren wechseln</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">96</context>
@@ -17947,9 +17947,9 @@
           <context context-type="linenumber">372</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="759552082340137565" datatype="html">
+      <trans-unit id="759552082340137565" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Delete report} other {Delete reports}}</source>
-        <target state="new">{count, plural, =1 {Delete report} other {Delete reports}}</target>
+        <target state="translated">{count, plural, =1 {Gelöschte Meldung} other {Gelöschte Meldungen}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">378</context>
@@ -17963,17 +17963,17 @@
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2052464115821785206" datatype="html">
+      <trans-unit id="2052464115821785206" datatype="html" xml:space="preserve">
         <source>Mute flagged {count, plural, =1 {account} other {accounts}}</source>
-        <target state="new">Mute flagged {count, plural, =1 {account} other {accounts}}</target>
+        <target state="translated">{count, plural, =1 {Makierten Account} other {Makierte Accounts}} stummschalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">400</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6244674823326566150" datatype="html">
+      <trans-unit id="6244674823326566150" datatype="html" xml:space="preserve">
         <source>Mute flagged {count, plural, =1 {platform} other {platforms}}</source>
-        <target state="new">Mute flagged {count, plural, =1 {platform} other {platforms}}</target>
+        <target state="translated">Markierte {count, plural, =1 {Plattform} other {Plattformen}} stummschalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">407</context>
@@ -17987,9 +17987,9 @@
           <context context-type="linenumber">420</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4773177228589861902" datatype="html">
+      <trans-unit id="4773177228589861902" datatype="html" xml:space="preserve">
         <source>Mute {count, plural, =1 {reporter} other {reporters}}</source>
-        <target state="new">Mute {count, plural, =1 {reporter} other {reporters}}</target>
+        <target state="translated">{count, plural, =1 {Melder} other {Meldene}} stummschalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">427</context>
@@ -18011,25 +18011,25 @@
           <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127978769406607253" datatype="html">
+      <trans-unit id="127978769406607253" datatype="html" xml:space="preserve">
         <source>Block the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Block the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Blockiere {count, plural, =1 {das Video} other {die Videos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">453</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4121384633096511327" datatype="html">
+      <trans-unit id="4121384633096511327" datatype="html" xml:space="preserve">
         <source>Unblock the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Unblock the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Entblocke {count, plural, =1 {das Video} other {die Videos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">459</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="360751696384645624" datatype="html">
+      <trans-unit id="360751696384645624" datatype="html" xml:space="preserve">
         <source>Delete the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Delete the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Lösche {count, plural, =1 {das Video} other {die Videos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">465</context>
@@ -18091,17 +18091,17 @@
           <context context-type="linenumber">342</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3005976570489477141" datatype="html">
+      <trans-unit id="3005976570489477141" datatype="html" xml:space="preserve">
         <source>Set internal note</source>
-        <target state="new">Set internal note</target>
+        <target state="translated">Interne Notiz festlegen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">360</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4985871382843824389" datatype="html">
+      <trans-unit id="4985871382843824389" datatype="html" xml:space="preserve">
         <source>Actions for videos</source>
-        <target state="new">Actions for videos</target>
+        <target state="translated">Aktionen für Videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -18187,9 +18187,9 @@
           <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5949969716502960330" datatype="html">
+      <trans-unit id="5949969716502960330" datatype="html" xml:space="preserve">
         <source>Switch</source>
-        <target state="new">Switch</target>
+        <target state="translated">Wechseln</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">187</context>
@@ -18568,9 +18568,9 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3323881181022144889" datatype="html">
+      <trans-unit id="3323881181022144889" datatype="html" xml:space="preserve">
         <source>Some jobs are also processed by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/jobs-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</source>
-        <target state="new">Some jobs are also processed by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/jobs-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.</target>
+        <target state="translated">Einige Jobs werden auch von <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/jobs-list&quot;&gt;"/>externen Runnern<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> verarbeitet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">2,5</context>
@@ -18784,9 +18784,9 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6296290397836859464" datatype="html">
+      <trans-unit id="6296290397836859464" datatype="html" xml:space="preserve">
         <source>Go to homepage</source>
-        <target state="new">Go to homepage</target>
+        <target state="translated">Zur Startseite gehen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">13</context>
@@ -18872,17 +18872,17 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6741064202113904768" datatype="html">
+      <trans-unit id="6741064202113904768" datatype="html" xml:space="preserve">
         <source>No job found for the current filters.</source>
-        <target state="new">No job found for the current filters.</target>
+        <target state="translated">Keinen Job gefunden für die aktuellen Filter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1776007048264915988" datatype="html">
+      <trans-unit id="1776007048264915988" datatype="html" xml:space="preserve">
         <source>No job found.</source>
-        <target state="new">No job found.</target>
+        <target state="translated">Keinen Job gefunden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">92</context>
@@ -19040,9 +19040,9 @@
           <context context-type="linenumber">17,24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5488516772394120306" datatype="html">
+      <trans-unit id="5488516772394120306" datatype="html" xml:space="preserve">
         <source>At least one registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> At least one registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">Mindestens eine Registrierungs-E-Mail wurde nicht verifiziert. Der E-Mail-Versand wurde standardmäßig deaktiviert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">27</context>
@@ -19056,9 +19056,9 @@
           <context context-type="linenumber">31,38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2583091767247736198" datatype="html">
+      <trans-unit id="2583091767247736198" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining accounts have been created.</source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email explaining accounts have been created. </target>
+        <target state="translated">E-Mails sind auf dieser Instanz deaktiviert. Deshalb kann PeerTube keine E-Mails versenden, die erläutern, dass die Accounts erstellt wurden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">41</context>
@@ -19072,9 +19072,9 @@
           <context context-type="linenumber">46,55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2941249138625577938" datatype="html">
+      <trans-unit id="2941249138625577938" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining registration requests have been rejected.</source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email explaining registration requests have been rejected. </target>
+        <target state="translated">E-Mails sind auf dieser Instanz deaktiviert. Daher kann PeerTube keine E-Mail senden, die erklärt, dass die Registrierung abgelehnt wurde.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">57</context>
@@ -19292,57 +19292,57 @@
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5179004125977023071" datatype="html">
+      <trans-unit id="5179004125977023071" datatype="html" xml:space="preserve">
         <source>Video state</source>
-        <target state="new">Video state</target>
+        <target state="translated">Video-Status.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7011571350595686224" datatype="html">
+      <trans-unit id="7011571350595686224" datatype="html" xml:space="preserve">
         <source>Web files (local only)</source>
-        <target state="new">Web files (local only)</target>
+        <target state="translated">Web-Dateien (nur lokal)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8438281847950034120" datatype="html">
+      <trans-unit id="8438281847950034120" datatype="html" xml:space="preserve">
         <source>With Web Videos files</source>
-        <target state="new">With Web Videos files</target>
+        <target state="translated">Mit Webvideo-Dateien</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">206</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6896697496682070097" datatype="html">
+      <trans-unit id="6896697496682070097" datatype="html" xml:space="preserve">
         <source>Without Web Videos files</source>
-        <target state="new">Without Web Videos files</target>
+        <target state="translated">Ohne Webvideo-Dateien</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2793440395888492218" datatype="html">
+      <trans-unit id="2793440395888492218" datatype="html" xml:space="preserve">
         <source>HLS files (local only)</source>
-        <target state="new">HLS files (local only)</target>
+        <target state="translated">HLS-Dateien (nur lokal)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">214</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7022580997752875808" datatype="html">
+      <trans-unit id="7022580997752875808" datatype="html" xml:space="preserve">
         <source>With HLS files</source>
-        <target state="new">With HLS files</target>
+        <target state="translated">Mit HLS-Dateien</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4129995850883206349" datatype="html">
+      <trans-unit id="4129995850883206349" datatype="html" xml:space="preserve">
         <source>Without HLS files</source>
-        <target state="new">Without HLS files</target>
+        <target state="translated">Ohne HLS-Dateien</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">218</context>
@@ -19632,9 +19632,9 @@
           <context context-type="linenumber">294</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3840417117006848247" datatype="html">
+      <trans-unit id="3840417117006848247" datatype="html" xml:space="preserve">
         <source>Filter by role: <x id="PH" equiv-text="roleLabel"/></source>
-        <target state="new">Filter by role: <x id="PH" equiv-text="roleLabel"/></target>
+        <target state="translated">Rolle filtern nach: <x id="PH" equiv-text="roleLabel"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">305</context>
@@ -19648,9 +19648,9 @@
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8570152277054451067" datatype="html">
+      <trans-unit id="8570152277054451067" datatype="html" xml:space="preserve">
         <source>Non sensitive</source>
-        <target state="new">Non sensitive</target>
+        <target state="translated">Nicht sensibel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">155</context>
