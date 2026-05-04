@@ -12891,9 +12891,9 @@
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5867513506373651775" datatype="html">
+      <trans-unit id="5867513506373651775" datatype="html" xml:space="preserve">
         <source>The file will be merged in a still image video with the preview file on upload.</source>
-        <target state="translated">Файл будет объединен в неподвижное видео с файлом предварительного просмотра при загрузке.</target>
+        <target state="translated">Файл будет объединён в неподвижное видео с файлом предварительного просмотра при загрузке.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">61</context>
@@ -12901,7 +12901,7 @@
       </trans-unit>
       <trans-unit id="8718102504014634857" datatype="html" xml:space="preserve">
         <source>Keep a version of the input file</source>
-        <target state="translated">Сохраните версию входного файла</target>
+        <target state="translated">Сохранять оригинал</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">69</context>
@@ -12909,7 +12909,7 @@
       </trans-unit>
       <trans-unit id="1143448052369512390" datatype="html" xml:space="preserve">
         <source>If enabled, the input file is not deleted after transcoding but moved in a dedicated folder or object storage</source>
-        <target state="translated">Если этот параметр включен, входной файл не удаляется после перекодирования, а перемещается в выделенную папку или объектное хранилище</target>
+        <target state="translated">Оригинал не удаляется после транскодирования, а перемещается в специальную папку или в объектное хранилище</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">72</context>
