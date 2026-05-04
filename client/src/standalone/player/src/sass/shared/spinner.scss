@@ -1,37 +1,34 @@
 @use "_variables" as *;
 @use "_mixins" as *;
 
-// Thanks: https://projects.lukehaas.me/css-loaders/
+// Thanks: https://cssloaders.github.io/
 .vjs-loading-spinner {
   --spinner-size: 6em;
 
-  top: calc(50% - var(--spinner-size) / 2);
-  left: calc(50% - var(--spinner-size) / 2);
-  font-size: 10px;
-  text-indent: -9999em;
-  border: 0.7em solid rgba(255, 255, 255, 0.2);
-  border-left-color: #ffffff;
-  transform: translateZ(0);
-  animation: 0.3s ease-out 1.1s forwards vjs-spinner-show, spinner 1.4s infinite linear !important;
-  overflow: hidden;
-  visibility: hidden;
+  // Override video.js styles
+  border: 0;
+  transform: none;
+  opacity: 1;
 
-  &::before {
-    animation: none !important;
-  }
-
+  &::before,
   &::after {
     display: none !important;
   }
 
-  @keyframes spinner {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+  font-size: 10px;
+
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  top: calc(50% - var(--spinner-size) / 2);
+  left: calc(50% - var(--spinner-size) / 2);
+
+  border-radius: 50%;
+
+  border-top: 4px solid pvar(--pt-player-fg);
+  border-right: 4px solid transparent;
+  box-sizing: border-box;
+
+  animation: 0.3s ease-out 1.1s forwards vjs-spinner-show, rotation 1s infinite linear !important;
 
   @keyframes vjs-spinner-show {
     0% {
@@ -46,6 +43,22 @@
     100% {
       visibility: visible;
       opacity: 1;
+    }
+  }
+
+  @keyframes rotation {
+    0% {
+      border-top-color: #fff;
+      transform: rotate(0deg);
+    }
+
+    50% {
+      border-top-color: #ccc;
+    }
+
+    100% {
+      border-top-color: #fff;
+      transform: rotate(360deg);
     }
   }
 }
