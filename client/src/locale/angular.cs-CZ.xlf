@@ -11059,9 +11059,9 @@
           <context context-type="linenumber">277</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1969113117715295994" datatype="html">
+      <trans-unit id="1969113117715295994" datatype="html" xml:space="preserve">
         <source>YOU AND YOUR PLATFORM</source>
-        <target state="new">YOU AND YOUR PLATFORM</target>
+        <target state="translated">VY A VAŠE PLATFORMA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">290</context>
@@ -11087,9 +11087,9 @@
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6377618413283681806" datatype="html">
+      <trans-unit id="6377618413283681806" datatype="html" xml:space="preserve">
         <source>Information updated.</source>
-        <target state="new">Information updated.</target>
+        <target state="translated">Informace byly aktualizovány.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
           <context context-type="linenumber">248</context>
@@ -11319,9 +11319,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8239083179530818601" datatype="html">
+      <trans-unit id="8239083179530818601" datatype="html" xml:space="preserve">
         <source>Only used by the web player</source>
-        <target state="new">Only used by the web player</target>
+        <target state="translated">Používá pouze webový přehrávač</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">33</context>
@@ -11359,9 +11359,9 @@
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3907392983067010584" datatype="html">
+      <trans-unit id="3907392983067010584" datatype="html" xml:space="preserve">
         <source>You can't preview the changes because you aren't using your platform's default theme.</source>
-        <target state="new">You can't preview the changes because you aren't using your platform's default theme.</target>
+        <target state="translated">Změny si nemůžete prohlédnout v náhledu, protože nepoužíváte výchozí motiv své platformy.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">60</context>
@@ -11503,9 +11503,9 @@
           <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8766972676494797493" datatype="html">
+      <trans-unit id="8766972676494797493" datatype="html" xml:space="preserve">
         <source>Signup won't be limited to a fixed number of users</source>
-        <target state="new">Signup won't be limited to a fixed number of users</target>
+        <target state="translated">Registrace nebude omezena na pevný počet uživatelů</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">228</context>
@@ -11735,9 +11735,9 @@
           <context context-type="linenumber">303</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7567466559668450627" datatype="html">
+      <trans-unit id="7567466559668450627" datatype="html" xml:space="preserve">
         <source>VIDEO IMPORTS</source>
-        <target state="new">VIDEO IMPORTS</target>
+        <target state="translated">IMPORT VIDEA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">315</context>
@@ -11799,17 +11799,17 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5668816720700287117" datatype="html">
+      <trans-unit id="5668816720700287117" datatype="html" xml:space="preserve">
         <source>Default sort</source>
-        <target state="new">Default sort</target>
+        <target state="translated">Výchozí řazení</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8230654187625869910" datatype="html">
+      <trans-unit id="8230654187625869910" datatype="html" xml:space="preserve">
         <source>Default scope</source>
-        <target state="new">Default scope</target>
+        <target state="translated">Výchozí rozsah</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">71</context>
@@ -11847,9 +11847,9 @@
           <context context-type="linenumber">449</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2791679701370281550" datatype="html">
+      <trans-unit id="2791679701370281550" datatype="html" xml:space="preserve">
         <source>Enable remote runners to generate storyboards</source>
-        <target state="new">Enable remote runners to generate storyboards</target>
+        <target state="translated">Umožnit vzdáleným uživatelům vytvářet storyboardy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">456</context>
@@ -11943,9 +11943,9 @@
           <context context-type="linenumber">519</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6375285763528205588" datatype="html">
+      <trans-unit id="6375285763528205588" datatype="html" xml:space="preserve">
         <source>Default download policy</source>
-        <target state="new">Default download policy</target>
+        <target state="translated">Výchozí zásady stahování</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">530,532</context>
@@ -12127,9 +12127,9 @@
           <context context-type="linenumber">893</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5344594655022049812" datatype="html">
+      <trans-unit id="5344594655022049812" datatype="html" xml:space="preserve">
         <source>Allowed</source>
-        <target state="new">Allowed</target>
+        <target state="translated">Povoleno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
           <context context-type="linenumber">264</context>
@@ -12483,17 +12483,17 @@
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3772621869333652421" datatype="html">
+      <trans-unit id="3772621869333652421" datatype="html" xml:space="preserve">
         <source>Allow your users to enable DVR (pause/rewind live)</source>
-        <target state="new">Allow your users to enable DVR (pause/rewind live)</target>
+        <target state="translated">Umožněte uživatelům zapnout funkci DVR (pozastavení/převíjení živých přenosů)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1984064334810712764" datatype="html">
+      <trans-unit id="1984064334810712764" datatype="html" xml:space="preserve">
         <source>Allow video streamers to set the DVR window up to</source>
-        <target state="new">Allow video streamers to set the DVR window up to</target>
+        <target state="translated">Umožnit streamerům videa nastavit okno DVR až na</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -12511,17 +12511,17 @@
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="967425886473642415" datatype="html">
+      <trans-unit id="967425886473642415" datatype="html" xml:space="preserve">
         <source>Automatically publish a replay by default</source>
-        <target state="new">Automatically publish a replay by default</target>
+        <target state="translated">Ve výchozím nastavení automaticky zveřejnit záznam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">69,70</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8266776073001453649" datatype="html">
+      <trans-unit id="8266776073001453649" datatype="html" xml:space="preserve">
         <source>Default value for the "automatically publish a replay when your live ends" checkbox when creating a new live</source>
-        <target state="new"> Default value for the "automatically publish a replay when your live ends" checkbox when creating a new live </target>
+        <target state="translated">Výchozí hodnota zaškrtávacího políčka „Automaticky zveřejnit záznam po skončení živého přenosu“ při vytváření nového živého přenosu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">72</context>
@@ -12903,9 +12903,9 @@
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7432023059007277803" datatype="html">
+      <trans-unit id="7432023059007277803" datatype="html" xml:space="preserve">
         <source>If you also enable HLS output, video storage will be multiplied by 2</source>
-        <target state="new">If you also enable HLS output, video storage will be multiplied by 2</target>
+        <target state="translated">Pokud povolíte také výstup HLS, kapacita úložiště videí se zdvojnásobí</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">89</context>
@@ -12943,9 +12943,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3823200654587476401" datatype="html">
+      <trans-unit id="3823200654587476401" datatype="html" xml:space="preserve">
         <source>If you also enable Web Videos output, video storage will be multiplied by 2</source>
-        <target state="new">If you also enable Web Videos output, video storage will be multiplied by 2</target>
+        <target state="translated">Pokud povolíte také výstup webových videí, kapacita úložiště videí se zdvojnásobí</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">104</context>
@@ -12999,25 +12999,25 @@
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3405496913415532946" datatype="html">
+      <trans-unit id="3405496913415532946" datatype="html" xml:space="preserve">
         <source>Always generate an audio file optimized for podcast applications</source>
-        <target state="new">Always generate an audio file optimized for podcast applications</target>
+        <target state="translated">Vždy vytvářejte zvukový soubor optimalizovaný pro podcastové aplikace</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5269138898159282829" datatype="html">
+      <trans-unit id="5269138898159282829" datatype="html" xml:space="preserve">
         <source>HLS audio files are not always played correctly by podcast applications</source>
-        <target state="new">HLS audio files are not always played correctly by podcast applications</target>
+        <target state="translated">Aplikace pro podcasty ne vždy správně přehrávají zvukové soubory HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1264242120409455985" datatype="html">
+      <trans-unit id="1264242120409455985" datatype="html" xml:space="preserve">
         <source>This option ensures that an optimized audio file is generated for podcast applications, even if Web Videos output is disabled</source>
-        <target state="new">This option ensures that an optimized audio file is generated for podcast applications, even if Web Videos output is disabled</target>
+        <target state="translated">Tato volba zajistí, že se pro podcastové aplikace vygeneruje optimalizovaný zvukový soubor, i když je výstup webových videí deaktivován</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">150</context>
@@ -13103,9 +13103,9 @@
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1407247798083071149" datatype="html">
+      <trans-unit id="1407247798083071149" datatype="html" xml:space="preserve">
         <source>allows to transcode multiple files in parallel</source>
-        <target state="new">allows to transcode multiple files in parallel</target>
+        <target state="translated">umožňuje překódovat více souborů současně</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">250</context>
@@ -14105,9 +14105,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8533487962503184458" datatype="html">
+      <trans-unit id="8533487962503184458" datatype="html" xml:space="preserve">
         <source>Target account</source>
-        <target state="new">Target account</target>
+        <target state="translated">Cílový účet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -14305,41 +14305,41 @@
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2628791643775383047" datatype="html">
+      <trans-unit id="2628791643775383047" datatype="html" xml:space="preserve">
         <source>Target URL</source>
-        <target state="new">Target URL</target>
+        <target state="translated">Cílové URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7105588718549441747" datatype="html">
+      <trans-unit id="7105588718549441747" datatype="html" xml:space="preserve">
         <source>https://example.com/.../video.mp4</source>
-        <target state="new">https://example.com/.../video.mp4</target>
+        <target state="translated">https://example.com/.../video.mp4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7335875272696063069" datatype="html">
+      <trans-unit id="7335875272696063069" datatype="html" xml:space="preserve">
         <source>Import ID</source>
-        <target state="new">Import ID</target>
+        <target state="translated">Import ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3120167430727242536" datatype="html">
+      <trans-unit id="3120167430727242536" datatype="html" xml:space="preserve">
         <source>Video ID</source>
-        <target state="new">Video ID</target>
+        <target state="translated">Video ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1833025987045683485" datatype="html">
+      <trans-unit id="1833025987045683485" datatype="html" xml:space="preserve">
         <source>Channel sync ID</source>
-        <target state="new">Channel sync ID</target>
+        <target state="translated">Channel sync ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -14409,17 +14409,17 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="619179346387768216" datatype="html">
+      <trans-unit id="619179346387768216" datatype="html" xml:space="preserve">
         <source>Change ownership of your channel</source>
-        <target state="new">Change ownership of your channel</target>
+        <target state="translated">Změnit vlastníka svého kanálu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">142,143</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4883344177954515944" datatype="html">
+      <trans-unit id="4883344177954515944" datatype="html" xml:space="preserve">
         <source>A modal window will open for you to specify the local account to which you want to transfer your channel</source>
-        <target state="new">A modal window will open for you to specify the local account to which you want to transfer your channel</target>
+        <target state="translated">Otevře se vám dialogové okno, ve kterém můžete zadat místní účet, na který chcete svůj kanál převést</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">144,145</context>
