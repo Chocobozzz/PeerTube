@@ -1,7 +1,7 @@
 <div>
   <div class="title-block">
     <h2>
-      {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{totalNotDeletedComments}} Comments}}
+      {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{ totalNotDeletedComments }} Comments}}
     </h2>
 
     <my-feed class="me-1" [syndicationItems]="syndicationItems"></my-feed>
@@ -25,6 +25,7 @@
       [user]="user()"
       (commentCreated)="onCommentThreadCreated($event)"
       [textValue]="commentThreadRedraftValue"
+      hasCancel="false"
     ></my-video-comment-add>
 
     @if (totalNotDeletedComments === 0 && comments.length === 0) {
@@ -73,19 +74,23 @@
               (resetReply)="onResetReply()"
               (timestampClicked)="handleTimestampClicked($event)"
               [redraftValue]="commentReplyRedraftValue"
-              >
+            >
               @if (comment.totalReplies !== 0 && !threadComments[comment.id]) {
                 <button (click)="viewReplies(comment.id)" class="view-replies mb-2 button-unstyle">
                   <span class="chevron-down"></span>
                   @if (comment.totalRepliesFromVideoAuthor > 0) {
                     @if (comment.totalReplies !== comment.totalRepliesFromVideoAuthor) {
                       <ng-container i18n>
-                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video()?.account?.displayName || 'the author' }} and others
-              </ng-container>
+                        View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{
+                          video()?.account?.displayName || 'the author'
+                        }} and others
+                      </ng-container>
                     } @else {
                       <ng-container i18n>
-                View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{ video()?.account?.displayName || 'the author' }}
-              </ng-container>
+                        View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}} from {{
+                          video()?.account?.displayName || 'the author'
+                        }}
+                      </ng-container>
                     }
                   } @else {
                     <ng-container i18n>View {comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}</ng-container>

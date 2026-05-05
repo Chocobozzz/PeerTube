@@ -1,5 +1,5 @@
 @if (isCommentDisplayed()) {
-  <div class="root-comment" [ngClass]="{ 'is-child': isChild() }">
+  <div class="root-comment" [ngClass]="{ 'is-child': isChild(), 'mb-3': firstInThread() }">
     <div class="left">
       @if (!comment().isDeleted) {
         <my-actor-avatar
@@ -7,36 +7,43 @@
           [actor]="comment().account" actorType="account" [size]="isChild() ? '25' : '36'"
         ></my-actor-avatar>
       }
+
       <div class="vertical-border"></div>
     </div>
-    <div class="right" [ngClass]="{ 'mb-3': firstInThread() }">
+
+    <div class="right">
       <div class="comment">
         @if (!comment().isDeleted) {
           @if (highlightedComment() === true) {
             <div class="highlighted-comment" i18n>Highlighted comment</div>
           }
+
           <div class="comment-account-date">
             <div class="comment-account">
               <a [routerLink]="[ '/a', comment().by ]">
                 <span class="comment-account-name" [ngClass]="{ 'video-author': video().account.id === comment().account.id }">
                   {{ comment().account.displayName }}
                 </span>
-                <span class="comment-account-fid ms-1">{{ comment().by }}</span>
+                <span class="comment-account-handle ms-1">{{ comment().by }}</span>
               </a>
             </div>
+
             <a [routerLink]="['/w', video().shortUUID, { 'threadId': comment().threadId }]" class="comment-date" [title]="comment().createdAt">
               {{ comment().createdAt | myFromNow }}
             </a>
+
             @if (comment().heldForReview) {
               <span class="pt-badge badge-red ms-2" i18n>Pending review</span>
             }
           </div>
+
           <div
             class="comment-html"
             [innerHTML]="sanitizedCommentHTML"
             (timestampClicked)="handleTimestampClicked($event)"
             myTimestampRouteTransformer
           ></div>
+
           <div class="comment-actions">
             <button (click)="onWantToReply()" class="comment-action-reply border-0 p-0" i18n>Reply</button>
             <my-user-moderation-dropdown
@@ -45,17 +52,18 @@
             ></my-user-moderation-dropdown>
           </div>
         }
+
         @if (comment().isDeleted) {
           <div class="comment-account-date">
             <span class="comment-account" i18n>Deleted</span>
             <a [routerLink]="['/w', video().shortUUID, { 'threadId': comment().threadId }]"
             class="comment-date">{{ comment().createdAt | myFromNow }}</a>
           </div>
+
           <div class="comment-html comment-html-deleted">
             <i i18n>This comment has been deleted</i>
           </div>
-        }
-        @if (!comment().isDeleted && inReplyToCommentId() === comment().id) {
+        } @else if (inReplyToCommentId() === comment().id && !isInMobileView()) {
           <my-video-comment-add
             [user]="user"
             [video]="video()"
@@ -68,6 +76,7 @@
             [textValue]="redraftValue()"
           ></my-video-comment-add>
         }
+
         @if (commentTree()) {
           <div>
             @for (commentChild of commentTree().children; track commentChild) {
@@ -100,3 +109,26 @@
 @if (prependModerationActions) {
   <my-comment-report #commentReportModal [comment]="comment()"></my-comment-report>
 }
+
+<ng-template #commentReplyModal>
+  <div class="modal-header">
+    <h4 class="modal-title" i18n>Reply to {{ comment().account?.displayName || 'Unknown' }}</h4>
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="onResetReply()">
+      <my-global-icon iconName="cross" ariaHidden="true"></my-global-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <my-video-comment-add
+      [user]="user"
+      [video]="video()"
+      [videoPassword]="videoPassword()"
+      [parentComment]="comment()"
+      [parentComments]="newParentComments"
+      [focusOnInit]="true"
+      (commentCreated)="onCommentReplyCreated($event)"
+      (cancelEdit)="onResetReply()"
+      [textValue]="redraftValue()"
+    ></my-video-comment-add>
+  </div>
+</ng-template>

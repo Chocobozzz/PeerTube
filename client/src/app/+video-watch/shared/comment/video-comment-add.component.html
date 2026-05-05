@@ -8,7 +8,7 @@
         [readonly]="(user() === null) ? true : false"
         (click)="openVisitorModal($event)"
         formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
-        (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea
+        (keyup.control.enter)="formValidated()" (keyup.meta.enter)="formValidated()" #textarea
         >
       </textarea>
 
@@ -46,15 +46,15 @@
   </div>
 
   <div class="comment-buttons">
-    @if (isAddButtonDisplayed()) {
+    @if (hasCancel()) {
       <button class="peertube-button tertiary-button cancel-button me-2" (click)="cancelCommentReply()" type="button" i18n>
         Cancel
       </button>
-
-      <button class="peertube-button primary-button" [disabled]="!form.valid || addingComment">
-        {{ addingCommentButtonValue }}
-      </button>
     }
+
+    <button class="peertube-button primary-button" [disabled]="!form.valid || addingComment">
+      {{ addingCommentButtonValue }}
+    </button>
   </div>
 </form>
 

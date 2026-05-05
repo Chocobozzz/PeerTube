@@ -1,9 +1,10 @@
 import { NgClass } from '@angular/common'
-import { Component, OnChanges, OnInit, inject, input, model, output, viewChild } from '@angular/core'
+import { Component, OnChanges, OnInit, TemplateRef, inject, input, model, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
-import { MarkdownService, Notifier, UserService } from '@app/core'
+import { MarkdownService, Notifier, ScreenService, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { FromNowPipe } from '@app/shared/shared-main/date/from-now.pipe'
@@ -12,6 +13,7 @@ import { CommentReportComponent } from '@app/shared/shared-moderation/report-mod
 import { UserModerationDropdownComponent } from '@app/shared/shared-moderation/user-moderation-dropdown.component'
 import { VideoCommentThreadTree } from '@app/shared/shared-video-comment/video-comment-thread-tree.model'
 import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { User, UserRight } from '@peertube/peertube-models'
 import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
 import { VideoCommentAddComponent } from './video-comment-add.component'
@@ -28,6 +30,7 @@ import { VideoCommentAddComponent } from './video-comment-add.component'
     UserModerationDropdownComponent,
     VideoCommentAddComponent,
     CommentReportComponent,
+    GlobalIconComponent,
     FromNowPipe
   ]
 })
@@ -36,8 +39,11 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   private authService = inject(AuthService)
   private userService = inject(UserService)
   private notifier = inject(Notifier)
+  private screenService = inject(ScreenService)
+  private modalService = inject(NgbModal)
 
   readonly commentReportModal = viewChild<CommentReportComponent>('commentReportModal')
+  readonly commentReplyModal = viewChild<TemplateRef<any>>('commentReplyModal')
 
   readonly video = input<Video>(undefined)
   readonly videoPassword = input<string>(undefined)
@@ -64,6 +70,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   commentAccount: Account
   commentUser: User
+  private replyModalRef: NgbModalRef
 
   get user () {
     return this.authService.getUser()
@@ -75,6 +82,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   ngOnChanges () {
     this.init()
+    this.toggleMobileReplyModalIfNeeded()
   }
 
   onCommentReplyCreated (createdComment: VideoComment) {
@@ -97,6 +105,8 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     this.resetReply.emit()
 
     this.redraftValue.set(undefined)
+
+    this.closeReplyModal()
   }
 
   onWantToReply (comment?: VideoComment) {
@@ -121,6 +131,11 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   onResetReply () {
     this.resetReply.emit()
+    this.closeReplyModal()
+  }
+
+  isInMobileView () {
+    return this.screenService.isInMobileView()
   }
 
   handleTimestampClicked (timestamp: number) {
@@ -251,5 +266,29 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   private showReportModal () {
     this.commentReportModal().show()
+  }
+
+  private closeReplyModal () {
+    if (!this.replyModalRef) return
+
+    this.replyModalRef.close()
+    this.replyModalRef = undefined
+  }
+
+  private toggleMobileReplyModalIfNeeded () {
+    const shouldOpenReplyModal = this.isInMobileView() &&
+      this.inReplyToCommentId() === this.comment().id
+
+    if (!shouldOpenReplyModal || this.replyModalRef) return
+
+    this.replyModalRef = this.modalService.open(this.commentReplyModal(), { centered: true })
+
+    this.replyModalRef.result.finally(() => {
+      this.replyModalRef = undefined
+
+      if (this.inReplyToCommentId() === this.comment().id) {
+        this.resetReply.emit()
+      }
+    })
   }
 }

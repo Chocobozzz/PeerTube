@@ -9,13 +9,13 @@
     flex-direction: column;
     align-items: center;
 
-    @include margin-right(10px);
+    @include margin-right(0.5rem);
 
     .vertical-border {
       width: 2px;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.05);
-      margin: 10px calc(1rem + 1px);
+      margin: 10px auto;
     }
   }
 
@@ -32,8 +32,8 @@
 
 .highlighted-comment {
   display: inline-block;
-  background-color: pvar(--bg-secondary-400);
-  color: pvar(--fg);
+  background-color: pvar(--primary);
+  color: pvar(--on-primary);
   padding: 0 5px;
   font-size: 13px;
   margin-bottom: 5px;
@@ -77,7 +77,7 @@
     }
   }
 
-  .comment-account-fid {
+  .comment-account-handle {
     color: pvar(--fg-300);
   }
 }
@@ -142,29 +142,9 @@ my-video-comment-add {
   }
 }
 
-.is-child {
-  .left {
-    @include margin-right(6px);
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .children {
-    @include margin-left(-10px);
-  }
-}
-
 @media screen and (max-width: 600px) {
-  .children {
-    @include margin-left(-20px);
-
-    .left {
-      align-items: flex-start;
-
-      .vertical-border {
-        @include margin-left(2px);
-      }
-    }
+  .is-child .left {
+    @include margin-right(0.25rem);
   }
 
   .comment-account-date {
