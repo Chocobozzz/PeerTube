@@ -6,7 +6,6 @@ import {
   inject,
   input,
   LOCALE_ID,
-  numberAttribute,
   OnChanges,
   OnInit,
   output,

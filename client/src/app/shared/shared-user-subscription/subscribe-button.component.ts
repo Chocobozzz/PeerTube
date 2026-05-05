@@ -49,6 +49,8 @@ export class SubscribeButtonComponent implements OnChanges {
 
   buttonClasses: Record<string, boolean> = {}
 
+  private loadedSubscribedStatus = false
+
   get handle () {
     const account = this.account()
     return account
@@ -218,6 +220,13 @@ export class SubscribeButtonComponent implements OnChanges {
     return this.isSingleSubscribe && !this.isUserLoggedIn()
   }
 
+  isLoaded () {
+    if (!this.isUserLoggedIn()) return true
+    if (!this.videoChannels() || this.videoChannels().length === 0) return true
+
+    return this.loadedSubscribedStatus
+  }
+
   private getChannelHandler (videoChannel: VideoChannel) {
     return videoChannel.name + '@' + videoChannel.host
   }
@@ -236,6 +245,7 @@ export class SubscribeButtonComponent implements OnChanges {
         .subscribe({
           next: res => {
             this.subscribed.set(handle, res)
+            this.loadedSubscribedStatus = true
 
             this.buildClasses()
           },

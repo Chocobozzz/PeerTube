@@ -1,9 +1,14 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .btn-group {
   padding: 0;
+  opacity: 0;
+
+  &.loaded {
+    opacity: 1;
+  }
 
   .peertube-button {
     // Prevent weird border radius blur on chrome

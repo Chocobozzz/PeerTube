@@ -1,7 +1,7 @@
 <div
   class="btn-group"
   role="group"
-  [ngClass]="{ 'big': isBigButton }"
+  [ngClass]="{ 'big': isBigButton, loaded: isLoaded() }"
   ngbDropdown="dropdown"
   autoClose="outside"
   placement="bottom-right bottom-left bottom auto"
