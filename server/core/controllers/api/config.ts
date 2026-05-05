@@ -494,6 +494,11 @@ function customConfig (): CustomConfig {
         enabled: CONFIG.VIDEO_FILE.UPDATE.ENABLED
       }
     },
+    views: {
+      videos: {
+        countViewAfter: CONFIG.VIEWS.VIDEOS.COUNT_VIEW_AFTER / 1000
+      }
+    },
     import: {
       videos: {
         concurrency: CONFIG.IMPORT.VIDEOS.CONCURRENCY,

@@ -295,6 +295,12 @@ export interface ServerConfig {
     }
   }
 
+  views: {
+    videos: {
+      countViewAfter: number
+    }
+  }
+
   import: {
     videos: {
       http: {

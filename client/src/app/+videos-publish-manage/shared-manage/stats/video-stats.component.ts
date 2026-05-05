@@ -333,11 +333,13 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private buildOverallStatCard (overallStats: VideoStatsOverall) {
+    const countViewAfter = this.serverService.getHTMLConfig().views.videos.countViewAfter
+
     this.globalStatsCards = [
       {
         label: $localize`Views`,
         value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().views),
-        help: $localize`A view means that someone watched the video for several seconds (10 seconds by default)`
+        help: $localize`A view means that someone watched the video for at least ${countViewAfter} seconds (configured via "count_view_after" in the instance configuration).`
       },
       {
         label: $localize`Downloads`,
