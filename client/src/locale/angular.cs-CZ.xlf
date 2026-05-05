@@ -9623,41 +9623,41 @@
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1755997049473545568" datatype="html">
+      <trans-unit id="1755997049473545568" datatype="html" xml:space="preserve">
         <source>Predefined reason</source>
-        <target state="new">Predefined reason</target>
+        <target state="translated">Přednastavený důvod</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8497432602979613054" datatype="html">
+      <trans-unit id="8497432602979613054" datatype="html" xml:space="preserve">
         <source>Search by reporter name...</source>
-        <target state="new">Search by reporter name...</target>
+        <target state="translated">Vyhledat podle jména oznamovatele...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1418185572945708372" datatype="html">
+      <trans-unit id="1418185572945708372" datatype="html" xml:space="preserve">
         <source>Search by reportee name...</source>
-        <target state="new">Search by reportee name...</target>
+        <target state="translated">Vyhledat podle jména oznamovatele...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3466717080499226256" datatype="html">
+      <trans-unit id="3466717080499226256" datatype="html" xml:space="preserve">
         <source>Report ID</source>
-        <target state="new">Report ID</target>
+        <target state="translated">ID zprávy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4169196457820894934" datatype="html">
+      <trans-unit id="4169196457820894934" datatype="html" xml:space="preserve">
         <source>Search by report ID...</source>
-        <target state="new">Search by report ID...</target>
+        <target state="translated">Vyhledat podle ID zprávy...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">122</context>
@@ -9687,17 +9687,17 @@
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="844463430866816074" datatype="html">
+      <trans-unit id="844463430866816074" datatype="html" xml:space="preserve">
         <source>Block type</source>
-        <target state="new">Block type</target>
+        <target state="translated">Typ bloku</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1616102757855967475" datatype="html">
+      <trans-unit id="1616102757855967475" datatype="html" xml:space="preserve">
         <source>All</source>
-        <target state="new">All</target>
+        <target state="translated">Vše</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -9915,9 +9915,9 @@
           <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1467799882239453584" datatype="html">
+      <trans-unit id="1467799882239453584" datatype="html" xml:space="preserve">
         <source>No playlists found matching your filters.</source>
-        <target state="new">No playlists found matching your filters.</target>
+        <target state="translated">Nebyly nalezeny žádné seznamy skladeb odpovídající vašim filtrům.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">126</context>
@@ -10343,25 +10343,25 @@
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7366387646685791945" datatype="html">
+      <trans-unit id="7366387646685791945" datatype="html" xml:space="preserve">
         <source>Whether they're from channels you own or channels for which you're an editor</source>
-        <target state="new">Whether they're from channels you own or channels for which you're an editor</target>
+        <target state="translated">Ať už pocházejí z kanálů, které vlastníte, nebo z kanálů, u nichž působíte jako editor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1899610511598634736" datatype="html">
+      <trans-unit id="1899610511598634736" datatype="html" xml:space="preserve">
         <source>This will delete comments on all your videos</source>
-        <target state="new">This will delete comments on all your videos</target>
+        <target state="translated">Tím se smažou komentáře u všech vašich videí</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="784223184153447251" datatype="html">
+      <trans-unit id="784223184153447251" datatype="html" xml:space="preserve">
         <source>This will delete comments on all videos from your platform</source>
-        <target state="new">This will delete comments on all videos from your platform</target>
+        <target state="translated">Tím se smažou komentáře ke všem videím na vaší platformě</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -10407,17 +10407,17 @@
           <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5414463732514599361" datatype="html">
+      <trans-unit id="5414463732514599361" datatype="html" xml:space="preserve">
         <source>Comment scope</source>
-        <target state="new">Comment scope</target>
+        <target state="translated">Rozsah komentáře</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1722554034307231103" datatype="html">
+      <trans-unit id="1722554034307231103" datatype="html" xml:space="preserve">
         <source>Exclude comments from muted accounts</source>
-        <target state="new">Exclude comments from muted accounts</target>
+        <target state="translated">Vyloučit komentáře od účtů s omezeným přístupem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">253</context>
@@ -10439,9 +10439,9 @@
           <context context-type="linenumber">392</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2712688659924558571" datatype="html">
+      <trans-unit id="2712688659924558571" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</target>
+        <target state="translated">Opravdu chcete smazat všechny komentáře k  <x id="PH" equiv-text="comment.by"/> ? Komentáře budou smazány za několik minut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">405</context>
@@ -10555,9 +10555,9 @@
           <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5412611865788148550" datatype="html">
+      <trans-unit id="5412611865788148550" datatype="html" xml:space="preserve">
         <source>Filter by type: <x id="PH" equiv-text="type.toLocaleUpperCase()"/></source>
-        <target state="new">Filter by type: <x id="PH" equiv-text="type.toLocaleUpperCase()"/></target>
+        <target state="translated">Filtrovat podle typu: <x id="PH" equiv-text="type.toLocaleUpperCase()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">159</context>
@@ -10751,9 +10751,9 @@
           <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6968024281421956913" datatype="html">
+      <trans-unit id="6968024281421956913" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, it will be resized to 32x32 pixels and converted to .png format.</source>
-        <target state="new">If the image is not in .svg format, it will be resized to 32x32 pixels and converted to .png format.</target>
+        <target state="translated">Pokud obrázek není ve formátu .svg, bude jeho velikost upravena na 32 × 32 pixelů a bude převeden do formátu .png.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">46,47</context>
@@ -10775,9 +10775,9 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2548546342283535220" datatype="html">
+      <trans-unit id="2548546342283535220" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</source>
-        <target state="new">If the image is not in .svg format, its height will be reduced to 48 pixels and the width will be calculated based on the original file ratio.</target>
+        <target state="translated">Pokud obrázek není ve formátu .svg, jeho výška se zmenší na 48 pixelů a šířka se vypočítá na základě poměru stran původního souboru.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">69,70</context>
@@ -10815,9 +10815,9 @@
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="990188276054805848" datatype="html">
+      <trans-unit id="990188276054805848" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, it will be resized to 48x48 pixels.</source>
-        <target state="new">If the image is not in .svg format, it will be resized to 48x48 pixels.</target>
+        <target state="translated">Pokud obrázek není ve formátu .svg, bude jeho velikost upravena na 48 × 48 pixelů.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">105,106</context>
@@ -10839,9 +10839,9 @@
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="642474058485369474" datatype="html">
+      <trans-unit id="642474058485369474" datatype="html" xml:space="preserve">
         <source>If the image is not in .svg format, it will be resized to 1200x650 pixels.</source>
-        <target state="new">If the image is not in .svg format, it will be resized to 1200x650 pixels.</target>
+        <target state="translated">Pokud obrázek není ve formátu .svg, bude jeho velikost upravena na 1200 × 650 pixelů.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">128,129</context>
