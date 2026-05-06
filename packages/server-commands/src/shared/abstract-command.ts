@@ -398,14 +398,16 @@ export abstract class AbstractCommand {
             Object.assign(headers, { digest: digestBuilder(chunk) })
           }
 
-          const res = await got<T>({
-            url: new URL(path + '?' + pathUploadId, server.url).toString(),
-            method: 'put',
-            headers,
-            body: chunk,
-            responseType: 'json',
-            throwHttpErrors: false
-          })
+          const res = await got<T>(
+            new URL(path + '?' + pathUploadId, server.url).toString(),
+            {
+              method: 'put',
+              headers,
+              body: chunk,
+              responseType: 'json',
+              throwHttpErrors: false
+            }
+          )
 
           start += chunk.length
 

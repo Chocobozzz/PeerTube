@@ -2,7 +2,7 @@ import { signAsDraftToRequest } from '@misskey-dev/node-http-message-signatures'
 import { CONFIG } from '@server/initializers/config.js'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
-import got, { OptionsInit, OptionsOfTextResponseBody, OptionsOfUnknownResponseBodyWrapped, RequestError, Response } from 'got'
+import got, { OptionsInit, OptionsOfTextResponseBody, OptionsOfUnknownResponseBodyWrapped, Request, RequestError, Response } from 'got'
 import { gotSsrf } from 'got-ssrf'
 import http from 'http'
 import https from 'https'
@@ -50,24 +50,32 @@ export const unsafeSSRFGot = got.extend({
 
   handlers: [
     (options, next) => {
-      const promiseOrStream = next(options) as CancelableRequest<any>
       const bodyKBLimit = options.context?.bodyKBLimit as number
       if (!bodyKBLimit) throw new Error('No KB limit for this request')
 
+      let controller: AbortController
+      let { signal } = options
+
+      if (!signal) {
+        controller = new AbortController()
+        signal = controller.signal
+        options.signal = signal
+      }
+
+      const promiseOrStream = next(options)
       const bodyLimit = bodyKBLimit * 1000
 
       void promiseOrStream.on('downloadProgress', progress => {
         if (progress.transferred > bodyLimit && progress.percent !== 1) {
           const message = `Exceeded the download limit of ${bodyLimit} B`
+          const error = new Error(message)
           logger.warn(message, lTags())
 
-          // CancelableRequest
-          if (promiseOrStream.cancel) {
-            promiseOrStream.cancel()
-            return
+          if (options.isStream) {
+            ;(promiseOrStream as Request).destroy(error)
+          } else {
+            controller?.abort(error)
           }
-
-          ;(promiseOrStream as any).destroy()
         }
       })
 
