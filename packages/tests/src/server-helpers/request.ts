@@ -15,7 +15,7 @@ describe('Request helpers', function () {
 
   it('Should throw an error when the bytes limit is exceeded for request', async function () {
     try {
-      await doRequest(FIXTURE_URLS.file4K, { bodyKBLimit: 3 })
+      await doRequest(FIXTURE_URLS.transcriptionModels, { bodyKBLimit: 3 })
     } catch {
       return
     }
