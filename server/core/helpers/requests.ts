@@ -2,14 +2,7 @@ import { signAsDraftToRequest } from '@misskey-dev/node-http-message-signatures'
 import { CONFIG } from '@server/initializers/config.js'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
-import got, {
-  CancelableRequest,
-  OptionsInit,
-  OptionsOfTextResponseBody,
-  OptionsOfUnknownResponseBodyWrapped,
-  RequestError,
-  Response
-} from 'got'
+import got, { OptionsInit, OptionsOfTextResponseBody, OptionsOfUnknownResponseBodyWrapped, RequestError, Response } from 'got'
 import { gotSsrf } from 'got-ssrf'
 import http from 'http'
 import https from 'https'
@@ -165,7 +158,7 @@ export async function doRequestAndSaveToFile (url: string, destPath: string, opt
 
   try {
     await pipelinePromise(
-      peertubeGot.stream(url, { ...gotOptions, isStream: true }),
+      peertubeGot.stream(url, gotOptions),
       outFile
     )
   } catch (err) {
@@ -179,7 +172,7 @@ export async function doRequestAndSaveToFile (url: string, destPath: string, opt
 export function generateRequestStream (url: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT })
 
-  return peertubeGot.stream(url, { ...gotOptions, isStream: true })
+  return peertubeGot.stream(url, gotOptions)
 }
 
 export function getProxyAgent () {

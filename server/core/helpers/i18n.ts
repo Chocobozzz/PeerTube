@@ -27,7 +27,6 @@ export async function initI18n () {
       resources,
       nsSeparator: false,
       keySeparator: false,
-      showSupportNotice: false,
 
       // do not load a fallback
       fallbackLng: false

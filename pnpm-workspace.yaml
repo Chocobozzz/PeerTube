@@ -6,10 +6,10 @@ packages:
   - client/packages/*
   - client/src/standalone/player
 
-minimumReleaseAge: 1440
-
 ignoredBuiltDependencies:
   - sharp
+
+minimumReleaseAge: 1440
 
 onlyBuiltDependencies:
   - '@parcel/watcher'
@@ -32,4 +32,3 @@ patchedDependencies:
   '@types/markdown-it': pnpm-patches/@types__markdown-it.patch
   tinykeys: pnpm-patches/tinykeys.patch
   video.js: pnpm-patches/video.js.patch
-  webfinger.js: pnpm-patches/webfinger.js.patch

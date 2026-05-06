@@ -1,11 +1,7 @@
-import createTorrent from 'create-torrent'
+import createTorrent, { CreateTorrentOptions } from 'create-torrent'
 
-export default function createTorrentPromise (
-  options: {
-    path: string
-  } & Parameters<typeof createTorrent>[1]
-): Promise<Buffer> {
-  return new Promise<Buffer>((resolve, reject) => {
+export default function createTorrentPromise (options: CreateTorrentOptions & { path: string }): Promise<Uint8Array> {
+  return new Promise<Uint8Array>((resolve, reject) => {
     createTorrent(options.path, options, (err, torrent) => {
       if (err) return reject(err)
 
