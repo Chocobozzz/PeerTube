@@ -20,7 +20,7 @@ export class VideoChapterService {
   }
 
   updateChapters (videoId: string, chaptersEdit: VideoChaptersEdit) {
-    const body = { chapters: chaptersEdit.getChaptersForUpdate() } as VideoChapterUpdate
+    const body = { chapters: chaptersEdit.getChaptersForUpdate() } satisfies VideoChapterUpdate
 
     return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${videoId}/chapters`, body)
       .pipe(catchError(err => this.restExtractor.handleError(err)))

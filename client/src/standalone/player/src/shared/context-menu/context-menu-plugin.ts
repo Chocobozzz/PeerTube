@@ -57,7 +57,7 @@ class ContextMenuPlugin extends Plugin {
 
     this.menu.on('dispose', () => {
       for (const event of [ 'click', 'tap' ]) {
-        videojs.off(documentEl as Element, event, this.menu.dispose)
+        videojs.off(documentEl, event, this.menu.dispose)
       }
 
       this.player.removeChild(this.menu)
@@ -83,7 +83,7 @@ class ContextMenuPlugin extends Plugin {
     }
 
     for (const event of [ 'click', 'tap' ]) {
-      videojs.on(documentEl as Element, event, this.menu.dispose)
+      videojs.on(documentEl, event, this.menu.dispose)
     }
   }
 }

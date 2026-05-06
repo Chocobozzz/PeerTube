@@ -263,24 +263,27 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.statsP2PBytes.pendingUpload = []
       this.statsHTTPBytes.pendingDownload = []
 
-      return player.trigger('network-info', {
-        source: 'p2p-media-loader',
-        bandwidthEstimate: (hlsjs as any).bandwidthEstimate / 8,
-        http: {
-          downloadSpeed: httpDownloadSpeed,
-          downloaded: this.statsHTTPBytes.totalDownload
-        },
-        p2p: this.options.p2pEnabled
-          ? {
-            downloadSpeed: p2pDownloadSpeed,
-            uploadSpeed: p2pUploadSpeed,
-            peersWithWebSeed: this.statsP2PBytes.peersWithWebSeed,
-            peersP2POnly: this.statsP2PBytes.peersP2POnly,
-            downloaded: this.statsP2PBytes.totalDownload,
-            uploaded: this.statsP2PBytes.totalUpload
-          }
-          : undefined
-      } as PlayerNetworkInfo)
+      return player.trigger(
+        'network-info',
+        {
+          source: 'p2p-media-loader',
+          bandwidthEstimate: (hlsjs as any).bandwidthEstimate / 8,
+          http: {
+            downloadSpeed: httpDownloadSpeed,
+            downloaded: this.statsHTTPBytes.totalDownload
+          },
+          p2p: this.options.p2pEnabled
+            ? {
+              downloadSpeed: p2pDownloadSpeed,
+              uploadSpeed: p2pUploadSpeed,
+              peersWithWebSeed: this.statsP2PBytes.peersWithWebSeed,
+              peersP2POnly: this.statsP2PBytes.peersP2POnly,
+              downloaded: this.statsP2PBytes.totalDownload,
+              uploaded: this.statsP2PBytes.totalUpload
+            }
+            : undefined
+        } satisfies PlayerNetworkInfo
+      )
     }, 1000)
   }
 

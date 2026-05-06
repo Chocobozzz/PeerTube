@@ -107,7 +107,7 @@ export class VideoCaptionService {
 
     return this.authHttp.post(`${VideoService.BASE_VIDEO_URL}/${video.id}/captions/generate`, body)
       .pipe(
-        map(() => 'success' as 'success'),
+        map(() => 'success' as const),
         catchError(err => {
           const error: PeerTubeProblemDocument = err.error
 

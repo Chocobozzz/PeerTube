@@ -94,7 +94,7 @@ export class VideoCaptionsComponent implements OnInit {
       Object.assign(existingCaption, caption)
     } else {
       captionsEdit.push(
-        Object.assign(caption, { action: 'CREATE' as 'CREATE' })
+        Object.assign(caption, { action: 'CREATE' })
       )
     }
 
@@ -116,7 +116,7 @@ export class VideoCaptionsComponent implements OnInit {
       return
     }
 
-    caption.action = 'REMOVE' as 'REMOVE'
+    caption.action = 'REMOVE'
 
     debugLogger('Caption deleted', caption)
   }

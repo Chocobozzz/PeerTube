@@ -106,7 +106,7 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
     return {
       platformName: config.instance.name,
       shortDescription: config.instance.shortDescription,
-      avatar: undefined as Blob,
+      avatar: undefined,
       primaryColor
     }
   }

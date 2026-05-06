@@ -199,12 +199,15 @@ class WebVideoPlugin extends Plugin {
 
       if (!player) return
 
-      return player.trigger('network-info', {
-        source: 'web-video',
-        http: {
-          downloaded: player.bufferedPercent() * this.currentVideoFile?.size
-        }
-      } as PlayerNetworkInfo)
+      return player.trigger(
+        'network-info',
+        {
+          source: 'web-video',
+          http: {
+            downloaded: player.bufferedPercent() * this.currentVideoFile?.size
+          }
+        } satisfies PlayerNetworkInfo
+      )
     }, 1000)
   }
 }

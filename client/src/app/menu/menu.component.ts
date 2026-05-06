@@ -124,7 +124,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         {
           path: this.redirectService.getDefaultRoute(),
           query: this.redirectService.getDefaultRouteQuery(),
-          icon: 'home' as GlobalIconName,
+          icon: 'home',
           label: $localize`Home`
         }
       ]
@@ -133,7 +133,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (this.loggedIn) {
       base.links.push({
         path: '/videos/subscriptions',
-        icon: 'subscriptions' as GlobalIconName,
+        icon: 'subscriptions',
         label: $localize`Subscriptions`
       })
     }
@@ -148,12 +148,12 @@ export class MenuComponent implements OnInit, OnDestroy {
       links = links.concat([
         {
           path: '/my-library/video-playlists',
-          icon: 'playlists' as GlobalIconName,
+          icon: 'playlists',
           label: $localize`Playlists`
         },
         {
           path: '/my-library/history/videos',
-          icon: 'history' as GlobalIconName,
+          icon: 'history',
           label: $localize`History`
         }
       ])
@@ -173,20 +173,20 @@ export class MenuComponent implements OnInit, OnDestroy {
       links = links.concat([
         {
           path: '/my-library/video-channels',
-          icon: 'channel' as GlobalIconName,
+          icon: 'channel',
           iconClass: 'channel-icon',
           label: $localize`Channels`
         },
 
         {
           path: '/my-library/videos',
-          icon: 'videos' as GlobalIconName,
+          icon: 'videos',
           label: $localize`Videos`
         },
 
         {
           path: '/videos/publish',
-          icon: 'upload' as GlobalIconName,
+          icon: 'upload',
           label: $localize`Publish`,
           isPrimaryButton: true,
           ngClass: 'publish-button'
@@ -208,7 +208,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       if (this.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
         links.push({
           path: '/admin/overview',
-          icon: 'overview' as GlobalIconName,
+          icon: 'overview',
           label: $localize`Overview`
         })
       }
@@ -216,7 +216,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       if (this.user.hasRight(UserRight.MANAGE_ABUSES)) {
         links.push({
           path: '/admin/moderation',
-          icon: 'moderation' as GlobalIconName,
+          icon: 'moderation',
           label: $localize`Moderation`
         })
       }
@@ -224,7 +224,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       if (this.user.hasRight(UserRight.MANAGE_CONFIGURATION)) {
         links.push({
           path: '/admin/settings',
-          icon: 'config' as GlobalIconName,
+          icon: 'config',
           label: $localize`Settings`
         })
       }

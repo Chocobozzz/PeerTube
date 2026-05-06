@@ -37,6 +37,19 @@ type ActiveGraphId = VideoStatsTimeserieMetric | 'retention' | BarGraphs
 type GeoData = { name: string, viewers: number }[]
 
 type ChartIngestData = VideoStatsTimeserie | VideoStatsRetention | GeoData | VideoStatsUserAgent
+
+type GraphDataById = {
+  clients: VideoStatsUserAgent
+  devices: VideoStatsUserAgent
+  operatingSystems: VideoStatsUserAgent
+  retention: VideoStatsRetention
+  aggregateWatchTime: VideoStatsTimeserie
+  viewers: VideoStatsTimeserie
+  downloads: VideoStatsTimeserie
+  countries: GeoData
+  regions: GeoData
+}
+
 type ChartBuilderResult = {
   type: 'line' | 'bar'
 
@@ -431,10 +444,8 @@ export class VideoStatsComponent implements OnInit {
     })
   }
 
-  private buildChartOptions (graphId: ActiveGraphId): ChartConfiguration<'line' | 'bar'> {
-    const dataBuilders: {
-      [id in ActiveGraphId]: (rawData: ChartIngestData) => ChartBuilderResult
-    } = {
+  private buildChartOptions<K extends ActiveGraphId> (graphId: K): ChartConfiguration<'line' | 'bar'> {
+    const dataBuilders: { [P in ActiveGraphId]: (rawData: GraphDataById[P]) => ChartBuilderResult } = {
       clients: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'clients'),
       devices: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'devices'),
       operatingSystems: (rawData: VideoStatsUserAgent) => this.buildUserAgentChartOptions(rawData, 'operatingSystems'),
@@ -446,7 +457,8 @@ export class VideoStatsComponent implements OnInit {
       regions: (rawData: GeoData) => this.buildGeoChartOptions(rawData)
     }
 
-    const { type, data, displayLegend, plugins, options } = dataBuilders[graphId](this.chartIngestData[graphId])
+    const rawData = this.chartIngestData[graphId] as GraphDataById[K]
+    const { type, data, displayLegend, plugins, options } = dataBuilders[graphId](rawData)
 
     const self = this
 
@@ -516,7 +528,7 @@ export class VideoStatsComponent implements OnInit {
     }
 
     return {
-      type: 'line' as 'line',
+      type: 'line',
 
       displayLegend: false,
 
@@ -546,7 +558,7 @@ export class VideoStatsComponent implements OnInit {
     }
 
     return {
-      type: 'line' as 'line',
+      type: 'line',
 
       displayLegend: false,
 
@@ -606,7 +618,7 @@ export class VideoStatsComponent implements OnInit {
     }
 
     return {
-      type: 'bar' as 'bar',
+      type: 'bar',
 
       options: {
         indexAxis: 'y'
@@ -642,7 +654,7 @@ export class VideoStatsComponent implements OnInit {
     }
 
     return {
-      type: 'bar' as 'bar',
+      type: 'bar',
 
       options: {
         indexAxis: 'y'
