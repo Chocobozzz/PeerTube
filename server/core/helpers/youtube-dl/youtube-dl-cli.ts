@@ -34,7 +34,7 @@ export class YoutubeDLCLI {
 
     const gotOptions: OptionsOfBufferResponseBody = {
       context: { bodyKBLimit: 100_000 },
-      responseType: 'buffer' as 'buffer'
+      responseType: 'buffer'
     }
 
     if (process.env.YOUTUBE_DL_DOWNLOAD_BEARER_TOKEN) {
@@ -47,7 +47,7 @@ export class YoutubeDLCLI {
       let gotResult = await unsafeSSRFGot(url, gotOptions)
 
       if (!isBinaryResponse(gotResult)) {
-        const json = JSON.parse(gotResult.body.toString())
+        const json = JSON.parse(Buffer.from(gotResult.rawBody).toString())
         const latest = json.filter(release => release.prerelease === false)[0]
         if (!latest) throw new Error('Cannot find latest release')
 
