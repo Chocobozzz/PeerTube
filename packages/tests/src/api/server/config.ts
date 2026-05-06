@@ -429,7 +429,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       searchIndex: {
         enabled: true,
-        url: 'https://search.joinpeertube.org',
+        url: 'https://sepiasearch.org',
         disableLocalSearch: true,
         isDefaultSearch: true
       }

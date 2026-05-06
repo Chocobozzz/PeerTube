@@ -35,7 +35,7 @@ smtp:
   from_address: 'test-admin@127.0.0.1'
   username: null
   password: null
-  
+
 log:
   level: 'debug'
   rotation:
@@ -169,7 +169,7 @@ open_telemetry:
 
 search:
   search_index:
-    url: 'https://search.joinpeertube.org/'
+    url: 'https://sepiasearch.org/'
 
 video_transcription:
   model: 'tiny'
