@@ -367,19 +367,24 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     forUserId?: number
   }) {
     const id = forceNumber(options.id)
+    const bind: { id: number, forUserId?: number } = { id }
+
+    if (options.forUserId !== undefined) {
+      bind.forUserId = options.forUserId
+    }
 
     function buildAccountWhereQuery (base: string) {
-      const whereSuffix = options.forUserId
-        ? ` AND "userNotification"."userId" = ${options.forUserId}`
+      const whereSuffix = options.forUserId !== undefined
+        ? ' AND "userNotification"."userId" = $forUserId'
         : ''
 
       if (options.type === 'account') {
         return base +
-          ` WHERE "account"."id" = ${id} ${whereSuffix}`
+          ` WHERE "account"."id" = $id ${whereSuffix}`
       }
 
       return base +
-        ` WHERE "actor"."serverId" = ${id} ${whereSuffix}`
+        ` WHERE "actor"."serverId" = $id ${whereSuffix}`
     }
 
     const queries = [
@@ -426,7 +431,7 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
 
     const query = `DELETE FROM "userNotification" WHERE id IN (${queries.join(' UNION ')})`
 
-    return UserNotificationModel.sequelize.query(query)
+    return UserNotificationModel.sequelize.query(query, { bind })
   }
 
   toFormattedJSON (this: UserNotificationModelForApi): UserNotification {
