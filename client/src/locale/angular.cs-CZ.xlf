@@ -6,7 +6,7 @@
         <source>Close</source>
         <target state="translated">Zavřít</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/alert/alert.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/alert/alert.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
@@ -15,7 +15,7 @@
         <target state="translated">Obrazovka <x id="INTERPOLATION" equiv-text="get wrap("/> z <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
@@ -23,7 +23,7 @@
         <source>Previous</source>
         <target state="translated">Předchozí</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
@@ -31,7 +31,7 @@
         <source>Next</source>
         <target state="translated">Další</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/carousel/carousel.ts</context>
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
@@ -39,11 +39,11 @@
         <source>Select month</source>
         <target state="translated">Vybrat měsíc</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -51,11 +51,11 @@
         <source>Select year</source>
         <target state="translated">Vybrat rok</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
@@ -63,11 +63,11 @@
         <source>Previous month</source>
         <target state="translated">Předchozí měsíc</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">109</context>
         </context-group>
       </trans-unit>
@@ -75,11 +75,11 @@
         <source>Next month</source>
         <target state="translated">Příští měsíc</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/datepicker/datepicker-navigation.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/datepicker/datepicker-navigation.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
@@ -87,7 +87,7 @@
         <source>««</source>
         <target state="translated">««</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
@@ -95,7 +95,7 @@
         <source>«</source>
         <target state="translated">«</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">318</context>
         </context-group>
       </trans-unit>
@@ -103,7 +103,7 @@
         <source>»</source>
         <target state="translated">»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
@@ -111,7 +111,7 @@
         <source>»»</source>
         <target state="translated">»»</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
@@ -119,7 +119,7 @@
         <source>First</source>
         <target state="translated">První</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
@@ -127,7 +127,7 @@
         <source>Previous</source>
         <target state="translated">Předchozí</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">425</context>
         </context-group>
       </trans-unit>
@@ -135,7 +135,7 @@
         <source>Next</source>
         <target state="translated">Další</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">446</context>
         </context-group>
       </trans-unit>
@@ -143,17 +143,19 @@
         <source>Last</source>
         <target state="translated">Poslední</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/pagination/pagination.ts</context>
           <context context-type="linenumber">476</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="a tak dále.    *"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/progressbar/progressbar.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/progressbar/progressbar.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
@@ -161,7 +163,7 @@
         <source>HH</source>
         <target state="translated">HH</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">249</context>
         </context-group>
       </trans-unit>
@@ -169,7 +171,7 @@
         <source>Hours</source>
         <target state="translated">Hodin</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
@@ -177,7 +179,7 @@
         <source>MM</source>
         <target state="translated">MM</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">308</context>
         </context-group>
       </trans-unit>
@@ -185,7 +187,7 @@
         <source>Minutes</source>
         <target state="translated">Minut</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">339</context>
         </context-group>
       </trans-unit>
@@ -193,7 +195,7 @@
         <source>Increment hours</source>
         <target state="translated">Přírůstek hodin</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">369</context>
         </context-group>
       </trans-unit>
@@ -201,7 +203,7 @@
         <source>Decrement hours</source>
         <target state="translated">Snížení hodin</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">404</context>
         </context-group>
       </trans-unit>
@@ -209,7 +211,7 @@
         <source>Increment minutes</source>
         <target state="translated">Přírůstek minut</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">436</context>
         </context-group>
       </trans-unit>
@@ -217,7 +219,7 @@
         <source>Decrement minutes</source>
         <target state="translated">Snížení minut</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -225,7 +227,7 @@
         <source>SS</source>
         <target state="translated">SS</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -233,7 +235,7 @@
         <source>Seconds</source>
         <target state="translated">vteřin</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -241,7 +243,7 @@
         <source>Increment seconds</source>
         <target state="translated">Přírůstek vteřin</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -249,17 +251,19 @@
         <source>Decrement seconds</source>
         <target state="translated">Snížení vteřin</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/> </source>
+        <source>
+          <x id="INTERPOLATION"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
       </trans-unit>
@@ -267,7 +271,7 @@
         <source>Close</source>
         <target state="translated">Zavřít</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.4_@angular+core@21.2.4_@angular+_2641c572db9481350d14c8a9b34ca484/node_modules/src/toast/toast.ts</context>
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/toast/toast.ts</context>
           <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
@@ -868,7 +872,7 @@
         <target>Možnosti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1394835141143590910">
@@ -1566,7 +1570,7 @@
         <target state="translated">Smazané</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/video-playlist-element-miniature.component.html</context>
@@ -2992,7 +2996,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
+The link will expire within 1 hour.</source>
         <target state="translated">E-mail s pokyny pro obnovení hesla bude odeslán na adresu <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Platnost odkazu vyprší do 1 hodiny.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -6818,7 +6823,7 @@
         <target state="translated">Nahlásit tento komentář</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context>
-          <context context-type="linenumber">222</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7419704019640008953">
@@ -7666,11 +7671,8 @@
       <trans-unit id="8556648414940559453" datatype="html" xml:space="preserve">
         <source>This video is not available on <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Do you want to be redirected on the origin platform: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</source>
         <target state="translated">Toto video není dostupné na <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Chcete být přesměrováni na původní platformu: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">459</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">491</context></context-group></trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
         <target state="translated">Odebírat</target>
@@ -7968,15 +7970,15 @@
         <target>Žádné komentáře.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
-        <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> and others </source>
+        <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{                           video()?.account?.displayName || 'the author'                         }}"/> and others </source>
         <target state="translated">Zobrazit <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 odpověď} other {{{ comment.totalReplies }} odpovědí}}"/> z <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'autora' }}"/> a dalších </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
@@ -7984,23 +7986,23 @@
         <target state="translated">{VAR_PLURAL, plural, =1 {1 odpověď} other {<x id="INTERPOLATION"/> odpovědí}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">84</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">90</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
-        <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{ video()?.account?.displayName || 'the author' }}"/> </source>
+        <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{                           video()?.account?.displayName || 'the author'                         }}"/> </source>
         <target state="translated">Zobrazit <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 odpověď} other {{{ comment.totalReplies }} odpovědí}}"/> od <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'autora' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5535545444690528619" datatype="html">
@@ -8008,17 +8010,14 @@
         <target state="translated">Zobrazit <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 odpověď} other {{{ comment.totalReplies }} odpovědí}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6141356876817135294" datatype="html" xml:space="preserve">
         <source>Comments are disabled.</source>
         <target state="translated">Komentáře jsou vypnuté.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
-          <context context-type="linenumber">102</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">107</context></context-group></trans-unit>
       <trans-unit id="5733075023444401902">
         <source>Add comment...</source>
         <target>Přidat komentář...</target>
@@ -8136,31 +8135,25 @@
         <target>Zvýrazněné komentáře</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3470970355101730705" datatype="html" xml:space="preserve">
         <source>Pending review</source>
         <target state="translated">Čeká se na kontrolu</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
-          <context context-type="linenumber">68</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context><context context-type="linenumber">68</context></context-group></trans-unit>
       <trans-unit id="4502286564339177240">
         <source>Reply</source>
         <target>Odpovědět</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2447932355167015019" datatype="html">
@@ -8168,17 +8161,22 @@
         <target state="translated">Tento komentář byl smazán</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="338501496330700774" datatype="html">
+        <source>Reply to <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></source>
+        <target state="new">Reply to <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
+          <context context-type="linenumber">115,116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3821661153451769620" datatype="html" xml:space="preserve">
         <source>Approve</source>
         <target state="translated">Schválit</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context>
-          <context context-type="linenumber">214</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">229</context></context-group></trans-unit>
       <trans-unit id="9031514421077169181" datatype="html" xml:space="preserve">
         <source>Video redundancies</source>
         <target state="translated">Redundance videí</target>
@@ -8488,7 +8486,7 @@
         <target>Filtrovat...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/search-input.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4965562695253171955" datatype="html">
@@ -8640,7 +8638,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">69</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
@@ -9420,11 +9418,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
@@ -9808,7 +9806,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
@@ -9824,7 +9822,7 @@
         <target state="translated">Komentář</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.ts</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">84</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
@@ -14086,7 +14084,15 @@
         <target state="translated">Stav</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3621260373818132752" datatype="html">
+        <source>Manage video</source>
+        <target state="new">Manage video</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5417361655914085905" datatype="html">
@@ -14102,17 +14108,14 @@
         <target state="translated">Nebyla nalezena žádná žádost o změnu vlastnictví.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8533487962503184458" datatype="html" xml:space="preserve">
         <source>Target account</source>
         <target state="translated">Cílový účet</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
-          <context context-type="linenumber">45</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context><context context-type="linenumber">46</context></context-group></trans-unit>
       <trans-unit id="2091927708110728875" datatype="html">
         <source>⚠️ The instance doesn't allow channel synchronization</source>
         <target state="translated">⚠️ Instance neumožňuje synchronizaci kanálů</target>
@@ -14286,25 +14289,19 @@
         <target state="new">{VAR_PLURAL, plural, =0 {No import} =1 {1 import} other {<x id="INTERPOLATION"/> imports}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2630714876280650406" datatype="html" xml:space="preserve">
         <source>This video has been deleted</source>
         <target state="translated">Toto video bylo smazáno</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit>
       <trans-unit id="8293800276606426758" datatype="html" xml:space="preserve">
         <source>No video import found.</source>
         <target state="translated">Nenalezeno žádné importované video.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
-          <context context-type="linenumber">62</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="2628791643775383047" datatype="html" xml:space="preserve">
         <source>Target URL</source>
         <target state="translated">Cílové URL</target>
@@ -14481,43 +14478,28 @@
       <trans-unit id="2543396005338987129" datatype="html" xml:space="preserve">
         <source>Cancel import</source>
         <target state="translated">Zrušit import</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
-          <context context-type="linenumber">81</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
       <trans-unit id="3434581670838629732" datatype="html" xml:space="preserve">
         <source>Retry import</source>
         <target state="translated">Opakovat import</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
-          <context context-type="linenumber">87</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit>
       <trans-unit id="8634669765105555941" datatype="html" xml:space="preserve">
         <source>Delete import task</source>
         <target state="translated">Smazat úlohu importu</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
-          <context context-type="linenumber">93</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">95</context></context-group></trans-unit>
       <trans-unit id="7891887667515400088" datatype="html" xml:space="preserve">
         <source>The associated video is not deleted</source>
         <target state="translated">Související video není smazáno</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
-          <context context-type="linenumber">94</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">96</context></context-group></trans-unit>
       <trans-unit id="9127817756370915850" datatype="html" xml:space="preserve">
         <source>Edit video</source>
         <target state="translated">Upravit video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
-          <context context-type="linenumber">102</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">104</context></context-group></trans-unit>
       <trans-unit id="8173902679178787744" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
         <target state="translated">Jakmile jednou účet odstraníte, není cesty zpět. Budete vyzváni k potvrzení této akce.</target>
@@ -15447,7 +15429,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
+        <source>
+          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
+        </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videa}}"/>
         </target>
@@ -16030,6 +16014,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">92</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
+          <context context-type="linenumber">116</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-add-modal.component.html</context>
@@ -17397,7 +17385,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
@@ -19478,7 +19466,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
@@ -21416,7 +21404,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1034</context>
+          <context context-type="linenumber">1067</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5470809226184152498" datatype="html">
@@ -21716,7 +21704,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Nelze načíst pověření klienta OAuth: <x id="PH" equiv-text="err.text"/>. Ujistěte se, že jste správně nakonfigurovali PeerTube (adresář config/), zejména část "webserver".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -22084,7 +22073,10 @@
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
+          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {výsledek} other {výsledků}}"/>
@@ -25429,17 +25421,14 @@
       <trans-unit id="5927402622550505067" datatype="html" xml:space="preserve">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="translated">Odebírány všechny aktuální kanály <x id="PH"/>. Budete upozorněni na všechna jejich nová videa.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">144</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context><context context-type="linenumber">149</context></context-group></trans-unit>
       <trans-unit id="2780460651686172544" datatype="html">
         <source>Subscribed to <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="translated">Přihlášeno k odběru <x id="PH"/>. Budete upozorněni na všechna jejich nová videa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7019115336138470191">
@@ -25447,7 +25436,7 @@
         <target>Odebíráte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7070823964189404459" datatype="html">
@@ -25455,7 +25444,7 @@
         <target state="translated">Odhlášení ze všech kanálů z <x id="PH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">186</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9201562016527884133">
@@ -25465,7 +25454,7 @@
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="516954136005961440">
@@ -25473,7 +25462,7 @@
         <target>Odběr zrušen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.ts</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7292902857194439444" datatype="html" xml:space="preserve">
@@ -26565,7 +26554,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">245</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
@@ -26789,7 +26778,7 @@
         <target state="translated">Odstranit &amp; přepracovat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">253</context>
         </context-group>
       </trans-unit>
       <trans-unit id="60216491008745400" datatype="html">
@@ -26797,7 +26786,7 @@
         <target state="translated">Opatření ke komentáři</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context>
-          <context context-type="linenumber">246</context>
+          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="992317512448454409" datatype="html" xml:space="preserve">
@@ -27365,7 +27354,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -27927,7 +27918,7 @@
         <target state="translated">Přesměrování</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">460</context>
+          <context context-type="linenumber">492</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6851759241723629925" datatype="html">
@@ -27935,7 +27926,7 @@
         <target state="translated">Pro sledování tohoto videa potřebujete heslo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">500</context>
+          <context context-type="linenumber">532</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7116606560384080593" datatype="html">
@@ -27943,7 +27934,7 @@
         <target state="translated">Toto video je chráněno heslem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">501</context>
+          <context context-type="linenumber">533</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6566384659758828708" datatype="html">
@@ -27951,49 +27942,34 @@
         <target state="translated">Nesprávné heslo, zadejte prosím správné heslo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">502</context>
+          <context context-type="linenumber">534</context>
         </context-group>
       </trans-unit>
       <trans-unit id="785960720847076177" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content. Are you sure you want to display the video page?</source>
         <target state="translated">Toto video obsahuje citlivý obsah. Opravdu chcete zobrazit stránku s videem?</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">553</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">585</context></context-group></trans-unit>
       <trans-unit id="3000101082394601351" datatype="html" xml:space="preserve">
         <source>Sensitive video</source>
         <target state="translated">Citlivé video</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">554</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">586</context></context-group></trans-unit>
       <trans-unit id="3982297826462365916" datatype="html" xml:space="preserve">
         <source>Display the page</source>
         <target state="translated">Zobrazit stránku</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">556</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">588</context></context-group></trans-unit>
       <trans-unit id="3393221397715061387" datatype="html" xml:space="preserve">
         <source>Quit that page</source>
         <target state="translated">Opusť tu stránku</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">557</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">589</context></context-group></trans-unit>
       <trans-unit id="819996403327805209" datatype="html" xml:space="preserve">
         <source>Learn more</source>
         <target state="translated">Zjistěte více</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">560</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">592</context></context-group></trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
         <target state="translated">Zrušit</target>
@@ -28103,7 +28079,7 @@
         <target state="translated">Vstup/výstup na celoobrazovkový režim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">996</context>
+          <context context-type="linenumber">1029</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2971009377468404076" datatype="html">
@@ -28111,7 +28087,7 @@
         <target state="translated">Přehrát / Zastavit video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">997</context>
+          <context context-type="linenumber">1030</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4147087312411482964" datatype="html">
@@ -28119,7 +28095,7 @@
         <target state="translated">Ztišit / zrušit ztišení videa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">998</context>
+          <context context-type="linenumber">1031</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4791956574676305640" datatype="html">
@@ -28127,7 +28103,7 @@
         <target state="translated">Přeskočení na určitou část videa: 0 je 0 % a 9 je 90 %</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1013</context>
+          <context context-type="linenumber">1046</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3887762369650091344" datatype="html">
@@ -28135,7 +28111,7 @@
         <target state="translated">Zvýšit hlasitost</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1000</context>
+          <context context-type="linenumber">1033</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1363382131573461910" datatype="html">
@@ -28143,7 +28119,7 @@
         <target state="translated">Snížit hlasitost</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1001</context>
+          <context context-type="linenumber">1034</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2541031516422557760" datatype="html">
@@ -28151,7 +28127,7 @@
         <target state="translated">Procházení videa dopředu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1015</context>
+          <context context-type="linenumber">1048</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8813023402019364882" datatype="html">
@@ -28159,7 +28135,7 @@
         <target state="translated">Procházení videa dozadu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1016</context>
+          <context context-type="linenumber">1049</context>
         </context-group>
       </trans-unit>
       <trans-unit id="581757752202843950" datatype="html">
@@ -28167,7 +28143,7 @@
         <target state="translated">Zvýšení rychlosti přehrávání</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1018</context>
+          <context context-type="linenumber">1051</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5467642834854681120" datatype="html">
@@ -28175,7 +28151,7 @@
         <target state="translated">Snížení rychlosti přehrávání</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1019</context>
+          <context context-type="linenumber">1052</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3860402955823859506" datatype="html">
@@ -28183,7 +28159,7 @@
         <target state="translated">Přejít ve videu na předchozí snímek</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1021</context>
+          <context context-type="linenumber">1054</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8232494782895420700" datatype="html">
@@ -28191,7 +28167,7 @@
         <target state="translated">Přejít ve videu na další snímek</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1022</context>
+          <context context-type="linenumber">1055</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1887788831759691756" datatype="html">
@@ -28199,11 +28175,11 @@
         <target state="new"><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Videos feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1052</context>
+          <context context-type="linenumber">1085</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1066</context>
+          <context context-type="linenumber">1099</context>
         </context-group>
       </trans-unit>
       <trans-unit id="513070917830516194" datatype="html">
@@ -28211,7 +28187,7 @@
         <target state="new"><x id="PH" equiv-text="this.playlist.displayName"/> - Podcast feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1053</context>
+          <context context-type="linenumber">1086</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5232693393816852420" datatype="html">
@@ -28219,7 +28195,7 @@
         <target state="new"><x id="PH" equiv-text="video.name"/> - Comments feed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1067</context>
+          <context context-type="linenumber">1100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8223917068580581095" datatype="html">
@@ -28227,7 +28203,7 @@
         <target state="translated">Přepnutí režimu kina</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1006</context>
+          <context context-type="linenumber">1039</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8025996572234182184">
