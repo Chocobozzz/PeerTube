@@ -193,7 +193,7 @@ export class PeerTubePlayer {
   }
 
   setCurrentTime (currentTime: number) {
-    if (this.player.paused()) {
+    if (!this.player.hasStarted_) {
       this.currentLoadOptions.startTime = currentTime
 
       this.player.play()

@@ -1,15 +1,15 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 .segment {
   &.active,
   &:hover {
-    background: pvar(--bg-secondary-300);
+    background: pvar(--bg-secondary-400);
   }
 }
 
-input[type=text] {
+input[type="text"] {
   @include peertube-input-text(100%);
 }
 
