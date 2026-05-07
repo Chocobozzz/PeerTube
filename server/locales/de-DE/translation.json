@@ -207,7 +207,7 @@
     "Registration request of your account {username} has rejected": "Die Registrierungsanfrage für deinen Account {username} wurde abgelehnt",
     "Reorder length with this start position exceeds the channel limits (max: {max})": "Die Umsortierungslänge mit dieser Startposition überschreitet die Kanallimits (max.: {max})",
     "Reorder length with this start position exceeds the playlist limits (max: {max})": "Die Umsortierungslänge mit dieser Startposition überschreitet die Wiedergabelistenlimits (max.: {max})",
-    "Replay settings are missing now the live replay is saved": "Replay settings are missing now the live replay is saved",
+    "Replay settings are missing now the live replay is saved": "Aufzeichnungseinstellungen fehlen. Die Live-Übertragungs-Aufzeichnung wird gespeichert",
     "Report #{id} has been accepted": "Meldung #{id} wurde akzeptiert",
     "Report #{id} has been rejected": "Meldung #{id} wurde abgelehnt",
     "Reset my password": "Reset my password",
