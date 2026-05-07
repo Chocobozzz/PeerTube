@@ -14,8 +14,11 @@
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
         <target state="translated">Слайд <x id="INTERPOLATION" equiv-text="get wrap("/> из <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <target state="translated">Предыдущий</target>
@@ -145,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="и.т.д.    *"/>
         </target>
@@ -253,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -2686,9 +2685,9 @@
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4892001398723483418" datatype="html">
+      <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
-        <target state="translated">Включить горячие клавиши в этом веб-браузере</target>
+        <target state="translated">Включить горячие клавиши в этом браузере</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/hotkeys/hotkeys-cheat-sheet.component.html</context>
           <context context-type="linenumber">8</context>
@@ -2993,8 +2992,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Письмо с руководством по сбросу пароля будет отправлено на <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Ссылка будет рабочей в течении 1 часа.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -7664,8 +7662,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="8556648414940559453" datatype="html" xml:space="preserve">
         <source>This video is not available on <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Do you want to be redirected on the origin platform: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</source>
         <target state="translated">Это видео недоступно на <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Хотите перейти на исходную платформу: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">491</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">491</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">
         <source>Subscribe</source>
         <target state="translated">Подписаться</target>
@@ -7967,7 +7968,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="6390009909920475335" datatype="html">
-        <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{                           video()?.account?.displayName || 'the author'                         }}"/> and others </source>
+        <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{                           video()?.account?.displayName || 'the author'                         }}"/> and others </source>
         <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, one {{{ comment.totalReplies }} ответ} few {{{ comment.totalReplies }} ответа} other {{{ comment.totalReplies }} ответов}}"/> от <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> и других </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
@@ -7991,7 +7992,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="127329338495775339" datatype="html">
-        <source> View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{                           video()?.account?.displayName || 'the author'                         }}"/> </source>
+        <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/> from <x id="INTERPOLATION_1" equiv-text="{{                           video()?.account?.displayName || 'the author'                         }}"/> </source>
         <target state="translated">Просмотреть <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, one {{{ comment.totalReplies }} ответ} few {{{ comment.totalReplies }} ответа} other {{{ comment.totalReplies }} ответов}}"/> от<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'автора' }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
@@ -8009,8 +8010,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="6141356876817135294" datatype="html" xml:space="preserve">
         <source>Comments are disabled.</source>
         <target state="translated">Комментарии отключены.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context><context context-type="linenumber">107</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5964038603724691720" datatype="html" xml:space="preserve">
         <source>Delete and re-draft</source>
         <target state="translated">Удалить и отредактировать снова</target>
@@ -8166,9 +8170,15 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3470970355101730705" datatype="html" xml:space="preserve">
         <source>Pending review</source>
         <target state="translated">Ожидает рассмотрения</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context><context context-type="linenumber">68</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4502286564339177240">
         <source>Reply</source>
         <target>Ответить</target>
@@ -8200,8 +8210,11 @@ The link will expire within 1 hour.</source>
       <trans-unit id="3821661153451769620" datatype="html" xml:space="preserve">
         <source>Approve</source>
         <target state="translated">Одобрено</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">229</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context>
+          <context context-type="linenumber">229</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
         <target state="translated">Видео повторы</target>
@@ -14315,18 +14328,27 @@ The link will expire within 1 hour.</source>
       <trans-unit id="4051889386110039096" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No import} =1 {1 import} other {<x id="INTERPOLATION"/> imports}}</source>
         <target state="translated">{VAR_PLURAL, plural, =0 {Нет импортов} =1 {1 импорт} other {<x id="INTERPOLATION"/> импортов}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">15</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2630714876280650406" datatype="html" xml:space="preserve">
         <source>This video has been deleted</source>
         <target state="translated">Это видео было удалено</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8293800276606426758" datatype="html" xml:space="preserve">
         <source>No video import found.</source>
         <target state="translated">Видео импорт не найден.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2628791643775383047" datatype="html">
         <source>Target URL</source>
         <target state="new">Target URL</target>
@@ -14503,28 +14525,43 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2543396005338987129" datatype="html" xml:space="preserve">
         <source>Cancel import</source>
         <target state="translated">Отменить импорт</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3434581670838629732" datatype="html" xml:space="preserve">
         <source>Retry import</source>
         <target state="translated">Повторить импорт</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8634669765105555941" datatype="html" xml:space="preserve">
         <source>Delete import task</source>
         <target state="translated">Удалить задачу импорта</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">95</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7891887667515400088" datatype="html" xml:space="preserve">
         <source>The associated video is not deleted</source>
         <target state="translated">Связанное видео не удалено</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">96</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9127817756370915850" datatype="html" xml:space="preserve">
         <source>Edit video</source>
         <target state="translated">Редактировать видео</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">104</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8173902679178787744" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
         <target state="translated">После удаления учетной записи, вернуть ее будет невозможно. Вам будет предложено подтвердить это действие.</target>
@@ -15454,9 +15491,7 @@ The link will expire within 1 hour.</source>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="translated">
           <x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {Нет видео} =1 {1 видео} other {{{ getTotalVideosOf(videoChannel) }} видео}}"/>
         </target>
@@ -21428,9 +21463,15 @@ The link will expire within 1 hour.</source>
       <trans-unit id="1783173774503340906" xml:space="preserve">
         <source>Subscribe to the account</source>
         <target state="translated">Подписаться на учетную запись</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">125</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1067</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">1067</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5470809226184152498" datatype="html">
         <source>CUT VIDEO</source>
         <target state="translated">ВЫРЕЗАТЬ ВИДЕО</target>
@@ -21639,17 +21680,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">428</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7709367721354853232">
+      <trans-unit id="7709367721354853232" xml:space="preserve">
         <source>Focus the search bar</source>
-        <target state="translated">Перейти в панель поиска</target>
+        <target state="translated">Открыть панель поиска</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4049262826107502276">
+      <trans-unit id="4049262826107502276" xml:space="preserve">
         <source>Toggle the left menu</source>
-        <target state="translated">Переключить левое меню</target>
+        <target state="translated">Показать/скрыть боковое меню</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">384</context>
@@ -21657,7 +21698,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4482153685775394919" datatype="html" xml:space="preserve">
         <source>Go to the "Discover videos" page</source>
-        <target state="translated">Перейти в "Поиск видео"</target>
+        <target state="translated">Перейти на страницу обзора</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">389</context>
@@ -21665,7 +21706,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6123131701694052862" datatype="html" xml:space="preserve">
         <source>Go to the "Browse videos" page</source>
-        <target state="translated">Перейти в "Просмотр видео"</target>
+        <target state="translated">Перейти на страницу «Просмотр видео»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">394</context>
@@ -21673,7 +21714,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5260039955239962053" datatype="html" xml:space="preserve">
         <source>Go to the "Publish video" page</source>
-        <target state="translated">Перейти в "Опубликовать видео"</target>
+        <target state="translated">Перейти на страницу загрузки видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">399</context>
@@ -21695,58 +21736,57 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3779524668013120370">
+      <trans-unit id="3779524668013120370" xml:space="preserve">
         <source>Go to my subscriptions</source>
-        <target>Перейти на мои подписки</target>
+        <target state="translated">Перейти на страницу подписок</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1136469849928650779">
+      <trans-unit id="1136469849928650779" xml:space="preserve">
         <source>Go to my videos</source>
-        <target>Перейти на мои видео</target>
+        <target state="translated">Перейти на страницу моих видео</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7836683738999600376">
+      <trans-unit id="7836683738999600376" xml:space="preserve">
         <source>Go to my imports</source>
-        <target>Перейти на мои импортированные видео</target>
+        <target state="translated">Перейти на страницу импортов</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7511292153332773503">
+      <trans-unit id="7511292153332773503" xml:space="preserve">
         <source>Go to my channels</source>
-        <target>Перейти на мои каналы</target>
+        <target state="translated">Перейти на страницу моих каналов</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Не удается получить учетные данные клиента OAuth: <x id="PH" equiv-text="error.text"/>. Убедитесь, что вы правильно настроили PeerTube (config / directory), в частности раздел «веб-сервер».</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6667870723906986565" datatype="html">
+      <trans-unit id="6667870723906986565" datatype="html" xml:space="preserve">
         <source>Show / hide this help menu</source>
-        <target state="translated">Показать/скрыть это меню помощи</target>
+        <target state="translated">Показать/скрыть меню справки</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3314265031897048047" datatype="html">
+      <trans-unit id="3314265031897048047" datatype="html" xml:space="preserve">
         <source>Hide this help menu</source>
-        <target state="translated">Скрыть это меню справки</target>
+        <target state="translated">Скрыть меню справки</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.service.ts</context>
           <context context-type="linenumber">42</context>
@@ -22097,10 +22137,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, one {результат} few {результата} other {результатов}}"/>
@@ -26805,8 +26842,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="6871668720687277843" datatype="html" xml:space="preserve">
         <source>Remove &amp; re-draft</source>
         <target state="translated">Удалить и переоформить</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context><context context-type="linenumber">253</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.ts</context>
+          <context context-type="linenumber">253</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="60216491008745400" datatype="html">
         <source>Actions on comment</source>
         <target state="translated">Действия над комментарием</target>
@@ -27380,9 +27420,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
@@ -27942,28 +27980,43 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="785960720847076177" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content. Are you sure you want to display the video page?</source>
         <target state="translated">Это видео содержит конфиденциальный контент. Вы уверены, что хотите отобразить страницу с видео?</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">585</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">585</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3000101082394601351" datatype="html" xml:space="preserve">
         <source>Sensitive video</source>
         <target state="translated">Неприемлимые видео</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">586</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">586</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3982297826462365916" datatype="html" xml:space="preserve">
         <source>Display the page</source>
         <target state="translated">Отобразить страницу</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">588</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">588</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3393221397715061387" datatype="html" xml:space="preserve">
         <source>Quit that page</source>
         <target state="translated">Закрыть эту страницу</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">589</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">589</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="819996403327805209" datatype="html" xml:space="preserve">
         <source>Learn more</source>
         <target state="translated">Узнать больше</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">592</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
+          <context context-type="linenumber">592</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
         <source>Cancel</source>
         <target state="translated">Отмена</target>
