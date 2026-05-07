@@ -195,11 +195,11 @@ importers:
         specifier: ^11.3.4
         version: 11.3.4
       got:
-        specifier: ^15.0.3
-        version: 15.0.3
+        specifier: ^15.0.5
+        version: 15.0.5
       got-ssrf:
         specifier: ^3.0.0
-        version: 3.0.0(got@15.0.3)
+        version: 3.0.0(got@15.0.5)
       handlebars:
         specifier: ^4.7.9
         version: 4.7.9
@@ -7312,8 +7312,8 @@ packages:
     peerDependencies:
       got: ^14
 
-  got@15.0.3:
-    resolution: {integrity: sha512-630of5aMTYM6g6epok5nuqvctP8InJISvt39iNt7y0r27rcGCdiPv9Cc6EbwfnkyT1g/shBoVhvDjtXZUbn/Rw==}
+  got@15.0.5:
+    resolution: {integrity: sha512-PMIMaZuYUCK43+Z9JWEXea4kkX2b3301m81D5TS6QpfG4PmNyirzEdO/Oa2OHAN4GsjnPfvWCWsshKN2rq4/gQ==}
     engines: {node: '>=22'}
 
   graceful-fs@4.2.11:
@@ -19351,15 +19351,15 @@ snapshots:
 
   gopd@1.2.0: {}
 
-  got-ssrf@3.0.0(got@15.0.3):
+  got-ssrf@3.0.0(got@15.0.5):
     dependencies:
       debug: 4.4.3(supports-color@8.1.1)
-      got: 15.0.3
+      got: 15.0.5
       ipaddr.js: 2.4.0
     transitivePeerDependencies:
       - supports-color
 
-  got@15.0.3:
+  got@15.0.5:
     dependencies:
       '@sindresorhus/is': 8.0.0
       byte-counter: 0.1.0

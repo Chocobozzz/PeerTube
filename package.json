@@ -146,7 +146,7 @@
     "flat": "^6.0.1",
     "fluent-ffmpeg": "^2.1.3",
     "fs-extra": "^11.3.4",
-    "got": "^15.0.3",
+    "got": "^15.0.5",
     "got-ssrf": "^3.0.0",
     "handlebars": "^4.7.9",
     "helmet": "^8.1.0",
