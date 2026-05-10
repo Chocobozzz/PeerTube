@@ -67,6 +67,7 @@ const I18N_LOCALE_ALIAS = {
   'nl': 'nl-NL',
   'pl': 'pl-PL',
   'pt': 'pt-BR',
+  'ro-RO': 'ro',
   'ru': 'ru-RU',
   'sk': 'sk-SK',
   'sv': 'sv-SE',
