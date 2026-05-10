@@ -32,6 +32,7 @@ export const I18N_LOCALES = {
   'pl-PL': 'Polski',
   'pt-BR': 'Português (Brasil)',
   'pt-PT': 'Português (Portugal)',
+  'ro': 'Română',
   'ru-RU': 'Pусский',
   'sk-SK': 'Slovenčina',
   'sq': 'Shqip',
