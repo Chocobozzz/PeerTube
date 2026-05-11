@@ -27,7 +27,7 @@ languages=(
     ja:ja-JP
     ka:ka
     kab:kab
-    ko:ko
+    ko:ko-KR
     nb:nb-NO
     nl:nl-NL
     nn:nn

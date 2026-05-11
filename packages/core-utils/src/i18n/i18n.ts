@@ -4,6 +4,7 @@ export const I18N_LOCALES = {
   // Always first to avoid issues when using express acceptLanguages function when no accept language header is set
   'en-US': 'English',
 
+  // Keep it alphabetically sorted
   'ar': 'العربية',
   'ca-ES': 'Català',
   'cs-CZ': 'Čeština',
@@ -24,7 +25,7 @@ export const I18N_LOCALES = {
   'ja-JP': '日本語',
   'ka': 'ქართული ენა',
   'kab': 'Taqbaylit',
-  'ko': '한국어',
+  'ko-KR': '한국어',
   'nb-NO': 'Norsk bokmål',
   'nl-NL': 'Nederlands',
   'nn': 'Norsk nynorsk',
@@ -44,7 +45,6 @@ export const I18N_LOCALES = {
   'vi-VN': 'Tiếng Việt',
   'zh-Hans-CN': '简体中文（中国）',
   'zh-Hant-TW': '繁體中文（台灣）'
-  // Keep it alphabetically sorted
 }
 
 // Keep it alphabetically sorted
@@ -64,6 +64,7 @@ const I18N_LOCALE_ALIAS = {
   'hu': 'hu-HU',
   'it': 'it-IT',
   'ja': 'ja-JP',
+  'ko': 'ko-KR',
   'nb': 'nb-NO',
   'nl': 'nl-NL',
   'pl': 'pl-PL',
