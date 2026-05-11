@@ -165,7 +165,7 @@
             "translation": "src/locale/angular.ro.xlf",
             "baseHref": "/client/ro/"
           },
-          "ko-KR": {
+          "ko": {
             "translation": "src/locale/angular.ko-KR.xlf",
             "baseHref": "/client/ko-KR/"
           },
