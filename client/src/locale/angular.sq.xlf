@@ -13202,193 +13202,121 @@ The link will expire within 1 hour.</source>
       <trans-unit id="7849797693092882170" datatype="html" xml:space="preserve">
         <source>Since the video publication</source>
         <target state="translated">Që nga botimi i videos</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">111</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">124</context></context-group></trans-unit>
       <trans-unit id="5864040054093006922" datatype="html" xml:space="preserve">
         <source>Viewers</source>
         <target state="translated">Parës</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">126</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">625</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">661</context>
-        </context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">139</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">637</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">673</context></context-group></trans-unit>
       <trans-unit id="5691818894884119596" datatype="html" xml:space="preserve">
         <source>Watch time</source>
         <target state="translated">Kohë parjejej</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">131</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">144</context></context-group></trans-unit>
       <trans-unit id="9040361513231775562" datatype="html">
         <source>Downloads</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">149</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">343</context>
+          <context context-type="linenumber">356</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html" xml:space="preserve">
         <source>Countries</source>
         <target state="translated">Vende</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">141</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">376</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">154</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">389</context></context-group></trans-unit>
       <trans-unit id="699590710757792843" datatype="html" xml:space="preserve">
         <source>Regions</source>
         <target state="translated">Rajone</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">146</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">383</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">159</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">396</context></context-group></trans-unit>
       <trans-unit id="5910845130937645353" datatype="html" xml:space="preserve">
         <source>Clients</source>
         <target state="translated">Klientë</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">151</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">164</context></context-group></trans-unit>
       <trans-unit id="3719027099325959755" datatype="html" xml:space="preserve">
         <source>Devices</source>
         <target state="translated">Pajisje</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">156</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">169</context></context-group></trans-unit>
       <trans-unit id="2852782118363573273" datatype="html" xml:space="preserve">
         <source>Operating systems</source>
         <target state="translated">Sisteme operativë</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">161</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">174</context></context-group></trans-unit>
       <trans-unit id="683980015107026060" datatype="html" xml:space="preserve">
         <source>Retention</source>
         <target state="translated">Mbajtje</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">169</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">182</context></context-group></trans-unit>
       <trans-unit id="2232536542109196600" datatype="html" xml:space="preserve">
         <source>Viewers stats between <x id="PH" equiv-text="this.toMediumDate(this.statsStartDate)"/> and <x id="PH_1" equiv-text="this.toMediumDate(this.statsEndDate)"/></source>
         <target state="translated">Statistika parësish mes <x id="PH" equiv-text="this.toMediumDate(this.statsStartDate)"/> dhe <x id="PH_1" equiv-text="this.toMediumDate(this.statsEndDate)"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">232</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">245</context></context-group></trans-unit>
       <trans-unit id="5697131528899933134" datatype="html" xml:space="preserve">
         <source>Viewers stats</source>
         <target state="translated">Statistika parësish</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">235</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">248</context></context-group></trans-unit>
       <trans-unit id="8089238718524110373" datatype="html">
         <source>Live as of <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">310</context>
+          <context context-type="linenumber">323</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3249405667632600635" datatype="html" xml:space="preserve">
         <source>Custom dates</source>
         <target state="translated">Data vetjake</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">321</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">334</context></context-group></trans-unit>
       <trans-unit id="2405893290244253562" datatype="html" xml:space="preserve">
         <source>A view means that someone watched the video for several seconds (10 seconds by default)</source>
         <target state="translated">Parje do të thotë se dikush pa videon për disa sekonda (10 sekonda, si parazgjedhje)</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">340</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">353</context></context-group></trans-unit>
       <trans-unit id="7112532281224432421" datatype="html" xml:space="preserve">
         <source>Likes</source>
         <target state="translated">Pëlqime</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">347</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-forms/select/select-videos-sort.component.ts</context>
-          <context context-type="linenumber">61</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">360</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/select/select-videos-sort.component.ts</context><context context-type="linenumber">61</context></context-group></trans-unit>
       <trans-unit id="1155438117303179048" datatype="html" xml:space="preserve">
         <source>Average watch time</source>
         <target state="translated">Kohë mesatare parjesh</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">354</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">367</context></context-group></trans-unit>
       <trans-unit id="3457644129579531516" datatype="html" xml:space="preserve">
         <source>Total watch time</source>
         <target state="translated">Kohë parjesh gjithsej</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">358</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">371</context></context-group></trans-unit>
       <trans-unit id="7988517647183541852" datatype="html" xml:space="preserve">
         <source>Peak viewers</source>
         <target state="translated">Kulmim parësish</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">362</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">375</context></context-group></trans-unit>
       <trans-unit id="8536543691393468142" datatype="html" xml:space="preserve">
         <source>at <x id="PH" equiv-text="this.toMediumDate(new Date(overallStats.viewersPeakDate))"/></source>
         <target state="translated">më <x id="PH" equiv-text="this.toMediumDate(new Date(overallStats.viewersPeakDate))"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">365</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">378</context></context-group></trans-unit>
       <trans-unit id="7299658893351817136" datatype="html" xml:space="preserve">
         <source>Unique viewers</source>
         <target state="translated">Parës unikë</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">369</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">382</context></context-group></trans-unit>
       <trans-unit id="6389312883797462351" datatype="html" xml:space="preserve">
         <source>Studio</source>
         <target state="translated">Studio</target>
@@ -20837,15 +20765,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2123659921722214537" datatype="html" xml:space="preserve">
         <source>Views</source>
         <target state="translated">Parje</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+search/search-filters.component.ts</context>
-          <context context-type="linenumber">84</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">338</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context><context context-type="linenumber">351</context></context-group></trans-unit>
       <trans-unit id="4319634264526091601" datatype="html" xml:space="preserve">
         <source>on this instance</source>
         <target state="translated">në këtë instancë</target>
