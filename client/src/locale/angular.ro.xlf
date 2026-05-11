@@ -9513,7 +9513,7 @@
       </trans-unit>
       <trans-unit id="7512666561651719221" datatype="html" xml:space="preserve">
         <source>You can now &lt;strong&gt;invite other users&lt;/strong&gt; to collaborate on your channel</source>
-        <target state="translated">Acum poți <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> să colaboreze la canalul tău</target>
+        <target state="translated">Acum poți &lt;strong&gt;invita alți utilizatori&lt;/strong&gt; să colaboreze pe canalul tău</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/new-feature-info.service.ts</context>
           <context context-type="linenumber">36</context>
@@ -16705,7 +16705,7 @@
       </trans-unit>
       <trans-unit id="5663976721315204489" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Permite<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> utilizatorilor tăi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>să importe și să sincronizeze<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videoclipuri de pe platforme externe (YouTube, Vimeo...)</target>
+        <target state="translated">&lt;strong&gt;Permiteți utilizatorilor dvs. de pe&lt;/strong&gt; &lt;strong&gt; să importe și să sincronizeze videoclipuri de pe&lt;/strong&gt; de pe platforme externe (YouTube, Vimeo...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">255</context>
@@ -16714,7 +16714,7 @@
       </trans-unit>
       <trans-unit id="4936759942517379026" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Previne<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> utilizatorii tăi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>să importe videoclipuri<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> de pe platforme externe</target>
+        <target state="translated">&lt;strong&gt;Împiedicați utilizatorii&lt;/strong&gt; &lt;strong&gt; să importe videoclipuri&lt;/strong&gt; de pe platforme externe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">260</context>
@@ -16723,7 +16723,7 @@
       </trans-unit>
       <trans-unit id="7110073515390971316" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Permite<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> utilizatorilor tăi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>să transmită live și să discute<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> cu vizitatorii lor folosind pluginul <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Livechat<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">&lt;strong&gt;Permiteți utilizatorilor de pe&lt;/strong&gt; &lt;strong&gt; să creeze un flux live pe&lt;/strong&gt; și să discute cu spectatorii lor folosind pluginul &lt;strong&gt;Livechat&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">279</context>
@@ -16732,7 +16732,7 @@
       </trans-unit>
       <trans-unit id="3769529336397241157" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Previne<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> utilizatorii tăi de la rularea <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>transmisiunilor live<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">&lt;strong&gt;Împiedicați utilizatorii site-ului&lt;/strong&gt; să difuzeze fluxuri live pe &lt;strong&gt;&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">283</context>
@@ -16741,7 +16741,7 @@
       </trans-unit>
       <trans-unit id="3112814596265051794" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</source>
-        <target state="translated">Setează <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>confidențialitatea implicită a videoclipului<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> la <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Internă<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Setați setarea implicită pentru confidențialitatea videoclipurilor din „ &lt;strong&gt;” (&lt;/strong&gt; ) la „ &lt;strong&gt;” (Intern)&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">301</context>
