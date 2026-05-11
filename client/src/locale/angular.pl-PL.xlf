@@ -24264,7 +24264,7 @@ Link będzie ważny przez 1 godzinę.</target>
       </trans-unit>
       <trans-unit id="5922757127987546008" xml:space="preserve">
         <source>yy-mm-dd</source>
-        <target state="translated">dd.mm.yyyy</target>
+        <target state="translated">dd.mm.yy</target>
         <note from="description" priority="1">Date format in this locale.</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/i18n-primeng-calendar.service.ts</context>
