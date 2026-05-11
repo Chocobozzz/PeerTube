@@ -27,13 +27,15 @@ languages=(
     ja:ja-JP
     ka:ka
     kab:kab
+    ko:ko
     nb:nb-NO
     nl:nl-NL
     nn:nn
     oc:oc
     pl:pl-PL
-    pt:pt-BR
     pt-PT:pt-PT
+    pt:pt-BR
+    ro:ro
     ru:ru-RU
     sk:sk-SK
     sq:sq

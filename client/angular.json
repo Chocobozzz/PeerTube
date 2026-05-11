@@ -161,6 +161,14 @@
             "translation": "src/locale/angular.is.xlf",
             "baseHref": "/client/is/"
           },
+          "ro": {
+            "translation": "src/locale/angular.ro.xlf",
+            "baseHref": "/client/ro/"
+          },
+          "ko": {
+            "translation": "src/locale/angular.ko.xlf",
+            "baseHref": "/client/ko/"
+          },
           "uk": {
             "translation": "src/locale/angular.uk-UA.xlf",
             "baseHref": "/client/uk-UA/"
