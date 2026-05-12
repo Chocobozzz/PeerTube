@@ -1,5 +1,127 @@
 # Changelog
 
+## v8.2.0-rc.1
+
+### IMPORTANT NOTES
+
+  * Remove NodeJS 20 support. Please upgrade to NodeJS 22 (>= 22.12) before upgrading PeerTube
+  * The public access of `/api/v1/accounts` API endpoint is deprecated for privacy reasons and will be behind an admin/moderator auth access in PeerTube v9, planned for the end of 2027
+  * iOS versions < 15.4 are not supported anymore
+
+### NGINX
+
+ * Fix an important NGINX I/O issue when users download a video: https://github.com/Chocobozzz/PeerTube/commit/5fa456e6e76af682d9f03be779d98b0779c4fbd3
+ Please upgrade your NGINX configuration
+
+### Sysadmin
+
+  * [prune-storage script](https://docs.joinpeertube.org/maintain/tools#prune-filesystem-object-storage) can now be run without stopping PeerTube
+  * Add video `pivacy` tag for `peertube_videos_total` OTEL metric
+
+### Configuration
+
+*This section is not exhaustive*
+
+ * Add `download.max_total_bytes_per_second` and `download.max_bytes_per_ip_per_second` configuration keys to throttle video downloads.
+ These new keys help prevent instability when botnets download the entire PeerTube catalog
+ * Add ability to provide cookies to `yt-dlp` [#7510](https://github.com/Chocobozzz/PeerTube/pull/7510).
+ See the documentation for more information: https://docs.joinpeertube.org/maintain/configuration#use-cookies-for-youtube-imports-when-needed
+ * Increase the default refresh token lifetime `oauth2.token_lifetime.refresh_token` to `4 weeks` (instead of `2 weeks`)
+ * Allow admins to configure the default state of the *Automatically publish a replay when your live ends* option [#7414](https://github.com/Chocobozzz/PeerTube/pull/7414)
+
+### Docker
+
+  * The entire PeerTube configuration can be set using environment variables.
+  Keep in mind that environment variable configuration keys override web admin configuration
+
+### Plugins/Themes/Embed API
+
+  * Add server plugin hooks (https://docs.joinpeertube.org/api/plugins):
+    * `filter:api.user.signup.requires-approval.result`
+    * `filter:notifier.notification.enabled.result`
+  * Add a server plugin helper:
+    * `storageManager.deleteData(key: string)`
+
+### Features
+
+  * :tada: Add ability to transfer a video channel to another user of the same instance :tada:
+  * :tada: Add live DVR [#7396](https://github.com/Chocobozzz/PeerTube/pull/7396) allowing users to seek within and pause the live :tada:
+  * :tada: Add ability to remove segments of a video in Studio :tada:
+  * Support Romanian and Korean languages in web client
+  * Improve video ownership change UX:
+    * Better table UI in *My Videos* -> *More* -> *Ownership changes*. It also lists ownership change requests for users' videos
+    * The video management page now includes a section to transfer ownership of a video and cancel a pending request
+    * Add notifications when video ownership is requested/accepted/rejected
+    * Add bulk actions to accept/reject an ownership change request
+  * Player:
+    * Restore playback rates and manual video resolution choice between sessions in the same web browser
+    * Add ability to flip the video horizontally [#7478](https://github.com/Chocobozzz/PeerTube/pull/7478)
+	* Redesign loading spinner
+  * Support podcast feed for playlists
+  * Add video download stats for video makers
+  * Improve global UX:
+    * Introduce a new table filter component that is simpler to use
+    * Default runner job route is the page that lists runner jobs
+    * Clicking on a type/state tag automatically filters data for local/runner job states and types, follow states, registration states, and user roles
+    * Add video tag information and filter when listing my videos
+    * Add ability to bulk accept/reject registration requests
+    * Add ability to filter users by role in users overview
+	* Improve comments UI on mobile
+	* Display subscribe button when subscription state is loaded
+	* Add `g p` hotkeys to go to *My playlists* page
+  * Improve videos overview for admins:
+    * Add ability to filter videos by state
+    * Add a mute badge if the video owner is muted by the instance
+    * Add ability to filter out videos from muted accounts
+  * Improve video blocks overview for admins:
+    * Add video privacy column
+    * Add bulk actions to unblock, switch to manual block or delete the selected videos
+    * Add a mute badge if the video owner is muted by the instance
+  * Improve abuses overview for admins:
+    * Add bulk action to update internal note, mark as accepted/rejected, delete report, mute reporter/reportee, block/unblock the video, delete the video/comment
+    * Add a mute badge if the reporter/reportee is muted by the instance
+  * Improve comments overview for admins and users:
+    * Clicking on account name filters comments
+    * Add a mute badge if the account that commented the video is muted by the instance
+    * Add ability to filter out comments from muted accounts
+  * Performance:
+    * Reduce SQL joins when loading a video from the database
+    * Faster video SQL query to retrieve my videos
+    * Faster video comments SQL queries for users that list comments on their videos
+    * Faster video redundancies SQL queries
+    * Reduce number of rows returned by video SQL queries
+    * Reduce number of rows returned by comments SQL queries
+    * Faster loading of *My channels* page
+    * Add `/about` endpoint caching in the client to reduce unnecessary API calls
+    * Process ActivityPub `View` and `Download` activities in parallel
+    * Forward ActivityPub `View` using parallel broadcast
+  * Support ActivityPub `indexable` field for actors
+  * Expose runner and runner job queue OpenTelemetry metrics [#7469](https://github.com/Chocobozzz/PeerTube/pull/7469)
+  * Prevent stale follows by periodically re-sending `Follow` ActivityPub requests to remote instances
+  * Improve follows reliability algorithm to reject followers that have been consistently down for ~7 days
+
+### Bug fixes
+
+  * Fix plugin settings to display default values when not configured in the DB [#7484](https://github.com/Chocobozzz/PeerTube/pull/7484)
+  * Fix actor host link in miniature instance dropdown if search index is disabled
+  * Fix missing stream error handling in web video object storage proxy [#7535](https://github.com/Chocobozzz/PeerTube/pull/7535)
+  * Fix caption filename overflow
+  * Fix setting a thumbnail from a video that is stored in object storage
+  * Fix instance redundancies pagination
+  * Filter out non-text languages for captions
+  * Increase lazy static files cache time (thumbnails, captions, actor avatars/banners, etc.) to 1 year
+  * Correctly log uncaught exceptions or unhandled promise rejections in file logger
+  * Prevent page scrolling when applying filters while browsing instance/account/channel videos
+  * Fix infinite scroll when listing my followers
+  * Handle errors when updating a video playlist
+  * Fix download filename if the video contains non-Latin characters
+  * Fix font colors in emails by only injecting custom admin colors when the default theme is `light-beige` or `dark-brown`, to prevent accessibility issues
+  * Fix broken audio stream P2P for lives
+  * Fix broke HLS transcoding on concurrent video privacy change
+  * Don't unpause the player when clicking on a transcription segment
+  * Fix table page navigation on registration action
+
+
 ## v8.1.5
 
 ### IMPORTANT NOTES
