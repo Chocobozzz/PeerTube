@@ -8,7 +8,9 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
@@ -34,7 +36,18 @@ export class VODWebVideoTranscodingJobHandler
     const { video, resolution, fps, priority, dependsOnRunnerJob } = options
 
     const jobUUID = buildUUID()
-    const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+
+    let hasSeparatedAudio = false
+    if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
+      const videoSource = await VideoSourceModel.loadLatest(video.id)
+      if (!videoSource?.keptOriginalFilename) {
+        const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+        hasSeparatedAudio = !!separatedAudioFile
+      }
+    } else {
+      const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+      hasSeparatedAudio = !!separatedAudioFile
+    }
 
     const payload: RunnerJobVODWebVideoTranscodingPayload = {
       input: {
@@ -46,7 +59,7 @@ export class VODWebVideoTranscodingJobHandler
             : 'video'
         }),
 
-        separatedAudioFileUrl: separatedAudioFile
+        separatedAudioFileUrl: hasSeparatedAudio
           ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
           : []
       },

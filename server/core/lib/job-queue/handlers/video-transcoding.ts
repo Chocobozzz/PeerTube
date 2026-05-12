@@ -7,6 +7,7 @@ import {
   VideoTranscodingPayload
 } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { hasMissingHLSStreams } from '@server/lib/runners/job-handlers/shared/utils.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { generateHlsPlaylistResolution } from '@server/lib/transcoding/hls-transcoding.js'
@@ -121,27 +122,54 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
   try {
     video = await VideoModel.loadFull(videoArg.uuid)
 
-    const { videoFile, separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
-    const webVideoFile = video.getWebVideoFileResolution(payload.resolution)
+    let usedOriginal = false
 
-    const videoFileInputs = webVideoFile
-      ? [ webVideoFile ]
-      : [ videoFile, separatedAudioFile ].filter(v => !!v)
+    if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
+      const videoSource = await VideoSourceModel.loadLatest(video.id)
 
-    await VideoPathManager.Instance.makeAvailableVideoFiles(videoFileInputs, ([ videoPath, separatedAudioPath ]) => {
-      return generateHlsPlaylistResolution({
-        video,
+      if (videoSource?.keptOriginalFilename) {
+        usedOriginal = true
 
-        videoInputPath: videoPath,
-        separatedAudioInputPath: separatedAudioPath,
+        await VideoPathManager.Instance.makeAvailableOriginalFile(videoSource, ([ videoPath ]) => {
+          return generateHlsPlaylistResolution({
+            video,
 
-        inputFileMutexReleaser,
-        resolution: payload.resolution,
-        fps: payload.fps,
-        separatedAudio: payload.separatedAudio,
-        job
+            videoInputPath: videoPath,
+            separatedAudioInputPath: undefined,
+
+            inputFileMutexReleaser,
+            resolution: payload.resolution,
+            fps: payload.fps,
+            separatedAudio: payload.separatedAudio,
+            job
+          })
+        })
+      }
+    }
+
+    if (!usedOriginal) {
+      const { videoFile, separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+      const webVideoFile = video.getWebVideoFileResolution(payload.resolution)
+
+      const videoFileInputs = webVideoFile
+        ? [ webVideoFile ]
+        : [ videoFile, separatedAudioFile ].filter(v => !!v)
+
+      await VideoPathManager.Instance.makeAvailableVideoFiles(videoFileInputs, ([ videoPath, separatedAudioPath ]) => {
+        return generateHlsPlaylistResolution({
+          video,
+
+          videoInputPath: videoPath,
+          separatedAudioInputPath: separatedAudioPath,
+
+          inputFileMutexReleaser,
+          resolution: payload.resolution,
+          fps: payload.fps,
+          separatedAudio: payload.separatedAudio,
+          job
+        })
       })
-    })
+    }
   } finally {
     inputFileMutexReleaser()
   }

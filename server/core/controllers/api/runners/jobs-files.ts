@@ -1,6 +1,7 @@
 import { FileStorage, RunnerJobState, VideoFileStream } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { proxifyHLS, proxifyWebVideoFile } from '@server/lib/object-storage/index.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { proxifyHLS, proxifyOriginalVideoFile, proxifyWebVideoFile } from '@server/lib/object-storage/index.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { getStudioTaskFilePath } from '@server/lib/video-studio.js'
 import { apiRateLimiter, asyncMiddleware } from '@server/middlewares/index.js'
@@ -9,6 +10,7 @@ import {
   runnerJobGetVideoStudioTaskFileValidator,
   runnerJobGetVideoTranscodingFileValidator
 } from '@server/middlewares/validators/runners/job-files.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideoFileStreamingPlaylistVideo, MVideoFileVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 
@@ -70,6 +72,14 @@ async function getMaxQualityAudioFile (req: express.Request, res: express.Respon
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
 
+  if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
+    const videoSource = await VideoSourceModel.loadLatest(video.id)
+
+    if (videoSource?.keptOriginalFilename) {
+      return serveOriginalFile({ videoSource, req, res })
+    }
+  }
+
   const file = video.getMaxQualityFile(VideoFileStream.AUDIO) || video.getMaxQualityFile(VideoFileStream.VIDEO)
 
   return serveVideoFile({ video, file, req, res })
@@ -87,6 +97,14 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
     runner.name,
     lTags(runner.name, runnerJob.id, runnerJob.type)
   )
+
+  if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
+    const videoSource = await VideoSourceModel.loadLatest(video.id)
+
+    if (videoSource?.keptOriginalFilename) {
+      return serveOriginalFile({ videoSource, req, res })
+    }
+  }
 
   const file = video.getMaxQualityFile(VideoFileStream.VIDEO) || video.getMaxQualityFile(VideoFileStream.AUDIO)
 
@@ -123,6 +141,21 @@ async function serveVideoFile (options: {
   return VideoPathManager.Instance.makeAvailableVideoFile(file, videoPath => {
     return res.sendFile(videoPath)
   })
+}
+
+async function serveOriginalFile (options: {
+  videoSource: { keptOriginalFilename: string, storage: number }
+  req: express.Request
+  res: express.Response
+}) {
+  const { videoSource, req, res } = options
+
+  if (videoSource.storage === FileStorage.OBJECT_STORAGE) {
+    return proxifyOriginalVideoFile({ req, res, keptOriginalFilename: videoSource.keptOriginalFilename })
+  }
+
+  const path = VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename)
+  return res.sendFile(path)
 }
 
 // ---------------------------------------------------------------------------
