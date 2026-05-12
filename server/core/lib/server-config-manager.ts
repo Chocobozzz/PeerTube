@@ -101,6 +101,7 @@ class ServerConfigManager {
       defaults: {
         publish: {
           downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+          downloadOriginalFileEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ORIGINAL_FILE_ENABLED,
 
           commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
 

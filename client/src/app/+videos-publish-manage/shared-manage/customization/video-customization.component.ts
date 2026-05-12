@@ -18,6 +18,7 @@ const debugLogger = debug('peertube:video-manage')
 
 type Form = {
   downloadEnabled: FormControl<boolean>
+  downloadOriginalFileEnabled: FormControl<boolean>
   originallyPublishedAt: FormControl<Date>
 
   playerSettings: FormGroup<{
@@ -80,6 +81,7 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
 
     const obj: BuildFormArgumentTyped<Form> = {
       downloadEnabled: null,
+      downloadOriginalFileEnabled: null,
       originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
       playerSettings: {
         theme: null

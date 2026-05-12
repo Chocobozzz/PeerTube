@@ -94,7 +94,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
         'waitTranscoding',
         'support',
         'description',
-        'downloadEnabled'
+        'downloadEnabled',
+        'downloadOriginalFileEnabled'
       ]
 
       for (const key of keysToUpdate) {

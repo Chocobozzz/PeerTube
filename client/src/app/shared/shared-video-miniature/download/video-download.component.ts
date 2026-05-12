@@ -99,8 +99,14 @@ export class VideoDownloadComponent {
 
     const user = this.authService.getUser()
     // User that can update the video can also get the original video file
-    if (!this.video.isUpdatableBy(user)) return of(undefined)
+    if (this.video.isUpdatableBy(user)) return this.getSourceObs()
+    // Uploader can allow downloading the original file
+    if (this.video.downloadOriginalFileEnabled) return this.getSourceObs()
 
+    return of(undefined)
+  }
+
+  private getSourceObs () {
     return this.videoService.getSource(this.video.id)
       .pipe(catchError(err => {
         logger.error('Cannot get source file', err)

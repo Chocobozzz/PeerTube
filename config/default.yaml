@@ -1227,6 +1227,8 @@ defaults:
   publish:
     download_enabled: true
 
+    download_original_file_enabled: false
+
     # enabled = 1, disabled = 2, requires_approval = 3
     comments_policy: 1
 

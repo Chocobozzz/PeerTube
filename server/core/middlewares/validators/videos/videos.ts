@@ -478,6 +478,10 @@ export function getCommonVideoEditAttributes () {
       .optional()
       .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have downloadEnabled boolean'),
+    body('downloadOriginalFileEnabled')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have downloadOriginalFileEnabled boolean'),
     body('originallyPublishedAt')
       .optional()
       .customSanitizer(toValueOrNull)

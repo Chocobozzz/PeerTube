@@ -184,6 +184,7 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     },
 
     downloadEnabled: video.downloadEnabled,
+    downloadOriginalFileEnabled: video.downloadOriginalFileEnabled,
     waitTranscoding: video.waitTranscoding,
 
     inputFileUpdatedAt: video.inputFileUpdatedAt,

@@ -580,6 +580,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   declare downloadEnabled: boolean
 
   @AllowNull(false)
+  @Default(false)
+  @Column
+  declare downloadOriginalFileEnabled: boolean
+
+  @AllowNull(false)
   @Column
   declare embedPrivacyPolicy: VideoEmbedPrivacyPolicyType
 

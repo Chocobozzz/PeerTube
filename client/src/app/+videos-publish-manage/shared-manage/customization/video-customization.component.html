@@ -59,6 +59,10 @@
       </div>
 
       <my-peertube-checkbox inputName="downloadEnabled" formControlName="downloadEnabled" i18n-labelText labelText="Enable download"></my-peertube-checkbox>
+
+      @if (form.get('downloadEnabled').value) {
+        <my-peertube-checkbox inputName="downloadOriginalFileEnabled" formControlName="downloadOriginalFileEnabled" i18n-labelText labelText="Allow downloading the original file"></my-peertube-checkbox>
+      }
     </div>
 
   </div>
