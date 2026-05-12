@@ -58,7 +58,7 @@
     * Add ability to flip the video horizontally [#7478](https://github.com/Chocobozzz/PeerTube/pull/7478)
 	* Redesign loading spinner
   * Support podcast feed for playlists
-  * Add video download stats for video makers
+  * Add video download stats for video makers [#7437](https://github.com/Chocobozzz/PeerTube/pull/7437)
   * Improve global UX:
     * Introduce a new table filter component that is simpler to use
     * Default runner job route is the page that lists runner jobs
