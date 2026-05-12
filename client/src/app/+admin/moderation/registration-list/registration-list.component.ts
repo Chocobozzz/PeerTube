@@ -130,7 +130,7 @@ export class RegistrationListComponent implements OnInit {
   }
 
   onRegistrationProcessed () {
-    this.table().reloadData({ field: 'createdAt', order: -1 })
+    this.table().loadData()
   }
 
   getStateFilterTitle (stateLabel: string) {

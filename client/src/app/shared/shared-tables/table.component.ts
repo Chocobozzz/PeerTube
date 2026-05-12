@@ -54,7 +54,8 @@ export type TableQueryParams = {
   sortField?: string
   search?: string
 
-  state?: number
+  // Internal table state to fire reload
+  _state?: number
 }
 
 export type TableColumnInfo<ColumnName> = {
@@ -489,9 +490,9 @@ export class TableComponent<
     }
 
     if (reset) {
-      const baseState = this.route.snapshot.queryParams.state || 0
+      const baseState = this.route.snapshot.queryParams._state || 0
 
-      newParams.state = +baseState + 1
+      newParams._state = +baseState + 1
     }
 
     debugLogger('Update URL', { newParams })
