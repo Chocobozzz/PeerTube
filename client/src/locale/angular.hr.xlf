@@ -148,7 +148,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="turn this._max;"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="turn this._max;"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="turn this._max;"/>
         </target>
@@ -254,7 +256,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="sible.    */   "/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="sible.    */   "/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="sible.    */   "/>
         </target>
@@ -8365,7 +8369,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
+The link will expire within 1 hour.</source>
         <target state="translated">E-poruka s uputama za obnavljanje lozinke bit će poslana na <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Poveznica će isteći u roku od 1 sata.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -17450,12 +17455,21 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3545929198870894557" datatype="html">
+        <source>Go to my playlists</source>
+        <target state="new">Go to my playlists</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Nije moguće dohvatiti OAuth podatke prijave klijenta: <x id="PH" equiv-text="err.text"/>. Provjeri PeerTube konfiguraciju (config/directory), posebno odjeljak „webserver”.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1519954996184640001" datatype="html">
@@ -17463,7 +17477,7 @@
         <target state="translated">Greška</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">111</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/notification/notifier.service.ts</context>
@@ -17477,23 +17491,14 @@
       <trans-unit id="6250956071546896586" datatype="html" xml:space="preserve">
         <source>You need to reconnect</source>
         <target state="translated">Moraš se ponovo povezati</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">207</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">235</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">211</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">239</context></context-group></trans-unit>
       <trans-unit id="2784250050046176017" datatype="html" xml:space="preserve">
         <source>Your authentication has expired, you need to reconnect.</source>
         <target state="translated">Tvoja eutentifikacija je istekla. Moraš se ponovo povezati.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">232</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/core/auth/auth.service.ts</context><context context-type="linenumber">236</context></context-group></trans-unit>
       <trans-unit id="6667870723906986565" datatype="html" xml:space="preserve">
         <source>Show / hide this help menu</source>
         <target state="translated">Prikaži/sakrij ovaj izbornik pomoći</target>
@@ -26941,7 +26946,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/>
         </target>
@@ -28391,7 +28398,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
+        <source>
+          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
+        </source>
         <target state="translated">
           <x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {Nema videa} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videa}}"/>
         </target>

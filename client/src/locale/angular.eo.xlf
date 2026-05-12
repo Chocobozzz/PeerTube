@@ -18718,7 +18718,7 @@ The link will expire within 1 hour.</source>
         <target>Eraro</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">111</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/notification/notifier.service.ts</context>
@@ -18734,11 +18734,11 @@ The link will expire within 1 hour.</source>
         <target state="new">You need to reconnect</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">211</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2784250050046176017" datatype="html">
@@ -18746,7 +18746,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Your authentication has expired, you need to reconnect.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">236</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5076187961693950167" datatype="html">
@@ -21663,13 +21663,21 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3545929198870894557" datatype="html">
+        <source>Go to my playlists</source>
+        <target state="new">Go to my playlists</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Ne povas ekhavi salutilojn de OAuth Client: <x id="PH" equiv-text="err.text"/>. Certigu, ke PeerTube estas ĝuste agordita (en la dosierujo config/), precipe la sekcio «webserver».</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6667870723906986565" datatype="html">
