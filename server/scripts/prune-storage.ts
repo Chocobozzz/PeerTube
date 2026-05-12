@@ -21,7 +21,7 @@ import { ActorImageModel } from '../core/models/actor/actor-image.js'
 import { VideoRedundancyModel } from '../core/models/redundancy/video-redundancy.js'
 import { ThumbnailModel } from '../core/models/video/thumbnail.js'
 import { VideoModel } from '../core/models/video/video.js'
-import { askConfirmation, displayPeerTubeMustBeStoppedWarning } from './shared/common.js'
+import { askConfirmation } from './shared/common.js'
 
 const program = createCommand()
   .description('Remove unused local objects (video files, captions, user exports...) from object storage or file system')
@@ -40,8 +40,6 @@ run()
 
 async function run () {
   await initDatabaseModels(true)
-
-  displayPeerTubeMustBeStoppedWarning()
 
   await new FSPruner().prune()
 

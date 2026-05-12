@@ -45,7 +45,7 @@
 ### Features
 
   * :tada: Add ability to transfer a video channel to another user of the same instance :tada:
-  * :tada: Add live DVR [#7396](https://github.com/Chocobozzz/PeerTube/pull/7396) allowing users to seek within and pause the live :tada:
+  * :tada: Add live DVR allowing users to seek within and pause the live [#7396](https://github.com/Chocobozzz/PeerTube/pull/7396) :tada:
   * :tada: Add ability to remove segments of a video in Studio :tada:
   * Support Romanian and Korean languages in web client
   * Improve video ownership change UX:
