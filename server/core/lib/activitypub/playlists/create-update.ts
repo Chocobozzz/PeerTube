@@ -149,7 +149,16 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
     })
   })
 
-  await playlist.replaceAndSaveThumbnails(thumbnails, undefined)
+  try {
+    await sequelizeTypescript.transaction(async t => {
+      await playlist.replaceAndSaveThumbnails(thumbnails, t)
+    })
+  } catch (err) {
+    logger.debug(`Failed to update thumbnail for playlist ${playlist.url} with icon ${icons[0].url}, maybe because of concurrent request`, {
+      err,
+      ...lTags(playlist.uuid, playlist.url)
+    })
+  }
 }
 
 async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MVideoPlaylist) {
