@@ -70,7 +70,11 @@ export class AuthService {
       new Hotkey('m c', e => {
         this.router.navigate([ '/my-library/video-channels' ])
         return false
-      }, $localize`Go to my channels`)
+      }, $localize`Go to my channels`),
+      new Hotkey('m p', e => {
+        this.router.navigate([ '/my-library/video-playlists' ])
+        return false
+      }, $localize`Go to my playlists`)
     ]
   }
 
