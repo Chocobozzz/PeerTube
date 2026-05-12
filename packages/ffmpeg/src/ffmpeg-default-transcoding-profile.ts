@@ -112,7 +112,12 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
 
   if (!parsedAudio.audioStream) return true
 
-  if (parsedAudio.audioStream['codec_name'] !== 'aac') return false
+  const audioCodec = parsedAudio.audioStream['codec_name']
+
+  // Opus is widely supported and always efficient — safe to copy as-is
+  if (audioCodec === 'opus') return true
+
+  if (audioCodec !== 'aac') return false
 
   const audioBitrate = parsedAudio.bitrate
   if (!audioBitrate) return false
@@ -140,8 +145,12 @@ export async function canDoQuickVideoTranscode (path: string, maxFPS: number, pr
 
   // check video params
   if (!videoStream) return false
-  if (videoStream['codec_name'] !== 'h264') return false
-  if (videoStream['pix_fmt'] !== 'yuv420p') return false
+
+  const webCompatibleVideoCodecs = [ 'h264', 'av1', 'vp9' ]
+  if (!webCompatibleVideoCodecs.includes(videoStream['codec_name'])) return false
+
+  const webCompatiblePixelFormats = [ 'yuv420p', 'yuv420p10le' ]
+  if (!webCompatiblePixelFormats.includes(videoStream['pix_fmt'])) return false
   if (fps < 2 || fps > maxFPS) return false
   if (bitRate > getMaxTheoreticalBitrate({ ...resolutionData, fps })) return false
 
