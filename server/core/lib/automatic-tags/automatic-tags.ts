@@ -21,6 +21,7 @@ export async function setAndSaveCommentAutomaticTags (options: {
   transaction?: Transaction
 }) {
   const { comment, automaticTagsByAccount, transaction } = options
+  if (Object.keys(automaticTagsByAccount).length === 0) return
 
   const { toCreateItems, toDeleteItems } = await _buildAutomaticTagItems({
     automaticTagsByAccount,
@@ -58,6 +59,8 @@ export async function setAndSaveVideoAutomaticTags (options: {
   transaction?: Transaction
 }) {
   const { video, automaticTagsByAccount, transaction } = options
+
+  if (Object.keys(automaticTagsByAccount).length === 0) return
 
   const { toCreateItems, toDeleteItems } = await _buildAutomaticTagItems({
     automaticTagsByAccount,

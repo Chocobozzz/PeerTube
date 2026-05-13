@@ -163,8 +163,8 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
 
 // Return the automatic tags by account id (owner and server accounts) and assign the held for review status to the comment if needed
 async function getAutomaticTagsAndAssignReview (comment: MComment, video: MVideoAccountLight) {
-  // Remote comment already exists in database or remote video -> we don't need to rebuild automatic tags
-  if (comment.id) return []
+  // Remote comment already exists in database -> we don't need to rebuild automatic tags
+  if (comment.id) return {}
 
   const ownerAccount = video.VideoChannel.Account
 

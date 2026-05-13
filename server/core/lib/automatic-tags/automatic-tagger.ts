@@ -88,7 +88,7 @@ export class AutomaticTagger {
     // Watched words by account that published the video
     const watchedWords = await WatchedWordsListModel.buildWatchedWordsRegexp({ accountId: account.id, transaction })
 
-    logger.debug(`Got watched words regex for account ${account.getDisplayName()}`, {
+    logger.debug(`Got watched words regex for account ${account.id}`, {
       listNames: watchedWords.map(r => r.listName),
       ...lTags()
     })

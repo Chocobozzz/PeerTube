@@ -204,7 +204,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     return result
   }
 
-  static createList (options: {
+  static async createList (options: {
     accountId: number
 
     listName: string
@@ -213,9 +213,11 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
 
     transaction?: Transaction
   }) {
+    const list = await super.create<MWatchedWordsList>(options, { transaction: options.transaction })
+
     WatchedWordsListModel.regexCache.delete(options.accountId)
 
-    return super.create<MWatchedWordsList>(options, { transaction: options.transaction })
+    return list
   }
 
   static removeImportedBySubscription (options: {
@@ -236,7 +238,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     })
   }
 
-  updateList (options: {
+  async updateList (options: {
     listName: string
     words?: string[]
     transaction?: Transaction
@@ -250,17 +252,17 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     if (words) this.words = words
     if (listName) this.listName = listName
 
-    WatchedWordsListModel.regexCache.delete(this.accountId)
+    await this.save({ transaction })
 
-    return this.save({ transaction })
+    WatchedWordsListModel.regexCache.delete(this.accountId)
   }
 
-  destroy (options: {
+  async destroy (options: {
     transaction?: Transaction
   } = {}) {
-    WatchedWordsListModel.regexCache.delete(this.accountId)
+    await super.destroy(options)
 
-    return super.destroy(options)
+    WatchedWordsListModel.regexCache.delete(this.accountId)
   }
 
   toFormattedJSON (): WatchedWordsList {
