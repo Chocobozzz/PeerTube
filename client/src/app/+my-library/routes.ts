@@ -28,6 +28,7 @@ import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlis
 import { MyVideoSpaceComponent } from './my-video-space.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
 import { MyWatchedWordsListComponent } from './my-watched-words-list/my-watched-words-list.component'
+import { MyWatchedWordsSubscriptionsComponent } from './my-watched-words-subscriptions/my-watched-words-subscriptions.component'
 
 const commonConfig = {
   path: '',
@@ -71,6 +72,16 @@ const videoSpaceRoutes = [
     data: {
       meta: {
         title: $localize`Your watched words`
+      }
+    }
+  },
+
+  {
+    path: 'watched-words/subscriptions',
+    component: MyWatchedWordsSubscriptionsComponent,
+    data: {
+      meta: {
+        title: $localize`Your watched words subscriptions`
       }
     }
   },

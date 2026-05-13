@@ -10,6 +10,7 @@ import { UserRightGuard } from '@app/core'
 import { UserRight } from '@peertube/peertube-models'
 import { RegistrationListComponent } from './registration-list'
 import { WatchedWordsListAdminComponent } from './watched-words-list/watched-words-list-admin.component'
+import { WatchedWordsSubscriptionsComponent } from './watched-words-subscriptions/watched-words-subscriptions.component'
 
 export const moderationRoutes: Routes = [
   {
@@ -141,6 +142,18 @@ export const moderationRoutes: Routes = [
           userRight: UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
           meta: {
             title: $localize`Watched words`
+          }
+        }
+      },
+
+      {
+        path: 'watched-words/subscriptions',
+        component: WatchedWordsSubscriptionsComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
+          meta: {
+            title: $localize`Watched words subscriptions`
           }
         }
       }

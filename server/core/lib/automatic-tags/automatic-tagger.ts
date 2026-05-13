@@ -1,7 +1,6 @@
 import { AutomaticTagAvailable, AutomaticTagPolicy, CommentAutomaticTagPolicies } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { getServerActor } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import { MAccount, MAccountId, MVideo } from '@server/types/models/index.js'
@@ -13,43 +12,46 @@ const lTags = loggerTagsFactory('automatic-tags')
 const linkifyit = new Linkifyit()
 
 export class AutomaticTagger {
-
   private static readonly SPECIAL_TAGS = {
     EXTERNAL_LINK: 'external-link'
   }
 
   async buildCommentsAutomaticTags (options: {
-    ownerAccount: MAccount
+    serverAccount: MAccount | null
+    ownerAccount: MAccount | null
     text: string
     transaction?: Transaction
   }) {
-    const { text, ownerAccount, transaction } = options
+    const { text, serverAccount, ownerAccount, transaction } = options
 
-    const serverAccount = (await getServerActor()).Account
+    // accountId -> tags
+    const result: Record<number, string[]> = {}
 
     try {
-      const [ accountTags, serverTags ] = await Promise.all([
-        this.buildAutomaticTags({ account: ownerAccount, text, transaction }),
-        this.buildAutomaticTags({ account: serverAccount, text, transaction })
-      ])
+      if (serverAccount) {
+        result[serverAccount.id] = await this.buildAutomaticTags({ account: serverAccount, text, transaction })
+      }
 
-      logger.debug('Built automatic tags for comment', { text, accountTags, serverTags, ...lTags() })
+      if (ownerAccount) {
+        result[ownerAccount.id] = await this.buildAutomaticTags({ account: ownerAccount, text, transaction })
+      }
 
-      return [ ...accountTags, ...serverTags ]
+      logger.debug('Built automatic tags for comment', { text, result, ...lTags() })
+
+      return result
     } catch (err) {
       logger.error('Cannot build comment automatic tags', { text, err, ...lTags() })
 
-      return []
+      return {}
     }
   }
 
   async buildVideoAutomaticTags (options: {
+    serverAccount: MAccount
     video: MVideo
     transaction?: Transaction
   }) {
-    const { video, transaction } = options
-
-    const serverAccount = (await getServerActor()).Account
+    const { video, serverAccount, transaction } = options
 
     try {
       const [ videoNameTags, videoDescriptionTags ] = await Promise.all([
@@ -57,9 +59,15 @@ export class AutomaticTagger {
         this.buildAutomaticTags({ account: serverAccount, text: video.description, transaction })
       ])
 
-      logger.debug('Built automatic tags for video', { video, videoNameTags, videoDescriptionTags, ...lTags() })
+      logger.debug('Built automatic tags for video', {
+        videoName: video.name,
+        videoDescription: video.description,
+        videoNameTags,
+        videoDescriptionTags,
+        ...lTags()
+      })
 
-      return [ ...videoNameTags, ...videoDescriptionTags ]
+      return { [serverAccount.id]: [ ...videoNameTags, ...videoDescriptionTags ] }
     } catch (err) {
       logger.error('Cannot build video automatic tags', { video, err, ...lTags() })
 
@@ -75,28 +83,31 @@ export class AutomaticTagger {
     const { text, account, transaction } = options
 
     const tagsDone = new Set<string>()
-    const automaticTags: { name: string, accountId: number }[] = []
+    const automaticTags: string[] = []
 
     // Watched words by account that published the video
     const watchedWords = await WatchedWordsListModel.buildWatchedWordsRegexp({ accountId: account.id, transaction })
 
-    logger.debug(`Got watched words regex for account ${account.getDisplayName()}`, { watchedWords, ...lTags() })
+    logger.debug(`Got watched words regex for account ${account.getDisplayName()}`, {
+      listNames: watchedWords.map(r => r.listName),
+      ...lTags()
+    })
 
     for (const { listName, regex } of watchedWords) {
       try {
         if (regex.test(text)) {
           tagsDone.add(listName)
-          automaticTags.push({ name: listName, accountId: account.id })
+          automaticTags.push(listName)
         }
       } catch (err) {
-        logger.error('Cannot test regex against text', { regex, err, ...lTags() })
+        logger.error('Cannot test regex against text', { listName, regex: regex.toString(), err, ...lTags() })
       }
     }
 
     // Core PeerTube tags
     if (!tagsDone.has(AutomaticTagger.SPECIAL_TAGS.EXTERNAL_LINK) && this.hasExternalLinks(text)) {
       // This is a global tag, not assigned to a specific account
-      automaticTags.push({ name: AutomaticTagger.SPECIAL_TAGS.EXTERNAL_LINK, accountId: account.id })
+      automaticTags.push(AutomaticTagger.SPECIAL_TAGS.EXTERNAL_LINK)
       tagsDone.add(AutomaticTagger.SPECIAL_TAGS.EXTERNAL_LINK)
     }
 

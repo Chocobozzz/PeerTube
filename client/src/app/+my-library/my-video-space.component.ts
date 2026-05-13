@@ -45,6 +45,10 @@ export class MyVideoSpaceComponent implements OnInit {
             routerLink: '/my-library/watched-words/list'
           },
           {
+            label: $localize`Watched words subscriptions`,
+            routerLink: '/my-library/watched-words/subscriptions'
+          },
+          {
             label: $localize`Auto tag policies`,
             routerLink: '/my-library/auto-tag-policies'
           }

@@ -975,6 +975,20 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       .then(rows => rows.map(r => r.id))
   }
 
+  static async batchListIds (options: {
+    lastId: number
+    batchSize: number
+  }) {
+    const { lastId, batchSize } = options
+
+    const rows = await this.sequelize.query<{ id: number }>(
+      'SELECT "video"."id" FROM "video" WHERE "video"."id" > :lastId ORDER BY "video"."id" ASC LIMIT :batchSize',
+      { replacements: { lastId, batchSize }, type: QueryTypes.SELECT }
+    )
+
+    return rows.map(r => r.id)
+  }
+
   static listAllAndSharedByActorForOutbox (actorIdArg: number, start: number, count: number) {
     const actorId = forceNumber(actorIdArg)
 

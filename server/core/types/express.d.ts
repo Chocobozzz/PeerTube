@@ -36,6 +36,7 @@ import {
   MVideoWithBlacklist,
   MVideoWithRights,
   MWatchedWordsList,
+  MWatchedWordsSubscription,
   MBlocklistSubscription
 } from '@server/types/models/index.js'
 import { MOAuthToken, MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
@@ -260,6 +261,7 @@ declare module 'express' {
       userExport?: MUserExport
 
       watchedWordsList?: MWatchedWordsList
+      watchedWordsSubscription?: MWatchedWordsSubscription
 
       tokenSession?: MOAuthToken
 

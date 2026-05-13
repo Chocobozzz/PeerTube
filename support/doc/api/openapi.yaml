@@ -8620,6 +8620,180 @@ paths:
       responses:
         '204':
           description: successful operation
+
+  /api/v1/watched-words/accounts/{accountName}/subscriptions:
+    get:
+      tags:
+        - Watched Words
+      summary: List account watched words subscriptions
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: account name to list watched words subscriptions
+          schema:
+            type: string
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WatchedWordsSubscription'
+    post:
+      tags:
+        - Watched Words
+      summary: Add account watched words subscription
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: url
+              required:
+                - url
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchedWordsSubscription'
+        '400':
+          description: cannot fetch or parse watched words URL
+        '409':
+          description: subscription already exists or watched words list with fetched name already exists
+
+  /api/v1/watched-words/accounts/{accountName}/subscriptions/{id}:
+    delete:
+      tags:
+        - Watched Words
+      summary: Delete account watched words subscription
+      security:
+        - OAuth2: []
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: watched words subscription does not exist
+
+  /api/v1/watched-words/server/subscriptions:
+    get:
+      tags:
+        - Watched Words
+      summary: List server watched words subscriptions
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WatchedWordsSubscription'
+    post:
+      tags:
+        - Watched Words
+      summary: Add server watched words subscription
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: url
+              required:
+                - url
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchedWordsSubscription'
+        '400':
+          description: cannot fetch or parse watched words URL
+        '409':
+          description: subscription already exists or watched words list with fetched name already exists
+
+  /api/v1/watched-words/server/subscriptions/{id}:
+    delete:
+      tags:
+        - Watched Words
+      summary: Delete server watched words subscription
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: watched words subscription does not exist
+
   /api/v1/client-config/update-language:
     post:
       tags:
@@ -13957,6 +14131,48 @@ components:
           type: array
           items:
             type: string
+        subscriptionUrl:
+          type: string
+          format: url
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2021-05-04T08:01:01.502Z
+        createdAt:
+          type: string
+          format: date-time
+          example: 2021-05-04T08:01:01.502Z
+
+    WatchedWordsSubscription:
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        name:
+          type: string
+        url:
+          type: string
+          format: url
+        importedWordsCount:
+          type: integer
+          minimum: 0
+        lastSyncAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: 2021-05-04T08:01:01.502Z
+        state:
+          type: object
+          properties:
+            id:
+              type: integer
+              enum:
+                - 1
+                - 2
+                - 3
+                - 4
+            label:
+              type: string
         updatedAt:
           type: string
           format: date-time

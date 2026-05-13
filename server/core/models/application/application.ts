@@ -25,6 +25,10 @@ export const getServerActor = memoizee(async function () {
   return actor
 }, { promise: true })
 
+export function getServerAccount () {
+  return getServerActor().then(actor => actor.Account)
+}
+
 type ConfigPart = PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS'>
 
 @DefaultScope(() => ({

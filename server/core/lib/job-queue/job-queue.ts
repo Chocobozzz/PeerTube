@@ -6,6 +6,7 @@ import {
   ActivitypubHttpUnicastPayload,
   ActorKeysPayload,
   AfterVideoChannelImportPayload,
+  BuildAutomaticTagsPayload,
   CreateUserExportPayload,
   EmailPayload,
   FederateVideoPayload,
@@ -57,6 +58,7 @@ import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unica
 import { refreshAPObject } from './handlers/activitypub-refresher.js'
 import { processActorKeys } from './handlers/actor-keys.js'
 import { processAfterVideoChannelImport } from './handlers/after-video-channel-import.js'
+import { processBuildAutomaticTags } from './handlers/build-automatic-tags.js'
 import { processCreateUserExport } from './handlers/create-user-export.js'
 import { processEmail } from './handlers/email.js'
 import { processFederateVideo } from './handlers/federate-video.js'
@@ -77,6 +79,7 @@ import { processVideoTranscription } from './handlers/video-transcription.js'
 import { processVideosStats } from './handlers/video-stats.js'
 
 export type CreateJobTypeAndPayload =
+  | { type: 'build-automatic-tags', payload: BuildAutomaticTagsPayload }
   | { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload }
   | { type: 'activitypub-http-broadcast-parallel', payload: ActivitypubHttpBroadcastPayload }
   | { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload }
@@ -114,6 +117,7 @@ export type CreateJobOptions = {
 }
 
 const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
+  'build-automatic-tags': processBuildAutomaticTags,
   'activitypub-cleaner': processActivityPubCleaner,
   'activitypub-follow': processActivityPubFollow,
   'activitypub-http-broadcast-parallel': processActivityPubParallelHttpBroadcast,
@@ -150,6 +154,7 @@ const errorHandlers: { [id in JobType]?: (job: Job, err: any) => Promise<any> } 
 }
 
 const jobTypes: JobType[] = [
+  'build-automatic-tags',
   'activitypub-cleaner',
   'activitypub-follow',
   'activitypub-http-broadcast-parallel',

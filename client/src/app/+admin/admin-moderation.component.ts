@@ -82,10 +82,24 @@ export class AdminModerationComponent implements OnInit {
     }
 
     if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)) {
-      this.menuEntries.push({
+      const item: HorizontalMenuEntry = {
         label: $localize`Watched words`,
-        routerLink: '/admin/moderation/watched-words/list'
-      })
+        routerLink: '',
+        children: [
+          {
+            label: $localize`Lists`,
+            routerLink: '/admin/moderation/watched-words/list'
+          },
+          {
+            label: $localize`Subscriptions`,
+            routerLink: '/admin/moderation/watched-words/subscriptions'
+          }
+        ]
+      }
+
+      item.routerLink = item.children[0].routerLink
+
+      this.menuEntries.push(item)
     }
   }
 

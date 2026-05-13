@@ -16,6 +16,7 @@ import { WatchedWordsListService } from './watched-words-list.service'
 @Component({
   selector: 'my-watched-words-list-admin-owner',
   templateUrl: './watched-words-list-admin-owner.component.html',
+  styleUrls: [ './watched-words-list-admin-owner.component.scss' ],
   imports: [
     GlobalIconComponent,
     ActionDropdownComponent,
@@ -90,7 +91,7 @@ export class WatchedWordsListAdminOwnerComponent {
   }
 
   openCreateOrUpdateList (list?: WatchedWordsList) {
-    this.saveModal().show(list)
+    this.saveModal().show({ mode: this.mode(), list })
   }
 
   onListAddedOrUpdated () {

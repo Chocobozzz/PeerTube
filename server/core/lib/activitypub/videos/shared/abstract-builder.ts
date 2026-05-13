@@ -9,6 +9,7 @@ import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automat
 import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
 import { replaceChapters } from '@server/lib/video-chapters.js'
 import { setVideoTags } from '@server/lib/video.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -243,7 +244,11 @@ export abstract class APVideoAbstractBuilder {
 
     if (video.name === oldVideo?.name && video.description === oldVideo.description) return
 
-    const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video, transaction })
-    await setAndSaveVideoAutomaticTags({ video, automaticTags, transaction })
+    const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
+      serverAccount: await getServerAccount(),
+      video,
+      transaction
+    })
+    await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount, transaction })
   }
 }

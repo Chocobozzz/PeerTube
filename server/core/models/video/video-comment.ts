@@ -43,6 +43,7 @@ import {
   MCommentOwner,
   MCommentOwnerVideoFeed,
   MCommentOwnerVideoReply,
+  MCommentVideo,
   MVideo,
   MVideoImmutable
 } from '../../types/models/video/index.js'
@@ -292,6 +293,17 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     return VideoCommentModel.findOne(query)
+  }
+
+  static loadByIdWithVideo (id: number, transaction?: Transaction): Promise<MCommentVideo> {
+    const query = {
+      where: {
+        id
+      },
+      transaction
+    }
+
+    return VideoCommentModel.scope([ ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
   static loadByIdAndPopulateVideoAndAccountAndReply (id: number, transaction?: Transaction): Promise<MCommentOwnerVideoReply> {
@@ -599,6 +611,30 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
       ],
       limit: USER_EXPORT_MAX_ITEMS
     })
+  }
+
+  static async batchListIds (options: {
+    lastId: number
+    batchSize: number
+    deleted: false
+    videoOwnerId?: number
+  }) {
+    const { lastId, batchSize, videoOwnerId } = options
+
+    const videoOwnerWhere = videoOwnerId
+      ? '"videoChannel"."accountId" = :videoOwnerId AND '
+      : ''
+
+    const rows = await sequelizeTypescript.query<{ id: number }>(
+      `SELECT "videoComment"."id" FROM "videoComment" ` +
+        `INNER JOIN "video" ON "video"."id" = "videoComment"."videoId" ` +
+        `INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
+        `WHERE ${videoOwnerWhere} "deletedAt" IS NULL AND "videoComment"."id" > :lastId ` +
+        `ORDER BY "videoComment"."id" ASC LIMIT :batchSize`,
+      { replacements: { lastId, batchSize, videoOwnerId }, type: QueryTypes.SELECT }
+    )
+
+    return rows.map(r => r.id)
   }
 
   // ---------------------------------------------------------------------------

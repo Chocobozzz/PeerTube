@@ -112,7 +112,7 @@ Default: no subtitle selected and then tries to restore the last subtitle set by
 ### autoplay
 
 Try to automatically play the video.
-Most web browsers disable video autoplay if the user did not interact with the video. You can try to bypass this limitation by muting the video
+Most web browsers disable video autoplay if the user did not interact with the video. You can try to bypass this limitation by muting the video.
 
 Value must be `0` or `1`.
 Default: `0`

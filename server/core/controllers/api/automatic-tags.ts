@@ -1,30 +1,24 @@
 import { AutomaticTagPolicy, CommentAutomaticTagPoliciesUpdate, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAccountAutomaticTagsPolicy } from '@server/lib/automatic-tags/automatic-tags.js'
-import {
-  manageAccountAutomaticTagsValidator,
-  updateAutomaticTagPoliciesValidator
-} from '@server/middlewares/validators/automatic-tags.js'
-import { getServerActor } from '@server/models/application/application.js'
+import { manageAccountAutomaticTagsValidator, updateAutomaticTagPoliciesValidator } from '@server/middlewares/validators/automatic-tags.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import express from 'express'
-import {
-  apiRateLimiter,
-  asyncMiddleware,
-  authenticate,
-  ensureUserHasRight
-} from '../../middlewares/index.js'
+import { apiRateLimiter, asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares/index.js'
 
 const automaticTagRouter = express.Router()
 
 automaticTagRouter.use(apiRateLimiter)
 
-automaticTagRouter.get('/policies/accounts/:accountName/comments',
+automaticTagRouter.get(
+  '/policies/accounts/:accountName/comments',
   authenticate,
   asyncMiddleware(manageAccountAutomaticTagsValidator),
   asyncMiddleware(getAutomaticTagPolicies)
 )
 
-automaticTagRouter.put('/policies/accounts/:accountName/comments',
+automaticTagRouter.put(
+  '/policies/accounts/:accountName/comments',
   authenticate,
   asyncMiddleware(manageAccountAutomaticTagsValidator),
   asyncMiddleware(updateAutomaticTagPoliciesValidator),
@@ -33,13 +27,15 @@ automaticTagRouter.put('/policies/accounts/:accountName/comments',
 
 // ---------------------------------------------------------------------------
 
-automaticTagRouter.get('/accounts/:accountName/available',
+automaticTagRouter.get(
+  '/accounts/:accountName/available',
   authenticate,
   asyncMiddleware(manageAccountAutomaticTagsValidator),
   asyncMiddleware(getAccountAutomaticTagAvailable)
 )
 
-automaticTagRouter.get('/server/available',
+automaticTagRouter.get(
+  '/server/available',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_INSTANCE_AUTO_TAGS),
   asyncMiddleware(getServerAutomaticTagAvailable)
@@ -76,7 +72,7 @@ async function getAccountAutomaticTagAvailable (req: express.Request, res: expre
 }
 
 async function getServerAutomaticTagAvailable (req: express.Request, res: express.Response) {
-  const result = await AutomaticTagger.getAutomaticTagAvailable((await getServerActor()).Account)
+  const result = await AutomaticTagger.getAutomaticTagAvailable(await getServerAccount())
 
   return res.json(result)
 }

@@ -156,7 +156,7 @@ export const addBlocklistSubscriptionValidator = [
     if (existingSubscription) {
       return res.fail({
         status: HttpStatusCode.CONFLICT_409,
-        message: req.t('Subscription with URL {{url}} already exists', { url: req.body.url })
+        message: req.t('Subscription with URL {url} already exists', { url: req.body.url })
       })
     }
 

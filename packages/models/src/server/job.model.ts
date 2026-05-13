@@ -15,13 +15,17 @@ export type JobType =
   | 'activitypub-refresher'
   | 'actor-keys'
   | 'after-video-channel-import'
+  | 'build-automatic-tags'
+  | 'create-user-export'
   | 'email'
   | 'federate-video'
-  | 'transcoding-job-builder'
+  | 'generate-video-storyboard'
+  | 'import-user-archive'
   | 'manage-video-torrent'
-  | 'move-to-object-storage'
   | 'move-to-file-system'
+  | 'move-to-object-storage'
   | 'notify'
+  | 'transcoding-job-builder'
   | 'video-channel-import'
   | 'video-file-import'
   | 'video-import'
@@ -29,11 +33,8 @@ export type JobType =
   | 'video-redundancy'
   | 'video-studio-edition'
   | 'video-transcoding'
-  | 'videos-stats'
-  | 'generate-video-storyboard'
-  | 'create-user-export'
-  | 'import-user-archive'
   | 'video-transcription'
+  | 'videos-stats'
 
 export interface Job {
   id: number | string
@@ -358,4 +359,12 @@ export interface ImportUserArchivePayload {
 
 export interface VideoTranscriptionPayload {
   videoUUID: string
+}
+
+// ---------------------------------------------------------------------------
+
+export interface BuildAutomaticTagsPayload {
+  accountId: number
+  ofComments: boolean
+  ofVideos: boolean
 }

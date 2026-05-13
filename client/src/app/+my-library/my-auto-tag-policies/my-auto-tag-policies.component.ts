@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { AuthService, Notifier } from '@app/core'
+import { AuthService, HtmlRendererService, Notifier } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 
 import { AutomaticTagAvailableType } from '@peertube/peertube-models'
@@ -18,6 +18,7 @@ export class MyAutoTagPoliciesComponent implements OnInit {
   private authService = inject(AuthService)
   private autoTagsService = inject(AutomaticTagService)
   private notifier = inject(Notifier)
+  private html = inject(HtmlRendererService)
 
   tags: { name: string, review: boolean, type: AutomaticTagAvailableType }[] = []
 
@@ -26,11 +27,11 @@ export class MyAutoTagPoliciesComponent implements OnInit {
   }
 
   getLabelText (tag: { name: string, type: AutomaticTagAvailableType }) {
-    if (tag.name === 'external-link') {
-      return $localize`That contain an external link`
-    }
+    const text = tag.name === 'external-link'
+      ? $localize`That contain <strong>an external link</strong>`
+      : $localize`That contain any word from your <strong>${tag.name}</strong> watched word list`
 
-    return $localize`That contain any word from your "${tag.name}" watched word list`
+    return this.html.toSimpleSafeHtml(text)
   }
 
   updatePolicies () {

@@ -16,6 +16,7 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
@@ -171,8 +172,12 @@ export class LocalVideoCreator {
 
         await setVideoTags({ video: this.video, tags: this.videoAttributes.tags, transaction })
 
-        const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video: this.video, transaction })
-        await setAndSaveVideoAutomaticTags({ video: this.video, automaticTags, transaction })
+        const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
+          serverAccount: await getServerAccount(),
+          video: this.video,
+          transaction
+        })
+        await setAndSaveVideoAutomaticTags({ video: this.video, automaticTagsByAccount, transaction })
 
         // Schedule an update in the future?
         if (this.videoAttributes.scheduleUpdate) {

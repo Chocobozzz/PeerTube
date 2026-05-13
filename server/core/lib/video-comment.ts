@@ -2,6 +2,7 @@ import { AutomaticTagPolicy, ResultList, UserRight, VideoCommentPolicy, VideoCom
 import { logger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import express from 'express'
 import cloneDeep from 'lodash-es/cloneDeep.js'
@@ -86,13 +87,19 @@ export async function createLocalVideoComment (options: {
   return sequelizeTypescript.transaction(async transaction => {
     const account = await AccountModel.load(user.Account.id, transaction)
 
-    const automaticTags = await new AutomaticTagger().buildCommentsAutomaticTags({
+    const automaticTagsByAccount = await new AutomaticTagger().buildCommentsAutomaticTags({
+      serverAccount: await getServerAccount(),
       ownerAccount: video.VideoChannel.Account,
       text,
       transaction
     })
 
-    const heldForReview = await shouldCommentBeHeldForReview({ user, video, automaticTags, transaction })
+    const heldForReview = await shouldCommentBeHeldForReview({
+      user,
+      video,
+      ownerAutomaticTags: automaticTagsByAccount[video.VideoChannel.accountId],
+      transaction
+    })
 
     const comment = await VideoCommentModel.create({
       text,
@@ -108,7 +115,7 @@ export async function createLocalVideoComment (options: {
 
     const savedComment: MCommentOwnerVideoReply = await comment.save({ transaction })
 
-    await setAndSaveCommentAutomaticTags({ comment: savedComment, automaticTags, transaction })
+    await setAndSaveCommentAutomaticTags({ comment: savedComment, automaticTagsByAccount, transaction })
 
     savedComment.InReplyToVideoComment = inReplyToComment
     savedComment.Video = video
@@ -155,10 +162,10 @@ export function buildFormattedCommentTree (resultList: ResultList<MCommentFormat
 export async function shouldCommentBeHeldForReview (options: {
   user: MUserAccountId
   video: MVideoAccountLight
-  automaticTags: { name: string, accountId: number }[]
+  ownerAutomaticTags: string[]
   transaction?: Transaction
 }) {
-  const { user, video, transaction, automaticTags } = options
+  const { user, video, transaction, ownerAutomaticTags } = options
 
   if (video.isLocal() && user) {
     if (user.hasRight(UserRight.MANAGE_ANY_VIDEO_COMMENT)) return false
@@ -168,16 +175,12 @@ export async function shouldCommentBeHeldForReview (options: {
   if (video.commentsPolicy === VideoCommentPolicy.REQUIRES_APPROVAL) return true
   if (video.isLocal() !== true) return false
 
-  const ownerAccountTags = automaticTags
-    .filter(t => t.accountId === video.VideoChannel.accountId)
-    .map(t => t.name)
-
-  if (ownerAccountTags.length === 0) return false
+  if (!ownerAutomaticTags || ownerAutomaticTags.length === 0) return false
 
   return AccountAutomaticTagPolicyModel.hasPolicyOnTags({
     accountId: video.VideoChannel.accountId,
     policy: AutomaticTagPolicy.REVIEW_COMMENT,
-    tags: ownerAccountTags,
+    tags: ownerAutomaticTags,
     transaction
   })
 }

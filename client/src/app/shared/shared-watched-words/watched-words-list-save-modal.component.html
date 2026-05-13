@@ -9,6 +9,14 @@
     </div>
 
     <div class="modal-body">
+      <div class="callout callout-primary mb-3">
+        @if (mode === 'user') {
+          <div i18n>The auto tags on existing comments will be updated based on the words in this list.</div>
+        } @else if (mode === 'admin') {
+          <div i18n>The auto tags on existing comments and videos will be updated based on the words in this list.</div>
+        }
+      </div>
+
       <div class="form-group">
         <label i18n for="listName">List name</label>
 

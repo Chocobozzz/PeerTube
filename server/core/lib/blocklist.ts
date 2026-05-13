@@ -1,7 +1,7 @@
 import { logger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
-import { getServerActor } from '@server/models/application/application.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import {
@@ -121,7 +121,7 @@ export function removeServerFromBlocklist (serverBlock: MServerBlocklist) {
 }
 
 export async function isBlockedByServerOrAccount (targetAccount: MAccountHost, userAccount?: MAccountId) {
-  const serverAccountId = (await getServerActor()).Account.id
+  const serverAccountId = (await getServerAccount()).id
   const sourceAccounts = [ serverAccountId ]
 
   if (userAccount) sourceAccounts.push(userAccount.id)

@@ -23,6 +23,8 @@ export class WatchedWordsListSaveModalComponent extends FormReactive implements 
   private notifier = inject(Notifier)
   private watchedWordsService = inject(WatchedWordsListService)
 
+  mode: 'admin' | 'user'
+
   readonly accountName = input.required<string>()
 
   readonly listAddedOrUpdated = output()
@@ -39,15 +41,19 @@ export class WatchedWordsListSaveModalComponent extends FormReactive implements 
     })
   }
 
-  show (list?: WatchedWordsList) {
-    this.listToUpdate = list
+  show (options: {
+    mode: 'admin' | 'user'
+    list?: WatchedWordsList
+  }) {
+    this.mode = options.mode
+    this.listToUpdate = options.list
 
     this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
 
-    if (list) {
+    if (this.listToUpdate) {
       this.form.patchValue({
-        listName: list.listName,
-        words: list.words.join('\n')
+        listName: this.listToUpdate.listName,
+        words: this.listToUpdate.words.join('\n')
       })
     }
   }

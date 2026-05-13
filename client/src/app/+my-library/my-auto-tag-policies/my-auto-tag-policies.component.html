@@ -3,7 +3,7 @@
 @for (tag of tags; track tag; let i = $index) {
   <div class="form-group ms-3">
     <my-peertube-checkbox
-      [inputName]="'tag-' + i" [(ngModel)]="tag.review" [labelText]="getLabelText(tag)"
+      [inputName]="'tag-' + i" [(ngModel)]="tag.review" [labelInnerHTML]="getLabelText(tag)"
       (ngModelChange)="updatePolicies()"
     ></my-peertube-checkbox>
   </div>

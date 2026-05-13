@@ -3,8 +3,8 @@ import { tu } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { toSafeHtml } from '@server/helpers/markdown.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
-import { getServerActor } from '@server/models/application/application.js'
 import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -50,7 +50,7 @@ export class CommentMention extends AbstractNotification<MCommentOwnerVideo, MUs
 
     if (this.users.length === 0) return
 
-    this.serverAccountId = (await getServerActor()).Account.id
+    this.serverAccountId = (await getServerAccount()).id
 
     const sourceAccounts = this.users.map(u => u.Account.id).concat([ this.serverAccountId ])
 

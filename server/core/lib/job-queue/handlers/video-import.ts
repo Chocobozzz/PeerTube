@@ -27,6 +27,7 @@ import { addLocalOrRemoteStoryboardJobIfNeeded, buildMoveVideoJob } from '@serve
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
@@ -240,8 +241,12 @@ async function processFile (options: {
 
           await replaceChaptersIfNotExist({ video, chapters: containerChapters, transaction: t })
 
-          const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video, transaction: t })
-          await setAndSaveVideoAutomaticTags({ video, automaticTags, transaction: t })
+          const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
+            serverAccount: await getServerAccount(),
+            video,
+            transaction: t
+          })
+          await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount, transaction: t })
 
           // Now we can federate the video (reload from database, we need more attributes)
           const videoForFederation = await VideoModel.loadFull(video.uuid, t)

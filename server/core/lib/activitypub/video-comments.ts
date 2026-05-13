@@ -1,4 +1,6 @@
 import { HttpStatusCode, VideoCommentPolicy } from '@peertube/peertube-models'
+import { CONFIG } from '@server/initializers/config.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import Bluebird from 'bluebird'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments.js'
 import { logger } from '../../helpers/logger.js'
@@ -20,7 +22,6 @@ import { fetchAP } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { checkUrlsSameHost } from './url.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from './videos/index.js'
-import { CONFIG } from '@server/initializers/config.js'
 
 type ResolveThreadParams = {
   url: string
@@ -130,10 +131,10 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
       return undefined
     }
 
-    const firstReplyAutomaticTags = await getAutomaticTagsAndAssignReview(firstReply, video)
+    const firstReplyAutomaticTagsByAccount = await getAutomaticTagsAndAssignReview(firstReply, video)
     comments[comments.length - 1] = await firstReply.save()
 
-    await setAndSaveCommentAutomaticTags({ comment: firstReply, automaticTags: firstReplyAutomaticTags })
+    await setAndSaveCommentAutomaticTags({ comment: firstReply, automaticTagsByAccount: firstReplyAutomaticTagsByAccount })
 
     for (let i = comments.length - 2; i >= 0; i--) {
       const comment = comments[i] as MCommentOwnerVideo
@@ -147,11 +148,11 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
         return undefined
       }
 
-      const automaticTags = await getAutomaticTagsAndAssignReview(comment, video)
+      const automaticTagsByAccount = await getAutomaticTagsAndAssignReview(comment, video)
 
       comments[i] = await comment.save()
 
-      await setAndSaveCommentAutomaticTags({ comment, automaticTags })
+      await setAndSaveCommentAutomaticTags({ comment, automaticTagsByAccount })
     }
 
     resultComment = comments[0] as MCommentOwnerVideo
@@ -160,22 +161,31 @@ async function tryToResolveThreadFromVideo (params: ResolveThreadParams) {
   return { video, comment: resultComment, commentCreated }
 }
 
+// Return the automatic tags by account id (owner and server accounts) and assign the held for review status to the comment if needed
 async function getAutomaticTagsAndAssignReview (comment: MComment, video: MVideoAccountLight) {
   // Remote comment already exists in database or remote video -> we don't need to rebuild automatic tags
   if (comment.id) return []
 
   const ownerAccount = video.VideoChannel.Account
 
-  const automaticTags = await new AutomaticTagger().buildCommentsAutomaticTags({ ownerAccount, text: comment.text })
+  const automaticTagsByAccount = await new AutomaticTagger().buildCommentsAutomaticTags({
+    serverAccount: await getServerAccount(),
+    ownerAccount,
+    text: comment.text
+  })
 
   // Third parties rely on origin, so if origin has the comment it's not held for review
   if (video.isLocal() || comment.isLocal()) {
-    comment.heldForReview = await shouldCommentBeHeldForReview({ user: null, video, automaticTags })
+    comment.heldForReview = await shouldCommentBeHeldForReview({
+      user: null,
+      video,
+      ownerAutomaticTags: automaticTagsByAccount[video.VideoChannel.accountId]
+    })
   } else {
     comment.heldForReview = false
   }
 
-  return automaticTags
+  return automaticTagsByAccount
 }
 
 // ---------------------------------------------------------------------------

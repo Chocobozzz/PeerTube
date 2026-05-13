@@ -33,6 +33,7 @@ export const videoPasswordsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VID
 export const changeOwnershipSortValidator = checkSortFactory(SORTABLE_COLUMNS.CHANGE_OWNERSHIP)
 
 export const watchedWordsListsSortValidator = checkSortFactory(SORTABLE_COLUMNS.WATCHED_WORDS_LISTS)
+export const watchedWordsSubscriptionsSortValidator = checkSortFactory(SORTABLE_COLUMNS.WATCHED_WORDS_SUBSCRIPTIONS)
 
 export const accountsFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.ACCOUNT_FOLLOWERS)
 export const videoChannelFollowersSortValidator = checkSortFactory(SORTABLE_COLUMNS.CHANNEL_FOLLOWERS)

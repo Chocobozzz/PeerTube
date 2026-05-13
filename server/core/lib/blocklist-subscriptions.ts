@@ -23,6 +23,11 @@ export async function fetchAndValidateAutoMuteList (url: string, startDate?: Dat
     throw new Error('Invalid auto mute list payload: actions must be an array')
   }
 
+  const maxActions = 10_000
+  if (rawActions.length > maxActions) {
+    throw new Error(`Invalid auto mute list payload: actions length must not exceed ${maxActions}`)
+  }
+
   const actions: AutoMuteAction[] = rawActions.map((action, index) => validateAutoMuteAction(action, index))
 
   return {

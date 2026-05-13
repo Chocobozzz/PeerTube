@@ -24,6 +24,12 @@
   <ng-template #tableCells let-list>
     <td>
       {{ list.listName }}
+
+      @if (list.subscriptionUrl) {
+        <span i18n-title title="Imported from a watched words subscription" class="ms-1 subscription-wrapper">
+          <my-global-icon iconName="globe"></my-global-icon>
+        </span>
+      }
     </td>
 
     <td i18n>

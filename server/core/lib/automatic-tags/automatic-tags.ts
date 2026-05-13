@@ -1,4 +1,5 @@
 import { AutomaticTagPolicyType } from '@peertube/peertube-models'
+import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
 import { CommentAutomaticTagModel } from '@server/models/automatic-tag/comment-automatic-tag.js'
@@ -12,24 +13,29 @@ import {
   MVideoAutomaticTagWithTag
 } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
+import { JobQueue } from '../job-queue/job-queue.js'
 
 export async function setAndSaveCommentAutomaticTags (options: {
   comment: MComment
-  automaticTags: { accountId: number, name: string }[]
+  automaticTagsByAccount: Record<number, string[]>
   transaction?: Transaction
 }) {
-  const { comment, automaticTags, transaction } = options
+  const { comment, automaticTagsByAccount, transaction } = options
 
-  if (automaticTags.length === 0) return
+  const { toCreateItems, toDeleteItems } = await _buildAutomaticTagItems({
+    automaticTagsByAccount,
+    existingAutomaticTagsGetter: (accountIds: number[]) => {
+      return CommentAutomaticTagModel.listByAccountIdsAndCommentId({ commentId: comment.id, accountIds, transaction })
+    }
+  })
+
+  for (const item of toDeleteItems) {
+    await item.destroy({ transaction })
+  }
 
   const commentAutomaticTags: MCommentAutomaticTagWithTag[] = []
 
-  const accountIds = new Set(automaticTags.map(t => t.accountId))
-  for (const accountId of accountIds) {
-    await CommentAutomaticTagModel.deleteAllOfAccountAndComment({ accountId, commentId: comment.id, transaction })
-  }
-
-  for (const tag of automaticTags) {
+  for (const tag of toCreateItems) {
     const automaticTagInstance = await AutomaticTagModel.findOrCreateAutomaticTag({ tag: tag.name, transaction })
 
     const [ commentAutomaticTag ] = await CommentAutomaticTagModel.upsert({
@@ -43,26 +49,31 @@ export async function setAndSaveCommentAutomaticTags (options: {
     commentAutomaticTags.push(commentAutomaticTag)
   }
 
-  (comment as MCommentAdminOrUserFormattable).CommentAutomaticTags = commentAutomaticTags
+  ;(comment as MCommentAdminOrUserFormattable).CommentAutomaticTags = commentAutomaticTags
 }
 
 export async function setAndSaveVideoAutomaticTags (options: {
   video: MVideo
-  automaticTags: { accountId: number, name: string }[]
+  automaticTagsByAccount: Record<number, string[]>
   transaction?: Transaction
 }) {
-  const { video, automaticTags, transaction } = options
+  const { video, automaticTagsByAccount, transaction } = options
 
-  if (automaticTags.length === 0) return
+  const { toCreateItems, toDeleteItems } = await _buildAutomaticTagItems({
+    automaticTagsByAccount,
 
-  const accountIds = new Set(automaticTags.map(t => t.accountId))
-  for (const accountId of accountIds) {
-    await VideoAutomaticTagModel.deleteAllOfAccountAndVideo({ accountId, videoId: video.id, transaction })
+    existingAutomaticTagsGetter: accountIds => {
+      return VideoAutomaticTagModel.listByAccountIdsAndVideoId({ videoId: video.id, accountIds, transaction })
+    }
+  })
+
+  for (const item of toDeleteItems) {
+    await item.destroy({ transaction })
   }
 
   const videoAutomaticTags: MVideoAutomaticTagWithTag[] = []
 
-  for (const tag of automaticTags) {
+  for (const tag of toCreateItems) {
     const automaticTagInstance = await AutomaticTagModel.findOrCreateAutomaticTag({ tag: tag.name, transaction })
 
     const [ videoAutomaticTag ] = await VideoAutomaticTagModel.upsert({
@@ -76,6 +87,37 @@ export async function setAndSaveVideoAutomaticTags (options: {
     videoAutomaticTags.push(videoAutomaticTag)
   }
 }
+
+async function _buildAutomaticTagItems<T extends MCommentAutomaticTagWithTag | MVideoAutomaticTagWithTag> (options: {
+  automaticTagsByAccount: Record<number, string[]>
+  existingAutomaticTagsGetter: (accountIds: number[]) => Promise<T[]>
+}) {
+  const { automaticTagsByAccount, existingAutomaticTagsGetter } = options
+
+  const accountIds = Object.keys(automaticTagsByAccount).map(id => Number(id))
+
+  // Convert automaticTagsByAccount to a flat list of { accountId, name }
+  const automaticTags: { accountId: number, name: string }[] = []
+  for (const [ accountId, tags ] of Object.entries(automaticTagsByAccount)) {
+    for (const tag of tags) {
+      automaticTags.push({ accountId: Number(accountId), name: tag })
+    }
+  }
+
+  const existingVideoAutomaticTags = await existingAutomaticTagsGetter(accountIds)
+
+  const existingByKey = new Map(existingVideoAutomaticTags.map(tag => [ `${tag.accountId}:${tag.AutomaticTag.name}`, tag ]))
+  const desiredKeys = new Set(automaticTags.map(tag => `${tag.accountId}:${tag.name}`))
+
+  const toDeleteItems = existingVideoAutomaticTags
+    .filter(tag => !desiredKeys.has(`${tag.accountId}:${tag.AutomaticTag.name}`))
+
+  const toCreateItems = automaticTags.filter(tag => !existingByKey.has(`${tag.accountId}:${tag.name}`))
+
+  return { toDeleteItems, toCreateItems }
+}
+
+// ---------------------------------------------------------------------------
 
 export async function setAccountAutomaticTagsPolicy (options: {
   account: MAccountId
@@ -96,4 +138,20 @@ export async function setAccountAutomaticTagsPolicy (options: {
       automaticTagId: automaticTagInstance.id
     }, { transaction })
   }
+}
+
+export async function createRebuildAutomaticTagsJob (options: {
+  accountId: number
+}) {
+  const { accountId } = options
+
+  return JobQueue.Instance.createJob({
+    type: 'build-automatic-tags',
+    payload: {
+      accountId,
+      ofComments: true,
+      ofVideos: (await getServerAccount()).id === accountId
+    },
+    deduplicationId: `build-automatic-tags:${accountId}`
+  })
 }

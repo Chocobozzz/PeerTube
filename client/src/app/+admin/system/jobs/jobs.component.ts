@@ -6,6 +6,7 @@ import { RestPagination, ServerService } from '@app/core'
 import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { PeerTubeBadgeService } from '@app/shared/shared-main/common/peertube-badge.service'
 import { Job, JobState, JobType } from '@peertube/peertube-models'
+import { arrayOfAllFactory } from '@peertube/peertube-typescript-utils'
 import { SortMeta } from 'primeng/api'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
@@ -35,7 +36,7 @@ export class JobsComponent {
 
   private jobStates: JobState[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed' ]
 
-  private jobTypes: JobType[] = [
+  private jobTypes = arrayOfAllFactory<JobType>()([
     'activitypub-cleaner',
     'activitypub-follow',
     'activitypub-http-broadcast-parallel',
@@ -45,10 +46,12 @@ export class JobsComponent {
     'activitypub-refresher',
     'actor-keys',
     'after-video-channel-import',
+    'build-automatic-tags',
     'create-user-export',
     'email',
     'federate-video',
     'generate-video-storyboard',
+    'import-user-archive',
     'manage-video-torrent',
     'move-to-file-system',
     'move-to-object-storage',
@@ -63,7 +66,7 @@ export class JobsComponent {
     'video-transcoding',
     'video-transcription',
     'videos-stats'
-  ]
+  ])
 
   readonly inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
     {

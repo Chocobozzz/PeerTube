@@ -21,6 +21,7 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { setVideoPrivacy } from '@server/lib/video-privacy.js'
 import { setVideoTags } from '@server/lib/video.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
@@ -194,8 +195,12 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       if (oldName !== video.name || oldDescription !== video.description) {
-        const automaticTags = await new AutomaticTagger().buildVideoAutomaticTags({ video, transaction: t })
-        await setAndSaveVideoAutomaticTags({ video, automaticTags, transaction: t })
+        const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
+          serverAccount: await getServerAccount(),
+          video,
+          transaction: t
+        })
+        await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount, transaction: t })
       }
 
       await autoBlacklistVideoIfNeeded({
