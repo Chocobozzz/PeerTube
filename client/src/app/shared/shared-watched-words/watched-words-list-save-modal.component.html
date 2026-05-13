@@ -11,7 +11,14 @@
     <div class="modal-body">
       <div class="callout callout-primary mb-3">
         @if (mode === 'user') {
-          <div i18n>The auto tags on existing comments will be updated based on the words in this list.</div>
+          <div class="mb-1" i18n>The auto tags on existing comments will be updated based on the words in this list.</div>
+
+          <div i18n>However, the auto-tagging policies will not affect existing comments:</div>
+
+          <ul class="mb-0">
+            <li i18n>Only new comments can be blocked by a new word</li>
+            <li i18n>If you remove a word from the list, any comments that are currently awaiting review will not be affected</li>
+          </ul>
         } @else if (mode === 'admin') {
           <div i18n>The auto tags on existing comments and videos will be updated based on the words in this list.</div>
         }

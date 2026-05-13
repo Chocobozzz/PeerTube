@@ -10,7 +10,8 @@
   searchInput="true"
 >
   <ng-template #totalTitle let-totalRecords>
-    <ng-container i18n>{ totalRecords, plural, =0 {No subscription} =1 {1 subscription} other {{{ totalRecords | myNumberFormatter }} subscriptions}}</ng-container>
+    <ng-container i18n
+    >{ totalRecords, plural, =0 {No subscription} =1 {1 subscription} other {{{ totalRecords | myNumberFormatter }} subscriptions}}</ng-container>
   </ng-template>
 
   <ng-template #captionRight>
@@ -40,9 +41,9 @@
       {{ subscription.importedWordsCount }} words
     </td>
 
-    <td>{{ subscription.lastSyncAt ? (subscription.lastSyncAt | ptDate: 'short') : '-' }}</td>
+    <td>{{ subscription.lastSyncAt ? (subscription.lastSyncAt | ptDate: 'short') : '-'   }}</td>
 
-    <td>{{ subscription.createdAt | ptDate: 'short' }}</td>
+    <td>{{ subscription.createdAt | ptDate: 'short'   }}</td>
   </ng-template>
 
   <ng-template #actionCell let-subscription>
@@ -69,8 +70,25 @@
     </div>
 
     <div class="modal-body">
-      <div class="callout callout-primary mb-3" i18n>
-        Enter the URL of the watched words list to subscribe to. The remote list will be fetched and synchronized periodically.
+      <div class="callout callout-primary mb-3">
+        @if (mode() === 'admin') {
+          <div i18n>
+            The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list.
+          </div>
+        } @else {
+          <div class="mb-3" i18n>
+            The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list.
+          </div>
+
+          <div>
+            <div i18n>However, the auto-tagging policies will not affect existing comments:</div>
+
+            <ul class="mb-0">
+              <li i18n>Only new comments can be blocked by a new word added to the list</li>
+              <li i18n>If a word is removed from the list, any comments that are currently awaiting review will not be affected</li>
+            </ul>
+          </div>
+        }
       </div>
 
       <div class="form-group">
