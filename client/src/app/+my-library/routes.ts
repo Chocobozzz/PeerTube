@@ -12,6 +12,7 @@ import { LoginGuard } from '../core'
 import { CommentsOnMyVideosComponent } from './comments-on-my-videos/comments-on-my-videos.component'
 import { AutomaticTagService } from './my-auto-tag-policies/automatic-tag.service'
 import { MyAutoTagPoliciesComponent } from './my-auto-tag-policies/my-auto-tag-policies.component'
+import { autoTagPoliciesResolver } from './my-auto-tag-policies/my-auto-tag-policies.resolver'
 import { MyChannelSpaceComponent } from './my-channel-space.component'
 import { MyFollowersComponent } from './my-follows/my-followers.component'
 import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
@@ -89,6 +90,9 @@ const videoSpaceRoutes = [
   {
     path: 'auto-tag-policies',
     component: MyAutoTagPoliciesComponent,
+    resolve: {
+      tags: autoTagPoliciesResolver
+    },
     data: {
       meta: {
         title: $localize`Your automatic tag policies`

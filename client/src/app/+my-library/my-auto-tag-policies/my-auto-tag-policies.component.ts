@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
 import { AuthService, HtmlRendererService, Notifier } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 
 import { AutomaticTagAvailableType } from '@peertube/peertube-models'
-import { forkJoin } from 'rxjs'
 import { AutomaticTagService } from './automatic-tag.service'
+import { AutoTagPoliciesTag } from './my-auto-tag-policies.resolver'
 
 @Component({
   templateUrl: './my-auto-tag-policies.component.html',
@@ -19,11 +20,12 @@ export class MyAutoTagPoliciesComponent implements OnInit {
   private autoTagsService = inject(AutomaticTagService)
   private notifier = inject(Notifier)
   private html = inject(HtmlRendererService)
+  private route = inject(ActivatedRoute)
 
-  tags: { name: string, review: boolean, type: AutomaticTagAvailableType }[] = []
+  tags: AutoTagPoliciesTag[] = []
 
   ngOnInit () {
-    this.loadAvailableTags()
+    this.tags = this.route.snapshot.data['tags']
   }
 
   getLabelText (tag: { name: string, type: AutomaticTagAvailableType }) {
@@ -46,18 +48,6 @@ export class MyAutoTagPoliciesComponent implements OnInit {
       },
 
       error: err => this.notifier.handleError(err)
-    })
-  }
-
-  private loadAvailableTags () {
-    const accountName = this.authService.getUser().account.name
-
-    forkJoin([
-      this.autoTagsService.listAvailable({ accountName }),
-      this.autoTagsService.getCommentPolicies({ accountName })
-    ]).subscribe(([ resAvailable, policies ]) => {
-      this.tags = resAvailable.available
-        .map(a => ({ name: a.name, type: a.type, review: policies.review.includes(a.name) }))
     })
   }
 }
