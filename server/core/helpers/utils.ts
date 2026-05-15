@@ -19,7 +19,7 @@ async function generateRandomString (size: number) {
 }
 
 interface FormattableToJSON<U, V> {
-  toFormattedJSON (args?: U): V
+  toFormattedJSON(args?: U): V
 }
 
 function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: T[], objectsTotal: number, formattedArg?: U) {
@@ -38,10 +38,6 @@ function generateVideoImportTmpPath (target: string | ParseTorrent, extension = 
 
   const hash = sha256(id)
   return join(CONFIG.STORAGE.TMP_DIR, `${hash}-import${extension}`)
-}
-
-function getSecureTorrentName (originalName: string) {
-  return sha256(originalName) + '.torrent'
 }
 
 /**
@@ -64,7 +60,6 @@ export {
   deleteFileAndCatch,
   generateRandomString,
   getFormattedObjects,
-  getSecureTorrentName,
   generateVideoImportTmpPath,
   getUUIDFromFilename
 }

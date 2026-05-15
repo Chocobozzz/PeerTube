@@ -20,12 +20,12 @@ import { generateVideoImportTmpPath } from '../helpers/utils.js'
 import { extractVideo } from '../helpers/video.js'
 import { CONFIG } from '../initializers/config.js'
 
-export async function downloadWebTorrentVideo (target: { uri: string, torrentName?: string }, timeout: number) {
-  const id = target.uri || target.torrentName
+export async function downloadWebTorrentVideo (target: { uri: string, torrentPath: string | null }, timeout: number) {
+  const torrentId = target.uri || target.torrentPath
   let timer
 
-  const path = generateVideoImportTmpPath(id)
-  logger.info('Importing torrent video %s', id)
+  const path = generateVideoImportTmpPath(torrentId)
+  logger.info('Importing torrent video %s', torrentId)
 
   const directoryPath = join(CONFIG.STORAGE.TMP_DIR, 'webtorrent')
   await ensureDir(directoryPath)
@@ -43,7 +43,6 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentNam
   return new Promise<string>(async (res, rej) => {
     let file: TorrentFile
 
-    const torrentId = target.uri || join(CONFIG.STORAGE.TORRENTS_DIR, target.torrentName)
     let torrentInput: string | Buffer
 
     try {
@@ -61,11 +60,11 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentNam
           deleteDownloadedFile({ directoryPath, filepath: file.path })
         }
 
-        return safeWebtorrentDestroy(webtorrent, torrentId, undefined, target.torrentName)
+        return safeWebtorrentDestroy({ webtorrent, downloadedFile: null, torrentPath: target.torrentPath })
           .then(() => rej(new Error('Cannot import torrent ' + torrentId + ': there are multiple files in it')))
       }
 
-      logger.debug('Got torrent from webtorrent %s.', id, { infoHash: torrent.infoHash })
+      logger.debug('Got torrent from webtorrent %s.', torrentId, { infoHash: torrent.infoHash })
 
       file = torrent.files[0]
 
@@ -74,9 +73,9 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentNam
       writeStream.on('finish', () => {
         if (timer) clearTimeout(timer)
 
-        safeWebtorrentDestroy(webtorrent, torrentId, { directoryPath, filepath: file.path }, target.torrentName)
-          .then(() => res(path))
+        safeWebtorrentDestroy({ webtorrent, downloadedFile: { directoryPath, filepath: file.path }, torrentPath: target.torrentPath })
           .catch(err => logger.error('Cannot destroy webtorrent.', { err }))
+          .finally(() => res(path))
       })
 
       pipeline(
@@ -88,17 +87,26 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentNam
       )
     })
 
-    torrent.on('error', err => rej(err))
+    torrent.on('error', err => {
+      safeWebtorrentDestroy({
+        webtorrent,
+        downloadedFile: file ? { directoryPath, filepath: file.path } : null,
+        torrentPath: target.torrentPath
+      }).catch(err => logger.error('Cannot destroy webtorrent.', { err }))
+        .finally(() => rej(err))
+    })
 
     timer = setTimeout(() => {
       const err = new Error('Webtorrent download timeout.')
 
-      safeWebtorrentDestroy(webtorrent, torrentId, file ? { directoryPath, filepath: file.path } : undefined, target.torrentName)
-        .then(() => rej(err))
-        .catch(destroyErr => {
-          logger.error('Cannot destroy webtorrent.', { err: destroyErr })
-          rej(err)
-        })
+      safeWebtorrentDestroy({
+        webtorrent,
+        downloadedFile: file
+          ? { directoryPath, filepath: file.path }
+          : null,
+        torrentPath: target.torrentPath
+      }).catch(destroyErr => logger.error('Cannot destroy webtorrent.', { err: destroyErr }))
+        .finally(() => rej(err))
     }, timeout)
   })
 }
@@ -208,19 +216,21 @@ export function generateMagnetUri (
 // Private
 // ---------------------------------------------------------------------------
 
-function safeWebtorrentDestroy (
-  webtorrent: Instance,
-  torrentId: string,
-  downloadedFile?: { directoryPath: string, filepath: string },
-  torrentName?: string
-) {
+function safeWebtorrentDestroy (options: {
+  webtorrent: Instance
+  downloadedFile: { directoryPath: string, filepath: string } | null
+  torrentPath: string | null
+}) {
+  const { webtorrent, downloadedFile, torrentPath } = options
+
   return new Promise<void>(res => {
     webtorrent.destroy(err => {
       // Delete torrent file
-      if (torrentName) {
-        logger.debug('Removing %s torrent after webtorrent download.', torrentId)
-        remove(torrentId)
-          .catch(err => logger.error('Cannot remove torrent %s in webtorrent download.', torrentId, { err }))
+      if (torrentPath) {
+        logger.debug('Removing %s torrent after webtorrent download.', torrentPath)
+
+        remove(torrentPath)
+          .catch(err => logger.error('Cannot remove torrent %s in webtorrent download.', torrentPath, { err }))
       }
 
       // Delete downloaded file

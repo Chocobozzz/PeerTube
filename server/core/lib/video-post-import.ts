@@ -1,4 +1,4 @@
-import { VideoImportPayload, VideoImportState, VideoImportYoutubeDLPayload } from '@peertube/peertube-models'
+import { VideoImportPayload, VideoImportState, VideoImportTorrentPayload, VideoImportYoutubeDLPayload } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideoImport } from '@server/types/models/video/video-import.js'
 
@@ -17,7 +17,8 @@ export async function buildRetryImportJob (videoImport: MVideoImport) {
     preventException: videoImport.payload?.preventException ?? !!videoImport.videoChannelSyncId,
 
     generateTranscription: videoImport.payload?.generateTranscription ?? CONFIG.VIDEO_TRANSCRIPTION.ENABLED,
-    fileExt: (videoImport.payload as VideoImportYoutubeDLPayload)?.fileExt
+    fileExt: (videoImport.payload as VideoImportYoutubeDLPayload)?.fileExt,
+    torrentPath: (videoImport.payload as VideoImportTorrentPayload)?.torrentPath
   }
 
   videoImport.state = VideoImportState.PENDING

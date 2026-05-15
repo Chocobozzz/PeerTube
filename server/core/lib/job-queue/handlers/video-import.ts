@@ -27,6 +27,7 @@ import { addLocalOrRemoteStoryboardJobIfNeeded, buildMoveVideoJob } from '@serve
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
+import { UserModel } from '@server/models/user/user.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
@@ -35,7 +36,6 @@ import { FfprobeData } from 'fluent-ffmpeg'
 import { move, remove } from 'fs-extra/esm'
 import { stat } from 'fs/promises'
 import { logger } from '../../../helpers/logger.js'
-import { getSecureTorrentName } from '../../../helpers/utils.js'
 import { CONSTRAINTS_FIELDS, JOB_TTL } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoFileModel } from '../../../models/video/video-file.js'
@@ -45,7 +45,6 @@ import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { createLocalVideoThumbnailsFromVideo } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
-import { UserModel } from '@server/models/user/user.js'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
@@ -92,21 +91,15 @@ export {
 async function processTorrentImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportTorrentPayload) {
   logger.info('Processing torrent video import in job %s.', job.id)
 
-  const options = { type: payload.type, generateTranscription: payload.generateTranscription, videoImportId: payload.videoImportId }
-
-  const target = {
-    torrentName: videoImport.torrentName
-      ? getSecureTorrentName(videoImport.torrentName)
-      : undefined,
-    uri: videoImport.magnetUri
-  }
-  return processFile(() => downloadWebTorrentVideo(target, JOB_TTL['video-import']), videoImport, options)
+  return processFile(
+    () => downloadWebTorrentVideo({ torrentPath: payload.torrentPath, uri: videoImport.magnetUri }, JOB_TTL['video-import']),
+    videoImport,
+    { type: payload.type, generateTranscription: payload.generateTranscription, videoImportId: payload.videoImportId }
+  )
 }
 
 async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportYoutubeDLPayload) {
   logger.info('Processing youtubeDL video import in job %s.', job.id)
-
-  const options = { type: payload.type, generateTranscription: payload.generateTranscription, videoImportId: videoImport.id }
 
   const youtubeDL = new YoutubeDLWrapper(
     videoImport.targetUrl,
@@ -117,7 +110,7 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
   return processFile(
     () => youtubeDL.downloadVideo(payload.fileExt, JOB_TTL['video-import']),
     videoImport,
-    options
+    { type: payload.type, generateTranscription: payload.generateTranscription, videoImportId: videoImport.id }
   )
 }
 

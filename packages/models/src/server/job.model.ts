@@ -113,6 +113,7 @@ export interface VideoImportYoutubeDLPayload extends VideoImportAbstractPayload 
 
 export interface VideoImportTorrentPayload extends VideoImportAbstractPayload {
   type: VideoImportTorrentPayloadType
+  torrentPath: string | null // null if magnet URI
 }
 
 export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload

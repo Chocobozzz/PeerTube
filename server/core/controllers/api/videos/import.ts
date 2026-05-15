@@ -6,6 +6,7 @@ import {
   VideoImportPayload,
   VideoImportState
 } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode } from '@server/helpers/youtube-dl/youtube-dl-wrapper.js'
 import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
@@ -22,7 +23,6 @@ import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
-import { getSecureTorrentName } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { JobQueue } from '../../../lib/job-queue/job-queue.js'
@@ -161,9 +161,11 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     type: torrentfile
       ? 'torrent-file'
       : 'magnet-uri',
+
     videoImportId: videoImport.id,
     preventException: false,
-    generateTranscription: body.generateTranscription
+    generateTranscription: body.generateTranscription,
+    torrentPath: torrentfile?.path ?? null
   }
 
   videoImport.payload = payload
@@ -238,7 +240,7 @@ async function processTorrentOrAbortRequest (req: express.Request, res: express.
   const torrentName = torrentfile.originalname
 
   // Rename the torrent to a secured name
-  const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, getSecureTorrentName(torrentName))
+  const newTorrentPath = join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, buildUUID() + '.torrent')
   await move(torrentfile.path, newTorrentPath, { overwrite: true })
   torrentfile.path = newTorrentPath
 
