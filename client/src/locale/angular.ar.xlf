@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.slide-number" datatype="html" xml:space="preserve">
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
-        <target state="translated">شريحة<x id="INTERPOLATION" equiv-text="get wrap("/>من<x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
+        <target state="translated">شريحة <x id="INTERPOLATION" equiv-text="get wrap("/> من <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/carousel/carousel.ts</context>
@@ -157,9 +157,9 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.HH" datatype="html">
+      <trans-unit id="ngb.timepicker.HH" datatype="html" xml:space="preserve">
         <source>HH</source>
-        <target state="translated">HH</target>
+        <target state="translated">س‌س</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">249</context>
@@ -173,9 +173,9 @@
           <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ngb.timepicker.MM" datatype="html">
+      <trans-unit id="ngb.timepicker.MM" datatype="html" xml:space="preserve">
         <source>MM</source>
-        <target state="translated">MM</target>
+        <target state="translated">د‌د</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@20.0.0_@angular+common@21.2.11_@angular+core@21.2.11_@angula_df3002d958ce6d333d588cd8b04351ef/node_modules/src/timepicker/timepicker.ts</context>
           <context context-type="linenumber">308</context>
