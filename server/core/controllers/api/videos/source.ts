@@ -135,6 +135,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
       await autoBlacklistVideoIfNeeded({
         video,
         user,
+        automaticTagsByAccount: null,
         isRemote: false,
         isNew: false,
         isNewFile: true,

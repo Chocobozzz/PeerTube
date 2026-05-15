@@ -67,10 +67,13 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         runInReadCommittedTransaction(t => this.setTags(videoUpdated, t)),
         runInReadCommittedTransaction(t => this.setTrackers(videoUpdated, t)),
         runInReadCommittedTransaction(t => this.setStoryboard(videoUpdated, t)),
-        runInReadCommittedTransaction(t => this.setAutomaticTags({ video: videoUpdated, transaction: t, oldVideo })),
         runInReadCommittedTransaction(t => this.setThumbnails(videoUpdated, t)),
         this.setOrDeleteLive(videoUpdated)
       ])
+
+      const automaticTagsByAccount = await runInReadCommittedTransaction(t => {
+        return this.setAutomaticTags({ video: videoUpdated, transaction: t, oldVideo })
+      })
 
       await runInReadCommittedTransaction(t => this.setCaptions(videoUpdated, t))
 
@@ -79,6 +82,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       await autoBlacklistVideoIfNeeded({
         video: videoUpdated,
+        automaticTagsByAccount,
         user: undefined,
         isRemote: true,
         isNew: false,

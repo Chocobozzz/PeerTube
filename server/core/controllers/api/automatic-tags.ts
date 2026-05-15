@@ -1,7 +1,17 @@
-import { AutomaticTagPolicy, CommentAutomaticTagPoliciesUpdate, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import {
+  AutomaticTagPolicy,
+  CommentAutomaticTagPoliciesUpdate,
+  HttpStatusCode,
+  UserRight,
+  VideoAutomaticTagPoliciesUpdate
+} from '@peertube/peertube-models'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAccountAutomaticTagsPolicy } from '@server/lib/automatic-tags/automatic-tags.js'
-import { manageAccountAutomaticTagsValidator, updateAutomaticTagPoliciesValidator } from '@server/middlewares/validators/automatic-tags.js'
+import {
+  manageAccountAutomaticTagsValidator,
+  updateAutomaticTagPoliciesValidator,
+  updateServerVideoAutomaticTagPoliciesValidator
+} from '@server/middlewares/validators/automatic-tags.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import express from 'express'
 import { apiRateLimiter, asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares/index.js'
@@ -23,6 +33,23 @@ automaticTagRouter.put(
   asyncMiddleware(manageAccountAutomaticTagsValidator),
   asyncMiddleware(updateAutomaticTagPoliciesValidator),
   asyncMiddleware(updateAutomaticTagPolicies)
+)
+
+// ---------------------------------------------------------------------------
+
+automaticTagRouter.get(
+  '/policies/server/videos',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_INSTANCE_AUTO_TAGS),
+  asyncMiddleware(getServerVideoAutomaticTagPolicies)
+)
+
+automaticTagRouter.put(
+  '/policies/server/videos',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_INSTANCE_AUTO_TAGS),
+  asyncMiddleware(updateServerVideoAutomaticTagPoliciesValidator),
+  asyncMiddleware(updateServerVideoAutomaticTagPolicies)
 )
 
 // ---------------------------------------------------------------------------
@@ -75,4 +102,23 @@ async function getServerAutomaticTagAvailable (req: express.Request, res: expres
   const result = await AutomaticTagger.getAutomaticTagAvailable(await getServerAccount())
 
   return res.json(result)
+}
+
+async function getServerVideoAutomaticTagPolicies (req: express.Request, res: express.Response) {
+  const serverAccount = await getServerAccount()
+  const result = await AutomaticTagger.getVideoAutomaticTagPolicies(serverAccount)
+
+  return res.json(result)
+}
+
+async function updateServerVideoAutomaticTagPolicies (req: express.Request, res: express.Response) {
+  const serverAccount = await getServerAccount()
+
+  await setAccountAutomaticTagsPolicy({
+    account: serverAccount,
+    policy: AutomaticTagPolicy.AUTO_BLACKLIST_VIDEO,
+    tags: (req.body as VideoAutomaticTagPoliciesUpdate).autoBlock
+  })
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

@@ -199,6 +199,7 @@ export class LocalVideoCreator {
         await autoBlacklistVideoIfNeeded({
           video: this.video,
           user: this.options.user,
+          automaticTagsByAccount,
           isRemote: false,
           isNew: true,
           isNewFile: true,

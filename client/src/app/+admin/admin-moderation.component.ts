@@ -71,7 +71,7 @@ export class AdminModerationComponent implements OnInit {
 
       if (this.hasRight(UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS)) {
         item.children.push({
-          label: $localize`Blocklist subscriptions`,
+          label: $localize`Subscriptions`,
           routerLink: '/admin/moderation/blocklist/subscriptions'
         })
       }
@@ -81,20 +81,30 @@ export class AdminModerationComponent implements OnInit {
       this.menuEntries.push(item)
     }
 
-    if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)) {
+    if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS) || this.hasRight(UserRight.MANAGE_INSTANCE_AUTO_TAGS)) {
       const item: HorizontalMenuEntry = {
         label: $localize`Watched words`,
         routerLink: '',
-        children: [
-          {
-            label: $localize`Lists`,
-            routerLink: '/admin/moderation/watched-words/list'
-          },
-          {
-            label: $localize`Subscriptions`,
-            routerLink: '/admin/moderation/watched-words/subscriptions'
-          }
-        ]
+        children: []
+      }
+
+      if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)) {
+        item.children.push({
+          label: $localize`Lists`,
+          routerLink: '/admin/moderation/watched-words/list'
+        })
+
+        item.children.push({
+          label: $localize`Subscriptions`,
+          routerLink: '/admin/moderation/watched-words/subscriptions'
+        })
+      }
+
+      if (this.hasRight(UserRight.MANAGE_INSTANCE_AUTO_TAGS)) {
+        item.children.push({
+          label: $localize`Auto tag policies`,
+          routerLink: '/admin/moderation/watched-words/automatic-tag-policies'
+        })
       }
 
       item.routerLink = item.children[0].routerLink

@@ -194,8 +194,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
         })
       }
 
+      let automaticTagsByAccount: Record<number, string[]>
       if (oldName !== video.name || oldDescription !== video.description) {
-        const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
+        automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
           serverAccount: await getServerAccount(),
           video,
           transaction: t
@@ -209,6 +210,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         isRemote: false,
         isNew: false,
         isNewFile: false,
+        automaticTagsByAccount,
         transaction: t
       })
 

@@ -242,7 +242,7 @@ export abstract class APVideoAbstractBuilder {
   }) {
     const { video, transaction, oldVideo } = options
 
-    if (video.name === oldVideo?.name && video.description === oldVideo.description) return
+    if (video.name === oldVideo?.name && video.description === oldVideo.description) return {}
 
     const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
       serverAccount: await getServerAccount(),
@@ -250,5 +250,7 @@ export abstract class APVideoAbstractBuilder {
       transaction
     })
     await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount, transaction })
+
+    return automaticTagsByAccount
   }
 }

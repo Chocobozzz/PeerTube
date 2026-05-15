@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { AutomaticTagAvailable, CommentAutomaticTagPolicies } from '@peertube/peertube-models'
+import { AutomaticTagAvailable, CommentAutomaticTagPolicies, VideoAutoTagPolicies, VideoAutomaticTagPoliciesUpdate } from '@peertube/peertube-models'
 import { catchError } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 
@@ -37,6 +37,29 @@ export class AutomaticTagService {
     const url = AutomaticTagService.BASE_AUTOMATIC_TAGS_URL + 'policies/accounts/' + options.accountName + '/comments'
 
     return this.authHttp.put(url, { review: options.review })
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  // ---------------------------------------------------------------------------
+
+  getServerAutomaticTagAvailable () {
+    const url = AutomaticTagService.BASE_AUTOMATIC_TAGS_URL + 'server/available'
+
+    return this.authHttp.get<AutomaticTagAvailable>(url)
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  getServerVideoPolicies () {
+    const url = AutomaticTagService.BASE_AUTOMATIC_TAGS_URL + 'policies/server/videos'
+
+    return this.authHttp.get<VideoAutoTagPolicies>(url)
+      .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  updateServerVideoPolicies (options: VideoAutomaticTagPoliciesUpdate) {
+    const url = AutomaticTagService.BASE_AUTOMATIC_TAGS_URL + 'policies/server/videos'
+
+    return this.authHttp.put(url, options)
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 }

@@ -1,4 +1,4 @@
-import { AutomaticTagAvailable, AutomaticTagPolicy, CommentAutomaticTagPolicies } from '@peertube/peertube-models'
+import { AutomaticTagAvailable, AutomaticTagPolicy, CommentAutomaticTagPolicies, VideoAutoTagPolicies } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
@@ -48,7 +48,7 @@ export class AutomaticTagger {
 
   async buildVideoAutomaticTags (options: {
     serverAccount: MAccount
-    video: MVideo
+    video: Pick<MVideo, 'name' | 'description'>
     transaction?: Transaction
   }) {
     const { video, serverAccount, transaction } = options
@@ -71,7 +71,7 @@ export class AutomaticTagger {
     } catch (err) {
       logger.error('Cannot build video automatic tags', { video, err, ...lTags() })
 
-      return []
+      return {}
     }
   }
 
@@ -134,6 +134,16 @@ export class AutomaticTagger {
 
     const result: CommentAutomaticTagPolicies = {
       review: policies.filter(p => p.policy === AutomaticTagPolicy.REVIEW_COMMENT).map(p => p.name)
+    }
+
+    return result
+  }
+
+  static async getVideoAutomaticTagPolicies (account: MAccountId) {
+    const policies = await AccountAutomaticTagPolicyModel.listOfAccount(account)
+
+    const result: VideoAutoTagPolicies = {
+      autoBlock: policies.filter(p => p.policy === AutomaticTagPolicy.AUTO_BLACKLIST_VIDEO).map(p => p.name)
     }
 
     return result

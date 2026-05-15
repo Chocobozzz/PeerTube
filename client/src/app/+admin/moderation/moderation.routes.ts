@@ -11,6 +11,8 @@ import { UserRight } from '@peertube/peertube-models'
 import { RegistrationListComponent } from './registration-list'
 import { WatchedWordsListAdminComponent } from './watched-words-list/watched-words-list-admin.component'
 import { WatchedWordsSubscriptionsComponent } from './watched-words-subscriptions/watched-words-subscriptions.component'
+import { AutomaticTagPoliciesAdminComponent } from './automatic-tag-policies/automatic-tag-policies-admin.component'
+import { automaticTagPoliciesAdminResolver } from './automatic-tag-policies/automatic-tag-policies-admin.resolver'
 
 export const moderationRoutes: Routes = [
   {
@@ -55,11 +57,6 @@ export const moderationRoutes: Routes = [
       },
       {
         path: 'video-auto-blacklist/list',
-        redirectTo: 'video-blocks/list',
-        pathMatch: 'full'
-      },
-      {
-        path: 'video-blacklist',
         redirectTo: 'video-blocks/list',
         pathMatch: 'full'
       },
@@ -129,7 +126,7 @@ export const moderationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS,
           meta: {
-            title: $localize`Blocklist subscriptions`
+            title: $localize`Mute list subscriptions`
           }
         }
       },
@@ -154,6 +151,21 @@ export const moderationRoutes: Routes = [
           userRight: UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
           meta: {
             title: $localize`Watched words subscriptions`
+          }
+        }
+      },
+
+      {
+        path: 'watched-words/automatic-tag-policies',
+        component: AutomaticTagPoliciesAdminComponent,
+        resolve: {
+          tags: automaticTagPoliciesAdminResolver
+        },
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_INSTANCE_AUTO_TAGS,
+          meta: {
+            title: $localize`Auto tag policies`
           }
         }
       }

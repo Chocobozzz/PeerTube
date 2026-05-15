@@ -131,6 +131,60 @@ describe('Test auto tag policies API validator', function () {
     })
   })
 
+  describe('When getting server auto tag video policies', function () {
+    it('Should fail without token', async function () {
+      await server.autoTags.getServerVideoPolicies({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with a user that does not have enough rights', async function () {
+      await server.autoTags.getServerVideoPolicies({ token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await server.autoTags.getServerVideoPolicies()
+    })
+  })
+
+  describe('When updating server auto tag video policies', function () {
+    const baseParams = () => ({ autoBlock: [ 'external-link' ] })
+
+    it('Should fail without token', async function () {
+      await server.autoTags.updateServerVideoPolicies({
+        ...baseParams(),
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with a user that does not have enough rights', async function () {
+      await server.autoTags.updateServerVideoPolicies({
+        ...baseParams(),
+        token: userToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail with invalid autoBlock array', async function () {
+      await server.autoTags.updateServerVideoPolicies({
+        ...baseParams(),
+        autoBlock: 'toto' as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with autoBlock array that does not contain available tags', async function () {
+      await server.autoTags.updateServerVideoPolicies({
+        ...baseParams(),
+        autoBlock: [ 'unknown-tag' ],
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await server.autoTags.updateServerVideoPolicies(baseParams())
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

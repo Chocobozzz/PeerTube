@@ -43,6 +43,9 @@ import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { createLocalVideoThumbnailsFromUrl, createLocalVideoThumbnailsFromImage } from './thumbnail.js'
 import { createLocalCaption } from './video-captions.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
+import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
+import { getServerAccount } from '@server/models/application/application.js'
+import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 
 // ---------------------------------------------------------------------------
 
@@ -73,8 +76,16 @@ export async function insertFromImportIntoDB (parameters: {
       await VideoPasswordModel.addPasswords(videoPasswords, video.id, t)
     }
 
+    const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
+      serverAccount: await getServerAccount(),
+      video,
+      transaction: t
+    })
+    await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount, transaction: t })
+
     await autoBlacklistVideoIfNeeded({
       video: videoCreated,
+      automaticTagsByAccount,
       user,
       notify: false,
       isRemote: false,

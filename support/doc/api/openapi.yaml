@@ -8384,6 +8384,47 @@ paths:
               schema:
                 $ref: '#/components/schemas/AutomaticTagAvailable'
 
+  /api/v1/automatic-tags/policies/server/videos:
+    get:
+      tags:
+        - Automatic Tags
+      summary: Get server auto tag policies for videos
+      description: "**PeerTube >= 8.3**"
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoAutoTagPolicies'
+    put:
+      tags:
+        - Automatic Tags
+      summary: Update server auto tag policies for videos
+      description: "**PeerTube >= 8.3**"
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                autoBlock:
+                  description: 'Auto tags that will automatically block videos matching these tags'
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '204':
+          description: successful operation
+
   /api/v1/watched-words/accounts/{accountName}/lists:
     get:
       tags:
@@ -10770,6 +10811,13 @@ components:
         review:
           type: array
           description: 'Auto tags that automatically set the comment in review state'
+          items:
+            type: string
+    VideoAutoTagPolicies:
+      properties:
+        autoBlock:
+          type: array
+          description: 'Auto tags that will automatically block videos matching these tags'
           items:
             type: string
     AutomaticTagAvailable:

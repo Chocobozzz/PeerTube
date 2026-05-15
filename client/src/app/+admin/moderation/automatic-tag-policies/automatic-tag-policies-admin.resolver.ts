@@ -1,29 +1,25 @@
 import { inject } from '@angular/core'
 import { ResolveFn } from '@angular/router'
-import { AuthService } from '@app/core'
 import { AutomaticTagService } from '@app/shared/shared-moderation/automatic-tag.service'
 import { AutomaticTagAvailableType } from '@peertube/peertube-models'
 import { forkJoin, map } from 'rxjs'
 
-export type AutoTagPoliciesTag = {
+export type AutomaticTagPoliciesAdminTag = {
   name: string
-  review: boolean
+  autoBlock: boolean
   type: AutomaticTagAvailableType
 }
 
-export const autoTagPoliciesResolver: ResolveFn<AutoTagPoliciesTag[]> = () => {
-  const authService = inject(AuthService)
+export const automaticTagPoliciesAdminResolver: ResolveFn<AutomaticTagPoliciesAdminTag[]> = () => {
   const autoTagService = inject(AutomaticTagService)
 
-  const accountName = authService.getUser().account.name
-
   return forkJoin([
-    autoTagService.listAvailable({ accountName }),
-    autoTagService.getCommentPolicies({ accountName })
+    autoTagService.getServerAutomaticTagAvailable(),
+    autoTagService.getServerVideoPolicies()
   ]).pipe(
     map(([ resAvailable, policies ]) => {
       return resAvailable.available
-        .map(a => ({ name: a.name, type: a.type, review: policies.review.includes(a.name) }))
+        .map(a => ({ name: a.name, type: a.type, autoBlock: policies.autoBlock.includes(a.name) }))
     })
   )
 }

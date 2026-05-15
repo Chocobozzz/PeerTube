@@ -40,13 +40,14 @@ export class APVideoCreator extends APVideoAbstractBuilder {
       await this.insertOrReplaceLive(videoCreated, t)
       await this.insertOrReplaceStoryboard(videoCreated, t)
 
-      await this.setAutomaticTags({ video: videoCreated, transaction: t })
+      const automaticTagsByAccount = await this.setAutomaticTags({ video: videoCreated, transaction: t })
 
       // We added a video in this channel, set it as updated
       await channel.setAsUpdated(t)
 
       const autoBlacklisted = await autoBlacklistVideoIfNeeded({
         video: videoCreated,
+        automaticTagsByAccount,
         user: undefined,
         isRemote: true,
         isNew: true,

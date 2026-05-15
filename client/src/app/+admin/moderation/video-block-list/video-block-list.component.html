@@ -25,7 +25,9 @@
       >
         <div>
           @if (videoBlock.type === 2) {
-            <span i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info badge-small" i18n>Auto block</span>
+            <span i18n-title title="The video was blocked due to automatic blocking of new videos on this instance" class="pt-badge badge-info badge-small" i18n>Auto block - Instance policy</span>
+          } @else if (videoBlock.type === 3) {
+            <span i18n-title title="The video was blocked due to automatic blocking of videos with specific tags" class="pt-badge badge-info badge-small" i18n>Auto block - Auto-tag policy</span>
           }
         </div>
       </my-video-cell>

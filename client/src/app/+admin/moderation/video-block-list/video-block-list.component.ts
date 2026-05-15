@@ -62,8 +62,9 @@ export class VideoBlockListComponent implements OnInit {
       title: $localize`Block type`,
       options: [
         { value: 'all', label: $localize`All` },
-        { value: VideoBlacklistType['AUTO_BEFORE_PUBLISHED'], label: $localize`Automatic blocks` },
-        { value: VideoBlacklistType['MANUAL'], label: $localize`Manual blocks` }
+        { value: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY, label: $localize`Auto-block by instance policy` },
+        { value: VideoBlacklistType.AUTO_BY_AUTO_TAG_POLICY, label: $localize`Auto-block by auto-tag policy` },
+        { value: VideoBlacklistType.MANUAL, label: $localize`Manual blocks` }
       ]
     }
   ]
@@ -89,13 +90,13 @@ export class VideoBlockListComponent implements OnInit {
         {
           label: () => $localize`Internal actions`,
           isHeader: true,
-          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
+          isDisplayed: videoBlock => videoBlock.type !== VideoBlacklistType.MANUAL,
           enableBulk: true
         },
         {
           label: () => $localize`Switch to manual block`,
           handler: videoBlocks => this.switchVideosBlockToManual(videoBlocks),
-          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
+          isDisplayed: videoBlock => videoBlock.type !== VideoBlacklistType.MANUAL,
           enableBulk: true
         }
       ],

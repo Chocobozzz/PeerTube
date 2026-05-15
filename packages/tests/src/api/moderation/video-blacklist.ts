@@ -118,7 +118,7 @@ describe('Test video blacklist', function () {
     })
 
     it('Should display nothing when applying automatic type filter', async function () {
-      const body = await command.list({ type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(0)
 
       const blacklistedVideos = body.data
@@ -306,7 +306,7 @@ describe('Test video blacklist', function () {
       await makeActivityPubGetRequest(servers[0].url, `/videos/watch/${video3UUID}/dislikes`, HttpStatusCode.UNAUTHORIZED_401)
     })
 
-    it('Should remove the video from blacklist and refederate the video', async function () {
+    it('Should remove the video from blacklist and re-federate the video', async function () {
       await command.remove({ videoId: video4UUID })
 
       await waitJobs(servers)
@@ -317,7 +317,7 @@ describe('Test video blacklist', function () {
       }
     })
 
-    it('Should not crash when unfederating an internal blacklisted video', async function () {
+    it('Should not crash when un-federating an internal blacklisted video', async function () {
       const video = await servers[0].videos.quickUpload({ name: 'internal video', privacy: VideoPrivacy.INTERNAL })
       await command.add({ videoId: video.uuid, reason: 'super reason', unfederate: true })
     })
@@ -372,7 +372,7 @@ describe('Test video blacklist', function () {
     it('Should auto blacklist a public video on upload', async function () {
       const video = await servers[0].videos.quickUpload({ token: userWithoutFlag, name: 'blacklisted 1' })
 
-      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(1)
       expect(body.data[0].video.name).to.equal('blacklisted 1')
 
@@ -382,7 +382,7 @@ describe('Test video blacklist', function () {
     it('Should auto blacklist an unlisted video on upload', async function () {
       const video = await servers[0].videos.quickUpload({ token: userWithoutFlag, name: 'blacklisted 2', privacy: VideoPrivacy.UNLISTED })
 
-      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(2)
       expect(body.data[0].video.name).to.equal('blacklisted 2')
 
@@ -399,7 +399,7 @@ describe('Test video blacklist', function () {
         }
       })
 
-      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(3)
       expect(body.data[0].video.name).to.equal('blacklisted 3')
 
@@ -414,7 +414,7 @@ describe('Test video blacklist', function () {
       }
       const { video } = await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
 
-      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(4)
       expect(body.data[0].video.name).to.equal('URL import')
 
@@ -429,7 +429,7 @@ describe('Test video blacklist', function () {
       }
       const { video } = await servers[0].videoImports.importVideo({ token: userWithoutFlag, attributes })
 
-      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ sort: '-createdAt', type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(5)
       expect(body.data[0].video.name).to.equal('Torrent import')
 
@@ -439,8 +439,184 @@ describe('Test video blacklist', function () {
     it('Should not auto blacklist a video on upload if the user has the bypass blacklist flag', async function () {
       await servers[0].videos.upload({ token: userWithFlag, attributes: { name: 'not blacklisted' } })
 
-      const body = await command.list({ type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED })
+      const body = await command.list({ type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(5)
+    })
+  })
+
+  describe('When auto blacklist videos using automatic tags policies', function () {
+    let userToken: string
+    let userChannelId: number
+
+    async function listAutoBlacklistedVideos () {
+      const { data } = await command.list({ sort: '-createdAt' })
+
+      return data.filter(b => b.type === VideoBlacklistType.AUTO_BY_AUTO_TAG_POLICY)
+    }
+
+    async function expectVideoAutoBlacklisted (name: string) {
+      const data = await listAutoBlacklistedVideos()
+      const entry = data.find(b => b.video.name === name)
+
+      expect(entry, `Cannot find auto blacklisted video ${name}`).to.not.be.undefined
+
+      return entry
+    }
+
+    before(async function () {
+      await servers[0].config.disableAutoBlacklist()
+    })
+
+    describe('With built-in external link auto tag', function () {
+      before(async function () {
+        userToken = await servers[0].users.generateUserAndToken('auto_tag_policy_user')
+
+        const { videoChannels } = await servers[0].users.getMyInfo({ token: userToken })
+        userChannelId = videoChannels[0].id
+      })
+
+      it('Should setup server video auto-block policy for external-link tag', async function () {
+        await servers[0].autoTags.updateServerVideoPolicies({ autoBlock: [ 'external-link' ] })
+
+        const policies = await servers[0].autoTags.getServerVideoPolicies()
+        expect(policies.autoBlock).to.have.members([ 'external-link' ])
+      })
+
+      it('Should auto-blacklist video with external link when policy is set', async function () {
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+
+        await servers[0].videos.upload({
+          token: userToken,
+          attributes: { name: 'video with link', description: 'Check example.com' }
+        })
+        await waitJobs(servers)
+
+        const data = await listAutoBlacklistedVideos()
+        expect(data).to.have.lengthOf(beforeCount + 1)
+        expect(data[0].video.name).to.equal('video with link')
+      })
+
+      it('Should not auto-blacklist video without matching tags', async function () {
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+
+        await servers[0].videos.upload({
+          token: userToken,
+          attributes: { name: 'video without link', description: 'No external URL' }
+        })
+        await waitJobs(servers)
+
+        const data = await listAutoBlacklistedVideos()
+        expect(data).to.have.lengthOf(beforeCount)
+      })
+
+      it('Should clear policy and not auto-blacklist matching videos', async function () {
+        await servers[0].autoTags.updateServerVideoPolicies({ autoBlock: [] })
+
+        const policies = await servers[0].autoTags.getServerVideoPolicies()
+        expect(policies.autoBlock).to.have.lengthOf(0)
+
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+
+        await servers[0].videos.upload({
+          token: userToken,
+          attributes: { name: 'video with link 2', description: 'Another example.com' }
+        })
+        await waitJobs(servers)
+
+        const data = await listAutoBlacklistedVideos()
+        expect(data).to.have.lengthOf(beforeCount)
+      })
+    })
+
+    describe('With watched words auto tags', function () {
+      before(async function () {
+        await servers[0].watchedWordsLists.createList({
+          listName: 'forbidden words',
+          words: [ 'badword' ]
+        })
+
+        await servers[0].autoTags.updateServerVideoPolicies({
+          autoBlock: [ 'forbidden words' ]
+        })
+      })
+
+      it('Should auto-blacklist video with watched words on upload', async function () {
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+
+        await servers[0].videos.upload({
+          token: userToken,
+          attributes: { name: 'watched word upload', description: 'Contains badword' }
+        })
+        await waitJobs(servers)
+
+        const data = await listAutoBlacklistedVideos()
+        expect(data).to.have.lengthOf(beforeCount + 1)
+        await expectVideoAutoBlacklisted('watched word upload')
+      })
+
+      it('Should auto-blacklist video with watched words on update', async function () {
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+        const { uuid } = await servers[0].videos.quickUpload({ token: userToken, name: 'watched word update' })
+
+        await waitJobs(servers)
+
+        await servers[0].videos.update({
+          token: userToken,
+          id: uuid,
+          attributes: { description: 'Contains badword after update' }
+        })
+        await waitJobs(servers)
+
+        const data = await listAutoBlacklistedVideos()
+        expect(data).to.have.lengthOf(beforeCount + 1)
+        await expectVideoAutoBlacklisted('watched word update')
+      })
+
+      it('Should auto-blacklist video with watched words on local import', async function () {
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+
+        await servers[0].videoImports.importVideo({
+          token: userToken,
+          attributes: {
+            channelId: userChannelId,
+            targetUrl: FIXTURE_URLS.goodVideo,
+            name: 'watched word local import',
+            description: 'Contains badword from local import'
+          }
+        })
+        await waitJobs(servers)
+
+        const data = await listAutoBlacklistedVideos()
+        expect(data).to.have.lengthOf(beforeCount + 1)
+        await expectVideoAutoBlacklisted('watched word local import')
+      })
+
+      it('Should auto-blacklist video with watched words from federation', async function () {
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+
+        await servers[1].videos.upload({
+          attributes: { name: 'watched word federation', description: 'Contains badword from remote server' }
+        })
+        await waitJobs(servers)
+
+        const data = await listAutoBlacklistedVideos()
+        expect(data).to.have.lengthOf(beforeCount + 1)
+        await expectVideoAutoBlacklisted('watched word federation')
+      })
+
+      it('Should not auto-blacklist a video if a word is added to the watched words list after the video upload', async function () {
+        const beforeCount = (await listAutoBlacklistedVideos()).length
+
+        await servers[0].videos.quickUpload({ token: userToken, name: 'banana' })
+        await waitJobs(servers)
+
+        await servers[0].watchedWordsLists.createList({ listName: 'banana forbidden', words: [ 'banana' ] })
+        await waitJobs(servers)
+
+        const afterCount = (await listAutoBlacklistedVideos()).length
+
+        expect(afterCount).to.equal(beforeCount)
+      })
     })
   })
 

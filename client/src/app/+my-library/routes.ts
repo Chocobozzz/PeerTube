@@ -10,7 +10,7 @@ import { LiveVideoService } from '@app/shared/shared-video-live/live-video.servi
 import { WatchedWordsListService } from '@app/shared/shared-watched-words/watched-words-list.service'
 import { LoginGuard } from '../core'
 import { CommentsOnMyVideosComponent } from './comments-on-my-videos/comments-on-my-videos.component'
-import { AutomaticTagService } from './my-auto-tag-policies/automatic-tag.service'
+import { AutomaticTagService } from '@app/shared/shared-moderation/automatic-tag.service'
 import { MyAutoTagPoliciesComponent } from './my-auto-tag-policies/my-auto-tag-policies.component'
 import { autoTagPoliciesResolver } from './my-auto-tag-policies/my-auto-tag-policies.resolver'
 import { MyChannelSpaceComponent } from './my-channel-space.component'
