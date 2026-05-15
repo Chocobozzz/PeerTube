@@ -793,6 +793,8 @@ export const MIMETYPES = {
       'audio/x-m4a': '.m4a',
       'audio/mp4': '.m4a',
 
+      'audio/x-m4b': '.m4b',
+
       'audio/vnd.dolby.dd-raw': '.ac3',
       'audio/ac3': '.ac3'
     },
