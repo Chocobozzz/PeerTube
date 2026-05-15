@@ -1,10 +1,11 @@
+import { buildSUUID } from '@peertube/peertube-node-utils'
 import { mapToJSON } from '@server/helpers/core-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { MStreamingPlaylistVideo } from '@server/types/models/index.js'
 import { writeJson } from 'fs-extra/esm'
 import { rename } from 'fs/promises'
 import PQueue from 'p-queue'
-import { basename } from 'path'
+import { basename, dirname, join } from 'path'
 import { buildSha256Segment } from '../hls.js'
 import { storeHLSFileFromPath } from '../object-storage/index.js'
 
@@ -31,10 +32,15 @@ class LiveSegmentShaStore {
     this.videoUUID = options.videoUUID
 
     this.sha256Path = options.sha256Path
-    this.sha256PathTMP = options.sha256Path + '.tmp'
+    this.sha256PathTMP = join(dirname(options.sha256Path), buildSUUID() + '-segments-sha256.json.tmp')
 
     this.streamingPlaylist = options.streamingPlaylist
     this.sendToObjectStorage = options.sendToObjectStorage
+  }
+
+  abort () {
+    this.writeQueue.pause()
+    this.writeQueue.clear()
   }
 
   async addSegmentSha (segmentPath: string) {
