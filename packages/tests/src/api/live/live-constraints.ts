@@ -50,11 +50,19 @@ describe('Test live constraints', function () {
     await checkLiveCleanup({ server: servers[0], permanent: false, videoUUID: videoId, savedResolutions })
   }
 
-  function updateQuota (options: { total: number, daily: number }) {
+  async function increaseQuota (options: { total: number, daily: number }) {
+    const current = await servers[0].users.getMyQuotaUsed({ token: userAccessToken })
+
     return servers[0].users.update({
       userId,
-      videoQuota: options.total,
-      videoQuotaDaily: options.daily
+
+      videoQuota: options.total !== -1
+        ? current.videoQuotaUsed + options.total
+        : options.total,
+
+      videoQuotaDaily: options.daily !== -1
+        ? current.videoQuotaUsedDaily + options.daily
+        : options.daily
     })
   }
 
@@ -75,8 +83,6 @@ describe('Test live constraints', function () {
       userId = res.userId
       userChannelId = res.userChannelId
       userAccessToken = res.token
-
-      await updateQuota({ total: 1, daily: -1 })
     }
 
     editorToken = await servers[0].channelCollaborators.createEditor('editor', 'user1_channel')
@@ -88,6 +94,8 @@ describe('Test live constraints', function () {
   it('Should not have size limit if save replay is disabled', async function () {
     this.timeout(60000)
 
+    await increaseQuota({ total: 5000, daily: -1 })
+
     const userVideoLiveId = await createLiveWrapper({ replay: false, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveId, shouldHaveError: false })
   })
@@ -97,6 +105,8 @@ describe('Test live constraints', function () {
 
     // Wait for user quota memoize cache invalidation
     await wait(5000)
+
+    await increaseQuota({ total: 5000, daily: -1 })
 
     const userVideoLiveId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveId, shouldHaveError: true })
@@ -116,6 +126,8 @@ describe('Test live constraints', function () {
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
+    await increaseQuota({ total: 5000, daily: -1 })
+
     const userVideoLiveId = await createLiveWrapper({ replay: true, permanent: true })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveId, shouldHaveError: true })
 
@@ -132,7 +144,7 @@ describe('Test live constraints', function () {
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
-    await updateQuota({ total: -1, daily: 1 })
+    await increaseQuota({ total: -1, daily: 5000 })
 
     const userVideoLiveId = await createLiveWrapper({ replay: true, permanent: false, token: editorToken })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveId, shouldHaveError: true })
@@ -152,7 +164,7 @@ describe('Test live constraints', function () {
     // Wait for user quota memoize cache invalidation
     await wait(5000)
 
-    await updateQuota({ total: 10 * 1000 * 1000, daily: -1 })
+    await increaseQuota({ total: 10 * 1000 * 1000, daily: -1 })
 
     const userVideoLiveId = await createLiveWrapper({ replay: true, permanent: false })
     await servers[0].live.runAndTestStreamError({ token: userAccessToken, videoId: userVideoLiveId, shouldHaveError: false })
@@ -197,6 +209,8 @@ describe('Test live constraints', function () {
 
   it('Should have max duration limit', async function () {
     this.timeout(240000)
+
+    await increaseQuota({ total: -1, daily: -1 })
 
     await servers[0].config.updateExistingConfig({
       newConfig: {

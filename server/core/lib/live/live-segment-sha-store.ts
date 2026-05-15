@@ -38,11 +38,6 @@ class LiveSegmentShaStore {
     this.sendToObjectStorage = options.sendToObjectStorage
   }
 
-  abort () {
-    this.writeQueue.pause()
-    this.writeQueue.clear()
-  }
-
   async addSegmentSha (segmentPath: string) {
     logger.debug('Adding live sha segment %s.', segmentPath, lTags(this.videoUUID))
 

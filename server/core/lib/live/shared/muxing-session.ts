@@ -202,8 +202,6 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
     this.aborted = true
     this.transcodingWrapper.abort()
-
-    if (this.liveSegmentShaStore) this.liveSegmentShaStore.abort()
   }
 
   destroy () {
