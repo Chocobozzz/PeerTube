@@ -38,6 +38,7 @@ import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolu
 import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
+import { isUserQuotaValid } from '../user.js'
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -271,12 +272,21 @@ class LiveManager {
 
     if (this.videoSessions.has(video.uuid)) {
       logger.warn(
-        'Video %s has already a live session %s. Refusing stream %s.',
-        video.uuid,
-        this.videoSessions.get(video.uuid),
-        streamKey,
+        `Video ${video.uuid} has already a live session ${this.videoSessions.get(video.uuid)}. Refusing stream ${streamKey}.`,
         lTags(sessionId, video.uuid)
       )
+      return this.abortSession(sessionId)
+    }
+
+    if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
+      logger.warn('User quota exceeded. Refusing stream %s.', streamKey, lTags(sessionId, video.uuid))
+
+      try {
+        await this.saveEndingSession({ videoUUID: video.uuid, error: LiveVideoError.QUOTA_EXCEEDED })
+      } catch (err) {
+        logger.error('Cannot save ending session of live with quota exceeded error.', { err, ...lTags(sessionId, video.uuid) })
+      }
+
       return this.abortSession(sessionId)
     }
 

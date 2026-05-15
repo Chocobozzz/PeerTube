@@ -230,7 +230,7 @@ export async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
 
 export async function isUserQuotaValid (options: {
   channelUserId: number
-  uploadSize: number
+  uploadSize: number // In bytes
   checkDaily?: boolean // default true
 }) {
   const { channelUserId, uploadSize, checkDaily = true } = options
