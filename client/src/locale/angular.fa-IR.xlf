@@ -4413,9 +4413,9 @@
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5158930137081704296" datatype="html">
+      <trans-unit id="5158930137081704296" datatype="html" xml:space="preserve">
         <source>Search videos, channels…</source>
-        <target state="new">Search videos, channels…</target>
+        <target state="translated">جستجوی ویدئوها، کانال‌ها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -25520,9 +25520,9 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="135077277733987408" datatype="html">
+      <trans-unit id="135077277733987408" datatype="html" xml:space="preserve">
         <source>Revoke</source>
-        <target state="new">Revoke</target>
+        <target state="translated">ابطال</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">34</context>
@@ -26142,15 +26142,15 @@
       </trans-unit>
       <trans-unit id="3045979261611286252" datatype="html" xml:space="preserve">
         <source>Exit full-screen editor</source>
-        <target state="translated">ادیتور تمام صفحه</target>
+        <target state="translated">خروج از ادیتور تمام صفحه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5828663111777947237" datatype="html">
+      <trans-unit id="5828663111777947237" datatype="html" xml:space="preserve">
         <source>Full-screen editor</source>
-        <target state="new">Full-screen editor</target>
+        <target state="translated">ادیتور تمام صفحه</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">40</context>
