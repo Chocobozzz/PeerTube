@@ -27459,9 +27459,9 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8657461348142878243" datatype="html">
+      <trans-unit id="8657461348142878243" datatype="html" xml:space="preserve">
         <source>Preferred language for the web interface and for emails</source>
-        <target state="new">Preferred language for the web interface and for emails</target>
+        <target state="translated">زبان پیش‌فرض برای سایت و ایمیل‌ها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">5,7</context>
