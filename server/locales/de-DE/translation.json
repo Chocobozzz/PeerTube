@@ -240,7 +240,7 @@
     "The channel must be owned by the same account as the playlist": "Dieser Kanal muss das selbe Konto als Eigentümer haben wie die Wiedergabeliste",
     "The comment was posted on {commentCreatedAt} by {flaggedAccount} .": "Der Kommentar wurde am {commentCreatedAt} von {flaggedAccount} gepostet.",
     "The maximum number of collaborators for this channel ({limit}) has been reached": "Die maximale Anzahl an Mitwirkenden für diesen Kanal ({limit}) wurde erreicht",
-    "The new owner is already the owner of this channel": "Der neue Eigentümer ist bereits der Eigentümer dieses Kanals.",
+    "The new owner is already the owner of this channel": "Der neue Eigentümer ist bereits der Eigentümer dieses Kanals",
     "The new owner is already the owner of this video": "Der neue Eigentümer ist bereits der Eigentümer des Videos",
     "The ownership change request is not linked to a channel": "Die Anfrage das Eigentum zu übertragen steht nicht mit einem Kanal in Verbindung",
     "The ownership change request is not linked to a video": "Die Anfrage das Eigentum zu übertragen steht nicht mit einem Video in Verbindung",
