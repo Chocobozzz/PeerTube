@@ -21762,9 +21762,9 @@
           <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3545929198870894557" datatype="html">
+      <trans-unit id="3545929198870894557" datatype="html" xml:space="preserve">
         <source>Go to my playlists</source>
-        <target state="new">Go to my playlists</target>
+        <target state="translated">Ir para as minhas listas de reprodução</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">77</context>
