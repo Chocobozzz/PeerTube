@@ -10,6 +10,7 @@ import {
   BelongsTo,
   Column,
   CreatedAt,
+  DataType,
   ForeignKey,
   Scopes,
   Table,
@@ -100,7 +101,7 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
   @Column
   declare authName: string
 
-  @Column
+  @Column(DataType.STRING(500))
   declare loginDevice: string
 
   @Column
@@ -109,7 +110,7 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
   @Column
   declare loginDate: Date
 
-  @Column
+  @Column(DataType.STRING(500))
   declare lastActivityDevice: string
 
   @Column

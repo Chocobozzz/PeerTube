@@ -3,9 +3,20 @@ import { MActorId, MUploadImage } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Transaction } from 'sequelize'
-import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AfterDestroy,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import { logger } from '../../helpers/logger.js'
-import { DIRECTORIES, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, DIRECTORIES, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel } from '../shared/index.js'
 
@@ -41,7 +52,7 @@ export class UploadImageModel extends SequelizeModel<UploadImageModel> {
   declare width: number
 
   @AllowNull(true)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
   declare fileUrl: string
 
   @AllowNull(false)

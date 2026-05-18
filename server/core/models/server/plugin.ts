@@ -17,6 +17,7 @@ import {
   isPluginTypeValid
 } from '../../helpers/custom-validators/plugins.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
 @DefaultScope(() => ({
   attributes: {
@@ -67,12 +68,12 @@ export class PluginModel extends SequelizeModel<PluginModel> {
 
   @AllowNull(true)
   @Is('PluginDescription', value => throwIfNotValid(value, isPluginDescriptionValid, 'description'))
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.PLUGINS.DESCRIPTION.max))
   declare description: string
 
   @AllowNull(false)
   @Is('PluginHomepage', value => throwIfNotValid(value, isPluginHomepage, 'homepage'))
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
   declare homepage: string
 
   @AllowNull(true)

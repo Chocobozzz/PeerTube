@@ -107,7 +107,7 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
 
   // Used to fetch the appropriate job when the runner wants to post the result
   @AllowNull(true)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.RUNNER_JOBS.TOKEN.max))
   declare processingJobToken: string
 
   @AllowNull(true)

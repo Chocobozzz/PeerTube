@@ -1,4 +1,5 @@
-import { AllowNull, BelongsToMany, Column, CreatedAt, Table, UpdatedAt } from 'sequelize-typescript'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { AllowNull, BelongsToMany, Column, CreatedAt, DataType, Table, UpdatedAt } from 'sequelize-typescript'
 import { Transaction } from 'sequelize'
 import { MTracker } from '@server/types/models/server/tracker.js'
 import { VideoModel } from '../video/video.js'
@@ -16,7 +17,7 @@ import { SequelizeModel } from '../shared/sequelize-type.js'
 })
 export class TrackerModel extends SequelizeModel<TrackerModel> {
   @AllowNull(false)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
   declare url: string
 
   @CreatedAt

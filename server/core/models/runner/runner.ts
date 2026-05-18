@@ -25,7 +25,7 @@ import { RunnerRegistrationTokenModel } from './runner-registration-token.js'
 export class RunnerModel extends SequelizeModel<RunnerModel> {
   // Used to identify the appropriate runner when it uses the runner REST API
   @AllowNull(false)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.RUNNERS.TOKEN.max))
   declare runnerToken: string
 
   @AllowNull(false)

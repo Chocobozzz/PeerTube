@@ -1,5 +1,6 @@
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { FindOptions, literal } from 'sequelize'
-import { AllowNull, Column, CreatedAt, HasMany, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, DataType, HasMany, Table, UpdatedAt } from 'sequelize-typescript'
 import { MRunnerRegistrationToken } from '@server/types/models/runners/index.js'
 import { RunnerRegistrationToken } from '@peertube/peertube-models'
 import { SequelizeModel, getSort } from '../shared/index.js'
@@ -20,7 +21,7 @@ import { RunnerModel } from './runner.js'
 })
 export class RunnerRegistrationTokenModel extends SequelizeModel<RunnerRegistrationTokenModel> {
   @AllowNull(false)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.RUNNERS.TOKEN.max))
   declare registrationToken: string
 
   @CreatedAt

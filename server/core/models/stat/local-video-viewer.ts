@@ -6,7 +6,7 @@ import {
   VideoStatsUserAgent,
   WatchActionObject
 } from '@peertube/peertube-models'
-import { MAX_SQL_DELETE_ITEMS } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, MAX_SQL_DELETE_ITEMS } from '@server/initializers/constants.js'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { buildGroupByAndBoundaries } from '@server/lib/timeserie.js'
 import { MLocalVideoViewer, MLocalVideoViewerWithWatchSections, MVideo } from '@server/types/models/index.js'
@@ -51,7 +51,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
   declare watchTime: number
 
   @AllowNull(true)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_VIEW.UA_INFO.max))
   declare client: string
 
   @AllowNull(true)
@@ -77,7 +77,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
   declare uuid: string
 
   @AllowNull(false)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
   declare url: string
 
   @ForeignKey(() => VideoModel)

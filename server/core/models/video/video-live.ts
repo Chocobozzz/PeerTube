@@ -7,18 +7,7 @@ import {
   MVideoLiveWithSettingSchedules
 } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
-import {
-  AllowNull,
-  BeforeDestroy,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-  HasMany,
-  Table,
-  UpdatedAt
-} from 'sequelize-typescript'
+import { AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, ForeignKey, HasMany, Table, UpdatedAt } from 'sequelize-typescript'
 import { SequelizeModel } from '../shared/index.js'
 import { VideoBlacklistModel } from './video-blacklist.js'
 import { VideoLiveReplaySettingModel } from './video-live-replay-setting.js'
@@ -40,7 +29,7 @@ import { VideoModel } from './video.js'
 })
 export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
   @AllowNull(true)
-  @Column(DataType.STRING)
+  @Column
   declare streamKey: string
 
   @AllowNull(false)
