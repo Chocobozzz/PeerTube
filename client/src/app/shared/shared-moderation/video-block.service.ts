@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { arrayify } from '@peertube/peertube-core-utils'
-import { ResultList, VideoBlacklist, VideoBlacklistType_Type } from '@peertube/peertube-models'
+import { ResultList, VideoBlacklist, VideoBlacklistType_Type, VideoBlacklistUpdate } from '@peertube/peertube-models'
 import { SortMeta } from 'primeng/api'
 import { Observable, from as observableFrom } from 'rxjs'
 import { catchError, concatMap, toArray } from 'rxjs/operators'
@@ -56,6 +56,26 @@ export class VideoBlockService {
           const body = { unfederate, reason }
 
           return this.authHttp.post(VideoBlockService.BASE_VIDEOS_URL + videoId + '/blacklist', body)
+        }),
+        toArray(),
+        catchError(res => this.restExtractor.handleError(res))
+      )
+  }
+
+  updateBlocks (options: {
+    videoId: number | string
+    reason?: string
+    internalNote?: string
+  }[]) {
+    return observableFrom(options)
+      .pipe(
+        concatMap(({ videoId, reason, internalNote }) => {
+          const body: VideoBlacklistUpdate = {}
+
+          if (reason !== undefined) body.reason = reason
+          if (internalNote !== undefined) body.internalNote = internalNote
+
+          return this.authHttp.put(VideoBlockService.BASE_VIDEOS_URL + videoId + '/blacklist', body)
         }),
         toArray(),
         catchError(res => this.restExtractor.handleError(res))

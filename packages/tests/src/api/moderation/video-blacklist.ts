@@ -172,6 +172,33 @@ describe('Test video blacklist', function () {
 
       expect(video.reason).to.equal('my super reason updated')
     })
+
+    it('Should set an internal note', async function () {
+      await command.update({ videoId, internalNote: 'internal moderation note' })
+
+      const body = await command.list()
+      const video = body.data.find(b => b.video.id === videoId)
+
+      expect(video.internalNote).to.equal('internal moderation note')
+    })
+
+    it('Should update the internal note', async function () {
+      await command.update({ videoId, internalNote: 'updated internal note' })
+
+      const body = await command.list()
+      const video = body.data.find(b => b.video.id === videoId)
+
+      expect(video.internalNote).to.equal('updated internal note')
+    })
+
+    it('Should clear the internal note', async function () {
+      await command.update({ videoId, internalNote: null })
+
+      const body = await command.list()
+      const video = body.data.find(b => b.video.id === videoId)
+
+      expect(video.internalNote).to.not.exist
+    })
   })
 
   describe('When listing my videos', function () {
@@ -251,7 +278,15 @@ describe('Test video blacklist', function () {
     })
 
     it('Should blacklist video 3 and keep it federated', async function () {
-      await command.add({ videoId: video3UUID, reason: 'super reason', unfederate: false })
+      // TODO: check reason and internal note
+      await command.add({ videoId: video3UUID, reason: 'super reason', internalNote: 'my internal note', unfederate: false })
+
+      {
+        const { data } = await servers[0].blacklist.list({ sort: '-createdAt' })
+        const blacklist = data[0]
+        expect(blacklist.reason).to.equal('super reason')
+        expect(blacklist.internalNote).to.equal('my internal note')
+      }
 
       await waitJobs(servers)
 

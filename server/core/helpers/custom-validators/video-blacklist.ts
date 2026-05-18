@@ -9,6 +9,10 @@ export function isVideoBlacklistReasonValid (value: string) {
   return value === null || validator.default.isLength(value, VIDEO_BLACKLIST_CONSTRAINTS_FIELDS.REASON)
 }
 
+export function isVideoBlacklistInternalNoteValid (value: string) {
+  return value === null || validator.default.isLength(value, VIDEO_BLACKLIST_CONSTRAINTS_FIELDS.INTERNAL_NOTE)
+}
+
 export function isVideoBlacklistTypeValid (value: any) {
   return exists(value) &&
     (

@@ -4716,9 +4716,35 @@ paths:
         - Video Blocks
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoBlacklistCreate'
       responses:
         '204':
           description: successful operation
+    put:
+      summary: Update a video block
+      operationId: updateVideoBlock
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      tags:
+        - Video Blocks
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoBlacklistUpdate'
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: block not found
     delete:
       summary: Unblock a video by its id
       operationId: delVideoBlock
@@ -10988,37 +11014,53 @@ components:
         account:
           $ref: '#/components/schemas/AccountSummary'
     VideoBlacklist:
+      type: object
       properties:
         id:
           $ref: '#/components/schemas/id'
-        videoId:
-          $ref: '#/components/schemas/Video/properties/id'
+        reason:
+          type: string
+          description: Reason for the block (public)
+        internalNote:
+          type: string
+          description: Internal note for moderators/admins
+        unfederated:
+          type: boolean
+        type:
+          type: integer
+          description: >
+            - `1`: manual block
+            - `2`: automatic block by instance policy
+            - `3`: automatic block by auto-tag policy
+        video:
+          $ref: '#/components/schemas/Video'
         createdAt:
           type: string
           format: date-time
         updatedAt:
           type: string
           format: date-time
-        name:
+    VideoBlacklistCreate:
+      type: object
+      properties:
+        reason:
           type: string
-          minLength: 3
-          maxLength: 120
-        uuid:
-          $ref: '#/components/schemas/UUIDv4'
-        description:
-          type: string
-          minLength: 3
-          maxLength: 10000
-        duration:
-          type: integer
-        views:
-          type: integer
-        likes:
-          type: integer
-        dislikes:
-          type: integer
-        nsfw:
+          description: Reason for the block (public)
+        unfederate:
           type: boolean
+          description: Whether to unfederate the video
+        internalNote:
+          type: string
+          description: Internal note for moderators/admins
+    VideoBlacklistUpdate:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason for the block (displayed publicly)
+        internalNote:
+          type: string
+          description: Internal note for moderators/admins
     ChangeOwnership:
       type: object
       description: Representation of a ownership change

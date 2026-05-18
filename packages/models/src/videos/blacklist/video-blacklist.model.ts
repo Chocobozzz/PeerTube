@@ -12,6 +12,7 @@ export interface VideoBlacklist {
   id: number
   unfederated: boolean
   reason?: string
+  internalNote?: string
   type: VideoBlacklistType_Type
 
   video: Video

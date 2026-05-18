@@ -98,6 +98,13 @@ describe('Test video blacklist API validators', function () {
       await makePostBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields })
     })
 
+    it('Should fail with an invalid internal note', async function () {
+      const path = basePath + servers[0].store.videoCreated.uuid + '/blacklist'
+      const fields = { internalNote: 'a'.repeat(305) }
+
+      await makePostBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields })
+    })
+
     it('Should fail to unfederate a remote video', async function () {
       const path = basePath + remoteVideoUUID + '/blacklist'
       const fields = { unfederate: true }
@@ -171,9 +178,16 @@ describe('Test video blacklist API validators', function () {
       await makePutBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields })
     })
 
+    it('Should fail with an invalid internal note', async function () {
+      const path = basePath + servers[0].store.videoCreated.uuid + '/blacklist'
+      const fields = { internalNote: 'a'.repeat(305) }
+
+      await makePutBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields })
+    })
+
     it('Should succeed with the correct params', async function () {
       const path = basePath + servers[0].store.videoCreated.shortUUID + '/blacklist'
-      const fields = { reason: 'hello' }
+      const fields = { reason: 'hello', internalNote: 'internal note test' }
 
       await makePutBodyRequest({
         url: servers[0].url,

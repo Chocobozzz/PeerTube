@@ -151,6 +151,7 @@ export async function blacklistVideo (videoInstance: MVideoAccountLight, options
     videoId: videoInstance.id,
     unfederated: options.unfederate === true,
     reason: options.reason,
+    internalNote: options.internalNote,
     type: VideoBlacklistType.MANUAL
   })
   blacklist.Video = videoInstance
