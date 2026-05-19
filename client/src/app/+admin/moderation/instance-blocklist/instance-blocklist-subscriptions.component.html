@@ -87,13 +87,13 @@
 
       <div class="form-group">
         <label i18n for="subscriptionUrl">Blocklist URL</label>
+        <div class="form-group-description">For example: <a href="https://docs.joinpeertube.org/examples/mute-list.json" target="_blank" rel="noopener noreferrer">https://docs.joinpeertube.org/examples/mute-list.json</a></div>
+
         <input
           type="url"
           id="subscriptionUrl"
           class="form-control"
           [formField]="addSubscriptionForm['url']"
-          i18n-placeholder
-          placeholder="https://example.com/blocklist.json"
         >
 
         <my-form-error [field]="addSubscriptionForm.url()"></my-form-error>

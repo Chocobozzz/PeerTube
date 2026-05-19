@@ -93,13 +93,13 @@
 
       <div class="form-group">
         <label i18n for="subscriptionUrl">Watched words URL</label>
+        <div class="form-group-description">For example: <a href="https://docs.joinpeertube.org/examples/watched-words.json" target="_blank" rel="noopener noreferrer">https://docs.joinpeertube.org/examples/watched-words.json</a></div>
+
         <input
           type="url"
           id="subscriptionUrl"
           class="form-control"
           [formField]="addSubscriptionForm['url']"
-          i18n-placeholder
-          placeholder="https://example.com/watched-words.json"
         >
 
         <my-form-error [field]="addSubscriptionForm.url()"></my-form-error>
