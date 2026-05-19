@@ -14,6 +14,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { canDoQuickTranscode } from '@peertube/peertube-server/core/lib/transcoding/transcoding-quick-transcode.js'
+import { generateVideoWithCodec } from '@tests/shared/generate.js'
 import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import { expect } from 'chai'
 
@@ -468,6 +469,79 @@ describe('Test video transcoding', function () {
 
       expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.mp4'), 60)).to.be.true
       expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.webm'), 60)).to.be.false
+    })
+
+    it('Should accept AV1 video as quick-transcode candidate', async function () {
+      this.timeout(120_000)
+
+      const path = await generateVideoWithCodec('quick_transcode_av1.mp4', {
+        videoCodec: 'libaom-av1',
+        audioCodec: 'aac',
+        container: 'mp4'
+      })
+
+      expect(await canDoQuickTranscode(path, 60)).to.be.true
+    })
+
+    it('Should accept VP9 video as quick-transcode candidate', async function () {
+      this.timeout(120_000)
+
+      const path = await generateVideoWithCodec('quick_transcode_vp9.mp4', {
+        videoCodec: 'libvpx-vp9',
+        audioCodec: 'aac',
+        container: 'mp4'
+      })
+
+      expect(await canDoQuickTranscode(path, 60)).to.be.true
+    })
+
+    it('Should accept 10-bit yuv420p10le pixel format', async function () {
+      this.timeout(120_000)
+
+      const path = await generateVideoWithCodec('quick_transcode_av1_10bit.mp4', {
+        videoCodec: 'libaom-av1',
+        audioCodec: 'aac',
+        pixelFormat: 'yuv420p10le',
+        container: 'mp4'
+      })
+
+      expect(await canDoQuickTranscode(path, 60)).to.be.true
+    })
+
+    it('Should accept Opus audio for quick transcode', async function () {
+      this.timeout(120_000)
+
+      const path = await generateVideoWithCodec('quick_transcode_h264_opus.mp4', {
+        videoCodec: 'libx264',
+        audioCodec: 'libopus',
+        container: 'mp4'
+      })
+
+      expect(await canDoQuickTranscode(path, 60)).to.be.true
+    })
+
+    it('Should reject non-web-compatible video codecs', async function () {
+      this.timeout(120_000)
+
+      const path = await generateVideoWithCodec('quick_transcode_mpeg2.mkv', {
+        videoCodec: 'mpeg2video',
+        audioCodec: 'aac',
+        container: 'mkv'
+      })
+
+      expect(await canDoQuickTranscode(path, 60)).to.be.false
+    })
+
+    it('Should reject non-web-compatible audio codecs', async function () {
+      this.timeout(120_000)
+
+      const path = await generateVideoWithCodec('quick_transcode_h264_vorbis.mkv', {
+        videoCodec: 'libx264',
+        audioCodec: 'libvorbis',
+        container: 'mkv'
+      })
+
+      expect(await canDoQuickTranscode(path, 60)).to.be.false
     })
   })
 
