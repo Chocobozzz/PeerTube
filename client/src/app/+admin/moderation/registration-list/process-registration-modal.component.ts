@@ -58,13 +58,11 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
 
     if (this.shouldDisableEmailDelivery()) {
       this.form.get('preventEmailDelivery').disable()
+      this.form.patchValue({ preventEmailDelivery: true })
     } else {
       this.form.get('preventEmailDelivery').enable()
+      this.form.patchValue({ preventEmailDelivery: false })
     }
-
-    this.form.patchValue({
-      preventEmailDelivery: this.shouldDisableEmailDelivery()
-    })
 
     this.openedModal = this.modalService.open(this.modal(), { centered: true })
   }
@@ -110,10 +108,6 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
 
   isEmailEnabled () {
     return this.server.getHTMLConfig().email.enabled
-  }
-
-  isPreventEmailDeliveryChecked () {
-    return this.form.value.preventEmailDelivery
   }
 
   hasUnverifiedEmails () {

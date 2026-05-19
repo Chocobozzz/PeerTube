@@ -349,6 +349,25 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
 
     return [
       {
+        label: () => $localize`Accept/Reject`,
+        isHeader: true,
+        enableBulk: true
+      },
+
+      {
+        label: () => $localize`Mark as accepted`,
+        handler: abuses => this.updateAbusesState(abuses, AbuseState.ACCEPTED),
+        isDisplayed: abuse => this.isAdminView() && !this.isAbuseAccepted(abuse),
+        enableBulk: true
+      },
+      {
+        label: () => $localize`Mark as rejected`,
+        handler: abuses => this.updateAbusesState(abuses, AbuseState.REJECTED),
+        isDisplayed: abuse => this.isAdminView() && !this.isAbuseRejected(abuse),
+        enableBulk: true
+      },
+
+      {
         label: () => $localize`Internal actions`,
         isHeader: true,
         enableBulk: true
@@ -360,18 +379,6 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
         label: () => $localize`Set internal note`,
         handler: abuses => this.openModerationCommentModal(abuses),
         isDisplayed: () => this.isAdminView(),
-        enableBulk: true
-      },
-      {
-        label: () => $localize`Mark as accepted`,
-        handler: abuses => this.updateAbusesState(abuses, AbuseState.ACCEPTED),
-        isDisplayed: abuse => this.isAdminView() && !this.isAbuseAccepted(abuse),
-        enableBulk: true
-      },
-      {
-        label: () => $localize`Mark as rejected`,
-        handler: abuses => this.updateAbusesState(abuses, AbuseState.REJECTED),
-        isDisplayed: abuse => this.isAdminView() && !this.isAbuseRejected(abuse),
         enableBulk: true
       },
       {
