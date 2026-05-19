@@ -9,7 +9,6 @@ import { buildUUID } from '@peertube/peertube-node-utils'
 // ---------------------------------------------------------------------------
 
 class VideoTokensManager {
-
   private static instance: VideoTokensManager
 
   private readonly lruCache = new LRUCache<string, { videoUUID: string, user?: MUserAccountUrl }>({
@@ -19,23 +18,13 @@ class VideoTokensManager {
 
   private constructor () {}
 
-  createForAuthUser (options: {
+  create (options: {
     user: MUserAccountUrl
     videoUUID: string
   }) {
     const { token, expires } = this.generateVideoToken()
 
     this.lruCache.set(token, pick(options, [ 'user', 'videoUUID' ]))
-
-    return { token, expires }
-  }
-
-  createForPasswordProtectedVideo (options: {
-    videoUUID: string
-  }) {
-    const { token, expires } = this.generateVideoToken()
-
-    this.lruCache.set(token, pick(options, [ 'videoUUID' ]))
 
     return { token, expires }
   }
