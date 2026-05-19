@@ -28,6 +28,7 @@ import { PeerTubeSocket } from '@server/lib/peertube-socket.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { setAsUpdated } from '@server/models/shared/update.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
+import { Transaction } from 'sequelize'
 
 type CreateRunnerJobArg =
   | {
@@ -98,7 +99,7 @@ export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S 
       priority
     })
 
-    await saveInTransactionWithRetries(runnerJob)
+    await saveInTransactionWithRetries(runnerJob, Transaction.ISOLATION_LEVELS.READ_COMMITTED)
 
     if (runnerJob.state === RunnerJobState.PENDING) {
       PeerTubeSocket.Instance.sendAvailableJobsPingToRunners()

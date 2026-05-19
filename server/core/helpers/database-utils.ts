@@ -68,11 +68,14 @@ export function transactionRetryer<T> (func: (err: any, data: T) => any) {
   })
 }
 
-export function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>> (model: T) {
+export function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>> (
+  model: T,
+  isolationLevel: Transaction.ISOLATION_LEVELS = Transaction.ISOLATION_LEVELS.SERIALIZABLE
+) {
   const changedKeys = model.changed() || []
 
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
+    return sequelizeTypescript.transaction({ isolationLevel }, async transaction => {
       try {
         await model.save({ transaction })
       } catch (err) {
