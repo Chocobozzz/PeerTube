@@ -393,8 +393,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         return false
       }, $localize`Go to the "Browse videos" page`),
 
-      new Hotkey('g u', () => {
-        this.router.navigate([ '/videos/upload' ])
+      new Hotkey('g p', () => {
+        this.router.navigate([ '/videos/publish' ])
         return false
       }, $localize`Go to the "Publish video" page`),
 
