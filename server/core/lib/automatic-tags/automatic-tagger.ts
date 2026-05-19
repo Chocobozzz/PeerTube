@@ -1,11 +1,14 @@
+import { uniqify } from '@peertube/peertube-core-utils'
 import { AutomaticTagAvailable, AutomaticTagPolicy, CommentAutomaticTagPolicies, VideoAutoTagPolicies } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
-import { MAccount, MAccountId, MVideo } from '@server/types/models/index.js'
+import { MAccount, MAccountId, MComment, MVideo } from '@server/types/models/index.js'
 import Linkifyit from 'linkify-it'
 import { Transaction } from 'sequelize'
+import { PluginManager } from '../plugins/plugin-manager.js'
 
 const lTags = loggerTagsFactory('automatic-tags')
 
@@ -28,12 +31,24 @@ export class AutomaticTagger {
     const result: Record<number, string[]> = {}
 
     try {
+      const pluginAutoTags = await this.buildPluginAutomaticTags({ video: null, comment: { text } })
+
       if (serverAccount) {
-        result[serverAccount.id] = await this.buildAutomaticTags({ account: serverAccount, text, transaction })
+        const tags = [
+          ...await this.buildAutomaticTags({ account: serverAccount, text, transaction }),
+          ...pluginAutoTags
+        ]
+
+        result[serverAccount.id] = uniqify(tags)
       }
 
       if (ownerAccount) {
-        result[ownerAccount.id] = await this.buildAutomaticTags({ account: ownerAccount, text, transaction })
+        const tags = [
+          ...await this.buildAutomaticTags({ account: ownerAccount, text, transaction }),
+          ...pluginAutoTags
+        ]
+
+        result[ownerAccount.id] = uniqify(tags)
       }
 
       logger.debug('Built automatic tags for comment', { text, result, ...lTags() })
@@ -54,9 +69,10 @@ export class AutomaticTagger {
     const { video, serverAccount, transaction } = options
 
     try {
-      const [ videoNameTags, videoDescriptionTags ] = await Promise.all([
+      const [ videoNameTags, videoDescriptionTags, pluginTags ] = await Promise.all([
         this.buildAutomaticTags({ account: serverAccount, text: video.name, transaction }),
-        this.buildAutomaticTags({ account: serverAccount, text: video.description, transaction })
+        this.buildAutomaticTags({ account: serverAccount, text: video.description, transaction }),
+        this.buildPluginAutomaticTags({ video, comment: null })
       ])
 
       logger.debug('Built automatic tags for video', {
@@ -64,10 +80,11 @@ export class AutomaticTagger {
         videoDescription: video.description,
         videoNameTags,
         videoDescriptionTags,
+        pluginTags,
         ...lTags()
       })
 
-      return { [serverAccount.id]: [ ...videoNameTags, ...videoDescriptionTags ] }
+      return { [serverAccount.id]: uniqify([ ...videoNameTags, ...videoDescriptionTags, ...pluginTags ]) }
     } catch (err) {
       logger.error('Cannot build video automatic tags', { video, err, ...lTags() })
 
@@ -116,6 +133,35 @@ export class AutomaticTagger {
     return automaticTags
   }
 
+  private async buildPluginAutomaticTags (options: {
+    video: Pick<MVideo, 'name' | 'description'> | null
+    comment: Pick<MComment, 'text'> | null
+  }) {
+    const { video, comment } = options
+
+    const pluginTags: string[] = []
+
+    const pluginWithAutoTags = video
+      ? PluginManager.Instance.getVideoAutoTaggers()
+      : PluginManager.Instance.getCommentAutoTaggers()
+
+    for (const { npmName, autoTaggersPerTagName } of pluginWithAutoTags) {
+      for (const autoTagName of Object.keys(autoTaggersPerTagName)) {
+        for (const autoTagger of (autoTaggersPerTagName[autoTagName] || [])) {
+          try {
+            const { result } = await autoTagger({ video, comment })
+
+            if (result) pluginTags.push(autoTagName)
+          } catch (err) {
+            logger.error('Cannot execute auto tagger of plugin ' + npmName, { err, ...lTags() })
+          }
+        }
+      }
+    }
+
+    return pluginTags
+  }
+
   private hasExternalLinks (text: string) {
     if (!text) return false
 
@@ -152,12 +198,31 @@ export class AutomaticTagger {
   static async getAutomaticTagAvailable (account: MAccountId) {
     const result: AutomaticTagAvailable = {
       available: [
-        ...(await WatchedWordsListModel.listNamesOf(account)).map(t => ({ name: t, type: 'watched-words-list' as 'watched-words-list' })),
+        ...(await WatchedWordsListModel.listNamesOf(account)).map(t => ({ name: t, type: 'watched-words-list' as const })),
 
-        ...Object.values(AutomaticTagger.SPECIAL_TAGS).map(t => ({ name: t, type: 'core' as 'core' }))
+        ...Object.values(AutomaticTagger.SPECIAL_TAGS).map(t => ({ name: t, type: 'core' as const })),
+
+        ...await this.getAvailablePluginAutomaticTagNames(account)
       ]
     }
 
     return result
+  }
+
+  private static async getAvailablePluginAutomaticTagNames (account: MAccountId) {
+    const serverAccountId = (await getServerAccount()).id
+
+    // The instance can only blacklist videos, it doesn't act on comments
+    const toLoad = serverAccountId === account.id
+      ? PluginManager.Instance.getVideoAutoTaggers()
+      : PluginManager.Instance.getCommentAutoTaggers()
+
+    return toLoad
+      .flatMap(({ autoTaggersPerTagName }) => {
+        // Keys that have at least one active auto tagger function
+        return Object.keys(autoTaggersPerTagName)
+          .filter(k => (autoTaggersPerTagName[k] || []).length > 0)
+      })
+      .map(name => ({ name, type: 'plugin' as const }))
   }
 }

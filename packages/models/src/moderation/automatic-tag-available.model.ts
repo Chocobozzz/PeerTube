@@ -1,4 +1,4 @@
-export type AutomaticTagAvailableType = 'core' | 'watched-words-list'
+export type AutomaticTagAvailableType = 'core' | 'watched-words-list' | 'plugin'
 
 export interface AutomaticTagAvailable {
   available: {

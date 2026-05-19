@@ -1,7 +1,12 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
-import { AutomaticTagAvailable, CommentAutomaticTagPolicies, VideoAutoTagPolicies, VideoAutomaticTagPoliciesUpdate } from '@peertube/peertube-models'
+import {
+  AutomaticTagAvailable,
+  CommentAutomaticTagPolicies,
+  VideoAutoTagPolicies,
+  VideoAutomaticTagPoliciesUpdate
+} from '@peertube/peertube-models'
 import { catchError } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 

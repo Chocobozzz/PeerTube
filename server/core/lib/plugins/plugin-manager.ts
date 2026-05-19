@@ -155,6 +155,8 @@ export class PluginManager implements ServerHook {
     return this.getRegisteredPluginsOrThemes(PluginType.THEME)
   }
 
+  // ---------------------------------------------------------------------------
+
   getIdAndPassAuths () {
     return this.getRegisteredPlugins()
       .map(p => ({
@@ -176,6 +178,32 @@ export class PluginManager implements ServerHook {
       }))
       .filter(v => v.externalAuths.length !== 0)
   }
+
+  // ---------------------------------------------------------------------------
+
+  getVideoAutoTaggers () {
+    return this.getRegisteredPlugins()
+      .map(p => ({
+        npmName: p.npmName,
+        name: p.name,
+        version: p.version,
+        autoTaggersPerTagName: p.registerHelpers.getVideoAutoTagger()
+      }))
+      .filter(p => Object.keys(p.autoTaggersPerTagName).length !== 0)
+  }
+
+  getCommentAutoTaggers () {
+    return this.getRegisteredPlugins()
+      .map(p => ({
+        npmName: p.npmName,
+        name: p.name,
+        version: p.version,
+        autoTaggersPerTagName: p.registerHelpers.getCommentAutoTagger()
+      }))
+      .filter(p => Object.keys(p.autoTaggersPerTagName).length !== 0)
+  }
+
+  // ---------------------------------------------------------------------------
 
   getRegisteredSettings (npmName: string) {
     const result = this.getRegisteredPluginOrTheme(npmName)

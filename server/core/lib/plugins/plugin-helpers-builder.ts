@@ -5,9 +5,11 @@ import { buildLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { AccountModel } from '@server/models/account/account.js'
-import { getServerActor } from '@server/models/application/application.js'
+import { getServerAccount, getServerActor } from '@server/models/application/application.js'
+import { CommentAutomaticTagModel } from '@server/models/automatic-tag/comment-automatic-tag.js'
+import { VideoAutomaticTagModel } from '@server/models/automatic-tag/video-automatic-tag.js'
+import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -25,33 +27,25 @@ import { blacklistVideo, unblacklistVideo } from '../video-blacklist.js'
 import { VideoPathManager } from '../video-path-manager.js'
 
 function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
-  const logger = buildPluginLogger(npmName)
-
-  const database = buildDatabaseHelpers()
-  const videos = buildVideosHelpers()
-
-  const config = buildConfigHelpers()
-
-  const server = buildServerHelpers(httpServer)
-
-  const moderation = buildModerationHelpers()
-
-  const plugin = buildPluginRelatedHelpers(pluginModel, npmName)
-
-  const socket = buildSocketHelpers()
-
-  const user = buildUserHelpers()
-
   return {
-    logger,
-    database,
-    videos,
-    config,
-    moderation,
-    plugin,
-    server,
-    socket,
-    user
+    logger: buildPluginLogger(npmName),
+
+    database: buildDatabaseHelpers(),
+    videos: buildVideosHelpers(),
+
+    config: buildConfigHelpers(),
+
+    server: buildServerHelpers(httpServer),
+
+    moderation: buildModerationHelpers(),
+
+    plugin: buildPluginRelatedHelpers(pluginModel, npmName),
+
+    socket: buildSocketHelpers(),
+
+    user: buildUserHelpers(),
+
+    automaticTags: buildAutomaticTagsHelpers()
   }
 }
 
@@ -276,6 +270,42 @@ function buildUserHelpers () {
       if (!user) return undefined
 
       return UserModel.loadByIdFull(user.id)
+    }
+  }
+}
+
+function buildAutomaticTagsHelpers () {
+  return {
+    getServerCommentAutomaticTags: async (options: {
+      commentId: number
+    }) => {
+      const result = await CommentAutomaticTagModel.listByAccountIdsAndCommentId({
+        commentId: options.commentId,
+        accountIds: [ (await getServerAccount()).id ]
+      })
+
+      return result.map(r => r.AutomaticTag)
+    },
+
+    getAccountCommentAutomaticTags: async (options: {
+      accountId: number
+      commentId: number
+    }) => {
+      const result = await CommentAutomaticTagModel.listByAccountIdsAndCommentId({
+        commentId: options.commentId,
+        accountIds: [ options.accountId ]
+      })
+
+      return result.map(r => r.AutomaticTag)
+    },
+
+    getServerVideoAutomaticTags: async (options: { videoId: number }) => {
+      const result = await VideoAutomaticTagModel.listByAccountIdsAndVideoId({
+        videoId: options.videoId,
+        accountIds: [ (await getServerAccount()).id ]
+      })
+
+      return result.map(r => r.AutomaticTag)
     }
   }
 }

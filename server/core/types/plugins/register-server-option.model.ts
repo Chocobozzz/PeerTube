@@ -1,6 +1,3 @@
-import { Response, Router } from 'express'
-import { Server } from 'http'
-import { Logger } from 'winston'
 import {
   PluginPlaylistPrivacyManager,
   PluginSettingsManager,
@@ -16,7 +13,11 @@ import {
   VideoBlacklistCreate
 } from '@peertube/peertube-models'
 import { ActorModel } from '@server/models/actor/actor.js'
-import { MUserDefault, MVideo, MVideoThumbnails, MVideoWithAllFiles, UserNotificationModelForApi } from '../models/index.js'
+import { Response, Router } from 'express'
+import { Server } from 'http'
+import { Logger } from 'winston'
+import { MAutomaticTag, MUserDefault, MVideo, MVideoThumbnails, MVideoWithAllFiles, UserNotificationModelForApi } from '../models/index.js'
+import { RegisterCommentAutoTaggerOptions, RegisterVideoAutoTaggerOptions } from './register-auto-tagger.model.js'
 import {
   RegisterServerAuthExternalOptions,
   RegisterServerAuthExternalResult,
@@ -123,6 +124,16 @@ export type PeerTubeHelpers = {
     // PeerTube >= 4.3
     loadById: (id: number) => Promise<MUserDefault>
   }
+
+  automaticTags: {
+    // PeerTube >= 8.3
+    getServerCommentAutomaticTags: (options: { commentId: number }) => Promise<MAutomaticTag[]>
+    // PeerTube >= 8.3
+    getAccountCommentAutomaticTags: (options: { accountId: number, commentId: number }) => Promise<MAutomaticTag[]>
+
+    // PeerTube >= 8.3
+    getServerVideoAutomaticTags: (options: { videoId: number }) => Promise<MAutomaticTag[]>
+  }
 }
 
 export type RegisterServerOptions = {
@@ -147,6 +158,11 @@ export type RegisterServerOptions = {
   registerExternalAuth: (options: RegisterServerAuthExternalOptions) => RegisterServerAuthExternalResult
   unregisterIdAndPassAuth: (authName: string) => void
   unregisterExternalAuth: (authName: string) => void
+
+  registerCommentAutoTagger: (options: RegisterCommentAutoTaggerOptions) => void
+  registerVideoAutoTagger: (options: RegisterVideoAutoTaggerOptions) => void
+  unregisterCommentAutoTagger: (options: RegisterCommentAutoTaggerOptions) => void
+  unregisterVideoAutoTagger: (options: RegisterVideoAutoTaggerOptions) => void
 
   // Get plugin router to create custom routes
   // Base routes of this router are
