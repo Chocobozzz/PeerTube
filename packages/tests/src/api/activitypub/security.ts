@@ -482,7 +482,7 @@ describe('Test ActivityPub security', function () {
           }
         }
 
-        const { fail, statusCode } = await postActivity(activity)
+        const { fail } = await postActivity(activity)
         expect(fail).to.be.false
       }
     })
