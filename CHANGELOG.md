@@ -27,8 +27,8 @@
 
 ### SECURITY
 
- * Fix SQL injection coming from actor inbox URL when updating actor follow scores
- * Reject JSON-LD objects with special properties
+ * Fix SQL injection coming from actor inbox URL when updating actor follow scores. Thanks to **Nagarajan Selvaraj Paulmony** for reporting this vulnerability :pray:
+ * Reject JSON-LD objects with special properties. Thanks to **Mastodon security team** for reporting this vulnerability :pray:
  * Restricts role assignment to administrators only
  * Prevent external auth token replay
  * Prevent SSRF on import and channel sync
