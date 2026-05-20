@@ -172,9 +172,12 @@ async function getBypassFromPasswordGrant (username: string, password: string): 
   return undefined
 }
 
-function getBypassFromExternalAuth (username: string, externalAuthToken: string): BypassLogin {
+function consumeBypassFromExternalAuth (username: string, externalAuthToken: string): BypassLogin {
   const obj = authBypassTokens.get(externalAuthToken)
   if (!obj) throw new Error('Cannot authenticate user with unknown bypass token')
+
+  // Prevent replaying the same token
+  authBypassTokens.delete(externalAuthToken)
 
   const { expires, user, authName, npmName } = obj
 
@@ -245,7 +248,7 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
 
 export {
   onExternalUserAuthenticated,
-  getBypassFromExternalAuth,
+  consumeBypassFromExternalAuth,
   getAuthNameFromRefreshGrant,
   getBypassFromPasswordGrant
 }

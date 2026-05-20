@@ -29,8 +29,8 @@ export async function compactJSONLDAndCheckRSA2017Signature (fromActor: MActor, 
 
   req.body = { ...compacted, signature: req.body.signature }
 
-  if (compacted['@include']) {
-    logger.warn('JSON-LD @include is not supported')
+  if (containInvalidJsonldKeys(compacted)) {
+    logger.warn('JSON-LD @included, @graph or @reverse are not supported')
     return false
   }
 
@@ -150,4 +150,18 @@ function createDocWithoutSignatureHash (doc: any) {
   delete docWithoutSignature.signature
 
   return hashObject(docWithoutSignature)
+}
+
+function containInvalidJsonldKeys (obj: any, depth = 1) {
+  if (depth > 20) return true
+
+  if (typeof obj !== 'object' || obj === null) return false
+
+  if (Array.isArray(obj)) {
+    return obj.some(item => containInvalidJsonldKeys(item, depth + 1))
+  }
+
+  if ('@included' in obj || '@graph' in obj || '@reverse' in obj) return true
+
+  return Object.values(obj).some(value => containInvalidJsonldKeys(value, depth + 1))
 }

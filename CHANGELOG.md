@@ -1,5 +1,21 @@
 # Changelog
 
+## v8.1.6
+
+### IMPORTANT NOTES
+
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+
+### SECURITY
+
+ * Fix SQL injection coming from actor inbox URL when updating actor follow scores
+ * Reject JSON-LD objects with special properties
+ * Restricts role assignment to administrators only
+ * Prevent external auth token replay
+ * Prevent SSRF on import and channel sync
+ * Stricter rate limit to ask password reset
+
+
 ## v8.2.0-rc.1
 
 ### IMPORTANT NOTES

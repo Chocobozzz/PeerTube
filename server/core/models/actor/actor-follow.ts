@@ -658,14 +658,19 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
   }
 
   static updateScore (inboxUrl: string, value: number, t?: Transaction) {
-    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
+    const query = 'UPDATE "actorFollow" SET "score" = LEAST("score" + $value, $maxScore) ' +
       'WHERE id IN (' +
       'SELECT "actorFollow"."id" FROM "actorFollow" ' +
       'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
-      `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
+      'WHERE "actor"."inboxUrl" = $inboxUrl OR "actor"."sharedInboxUrl" = $inboxUrl' +
       ')'
 
     const options = {
+      bind: {
+        inboxUrl,
+        maxScore: ACTOR_FOLLOW_SCORE.MAX,
+        value
+      },
       type: QueryTypes.BULKUPDATE,
       transaction: t
     }

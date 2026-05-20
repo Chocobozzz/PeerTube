@@ -1,5 +1,5 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRole, UserUpdateMe } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
@@ -96,13 +96,7 @@ export const usersAddValidator = [
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
     if (!await checkUsernameOrEmailDoNotAlreadyExist({ username: req.body.username, email: req.body.email, req, res })) return
 
-    const authUser = res.locals.oauth.token.User
-    if (authUser.role !== UserRole.ADMINISTRATOR && req.body.role !== UserRole.USER) {
-      return res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'You can only create users (and not administrators or moderators)'
-      })
-    }
+    if (!checkCanSetRole(req.body.role, res)) return
 
     if (req.body.channelName) {
       if (req.body.channelName === req.body.username) {
@@ -213,6 +207,7 @@ export const usersUpdateValidator = [
     }
 
     if (!checkCanModerate(user, res)) return
+    if (req.body.role && !checkCanSetRole(req.body.role, res)) return
 
     if (
       req.body.email &&
@@ -523,4 +518,19 @@ function checkCanModerate (onUser: MUser, res: express.Response) {
   })
 
   return false
+}
+
+function checkCanSetRole (role: UserRoleType, res: express.Response) {
+  const authUser = res.locals.oauth.token.User
+
+  if (authUser.role !== UserRole.ADMINISTRATOR && role !== UserRole.USER) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: 'Only administrators can assign admin or moderator roles'
+    })
+
+    return false
+  }
+
+  return true
 }
