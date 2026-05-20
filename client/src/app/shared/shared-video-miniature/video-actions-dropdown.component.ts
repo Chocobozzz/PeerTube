@@ -505,7 +505,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.videoActions = [
       [
         {
-          label: $localize`Save to playlist`,
+          label: $localize`Save to playlist...`,
           handler: () => this.playlistDropdown().toggle(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().playlist,
           iconName: 'playlist-add'
@@ -513,7 +513,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
       ],
       [ // public actions regarding the video
         {
-          label: $localize`Download`,
+          label: $localize`Download...`,
           handler: () => this.showDownloadModal(),
           isDisplayed: () => {
             if (!this.displayOptions().download) return false
@@ -565,7 +565,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().update && this.isVideoUpdatable()
         },
         {
-          label: $localize`Block`,
+          label: $localize`Block...`,
           handler: () => this.showBlockModal(),
           iconName: 'no',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().blacklist && this.isVideoBlockable()
@@ -589,7 +589,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           iconName: 'delete'
         },
         {
-          label: $localize`Report`,
+          label: $localize`Report...`,
           handler: () => this.showReportModal(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().report,
           iconName: 'flag'

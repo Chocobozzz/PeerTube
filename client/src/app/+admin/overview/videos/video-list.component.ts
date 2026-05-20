@@ -235,7 +235,7 @@ export class VideoListComponent implements OnInit {
           iconName: 'delete'
         },
         {
-          label: $localize`Block`,
+          label: $localize`Block...`,
           handler: videos => this.videoBlockModal().show(videos),
           isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => !v.blacklisted),
           iconName: 'no'

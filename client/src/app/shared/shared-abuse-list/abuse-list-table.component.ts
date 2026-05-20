@@ -338,8 +338,8 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
   private buildInternalActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
     const messagesAction: DropdownActionForBuilder<ProcessedAbuse> = {
       label: this.isAdminView()
-        ? $localize`Messages with reporter`
-        : $localize`Messages with moderators`,
+        ? $localize`Messages with reporter...`
+        : $localize`Messages with moderators...`,
       handler: abuses => this.openAbuseMessagesModal(abuses[0]),
       isDisplayed: abuse => this.isLocalAbuse(abuse),
       enableBulk: false
@@ -376,7 +376,7 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
       messagesAction,
 
       {
-        label: () => $localize`Set internal note`,
+        label: () => $localize`Set internal note...`,
         handler: abuses => this.openModerationCommentModal(abuses),
         isDisplayed: () => this.isAdminView(),
         enableBulk: true

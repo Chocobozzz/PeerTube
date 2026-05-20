@@ -146,7 +146,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           isDisplayed: users => users.every(u => this.authUser.canManageUser(u))
         },
         {
-          label: $localize`Ban`,
+          label: $localize`Ban...`,
           description: $localize`User won't be able to login anymore, but videos and comments will be kept as is.`,
           handler: users => this.openBanUserModal(users),
           isDisplayed: users => users.every(u => this.authUser.canManageUser(u) && u.blocked === false)

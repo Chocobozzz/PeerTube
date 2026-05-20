@@ -416,7 +416,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       if (hasManageRight) {
         platformModerationActions = platformModerationActions.concat([
           {
-            label: $localize`Ban`,
+            label: $localize`Ban...`,
             description: $localize`User won't be able to login anymore, but videos and comments will be kept as is.`,
             handler: ({ user }) => this.openBanUserModal(user),
             isDisplayed: ({ user }) => !this.isMyUser(user) && !user.blocked

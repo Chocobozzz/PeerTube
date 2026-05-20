@@ -107,7 +107,7 @@ export class VideoBlockListComponent implements OnInit {
           enableBulk: true
         },
         {
-          label: () => $localize`Set internal note`,
+          label: () => $localize`Set internal note...`,
           handler: entries => this.internalNoteModal().openModal(entries),
           enableBulk: true
         }

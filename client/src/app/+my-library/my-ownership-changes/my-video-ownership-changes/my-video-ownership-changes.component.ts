@@ -66,7 +66,7 @@ export class MyVideoOwnershipChangesComponent {
       ],
       [
         {
-          label: () => $localize`Accept`,
+          label: () => $localize`Accept...`,
           handler: changeOwnership => this.openAcceptModal(changeOwnership),
           isDisplayed: changeOwnership => this.canAcceptOrReject(changeOwnership),
           enableBulk: true
