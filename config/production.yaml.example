@@ -1064,7 +1064,7 @@ instance:
   # To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string
   securitytxt: |
     Contact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md
-    Expires: 2025-12-31T11:00:00.000Z
+    Expires: 2030-12-31T11:00:00.000Z
 
 services:
   # Cards configuration to format video in Twitter/X
