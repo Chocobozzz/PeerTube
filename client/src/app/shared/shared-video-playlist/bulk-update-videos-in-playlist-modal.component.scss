@@ -1,0 +1,27 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+my-peertube-checkbox {
+  align-self: center;
+
+  @include margin-right(10px);
+}
+
+.display-name {
+  display: flex;
+  align-items: flex-end;
+  flex-grow: 1;
+  margin: 0;
+  font-weight: $font-regular;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+my-playlist-create-block {
+  border-top: 1px solid $separator-border-color;
+}
+
+input[type="text"] {
+  @include peertube-input-text(100%);
+}

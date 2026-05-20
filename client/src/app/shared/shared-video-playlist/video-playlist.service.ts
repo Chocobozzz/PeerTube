@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core'
 import { AuthService, AuthUser, ComponentPaginationLight, RestExtractor, RestPagination, RestService, ServerService } from '@app/core'
 import { buildBulkObservable, objectToFormData } from '@app/helpers'
 import { NGX_LOADING_BAR_IGNORED } from '@ngx-loading-bar/http-client'
+import { arrayify } from '@peertube/peertube-core-utils'
 import {
   CachedVideoExistInPlaylist,
   CachedVideosExistInPlaylists,
@@ -20,8 +21,8 @@ import {
 } from '@peertube/peertube-models'
 import debug from 'debug'
 import { SortMeta } from 'primeng/api'
-import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
-import { catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
+import { from, merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
+import { catchError, concatMap, filter, map, share, switchMap, tap, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { Account } from '../shared-main/account/account.model'
 import { AccountService } from '../shared-main/account/account.service'
@@ -224,19 +225,25 @@ export class VideoPlaylistService {
       )
   }
 
-  addVideoInPlaylist (playlistId: number, body: VideoPlaylistElementCreate) {
+  // ---------------------------------------------------------------------------
+
+  addVideoInPlaylist (playlistId: number, bodyArg: VideoPlaylistElementCreate | VideoPlaylistElementCreate[]) {
     const url = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos'
 
-    return this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body)
+    return from(arrayify(bodyArg))
       .pipe(
-        tap(res => {
+        concatMap(body => this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body).pipe(map(res => ({ res, body })))),
+        tap(({ res, body }) => {
           const existsResult = this.videoExistsCache[body.videoId]
-          existsResult.push({
-            playlistId,
-            playlistElementId: res.videoPlaylistElement.id,
-            startTimestamp: body.startTimestamp,
-            stopTimestamp: body.stopTimestamp
-          })
+
+          if (existsResult) {
+            existsResult.push({
+              playlistId,
+              playlistElementId: res.videoPlaylistElement.id,
+              startTimestamp: body.startTimestamp,
+              stopTimestamp: body.stopTimestamp
+            })
+          }
 
           this.runVideoExistsInPlaylistCheck(body.videoId)
 
@@ -248,14 +255,29 @@ export class VideoPlaylistService {
             this.myAccountPlaylistCache.data = [ playlist, ...otherPlaylists ]
           }
         }),
+        map(({ res }) => res),
+        toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
   }
 
-  updateVideoOfPlaylist (playlistId: number, playlistElementId: number, body: VideoPlaylistElementUpdate, videoId: number) {
-    return this.authHttp.put(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId, body)
+  updateVideoOfPlaylist (options: {
+    playlistId: number
+
+    elements: ({
+      playlistElementId: number
+      videoId: number
+    } & VideoPlaylistElementUpdate)[]
+  }) {
+    const { playlistId, elements } = options
+
+    return from(elements)
       .pipe(
-        tap(() => {
+        concatMap(({ playlistElementId, videoId, ...body }) => {
+          return this.authHttp.put(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId, body)
+            .pipe(map(() => ({ playlistElementId, videoId, body })))
+        }),
+        tap(({ playlistElementId, videoId, body }) => {
           const existsResult = this.videoExistsCache[videoId]
 
           if (existsResult) {
@@ -267,16 +289,28 @@ export class VideoPlaylistService {
 
           this.runVideoExistsInPlaylistCheck(videoId)
         }),
+        toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
   }
 
-  removeVideoFromPlaylist (playlistId: number, playlistElementId: number, videoId?: number) {
-    return this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId)
-      .pipe(
-        tap(() => {
-          if (!videoId) return
+  removeElementsFromPlaylist (options: {
+    playlistId: number
 
+    elements: {
+      playlistElementId: number
+      videoId: number
+    }[]
+  }) {
+    const { playlistId, elements } = options
+
+    return from(elements)
+      .pipe(
+        concatMap(({ playlistElementId, videoId }) =>
+          this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId)
+            .pipe(map(() => ({ playlistElementId, videoId })))
+        ),
+        tap(({ playlistElementId, videoId }) => {
           if (this.videoExistsCache[videoId]) {
             this.videoExistsCache[videoId] = this.videoExistsCache[videoId]
               .filter(e => e.playlistElementId !== playlistElementId)
@@ -284,6 +318,7 @@ export class VideoPlaylistService {
 
           this.runVideoExistsInPlaylistCheck(videoId)
         }),
+        toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
   }
@@ -350,17 +385,20 @@ export class VideoPlaylistService {
     return obs
   }
 
-  runVideoExistsInPlaylistCheck (videoId: number) {
+  runVideoExistsInPlaylistCheck (videoIds: number | number[]) {
     debugLogger('Running playlist check.')
 
-    if (this.videoExistsCache[videoId]) {
-      debugLogger('Found cache for %d.', videoId)
+    for (const videoId of arrayify(videoIds)) {
+      if (this.videoExistsCache[videoId]) {
+        debugLogger('Found cache for %d.', videoId)
 
-      return this.videoExistsInPlaylistCacheSubject.next({ [videoId]: this.videoExistsCache[videoId] })
+        this.videoExistsInPlaylistCacheSubject.next({ [videoId]: this.videoExistsCache[videoId] })
+        continue
+      }
+
+      debugLogger('Fetching from network for %d.', videoId)
+      this.videoExistsInPlaylistNotifier.next(videoId)
     }
-
-    debugLogger('Fetching from network for %d.', videoId)
-    return this.videoExistsInPlaylistNotifier.next(videoId)
   }
 
   extractPlaylists (result: ResultList<VideoPlaylistServerModel>) {

@@ -43,6 +43,8 @@
                   <my-global-icon [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
                 } @else if (action.actorAvatar) {
                   <my-actor-avatar size="24" [actor]="action.actorAvatar.actor" [actorType]="action.actorAvatar.type"></my-actor-avatar>
+                } @else if (hasAtLeastAnIconOrAvatar) {
+                  <div class="icon-placeholder"></div>
                 }
 
                 <div class="item-label">

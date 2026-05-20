@@ -97,3 +97,9 @@ button {
 
   @include margin-left(0.5rem !important);
 }
+
+.icon-placeholder {
+  width: 22px;
+
+  @include margin-right(0.5rem);
+}

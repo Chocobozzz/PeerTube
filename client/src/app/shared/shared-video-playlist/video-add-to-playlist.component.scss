@@ -6,10 +6,14 @@ my-timestamp-input {
   width: 100px;
 }
 
+my-playlist-create-block {
+  display: block;
+}
+
 .header,
 .dropdown-item,
 .input-container,
-.new-playlist-block {
+my-playlist-create-block {
   padding: 8px 24px;
 }
 
@@ -118,7 +122,7 @@ my-timestamp-input {
 }
 
 .new-playlist-button,
-.new-playlist-block {
+my-playlist-create-block {
   padding-top: 10px;
   border-top: 1px solid $separator-border-color;
 }

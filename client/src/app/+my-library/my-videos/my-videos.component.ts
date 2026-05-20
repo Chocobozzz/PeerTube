@@ -10,6 +10,7 @@ import { PeerTubeBadgeService } from '@app/shared/shared-main/common/peertube-ba
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
+import { BulkUpdateVideosInPlaylistModalComponent } from '@app/shared/shared-video-playlist/bulk-update-videos-in-playlist-modal.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { arrayify } from '@peertube/peertube-core-utils'
@@ -66,7 +67,8 @@ type DataLoaderParameter = Parameters<MyVideosComponent['_dataLoader']>[0]
     PTDatePipe,
     VideoNSFWBadgeComponent,
     TableComponent,
-    PrivacyBadgeComponent
+    PrivacyBadgeComponent,
+    BulkUpdateVideosInPlaylistModalComponent
   ]
 })
 export class MyVideosComponent implements OnInit, OnDestroy {
@@ -81,6 +83,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute)
 
   readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName, QueryParams>>('table')
+  readonly bulkUpdateVideosInPlaylistModal = viewChild<BulkUpdateVideosInPlaylistModalComponent>('bulkUpdateVideosInPlaylistModal')
 
   videosContainedInPlaylists: VideosExistInPlaylists = {}
 
@@ -254,7 +257,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     }).pipe(tap(({ data }) => this.fetchVideosContainedInPlaylists(data)))
   }
 
-  fetchVideosContainedInPlaylists (videos: Video[]) {
+  fetchVideosContainedInPlaylists (videos: Pick<Video, 'id'>[]) {
     this.playlistService.doVideosExistInPlaylist(videos.map(v => v.id))
       .subscribe(result => {
         this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
@@ -296,6 +299,16 @@ export class MyVideosComponent implements OnInit, OnDestroy {
 
   private buildActions () {
     this.bulkActions = [
+      [
+        {
+          label: $localize`Add to playlist...`,
+          handler: videos => {
+            this.bulkUpdateVideosInPlaylistModal().show({ videos, videosContainedInPlaylists: this.videosContainedInPlaylists })
+          },
+          iconName: 'playlist-add'
+        }
+      ],
+
       [
         {
           label: $localize`Delete`,

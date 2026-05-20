@@ -275,23 +275,27 @@ export class VideoMiniatureComponent implements OnInit {
 
     this.videoPlaylistService.addVideoInPlaylist(this.watchLaterPlaylist.id, body)
       .subscribe(
-        res => {
+        ([ res ]) => {
           this.watchLaterPlaylist.playlistElementId = res.videoPlaylistElement.id
         }
       )
   }
 
   removeFromWatchLater () {
-    this.videoPlaylistService.removeVideoFromPlaylist(
-      this.watchLaterPlaylist.id,
-      this.watchLaterPlaylist.playlistElementId,
-      this.video().id
-    )
-      .subscribe(
-        _ => {
-          // empty
+    this.videoPlaylistService.removeElementsFromPlaylist({
+      playlistId: this.watchLaterPlaylist.id,
+
+      elements: [
+        {
+          playlistElementId: this.watchLaterPlaylist.playlistElementId,
+          videoId: this.video().id
         }
-      )
+      ]
+    }).subscribe(
+      _ => {
+        // empty
+      }
+    )
   }
 
   isWatchLaterPlaylistDisplayed () {
