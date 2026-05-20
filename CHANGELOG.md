@@ -1,5 +1,24 @@
 # Changelog
 
+## v8.2.0-rc.2
+
+### SECURITY
+
+ * Include security fixes from 8.1.6
+
+### Features
+
+ * Add `g p` hotkey to go to my playlists
+ * Add `.m4b` audio file support
+
+### Bug fixes
+
+ * More robust playlist thumbnails updater
+ * Fix concurrency issue when writing live sha segments
+ * Fix concurrency issue when uploading the same torrent filename
+ * Fix column varchar lengths
+
+
 ## v8.1.6
 
 ### IMPORTANT NOTES
