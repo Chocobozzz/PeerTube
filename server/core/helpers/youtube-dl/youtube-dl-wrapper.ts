@@ -269,7 +269,7 @@ export class YoutubeDLWrapper {
   }
 
   private async checkUnicastOrThrow (userLanguage: string) {
-    if (!await isResolvingToUnicastOnly(this.url)) {
+    if (!await isResolvingToUnicastOnly(new URL(this.url).hostname)) { 
       throw new YoutubeDlImportError({
         message: t(`URL {targetUrl} is not a unicast URL.`, userLanguage, { targetUrl: this.url }),
         code: YoutubeDlImportErrorCode.NOT_ONLY_UNICAST_URL
