@@ -49,7 +49,7 @@ export class VODHLSTranscodingJobHandler
     let hasSeparatedAudio = false
     if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
       const videoSource = await VideoSourceModel.loadLatest(video.id)
-      if (!videoSource?.keptOriginalFilename) {
+      if (!videoSource?.keptOriginalFilename || videoSource.resolution === VideoResolution.H_NOVIDEO) {
         const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
         hasSeparatedAudio = !!separatedAudioFile
       }

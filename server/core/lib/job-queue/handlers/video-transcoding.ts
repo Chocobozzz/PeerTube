@@ -127,7 +127,7 @@ async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg:
     if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
       const videoSource = await VideoSourceModel.loadLatest(video.id)
 
-      if (videoSource?.keptOriginalFilename) {
+      if (videoSource?.keptOriginalFilename && videoSource.resolution !== VideoResolution.H_NOVIDEO) {
         usedOriginal = true
 
         await VideoPathManager.Instance.makeAvailableOriginalFile(videoSource, ([ videoPath ]) => {

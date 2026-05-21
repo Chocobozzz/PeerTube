@@ -1,4 +1,4 @@
-import { FileStorage, RunnerJobState, VideoFileStream } from '@peertube/peertube-models'
+import { FileStorage, RunnerJobState, VideoFileStream, VideoResolution } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { proxifyHLS, proxifyOriginalVideoFile, proxifyWebVideoFile } from '@server/lib/object-storage/index.js'
@@ -101,7 +101,7 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
   if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
     const videoSource = await VideoSourceModel.loadLatest(video.id)
 
-    if (videoSource?.keptOriginalFilename) {
+    if (videoSource?.keptOriginalFilename && videoSource.resolution !== VideoResolution.H_NOVIDEO) {
       return serveOriginalFile({ videoSource, req, res })
     }
   }

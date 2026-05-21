@@ -1,4 +1,4 @@
-import { FileStorage } from '@peertube/peertube-models'
+import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
@@ -141,7 +141,7 @@ class VideoPathManager {
     if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
       const videoSource = await VideoSourceModel.loadLatest(video.id)
 
-      if (videoSource?.keptOriginalFilename) {
+      if (videoSource?.keptOriginalFilename && videoSource.resolution !== VideoResolution.H_NOVIDEO) {
         logger.info('Using kept original file %s as transcoding input for video %s.', videoSource.keptOriginalFilename, video.uuid, lTags(video.uuid))
 
         return this.makeAvailableOriginalFile(videoSource, ([ videoPath ]) => {
