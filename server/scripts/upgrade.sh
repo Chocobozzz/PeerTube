@@ -40,14 +40,29 @@ if [ -x "$(command -v pg_dump)" ]; then
 
   echo "Backing up PostgreSQL database in $SQL_BACKUP_PATH"
 
-  DB_USER=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
-  DB_PASS=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
   DB_HOST=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
-  DB_PORT=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['port'])")
   DB_SUFFIX=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
   DB_NAME=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['name'] || '')")
 
-  PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -p $DB_PORT -h $DB_HOST -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH"
+  pg_dump_cmd() {
+    pg_dump -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH" "$@"
+  }
+
+  # Empty hostname means that we should connect using default postgres socket using peer auth
+  # For non-empty host we are using network connection with credentials
+  if [ "$DB_HOST" = "" ]; then
+
+    pg_dump_cmd
+  else
+
+    DB_USER=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
+    DB_PASS=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
+    DB_PORT=$(node -e "console.log(require('js-yaml').load(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['port'])")
+
+    PGPASSWORD=$DB_PASS pg_dump_cmd -U "$DB_USER" -h "$DB_HOST" -p $DB_PORT
+  fi
+
+  echo "Backup complete"
 else
   echo "pg_dump not found. Cannot make a SQL backup!"
 fi
