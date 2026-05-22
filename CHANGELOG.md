@@ -1,5 +1,14 @@
 # Changelog
 
+## v8.1.7
+
+## Bug fixes
+
+  * Fix broken URL import
+  * Fix user quota check for imports
+  * Fix removing notifications from muted accounts
+
+
 ## v8.1.6
 
 ### IMPORTANT NOTES
