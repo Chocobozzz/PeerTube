@@ -27,6 +27,7 @@ import { addLocalOrRemoteStoryboardJobIfNeeded, buildMoveVideoJob } from '@serve
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
+import { UserModel } from '@server/models/user/user.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { MUserId, MVideoFile, MVideoFullLight } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
@@ -45,7 +46,6 @@ import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { createLocalVideoThumbnailsFromVideo } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
-import { UserModel } from '@server/models/user/user.js'
 
 async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
@@ -99,7 +99,8 @@ async function processTorrentImport (job: Job, videoImport: MVideoImportDefault,
     uri: videoImport.magnetUri
   }
 
-  const user = await UserModel.loadById(videoImport.userId)
+  const user = await UserModel.loadByVideoId(videoImport.videoId)
+  if (!user) throw new Error('Video does not exist anymore')
 
   return processFile({
     downloader: () => downloadWebTorrentVideo(target, JOB_TTL['video-import']),
@@ -119,7 +120,8 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
     CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
   )
 
-  const user = await UserModel.loadById(videoImport.userId)
+  const user = await UserModel.loadByVideoId(videoImport.videoId)
+  if (!user) throw new Error('Video does not exist anymore')
 
   return processFile({
     downloader: () => {
@@ -162,7 +164,7 @@ async function processFile (options: {
   let videoFile: MVideoFile
 
   try {
-    // Download video from youtubeDL
+    // Download video
     tmpVideoPath = await downloader()
 
     // Get information about this video
