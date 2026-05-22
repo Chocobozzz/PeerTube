@@ -727,65 +727,65 @@
           <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5090788635073547775" datatype="html">
+      <trans-unit id="5090788635073547775" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.initiatorAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> requested to transfer ownership of video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to you </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.initiatorAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> requested to transfer ownership of video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to you </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.initiatorAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> heeft verzocht om het eigenaarschap van video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> aan jou over te dragen </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">277,281</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4000711509477961911" datatype="html">
+      <trans-unit id="4000711509477961911" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> accepted the ownership change request for video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> accepted the ownership change request for video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> heeft de aanpassing van het eigenaarschap geaccepteerd voor video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">285,288</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2636776952466812483" datatype="html">
+      <trans-unit id="2636776952466812483" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rejected the ownership change request for video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rejected the ownership change request for video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> heeft de aanpassing van het eigenaarschap geweigerd voor video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">293,296</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5160347700619694818" datatype="html">
+      <trans-unit id="5160347700619694818" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.initiatorAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> requested to transfer ownership of channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to you </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.initiatorAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> requested to transfer ownership of channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to you </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.initiatorAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> heeft verzocht om het eigenaarschap van kanaal <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> aan jou over te dragen </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">301,304</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6376001235231740985" datatype="html">
+      <trans-unit id="6376001235231740985" datatype="html" xml:space="preserve">
         <source>Request declined</source>
-        <target state="new">Request declined</target>
+        <target state="translated">Verzoek geweigerd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">308,309</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7685379141909714548" datatype="html">
+      <trans-unit id="7685379141909714548" datatype="html" xml:space="preserve">
         <source>Request accepted</source>
-        <target state="new">Request accepted</target>
+        <target state="translated">Verzoek geaccepteerd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">319,320</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2791556416676837488" datatype="html">
+      <trans-unit id="2791556416676837488" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> accepted the ownership change request for channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> accepted the ownership change request for channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> heeft de aanpassing van het eigenaarschap geaccepteerd voor kanaal <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">328,331</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3279817871844758558" datatype="html">
+      <trans-unit id="3279817871844758558" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rejected the ownership change request for channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> rejected the ownership change request for channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> heeft de aanpassing van het eigenaarschap geweigerd voor kanaal  <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">336,339</context>
@@ -799,9 +799,9 @@
           <context context-type="linenumber">343</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5356640542998969919" datatype="html">
+      <trans-unit id="5356640542998969919" datatype="html" xml:space="preserve">
         <source>You are now the owner of the channel <x id="PH" equiv-text="changeOwnership.channel.name"/></source>
-        <target state="new">You are now the owner of the channel <x id="PH" equiv-text="changeOwnership.channel.name"/></target>
+        <target state="translated">Je bent nu de eigenaar van het kanaal <x id="PH" equiv-text="changeOwnership.channel.name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -2413,9 +2413,9 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2727852160479343870" datatype="html">
+      <trans-unit id="2727852160479343870" datatype="html" xml:space="preserve">
         <source>downloads</source>
-        <target state="new">downloads</target>
+        <target state="translated">downloads</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -2794,9 +2794,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="350798057497677761" datatype="html">
+      <trans-unit id="350798057497677761" datatype="html" xml:space="preserve">
         <source><x id="PH"/>sec</source>
-        <target state="translated"><x id="PH"/> seconden</target>
+        <target state="translated"><x id="PH"/>sec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/time-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">18</context>
@@ -3204,9 +3204,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2750704831338623812" datatype="html">
+      <trans-unit id="2750704831338623812" datatype="html" xml:space="preserve">
         <source>Do you use Mastodon, ActivityPub or an RSS feed aggregator?</source>
-        <target state="new">Do you use Mastodon, ActivityPub or an RSS feed aggregator?</target>
+        <target state="translated">Gebruik je Mastodon, ActivityPub of een RSS-feed aggregator?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">36,38</context>
@@ -4100,9 +4100,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2005818722469409502" datatype="html">
+      <trans-unit id="2005818722469409502" datatype="html" xml:space="preserve">
         <source>Open menu</source>
-        <target state="new">Open menu</target>
+        <target state="translated">Open menu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
           <context context-type="linenumber">108</context>
@@ -4168,9 +4168,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">322</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2452704893861050818" datatype="html">
+      <trans-unit id="2452704893861050818" datatype="html" xml:space="preserve">
         <source>allows to import multiple videos in parallel</source>
-        <target state="new">allows to import multiple videos in parallel</target>
+        <target state="translated">staat het gelijktijdig importeren van meerdere video's toe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">323</context>
@@ -4328,9 +4328,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5393752421173524034" datatype="html">
+      <trans-unit id="5393752421173524034" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Set up<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Set up<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Set up<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>jouw account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">57,59</context>
@@ -4581,9 +4581,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3543381263966122204" datatype="html">
+      <trans-unit id="3543381263966122204" datatype="html" xml:space="preserve">
         <source>You might need to check your account is allowed by the resource or instance owner.</source>
-        <target state="translated">Controleer of je account is toegestaan tot deze URL door de bron- of instantie eigenaar.</target>
+        <target state="translated">Controleer of je account is toegestaan door de bron- of instantie-eigenaar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+error-page/error-page.component.html</context>
           <context context-type="linenumber">26</context>
@@ -5260,25 +5260,25 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6420937489222972725" datatype="html">
+      <trans-unit id="6420937489222972725" datatype="html" xml:space="preserve">
         <source>Open filters</source>
-        <target state="new">Open filters</target>
+        <target state="translated">Open filters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5098514115800581725" datatype="html">
+      <trans-unit id="5098514115800581725" datatype="html" xml:space="preserve">
         <source>Close filters</source>
-        <target state="new">Close filters</target>
+        <target state="translated">Sluit filters</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">24,25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4391289919356861627" datatype="html">
+      <trans-unit id="4391289919356861627" datatype="html" xml:space="preserve">
         <source>Apply</source>
-        <target state="new">Apply</target>
+        <target state="translated">Toepassen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">120</context>
@@ -5408,33 +5408,33 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1162417745553050010" datatype="html">
+      <trans-unit id="1162417745553050010" datatype="html" xml:space="preserve">
         <source>All registrations</source>
-        <target state="new">All registrations</target>
+        <target state="translated">Alle registraties</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7813761224520792935" datatype="html">
+      <trans-unit id="7813761224520792935" datatype="html" xml:space="preserve">
         <source>Accepted registrations</source>
-        <target state="new">Accepted registrations</target>
+        <target state="translated">Geaccepteerde registraties</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9164244516568257595" datatype="html">
+      <trans-unit id="9164244516568257595" datatype="html" xml:space="preserve">
         <source>Rejected registrations</source>
-        <target state="new">Rejected registrations</target>
+        <target state="translated">Geweigerde registraties</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="843338523216932248" datatype="html">
+      <trans-unit id="843338523216932248" datatype="html" xml:space="preserve">
         <source>Pending registrations</source>
-        <target state="new">Pending registrations</target>
+        <target state="translated">Registraties in afwachting</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -5596,9 +5596,9 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">204</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3069881380265686521" datatype="html">
+      <trans-unit id="3069881380265686521" datatype="html" xml:space="preserve">
         <source>Ownership change request sent to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{pendingOwnershipRequest.nextOwnerAccount.name}}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, awaiting its approval.</source>
-        <target state="new">Ownership change request sent to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{pendingOwnershipRequest.nextOwnerAccount.name}}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, awaiting its approval.</target>
+        <target state="translated">Verzoek tot wijzigen van eigenaarschap verzonden aan <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{pendingOwnershipRequest.nextOwnerAccount.name}}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, in afwachting van diens goedkeuring.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">153,155</context>
@@ -5608,9 +5608,9 @@ Dit zal een bestaande ondertiteling vervangen!</target>
           <context context-type="linenumber">209,211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7413914705059866493" datatype="html">
+      <trans-unit id="7413914705059866493" datatype="html" xml:space="preserve">
         <source>Delete your channel</source>
-        <target state="new">Delete your channel</target>
+        <target state="translated">Verwijder je kanaal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">167,168</context>
@@ -5969,17 +5969,17 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4272969253403748136" datatype="html">
+      <trans-unit id="4272969253403748136" datatype="html" xml:space="preserve">
         <source>Restrict embed to the following domains</source>
-        <target state="new">Restrict embed to the following domains</target>
+        <target state="translated">Beperk insluiten tot de volgende domeinen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4520053292376276280" datatype="html">
+      <trans-unit id="4520053292376276280" datatype="html" xml:space="preserve">
         <source>Allowed domains</source>
-        <target state="new">Allowed domains</target>
+        <target state="translated">Toegestane domeinen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -6049,25 +6049,25 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6267228851810421946" datatype="html">
+      <trans-unit id="6267228851810421946" datatype="html" xml:space="preserve">
         <source>DVR window is required.</source>
-        <target state="new">DVR window is required.</target>
+        <target state="translated">DVR-venster is vereist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3557296975463596398" datatype="html">
+      <trans-unit id="3557296975463596398" datatype="html" xml:space="preserve">
         <source>DVR window must be at least 1 minute.</source>
-        <target state="new">DVR window must be at least 1 minute.</target>
+        <target state="translated">DVR-venster dient ten minste 1 minuut te zijn.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
           <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6927279544841158879" datatype="html">
+      <trans-unit id="6927279544841158879" datatype="html" xml:space="preserve">
         <source>DVR window exceeds the maximum.</source>
-        <target state="new">DVR window exceeds the maximum.</target>
+        <target state="translated">DVR-venster overschrijdt het maximum.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
           <context context-type="linenumber">152</context>
@@ -8492,9 +8492,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6086365181226161548" datatype="html">
+      <trans-unit id="6086365181226161548" datatype="html" xml:space="preserve">
         <source>Feed Token</source>
-        <target state="translated">RSS-feed authenticatie token</target>
+        <target state="translated">Feed-token</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-applications/my-account-applications.component.html</context>
           <context context-type="linenumber">19</context>
@@ -12054,7 +12054,7 @@ Geen ondertiteling voor nu.</target>
       </trans-unit>
       <trans-unit id="7372107248244982956" datatype="html" xml:space="preserve">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</source>
-        <target state="translated">Sta anonieme gebruikers <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> toe om externe video's, accounts en kanalen op te zoeken die mogelijk niet zijn gekoppeld aan je platform</target>
+        <target state="translated">Sta <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonieme gebruikers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> toe om externe video's, accounts en kanalen op te zoeken die mogelijk niet zijn gekoppeld aan je platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">770</context>
@@ -12490,7 +12490,7 @@ Geen ondertiteling voor nu.</target>
       </trans-unit>
       <trans-unit id="1905144662537747797" datatype="html" xml:space="preserve">
         <source>Enable users of your platform to stream a live.</source>
-        <target state="translated">Gebruikers kunnen live-uitzenden</target>
+        <target state="translated">Sta gebruikers van je platform toe om live te streamen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">14</context>
@@ -14440,7 +14440,7 @@ Geen ondertiteling voor nu.</target>
       </trans-unit>
       <trans-unit id="7785411665353034911" datatype="html" xml:space="preserve">
         <source>This is text that helps people visiting your channel page <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated">Dit is tekst die mensen die je kanaalpagina bezoeken helpt <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>om te begrijpen hoe ze je kunnen ondersteunen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Je kan <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Taal<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>gebruiken, met <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links naar je fondswervingsmiddelen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Dit is tekst die mensen die je kanaalpagina bezoeken helpt <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>om te begrijpen hoe ze je kunnen ondersteunen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Je kan <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown-taal<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/> gebruiken, met <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links naar je fondswervingsmiddelen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">91</context>
@@ -15869,9 +15869,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="135286612733607700" datatype="html">
+      <trans-unit id="135286612733607700" datatype="html" xml:space="preserve">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
-        <target state="translated">Het is vrije en open-source software, onder <x id="START_LINK"/> AGPLv3-licentie <x id="CLOSE_LINK"/>. </target>
+        <target state="translated">Het is vrije en open-source software, onder <x id="START_LINK"/>AGPLv3-licentie<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">14</context>
@@ -16313,9 +16313,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3273586660042053098" datatype="html">
+      <trans-unit id="3273586660042053098" datatype="html" xml:space="preserve">
         <source>Why do you want to join <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>?</source>
-        <target state="translated">Waarom wil je aan <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>deelnemen?</target>
+        <target state="translated">Waarom wil je aan <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> deelnemen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">5</context>
@@ -16369,9 +16369,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1869511367449012579" datatype="html">
+      <trans-unit id="1869511367449012579" datatype="html" xml:space="preserve">
         <source>This is the name that will be publicly visible to other users.</source>
-        <target state="new"> This is the name that will be publicly visible to other users. </target>
+        <target state="translated">Dit is de naam die voor iedereen zichtbaar is.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -21021,7 +21021,7 @@ Geen ondertiteling voor nu.</target>
       </trans-unit>
       <trans-unit id="2413744864598710526" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> created <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>a channel synchronization<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>: <x id="INTERPOLATION_1" equiv-text="{{ a.channelSync.externalChannelUrl }}"/> </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>maakte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>een kanaalsynchronisatie<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>aan: <x id="INTERPOLATION_1" equiv-text="{{ a.channelSync.externalChannelUrl }}"/> </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> maakte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>een kanaalsynchronisatie<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> aan: <x id="INTERPOLATION_1" equiv-text="{{ a.channelSync.externalChannelUrl }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-activity.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -22415,9 +22415,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="336731433013115653" datatype="html">
+      <trans-unit id="336731433013115653" datatype="html" xml:space="preserve">
         <source>Enter the code generated by your authenticator app to confirm</source>
-        <target state="translated">Voer de door je TOTP app gegenereerde code in om te bevestigen</target>
+        <target state="translated">Voer de door je authenticator-app gegenereerde code in om te bevestigen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.html</context>
           <context context-type="linenumber">36</context>
@@ -23371,9 +23371,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6149476559621965756" datatype="html">
+      <trans-unit id="6149476559621965756" datatype="html" xml:space="preserve">
         <source>Remote channel url is required.</source>
-        <target state="translated">Externe kanaal URL is vereist.</target>
+        <target state="translated">Externe kanaal-URL is vereist.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-channel-validators.ts</context>
           <context context-type="linenumber">59</context>
