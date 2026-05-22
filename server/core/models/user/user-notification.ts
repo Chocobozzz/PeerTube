@@ -1,4 +1,4 @@
-import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
+import { exists, forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import type { UserNotification, UserNotificationData, UserNotificationType_Type } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user/index.js'
@@ -390,12 +390,12 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
     const id = forceNumber(options.id)
     const bind: { id: number, forUserId?: number } = { id }
 
-    if (options.forUserId !== undefined) {
+    if (exists(options.forUserId)) {
       bind.forUserId = options.forUserId
     }
 
     function buildAccountWhereQuery (base: string) {
-      const whereSuffix = options.forUserId !== undefined
+      const whereSuffix = exists(options.forUserId)
         ? ' AND "userNotification"."userId" = $forUserId'
         : ''
 

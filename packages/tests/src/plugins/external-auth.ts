@@ -1,6 +1,5 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType, UserAdminFlag, UserRole } from '@peertube/peertube-models'
 import {
@@ -11,6 +10,7 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 async function loginExternal (options: {
   server: PeerTubeServer
@@ -21,6 +21,25 @@ async function loginExternal (options: {
   expectedStatus?: HttpStatusCodeType
   expectedStatusStep2?: HttpStatusCodeType
 }) {
+  const externalAuthToken = await fetchExternalToken(options)
+  if (!externalAuthToken) return
+
+  const resLogin = await options.server.login.loginUsingExternalToken({
+    username: options.username,
+    externalAuthToken,
+    expectedStatus: options.expectedStatusStep2
+  })
+
+  return resLogin.body
+}
+
+async function fetchExternalToken (options: {
+  server: PeerTubeServer
+  npmName: string
+  authName: string
+  query?: any
+  expectedStatus?: HttpStatusCodeType
+}) {
   const res = await options.server.plugins.getExternalAuth({
     npmName: options.npmName,
     npmVersion: '0.0.1',
@@ -29,18 +48,12 @@ async function loginExternal (options: {
     expectedStatus: options.expectedStatus || HttpStatusCode.FOUND_302
   })
 
-  if (res.status !== HttpStatusCode.FOUND_302) return
+  if (res.status !== HttpStatusCode.FOUND_302) return undefined
 
   const location = res.header.location
   const { externalAuthToken } = decodeQueryString(location)
 
-  const resLogin = await options.server.login.loginUsingExternalToken({
-    username: options.username,
-    externalAuthToken: externalAuthToken as string,
-    expectedStatus: options.expectedStatusStep2
-  })
-
-  return resLogin.body
+  return externalAuthToken as string
 }
 
 describe('Test external auth plugins', function () {
@@ -53,7 +66,17 @@ describe('Test external auth plugins', function () {
   let kefkaRefreshToken: string
   let kefkaId: number
 
-  let externalAuthToken: string
+  async function fetchCyanExternalToken () {
+    return fetchExternalToken({
+      server,
+      npmName: 'test-external-auth-one',
+      authName: 'external-auth-1',
+      query: {
+        username: 'cyan'
+      },
+      expectedStatus: HttpStatusCode.FOUND_302
+    })
+  }
 
   before(async function () {
     this.timeout(30000)
@@ -103,8 +126,6 @@ describe('Test external auth plugins', function () {
 
     expect(searchParams.externalAuthToken).to.exist
     expect(searchParams.username).to.equal('cyan')
-
-    externalAuthToken = searchParams.externalAuthToken as string
   })
 
   it('Should reject auto external login with a missing or invalid token', async function () {
@@ -117,12 +138,21 @@ describe('Test external auth plugins', function () {
   it('Should reject auto external login with a missing or invalid username', async function () {
     const command = server.login
 
-    await command.loginUsingExternalToken({ username: '', externalAuthToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
-    await command.loginUsingExternalToken({ username: '', externalAuthToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    {
+      const externalAuthToken = await fetchCyanExternalToken()
+      await command.loginUsingExternalToken({ username: '', externalAuthToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    }
+
+    {
+      const externalAuthToken = await fetchCyanExternalToken()
+      await command.loginUsingExternalToken({ username: '', externalAuthToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    }
   })
 
   it('Should reject auto external login with an expired token', async function () {
     this.timeout(30000)
+
+    const externalAuthToken = await fetchCyanExternalToken()
 
     await wait(5000)
 
@@ -453,7 +483,7 @@ describe('Test external auth plugins', function () {
     expect(searchParams.externalAuthToken).to.exist
     expect(searchParams.username).to.equal('cid')
 
-    externalAuthToken = searchParams.externalAuthToken as string
+    const externalAuthToken = searchParams.externalAuthToken as string
 
     await server.login.loginUsingExternalToken({ username: 'cid', externalAuthToken, expectedStatus: HttpStatusCode.OK_200 })
   })

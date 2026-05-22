@@ -91,7 +91,8 @@ export {
 async function processTorrentImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportTorrentPayload) {
   logger.info('Processing torrent video import in job %s.', job.id)
 
-  const user = await UserModel.loadById(videoImport.userId)
+  const user = await UserModel.loadByVideoId(videoImport.videoId)
+  if (!user) throw new Error('Video does not exist anymore')
 
   return processFile({
     downloader: () => downloadWebTorrentVideo({ torrentPath: payload.torrentPath, uri: videoImport.magnetUri }, JOB_TTL['video-import']),
@@ -111,7 +112,8 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
     CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
   )
 
-  const user = await UserModel.loadById(videoImport.userId)
+  const user = await UserModel.loadByVideoId(videoImport.videoId)
+  if (!user) throw new Error('Video does not exist anymore')
 
   return processFile({
     downloader: () => {
@@ -154,7 +156,7 @@ async function processFile (options: {
   let videoFile: MVideoFile
 
   try {
-    // Download video from youtubeDL
+    // Download video
     tmpVideoPath = await downloader()
 
     // Get information about this video
