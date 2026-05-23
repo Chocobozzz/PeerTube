@@ -1,5 +1,45 @@
 # Changelog
 
+## v8.1.8
+
+### IMPORTANT NOTES
+
+We have learned that the SQL injection vulnerability fixed in v8.1.6 has been exploited at scale since at least May 18, 2026.
+According to our investigation, the attacker exploited this SQL injection to generate a token for the `root` user and install the `peertube-plugin-google-analytics-js` plugin. This plugin imports a client script from `hxxps://www.googie-anaiytics.com/jquery.ui.js` that currently only logs a line in the web browser.
+
+All PeerTube versions earlier than 8.1.6 are affected.
+
+Actions taken by this release:
+ * Automatically remove `peertube-plugin-google-analytics-js` in v8.1.8
+ * Invalidate OAuth tokens in v8.1.8 (all users must log in again)
+ * Add a new `user.disable_root_auth` config key to disable `root` token usage
+ * Remove the plugin from the plugin registry
+
+Actions taken by Framasoft:
+ * Report `googie-anaiytics.com` to the registrar
+ * Send a contact-form message to public PeerTube instances
+ * Release additional versions if we observe other attack vectors
+
+Actions admins must take:
+ * Upgrade to v8.1.8 **as soon as possible**
+ * Review newly created users and videos
+ * Review your instance configuration, especially *Configuration* -> *Customization* -> *JavaScript*/*CSS*
+ * Review installed plugins
+ * Generate new tokens for your runners
+
+If you cannot upgrade to v8.1.8:
+ 1. Remove actor follows that contain the `20.240.202.159` URL:
+   * Find them: `SELECT * FROM "actorFollow" WHERE "url" LIKE '%20.240.202.159%'`
+   * Delete them: `DELETE FROM "actorFollow" WHERE "id" = ...`
+ 2. Remove actors that contain a `'` character in `inboxUrl`:
+   * Find them: `SELECT * FROM "actor" WHERE "inboxUrl" LIKE '%''%'`
+   * Delete them: `DELETE FROM "actor" WHERE "id" = ...`
+ 3. Invalidate OAuth tokens: `UPDATE "oAuthToken" SET "accessTokenExpiresAt" = NOW(), "refreshTokenExpiresAt" = NOW() WHERE "accessTokenExpiresAt" > NOW() OR "refreshTokenExpiresAt" > NOW()`
+ 4. Remove `peertube-plugin-google-analytics-js` from instance plugins
+ 5. Disable federation in `production.yaml` by setting `federation.enabled` to `false`
+ 6. Restart PeerTube
+
+
 ## v8.1.7
 
 ## Bug fixes
