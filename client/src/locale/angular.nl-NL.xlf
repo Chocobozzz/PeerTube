@@ -18014,49 +18014,49 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">434</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7394226533516335523" datatype="html">
+      <trans-unit id="7394226533516335523" datatype="html" xml:space="preserve">
         <source>Actions for the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Actions for the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Acties voor de {count, plural, =1 {video} other {video's}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">447</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127978769406607253" datatype="html">
+      <trans-unit id="127978769406607253" datatype="html" xml:space="preserve">
         <source>Block the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Block the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Blokkeer de {count, plural, =1 {video} other {video's}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">453</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4121384633096511327" datatype="html">
+      <trans-unit id="4121384633096511327" datatype="html" xml:space="preserve">
         <source>Unblock the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Unblock the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">{count, plural, =1 {Video} other {Video's}} deblokkeren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">459</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="360751696384645624" datatype="html">
+      <trans-unit id="360751696384645624" datatype="html" xml:space="preserve">
         <source>Delete the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Delete the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Verwijder deze {count, plural, =1 {video} other {video's}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">465</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7476104506257949513" datatype="html">
+      <trans-unit id="7476104506257949513" datatype="html" xml:space="preserve">
         <source>Actions for {count, plural, =1 {the comment} other {the comments}}</source>
-        <target state="new">Actions for {count, plural, =1 {the comment} other {the comments}}</target>
+        <target state="translated">Acties voor de {count, plural, =1 {reactie} other {reacties}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">479</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8870282537679260686" datatype="html">
+      <trans-unit id="8870282537679260686" datatype="html" xml:space="preserve">
         <source>Delete {count, plural, =1 {comment} other {comments}}</source>
-        <target state="new">Delete {count, plural, =1 {comment} other {comments}}</target>
+        <target state="translated">Delete {count, plural, =1 {reactie} other {reacties}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">487</context>
@@ -18150,9 +18150,9 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">574</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="82990740698454566" datatype="html">
+      <trans-unit id="82990740698454566" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Delete video} other {Delete videos}}</source>
-        <target state="new">{count, plural, =1 {Delete video} other {Delete videos}}</target>
+        <target state="translated">{count, plural, =1 {Video} other {Video's}} verwijderen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -20903,17 +20903,17 @@ Geen ondertiteling voor nu.</target>
           <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1990743270860913672" datatype="html">
+      <trans-unit id="1990743270860913672" datatype="html" xml:space="preserve">
         <source>Server <x id="PH" equiv-text="host"/> muted.</source>
-        <target state="new">Server <x id="PH" equiv-text="host"/> muted.</target>
+        <target state="translated">Server <x id="PH" equiv-text="host"/> gedempt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3494132403413285893" datatype="html">
+      <trans-unit id="3494132403413285893" datatype="html" xml:space="preserve">
         <source>Server <x id="PH" equiv-text="host"/> unmuted.</source>
-        <target state="new">Server <x id="PH" equiv-text="host"/> unmuted.</target>
+        <target state="translated">Het dempen van de server <x id="PH" equiv-text="host"/> is ongedaan gemaakt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">387</context>
