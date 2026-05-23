@@ -349,7 +349,7 @@ async function startApplication () {
   server.listen(port, hostname, async () => {
     if (cliOptions.plugins) {
       try {
-        await PluginManager.Instance.removeUnsecurePluginsIfNeeded()
+        await PluginManager.Instance.removeUnsecurePluginsIfNeededBeforeRegistration()
 
         await PluginManager.Instance.rebuildNativePluginsIfNeeded()
 

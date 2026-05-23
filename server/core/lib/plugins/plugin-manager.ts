@@ -304,12 +304,12 @@ export class PluginManager implements ServerHook {
     this.sortHooksByPriority()
   }
 
-  async removeUnsecurePluginsIfNeeded () {
+  async removeUnsecurePluginsIfNeededBeforeRegistration () {
     for (const npmName of UNSECURE_PLUGINS_TO_REMOVE) {
       const plugin = await PluginModel.loadByNpmName(npmName)
       if (!plugin || plugin.uninstalled === true) continue
 
-      await this.uninstall({ npmName })
+      await this.uninstall({ npmName, unregister: false })
     }
   }
 
