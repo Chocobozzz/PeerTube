@@ -1,5 +1,12 @@
 # Changelog
 
+## v8.2.0-rc.3
+
+### SECURITY
+
+ * Include security fixes from 8.1.8 and bug fixes from 8.1.7
+
+
 ## v8.2.0-rc.2
 
 ### SECURITY
