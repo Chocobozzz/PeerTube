@@ -4,10 +4,8 @@
 
 ### IMPORTANT NOTES
 
-We have learned that the SQL injection vulnerability fixed in v8.1.6 has been exploited at scale since at least May 18, 2026.
+We have learned that the SQL injection vulnerability fixed in v8.1.6 has been exploited at scale since at least May 18, 2026 and so before the v8.1.6 release.
 According to our investigation, the attacker exploited this SQL injection to generate a token for the `root` user and install the `peertube-plugin-google-analytics-js` plugin. This plugin imports a client script from `hxxps://www.googie-anaiytics.com/jquery.ui.js` that currently only logs a line in the web browser.
-
-All PeerTube versions earlier than 8.1.6 are affected.
 
 Actions taken by this release:
  * Automatically remove `peertube-plugin-google-analytics-js` in v8.1.8
@@ -19,6 +17,7 @@ Actions taken by Framasoft:
  * Report `googie-anaiytics.com` to the registrar
  * Send a contact-form message to public PeerTube instances
  * Release additional versions if we observe other attack vectors
+ * A CVE is being requested for the SQL injection
 
 Actions admins must take:
  * Upgrade to v8.1.8 **as soon as possible**
