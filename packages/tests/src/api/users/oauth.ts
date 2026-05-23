@@ -404,6 +404,41 @@ describe('Test oauth', function () {
     })
   })
 
+  describe('Disable root auth', function () {
+    let rootAccessToken: string
+    let rootRefreshToken: string
+
+    it('Should get root tokens when root auth is enabled', async function () {
+      await server.kill()
+      await server.run({ user: { disable_root_auth: false } })
+
+      const res = await server.login.login({ expectedStatus: HttpStatusCode.OK_200 })
+
+      rootAccessToken = res.access_token
+      rootRefreshToken = res.refresh_token
+
+      await server.users.getMyInfo({ token: rootAccessToken, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should not allow root password login when root auth is disabled', async function () {
+      await server.kill()
+      await server.run({ user: { disable_root_auth: true } })
+
+      const body = await server.login.login({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
+    })
+
+    it('Should reject existing root access token when root auth is disabled', async function () {
+      await server.users.getMyInfo({ token: rootAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should reject existing root refresh token when root auth is disabled', async function () {
+      const { body } = await server.login.refreshToken({ refreshToken: rootRefreshToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
+      expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
+    })
+  })
+
   describe('Custom token lifetime', function () {
     before(async function () {
       this.timeout(120_000)

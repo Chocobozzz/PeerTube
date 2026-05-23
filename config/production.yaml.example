@@ -603,6 +603,10 @@ user:
       # Enable or disable video history by default for new users
       enabled: true
 
+  # Disable local login and OAuth token usage for the built-in `root` user.
+  # If enabled, root cannot login and existing root OAuth access/refresh tokens are rejected.
+  disable_root_auth: false
+
   # Default value of maximum video bytes the user can upload
   # Does not take into account transcoded files or account export archives (that can include user uploaded files)
   # Byte format is supported ("1GB" etc)
