@@ -60,7 +60,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1000
+export const LAST_MIGRATION_VERSION = 1001
 
 // ---------------------------------------------------------------------------
 
