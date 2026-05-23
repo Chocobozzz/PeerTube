@@ -607,6 +607,9 @@ const CONFIG = {
         }
       }
     },
+    get DISABLE_ROOT_AUTH () {
+      return config.get<boolean>('user.disable_root_auth')
+    },
     get VIDEO_QUOTA () {
       return parseBytes(config.get<number>('user.video_quota'))
     },

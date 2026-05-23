@@ -1,9 +1,3 @@
-import express from 'express'
-import { createReadStream, createWriteStream } from 'fs'
-import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
-import { Server } from 'http'
-import { createRequire } from 'module'
-import { basename, join } from 'path'
 import { getCompleteLocale, getHookType, internalRunHook } from '@peertube/peertube-core-utils'
 import {
   ClientScriptJSON,
@@ -19,6 +13,12 @@ import {
 import { decachePlugin } from '@server/helpers/decache.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
+import express from 'express'
+import { createReadStream, createWriteStream } from 'fs'
+import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
+import { Server } from 'http'
+import { createRequire } from 'module'
+import { basename, join } from 'path'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins.js'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -31,8 +31,8 @@ import {
   RegisterServerOptions
 } from '../../types/plugins/index.js'
 import { ClientHtml } from '../html/client-html.js'
-import { RegisterHelpers } from './register-helpers.js'
 import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './package-manager.js'
+import { RegisterHelpers } from './register-helpers.js'
 
 const require = createRequire(import.meta.url)
 
@@ -67,6 +67,10 @@ export interface HookInformationValue {
 type PluginLocalesTranslations = {
   [locale: string]: PluginTranslation
 }
+
+const UNSECURE_PLUGINS_TO_REMOVE = [
+  'peertube-plugin-google-analytics-js'
+]
 
 export class PluginManager implements ServerHook {
   private static instance: PluginManager
@@ -298,6 +302,15 @@ export class PluginManager implements ServerHook {
     }
 
     this.sortHooksByPriority()
+  }
+
+  async removeUnsecurePluginsIfNeededBeforeRegistration () {
+    for (const npmName of UNSECURE_PLUGINS_TO_REMOVE) {
+      const plugin = await PluginModel.loadByNpmName(npmName)
+      if (!plugin || plugin.uninstalled === true) continue
+
+      await this.uninstall({ npmName, unregister: false })
+    }
   }
 
   // Don't need the plugin type since themes cannot register server code

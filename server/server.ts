@@ -4,13 +4,13 @@ await registerOpentelemetryTracing()
 process.title = 'peertube'
 
 // ----------- Core checker -----------
-import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './core/initializers/checker-before-init.js'
+import { checkFFmpeg, checkMissedConfig, checkNodeVersion } from './core/initializers/checker-before-init.js'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
+import { initI18n, useI18n } from '@server/helpers/i18n.js'
+import { logger } from './core/helpers/logger.js'
 import { CONFIG } from './core/initializers/config.js'
 import { API_VERSION, WEBSERVER, loadLanguages } from './core/initializers/constants.js'
-import { logger } from './core/helpers/logger.js'
-import { initI18n, useI18n } from '@server/helpers/i18n.js'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -31,7 +31,7 @@ try {
   process.exit(-1)
 }
 
-import { checkConfig, checkActivityPubUrls, checkFFmpegVersion } from './core/initializers/checker-after-init.js'
+import { checkActivityPubUrls, checkConfig, checkFFmpegVersion } from './core/initializers/checker-after-init.js'
 
 try {
   checkConfig()
@@ -43,7 +43,7 @@ try {
 // ----------- Database -----------
 
 // Initialize database and models
-import { initDatabaseModels, checkDatabaseConnectionOrDie, sequelizeTypescript } from './core/initializers/database.js'
+import { checkDatabaseConnectionOrDie, initDatabaseModels, sequelizeTypescript } from './core/initializers/database.js'
 checkDatabaseConnectionOrDie()
 
 import { migrate } from './core/initializers/migrator.js'
@@ -62,13 +62,13 @@ Promise.all([
 ]).catch(err => logger.error('Cannot load i18n/languages', { err }))
 
 // Express configuration
-import express from 'express'
-import morgan, { token } from 'morgan'
-import cors from 'cors'
+import { program as cli } from 'commander'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import express from 'express'
 import { frameguard } from 'helmet'
 import anonymize from 'ip-anonymize'
-import { program as cli } from 'commander'
+import morgan, { token } from 'morgan'
 
 const app = express().disable('x-powered-by')
 
@@ -102,57 +102,57 @@ if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
 }
 
 // ----------- PeerTube modules -----------
-import { installApplication } from './core/initializers/installer.js'
-import { Emailer } from './core/lib/emailer.js'
-import { JobQueue } from './core/lib/job-queue/index.js'
+import { HttpStatusCode } from '@peertube/peertube-models'
+import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
+import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
+import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
+import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
+import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
+import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
+import { ApplicationModel } from '@server/models/application/application.js'
 import {
   activityPubRouter,
   apiRouter,
-  miscRouter,
   clientsRouter,
+  createWebsocketTrackerServer,
+  downloadRouter,
   feedsRouter,
-  staticRouter,
-  wellKnownRouter,
   lazyStaticRouter,
-  servicesRouter,
+  miscRouter,
   objectStorageProxyRouter,
   pluginsRouter,
-  trackerRouter,
-  createWebsocketTrackerServer,
+  servicesRouter,
   sitemapRouter,
-  downloadRouter
+  staticRouter,
+  trackerRouter,
+  wellKnownRouter
 } from './core/controllers/index.js'
-import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
-import { apiFailMiddleware } from './core/middlewares/error.js'
-import { Redis } from './core/lib/redis.js'
-import { ActorFollowScheduler } from './core/lib/schedulers/actor-follow-scheduler.js'
-import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
-import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-scheduler.js'
-import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
-import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
-import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
-import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-index-instances.js'
-import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
-import { VideoStatsBufferScheduler } from './core/lib/schedulers/video-stats-buffer-scheduler.js'
-import { GeoIPUpdateScheduler } from './core/lib/schedulers/geo-ip-update-scheduler.js'
-import { RunnerJobWatchDogScheduler } from './core/lib/schedulers/runner-job-watch-dog-scheduler.js'
 import { isHTTPSignatureDigestValid } from './core/helpers/peertube-crypto.js'
-import { PeerTubeSocket } from './core/lib/peertube-socket.js'
+import { installApplication } from './core/initializers/installer.js'
+import { Emailer } from './core/lib/emailer.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
-import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
-import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
+import { JobQueue } from './core/lib/job-queue/index.js'
+import { LiveManager } from './core/lib/live/index.js'
+import { PeerTubeSocket } from './core/lib/peertube-socket.js'
 import { Hooks } from './core/lib/plugins/hooks.js'
 import { PluginManager } from './core/lib/plugins/plugin-manager.js'
-import { LiveManager } from './core/lib/live/index.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
-import { ServerConfigManager } from '@server/lib/server-config-manager.js'
-import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
-import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
-import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
-import { ApplicationModel } from '@server/models/application/application.js'
-import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
-import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
-import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
+import { Redis } from './core/lib/redis.js'
+import { ActorFollowScheduler } from './core/lib/schedulers/actor-follow-scheduler.js'
+import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-index-instances.js'
+import { GeoIPUpdateScheduler } from './core/lib/schedulers/geo-ip-update-scheduler.js'
+import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
+import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
+import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
+import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
+import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
+import { RunnerJobWatchDogScheduler } from './core/lib/schedulers/runner-job-watch-dog-scheduler.js'
+import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-scheduler.js'
+import { VideoStatsBufferScheduler } from './core/lib/schedulers/video-stats-buffer-scheduler.js'
+import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
+import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
+import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
+import { apiFailMiddleware } from './core/middlewares/error.js'
 
 // ----------- Command line -----------
 
@@ -349,6 +349,8 @@ async function startApplication () {
   server.listen(port, hostname, async () => {
     if (cliOptions.plugins) {
       try {
+        await PluginManager.Instance.removeUnsecurePluginsIfNeededBeforeRegistration()
+
         await PluginManager.Instance.rebuildNativePluginsIfNeeded()
 
         await PluginManager.Instance.registerPluginsAndThemes()

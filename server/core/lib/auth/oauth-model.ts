@@ -58,6 +58,8 @@ async function getAccessToken (bearerToken: string) {
 
   if (!tokenModel) return undefined
 
+  if (isRootAuthDisabled(tokenModel.User)) return undefined
+
   if (tokenModel.User.pluginAuth) {
     const valid = await PluginManager.Instance.isTokenValid(tokenModel, 'access')
 
@@ -80,6 +82,8 @@ async function getRefreshToken (refreshToken: string) {
   if (!tokenInfo) return undefined
 
   const tokenModel = tokenInfo.token
+
+  if (isRootAuthDisabled(tokenModel.User)) return undefined
 
   if (tokenModel.User.pluginAuth) {
     const valid = await PluginManager.Instance.isTokenValid(tokenModel, 'refresh')
@@ -146,6 +150,8 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
 
   // If we don't find the user, or if the user belongs to a plugin
   if (user?.pluginAuth !== null || !password) return null
+
+  if (isRootAuthDisabled(user)) return null
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) return null
@@ -334,4 +340,8 @@ function checkUserValidityOrThrow (user: MUser, req: express.Request) {
 
 function buildExpiresIn (expiresAt: Date) {
   return Math.floor((expiresAt.getTime() - new Date().getTime()) / 1000)
+}
+
+function isRootAuthDisabled (user: Pick<MUser, 'username'>) {
+  return CONFIG.USER.DISABLE_ROOT_AUTH === true && user.username === 'root'
 }

@@ -65,6 +65,7 @@ export function checkMissedConfig () {
     'open_telemetry.tracing.jaeger_exporter.endpoint',
     'open_telemetry.metrics.http_request_duration.enabled',
     'user.history.videos.enabled',
+    'user.disable_root_auth',
     'user.video_quota',
     'user.video_quota_daily',
     'user.password_constraints.min_length',
