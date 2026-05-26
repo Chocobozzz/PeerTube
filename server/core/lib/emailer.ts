@@ -420,7 +420,7 @@ export class Emailer {
     }
 
     if (errors.length !== 0) {
-      const err = new Error('Some errors when sent emails') as Error & { errors: Error[] }
+      const err = new Error('Some errors when sent emails: ' + errors.map(e => e.message).join(', ')) as Error & { errors: Error[] }
       err.errors = errors
 
       throw err
