@@ -1,0 +1,23 @@
+diff --git a/lib/sharp.js b/lib/sharp.js
+index 1081c9314de1b669b0744a931a3b6b570c9f6609..09aec3fc832cf50ced4457a6d2ba20c71dde165a 100644
+--- a/lib/sharp.js
++++ b/lib/sharp.js
+@@ -31,10 +31,15 @@ for (path of paths) {
+ }
+ 
+ if (sharp && path.startsWith('@img/sharp-linux-x64') && !sharp._isUsingX64V2()) {
+-  const err = new Error('Prebuilt binaries for linux-x64 require v2 microarchitecture');
+-  err.code = 'Unsupported CPU';
+-  errors.push(err);
+   sharp = null;
++
++  try {
++    sharp = require('@img/sharp-wasm32/sharp.node');
++  } catch (err2) {
++    const err = new Error('Prebuilt binaries for linux-x64 require v2 microarchitecture');
++    err.code = 'Unsupported CPU';
++    errors.push(err);
++  }
+ }
+ 
+ if (sharp) {

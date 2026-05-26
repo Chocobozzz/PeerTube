@@ -12,6 +12,9 @@ patchedDependencies:
   '@types/markdown-it':
     hash: b68247cf64808c60a86b4f1ee56430de5e1b3d0fb2023e0c82242537f4f27937
     path: pnpm-patches/@types__markdown-it.patch
+  sharp:
+    hash: 6360e5a7ee3bb2fcc71d0f3c8a8532b01555e32108f8ec2eedcbfaba4ea25704
+    path: pnpm-patches/sharp.patch
   tinykeys:
     hash: 6855931e9590b29110de8402432514ff7aa294934a067557e96dc7eb46f365e3
     path: pnpm-patches/tinykeys.patch
@@ -35,6 +38,9 @@ importers:
       '@commander-js/extra-typings':
         specifier: ^14.0.0
         version: 14.0.0(commander@14.0.3)
+      '@img/sharp-wasm32':
+        specifier: ^0.34.5
+        version: 0.34.5
       '@misskey-dev/node-http-message-signatures':
         specifier: ^0.0.10
         version: 0.0.10
@@ -322,7 +328,7 @@ importers:
         version: 2.1.6(@types/node@22.14.1)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(pg@8.20.0))
       sharp:
         specifier: ^0.34.5
-        version: 0.34.5
+        version: 0.34.5(patch_hash=6360e5a7ee3bb2fcc71d0f3c8a8532b01555e32108f8ec2eedcbfaba4ea25704)
       short-uuid:
         specifier: ^6.0.3
         version: 6.0.3
@@ -13103,7 +13109,6 @@ snapshots:
   '@emnapi/runtime@1.10.0':
     dependencies:
       tslib: 2.8.1
-    optional: true
 
   '@emnapi/runtime@1.9.2':
     dependencies:
@@ -13460,7 +13465,6 @@ snapshots:
   '@img/sharp-wasm32@0.34.5':
     dependencies:
       '@emnapi/runtime': 1.10.0
-    optional: true
 
   '@img/sharp-win32-arm64@0.34.5':
     optional: true
@@ -22976,7 +22980,7 @@ snapshots:
       safe-buffer: 5.2.1
       to-buffer: 1.2.2
 
-  sharp@0.34.5:
+  sharp@0.34.5(patch_hash=6360e5a7ee3bb2fcc71d0f3c8a8532b01555e32108f8ec2eedcbfaba4ea25704):
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
