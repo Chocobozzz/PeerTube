@@ -704,3 +704,9 @@ $chapter-marker-size: 9px;
     }
   }
 }
+
+// Override video.js to not break viewport on RTL layout on mobile
+html[dir="rtl"] .video-js .vjs-volume-panel .vjs-volume-control.vjs-volume-vertical {
+  left: auto;
+  right: -3000em;
+}
