@@ -120,11 +120,8 @@ guide](https://docs.joinpeertube.org/contribute/getting-started) to know how, it
 
 You can also join the cheerful bunch that makes our community:
 
-* Chat<a name="contact"></a>:
-  * Matrix (bridged on IRC and [Discord](https://discord.gg/wj8DDUT)) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
-  * IRC : **[#peertube on irc.libera.chat:6697](https://web.libera.chat/#peertube)**
-* Forum:
-  * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
+* Matrix (bridged on [Discord](https://discord.gg/wj8DDUT)): **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
+* Forum: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
 
 Feel free to reach out if you have any questions or ideas! :speech_balloon:
 
