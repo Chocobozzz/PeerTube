@@ -1,4 +1,4 @@
-import { pick } from '@peertube/peertube-core-utils'
+import { forceNumber, pick } from '@peertube/peertube-core-utils'
 import {
   ActivityTagObject,
   ActivityTombstoneObject,
@@ -480,7 +480,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
           [Op.in]: Sequelize.literal(
             '(' +
               'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
-              `SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ${comment.id} ` +
+              `SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ${forceNumber(comment.id)} ` +
               'UNION ' +
               'SELECT "parent"."id", "parent"."inReplyToCommentId" FROM "videoComment" "parent" ' +
               'INNER JOIN "children" ON "children"."inReplyToCommentId" = "parent"."id"' +

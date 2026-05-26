@@ -10,12 +10,12 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, input }
 export class CustomIconComponent implements OnInit {
   private el = inject(ElementRef)
 
-  readonly html = input.required<string>()
+  readonly unsafeHTML = input.required<string>()
 
   ngOnInit () {
     const nativeElement = this.el.nativeElement as HTMLElement
 
-    nativeElement.innerHTML = this.html()
+    nativeElement.innerHTML = this.unsafeHTML()
     nativeElement.ariaHidden = 'true'
   }
 }

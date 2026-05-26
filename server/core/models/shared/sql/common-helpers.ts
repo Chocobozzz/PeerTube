@@ -1,7 +1,9 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { FollowState } from '@peertube/peertube-models'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import { literal } from 'sequelize'
 import { Literal } from 'sequelize/types/utils'
+import { createSafeIn } from '../query.js'
 
 // FIXME: have to specify the result type to not break peertube typings generation
 export function buildLocalAccountIdsIn (): Literal {
@@ -18,7 +20,7 @@ export function buildLocalActorIdsIn (): Literal {
 }
 
 export function buildBlockedAccountSQL (blockerIds: number[]) {
-  const blockerIdsString = blockerIds.join(', ')
+  const blockerIdsString = createSafeIn(sequelizeTypescript, blockerIds)
 
   return 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +
     ' UNION ' +

@@ -1,4 +1,5 @@
 import { ActorFollow, type FollowState } from '@peertube/peertube-models'
+import { isTestInstance } from '@peertube/peertube-node-utils'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -47,7 +48,6 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { ActorModel, unusedActorAttributesForAPI } from './actor.js'
 import { InstanceListFollowersQueryBuilder, ListFollowersOptions } from './sql/instance-list-followers-query-builder.js'
 import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/instance-list-following-query-builder.js'
-import { isTestInstance } from '@peertube/peertube-node-utils'
 
 @Table({
   tableName: 'actorFollow',
@@ -708,12 +708,16 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     start?: number
     count?: number
 
-    columnUrl?: string // Default 'url'
+    columnUrl?: 'url' | 'sharedInboxUrl' // Default 'url'
     distinct?: boolean // Default false
 
     selectTotal?: boolean // Default true
   }) {
     const { type, actorIds, t, start, count, columnUrl = 'url', distinct = false, selectTotal = true } = options
+
+    if (new Set([ 'url', 'sharedInboxUrl' ]).has(columnUrl) === false) {
+      throw new Error('Invalid columnUrl')
+    }
 
     let firstJoin: string
     let secondJoin: string

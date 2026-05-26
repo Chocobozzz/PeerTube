@@ -387,6 +387,10 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
   }) {
     const { groupByColumn, startDate, endDate, videoId } = options
 
+    if (new Set([ 'country', 'subdivisionName', 'client', 'device', 'operatingSystem' ]).has(groupByColumn) === false) {
+      throw new Error('Invalid groupByColumn')
+    }
+
     const queryOptions: QueryOptionsWithType<QueryTypes.SELECT> = {
       type: QueryTypes.SELECT as QueryTypes.SELECT,
       replacements: { videoId, startDate, endDate }

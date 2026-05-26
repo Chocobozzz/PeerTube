@@ -5,11 +5,16 @@ const updating = new Set<string>()
 // Sequelize always skip the update if we only update updatedAt field
 export async function setAsUpdated (options: {
   sequelize: Sequelize
-  table: string
+  table: 'runnerJob' | 'actorFollow' | 'videoPlaylist' | 'video' | 'videoChannel'
   id: number
   transaction?: Transaction
 }) {
   const { sequelize, table, id, transaction } = options
+
+  if (new Set([ 'runnerJob', 'actorFollow', 'videoPlaylist', 'video', 'videoChannel' ]).has(table) === false) {
+    throw new Error('Invalid table')
+  }
+
   const key = table + '-' + id
 
   if (updating.has(key)) return

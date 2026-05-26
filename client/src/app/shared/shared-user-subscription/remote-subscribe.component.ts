@@ -59,9 +59,12 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
         throw new Error('No subscribe template in webfinger response')
       })
       .then(url => {
-        if (isIOS()) return window.location.href = url
+        // Ensure the URL is valid
+        const parsed = new URL(url)
 
-        return window.open(url)
+        if (isIOS()) return window.location.href = parsed.toString()
+
+        return window.open(parsed.toString())
       })
       .catch(err => {
         logger.error(err)

@@ -11,6 +11,8 @@ import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-regis
 import { RunnerModel } from '@server/models/runner/runner.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { VideoTrackerModel } from '@server/models/server/video-tracker.js'
+import { LocalVideoViewerWatchSectionModel } from '@server/models/stat/local-video-viewer-watch-section.js'
+import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { UserImportModel } from '@server/models/user/user-import.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
@@ -30,8 +32,6 @@ import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { LocalVideoViewerWatchSectionModel } from '@server/models/stat/local-video-viewer-watch-section.js'
-import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import { readFileSync } from 'fs'
 import pg from 'pg'
@@ -55,13 +55,14 @@ import { VideoRedundancyModel } from '../models/redundancy/video-redundancy.js'
 import { PluginModel } from '../models/server/plugin.js'
 import { ServerBlocklistModel } from '../models/server/server-blocklist.js'
 import { ServerModel } from '../models/server/server.js'
+import { VideoStatModel } from '../models/stat/video-stat.js'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting.js'
+import { ChangeOwnershipModel } from '../models/video/change-ownership.js'
 import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update.js'
 import { TagModel } from '../models/video/tag.js'
 import { ThumbnailModel } from '../models/video/thumbnail.js'
 import { VideoBlacklistModel } from '../models/video/video-blacklist.js'
 import { VideoCaptionModel } from '../models/video/video-caption.js'
-import { ChangeOwnershipModel } from '../models/video/change-ownership.js'
 import { VideoChannelModel } from '../models/video/video-channel.js'
 import { VideoCommentModel } from '../models/video/video-comment.js'
 import { VideoFileModel } from '../models/video/video-file.js'
@@ -73,7 +74,6 @@ import { VideoShareModel } from '../models/video/video-share.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
-import { VideoStatModel } from '../models/stat/video-stat.js'
 import { CONFIG } from './config.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
@@ -237,7 +237,7 @@ async function checkPostgresExtensions () {
   return Promise.all(promises)
 }
 
-async function checkPostgresExtension (extension: string) {
+async function checkPostgresExtension (extension: 'pg_trgm' | 'unaccent') {
   const query = `SELECT 1 FROM pg_available_extensions WHERE name = '${extension}' AND installed_version IS NOT NULL;`
   const options = {
     type: QueryTypes.SELECT as QueryTypes.SELECT,

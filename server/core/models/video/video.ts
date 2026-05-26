@@ -1,4 +1,4 @@
-import { buildVideoEmbedPath, buildVideoWatchPath, maxBy, minBy, pick, wait } from '@peertube/peertube-core-utils'
+import { buildVideoEmbedPath, buildVideoWatchPath, forceNumber, maxBy, minBy, pick, wait } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   ResultList,
@@ -975,7 +975,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       .then(rows => rows.map(r => r.id))
   }
 
-  static listAllAndSharedByActorForOutbox (actorId: number, start: number, count: number) {
+  static listAllAndSharedByActorForOutbox (actorIdArg: number, start: number, count: number) {
+    const actorId = forceNumber(actorIdArg)
+
     function getRawQuery (select: string) {
       const queryVideo = 'SELECT ' + select + ' FROM "video" AS "Video" ' +
         'INNER JOIN "videoChannel" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
