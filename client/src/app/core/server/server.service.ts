@@ -9,6 +9,7 @@ import {
   VideoCommentPolicy,
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
+  VideoRecommendationStrategy,
   ConstantLabel,
   VideoLicenceType,
   VideoPlaylistPrivacyType,
@@ -148,6 +149,27 @@ export class ServerService {
       {
         id: VideoEmbedPrivacyPolicy.DISABLED,
         label: $localize`Nobody can embed this video`
+      }
+    ])
+  }
+
+  getRecommendationStrategies () {
+    return of([
+      {
+        id: VideoRecommendationStrategy.ANY_VIDEOS,
+        label: $localize`Allow any videos in recommendations`
+      },
+      {
+        id: VideoRecommendationStrategy.ONLY_LOCAL_VIDEOS,
+        label: $localize`Only allow instance-local videos in recommendations`
+      },
+      {
+        id: VideoRecommendationStrategy.ONLY_CHANNEL_VIDEOS,
+        label: $localize`Only allow same channel videos in recommendations`
+      },
+      {
+        id: VideoRecommendationStrategy.ONLY_OWNER_VIDEOS,
+        label: $localize`Only allow owner videos in recommendations`
       }
     ])
   }

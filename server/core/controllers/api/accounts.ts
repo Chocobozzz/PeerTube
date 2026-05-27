@@ -252,6 +252,7 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
     displayOnlyForFollower,
     accountId: account.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
+    currentVideoUuid: undefined,
     countVideos
   }, 'filter:api.accounts.videos.list.params')
 

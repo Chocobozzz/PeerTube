@@ -44,6 +44,7 @@ import {
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
   isVideoCommentsPolicyValid,
+  isRecommendationStrategyValid,
   isVideoDescriptionValid,
   isVideoImageValid,
   isVideoIncludeValid,
@@ -499,7 +500,11 @@ export function getCommonVideoEditAttributes () {
     body('scheduleUpdate.privacy')
       .optional()
       .customSanitizer(toIntOrNull)
-      .custom(isScheduleVideoUpdatePrivacyValid)
+      .custom(isScheduleVideoUpdatePrivacyValid),
+
+    body('recommendationStrategy')
+      .optional()
+      .custom(isRecommendationStrategyValid)
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
@@ -557,6 +562,10 @@ export const commonVideosFiltersValidatorFactory = (options: {
       .optional()
       .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have a valid isLocal boolean'),
+
+    query('currentVideoUuid')
+      .optional()
+      .isUUID(),
     query('hasHLSFiles')
       .optional()
       .customSanitizer(toBooleanOrNull)

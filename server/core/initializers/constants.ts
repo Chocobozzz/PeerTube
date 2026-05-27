@@ -47,7 +47,9 @@ import {
   VideoRateType,
   VideoResolution,
   VideoState,
-  VideoStateType
+  VideoStateType,
+  VideoRecommendationStrategy,
+  VideoRecommendationStrategyType
 } from '@peertube/peertube-models'
 import { isDevInstance, isTestInstance, isTestOrDevInstance, parseDurationToMs, root, sanitizeUrl } from '@peertube/peertube-node-utils'
 import { RepeatOptions } from 'bullmq'
@@ -62,7 +64,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1160
+export const LAST_MIGRATION_VERSION = 1165
 
 // ---------------------------------------------------------------------------
 
@@ -733,6 +735,13 @@ export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal',
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
+}
+
+export const VIDEO_RECOMMENDATION_STRATEGIES: { [id in VideoRecommendationStrategyType]: string } = {
+  [VideoRecommendationStrategy.ANY_VIDEOS]: 'Any videos',
+  [VideoRecommendationStrategy.ONLY_LOCAL_VIDEOS]: 'Only instance local videos',
+  [VideoRecommendationStrategy.ONLY_OWNER_VIDEOS]: 'Only owner videos',
+  [VideoRecommendationStrategy.ONLY_CHANNEL_VIDEOS]: 'Only same channel videos'
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {
