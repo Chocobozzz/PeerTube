@@ -148,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="och så vidare.    *"/>
         </target>
@@ -256,9 +254,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -2998,8 +2994,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="translated">Ett meddelande med instruktioner för att återställa lösenordet kommer skickas per e-post till <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Länken är giltig i 1 timme.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
@@ -17971,68 +17966,107 @@ color: red;
       <trans-unit id="759552082340137565" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Delete report} other {Delete reports}}</source>
         <target state="translated">{count, plural, =1 {Radera anmälan} other {Radera anmälningarna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">385</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">385</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1893484749636135486" datatype="html" xml:space="preserve">
         <source>Actions for the flagged {count, plural, =1 {account} other {accounts}}</source>
         <target state="translated">Åtgärder för {count, plural, =1 {det} other {de}} markerade {count, plural, =1 {kontot} other {kontona}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">399</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">399</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2052464115821785206" datatype="html" xml:space="preserve">
         <source>Mute flagged {count, plural, =1 {account} other {accounts}}</source>
         <target state="translated">Tysta {count, plural, =1 {det} other {de}} markerade {count, plural, =1 {kontot} other {kontona}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">407</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">407</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6244674823326566150" datatype="html" xml:space="preserve">
         <source>Mute flagged {count, plural, =1 {platform} other {platforms}}</source>
         <target state="translated">Tysta {count, plural, =1 {det} other {de}} flaggade {count, plural, =1 {plattformen} other {plattformarna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">414</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">414</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8383232244666739811" datatype="html" xml:space="preserve">
         <source>Actions for the {count, plural, =1 {reporter} other {reporters}}</source>
         <target state="translated">Åtgärder för {count, plural, =1 {rapportören} other {rapportörerna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">427</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">427</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4773177228589861902" datatype="html" xml:space="preserve">
         <source>Mute {count, plural, =1 {reporter} other {reporters}}</source>
         <target state="translated">Tysta {count, plural, =1 {rapportören} other {rapportörerna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">434</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">434</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7197879989894863275" datatype="html" xml:space="preserve">
         <source>Mute reporter {count, plural, =1 {platform} other {platforms}}</source>
         <target state="translated">Tysta rapporterande {count, plural, =1 {plattform} other {plattformar}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">441</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">441</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7394226533516335523" datatype="html" xml:space="preserve">
         <source>Actions for the {count, plural, =1 {video} other {videos}}</source>
         <target state="translated">Åtgärder för {count, plural, =1 {videon} other {videorna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">454</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">454</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="127978769406607253" datatype="html" xml:space="preserve">
         <source>Block the {count, plural, =1 {video} other {videos}}</source>
         <target state="translated">Blockera {count, plural, =1 {videon} other {videorna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">460</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">460</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4121384633096511327" datatype="html" xml:space="preserve">
         <source>Unblock the {count, plural, =1 {video} other {videos}}</source>
         <target state="translated">Lås upp {count, plural, =1 {videon} other {videorna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">466</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">466</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="360751696384645624" datatype="html" xml:space="preserve">
         <source>Delete the {count, plural, =1 {video} other {videos}}</source>
         <target state="translated">Radera {count, plural, =1 {videon} other {videorna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">472</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">472</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7476104506257949513" datatype="html" xml:space="preserve">
         <source>Actions for {count, plural, =1 {the comment} other {the comments}}</source>
         <target state="translated">Åtgärder för {count, plural, =1 {kommentaren} other {kommentarerna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">486</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">486</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8870282537679260686" datatype="html" xml:space="preserve">
         <source>Delete {count, plural, =1 {comment} other {comments}}</source>
         <target state="translated">Radera {count, plural, =1 {kommentaren} other {kommentarerna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">494</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">494</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7822423019936222997" datatype="html" xml:space="preserve">
         <source>Send a message to the reporter (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</source>
         <target state="translated">Skicka ett meddelande till rapportören (nu {count, plural, =1 {<x id="count"/> meddelande} other {<x id="count"/> meddelanden}})</target>
@@ -18073,9 +18107,9 @@ color: red;
           <context context-type="linenumber">342</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="394817347378438833" datatype="html">
+      <trans-unit id="394817347378438833" datatype="html" xml:space="preserve">
         <source>Accept/Reject</source>
-        <target state="new">Accept/Reject</target>
+        <target state="translated">Godkänn/Avvisa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">352</context>
@@ -18084,8 +18118,11 @@ color: red;
       <trans-unit id="3005976570489477141" datatype="html" xml:space="preserve">
         <source>Set internal note</source>
         <target state="translated">Skapa intern anteckning</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">379</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">379</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4985871382843824389" datatype="html" xml:space="preserve">
         <source>Actions for videos</source>
         <target state="translated">Åtgärder för videor</target>
@@ -18157,9 +18194,15 @@ color: red;
       <trans-unit id="3158039989618629879" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video unblocked.} other {<x id="count"/> videos unblocked.}}</source>
         <target state="translated">Avblockerade {count, plural, =1 {1 video} other {<x id="count"/> videor}}.</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">170</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">650</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">650</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1828494663226140635" datatype="html" xml:space="preserve">
         <source>Switch {count, plural, =1 {this auto block to manual?} other {<x id="count"/> auto blocks to manual?}}</source>
         <target state="translated">Ska {count, plural, =1 {denna automatiska blockering ändras till manuell?} other {dessa <x id="count"/> automatiska blockeringar ändras till manuella?}}</target>
@@ -18187,15 +18230,27 @@ color: red;
       <trans-unit id="4506177846215251976" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this video?} other {<x id="count"/> videos?}}</source>
         <target state="translated">Vill du verkligen radera {count, plural, =1 {den här videon?} other {dessa <x id="count"/> videor?}}</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">213</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">665</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
+          <context context-type="linenumber">213</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">665</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3648689565279541228" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video deleted.} other {<x id="count"/> videos deleted.}}</source>
         <target state="translated">Raderade {count, plural, =1 {1 video} other {<x id="count"/> videor}}.</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">225</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">677</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
+          <context context-type="linenumber">225</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">677</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5841439724861780893" datatype="html" xml:space="preserve">
         <source>Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</source>
         <target state="translated">Videonamn/-beskrivning och kommentarer som innehåller något av de bevakade orden taggas automatiskt med namnet på listan.</target>
@@ -19004,16 +19059,22 @@ color: red;
       <trans-unit id="8551670396148163744" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registrations.length }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registrations will create the accounts and channels. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>När du godkänner flera anmälningar <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>  <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registrations.length }}"/> <x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> skapas konton och deras första kanaler. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> När du godkänner en anmälning <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>  <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ registration.username }}"/> <x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> skapas kontot och dess första kanal. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5488516772394120306" datatype="html" xml:space="preserve">
         <source>At least one registration email has not been verified. Email delivery has been disabled by default.</source>
         <target state="translated">Minst ett registreringsmejl har inte verifierats. E-postleverans har slagits av som standard.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">4</context></context-group></trans-unit>
-      <trans-unit id="4616488263446093258" datatype="html">
-        <source> The registration email has not been verified. Email delivery has been disabled by default. </source>
-        <target state="new"> The registration email has not been verified. Email delivery has been disabled by default. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4616488263446093258" datatype="html" xml:space="preserve">
+        <source>The registration email has not been verified. Email delivery has been disabled by default.</source>
+        <target state="translated">Registreringsmejlet har inte verifierats. Som standard är då e-postleverans avslagen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -19022,23 +19083,35 @@ color: red;
       <trans-unit id="3002015479721765483" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> An email will be sent to each user explaining its account has been created with the moderation response you'll write below. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its account has been created with the moderation response you'll write below. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> Ett e-postmeddelande kommer att skickas till varje användare med information om att deras konto har skapats, tillsammans med svaret från modereringen som du skriver nedan. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Ett e-postmeddelande kommer att skickas till <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> med information om att deras konto har skapats, tillsammans med svaret från modereringen som du skriver nedan. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">41</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2583091767247736198" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining accounts have been created.</source>
         <target state="translated">E-postfunktionen är inte påslagen på denna instans så PeerTube kan inte skicka e-postmeddelanden med information om att konton har skapats.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">51</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="616706496397696409" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> An email will be sent to each user explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
         <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> Ett e-postmeddelande kommer att skickas till varje användare med information om att deras anmälan har avvisats <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tillsammans med det svar som du skriver under modereringen. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Ett e-postmeddelande kommer att skickas till <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> med information om att deras anmälningar har avvisats <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tillsammans med det svar som du skriver under modereringen. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">60</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2941249138625577938" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining registration requests have been rejected.</source>
         <target state="translated">E-postfunktionen har inte slagits på för denna instans. Det innebär att PeerTube inte kan skicka e-postmeddelanden om att anmälningar har avvisats.</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">71</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8494092276635837685" datatype="html">
         <source>Send a message to the user</source>
         <target state="translated">Skicka ett meddelande till användaren</target>
@@ -19058,33 +19131,51 @@ color: red;
       <trans-unit id="1508051499475223445" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Accept registration} other {Accept registrations}}</source>
         <target state="translated">{count, plural, =1 {Godkänn den här registreringsanmälan} other {Godkänn dessa registreringsanmälningar}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">80</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6146369807737651886" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reject registration} other {Reject registrations}}</source>
         <target state="translated">{count, plural, =1 {Avvisa den här registreringsanmälningen} other {Avvisa de här registreringsanmälningarna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">81</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5541059572301014238" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Accept registration} other {Accept <x id="count"/> registrations}}</source>
         <target state="translated">{count, plural, =1 {Godkänn den här registreringsanmälningen} other {Godkänn de här <x id="count"/> registreringsanmälningarna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4247834072883397130" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reject registration} other {Reject <x id="count"/> registrations}}</source>
         <target state="translated">{count, plural, =1 {Avvisa den här registreringsanmälningen} other {Avvisa de här <x id="count"/> registreringsanmälningarna}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">90</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1072149050517623514" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {<x id="username"/> account created} other {<x id="count"/> accounts created}}</source>
         <target state="translated">{count, plural, =1 {Konto för <x id="username"/> skapat} other {Konton för de här <x id="count"/> användarna är skapade}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">140</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6376954178222267147" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {<x id="username"/> registration rejected} other {<x id="count"/> registrations rejected}}</source>
         <target state="translated">{count, plural, =1 {Registreringsanmälningen för <x id="username"/> är avvisad} other {Registreringsanmälningarna för<x id="count"/> användare är avvisade}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context><context context-type="linenumber">172</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
+          <context context-type="linenumber">172</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5941489410560989457" datatype="html">
         <source>Moderation response is required.</source>
         <target state="translated">Respons krävs från moderator.</target>
@@ -21708,8 +21799,7 @@ color: red;
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Kan inte hämta OAuth Client-uppgifter: <x id="PH" equiv-text="error.text"/>. Försäkra dig om att du har konfigurerat PeerTube korrekt (i config-katalogen), speciellt ”webserver”-sektionen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -25416,8 +25506,11 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="4750857371950301240" datatype="html" xml:space="preserve">
         <source>Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</source>
         <target state="translated">Visar <x id="PH" equiv-text="start"/> till <x id="PH_1" equiv-text="end"/> av <x id="PH_2" equiv-text="this.totalRecords"/> poster</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context><context context-type="linenumber">517</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context>
+          <context context-type="linenumber">517</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="translated">Prenumererar på samtliga kanaler tillhörande <x id="PH"/>. Du kommer underrättas om alla nya videor.</target>
@@ -25645,48 +25738,75 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <trans-unit id="368656696071815451" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this report?} other {<x id="count"/> reports?}}</source>
         <target state="translated">Vill du verkligen radera {count, plural, =1 {den här anmälaren?} other {<x id="count"/> andra anmälare?}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">504</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">504</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7400236202912485768" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Abuse deleted.} other {<x id="count"/> abuses deleted.}}</source>
         <target state="translated">{count, plural, =1 {Missbruket raderat.} other {<x id="count"/> missbruk raderade.}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">516</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">516</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4991784943314587973" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Flagged account muted.} other {<x id="count"/> flagged accounts muted.}}</source>
         <target state="translated">{count, plural, =1 {Flaggat konto har tystats.} other {<x id="count"/> flaggade konton har tystats.}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">547</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">547</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1092730482477962724" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Flagged account server muted.} other {<x id="count"/> flagged account servers muted.}}</source>
         <target state="translated">{count, plural, =1 {Servern för det flaggade kontot har ignorerats.} other {<x id="count"/> servrar för flaggade konton har ignorerats.}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">567</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">567</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7883629715645527621" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reporter muted.} other {<x id="count"/> reporters muted.}}</source>
         <target state="translated">{count, plural, =1 {Rapportören tystad.} other {<x id="count"/> rapportörer tystade.}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">587</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">587</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6178299862221951759" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reporter server muted.} other {<x id="count"/> reporter servers muted.}}</source>
         <target state="translated">{count, plural, =1 {Rapportör-server ignorerad.} other {<x id="count"/> rapportör-servrar ignorerade.}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">609</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">609</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5440091471769708291" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video blocked.} other {<x id="count"/> videos blocked.}}</source>
         <target state="translated">{count, plural, =1 {Videon blockerad.} other {<x id="count"/> videor blockerade.}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">630</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">630</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="108745724002877541" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this comment?} other {<x id="count"/> comments?}}</source>
         <target state="translated">Vill du verkligen radera {count, plural, =1 {den här kommentaren?} other {de här <x id="count"/> kommentarerna?}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">692</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">692</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3036032783101046738" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment deleted.} other {<x id="count"/> comments deleted.}}</source>
         <target state="translated">{count, plural, =1 {1 kommentar raderad.} other {<x id="count"/> kommentarer raderade.}}</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">709</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">709</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6747218355168080191" datatype="html">
         <source>Do you really want to delete this comment?</source>
         <target state="translated">Vill du verkligen radera den här kommentaren?</target>
@@ -27336,9 +27456,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
