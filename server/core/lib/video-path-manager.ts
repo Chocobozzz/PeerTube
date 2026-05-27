@@ -15,7 +15,7 @@ import {
   MVideoWithFile
 } from '@server/types/models/index.js'
 import { Mutex } from 'async-mutex'
-import { remove } from 'fs-extra/esm'
+import { pathExists, remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
 import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
 import { getHLSDirectory, getHLSResolutionPlaylistFilename } from './paths.js'
@@ -66,9 +66,12 @@ class VideoPathManager {
     const createMethods: MakeAvailableCreateMethod[] = []
 
     for (const videoFile of videoFiles) {
-      if (videoFile.storage === FileStorage.FILE_SYSTEM) {
+      const localPath = this.getFSVideoFileOutputPath(videoFile.getVideoOrStreamingPlaylist(), videoFile)
+      const localExists = videoFile.storage === FileStorage.FILE_SYSTEM || await pathExists(localPath)
+
+      if (localExists) {
         createMethods.push({
-          method: () => this.getFSVideoFileOutputPath(videoFile.getVideoOrStreamingPlaylist(), videoFile),
+          method: () => localPath,
           clean: false
         })
 
@@ -117,12 +120,14 @@ class VideoPathManager {
 
   async makeAvailableResolutionPlaylistFile<T> (videoFile: MVideoFileStreamingPlaylistVideo, cb: MakeAvailableCB<T>) {
     const filename = getHLSResolutionPlaylistFilename(videoFile.filename)
+    const localPath = join(getHLSDirectory(videoFile.getVideo()), filename)
+    const localExists = videoFile.storage === FileStorage.FILE_SYSTEM || await pathExists(localPath)
 
-    if (videoFile.storage === FileStorage.FILE_SYSTEM) {
+    if (localExists) {
       return this.makeAvailableFactory({
         createMethods: [
           {
-            method: () => join(getHLSDirectory(videoFile.getVideo()), filename),
+            method: () => localPath,
             clean: false
           }
         ],
