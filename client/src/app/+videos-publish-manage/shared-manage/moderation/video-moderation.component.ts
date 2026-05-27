@@ -6,7 +6,7 @@ import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { VIDEO_NSFW_SUMMARY_VALIDATOR } from '@app/shared/form-validators/video-validators'
 import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
-import { HTMLServerConfig, VideoCommentPolicyType, ConstantLabel } from '@peertube/peertube-models'
+import { HTMLServerConfig, VideoCommentPolicyType, VideoRecommendationPolicyType, ConstantLabel } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
@@ -26,6 +26,7 @@ type Form = {
   nsfwSummary: FormControl<string>
 
   commentPolicies: FormControl<VideoCommentPolicyType>
+  recommendationPolicies: FormControl<VideoRecommendationPolicyType>
 
   videoPrivacyEmbedEnableAllowlist: FormControl<boolean>
   videoPrivacyEmbedAllowlistDomains: FormControl<string>
@@ -58,6 +59,8 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
   validationMessages: FormReactiveMessages = {}
 
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[] = []
+  recommendationPolicies: ConstantLabel<VideoRecommendationPolicyType>[] = []
+
   serverConfig: HTMLServerConfig
 
   private updatedSub: Subscription
@@ -69,6 +72,9 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
 
     this.serverService.getCommentPolicies()
       .subscribe(res => this.commentPolicies = res)
+
+    this.serverService.getRecommendationPolicies()
+      .subscribe(res => this.recommendationPolicies = res)
   }
 
   ngOnDestroy () {
@@ -81,6 +87,7 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
     const defaultValues = { ...videoEdit.toCommonFormPatch(), ...videoEdit.toEmbedPrivacyFormPatch() }
     const obj: BuildFormArgument = {
       commentsPolicy: null,
+      recommendationPolicy: null,
       nsfw: null,
       nsfwFlagViolent: null,
       nsfwFlagSex: null,

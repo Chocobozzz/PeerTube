@@ -164,6 +164,14 @@ export class VideoService {
       )
   }
 
+  listRecommendationVideos (
+    options: VideoListParams & {
+      currentVideo: Pick<Video, 'uuid'>
+    }
+  ): Observable<ResultList<Video>> {
+    return this.listVideos({ ...options, currentVideo: options.currentVideo })
+  }
+
   listAccountVideos (
     options: VideoListParams & {
       account: Pick<Account, 'nameWithHost'>
@@ -183,16 +191,19 @@ export class VideoService {
   listVideos (
     optionsArg: VideoListParams & {
       videoChannel?: Pick<VideoChannel, 'nameWithHost'>
+      currentVideo?: Pick<Video, 'uuid'>
       account?: Pick<Account, 'nameWithHost'>
     }
   ): Observable<ResultList<Video>> {
-    const { account, videoChannel, ...options } = optionsArg
+    const { account, videoChannel, currentVideo, ...options } = optionsArg
 
     let params = new HttpParams()
     params = this.buildVideoListParams({ params, ...options })
 
     let url: string
-    if (videoChannel) {
+    if (currentVideo) {
+      url = VideoService.BASE_VIDEO_URL + '/' + currentVideo.uuid + '/recommendations'
+    } else if (videoChannel) {
       url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos'
     } else if (account) {
       url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos'

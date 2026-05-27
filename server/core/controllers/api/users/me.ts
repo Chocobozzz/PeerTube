@@ -165,6 +165,7 @@ async function listMyVideos (req: express.Request, res: express.Response) {
       videoChannelId: res.locals.videoChannel?.id,
       channelNameOneOf: req.query.channelNameOneOf,
       includeCollaborations: req.query.includeCollaborations || false,
+      currentVideoUuid: undefined,
 
       countVideos,
 

@@ -122,6 +122,7 @@ async function getVideos (
     },
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos: false,
+    currentVideoUuid: undefined,
 
     ...where
   }, 'filter:api.overviews.videos.list.params')

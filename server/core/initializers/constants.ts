@@ -47,7 +47,9 @@ import {
   VideoRateType,
   VideoResolution,
   VideoState,
-  VideoStateType
+  VideoStateType,
+  VideoRecommendationPolicy,
+  VideoRecommendationPolicyType
 } from '@peertube/peertube-models'
 import { isTestInstance, isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
 import { RepeatOptions } from 'bullmq'
@@ -62,7 +64,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1040
+export const LAST_MIGRATION_VERSION = 1041
 
 // ---------------------------------------------------------------------------
 
@@ -636,6 +638,13 @@ export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal',
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
+}
+
+export const VIDEO_RECOMMENDATION_POLICY: { [id in VideoRecommendationPolicyType]: string } = {
+  [VideoRecommendationPolicy.ONLY_OWNER_VIDEOS]: "Only owner videos",
+  [VideoRecommendationPolicy.ONLY_CHANNEL_VIDEOS]: "Only same channel videos",
+  [VideoRecommendationPolicy.ONLY_LOCAL_VIDEOS]: "Only instance local videos",
+  [VideoRecommendationPolicy.ANY_VIDEOS]: "Any videos (instance administrator choice)",
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {
