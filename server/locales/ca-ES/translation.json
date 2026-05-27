@@ -277,6 +277,7 @@
   "Transcription of your video has been generated": "S'ha generat la transcripció del vídeo",
   "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "L'algoritme de vídeos de tendència {currentTrendingSortAlgorithm} hauria d'estar activat si l'ordenació per defecte per navegar per vídeos és {value}",
   "Updating the file of an existing video is not allowed on this instance": "No es permet actualitzar el fitxer d'un vídeo existent en aquesta instància",
+  "URL {targetUrl} is not a unicast URL.": "URL {targetUrl} is not a unicast URL.",
   "User {registrationUsername} wants to register on {instanceName} for the following reason:": "{registrationUsername} vol registrar-se a {instanceName} pel següent motiu:",
   "User <a href=\"{accountUrl}\">{userUsername}</a> just registered.": "El compte <a href=\"{accountUrl}\">{userUsername}</a> s'acaba de registrar.",
   "User and token mismatch": "Discrepància entre el compte i el token",

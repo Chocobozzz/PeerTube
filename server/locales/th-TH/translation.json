@@ -277,6 +277,7 @@
   "Transcription of your video has been generated": "Transcription of your video has been generated",
   "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}",
   "Updating the file of an existing video is not allowed on this instance": "Updating the file of an existing video is not allowed on this instance",
+  "URL {targetUrl} is not a unicast URL.": "URL {targetUrl} is not a unicast URL.",
   "User {registrationUsername} wants to register on {instanceName} for the following reason:": "ผู้ใช้ {registrationUsername} ต้องการลงทะเบียนบน {instanceName} ด้วยเหตุผลต่อไปนี้:",
   "User <a href=\"{accountUrl}\">{userUsername}</a> just registered.": "ผู้ใช้ <a href=\"{accountUrl}\">{userUsername}</a> เพิ่งลงทะเบียน",
   "User and token mismatch": "User and token mismatch",

@@ -277,6 +277,7 @@
   "Transcription of your video has been generated": "Bản phiên âm video của bạn đã được tạo",
   "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "Thuật toán video thịnh hành {currentTrendingSortAlgorithm} phải được bật nếu sắp xếp mặc định của video duyệt là {value}",
   "Updating the file of an existing video is not allowed on this instance": "Không được phép cập nhật tệp video hiện có trên máy chủ này",
+  "URL {targetUrl} is not a unicast URL.": "URL {targetUrl} is not a unicast URL.",
   "User {registrationUsername} wants to register on {instanceName} for the following reason:": "Người dùng {registrationUsername} muốn đăng ký trên {instanceName} với lý do:",
   "User <a href=\"{accountUrl}\">{userUsername}</a> just registered.": "Người dùng <a href=\"{accountUrl}\">{userUsername}</a> vừa mới đăng ký.",
   "User and token mismatch": "Người dùng và token không khớp",

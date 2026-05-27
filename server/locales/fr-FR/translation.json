@@ -277,6 +277,7 @@
   "Transcription of your video has been generated": "La transcription de votre vidéo a été générée",
   "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "L'algorithme des vidéos tendance {currentTrendingSortAlgorithm} doit être activé si le tri par défaut des vidéos est {value}",
   "Updating the file of an existing video is not allowed on this instance": "Updating the file of an existing video is not allowed on this instance",
+  "URL {targetUrl} is not a unicast URL.": "URL {targetUrl} is not a unicast URL.",
   "User {registrationUsername} wants to register on {instanceName} for the following reason:": "L'utilisateur·ice {registrationUsername} souhaite s'inscrire sur {instanceName} pour la raison suivante :",
   "User <a href=\"{accountUrl}\">{userUsername}</a> just registered.": "L'utilisateur <a href=\"{accountUrl}\">{userUsername}</a> vient de s'inscrire.",
   "User and token mismatch": "User and token mismatch",

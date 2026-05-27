@@ -277,6 +277,7 @@
   "Transcription of your video has been generated": "Transkrypcja Twojego filmu została wygenerowana",
   "Trending videos algorithm {currentTrendingSortAlgorithm} should be enabled if browse videos default sort is {value}": "Algorytm najpopularniejszych filmów: {currentTrendingSortAlgorithm} powinien być włączony, jeżeli domyślny algorytm sortowania wszystkich filmów to: {value}",
   "Updating the file of an existing video is not allowed on this instance": "Zmiana pliku istniejącego filmu nie jest dozwolona na tej instancji",
+  "URL {targetUrl} is not a unicast URL.": "URL {targetUrl} is not a unicast URL.",
   "User {registrationUsername} wants to register on {instanceName} for the following reason:": "Użytkownik o pseudonimie {registrationUsername} chce zarejestrować się na {instanceName}, podając za powód:",
   "User <a href=\"{accountUrl}\">{userUsername}</a> just registered.": "Użytkownik o pseudonimie <a href=\"{accountUrl}\">{userUsername}</a> zarejestrował się.",
   "User and token mismatch": "Nie udało się dopasować tokenu do konta",
