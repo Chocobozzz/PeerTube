@@ -34,16 +34,29 @@ export class Notifier {
   handleError (err: Error) {
     if (err instanceof PeerTubeReconnectError && err.alreadyNotified) return
 
-    if (err instanceof PeerTubeHTTPError) {
-      const message = `Backend returned code ${err.status}, errorMessage is: ${err.message}`
+    const text = this.buildErrorText(err)
 
-      if (err.status === HttpStatusCode.NOT_FOUND_404) logger.clientError(message)
-      else logger.error(message, { url: err.url })
+    if (err instanceof PeerTubeHTTPError) {
+      const logMessage = `Backend returned code ${err.status}, errorMessage is: ${err.message}`
+
+      if (err.status === HttpStatusCode.NOT_FOUND_404) logger.clientError(logMessage)
+      else logger.error(logMessage, { url: err.url })
     } else {
       logger.error(err.message, err)
     }
 
-    return this.notify({ severity: 'error', text: err.message, title: $localize`Error` })
+    return this.notify({ severity: 'error', text, title: $localize`Error` })
+  }
+
+  private buildErrorText (err: Error) {
+    if (
+      (err instanceof PeerTubeHTTPError && err.status === HttpStatusCode.BAD_GATEWAY_502) ||
+      err.message?.toLowerCase() === 'bad gateway'
+    ) {
+      return $localize`Server is unavailable. Please retry later.`
+    }
+
+    return err.message
   }
 
   private notify (options: {
