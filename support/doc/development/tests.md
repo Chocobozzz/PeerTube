@@ -129,5 +129,5 @@ To add E2E tests and quickly run tests using a local Chrome:
 
 ```bash
 cd client/e2e
-../node_modules/.bin/wdio wdio.local-test.conf.ts # you can also add --mochaOpts.grep to only run tests you want
+WDIO_HEADLESS=false ../node_modules/.bin/wdio wdio.local-test.conf.ts # you can also add --mochaOpts.grep to only run tests you want
 ```
