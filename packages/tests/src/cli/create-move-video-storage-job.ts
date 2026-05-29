@@ -246,7 +246,7 @@ describe('Test create move video storage job CLI', function () {
       const command = `npm run create-move-video-storage-job -- --to-file-system --all-videos`
       const { stdout } = await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
 
-      expect(stdout).to.not.include('Creating external storage move job ')
+      expect(stdout).to.not.include('Creating move to file ')
 
       await waitJobs(servers)
     })

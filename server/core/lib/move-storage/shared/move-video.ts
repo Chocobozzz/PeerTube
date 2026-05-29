@@ -1,4 +1,4 @@
-import { FileStorage, FileStorageType } from '@peertube/peertube-models'
+import { FileStorageType } from '@peertube/peertube-models'
 import { LoggerTags, logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
@@ -117,11 +117,7 @@ export async function filterVideoResourcesToBeMoved (videoArg: MVideo, targetSto
     webFiles: video.VideoFiles.filter(f => f.storage !== targetStorage),
     captions: captions.filter(c => {
       if (c.storage !== targetStorage) return true
-
-      if (hls) {
-        if (targetStorage === FileStorage.OBJECT_STORAGE) return !c.m3u8Filename
-        else if (targetStorage === FileStorage.FILE_SYSTEM) return !c.m3u8Filename
-      }
+      if (hls && !c.m3u8Filename) return true
 
       return false
     })
