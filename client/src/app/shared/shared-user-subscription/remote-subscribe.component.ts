@@ -40,20 +40,10 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
 
     const [ username, hostname ] = address.split('@')
 
-    // Should not have CORS error because https://tools.ietf.org/html/rfc7033#section-5
-    fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
-      .then(response => response.json())
-      .then(data => {
-        if (!data || Array.isArray(data.links) === false) {
-          throw new Error('Not links in webfinger response')
-        }
-
-        const link: { template: string } = data.links.find((link: any) => {
-          return link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe'
-        })
-
-        if (link?.template.includes('{uri}')) {
-          return link.template.replace('{uri}', encodeURIComponent(this.uri()))
+    this.getSubscribeTemplateUrl({ username, hostname })
+      .then(template => {
+        if (template.includes('{uri}')) {
+          return template.replace('{uri}', encodeURIComponent(this.uri()))
         }
 
         throw new Error('No subscribe template in webfinger response')
@@ -71,5 +61,78 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
 
         this.notifier.error($localize`Cannot fetch information of this remote account`)
       })
+  }
+
+  private async getSubscribeTemplateUrl (options: {
+    username: string
+    hostname: string
+  }) {
+    const webfingerUrl = await this.getWebfingerUrl(options)
+    const data = await this.fetchWebfinger(webfingerUrl)
+
+    return this.extractSubscribeTemplate(data)
+  }
+
+  private async getWebfingerUrl (options: {
+    username: string
+    hostname: string
+  }) {
+    const { username, hostname } = options
+
+    try {
+      const hostMetaUrl = `https://${hostname}/.well-known/host-meta`
+      const hostMetaTemplate = await this.fetchHostMetaTemplate(hostMetaUrl)
+
+      const resource = `acct:${username}@${hostname}`
+
+      return hostMetaTemplate.replace('{uri}', encodeURIComponent(resource))
+    } catch (err) {
+      logger.info('Cannot get webfinger URL', err)
+
+      return `https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`
+    }
+  }
+
+  private async fetchWebfinger (url: string) {
+    const response = await fetch(url)
+    if (!response.ok) throw new Error('Webfinger request failed')
+
+    return response.json()
+  }
+
+  private extractSubscribeTemplate (data: any) {
+    if (!data || Array.isArray(data.links) === false) {
+      throw new Error('Not links in webfinger response')
+    }
+
+    const link: { template: string } = data.links.find((entry: any) => {
+      return entry && typeof entry.template === 'string' && entry.rel === 'http://ostatus.org/schema/1.0/subscribe'
+    })
+
+    if (!link?.template) throw new Error('No subscribe template in webfinger response')
+
+    return link.template
+  }
+
+  private async fetchHostMetaTemplate (url: string) {
+    const response = await fetch(url, {
+      headers: {
+        Accept: 'application/xrd+xml, application/xml;q=0.9, text/xml;q=0.8'
+      }
+    })
+
+    if (!response.ok) throw new Error('Host-meta request failed')
+
+    const xml = await response.text()
+
+    const linkWithTemplateRegexp = /<Link\b[^>]*\brel=(?:"|')lrdd(?:"|')[^>]*\btemplate=(?:"|')([^"']+)(?:"|')[^>]*\/?>/i
+    const match = xml.match(linkWithTemplateRegexp)
+    const template = match?.[1]
+
+    if (!template?.includes('{uri}')) {
+      throw new Error('No host-meta lrdd template found')
+    }
+
+    return template
   }
 }
