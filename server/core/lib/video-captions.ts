@@ -74,6 +74,8 @@ export async function createAllCaptionPlaylistsOnFSIfNeeded (video: MVideo) {
 
   for (const caption of captions) {
     if (caption.m3u8Filename) continue
+    // If object storage is enabled, the move to object storage job will upload the playlist on the fly
+    if (CONFIG.OBJECT_STORAGE.ENABLED) continue
 
     try {
       caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, video)
