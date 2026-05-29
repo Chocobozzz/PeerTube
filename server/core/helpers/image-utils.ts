@@ -117,7 +117,6 @@ async function autoResize (options: {
 }) {
   const { sharpInstance, metadata, newSize, destination } = options
 
-  // Portrait/square input to landscape target
   const sourceIsPortraitOrSquare = metadata.width <= metadata.height
   const destIsPortraitOrSquare = newSize.width <= newSize.height
 

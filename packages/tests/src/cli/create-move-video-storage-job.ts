@@ -16,6 +16,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { expect } from 'chai'
 import { join } from 'path'
 import { expectStartWith } from '../shared/checks.js'
 
@@ -168,6 +169,15 @@ describe('Test create move video storage job CLI', function () {
       }
     })
 
+    it('Should not re-move all files', async function () {
+      const command = `npm run create-move-video-storage-job -- --to-object-storage --all-videos`
+      const { stdout } = await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
+
+      expect(stdout).to.not.include('Creating external storage move job ')
+
+      await waitJobs(servers)
+    })
+
     it('Should not have files on disk anymore', async function () {
       await checkDirectoryIsEmpty(servers[0], 'captions', [ 'private' ])
 
@@ -230,6 +240,15 @@ describe('Test create move video storage job CLI', function () {
           await checkFiles({ origin: servers[0], video })
         }
       }
+    })
+
+    it('Should not re-move all files', async function () {
+      const command = `npm run create-move-video-storage-job -- --to-file-system --all-videos`
+      const { stdout } = await servers[0].cli.execWithEnv(command, objectStorage.getDefaultMockConfig())
+
+      expect(stdout).to.not.include('Creating external storage move job ')
+
+      await waitJobs(servers)
     })
 
     it('Should not have files on disk anymore', async function () {

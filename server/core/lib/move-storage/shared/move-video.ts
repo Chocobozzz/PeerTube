@@ -119,8 +119,8 @@ export async function filterVideoResourcesToBeMoved (videoArg: MVideo, targetSto
       if (c.storage !== targetStorage) return true
 
       if (hls) {
-        if (targetStorage === FileStorage.OBJECT_STORAGE) return !c.m3u8Filename || !c.m3u8Url
-        else if (targetStorage === FileStorage.FILE_SYSTEM) return !c.m3u8Filename || c.m3u8Url
+        if (targetStorage === FileStorage.OBJECT_STORAGE) return !c.m3u8Filename
+        else if (targetStorage === FileStorage.FILE_SYSTEM) return !c.m3u8Filename
       }
 
       return false
