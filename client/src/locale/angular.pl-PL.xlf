@@ -18073,25 +18073,25 @@ Link będzie ważny przez 1 godzinę.</target>
           <context context-type="linenumber">342</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="394817347378438833" datatype="html">
+      <trans-unit id="394817347378438833" datatype="html" xml:space="preserve">
         <source>Accept/Reject</source>
-        <target state="new">Accept/Reject</target>
+        <target state="translated">Akceptuj/Odrzuć</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">352</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3005976570489477141" datatype="html">
+      <trans-unit id="3005976570489477141" datatype="html" xml:space="preserve">
         <source>Set internal note</source>
-        <target state="new">Set internal note</target>
+        <target state="translated">Dodaj lokalną notatkę</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4985871382843824389" datatype="html">
+      <trans-unit id="4985871382843824389" datatype="html" xml:space="preserve">
         <source>Actions for videos</source>
-        <target state="new">Actions for videos</target>
+        <target state="translated">Działania dla filmów</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -19073,9 +19073,9 @@ Link będzie ważny przez 1 godzinę.</target>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2941249138625577938" datatype="html">
+      <trans-unit id="2941249138625577938" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining registration requests have been rejected.</source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email explaining registration requests have been rejected. </target>
+        <target state="translated">Emaile są wyłączone na tej instancji, więc PeerTube nie będzie w stanie wysłać wiadomości email z informacją o odrzuceniu próśb o rejestrację.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">71</context>
