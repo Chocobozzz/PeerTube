@@ -118,7 +118,7 @@ You don't need to be a programmer to help!
 You can give us your feedback, report bugs, help us translate PeerTube, write documentation, and more. Check out the [contributing
 guide](https://docs.joinpeertube.org/contribute/getting-started) to know how, it takes less than 2 minutes to get started. :wink:
 
-You can also join the cheerful bunch that makes our community:
+You can also join the cheerful bunch that makes our community<a name="contact"></a>:
 
 * Matrix (bridged on [Discord](https://discord.gg/wj8DDUT)): **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
 * Forum: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
