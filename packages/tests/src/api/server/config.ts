@@ -165,6 +165,8 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.email.subject.prefix).to.equal('[{{instanceName}}] ')
 
   expect(data.videoComments.acceptRemoteComments).to.be.true
+
+  expect(data.advancedAuth.allowCrossAuth).to.be.false
 }
 
 function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
@@ -486,6 +488,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
     },
     videoComments: {
       acceptRemoteComments: false
+    },
+    advancedAuth: {
+      allowCrossAuth: true
     }
   }
 }

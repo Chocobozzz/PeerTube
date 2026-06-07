@@ -378,4 +378,8 @@ export interface CustomConfig {
   videoComments: {
     acceptRemoteComments: boolean
   }
+
+  advancedAuth: {
+    allowCrossAuth: boolean
+  }
 }

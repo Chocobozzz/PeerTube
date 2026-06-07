@@ -252,7 +252,8 @@ const customConfigKeysToKeep = new Set([
   'user-videoQuota',
   'transcoding-enabled',
   'transcoding-threads',
-  'transcoding-resolutions'
+  'transcoding-resolutions',
+  'advancedAuth-allowCrossAuth'
 ])
 class CustomConfigAuditView extends EntityAuditView {
   constructor (customConfig: CustomConfig) {

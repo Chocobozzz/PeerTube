@@ -15,12 +15,16 @@ import { CustomConfig } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { AdminConfigService } from '../../../shared/shared-admin/admin-config.service'
 import { AdminSaveBarComponent } from '../shared/admin-save-bar.component'
+import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
 
 type Form = {
   services: FormGroup<{
     twitter: FormGroup<{
       username: FormControl<string>
     }>
+  }>
+  advancedAuth: FormGroup<{
+    allowCrossAuth: FormControl<boolean>
   }>
 }
 
@@ -70,6 +74,9 @@ export class AdminConfigAdvancedComponent implements OnInit, OnDestroy, CanCompo
         twitter: {
           username: SERVICES_TWITTER_USERNAME_VALIDATOR
         }
+      },
+      advancedAuth: {
+        allowCrossAuth: null
       }
     }
 

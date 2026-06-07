@@ -119,16 +119,30 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
     // If the user does not belongs to a plugin, it was created before its installation
     // Then we just go through a regular login process
     if (user.pluginAuth !== null) {
-      // This user does not belong to this plugin, skip it
+      // This user does not belong to this plugin
       if (user.pluginAuth !== bypassLogin.pluginName) {
-        logger.info(
-          'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
-          bypassLogin.pluginName,
-          bypassLogin.user.email,
-          user.pluginAuth
-        )
+        // Skip ip
+        if (!CONFIG.ADVANCED_AUTH.ALLOW_CROSS_AUTH) {
+          logger.info(
+            'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
+            bypassLogin.pluginName,
+            bypassLogin.user.email,
+            user.pluginAuth
+          )
 
-        return null
+          return null
+
+        } else {
+          logger.info(
+            'Allowing cross authentication login for %s using plugin %s despite being known from plugin %s',
+            bypassLogin.user.email,
+            bypassLogin.pluginName,
+            user.pluginAuth
+          )
+
+          user.pluginAuth = bypassLogin.pluginName
+          user = await updateUserFromExternal(user, bypassLogin.user, bypassLogin.userUpdater)
+        }
       }
 
       checkUserValidityOrThrow(user, req)

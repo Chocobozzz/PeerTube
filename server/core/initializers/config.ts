@@ -503,6 +503,11 @@ const CONFIG = {
       URL: config.get<string>('plugins.index.url')
     }
   },
+  ADVANCED_AUTH: {
+    get ALLOW_CROSS_AUTH () {
+      return config.get<boolean>('advanced_auth.allow_cross_auth')
+    }
+  },
   FEDERATION: {
     ENABLED: config.get<boolean>('federation.enabled'),
     PREVENT_SSRF: config.get<boolean>('federation.prevent_ssrf'),
