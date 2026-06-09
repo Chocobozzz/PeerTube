@@ -81,15 +81,29 @@ export async function presetVOD (options: {
 
     commandWrapper.debugLog(
       `Apply ffmpeg params from ${builderResult.encoder} for ${streamType} ` +
-      `stream of input ${input} using ${commandWrapper.getProfile()} profile.`,
+        `stream of input ${input} using ${commandWrapper.getProfile()} profile.`,
       { builderResult, resolution, fps }
     )
 
     if (streamType === 'video') {
       command.videoCodec(builderResult.encoder)
 
+      const videoFilters: string[] = []
+
       if (scaleFilterValue) {
-        command.outputOption(`-vf ${getScaleFilter(builderResult.result)}=${scaleFilterValue}`)
+        videoFilters.push(`${getScaleFilter(builderResult.result)}=${scaleFilterValue}`)
+      }
+
+      for (const builderVideoFilter of builderResult.result.videoFilters || []) {
+        videoFilters.push(
+          builderVideoFilter.rawOptions
+            ? `${builderVideoFilter.name}=${builderVideoFilter.rawOptions}`
+            : builderVideoFilter.name
+        )
+      }
+
+      if (videoFilters.length > 0) {
+        command.outputOption(`-vf ${videoFilters.join(',')}`)
       }
     } else if (streamType === 'audio') {
       command.audioCodec(builderResult.encoder)

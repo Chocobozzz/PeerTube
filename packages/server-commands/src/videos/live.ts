@@ -25,7 +25,7 @@ export function sendRTMPStream (options: {
     command.outputOption('-c:v libx264')
     command.outputOption('-g 120')
     command.outputOption('-x264-params "no-scenecut=1"')
-    command.outputOption('-r 60')
+    command.outputOption('-vf fps=60')
   }
 
   command.outputOption('-f flv')

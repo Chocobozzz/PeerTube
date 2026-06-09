@@ -31,14 +31,20 @@ export interface EncoderOptions {
     name: string
   }
 
+  // Additional video filters to apply (e.g., fps)
+  videoFilters?: {
+    name: string
+    rawOptions?: string
+  }[]
+
   inputOptions?: string[]
   outputOptions?: string[]
 }
 
 // All our encoders
 
-export interface EncoderProfile <T> {
-  [ profile: string ]: T
+export interface EncoderProfile<T> {
+  [profile: string]: T
 
   default: T
 }
@@ -46,11 +52,11 @@ export interface EncoderProfile <T> {
 export type AvailableEncoders = {
   available: {
     live: {
-      [ encoder: string ]: EncoderProfile<EncoderOptionsBuilder>
+      [encoder: string]: EncoderProfile<EncoderOptionsBuilder>
     }
 
     vod: {
-      [ encoder: string ]: EncoderProfile<EncoderOptionsBuilder>
+      [encoder: string]: EncoderProfile<EncoderOptionsBuilder>
     }
   }
 

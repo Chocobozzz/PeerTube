@@ -18,11 +18,11 @@ const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOpt
   const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
 
   return {
-    outputOptions: [
-      ...getCommonOutputOptions(targetBitrate),
+    videoFilters: fps
+      ? [ { name: 'fps', rawOptions: `fps=${fps}` } ]
+      : undefined,
 
-      `-r ${fps}`
-    ]
+    outputOptions: getCommonOutputOptions(targetBitrate)
   }
 }
 
@@ -32,10 +32,13 @@ const defaultX264LiveOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOp
   const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
 
   return {
+    videoFilters: fps
+      ? [ { name: 'fps', rawOptions: `fps=${fps}` } ]
+      : undefined,
+
     outputOptions: [
       ...getCommonOutputOptions(targetBitrate, streamNum),
 
-      `${buildStreamSuffix('-r:v', streamNum)} ${fps}`,
       `${buildStreamSuffix('-b:v', streamNum)} ${targetBitrate}`
     ]
   }
