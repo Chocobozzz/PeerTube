@@ -4598,7 +4598,7 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2933819425721221134" datatype="html">
+      <trans-unit id="2933819425721221134" datatype="html" xml:space="preserve">
         <source>Sepia seems to like it.</source>
         <target state="translated">Sepia schijnt het lekker te vinden.</target>
         <note priority="1" from="description">This is about Sepia's tea</note>
@@ -4683,9 +4683,9 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2468689683507870964" datatype="html">
+      <trans-unit id="2468689683507870964" datatype="html" xml:space="preserve">
         <source>In this instance's network</source>
-        <target state="translated">In het netwerk van dit exemplaar van PeerTube</target>
+        <target state="translated">In ons directe netwerk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">17</context>
@@ -4709,7 +4709,7 @@ Een verbannen gebruiker kan niet langer inloggen.</target>
       </trans-unit>
       <trans-unit id="2820857203884114586" datatype="html" xml:space="preserve">
         <source>Search "<x id="PH" equiv-text="this.result.text"/>" in the vidiverse</source>
-        <target state="translated">Zoek "<x id="PH" equiv-text="this.result.text"/>" in de vidiverse</target>
+        <target state="translated">Zoek "<x id="PH" equiv-text="this.result.text"/>" in het videoversum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.ts</context>
           <context context-type="linenumber">32</context>
