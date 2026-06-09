@@ -93,11 +93,12 @@ database:
     max: 5
 
 # Redis server for short time storage
-# You can also specify a 'socket' path to a unix socket but first need to
-# set 'hostname' and 'port' to null
 redis:
+  # You can also specify a 'socket' path to a unix socket but first need to
+  # set 'hostname' and 'port' to null
   hostname: '127.0.0.1'
   port: 6379
+  socket: null
   auth: null
   db: 0
   enable_tls: false

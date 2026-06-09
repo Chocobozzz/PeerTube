@@ -125,6 +125,7 @@ redis:
   port:
     __name: PEERTUBE_REDIS_PORT
     __format: json
+  socket: PEERTUBE_REDIS_SOCKET
   auth: PEERTUBE_REDIS_AUTH
   db:
     __name: PEERTUBE_REDIS_DB
