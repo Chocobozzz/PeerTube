@@ -47,6 +47,7 @@ describe('Test ActivityPub', function () {
     expect(object.preferredUsername).to.equal('root')
 
     expect(object.indexable).to.be.true
+    expect(object.discoverable).to.be.true
 
     if (hasIcon) {
       expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])
@@ -75,6 +76,7 @@ describe('Test ActivityPub', function () {
     expect(object.preferredUsername).to.equal('root_channel')
 
     expect(object.indexable).to.be.true
+    expect(object.discoverable).to.be.true
 
     if (hasIcon) {
       expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])

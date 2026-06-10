@@ -43,4 +43,5 @@ export interface ActivityPubActor {
   playerSettings?: string
 
   indexable?: boolean
+  discoverable?: boolean
 }
