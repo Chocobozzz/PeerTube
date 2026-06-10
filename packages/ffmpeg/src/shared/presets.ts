@@ -1,4 +1,5 @@
 import { pick } from '@peertube/peertube-core-utils'
+import { FilterSpecification } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper } from '../ffmpeg-command-wrapper.js'
 import { getScaleFilter, StreamType } from '../ffmpeg-utils.js'
 import { ffprobePromise, getVideoStreamBitrate, getVideoStreamDimensionsInfo, hasAudioStream } from '../ffprobe.js'
@@ -18,9 +19,24 @@ export async function presetVOD (options: {
 
   videoStreamOnly: boolean
 
+  chainComplexFilters: {
+    complexFilters: FilterSpecification[]
+    lastVideoInput: string
+    videoOutput?: string
+  } | null
+
   scaleFilterValue?: string
 }) {
-  const { commandWrapper, videoInputPath, separatedAudioInputPath, resolution, fps, videoStreamOnly, scaleFilterValue } = options
+  const {
+    commandWrapper,
+    videoInputPath,
+    separatedAudioInputPath,
+    resolution,
+    fps,
+    videoStreamOnly,
+    scaleFilterValue,
+    chainComplexFilters
+  } = options
 
   if (videoStreamOnly && !resolution) {
     throw new Error('Cannot generate video stream only without valid resolution')
@@ -88,23 +104,24 @@ export async function presetVOD (options: {
     if (streamType === 'video') {
       command.videoCodec(builderResult.encoder)
 
-      const videoFilters: string[] = []
+      const videoFilters: { name: string, rawOptions?: string }[] = []
 
       if (scaleFilterValue) {
-        videoFilters.push(`${getScaleFilter(builderResult.result)}=${scaleFilterValue}`)
+        videoFilters.push({
+          name: getScaleFilter(builderResult.result),
+          rawOptions: scaleFilterValue
+        })
       }
 
       for (const builderVideoFilter of builderResult.result.videoFilters || []) {
-        videoFilters.push(
-          builderVideoFilter.rawOptions
-            ? `${builderVideoFilter.name}=${builderVideoFilter.rawOptions}`
-            : builderVideoFilter.name
-        )
+        videoFilters.push(builderVideoFilter)
       }
 
-      if (videoFilters.length > 0) {
-        command.outputOption(`-vf ${videoFilters.join(',')}`)
-      }
+      applyVideoFilters({
+        commandWrapper,
+        videoFilters,
+        chainComplexFilters
+      })
     } else if (streamType === 'audio') {
       command.audioCodec(builderResult.encoder)
     }
@@ -127,4 +144,66 @@ export function presetCopy (commandWrapper: FFmpegCommandWrapper, options: {
 
   if (options.withVideo === false) command.noVideo()
   else command.videoCodec('copy')
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function applyVideoFilters (options: {
+  commandWrapper: FFmpegCommandWrapper
+
+  videoFilters: { name: string, rawOptions?: string }[]
+
+  chainComplexFilters: {
+    complexFilters: FilterSpecification[]
+    lastVideoInput: string
+    videoOutput?: string
+  } | null
+}) {
+  const { commandWrapper, videoFilters, chainComplexFilters } = options
+
+  const command = commandWrapper.getCommand()
+
+  if (videoFilters.length === 0) return
+
+  // We can't use `-vf` option if we have complex filters
+  if (chainComplexFilters) {
+    const complexFilters = [ ...chainComplexFilters.complexFilters ]
+
+    for (let i = 0; i < videoFilters.length; i++) {
+      const videoFilter = videoFilters[i]
+
+      const outputName = i === videoFilters.length - 1
+        ? chainComplexFilters.videoOutput
+        : `vf_${i}`
+
+      const inputName = i === 0
+        ? chainComplexFilters.lastVideoInput
+        : `vf_${i - 1}`
+
+      complexFilters.push({
+        filter: videoFilter.name,
+        inputs: [ inputName ],
+
+        outputs: outputName
+          ? [ outputName ]
+          : undefined,
+
+        options: videoFilter.rawOptions
+      })
+    }
+
+    command.complexFilter(complexFilters)
+  } else {
+    const filterString = videoFilters
+      .map(f => {
+        if (f.rawOptions) return `${f.name}=${f.rawOptions}`
+
+        return f.name
+      })
+      .join(',')
+
+    command.outputOption(`-vf ${filterString}`)
+  }
 }
