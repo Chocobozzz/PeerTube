@@ -1,7 +1,7 @@
 import { isStableOrUnstableVersionValid } from '@server/helpers/custom-validators/misc.js'
 import { execa } from 'execa'
 import { outputJSON, pathExists, remove } from 'fs-extra/esm'
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, rename, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { isNpmPluginNameValid } from '../../helpers/custom-validators/plugins.js'
 import { logger } from '../../helpers/logger.js'
@@ -40,16 +40,75 @@ export async function rebuildNativePlugins () {
 // ---------------------------------------------------------------------------
 
 async function execPNPM (commands: string[]) {
+  const runCommand = () => execa('pnpm', commands, { cwd: CONFIG.STORAGE.PLUGINS_DIR })
+
   try {
-    const pluginDirectory = CONFIG.STORAGE.PLUGINS_DIR
-
-    return execa('pnpm', commands, { cwd: pluginDirectory })
+    return await runCommand()
   } catch (result) {
-    logger.error('Cannot exec pnpm.', { commands, err: result.err, stderr: result.stderr })
+    if (isPNPMUnexpectedStoreError(result)) {
+      logger.warn('Cannot exec pnpm because of an unexpected store location. Running pnpm install and retrying command.', { commands })
 
-    throw result.err as Error
+      const nodeModulesPath = join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules')
+      const nodeModulesBackupPath = join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules.bak')
+
+      try {
+        await rename(nodeModulesPath, nodeModulesBackupPath)
+
+        await execa('pnpm', [ 'install' ], { cwd: CONFIG.STORAGE.PLUGINS_DIR })
+
+        const commandResult = await runCommand()
+
+        remove(nodeModulesBackupPath)
+          .catch(err => logger.error('Cannot remove node_modules backup after reinstalling dependencies.', { err }))
+
+        return commandResult
+      } catch (retryResult) {
+        rename(nodeModulesBackupPath, nodeModulesPath)
+          .catch(err => logger.error('Cannot restore node_modules backup after failing to reinstall dependencies.', { err }))
+
+        const err = getErrorFromExecaResult(retryResult)
+
+        logger.error('Cannot recover pnpm command after reinstalling dependencies.', { commands, err, stderr: retryResult?.stderr })
+
+        throw err
+      }
+    }
+
+    const err = getErrorFromExecaResult(result)
+
+    logger.error('Cannot exec pnpm.', { commands, err, stderr: result?.stderr })
+
+    throw err
   }
 }
+
+function getErrorFromExecaResult (result: unknown): Error {
+  const execaResult = result as any
+
+  if (execaResult?.err instanceof Error) return execaResult.err
+  if (execaResult instanceof Error) return execaResult
+
+  const message = typeof execaResult?.message === 'string'
+    ? execaResult.message
+    : 'Unknown pnpm execution error'
+
+  return new Error(message)
+}
+
+function isPNPMUnexpectedStoreError (result: unknown) {
+  const execaResult = result as any
+
+  const output = [
+    execaResult?.stdout,
+    execaResult?.stderr,
+    execaResult?.shortMessage,
+    execaResult?.message
+  ].filter(value => typeof value === 'string').join('\n')
+
+  return output.includes('ERR_PNPM_UNEXPECTED_STORE') || output.includes('Unexpected store location')
+}
+
+// ---------------------------------------------------------------------------
 
 function checkNpmPluginNameOrThrow (name: string) {
   if (!isNpmPluginNameValid(name)) throw new Error('Invalid NPM plugin name to install')
