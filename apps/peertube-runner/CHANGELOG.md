@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.0
+
+ * Requires NodeJS >= 22
+ * Support removing segments from studio
+ * Better handling of variable FPS inputs
+
 ## v0.5.0
 
  * Migrate to `tsdown` to build the runner. The peertube-runner filename is now `peertube.runner.mjs`
