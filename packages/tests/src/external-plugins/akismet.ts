@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRegistrationState } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -149,25 +149,24 @@ describe('Official plugin Akismet', function () {
       })
     })
 
-    // TODO: Enable when 8.2 is released
-    //   it('Should detect a signup as SPAM and set it as approval', async function () {
-    //     await servers[0].plugins.updateSettings({
-    //       npmName: 'peertube-plugin-akismet',
-    //       settings: {
-    //         'akismet-api-key': process.env.AKISMET_KEY,
-    //         'akismet-spam-marked-user-registration-strategy': 'mark-for-approval'
-    //       }
-    //     })
+    it('Should detect a signup as SPAM and set it as approval', async function () {
+      await servers[0].plugins.updateSettings({
+        npmName: 'peertube-plugin-akismet',
+        settings: {
+          'akismet-api-key': process.env.AKISMET_KEY,
+          'akismet-spam-marked-user-registration-strategy': 'mark-for-approval'
+        }
+      })
 
-    //     const { state } = await servers[0].registrations.register({
-    //       username: 'user2',
-    //       displayName: 'user 2',
-    //       email: 'akismet-guaranteed-spam@example.com',
-    //       expectedStatus: HttpStatusCode.OK_200
-    //     })
+      const { state } = await servers[0].registrations.register({
+        username: 'user2',
+        displayName: 'user 2',
+        email: 'akismet-guaranteed-spam@example.com',
+        expectedStatus: HttpStatusCode.OK_200
+      })
 
-    //     expect(state.id).to.equal(UserRegistrationState.PENDING)
-    //   })
+      expect(state.id).to.equal(UserRegistrationState.PENDING)
+    })
   })
 
   after(async function () {

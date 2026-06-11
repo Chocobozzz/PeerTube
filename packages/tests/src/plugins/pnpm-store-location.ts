@@ -37,8 +37,8 @@ describe('Test plugin installation when pnpm store changes', function () {
 
     await server.run(undefined, {
       env: {
-        npm_config_store_dir: firstStoreDir, // PNPM <= 10
-        pnpm_config_store_dir: firstStoreDir // PNPM > 11
+        npm_config_store_dir: secondStoreDir, // PNPM <= 10
+        pnpm_config_store_dir: secondStoreDir // PNPM > 11
       }
     })
 
