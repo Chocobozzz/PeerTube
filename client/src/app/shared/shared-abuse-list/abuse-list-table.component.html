@@ -75,7 +75,7 @@
         ></a>
 
         @if (abuse.flaggedAccount) {
-          <div class="comment-flagged-account">by {{ abuse.flaggedAccount.displayName }}</div>
+          <span class="comment-flagged-account">by {{ abuse.flaggedAccount.displayName }}</span>
 
           <my-account-block-badges class="d-inline-block ms-3 align-top" [account]="abuse.flaggedAccount" platformOnly="true"></my-account-block-badges>
         }
