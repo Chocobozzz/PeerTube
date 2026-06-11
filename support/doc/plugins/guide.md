@@ -193,6 +193,7 @@ function register ({
 }) {
   const value = await storageManager.getData('mykey')
   await storageManager.storeData('mykey', { subkey: 'value' })
+  await storageManager.deleteData('mykey')
 }
 ```
 
