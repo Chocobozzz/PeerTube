@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.0
+
+  * Use default server values if not provided by CLI
+
 ## v1.1.0
 
   * Remove `previewfile` option (deprecated in PeerTube 8.1)
