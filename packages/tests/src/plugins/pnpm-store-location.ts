@@ -19,7 +19,10 @@ describe('Test plugin installation when pnpm store changes', function () {
     secondStoreDir = join(tmpdir(), `peertube-plugin-store-b-${id}`)
 
     server = await createSingleServer(1, undefined, {
-      env: { pnpm_config_store_dir: firstStoreDir }
+      env: {
+        npm_config_store_dir: firstStoreDir, // PNPM <= 10
+        pnpm_config_store_dir: firstStoreDir // PNPM > 11
+      }
     })
 
     await setAccessTokensToServers([ server ])
@@ -33,7 +36,10 @@ describe('Test plugin installation when pnpm store changes', function () {
     await server.kill()
 
     await server.run(undefined, {
-      env: { pnpm_config_store_dir: secondStoreDir }
+      env: {
+        npm_config_store_dir: firstStoreDir, // PNPM <= 10
+        pnpm_config_store_dir: firstStoreDir // PNPM > 11
+      }
     })
 
     await setAccessTokensToServers([ server ])
