@@ -64,6 +64,10 @@ export const customConfigUpdateValidator = [
 
   body('transcoding.enabled').isBoolean(),
   body('transcoding.originalFile.keep').isBoolean(),
+  body('transcoding.remux.h264').isBoolean(),
+  body('transcoding.remux.av1').isBoolean(),
+  body('transcoding.remux.vp9').isBoolean(),
+  body('transcoding.remux.opus').isBoolean(),
   body('transcoding.allowAdditionalExtensions').isBoolean(),
   body('transcoding.threads').isInt(),
   body('transcoding.concurrency').isInt({ min: 1 }),

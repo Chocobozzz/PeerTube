@@ -10,6 +10,7 @@ import { ensureDir, move } from 'fs-extra/esm'
 import { join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
+import { getEnabledRemuxAudioCodecs, getEnabledRemuxVideoCodecs } from './transcoding-quick-transcode.js'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist.js'
 import { renameVideoFileInPlaylist, updateM3U8AndShaPlaylist } from '../hls.js'
 import { generateHLSVideoFilename, getHLSResolutionPlaylistFilename } from '../paths.js'
@@ -198,7 +199,13 @@ async function generateHlsPlaylistCommon (options: {
     resolution,
     fps,
 
-    copyCodecs: !separatedAudioInputPath && await canCopyForHLS({ fps, resolution, path: videoInputPath }),
+    copyCodecs: !separatedAudioInputPath && await canCopyForHLS({
+      fps,
+      resolution,
+      path: videoInputPath,
+      enabledRemuxVideoCodecs: getEnabledRemuxVideoCodecs(),
+      enabledRemuxAudioCodecs: getEnabledRemuxAudioCodecs()
+    }),
 
     separatedAudio,
 

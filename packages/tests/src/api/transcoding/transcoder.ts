@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles, omit } from '@peertube/peertube-core-utils'
-import { ffprobePromise, getAudioStream, hasAudioStream } from '@peertube/peertube-ffmpeg'
+import { canDoQuickAudioTranscode, canDoQuickVideoTranscode, ffprobePromise, getAudioStream, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode, VideoFileMetadata, VideoState } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
@@ -542,6 +542,38 @@ describe('Test video transcoding', function () {
       })
 
       expect(await canDoQuickTranscode(path, 60)).to.be.false
+    })
+
+    it('Should only remux a video codec that is in the enabled remux list', async function () {
+      this.timeout(120_000)
+
+      const av1Path = await generateVideoWithCodec('remux_gate_av1.mp4', {
+        videoCodec: 'libaom-av1',
+        audioCodec: 'aac',
+        container: 'mp4'
+      })
+
+      // Enabled => remuxable
+      expect(await canDoQuickVideoTranscode(av1Path, 60, undefined, [ 'h264', 'av1', 'vp9' ])).to.be.true
+      // Disabled => must be re-encoded
+      expect(await canDoQuickVideoTranscode(av1Path, 60, undefined, [ 'h264', 'vp9' ])).to.be.false
+      // Empty list => nothing is remuxed
+      expect(await canDoQuickVideoTranscode(av1Path, 60, undefined, [])).to.be.false
+    })
+
+    it('Should only remux an audio codec that is in the enabled remux list', async function () {
+      this.timeout(120_000)
+
+      const opusPath = await generateVideoWithCodec('remux_gate_opus.mp4', {
+        videoCodec: 'libx264',
+        audioCodec: 'libopus',
+        container: 'mp4'
+      })
+
+      // Enabled => remuxable
+      expect(await canDoQuickAudioTranscode(opusPath, undefined, [ 'aac', 'opus' ])).to.be.true
+      // Disabled => must be re-encoded
+      expect(await canDoQuickAudioTranscode(opusPath, undefined, [ 'aac' ])).to.be.false
     })
   })
 

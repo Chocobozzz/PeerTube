@@ -107,7 +107,12 @@ export function getDefaultEncodersToTry () {
   }
 }
 
-export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeData): Promise<boolean> {
+// enabledRemuxAudioCodecs lists the input audio codecs the admin allows to remux (copy) instead of re-encoding
+export async function canDoQuickAudioTranscode (
+  path: string,
+  probe?: FfprobeData,
+  enabledRemuxAudioCodecs: string[] = [ 'aac', 'opus' ]
+): Promise<boolean> {
   const parsedAudio = await getAudioStream(path, probe)
 
   if (!parsedAudio.audioStream) return true
@@ -115,9 +120,10 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   const audioCodec = parsedAudio.audioStream['codec_name']
 
   // Opus is widely supported and always efficient — safe to copy as-is
-  if (audioCodec === 'opus') return true
+  if (audioCodec === 'opus') return enabledRemuxAudioCodecs.includes('opus')
 
   if (audioCodec !== 'aac') return false
+  if (!enabledRemuxAudioCodecs.includes('aac')) return false
 
   const audioBitrate = parsedAudio.bitrate
   if (!audioBitrate) return false
@@ -132,7 +138,13 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   return true
 }
 
-export async function canDoQuickVideoTranscode (path: string, maxFPS: number, probe?: FfprobeData): Promise<boolean> {
+// enabledRemuxVideoCodecs lists the input video codecs the admin allows to remux (copy) instead of re-encoding
+export async function canDoQuickVideoTranscode (
+  path: string,
+  maxFPS: number,
+  probe?: FfprobeData,
+  enabledRemuxVideoCodecs: string[] = [ 'h264', 'av1', 'vp9' ]
+): Promise<boolean> {
   const videoStream = await getVideoStream(path, probe)
   if (!videoStream) return true
 
@@ -148,6 +160,7 @@ export async function canDoQuickVideoTranscode (path: string, maxFPS: number, pr
 
   const webCompatibleVideoCodecs = [ 'h264', 'av1', 'vp9' ]
   if (!webCompatibleVideoCodecs.includes(videoStream['codec_name'])) return false
+  if (!enabledRemuxVideoCodecs.includes(videoStream['codec_name'])) return false
 
   const webCompatiblePixelFormats = [ 'yuv420p', 'yuv420p10le' ]
   if (!webCompatiblePixelFormats.includes(videoStream['pix_fmt'])) return false
@@ -163,15 +176,18 @@ export async function canCopyForHLS (options: {
   path: string
   fps: number
   resolution: number
+
+  enabledRemuxVideoCodecs?: string[]
+  enabledRemuxAudioCodecs?: string[]
 }, probe?: FfprobeData): Promise<boolean> {
-  const { path, fps, resolution } = options
+  const { path, fps, resolution, enabledRemuxVideoCodecs, enabledRemuxAudioCodecs } = options
 
   const inputProbe = probe ?? await ffprobePromise(path)
   const { resolution: inputResolution } = await getVideoStreamDimensionsInfo(path, inputProbe)
   const inputFPS = await getVideoStreamFPS(path, inputProbe)
 
-  return await canDoQuickAudioTranscode(path, probe) &&
-    await canDoQuickVideoTranscode(path, fps, probe) &&
+  return await canDoQuickAudioTranscode(path, probe, enabledRemuxAudioCodecs) &&
+    await canDoQuickVideoTranscode(path, fps, probe, enabledRemuxVideoCodecs) &&
     resolution === inputResolution &&
     (!inputResolution || fps === inputFPS)
 }

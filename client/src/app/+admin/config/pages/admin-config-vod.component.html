@@ -73,6 +73,32 @@
                     </ng-container>
                   </my-peertube-checkbox>
                 </div>
+
+                <div class="form-group" formGroupName="remux" [ngClass]="getTranscodingDisabledClass()">
+                  <div class="mb-2 fw-bold" i18n>Codecs to remux</div>
+
+                  <div i18n class="form-group-description">
+                    When a web compatible input file uses one of the enabled codecs, PeerTube copies the stream instead of re-encoding it (faster, lossless). Disabled codecs are always re-encoded.
+                  </div>
+
+                  <div class="ms-2 d-flex flex-column">
+                    <div class="form-group mb-2">
+                      <my-peertube-checkbox inputName="transcodingRemuxH264" formControlName="h264" labelText="H264"></my-peertube-checkbox>
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <my-peertube-checkbox inputName="transcodingRemuxAV1" formControlName="av1" labelText="AV1"></my-peertube-checkbox>
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <my-peertube-checkbox inputName="transcodingRemuxVP9" formControlName="vp9" labelText="VP9"></my-peertube-checkbox>
+                    </div>
+
+                    <div class="form-group mb-2">
+                      <my-peertube-checkbox inputName="transcodingRemuxOpus" formControlName="opus" labelText="Opus"></my-peertube-checkbox>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="callout callout-light pt-2 mt-2 pb-0">

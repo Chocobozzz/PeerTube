@@ -35,6 +35,13 @@ type Form = {
       keep: FormControl<boolean>
     }>
 
+    remux: FormGroup<{
+      h264: FormControl<boolean>
+      av1: FormControl<boolean>
+      vp9: FormControl<boolean>
+      opus: FormControl<boolean>
+    }>
+
     webVideos: FormGroup<{
       enabled: FormControl<boolean>
     }>
@@ -142,6 +149,13 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
 
         originalFile: {
           keep: null
+        },
+
+        remux: {
+          h264: null,
+          av1: null,
+          vp9: null,
+          opus: null
         },
 
         webVideos: {

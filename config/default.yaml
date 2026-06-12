@@ -631,6 +631,14 @@ transcoding:
     # If yes it is not deleted but moved in a dedicated folder or object storage
     keep: false
 
+  # Remux (copy the stream without re-encoding) web compatible input codecs instead of transcoding them
+  # Only the codecs enabled here are remuxed when the input is web compatible: disabled codecs are always re-encoded
+  remux:
+    h264: true
+    av1: true
+    vp9: true
+    opus: true
+
   # Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos
   allow_additional_extensions: true
 
