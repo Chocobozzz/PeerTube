@@ -1,4 +1,4 @@
-import { escapeAttribute, escapeHTML } from '@peertube/peertube-core-utils'
+import { escapeAttribute, escapeHTML, escapeHtmlJSONStr } from '@peertube/peertube-core-utils'
 import { mdToPlainText } from '@server/helpers/markdown.js'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
@@ -188,7 +188,7 @@ export class TagsHtml {
     const schemaTags = await this.generateSchemaTagsOptions(tagsValues, context)
 
     if (schemaTags) {
-      tagsStr += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
+      tagsStr += `<script type="application/ld+json">${escapeHtmlJSONStr(JSON.stringify(schemaTags))}</script>`
     }
 
     // Rel Me

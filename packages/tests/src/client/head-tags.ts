@@ -268,18 +268,6 @@ describe('Test <head> HTML tags', function () {
     })
   })
 
-  describe('Escaping', function () {
-    it('Should correctly escape values', async function () {
-      await servers[0].users.updateMe({ description: '<strong>"super description"</strong>' })
-
-      const res = await makeGetRequest({ url: servers[0].url, path: '/a/root', accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
-      const text = res.text
-
-      expect(text).to.contain(`<meta property="twitter:description" content="&quot;super description&quot;" />`)
-      expect(text).to.contain(`<meta property="og:description" content="&quot;super description&quot;" />`)
-    })
-  })
-
   describe('Mastodon link', function () {
     async function check (path: string, href: string, exist = true) {
       const res = await makeGetRequest({ url: servers[0].url, path, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
@@ -373,11 +361,18 @@ describe('Test <head> HTML tags', function () {
         for (const id of playlistIds) {
           await commonPageTest(path + id)
 
-          const res = await makeGetRequest({ url: servers[0].url, path: path + id, accept: 'text/html', expectedStatus: HttpStatusCode.OK_200 })
+          const res = await makeGetRequest({
+            url: servers[0].url,
+            path: path + id,
+            accept: 'text/html',
+            expectedStatus: HttpStatusCode.OK_200
+          })
           const text = res.text
 
           const feedUrl = `${servers[0].url}/feeds/podcast/videos.xml?playlistId=${playlist.id}`
-          expect(text).to.contain(`<link rel="alternate" type="application/rss+xml" title="${playlistName} - Podcast feed" href="${feedUrl}" />`)
+          expect(text).to.contain(
+            `<link rel="alternate" type="application/rss+xml" title="${playlistName} - Podcast feed" href="${feedUrl}" />`
+          )
         }
       }
     })
@@ -392,6 +387,44 @@ describe('Test <head> HTML tags', function () {
       await channelPageTest('/video-channels/' + servers[0].store.channel.name)
       await channelPageTest('/c/' + servers[0].store.channel.name)
       await channelPageTest('/@' + servers[0].store.channel.name)
+    })
+  })
+
+  describe('Escaping', function () {
+    it('Should correctly escape values', async function () {
+      {
+        await servers[0].users.updateMe({ description: '<strong>"super description"</strong>' })
+
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: '/a/root',
+          accept: 'text/html',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+        const text = res.text
+
+        expect(text).to.contain(`<meta property="twitter:description" content="&quot;super description&quot;" />`)
+        expect(text).to.contain(`<meta property="og:description" content="&quot;super description&quot;" />`)
+      }
+
+      {
+        await servers[0].channels.update({
+          channelName: 'root_channel',
+          attributes: {
+            displayName: '</strong>toto'
+          }
+        })
+
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: '/w/' + videoIds[0],
+          accept: 'text/html',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+        const text = res.text
+
+        expect(text).to.contain('\\u003c/strong\\u003etoto')
+      }
     })
   })
 
