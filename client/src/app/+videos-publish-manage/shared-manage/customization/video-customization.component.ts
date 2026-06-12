@@ -70,7 +70,9 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
     this.videoEdit = videoEdit
 
     const channelItem = userChannels.find(c => c.id === videoEdit.toCommonFormPatch().channelId)
-    this.videoChannel = { name: channelItem.name, displayName: channelItem.label }
+    if (channelItem) {
+      this.videoChannel = { name: channelItem.name, displayName: channelItem.label }
+    }
 
     this.buildForm()
   }
