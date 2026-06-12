@@ -171,6 +171,7 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
       orLocalVideos: false
     },
     user,
+    currentVideoUuid: undefined,
     countVideos
   }, 'filter:api.user.me.subscription-videos.list.params')
 

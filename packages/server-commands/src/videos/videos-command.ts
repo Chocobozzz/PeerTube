@@ -266,6 +266,25 @@ export class VideosCommand extends AbstractCommand {
   }
 
   // ---------------------------------------------------------------------------
+  listRecommendations (
+    options: OverrideCommandOptions & VideosCommonQuery & {
+      id: number | string
+    }
+  ) {
+    const path = '/api/v1/videos/' + options.id + '/recommendations'
+
+    const query = this.buildListQuery(options)
+
+    return this.getRequestBody<ResultList<Video>>({
+      ...options,
+
+      path,
+      query: { sort: 'name', ...query },
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
 
   list (options: OverrideCommandOptions & VideosCommonQuery = {}) {
     const path = '/api/v1/videos'

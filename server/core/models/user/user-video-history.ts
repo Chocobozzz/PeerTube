@@ -68,6 +68,7 @@ export class UserVideoHistoryModel extends SequelizeModel<UserVideoHistoryModel>
       sort: '-"userVideoHistory"."updatedAt"',
       nsfw: null, // All
       displayOnlyForFollower: null,
+      currentVideoUuid: undefined,
       user,
       historyOfUser: user
     })

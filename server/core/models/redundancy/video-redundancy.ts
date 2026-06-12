@@ -459,6 +459,7 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
       sort,
       nsfw: null,
       displayOnlyForFollower: null,
+      currentVideoUuid: undefined,
 
       include: VideoInclude.FILES | VideoInclude.BLACKLISTED | VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLOCKED_OWNER,
       privacyOneOf: getAllPrivacies(),

@@ -7,6 +7,7 @@ import {
   ServerConfig,
   ServerStats,
   VideoCommentPolicy,
+  VideoRecommendationPolicy,
   ConstantLabel,
   VideoLicenceType,
   VideoPlaylistPrivacyType,
@@ -129,6 +130,27 @@ export class ServerService {
       {
         id: VideoCommentPolicy.REQUIRES_APPROVAL,
         label: $localize`Any new comment requires approval`
+      }
+    ])
+  }
+
+  getRecommendationPolicies () {
+    return of([
+      {
+        id: VideoRecommendationPolicy.ANY_VIDEOS,
+        label: $localize`Allow any videos in recommendations`
+      },
+      {
+        id: VideoRecommendationPolicy.ONLY_LOCAL_VIDEOS,
+        label: $localize`Only allow instance-local videos in recommendations`
+      },
+      {
+        id: VideoRecommendationPolicy.ONLY_CHANNEL_VIDEOS,
+        label: $localize`Only allow same channel videos in recommendations`
+      },
+      {
+        id: VideoRecommendationPolicy.ONLY_OWNER_VIDEOS,
+        label: $localize`Only allow owner videos in recommendations`
       }
     ])
   }

@@ -5,7 +5,7 @@ import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
 import { SearchService } from '@app/shared/shared-search/search.service'
-import { HTMLServerConfig } from '@peertube/peertube-models'
+import { HTMLServerConfig, VideoRecommendationPolicy } from '@peertube/peertube-models'
 import { Observable, of } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 
@@ -59,11 +59,16 @@ export class VideoRecommendationService {
     return this.userService.getAnonymousOrLoggedUser()
       .pipe(
         switchMap(user => {
-          const defaultSubscription = this.videos.listVideos({
+          const defaultSubscription = this.videos.listRecommendationVideos({
             skipCount: true,
             videoPagination: pagination,
-            sort: '-publishedAt'
+            sort: '-publishedAt',
+            currentVideo
           }).pipe(map(v => v.data))
+
+          if (currentVideo.recommendationPolicy.id !== VideoRecommendationPolicy.ANY_VIDEOS) {
+            return defaultSubscription
+          }
 
           const searchIndexConfig = this.config.search.searchIndex
           if (searchIndexConfig.enabled === true && searchIndexConfig.disableLocalSearch === true) {

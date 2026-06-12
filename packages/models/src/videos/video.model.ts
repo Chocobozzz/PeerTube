@@ -1,6 +1,7 @@
 import { Account, AccountSummary } from '../actors/index.js'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model.js'
 import { VideoCommentPolicyType } from './comment/video-comment-policy.enum.js'
+import { VideoRecommendationPolicyType } from './video-recommendation-policies.enum.js'
 import { VideoEmbedPrivacyPolicyType } from './embed-privacy/video-embed-privacy-policy.enum.js'
 import { VideoFile } from './file/index.js'
 import { LiveVideoScheduleEdit } from './live/live-video-schedule.model.js'
@@ -87,6 +88,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   }
 
   pluginData?: any
+
+  recommendationPolicy?: ConstantLabel<VideoRecommendationPolicyType>
 }
 
 // Not included by default, needs query params
@@ -117,6 +120,11 @@ export interface VideoDetails extends Video {
   channel: VideoChannel
   account: Account
   tags: string[]
+
+  recommendationPolicy: {
+    id: VideoRecommendationPolicyType
+    label: string
+  }
 
   commentsPolicy: {
     id: VideoCommentPolicyType
