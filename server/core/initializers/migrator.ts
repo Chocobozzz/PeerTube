@@ -1,7 +1,8 @@
+import { sortBy } from '@peertube/peertube-core-utils'
+import { currentDir } from '@peertube/peertube-node-utils'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { QueryTypes } from 'sequelize'
-import { currentDir } from '@peertube/peertube-node-utils'
 import { logger } from '../helpers/logger.js'
 import { LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
@@ -76,7 +77,7 @@ async function getMigrationScripts () {
       })
     })
 
-  return filesToMigrate
+  return sortBy(filesToMigrate, 'version')
 }
 
 async function executeMigration (actualVersion: number, entity: { version: string, script: string }) {
