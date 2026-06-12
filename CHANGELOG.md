@@ -1,5 +1,20 @@
 # Changelog
 
+## v8.2.1
+
+### Features
+
+ * Add `toot:discoverable` support for actors
+
+### Bug fixes
+
+ * Handle PNPM store directory change, fixing `ERR_PNPM_UNEXPECTED_STORE` crash
+ * Better conversion to square thumbnail of landscape thumbnails
+ * Fix running again object storage move job on videos that are already in object storage when using `npm run create-move-video-storage-job`
+ * Fix uploading HLS caption after transcoding
+ * Fix broken schema.org tag with special chars
+
+
 ## v8.2.0
 
 ### SECURITY
