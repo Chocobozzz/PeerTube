@@ -133,6 +133,7 @@ export function checkMissedConfig () {
     'client.menu.login.redirect_on_single_external_auth',
     'client.header.hide_instance_name',
     'defaults.publish.download_enabled',
+    'defaults.publish.download_original_file_enabled',
     'defaults.publish.comments_policy',
     'defaults.publish.privacy',
     'defaults.publish.licence',

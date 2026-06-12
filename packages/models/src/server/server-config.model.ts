@@ -236,6 +236,10 @@ export interface ServerConfig {
       enabled: boolean
     }
 
+    originalFile: {
+      keep: boolean
+    }
+
     enabledResolutions: number[]
 
     profile: string

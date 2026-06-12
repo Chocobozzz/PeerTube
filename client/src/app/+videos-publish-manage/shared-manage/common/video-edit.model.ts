@@ -1151,6 +1151,10 @@ export class VideoEdit {
     return !this.metadata.isLive && this.metadata.state === VideoState.PUBLISHED
   }
 
+  isNew () {
+    return this.isNewVideo
+  }
+
   private updateAfterChange () {
     this.videoAttributes = {
       id: this.metadata.id,

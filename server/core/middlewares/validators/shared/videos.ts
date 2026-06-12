@@ -277,7 +277,7 @@ export async function checkCanAccessVideoSourceFile (options: {
     return true
   }
 
-  if (video.downloadOriginalFileEnabled === true) {
+  if (video.downloadEnabled === true && video.downloadOriginalFileEnabled === true) {
     return true
   }
 

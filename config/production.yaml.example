@@ -1237,6 +1237,10 @@ defaults:
   publish:
     download_enabled: true
 
+    # Allow download of the original uploaded file
+    # Requires download_enabled to be true
+    download_original_file_enabled: true
+
     # enabled = 1, disabled = 2, requires_approval = 3
     comments_policy: 1
 

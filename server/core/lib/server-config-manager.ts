@@ -219,6 +219,9 @@ class ServerConfigManager {
         web_videos: {
           enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED
         },
+        originalFile: {
+          keep: CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
+        },
         enabledResolutions: this.getEnabledResolutions('vod'),
         profile: CONFIG.TRANSCODING.PROFILE,
         availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('vod')
