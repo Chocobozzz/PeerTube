@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, DestroyRef, OnInit, inject } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RouterOutlet } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
@@ -10,13 +11,16 @@ import { UserRight, UserRightType } from '@peertube/peertube-models'
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class AdminModerationComponent implements OnInit {
+  private destroyRef = inject(DestroyRef)
   private auth = inject(AuthService)
   private server = inject(ServerService)
 
   menuEntries: HorizontalMenuEntry[] = []
 
   ngOnInit () {
-    this.server.configReloaded.subscribe(() => this.buildMenu())
+    this.server.configReloaded
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.buildMenu())
 
     this.buildMenu()
   }
