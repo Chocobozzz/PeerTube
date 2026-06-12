@@ -14,6 +14,8 @@ import {
   PlayerThemeVideoSetting,
   RunnerJobState,
   RunnerJobStateType,
+  StreamSyncState,
+  StreamSyncStateType,
   UploadImageType,
   UploadImageType_Type,
   UserExportState,
@@ -28,8 +30,6 @@ import {
   VideoChannelActivityTargetType,
   VideoChannelCollaboratorState,
   VideoChannelCollaboratorStateType,
-  StreamSyncState,
-  StreamSyncStateType,
   VideoCommentPolicy,
   VideoCommentPolicyType,
   VideoEmbedPrivacyPolicy,
@@ -469,7 +469,8 @@ export const CONSTRAINTS_FIELDS = {
     DISLIKES: { min: 0 },
     FILE_SIZE: { min: -1 },
     PARTIAL_UPLOAD_SIZE: { max: 50 * 1024 * 1024 * 1024 }, // 50GB
-    URL: { min: 3, max: 2000 } // Length
+    URL: { min: 3, max: 2000 }, // Length
+    PASSWORD: { min: 2, max: 100 } // Length
   },
   VIDEO_SOURCE: {
     FILENAME: { min: 1, max: 1000 } // Length
@@ -549,9 +550,6 @@ export const CONSTRAINTS_FIELDS = {
     REASON: { min: 1, max: 5000 }, // Length
     ERROR_MESSAGE: { min: 1, max: 5000 }, // Length
     PROGRESS: { min: 0, max: 100 } // Value
-  },
-  VIDEO_PASSWORD: {
-    LENGTH: { min: 2, max: 100 }
   },
   VIDEO_CHAPTERS: {
     TITLE: { min: 1, max: 100 } // Length
