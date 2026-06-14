@@ -4225,9 +4225,9 @@
           <context context-type="linenumber">594</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5174743927852553765" datatype="html">
+      <trans-unit id="5174743927852553765" datatype="html" xml:space="preserve">
         <source>Browse local videos</source>
-        <target state="new">Browse local videos</target>
+        <target state="translated">مشاهده ویدئوهای محلی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
           <context context-type="linenumber">595</context>
@@ -8262,7 +8262,7 @@
       </trans-unit>
       <trans-unit id="3140041890374956085" datatype="html" xml:space="preserve">
         <source>Comments on your videos</source>
-        <target state="translated">نظرات روی ویدئوی شما</target>
+        <target state="translated">نظرات روی ویدئوهای شما</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">63</context>
@@ -11592,9 +11592,9 @@
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8147229944654164397" datatype="html">
+      <trans-unit id="8147229944654164397" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {فیلم} other {فیلم} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 { فیلم} other { فیلم} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">27</context>
@@ -15382,9 +15382,9 @@
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8580229323143279034" datatype="html">
+      <trans-unit id="8580229323143279034" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos }}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos }}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {<x id="INTERPOLATION"/>  ویدئو }}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.html</context>
           <context context-type="linenumber">52</context>
@@ -15446,19 +15446,17 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3068011377000255023" datatype="html">
+      <trans-unit id="3068011377000255023" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 videos} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 ویدئو} other {<x id="INTERPOLATION"/> ویدئو}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {یک ویدئو} other {<x id="INTERPOLATION"/>  ویدئو}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8856905278208146821" datatype="html">
+      <trans-unit id="8856905278208146821" datatype="html" xml:space="preserve">
         <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
-        <target state="translated">
-          <x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {{{ getTotalVideosOf(videoChannel) }} ویدئو }}"/>
-        </target>
+        <target state="translated"><x id="ICU" xid="1730926218636655979" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {{{ getTotalVideosOf(videoChannel) }}  ویدئو }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">32</context>
@@ -15500,9 +15498,9 @@
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7766488542631150871" datatype="html">
+      <trans-unit id="7766488542631150871" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {<x id="INTERPOLATION"/>ویدئو }}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {<x id="INTERPOLATION"/> ویدئو }}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">32</context>
@@ -15928,9 +15926,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3526345455397325538" datatype="html">
+      <trans-unit id="3526345455397325538" datatype="html" xml:space="preserve">
         <source>total videos</source>
-        <target state="new">total videos</target>
+        <target state="translated">تعداد کل ویدئوها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">45</context>
@@ -16472,9 +16470,9 @@
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1753457183754409152" datatype="html">
+      <trans-unit id="1753457183754409152" datatype="html" xml:space="preserve">
         <source>Displayed videos</source>
-        <target state="new">Displayed videos</target>
+        <target state="translated">ویدئوهای نمایش‌داده‌شده</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">120</context>
@@ -16560,9 +16558,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708684903894580151" datatype="html">
+      <trans-unit id="4708684903894580151" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No video} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No video} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {بدون ویدئو} =1 {یک ویدئو} other {<x id="INTERPOLATION"/>  ویدئو}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -17976,33 +17974,33 @@
           <context context-type="linenumber">441</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7394226533516335523" datatype="html">
+      <trans-unit id="7394226533516335523" datatype="html" xml:space="preserve">
         <source>Actions for the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Actions for the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Actions for the {count, plural, =1 { ویدئو} other { ویدئو}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">454</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="127978769406607253" datatype="html">
+      <trans-unit id="127978769406607253" datatype="html" xml:space="preserve">
         <source>Block the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Block the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Block the {count, plural, =1 { ویدئو} other { ویدئو}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">460</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4121384633096511327" datatype="html">
+      <trans-unit id="4121384633096511327" datatype="html" xml:space="preserve">
         <source>Unblock the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Unblock the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Unblock the {count, plural, =1 { ویدئو} other { ویدئو}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">466</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="360751696384645624" datatype="html">
+      <trans-unit id="360751696384645624" datatype="html" xml:space="preserve">
         <source>Delete the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Delete the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Delete the {count, plural, =1 { ویدئو} other { ویدئو}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">472</context>
@@ -18120,9 +18118,9 @@
           <context context-type="linenumber">574</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="82990740698454566" datatype="html">
+      <trans-unit id="82990740698454566" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Delete video} other {Delete videos}}</source>
-        <target state="new">{count, plural, =1 {Delete video} other {Delete videos}}</target>
+        <target state="translated">{count, plural, =1 {حذف ویدئو} other {حذف ویدئوها}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -18148,9 +18146,9 @@
           <context context-type="linenumber">158</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3158039989618629879" datatype="html">
+      <trans-unit id="3158039989618629879" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video unblocked.} other {<x id="count"/> videos unblocked.}}</source>
-        <target state="new">{count, plural, =1 {Video unblocked.} other {<x id="count"/> videos unblocked.}}</target>
+        <target state="translated">{count, plural, =1 {ویدئو رفع انسداد شد.} other {<x id="count"/>  ویدئو رفع انسداد شدند.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">170</context>
@@ -18196,9 +18194,9 @@
           <context context-type="linenumber">665</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3648689565279541228" datatype="html">
+      <trans-unit id="3648689565279541228" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video deleted.} other {<x id="count"/> videos deleted.}}</source>
-        <target state="new">{count, plural, =1 {Video deleted.} other {<x id="count"/> videos deleted.}}</target>
+        <target state="translated">{count, plural, =1 { ویدئو حذف شد.} other {<x id="count"/>  ویدئو حذف شدند.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">225</context>
