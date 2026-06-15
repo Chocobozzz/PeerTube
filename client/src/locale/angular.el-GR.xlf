@@ -7301,90 +7301,90 @@ The link will expire within 1 hour.</source>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="801162573289021003" datatype="html">
+      <trans-unit id="801162573289021003" datatype="html" xml:space="preserve">
         <source>Allow users to &lt;strong&gt;apply for registration&lt;/strong&gt; on your platform</source>
-        <target state="new">Allow users to &lt;strong&gt;apply for registration&lt;/strong&gt; on your platform</target>
+        <target state="translated">Επιτρέπει στους χρήστες &lt;strong&gt;να υποβάλουν αίτηση εγγραφής&lt;/strong&gt; στην πλατφόρμα σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">173</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="7806027071187877900" datatype="html">
+      <trans-unit id="7806027071187877900" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable&lt;/strong&gt; user &lt;strong&gt;registration&lt;/strong&gt;</source>
-        <target state="new">&lt;strong&gt;Disable&lt;/strong&gt; user &lt;strong&gt;registration&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Απενεργοποιεί&lt;/strong&gt; εγγραφή &lt;strong&gt;χρήστη&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">183</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3048784583227512257" datatype="html">
+      <trans-unit id="3048784583227512257" datatype="html" xml:space="preserve">
         <source>Require &lt;strong&gt;moderator approval&lt;/strong&gt; for videos published by your community</source>
-        <target state="new">Require &lt;strong&gt;moderator approval&lt;/strong&gt; for videos published by your community</target>
+        <target state="translated">Απαιτεί &lt;strong&gt;έγκριση συντονιστή&lt;/strong&gt; για βίντεο που δημοσιεύονται απ' την κοινότητά σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">194</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="5342918468732313132" datatype="html">
+      <trans-unit id="5342918468732313132" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; new users &lt;strong&gt;from uploading videos&lt;/strong&gt; (can be changed by moderators)</target>
+        <target state="translated">&lt;strong&gt;Αποτρέπει&lt;/strong&gt; νέους χρήστες &lt;strong&gt;απ' το να μεταφορτώνουν βίντεο&lt;/strong&gt; (μπορεί να αλλάξει απ' τους συντονιστές)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">221</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="8937536900458817451" datatype="html">
+      <trans-unit id="8937536900458817451" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Not limit the amount of videos&lt;/strong&gt; new users can upload</source>
-        <target state="new">&lt;strong&gt;Not limit the amount of videos&lt;/strong&gt; new users can upload</target>
+        <target state="translated">&lt;strong&gt;Περιορίζει το πλήθος των βίντεο&lt;/strong&gt; που μπορούν να μετφορτώσουν οι νέοι χρήστες</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">225</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="6750683208657917557" datatype="html">
+      <trans-unit id="6750683208657917557" datatype="html" xml:space="preserve">
         <source>Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</source>
-        <target state="new">Set &lt;strong&gt;video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; for new users (can be changed by moderators)</target>
+        <target state="translated">Ορίσει &lt;strong&gt;όριο βίντεο σε <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong&gt; για νέους χρήστες (μπορεί να αλλάξει από τους συντονιστές)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">229</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="5663976721315204489" datatype="html">
+      <trans-unit id="5663976721315204489" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to import and synchronize&lt;/strong&gt; videos from remote platforms (YouTube, Vimeo...)</target>
+        <target state="translated">&lt;strong&gt;Επιτρέπει&lt;/strong&gt; στους χρήστες σας &lt;strong&gt;να εισάγουν και συγχρονίζουν&lt;/strong&gt; βίντεο από άλλες πλατφόρμες (YouTube, Vimeo...)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">255</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="4936759942517379026" datatype="html">
+      <trans-unit id="4936759942517379026" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; your users &lt;strong&gt;from importing videos&lt;/strong&gt; from remote platforms</target>
+        <target state="translated">&lt;strong&gt;Αποτρέπει&lt;/strong&gt; τους χρήστες σας &lt;strong&gt;απ' το να εισαγάγουν βίντεο&lt;/strong&gt; από άλλες πλατφόρμες</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">260</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="7110073515390971316" datatype="html">
+      <trans-unit id="7110073515390971316" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to stream lives&lt;/strong&gt; and chat with their viewers using the &lt;strong&gt;Livechat&lt;/strong&gt; plugin</target>
+        <target state="translated">&lt;strong&gt;Επιτρέπει&lt;/strong&gt; στους χρήστες σας &lt;strong&gt;να μεταδίδουν ζωντανά&lt;/strong&gt; και να συζητούν με τους θεατές τους χρησιμοποιώντας το πρόσθετο &lt;strong&gt;Livechat&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">279</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3769529336397241157" datatype="html">
+      <trans-unit id="3769529336397241157" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; your users from running &lt;strong&gt;live streams&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Αποτρέπει&lt;/strong&gt; τους χρήστες σας απ' το να μεταδίδουν &lt;strong&gt;ζωντανά&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">283</context>
