@@ -9,7 +9,7 @@ import {
 } from '@peertube/peertube-models'
 import { getAuthUser } from '@server/helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { VIDEO_EMBED_PRIVACY_POLICIES } from '@server/initializers/constants.js'
+import { VIDEO_EMBED_PRIVACY_POLICIES, WEBSERVER } from '@server/initializers/constants.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
@@ -74,8 +74,9 @@ async function getVideoEmbedPrivacy (req: express.Request, res: express.Response
 
 async function isVideoEmbedOnDomainAllowed (req: express.Request, res: express.Response) {
   const video = res.locals.videoWithBlacklist
+  const isOnInstance = req.query.domain === WEBSERVER.HOST
 
-  const domainAllowed = video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED
+  const domainAllowed = video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED || isOnInstance
     ? true
     : await VideoEmbedPrivacyDomainModel.isDomainAllowed(video.id, req.query.domain)
 

@@ -106,6 +106,19 @@ describe('Test video embed privacy', function () {
     }
   })
 
+  it('Should check if embed is allowed on origin instance', async function () {
+    {
+      const result = await servers[0].videoEmbedPrivacy.isDomainAllowed({ videoId, domain: servers[0].host })
+      expect(result).to.deep.equal({ domainAllowed: true, userBypassAllowed: null })
+    }
+
+    {
+      // Port is missing
+      const result = await servers[0].videoEmbedPrivacy.isDomainAllowed({ videoId, domain: servers[0].hostname, token: null })
+      expect(result).to.deep.equal({ domainAllowed: false, userBypassAllowed: false })
+    }
+  })
+
   it('Should add some domains to video embed privacy', async function () {
     await servers[0].videoEmbedPrivacy.update({
       videoId,
