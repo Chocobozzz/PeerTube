@@ -20,7 +20,8 @@ import { expectStartWith, testImageSize } from '@tests/shared/checks.js'
 import * as chai from 'chai'
 import chaiJSONSChema from 'chai-json-schema'
 import chaiXML from 'chai-xml'
-import { XMLParser, XMLValidator } from 'fast-xml-parser'
+import { XMLParser } from 'fast-xml-parser'
+import { SyntaxValidator as XMLValidator } from 'fast-xml-validator'
 
 chai.use(chaiXML)
 chai.use(chaiJSONSChema)

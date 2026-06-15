@@ -246,7 +246,6 @@
     "concurrently": "^9.2.1",
     "depcheck": "^1.4.7",
     "eslint-plugin-eslint-comments": "^3.2.0",
-    "fast-xml-parser": "^5.8.0",
     "i18next-cli": "^1.58.0",
     "jszip": "^3.10.1",
     "maildev": "^2.2.1",
