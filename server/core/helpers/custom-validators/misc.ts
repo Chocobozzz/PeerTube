@@ -125,10 +125,10 @@ export function checkMimetypeRegex (fileMimeType: string, mimeTypeRegex: string)
 
 // ---------------------------------------------------------------------------
 
-export function toCompleteUUID (value: string) {
-  if (isShortUUID(value)) {
+export function toCompleteUUID<T extends string | number> (value: T) {
+  if (isShortUUID(value + '')) {
     try {
-      return shortToUUID(value)
+      return shortToUUID(value + '')
     } catch {
       return ''
     }
@@ -137,7 +137,7 @@ export function toCompleteUUID (value: string) {
   return value
 }
 
-export function toCompleteUUIDs (values: string[]) {
+export function toCompleteUUIDs (values: (string | number)[]) {
   return values.map(v => toCompleteUUID(v))
 }
 

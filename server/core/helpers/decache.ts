@@ -11,8 +11,6 @@ export function decachePlugin (require: NodeJS.Require, libraryPath: string) {
   if (!moduleName) return
 
   searchCache(require, moduleName, function (mod) {
-    console.log(mod)
-
     delete require.cache[mod.id]
 
     removeCachedPath(mod.path)

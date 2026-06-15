@@ -1,5 +1,6 @@
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoBlacklistCreate } from '@peertube/peertube-models'
+import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { buildLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
@@ -85,11 +86,11 @@ function buildVideosHelpers () {
     },
 
     loadByIdOrUUID: (id: number | string) => {
-      return VideoModel.loadWithThumbnails(id)
+      return VideoModel.loadWithThumbnails(toCompleteUUID(id))
     },
 
     loadByIdOrUUIDWithFiles: (id: number | string) => {
-      return VideoModel.loadWithFiles(id)
+      return VideoModel.loadWithFiles(toCompleteUUID(id))
     },
 
     removeVideo: (id: number) => {
