@@ -817,31 +817,43 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     search?: string
   }) {
     const { search, isCount } = options
-
     if (!search) {
       if (!isCount) this.attributes.push('0 as similarity')
-
       return
     }
 
     const escapedSearch = this.sequelize.escape(search)
     const escapedLikeSearch = this.sequelize.escape('%' + search + '%')
-
-    this.queryConfig = 'SET pg_trgm.word_similarity_threshold = 0.40;'
-
-    this.cte.push(
-      '"trigramSearch" AS (' +
-        '  SELECT "video"."id", ' +
-        `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) as similarity ` +
-        '  FROM "video" ' +
-        '  WHERE lower(immutable_unaccent(' + escapedSearch + ')) <% lower(immutable_unaccent("video"."name")) OR ' +
-        '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
-        ')'
+    const escapedTsQuery = this.sequelize.escape(
+      search.trim().split(/\s+/).map(w => `${w}:*`).join(' & ')
     )
 
-    this.joins.push('LEFT JOIN "trigramSearch" ON "video"."id" = "trigramSearch"."id"')
+    this.queryConfig = 'SET pg_trgm.word_similarity_threshold = 0.45;'
+
+    this.cte.push(
+      '"ftsSearch" AS (' +
+      '  SELECT "videoSearch"."videoId" AS "id", ' +
+      `  ts_rank("videoSearch"."searchVector", to_tsquery('simple', unaccent(${escapedTsQuery}))) AS similarity ` +
+      '  FROM "videoSearch" ' +
+      `  WHERE "videoSearch"."searchVector" @@ to_tsquery('simple', unaccent(${escapedTsQuery}))` +
+      ')',
+
+      '"trigramSearch" AS (' +
+      '  SELECT "video"."id", ' +
+      `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) AS similarity ` +
+      '  FROM "video" ' +
+      '  WHERE lower(immutable_unaccent(' + escapedSearch + ')) <% lower(immutable_unaccent("video"."name")) OR ' +
+      '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+      ')'
+    )
+
+    this.joins.push(
+      'LEFT JOIN "ftsSearch" ON "video"."id" = "ftsSearch"."id"',
+      'LEFT JOIN "trigramSearch" ON "video"."id" = "trigramSearch"."id"'
+    )
 
     let base = '(' +
+      '  "ftsSearch"."id" IS NOT NULL OR ' +
       '  "trigramSearch"."id" IS NOT NULL OR ' +
       '  EXISTS (' +
       '    SELECT 1 FROM "videoTag" ' +
@@ -855,10 +867,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     base += ')'
-
     this.and.push(base)
 
-    let attribute = `COALESCE("trigramSearch"."similarity", 0)`
+    let attribute = `GREATEST(COALESCE("ftsSearch"."similarity", 0), COALESCE("trigramSearch"."similarity", 0))`
     if (this.group) attribute = `AVG(${attribute})`
 
     if (!isCount) {
