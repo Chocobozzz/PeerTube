@@ -9,20 +9,30 @@ import { fetchAP } from './activity.js'
 type HandlerFunction<T> = (items: T[]) => Promise<any> | Bluebird<any>
 type CleanerFunction = (startedDate: Date) => Promise<any>
 
-export async function crawlCollectionPage<T> (argUrl: string, handler: HandlerFunction<T>, cleaner?: CleanerFunction) {
+export async function crawlCollectionPage<T> (
+  argUrl: string,
+  handler: HandlerFunction<T>,
+  cleaner?: CleanerFunction,
+  abortSignal?: AbortSignal
+) {
   let url = argUrl
 
   logger.info('Crawling ActivityPub data on %s.', url)
 
   const startDate = new Date()
 
-  const response = await fetchAP<ActivityPubOrderedCollection<T>>(url)
+  const response = await fetchAP<ActivityPubOrderedCollection<T>>(url, { signal: abortSignal })
   const firstBody = response.body
 
   const limit = ACTIVITY_PUB.FETCH_PAGE_LIMIT
   let i = 0
   let nextLink = firstBody.first
   while (nextLink && i < limit) {
+    // Check if abort signal has been triggered
+    if (abortSignal?.aborted) {
+      throw new Error('ActivityPub crawl aborted')
+    }
+
     i++
 
     let body: any
@@ -34,7 +44,7 @@ export async function crawlCollectionPage<T> (argUrl: string, handler: HandlerFu
 
       url = nextLink
 
-      const res = await fetchAP<ActivityPubOrderedCollection<T>>(url)
+      const res = await fetchAP<ActivityPubOrderedCollection<T>>(url, { signal: abortSignal })
       body = res.body
     } else {
       // nextLink is already the object we want

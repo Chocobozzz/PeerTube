@@ -1,10 +1,10 @@
-import { Job } from 'bullmq'
+import { FFmpegVOD } from '@peertube/peertube-ffmpeg'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { logger } from '@server/helpers/logger.js'
-import { FFmpegVOD } from '@peertube/peertube-ffmpeg'
+import { Job } from 'bullmq'
 import { VideoTranscodingProfilesManager } from '../default-transcoding-profiles.js'
 
-export function buildFFmpegVOD (job?: Job) {
+export function buildFFmpegVOD<T extends Job<{ abortSignal?: AbortSignal }>> (job?: T) {
   return new FFmpegVOD({
     ...getFFmpegCommandWrapperOptions('vod', VideoTranscodingProfilesManager.Instance.getAvailableEncoders()),
 
@@ -13,6 +13,9 @@ export function buildFFmpegVOD (job?: Job) {
 
       job.updateProgress(progress)
         .catch(err => logger.error('Cannot update ffmpeg job progress', { err }))
-    }
+    },
+
+    // Pass the abort signal from the job so the ffmpeg process can be killed on timeout
+    abortSignal: job?.data?.abortSignal
   })
 }

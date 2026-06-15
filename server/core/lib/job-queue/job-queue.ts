@@ -1,4 +1,4 @@
-import { pick, timeoutPromise } from '@peertube/peertube-core-utils'
+import { pick, timeoutPromiseWithCleanup } from '@peertube/peertube-core-utils'
 import {
   ActivitypubFollowPayload,
   ActivitypubHttpBroadcastPayload,
@@ -73,10 +73,10 @@ import { processVideoChannelImport } from './handlers/video-channel-import.js'
 import { processVideoFileImport } from './handlers/video-file-import.js'
 import { processVideoImport } from './handlers/video-import.js'
 import { processVideoLiveEnding } from './handlers/video-live-ending.js'
+import { processVideosStats } from './handlers/video-stats.js'
 import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
 import { processVideoTranscription } from './handlers/video-transcription.js'
-import { processVideosStats } from './handlers/video-stats.js'
 
 export type CreateJobTypeAndPayload =
   | { type: 'build-automatic-tags', payload: BuildAutomaticTagsPayload }
@@ -243,11 +243,28 @@ class JobQueue {
 
     const handler = function (job: Job) {
       const timeout = JOB_TTL[handlerName]
-      const p = handlers[handlerName](job)
+      if (!timeout) return handlers[handlerName](job)
 
-      if (!timeout) return p
+      const controller = new AbortController()
 
-      return timeoutPromise(p, timeout)
+      // Store abort signal in job immediately so handlers can access it
+      job.data.abortSignal = controller.signal
+
+      // Create timeout with cleanup callback to kill orphaned processes
+      return timeoutPromiseWithCleanup(
+        handlers[handlerName](job),
+        timeout,
+        () => {
+          logger.warn(
+            'Job %s in queue %s exceeded timeout of %d ms, triggering cleanup',
+            job.id,
+            handlerName,
+            timeout
+          )
+
+          controller.abort()
+        }
+      )
     }
 
     const processor = async (jobArg: Job) => {

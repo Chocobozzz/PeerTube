@@ -77,7 +77,12 @@ export {
 // Job handlers
 // ---------------------------------------------------------------------------
 
-async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTranscodingPayload, video: MVideoFull, user: MUserId) {
+async function handleWebVideoMergeAudioJob (
+  job: Job<MergeAudioTranscodingPayload>,
+  payload: MergeAudioTranscodingPayload,
+  video: MVideoFull,
+  user: MUserId
+) {
   logger.info('Handling merge audio transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await mergeAudioVideofile({ video, resolution: payload.resolution, fps: payload.fps, job })
@@ -87,7 +92,12 @@ async function handleWebVideoMergeAudioJob (job: Job, payload: MergeAudioTransco
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
-async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscodingPayload, video: MVideoFull, user: MUserId) {
+async function handleWebVideoOptimizeJob (
+  job: Job<OptimizeTranscodingPayload>,
+  payload: OptimizeTranscodingPayload,
+  video: MVideoFull,
+  user: MUserId
+) {
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await optimizeOriginalVideofile({ video, job })
@@ -99,7 +109,11 @@ async function handleWebVideoOptimizeJob (job: Job, payload: OptimizeTranscoding
 
 // ---------------------------------------------------------------------------
 
-async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoResolutionTranscodingPayload, video: MVideoFull) {
+async function handleNewWebVideoResolutionJob (
+  job: Job<NewWebVideoResolutionTranscodingPayload>,
+  payload: NewWebVideoResolutionTranscodingPayload,
+  video: MVideoFull
+) {
   logger.info('Handling Web Video transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
   await transcodeNewWebVideoResolution({ video, resolution: payload.resolution, fps: payload.fps, job })
@@ -112,7 +126,7 @@ async function handleNewWebVideoResolutionJob (job: Job, payload: NewWebVideoRes
 
 // ---------------------------------------------------------------------------
 
-async function handleHLSJob (job: Job, payload: HLSTranscodingPayload, videoArg: MVideoFull) {
+async function handleHLSJob (job: Job<HLSTranscodingPayload>, payload: HLSTranscodingPayload, videoArg: MVideoFull) {
   logger.info('Handling HLS transcoding job for %s.', videoArg.uuid, lTags(videoArg.uuid), { payload })
 
   const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)

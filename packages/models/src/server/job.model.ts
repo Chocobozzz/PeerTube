@@ -36,6 +36,7 @@ export type JobType =
   | 'video-transcription'
   | 'videos-stats'
 
+// Client API
 export interface Job {
   id: number | string
   state: JobState | 'unknown'
@@ -52,6 +53,8 @@ export interface Job {
     id: string
   }
 }
+
+// ---------------------------------------------------------------------------
 
 export type ActivitypubHttpBroadcastPayload = {
   uris: string[]
@@ -74,6 +77,7 @@ export type ActivitypubHttpFetcherPayload = {
   type: FetchType
   videoId?: number
   accountId?: number
+  abortSignal?: AbortSignal
 }
 
 export type ActivitypubHttpUnicastPayload = {
@@ -148,6 +152,7 @@ interface BaseTranscodingPayload {
   videoUUID: string
   canMoveVideoState: boolean
   isNewVideo?: boolean
+  abortSignal?: AbortSignal
 }
 
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {

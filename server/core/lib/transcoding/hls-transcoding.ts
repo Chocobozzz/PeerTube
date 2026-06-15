@@ -38,7 +38,7 @@ export async function generateHlsPlaylistResolutionFromTS (options: {
 }
 
 // Generate an HLS playlist from an input file, and update the master playlist
-export function generateHlsPlaylistResolution (options: {
+export function generateHlsPlaylistResolution<JobData extends { abortSignal?: AbortSignal }> (options: {
   video: MVideo
 
   videoInputPath: string
@@ -48,7 +48,7 @@ export function generateHlsPlaylistResolution (options: {
   fps: number
   inputFileMutexReleaser: MutexInterface.Releaser
   separatedAudio: boolean
-  job?: Job
+  job?: Job<JobData>
 }) {
   return generateHlsPlaylistCommon({
     type: 'hls' as 'hls',
@@ -143,7 +143,7 @@ export async function onHLSVideoFileTranscoding (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function generateHlsPlaylistCommon (options: {
+async function generateHlsPlaylistCommon<JobData extends { abortSignal?: AbortSignal }> (options: {
   type: 'hls' | 'hls-from-ts'
   video: MVideo
 
@@ -160,7 +160,7 @@ async function generateHlsPlaylistCommon (options: {
 
   isAAC?: boolean
 
-  job?: Job
+  job?: Job<JobData>
 }) {
   const {
     type,

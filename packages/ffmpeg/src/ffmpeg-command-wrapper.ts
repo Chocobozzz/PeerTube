@@ -24,6 +24,9 @@ export interface FFmpegCommandWrapperOptions {
   updateJobProgress?: (progress?: number) => void
   onEnd?: () => void
   onError?: (err: Error) => void
+
+  // Optional abort signal to cancel the ffmpeg process on timeout or other cancellation
+  abortSignal?: AbortSignal
 }
 
 export class FFmpegCommandWrapper {
@@ -42,6 +45,7 @@ export class FFmpegCommandWrapper {
   private readonly updateJobProgress: (progress?: number) => void
   private readonly onEnd?: () => void
   private readonly onError?: (err: Error) => void
+  private readonly abortSignal?: AbortSignal
 
   private command: FfmpegCommand
 
@@ -58,6 +62,7 @@ export class FFmpegCommandWrapper {
 
     this.onEnd = options.onEnd
     this.onError = options.onError
+    this.abortSignal = options.abortSignal
   }
 
   getAvailableEncoders () {
@@ -82,6 +87,20 @@ export class FFmpegCommandWrapper {
 
   resetCommand () {
     this.command = undefined
+  }
+
+  // Kill the ffmpeg process (called on timeout to prevent orphaned processes)
+  killCommand (signal = 'SIGKILL') {
+    if (!this.command) return
+
+    this.logger.debug(`Killing ffmpeg process with ${signal}`, this.lTags)
+
+    try {
+      this.command.kill(signal)
+      this.command = undefined
+    } catch (err) {
+      this.logger.warn(`Failed to kill ffmpeg process`, { err, ...this.lTags })
+    }
   }
 
   buildCommand (inputs: (string | Readable)[] | string | Readable, inputFileMutexReleaser?: MutexInterface.Releaser) {
@@ -153,6 +172,22 @@ export class FFmpegCommandWrapper {
 
           this.updateJobProgress(percent)
         })
+      }
+
+      // Listen for abort signal to kill the ffmpeg process on timeout
+      if (this.abortSignal) {
+        if (this.abortSignal.aborted) {
+          // Signal already aborted before command started
+          this.killCommand('SIGKILL')
+          rej(new Error('FFmpeg process aborted'))
+          return
+        }
+
+        this.abortSignal.addEventListener('abort', () => {
+          this.logger.debug('Abort signal received, killing ffmpeg process', this.lTags)
+          this.killCommand('SIGKILL')
+          rej(new Error('FFmpeg process aborted'))
+        }, { once: true })
       }
 
       this.command.run()

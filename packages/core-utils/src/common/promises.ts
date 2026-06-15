@@ -18,6 +18,27 @@ export function timeoutPromise<T> (promise: Promise<T>, timeoutMs: number) {
   ]).finally(() => clearTimeout(timer))
 }
 
+// Timeout promise with cleanup callback to kill orphaned processes and cancel HTTP requests
+export function timeoutPromiseWithCleanup<T> (
+  promise: Promise<T>,
+  timeoutMs: number,
+  onTimeoutCleanup?: () => void
+) {
+  let timer: ReturnType<typeof setTimeout>
+
+  return Promise.race([
+    promise,
+
+    new Promise<T>((_res, rej) => {
+      timer = setTimeout(() => {
+        if (onTimeoutCleanup) onTimeoutCleanup()
+
+        rej(new Error('Timeout'))
+      }, timeoutMs)
+    })
+  ]).finally(() => clearTimeout(timer))
+}
+
 export function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {

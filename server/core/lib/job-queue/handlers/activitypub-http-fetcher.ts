@@ -35,7 +35,7 @@ async function processActivityPubHttpFetcher (job: Job) {
     'video-comments': crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
   }
 
-  return crawlCollectionPage(payload.uri, fetcherType[payload.type], cleanerType[payload.type])
+  return crawlCollectionPage(payload.uri, fetcherType[payload.type], cleanerType[payload.type], payload.abortSignal)
 }
 
 // ---------------------------------------------------------------------------
