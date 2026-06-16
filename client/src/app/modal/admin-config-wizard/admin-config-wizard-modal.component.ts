@@ -1,10 +1,10 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
+import { CommonStepperComponent } from '@app/shared/shared-main/common/common-stepper.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { AdminConfigWizardStepperComponent } from './admin-config-wizard-stepper.component'
 import { getNoWelcomeModalLocalStorageKey } from './shared/admin-config-wizard-modal-utils'
 import { AdminConfigWizardDocumentationComponent } from './steps/admin-config-wizard-documentation.component'
 import { AdminConfigWizardEditInfoComponent, FormEditInfo } from './steps/admin-config-wizard-edit-info.component'
@@ -19,7 +19,7 @@ import { UsageType } from './steps/usage-type/usage-type.model'
   styleUrls: [ './admin-config-wizard-modal.component.scss' ],
   imports: [
     CdkStepperModule,
-    AdminConfigWizardStepperComponent,
+    CommonStepperComponent,
     AdminConfigWizardWelcomeComponent,
     AdminConfigWizardEditInfoComponent,
     AdminConfigWizardFormComponent,
@@ -33,7 +33,7 @@ export class AdminConfigWizardModalComponent implements OnInit {
   private notifier = inject(Notifier)
 
   readonly modal = viewChild<ElementRef>('modal')
-  readonly stepper = viewChild<AdminConfigWizardStepperComponent>('stepper')
+  readonly stepper = viewChild<CommonStepperComponent>('stepper')
 
   readonly created = output()
 

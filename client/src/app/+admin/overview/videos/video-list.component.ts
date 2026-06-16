@@ -12,6 +12,7 @@ import { AccountBlockBadgeInput } from '@app/shared/shared-moderation/account-bl
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { BulkUpdateVideosModalComponent } from '@app/shared/shared-video/bulk-update-videos-modal.component'
 import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
 import { getAllVideoStates, getVideoStateBadgeClass, getVideoStateLabel } from '@app/shared/shared-video/video-state-utils'
 import { getAllFiles } from '@peertube/peertube-core-utils'
@@ -64,6 +65,7 @@ type ColumnName =
     BytesPipe,
     PrivacyBadgeComponent,
     VideoNSFWBadgeComponent,
+    BulkUpdateVideosModalComponent,
     TableComponent,
     NumberFormatterPipe
   ]
@@ -81,6 +83,7 @@ export class VideoListComponent implements OnInit {
   private blocklistService = inject(BlocklistService)
 
   readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
+  readonly bulkUpdateVideosModal = viewChild<BulkUpdateVideosModalComponent>('bulkUpdateVideosModal')
   readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName>>('table')
 
   bulkActions: DropdownAction<Video[]>[][] = []
@@ -228,6 +231,12 @@ export class VideoListComponent implements OnInit {
 
     this.bulkActions = [
       [
+        {
+          label: $localize`Update...`,
+          handler: videos => this.bulkUpdateVideosModal().show({ videos }),
+          isDisplayed: () => this.authUser.hasRight(UserRight.UPDATE_ANY_VIDEO),
+          iconName: 'edit'
+        },
         {
           label: $localize`Delete`,
           handler: videos => this.removeVideos(videos),

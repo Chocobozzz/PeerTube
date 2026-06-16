@@ -104,10 +104,26 @@
       </td>
     }
 
+    @if (table.isColumnDisplayed('category')) {
+      <td>
+        @if (video.category?.id) {
+          {{ video.category.label }}
+        }
+      </td>
+    }
+
     @if (table.isColumnDisplayed('language')) {
       <td>
         @if (video.language?.id) {
           {{ video.language.label }}
+        }
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('licence')) {
+      <td>
+        @if (video.licence?.id) {
+          {{ video.licence.label }}
         }
       </td>
     }
@@ -141,3 +157,5 @@
 </my-table>
 
 <my-bulk-update-videos-in-playlist-modal #bulkUpdateVideosInPlaylistModal (saved)="fetchVideosContainedInPlaylists($event)"></my-bulk-update-videos-in-playlist-modal>
+
+<my-bulk-update-videos-modal #bulkUpdateVideosModal (saved)="table.loadData()"></my-bulk-update-videos-modal>

@@ -8,6 +8,8 @@
 
   optionValue="id"
 
+  label
+
   [showClear]="clearable()"
 
   [filter]="filter()"
@@ -24,6 +26,8 @@
   [appendTo]="appendTo()"
 
   [class.small]="small()"
+
+  [placeholder]="placeholder()"
   >
   <ng-template #itemTemplate let-item let-description="description">
     @if (selectOptionTemplate) {

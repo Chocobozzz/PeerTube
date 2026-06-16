@@ -40,6 +40,7 @@ export class SelectOptionsComponent implements ControlValueAccessor {
   readonly clearable = input(false, { transform: booleanAttribute })
   readonly filter = input(false, { transform: booleanAttribute })
   readonly small = input(false, { transform: booleanAttribute })
+  readonly placeholder = input('')
 
   readonly appendTo = input<'body'>()
 

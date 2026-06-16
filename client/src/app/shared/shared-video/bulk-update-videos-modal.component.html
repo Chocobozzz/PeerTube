@@ -1,0 +1,131 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">{videos.length, plural, =1 {Bulk update 1 video} other {Bulk update {{ videos.length }} videos}}</h4>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
+  </div>
+
+  <my-common-stepper #stepper>
+    <cdk-step i18n-label label="Configure">
+      <div class="modal-body">
+        @if (activeAvailableFields().length > 0) {
+          <div class="bulk-update-add-field">
+            <select class="form-control" (change)="onAddFieldSelect($event)">
+              <option value="" disabled selected i18n>Add a field to update...</option>
+
+              @for (field of activeAvailableFields(); track field.key) {
+                <option [value]="field.key">{{ field.label }}</option>
+              }
+            </select>
+          </div>
+        }
+
+        <div class="bulk-update-fields">
+          @for (def of allFields; track def.key) {
+            @if (activeFields().has(def.key)) {
+              <div class="bulk-update-field-section">
+                <div class="bulk-update-field-header">
+                  <label [for]="'bulk-' + def.key" class="m-0">{{ def.label }}</label>
+
+                  <button class="remove-field-btn" (click)="removeField(def.key)" i18n-title title="Remove this field">
+                    <my-global-icon iconName="cross"></my-global-icon>
+                  </button>
+                </div>
+
+                @if (def.key === 'channelId') {
+                  <my-select-channel
+                    [inputId]="'bulk-' + def.key"
+                    [items]="userChannels"
+                    [formField]="bulkUpdateForm[def.key]"
+                  >
+                  </my-select-channel>
+                } @else if (def.key === 'support') {
+                  <textarea class="form-control" rows="3" [formField]="bulkUpdateForm[def.key]"></textarea>
+                } @else if (def.key === 'downloadEnabled') {
+                  <my-peertube-checkbox
+                    inputName="bulk-downloadEnabled"
+                    [labelText]="def.label"
+                    [formField]="bulkUpdateForm[def.key]"
+                  >
+                  </my-peertube-checkbox>
+                } @else if (def.key === 'language') {
+                  <my-select-options
+                    [inputId]="'bulk-' + def.key"
+                    [items]="videoLanguages"
+                    filter="true"
+                    clearable="true"
+                    [formField]="bulkUpdateForm[def.key]"
+                    virtualScroll="true"
+                    placeholder="Remove the language"
+                    i18n-placeholder
+                  >
+                  </my-select-options>
+                } @else if (def.key === 'category') {
+                  <my-select-options
+                    [inputId]="'bulk-' + def.key"
+                    [items]="videoCategories"
+                    clearable="true"
+                    [formField]="bulkUpdateForm[def.key]"
+                    placeholder="Remove the category"
+                    i18n-placeholder
+                  >
+                  </my-select-options>
+                } @else if (def.key === 'licence') {
+                  <my-select-options
+                    [inputId]="'bulk-' + def.key"
+                    [items]="videoLicences"
+                    clearable="true"
+                    [formField]="bulkUpdateForm[def.key]"
+                    placeholder="Remove the licence"
+                    i18n-placeholder
+                  >
+                  </my-select-options>
+                } @else {
+                  <my-select-options
+                    [inputId]="'bulk-' + def.key"
+                    [items]="getSelectItemsForField(def.key)"
+                    [formField]="bulkUpdateForm[def.key]"
+                  >
+                  </my-select-options>
+                }
+
+                <my-form-error [field]="bulkUpdateForm[def.key]()"></my-form-error>
+              </div>
+            }
+          }
+        </div>
+      </div>
+
+      <div class="modal-footer inputs">
+        <input type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button" (click)="hide()" (key.enter)="hide()">
+
+        <my-button theme="primary" [disabled]="!bulkUpdateForm().valid() || activeFields().size === 0 || isSaving()" (click)="stepper.next()" i18n>Next</my-button>
+      </div>
+    </cdk-step>
+
+    <cdk-step i18n-label label="Confirm">
+      <div class="modal-body">
+        <p i18n>
+          You are about to update the following {activeFields().size, plural, =1 {field} other {fields}} for
+          <strong>{videos.length, plural, =1 {1 video} other {{{ videos.length }} videos}}:</strong>
+        </p>
+
+        <ul>
+          @for (def of allFields; track def.key) {
+            @if (activeFields().has(def.key)) {
+              <li><strong>{{ def.label }}</strong>: {{ getFieldSummary(def.key) }}</li>
+            }
+          }
+        </ul>
+      </div>
+
+      <div class="modal-footer inputs">
+        <input type="button" role="button" i18n-value value="Back" class="peertube-button secondary-button" (click)="stepper.previous()" (key.enter)="stepper.previous()">
+
+        <my-button theme="primary" [loading]="isSaving()" [disabled]="isSaving()" (click)="save()" i18n>Update</my-button>
+      </div>
+    </cdk-step>
+  </my-common-stepper>
+</ng-template>
