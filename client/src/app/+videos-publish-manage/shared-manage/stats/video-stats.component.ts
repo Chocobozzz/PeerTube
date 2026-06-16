@@ -17,11 +17,11 @@ import {
   VideoStatsTimeserieMetric,
   VideoStatsUserAgent
 } from '@peertube/peertube-models'
+import { SelectOptionsItem } from '@pt-types'
 import { ChartConfiguration, ChartData, defaults as ChartJSDefaults, ChartOptions, PluginOptionsByType, Scale, TooltipItem } from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom'
 import { ChartModule } from 'primeng/chart'
 import { Observable, of } from 'rxjs'
-import { SelectOptionsItem } from '@pt-types'
 import { SelectOptionsComponent } from '../../../shared/shared-forms/select/select-options.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
@@ -348,52 +348,52 @@ export class VideoStatsComponent implements OnInit {
   private buildOverallStatCard (overallStats: VideoStatsOverall) {
     this.globalStatsCards = [
       {
-        label: $localize`Views`,
+        label: $localize`VIEWS`,
         value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().views),
         help: $localize`A view means that someone watched the video for several seconds (10 seconds by default)`
       },
       {
-        label: $localize`Downloads`,
+        label: $localize`DOWNLOADS`,
         value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().downloads)
       },
       {
-        label: $localize`Likes`,
+        label: $localize`LIKES`,
         value: this.numberFormatter.transform(this.videoEdit.getVideoAttributes().likes)
       }
     ]
 
     this.overallStatCards = [
       {
-        label: $localize`Average watch time`,
+        label: $localize`AVERAGE WATCH TIME`,
         value: secondsToTime({ seconds: overallStats.averageWatchTime, format: 'locale-string' })
       },
       {
-        label: $localize`Total watch time`,
+        label: $localize`TOTAL WATCH TIME`,
         value: secondsToTime({ seconds: overallStats.totalWatchTime, format: 'locale-string' })
       },
       {
-        label: $localize`Peak viewers`,
+        label: $localize`PEAK VIEWERS`,
         value: this.numberFormatter.transform(overallStats.viewersPeak),
         moreInfo: overallStats.viewersPeak !== 0
           ? $localize`at ${this.toMediumDate(new Date(overallStats.viewersPeakDate))}`
           : undefined
       },
       {
-        label: $localize`Unique viewers`,
+        label: $localize`UNIQUE VIEWERS`,
         value: this.numberFormatter.transform(overallStats.totalViewers)
       }
     ]
 
     if (overallStats.countries.length !== 0) {
       this.overallStatCards.push({
-        label: $localize`Countries`,
+        label: $localize`COUNTRIES`,
         value: this.numberFormatter.transform(overallStats.countries.length)
       })
     }
 
     if (overallStats.subdivisions.length !== 0) {
       this.overallStatCards.push({
-        label: $localize`Regions`,
+        label: $localize`REGIONS`,
         value: this.numberFormatter.transform(overallStats.subdivisions.length)
       })
     }
@@ -471,6 +471,11 @@ export class VideoStatsComponent implements OnInit {
 
         responsive: true,
 
+        // Avoid cropping the top of the y axis if max is specified: https://github.com/chartjs/Chart.js/issues/9372
+        clip: this.activeGraphId === 'retention'
+          ? false
+          : undefined,
+
         scales: {
           x: {
             ticks: {
@@ -483,6 +488,10 @@ export class VideoStatsComponent implements OnInit {
                   scale: this
                 })
               }
+            },
+
+            grid: {
+              display: false
             }
           },
 
@@ -497,6 +506,10 @@ export class VideoStatsComponent implements OnInit {
               callback: function (value) {
                 return self.formatYTick({ graphId, value, scale: this })
               }
+            },
+
+            grid: {
+              color: getComputedStyle(document.documentElement).getPropertyValue('--bg-secondary-350')
             }
           }
         },
@@ -541,6 +554,7 @@ export class VideoStatsComponent implements OnInit {
         datasets: [
           {
             data,
+            tension: 0.2,
             borderColor: this.buildChartColor()
           }
         ]
@@ -600,6 +614,7 @@ export class VideoStatsComponent implements OnInit {
         datasets: [
           {
             data,
+            tension: 0.2,
             borderColor: this.buildChartColor()
           }
         ]

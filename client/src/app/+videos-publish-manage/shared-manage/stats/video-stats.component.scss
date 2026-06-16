@@ -39,24 +39,31 @@
 .stats-card {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   height: fit-content;
   min-height: 100px;
   min-width: 200px;
-  background-color: pvar(--bg-secondary-400);
-  margin-bottom: 15px;
+  background-color: pvar(--bg-secondary-350);
+  margin-bottom: 1rem;
+  padding: 1rem;
 
-  @include margin-right(15px);
+  @include margin-right(1rem);
 
   .label,
   .more-info {
-    font-size: 1rem;
-    font-weight: $font-semibold;
+    color: pvar(--fg-200);
+
+    @include font-size(14px);
+  }
+
+  .more-info {
+    display: inline-block;
+
+    @include margin-left(0.5rem);
   }
 
   .value {
-    font-size: 24px;
-    font-weight: $font-semibold;
+    font-size: 1.5rem;
   }
 
   @media screen and (max-width: $mobile-view) {
