@@ -127,6 +127,7 @@ type UpdateFromAPIOptions = {
     | 'downloadEnabled'
     | 'pluginData'
     | 'scheduledUpdate'
+    | 'publishedAt'
     | 'originallyPublishedAt'
     | 'duration'
     | 'likes'
@@ -192,6 +193,7 @@ export class VideoEdit {
     likes: number
     blacklisted: boolean
     blacklistedReason: string
+    publishedAt: Date
 
     ownerAccountId: number
     ownerAccountDisplayName: string
@@ -208,6 +210,7 @@ export class VideoEdit {
     state: VideoStateType
     privacy: VideoEditPrivacyType
     isLive: boolean
+    publishedAt: Date
     aspectRatio: number
     duration: number
     views: number
@@ -441,6 +444,7 @@ export class VideoEdit {
     // ---------------------------------------------------------------------------
 
     this.metadata.id = video.id
+    this.metadata.publishedAt = new Date(video.publishedAt.toString())
     this.metadata.uuid = video.uuid
     this.metadata.shortUUID = video.shortUUID
 
@@ -1154,6 +1158,7 @@ export class VideoEdit {
       state: this.metadata.state,
       privacy: this.common.privacy,
       isLive: this.metadata.isLive,
+      publishedAt: this.metadata.publishedAt,
       aspectRatio: this.metadata.aspectRatio,
       views: this.metadata.views,
       downloads: this.metadata.downloads,

@@ -233,7 +233,8 @@ export class VideoStatsComponent implements OnInit {
 
   resetZoom () {
     this.peertubeRouter.silentNavigate([], {})
-    this.removeAndResetCustomDateFilter()
+    this.removeCustomDateFilter()
+    this.currentDateFilter = 'all'
   }
 
   hasZoom () {
@@ -249,6 +250,8 @@ export class VideoStatsComponent implements OnInit {
   }
 
   onDateFilterChange () {
+    this.removeCustomDateFilter()
+
     if (this.currentDateFilter === 'all') {
       return this.resetZoom()
     }
@@ -303,6 +306,8 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private loadVODDateFilters () {
+    this.addQuickDateFilters()
+
     this.liveService.findLiveSessionFromVOD(this.videoEdit.getVideoAttributes().id)
       .subscribe({
         next: session => {
@@ -315,6 +320,26 @@ export class VideoStatsComponent implements OnInit {
           this.notifier.handleError(err)
         }
       })
+  }
+
+  private addQuickDateFilters () {
+    const now = new Date()
+    const publishedAt = this.videoEdit.getVideoAttributes().publishedAt
+
+    const addFilter = (label: string, hoursAgo: number) => {
+      const start = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000)
+
+      if (publishedAt && start < publishedAt) return
+
+      this.dateFilters = this.dateFilters.concat([ {
+        id: start.toISOString() + '|' + now.toISOString(),
+        label
+      } ])
+    }
+
+    addFilter($localize`Last 24 hours`, 24)
+    addFilter($localize`Last 7 days`, 24 * 7)
+    addFilter($localize`Last 30 days`, 24 * 30)
   }
 
   private buildLiveFilter (session: LiveVideoSession) {
@@ -339,10 +364,8 @@ export class VideoStatsComponent implements OnInit {
     this.currentDateFilter = 'custom'
   }
 
-  private removeAndResetCustomDateFilter () {
+  private removeCustomDateFilter () {
     this.dateFilters = this.dateFilters.filter(d => d.id !== 'custom')
-
-    this.currentDateFilter = 'all'
   }
 
   private buildOverallStatCard (overallStats: VideoStatsOverall) {
