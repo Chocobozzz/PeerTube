@@ -2,6 +2,10 @@
 
 ## v8.2.1
 
+### SECURITY
+
+ * Fix XSS in JSON-LD object injected by the server in video watch page [GHSA-jxwq-h9xv-hr28](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-jxwq-h9xv-hr28)
+
 ### Features
 
  * Add `toot:discoverable` support for actors
