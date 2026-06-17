@@ -1,10 +1,11 @@
-import { FileStorage } from '@peertube/peertube-models'
+import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
 import {
   MStreamingPlaylistVideo,
   MVideo,
@@ -14,10 +15,11 @@ import {
   MVideoPrivacy,
   MVideoWithFile
 } from '@server/types/models/index.js'
+import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { Mutex } from 'async-mutex'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
-import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
+import { makeHLSFileAvailable, makeOriginalFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
 import { getHLSDirectory, getHLSResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
 
@@ -111,6 +113,44 @@ class VideoPathManager {
     return this.makeAvailableVideoFiles(files, ([ videoPath, separatedAudioPath ]) => {
       return cb({ videoPath, separatedAudioPath })
     })
+  }
+
+  async makeAvailableOriginalFile<T> (videoSource: MVideoSource, cb: MakeAvailableMultipleCB<T>) {
+    const createMethods: MakeAvailableCreateMethod[] = []
+
+    if (videoSource.storage === FileStorage.FILE_SYSTEM) {
+      createMethods.push({
+        method: () => this.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename),
+        clean: false
+      })
+    } else {
+      const destination = this.buildTMPDestination(videoSource.keptOriginalFilename)
+      createMethods.push({
+        method: () => makeOriginalFileAvailable(videoSource.keptOriginalFilename, destination),
+        clean: true
+      })
+    }
+
+    return this.makeAvailableFactory({ createMethods, cbContext: cb })
+  }
+
+  async makeAvailableOriginalFileOrMaxQuality<T> (
+    video: MVideoWithFile,
+    cb: (options: { videoPath: string, separatedAudioPath: string }) => Awaitable<T>
+  ) {
+    if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
+      const videoSource = await VideoSourceModel.loadLatest(video.id)
+
+      if (videoSource?.keptOriginalFilename && videoSource.resolution !== VideoResolution.H_NOVIDEO) {
+        logger.info('Using kept original file %s as transcoding input for video %s.', videoSource.keptOriginalFilename, video.uuid, lTags(video.uuid))
+
+        return this.makeAvailableOriginalFile(videoSource, ([ videoPath ]) => {
+          return cb({ videoPath, separatedAudioPath: undefined })
+        })
+      }
+    }
+
+    return this.makeAvailableMaxQualityFiles(video, cb)
   }
 
   // ---------------------------------------------------------------------------

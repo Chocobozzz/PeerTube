@@ -505,6 +505,64 @@ describe('Test video transcoding', function () {
     })
   })
 
+  describe('Transcoding from original file', function () {
+    function logsContain (logs: any[], needle: string) {
+      return JSON.stringify(logs).includes(needle)
+    }
+
+    it('Should use the kept original file as transcoding input when enabled', async function () {
+      this.timeout(120_000)
+
+      await servers[1].config.enableTranscoding({
+        alwaysTranscodeOriginalResolution: true,
+        resolutions: 'max',
+        hls: true,
+        webVideo: true,
+        with0p: false,
+        keepOriginal: true
+      })
+
+      const startDate = new Date()
+
+      const { uuid } = await servers[1].videos.upload({
+        attributes: { name: 'transcode from original', fixture: 'video_short.mp4' }
+      })
+
+      await waitJobs(servers)
+
+      const logs = await servers[1].logs.getLogs({ startDate, level: 'info' })
+
+      expect(logsContain(logs, 'Using kept original file'), 'expected log line about original-file transcoding input').to.be.true
+      expect(logsContain(logs, uuid)).to.be.true
+    })
+
+    it('Should fall back to max-quality file when keepOriginal is disabled', async function () {
+      this.timeout(120_000)
+
+      await servers[1].config.enableTranscoding({
+        alwaysTranscodeOriginalResolution: true,
+        resolutions: 'max',
+        hls: true,
+        webVideo: true,
+        with0p: false,
+        keepOriginal: false
+      })
+
+      const startDate = new Date()
+
+      const { uuid } = await servers[1].videos.upload({
+        attributes: { name: 'transcode without kept original', fixture: 'video_short.mp4' }
+      })
+
+      await waitJobs(servers)
+
+      const logs = await servers[1].logs.getLogs({ startDate, level: 'info' })
+      const scopedLogs = logs.filter(l => JSON.stringify(l).includes(uuid))
+
+      expect(logsContain(scopedLogs, 'Using kept original file')).to.be.false
+    })
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

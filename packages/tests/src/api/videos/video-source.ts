@@ -204,6 +204,67 @@ describe('Test video source management', function () {
     })
   })
 
+  describe('Original file public download', function () {
+    let videoUUID: string
+
+    before(async function () {
+      this.timeout(60000)
+
+      await servers[0].config.save()
+      await servers[0].config.keepSourceFile()
+
+      const { uuid } = await servers[0].videos.upload({
+        attributes: { name: 'downloadable original', fixture: 'video_short.webm' },
+        mode: 'resumable'
+      })
+      videoUUID = uuid
+
+      await waitJobs(servers)
+    })
+
+    it('Should default downloadOriginalFileEnabled to false', async function () {
+      const video = await servers[0].videos.get({ id: videoUUID })
+
+      expect(video.downloadOriginalFileEnabled).to.be.false
+    })
+
+    it('Should forbid a non-owner from fetching the source when disabled', async function () {
+      await servers[0].videos.getSource({ id: videoUUID, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should let the owner enable downloadOriginalFileEnabled', async function () {
+      await servers[0].videos.update({ id: videoUUID, attributes: { downloadOriginalFileEnabled: true } })
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.downloadOriginalFileEnabled).to.be.true
+    })
+
+    it('Should let a non-owner fetch the source once enabled', async function () {
+      const source = await servers[0].videos.getSource({ id: videoUUID, token: userToken })
+
+      expect(source.fileDownloadUrl).to.exist
+    })
+
+    it('Should let a non-owner download the original file once enabled', async function () {
+      const source = await servers[0].videos.getSource({ id: videoUUID, token: userToken })
+
+      await makeRawRequest({ url: source.fileDownloadUrl, token: userToken, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should forbid access again after the owner disables downloadOriginalFileEnabled', async function () {
+      await servers[0].videos.update({ id: videoUUID, attributes: { downloadOriginalFileEnabled: false } })
+
+      await servers[0].videos.getSource({ id: videoUUID, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    after(async function () {
+      await servers[0].videos.remove({ id: videoUUID })
+      await waitJobs(servers)
+
+      await servers[0].config.rollback()
+    })
+  })
+
   describe('Updating video source', function () {
     describe('Filesystem', function () {
       it('Should replace a video file with transcoding disabled', async function () {

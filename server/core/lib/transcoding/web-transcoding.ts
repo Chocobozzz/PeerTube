@@ -92,7 +92,7 @@ export async function transcodeNewWebVideoResolution (options: {
   try {
     const video = await VideoModel.loadFull(videoArg.uuid)
 
-    const result = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({ videoPath, separatedAudioPath }) => {
+    const result = await VideoPathManager.Instance.makeAvailableOriginalFileOrMaxQuality(video, async ({ videoPath, separatedAudioPath }) => {
       const filename = generateWebVideoFilename(resolution, newExtname)
       const videoOutputPath = join(transcodeDirectory, filename)
 

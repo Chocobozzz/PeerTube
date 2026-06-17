@@ -6,7 +6,7 @@ import { MVideo } from '@server/types/models/index.js'
 import express from 'express'
 import { PassThrough, pipeline } from 'stream'
 import { injectQueryToPlaylistUrls } from '../hls.js'
-import { getHLSFileReadStream, getWebVideoFileReadStream } from './videos.js'
+import { getHLSFileReadStream, getOriginalFileReadStream, getWebVideoFileReadStream } from './videos.js'
 
 import type { GetObjectCommandOutput } from '@aws-sdk/client-s3'
 
@@ -68,6 +68,37 @@ export async function proxifyHLS (options: {
     return pipeline(
       stream,
       streamReplacer,
+      res,
+      err => {
+        if (!err) return
+
+        handleObjectStorageFailure(res, err)
+      }
+    )
+  } catch (err) {
+    return handleObjectStorageFailure(res, err)
+  }
+}
+
+export async function proxifyOriginalVideoFile (options: {
+  req: express.Request
+  res: express.Response
+  keptOriginalFilename: string
+}) {
+  const { req, res, keptOriginalFilename } = options
+
+  logger.debug('Proxifying original video file %s from object storage.', keptOriginalFilename)
+
+  try {
+    const { response: s3Response, stream } = await getOriginalFileReadStream({
+      keptOriginalFilename,
+      rangeHeader: req.header('range')
+    })
+
+    setS3Headers(res, s3Response)
+
+    return pipeline(
+      stream,
       res,
       err => {
         if (!err) return

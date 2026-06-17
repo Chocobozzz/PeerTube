@@ -10,6 +10,7 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { onHLSVideoFileTranscoding } from '@server/lib/transcoding/hls-transcoding.js'
 import { removeAllWebVideoFiles } from '@server/lib/video-file.js'
@@ -45,7 +46,17 @@ export class VODHLSTranscodingJobHandler
 
     const jobUUID = buildUUID()
 
-    const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+    let hasSeparatedAudio = false
+    if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
+      const videoSource = await VideoSourceModel.loadLatest(video.id)
+      if (!videoSource?.keptOriginalFilename || videoSource.resolution === VideoResolution.H_NOVIDEO) {
+        const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+        hasSeparatedAudio = !!separatedAudioFile
+      }
+    } else {
+      const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+      hasSeparatedAudio = !!separatedAudioFile
+    }
 
     const payload: RunnerJobVODHLSTranscodingPayload = {
       input: {
@@ -57,7 +68,7 @@ export class VODHLSTranscodingJobHandler
             : 'video'
         }),
 
-        separatedAudioFileUrl: separatedAudioFile
+        separatedAudioFileUrl: hasSeparatedAudio
           ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
           : []
       },
