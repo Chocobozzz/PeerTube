@@ -7391,135 +7391,135 @@ The link will expire within 1 hour.</source>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3112814596265051794" datatype="html">
+      <trans-unit id="3112814596265051794" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</source>
-        <target state="new">Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Internal&lt;/strong&gt;</target>
+        <target state="translated">Ορίσει την &lt;strong&gt;προεπιλεγμένη ρύθμιση απορρήτου βίντεο&lt;/strong&gt; σε &lt;strong&gt;Εσωτερική&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">301</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="4274451041982561878" datatype="html">
+      <trans-unit id="4274451041982561878" datatype="html" xml:space="preserve">
         <source>Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Public&lt;/strong&gt;</source>
-        <target state="new">Set the &lt;strong&gt;default video privacy&lt;/strong&gt; to &lt;strong&gt;Public&lt;/strong&gt;</target>
+        <target state="translated">Ορίσει την &lt;strong&gt;προεπιλεγμένη ρύθμιση απορρήτου βίντεο&lt;/strong&gt; σε &lt;strong&gt;Δημόσιο&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">305</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="8003967585929454038" datatype="html">
+      <trans-unit id="8003967585929454038" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Require approval&lt;/strong&gt; by default of new video comment</source>
-        <target state="new">&lt;strong&gt;Require approval&lt;/strong&gt; by default of new video comment</target>
+        <target state="translated">&lt;strong&gt;Απαιτεί έγκριση&lt;/strong&gt; εξ' ορισμού για τα νέα σχόλια σε βίντεο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">321</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="4418462159149044975" datatype="html">
+      <trans-unit id="4418462159149044975" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
-        <target state="new">&lt;strong&gt;Enable P2P streaming&lt;/strong&gt; by default for anonymous and new users</target>
+        <target state="translated">&lt;strong&gt;Ενεργοποιεί τη ροή P2P&lt;/strong&gt; ως προεπιλογή για ανώνυμους και νέους χρήστες</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">342</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="168249800849144901" datatype="html">
+      <trans-unit id="168249800849144901" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</source>
-        <target state="new">&lt;strong&gt;Disable P2P streaming&lt;/strong&gt; by default for anonymous and new users</target>
+        <target state="translated">&lt;strong&gt;Απενεργοποιεί τη ροή P2P&lt;/strong&gt; από προεπιλογή για ανώνυμους και νέους χρήστες</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">346</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3562838477245844067" datatype="html">
+      <trans-unit id="3562838477245844067" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe&lt;/strong&gt; to your content</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe&lt;/strong&gt; to your content</target>
+        <target state="translated">&lt;strong&gt;Επιτρέπει&lt;/strong&gt; σε εξωτερικές πλατφόρμες/χρήστες να &lt;strong&gt;εγγραφούν&lt;/strong&gt; στο περιεχόμενό σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">368</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3834301287198491897" datatype="html">
+      <trans-unit id="3834301287198491897" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Prevent&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe to your content&lt;/strong&gt;</source>
-        <target state="new">&lt;strong&gt;Prevent&lt;/strong&gt; external platforms/users to &lt;strong&gt;subscribe to your content&lt;/strong&gt;</target>
+        <target state="translated">&lt;strong&gt;Αποτρέπει&lt;/strong&gt; σε εξωτερικές πλατφόρμες/χρήστες να &lt;strong&gt;εγγραφούν στο περιεχόμενό σας&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">373</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="2421351872465897229" datatype="html">
+      <trans-unit id="2421351872465897229" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Save a copy&lt;/strong&gt; of the uploaded video file</source>
-        <target state="new">&lt;strong&gt;Save a copy&lt;/strong&gt; of the uploaded video file</target>
+        <target state="translated">&lt;strong&gt;Αποθηκεύσει αντίγραφο&lt;/strong&gt; του αρχείου βίντεο που ανεβάσατε</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">390</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="3196732949948954586" datatype="html">
+      <trans-unit id="3196732949948954586" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</source>
-        <target state="new">&lt;strong&gt;Allow&lt;/strong&gt; your users &lt;strong&gt;to replace a video&lt;/strong&gt; that has already been published</target>
+        <target state="translated">&lt;strong&gt;Επιτρέπει&lt;/strong&gt; στους χρήστες σας &lt;strong&gt;να αντικαταστήσουν ένα βίντεο&lt;/strong&gt; που έχει ήδη δημοσιευτεί</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">408</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="1216660260185422329" datatype="html">
+      <trans-unit id="1216660260185422329" datatype="html" xml:space="preserve">
         <source>Set &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; as &lt;strong&gt;default search engine&lt;/strong&gt;</source>
-        <target state="new">Set &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; as &lt;strong&gt;default search engine&lt;/strong&gt;</target>
+        <target state="translated">Ορίσει το &lt;a href="https://sepiasearch.org" target="_blank"&gt;SepiaSearch&lt;/a&gt; ως &lt;strong&gt;προεπιλεγμένη μηχανή αναζήτησης&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">443</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="7258464719094694611" datatype="html">
+      <trans-unit id="7258464719094694611" datatype="html" xml:space="preserve">
         <source>&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</source>
-        <target state="new">&lt;strong&gt;Enable automatic transcription&lt;/strong&gt; of videos to create subtitles and improve accessibility</target>
+        <target state="translated">&lt;strong&gt;Ενεργοποιήσει την αυτόματη μεταγραφή&lt;/strong&gt; των βίντεο για δημιουργία υπότιτλων και βελτίωση της προσβασιμότητας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">460</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="8115142822298621193" datatype="html">
+      <trans-unit id="8115142822298621193" datatype="html" xml:space="preserve">
         <source>The plugin &lt;strong&gt;must be configured&lt;/strong&gt; after the pre-configuration wizard confirmation.</source>
-        <target state="new"> The plugin &lt;strong&gt;must be configured&lt;/strong&gt; after the pre-configuration wizard confirmation.</target>
+        <target state="translated">Το πρόσθετο &lt;strong&gt;πρέπει να ρυθμιστεί&lt;/strong&gt; μετά την επιβεβαίωση του οδηγού προρύθμισης.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">470</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="7555586666437103751" datatype="html">
+      <trans-unit id="7555586666437103751" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;LDAP&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;LDAP&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Εγκαταστήσει το πρόσθετο πιστοποίησης &lt;strong&gt;LDAP&lt;/strong&gt;.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">474</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="6740504336459164358" datatype="html">
+      <trans-unit id="6740504336459164358" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;SAML 2.0&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;SAML 2.0&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Εγκαταστήσει το πρόσθετο πιστοποίησης &lt;strong&gt;SAML 2.0&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">480</context>
         </context-group>
         <note from="description" priority="1">bullet point of "PeerTube will:"</note>
       </trans-unit>
-      <trans-unit id="5853661417734866559" datatype="html">
+      <trans-unit id="5853661417734866559" datatype="html" xml:space="preserve">
         <source>Install the &lt;strong&gt;OpenID Connect&lt;/strong&gt; authentication plugin.</source>
-        <target state="new">Install the &lt;strong&gt;OpenID Connect&lt;/strong&gt; authentication plugin.</target>
+        <target state="translated">Εγκαταστήσει το πρόσθετο πιστοποίησης &lt;strong&gt;OpenID Connect&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">486</context>
@@ -7534,33 +7534,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4583515246777381165" datatype="html">
+      <trans-unit id="4583515246777381165" datatype="html" xml:space="preserve">
         <source>Display player control bar</source>
-        <target state="new">Display player control bar</target>
+        <target state="translated">Εμφάνιση της γραμμής ελέγχου του αναπαραγωγέα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">218</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="805456636864344681" datatype="html">
+      <trans-unit id="805456636864344681" datatype="html" xml:space="preserve">
         <source>Display PeerTube button link</source>
-        <target state="new">Display PeerTube button link</target>
+        <target state="translated">Εμφάνιση συνδέσμου κουμπιού PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5898371297224932546" datatype="html">
+      <trans-unit id="5898371297224932546" datatype="html" xml:space="preserve">
         <source>More customization</source>
-        <target state="new">More customization</target>
+        <target state="translated">Περισσότερη παραμετροποίηση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5395293285957838632" datatype="html">
+      <trans-unit id="5395293285957838632" datatype="html" xml:space="preserve">
         <source>Less customization</source>
-        <target state="new">Less customization</target>
+        <target state="translated">Λιγότερη παραμετροποίηση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">244</context>
@@ -7574,34 +7574,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6357191571827015663" datatype="html">
+      <trans-unit id="6357191571827015663" datatype="html" xml:space="preserve">
         <source>This video is password protected.</source>
-        <target state="new"> This video is password protected.
-</target>
+        <target state="translated">Αυτό το βίντεο προστατεύεται με κωδικό πρόσβασης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2482137713226830428" datatype="html">
+      <trans-unit id="2482137713226830428" datatype="html" xml:space="preserve">
         <source>Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></source>
-        <target state="new">Published <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></target>
+        <target state="translated">Δημοσιεύθηκε <x id="START_TAG_MY_DATE_TOGGLE"/><x id="CLOSE_TAG_MY_DATE_TOGGLE"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5256472549326274222" datatype="html">
+      <trans-unit id="5256472549326274222" datatype="html" xml:space="preserve">
         <source>Go to the channel page</source>
-        <target state="new">Go to the channel page</target>
+        <target state="translated">Μετάβαση στη σελίδα του καναλιού</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7883181802464579797" datatype="html">
+      <trans-unit id="7883181802464579797" datatype="html" xml:space="preserve">
         <source>Go to the account page</source>
-        <target state="new">Go to the account page</target>
+        <target state="translated">Μετάβαση στη σελίδα του λογαριασμού</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">75</context>
