@@ -1,5 +1,6 @@
 import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
+import { MyVideosPage } from '../po/my-videos.po'
 import { PlayerPage } from '../po/player.po'
 import { VideoListPage } from '../po/video-list.po'
 import { VideoPublishPage } from '../po/video-publish.po'
@@ -22,6 +23,7 @@ describe('Videos all workflow', () => {
   let videoPublishPage: VideoPublishPage
   let videoUpdatePage: VideoUpdatePage
   let myAccountPage: MyAccountPage
+  let myVideosPage: MyVideosPage
   let loginPage: LoginPage
   let playerPage: PlayerPage
 
@@ -52,6 +54,7 @@ describe('Videos all workflow', () => {
     loginPage = new LoginPage(isMobileDevice())
     playerPage = new PlayerPage()
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
+    myVideosPage = new MyVideosPage()
 
     await prepareWebBrowser()
   })
@@ -212,13 +215,13 @@ describe('Videos all workflow', () => {
     // Go to the dev website
     await go(videoWatchUrl)
 
-    await myAccountPage.navigateToMyVideos()
+    await myVideosPage.navigateToMyVideos()
 
-    await myAccountPage.removeVideo(video2Name)
-    await myAccountPage.validRemove()
+    await myVideosPage.removeVideo(video2Name)
+    await myVideosPage.validRemove()
 
     await browser.waitUntil(async () => {
-      const count = await myAccountPage.countVideos([ videoName, video2Name ])
+      const count = await myVideosPage.countVideos([ videoName, video2Name ])
 
       return count === 1
     })
@@ -227,7 +230,7 @@ describe('Videos all workflow', () => {
   it('Should delete the first video', async () => {
     if (isUploadUnsupported()) return
 
-    await myAccountPage.removeVideo(videoName)
-    await myAccountPage.validRemove()
+    await myVideosPage.removeVideo(videoName)
+    await myVideosPage.validRemove()
   })
 })

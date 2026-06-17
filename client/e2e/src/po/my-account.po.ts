@@ -2,10 +2,6 @@ import { NSFWPolicyType } from '@peertube/peertube-models'
 import { getCheckbox, go, selectCustomSelect } from '../utils'
 
 export class MyAccountPage {
-  navigateToMyVideos () {
-    return $('a[href="/my-library/videos"]').click()
-  }
-
   navigateToMyPlaylists () {
     return $('a[href="/my-library/video-playlists"]').click()
   }
@@ -79,54 +75,6 @@ export class MyAccountPage {
     await submit.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
     await submit.waitForClickable()
     await submit.click()
-  }
-
-  // ---------------------------------------------------------------------------
-  // My account videos
-  // ---------------------------------------------------------------------------
-
-  async removeVideo (name: string) {
-    const container = await this.getVideoRow(name)
-
-    await container.$('my-action-dropdown .dropdown-toggle').click()
-
-    const deleteItem = () => {
-      return $$('.dropdown-menu .dropdown-item').find<WebdriverIO.Element>(async v => {
-        const text = await v.getText()
-
-        return text.includes('Delete')
-      })
-    }
-
-    await (await deleteItem()).waitForClickable()
-
-    return (await deleteItem()).click()
-  }
-
-  validRemove () {
-    return $('input[type=submit]').click()
-  }
-
-  async countVideos (names: string[]) {
-    const elements = await $$('.video-cell-name .name').filter(async e => {
-      const t = await e.getText()
-
-      return names.some(n => t.includes(n))
-    })
-
-    return elements.length
-  }
-
-  async getVideoRow (name: string) {
-    let el = $('.name*=' + name)
-
-    await el.waitForDisplayed()
-
-    while (await el.getTagName() !== 'tr') {
-      el = el.parentElement()
-    }
-
-    return el
   }
 
   // ---------------------------------------------------------------------------
