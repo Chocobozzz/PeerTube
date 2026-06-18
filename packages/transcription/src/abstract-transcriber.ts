@@ -16,6 +16,7 @@ export interface TranscribeArgs {
 
   language?: string
   runId?: string
+  signal?: AbortSignal
 }
 
 export abstract class AbstractTranscriber {
@@ -76,7 +77,12 @@ export abstract class AbstractTranscriber {
     return this.engine.command
   }
 
-  protected getExec (env?: { [id: string]: string }) {
+  protected getExec (options: {
+    signal?: AbortSignal
+    env?: { [id: string]: string }
+  } = {}) {
+    const { signal, env } = options
+
     const logLevels = {
       command: 'debug',
       output: 'debug',
@@ -91,6 +97,8 @@ export abstract class AbstractTranscriber {
 
         this.logger[level](message, verboseObject)
       },
+
+      cancelSignal: signal,
 
       env
     })

@@ -6,6 +6,7 @@ import {
   ServerLogLevel,
   VideoCreate
 } from '@peertube/peertube-models'
+import { SignupMode } from '@server/lib/signup.ts'
 import { RegisterServerAuthExternalOptions } from '@server/types/index.js'
 import {
   MAbuseMessage,
@@ -13,6 +14,8 @@ import {
   MAccountBlocklist,
   MActorFollowActorsDefault,
   MActorUrl,
+  MBlocklistSubscription,
+  MChangeOwnershipFull,
   MChannelBannerAccountDefault,
   MChannelCollaboratorAccount,
   MChannelSyncChannel,
@@ -21,7 +24,6 @@ import {
   MStreamingPlaylist,
   MUserAccountUrl,
   MUserExport,
-  MChangeOwnershipFull,
   MVideoEmbedDomain,
   MVideoFile,
   MVideoFormattableDetails,
@@ -36,8 +38,7 @@ import {
   MVideoWithBlacklist,
   MVideoWithRights,
   MWatchedWordsList,
-  MWatchedWordsSubscription,
-  MBlocklistSubscription
+  MWatchedWordsSubscription
 } from '@server/types/models/index.js'
 import { MOAuthToken, MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { MPlugin, MServer, MServerBlocklist } from '@server/types/models/server.js'
@@ -45,6 +46,7 @@ import { MVideoImportDefault } from '@server/types/models/video/video-import.js'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/types/models/video/video-playlist-element.js'
 import { MAccountVideoRateAccountVideo } from '@server/types/models/video/video-rate.js'
 import { Metadata, File as UploadXFile } from '@uploadx/core'
+import { Job as BullJob } from 'bullmq'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { OutgoingHttpHeaders } from 'http'
 import { Writable } from 'stream'
@@ -65,7 +67,6 @@ import {
 } from './models/index.js'
 import { MRunner, MRunnerJobRunner, MRunnerRegistrationToken } from './models/runners/index.js'
 import { MVideoSource } from './models/video/video-source.js'
-import { SignupMode } from '@server/lib/signup.ts'
 
 declare module 'express' {
   export interface Request {
@@ -268,6 +269,8 @@ declare module 'express' {
       channelCollaborator?: MChannelCollaboratorAccount
 
       blocklistSubscription?: MBlocklistSubscription
+
+      job?: BullJob
     }
   }
 }

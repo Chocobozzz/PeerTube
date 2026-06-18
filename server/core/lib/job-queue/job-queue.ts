@@ -1,4 +1,4 @@
-import { pick, timeoutPromiseWithCleanup } from '@peertube/peertube-core-utils'
+import { pick } from '@peertube/peertube-core-utils'
 import {
   ActivitypubFollowPayload,
   ActivitypubHttpBroadcastPayload,
@@ -116,7 +116,7 @@ export type CreateJobOptions = {
   deduplicationId?: string
 }
 
-const handlers: { [id in JobType]: (job: Job) => Promise<any> } = {
+const handlers: { [id in JobType]: (job: Job, signal?: AbortSignal) => Promise<any> } = {
   'build-automatic-tags': processBuildAutomaticTags,
   'activitypub-cleaner': processActivityPubCleaner,
   'activitypub-follow': processActivityPubFollow,
@@ -185,6 +185,8 @@ const jobTypes: JobType[] = [
   'video-transcoding'
 ]
 
+const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcription', 'video-studio-edition', 'generate-video-storyboard' ]
+
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
 
 class JobQueue {
@@ -233,6 +235,8 @@ class JobQueue {
   }
 
   private buildWorker (handlerName: JobType) {
+    let worker: Worker
+
     const workerOptions: WorkerOptions = {
       autorun: false,
       concurrency: this.getJobConcurrency(handlerName),
@@ -241,39 +245,27 @@ class JobQueue {
       maxStalledCount: 10
     }
 
-    const handler = function (job: Job) {
+    const handler = function (options: { job: Job, signal: AbortSignal }) {
+      const { job, signal } = options
+
       const timeout = JOB_TTL[handlerName]
-      if (!timeout) return handlers[handlerName](job)
+      if (!timeout) return handlers[handlerName](job, signal)
 
-      const controller = new AbortController()
+      const timeoutId = setTimeout(() => {
+        worker.cancelJob(job.id, 'Timeout exceeded')
+      }, timeout)
 
-      // Store abort signal in job immediately so handlers can access it
-      job.data.abortSignal = controller.signal
-
-      // Create timeout with cleanup callback to kill orphaned processes
-      return timeoutPromiseWithCleanup(
-        handlers[handlerName](job),
-        timeout,
-        () => {
-          logger.warn(
-            'Job %s in queue %s exceeded timeout of %d ms, triggering cleanup',
-            job.id,
-            handlerName,
-            timeout
-          )
-
-          controller.abort()
-        }
-      )
+      return handlers[handlerName](job, signal)
+        .finally(() => clearTimeout(timeoutId))
     }
 
-    const processor = async (jobArg: Job) => {
+    const processor = async (jobArg: Job, _, signal: AbortSignal) => {
       const job = await Hooks.wrapObject(jobArg, 'filter:job-queue.process.params', { type: handlerName })
 
-      return Hooks.wrapPromiseFun(handler, job, 'filter:job-queue.process.result')
+      return Hooks.wrapPromiseFun(handler, { job, signal }, 'filter:job-queue.process.result')
     }
 
-    const worker = new Worker(handlerName, processor, workerOptions)
+    worker = new Worker(handlerName, processor, workerOptions)
 
     worker.on('failed', (job, err) => {
       const logLevel = silentFailure.has(handlerName)
@@ -518,6 +510,30 @@ class JobQueue {
     }
 
     return total
+  }
+
+  async getJob (jobType: JobType, jobId: string): Promise<Job> {
+    const queue = this.queues[jobType]
+    if (!queue) throw new Error(`Unknown queue ${jobType}`)
+
+    return queue.getJob(jobId)
+  }
+
+  async canCancelJob (jobType: JobType, job: Job) {
+    if (!cancelableJobTypes.includes(jobType)) return false
+
+    const isActive = await job.isActive()
+
+    return isActive
+  }
+
+  cancelJob (jobType: JobType, job: Job) {
+    logger.info('Cancelling job %s in queue %s.', job.id, job.queueName)
+
+    const worker = this.workers[jobType]
+    if (!worker) throw new Error(`Unknown queue ${jobType}`)
+
+    return worker.cancelJob(job.id, 'Job cancelled by admin')
   }
 
   private buildStateFilter (state?: JobState) {

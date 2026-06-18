@@ -1234,6 +1234,37 @@ paths:
                     items:
                       $ref: '#/components/schemas/Job'
 
+  /api/v1/jobs/{jobType}/{jobId}/cancel:
+    post:
+      summary: Cancel a job
+      description: Abort a running job and its underlying ffmpeg/child process. Only active jobs that support cancellation can be cancelled.
+      operationId: cancelJob
+      security:
+        - OAuth2:
+          - admin
+      tags:
+        - Job
+      parameters:
+        - name: jobType
+          in: path
+          required: true
+          description: The type of the job to cancel
+          schema:
+            type: string
+        - name: jobId
+          in: path
+          required: true
+          description: The id of the job to cancel
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: job not found
+        '409':
+          description: job cannot be cancelled (not active or not cancellable)
+
   /api/v1/server/followers:
     get:
       tags:
@@ -12336,6 +12367,9 @@ components:
         processedOn:
           type: string
           format: date-time
+        canCancel:
+          description: Whether this job is currently running and supports cancellation
+          type: boolean
     AddUserResponse:
       properties:
         user:

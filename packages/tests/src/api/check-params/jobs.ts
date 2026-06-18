@@ -1,6 +1,5 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -10,6 +9,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/failed'
@@ -115,6 +115,45 @@ describe('Test jobs API validators', function () {
           expectedStatus: HttpStatusCode.NO_CONTENT_204
         })
       }
+    })
+  })
+
+  describe('When cancelling a job', function () {
+    const path = '/api/v1/jobs/video-transcoding/123/cancel'
+
+    it('Should fail with a non authenticated user', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail with a non admin user', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail with a bad job type', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path: '/api/v1/jobs/not-a-job-type/123/cancel',
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail when the job does not exist', async function () {
+      await makePostBodyRequest({
+        url: server.url,
+        path: '/api/v1/jobs/video-transcoding/9999999/cancel',
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
     })
   })
 

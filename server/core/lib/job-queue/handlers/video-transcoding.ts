@@ -16,12 +16,19 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedTranscodingState } from '@server/lib/video-state.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
-import { MUser, MUserId, MVideoFull } from '@server/types/models/index.js'
+import { MUser, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
+import { buildPromiseForAbortSignal } from './shared/job-helpers.js'
 
-type HandlerFunction = (job: Job, payload: VideoTranscodingPayload, video: MVideoFull, user: MUser) => Promise<void>
+type HandlerFunction = (options: {
+  job: Job
+  payload: VideoTranscodingPayload
+  video: MVideoFull
+  user: MUser
+  abortSignal: AbortSignal
+}) => Promise<void>
 
 const handlers: { [id in VideoTranscodingPayload['type']]: HandlerFunction } = {
   'new-resolution-to-hls': handleHLSJob,
@@ -32,39 +39,45 @@ const handlers: { [id in VideoTranscodingPayload['type']]: HandlerFunction } = {
 
 const lTags = loggerTagsFactory('transcoding')
 
-async function processVideoTranscoding (job: Job) {
-  const payload = job.data as VideoTranscodingPayload
-  logger.info('Processing transcoding job %s.', job.id, lTags(payload.videoUUID))
+async function processVideoTranscoding (job: Job, abortSignal: AbortSignal) {
+  const abortPromise = buildPromiseForAbortSignal(abortSignal)
 
-  const video = await VideoModel.loadFull(payload.videoUUID)
-  // No video, maybe deleted?
-  if (!video) {
-    logger.info(`Do not process job ${job.id}, video does not exist.`, lTags(payload.videoUUID))
-    return undefined
+  const run = async () => {
+    const payload = job.data as VideoTranscodingPayload
+    logger.info('Processing transcoding job %s.', job.id, lTags(payload.videoUUID))
+
+    const video = await VideoModel.loadFull(payload.videoUUID)
+    // No video, maybe deleted?
+    if (!video) {
+      logger.info(`Do not process job ${job.id}, video does not exist.`, lTags(payload.videoUUID))
+      return undefined
+    }
+
+    const user = await UserModel.loadByChannelActorId(video.VideoChannel.Actor.id)
+
+    const handler = handlers[payload.type]
+
+    if (!handler) {
+      await moveToFailedTranscodingState(video)
+      await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
+
+      throw new Error('Cannot find transcoding handler for ' + payload.type)
+    }
+
+    try {
+      await handler({ job, payload, video, user, abortSignal })
+    } catch (error) {
+      await moveToFailedTranscodingState(video)
+
+      await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
+
+      throw error
+    }
+
+    return video
   }
 
-  const user = await UserModel.loadByChannelActorId(video.VideoChannel.Actor.id)
-
-  const handler = handlers[payload.type]
-
-  if (!handler) {
-    await moveToFailedTranscodingState(video)
-    await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
-
-    throw new Error('Cannot find transcoding handler for ' + payload.type)
-  }
-
-  try {
-    await handler(job, payload, video, user)
-  } catch (error) {
-    await moveToFailedTranscodingState(video)
-
-    await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
-
-    throw error
-  }
-
-  return video
+  return Promise.race([ run(), abortPromise ])
 }
 
 // ---------------------------------------------------------------------------
@@ -77,30 +90,36 @@ export {
 // Job handlers
 // ---------------------------------------------------------------------------
 
-async function handleWebVideoMergeAudioJob (
-  job: Job<MergeAudioTranscodingPayload>,
-  payload: MergeAudioTranscodingPayload,
-  video: MVideoFull,
-  user: MUserId
-) {
+async function handleWebVideoMergeAudioJob (options: {
+  job: Job<MergeAudioTranscodingPayload>
+  payload: MergeAudioTranscodingPayload
+  video: MVideoFull
+  user: MUser
+  abortSignal: AbortSignal
+}) {
+  const { job, payload, video, abortSignal } = options
+
   logger.info('Handling merge audio transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
-  await mergeAudioVideofile({ video, resolution: payload.resolution, fps: payload.fps, job })
+  await mergeAudioVideofile({ video, resolution: payload.resolution, fps: payload.fps, job, abortSignal })
 
   logger.info('Merge audio transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
   await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
-async function handleWebVideoOptimizeJob (
-  job: Job<OptimizeTranscodingPayload>,
-  payload: OptimizeTranscodingPayload,
-  video: MVideoFull,
-  user: MUserId
-) {
+async function handleWebVideoOptimizeJob (options: {
+  job: Job<OptimizeTranscodingPayload>
+  payload: OptimizeTranscodingPayload
+  video: MVideoFull
+  user: MUser
+  abortSignal: AbortSignal
+}) {
+  const { job, payload, video, abortSignal } = options
+
   logger.info('Handling optimize transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
-  await optimizeOriginalVideofile({ video, job })
+  await optimizeOriginalVideofile({ video, job, abortSignal })
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
@@ -109,14 +128,18 @@ async function handleWebVideoOptimizeJob (
 
 // ---------------------------------------------------------------------------
 
-async function handleNewWebVideoResolutionJob (
-  job: Job<NewWebVideoResolutionTranscodingPayload>,
-  payload: NewWebVideoResolutionTranscodingPayload,
+async function handleNewWebVideoResolutionJob (options: {
+  job: Job<NewWebVideoResolutionTranscodingPayload>
+  payload: NewWebVideoResolutionTranscodingPayload
   video: MVideoFull
-) {
+  user: MUser
+  abortSignal: AbortSignal
+}) {
+  const { job, payload, video, abortSignal } = options
+
   logger.info('Handling Web Video transcoding job for %s.', video.uuid, lTags(video.uuid), { payload })
 
-  await transcodeNewWebVideoResolution({ video, resolution: payload.resolution, fps: payload.fps, job })
+  await transcodeNewWebVideoResolution({ video, resolution: payload.resolution, fps: payload.fps, job, abortSignal })
 
   logger.info('Web Video transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
@@ -126,7 +149,15 @@ async function handleNewWebVideoResolutionJob (
 
 // ---------------------------------------------------------------------------
 
-async function handleHLSJob (job: Job<HLSTranscodingPayload>, payload: HLSTranscodingPayload, videoArg: MVideoFull) {
+async function handleHLSJob (options: {
+  job: Job<HLSTranscodingPayload>
+  payload: HLSTranscodingPayload
+  video: MVideoFull
+  user: MUser
+  abortSignal: AbortSignal
+}) {
+  const { job, payload, video: videoArg, abortSignal } = options
+
   logger.info('Handling HLS transcoding job for %s.', videoArg.uuid, lTags(videoArg.uuid), { payload })
 
   const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(videoArg.uuid)
@@ -153,7 +184,8 @@ async function handleHLSJob (job: Job<HLSTranscodingPayload>, payload: HLSTransc
         resolution: payload.resolution,
         fps: payload.fps,
         separatedAudio: payload.separatedAudio,
-        job
+        job,
+        abortSignal
       })
     })
   } finally {

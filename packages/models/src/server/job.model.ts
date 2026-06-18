@@ -48,6 +48,7 @@ export interface Job {
   createdAt: Date | string
   finishedOn: Date | string
   processedOn: Date | string
+  canCancel: boolean
 
   parent?: {
     id: string
@@ -152,7 +153,6 @@ interface BaseTranscodingPayload {
   videoUUID: string
   canMoveVideoState: boolean
   isNewVideo?: boolean
-  abortSignal?: AbortSignal
 }
 
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {

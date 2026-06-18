@@ -3,7 +3,6 @@ import { HttpStatusCode, Job, JobState, JobType, ResultList } from '@peertube/pe
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class JobsCommand extends AbstractCommand {
-
   async getLatest (options: OverrideCommandOptions & {
     jobType: JobType
   }) {
@@ -28,6 +27,21 @@ export class JobsCommand extends AbstractCommand {
 
   resumeJobQueue (options: OverrideCommandOptions = {}) {
     const path = '/api/v1/jobs/resume'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  cancel (options: OverrideCommandOptions & {
+    jobId: string | number
+    jobType: JobType
+  }) {
+    const path = `/api/v1/jobs/${options.jobType}/${options.jobId}/cancel`
 
     return this.postBodyRequest({
       ...options,

@@ -7,6 +7,7 @@ import {
   apiRateLimiter,
   asyncMiddleware,
   authenticate,
+  cancelJobValidator,
   ensureUserHasRight,
   jobsSortValidator,
   openapiOperationDoc,
@@ -20,19 +21,22 @@ const jobsRouter = express.Router()
 
 jobsRouter.use(apiRateLimiter)
 
-jobsRouter.post('/pause',
+jobsRouter.post(
+  '/pause',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
   asyncMiddleware(pauseJobQueue)
 )
 
-jobsRouter.post('/resume',
+jobsRouter.post(
+  '/resume',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
   resumeJobQueue
 )
 
-jobsRouter.get('/:state?',
+jobsRouter.get(
+  '/:state?',
   openapiOperationDoc({ operationId: 'getJobs' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
@@ -42,6 +46,15 @@ jobsRouter.get('/:state?',
   setDefaultPagination,
   listJobsValidator,
   asyncMiddleware(listJobs)
+)
+
+jobsRouter.post(
+  '/:jobType/:jobId/cancel',
+  openapiOperationDoc({ operationId: 'cancelJob' }),
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_JOBS),
+  cancelJobValidator,
+  cancelJob
 )
 
 // ---------------------------------------------------------------------------
@@ -60,6 +73,14 @@ async function pauseJobQueue (req: express.Request, res: express.Response) {
 
 function resumeJobQueue (req: express.Request, res: express.Response) {
   JobQueue.Instance.resume()
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+function cancelJob (req: express.Request, res: express.Response) {
+  const job = res.locals.job
+
+  JobQueue.Instance.cancelJob(job.queueName as JobType, job)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -100,7 +121,8 @@ async function formatJob (job: BullJob, state?: JobState): Promise<Job> {
     error: getJobError(job),
     createdAt: new Date(job.timestamp),
     finishedOn: new Date(job.finishedOn),
-    processedOn: new Date(job.processedOn)
+    processedOn: new Date(job.processedOn),
+    canCancel: await JobQueue.Instance.canCancelJob(job.queueName as JobType, job)
   }
 }
 

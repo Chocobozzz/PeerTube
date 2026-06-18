@@ -38,7 +38,7 @@ export async function generateHlsPlaylistResolutionFromTS (options: {
 }
 
 // Generate an HLS playlist from an input file, and update the master playlist
-export function generateHlsPlaylistResolution<JobData extends { abortSignal?: AbortSignal }> (options: {
+export function generateHlsPlaylistResolution (options: {
   video: MVideo
 
   videoInputPath: string
@@ -48,7 +48,9 @@ export function generateHlsPlaylistResolution<JobData extends { abortSignal?: Ab
   fps: number
   inputFileMutexReleaser: MutexInterface.Releaser
   separatedAudio: boolean
-  job?: Job<JobData>
+
+  job: Job
+  abortSignal: AbortSignal
 }) {
   return generateHlsPlaylistCommon({
     type: 'hls' as 'hls',
@@ -61,7 +63,8 @@ export function generateHlsPlaylistResolution<JobData extends { abortSignal?: Ab
       'fps',
       'separatedAudio',
       'inputFileMutexReleaser',
-      'job'
+      'job',
+      'abortSignal'
     ])
   })
 }
@@ -143,7 +146,7 @@ export async function onHLSVideoFileTranscoding (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function generateHlsPlaylistCommon<JobData extends { abortSignal?: AbortSignal }> (options: {
+async function generateHlsPlaylistCommon (options: {
   type: 'hls' | 'hls-from-ts'
   video: MVideo
 
@@ -160,7 +163,8 @@ async function generateHlsPlaylistCommon<JobData extends { abortSignal?: AbortSi
 
   isAAC?: boolean
 
-  job?: Job<JobData>
+  job?: Job
+  abortSignal?: AbortSignal
 }) {
   const {
     type,
@@ -173,7 +177,8 @@ async function generateHlsPlaylistCommon<JobData extends { abortSignal?: AbortSi
     isAAC,
     job,
     inputFileMutexReleaser,
-    preventInputFileLocking
+    preventInputFileLocking,
+    abortSignal
   } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
@@ -211,7 +216,7 @@ async function generateHlsPlaylistCommon<JobData extends { abortSignal?: AbortSi
     }
   }
 
-  await buildFFmpegVOD(job).transcode(transcodeOptions)
+  await buildFFmpegVOD({ job, abortSignal }).transcode(transcodeOptions)
 
   // Ensure the mutex is released if the ffmpeg command failed and did not release it
   if (inputFileMutexReleaser) inputFileMutexReleaser()

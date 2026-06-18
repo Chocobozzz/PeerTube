@@ -8,18 +8,18 @@ import { WhisperBuiltinModel } from '../whisper-builtin-model.js'
 import { OpenaiTranscriber } from './openai-transcriber.js'
 
 export class Ctranslate2Transcriber extends OpenaiTranscriber {
-
   async transcribe ({
     mediaFilePath,
     model = new WhisperBuiltinModel('tiny'),
     language,
     format,
     transcriptDirectory,
-    runId = buildSUUID()
+    runId = buildSUUID(),
+    signal
   }: TranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = this.getExec(this.getExecEnv())
+    const $$ = this.getExec({ signal, env: this.getExecEnv() })
 
     if (model.path) {
       assert(await lstat(model.path).then(stats => stats.isDirectory()), 'Model path must be a path to a directory.')

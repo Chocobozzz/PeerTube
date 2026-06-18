@@ -4,7 +4,12 @@ import { logger } from '@server/helpers/logger.js'
 import { Job } from 'bullmq'
 import { VideoTranscodingProfilesManager } from '../default-transcoding-profiles.js'
 
-export function buildFFmpegVOD<T extends Job<{ abortSignal?: AbortSignal }>> (job?: T) {
+export function buildFFmpegVOD (options: {
+  job?: Job
+  abortSignal?: AbortSignal
+} = {}) {
+  const { job, abortSignal } = options
+
   return new FFmpegVOD({
     ...getFFmpegCommandWrapperOptions('vod', VideoTranscodingProfilesManager.Instance.getAvailableEncoders()),
 
@@ -16,6 +21,6 @@ export function buildFFmpegVOD<T extends Job<{ abortSignal?: AbortSignal }>> (jo
     },
 
     // Pass the abort signal from the job so the ffmpeg process can be killed on timeout
-    abortSignal: job?.data?.abortSignal
+    abortSignal
   })
 }

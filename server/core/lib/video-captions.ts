@@ -141,6 +141,7 @@ let transcriber: AbstractTranscriber
 
 export async function generateSubtitle (options: {
   video: MVideoUUID
+  signal?: AbortSignal
 }) {
   const outputPath = join(CONFIG.STORAGE.TMP_DIR, 'transcription', buildSUUID())
 
@@ -200,7 +201,9 @@ export async function generateSubtitle (options: {
 
         transcriptDirectory: outputPath,
 
-        format: 'vtt'
+        format: 'vtt',
+
+        signal: options.signal
       })
 
       const refreshedVideo = await VideoModel.loadFull(video.uuid)
