@@ -34,11 +34,7 @@ function buildBaseUrl (options: {
 }) {
   const { baseMockUrl, bucket, pathStyle } = options
 
-  if (baseMockUrl) {
-    if (pathStyle) return `${baseMockUrl}/${bucket}/${bucket}/`
-
-    return `${baseMockUrl}/${bucket}/`
-  }
+  if (baseMockUrl) return `${baseMockUrl}/${bucket}/`
 
   if (pathStyle) return `http://${ObjectStorageCommand.getMockEndpointHost()}/${bucket}/`
 

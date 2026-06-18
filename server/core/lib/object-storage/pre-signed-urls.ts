@@ -93,9 +93,15 @@ async function generatePresignedUrl (options: {
   return getSignedUrl(await getClient(), command, { expiresIn: 3600 * 24 })
 }
 
-const regex = new RegExp('https?://[^/]+')
+const regex = CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE === true
+  ? new RegExp('https?://[^/]+/[^/]+')
+  : new RegExp('https?://[^/]+')
 function replaceByBaseUrl (fileUrl: string, bucket: { BASE_URL: string }) {
   if (!bucket.BASE_URL) return fileUrl
 
-  return fileUrl.replace(regex, bucket.BASE_URL)
+  const baseUrl = bucket.BASE_URL.endsWith('/')
+    ? bucket.BASE_URL.slice(0, -1)
+    : bucket.BASE_URL
+
+  return fileUrl.replace(regex, baseUrl)
 }
