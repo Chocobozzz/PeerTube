@@ -10229,9 +10229,9 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7186771264833643704" datatype="html">
+      <trans-unit id="7186771264833643704" datatype="html" xml:space="preserve">
         <source>This plugin is developed by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="translated">Framasoft, organización sen lucro que desenvolve PeerTube, creou este complemento</target>
+        <target state="translated">Este complemento foi desenvolvido por Framasoft, a organización sen ánimo de lucro que desenvolve PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">48</context>
@@ -10245,9 +10245,9 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5976946399792378437" datatype="html">
+      <trans-unit id="5976946399792378437" datatype="html" xml:space="preserve">
         <source>This plugin is recommended by Framasoft, the not-for-profit that develops PeerTube</source>
-        <target state="translated">Complemento recomendado por Framasoft, organización sen lucro que desenvolve PeerTube</target>
+        <target state="translated">Este complemento é recomendado por Framasoft, a organización sen ánimo de lucro que desenvolve PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">53</context>
