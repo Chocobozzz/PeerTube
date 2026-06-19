@@ -22300,9 +22300,9 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2471141982657856893" datatype="html">
+      <trans-unit id="2471141982657856893" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="translated">{interval, plural, =1 {Fai 1 día} other {Fai <x id="interval"/> días}}</target>
+        <target state="translated">{interval, plural, =1 {Hai 1 día} other {Hai <x id="interval"/> días}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">63</context>
@@ -22316,9 +22316,9 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8562677309401914974" datatype="html">
+      <trans-unit id="8562677309401914974" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="translated">{interval, plural, =1 {Fai 1 hora} other {Fai <x id="interval"/> horas}}</target>
+        <target state="translated">{interval, plural, =1 {Hai 1 hora} other {Hai <x id="interval"/> horas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">74</context>
@@ -27149,9 +27149,9 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1916995782667784441" datatype="html">
+      <trans-unit id="1916995782667784441" datatype="html" xml:space="preserve">
         <source>Import failed</source>
-        <target state="new">Import failed</target>
+        <target state="translated">Fallou a importación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">93</context>
@@ -27245,17 +27245,17 @@
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7751099270026389911" datatype="html">
+      <trans-unit id="7751099270026389911" datatype="html" xml:space="preserve">
         <source>The remote video failed to import, it will not be available.</source>
-        <target state="new">The remote video failed to import, it will not be available.</target>
+        <target state="translated">Non foi posíbel importar o vídeo remoto, polo que non vai estar dispoñíbel.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3974568873959756135" datatype="html">
+      <trans-unit id="3974568873959756135" datatype="html" xml:space="preserve">
         <source>Your remote video failed to import.</source>
-        <target state="new">Your remote video failed to import.</target>
+        <target state="translated">Produciuse un fallo ao importar o vídeo remoto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">94</context>
@@ -27281,17 +27281,17 @@
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6414709216834299238" datatype="html">
+      <trans-unit id="6414709216834299238" datatype="html" xml:space="preserve">
         <source>Failed to move video files to the platform file system.</source>
-        <target state="new">Failed to move video files to the platform file system.</target>
+        <target state="translated">Produciuse un fallo ao mover os ficheiros de vídeo para o sistema de ficheiros da plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6106629040656502843" datatype="html">
+      <trans-unit id="6106629040656502843" datatype="html" xml:space="preserve">
         <source>Failed to move video files</source>
-        <target state="new">Failed to move video files</target>
+        <target state="translated">Produciuse un fallo ao mover os ficheiros de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">119</context>
@@ -27309,9 +27309,9 @@
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="542526490067261846" datatype="html">
+      <trans-unit id="542526490067261846" datatype="html" xml:space="preserve">
         <source>Failed to move video files to an external storage.</source>
-        <target state="new">Failed to move video files to an external storage.</target>
+        <target state="translated">Produciuse un fallo ao mover os ficheiros de vídeo para un almacenamento externo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">137</context>
@@ -27325,9 +27325,9 @@
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7170696328218243679" datatype="html">
+      <trans-unit id="7170696328218243679" datatype="html" xml:space="preserve">
         <source>Failure during transcoding of your video files</source>
-        <target state="new">Failure during transcoding of your video files</target>
+        <target state="translated">Produciuse un fallo durante a transcodificación dos seus ficheiros de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">160</context>
