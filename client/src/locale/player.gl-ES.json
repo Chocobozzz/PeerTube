@@ -79,7 +79,7 @@
     "(skipped {1} buffers) ": "(skipped {1} buffers) ",
     "Video Filter": "Video Filter",
     "Mirror Video": "Replicar vídeo",
-    "Mirror": "Mirror",
+    "Mirror": "Espello",
     "Audio Player": "Reprodutor de audio",
     "Video Player": "Reprodutor de vídeo",
     "Play": "Reproducir",
@@ -163,5 +163,5 @@
     "End of dialog window.": "Fin da xanela de diálogo.",
     "{1} is loading.": "{1} está a cargarse.",
     "This live has not started yet.": "Aínda non comenzou o directo.",
-    "Uses P2P, others may know you are watching this video.": "Utiliza P2P, outras poderían saber que estás a ver este vídeo."
+    "Uses P2P, others may know you are watching this video.": "Utiliza P2P, outras persoas poderían saber que estás a ver este vídeo."
 }
