@@ -7916,35 +7916,33 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3992536540271265226" datatype="html">
+      <trans-unit id="3992536540271265226" datatype="html" xml:space="preserve">
         <source>This live is not currently streaming.</source>
-        <target state="new">This live is not currently streaming.</target>
+        <target state="translated">Αυτή η ζωντανή ροή δεν μεταδίδει αυτή τη στιγμή.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1382247797971338819" datatype="html">
+      <trans-unit id="1382247797971338819" datatype="html" xml:space="preserve">
         <source>It will start on <x id="INTERPOLATION" equiv-text="{{ scheduledLiveDate() | ptDate: 'short' }}"/>. </source>
-        <target state="new"> It will start on <x id="INTERPOLATION" equiv-text="{{ scheduledLiveDate() | ptDate: 'short' }}"/>. </target>
+        <target state="translated">Θα ξεκινήσει στις <x id="INTERPOLATION" equiv-text="{{ scheduledLiveDate() | ptDate: 'short' }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4926204350710628499" datatype="html">
+      <trans-unit id="4926204350710628499" datatype="html" xml:space="preserve">
         <source>This live has ended.</source>
-        <target state="new"> This live has ended.
-</target>
+        <target state="translated">Αυτή η ζωντανή μετάδοση έχει τελειώσει.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7365478703093390233" datatype="html">
+      <trans-unit id="7365478703093390233" datatype="html" xml:space="preserve">
         <source>There are no videos available in this playlist.</source>
-        <target state="new"> There are no videos available in this playlist.
-</target>
+        <target state="translated">Δεν υπάρχουν διαθέσιμα βίντεο σε αυτή τη λίστα αναπαραγωγής.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">46</context>
@@ -7958,17 +7956,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6448160249466325288" datatype="html">
+      <trans-unit id="6448160249466325288" datatype="html" xml:space="preserve">
         <source>Most recent first (default)</source>
-        <target state="new">Most recent first (default)</target>
+        <target state="translated">Πρώτα τα πιο πρόσφατα (προεπιλογή)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5179007899354903649" datatype="html">
+      <trans-unit id="5179007899354903649" datatype="html" xml:space="preserve">
         <source>Most replies first</source>
-        <target state="new">Most replies first</target>
+        <target state="translated">Πρώτα οι περισσότερες απαντήσεις</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">16</context>
@@ -7990,9 +7988,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4036338619293319383" datatype="html">
+      <trans-unit id="4036338619293319383" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 απάντηση} other {<x id="INTERPOLATION"/> απαντήσεις}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">84</context>
@@ -8014,25 +8012,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5535545444690528619" datatype="html">
+      <trans-unit id="5535545444690528619" datatype="html" xml:space="preserve">
         <source>View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}" xid="2084023438878610739"/></source>
-        <target state="new">View <x id="ICU" equiv-text="{comment.totalReplies, plural, =1 {1 reply} other {{{ comment.totalReplies }} replies}}"/></target>
+        <target state="translated">Προβολή <x id="ICU" xid="2084023438878610739" equiv-text="{comment.totalReplies, plural, =1 {1 απάντησης} other {{{ comment.totalReplies }} απαντήσεων}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6141356876817135294" datatype="html">
+      <trans-unit id="6141356876817135294" datatype="html" xml:space="preserve">
         <source>Comments are disabled.</source>
-        <target state="new">Comments are disabled.</target>
+        <target state="translated">Τα σχόλια έχουν απενεργοποιηθεί.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5964038603724691720" datatype="html">
+      <trans-unit id="5964038603724691720" datatype="html" xml:space="preserve">
         <source>Delete and re-draft</source>
-        <target state="new">Delete and re-draft</target>
+        <target state="translated">Διαγραφή και επανασύνταξη</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">248</context>
