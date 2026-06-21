@@ -3132,9 +3132,9 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4163272119298020373" datatype="html">
+      <trans-unit id="4163272119298020373" datatype="html" xml:space="preserve">
         <source>Filters</source>
-        <target state="new">Filters</target>
+        <target state="translated">فیلترها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">28</context>
@@ -4636,9 +4636,9 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1266693787067473546" datatype="html">
+      <trans-unit id="1266693787067473546" datatype="html" xml:space="preserve">
         <source>Your query will be matched against video names or channel names.</source>
-        <target state="new">Your query will be matched against video names or channel names.</target>
+        <target state="translated">جستجوی شما، در بین اسامی کانال‌ها و ویدئو‌ها انجام خواهد شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">46,47</context>
@@ -5973,9 +5973,9 @@
           <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4520053292376276280" datatype="html">
+      <trans-unit id="4520053292376276280" datatype="html" xml:space="preserve">
         <source>Allowed domains</source>
-        <target state="new">Allowed domains</target>
+        <target state="translated">دامنه‌های مجاز</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -7270,9 +7270,9 @@
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3818007889408286818" datatype="html">
+      <trans-unit id="3818007889408286818" datatype="html" xml:space="preserve">
         <source>Disable video import and channel synchronization</source>
-        <target state="new">Disable video import and channel synchronization</target>
+        <target state="translated">غیرفعالسازی واردات ویدئو و همسان‌سازی کانال</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/private-instance-config.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -9388,9 +9388,9 @@
           <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8692634109890521682" datatype="html">
+      <trans-unit id="8692634109890521682" datatype="html" xml:space="preserve">
         <source>No results found.</source>
-        <target state="new">No results found.</target>
+        <target state="translated">هیچ نتیجه‌ای یافت نشد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
           <context context-type="linenumber">231</context>
@@ -11760,9 +11760,9 @@
           <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3991697548652611331" datatype="html">
+      <trans-unit id="3991697548652611331" datatype="html" xml:space="preserve">
         <source>Allow channel synchronization with channel of other platforms like YouTube</source>
-        <target state="new">Allow channel synchronization with channel of other platforms like YouTube</target>
+        <target state="translated">امکان همسان‌سازی کانال با کانال سایر پلتفرم‌ها مانند یوتیوب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">370</context>
@@ -11776,9 +11776,9 @@
           <context context-type="linenumber">374</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5239500638742740142" datatype="html">
+      <trans-unit id="5239500638742740142" datatype="html" xml:space="preserve">
         <source>Max channel synchronization per user</source>
-        <target state="new">Max channel synchronization per user</target>
+        <target state="translated">حداکثر تعداد همسان‌سازی برای هر کاربر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">381</context>
@@ -12128,9 +12128,9 @@
           <context context-type="linenumber">893</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5344594655022049812" datatype="html">
+      <trans-unit id="5344594655022049812" datatype="html" xml:space="preserve">
         <source>Allowed</source>
-        <target state="new">Allowed</target>
+        <target state="translated">مجاز</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
           <context context-type="linenumber">264</context>
@@ -14170,9 +14170,9 @@
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7562759002958080337" datatype="html">
+      <trans-unit id="7562759002958080337" datatype="html" xml:space="preserve">
         <source>Last synchronization at</source>
-        <target state="new">Last synchronization at</target>
+        <target state="translated">زمان آخرین همسان‌سازی</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -20118,9 +20118,9 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1645193489541371451" datatype="html">
+      <trans-unit id="1645193489541371451" datatype="html" xml:space="preserve">
         <source>No results found</source>
-        <target state="new">No results found</target>
+        <target state="translated">هیچ نتیجه‌ای یافت نشد</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">46</context>
@@ -20362,9 +20362,9 @@
           <context context-type="linenumber">45,46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6753681732976615521" datatype="html">
+      <trans-unit id="6753681732976615521" datatype="html" xml:space="preserve">
         <source>Add or delete channel synchronization</source>
-        <target state="new">Add or delete channel synchronization</target>
+        <target state="translated">افزودن و حذف همسان‌سازی کانال</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.html</context>
           <context context-type="linenumber">46</context>
@@ -21310,9 +21310,9 @@
           <context context-type="linenumber">310</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7731752234233950482" datatype="html">
+      <trans-unit id="7731752234233950482" datatype="html" xml:space="preserve">
         <source>Synchronizations</source>
-        <target state="new">Synchronizations</target>
+        <target state="translated">همسان‌سازی‌ها</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
           <context context-type="linenumber">39</context>
