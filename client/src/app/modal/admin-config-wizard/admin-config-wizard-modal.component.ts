@@ -1,5 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { Notifier, User, UserService } from '@app/core'
 import { CommonStepperComponent } from '@app/shared/shared-main/common/common-stepper.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
@@ -17,6 +17,7 @@ import { UsageType } from './steps/usage-type/usage-type.model'
   selector: 'my-admin-config-wizard-modal',
   templateUrl: './admin-config-wizard-modal.component.html',
   styleUrls: [ './admin-config-wizard-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CdkStepperModule,
     CommonStepperComponent,

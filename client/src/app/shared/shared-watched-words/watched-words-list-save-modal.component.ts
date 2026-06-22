@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -15,6 +15,7 @@ import { WatchedWordsListService } from './watched-words-list.service'
   selector: 'my-watched-words-list-save-modal',
   styleUrls: [ './watched-words-list-save-modal.component.scss' ],
   templateUrl: './watched-words-list-save-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgClass ]
 })
 export class WatchedWordsListSaveModalComponent extends FormReactive implements OnInit {

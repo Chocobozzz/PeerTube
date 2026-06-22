@@ -1,5 +1,5 @@
 import { CdkStep, CdkStepperNext, CdkStepperPrevious } from '@angular/cdk/stepper'
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
@@ -29,6 +29,7 @@ import { RegisterStepUserComponent } from './steps/register-step-user.component'
   selector: 'my-register',
   templateUrl: './register.component.html',
   styleUrls: [ './register.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     SignupLabelComponent,
     RegisterStepperComponent,

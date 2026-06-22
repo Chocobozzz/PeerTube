@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, forwardRef, input, model, viewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, forwardRef, input, model, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { CopyButtonComponent } from '../shared-main/buttons/copy-button.component'
@@ -16,6 +16,7 @@ import { FormReactiveErrors } from './form-reactive.service'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, NgClass, GlobalIconComponent, CopyButtonComponent ]
 })
 export class InputTextComponent implements ControlValueAccessor, AfterViewInit {

@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnChanges, input } from '@angular/core'
+import { Component, forwardRef, OnChanges, input, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 
@@ -15,6 +15,7 @@ import { SelectOptionsComponent } from './select-options.component'
     }
   ],
   imports: [ SelectOptionsComponent, FormsModule ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     '[class.has-custom-value]': 'isCustomValue()'
   }

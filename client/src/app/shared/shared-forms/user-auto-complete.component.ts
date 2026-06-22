@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, input, model } from '@angular/core'
+import { Component, forwardRef, inject, input, model, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier, UserService } from '@app/core'
 import { AutoCompleteModule } from 'primeng/autocomplete'
@@ -14,6 +14,7 @@ import { InputMaskModule } from 'primeng/inputmask'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InputMaskModule, FormsModule, AutoCompleteModule ]
 })
 export class UserAutoCompleteComponent implements ControlValueAccessor {

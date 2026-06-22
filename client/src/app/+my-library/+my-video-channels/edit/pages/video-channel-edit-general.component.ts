@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier } from '@app/core'
@@ -46,6 +46,7 @@ type Form = {
   selector: 'my-video-channel-edit-general',
   templateUrl: './video-channel-edit-general.component.html',
   styleUrls: [ './video-channel-edit-general.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -54,6 +54,7 @@ type ColumnName =
   selector: 'my-video-list',
   templateUrl: './video-list.component.html',
   styleUrls: [ './video-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     VideoActionsDropdownComponent,
@@ -447,7 +448,7 @@ export class VideoListComponent implements OnInit {
 
   private _dataLoader (
     options: DataLoaderOptionsBase & Partial<Parameters<VideoAdminService['listAdminVideos']>[0]> & {
-      state: VideoStateType | string
+      state?: VideoStateType | string
     }
   ) {
     return this.videoAdminService.listAdminVideos({

@@ -1,5 +1,5 @@
 import { getLocaleDirection, NgClass, PlatformLocation } from '@angular/common'
-import { AfterViewInit, Component, DOCUMENT, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { AfterViewInit, Component, DOCUMENT, inject, LOCALE_ID, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
 import {
@@ -46,6 +46,7 @@ import { PeertubeModalService } from './shared/shared-main/peertube-modal/peertu
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HotkeysCheatSheetComponent,
     NgClass,

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { ServerService, User, UserService } from '@app/core'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { isP2PEnabled } from '@root-helpers/video'
@@ -9,6 +9,7 @@ import { HTMLServerConfig, Video } from '@peertube/peertube-models'
   selector: 'my-privacy-concerns',
   templateUrl: './privacy-concerns.component.html',
   styleUrls: [ './privacy-concerns.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: []
 })
 export class PrivacyConcernsComponent implements OnInit {

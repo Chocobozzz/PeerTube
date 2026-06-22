@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
 import { formatICU, listUserChannelsForSelect } from '@app/helpers'
@@ -16,6 +16,7 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-accept-change-video-ownership',
   templateUrl: './accept-change-video-ownership.component.html',
   styleUrls: [ './accept-change-video-ownership.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelComponent ]
 })
 export class AcceptChangeVideoOwnershipComponent extends FormReactive implements OnInit {

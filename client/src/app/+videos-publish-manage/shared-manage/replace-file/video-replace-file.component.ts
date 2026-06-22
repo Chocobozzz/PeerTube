@@ -1,5 +1,5 @@
 
-import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
@@ -28,6 +28,7 @@ type Form = {
     './video-replace-file.component.scss'
   ],
   templateUrl: './video-replace-file.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

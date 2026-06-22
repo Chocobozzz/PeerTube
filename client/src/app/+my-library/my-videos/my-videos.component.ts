@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
@@ -57,6 +57,7 @@ type DataLoaderParameter = Parameters<MyVideosComponent['_dataLoader']>[0]
   selector: 'my-videos',
   templateUrl: './my-videos.component.html',
   styleUrls: [ './my-videos.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ButtonComponent,

@@ -17,7 +17,7 @@ export class VideoFetcher {
     try {
       videoResponse = await videoPromise
       isResponseOk = videoResponse.status === HttpStatusCode.OK_200
-    } catch (err) {
+    } catch (err: any) {
       logger.error(err)
 
       isResponseOk = false

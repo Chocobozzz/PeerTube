@@ -1,5 +1,5 @@
 import { ListKeyManagerOption } from '@angular/cdk/a11y'
-import { Component, OnInit, input } from '@angular/core'
+import { Component, OnInit, input, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 
@@ -16,6 +16,7 @@ export type SuggestionPayloadType = 'search-instance' | 'search-index'
   selector: 'my-suggestion',
   templateUrl: './suggestion.component.html',
   styleUrls: [ './suggestion.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent ]
 })
 export class SuggestionComponent implements OnInit, ListKeyManagerOption {

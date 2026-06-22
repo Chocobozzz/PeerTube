@@ -1,5 +1,5 @@
 import { CommonModule, PlatformLocation } from '@angular/common'
-import { Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -104,6 +104,7 @@ type URLOptions = {
   selector: 'my-video-watch',
   templateUrl: './video-watch.component.html',
   styleUrls: [ './video-watch.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     VideoWatchPlaylistComponent,

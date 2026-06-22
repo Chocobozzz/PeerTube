@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core'
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { PeerTubePlugin, PeerTubePluginIndex, PluginType_Type } from '@peertube/peertube-models'
 import { PluginApiService } from '../../../shared/shared-admin/plugin-api.service'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
@@ -7,6 +7,7 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-plugin-card',
   templateUrl: './plugin-card.component.html',
   styleUrls: [ './plugin-card.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent ]
 })
 export class PluginCardComponent {

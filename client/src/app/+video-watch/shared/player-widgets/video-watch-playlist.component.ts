@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, inject, input, output } from '@angular/core'
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { Router } from '@angular/router'
 import {
   AuthService,
@@ -26,6 +26,7 @@ import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-video-watch-playlist',
   templateUrl: './video-watch-playlist.component.html',
   styleUrls: [ './player-widget.component.scss', './video-watch-playlist.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, VideoPlaylistElementMiniatureComponent ]
 })
 export class VideoWatchPlaylistComponent {

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
@@ -31,6 +31,7 @@ type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ActionDropdownComponent,
     VideoCellComponent,

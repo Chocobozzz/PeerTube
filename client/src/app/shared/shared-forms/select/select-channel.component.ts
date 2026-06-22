@@ -1,4 +1,4 @@
-import { Component, forwardRef, input, OnChanges } from '@angular/core'
+import { Component, forwardRef, input, OnChanges, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { SelectChannelItem, SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -36,6 +36,7 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, SelectOptionsComponent, CollaboratorStateComponent ]
 })
 export class SelectChannelComponent implements ControlValueAccessor, OnChanges {

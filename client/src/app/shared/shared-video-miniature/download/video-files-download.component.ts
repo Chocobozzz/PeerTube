@@ -1,5 +1,5 @@
 import { KeyValuePipe, NgTemplateOutlet } from '@angular/common'
-import { Component, OnInit, inject, input, output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { NgbCollapse, NgbNavModule, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -7,7 +7,6 @@ import { objectKeysTyped, pick } from '@peertube/peertube-core-utils'
 import { VideoFile, VideoFileMetadata, VideoSource } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { videoRequiresFileToken } from '@root-helpers/video'
-import { mapValues } from 'lodash-es'
 import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { InputTextComponent } from '../../shared-forms/input-text.component'
@@ -23,6 +22,7 @@ type FileMetadata = { [key: string]: { label: string, value: string | number } }
   selector: 'my-video-files-download',
   templateUrl: './video-files-download.component.html',
   styleUrls: [ './video-files-download.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     GlobalIconComponent,
@@ -171,9 +171,9 @@ export class VideoFilesDownloadComponent implements OnInit {
     const sanitizedFormat = Object.assign(format, format.tags)
     delete sanitizedFormat.tags
 
-    return mapValues(
-      pick(sanitizedFormat, objectKeysTyped(keyToTranslateFunction)),
-      (val: string, key: keyof typeof keyToTranslateFunction) => keyToTranslateFunction[key](val)
+    return Object.fromEntries(
+      Object.entries(pick(sanitizedFormat, objectKeysTyped(keyToTranslateFunction)))
+        .map(([ key, val ]) => [ key, keyToTranslateFunction[key as keyof typeof keyToTranslateFunction](val as string) ])
     )
   }
 
@@ -206,9 +206,9 @@ export class VideoFilesDownloadComponent implements OnInit {
       })
     }
 
-    return mapValues(
-      pick(stream, Object.keys(keyToTranslateFunction)),
-      (val: string, key: keyof typeof keyToTranslateFunction) => keyToTranslateFunction[key](val)
+    return Object.fromEntries(
+      Object.entries(pick(stream, Object.keys(keyToTranslateFunction)))
+        .map(([ key, val ]) => [ key, keyToTranslateFunction[key as keyof typeof keyToTranslateFunction](val as string) ])
     )
   }
 

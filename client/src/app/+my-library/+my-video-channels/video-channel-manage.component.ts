@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { AfterViewChecked, Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
@@ -17,6 +17,7 @@ import { ChannelManageResolverData } from './routes'
   template: `
   <my-video-channel-edit [videoChannelEdit]="videoChannelEdit" [saveFn]="saveFn">
   </my-video-channel-edit>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     VideoChannelEditComponent
   ]

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, model } from '@angular/core'
+import { Component, OnInit, inject, model, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, UserService } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -11,6 +11,7 @@ import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube
   selector: 'my-account-email-preferences',
   templateUrl: './my-account-email-preferences.component.html',
   styleUrls: [ './my-account-email-preferences.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, PeertubeCheckboxComponent, PeerTubeTemplateDirective ]
 })
 export class MyAccountEmailPreferencesComponent extends FormReactive implements OnInit {

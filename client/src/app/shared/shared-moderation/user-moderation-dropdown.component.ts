@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, OnChanges, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, ConfirmService, HooksService, Notifier, ServerService, UserService } from '@app/core'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
 import { Account } from '../shared-main/account/account.model'
@@ -22,6 +22,7 @@ export type UserModerationDisplayType = {
 @Component({
   selector: 'my-user-moderation-dropdown',
   templateUrl: './user-moderation-dropdown.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ UserBanModalComponent, ActionDropdownComponent ]
 })
 export class UserModerationDropdownComponent implements OnInit, OnChanges {

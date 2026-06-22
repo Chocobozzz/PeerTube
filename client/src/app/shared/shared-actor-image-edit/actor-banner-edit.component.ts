@@ -1,5 +1,5 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { SafeResourceUrl } from '@angular/platform-browser'
 import { Notifier, ServerService } from '@app/core'
 import { NgbDropdownModule, NgbPopover, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
@@ -14,6 +14,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
     './actor-image-edit.scss',
     './actor-banner-edit.component.scss'
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, NgbTooltipModule, NgTemplateOutlet, NgbDropdownModule, GlobalIconComponent ]
 })
 export class ActorBannerEditComponent implements OnInit, OnChanges {

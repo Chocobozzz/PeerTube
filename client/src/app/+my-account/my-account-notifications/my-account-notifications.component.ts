@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, viewChild } from '@angular/core'
+import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { UserNotificationsComponent } from '@app/shared/shared-notifications/user-notifications.component'
@@ -10,6 +10,7 @@ type NotificationSortType = 'createdAt' | 'read'
 @Component({
   templateUrl: './my-account-notifications.component.html',
   styleUrls: [ './my-account-notifications.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, RouterLink, GlobalIconComponent, FormsModule, UserNotificationsComponent ]
 })
 export class MyAccountNotificationsComponent {

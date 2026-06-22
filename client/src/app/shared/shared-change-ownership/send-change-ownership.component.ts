@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { OWNERSHIP_CHANGE_USERNAME_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
@@ -16,6 +16,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
   selector: 'my-send-change-ownership',
   templateUrl: './send-change-ownership.component.html',
   styleUrls: [ './send-change-ownership.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, AutoCompleteModule, UserAutoCompleteComponent ]
 })
 export class SendChangeOwnershipComponent extends FormReactive implements OnInit {

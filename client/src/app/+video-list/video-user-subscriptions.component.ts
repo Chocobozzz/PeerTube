@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, ComponentPaginationLight, DisableForReuseHook, ScopedTokensService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
@@ -12,6 +12,7 @@ import { first, switchMap, tap } from 'rxjs/operators'
 @Component({
   selector: 'my-videos-user-subscriptions',
   templateUrl: './video-user-subscriptions.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ VideosListComponent ]
 })
 export class VideoUserSubscriptionsComponent implements DisableForReuseHook {

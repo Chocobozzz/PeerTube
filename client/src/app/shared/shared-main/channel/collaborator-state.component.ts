@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, input, OnInit } from '@angular/core'
+import { booleanAttribute, Component, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 export type CollaboratorStateType = 'owner' | 'accepted' | 'invited'
@@ -8,6 +8,7 @@ export type CollaboratorStateType = 'owner' | 'accepted' | 'invited'
   selector: 'my-collaborator-state',
   templateUrl: './collaborator-state.component.html',
   styleUrls: [ './collaborator-state.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, NgbTooltipModule ]
 })
 export class CollaboratorStateComponent implements OnInit {

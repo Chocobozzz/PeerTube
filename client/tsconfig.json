@@ -47,6 +47,12 @@
   ],
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    },
     "strictTemplates": true,
     "enableI18nLegacyMessageIdFormat": false
   }

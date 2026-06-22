@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input, output } from '@angular/core'
+import { Component, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
@@ -11,6 +11,7 @@ type FormOption = { id: string, label: string }
   selector: 'my-search-filters',
   styleUrls: [ './search-filters.component.scss' ],
   templateUrl: './search-filters.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, SelectTagsComponent ]
 })
 export class SearchFiltersComponent implements OnInit {

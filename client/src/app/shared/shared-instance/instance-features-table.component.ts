@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, model } from '@angular/core'
+import { Component, OnInit, inject, model, ChangeDetectionStrategy } from '@angular/core'
 import { ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { ServerConfig, ServerStats } from '@peertube/peertube-models'
@@ -12,6 +12,7 @@ import { FeatureBooleanComponent } from './feature-boolean.component'
   selector: 'my-instance-features-table',
   templateUrl: './instance-features-table.component.html',
   styleUrls: [ './instance-features-table.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FeatureBooleanComponent, HelpComponent, BytesPipe ]
 })
 export class InstanceFeaturesTableComponent implements OnInit {

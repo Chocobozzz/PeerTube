@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { form, FormField, pattern, required } from '@angular/forms/signals'
 import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
@@ -22,6 +22,7 @@ type AddSubscriptionFormModel = {
 @Component({
   selector: 'my-instance-blocklist-subscriptions',
   templateUrl: './instance-blocklist-subscriptions.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormErrorComponent,

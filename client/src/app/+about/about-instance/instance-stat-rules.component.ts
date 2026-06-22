@@ -1,5 +1,5 @@
 import { CommonModule, DecimalPipe } from '@angular/common'
-import { Component, inject, input } from '@angular/core'
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { DaysDurationFormatterPipe } from '@app/shared/shared-main/date/days-duration-formatter.pipe'
@@ -13,6 +13,7 @@ import { AuthService } from '@app/core'
   selector: 'my-instance-stat-rules',
   templateUrl: './instance-stat-rules.component.html',
   styleUrls: [ './instance-stat-rules.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     GlobalIconComponent,

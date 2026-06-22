@@ -1,6 +1,6 @@
 import { CdkStepper } from '@angular/cdk/stepper'
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component } from '@angular/core'
+import { Component, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'my-common-stepper',
@@ -8,6 +8,7 @@ import { Component } from '@angular/core'
     <div [ngTemplateOutlet]="selected ? selected.content : null"></div>
   </div>`,
   providers: [ { provide: CdkStepper, useExisting: CommonStepperComponent } ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, NgTemplateOutlet ]
 })
 export class CommonStepperComponent extends CdkStepper {

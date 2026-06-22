@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -19,6 +19,7 @@ import { REGISTRATION_MODERATION_RESPONSE_VALIDATOR } from './process-registrati
 @Component({
   selector: 'my-process-registration-modal',
   templateUrl: './process-registration-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, GlobalIconComponent, FormsModule, ReactiveFormsModule, PeertubeCheckboxComponent, AlertComponent ]
 })
 export class ProcessRegistrationModalComponent extends FormReactive implements OnInit {

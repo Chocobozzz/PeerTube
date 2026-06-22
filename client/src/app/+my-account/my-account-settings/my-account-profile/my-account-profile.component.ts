@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, model } from '@angular/core'
+import { Component, OnInit, inject, model, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
 import { USER_DESCRIPTION_VALIDATOR, USER_DISPLAY_NAME_REQUIRED_VALIDATOR } from '@app/shared/form-validators/user-validators'
@@ -13,6 +13,7 @@ import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
   selector: 'my-account-profile',
   templateUrl: './my-account-profile.component.html',
   styleUrls: [ './my-account-profile.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, NgClass, AlertComponent, HelpComponent, MarkdownTextareaComponent ]
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {

@@ -7,3 +7,5 @@ interface NodeModule {
 }
 
 declare module 'markdown-it-emoji/lib/light.mjs'
+
+declare module '*.scss'

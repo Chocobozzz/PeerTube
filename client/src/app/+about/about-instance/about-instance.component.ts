@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, RouterOutlet } from '@angular/router'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
 import { ServerConfig, ServerStats } from '@peertube/peertube-models'
@@ -10,6 +10,7 @@ import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared
   selector: 'my-about-instance',
   templateUrl: './about-instance.component.html',
   styleUrls: [ './about-instance.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     InstanceStatRulesComponent,
     HorizontalMenuComponent,

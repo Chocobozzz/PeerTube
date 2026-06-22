@@ -1,4 +1,4 @@
-import { Component, OnChanges, inject, input, viewChild } from '@angular/core'
+import { Component, OnChanges, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
@@ -6,6 +6,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 @Component({
   selector: 'my-support-modal',
   templateUrl: './support-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent ]
 })
 export class SupportModalComponent implements OnChanges {

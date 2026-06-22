@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { AuthService, RedirectService } from '@app/core'
@@ -46,6 +46,7 @@ type QuickFilter = {
     SelectVideosSortComponent,
     SelectVideosScopeComponent
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ InstanceFollowService ]
 })
 export class VideoFiltersHeaderComponent implements OnInit {

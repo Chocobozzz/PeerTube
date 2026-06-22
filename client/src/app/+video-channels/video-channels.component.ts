@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService, ServerService } from '@app/core'
 import { getOriginUrl } from '@app/helpers'
@@ -23,6 +23,7 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
 @Component({
   templateUrl: './video-channels.component.html',
   styleUrls: [ './video-channels.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     SubscribeButtonComponent,

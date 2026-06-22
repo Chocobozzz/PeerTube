@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { AfterViewInit, Component, DestroyRef, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
+import { AfterViewInit, Component, DestroyRef, OnInit, booleanAttribute, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -17,6 +17,7 @@ const debugLogger = debug('peertube:SearchInputComponent')
   selector: 'my-search-input',
   templateUrl: './search-input.component.html',
   styleUrls: [ './search-input.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgClass, FormsModule, GlobalIconComponent ]
 })
 export class SearchInputComponent implements OnInit, AfterViewInit {

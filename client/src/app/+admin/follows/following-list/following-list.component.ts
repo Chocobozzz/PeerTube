@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -19,6 +19,7 @@ type DataLoaderParameter = Parameters<FollowingListComponent['_dataLoader']>[0]
 @Component({
   templateUrl: './following-list.component.html',
   styleUrls: [ './following-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     GlobalIconComponent,

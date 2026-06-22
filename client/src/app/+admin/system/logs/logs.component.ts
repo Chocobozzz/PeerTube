@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { LocalStorageService, Notifier } from '@app/core'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
@@ -14,6 +14,7 @@ import { LogsService } from './logs.service'
 @Component({
   templateUrl: './logs.component.html',
   styleUrls: [ './logs.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     NgClass,

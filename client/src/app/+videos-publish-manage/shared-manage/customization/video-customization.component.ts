@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgumentTyped } from '@app/shared/form-validators/form-validator.model'
@@ -31,6 +31,7 @@ type Form = {
     '../common/video-manage-page-common.scss'
   ],
   templateUrl: './video-customization.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

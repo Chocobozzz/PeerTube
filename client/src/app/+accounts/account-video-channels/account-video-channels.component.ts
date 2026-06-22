@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, hasMoreItems, MarkdownService, User, UserService } from '@app/core'
 import { SimpleMemoize } from '@app/helpers'
@@ -20,6 +20,7 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
   selector: 'my-account-video-channels',
   templateUrl: './account-video-channels.component.html',
   styleUrls: [ './account-video-channels.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InfiniteScrollerDirective, ActorAvatarComponent, RouterLink, SubscribeButtonComponent, VideoMiniatureComponent ]
 })
 export class AccountVideoChannelsComponent implements OnInit, OnDestroy {

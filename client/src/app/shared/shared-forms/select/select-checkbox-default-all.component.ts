@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, forwardRef, inject, input, OnChanges } from '@angular/core'
+import { booleanAttribute, Component, forwardRef, inject, input, OnChanges, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -32,6 +32,7 @@ import { SelectCheckboxComponent } from './select-checkbox.component'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ SelectCheckboxComponent, FormsModule ]
 })
 export class SelectCheckboxDefaultAllComponent implements ControlValueAccessor, OnChanges {

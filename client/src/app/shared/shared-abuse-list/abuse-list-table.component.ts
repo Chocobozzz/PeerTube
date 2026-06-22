@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { Component, inject, input, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -37,6 +37,7 @@ type DataLoaderParameter = Parameters<AbuseListTableComponent['_dataLoader']>[0]
   selector: 'my-abuse-list-table',
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgbTooltip,
     ActionDropdownComponent,

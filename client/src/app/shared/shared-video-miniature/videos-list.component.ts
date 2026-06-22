@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
+import { Component, OnDestroy, OnInit, booleanAttribute, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {
   ComponentPagination,
@@ -39,6 +39,7 @@ export type HeaderAction = {
   selector: 'my-videos-list',
   templateUrl: './videos-list.component.html',
   styleUrls: [ './videos-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     ButtonComponent,

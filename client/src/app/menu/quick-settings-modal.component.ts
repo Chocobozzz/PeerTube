@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, AuthStatus, LocalStorageService, PeerTubeRouterService, User, UserService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -17,6 +17,7 @@ import { filter } from 'rxjs/operators'
       font-size: 1rem;
     }`
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     UserVideoSettingsComponent,

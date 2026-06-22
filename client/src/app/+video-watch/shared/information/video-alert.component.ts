@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core'
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { AuthUser } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -10,6 +10,7 @@ import { UserRight, VideoPrivacy, VideoState } from '@peertube/peertube-models'
   selector: 'my-video-alert',
   templateUrl: './video-alert.component.html',
   styles: `my-alert { text-align: center }`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ PTDatePipe, AlertComponent ]
 })
 export class VideoAlertComponent {

@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
@@ -20,6 +20,7 @@ import { SelectChannelComponent } from '../../../shared/shared-forms/select/sele
   selector: 'my-video-channel-sync-edit',
   templateUrl: './video-channel-sync-edit.component.html',
   styleUrls: [ './video-channel-sync-edit.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, NgClass, SelectChannelComponent, AlertComponent ]
 })
 export class VideoChannelSyncEditComponent extends FormReactive implements OnInit {

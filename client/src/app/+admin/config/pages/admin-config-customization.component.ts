@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValueChangeEvent } from '@angular/forms'
 import { ActivatedRoute, RouterModule } from '@angular/router'
 import { CanComponentDeactivate, ServerService, ThemeService } from '@app/core'
@@ -82,6 +82,7 @@ type FieldType = 'color' | 'radius'
   selector: 'my-admin-config-customization',
   templateUrl: './admin-config-customization.component.html',
   styleUrls: [ './admin-config-common.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

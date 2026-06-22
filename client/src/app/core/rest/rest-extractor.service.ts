@@ -11,16 +11,15 @@ export class RestExtractor {
   private localeId = inject(LOCALE_ID)
   private router = inject(Router)
 
-  applyToResultListData<T, A, U> (
+  applyToResultListData<T, U> (
     result: ResultList<T>,
-    fun: (data: T, ...args: A[]) => U,
-    additionalArgs: A[] = []
+    fun: (data: T) => U
   ): ResultList<U> {
     const data: T[] = result.data
 
     return {
       total: result.total,
-      data: data.map(d => fun.apply(this, [ d, ...additionalArgs ]))
+      data: data.map(d => fun(d))
     }
   }
 
@@ -29,7 +28,7 @@ export class RestExtractor {
     fieldsToConvert: string[] = [ 'createdAt' ],
     format?: DateFormat
   ): ResultList<T> {
-    return this.applyToResultListData(result, this.convertDateToHuman.bind(this), [ fieldsToConvert, format ])
+    return this.applyToResultListData(result, data => this.convertDateToHuman(data, fieldsToConvert, format))
   }
 
   convertDateToHuman (target: any, fieldsToConvert: string[], format?: DateFormat) {

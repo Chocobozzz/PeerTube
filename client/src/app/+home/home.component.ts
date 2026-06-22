@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { DisableForReuseHook, PeerTubeRouterService } from '@app/core'
 import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
 import { debounceTime, fromEvent, Subscription } from 'rxjs'
@@ -6,6 +6,7 @@ import { CustomMarkupContainerComponent } from '../shared/shared-custom-markup/c
 
 @Component({
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CustomMarkupContainerComponent ]
 })
 export class HomeComponent implements OnInit, OnDestroy, DisableForReuseHook {

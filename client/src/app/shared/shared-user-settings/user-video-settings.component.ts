@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, booleanAttribute, inject, input } from '@angular/core'
+import { Component, OnDestroy, OnInit, booleanAttribute, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
 import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
@@ -30,6 +30,7 @@ type Form = {
   selector: 'my-user-video-settings',
   templateUrl: './user-video-settings.component.html',
   styleUrls: [ './user-video-settings.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, Notifier, User } from '@app/core'
@@ -12,6 +12,7 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-account-two-factor',
   templateUrl: './my-account-two-factor.component.html',
   styleUrls: [ './my-account-two-factor.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, InputTextComponent, QRCodeComponent ]
 })
 export class MyAccountTwoFactorComponent implements OnInit {

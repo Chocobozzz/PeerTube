@@ -8,7 +8,7 @@ import { RestExtractor } from '@app/core/rest'
 import { ServerService } from '@app/core/server/server.service'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
-import { getCompleteLocale, getKeys, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
+import { getCompleteLocale, getKeys, isDefaultLocale, objectKeysTyped, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
   ClientDoActionCallback,
   ClientDoActionName,
@@ -157,7 +157,7 @@ export class PluginService implements ClientHook {
   }
 
   getAllRegisteredClientRoutes () {
-    return Object.keys(this.clientRoutes)
+    return objectKeysTyped(this.clientRoutes)
       .map((parentRoute: RegisterClientRouteOptions['parentRoute']) => {
         return Object.keys(this.clientRoutes[parentRoute])
           .map(route => {

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EnvironmentInjector,
   OnInit,
@@ -26,6 +27,7 @@ import { VideoEdit } from './video-edit.model'
   styleUrls: [ './thumbnail-manager.component.scss' ],
   templateUrl: './thumbnail-manager.component.html',
   imports: [ ReactiveFileComponent, EmbedComponent, DragDropDirective, ButtonComponent ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -134,8 +136,8 @@ export class ThumbnailManagerComponent implements OnInit, ControlValueAccessor {
       afterNextRender(() => {
         try {
           this.player = new PeerTubePlayer(this.embed().getIframe())
-        } catch (err) {
-          this.notifier.error('Error creating PeerTube embed: ' + err.message)
+        } catch (err: unknown) {
+          this.notifier.error('Error creating PeerTube embed: ' + (err as Error).message)
           this.selectingFromVideo = false
           return
         }

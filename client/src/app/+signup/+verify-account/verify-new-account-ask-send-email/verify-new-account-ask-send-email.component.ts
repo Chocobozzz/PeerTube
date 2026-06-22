@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { Notifier, RedirectService, ServerService, UserService } from '@app/core'
@@ -12,6 +12,7 @@ import { forkJoin } from 'rxjs'
   selector: 'my-verify-new-account-ask-send-email',
   templateUrl: './verify-new-account-ask-send-email.component.html',
   styleUrls: [ './verify-new-account-ask-send-email.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class VerifyNewAccountAskSendEmailComponent extends FormReactive implements OnInit {

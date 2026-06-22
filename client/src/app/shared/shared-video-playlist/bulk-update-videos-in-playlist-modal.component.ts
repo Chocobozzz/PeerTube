@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit, output, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, OnDestroy, OnInit, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -26,6 +26,7 @@ type PlaylistElement = {
   selector: 'my-bulk-update-videos-in-playlist-modal',
   styleUrls: [ './bulk-update-videos-in-playlist-modal.component.scss' ],
   templateUrl: './bulk-update-videos-in-playlist-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     PeertubeCheckboxComponent,

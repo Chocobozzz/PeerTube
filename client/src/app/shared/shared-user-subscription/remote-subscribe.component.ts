@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -11,6 +11,7 @@ import { HelpComponent } from '../shared-main/buttons/help.component'
 @Component({
   selector: 'my-remote-subscribe',
   templateUrl: './remote-subscribe.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, HelpComponent ]
 })
 export class RemoteSubscribeComponent extends FormReactive implements OnInit {

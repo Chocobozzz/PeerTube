@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -9,6 +9,7 @@ import { forkJoin } from 'rxjs'
 @Component({
   selector: 'my-remote-interaction',
   templateUrl: './remote-interaction.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ AlertComponent ]
 })
 export class RemoteInteractionComponent implements OnInit {

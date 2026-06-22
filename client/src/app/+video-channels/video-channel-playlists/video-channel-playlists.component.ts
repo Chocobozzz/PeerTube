@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ComponentPagination, hasMoreItems, HooksService, resetCurrentPage, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -12,6 +12,7 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
   selector: 'my-video-channel-playlists',
   templateUrl: './video-channel-playlists.component.html',
   styleUrls: [ './video-channel-playlists.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InfiniteScrollerDirective, VideoPlaylistMiniatureComponent ]
 })
 export class VideoChannelPlaylistsComponent implements OnInit, AfterViewInit, OnDestroy {

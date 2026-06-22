@@ -63,7 +63,7 @@ class SettingsButton extends Button {
     this.player().one('play', () => this.hideDialog())
   }
 
-  onDocumentClick (event: MouseEvent) {
+  onDocumentClick (event: Event) {
     const element = event.target as HTMLElement
 
     if (element?.classList?.contains('vjs-settings') || element?.parentElement?.classList?.contains('vjs-settings')) {

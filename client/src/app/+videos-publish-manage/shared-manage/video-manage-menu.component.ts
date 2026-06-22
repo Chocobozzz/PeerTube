@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, inject, input, OnInit } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ServerService } from '@app/core'
 import { LateralMenuComponent, LateralMenuConfig } from '@app/shared/shared-main/menu/lateral-menu.component'
 import { getReplaceFileUnavailability, getStudioUnavailability } from './common/unavailable-features'
@@ -8,6 +8,7 @@ import { VideoManageController } from './video-manage-controller.service'
 @Component({
   selector: 'my-video-manage-menu',
   template: '<my-lateral-menu [config]="menuConfig" [globalQueryParams]="globalQueryParams" />',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     LateralMenuComponent
   ]

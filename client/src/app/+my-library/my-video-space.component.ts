@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { ServerService } from '@app/core'
 import { NewFeatureInfoService } from '@app/modal/new-feature-info.service'
@@ -7,6 +7,7 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
 
 @Component({
   templateUrl: './my-video-space.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ RouterOutlet, HorizontalMenuComponent ]
 })
 export class MyVideoSpaceComponent implements OnInit {

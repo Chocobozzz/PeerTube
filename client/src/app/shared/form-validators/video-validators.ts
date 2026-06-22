@@ -1,14 +1,6 @@
-import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
+import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
 import { maxLength, minLength, SchemaPath } from '@angular/forms/signals'
 import { BuildFormValidator } from './form-validator.model'
-
-export const trimValidator: ValidatorFn = (control: FormControl) => {
-  if (control.value.startsWith(' ') || control.value.endsWith(' ')) {
-    return { spaces: true }
-  }
-
-  return null
-}
 
 export const VIDEO_NAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(120) ],

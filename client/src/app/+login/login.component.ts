@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, LOCALE_ID, OnInit, inject, viewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, LOCALE_ID, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
@@ -25,6 +25,7 @@ import { PluginSelectorDirective } from '../shared/shared-main/plugins/plugin-se
   selector: 'my-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     FormsModule,

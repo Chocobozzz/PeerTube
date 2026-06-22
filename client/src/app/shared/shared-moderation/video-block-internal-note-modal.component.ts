@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -15,6 +15,7 @@ import { VideoBlockService } from './video-block.service'
   selector: 'my-video-block-internal-note-modal',
   templateUrl: './video-block-internal-note-modal.component.html',
   styleUrls: [ './video-block-internal-note-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class VideoBlockInternalNoteModalComponent extends FormReactive implements OnInit {

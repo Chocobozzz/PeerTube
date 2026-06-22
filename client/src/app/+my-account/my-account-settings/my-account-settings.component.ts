@@ -1,6 +1,6 @@
 import { ViewportScroller } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { AfterViewChecked, Component, OnInit, inject } from '@angular/core'
+import { AfterViewChecked, Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { shallowCopy } from '@peertube/peertube-core-utils'
@@ -23,6 +23,7 @@ import { MyAccountTwoFactorButtonComponent } from './my-account-two-factor/my-ac
   selector: 'my-account-settings',
   templateUrl: './my-account-settings.component.html',
   styleUrls: [ './my-account-settings.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ActorAvatarEditComponent,
     UserQuotaComponent,

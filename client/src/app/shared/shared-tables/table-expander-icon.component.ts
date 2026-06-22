@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core'
+import { Component, input, ChangeDetectionStrategy } from '@angular/core'
 import { NgClass } from '@angular/common'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 
@@ -8,6 +8,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 <button type="button" class="expander border-0 p-0" [ngbTooltip]="tooltip()" [ariaLabel]="tooltip()">
   <i [ngClass]="expanded() ? 'chevron-down' : 'chevron-right'"></i>
 </button>`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgbTooltip, NgClass ]
 })
 export class TableExpanderIconComponent {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, LOCALE_ID, OnInit, inject } from '@angular/core'
+import { Component, LOCALE_ID, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService, ServerService } from '@app/core'
@@ -75,6 +75,7 @@ ChartJSDefaults.color = getComputedStyle(document.documentElement).getPropertyVa
     './video-stats.component.scss'
   ],
   providers: [ NumberFormatterPipe ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     HelpComponent,

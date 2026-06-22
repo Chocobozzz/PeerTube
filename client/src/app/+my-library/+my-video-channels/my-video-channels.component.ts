@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import {
@@ -38,6 +38,7 @@ type DisplayFilter = 'all' | 'owned'
 @Component({
   templateUrl: './my-video-channels.component.html',
   styleUrls: [ './my-video-channels.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     FormsModule,

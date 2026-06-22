@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnChanges, booleanAttribute, inject, input, numberAttribute } from '@angular/core'
+import { Component, ElementRef, OnChanges, booleanAttribute, inject, input, numberAttribute, ChangeDetectionStrategy } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { Video } from '@peertube/peertube-models'
@@ -11,6 +11,7 @@ export type EmbedVideoInput = Pick<Video, 'name' | 'uuid'> & Partial<Pick<Video,
   selector: 'my-embed',
   styleUrls: [ './embed.component.scss' ],
   templateUrl: './embed.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class EmbedComponent implements OnChanges {

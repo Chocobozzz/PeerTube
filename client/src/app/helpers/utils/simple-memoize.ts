@@ -16,7 +16,7 @@ export function SimpleMemoize () {
   }
 }
 
-function getNewFunction (originalMethod: () => void, store: Map<any, any>) {
+function getNewFunction (originalMethod: (...args: any[]) => void, store: Map<any, any>) {
   return function (this: any, ...args: any[]) {
     if (args.length > 1) {
       throw new Error('Simple memoize only support 0 or 1 argument')

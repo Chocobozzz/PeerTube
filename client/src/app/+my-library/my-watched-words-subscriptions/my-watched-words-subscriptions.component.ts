@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { WatchedWordsSubscriptionService } from '@app/shared/shared-watched-words/watched-words-subscription.service'
 import {
   WatchedWordsSubscriptionsAdminOwnerComponent
@@ -7,6 +7,7 @@ import {
 @Component({
   templateUrl: './my-watched-words-subscriptions.component.html',
   imports: [ WatchedWordsSubscriptionsAdminOwnerComponent ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ WatchedWordsSubscriptionService ]
 })
 export class MyWatchedWordsSubscriptionsComponent {
