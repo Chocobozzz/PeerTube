@@ -109,26 +109,24 @@ npm run install-node-dependencies -- --production
 
 OLD_VERSION_DIRECTORY=$(readlink "$PEERTUBE_PATH/peertube-latest")
 
-# Switch to latest code version. POSIX ln has no -n option (it would
-# dereference an existing symlink pointing to a directory), so remove the
-# old symlink first. The window without peertube-latest is reduced to the
-# two syscalls below, and the guard on VERSION above prevents creating a
-# symlink to a non-existent path.
+
 rm -f "$PEERTUBE_PATH/peertube-latest"
 ln -s "$LATEST_VERSION_DIRECTORY" "$PEERTUBE_PATH/peertube-latest"
 
-# Verify the symlink resolves to the expected directory (POSIX-compliant
-# resolution with cd -P, since readlink -f is not POSIX)
 RESOLVED_TARGET=$(cd -P "$PEERTUBE_PATH/peertube-latest" 2>/dev/null && pwd) || RESOLVED_TARGET=""
-EXPECTED_TARGET=$(cd -P "$LATEST_VERSION_DIRECTORY" && pwd)
+EXPECTED_TARGET=$(cd -P "$LATEST_VERSION_DIRECTORY" 2>/dev/null && pwd) || {
+  echo "Error - could not resolve $LATEST_VERSION_DIRECTORY"
+  exit 1
+}
 
 if [ -z "$RESOLVED_TARGET" ] || [ "$RESOLVED_TARGET" != "$EXPECTED_TARGET" ]; then
   echo "Error - peertube-latest symlink is broken after update"
-  echo "Expected target: $LATEST_VERSION_DIRECTORY"
+  echo "  Expected : $EXPECTED_TARGET"
+  echo "  Resolved : ${RESOLVED_TARGET:-<unresolvable>}"
   exit 1
 fi
 
-cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/default.yaml
+cp "$PEERTUBE_PATH/peertube-latest/config/default.yaml" "$PEERTUBE_PATH/config/default.yaml"
 
 echo ""
 echo "=========================================================="
