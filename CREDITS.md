@@ -10,12 +10,12 @@
  * Александр
  * josé m
  * fran secs
- * Ihor Hordiichuk
- * Filip Bengtsson
- * kontrollanten
  * Payman Moghadam
- * Berto Te
+ * Ihor Hordiichuk
+ * kontrollanten
+ * Filip Bengtsson
  * Leif-Jöran Olsson
+ * Berto Te
  * Simon Brosdetzko
  * Jiri Podhorecky
  * Phongpanot
@@ -23,33 +23,35 @@
  * Tibbe Debats
  * GunChleoc
  * Hannes Ylä-Jääski
+ * Besnik Bleta
  * hecko
  * Laurent Ettouati
  * kimsible
- * Besnik Bleta
  * Zet
  * Ewout van Mansom
  * Aitor Salaberria
- * Clemens Schielicke
  * Jiří Podhorecký
+ * Clemens Schielicke
  * Luca Calcaterra
- * Racida S
  * Oliwier Jaszczyszyn
+ * Racida S
  * Balázs Meskó
  * Blood Axe
  * Marcin Mikołajczak
  * John Livingston
  * Wicklow
  * Eivind Ødegård
+ * Lefteris T.
  * Tirifto
  * Kim
- * Vodoyo Kamal
  * Wuzzy
+ * Vodoyo Kamal
  * 偶尔来巡山
  * ButterflyOfFire
+ * Fjuro
+ * Ricardo Simões
  * Armin
  * Fontan 030
- * Fjuro
  * Mohamad Reza
  * Ettore Atalan
  * Quentin PAGÈS
@@ -60,11 +62,13 @@
  * dxuser514
  * Andrea Gavioli
  * Mürteza MERT
- * Ricardo Simões
- * Gérald Niel
- * Duy
  * Eric Guichaoua
+ * Gérald Niel
+ * Aarón Guillén
+ * Duy
+ * Ghost of Sparta
  * Renne Rocha
+ * Sergej Jaskiewicz
  * Slimane Selyan AMIRI
  * Booteille
  * Dingzhong Chen
@@ -77,9 +81,7 @@
  * Ignacio Carrera González
  * Jorropo
  * Josh Morel
- * Aarón Guillén
  * BO41
- * Ghost of Sparta
  * Marc Strange
  * vachan
  * AP
@@ -90,6 +92,7 @@
  * Ľubomír Šima
  * Артём Котлубай
  * Ricardo Biloti
+ * fschaupp
  * 0que
  * Cedric F
  * Florent
@@ -110,6 +113,7 @@
  * Martin Hoefler
  * Porrumentzio
  * Poslovitch
+ * Thomas Citharel
  * Xabi
  * buoyantair
  * Adrià Martín
@@ -117,14 +121,16 @@
  * Balázs Úr
  * Echo Kilo
  * Jan Keromnes
+ * Kachel Kaiser
  * NorbiPeti
  * Siourdakis Thanos
- * Thomas Citharel
+ * Yaron Shahrabani
  * knuxify
  * tray
  * Agron Selimaj
  * Attila F
  * Caroline Chuong
+ * Cirnos
  * David Soh
  * Diazepan Medina
  * Jason Zhou
@@ -135,11 +141,10 @@
  * Txopi
  * Benjamin Bouvier
  * Cavernosa
- * Cirnos
+ * Framasoft Weblate user 1402
  * Joe Bill
  * Julien
  * Jure Repinc
- * Kachel Kaiser
  * Kemal Oktay Aktoğan
  * Lucas Declercq
  * Ryan He
@@ -147,6 +152,7 @@
  * Viorel-Cătălin Răpițeanu
  * matograine
  * Ahmed ABERWAG
+ * B
  * Daniel Santos
  * David Libeau
  * Ewald Arnold
@@ -154,6 +160,7 @@
  * Florent Poinsaut
  * Jayme Soares Almeida Cruz
  * Lety Does Stuff
+ * Miguel A. Bouzada Fdz.
  * Nassim Bounouas
  * Rafael Fontenelle
  * Thomas Kuntz
@@ -169,17 +176,18 @@
  * Anne-Gaelle Moulun
  * Arman
  * Asier Iturralde Sarasola
- * B
  * BRAINS YUM
  * Belkacem Mohammed
  * Bob Oob
  * Côme 744
  * Dimitri Gilbert
+ * ErikDK
  * Flavio F. M
  * Frank Chang
  * Green-Star
  * I_Automne
  * Ilia
+ * JNezbeda
  * Leonora
  * Marek Ľach
  * Micah Elizabeth Scott
@@ -208,6 +216,7 @@
  * DontUseGithub
  * Eder Etxebarria
  * Farooq Karimi Zadeh
+ * Franciszek Pilch
  * Frederic Bezies
  * Gianantonio Pini
  * Iñigo
@@ -235,11 +244,13 @@
  * Ugaitz
  * Vaclovas Intas
  * Vincent Finance
+ * Voxel
  * ar9708
  * aschaap
  * clementbrizard
  * gohoso9454
  * helabasa
+ * josé m.
  * kaiyou
  * max
  * roberto marcolin
@@ -305,11 +316,13 @@
  * Yohan Boniface
  * am97
  * anotheranonymoususer
+ * austin
  * dada
  * frankdelange
  * h3n3
  * iapellaniz
  * jonathanraes
+ * lawrence3699
  * legiorange
  * numéro6
  * saleh oukiki
@@ -331,6 +344,7 @@
  * Aurélien Béranger
  * Average Dude
  * BGR2
+ * Bau Baus
  * BitTube
  * Bojidar Marinov
  * Boo
@@ -345,7 +359,6 @@
  * Doug Luce
  * Emv
  * EndoGai
- * ErikDK
  * Fatih Özsoy
  * FediverseTV
  * Florent Fayolle
@@ -389,6 +402,7 @@
  * Qontinuum
  * Quentin
  * ROBERT MCDOWELL
+ * Racida S.
  * Ronan
  * SerCom_KC
  * Skid
@@ -405,7 +419,6 @@
  * Túlio Simões Martins Padilha
  * Valvin
  * XblateX
- * Yaron Shahrabani
  * YiDai
  * Yogesh K S
  * ahmadsharifian
@@ -429,6 +442,7 @@
  * vancha march
  * victor héry
  * 3risian
+ * @bpNjDvJU9xuGnG@esEW
  * A.D.R.S
  * Acid Chicken (硫酸鶏)
  * Adam Adamsky
@@ -471,6 +485,7 @@
  * Cadence Ember
  * Cale
  * Carlos García Gutiérrez
+ * Charles Fache
  * Charles de Lacombe
  * Christoph Geschwind
  * Chronos
@@ -538,6 +553,7 @@
  * Jarosław Maciejewski
  * Jaz Dina
  * Jeena
+ * Jeffrey Cheung
  * Jessica Fairchild
  * Jeston Tan
  * Jinn Koriech
@@ -562,6 +578,7 @@
  * Kody
  * Konstantinos Agiannis
  * Kyâne Pichou
+ * Lachlan Stevens
  * Leo Mouyna
  * Lesterpig
  * Levi Bard
@@ -603,6 +620,7 @@
  * Mélanie Pin
  * Nataly Rocha
  * Nathanaël J
+ * Nele
  * Net
  * Nicolas Fortin
  * Niklas Reimer
@@ -611,6 +629,7 @@
  * Nuño Sempere
  * Olivier Jolly
  * Pablo Joubert
+ * Packingdustry
  * Paul FLORENCE
  * Paul V
  * Pavel 7 Tomsk
@@ -643,6 +662,7 @@
  * Sankar
  * SansPseudoFix
  * Sarah Lewis
+ * Scott Ruona
  * Scott Starkey
  * Sebastian Paweł Wolski
  * Seth Falco
@@ -676,6 +696,7 @@
  * VeryREAL
  * Vik
  * Vincent Stakenburg
+ * Viny Brun Kriesang
  * Weblate
  * WhiredPlanck
  * William Cliff
@@ -693,6 +714,7 @@
  * alexma233
  * allmiha2
  * aloxe
+ * amlor
  * anmol26s
  * april
  * augier
@@ -701,6 +723,8 @@
  * bsky
  * ceasermikes002
  * chagai95
+ * chaoliang yan
+ * cinereal
  * ctlaltdefeat
  * decentral1se
  * djblu2003dk-tech
@@ -712,7 +736,6 @@
  * jameskimmel
  * jinubook
  * jomo
- * josé m.
  * kiro-dev28
  * kukhariev
  * lambdacastix
