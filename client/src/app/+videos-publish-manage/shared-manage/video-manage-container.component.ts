@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http'
-import { booleanAttribute, Component, inject, input, OnDestroy, OnInit, output } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnDestroy, OnInit, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { Notifier, ScreenService } from '@app/core'
@@ -18,6 +18,7 @@ import { VideoManageMenuComponent } from './video-manage-menu.component'
   selector: 'my-video-manage-container',
   styleUrls: [ './video-manage-container.component.scss' ],
   templateUrl: './video-manage-container.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
     FormsModule,

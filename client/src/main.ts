@@ -10,7 +10,6 @@ import {
   provideZoneChangeDetection
 } from '@angular/core'
 import { BrowserModule, bootstrapApplication, enableDebugTools } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouteReuseStrategy, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { PTPrimeTheme } from '@app/core/theme/primeng/primeng-theme'
@@ -75,7 +74,6 @@ const bootstrap = () => {
 
       importProvidersFrom(
         BrowserModule,
-        BrowserAnimationsModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
       ),
 

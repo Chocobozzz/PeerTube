@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { ChangeDetectorRef, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/+videos-publish-manage/shared-manage/common/video-caption-edit.model'
 import { VIDEO_CAPTION_FILE_CONTENT_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
@@ -37,6 +37,7 @@ type Segment = {
   selector: 'my-video-caption-edit-modal',
   styleUrls: [ './video-caption-edit-modal.component.scss' ],
   templateUrl: './video-caption-edit-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

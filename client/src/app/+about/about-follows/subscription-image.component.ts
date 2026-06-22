@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ServerService } from '@app/core'
 import { findAppropriateImageFileUrl } from '@root-helpers/images'
 
@@ -7,6 +7,7 @@ import { findAppropriateImageFileUrl } from '@root-helpers/images'
   templateUrl: './subscription-image.component.html',
   styleUrls: [ './subscription-image.component.scss' ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: []
 })
 export class SubscriptionImageComponent implements OnInit {

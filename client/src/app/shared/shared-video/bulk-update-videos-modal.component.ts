@@ -1,5 +1,5 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { Component, computed, ElementRef, inject, output, signal, viewChild } from '@angular/core'
+import { Component, computed, ElementRef, inject, output, signal, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { form, FormField, required } from '@angular/forms/signals'
 import { AuthService, Notifier, ServerService } from '@app/core'
@@ -43,6 +43,7 @@ const BULK_PRIVACY_EXCLUDE = new Set<VideoPrivacyType>([ VideoPrivacy.PASSWORD_P
   selector: 'my-bulk-update-videos-modal',
   styleUrls: [ './bulk-update-videos-modal.component.scss' ],
   templateUrl: './bulk-update-videos-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     CdkStepperModule,

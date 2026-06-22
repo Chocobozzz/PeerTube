@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit, viewChild } from '@angular/core'
+import { Component, inject, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { VideoChannelSyncService } from '@app/shared/shared-main/channel/video-channel-sync.service'
@@ -16,6 +16,7 @@ import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../sh
 
 @Component({
   templateUrl: './my-video-channel-syncs.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     GlobalIconComponent,

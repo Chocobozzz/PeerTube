@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -32,6 +32,7 @@ type ColumnName =
   selector: 'my-video-comment-list-admin-owner',
   templateUrl: './video-comment-list-admin-owner.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './video-comment-list-admin-owner.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ActionDropdownComponent,
     ActorAvatarComponent,

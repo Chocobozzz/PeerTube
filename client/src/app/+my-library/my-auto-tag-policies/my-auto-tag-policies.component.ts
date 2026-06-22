@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, HtmlRendererService, Notifier } from '@app/core'
@@ -9,6 +9,7 @@ import { AutoTagPoliciesTag } from './my-auto-tag-policies.resolver'
 
 @Component({
   templateUrl: './my-auto-tag-policies.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     PeertubeCheckboxComponent

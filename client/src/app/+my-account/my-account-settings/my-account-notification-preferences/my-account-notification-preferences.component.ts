@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, model } from '@angular/core'
+import { Component, OnInit, inject, model, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
@@ -11,6 +11,7 @@ import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.
   selector: 'my-account-notification-preferences',
   templateUrl: './my-account-notification-preferences.component.html',
   styleUrls: [ './my-account-notification-preferences.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InputSwitchComponent, FormsModule ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {

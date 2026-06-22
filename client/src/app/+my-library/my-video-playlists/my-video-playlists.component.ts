@@ -1,5 +1,5 @@
 import { DragDropModule } from '@angular/cdk/drag-drop'
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ScreenService } from '@app/core'
@@ -34,6 +34,7 @@ const debugLogger = debug('peertube:my-video-playlists')
 @Component({
   templateUrl: './my-video-playlists.component.html',
   styleUrls: [ './my-video-playlists.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     GlobalIconComponent,
@@ -216,7 +217,7 @@ export class MyVideoPlaylistsComponent implements OnInit, OnDestroy {
   private _dataLoader (options: {
     pagination: RestPagination
     sort: SortMeta
-    search: string
+    search?: string
   }) {
     const { pagination, sort, search } = options
 

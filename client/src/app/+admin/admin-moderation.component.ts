@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core'
+import { Component, DestroyRef, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RouterOutlet } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
@@ -8,6 +8,7 @@ import { UserRight, UserRightType } from '@peertube/peertube-models'
 @Component({
   selector: 'my-admin-moderation',
   templateUrl: './admin-moderation.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class AdminModerationComponent implements OnInit {

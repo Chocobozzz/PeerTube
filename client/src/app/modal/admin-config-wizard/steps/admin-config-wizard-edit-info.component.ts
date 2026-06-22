@@ -1,6 +1,6 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, inject, input, numberAttribute, OnInit, output } from '@angular/core'
+import { booleanAttribute, Component, inject, input, numberAttribute, OnInit, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService, ThemeService } from '@app/core'
 import { HEX_COLOR_CODE_VALIDATOR } from '@app/shared/form-validators/common-validators'
@@ -31,6 +31,7 @@ export type FormEditInfo = FormDefaultTyped<Form>
   selector: 'my-admin-config-wizard-edit-info',
   templateUrl: './admin-config-wizard-edit-info.component.html',
   styleUrls: [ './admin-config-wizard-edit-info.component.scss', '../shared/admin-config-wizard-modal-common.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

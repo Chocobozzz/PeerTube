@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common'
-import { Component, input, OnChanges } from '@angular/core'
+import { Component, input, OnChanges, ChangeDetectionStrategy } from '@angular/core'
 import { Video, VideoPrivacy, VideoState } from '@peertube/peertube-models'
 import { getVideoStateBadgeClass, getVideoStateLabel } from './video-state-utils'
 
 @Component({
   selector: 'my-video-state-badge',
   templateUrl: './video-state-badge.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule ]
 })
 export class VideoStateBadgeComponent implements OnChanges {

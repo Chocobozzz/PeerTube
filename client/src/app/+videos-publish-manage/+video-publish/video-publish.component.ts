@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common'
-import { Component, HostListener, OnInit, inject, viewChild } from '@angular/core'
+import { Component, HostListener, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, AuthUser, CanComponentDeactivate, CanDeactivateGuard, HooksService, ServerService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -22,6 +22,7 @@ import { VideoPublishResolverData } from './video-publish.resolver'
   selector: 'my-video-publish',
   templateUrl: './video-publish.component.html',
   styleUrls: [ './video-publish.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     NgTemplateOutlet,

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 
 @Component({
   templateUrl: './my-library.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ RouterOutlet, HorizontalMenuComponent ]
 })
 export class MyLibraryComponent implements OnInit {

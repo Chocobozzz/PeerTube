@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, inject, input, OnInit } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { AuthService } from '@app/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '../shared-actor-image/actor-avatar.component'
@@ -9,6 +9,7 @@ import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-
   selector: 'my-actor-cell',
   templateUrl: './actor-cell.component.html',
   styleUrls: [ './actor-cell.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
     CollaboratorStateComponent,

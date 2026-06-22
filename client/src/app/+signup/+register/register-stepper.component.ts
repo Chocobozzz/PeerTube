@@ -1,6 +1,6 @@
 import { CdkStep, CdkStepper } from '@angular/cdk/stepper'
 import { NgClass, NgTemplateOutlet } from '@angular/common'
-import { Component } from '@angular/core'
+import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 
 @Component({
@@ -8,6 +8,7 @@ import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.compo
   templateUrl: './register-stepper.component.html',
   styleUrls: [ './register-stepper.component.scss' ],
   providers: [ { provide: CdkStepper, useExisting: RegisterStepperComponent } ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgClass, GlobalIconComponent, NgTemplateOutlet ]
 })
 export class RegisterStepperComponent extends CdkStepper {

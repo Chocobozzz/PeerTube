@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { TokenSessionService } from '@app/shared/shared-users/token-session.service'
 import { TokenSession, User } from '@peertube/peertube-models'
@@ -10,6 +10,7 @@ import { UAParser } from 'ua-parser-js'
   templateUrl: './account-token-sessions.component.html',
   styleUrls: [ './account-token-sessions.component.scss' ],
   imports: [ CommonModule ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ TokenSessionService ]
 })
 export class AccountTokenSessionsComponent implements OnInit {

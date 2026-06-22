@@ -12,7 +12,8 @@ import {
   output,
   SimpleChanges,
   TemplateRef,
-  viewChild
+  viewChild,
+  ChangeDetectionStrategy
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -78,6 +79,7 @@ type BulkActions<Data> = DropdownAction<Data[]>[][] | DropdownAction<Data[]>[]
   selector: 'my-table',
   templateUrl: './table.component.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

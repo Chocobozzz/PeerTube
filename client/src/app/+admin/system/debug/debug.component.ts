@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
 import { Debug } from '@peertube/peertube-models'
@@ -7,6 +7,7 @@ import { DebugService } from './debug.service'
 @Component({
   templateUrl: './debug.component.html',
   styleUrls: [ './debug.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule ]
 })
 export class DebugComponent implements OnInit {

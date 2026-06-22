@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, viewChild } from '@angular/core'
+import { Component, DestroyRef, inject, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import {
@@ -26,6 +26,7 @@ import { PeerTubeTemplateDirective } from '../../shared/shared-main/common/peert
 @Component({
   templateUrl: './my-history.component.html',
   styleUrls: [ './my-history.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ButtonComponent,
     SearchInputComponent,

@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { booleanAttribute, ChangeDetectorRef, Component, forwardRef, OnInit, inject, input, model, output } from '@angular/core'
+import { booleanAttribute, ChangeDetectorRef, Component, forwardRef, OnInit, inject, input, model, output, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { secondsToTime, timeToInt } from '@peertube/peertube-core-utils'
 import { InputMaskModule } from 'primeng/inputmask'
@@ -15,6 +15,7 @@ import { InputMaskModule } from 'primeng/inputmask'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InputMaskModule, FormsModule, NgClass ]
 })
 export class TimestampInputComponent implements ControlValueAccessor, OnInit {

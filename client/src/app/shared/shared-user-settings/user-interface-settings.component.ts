@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, inject, input, OnDestroy, OnInit } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, ThemeService, UserService } from '@app/core'
 import {
@@ -22,6 +22,7 @@ type Form = {
   selector: 'my-user-interface-settings',
   templateUrl: './user-interface-settings.component.html',
   styleUrls: [ './user-interface-settings.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, SelectOptionsComponent ]
 })
 export class UserInterfaceSettingsComponent implements OnInit, OnDestroy {

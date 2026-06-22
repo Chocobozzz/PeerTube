@@ -1,4 +1,4 @@
-import { Component, inject, output, signal } from '@angular/core'
+import { Component, inject, output, signal, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { form, FormField } from '@angular/forms/signals'
 import { Notifier } from '@app/core'
@@ -12,6 +12,7 @@ import { VideoPlaylistService } from '../video-playlist.service'
   selector: 'my-playlist-create-block',
   templateUrl: './playlist-create-block.component.html',
   styleUrls: [ './playlist-create-block.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

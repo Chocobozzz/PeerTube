@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common'
-import { Component, OnChanges, inject, input, output, viewChild } from '@angular/core'
+import { Component, OnChanges, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RedirectService, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -17,6 +17,7 @@ import { VideoRateComponent } from './video-rate.component'
   selector: 'my-action-buttons',
   templateUrl: './action-buttons.component.html',
   styleUrls: [ './action-buttons.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     VideoRateComponent,
     NgbTooltip,

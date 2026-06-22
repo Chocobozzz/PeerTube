@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core'
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core'
 
 /*
  * Allows to lazy load global player styles in the watch component
@@ -10,6 +10,7 @@ import { Component, ViewEncapsulation } from '@angular/core'
   styleUrls: [ './player-styles.component.scss' ],
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class PlayerStylesComponent {

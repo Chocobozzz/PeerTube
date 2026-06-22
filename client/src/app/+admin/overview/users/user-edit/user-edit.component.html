@@ -6,12 +6,12 @@
 
     @if (isCreation()) {
       <li class="breadcrumb-item" i18n>Create</li>
-    } @else {
+    } @else if (user) {
       <li class="breadcrumb-item" i18n>Edit</li>
 
       <li class="breadcrumb-item" aria-current="page">
         @if (user) {
-          <a [routerLink]="[ '/a', user?.username ]">{{ user?.username }}</a>
+          <a [routerLink]="[ '/a', user.username ]">{{ user.username }}</a>
         }
       </li>
     }
@@ -40,13 +40,13 @@
         </a>
       </div>
       <div>
-        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + user?.account.displayName + '&quot;' }">
+        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'searchReportee': user.account.displayName }">
           <div class="dashboard-num">{{ user.abusesCount }}</div>
           <div class="dashboard-label" i18n>Incriminated in reports</div>
         </a>
       </div>
       <div>
-        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + user?.account.displayName + '&quot; state:accepted' }">
+        <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'searchReporter': user.account.displayName, 'state': 'accepted' }">
           <div class="dashboard-num">{{ user.abusesAcceptedCount }} / {{ user.abusesCreatedCount }}</div>
           <div class="dashboard-label" i18n>Authored reports accepted</div>
         </a>

@@ -1,5 +1,5 @@
 
-import { Component, OnInit, input, output } from '@angular/core'
+import { Component, OnInit, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
@@ -8,6 +8,7 @@ import { InputTextComponent } from '../../shared-forms/input-text.component'
 @Component({
   selector: 'my-subtitle-files-download',
   templateUrl: './subtitle-files-download.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     InputTextComponent,
     NgbNavModule

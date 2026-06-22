@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, inject, input, output } from '@angular/core'
+import { AfterViewInit, Component, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
@@ -28,6 +28,7 @@ const debugLogger = debug('peertube:video-publish')
   selector: 'my-video-import-url',
   templateUrl: './video-import-url.component.html',
   styleUrls: [ '../shared/common-publish.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     HelpComponent,

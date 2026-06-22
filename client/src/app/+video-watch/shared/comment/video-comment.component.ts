@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnChanges, OnInit, TemplateRef, inject, input, model, output, viewChild } from '@angular/core'
+import { Component, OnChanges, OnInit, TemplateRef, inject, input, model, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { MarkdownService, Notifier, ScreenService, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'
@@ -22,6 +22,7 @@ import { VideoCommentAddComponent } from './video-comment-add.component'
   selector: 'my-video-comment',
   templateUrl: './video-comment.component.html',
   styleUrls: [ './video-comment.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgClass,
     ActorAvatarComponent,

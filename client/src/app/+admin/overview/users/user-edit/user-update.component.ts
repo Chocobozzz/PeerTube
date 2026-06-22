@@ -1,5 +1,5 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
@@ -30,6 +30,7 @@ import { AccountTokenSessionsComponent } from '@app/shared/shared-users/account-
   selector: 'my-user-update',
   templateUrl: './user-edit.component.html',
   styleUrls: [ './user-edit.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     NgTemplateOutlet,

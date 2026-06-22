@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core'
+import { AfterViewInit, Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, CanComponentDeactivate, HooksService, Notifier } from '@app/core'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -15,6 +15,7 @@ import { VideoChannelEdit } from './edit/video-channel-edit.model'
   <my-video-channel-edit [videoChannelEdit]="videoChannelEdit" [saveFn]="saveFn">
   </my-video-channel-edit>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     VideoChannelEditComponent
   ]

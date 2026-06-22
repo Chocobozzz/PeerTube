@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core'
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core'
 import { Account } from '../shared-main/account/account.model'
 
 export type AccountBlockBadgeInput = Partial<
@@ -17,6 +17,7 @@ export type AccountBlockBadgeInput = Partial<
   selector: 'my-account-block-badges',
   styleUrls: [ './account-block-badges.component.scss' ],
   templateUrl: './account-block-badges.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: []
 })
 export class AccountBlockBadgesComponent {

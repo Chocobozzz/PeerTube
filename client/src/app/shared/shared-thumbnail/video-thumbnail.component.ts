@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, input, OnChanges, output, viewChild } from '@angular/core'
+import { booleanAttribute, Component, input, OnChanges, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
@@ -25,6 +25,7 @@ export type VideoThumbnailInput = Pick<
   selector: 'my-video-thumbnail',
   styleUrls: [ './video-thumbnail.component.scss' ],
   templateUrl: './video-thumbnail.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent, FromNowPipe ]
 })
 export class VideoThumbnailComponent implements OnChanges {

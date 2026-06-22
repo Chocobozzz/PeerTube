@@ -1,5 +1,5 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
@@ -32,6 +32,7 @@ import { UserPasswordComponent } from './user-password.component'
   selector: 'my-user-create',
   templateUrl: './user-edit.component.html',
   styleUrls: [ './user-edit.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     CommonModule,

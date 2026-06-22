@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ServerService } from '@app/core'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
@@ -9,6 +9,7 @@ import { InstanceFeaturesTableComponent } from '@app/shared/shared-instance/inst
 @Component({
   templateUrl: './about-instance-tech.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ PluginSelectorDirective, InstanceFeaturesTableComponent ]
 })
 export class AboutInstanceTechComponent implements OnInit {

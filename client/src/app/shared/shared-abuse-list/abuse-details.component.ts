@@ -1,4 +1,4 @@
-import { Component, OnInit, input } from '@angular/core'
+import { Component, OnInit, input, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { durationToString } from '@app/helpers'
 import { AbusePredefinedReasonsString } from '@peertube/peertube-models'
@@ -12,6 +12,7 @@ import { ProcessedAbuse } from './processed-abuse.model'
   selector: 'my-abuse-details',
   templateUrl: './abuse-details.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-details.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ RouterLink, ActorAvatarComponent, GlobalIconComponent, EmbedComponent, PTDatePipe ]
 })
 export class AbuseDetailsComponent implements OnInit {

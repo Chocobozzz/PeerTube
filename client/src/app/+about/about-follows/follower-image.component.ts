@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ServerService } from '@app/core'
 import { findAppropriateImageFileUrl } from '@root-helpers/images'
 
@@ -7,6 +7,7 @@ import { findAppropriateImageFileUrl } from '@root-helpers/images'
   templateUrl: './follower-image.component.html',
   styleUrls: [ './follower-image.component.scss' ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: []
 })
 export class FollowerImageComponent implements OnInit {

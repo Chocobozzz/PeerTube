@@ -1,4 +1,4 @@
-import { Component, inject, input, viewChild } from '@angular/core'
+import { Component, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { Notifier } from '@app/core'
 import { RouterLink } from '@angular/router'
 import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
@@ -18,6 +18,7 @@ type DataLoaderParameter = DataLoaderOptionsBase & {
 @Component({
   selector: 'my-generic-server-blocklist',
   templateUrl: './generic-server-blocklist.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     TableComponent,
     NumberFormatterPipe,

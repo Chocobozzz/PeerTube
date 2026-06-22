@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, inject, input, LOCALE_ID, OnChanges } from '@angular/core'
+import { booleanAttribute, Component, inject, input, LOCALE_ID, OnChanges, ChangeDetectionStrategy } from '@angular/core'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { Video, VideoPlaylistPrivacy, VideoPlaylistPrivacyType, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
@@ -7,6 +7,7 @@ import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
 @Component({
   selector: 'my-privacy-badge',
   templateUrl: './privacy-badge.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, NgbTooltipModule ]
 })
 export class PrivacyBadgeComponent implements OnChanges {

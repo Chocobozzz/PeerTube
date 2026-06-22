@@ -1,5 +1,5 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, numberAttribute, viewChild } from '@angular/core'
+import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, numberAttribute, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ActorImage } from '@peertube/peertube-models'
@@ -18,6 +18,7 @@ export type ActorAvatarType = 'channel' | 'account' | 'instance' | 'unlogged'
   selector: 'my-actor-avatar',
   styleUrls: [ './actor-avatar.component.scss' ],
   templateUrl: './actor-avatar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, NgTemplateOutlet, RouterLink ]
 })
 export class ActorAvatarComponent implements OnInit, OnChanges {

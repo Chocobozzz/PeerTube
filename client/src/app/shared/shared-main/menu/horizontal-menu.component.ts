@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, OnChanges, OnDestroy, OnInit, inject, input } from '@angular/core'
+import { booleanAttribute, Component, OnChanges, OnDestroy, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import { logger } from '@root-helpers/logger'
@@ -33,6 +33,7 @@ export type HorizontalMenuEntry = {
   selector: 'my-horizontal-menu',
   templateUrl: './horizontal-menu.component.html',
   styleUrls: [ './horizontal-menu.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     RouterModule,

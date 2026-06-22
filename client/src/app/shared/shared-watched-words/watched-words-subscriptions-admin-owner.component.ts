@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, ElementRef, inject, input, signal, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, input, signal, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { form, FormField, pattern, required } from '@angular/forms/signals'
 import { AuthService, ConfirmService, Notifier } from '@app/core'
 import { urlPattern } from '@app/shared/form-validators/common-validators'
@@ -22,6 +22,7 @@ type AddSubscriptionFormModel = {
 @Component({
   selector: 'my-watched-words-subscriptions-admin-owner',
   templateUrl: './watched-words-subscriptions-admin-owner.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormErrorComponent,

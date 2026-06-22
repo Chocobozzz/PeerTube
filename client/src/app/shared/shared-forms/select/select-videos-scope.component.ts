@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit, input } from '@angular/core'
+import { Component, forwardRef, OnInit, input, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { SelectOptionsComponent } from './select-options.component'
@@ -22,6 +22,7 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, SelectOptionsComponent ]
 })
 export class SelectVideosScopeComponent implements ControlValueAccessor, OnInit {

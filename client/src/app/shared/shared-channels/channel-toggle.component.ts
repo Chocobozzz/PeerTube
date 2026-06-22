@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, forwardRef, inject, input, model } from '@angular/core'
+import { Component, forwardRef, inject, input, model, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { AuthService } from '@app/core'
 import { VideoChannel } from '@peertube/peertube-models'
@@ -18,6 +18,7 @@ import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-
     }
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     ActorAvatarComponent,

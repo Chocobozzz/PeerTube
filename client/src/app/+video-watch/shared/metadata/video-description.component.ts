@@ -1,4 +1,4 @@
-import { Component, OnChanges, ElementRef, inject, input, output, viewChild } from '@angular/core'
+import { Component, OnChanges, ElementRef, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import { NgClass } from '@angular/common'
 import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
@@ -8,6 +8,7 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
   selector: 'my-video-description',
   templateUrl: './video-description.component.html',
   styleUrls: [ './video-description.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ TimestampRouteTransformerDirective, NgClass ]
 })
 export class VideoDescriptionComponent implements OnChanges {

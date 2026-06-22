@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ServerService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -9,6 +9,7 @@ import { ResolverData } from '../about-instance.resolver'
 @Component({
   templateUrl: './about-instance-moderation.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ PluginSelectorDirective, GlobalIconComponent ]
 })
 export class AboutInstanceModerationComponent implements OnInit {

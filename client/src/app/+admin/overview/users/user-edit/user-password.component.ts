@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
 import { getUserNewPasswordValidator } from '@app/shared/form-validators/user-validators'
@@ -12,6 +12,7 @@ import { UserUpdate } from '@peertube/peertube-models'
   selector: 'my-user-password',
   templateUrl: './user-password.component.html',
   styleUrls: [ './user-password.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class UserPasswordComponent extends FormReactive implements OnInit {

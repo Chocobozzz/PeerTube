@@ -9,7 +9,8 @@ import {
   inject,
   input,
   numberAttribute,
-  TemplateRef
+  TemplateRef,
+  ChangeDetectionStrategy
 } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SelectModule } from 'primeng/select'
@@ -28,6 +29,7 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ SelectModule, FormsModule, CommonModule ]
 })
 export class SelectOptionsComponent implements ControlValueAccessor {

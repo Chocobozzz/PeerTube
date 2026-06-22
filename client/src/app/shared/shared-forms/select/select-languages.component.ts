@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, input, OnInit } from '@angular/core'
+import { Component, forwardRef, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -30,6 +30,7 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ SelectCheckboxDefaultAllComponent, FormsModule ]
 })
 export class SelectLanguagesComponent implements ControlValueAccessor, OnInit {

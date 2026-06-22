@@ -1,5 +1,5 @@
 
-import { Component, input } from '@angular/core'
+import { Component, input, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
@@ -9,6 +9,7 @@ import { HelpComponent } from '../buttons/help.component'
   selector: 'my-unavailable-menu-entry',
   templateUrl: './unavailable-menu-entry.component.html',
   styleUrls: [ './unavailable-menu-entry.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
     FormsModule,

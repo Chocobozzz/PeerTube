@@ -1,10 +1,11 @@
-import { Component, OnInit, input, numberAttribute } from '@angular/core'
+import { Component, OnInit, input, numberAttribute, ChangeDetectionStrategy } from '@angular/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
 
 @Component({
   selector: 'my-account-on-channel-avatar',
   templateUrl: './account-on-channel-avatar.component.html',
   styleUrls: [ './account-on-channel-avatar.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ ActorAvatarComponent ]
 })
 export class AccountOnChannelAvatarComponent implements OnInit {

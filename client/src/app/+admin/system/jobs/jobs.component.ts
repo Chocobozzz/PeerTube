@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, viewChild } from '@angular/core'
+import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
@@ -20,6 +20,7 @@ type DataLoaderParameter = Parameters<JobsComponent['_dataLoader']>[0]
   selector: 'my-jobs',
   templateUrl: './jobs.component.html',
   styleUrls: [ './jobs.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

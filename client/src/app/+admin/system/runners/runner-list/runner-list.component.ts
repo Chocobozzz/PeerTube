@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { Runner } from '@peertube/peertube-models'
@@ -10,6 +10,7 @@ import { RunnerService } from '../runner.service'
 @Component({
   selector: 'my-runner-list',
   templateUrl: './runner-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ActionDropdownComponent,
     PTDatePipe,

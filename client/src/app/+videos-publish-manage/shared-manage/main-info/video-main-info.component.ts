@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
@@ -89,6 +89,7 @@ type Form = {
     '../common/video-manage-page-common.scss'
   ],
   templateUrl: './video-main-info.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

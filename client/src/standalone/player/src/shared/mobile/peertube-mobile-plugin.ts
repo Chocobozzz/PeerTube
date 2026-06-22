@@ -69,7 +69,9 @@ class PeerTubeMobilePlugin extends Plugin {
     if (this.onFullScreenChangeHandler) this.player.off('fullscreenchange', this.onFullScreenChangeHandler)
     if (this.onTouchStartHandler) this.player.off('touchstart', this.onFullScreenChangeHandler)
     if (this.onMobileButtonTouchStartHandler) {
-      this.peerTubeMobileButtons?.el().removeEventListener('touchstart', this.onMobileButtonTouchStartHandler)
+      const el = this.peerTubeMobileButtons?.el() as HTMLElement
+
+      el?.removeEventListener('touchstart', this.onMobileButtonTouchStartHandler)
     }
 
     super.dispose()
@@ -145,7 +147,8 @@ class PeerTubeMobilePlugin extends Plugin {
       handleTouchStart(event)
     }
 
-    this.peerTubeMobileButtons.el().addEventListener('touchstart', this.onMobileButtonTouchStartHandler, { passive: false })
+    const el = this.peerTubeMobileButtons.el() as HTMLElement
+    el.addEventListener('touchstart', this.onMobileButtonTouchStartHandler, { passive: false })
   }
 
   private onDoubleTap (event: TouchEvent) {

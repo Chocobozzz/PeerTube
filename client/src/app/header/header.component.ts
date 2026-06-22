@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import { AuthService, AuthStatus, AuthUser, HotkeysService, MenuService, RedirectService, ScreenService, ServerService } from '@app/core'
 import { NotificationDropdownComponent } from '@app/header/notification-dropdown.component'
@@ -25,6 +25,7 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
   selector: 'my-header',
   templateUrl: './header.component.html',
   styleUrls: [ './header.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     NotificationDropdownComponent,
