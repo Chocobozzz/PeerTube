@@ -341,16 +341,24 @@
       "additionalProperties": false
     },
     "redis": {
-      "description": "Redis server for short time storage You can also specify a 'socket' path to a unix socket but first need to set 'hostname' and 'port' to null",
+      "description": "Redis server for short time storage",
       "type": "object",
       "properties": {
         "hostname": {
+          "description": "You can also specify a 'socket' path to a unix socket but first need to set 'hostname' and 'port' to null",
           "type": "string",
           "default": "127.0.0.1"
         },
         "port": {
           "type": "integer",
           "default": 6379
+        },
+        "socket": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "default": null
         },
         "auth": {
           "type": [
@@ -2592,6 +2600,23 @@
                 }
               },
               "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "blocklist": {
+      "type": "object",
+      "properties": {
+        "public_log": {
+          "description": "Enable /api/v1/server/blocklist/public-log endpoint on your instance to share your blocklist with other instances",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
             }
           },
           "additionalProperties": false
