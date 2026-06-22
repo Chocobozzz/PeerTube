@@ -1250,7 +1250,7 @@ paths:
           required: true
           description: The type of the job to cancel
           schema:
-            type: string
+            $ref: '#/components/schemas/JobType'
         - name: jobId
           in: path
           required: true
@@ -9695,21 +9695,7 @@ components:
       required: false
       description: job type
       schema:
-        type: string
-        enum:
-          - activitypub-follow
-          - activitypub-http-broadcast
-          - activitypub-http-fetcher
-          - activitypub-http-unicast
-          - email
-          - video-transcoding
-          - video-file-import
-          - video-import
-          - videos-stats
-          - activitypub-refresher
-          - video-redundancy
-          - video-live-ending
-          - video-channel-import
+        $ref: '#/components/schemas/JobType'
     followState:
       name: state
       in: query
@@ -12325,6 +12311,39 @@ components:
         - thumbnails
         - captions
 
+    JobType:
+      type: string
+      enum:
+        - activitypub-cleaner
+        - activitypub-follow
+        - activitypub-http-broadcast
+        - activitypub-http-broadcast-parallel
+        - activitypub-http-fetcher
+        - activitypub-http-unicast
+        - activitypub-refresher
+        - actor-keys
+        - after-video-channel-import
+        - build-automatic-tags
+        - create-user-export
+        - email
+        - federate-video
+        - generate-video-storyboard
+        - import-user-archive
+        - manage-video-torrent
+        - move-to-file-system
+        - move-to-object-storage
+        - notify
+        - transcoding-job-builder
+        - video-channel-import
+        - video-file-import
+        - video-import
+        - video-live-ending
+        - video-redundancy
+        - video-studio-edition
+        - video-transcoding
+        - video-transcription
+        - videos-stats
+
     Job:
       properties:
         id:
@@ -12338,20 +12357,7 @@ components:
             - waiting
             - delayed
         type:
-          type: string
-          enum:
-            - activitypub-http-unicast
-            - activitypub-http-broadcast
-            - activitypub-http-fetcher
-            - activitypub-follow
-            - video-file-import
-            - video-transcoding
-            - email
-            - video-import
-            - videos-stats
-            - activitypub-refresher
-            - video-redundancy
-            - video-channel-import
+          $ref: '#/components/schemas/JobType'
         data:
           type: object
           additionalProperties: true
