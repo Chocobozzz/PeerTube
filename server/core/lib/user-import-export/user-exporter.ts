@@ -106,9 +106,9 @@ export class UserExporter {
 
     return new Promise<void>(async (res, rej) => {
       try {
-        const archiver = await import('archiver')
+        const archiverModule = await import('archiver')
 
-        this.archive = archiver.default('zip', {
+        this.archive = new archiverModule.ZipArchive({
           zlib: {
             level: 9
           }

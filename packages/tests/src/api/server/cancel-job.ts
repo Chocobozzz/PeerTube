@@ -3,6 +3,7 @@
 import { wait } from '@peertube/peertube-core-utils'
 import { Job, JobState, JobType, VideoDetails, VideoPrivacy, VideoStudioTask } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
+import { generateHighBitrateVideo } from '@tests/shared/generate.js'
 import { expect } from 'chai'
 
 async function waitForActiveJob (server: PeerTubeServer, uuid: string, jobType: JobType) {
@@ -36,12 +37,15 @@ async function findActiveJobByUUID (server: PeerTubeServer, uuid: string, jobTyp
 describe('Test cancelling running jobs', function () {
   let server: PeerTubeServer
   let video: VideoDetails
+  let highBitrateFixture: string
 
   before(async function () {
     this.timeout(120_000)
 
     server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
+
+    highBitrateFixture = await generateHighBitrateVideo()
 
     // Enable transcoding with a single concurrent worker so the job stays in "active" long enough for us to cancel it.
     await server.config.enableTranscoding({ resolutions: 'max', hls: true, webVideo: true })
@@ -54,7 +58,7 @@ describe('Test cancelling running jobs', function () {
       attributes: {
         name: 'to cancel',
         privacy: VideoPrivacy.PUBLIC,
-        fixture: 'video_high_bitrate_1080p.mp4'
+        fixture: highBitrateFixture
       },
       waitTorrentGeneration: false
     })
@@ -85,7 +89,7 @@ describe('Test cancelling running jobs', function () {
       attributes: {
         name: 'to cancel transcription',
         privacy: VideoPrivacy.PUBLIC,
-        fixture: 'video_high_bitrate_1080p.mp4'
+        fixture: highBitrateFixture
       },
       waitTorrentGeneration: false
     })

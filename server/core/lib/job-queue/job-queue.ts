@@ -235,8 +235,6 @@ class JobQueue {
   }
 
   private buildWorker (handlerName: JobType) {
-    let worker: Worker
-
     const workerOptions: WorkerOptions = {
       autorun: false,
       concurrency: this.getJobConcurrency(handlerName),
@@ -265,7 +263,7 @@ class JobQueue {
       return Hooks.wrapPromiseFun(handler, { job, signal }, 'filter:job-queue.process.result')
     }
 
-    worker = new Worker(handlerName, processor, workerOptions)
+    const worker = new Worker(handlerName, processor, workerOptions)
 
     worker.on('failed', (job, err) => {
       const logLevel = silentFailure.has(handlerName)

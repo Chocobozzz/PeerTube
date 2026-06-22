@@ -1,7 +1,7 @@
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { copy, remove } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
-import sharp from 'sharp'
+import sharp, { type Metadata, type Sharp } from 'sharp'
 import { logger } from './logger.js'
 
 export function generateImageFilename (extension = '.jpg') {
@@ -110,8 +110,8 @@ async function sharpProcessor (options: {
 }
 
 async function autoResize (options: {
-  sharpInstance: sharp.Sharp
-  metadata: sharp.Metadata
+  sharpInstance: Sharp
+  metadata: Metadata
   newSize: { width: number, height: number }
   destination: string
 }) {
@@ -148,7 +148,7 @@ async function autoResize (options: {
 }
 
 function skipProcessing (options: {
-  metadata: sharp.Metadata
+  metadata: Metadata
   newSize?: { width: number, height: number }
   imageBytes: number
   inputExt: string
@@ -180,7 +180,7 @@ function buildSharp (options: {
 }
 
 function writeSharp (options: {
-  sharpInstance: sharp.Sharp
+  sharpInstance: Sharp
   destination: string
 }) {
   const { sharpInstance, destination } = options

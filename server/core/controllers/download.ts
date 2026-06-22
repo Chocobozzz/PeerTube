@@ -3,6 +3,7 @@ import { FileStorage, HttpStatusCode, VideoResolution, VideoStreamingPlaylistTyp
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { generateRequestStream } from '@server/helpers/requests.js'
+import { ThrottleStream } from '@server/helpers/stream-throttle.js'
 import { CONFIG } from '@server/initializers/config.js'
 import {
   generateHLSFilePresignedUrl,
@@ -12,18 +13,18 @@ import {
 } from '@server/lib/object-storage/index.js'
 import { getFSUserExportFilePath } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MUserExport, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
-import contentDisposition from 'content-disposition'
+import { create as createContentDisposition } from 'content-disposition'
 import cors from 'cors'
 import express from 'express'
-import { join } from 'path'
 import { createReadStream } from 'fs'
+import { join } from 'path'
 import { pipeline } from 'stream/promises'
-import { ThrottleStream } from '@server/helpers/stream-throttle.js'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
   asyncMiddleware,
@@ -34,7 +35,6 @@ import {
   videosDownloadValidator,
   videosGenerateDownloadValidator
 } from '../middlewares/index.js'
-import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 
 const lTags = loggerTagsFactory('download')
 
@@ -135,7 +135,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
 
   // Proxify remote request without cache
   res.type('application/x-bittorrent')
-  res.setHeader('Content-disposition', contentDisposition(downloadFilename))
+  res.setHeader('Content-disposition', createContentDisposition(downloadFilename))
 
   const remoteUrl = file.getRemoteTorrentUrl(video)
 
@@ -284,7 +284,7 @@ async function downloadGeneratedVideoFile (req: express.Request, res: express.Re
   const urlPath = new URL(req.originalUrl, WEBSERVER.URL).pathname
   if (!urlPath.endsWith('.mp4') && !urlPath.endsWith('.m4a')) {
     const downloadFilename = buildDownloadFilename({ video, extname })
-    res.setHeader('Content-disposition', contentDisposition(downloadFilename))
+    res.setHeader('Content-disposition', createContentDisposition(downloadFilename))
   }
 
   res.type(extname)
@@ -413,7 +413,7 @@ async function downloadLocalFileWithOptionalThrottle (options: {
 
   if (!totalBytesPerSecond && !bytesPerIpPerSecond) return res.download(path, downloadFilename)
 
-  res.setHeader('Content-Disposition', contentDisposition(downloadFilename))
+  res.setHeader('Content-Disposition', createContentDisposition(downloadFilename))
   res.setHeader('Content-Type', 'application/octet-stream')
 
   const readStream = createReadStream(path)
