@@ -1,8 +1,8 @@
-import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { RouterLink } from '@angular/router'
-import { AuthService, HooksService, ServerService } from '@app/core'
+import { HooksService, ServerService } from '@app/core'
 import { NgbCollapse, NgbNav, NgbNavContent, NgbNavItem, NgbNavLink, NgbNavLinkBase, NgbNavOutlet } from '@ng-bootstrap/ng-bootstrap'
 import { buildVideoLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { VideoCaption, VideoPrivacy } from '@peertube/peertube-models'
@@ -44,7 +44,6 @@ export class ShareVideoComponent implements OnInit {
   private sanitizer = inject(DomSanitizer)
   private server = inject(ServerService)
   private hooks = inject(HooksService)
-  private authService = inject(AuthService)
 
   readonly video = input<VideoDetails>(null)
   readonly videoCaptions = input<VideoCaption[]>([])

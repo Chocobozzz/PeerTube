@@ -47,11 +47,11 @@ describe('Videos all workflow', () => {
   })
 
   beforeEach(async () => {
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
+    videoWatchPage = new VideoWatchPage(isSafari())
     videoPublishPage = new VideoPublishPage()
     videoUpdatePage = new VideoUpdatePage()
     myAccountPage = new MyAccountPage()
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     playerPage = new PlayerPage()
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
     myVideosPage = new MyVideosPage()

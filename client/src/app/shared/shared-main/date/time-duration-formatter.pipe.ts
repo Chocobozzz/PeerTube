@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from '@angular/core'
   standalone: true
 })
 export class TimeDurationFormatterPipe implements PipeTransform {
-
   transform (value: number): string {
     const hours = Math.floor(value / 3600)
     const minutes = Math.floor((value % 3600) / 60)
@@ -23,7 +22,7 @@ export class TimeDurationFormatterPipe implements PipeTransform {
     if (minutes > 0) {
       let result = $localize`${minutes}min`
 
-      if (seconds !== 0) result += ' ' + `${seconds}sec`
+      if (seconds !== 0) result += ' ' + $localize`${seconds}sec`
 
       return result
     }

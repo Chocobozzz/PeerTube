@@ -7,7 +7,7 @@ export function SimpleMemoize () {
   const store = new Map()
 
   return (_target: object, _propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
-    if (descriptor.value != null) {
+    if (descriptor.value !== null) {
       descriptor.value = getNewFunction(descriptor.value, store)
       return
     }

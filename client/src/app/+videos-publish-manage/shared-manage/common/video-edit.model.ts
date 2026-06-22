@@ -265,6 +265,8 @@ export class VideoEdit {
     return videoEdit
   }
 
+  // False positive
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
   private loadFromImport (options: CreateFromImportOptions) {
     this.loadFromPublish(options, false)
 
@@ -286,6 +288,8 @@ export class VideoEdit {
     return videoEdit
   }
 
+  // False positive
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
   private loadFromLive (options: CreateFromLiveOptions) {
     this.loadFromPublish(options, true)
 

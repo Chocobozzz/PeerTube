@@ -171,6 +171,7 @@ export class PluginService implements ClientHook {
 
   async translateSetting (npmName: string, setting: RegisterClientFormFieldOptions) {
     for (const key of getKeys(setting, [ 'label', 'html', 'descriptionHTML' ])) {
+      // eslint-disable-next-line require-atomic-updates
       if (setting[key]) setting[key] = await this.translateBy(npmName, setting[key])
     }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, LOCALE_ID, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, LOCALE_ID, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService, ServerService } from '@app/core'
@@ -723,6 +723,8 @@ export class VideoStatsComponent implements OnInit {
     return getComputedStyle(document.documentElement).getPropertyValue('--border-primary')
   }
 
+  // False positive
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
   private formatXTick (options: {
     graphId: ActiveGraphId
     value: number | string

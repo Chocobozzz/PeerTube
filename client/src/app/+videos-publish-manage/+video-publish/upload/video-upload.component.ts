@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  inject,
+  input,
+  output,
+  viewChild
+} from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
@@ -7,10 +18,10 @@ import { VideoManageController } from '@app/+videos-publish-manage/shared-manage
 import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
+import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { truncate } from 'lodash-es'
 import { Subscription } from 'rxjs'
-import { SelectChannelItem } from '@pt-types'
 import { ImageInputComponent } from '../../../shared/shared-forms/image-input.component'
 import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'

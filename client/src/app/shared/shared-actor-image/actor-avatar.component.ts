@@ -1,5 +1,16 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, numberAttribute, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnInit,
+  booleanAttribute,
+  inject,
+  input,
+  numberAttribute,
+  viewChild
+} from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ActorImage } from '@peertube/peertube-models'

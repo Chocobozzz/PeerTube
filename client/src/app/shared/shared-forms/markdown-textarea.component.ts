@@ -1,5 +1,17 @@
 import { CommonModule, NgTemplateOutlet, ViewportScroller } from '@angular/common'
-import { booleanAttribute, Component, ElementRef, forwardRef, inject, input, model, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  forwardRef,
+  inject,
+  input,
+  model,
+  OnDestroy,
+  OnInit,
+  viewChild
+} from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { SafeHtml } from '@angular/platform-browser'
 import { MarkdownService, ScreenService } from '@app/core'

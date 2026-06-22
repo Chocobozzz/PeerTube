@@ -1,7 +1,7 @@
 import { browserSleep, FIXTURE_URLS, go } from '../utils'
 
 export class VideoWatchPage {
-  constructor (private isMobileDevice: boolean, private isSafari: boolean) {
+  constructor (private isSafari: boolean) {
   }
 
   waitWatchVideoName (videoName: string, maxTime?: number) {

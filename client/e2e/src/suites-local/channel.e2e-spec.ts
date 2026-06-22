@@ -2,7 +2,7 @@ import { AdminUserPage } from '../po/admin-user.po'
 import { ChannelPage } from '../po/channel.po'
 import { LoginPage } from '../po/login.po'
 import { NotificationPage } from '../po/notification.po'
-import { isMobileDevice, prepareWebBrowser, waitServerUp } from '../utils'
+import { prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Channel management', () => {
   let loginPage: LoginPage
@@ -25,7 +25,7 @@ describe('Channel management', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     adminUserPage = new AdminUserPage()
     channelPage = new ChannelPage()
     notificationPage = new NotificationPage()

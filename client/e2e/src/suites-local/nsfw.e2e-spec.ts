@@ -146,13 +146,13 @@ describe('NSFW', () => {
   beforeEach(async () => {
     videoListPage = new VideoListPage(isMobileDevice(), isSafari())
     adminConfigPage = new AdminConfigPage()
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     adminUserPage = new AdminUserPage()
     videoPublishPage = new VideoPublishPage()
     myAccountPage = new MyAccountPage()
     videoSearchPage = new VideoSearchPage()
     playerPage = new PlayerPage()
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
+    videoWatchPage = new VideoWatchPage(isSafari())
     anonymousSettingsPage = new AnonymousSettingsPage()
 
     await prepareWebBrowser()

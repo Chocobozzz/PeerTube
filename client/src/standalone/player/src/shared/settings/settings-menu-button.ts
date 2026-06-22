@@ -172,8 +172,8 @@ class SettingsButton extends Button {
   }
 
   getComponentSize (element: VideojsComponent | HTMLElement) {
-    let width: number = null
-    let height: number = null
+    let width: number
+    let height: number
 
     // Could be component or just DOM element
     if (element instanceof Component) {

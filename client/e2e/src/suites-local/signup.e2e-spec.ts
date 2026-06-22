@@ -9,7 +9,6 @@ import {
   getScreenshotPath,
   getVerificationLink,
   go,
-  isMobileDevice,
   MockSMTPServer,
   prepareWebBrowser,
   waitServerUp
@@ -101,7 +100,7 @@ describe('Signup', () => {
   })
 
   beforeEach(async () => {
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     adminConfigPage = new AdminConfigPage()
     signupPage = new SignupPage()
     adminRegistrationPage = new AdminRegistrationPage()

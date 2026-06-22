@@ -1,10 +1,9 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import {
   AuthService,
   ComponentPagination,
-  ConfirmService,
   Notifier,
   PeerTubeRouterService,
   ScreenService,
@@ -59,7 +58,6 @@ type DisplayFilter = 'all' | 'owned'
 export class MyVideoChannelsComponent implements OnInit {
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
-  private confirmService = inject(ConfirmService)
   private videoChannelService = inject(VideoChannelService)
   private screenService = inject(ScreenService)
   private route = inject(ActivatedRoute)

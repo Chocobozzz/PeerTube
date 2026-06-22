@@ -3,7 +3,7 @@ import { LoginPage } from '../po/login.po'
 import { MyVideosPage } from '../po/my-videos.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoUpdatePage } from '../po/video-update.po'
-import { isMobileDevice, prepareWebBrowser, waitServerUp } from '../utils'
+import { prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Bulk update videos', () => {
   let loginPage: LoginPage
@@ -17,7 +17,7 @@ describe('Bulk update videos', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     videoPublishPage = new VideoPublishPage()
     bulkUpdatePage = new BulkUpdatePage()
     myVideosPage = new MyVideosPage()

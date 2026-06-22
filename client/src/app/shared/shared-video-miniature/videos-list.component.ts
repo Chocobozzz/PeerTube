@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, booleanAttribute, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, booleanAttribute, inject, input, output } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import {
   ComponentPagination,
@@ -130,8 +130,6 @@ export class VideosListComponent implements OnInit, OnDestroy {
     obsVideos: Observable<Pick<ResultList<Video>, 'data'>>
     obsHighlightedLives: Observable<Pick<ResultList<Video>, 'data'>>
   }>()
-
-  private alreadyDoneSearch = false
 
   ngOnInit () {
     this.displayOptions.by = this.displayBy()
@@ -326,14 +324,6 @@ export class VideosListComponent implements OnInit, OnDestroy {
   private subscribeToQueryParamsChange () {
     this.routeSub = this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length === 0 && !this.filters.hasBeenCustomizedByUser()) return
-
-      let search = params.search
-
-      if (search) {
-        this.alreadyDoneSearch = true
-      } else if (this.alreadyDoneSearch) {
-        search = ''
-      }
 
       debugLogger('Query params changed', params)
 

@@ -1,4 +1,15 @@
-import { Component, ElementRef, OnChanges, OnInit, booleanAttribute, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnChanges,
+  OnInit,
+  booleanAttribute,
+  inject,
+  input,
+  output,
+  viewChild
+} from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { ActorImage } from '@peertube/peertube-models'

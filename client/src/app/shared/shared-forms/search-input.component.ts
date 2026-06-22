@@ -1,5 +1,15 @@
 import { NgClass } from '@angular/common'
-import { AfterViewInit, Component, DestroyRef, OnInit, booleanAttribute, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  booleanAttribute,
+  inject,
+  input,
+  output
+} from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
