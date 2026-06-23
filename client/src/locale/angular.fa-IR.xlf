@@ -3043,9 +3043,9 @@
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4019610224237760025" datatype="html">
+      <trans-unit id="4019610224237760025" datatype="html" xml:space="preserve">
         <source>Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">Login on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated">ورود به <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7980,17 +7980,17 @@
           <context context-type="linenumber">227</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5898371297224932546" datatype="html">
+      <trans-unit id="5898371297224932546" datatype="html" xml:space="preserve">
         <source>More customization</source>
-        <target state="new">More customization</target>
+        <target state="translated">شخصی‌سازی‌های بیشتر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5395293285957838632" datatype="html">
+      <trans-unit id="5395293285957838632" datatype="html" xml:space="preserve">
         <source>Less customization</source>
-        <target state="new">Less customization</target>
+        <target state="translated">شخصی‌سازی‌های کمتر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">244</context>
@@ -13416,9 +13416,9 @@
           <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1577436512754482869" datatype="html">
+      <trans-unit id="1577436512754482869" datatype="html" xml:space="preserve">
         <source>Platform customization</source>
-        <target state="new">Platform customization</target>
+        <target state="translated">شخصی‌سازی‌ پلتفرم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
           <context context-type="linenumber">110</context>
@@ -14158,9 +14158,9 @@
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1631750873832492109" datatype="html">
+      <trans-unit id="1631750873832492109" datatype="html" xml:space="preserve">
         <source>Platform customization updated.</source>
-        <target state="new">Platform customization updated.</target>
+        <target state="translated">شخصی‌سازی‌ پلتفرم به روز شد.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">364</context>
