@@ -203,6 +203,8 @@ export async function prepareImportExportTests (options: {
     }
   })
 
+  await server.channels.update({ token: noahToken, channelName: 'noah_second_channel', attributes: { publicEmail: 'noah@example.com' } })
+
   await server.channels.updateImage({
     channelName: 'noah_second_channel',
     fixture: 'banner.jpg',

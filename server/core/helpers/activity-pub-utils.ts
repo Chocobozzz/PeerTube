@@ -259,7 +259,9 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
 
     toot: 'http://joinmastodon.org/ns#',
     indexable: 'toot:indexable',
-    discoverable: 'toot:discoverable'
+    discoverable: 'toot:discoverable',
+
+    email: 'sc:email'
   }),
 
   WatchAction: buildContext({

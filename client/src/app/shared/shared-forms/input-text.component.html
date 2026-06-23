@@ -19,7 +19,7 @@
 
   @if (withCopy()) {
     <my-copy-button
-      [value]="input.value" i18n-notification notification="Copied"
+      [value]="input.value" [notification]="copiedNotification()"
       [isInputGroup]="true" i18n
     >COPY</my-copy-button>
   }

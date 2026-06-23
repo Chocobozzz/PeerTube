@@ -33,14 +33,6 @@ export const USER_CHANNEL_NAME_VALIDATOR: BuildFormValidator = {
   }
 }
 
-export const USER_EMAIL_VALIDATOR: BuildFormValidator = {
-  VALIDATORS: [ Validators.required, Validators.email ],
-  MESSAGES: {
-    required: $localize`Email is required.`,
-    email: $localize`Email must be valid.`
-  }
-}
-
 export const USER_HANDLE_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [
     Validators.required,

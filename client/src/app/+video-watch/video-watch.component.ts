@@ -1,5 +1,5 @@
 import { CommonModule, PlatformLocation } from '@angular/common'
-import { Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -1084,7 +1084,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           playlist: this.playlist,
           titles: {
             instanceVideosFeed: $localize`${this.serverConfig.instance.name} - Videos feed`,
-            playlistPodcastFeed: $localize`${this.playlist.displayName} - Podcast feed`
+            playlistPodcastFeed: $localize`${this.playlist.displayName} - Podcast feed`,
+            playlistPodcastAudioFeed: $localize`${this.playlist.displayName} - Apple Podcast audio feed`,
+            playlistPodcastVideoFeed: $localize`${this.playlist.displayName} - Apple Podcast video feed`
           }
         })
       )

@@ -1,6 +1,6 @@
 import { ViewportScroller } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
-import { AfterViewChecked, Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { AfterViewChecked, ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { shallowCopy } from '@peertube/peertube-core-utils'
@@ -12,7 +12,6 @@ import { AccountTokenSessionsComponent } from '../../shared/shared-users/account
 import { MyAccountChangeEmailComponent } from './my-account-change-email/my-account-change-email.component'
 import { MyAccountChangePasswordComponent } from './my-account-change-password/my-account-change-password.component'
 import { MyAccountDangerZoneComponent } from './my-account-danger-zone/my-account-danger-zone.component'
-import { MyAccountEmailPreferencesComponent } from './my-account-email-preferences/my-account-email-preferences.component'
 import {
   MyAccountNotificationPreferencesComponent
 } from './my-account-notification-preferences/my-account-notification-preferences.component'
@@ -33,7 +32,6 @@ import { MyAccountTwoFactorButtonComponent } from './my-account-two-factor/my-ac
     MyAccountNotificationPreferencesComponent,
     MyAccountChangePasswordComponent,
     MyAccountTwoFactorButtonComponent,
-    MyAccountEmailPreferencesComponent,
     MyAccountChangeEmailComponent,
     MyAccountDangerZoneComponent,
     AccountTokenSessionsComponent

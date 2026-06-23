@@ -193,7 +193,8 @@ describe('Test video channels', function () {
     const videoChannelAttributes = {
       displayName: 'video channel updated',
       description: 'video channel description updated',
-      support: 'support updated'
+      support: 'support updated',
+      publicEmail: 'public-email@example.com'
     }
 
     await servers[0].channels.update({ channelName: 'second_video_channel', attributes: videoChannelAttributes })
@@ -213,6 +214,7 @@ describe('Test video channels', function () {
       expect(body.data[0].displayName).to.equal('video channel updated')
       expect(body.data[0].description).to.equal('video channel description updated')
       expect(body.data[0].support).to.equal('support updated')
+      expect(body.data[0].publicEmail).to.equal('public-email@example.com')
     }
   })
 

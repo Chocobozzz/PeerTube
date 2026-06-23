@@ -750,9 +750,24 @@ paths:
         - name: videoChannelId
           in: query
           description: 'Limit listing to a specific video channel'
-          required: true
+          required: false
           schema:
             type: string
+        - name: playlistId
+          in: query
+          description: 'Limit listing to a specific video playlist'
+          required: false
+          schema:
+            type: string
+        - name: enclosurePreference
+          in: query
+          description: 'Filter enclosures by type (video-only or audio-only)'
+          required: false
+          schema:
+            type: string
+            enum:
+              - video-only
+              - audio-only
       responses:
         '200':
           description: successful operation
@@ -762,7 +777,7 @@ paths:
                 type: string
                 default: 'max-age=900' # 15 min cache
         '404':
-          description: video channel not found
+          description: video channel or playlist not found
 
   '/api/v1/accounts/{name}':
     get:
@@ -12733,9 +12748,6 @@ components:
         emailVerified:
           type: boolean
           description: Has the user confirmed their email address?
-        emailPublic:
-          type: boolean
-          description: Has the user accepted to display the email publicly?
 
         nsfwPolicy:
           $ref: '#/components/schemas/NSFWPolicy'
@@ -13198,6 +13210,11 @@ components:
               example: Please support our work on https://soutenir.framasoft.org/en/ <3
               minLength: 3
               maxLength: 1000
+            publicEmail:
+              type: string
+              format: email
+              nullable: true
+              description: Public email visible in podcast RSS feeds
             isLocal:
               type: boolean
             updatedAt:
@@ -13218,6 +13235,11 @@ components:
           description: Channel description
         support:
           description: How to support/fund the channel
+        publicEmail:
+          type: string
+          format: email
+          nullable: true
+          description: Public email visible in podcast RSS feeds
 
     VideoChannelCreate:
       allOf:

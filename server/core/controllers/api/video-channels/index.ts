@@ -233,19 +233,20 @@ async function createVideoChannel (req: express.Request, res: express.Response) 
 async function updateVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInstance = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannelInstance.toFormattedJSON())
-  const videoChannelInfoToUpdate = req.body as VideoChannelUpdate
+  const body = req.body as VideoChannelUpdate
   let doBulkVideoUpdate = false
 
   try {
     await sequelizeTypescript.transaction(async t => {
-      if (videoChannelInfoToUpdate.displayName !== undefined) videoChannelInstance.name = videoChannelInfoToUpdate.displayName
-      if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.description = videoChannelInfoToUpdate.description
+      if (body.displayName !== undefined) videoChannelInstance.name = body.displayName
+      if (body.description !== undefined) videoChannelInstance.description = body.description
+      if (body.publicEmail !== undefined) videoChannelInstance.publicEmail = body.publicEmail
 
-      if (videoChannelInfoToUpdate.support !== undefined) {
+      if (body.support !== undefined) {
         const oldSupportField = videoChannelInstance.support
-        videoChannelInstance.support = videoChannelInfoToUpdate.support
+        videoChannelInstance.support = body.support
 
-        if (videoChannelInfoToUpdate.bulkVideosSupportUpdate === true && oldSupportField !== videoChannelInfoToUpdate.support) {
+        if (body.bulkVideosSupportUpdate === true && oldSupportField !== body.support) {
           doBulkVideoUpdate = true
           await VideoModel.bulkUpdateSupportField(videoChannelInstance, t)
         }

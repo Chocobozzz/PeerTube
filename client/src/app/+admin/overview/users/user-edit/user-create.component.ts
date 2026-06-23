@@ -1,11 +1,11 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
+import { REQUIRED_EMAIL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import {
   USER_CHANNEL_NAME_VALIDATOR,
-  USER_EMAIL_VALIDATOR,
   USER_ROLE_VALIDATOR,
   USER_USERNAME_VALIDATOR,
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
@@ -82,7 +82,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     this.buildForm({
       username: USER_USERNAME_VALIDATOR,
       channelName: USER_CHANNEL_NAME_VALIDATOR,
-      email: USER_EMAIL_VALIDATOR,
+      email: REQUIRED_EMAIL_VALIDATOR,
 
       password: this.isPasswordOptional()
         ? getUserNewPasswordOptionalValidator(passwordConstraints.minLength, passwordConstraints.maxLength)

@@ -54,6 +54,7 @@ export class APActorUpdater {
 
         channel.accountId = owner.Account.id
         channel.support = this.actorObject.support
+        channel.publicEmail = this.actorObject.email
 
         if (typeof this.actorObject.playerSettings === 'string') {
           await upsertAPPlayerSettings({

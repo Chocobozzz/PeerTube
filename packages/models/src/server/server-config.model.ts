@@ -229,6 +229,7 @@ export interface ServerConfig {
   transcoding: {
     hls: {
       enabled: boolean
+      splitAudioAndVideo: boolean
     }
 
     web_videos: {
@@ -243,6 +244,9 @@ export interface ServerConfig {
     remoteRunners: {
       enabled: boolean
     }
+
+    alwaysTranscodeOriginalResolution: boolean
+    alwaysTranscodePodcastOptimizedAudio: boolean
   }
 
   live: {

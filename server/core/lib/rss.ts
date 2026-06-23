@@ -25,7 +25,9 @@ export function getChannelRSSFeeds (channel: MChannel, req: express.Request) {
     titles: {
       instanceVideosFeed: req.t('{instanceName} - Videos feed', { instanceName: CONFIG.INSTANCE.NAME }),
       channelVideosFeed: req.t('{name} - Videos feed', { name: channel.getDisplayName() }),
-      channelPodcastFeed: req.t('{name} - Podcast feed', { name: channel.getDisplayName() })
+      channelPodcastFeed: req.t('{name} - Podcast feed', { name: channel.getDisplayName() }),
+      channelPodcastAudioFeed: req.t('{name} - Apple Podcast audio feed', { name: channel.getDisplayName() }),
+      channelPodcastVideoFeed: req.t('{name} - Apple Podcast video feed', { name: channel.getDisplayName() })
     }
   })
 }
@@ -47,7 +49,9 @@ export function getPlaylistRSSFeeds (playlist: { displayName: string, id: number
     playlist,
     titles: {
       instanceVideosFeed: req.t('{instanceName} - Videos feed', { instanceName: CONFIG.INSTANCE.NAME }),
-      playlistPodcastFeed: req.t('{name} - Podcast feed', { name: playlist.displayName })
+      playlistPodcastFeed: req.t('{name} - Podcast feed', { name: playlist.displayName }),
+      playlistPodcastAudioFeed: req.t('{name} - Apple Podcast audio feed', { name: playlist.displayName }),
+      playlistPodcastVideoFeed: req.t('{name} - Apple Podcast video feed', { name: playlist.displayName })
     }
   })
 }

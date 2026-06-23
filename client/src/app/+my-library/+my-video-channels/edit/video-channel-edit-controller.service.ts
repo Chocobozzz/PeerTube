@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core'
+import { ValidationError } from '@angular/forms/signals'
 import { FormReactiveErrors } from '@app/shared/form-validators/form-validator.model'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { VideoChannelEdit } from './video-channel-edit.model'
 import { Subject } from 'rxjs'
+import { VideoChannelEdit } from './video-channel-edit.model'
 
 export type EditMode = 'create' | 'update'
 
@@ -59,8 +60,11 @@ export class VideoChannelEditControllerService {
 
   // ---------------------------------------------------------------------------
 
-  setFormError (page: string, path: string, formErrors: FormReactiveErrors) {
-    const errors = this.formReactiveService.grabAllErrors(formErrors)
+  setFormError (page: string, path: string, formErrors: FormReactiveErrors | ValidationError.WithFieldTree[]) {
+    const errors = Array.isArray(formErrors)
+      ? formErrors.map(e => e.message)
+      : this.formReactiveService.grabAllErrors(formErrors)
+
     this.formErrors = this.formErrors.filter(e => e.page !== page)
 
     if (errors.length === 0) return

@@ -26,3 +26,11 @@ export const HEX_COLOR_CODE_VALIDATOR: BuildFormValidator = {
     pattern: $localize`This field must be a valid 6-digit hexadecimal color code.`
   }
 }
+
+export const REQUIRED_EMAIL_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.required, Validators.email ],
+  MESSAGES: {
+    required: $localize`Email is required.`,
+    email: $localize`Email must be valid.`
+  }
+}

@@ -20,7 +20,6 @@ export class User implements UserServerModel {
   pendingEmail: string | null
 
   emailVerified: boolean
-  emailPublic: boolean
 
   nsfwPolicy: NSFWPolicyType
   nsfwFlagsDisplayed: number

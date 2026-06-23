@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, forwardRef, input, model, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, forwardRef, input, model, viewChild } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { CopyButtonComponent } from '../shared-main/buttons/copy-button.component'
@@ -35,6 +35,7 @@ export class InputTextComponent implements ControlValueAccessor, AfterViewInit {
   readonly formError = input<string | FormReactiveErrors | FormReactiveErrors[]>(undefined)
   readonly autofocus = input(false)
   readonly ariaLabel = input<string>(undefined)
+  readonly copiedNotification = input<string>($localize`Copied!`)
 
   get inputType () {
     return this.show()

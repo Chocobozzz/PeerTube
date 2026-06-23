@@ -16,6 +16,12 @@ type GeneralFormValue = {
   }
 }
 
+type PodcastFormValue = {
+  channel: {
+    publicEmail: string
+  }
+}
+
 export class VideoChannelEdit {
   avatar: FormData
   banner: FormData
@@ -29,6 +35,7 @@ export class VideoChannelEdit {
     displayName: string
     description: string
     support: string
+    publicEmail: string
     bulkVideosSupportUpdate: boolean
   }
 
@@ -63,6 +70,7 @@ export class VideoChannelEdit {
       displayName: '',
       description: '',
       support: '',
+      publicEmail: null,
       bulkVideosSupportUpdate: false
     }
 
@@ -95,6 +103,7 @@ export class VideoChannelEdit {
       displayName: channel.displayName,
       description: channel.description,
       support: channel.support,
+      publicEmail: channel.publicEmail,
       bulkVideosSupportUpdate: false
     }
 
@@ -128,6 +137,17 @@ export class VideoChannelEdit {
 
     this.channel = {
       ...this.channel,
+
+      ...form.channel
+    }
+
+    this.commonChanged = true
+  }
+
+  loadFromPodcastForm (form: PodcastFormValue) {
+    this.channel = {
+      ...this.channel,
+
       ...form.channel
     }
 

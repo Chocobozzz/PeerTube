@@ -9,6 +9,7 @@ import { isBooleanValid, isIdValid, toBooleanOrNull } from '../../../helpers/cus
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
+  isVideoChannelPublicEmailValid,
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels.js'
@@ -27,6 +28,9 @@ export const videoChannelsAddValidator = [
   body('support')
     .optional()
     .custom(isVideoChannelSupportValid),
+  body('publicEmail')
+    .optional()
+    .custom(isVideoChannelPublicEmailValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -63,6 +67,9 @@ export const videoChannelsUpdateValidator = [
   body('support')
     .optional()
     .custom(isVideoChannelSupportValid),
+  body('publicEmail')
+    .optional()
+    .custom(isVideoChannelPublicEmailValid),
   body('bulkVideosSupportUpdate')
     .optional()
     .custom(isBooleanValid).withMessage('Should have a valid bulkVideosSupportUpdate boolean field'),

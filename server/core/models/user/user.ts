@@ -434,11 +434,6 @@ export class UserModel extends SequelizeModel<UserModel> {
   @Column
   declare lastLoginDate: Date
 
-  @AllowNull(false)
-  @Default(false)
-  @Column
-  declare emailPublic: boolean
-
   @AllowNull(true)
   @Default(null)
   @Column
@@ -1052,7 +1047,6 @@ export class UserModel extends SequelizeModel<UserModel> {
       theme: getThemeOrDefault(this.theme, DEFAULT_INSTANCE_THEME_NAME),
 
       pendingEmail: this.pendingEmail,
-      emailPublic: this.emailPublic,
       emailVerified: this.emailVerified,
 
       nsfwPolicy: this.nsfwPolicy,

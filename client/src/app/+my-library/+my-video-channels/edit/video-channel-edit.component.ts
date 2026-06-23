@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, input, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule, RouterOutlet } from '@angular/router'
 import { AuthService } from '@app/core'
@@ -70,6 +70,14 @@ export class VideoChannelEditComponent implements OnInit, OnDestroy {
           icon: 'users',
           label: $localize`Editors`,
           routerLink: 'editors',
+          isDisplayed: () => this.mode === 'update'
+        },
+
+        {
+          type: 'link',
+          icon: 'syndication',
+          label: $localize`Podcast`,
+          routerLink: 'podcast',
           isDisplayed: () => this.mode === 'update'
         },
 

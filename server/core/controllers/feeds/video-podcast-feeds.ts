@@ -1,7 +1,7 @@
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings/index.js'
 import { buildDownloadFilesUrl, getResolutionLabel, sortObjectComparator } from '@peertube/peertube-core-utils'
-import { ActorImageType, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
+import { ActorImageType, FeedEnclosurePreference, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
 import { buildNSFWFilters } from '@server/helpers/express-utils.js'
 import { logger } from '@server/helpers/logger.js'
@@ -165,7 +165,7 @@ async function generateChannelPodcastFeed (req: express.Request, res: express.Re
     customTags
   })
 
-  await addVideosToPodcastFeed(feed, data)
+  await addVideosToPodcastFeed(feed, data, req.query.enclosurePreference)
 
   // Now the feed generation is done, let's send it!
   return res.send(feed.podcast()).end()
@@ -236,7 +236,7 @@ async function generatePlaylistPodcastFeed (req: express.Request, res: express.R
     customTags
   })
 
-  await addVideosToPodcastFeed(feed, data)
+  await addVideosToPodcastFeed(feed, data, req.query.enclosurePreference)
 
   return res.send(feed.podcast()).end()
 }
@@ -308,12 +308,12 @@ async function generatePodcastItem (options: {
   }
 }
 
-async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[]) {
+async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[], enclosurePreference?: FeedEnclosurePreference) {
   const captionsGroup = await VideoCaptionModel.listCaptionsOfMultipleVideos(videos.map(v => v.id))
 
   for (const video of videos) {
     if (!video.isLive) {
-      await addVODPodcastItem({ feed, video, captionsGroup })
+      await addVODPodcastItem({ feed, video, captionsGroup, enclosurePreference })
     } else if (video.isLive && video.state !== VideoState.LIVE_ENDED) {
       await addLivePodcastItem({ feed, video })
     }
@@ -324,18 +324,31 @@ async function addVODPodcastItem (options: {
   feed: Feed
   video: VideoModel
   captionsGroup: { [id: number]: MVideoCaptionVideo[] }
+  enclosurePreference?: FeedEnclosurePreference
 }) {
-  const { feed, video, captionsGroup } = options
+  const { feed, video, captionsGroup, enclosurePreference } = options
+
+  const resolutionSortOrder = enclosurePreference === 'video'
+    ? 'desc' as const
+    : 'asc'
 
   const webVideos = video.getFormattedWebVideoFilesJSON(true)
-    .map(f => buildVODWebVideoFile(video, f))
-    .sort(sortObjectComparator('bitrate', 'asc'))
+    .filter(f => {
+      if (enclosurePreference === 'audio' && f.resolution.id !== VideoResolution.H_NOVIDEO) return false
+      if (enclosurePreference === 'video' && f.resolution.id === VideoResolution.H_NOVIDEO) return false
+      if (enclosurePreference === 'm3u8') return false
 
-  const streamingPlaylistFiles = buildVODStreamingPlaylistsIfMissingWebVideoFile(video)
+      return true
+    })
+    .map(f => buildVODWebVideoFile(video, f))
+    .sort(sortObjectComparator('resolution', resolutionSortOrder))
+
+  const streamingPlaylistFiles = buildVODStreamingPlaylistsIfMissingWebVideoFile({ video, enclosurePreference, resolutionSortOrder })
 
   // Order matters here, the first media URI will be the "default"
   // So web videos are default if enabled
-  const media = [ ...webVideos, ...streamingPlaylistFiles ]
+  const media: PodcastMedia[] = [ ...webVideos, ...streamingPlaylistFiles ]
+  if (media.length === 0) return
 
   const videoCaptions = buildVODCaptions(captionsGroup[video.id])
   const item = await generatePodcastItem({ video, liveItem: false, media })
@@ -355,6 +368,7 @@ async function addLivePodcastItem (options: {
     case VideoState.WAITING_FOR_LIVE:
       status = LiveItemStatus.pending
       break
+
     case VideoState.PUBLISHED:
       status = LiveItemStatus.live
       break
@@ -387,16 +401,38 @@ function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   }
 }
 
-function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFull) {
+function buildVODStreamingPlaylistsIfMissingWebVideoFile (options: {
+  video: MVideoFull
+  resolutionSortOrder: 'asc' | 'desc'
+  enclosurePreference?: FeedEnclosurePreference
+}) {
+  const { video, enclosurePreference, resolutionSortOrder } = options
+
   const hls = video.getHLSPlaylist()
   if (!hls) return []
 
+  const m3u8 = {
+    type: 'application/x-mpegURL',
+    title: 'HLS',
+    sources: [
+      { uri: hls.getMasterPlaylistUrl(video) }
+    ],
+    language: video.language
+  }
+
+  if (enclosurePreference === 'm3u8') return [ m3u8 ]
+
   const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
 
-  return [
+  const files = [
     ...hls.VideoFiles
-      .filter(videoFile => !video.VideoFiles.some(f => f.fps === videoFile.fps && f.resolution === videoFile.resolution))
-      .sort(sortObjectComparator('resolution', 'asc'))
+      .filter(videoFile => {
+        if (enclosurePreference === 'audio' && videoFile.hasVideo()) return false
+        if (enclosurePreference === 'video' && !videoFile.hasVideo()) return false
+
+        return !video.VideoFiles.some(f => f.fps === videoFile.fps && f.resolution === videoFile.resolution)
+      })
+      .sort(sortObjectComparator('resolution', resolutionSortOrder))
       .map(videoFile => {
         const files = [ videoFile ]
 
@@ -422,17 +458,13 @@ function buildVODStreamingPlaylistsIfMissingWebVideoFile (video: MVideoFull) {
             }
           ]
         }
-      }),
-
-    {
-      type: 'application/x-mpegURL',
-      title: 'HLS',
-      sources: [
-        { uri: hls.getMasterPlaylistUrl(video) }
-      ],
-      language: video.language
-    }
+      })
   ]
+
+  // We don't return m3u8 if we don't have available files
+  if (files.length === 0) return []
+
+  return [ ...files, m3u8 ]
 }
 
 function buildLiveStreamingPlaylists (video: MVideoFull) {

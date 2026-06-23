@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService, ServerService } from '@app/core'
 import { getOriginUrl } from '@app/helpers'
@@ -91,7 +91,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
             titles: {
               instanceVideosFeed: `${instanceName} - Videos feed`,
               channelVideosFeed: `${videoChannel.displayName} - Videos feed`,
-              channelPodcastFeed: `${videoChannel.displayName} - Podcast feed`
+              channelPodcastFeed: `${videoChannel.displayName} - Podcast feed`,
+              channelPodcastAudioFeed: `${videoChannel.displayName} - Apple Podcast audio feed`,
+              channelPodcastVideoFeed: `${videoChannel.displayName} - Apple Podcast video feed`
             }
           })
         )

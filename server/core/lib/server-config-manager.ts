@@ -213,14 +213,17 @@ class ServerConfigManager {
           enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
         },
         hls: {
-          enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.HLS.ENABLED
+          enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.HLS.ENABLED,
+          splitAudioAndVideo: CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO
         },
         web_videos: {
           enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED
         },
         enabledResolutions: this.getEnabledResolutions('vod'),
         profile: CONFIG.TRANSCODING.PROFILE,
-        availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('vod')
+        availableProfiles: VideoTranscodingProfilesManager.Instance.getAvailableProfiles('vod'),
+        alwaysTranscodeOriginalResolution: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+        alwaysTranscodePodcastOptimizedAudio: CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
       },
       live: {
         enabled: CONFIG.LIVE.ENABLED,

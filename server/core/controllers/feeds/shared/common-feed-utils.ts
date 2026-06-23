@@ -8,12 +8,10 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { regenerateActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { UserModel } from '@server/models/user/user.js'
 import {
   MAccountDefault,
   MChannelBannerAccountDefault,
   MChannelDefault,
-  MUser,
   MVideo,
   MVideoPlaylistFull
 } from '@server/types/models/index.js'
@@ -133,7 +131,6 @@ export async function buildFeedMetadata (options: {
   let email: string
   let link: string
   let ownerLink: string
-  let user: MUser
 
   if (videoPlaylist) {
     name = videoPlaylist.name
@@ -151,8 +148,6 @@ export async function buildFeedMetadata (options: {
     if (channel.Actor.hasImage(ActorImageType.AVATAR)) {
       ownerImageUrl = await getOrGenerateActorImageUrl(channel)
     }
-
-    user = await UserModel.loadById(videoPlaylist.OwnerAccount.userId)
   } else if (videoChannel) {
     name = videoChannel.getDisplayName()
     description = videoChannel.description
@@ -163,8 +158,6 @@ export async function buildFeedMetadata (options: {
       imageUrl = await getOrGenerateActorImageUrl(videoChannel)
       ownerImageUrl = imageUrl
     }
-
-    user = await UserModel.loadById(videoChannel.Account.userId)
   } else if (account) {
     name = account.getDisplayName()
     description = account.description
@@ -175,8 +168,6 @@ export async function buildFeedMetadata (options: {
       imageUrl = await getOrGenerateActorImageUrl(account)
       ownerImageUrl = imageUrl
     }
-
-    user = await UserModel.loadById(account.userId)
   } else if (video) {
     name = video.name
     description = video.description
@@ -187,10 +178,12 @@ export async function buildFeedMetadata (options: {
     link = WEBSERVER.URL
   }
 
-  // If the user is local, has a verified email address, and allows it to be publicly displayed
-  // Return it so the owner can prove ownership of their feed
-  if (user && !user.pluginAuth && user.emailVerified && user.emailPublic) {
-    email = user.email
+  // If the video channel has a public email set, use it
+  // So the owner can prove ownership of their feed
+  if (videoChannel?.publicEmail) {
+    email = videoChannel.publicEmail
+  } else if (videoPlaylist?.VideoChannel?.publicEmail) {
+    email = videoPlaylist.VideoChannel.publicEmail
   }
 
   return { name, description, imageUrl, ownerImageUrl, email, link, ownerLink }

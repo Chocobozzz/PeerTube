@@ -209,6 +209,7 @@ function runTest (withObjectStorage: boolean) {
       expect(importedSecond.displayName).to.equal('noah display name')
       expect(importedSecond.description).to.equal('noah description')
       expect(importedSecond.support).to.equal('noah support')
+      expect(importedSecond.publicEmail).to.equal('noah@example.com')
 
       const playerSettingSecond = await remoteServer.playerSettings.getForChannel({
         channelHandle: 'noah_second_channel',

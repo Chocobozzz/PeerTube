@@ -4,6 +4,7 @@ import { isPlayerChannelThemeSettingValid } from '@server/helpers/custom-validat
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
+  isVideoChannelPublicEmailValid,
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '@server/helpers/custom-validators/video-channels.js'
@@ -22,7 +23,7 @@ const lTags = loggerTagsFactory('user-import')
 
 type SanitizedObject = Pick<
   ChannelExportJSON['channels'][0],
-  'name' | 'displayName' | 'description' | 'support' | 'playerSettings' | 'archiveFiles'
+  'name' | 'displayName' | 'description' | 'support' | 'publicEmail' | 'playerSettings' | 'archiveFiles'
 >
 
 export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, ChannelExportJSON['channels'][0], SanitizedObject> {
@@ -36,12 +37,13 @@ export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, Ch
 
     if (!isVideoChannelDescriptionValid(channelImportData.description)) channelImportData.description = null
     if (!isVideoChannelSupportValid(channelImportData.support)) channelImportData.support = null
+    if (!isVideoChannelPublicEmailValid(channelImportData.publicEmail)) channelImportData.publicEmail = null
 
     if (channelImportData.playerSettings) {
       if (!isPlayerChannelThemeSettingValid(channelImportData.playerSettings.theme)) channelImportData.playerSettings.theme = undefined
     }
 
-    return pick(channelImportData, [ 'name', 'displayName', 'description', 'support', 'playerSettings', 'archiveFiles' ])
+    return pick(channelImportData, [ 'name', 'displayName', 'description', 'support', 'publicEmail', 'playerSettings', 'archiveFiles' ])
   }
 
   protected async importObject (channelImportData: SanitizedObject) {
@@ -52,7 +54,11 @@ export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, Ch
       logger.info(`Do not import channel ${existingChannel.name} that already exists on this PeerTube instance`, lTags())
     } else {
       const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
-        return createLocalVideoChannelWithoutKeys(pick(channelImportData, [ 'displayName', 'name', 'description', 'support' ]), account, t)
+        return createLocalVideoChannelWithoutKeys(
+          pick(channelImportData, [ 'displayName', 'name', 'description', 'support', 'publicEmail' ]),
+          account,
+          t
+        )
       })
 
       await this.importPlayerSettings(videoChannelCreated, channelImportData)

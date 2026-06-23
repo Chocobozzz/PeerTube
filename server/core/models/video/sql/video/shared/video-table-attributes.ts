@@ -22,6 +22,7 @@ export class VideoTableAttributes {
 
     if (this.mode === 'get') {
       attributeKeys = attributeKeys.concat([
+        'publicEmail',
         'support',
         'createdAt',
         'updatedAt'

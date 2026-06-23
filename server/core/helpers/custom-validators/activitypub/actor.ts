@@ -107,6 +107,7 @@ function normalizeActor (actor: ActivityPubActor) {
   setValidUrls(actor)
   setValidAttributedTo(actor)
   setValidDescription(actor)
+  setValidEmail(actor)
 
   if (!isDateValid(actor.published)) actor.published = undefined
 
@@ -121,6 +122,11 @@ function normalizeActor (actor: ActivityPubActor) {
 
 function setValidDescription (actor: ActivityPubActor) {
   if (!actor.summary) actor.summary = null
+}
+
+function setValidEmail (actor: ActivityPubActor) {
+  if (!actor.email) actor.email = null
+  else if (!validator.default.isEmail(actor.email)) actor.email = null
 }
 
 function setValidUrls (actor: any) {

@@ -88,19 +88,18 @@
   </div>
 </div>
 
-<div class="pt-two-cols mt-5"> <!-- email grid -->
-  <div class="title-col">
-    <h2 i18n>EMAIL</h2>
-  </div>
 
-  <div class="content-col">
-    <my-account-email-preferences class="d-block mb-5" [user]="user"></my-account-email-preferences>
+@if (user.pluginAuth === null) {
+  <div class="pt-two-cols mt-5"> <!-- email grid -->
+    <div class="title-col">
+      <h2 i18n>EMAIL</h2>
+    </div>
 
-    @if (user.pluginAuth === null) {
-      <my-account-change-email></my-account-change-email>
-    }
+    <div class="content-col">
+        <my-account-change-email></my-account-change-email>
+    </div>
   </div>
-</div>
+}
 
 <div class="pt-two-cols mt-5"> <!-- danger zone grid -->
   <div class="title-col">

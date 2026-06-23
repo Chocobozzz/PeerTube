@@ -80,6 +80,7 @@ export class VideoChannelManageComponent implements OnInit, OnDestroy, AfterView
       displayName: this.videoChannelEdit.channel.displayName,
       description: this.videoChannelEdit.channel.description,
       support: this.videoChannelEdit.channel.support,
+      publicEmail: this.videoChannelEdit.channel.publicEmail,
       bulkVideosSupportUpdate: this.videoChannelEdit.channel.bulkVideosSupportUpdate
     }
 

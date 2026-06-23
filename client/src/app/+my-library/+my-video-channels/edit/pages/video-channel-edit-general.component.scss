@@ -10,10 +10,6 @@ input[type="text"] {
   @include peertube-input-text(340px);
 }
 
-input[type="submit"] {
-  @include margin-left(auto);
-}
-
 .markdown-block {
   max-width: 500px;
 }

@@ -1,4 +1,4 @@
-import { VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+import { FeedEnclosurePreference, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 
 export function getInstanceRSSFeed (options: {
   url: string
@@ -9,6 +9,9 @@ export function getInstanceRSSFeed (options: {
   return { url: `${url}/feeds/videos.xml`, title }
 }
 
+// ---------------------------------------------------------------------------
+
+
 export function getChannelRSSFeeds (options: {
   url: string
   channel: { name: string, id: number }
@@ -16,6 +19,8 @@ export function getChannelRSSFeeds (options: {
     instanceVideosFeed: string
     channelVideosFeed: string
     channelPodcastFeed: string
+    channelPodcastAudioFeed: string
+    channelPodcastVideoFeed: string
   }
 }) {
   const { url, titles, channel } = options
@@ -27,6 +32,16 @@ export function getChannelRSSFeeds (options: {
     },
 
     {
+      url: getChannelPodcastFeed(url, channel, 'audio'),
+      title: titles.channelPodcastAudioFeed
+    },
+
+    {
+      url: getChannelPodcastFeed(url, channel, 'video'),
+      title: titles.channelPodcastVideoFeed
+    },
+
+    {
       url: `${url}/feeds/videos.xml?videoChannelId=${channel.id}`,
       title: titles.channelVideosFeed
     },
@@ -34,6 +49,16 @@ export function getChannelRSSFeeds (options: {
     getInstanceRSSFeed({ url, title: titles.instanceVideosFeed })
   ]
 }
+
+export function getChannelPodcastFeed (url: string, channel: { id: number }, enclosurePreference?: FeedEnclosurePreference) {
+  const enclosurePreferenceQuery = enclosurePreference
+    ? `&enclosurePreference=${enclosurePreference}`
+    : ''
+
+  return `${url}/feeds/podcast/videos.xml?videoChannelId=${channel.id}${enclosurePreferenceQuery}`
+}
+
+// ---------------------------------------------------------------------------
 
 export function getVideoRSSFeeds (options: {
   url: string
@@ -59,9 +84,8 @@ export function getVideoRSSFeeds (options: {
   ]
 }
 
-export function getChannelPodcastFeed (url: string, channel: { id: number }) {
-  return `${url}/feeds/podcast/videos.xml?videoChannelId=${channel.id}`
-}
+// ---------------------------------------------------------------------------
+
 
 export function getPlaylistRSSFeeds (options: {
   url: string
@@ -69,6 +93,8 @@ export function getPlaylistRSSFeeds (options: {
   titles: {
     instanceVideosFeed: string
     playlistPodcastFeed: string
+    playlistPodcastAudioFeed: string
+    playlistPodcastVideoFeed: string
   }
 }) {
   const { url, titles, playlist } = options
@@ -79,10 +105,24 @@ export function getPlaylistRSSFeeds (options: {
       title: titles.playlistPodcastFeed
     },
 
+    {
+      url: getPlaylistPodcastFeed(url, playlist, 'audio'),
+      title: titles.playlistPodcastAudioFeed
+    },
+
+    {
+      url: getPlaylistPodcastFeed(url, playlist, 'video'),
+      title: titles.playlistPodcastVideoFeed
+    },
+
     getInstanceRSSFeed({ url, title: titles.instanceVideosFeed })
   ]
 }
 
-export function getPlaylistPodcastFeed (url: string, playlist: { id: number }) {
-  return `${url}/feeds/podcast/videos.xml?playlistId=${playlist.id}`
+export function getPlaylistPodcastFeed (url: string, playlist: { id: number }, enclosurePreference?: FeedEnclosurePreference) {
+  const enclosurePreferenceQuery = enclosurePreference
+    ? `&enclosurePreference=${enclosurePreference}`
+    : ''
+
+  return `${url}/feeds/podcast/videos.xml?playlistId=${playlist.id}${enclosurePreferenceQuery}`
 }

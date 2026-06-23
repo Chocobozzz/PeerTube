@@ -91,10 +91,6 @@ export function isUserAutoPlayNextVideoPlaylistValid (value: any) {
   return isBooleanValid(value)
 }
 
-export function isUserEmailPublicValid (value: any) {
-  return isBooleanValid(value)
-}
-
 export function isUserNoModal (value: any) {
   return isBooleanValid(value)
 }

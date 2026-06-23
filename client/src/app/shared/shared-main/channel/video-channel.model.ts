@@ -6,6 +6,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   displayName: string
   description: string
   support: string
+  publicEmail: string
 
   nameWithHost: string
   nameWithHostForced: string
@@ -53,6 +54,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.displayName = hash.displayName
     this.description = hash.description
     this.support = hash.support
+    this.publicEmail = hash.publicEmail
 
     this.banners = hash.banners || []
 

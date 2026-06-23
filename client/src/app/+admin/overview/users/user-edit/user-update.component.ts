@@ -1,10 +1,10 @@
 import { CommonModule, NgTemplateOutlet } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
+import { REQUIRED_EMAIL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import {
-  USER_EMAIL_VALIDATOR,
   USER_ROLE_VALIDATOR,
   USER_VIDEO_QUOTA_DAILY_VALIDATOR,
   USER_VIDEO_QUOTA_VALIDATOR
@@ -12,6 +12,7 @@ import {
 import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { AccountTokenSessionsComponent } from '@app/shared/shared-users/account-token-sessions.component'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
 import { UserAdminService } from '@app/shared/shared-users/user-admin.service'
 import { UserAdminFlag, UserRole, User as UserType, UserUpdate } from '@peertube/peertube-models'
@@ -24,7 +25,6 @@ import { BytesPipe } from '../../../../shared/shared-main/common/bytes.pipe'
 import { UserRealQuotaInfoComponent } from '../../../shared/user-real-quota-info.component'
 import { UserEdit } from './user-edit'
 import { UserPasswordComponent } from './user-password.component'
-import { AccountTokenSessionsComponent } from '@app/shared/shared-users/account-token-sessions.component'
 
 @Component({
   selector: 'my-user-update',
@@ -81,7 +81,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     }
 
     this.buildForm({
-      email: USER_EMAIL_VALIDATOR,
+      email: REQUIRED_EMAIL_VALIDATOR,
       role: USER_ROLE_VALIDATOR,
       videoQuota: USER_VIDEO_QUOTA_VALIDATOR,
       videoQuotaDaily: USER_VIDEO_QUOTA_DAILY_VALIDATOR,
