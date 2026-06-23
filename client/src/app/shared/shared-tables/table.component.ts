@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   inject,
@@ -12,8 +13,7 @@ import {
   output,
   SimpleChanges,
   TemplateRef,
-  viewChild,
-  ChangeDetectionStrategy
+  viewChild
 } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -516,7 +516,7 @@ export class TableComponent<
     const start = this.pagination.start + 1
     const end = Math.min(this.pagination.start + this.pagination.count, this.totalRecords)
 
-    return $localize`Showing ${start} to ${end} of ${this.totalRecords} elements`
+    return $localize`Showing ${start} to ${end} of ${this.totalRecords.toLocaleString()} elements`
   }
 
   hasBulkActions () {
