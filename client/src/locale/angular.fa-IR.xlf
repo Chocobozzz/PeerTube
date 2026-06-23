@@ -7260,7 +7260,7 @@
       </trans-unit>
       <trans-unit id="7419704019640008953" datatype="html" xml:space="preserve">
         <source>Share</source>
-        <target state="translated">هم‌رسانی</target>
+        <target state="translated">اشتراک‌گذاری</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context>
           <context context-type="linenumber">13</context>
@@ -7272,7 +7272,7 @@
       </trans-unit>
       <trans-unit id="6599497107591892109" datatype="html" xml:space="preserve">
         <source>Share the playlist</source>
-        <target state="translated">هم‌رسانی فهرست پخش</target>
+        <target state="translated">اشتراک‌گذاری فهرست پخش</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-playlist.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7280,7 +7280,7 @@
       </trans-unit>
       <trans-unit id="937533808893845780" datatype="html" xml:space="preserve">
         <source>This playlist is private so you won't be able to share it with external users</source>
-        <target state="translated">این فهرست پخش خصوصی است، بنابراین شما نمی‌توانید آن را با کاربران بیرونی هم‌رسانی کنید</target>
+        <target state="translated">این فهرست پخش خصوصی است، بنابراین شما نمی‌توانید آن را با کاربران بیرونی به اشتراک بگذارید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-playlist.component.html</context>
           <context context-type="linenumber">8</context>
@@ -7336,7 +7336,7 @@
       </trans-unit>
       <trans-unit id="1253396341165671470" datatype="html" xml:space="preserve">
         <source>Share the video</source>
-        <target state="translated">هم‌رسانی ویدیو</target>
+        <target state="translated">اشتراک‌گذاری ویدئو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">3</context>
@@ -7344,7 +7344,7 @@
       </trans-unit>
       <trans-unit id="5254843797242866315" datatype="html" xml:space="preserve">
         <source>This video is private so you won't be able to share it with external users</source>
-        <target state="translated">این ویدیو خصوصی است، بنابراین شما نمی‌توانید آن را با کاربران بیرونی هم‌رسانی کنید</target>
+        <target state="translated">این ویدیو خصوصی است، بنابراین شما نمی‌توانید آن را با کاربران بیرونی به اشتراک بگذارید</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">8</context>
@@ -8046,7 +8046,7 @@
       </trans-unit>
       <trans-unit id="9219888125536520293" datatype="html" xml:space="preserve">
         <source>SHARE</source>
-        <target state="translated">هم‌رسانی</target>
+        <target state="translated">اشتراک‌گذاری</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/action-buttons/action-buttons.component.html</context>
           <context context-type="linenumber">20</context>
@@ -27569,9 +27569,9 @@
           <context context-type="linenumber">92</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4503408361537553733" datatype="html">
+      <trans-unit id="4503408361537553733" datatype="html" xml:space="preserve">
         <source>Mirror</source>
-        <target state="translated">آیینه</target>
+        <target state="translated">نمایش آینه‌ای</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">580</context>
