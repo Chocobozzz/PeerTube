@@ -53,7 +53,17 @@ describe('Test plugins HTML injection', function () {
     }
   })
 
+  it('Should strip sourcemap comments from global css', async function () {
+    await command.install({ path: PluginsCommand.getPluginTestPath('-css-sourcemap') })
+
+    const text = await command.getCSS()
+    expect(text).to.contain('.css-sourcemap-fixture')
+    expect(text).to.not.contain('sourceMappingURL')
+    expect(text).to.not.contain('style.css.map')
+  })
+
   it('Should have an empty global css on uninstall', async function () {
+    await command.uninstall({ npmName: 'peertube-plugin-test-css-sourcemap' })
     await command.uninstall({ npmName: 'peertube-plugin-hello-world' })
 
     {
