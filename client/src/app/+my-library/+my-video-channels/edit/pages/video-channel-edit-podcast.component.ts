@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, effect, inject, Injector, OnDestroy
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { email, form, FormField } from '@angular/forms/signals'
 import { ServerService } from '@app/core'
+import { getOriginUrl } from '@app/helpers'
 import { FormErrorComponent } from '@app/shared/shared-forms/form-error.component'
 import { FormInputErrorDirective } from '@app/shared/shared-forms/form-input-error.directive'
 import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
@@ -11,7 +12,6 @@ import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { getChannelPodcastFeed } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
-import { environment } from '../../../../../environments/environment'
 import { VideoChannelEditControllerService } from '../video-channel-edit-controller.service'
 import { VideoChannelEdit } from '../video-channel-edit.model'
 
@@ -54,15 +54,15 @@ export class VideoChannelEditPodcastComponent implements OnInit, OnDestroy {
   private formSub: Subscription
 
   get videoFeedUrl () {
-    return getChannelPodcastFeed(environment.originServerUrl, { id: this.videoChannelEdit.apiInfo.id }, 'video')
+    return getChannelPodcastFeed(getOriginUrl(), { id: this.videoChannelEdit.apiInfo.id }, 'video')
   }
 
   get audioFeedUrl () {
-    return getChannelPodcastFeed(environment.originServerUrl, { id: this.videoChannelEdit.apiInfo.id }, 'audio')
+    return getChannelPodcastFeed(getOriginUrl(), { id: this.videoChannelEdit.apiInfo.id }, 'audio')
   }
 
   get podcastFeedUrl () {
-    return getChannelPodcastFeed(environment.originServerUrl, { id: this.videoChannelEdit.apiInfo.id })
+    return getChannelPodcastFeed(getOriginUrl(), { id: this.videoChannelEdit.apiInfo.id })
   }
 
   ngOnInit () {
