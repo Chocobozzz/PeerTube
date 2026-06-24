@@ -113,7 +113,7 @@ async function generateChannelPodcastFeed (req: express.Request, res: express.Re
   const data = await getVideosForFeeds({
     ...nsfwOptions,
 
-    sort: '-publishedAt',
+    sort: '-originallyPublishedAt',
 
     // Prevent podcast feeds from listing videos in other instances
     // helps prevent duplicates when they are indexed -- only the author should control them
@@ -181,7 +181,7 @@ async function generatePlaylistPodcastFeed (req: express.Request, res: express.R
   const data = await getVideosForFeeds({
     ...nsfwOptions,
 
-    sort: '-publishedAt',
+    sort: '-playlistElementPosition',
 
     // Prevent podcast feeds from listing videos in other instances
     // helps prevent duplicates when they are indexed -- only the author should control them

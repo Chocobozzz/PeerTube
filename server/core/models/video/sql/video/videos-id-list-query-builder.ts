@@ -446,8 +446,8 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
   private joinPlaylist (playlistId: number) {
     this.joins.push(
-      'INNER JOIN "videoPlaylistElement" ON "video"."id" = "videoPlaylistElement"."videoId" ' +
-        'AND "videoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
+      'INNER JOIN "videoPlaylistElement" "VideoPlaylistElement" ON "video"."id" = "VideoPlaylistElement"."videoId" ' +
+        'AND "VideoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
     )
 
     this.replacements.videoPlaylistId = playlistId
@@ -1016,10 +1016,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private setSort (column: string, direction: 'ASC' | 'DESC') {
-    this.sort = this.buildOrder(column, direction)
-  }
-
-  private buildOrder (column: string, direction: 'ASC' | 'DESC') {
     if (column.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + column)
 
     if (column === 'random') return 'ORDER BY RANDOM()'
@@ -1037,13 +1033,15 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       firstSort = '"publishedAtForOrder"'
     } else if (column === 'localVideoFilesSize') {
       firstSort = '"localVideoFilesSize"'
+    } else if (column === 'playlistElementPosition') {
+      firstSort = '"VideoPlaylistElement"."position"'
     } else if (column.includes('.')) {
       firstSort = column
     } else {
       firstSort = `"video"."${column}"`
     }
 
-    return `ORDER BY ${firstSort} ${direction}, "video"."id" ASC`
+    this.sort = `ORDER BY ${firstSort} ${direction}, "video"."id" ASC`
   }
 
   private setLimit (countArg: number) {

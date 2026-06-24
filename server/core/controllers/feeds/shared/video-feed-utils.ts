@@ -62,7 +62,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
     description: mdToPlainText(video.getTruncatedDescription()),
     content: toSafeHtml(video.description),
 
-    date: video.publishedAt,
+    date: video.originallyPublishedAt || video.publishedAt,
     nsfw: video.nsfw,
 
     category: video.category
