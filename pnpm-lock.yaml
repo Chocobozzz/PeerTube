@@ -785,11 +785,11 @@ importers:
         specifier: ^7.1.0
         version: 7.1.0(@angular/core@22.0.2(@angular/compiler@22.0.2)(rxjs@7.8.2)(zone.js@0.16.2))(rxjs@7.8.2)
       p2p-media-loader-core:
-        specifier: ^2.3.2
-        version: 2.3.2
+        specifier: ^2.2.2
+        version: 2.2.2
       p2p-media-loader-hlsjs:
-        specifier: ^2.3.2
-        version: 2.3.2
+        specifier: ^2.2.2
+        version: 2.2.2
       primeng:
         specifier: ^21.1.9
         version: 21.1.9(336478e1d21b5775370a581586d74a89)
@@ -8793,6 +8793,9 @@ packages:
     engines: {node: '>=8', npm: '>=5'}
     hasBin: true
 
+  nano-md5@1.0.5:
+    resolution: {integrity: sha512-1VAOX0EiuwAdCMGpnglxp9r6ylm+gXwQi+UPAnc/Oj1tLLJ8D1I8rLZeiO4MWsUAqH8tuBAHweT1LYSrDfJlPg==}
+
   nanoid@3.3.15:
     resolution: {integrity: sha512-y7Wygv/7mEOvxTuEQDB8StXdMRBWf1kR/tlhAzBRUFkB2jfcLOAxO/SHmOO2zgz1pVgK29/kyupn059/bCHdjA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -9219,11 +9222,11 @@ packages:
     resolution: {integrity: sha512-wpgERjNkLrBiFmkMEjuZJEWKKDrNfHCKA1OhyN1wg1FrLkULbviEy6py1AyJUgZ72YWFbZ38FIpnqvVqAlDUwA==}
     engines: {node: '>=8'}
 
-  p2p-media-loader-core@2.3.2:
-    resolution: {integrity: sha512-x/Q0dVLgs20rvat20Afaw3Cz0i2wYvHrfjT8akgcsoV0NaGDj+Q6vOoldJ5Rvur3SdfTXnHBp7T0yvMQLN+3+Q==}
+  p2p-media-loader-core@2.2.2:
+    resolution: {integrity: sha512-Y12TkXugDzV3O1p7jynYL3aVrVGzEAm55PyHlUVWcJsqKMtg6Agkrnc7a0583WW/s8sAu7uhDbN5tPuuo3tFvw==}
 
-  p2p-media-loader-hlsjs@2.3.2:
-    resolution: {integrity: sha512-s+RL43eho59E/67+GoDo/IIWFlRcx1jvxLqRDVntHdSaqQkjcjelexT8pjS/UW/0qNKnBjWR/f7cdmlD6XPWMA==}
+  p2p-media-loader-hlsjs@2.2.2:
+    resolution: {integrity: sha512-YfPu1tw5VHjUefpry9EaoZ43+n1Y4uxYlYCmesDitYMgSp825OPYcYedlQWrLDwVqJrh+WcjtCthUxFMsFC4Og==}
 
   pac-proxy-agent@7.2.0:
     resolution: {integrity: sha512-TEB8ESquiLMc0lV8vcd5Ql/JAKAoyzHFXaStwjkzpOpC5Yv+pIzLfHvjTSdf3vpa2bMiUQrg9i6276yn8666aA==}
@@ -20927,6 +20930,8 @@ snapshots:
       '@babel/runtime': 7.29.7
       global: 4.4.0
 
+  nano-md5@1.0.5: {}
+
   nanoid@3.3.15: {}
 
   napi-build-utils@2.0.0: {}
@@ -21462,19 +21467,20 @@ snapshots:
       p-timeout: 3.2.0
     optional: true
 
-  p2p-media-loader-core@2.3.2:
+  p2p-media-loader-core@2.2.2:
     dependencies:
       '@types/debug': 4.1.13
       bittorrent-tracker: 11.2.3
       debug: 4.4.3(supports-color@8.1.1)
+      nano-md5: 1.0.5
     transitivePeerDependencies:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
 
-  p2p-media-loader-hlsjs@2.3.2:
+  p2p-media-loader-hlsjs@2.2.2:
     dependencies:
-      p2p-media-loader-core: 2.3.2
+      p2p-media-loader-core: 2.2.2
     transitivePeerDependencies:
       - bare-abort-controller
       - react-native-b4a
