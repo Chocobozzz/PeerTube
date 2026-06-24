@@ -37,7 +37,9 @@ export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, Ch
 
     if (!isVideoChannelDescriptionValid(channelImportData.description)) channelImportData.description = null
     if (!isVideoChannelSupportValid(channelImportData.support)) channelImportData.support = null
-    if (!isVideoChannelPublicEmailValid(channelImportData.publicEmail)) channelImportData.publicEmail = null
+    if (channelImportData.publicEmail && !isVideoChannelPublicEmailValid(channelImportData.publicEmail)) {
+      channelImportData.publicEmail = null
+    }
 
     if (channelImportData.playerSettings) {
       if (!isPlayerChannelThemeSettingValid(channelImportData.playerSettings.theme)) channelImportData.playerSettings.theme = undefined

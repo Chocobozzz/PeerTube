@@ -183,7 +183,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       : null
 
     const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(videoImportData.channel.name)
-    if (!videoChannel) throw new Error(`Channel ${videoImportData} not found`)
+    if (!videoChannel) throw new Error(`Channel ${videoImportData.channel.name} not found`)
     if (videoChannel.accountId !== this.user.Account.id) {
       throw new Error(`Channel ${videoChannel.name} is not owned by user ${this.user.username}`)
     }
