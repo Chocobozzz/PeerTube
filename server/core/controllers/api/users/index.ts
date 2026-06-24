@@ -174,7 +174,7 @@ async function createUser (req: express.Request, res: express.Response) {
     channelNames: body.channelName && { name: body.channelName, displayName: body.channelName }
   })
 
-  auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })))
   logger.info('User %s with its channel and account created.', body.username, lTags(user.username))
 
   if (createPassword) {
@@ -300,7 +300,7 @@ async function updateUser (req: express.Request, res: express.Response) {
   // Destroy user token to refresh rights
   if (roleChanged || body.password !== undefined) await OAuthTokenModel.deleteUserToken(userToUpdate.id)
 
-  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })), oldUserAuditView)
 
   logger.info(`Updated user ${user.username} by moderator ${byUser.username}.`, lTags(user.username, byUser.username))
 
@@ -353,5 +353,5 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
 
   Emailer.Instance.addUserBlockJob({ username: user.username, email: user.email, language: user.getLanguage(), blocked: block, reason })
 
-  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })), oldUserAuditView)
 }
