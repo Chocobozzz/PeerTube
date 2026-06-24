@@ -63,6 +63,10 @@ function sendHTML (html: string, res: express.Response, localizedHTML = false) {
 }
 
 async function serveIndexHTML (req: express.Request, res: express.Response) {
+  if (isSourcemapPath(req.path)) {
+    return res.status(HttpStatusCode.NOT_FOUND_404).end()
+  }
+
   if (req.accepts(ACCEPT_HEADERS) === 'html' || !req.headers.accept) {
     try {
       await generateHTMLPage(req, res, req.params.language)
@@ -87,6 +91,10 @@ export {
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+function isSourcemapPath (path: string) {
+  return /\.map$/i.test(path)
+}
 
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
   const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
