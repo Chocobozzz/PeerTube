@@ -82,6 +82,20 @@ describe('Test index HTML generation', function () {
     })
   })
 
+  describe('Static assets fallback', function () {
+    it('Should not serve index HTML for a missing sourcemap asset', async function () {
+      const res = await makeGetRequest({
+        url: servers[0].url,
+        path: '/videos/header.component-FAKE.css.map',
+        accept: '*/*',
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+
+      expect(res.headers['content-type'] || '').to.not.contain('text/html')
+      expect(res.text || '').to.not.contain('<!doctype html>')
+    })
+  })
+
   describe('Canonical tags', function () {
     it('Should use the original video URL for the canonical tag', async function () {
       for (const basePath of getWatchVideoBasePaths()) {
