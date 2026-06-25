@@ -1,5 +1,6 @@
 import { SimpleLogger } from '@peertube/peertube-models'
 import { TranscriptionEngine, TranscriptionEngineName } from './transcription-engine.js'
+import { TwelveLabsTranscriber } from './twelvelabs/index.js'
 import { Ctranslate2Transcriber, OpenaiTranscriber } from './whisper/index.js'
 
 export class TranscriberFactory {
@@ -30,6 +31,9 @@ export class TranscriberFactory {
 
       case 'whisper-ctranslate2':
         return new Ctranslate2Transcriber(transcriberArgs)
+
+      case 'twelvelabs':
+        return new TwelveLabsTranscriber(transcriberArgs)
 
       default:
         throw new Error(`Unimplemented engine ${engineName}`)

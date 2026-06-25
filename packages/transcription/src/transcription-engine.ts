@@ -1,13 +1,18 @@
 import { ModelFormat } from './transcription-model.js'
 
-export type TranscriptionEngineName = 'openai-whisper' | 'whisper-ctranslate2'
+export type TranscriptionEngineName = 'openai-whisper' | 'whisper-ctranslate2' | 'twelvelabs'
 
 export interface TranscriptionEngine {
   name: TranscriptionEngineName
   description?: string
   language?: string
-  type: 'binary'
-  command: string
+
+  // 'binary' engines run a local command, 'api' engines call a remote provider
+  type: 'binary' | 'api'
+
+  // Only set for 'binary' engines
+  command?: string
+
   version: string
   license?: string
   forgeURL?: string

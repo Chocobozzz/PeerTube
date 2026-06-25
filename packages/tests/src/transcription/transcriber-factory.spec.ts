@@ -2,7 +2,7 @@ import { TranscriptionEngineName, transcriberFactory } from '@peertube/peertube-
 import { createConsoleLogger } from '@tests/shared/common.js'
 
 describe('Transcriber factory', function () {
-  const transcribers: TranscriptionEngineName[] = [ 'openai-whisper', 'whisper-ctranslate2' ]
+  const transcribers: TranscriptionEngineName[] = [ 'openai-whisper', 'whisper-ctranslate2', 'twelvelabs' ]
 
   describe('Should be able to create a transcriber for each available transcription engine', function () {
 

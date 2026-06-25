@@ -2104,7 +2104,7 @@
           "default": false
         },
         "engine": {
-          "description": "Choose engine for local transcription Supported: 'openai-whisper' or 'whisper-ctranslate2'",
+          "description": "Choose engine for transcription Local engines: 'openai-whisper' or 'whisper-ctranslate2' Remote engine: 'twelvelabs' (TwelveLabs Pegasus, requires the TWELVELABS_API_KEY env variable - https://twelvelabs.io)",
           "type": "string",
           "default": "whisper-ctranslate2"
         },

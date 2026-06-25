@@ -816,8 +816,9 @@ video_transcription:
   # Enable automatic transcription of videos
   enabled: false
 
-  # Choose engine for local transcription
-  # Supported: 'openai-whisper' or 'whisper-ctranslate2'
+  # Choose engine for transcription
+  # Local engines: 'openai-whisper' or 'whisper-ctranslate2'
+  # Remote engine: 'twelvelabs' (TwelveLabs Pegasus, requires the TWELVELABS_API_KEY env variable - https://twelvelabs.io)
   engine: 'whisper-ctranslate2'
 
   # You can set a custom engine path for local transcription
