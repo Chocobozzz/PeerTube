@@ -1,14 +1,19 @@
-import { ChangeDetectionStrategy, Component, forwardRef, inject, input, OnChanges, OnDestroy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, forwardRef, inject, input, OnChanges, OnDestroy, output } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { SearchService } from '@app/shared/shared-search/search.service'
+import { pick } from '@peertube/peertube-core-utils'
 import { VideoChannel as VideoChannelServer } from '@peertube/peertube-models'
+import { SelectOptionsItem } from '@pt-types'
 import { findAppropriateImageFileUrl } from '@root-helpers/images'
 import { first, forkJoin, map, Subscription } from 'rxjs'
-import { SelectOptionsItem } from '../../../../types/select-options-item.model'
+import { ChannelMetadata } from './select-channel-metadata.model'
 import { SelectOptionsComponent } from './select-options.component'
+
+interface ChannelOption extends SelectOptionsItem, ChannelMetadata {
+}
 
 @Component({
   selector: 'my-select-channel-admin',
@@ -52,10 +57,13 @@ export class SelectChannelAdminComponent implements ControlValueAccessor, OnChan
   readonly inputId = input.required<string>()
   readonly ownerAccountName = input.required<string>()
 
+  readonly channelChanged = output<ChannelMetadata>()
+
   selectedId: number
 
-  options: { label: string, value: string, items: SelectOptionsItem[] }[] = []
-  baseOptions: { label: string, value: string, items: SelectOptionsItem[] }[] = []
+  options: { label: string, value: string, items: ChannelOption[] }[] = []
+
+  baseOptions: { label: string, value: string, items: ChannelOption[] }[] = []
 
   loading = false
 
@@ -175,12 +183,17 @@ export class SelectChannelAdminComponent implements ControlValueAccessor, OnChan
 
   onModelChange () {
     this.propagateChange(this.selectedId)
+
+    const item = this.options.flatMap(o => o.items)
+      .find(c => c.id === this.selectedId)
+
+    this.channelChanged.emit(pick(item, [ 'ownerAccountName', 'channelDisplayName', 'channelName' ]))
   }
 
   private formatChannel (options: {
     channel: VideoChannelServer
     displayOwner: boolean
-  }) {
+  }): ChannelOption {
     const { channel, displayOwner } = options
 
     return {
@@ -192,7 +205,11 @@ export class SelectChannelAdminComponent implements ControlValueAccessor, OnChan
 
       imageUrl: channel.avatars.length
         ? findAppropriateImageFileUrl(channel.avatars, 21)
-        : VideoChannel.GET_DEFAULT_AVATAR_URL(21)
+        : VideoChannel.GET_DEFAULT_AVATAR_URL(21),
+
+      ownerAccountName: channel.ownerAccount.name,
+      channelDisplayName: channel.displayName,
+      channelName: channel.name
     }
   }
 }

@@ -43,6 +43,8 @@ export class SelectChannelUserComponent implements ControlValueAccessor, OnChang
   readonly inputId = input.required<string>()
   readonly items = input<SelectChannelItem[]>([])
 
+  readonly channelChanged = output<ChannelMetadata>()
+
   channels: SelectOptionsItem[]
   selectedId: number
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, forwardRef, inject, input, OnChanges, OnDestroy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, forwardRef, inject, input, OnChanges, OnDestroy, output } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { AuthService } from '@app/core'
 import { buildUserChannelsForSelect } from '@app/helpers/utils/channel'
@@ -7,6 +7,7 @@ import { Account } from '@peertube/peertube-models'
 import { first, Subscription } from 'rxjs'
 import { SelectChannelItem } from '../../../../types/select-options-item.model'
 import { SelectChannelAdminComponent } from './select-channel-admin.component'
+import { ChannelMetadata } from './select-channel-metadata.model'
 import { SelectChannelUserComponent } from './select-channel-user.component'
 
 /**
@@ -24,6 +25,7 @@ import { SelectChannelUserComponent } from './select-channel-user.component'
       [ownerAccountName]="ownerAccount().name"
       [(ngModel)]="selectedId"
       (ngModelChange)="onModelChange()"
+      (channelChanged)="channelChanged.emit($event)"
     ></my-select-channel-admin>
   } @else {
     <my-select-channel-user
@@ -31,6 +33,7 @@ import { SelectChannelUserComponent } from './select-channel-user.component'
       [items]="userChannels"
       [(ngModel)]="selectedId"
       (ngModelChange)="onModelChange()"
+      (channelChanged)="channelChanged.emit($event)"
     ></my-select-channel-user>
   }
   `,
@@ -50,6 +53,8 @@ export class SelectChannelAutoComponent implements ControlValueAccessor, OnChang
   readonly inputId = input.required<string>()
   readonly ownerChannel = input.required<Pick<VideoChannel, 'id'>>()
   readonly ownerAccount = input.required<Pick<Account, 'name'>>()
+
+  readonly channelChanged = output<ChannelMetadata>()
 
   userChannels: SelectChannelItem[]
   selectedId: number

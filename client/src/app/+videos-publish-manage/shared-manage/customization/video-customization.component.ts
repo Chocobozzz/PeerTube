@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { BuildFormArgumentTyped } from '@app/shared/form-validators/form-validator.model'
@@ -67,11 +67,14 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    const { videoEdit, userChannels } = this.manageController.getStore()
+    const { videoEdit } = this.manageController.getStore()
     this.videoEdit = videoEdit
 
-    const channelItem = userChannels.find(c => c.id === videoEdit.toCommonFormPatch().channelId)
-    this.videoChannel = { name: channelItem.name, displayName: channelItem.label }
+    const attributes = this.videoEdit.getVideoAttributes()
+    this.videoChannel = {
+      name: attributes.channelName,
+      displayName: attributes.channelDisplayName
+    }
 
     this.buildForm()
   }

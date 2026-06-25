@@ -194,8 +194,8 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     this.forbidScheduledPublication = forbidScheduledPublication
 
     this.initialOwner = {
-      channelId: this.videoEdit.toCommonFormPatch().channelId,
-      accountName: this.videoEdit.getVideoAttributes().ownerAccountName
+      channelId: this.videoEdit.getInitialAttributes().channelId,
+      accountName: this.videoEdit.getInitialAttributes().accountName
     }
 
     this.buildForm()
@@ -495,6 +495,10 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
+  onAdminChannelChanged ({ channelId, channelDisplayName }) {
+    this.videoEdit.loadChannelChange({ channelId, channelDisplayName })
+  }
+
   canBeDeletedOrTransferred () {
     return !!this.videoEdit.getVideoAttributes().id
   }
@@ -555,11 +559,5 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
         this.pendingOwnershipRequest = data[0]
       })
-  }
-
-  // ---------------------------------------------------------------------------
-
-  isVideoOwner () {
-    return this.videoEdit.getVideoAttributes().ownerAccountId === this.authService.getUser().account.id
   }
 }

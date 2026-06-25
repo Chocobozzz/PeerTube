@@ -98,6 +98,7 @@
         <my-select-channel-auto
           class="d-block" inputId="adminChannel" formControlName="channelId"
           [ownerAccount]="{ name: initialOwner.accountName }" [ownerChannel]="{ id: initialOwner.channelId }"
+          (onChannelChanged)="onAdminChannelChanged($event)"
         ></my-select-channel-auto>
       </div>
 

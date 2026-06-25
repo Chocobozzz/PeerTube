@@ -88,6 +88,7 @@ type EmbedPrivacyForm = {
 // ---------------------------------------------------------------------------
 
 type LoadFromPublishOptions = Required<Pick<VideoCreate, 'channelId' | 'support'>> & Partial<Pick<VideoCreate, 'name'>> & {
+  channelDisplayName: string
   user: AuthUser
 }
 
@@ -180,6 +181,11 @@ export class VideoEdit {
 
   private videoImport: Pick<VideoImportCreate, 'magnetUri' | 'torrentfile' | 'targetUrl'>
 
+  private initialMetadata: {
+    accountName: string
+    channelId: number
+  }
+
   private metadata: Partial<{
     id: number
     uuid: string
@@ -195,12 +201,12 @@ export class VideoEdit {
     blacklistedReason: string
     publishedAt: Date
 
-    ownerAccountId: number
-    ownerAccountName: string
-    ownerAccountDisplayName: string
-
     live: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
     videoSource: VideoSource
+
+    accountName: string
+    channelName: string
+    channelDisplayName: string
   }> = {}
 
   private videoAttributes: {
@@ -221,9 +227,9 @@ export class VideoEdit {
     blacklisted: boolean
     blacklistedReason: string
 
-    ownerAccountId: number
-    ownerAccountName: string
-    ownerAccountDisplayName: string
+    accountName: string
+    channelName: string
+    channelDisplayName: string
 
     live?: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
   }
@@ -339,9 +345,12 @@ export class VideoEdit {
     this.metadata.downloads = 0
     this.metadata.likes = 0
 
-    this.metadata.ownerAccountDisplayName = options.user.account.displayName
-    this.metadata.ownerAccountName = options.user.account.name
-    this.metadata.ownerAccountId = options.user.account.id
+    this.metadata.accountName = options.user.account.name
+    this.metadata.channelName = options.channelName
+    this.metadata.channelDisplayName = options.channelDisplayName
+
+    this.initialMetadata.accountName = this.metadata.accountName
+    this.initialMetadata.channelId = this.common.channelId
 
     this.updateAfterChange()
   }
@@ -466,9 +475,12 @@ export class VideoEdit {
 
     this.metadata.isLive = video.isLive
 
-    this.metadata.ownerAccountDisplayName = video.channel.ownerAccount.displayName
-    this.metadata.ownerAccountName = video.channel.ownerAccount.name
-    this.metadata.ownerAccountId = video.channel.ownerAccount.id
+    this.metadata.accountName = video.channel.ownerAccount.name
+    this.metadata.channelName = video.channel.name
+    this.metadata.channelDisplayName = video.channel.displayName
+
+    this.initialMetadata.accountName = this.metadata.accountName
+    this.initialMetadata.channelId = this.common.channelId
   }
 
   loadPluginDataDefaults (pluginDefaults: Record<string, string | boolean>) {
@@ -637,6 +649,16 @@ export class VideoEdit {
     }
 
     this.updateAfterChange()
+  }
+
+  loadChannelChange (options: {
+    name: string
+    displayName: string
+    ownerAccountName: string
+  }) {
+    this.metadata.channelName = options.name
+    this.metadata.channelDisplayName = options.displayName
+    this.metadata.accountName = options.ownerAccountName
   }
 
   toCommonFormPatch () {
@@ -969,6 +991,10 @@ export class VideoEdit {
     return this.videoAttributes
   }
 
+  getInitialAttributes () {
+    return this.initialMetadata
+  }
+
   getChaptersEdit () {
     return this.chapters
   }
@@ -1175,9 +1201,9 @@ export class VideoEdit {
       blacklisted: this.metadata.blacklisted,
       blacklistedReason: this.metadata.blacklistedReason,
 
-      ownerAccountId: this.metadata.ownerAccountId,
-      ownerAccountName: this.metadata.ownerAccountName,
-      ownerAccountDisplayName: this.metadata.ownerAccountDisplayName,
+      accountName: this.metadata.accountName,
+      channelName: this.metadata.channelName,
+      channelDisplayName: this.metadata.channelDisplayName,
 
       live: this.metadata.live
     }
@@ -1226,6 +1252,11 @@ export class VideoEdit {
 
   onSave () {
     this.isNewVideo = false
+
+    this.initialMetadata = {
+      accountName: this.metadata.accountName,
+      channelId: this.common.channelId
+    }
   }
 
   enableCheckPluginChanges () {
