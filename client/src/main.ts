@@ -3,7 +3,6 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http'
 import {
   ApplicationRef,
   enableProdMode,
-  enableProfiling,
   importProvidersFrom,
   inject,
   provideAppInitializer,
@@ -61,8 +60,6 @@ export function loadConfigFactory (
 
 if (environment.production) {
   enableProdMode()
-} else {
-  enableProfiling()
 }
 
 logger.registerServerSending(environment.apiUrl)
