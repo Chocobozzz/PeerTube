@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { AuthService, ServerService, UserService } from '@app/core'
-import { listUserChannelsForSelect } from '@app/helpers'
+import { listChannelsForSelect } from '@app/helpers'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -121,7 +121,10 @@ export class VideoManageResolver {
 
       this.videoService.getSource(video.id),
 
-      listUserChannelsForSelect(this.authService, { includeCollaborations: true }),
+      listChannelsForSelect({
+        authService: this.authService,
+        includeCollaborations: true
+      }),
 
       this.videoCaptionService
         .listCaptions(video.uuid)

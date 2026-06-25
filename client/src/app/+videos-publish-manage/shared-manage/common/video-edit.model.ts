@@ -196,6 +196,7 @@ export class VideoEdit {
     publishedAt: Date
 
     ownerAccountId: number
+    ownerAccountName: string
     ownerAccountDisplayName: string
 
     live: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
@@ -221,6 +222,7 @@ export class VideoEdit {
     blacklistedReason: string
 
     ownerAccountId: number
+    ownerAccountName: string
     ownerAccountDisplayName: string
 
     live?: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
@@ -338,6 +340,7 @@ export class VideoEdit {
     this.metadata.likes = 0
 
     this.metadata.ownerAccountDisplayName = options.user.account.displayName
+    this.metadata.ownerAccountName = options.user.account.name
     this.metadata.ownerAccountId = options.user.account.id
 
     this.updateAfterChange()
@@ -464,6 +467,7 @@ export class VideoEdit {
     this.metadata.isLive = video.isLive
 
     this.metadata.ownerAccountDisplayName = video.channel.ownerAccount.displayName
+    this.metadata.ownerAccountName = video.channel.ownerAccount.name
     this.metadata.ownerAccountId = video.channel.ownerAccount.id
   }
 
@@ -1172,6 +1176,7 @@ export class VideoEdit {
       blacklistedReason: this.metadata.blacklistedReason,
 
       ownerAccountId: this.metadata.ownerAccountId,
+      ownerAccountName: this.metadata.ownerAccountName,
       ownerAccountDisplayName: this.metadata.ownerAccountDisplayName,
 
       live: this.metadata.live

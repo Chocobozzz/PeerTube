@@ -23,7 +23,7 @@ import debug from 'debug'
 import { truncate } from 'lodash-es'
 import { Subscription } from 'rxjs'
 import { ImageInputComponent } from '../../../shared/shared-forms/image-input.component'
-import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
@@ -43,7 +43,7 @@ const debugLogger = debug('peertube:video-publish')
     DragDropDirective,
     GlobalIconComponent,
     NgbTooltip,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     FormsModule,
     ImageInputComponent,
     ButtonComponent,

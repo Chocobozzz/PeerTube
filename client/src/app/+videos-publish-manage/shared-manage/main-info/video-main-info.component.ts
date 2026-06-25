@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
@@ -25,7 +25,7 @@ import { FormValidatorService } from '@app/shared/shared-forms/form-validator.se
 import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
 import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
-import { SelectChannelComponent } from '@app/shared/shared-forms/select/select-channel.component'
+import { SelectChannelAutoComponent } from '@app/shared/shared-forms/select/select-channel-auto.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { SelectTagsComponent } from '@app/shared/shared-forms/select/select-tags.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
@@ -44,7 +44,6 @@ import {
   VideoPrivacyType
 } from '@peertube/peertube-models'
 import { SelectChannelItem } from '@pt-types'
-import { logger } from '@root-helpers/logger'
 import { PluginInfo } from '@root-helpers/plugins-manager'
 import debug from 'debug'
 import { DatePickerModule } from 'primeng/datepicker'
@@ -98,7 +97,6 @@ type Form = {
     PeerTubeTemplateDirective,
     SelectTagsComponent,
     MarkdownTextareaComponent,
-    SelectChannelComponent,
     SelectOptionsComponent,
     InputTextComponent,
     DatePickerModule,
@@ -109,7 +107,8 @@ type Form = {
     RouterLink,
     AlertComponent,
     ButtonComponent,
-    SendChangeOwnershipComponent
+    SendChangeOwnershipComponent,
+    SelectChannelAutoComponent
   ]
 })
 export class VideoMainInfoComponent implements OnInit, OnDestroy {
@@ -169,6 +168,11 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   pendingOwnershipRequest: ChangeOwnership
 
+  initialOwner: {
+    channelId: number
+    accountName: string
+  }
+
   private schedulerInterval: any
   private updatedSub: Subscription
 
@@ -188,6 +192,11 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
     this.manageType = manageType
     this.hideWaitTranscoding = hideWaitTranscoding
     this.forbidScheduledPublication = forbidScheduledPublication
+
+    this.initialOwner = {
+      channelId: this.videoEdit.toCommonFormPatch().channelId,
+      accountName: this.videoEdit.getVideoAttributes().ownerAccountName
+    }
 
     this.buildForm()
 
@@ -462,8 +471,10 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
     const oldChannelId = this.form.value.channelId
     const oldChannel = this.userChannels.find(c => c.id === oldChannelId)
+
+    // Can happen if we change the channel to a new owner
     if (!newChannel || !oldChannel) {
-      logger.error('Cannot find new or old channel.')
+      debugLogger('Channel change: new or old channel not found', { newChannel, oldChannel })
       return
     }
 

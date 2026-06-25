@@ -33,7 +33,7 @@
 
       <div class="form-group">
         <label i18n for="videoChannel">Video channel</label>
-        <my-select-channel inputId="videoChannel" [items]="userVideoChannels" formControlName="videoChannel"></my-select-channel>
+        <my-select-channel-user inputId="videoChannel" [items]="channels" formControlName="videoChannel"></my-select-channel-user>
 
         @if (formErrors['videoChannel']) {
           <div class="form-error" role="alert">{{ formErrors['videoChannel'] }}</div>

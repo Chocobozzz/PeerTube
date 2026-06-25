@@ -3,24 +3,38 @@ import { VideoChannel } from '@peertube/peertube-models'
 import { first, map } from 'rxjs/operators'
 import { AuthService } from '../../core/auth'
 
-export function listUserChannelsForSelect (authService: AuthService, options: { includeCollaborations: boolean }) {
+// List channels of selected accountName
+// Set the currentChannelId to correctly display channel editor/owner information
+export function listChannelsForSelect (options: {
+  authService: AuthService
+  includeCollaborations: boolean
+}) {
+  const { authService } = options
+
   return authService.userInformationLoaded
     .pipe(
       first(),
-      map(() => {
-        const user = authService.getUser()
-        const collaborate = user.isCollaboratingToChannels()
-
-        const allChannels = options.includeCollaborations
-          ? [
-            ...formatChannels(user.videoChannels, { editor: false, owner: true, collaborate }),
-            ...formatChannels(user.videoChannelCollaborations, { editor: true, owner: false, collaborate })
-          ]
-          : formatChannels(user.videoChannels, { editor: false, owner: false, collaborate })
-
-        return sortBy(allChannels, 'updatedAt').reverse()
-      })
+      map(() => buildUserChannelsForSelect(options))
     )
+}
+
+export function buildUserChannelsForSelect (options: {
+  authService: AuthService
+  includeCollaborations: boolean
+}) {
+  const { authService, includeCollaborations } = options
+
+  const user = authService.getUser()
+  const collaborate = user.isCollaboratingToChannels()
+
+  const allChannels = includeCollaborations
+    ? [
+      ...formatChannels(user.videoChannels, { editor: false, owner: true, collaborate }),
+      ...formatChannels(user.videoChannelCollaborations, { editor: true, owner: false, collaborate })
+    ]
+    : formatChannels(user.videoChannels, { editor: false, owner: false, collaborate })
+
+  return sortBy(allChannels, 'updatedAt').reverse()
 }
 
 // ---------------------------------------------------------------------------

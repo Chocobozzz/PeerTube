@@ -6,7 +6,7 @@ import { SelectChannelItem } from '../../../types/select-options-item.model'
 export abstract class MyVideoPlaylistEdit extends FormReactive {
   // Declare it here to avoid errors in create template
   videoPlaylistToUpdate: VideoPlaylist
-  userVideoChannels: SelectChannelItem[] = []
+  channels: SelectChannelItem[] = []
   videoPlaylistPrivacies: ConstantLabel<VideoPlaylistPrivacyType>[] = []
 
   abstract isCreation (): boolean

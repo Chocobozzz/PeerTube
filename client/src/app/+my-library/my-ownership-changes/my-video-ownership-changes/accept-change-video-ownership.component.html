@@ -10,7 +10,7 @@
   <div class="modal-body" [formGroup]="form">
     <div class="form-group">
       <label i18n for="channel">{ ownershipChanges.length, plural, =1 {Select a channel to receive the video} other {Select a channel to receive the videos}}</label>
-      <my-select-channel class="d-block" inputId="channel" formControlName="channel" [items]="videoChannels"></my-select-channel>
+      <my-select-channel-user class="d-block" inputId="channel" formControlName="channel" [items]="videoChannels"></my-select-channel-user>
 
       @if (formErrors.channel) {
         <div class="form-error" role="alert">{{ formErrors.channel }}</div>

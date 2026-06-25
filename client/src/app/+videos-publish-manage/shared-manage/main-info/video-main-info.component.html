@@ -95,7 +95,10 @@
           </div>
         }
 
-        <my-select-channel class="d-block" inputId="channel" [items]="userChannels" formControlName="channelId"></my-select-channel>
+        <my-select-channel-auto
+          class="d-block" inputId="adminChannel" formControlName="channelId"
+          [ownerAccount]="{ name: initialOwner.accountName }" [ownerChannel]="{ id: initialOwner.channelId }"
+        ></my-select-channel-auto>
       </div>
 
       <div class="form-group">

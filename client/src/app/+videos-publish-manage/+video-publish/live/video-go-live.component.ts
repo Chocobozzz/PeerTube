@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
@@ -8,10 +8,10 @@ import { LiveVideoService } from '@app/shared/shared-video-live/live-video.servi
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
 import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 import { LiveVideoLatencyMode, PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
+import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { forkJoin, map, switchMap } from 'rxjs'
-import { SelectChannelItem } from '@pt-types'
-import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
 
@@ -27,7 +27,7 @@ const debugLogger = debug('peertube:video-publish')
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     FormsModule,
     ReactiveFormsModule,
     VideoManageContainerComponent

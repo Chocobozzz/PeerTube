@@ -1,12 +1,12 @@
-import { Component, forwardRef, input, OnChanges, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, forwardRef, input, OnChanges } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { SelectChannelItem, SelectOptionsItem } from '../../../../types/select-options-item.model'
 import { SelectOptionsComponent } from './select-options.component'
-import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
 
 @Component({
-  selector: 'my-select-channel',
+  selector: 'my-select-channel-user',
   template: `
   <my-select-options
     [inputId]="inputId()"
@@ -32,14 +32,14 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectChannelComponent),
+      useExisting: forwardRef(() => SelectChannelUserComponent),
       multi: true
     }
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, SelectOptionsComponent, CollaboratorStateComponent ]
 })
-export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
+export class SelectChannelUserComponent implements ControlValueAccessor, OnChanges {
   readonly inputId = input.required<string>()
   readonly items = input<SelectChannelItem[]>([])
 
@@ -76,9 +76,5 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
 
   onModelChange () {
     this.propagateChange(this.selectedId)
-  }
-
-  getSelectedChannel () {
-    return (this.channels || []).find(c => c.id + '' === this.selectedId + '')
   }
 }

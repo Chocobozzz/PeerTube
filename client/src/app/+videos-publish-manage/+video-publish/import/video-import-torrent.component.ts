@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
@@ -12,10 +12,10 @@ import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-p
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
+import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { forkJoin, switchMap } from 'rxjs'
-import { SelectChannelItem } from '@pt-types'
-import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
@@ -37,7 +37,7 @@ const debugLogger = debug('peertube:video-publish')
     HelpComponent,
     FormsModule,
     DragDropDirective,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     ReactiveFormsModule,
     AlertComponent,
     VideoManageContainerComponent

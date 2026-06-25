@@ -15,3 +15,9 @@ export interface SelectChannelItem extends SelectOptionsItem {
 
   editor: boolean
 }
+
+export interface SelectOptionsGroup {
+  label: string
+  value: string
+  items: SelectOptionsItem[]
+}

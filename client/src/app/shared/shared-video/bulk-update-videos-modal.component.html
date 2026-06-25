@@ -35,12 +35,12 @@
                 </div>
 
                 @if (def.key === 'channelId') {
-                  <my-select-channel
+                  <my-select-channel-user
                     [inputId]="'bulk-' + def.key"
                     [items]="userChannels"
                     [formField]="bulkUpdateForm[def.key]"
                   >
-                  </my-select-channel>
+                  </my-select-channel-user>
                 } @else if (def.key === 'support') {
                   <textarea class="form-control" rows="3" [formField]="bulkUpdateForm[def.key]"></textarea>
                 } @else if (def.key === 'downloadEnabled') {

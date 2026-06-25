@@ -1,3 +1,4 @@
+import { getOriginUrl } from '@app/helpers'
 import { maxBy } from '@peertube/peertube-core-utils'
 import { ActorImage, Account as ServerAccount, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@peertube/peertube-models'
 import { Actor } from '../account/actor.model'
@@ -38,10 +39,10 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
 
   static GET_DEFAULT_AVATAR_URL (size: number) {
     if (size <= 48) {
-      return `${window.location.origin}/client/assets/images/default-avatar-video-channel-48x48.png`
+      return `${getOriginUrl()}/client/assets/images/default-avatar-video-channel-48x48.png`
     }
 
-    return `${window.location.origin}/client/assets/images/default-avatar-video-channel.png`
+    return `${getOriginUrl()}/client/assets/images/default-avatar-video-channel.png`
   }
 
   static buildPublicUrl (channel: Pick<ServerVideoChannel, 'name' | 'host'>) {
