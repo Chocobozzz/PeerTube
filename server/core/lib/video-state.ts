@@ -74,8 +74,13 @@ export function moveToNextState (options: {
         return true
       }
 
-      // Keep video in failed transcoding state
-      if (videoDatabase.state === VideoState.TRANSCODING_FAILED) {
+      // Keep video in failed state
+      const failedStates = new Set<VideoStateType>([
+        VideoState.TRANSCODING_FAILED,
+        VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED,
+        VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED
+      ])
+      if (failedStates.has(videoDatabase.state)) {
         return true
       }
 
