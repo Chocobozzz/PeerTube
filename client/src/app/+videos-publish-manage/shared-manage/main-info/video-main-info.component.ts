@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { AbstractControl, FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
-import { AuthService, ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
+import { ConfirmService, HooksService, Notifier, PluginService, ServerService } from '@app/core'
 import { BuildFormArgument, BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 import {
   VIDEO_CATEGORY_VALIDATOR,
@@ -113,7 +113,6 @@ type Form = {
 })
 export class VideoMainInfoComponent implements OnInit, OnDestroy {
   private formValidatorService = inject(FormValidatorService)
-  private authService = inject(AuthService)
   private formReactiveService = inject(FormReactiveService)
   private videoService = inject(VideoService)
   private serverService = inject(ServerService)

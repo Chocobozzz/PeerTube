@@ -662,6 +662,8 @@ export class VideoEdit {
     this.metadata.channelName = options.name
     this.metadata.channelDisplayName = options.displayName
     this.metadata.accountName = options.ownerAccountName
+
+    this.updateAfterChange()
   }
 
   toCommonFormPatch () {
