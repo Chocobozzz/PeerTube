@@ -1,5 +1,6 @@
-import { ActorImageType, VideoChannelCollaboratorState, VideoPlaylistType } from '@peertube/peertube-models'
+import { VideoChannelCollaboratorState, VideoPlaylistType } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
+import { getAvatarsJSONJoin, getBannersJSONJoin } from '@server/models/shared/sql/actor-helpers.js'
 import { Sequelize } from 'sequelize'
 import { UserTableAttributes } from './user-table-attributes.js'
 
@@ -43,8 +44,11 @@ export class UserListQueryBuilder extends AbstractListQuery {
     this.join += ' INNER JOIN "account" "Account" ON "Account"."userId" = "UserModel"."id" ' +
       'INNER JOIN "actor" "Account->Actor" ON "Account->Actor"."accountId" = "Account"."id" ' +
       'LEFT JOIN "server" "Account->Actor->Server" ON "Account->Actor"."serverId" = "Account->Actor->Server"."id" ' +
-      'LEFT JOIN "actorImage" "Account->Actor->Avatars" ON "Account->Actor->Avatars"."actorId" = "Account->Actor"."id" ' +
-      `  AND "Account->Actor->Avatars"."type" = ${ActorImageType.AVATAR} `
+      getAvatarsJSONJoin({
+        attributes: this.tableAttributes.getAvatarAttributesJSON(),
+        base: 'Account->Actor->',
+        on: '"Account->Actor"."id"'
+      })
 
     this.builtAccountJoin = true
   }
@@ -57,12 +61,16 @@ export class UserListQueryBuilder extends AbstractListQuery {
       '  ON "Account->VideoChannels->Actor"."videoChannelId" = "Account->VideoChannels"."id" ' +
       'LEFT JOIN "server" "Account->VideoChannels->Actor->Server" ' +
       '  ON "Account->VideoChannels->Actor->Server"."id" = "Account->VideoChannels->Actor"."serverId" ' +
-      'LEFT JOIN "actorImage" "Account->VideoChannels->Actor->Avatars" ' +
-      '  ON "Account->VideoChannels->Actor->Avatars"."actorId" = "Account->VideoChannels->Actor"."id" ' +
-      `  AND "Account->VideoChannels->Actor->Avatars"."type" = ${ActorImageType.AVATAR} ` +
-      'LEFT JOIN "actorImage" "Account->VideoChannels->Actor->Banners" ' +
-      '  ON "Account->VideoChannels->Actor->Banners"."actorId" = "Account->VideoChannels->Actor"."id" ' +
-      `  AND "Account->VideoChannels->Actor->Banners"."type" = ${ActorImageType.BANNER} `
+      getAvatarsJSONJoin({
+        attributes: this.tableAttributes.getAvatarAttributesJSON(),
+        base: 'Account->VideoChannels->Actor->',
+        on: '"Account->VideoChannels->Actor"."id"'
+      }) +
+      getBannersJSONJoin({
+        attributes: this.tableAttributes.getBannerAttributesJSON(),
+        base: 'Account->VideoChannels->Actor->',
+        on: '"Account->VideoChannels->Actor"."id"'
+      })
 
     this.builtChannelsJoin = true
   }
@@ -77,13 +85,17 @@ export class UserListQueryBuilder extends AbstractListQuery {
       '  INNER JOIN "actor" AS "Account->Collabs->Channel->Actor" ' +
       '    ON "Account->Collabs->Channel"."id" = "Account->Collabs->Channel->Actor"."videoChannelId" ' +
       '  LEFT JOIN "server" AS "Account->Collabs->Channel->Actor->Server" ' +
-      '    ON "Account->Collabs->Channel->Actor"."serverId" = "Account->Collabs->Channel->Actor->Server"."id"' +
-      '  LEFT JOIN "actorImage" AS "Account->Collabs->Channel->Actor->Avatars" ' +
-      '    ON "Account->Collabs->Channel->Actor"."id" = "Account->Collabs->Channel->Actor->Avatars"."actorId"' +
-      `    AND "Account->Collabs->Channel->Actor->Avatars"."type" = ${ActorImageType.AVATAR}` +
-      '  LEFT JOIN "actorImage" AS "Account->Collabs->Channel->Actor->Banners" ' +
-      '    ON "Account->Collabs->Channel->Actor"."id" = "Account->Collabs->Channel->Actor->Banners"."actorId" ' +
-      `    AND "Account->Collabs->Channel->Actor->Banners"."type" = ${ActorImageType.BANNER} ` +
+      '    ON "Account->Collabs->Channel->Actor"."serverId" = "Account->Collabs->Channel->Actor->Server"."id" ' +
+      getAvatarsJSONJoin({
+        attributes: this.tableAttributes.getAvatarAttributesJSON(),
+        base: 'Account->Collabs->Channel->Actor->',
+        on: '"Account->Collabs->Channel->Actor"."id"'
+      }) +
+      getBannersJSONJoin({
+        attributes: this.tableAttributes.getBannerAttributesJSON(),
+        base: 'Account->Collabs->Channel->Actor->',
+        on: '"Account->Collabs->Channel->Actor"."id"'
+      }) +
       `  INNER JOIN "account" "Account->Collabs->Channel->Account" ` +
       `    ON "Account->Collabs->Channel"."accountId" = "Account->Collabs->Channel->Account"."id" ` +
       `  INNER JOIN "actor" "Account->Collabs->Channel->Account->Actor" ` +
