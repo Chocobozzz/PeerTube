@@ -17,7 +17,7 @@ import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { forkJoin } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
@@ -112,10 +112,13 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
 
     const serverConfig = this.serverService.getHTMLConfig()
 
+    const channel = this.userChannels().find(c => c.id === this.firstStepChannelId)
     const videoEdit = VideoEdit.createFromImport(serverConfig, {
       targetUrl: this.targetUrl,
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      channelName: channel.name,
+      channelDisplayName: channel.displayName,
+      support: channel.support ?? '',
       user: this.authService.getUser()
     })
     this.manageController.setConfig({ manageType: 'import-url', serverConfig: this.serverService.getHTMLConfig() })

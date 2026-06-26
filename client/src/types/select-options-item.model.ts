@@ -10,10 +10,17 @@ export interface SelectOptionsItem<T = string | number> {
 export interface SelectChannelItem extends SelectOptionsItem {
   id: number // Force number
   name: string
-  avatarFileUrl: string
   support: string
 
   editor: boolean
+  collaborate: boolean
+  owner: boolean
+
+  ownerAccountName: string
+  ownerAccountId: number
+  displayName: string
+
+  updatedAt: string | Date
 }
 
 export interface SelectOptionsGroup {

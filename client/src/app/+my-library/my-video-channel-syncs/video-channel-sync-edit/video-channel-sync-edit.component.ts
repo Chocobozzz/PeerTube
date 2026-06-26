@@ -3,18 +3,18 @@ import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/cor
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
-import { listChannelsForSelect } from '@app/helpers'
 import { REQUIRED_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import { VIDEO_CHANNEL_EXTERNAL_URL_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { VideoChannelSyncService } from '@app/shared/shared-main/channel/video-channel-sync.service'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoChannelSyncCreate } from '@peertube/peertube-models'
 import { SelectChannelItem } from '@pt-types'
 import { mergeMap } from 'rxjs'
-import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 
 @Component({
   selector: 'my-video-channel-sync-edit',

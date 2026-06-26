@@ -1,19 +1,12 @@
 import { ChangeDetectionStrategy, Component, forwardRef, inject, input, OnChanges, OnDestroy, output } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
-import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { SearchService } from '@app/shared/shared-search/search.service'
-import { pick } from '@peertube/peertube-core-utils'
-import { VideoChannel as VideoChannelServer } from '@peertube/peertube-models'
-import { SelectOptionsItem } from '@pt-types'
-import { findAppropriateImageFileUrl } from '@root-helpers/images'
+import { SelectChannelItem } from '@pt-types'
 import { first, forkJoin, map, Subscription } from 'rxjs'
-import { ChannelMetadata } from './select-channel-metadata.model'
-import { SelectOptionsComponent } from './select-options.component'
-
-interface ChannelOption extends SelectOptionsItem, ChannelMetadata {
-}
+import { SelectOptionsComponent } from '../select-options.component'
+import { formatChannelForSelect } from './select-channel-helpers'
 
 @Component({
   selector: 'my-select-channel-admin',
@@ -36,7 +29,7 @@ interface ChannelOption extends SelectOptionsItem, ChannelMetadata {
 >
 </my-select-options>
   `,
-  styleUrls: [ 'select-options.component.scss' ],
+  styleUrls: [ '../select-options.component.scss' ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -57,13 +50,13 @@ export class SelectChannelAdminComponent implements ControlValueAccessor, OnChan
   readonly inputId = input.required<string>()
   readonly ownerAccountName = input.required<string>()
 
-  readonly channelChanged = output<ChannelMetadata>()
+  readonly channelChanged = output<SelectChannelItem>()
 
   selectedId: number
 
-  options: { label: string, value: string, items: ChannelOption[] }[] = []
+  options: { label: string, value: string, items: SelectChannelItem[] }[] = []
 
-  baseOptions: { label: string, value: string, items: ChannelOption[] }[] = []
+  baseOptions: { label: string, value: string, items: SelectChannelItem[] }[] = []
 
   loading = false
 
@@ -116,13 +109,22 @@ export class SelectChannelAdminComponent implements ControlValueAccessor, OnChan
 
   private buildUserChannelObs () {
     return this.auth.userInformationLoaded.pipe(first())
-      .pipe(map(() => this.auth.getUser().videoChannels.map(c => this.formatChannel({ channel: c, displayOwner: false }))))
+      .pipe(map(() => {
+        return this.auth.getUser().videoChannels
+          .map(c => formatChannelForSelect(c, { editor: false, owner: false, collaborate: false }))
+      }))
   }
 
   private buildOwnerChannelObs () {
     return this.channelService.listAccountChannels({
       account: { nameWithHost: this.ownerAccountName() }
-    }).pipe(map(({ data }) => data.map(c => this.formatChannel({ channel: c, displayOwner: false }))))
+    }).pipe(map(({ data }) => {
+      return data.map(c => {
+        const channel = { ...c, ownerAccountId: c.ownerAccount.id, ownerAccountName: c.ownerAccount.name }
+
+        return formatChannelForSelect(channel, { editor: false, owner: false, collaborate: false })
+      })
+    }))
   }
 
   onHide () {
@@ -148,7 +150,15 @@ export class SelectChannelAdminComponent implements ControlValueAccessor, OnChan
             {
               label: $localize`Searched channels`,
               value: 'search',
-              items: data.map(c => this.formatChannel({ channel: c, displayOwner: true }))
+              items: data.map(c => {
+                const userChannel = { ...c, ownerAccountId: c.ownerAccount.id, ownerAccountName: c.ownerAccount.name }
+
+                return {
+                  ...formatChannelForSelect(userChannel, { editor: false, owner: false, collaborate: false }),
+
+                  description: c.ownerAccount.displayName
+                }
+              })
             }
           ]
 
@@ -187,29 +197,6 @@ export class SelectChannelAdminComponent implements ControlValueAccessor, OnChan
     const item = this.options.flatMap(o => o.items)
       .find(c => c.id === this.selectedId)
 
-    this.channelChanged.emit(pick(item, [ 'ownerAccountName', 'channelDisplayName', 'channelName' ]))
-  }
-
-  private formatChannel (options: {
-    channel: VideoChannelServer
-    displayOwner: boolean
-  }): ChannelOption {
-    const { channel, displayOwner } = options
-
-    return {
-      id: channel.id,
-      label: channel.displayName,
-      description: displayOwner
-        ? channel.ownerAccount.displayName
-        : undefined,
-
-      imageUrl: channel.avatars.length
-        ? findAppropriateImageFileUrl(channel.avatars, 21)
-        : VideoChannel.GET_DEFAULT_AVATAR_URL(21),
-
-      ownerAccountName: channel.ownerAccount.name,
-      channelDisplayName: channel.displayName,
-      channelName: channel.name
-    }
+    this.channelChanged.emit(item)
   }
 }

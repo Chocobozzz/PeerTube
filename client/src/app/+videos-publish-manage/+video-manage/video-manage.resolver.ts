@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { ActivatedRouteSnapshot, Router } from '@angular/router'
 import { AuthService, ServerService, UserService } from '@app/core'
-import { listChannelsForSelect } from '@app/helpers'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { VideoChapterService } from '@app/shared/shared-main/video/video-chapter.service'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'

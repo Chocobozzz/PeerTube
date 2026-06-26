@@ -25,7 +25,7 @@ import { FormValidatorService } from '@app/shared/shared-forms/form-validator.se
 import { InputTextComponent } from '@app/shared/shared-forms/input-text.component'
 import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-textarea.component'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
-import { SelectChannelAutoComponent } from '@app/shared/shared-forms/select/select-channel-auto.component'
+import { SelectChannelAutoComponent } from '@app/shared/shared-forms/select/channel/select-channel-auto.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { SelectTagsComponent } from '@app/shared/shared-forms/select/select-tags.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
@@ -495,8 +495,8 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
-  onAdminChannelChanged ({ channelId, channelDisplayName }) {
-    this.videoEdit.loadChannelChange({ channelId, channelDisplayName })
+  onChannelChanged (item: SelectChannelItem) {
+    this.videoEdit.loadChannelChange({ displayName: item.displayName, name: item.name, ownerAccountName: item.ownerAccountName })
   }
 
   canBeDeletedOrTransferred () {

@@ -107,7 +107,13 @@ usersRouter.post(
   asyncMiddleware(unblockUser)
 )
 
-usersRouter.get('/:id', authenticate, ensureUserHasRight(UserRight.MANAGE_USERS), asyncMiddleware(usersGetValidator), getUser)
+usersRouter.get(
+  '/:id',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersGetValidator),
+  getUser
+)
 
 usersRouter.post(
   '/',

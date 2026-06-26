@@ -15,7 +15,7 @@ import { PeerTubeProblemDocument, ServerErrorCode, UserVideoQuota, VideoPrivacyT
 import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { forkJoin, switchMap } from 'rxjs'
-import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
@@ -123,11 +123,14 @@ export class VideoImportTorrentComponent implements OnInit, AfterViewInit, CanCo
 
     const serverConfig = this.serverService.getHTMLConfig()
 
+    const channel = this.userChannels().find(c => c.id === this.firstStepChannelId)
     const videoEdit = VideoEdit.createFromImport(serverConfig, {
       torrentfile,
       magnetUri: this.firstStepMagnetUri,
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      channelName: channel.name,
+      channelDisplayName: channel.displayName,
+      support: channel.support ?? '',
       user: this.authService.getUser()
     })
     this.manageController.setConfig({ manageType: 'import-torrent', serverConfig: this.serverService.getHTMLConfig() })

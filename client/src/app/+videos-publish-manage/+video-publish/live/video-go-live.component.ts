@@ -11,7 +11,7 @@ import { LiveVideoLatencyMode, PeerTubeProblemDocument, ServerErrorCode, UserVid
 import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { forkJoin, map, switchMap } from 'rxjs'
-import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
 
@@ -88,10 +88,14 @@ export class VideoGoLiveComponent implements OnInit, AfterViewInit, CanComponent
 
     const serverConfig = this.serverService.getHTMLConfig()
 
+    const channel = this.userChannels().find(c => c.id === this.firstStepChannelId)
+
     const videoEdit = VideoEdit.createFromLive(serverConfig, {
       name: $localize`:The translation must be at least 3 characters long:Live`,
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      support: channel.support ?? '',
+      channelName: channel.name,
+      channelDisplayName: channel.displayName,
       permanentLive: this.firstStepPermanentLive,
       latencyMode: LiveVideoLatencyMode.DEFAULT,
       dvrWindow: serverConfig.live.dvr.maxWindow,

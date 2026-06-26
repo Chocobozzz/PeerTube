@@ -84,6 +84,10 @@ export class UserListQueryBuilder extends AbstractListQuery {
       '  LEFT JOIN "actorImage" AS "Account->Collabs->Channel->Actor->Banners" ' +
       '    ON "Account->Collabs->Channel->Actor"."id" = "Account->Collabs->Channel->Actor->Banners"."actorId" ' +
       `    AND "Account->Collabs->Channel->Actor->Banners"."type" = ${ActorImageType.BANNER} ` +
+      `  INNER JOIN "account" "Account->Collabs->Channel->Account" ` +
+      `    ON "Account->Collabs->Channel"."accountId" = "Account->Collabs->Channel->Account"."id" ` +
+      `  INNER JOIN "actor" "Account->Collabs->Channel->Account->Actor" ` +
+      `    ON "Account->Collabs->Channel->Account"."id" = "Account->Collabs->Channel->Account->Actor"."accountId" ` +
       ') ON "Account->Collabs"."channelId" = "Account->Collabs->Channel"."id"'
 
     this.builtChannelCollabsJoin = true
@@ -137,7 +141,9 @@ export class UserListQueryBuilder extends AbstractListQuery {
       this.tableAttributes.getCollabChannelActorAttributes(),
       this.tableAttributes.getCollabChannelActorServerAttributes(),
       this.tableAttributes.getCollabChannelActorAvatarAttributes(),
-      this.tableAttributes.getCollabChannelActorBannerAttributes()
+      this.tableAttributes.getCollabChannelActorBannerAttributes(),
+      this.tableAttributes.getCollabChannelAccountAttributes(),
+      this.tableAttributes.getCollabChannelAccountActorAttributes()
     ]
   }
 

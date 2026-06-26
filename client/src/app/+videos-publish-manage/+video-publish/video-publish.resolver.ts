@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core'
 import { AuthService, ServerService, UserService } from '@app/core'
-import { listChannelsForSelect } from '@app/helpers'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { ConstantLabel, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'

@@ -88,6 +88,7 @@ type EmbedPrivacyForm = {
 // ---------------------------------------------------------------------------
 
 type LoadFromPublishOptions = Required<Pick<VideoCreate, 'channelId' | 'support'>> & Partial<Pick<VideoCreate, 'name'>> & {
+  channelName: string
   channelDisplayName: string
   user: AuthUser
 }
@@ -479,8 +480,10 @@ export class VideoEdit {
     this.metadata.channelName = video.channel.name
     this.metadata.channelDisplayName = video.channel.displayName
 
-    this.initialMetadata.accountName = this.metadata.accountName
-    this.initialMetadata.channelId = this.common.channelId
+    this.initialMetadata = {
+      accountName: this.metadata.accountName,
+      channelId: this.common.channelId
+    }
   }
 
   loadPluginDataDefaults (pluginDefaults: Record<string, string | boolean>) {

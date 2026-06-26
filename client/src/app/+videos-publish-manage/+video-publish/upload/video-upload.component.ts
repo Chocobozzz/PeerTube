@@ -23,7 +23,7 @@ import debug from 'debug'
 import { truncate } from 'lodash-es'
 import { Subscription } from 'rxjs'
 import { ImageInputComponent } from '../../../shared/shared-forms/image-input.component'
-import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/select-channel-user.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
@@ -221,10 +221,13 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
   private uploadFile (file: File, thumbnailfile?: File) {
     const serverConfig = this.serverService.getHTMLConfig()
 
+    const channel = this.userChannels().find(c => c.id === this.firstStepChannelId)
     this.videoEdit = VideoEdit.createFromUpload(serverConfig, {
       name: this.buildVideoFilename(file.name),
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      channelName: channel.name,
+      channelDisplayName: channel.displayName,
+      support: channel.support ?? '',
       user: this.authService.getUser()
     })
 
