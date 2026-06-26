@@ -233,37 +233,44 @@ export async function onTranscriptionEnded (options: {
     return
   }
 
-  if (!video.language) {
-    video.language = language
-    await video.save()
-  }
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
-  if (existing && !existing.automaticallyGenerated) {
-    logger.info(
-      // oxlint-disable-next-line max-len
-      `Do not replace existing caption for video ${video.uuid} after transcription (subtitle may have been added while during the transcription process)`,
-      lTags(video.uuid)
-    )
-    return
-  }
+  try {
+    if (!video.language) {
+      video.language = language
+      await video.save()
+    }
 
-  const caption = await createLocalCaption({
-    video,
-    language,
-    path: vttPath,
-    automaticallyGenerated: true
-  })
+    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
 
-  if (caption.m3u8Filename) {
-    await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    if (existing && !existing.automaticallyGenerated) {
+      logger.info(
+        // oxlint-disable-next-line max-len
+        `Do not replace existing caption for video ${video.uuid} after transcription (subtitle may have been added while during the transcription process)`,
+        lTags(video.uuid)
+      )
+      return
+    }
+
+    const caption = await createLocalCaption({
+      video,
+      language,
+      path: vttPath,
+      automaticallyGenerated: true
+    })
+
+    if (caption.m3u8Filename) {
+      await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    }
+
+    Notifier.Instance.notifyOfGeneratedVideoTranscription(caption)
+  } finally {
+    videoFileMutexReleaser()
   }
 
   await sequelizeTypescript.transaction(async t => {
     await federateVideoIfNeeded(video, false, t)
   })
-
-  Notifier.Instance.notifyOfGeneratedVideoTranscription(caption)
 
   logger.info(`Transcription ended for ${video.uuid}`, lTags(video.uuid, ...customLTags))
 }
