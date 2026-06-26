@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -57,12 +57,15 @@ export class ProcessRegistrationModalComponent extends FormReactive implements O
     this.processMode = mode
     this.registrations = arrayify(registrationsArg)
 
-    if (this.shouldDisableEmailDelivery()) {
+    if (!this.isEmailEnabled()) {
       this.form.get('preventEmailDelivery').disable()
-      this.form.patchValue({ preventEmailDelivery: true })
-    } else {
+      this.form.patchValue({ preventEmailDelivery: false })
+    } else if (this.hasUnverifiedEmails()) {
       this.form.get('preventEmailDelivery').enable()
       this.form.patchValue({ preventEmailDelivery: false })
+    } else {
+      this.form.get('preventEmailDelivery').enable()
+      this.form.patchValue({ preventEmailDelivery: true })
     }
 
     this.openedModal = this.modalService.open(this.modal(), { centered: true })
