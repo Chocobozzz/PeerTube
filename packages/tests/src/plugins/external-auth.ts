@@ -392,6 +392,68 @@ describe('Test external auth plugins', function () {
     })
   })
 
+  it('Should allow cross-provider auth when the option is enabled', async function () {
+    await server.config.updateExistingConfig({
+      newConfig: {
+        auth: {
+          allow_cross_provider_auth: true
+        }
+      }
+    })
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-three',
+        authName: 'external-auth-7',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
+    }
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-two',
+        authName: 'external-auth-3',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-two')
+    }
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-three',
+        authName: 'external-auth-7',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
+    }
+
+    await server.config.updateExistingConfig({
+      newConfig: {
+        auth: {
+          allow_cross_provider_auth: false
+        }
+      }
+    })
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-two',
+      authName: 'external-auth-3',
+      username: 'cid',
+      expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
+    })
+  })
+
   it('Should not login an existing user email', async function () {
     await server.users.create({ username: 'existing_user', password: 'super_password' })
 
