@@ -122,7 +122,7 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
       // This user does not belong to this plugin
       if (user.pluginAuth !== bypassLogin.pluginName) {
         // Skip ip
-        if (!CONFIG.ADVANCED_AUTH.ALLOW_CROSS_AUTH) {
+        if (!CONFIG.AUTH.ALLOW_CROSS_PROVIDER_AUTH) {
           logger.info(
             'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
             bypassLogin.pluginName,

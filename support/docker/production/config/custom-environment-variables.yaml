@@ -415,9 +415,9 @@ plugins:
     check_latest_versions_interval: PEERTUBE_PLUGINS_INDEX_CHECK_LATEST_VERSIONS_INTERVAL
     url: PEERTUBE_PLUGINS_INDEX_URL
 
-advanced_auth:
-  allow_cross_auth:
-    __name: PEERTUBE_ADVANCED_AUTH_ALLOW_CROSS_AUTH
+auth:
+  allow_cross_provider_auth:
+    __name: PEERTUBE_AUTH_ALLOW_CROSS_PROVIDER_AUTH
     __format: json
 
 federation:

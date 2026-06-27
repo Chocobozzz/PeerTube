@@ -442,10 +442,10 @@ plugins:
     check_latest_versions_interval: '4 hours' # How often you want to check new plugins/themes versions
     url: 'https://packages.joinpeertube.org'
 
-advanced_auth:
+auth::
   # Enable cross authentication when using multiple auth plugins
   # Never enable this unless you known what you're doing, it can leads to account takeover if not used correctly
-  allow_cross_auth: false
+  allow_cross_provider_auth: false
 
 federation:
   # Enable ActivityPub endpoints (inbox/outbox)

@@ -503,9 +503,9 @@ const CONFIG = {
       URL: config.get<string>('plugins.index.url')
     }
   },
-  ADVANCED_AUTH: {
-    get ALLOW_CROSS_AUTH () {
-      return config.get<boolean>('advanced_auth.allow_cross_auth')
+  AUTH: {
+    get ALLOW_CROSS_PROVIDER_AUTH () {
+      return config.get<boolean>('auth.allow_cross_provider_auth')
     }
   },
   FEDERATION: {
