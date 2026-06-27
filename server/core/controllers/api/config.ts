@@ -620,10 +620,6 @@ function customConfig (): CustomConfig {
 
     videoComments: {
       acceptRemoteComments: CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS
-    },
-
-    advancedAuth: {
-      allowCrossAuth: CONFIG.ADVANCED_AUTH.ALLOW_CROSS_AUTH
     }
   }
 }

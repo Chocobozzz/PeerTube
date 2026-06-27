@@ -50,38 +50,4 @@
 
     </div>
   </div>
-
-  <div class="pt-two-cols mt-4">
-
-    <div class="title-col">
-      <h2 i18n>AUTHENTICATION</h2>
-      <div i18n class="inner-form-description">
-        Extra auth configuration behaviors
-      </div>
-    </div>
-
-    <div class="content-col">
-      <ng-container formGroupName="advancedAuth">
-        <div class="form-group">
-          <my-peertube-checkbox
-            inputName="advancedAuthAllowCrossAuth"
-            formControlName="allowCrossAuth"
-            i18n-labelText
-            labelText="Allow cross authentication between all authentication plugins"
-            >
-            <ng-container ngProjectAs="description">
-              <p i18n class="mb-0">
-                When enabled, a user who registered with one authentication source is now allowed to login to their account using any other authentication source available.
-              </p>
-              <p i18n>
-                ⚠️ Only enable this if you know what you are doing, this can lead to account takeover if used in the wrong context.
-                To be used safely, you MUST ensure that the union of each authentication source associates a globally unique uid to each unique user. (If a user is present in more than one source, it must have the same uid in all sources. If a user is not present in all sources, another user cannot take the uid of the former in the sources where it does not exist.)
-              </p>
-            </ng-container>
-          </my-peertube-checkbox>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-
 </form>

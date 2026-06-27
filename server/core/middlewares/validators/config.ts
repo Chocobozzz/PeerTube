@@ -155,8 +155,6 @@ export const customConfigUpdateValidator = [
 
   body('videoComments.acceptRemoteComments').isBoolean(),
 
-  body('advancedAuth.allowCrossAuth').isBoolean(),
-
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, req, res)) return
