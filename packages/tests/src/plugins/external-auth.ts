@@ -392,68 +392,6 @@ describe('Test external auth plugins', function () {
     })
   })
 
-  it('Should allow cross-provider auth when the option is enabled', async function () {
-    await server.config.updateExistingConfig({
-      newConfig: {
-        auth: {
-          allow_cross_provider_auth: true
-        }
-      }
-    })
-
-    {
-      const res = await loginExternal({
-        server,
-        npmName: 'test-external-auth-three',
-        authName: 'external-auth-7',
-        username: 'cid'
-      })
-
-      const body = await server.users.getMyInfo({ token: res.access_token })
-      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
-    }
-
-    {
-      const res = await loginExternal({
-        server,
-        npmName: 'test-external-auth-two',
-        authName: 'external-auth-3',
-        username: 'cid'
-      })
-
-      const body = await server.users.getMyInfo({ token: res.access_token })
-      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-two')
-    }
-
-    {
-      const res = await loginExternal({
-        server,
-        npmName: 'test-external-auth-three',
-        authName: 'external-auth-7',
-        username: 'cid'
-      })
-
-      const body = await server.users.getMyInfo({ token: res.access_token })
-      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
-    }
-
-    await server.config.updateExistingConfig({
-      newConfig: {
-        auth: {
-          allow_cross_provider_auth: false
-        }
-      }
-    })
-
-    await loginExternal({
-      server,
-      npmName: 'test-external-auth-two',
-      authName: 'external-auth-3',
-      username: 'cid',
-      expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
-    })
-  })
-
   it('Should not login an existing user email', async function () {
     await server.users.create({ username: 'existing_user', password: 'super_password' })
 
@@ -548,5 +486,86 @@ describe('Test external auth plugins', function () {
     const externalAuthToken = searchParams.externalAuthToken as string
 
     await server.login.loginUsingExternalToken({ username: 'cid', externalAuthToken, expectedStatus: HttpStatusCode.OK_200 })
+  })
+})
+
+describe('Test external auth plugins with some non-default config options', function () {
+  let server: PeerTubeServer
+
+  before(async function () {
+    this.timeout(30000)
+
+    server = await createSingleServer(1, {
+      auth: {
+        allow_cross_provider_auth: true
+      }
+    })
+
+    await setAccessTokensToServers([ server ])
+
+    for (const suffix of [ 'two', 'three' ]) {
+      await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-external-auth-' + suffix) })
+    }
+  })
+
+  it('Should allow cross-provider auth when the option is enabled', async function () {
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-three',
+        authName: 'external-auth-7',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
+    }
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-two',
+        authName: 'external-auth-3',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-two')
+    }
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-three',
+        authName: 'external-auth-7',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
+    }
+
+    await server.kill()
+    await server.run({
+      auth: {
+        allow_cross_provider_auth: false
+      }
+    })
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-three',
+      authName: 'external-auth-7',
+      username: 'cid',
+      expectedStatusStep2: HttpStatusCode.OK_200
+    })
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-two',
+      authName: 'external-auth-3',
+      username: 'cid',
+      expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
+    })
   })
 })
