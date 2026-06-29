@@ -1,9 +1,8 @@
 import { CommonModule, NgClass } from '@angular/common'
-import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { listUserChannelsForSelect } from '@app/helpers'
 import {
   setPlaylistChannelValidator,
   VIDEO_PLAYLIST_CHANNEL_ID_VALIDATOR,
@@ -13,13 +12,14 @@ import {
 } from '@app/shared/form-validators/video-playlist-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoPlaylistCreate, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { of, switchMap } from 'rxjs'
-import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
 import { ImageInputComponent } from '../../shared/shared-forms/image-input.component'
-import { SelectChannelComponent } from '../../shared/shared-forms/select/select-channel.component'
+import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
+import { SelectChannelUserComponent } from '../../shared/shared-forms/select/channel/select-channel-user.component'
 import { SelectOptionsComponent } from '../../shared/shared-forms/select/select-options.component'
 import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
@@ -38,7 +38,7 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
     HelpComponent,
     MarkdownTextareaComponent,
     SelectOptionsComponent,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     AlertComponent,
     PeertubeCheckboxComponent
   ]
@@ -67,8 +67,10 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
       setPlaylistChannelValidator(this.form.get('videoChannelId'), privacy)
     })
 
-    listUserChannelsForSelect(this.authService, { includeCollaborations: true })
-      .subscribe(channels => this.userVideoChannels = channels)
+    listChannelsForSelect({
+      authService: this.authService,
+      includeCollaborations: true
+    }).subscribe(channels => this.channels = channels)
 
     this.serverService.getVideoPlaylistPrivacies()
       .subscribe(videoPlaylistPrivacies => {
@@ -97,7 +99,7 @@ export class MyVideoPlaylistCreateComponent extends MyVideoPlaylistEdit implemen
         switchMap(({ videoPlaylist: { id } }) => {
           if (body.insertAtFirstPosition !== true || !body.videoChannelId) return of(true)
 
-          const channelName = this.userVideoChannels.find(c => c.id === body.videoChannelId)?.name
+          const channelName = this.channels.find(c => c.id === body.videoChannelId)?.name
 
           return this.videoPlaylistService.getVideoPlaylist(id)
             .pipe(

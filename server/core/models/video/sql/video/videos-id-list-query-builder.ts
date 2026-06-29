@@ -1018,11 +1018,20 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private setSort (column: string, direction: 'ASC' | 'DESC') {
     if (column.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + column)
 
-    if (column === 'random') return 'ORDER BY RANDOM()'
-    if (column === 'total') return `ORDER BY "total" ${direction}`
+    if (column === 'random') {
+      this.sort = 'ORDER BY RANDOM()'
+      return
+    }
 
-    if ([ 'trending', 'hot', 'best' ].includes(column)) { // Sort by aggregation
-      return `ORDER BY "score" ${direction}`
+    if (column === 'total') {
+      this.sort = `ORDER BY "total" ${direction}`
+      return
+    }
+
+    // Sort by aggregation
+    if ([ 'trending', 'hot', 'best' ].includes(column)) {
+      this.sort = `ORDER BY "score" ${direction}`
+      return
     }
 
     let firstSort: string

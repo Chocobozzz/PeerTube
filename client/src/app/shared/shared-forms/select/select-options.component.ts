@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ContentChild,
@@ -9,12 +10,13 @@ import {
   inject,
   input,
   numberAttribute,
-  TemplateRef,
-  ChangeDetectionStrategy
+  output,
+  TemplateRef
 } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { SelectItemGroup } from 'primeng/api'
 import { SelectModule } from 'primeng/select'
-import { SelectOptionsItem } from '../../../../types/select-options-item.model'
+import { SelectOptionsGroup, SelectOptionsItem } from '../../../../types/select-options-item.model'
 
 @Component({
   selector: 'my-select-options',
@@ -35,19 +37,31 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
 export class SelectOptionsComponent implements ControlValueAccessor {
   private cd = inject(ChangeDetectorRef)
 
-  readonly items = input<SelectOptionsItem[]>([])
+  readonly items = input<SelectOptionsItem[] | SelectOptionsGroup[]>([])
 
   readonly inputId = input.required<string>()
 
   readonly clearable = input(false, { transform: booleanAttribute })
   readonly filter = input(false, { transform: booleanAttribute })
+  readonly resetFilterOnHide = input(false, { transform: booleanAttribute })
   readonly small = input(false, { transform: booleanAttribute })
   readonly placeholder = input('')
+
+  readonly group = input(false, { transform: booleanAttribute })
+
+  readonly filterPlaceholder = input($localize`Search`)
+  readonly emptyFilterMessage = input($localize`No results found`)
+  readonly emptyMessage = input($localize`No items available`)
 
   readonly appendTo = input<'body'>()
 
   readonly virtualScroll = input(false, { transform: booleanAttribute })
   readonly virtualScrollItemSize = input(39, { transform: numberAttribute })
+
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  readonly onHide = output()
+  // eslint-disable-next-line @angular-eslint/no-output-on-prefix
+  readonly onFilter = output<{ filter: string }>()
 
   @ContentChild('selectOption', { descendants: false })
   selectOptionTemplate: TemplateRef<any>
@@ -107,6 +121,10 @@ export class SelectOptionsComponent implements ControlValueAccessor {
   }
 
   getSelectedItem () {
-    return this.items().find(i => i.id === this.selectedId)
+    const items = this.group()
+      ? (this.items() as unknown as SelectItemGroup[]).reduce((acc, group) => acc.concat(group.items), [])
+      : this.items()
+
+    return items.find(i => i.id === this.selectedId)
   }
 }

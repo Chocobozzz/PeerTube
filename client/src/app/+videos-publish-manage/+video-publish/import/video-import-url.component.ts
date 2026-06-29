@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
@@ -13,11 +13,11 @@ import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.
 import { VideoEmbedPrivacyService } from '@app/shared/shared-video/video-embed-privacy.service'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
+import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { forkJoin } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { SelectChannelItem } from '@pt-types'
-import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { HelpComponent } from '../../../shared/shared-main/buttons/help.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
@@ -34,7 +34,7 @@ const debugLogger = debug('peertube:video-publish')
     HelpComponent,
     FormsModule,
     RouterLink,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     ReactiveFormsModule,
     AlertComponent,
     VideoManageContainerComponent
@@ -112,10 +112,13 @@ export class VideoImportUrlComponent implements OnInit, AfterViewInit, CanCompon
 
     const serverConfig = this.serverService.getHTMLConfig()
 
+    const channel = this.userChannels().find(c => c.id === this.firstStepChannelId)
     const videoEdit = VideoEdit.createFromImport(serverConfig, {
       targetUrl: this.targetUrl,
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      channelName: channel.name,
+      channelDisplayName: channel.displayName,
+      support: channel.support ?? '',
       user: this.authService.getUser()
     })
     this.manageController.setConfig({ manageType: 'import-url', serverConfig: this.serverService.getHTMLConfig() })

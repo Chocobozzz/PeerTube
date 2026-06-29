@@ -67,7 +67,7 @@ export default {
     borderRadius: '{list.option.border.radius}'
   },
   optionGroup: {
-    background: '{list.option.group.background}',
+    background: '{list.option.background}',
     color: '{list.option.group.color}',
     fontWeight: '{list.option.group.font.weight}',
     padding: '{list.option.group.padding}'

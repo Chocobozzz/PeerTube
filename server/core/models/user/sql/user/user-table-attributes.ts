@@ -3,11 +3,12 @@ import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
-import { UserModel } from '../../user.js'
+import { buildSQLAttributes } from '@server/models/shared/table.js'
+import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { UserNotificationSettingModel } from '../../user-notification-setting.js'
-import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
+import { UserModel } from '../../user.js'
 
 export class UserTableAttributes {
   @Memoize()
@@ -116,5 +117,24 @@ export class UserTableAttributes {
       'Account->Collabs->Channel->Actor->Banners',
       'Account.Collabs.Channel.Actor.Banners.'
     ).join(', ')
+  }
+  @Memoize()
+  getCollabChannelAccountAttributes () {
+    return buildSQLAttributes({
+      model: AccountModel,
+      tableName: 'Account->Collabs->Channel->Account',
+      aliasPrefix: 'Account.Collabs.Channel.Account.',
+      includeAttributes: [ 'id', 'name' ]
+    }).join(', ')
+  }
+
+  @Memoize()
+  getCollabChannelAccountActorAttributes () {
+    return buildSQLAttributes({
+      model: ActorModel,
+      tableName: 'Account->Collabs->Channel->Account->Actor',
+      aliasPrefix: 'Account.Collabs.Channel.Account.Actor.',
+      includeAttributes: [ 'id', 'preferredUsername' ]
+    }).join(', ')
   }
 }

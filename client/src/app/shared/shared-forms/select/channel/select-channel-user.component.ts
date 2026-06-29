@@ -1,22 +1,21 @@
-import { Component, forwardRef, input, OnChanges, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, forwardRef, input, output } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
-import { SelectChannelItem, SelectOptionsItem } from '../../../../types/select-options-item.model'
-import { SelectOptionsComponent } from './select-options.component'
 import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
+import { SelectChannelItem } from '../../../../../types/select-options-item.model'
+import { SelectOptionsComponent } from '../select-options.component'
 
 @Component({
-  selector: 'my-select-channel',
+  selector: 'my-select-channel-user',
   template: `
   <my-select-options
     [inputId]="inputId()"
 
-    [items]="channels"
+    [items]="items()"
 
     [(ngModel)]="selectedId"
     (ngModelChange)="onModelChange()"
 
-    [filter]="channels && channels.length > 5"
+    [filter]="items() && items().length > 5"
   >
     <ng-template #itemExtra let-item>
       @if (item.collaborate) {
@@ -32,29 +31,20 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectChannelComponent),
+      useExisting: forwardRef(() => SelectChannelUserComponent),
       multi: true
     }
   ],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, SelectOptionsComponent, CollaboratorStateComponent ]
 })
-export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
+export class SelectChannelUserComponent implements ControlValueAccessor {
   readonly inputId = input.required<string>()
   readonly items = input<SelectChannelItem[]>([])
 
-  channels: SelectOptionsItem[]
+  readonly channelChanged = output<SelectChannelItem>()
+
   selectedId: number
-
-  ngOnChanges () {
-    this.channels = this.items().map(c => {
-      const avatarFileUrl = c.avatarFileUrl
-        ? c.avatarFileUrl
-        : VideoChannel.GET_DEFAULT_AVATAR_URL(21)
-
-      return Object.assign({}, c, { imageUrl: avatarFileUrl })
-    })
-  }
 
   propagateChange = (_: any) => {
     // empty
@@ -76,9 +66,8 @@ export class SelectChannelComponent implements ControlValueAccessor, OnChanges {
 
   onModelChange () {
     this.propagateChange(this.selectedId)
-  }
 
-  getSelectedChannel () {
-    return (this.channels || []).find(c => c.id + '' === this.selectedId + '')
+    const channel = this.items().find(c => c.id === this.selectedId)
+    if (channel) this.channelChanged.emit(channel)
   }
 }

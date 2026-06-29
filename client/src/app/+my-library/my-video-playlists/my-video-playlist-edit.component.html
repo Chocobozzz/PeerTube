@@ -84,7 +84,7 @@
           </div>
         }
 
-        <my-select-channel inputId="videoChannelId" [items]="userVideoChannels" formControlName="videoChannelId"></my-select-channel>
+        <my-select-channel-user inputId="videoChannelId" [items]="channels" formControlName="videoChannelId"></my-select-channel-user>
 
         @if (formErrors['videoChannelId']) {
           <div class="form-error" role="alert">{{ formErrors['videoChannelId'] }}</div>

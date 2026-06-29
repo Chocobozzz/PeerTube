@@ -1,9 +1,8 @@
 import { CommonModule, NgClass } from '@angular/common'
-import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { listUserChannelsForSelect } from '@app/helpers'
 import {
   setPlaylistChannelValidator,
   VIDEO_PLAYLIST_CHANNEL_ID_VALIDATOR,
@@ -13,14 +12,15 @@ import {
 } from '@app/shared/form-validators/video-playlist-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
+import { SelectChannelUserComponent } from '@app/shared/shared-forms/select/channel/select-channel-user.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { VideoPlaylistUpdate } from '@peertube/peertube-models'
 import { forkJoin, Subscription } from 'rxjs'
-import { map, switchMap } from 'rxjs/operators'
-import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
+import { first, map, switchMap } from 'rxjs/operators'
 import { ImageInputComponent } from '../../shared/shared-forms/image-input.component'
-import { SelectChannelComponent } from '../../shared/shared-forms/select/select-channel.component'
+import { MarkdownTextareaComponent } from '../../shared/shared-forms/markdown-textarea.component'
 import { SelectOptionsComponent } from '../../shared/shared-forms/select/select-options.component'
 import { HelpComponent } from '../../shared/shared-main/buttons/help.component'
 import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
@@ -39,7 +39,7 @@ import { MyVideoPlaylistEdit } from './my-video-playlist-edit'
     HelpComponent,
     MarkdownTextareaComponent,
     SelectOptionsComponent,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     AlertComponent,
     PeertubeCheckboxComponent
   ]
@@ -70,22 +70,31 @@ export class MyVideoPlaylistUpdateComponent extends MyVideoPlaylistEdit implemen
       setPlaylistChannelValidator(this.form.get('videoChannelId'), privacy)
     })
 
-    this.paramsSub = this.route.params
+    this.paramsSub = this.authService.userInformationLoaded
       .pipe(
+        first(),
+        switchMap(() => this.route.params),
         map(routeParams => routeParams['videoPlaylistId']),
         switchMap(videoPlaylistId => {
           return forkJoin([
-            this.videoPlaylistService.getVideoPlaylist(videoPlaylistId),
-            this.serverService.getVideoPlaylistPrivacies(),
-            listUserChannelsForSelect(this.authService, { includeCollaborations: true })
+            this.videoPlaylistService.getVideoPlaylist(videoPlaylistId)
+              .pipe(
+                switchMap(videoPlaylist => {
+                  return listChannelsForSelect({
+                    authService: this.authService,
+                    includeCollaborations: true
+                  }).pipe(map(channels => ({ videoPlaylist, channels })))
+                })
+              ),
+            this.serverService.getVideoPlaylistPrivacies()
           ])
         })
       )
       .subscribe({
-        next: ([ videoPlaylistToUpdate, videoPlaylistPrivacies, channels ]) => {
-          this.videoPlaylistToUpdate = videoPlaylistToUpdate
+        next: ([ { videoPlaylist, channels }, videoPlaylistPrivacies ]) => {
+          this.videoPlaylistToUpdate = videoPlaylist
           this.videoPlaylistPrivacies = videoPlaylistPrivacies
-          this.userVideoChannels = channels.filter(c => c.ownerAccountId === this.videoPlaylistToUpdate.ownerAccount.id)
+          this.channels = channels.filter(c => c.ownerAccountId === this.videoPlaylistToUpdate.ownerAccount.id)
 
           this.hydrateFormFromPlaylist()
         },

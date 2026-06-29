@@ -2,6 +2,7 @@
   [inputId]="inputId()"
 
   [options]="items()"
+  [group]="group()"
 
   [(ngModel)]="selectedId"
   (ngModelChange)="onModelChange()"
@@ -14,10 +15,7 @@
 
   [filter]="filter()"
   filterBy="label"
-
-  i18n-filterPlaceholder filterPlaceholder="Search"
-  i18n-emptyFilterMessage emptyFilterMessage="No results found"
-  i18n-emptyMessage emptyMessage="No items available"
+  [resetFilterOnHide]="resetFilterOnHide()"
 
   [virtualScroll]="virtualScroll()"
   [virtualScrollItemSize]="virtualScrollItemSize()"
@@ -28,6 +26,12 @@
   [class.small]="small()"
 
   [placeholder]="placeholder()"
+  [filterPlaceholder]="filterPlaceholder()"
+  [emptyFilterMessage]="emptyFilterMessage()"
+  [emptyMessage]="emptyMessage()"
+
+  (onHide)="onHide.emit()"
+  (onFilter)="onFilter.emit($event)"
   >
   <ng-template #itemTemplate let-item let-description="description">
     @if (selectOptionTemplate) {
@@ -40,7 +44,7 @@
       <div>
         <div class="d-flex align-items-center item-label custom-item">
           @if (item?.imageUrl) {
-            <img alt="" class="me-2" [src]="item.imageUrl" />
+            <img alt="" [src]="item.imageUrl" />
           }
 
           <span class="ellipsis" [ngClass]="item?.classes">{{ item?.label }}</span>
@@ -51,7 +55,7 @@
         </div>
 
         @if (description) {
-          <span class="muted">{{ description }}</span>
+          <span class="muted" [class.has-image]="item?.imageUrl">{{ description }}</span>
         }
       </div>
     }

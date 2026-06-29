@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { AuthService, ServerService, UserService } from '@app/core'
-import { listUserChannelsForSelect } from '@app/helpers'
-import { UserVideoQuota, ConstantLabel, VideoPrivacyType } from '@peertube/peertube-models'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
+import { ConstantLabel, UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
 import { map } from 'rxjs/operators'
 import { SelectChannelItem } from '../../../types'
@@ -20,7 +20,10 @@ export class VideoPublishResolver {
 
   resolve () {
     return forkJoin([
-      listUserChannelsForSelect(this.authService, { includeCollaborations: true }),
+      listChannelsForSelect({
+        authService: this.authService,
+        includeCollaborations: true
+      }),
       this.userService.getMyVideoQuotaUsed(),
       this.serverService.getVideoPrivacies()
     ]).pipe(map(([ videoChannels, userQuota, privacies ]) => ({ videoChannels, userQuota, privacies } satisfies VideoPublishResolverData)))

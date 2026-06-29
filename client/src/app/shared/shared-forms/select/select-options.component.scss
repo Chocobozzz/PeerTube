@@ -1,11 +1,15 @@
 @use "_variables" as *;
 @use "_mixins" as *;
 
+$image-size: 21px;
+
 img {
   border-radius: 50%;
-  height: 21px;
-  width: 21px;
+  height: $image-size;
+  width: $image-size;
   margin-top: -1px;
+
+  @include margin-right(0.5rem);
 }
 
 .muted {
@@ -13,6 +17,10 @@ img {
   line-height: 1.2;
   display: block;
   white-space: normal;
+
+  &.has-image {
+    @include margin-left(calc(0.5rem + $image-size));
+  }
 }
 
 .item-label {

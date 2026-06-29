@@ -1,10 +1,10 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
-import { Component, computed, ElementRef, inject, output, signal, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, output, signal, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { form, FormField, required } from '@angular/forms/signals'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
-import { listUserChannelsForSelect } from '@app/helpers/utils/channel'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal'
 import { ConstantLabel, Video, VideoCommentPolicyType, VideoPrivacy, VideoPrivacyType, VideoUpdate } from '@peertube/peertube-models'
 import { SelectChannelItem } from '@pt-types'
@@ -12,7 +12,7 @@ import { concatMap, from, toArray } from 'rxjs'
 import { videoSupportValidator } from '../form-validators/video-validators'
 import { FormErrorComponent } from '../shared-forms/form-error.component'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
-import { SelectChannelComponent } from '../shared-forms/select/select-channel.component'
+import { SelectChannelUserComponent } from '../shared-forms/select/channel/select-channel-user.component'
 import { SelectOptionsComponent } from '../shared-forms/select/select-options.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
@@ -50,7 +50,7 @@ const BULK_PRIVACY_EXCLUDE = new Set<VideoPrivacyType>([ VideoPrivacy.PASSWORD_P
     GlobalIconComponent,
     ButtonComponent,
     SelectOptionsComponent,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     PeertubeCheckboxComponent,
     FormErrorComponent,
     FormField,
@@ -141,8 +141,10 @@ export class BulkUpdateVideosModalComponent {
     })
 
     // Load user channels
-    listUserChannelsForSelect(this.authService, { includeCollaborations: true })
-      .subscribe(channels => this.userChannels = channels)
+    listChannelsForSelect({
+      authService: this.authService,
+      includeCollaborations: true
+    }).subscribe(channels => this.userChannels = channels)
 
     this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
   }

@@ -1165,6 +1165,11 @@ export class UserModel extends SequelizeModel<UserModel> {
   }
 
   formatChannel (channel: MChannelFormattable) {
-    return { ...channel.toFormattedJSON(), ownerAccountId: channel.accountId }
+    return {
+      ...channel.toFormattedJSON(),
+
+      ownerAccountId: channel.Account?.id ?? null,
+      ownerAccountName: channel.Account?.Actor.preferredUsername ?? null
+    }
   }
 }
