@@ -14,8 +14,8 @@ import { decachePlugin } from '@server/helpers/decache.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import express from 'express'
-import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
+import { appendFile, readFile } from 'fs/promises'
 import { Server } from 'http'
 import { createRequire } from 'module'
 import { basename, join } from 'path'
@@ -604,16 +604,10 @@ export class PluginManager implements ServerHook {
     }
   }
 
-  private concatFiles (input: string, output: string) {
-    return new Promise<void>((res, rej) => {
-      const inputStream = createReadStream(input)
-      const outputStream = createWriteStream(output, { flags: 'a' })
+  private async concatFiles (input: string, output: string) {
+    const css = await readFile(input, 'utf-8')
 
-      inputStream.pipe(outputStream)
-
-      inputStream.on('end', () => res())
-      inputStream.on('error', err => rej(err))
-    })
+    return appendFile(output, stripSourceMappingURLComments(css))
   }
 
   private async regeneratePluginGlobalCSS () {
@@ -714,4 +708,10 @@ export class PluginManager implements ServerHook {
   static get Instance () {
     return this.instance || (this.instance = new this())
   }
+}
+
+function stripSourceMappingURLComments (css: string) {
+  return css
+    .replace(/\/\*#\s*sourceMappingURL=[^*]*\*\//gs, '')
+    .replace(/\/\/#\s*sourceMappingURL=.*/g, '')
 }

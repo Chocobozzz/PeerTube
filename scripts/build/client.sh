@@ -59,8 +59,8 @@ cd client
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || ([ "$1" != "--light" ] && [ "$1" != "--analyze-bundle" ]); then
     additionalParams=""
-    if [ ! -z ${1+x} ] && [ "$1" == "--source-map" ]; then
-        additionalParams="--source-map=true"
+    if [ -z ${1+x} ] || [ "$1" != "--source-map" ]; then
+        additionalParams="--source-map=false"
     fi
 
     NODE_OPTIONS=--max_old_space_size=8192 node_modules/.bin/ng build --configuration production --output-path "dist/build" $additionalParams
