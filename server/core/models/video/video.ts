@@ -619,6 +619,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Column
   declare originallyPublishedAt: Date
 
+  @AllowNull(true)
+  @Default(null)
+  @Column
+  declare firstPublishedAt: Date
+
   @ForeignKey(() => VideoChannelModel)
   @Column
   declare channelId: number

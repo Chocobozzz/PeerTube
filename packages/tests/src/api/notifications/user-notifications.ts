@@ -148,11 +148,12 @@ describe('Test user notifications', function () {
       await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
     })
 
-    it('Should send a new video notification when a video becomes public', async function () {
+    it('Should send a new video notification when a video becomes public for the first time', async function () {
       this.timeout(50000)
 
       for (const privacy of [ VideoPrivacy.PUBLIC, VideoPrivacy.INTERNAL ]) {
         const { name, uuid, shortUUID } = await uploadRandomVideoOnServers(servers, 1, { privacy: VideoPrivacy.PRIVATE })
+        await waitJobs(servers)
 
         await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
 
@@ -160,14 +161,26 @@ describe('Test user notifications', function () {
 
         await waitJobs(servers)
         await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+
+        const beforeAnotherUpdate = new Date()
+        await servers[0].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PRIVATE } })
+        await servers[0].videos.update({ id: uuid, attributes: { privacy } })
+        await waitJobs(servers)
+
+        const { data: notifications } = await servers[0].notifications.list({
+          token: userAccessToken,
+          typeOneOf: [ UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION ]
+        })
+        expect(notifications.filter(n => new Date(n.createdAt) > beforeAnotherUpdate)).to.have.lengthOf(0)
       }
     })
 
-    it('Should send a new video notification when a remote video becomes public', async function () {
+    it('Should send a new video notification when a remote video becomes public for the first time', async function () {
       this.timeout(120000)
 
       const data = { privacy: VideoPrivacy.PRIVATE }
       const { name, uuid, shortUUID } = await uploadRandomVideoOnServers(servers, 2, data)
+      await waitJobs(servers)
 
       await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
 
@@ -175,6 +188,17 @@ describe('Test user notifications', function () {
 
       await waitJobs(servers)
       await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+
+      const beforeAnotherUpdate = new Date()
+      await servers[1].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PRIVATE } })
+      await servers[1].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
+      await waitJobs(servers)
+
+      const { data: notifications } = await servers[0].notifications.list({
+        token: userAccessToken,
+        typeOneOf: [ UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION ]
+      })
+      expect(notifications.filter(n => new Date(n.createdAt) > beforeAnotherUpdate)).to.have.lengthOf(0)
     })
 
     it('Should not send a new video notification when a video becomes unlisted', async function () {

@@ -35,10 +35,10 @@ import { getLiveReplayBaseDirectory } from '../paths.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
+import { isUserQuotaValid } from '../user.js'
 import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
-import { isUserQuotaValid } from '../user.js'
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -519,7 +519,11 @@ class LiveManager {
       logger.info('Will publish and federate live %s.', video.url, localLTags)
 
       video.state = VideoState.PUBLISHED
-      video.publishedAt = new Date()
+
+      const now = new Date()
+      video.publishedAt = now
+      video.firstPublishedAt = video.firstPublishedAt ?? now
+
       video.aspectRatio = audioOnlyOutput
         ? 0
         : ratio

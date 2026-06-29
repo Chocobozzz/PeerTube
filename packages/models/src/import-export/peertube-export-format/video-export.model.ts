@@ -18,6 +18,7 @@ export interface VideoExportJSON {
     updatedAt: string
     publishedAt: string
     originallyPublishedAt: string
+    firstPublishedAt: string
 
     name: string
     category: number

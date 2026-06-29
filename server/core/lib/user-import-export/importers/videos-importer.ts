@@ -18,8 +18,8 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
-  isVideoOriginallyPublishedAtValid,
   isVideoPrivacyValid,
+  isVideoPublicationDateValid,
   isVideoReplayPrivacyValid,
   isVideoSourceFilenameValid,
   isVideoSupportValid,
@@ -65,6 +65,7 @@ type SanitizedObject = Pick<
   | 'downloadEnabled'
   | 'videoEmbedPrivacy'
   | 'waitTranscoding'
+  | 'firstPublishedAt'
   | 'originallyPublishedAt'
   | 'tags'
   | 'live'
@@ -103,7 +104,8 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
-    if (!isVideoOriginallyPublishedAtValid(o.originallyPublishedAt)) o.originallyPublishedAt = null
+    if (!o.originallyPublishedAt || !isVideoPublicationDateValid(o.originallyPublishedAt)) o.originallyPublishedAt = null
+    if (!o.firstPublishedAt || !isVideoPublicationDateValid(o.firstPublishedAt)) o.firstPublishedAt = null
 
     if (!o.videoEmbedPrivacy) o.videoEmbedPrivacy = { policy: VideoEmbedPrivacyPolicy.ALL_ALLOWED, domains: [] }
     if (!isVideoEmbedPrivacyPolicyValid(o.videoEmbedPrivacy.policy)) o.videoEmbedPrivacy.policy = VideoEmbedPrivacyPolicy.ALL_ALLOWED
@@ -166,6 +168,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'downloadEnabled',
       'videoEmbedPrivacy',
       'waitTranscoding',
+      'firstPublishedAt',
       'originallyPublishedAt',
       'tags',
       'captions',
@@ -245,7 +248,8 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
           'commentsPolicy',
           'downloadEnabled',
           'waitTranscoding',
-          'originallyPublishedAt'
+          'originallyPublishedAt',
+          'firstPublishedAt'
         ]),
 
         videoPasswords: videoImportData.passwords,

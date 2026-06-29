@@ -24,6 +24,15 @@ export class SQLCommand {
     return parseInt(total, 10)
   }
 
+  async getVideoField (uuid: string, field: string) {
+    const rows = await this.selectQuery<{ value: any }>(
+      `SELECT ${this.escapeColumnName(field)} AS value FROM "video" WHERE uuid = :uuid`,
+      { uuid }
+    )
+
+    return rows[0]?.value
+  }
+
   async getInternalFileUrl (fileId: number) {
     return this.selectQuery<{ fileUrl: string }>(`SELECT "fileUrl" FROM "videoFile" WHERE id = :fileId`, { fileId })
       .then(rows => rows[0].fileUrl)

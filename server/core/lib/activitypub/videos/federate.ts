@@ -39,6 +39,10 @@ export function isNewVideoPrivacyForFederation (currentPrivacy: VideoPrivacyType
   return !isPrivacyForFederation(currentPrivacy) && isPrivacyForFederation(newPrivacy)
 }
 
+export function isNewVideoForFederation (currentPrivacy: VideoPrivacyType, newPrivacy: VideoPrivacyType, firstPublishedAt?: Date) {
+  return isNewVideoPrivacyForFederation(currentPrivacy, newPrivacy) && !firstPublishedAt
+}
+
 export function isPrivacyForFederation (privacy: VideoPrivacyType) {
   const castedPrivacy = forceNumber(privacy)
 

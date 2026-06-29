@@ -5,11 +5,11 @@ import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update.js'
-import { isNewVideoPrivacyForFederation } from '../activitypub/videos/federate.js'
+import { isNewVideoForFederation } from '../activitypub/videos/federate.js'
 import { Notifier } from '../notifier/index.js'
-import { addVideoJobsAfterUpdate } from '../video-jobs.js'
+import { onVideoLocalUpdate } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
-import { setVideoPrivacy } from '../video-privacy.js'
+import { isNewVideoForSubscription, setVideoPrivacy } from '../video-privacy.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 const lTags = loggerTagsFactory('schedulers', 'update-videos')
@@ -54,7 +54,8 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
   private async updateAVideo (schedule: MScheduleVideoUpdate) {
     let oldPrivacy: VideoPrivacyType
-    let isNewVideoForFederation: boolean
+    let newVideoForFederation = false
+    let newVideoForSubscriptions = false
     let published = false
 
     const video = await sequelizeTypescript.transaction(async t => {
@@ -64,7 +65,13 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       logger.info('Executing scheduled video update on ' + video.uuid, lTags(video.uuid))
 
       if (schedule.privacy) {
-        isNewVideoForFederation = isNewVideoPrivacyForFederation(video.privacy, schedule.privacy)
+        newVideoForFederation = isNewVideoForFederation(video.privacy, schedule.privacy, video.firstPublishedAt)
+        newVideoForSubscriptions = isNewVideoForSubscription({
+          currentPrivacy: video.privacy,
+          newPrivacy: schedule.privacy,
+          firstPublishedAt: video.firstPublishedAt
+        })
+
         oldPrivacy = video.privacy
 
         setVideoPrivacy(video, schedule.privacy)
@@ -84,7 +91,13 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       return { video, published: false }
     }
 
-    await addVideoJobsAfterUpdate({ video, oldPrivacy, isNewVideoForFederation, nameChanged: false })
+    await onVideoLocalUpdate({
+      video,
+      oldPrivacy,
+      isNewVideoForFederation: newVideoForFederation,
+      isNewVideoForSubscription: newVideoForSubscriptions,
+      nameChanged: false
+    })
 
     return { video, published }
   }
