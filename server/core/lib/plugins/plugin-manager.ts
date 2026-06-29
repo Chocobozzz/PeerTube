@@ -14,8 +14,8 @@ import { decachePlugin } from '@server/helpers/decache.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import express from 'express'
-import { appendFile, readFile } from 'fs/promises'
 import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
+import { appendFile, readFile } from 'fs/promises'
 import { Server } from 'http'
 import { createRequire } from 'module'
 import { basename, join } from 'path'
@@ -711,5 +711,7 @@ export class PluginManager implements ServerHook {
 }
 
 function stripSourceMappingURLComments (css: string) {
-  return css.replace(/\/\*# sourceMappingURL=.*?\*\//g, '')
+  return css
+    .replace(/\/\*#\s*sourceMappingURL=[^*]*\*\//gs, '')
+    .replace(/\/\/#\s*sourceMappingURL=.*/g, '')
 }
