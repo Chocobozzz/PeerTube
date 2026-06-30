@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
@@ -107,7 +107,8 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     muteByServer: false,
     liveInfo: true,
     removeFiles: false,
-    transcoding: false
+    transcoding: false,
+    retryFailedImport: true
   }
 
   user: AuthUser

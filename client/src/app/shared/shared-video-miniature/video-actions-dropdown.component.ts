@@ -1,7 +1,7 @@
-import { Component, OnChanges, booleanAttribute, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnChanges, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
-import { VideoCaption } from '@peertube/peertube-models'
+import { UserRight, VideoCaption, VideoState } from '@peertube/peertube-models'
 import { of } from 'rxjs'
 import {
   ActionDropdownComponent,
@@ -12,6 +12,7 @@ import {
 import { VideoCaptionService } from '../shared-main/video-caption/video-caption.service'
 import { RedundancyService } from '../shared-main/video/redundancy.service'
 import { VideoDetails } from '../shared-main/video/video-details.model'
+import { VideoImportService } from '../shared-main/video/video-import.service'
 import { Video } from '../shared-main/video/video.model'
 import { VideoService } from '../shared-main/video/video.service'
 import { AccountBlockBadgeInput } from '../shared-moderation/account-block-badges.component'
@@ -37,6 +38,7 @@ export type VideoActionsDisplayType = {
   transcoding?: boolean
   generateTranscription?: boolean
   transcriptionWidget?: boolean
+  retryFailedImport?: boolean
 }
 
 @Component({
@@ -66,6 +68,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   private videoCaptionService = inject(VideoCaptionService)
   private redundancyService = inject(RedundancyService)
   private serverService = inject(ServerService)
+  private videoImportService = inject(VideoImportService)
 
   readonly playlistDropdown = viewChild<NgbDropdown>('playlistDropdown')
   readonly playlistAdd = viewChild<VideoAddToPlaylistComponent>('playlistAdd')
@@ -92,7 +95,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     removeFiles: false,
     transcoding: false,
     generateTranscription: false,
-    transcriptionWidget: false
+    transcriptionWidget: false,
+    retryFailedImport: true
   })
   readonly placement = input('auto')
   readonly moreActions = input<DropdownAction<{
@@ -115,6 +119,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   readonly muted = output()
   readonly unmuted = output()
   readonly transcodingCreated = output()
+  readonly videoImportRetried = output()
   readonly modalOpened = output()
   readonly videoExistsInPlaylistChange = output()
 
@@ -223,6 +228,17 @@ export class VideoActionsDropdownComponent implements OnChanges {
     if (!this.user) return false
 
     return this.video().canGenerateTranscription(this.user, this.serverService.getHTMLConfig().videoTranscription.enabled)
+  }
+
+  canRetryImport () {
+    if (this.video().state?.id !== VideoState.TO_IMPORT_FAILED) return false
+    if (!this.user) return false
+    if (this.user.hasRight(UserRight.MANAGE_VIDEO_IMPORTS)) return true
+
+    const channel = this.video().channel
+    if (this.user.isEditorOfChannel(channel) || this.user.isOwnerOfChannel(channel)) return true
+
+    return false
   }
 
   // ---------------------------------------------------------------------------
@@ -490,6 +506,20 @@ export class VideoActionsDropdownComponent implements OnChanges {
       })
   }
 
+  retryImport () {
+    const video = this.video()
+
+    this.videoImportService.retryVideoImportByVideos([ video ])
+      .subscribe({
+        next: () => {
+          this.notifier.success($localize`Retry video import of "${video.name}" requested.`)
+          this.videoImportRetried.emit()
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
   onVideoBlocked () {
     this.videoBlocked.emit()
   }
@@ -564,6 +594,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
           linkBuilder: ({ video }) => [ '/videos/manage', video.shortUUID ],
           iconName: 'film',
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().update && this.isVideoUpdatable()
+        },
+        {
+          label: $localize`Retry import`,
+          handler: () => this.retryImport(),
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions().retryFailedImport && this.canRetryImport(),
+          iconName: 'refresh'
         },
         {
           label: $localize`Block...`,

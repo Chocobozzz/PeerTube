@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common'
-import { Component, OnChanges, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnChanges, inject, input, output, viewChild } from '@angular/core'
 import { RedirectService, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -76,7 +76,8 @@ export class ActionButtonsComponent implements OnChanges {
     liveInfo: true,
     generateTranscription: true,
     transcriptionWidget: true,
-    transcoding: true
+    transcoding: true,
+    retryFailedImport: true
   }
 
   userRating: UserVideoRateType

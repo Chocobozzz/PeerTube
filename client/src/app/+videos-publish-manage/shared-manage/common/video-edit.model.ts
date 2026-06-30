@@ -350,8 +350,10 @@ export class VideoEdit {
     this.metadata.channelName = options.channelName
     this.metadata.channelDisplayName = options.channelDisplayName
 
-    this.initialMetadata.accountName = this.metadata.accountName
-    this.initialMetadata.channelId = this.common.channelId
+    this.initialMetadata = {
+      accountName: this.metadata.accountName,
+      channelId: this.common.channelId
+    }
 
     this.updateAfterChange()
   }

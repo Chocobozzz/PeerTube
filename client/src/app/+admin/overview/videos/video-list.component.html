@@ -93,7 +93,7 @@
       placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true" [video]="video"
       [displayOptions]="videoActionsOptions" [muteStatus]="accountBlocklist.get(video.account.id)"
       (videoRemoved)="table.loadData()" (videoFilesRemoved)="table.loadData()" (transcodingCreated)="table.loadData()"
-      (muted)="loadBlockStatus()" (unmuted)="loadBlockStatus()"
+      (muted)="loadBlockStatus()" (unmuted)="loadBlockStatus()" (videoImportRetried)="table.loadData()"
     ></my-video-actions-dropdown>
   </ng-template>
 
