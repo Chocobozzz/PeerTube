@@ -10337,6 +10337,8 @@ components:
         thumbnails:
           description: "**PeerTube >= 8.1** Array of thumbnails for the video"
           type: array
+          items:
+            $ref: '#/components/schemas/Thumbnail'
         channel:
           $ref: '#/components/schemas/VideoChannelSummary'
 
