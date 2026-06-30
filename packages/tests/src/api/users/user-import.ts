@@ -19,7 +19,6 @@ import { ObjectStorageCommand, PeerTubeServer, cleanupTests, waitJobs } from '@p
 import { testAvatarSize, testImage } from '@tests/shared/checks.js'
 import { prepareImportExportTests } from '@tests/shared/import-export.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { SQLCommand } from '@tests/shared/sql-command.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { completeVideoCheck } from '@tests/shared/videos.js'
 import { expect } from 'chai'
@@ -401,6 +400,9 @@ function runTest (withObjectStorage: boolean) {
         expect(publicVideo).to.exist
         expect(publicVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
+        expect(publicVideo.originallyPublishedAt).to.exist
+        expect(new Date(publicVideo.originallyPublishedAt)).to.be.below(new Date(publicVideo.publishedAt))
+
         const playerSetting = await remoteServer.playerSettings.getForVideo({
           videoId: publicVideo.uuid,
           token: remoteServer.accessToken,
@@ -485,15 +487,6 @@ function runTest (withObjectStorage: boolean) {
               thumbnails: [ 'custom-thumbnail-user-import-280x157.jpg', 'custom-thumbnail-user-import-850x480.jpg' ]
             }
           })
-        }
-
-        // Imported video should preserve firstPublishedAt from the original
-        {
-          const sqlCommand = new SQLCommand(remoteServer)
-          const firstPublishedAt = await sqlCommand.getVideoField(otherVideo.uuid, 'firstPublishedAt')
-          expect(firstPublishedAt).to.exist
-
-          await sqlCommand.cleanup()
         }
 
         const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })

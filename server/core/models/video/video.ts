@@ -2397,13 +2397,19 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  async setNewState (newState: VideoStateType, isNewVideo: boolean, transaction: Transaction) {
+  async setNewStateAndPublishedAt (options: {
+    newState: VideoStateType
+    transaction: Transaction
+  }) {
+    const { newState, transaction } = options
+
     if (this.state === newState) throw new Error('Cannot use same state ' + newState)
 
     this.state = newState
 
-    if (this.state === VideoState.PUBLISHED && isNewVideo) {
+    if (this.state === VideoState.PUBLISHED && !this.firstPublishedAt) {
       this.publishedAt = new Date()
+      this.firstPublishedAt = this.publishedAt
     }
 
     await this.save({ transaction })

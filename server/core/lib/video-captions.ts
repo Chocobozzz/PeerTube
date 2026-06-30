@@ -263,7 +263,7 @@ export async function onTranscriptionEnded (options: {
   }
 
   await sequelizeTypescript.transaction(async t => {
-    await federateVideoIfNeeded(video, false, t)
+    await federateVideoIfNeeded(video, t)
   })
 
   Notifier.Instance.notifyOfGeneratedVideoTranscription(caption)

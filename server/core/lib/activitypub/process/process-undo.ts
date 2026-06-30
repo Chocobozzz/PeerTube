@@ -84,7 +84,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
     await video.decrement('likes', { transaction: t })
 
     video.likes--
-    await federateVideoIfNeeded(video, false, t)
+    await federateVideoIfNeeded(video, t)
   })
 }
 
@@ -108,7 +108,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     await video.decrement('dislikes', { transaction: t })
     video.dislikes--
 
-    await federateVideoIfNeeded(video, false, t)
+    await federateVideoIfNeeded(video, t)
   })
 }
 

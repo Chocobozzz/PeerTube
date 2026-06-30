@@ -104,7 +104,7 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
         transaction: t
       })
 
-      return federateVideoIfNeeded(video, false, t)
+      return federateVideoIfNeeded(video, t)
     })
   })
 
@@ -136,7 +136,7 @@ async function deleteVideoCaption (req: express.Request, res: express.Response) 
         transaction: t
       })
 
-      return federateVideoIfNeeded(video, false, t)
+      return federateVideoIfNeeded(video, t)
     })
   })
 

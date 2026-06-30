@@ -31,7 +31,6 @@ export async function moveVideoToObjectStorage (options: {
   videoUUID: string
 
   moveVideoState?: {
-    isNewVideo: boolean
     previousVideoState: VideoStateType
   }
 
@@ -55,7 +54,7 @@ export async function moveVideoToObjectStorage (options: {
     await moveToNextState({ video: { uuid: videoUUID }, ...moveVideoState })
   } else {
     const videoFull = await VideoModel.loadFull(videoUUID)
-    if (videoFull) await federateVideoIfNeeded(videoFull, false, undefined)
+    if (videoFull) await federateVideoIfNeeded(videoFull)
   }
 }
 

@@ -15,10 +15,9 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   async createOptimizeOrMergeAudioJobs (options: {
     video: MVideoFull
     videoFile: MVideoFile
-    isNewVideo: boolean
     user: MUserId
   }) {
-    const { video, videoFile, isNewVideo, user } = options
+    const { video, videoFile, user } = options
 
     let mergeOrOptimizePayload: P
     let children: P[][] = []
@@ -38,7 +37,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
 
       mergeOrOptimizePayload = this.buildMergeAudioPayload({
         video,
-        isNewVideo,
         inputFile: videoFile,
         resolution: maxResolution,
         fps: maxFPS,
@@ -53,7 +51,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
 
       mergeOrOptimizePayload = this.buildOptimizePayload({
         video,
-        isNewVideo,
         inputFile: videoFile,
         resolution: maxResolution,
         fps: maxFPS,
@@ -76,7 +73,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
           resolution: maxResolution,
           fps: maxFPS,
           video,
-          isNewVideo,
 
           inputStreams,
           transcodingRequestAt,
@@ -97,7 +93,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
             resolution: 0,
             fps: 0,
             video,
-            isNewVideo,
 
             inputStreams,
             transcodingRequestAt,
@@ -116,7 +111,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
       inputVideoResolution: maxResolution,
       inputVideoFPS: maxFPS,
       hasAudio: videoFile.hasAudio(),
-      isNewVideo,
       hlsAudioAlreadyGenerated
     })
 
@@ -138,10 +132,9 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
     transcodingType: 'hls' | 'web-video'
     video: MVideoFull
     resolutions: number[]
-    isNewVideo: boolean
     user: MUserId | null
   }) {
-    const { video, transcodingType, resolutions, isNewVideo } = options
+    const { video, transcodingType, resolutions } = options
     const separatedAudio = CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO
     const transcodingRequestAt = new Date().toISOString()
 
@@ -165,7 +158,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
               video,
               resolution,
               fps,
-              isNewVideo,
               separatedAudio,
               canMoveVideoState: true,
               inputStreams,
@@ -181,7 +173,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
               video,
               resolution,
               fps,
-              isNewVideo,
               canMoveVideoState: true,
               transcodingPriority: 'optional'
             })
@@ -200,7 +191,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
         video,
         resolution: VideoResolution.H_NOVIDEO,
         fps,
-        isNewVideo,
         separatedAudio,
         canMoveVideoState: true,
         transcodingRequestAt,
@@ -218,7 +208,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
     inputVideoFPS: number
     inputStreams: VideoFileStreamType[]
     hasAudio: boolean
-    isNewVideo: boolean
     hlsAudioAlreadyGenerated: boolean
     transcodingRequestAt: string
   }) {
@@ -227,7 +216,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
       inputVideoResolution,
       inputVideoFPS,
       inputStreams,
-      isNewVideo,
       hlsAudioAlreadyGenerated,
       hasAudio,
       transcodingRequestAt
@@ -272,7 +260,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
             video,
             resolution,
             fps,
-            isNewVideo,
             canMoveVideoState: true,
             transcodingPriority: 'optional'
           })
@@ -294,7 +281,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
             video,
             resolution,
             fps,
-            isNewVideo,
             separatedAudio: hasAudio && CONFIG.TRANSCODING.HLS.SPLIT_AUDIO_AND_VIDEO,
             canMoveVideoState: true,
             transcodingPriority: 'optional',
@@ -330,7 +316,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
   protected abstract buildMergeAudioPayload (options: {
     video: MVideoFull
     inputFile: MVideoFile
-    isNewVideo: boolean
     resolution: number
     fps: number
 
@@ -340,7 +325,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
 
   protected abstract buildOptimizePayload (options: {
     video: MVideoFull
-    isNewVideo: boolean
     inputFile: MVideoFile
     resolution: number
     fps: number
@@ -353,7 +337,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
     video: MVideoFull
     resolution: number
     fps: number
-    isNewVideo: boolean
     separatedAudio: boolean
 
     deleteWebVideoFiles?: boolean // default false
@@ -369,7 +352,6 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
     video: MVideoFull
     resolution: number
     fps: number
-    isNewVideo: boolean
 
     transcodingPriority: TranscodingPriorityType
     canMoveVideoState: boolean

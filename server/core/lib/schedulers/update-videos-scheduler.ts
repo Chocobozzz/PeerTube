@@ -5,7 +5,6 @@ import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { sequelizeTypescript } from '../../initializers/database.js'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update.js'
-import { isNewVideoForFederation } from '../activitypub/videos/federate.js'
 import { Notifier } from '../notifier/index.js'
 import { onVideoLocalUpdate } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
@@ -54,7 +53,6 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
   private async updateAVideo (schedule: MScheduleVideoUpdate) {
     let oldPrivacy: VideoPrivacyType
-    let newVideoForFederation = false
     let newVideoForSubscriptions = false
     let published = false
 
@@ -65,7 +63,6 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       logger.info('Executing scheduled video update on ' + video.uuid, lTags(video.uuid))
 
       if (schedule.privacy) {
-        newVideoForFederation = isNewVideoForFederation(video.privacy, schedule.privacy, video.firstPublishedAt)
         newVideoForSubscriptions = isNewVideoForSubscription({
           currentPrivacy: video.privacy,
           newPrivacy: schedule.privacy,
@@ -94,7 +91,6 @@ export class UpdateVideosScheduler extends AbstractScheduler {
     await onVideoLocalUpdate({
       video,
       oldPrivacy,
-      isNewVideoForFederation: newVideoForFederation,
       isNewVideoForSubscription: newVideoForSubscriptions,
       nameChanged: false
     })

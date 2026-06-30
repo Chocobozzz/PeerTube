@@ -522,7 +522,6 @@ class LiveManager {
 
       const now = new Date()
       video.publishedAt = now
-      video.firstPublishedAt = video.firstPublishedAt ?? now
 
       video.aspectRatio = audioOnlyOutput
         ? 0
@@ -535,7 +534,7 @@ class LiveManager {
       await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
       try {
-        await federateVideoIfNeeded(video, false)
+        await federateVideoIfNeeded(video)
       } catch (err) {
         logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags })
       }
@@ -610,7 +609,7 @@ class LiveManager {
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 
-      await federateVideoIfNeeded(fullVideo, false)
+      await federateVideoIfNeeded(fullVideo)
 
       Hooks.runAction('action:live.video.state.updated', { video: fullVideo })
     } catch (err) {

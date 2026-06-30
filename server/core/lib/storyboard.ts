@@ -92,7 +92,7 @@ export async function insertStoryboardInDatabase (options: {
       }, { transaction })
 
       if (federate) {
-        await federateVideoIfNeeded(video, false, transaction)
+        await federateVideoIfNeeded(video, transaction)
       }
     })
   })

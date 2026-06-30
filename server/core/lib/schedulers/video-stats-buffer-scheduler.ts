@@ -55,7 +55,7 @@ export class VideoStatsBufferScheduler extends AbstractScheduler {
         }
 
         // Send video update
-        await federateVideoIfNeeded(video, false)
+        await federateVideoIfNeeded(video)
       } catch (err) {
         logger.error(`Cannot process local video stats buffer of video ${videoId}.`, { err, ...lTags() })
       }

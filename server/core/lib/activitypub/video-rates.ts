@@ -1,5 +1,5 @@
-import { Transaction } from 'sequelize'
 import { VideoRateType } from '@peertube/peertube-models'
+import { Transaction } from 'sequelize'
 import { MAccountActor, MActorUrl, MVideoAccountLight, MVideoFull, MVideoId } from '../../types/models/index.js'
 import { sendLike, sendUndoDislike, sendUndoLike } from './send/index.js'
 import { sendDislike } from './send/send-dislike.js'
@@ -13,7 +13,7 @@ async function sendVideoRateChange (
   dislikes: number,
   t: Transaction
 ) {
-  if (video.isLocal()) return federateVideoIfNeeded(video, false, t)
+  if (video.isLocal()) return federateVideoIfNeeded(video, t)
 
   return sendVideoRateChangeToOrigin(account, video, likes, dislikes, t)
 }

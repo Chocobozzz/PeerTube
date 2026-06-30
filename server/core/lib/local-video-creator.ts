@@ -9,6 +9,7 @@ import {
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
   VideoPrivacy,
+  VideoState,
   VideoStateType
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
@@ -251,7 +252,7 @@ export class LocalVideoCreator {
             }).catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
           })
         } else {
-          await federateVideoIfNeeded(this.video, true, transaction)
+          await federateVideoIfNeeded(this.video, transaction)
         }
       }).catch(err => {
         // Reset elements to reinsert them in the database
@@ -309,7 +310,7 @@ export class LocalVideoCreator {
     let firstPublishedAt: Date = null
     if (videoInfo.firstPublishedAt) {
       firstPublishedAt = new Date(videoInfo.firstPublishedAt)
-    } else if (privacy !== VideoPrivacy.PRIVATE) {
+    } else if (privacy !== VideoPrivacy.PRIVATE && videoInfo.state === VideoState.PUBLISHED) {
       firstPublishedAt = now
     }
 

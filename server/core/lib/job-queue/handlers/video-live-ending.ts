@@ -223,7 +223,7 @@ async function saveReplayToExternalVideo (options: {
   await createStoryboardJob(replayVideo)
   await createTranscriptionTaskIfNeeded(replayVideo)
 
-  await moveToNextState({ video: replayVideo, isNewVideo: true })
+  await moveToNextState({ video: replayVideo })
 }
 
 async function copyOrRegenerateThumbnails (options: {
@@ -326,7 +326,7 @@ async function replaceLiveByReplay (options: {
   }
 
   // We consider this is a new video
-  await moveToNextState({ video: videoWithFiles, isNewVideo: true })
+  await moveToNextState({ video: videoWithFiles })
 
   await createStoryboardJob(videoWithFiles)
   await createTranscriptionTaskIfNeeded(videoWithFiles)
@@ -390,7 +390,7 @@ async function cleanupLiveAndFederate (options: {
 
   try {
     const fullVideo = await VideoModel.loadFull(video.id)
-    return federateVideoIfNeeded(fullVideo, false, undefined)
+    return federateVideoIfNeeded(fullVideo)
   } catch (err) {
     logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })
   }

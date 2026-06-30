@@ -68,7 +68,6 @@ async function createTranscoding (req: express.Request, res: express.Response) {
     video,
     resolutions,
     transcodingType: body.transcodingType,
-    isNewVideo: false,
     user: null // Don't specify priority since these transcoding jobs are fired by the admin
   })
 

@@ -177,7 +177,7 @@ export async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: 
 
     // Re federate the video
     if (unfederated === true) {
-      await federateVideoIfNeeded(await VideoModel.loadFull(video.id, t), true, t)
+      await federateVideoIfNeeded(await VideoModel.loadFull(video.id, t), t)
     }
 
     return videoBlacklistType

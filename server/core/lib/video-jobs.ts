@@ -16,7 +16,6 @@ export async function buildMoveVideoJob (options: {
   type: 'move-to-object-storage' | 'move-to-file-system'
 
   moveVideoState?: {
-    isNewVideo: boolean
     previousVideoState: VideoStateType
   }
 }) {
@@ -58,10 +57,7 @@ export async function buildLocalStoryboardJobIfNeeded (options: {
   if (federate === true) {
     return {
       type: 'federate-video' as 'federate-video',
-      payload: {
-        videoUUID: video.uuid,
-        isNewVideoForFederation: false
-      }
+      payload: { videoUUID: video.uuid }
     }
   }
 
@@ -124,10 +120,7 @@ export async function addVideoJobsAfterCreation (options: {
 
     {
       type: 'federate-video' as 'federate-video',
-      payload: {
-        videoUUID: video.uuid,
-        isNewVideoForFederation: true
-      }
+      payload: { videoUUID: video.uuid }
     }
   ]
 
@@ -138,7 +131,6 @@ export async function addVideoJobsAfterCreation (options: {
         type: 'move-to-object-storage',
         video,
         moveVideoState: {
-          isNewVideo: true,
           previousVideoState: undefined
         }
       })
@@ -150,9 +142,7 @@ export async function addVideoJobsAfterCreation (options: {
       type: 'transcoding-job-builder' as 'transcoding-job-builder',
       payload: {
         videoUUID: video.uuid,
-        optimizeJob: {
-          isNewVideo: true
-        }
+        optimizeJob: {}
       }
     })
   }
@@ -169,13 +159,12 @@ export async function addVideoJobsAfterCreation (options: {
 export async function onVideoLocalUpdate (options: {
   video: MVideoFull
 
-  isNewVideoForFederation: boolean
   isNewVideoForSubscription: boolean
 
   nameChanged: boolean
   oldPrivacy?: VideoPrivacyType
 }) {
-  const { video, nameChanged, oldPrivacy, isNewVideoForFederation, isNewVideoForSubscription } = options
+  const { video, nameChanged, oldPrivacy, isNewVideoForSubscription } = options
   const jobs: CreateJobTypeAndPayload[] = []
 
   const filePathChanged = exists(oldPrivacy)
@@ -211,10 +200,7 @@ export async function onVideoLocalUpdate (options: {
 
   jobs.push({
     type: 'federate-video',
-    payload: {
-      videoUUID: video.uuid,
-      isNewVideoForFederation
-    }
+    payload: { videoUUID: video.uuid }
   })
 
   if (isNewVideoForSubscription) {

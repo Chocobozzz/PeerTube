@@ -59,6 +59,6 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
 
     await rate.save({ transaction: t })
 
-    await federateVideoIfNeeded(video, false, t)
+    await federateVideoIfNeeded(video, t)
   })
 }

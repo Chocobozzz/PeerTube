@@ -434,7 +434,7 @@ describe('Test user notifications', function () {
       }
     })
 
-    it('Should send a notification is a live replay of a non permanent live is published', async function () {
+    it('Should send a notification when a live replay of a non permanent live is published', async function () {
       this.timeout(120000)
 
       const { shortUUID } = await servers[1].live.create({
@@ -460,7 +460,7 @@ describe('Test user notifications', function () {
       await checkMyVideoIsPublished({ ...baseParams, videoName: 'non permanent live', shortUUID, checkType: 'presence' })
     })
 
-    it('Should send a notification is a live replay of a permanent live is published', async function () {
+    it('Should send a notification when a live replay of a permanent live is published', async function () {
       this.timeout(120000)
 
       const { shortUUID } = await servers[1].live.create({

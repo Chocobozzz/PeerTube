@@ -240,7 +240,7 @@ async function processFile (options: {
 
           // Now we can federate the video (reload from database, we need more attributes)
           const videoForFederation = await VideoModel.loadFull(video.uuid, t)
-          await federateVideoIfNeeded(videoForFederation, true, t)
+          await federateVideoIfNeeded(videoForFederation, t)
 
           // Update video import object
           videoImportWithFiles.state = VideoImportState.SUCCESS
@@ -322,7 +322,6 @@ async function afterImportSuccess (options: {
         type: 'move-to-object-storage',
         video,
         moveVideoState: {
-          isNewVideo: true,
           previousVideoState: VideoState.TO_IMPORT
         }
       })
@@ -331,7 +330,7 @@ async function afterImportSuccess (options: {
   }
 
   if (video.state === VideoState.TO_TRANSCODE) { // Create transcoding jobs?
-    await createOptimizeOrMergeAudioJobs({ video, videoFile, isNewVideo: true, user })
+    await createOptimizeOrMergeAudioJobs({ video, videoFile, user })
   }
 }
 

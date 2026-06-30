@@ -11,7 +11,7 @@ import { exists } from '@server/helpers/custom-validators/misc.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { sendDeleteVideo } from '@server/lib/activitypub/send/send-delete.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
-import { isNewVideoForFederation, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
+import { isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
 import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
@@ -76,7 +76,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(videoFromReq.uuid)
 
   try {
-    const { videoInstanceUpdated, newVideoForFederation, newVideoForSubscription } = await sequelizeTypescript.transaction(async t => {
+    const { videoInstanceUpdated, newVideoForSubscription } = await sequelizeTypescript.transaction(async t => {
       // Refresh video since thumbnails to prevent concurrent updates
       const video = await VideoModel.loadFull(videoFromReq.id, t)
 
@@ -118,11 +118,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Privacy update?
-      let newVideoForFederation = false
       let newVideoForSubscription = false
 
       if (body.privacy !== undefined) {
-        newVideoForFederation = isNewVideoForFederation(video.privacy, body.privacy, video.firstPublishedAt)
         newVideoForSubscription = isNewVideoForSubscription({
           currentPrivacy: video.privacy,
           newPrivacy: body.privacy,
@@ -229,7 +227,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       )
       logger.info('Video with name %s and uuid %s updated.', video.name, video.uuid, lTags(video.uuid))
 
-      return { videoInstanceUpdated, newVideoForFederation, newVideoForSubscription }
+      return { videoInstanceUpdated, newVideoForSubscription }
     })
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
@@ -238,7 +236,6 @@ async function updateVideo (req: express.Request, res: express.Response) {
       video: videoInstanceUpdated,
       nameChanged: !!body.name,
       oldPrivacy,
-      isNewVideoForFederation: newVideoForFederation,
       isNewVideoForSubscription: newVideoForSubscription
     })
   } catch (err) {
