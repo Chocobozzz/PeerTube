@@ -22,7 +22,7 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
 <p align="center">
   <a href="https://framasoft.org">
-    <img width="150px" src="https://lutim.cpy.re/FeRgHH8r.png" alt="Framasoft logo"/>
+    <img width="150px" src="https://asso.framasoft.org/pic/7dcsknbA/8XSBIpLF.png" alt="Framasoft logo"/>
   </a>
 </p>
 
@@ -43,8 +43,8 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 <br />
 
 <p align="center">
-  <a href="https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3">
-    <img src="https://lutim.cpy.re/9CLXh0Ys.png" alt="screenshot" />
+  <a href="https://framatube.org/w/kkGMgK9ZtnKfYAgnEtQxbv">
+    <img src="https://asso.framasoft.org/pic/wI6n1YIH/hKfCL8Xi.png" alt="screenshot" />
   </a>
 </p>
 
@@ -71,7 +71,7 @@ To learn more:
   | <strong><a href="https://joinpeertube.org/faq#what-are-the-peertube-features-for-administrators">All features for administrators</a></strong>
 </p>
 
-<img src="https://lutim.cpy.re/AHbctLjn.png" align="left" height="300px"/>
+<img src="https://asso.framasoft.org/pic/z6py52z2/61ZyIm65.png" align="left" height="300px"/>
 <h3 align="left">Video streaming, even in live!</h3>
 <p align="left">
 Just upload your videos, and be sure they will stream anywhere. Add a description, some tags and your video will be discoverable by the entire video fediverse, not just your instance. You can even embed a player on your favorite website!
@@ -82,7 +82,7 @@ You are used to hosting live events? We got you covered too! Start livestreaming
 
 ---
 
-<img src="https://lutim.cpy.re/cxWccUK7.png" align="right" height="200px"/>
+<img src="https://asso.framasoft.org/pic/lYrgaP2N/Sj3hgkeo.png" align="right" height="200px"/>
 
 <h3 align="right">Keep in touch with video creators</h3>
 <p align="right">
@@ -91,7 +91,7 @@ Follow your favorite channels from PeerTube or really any other place. No need t
 
 ---
 
-<img src="https://lutim.cpy.re/K07EhFbt.png" align="left" height="200px"/>
+<img src="https://asso.framasoft.org/pic/UbNnLlzV/Sx0PSrH1.png" align="left" height="200px"/>
 
 <h3 align="left">An interface to call home</h3>
 <p align="left">
