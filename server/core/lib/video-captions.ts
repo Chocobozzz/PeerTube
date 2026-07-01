@@ -2,7 +2,7 @@ import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import { AbstractTranscriber, TranscriptionModel, WhisperBuiltinModel, transcriberFactory } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
-import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
+import { isVideoCaptionLanguageValid, isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -44,6 +44,15 @@ export async function createLocalCaption (options: {
   }) as MVideoCaption
 
   await moveAndProcessCaptionFile({ path }, videoCaption)
+
+  const captionDest = videoCaption.getFSFilePath()
+
+  if (!await isVTTFileValid(captionDest)) {
+    remove(captionDest)
+      .catch(err => logger.error('Cannot remove invalid VTT file', { err, ...lTags(video.uuid) }))
+
+    throw new Error(`Invalid VTT file`)
+  }
 
   const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
 
