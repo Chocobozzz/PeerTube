@@ -1,4 +1,5 @@
 import { HttpStatusCode, VideoCaptionGenerate, VideoChannelActivityAction } from '@peertube/peertube-models'
+import { isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { createLocalCaption, createTranscriptionTaskIfNeeded, updateHLSMasterOnCaptionChangeIfNeeded } from '@server/lib/video-captions.js'
@@ -79,14 +80,19 @@ async function listVideoCaptions (req: express.Request, res: express.Response) {
 
 async function createVideoCaption (req: express.Request, res: express.Response) {
   const videoCaptionPhysicalFile: Express.Multer.File = req.files['captionfile'][0]
+  const captionPath = videoCaptionPhysicalFile.path
   const video = res.locals.videoFull
+
+  if (!await isVTTFileValid(captionPath)) {
+    return res.fail({ status: HttpStatusCode.BAD_REQUEST_400, message: req.t('Invalid caption file') })
+  }
 
   const captionLanguage = req.params.captionLanguage
 
   const videoCaption = await createLocalCaption({
     video,
     language: captionLanguage,
-    path: videoCaptionPhysicalFile.path,
+    path: captionPath,
     automaticallyGenerated: false
   })
 
