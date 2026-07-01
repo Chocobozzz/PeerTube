@@ -100,6 +100,17 @@ export const privateHLSFileValidator = [
   }
 ]
 
+export const privateWebVideoFileValidator = [
+  param('filename')
+    .custom(v => isSafeFilename(v)),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 export const ensureCanAccessPrivateVideoHLSFiles = [
   query('videoFileToken')
     .optional()
