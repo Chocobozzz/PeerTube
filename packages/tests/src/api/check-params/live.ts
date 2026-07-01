@@ -20,6 +20,7 @@ import {
   makeUploadRequest,
   sendRTMPStream,
   setAccessTokensToServers,
+  setDefaultVideoChannel,
   stopFfmpeg
 } from '@peertube/peertube-server-commands'
 import { checkBadSort } from '@tests/shared/checks.js'
@@ -34,7 +35,11 @@ describe('Test video lives API validator', function () {
 
   let channelId: number
   let video: VideoCreateResult
+
   let videoIdNotLive: number
+  let videoIdPrivateNotLive: number
+  let videoIdPrivateLive: number
+
   let command: LiveCommand
   const dvrMaxWindow = 50
 
@@ -46,6 +51,7 @@ describe('Test video lives API validator', function () {
     server = await createSingleServer(1)
 
     await setAccessTokensToServers([ server ])
+    await setDefaultVideoChannel([ server ])
 
     await server.config.enableMinimumTranscoding()
     await server.config.updateExistingConfig({
@@ -75,6 +81,16 @@ describe('Test video lives API validator', function () {
 
     {
       videoIdNotLive = (await server.videos.quickUpload({ name: 'not live' })).id
+      videoIdPrivateNotLive = (await server.videos.quickUpload({ name: 'not live - private', privacy: VideoPrivacy.PRIVATE })).id
+    }
+
+    {
+      videoIdPrivateLive = (await server.live.quickCreate({
+        name: 'private',
+        privacy: VideoPrivacy.PRIVATE,
+        saveReplay: false,
+        permanentLive: false
+      })).video.id
     }
 
     command = server.live
@@ -499,6 +515,12 @@ describe('Test video lives API validator', function () {
       await command.get({ videoId: videoIdNotLive, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
     })
 
+    it('Should fail with a private live', async function () {
+      await command.get({ videoId: videoIdPrivateLive, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await command.get({ videoId: videoIdPrivateLive, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.get({ videoId: videoIdPrivateLive, token: server.accessToken })
+    })
+
     it('Should succeed with the correct params', async function () {
       await command.get({ videoId: video.id })
       await command.get({ videoId: video.uuid })
@@ -553,6 +575,15 @@ describe('Test video lives API validator', function () {
 
     it('Should fail with a non replay video', async function () {
       await command.getReplaySession({ videoId: videoIdNotLive, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail with a private video', async function () {
+      await command.getReplaySession({ videoId: videoIdPrivateNotLive, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+      await command.getReplaySession({
+        videoId: videoIdPrivateNotLive,
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
   })
 
