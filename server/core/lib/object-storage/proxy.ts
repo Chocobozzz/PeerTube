@@ -90,6 +90,11 @@ function handleObjectStorageFailure (res: express.Response, err: Error) {
     return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }
 
+  if ((err as any).code === 'ECONNRESET') {
+    logger.debug('Client aborted proxified request from object storage.', { err })
+    return
+  }
+
   logger.error('Object storage failure', { err })
 
   return res.fail({
