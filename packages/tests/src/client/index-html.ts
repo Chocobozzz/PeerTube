@@ -80,6 +80,18 @@ describe('Test index HTML generation', function () {
 
       checkIndexTags(res.text, 'PeerTube updated', 'my short description', 'body { background-color: red; }', config)
     })
+
+    it('Should escape HTML characters in the index html tags', async function () {
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            name: '</script><img src=x onerror=alert(1)>'
+          }
+        }
+      })
+      const res = await makeHTMLRequest(servers[0].url, '/videos/browse')
+      expect(res.text).to.contain('\\u003c/script\\u003e\\u003cimg src=x onerror=alert(1)\\u003e')
+    })
   })
 
   describe('Canonical tags', function () {
@@ -119,6 +131,11 @@ describe('Test index HTML generation', function () {
       channelURLtests(await makeHTMLRequest(servers[0].url, '/video-channels/root_channel@' + servers[0].host))
       channelURLtests(await makeHTMLRequest(servers[0].url, '/c/root_channel@' + servers[0].host))
       channelURLtests(await makeHTMLRequest(servers[0].url, '/@root_channel@' + servers[0].host))
+    })
+
+    it('Should escape canonical tag URL', async function () {
+      const res = await makeHTMLRequest(servers[0].url, '/watch/foo"><svg/onload=alert(1)>')
+      expect(res.text).to.not.contain('<svg/onload=alert(1)>')
     })
   })
 
