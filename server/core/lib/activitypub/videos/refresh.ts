@@ -45,7 +45,7 @@ export async function refreshVideoIfNeeded (options: {
       return video
     }
 
-    const videoUpdater = new APVideoUpdater(videoObject, video)
+    const videoUpdater = new APVideoUpdater(videoObject, video, video.url)
     await videoUpdater.update()
 
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
