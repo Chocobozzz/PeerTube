@@ -499,7 +499,7 @@ export class UserModel extends SequelizeModel<UserModel> {
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (instance: UserModel) {
-    return TokensCache.Instance.clearCacheByUserId(instance.id)
+    return TokensCache.Instance.deleteUserTokens(instance.id)
   }
 
   // ---------------------------------------------------------------------------

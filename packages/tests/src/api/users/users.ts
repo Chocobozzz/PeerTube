@@ -197,6 +197,12 @@ describe('Test users', function () {
   })
 
   describe('Update my account', function () {
+    let otherToken: string
+
+    before(async function () {
+      otherToken = await server.login.getAccessToken(user)
+    })
+
     it('Should update my password', async function () {
       await server.users.updateMe({
         token: userToken,
@@ -206,6 +212,11 @@ describe('Test users', function () {
       user.password = 'new password'
 
       await server.login.login({ user })
+    })
+
+    it('Should have invalided other tokens, but not the one that changed the password', async function () {
+      await server.users.getMyQuotaUsed({ token: userToken })
+      await server.users.getMyQuotaUsed({ token: otherToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
 
     it('Should be able to change the NSFW display attribute', async function () {

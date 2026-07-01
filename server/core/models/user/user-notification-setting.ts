@@ -211,7 +211,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (instance: UserNotificationSettingModel) {
-    return TokensCache.Instance.clearCacheByUserId(instance.userId)
+    return TokensCache.Instance.deleteUserTokens(instance.userId)
   }
 
   // ---------------------------------------------------------------------------
