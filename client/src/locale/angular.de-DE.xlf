@@ -1585,9 +1585,9 @@
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9072500254918792872" datatype="html">
+      <trans-unit id="9072500254918792872" datatype="html" xml:space="preserve">
         <source>Add a field to update...</source>
-        <target state="new">Add a field to update...</target>
+        <target state="translated">Feld hinzufügen, um zu aktualisieren...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -2273,9 +2273,9 @@
           <context context-type="linenumber">485</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1898581791654225317" datatype="html">
+      <trans-unit id="1898581791654225317" datatype="html" xml:space="preserve">
         <source>Save to playlist...</source>
-        <target state="new">Save to playlist...</target>
+        <target state="translated">In Wiedergabeliste speichern...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">508</context>
@@ -4113,17 +4113,17 @@
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4899825176400185840" datatype="html">
+      <trans-unit id="4899825176400185840" datatype="html" xml:space="preserve">
         <source>Enter the URL of the blocklist to subscribe to. The list will be fetched periodically and accounts/servers will be automatically muted.</source>
-        <target state="new">Enter the URL of the blocklist to subscribe to. The list will be fetched periodically and accounts/servers will be automatically muted.</target>
+        <target state="translated">Gebe die URL der Blockliste ein, die du abonnieren möchtest. Die Liste wird regelmäßig abgerufen und Konten/Server werden automatisch stummgeschaltet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">86,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8620830892282444876" datatype="html">
+      <trans-unit id="8620830892282444876" datatype="html" xml:space="preserve">
         <source>Blocklist URL</source>
-        <target state="new">Blocklist URL</target>
+        <target state="translated">Blockliste-URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">89,90</context>
@@ -5706,9 +5706,9 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7578466065199888239" datatype="html">
+      <trans-unit id="7578466065199888239" datatype="html" xml:space="preserve">
         <source>Accept...</source>
-        <target state="new">Accept...</target>
+        <target state="translated">Akzeptieren...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -5718,9 +5718,9 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3557445363988301484" datatype="html">
+      <trans-unit id="3557445363988301484" datatype="html" xml:space="preserve">
         <source>Reject...</source>
-        <target state="new">Reject...</target>
+        <target state="translated">Ablehnen...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -6693,9 +6693,9 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1268292519317944726" datatype="html">
+      <trans-unit id="1268292519317944726" datatype="html" xml:space="preserve">
         <source>Imported from a watched words subscription</source>
-        <target state="new">Imported from a watched words subscription</target>
+        <target state="translated">Aus einem Abonnement für überwachte Wörter importiert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">29</context>
@@ -6805,17 +6805,17 @@
           <context context-type="linenumber">84,86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6879611118172119569" datatype="html">
+      <trans-unit id="6879611118172119569" datatype="html" xml:space="preserve">
         <source>Only new comments can be blocked by a new word</source>
-        <target state="new">Only new comments can be blocked by a new word</target>
+        <target state="translated">Nur neue Kommentare können durch ein neues Wort blockiert werden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6123892565355794580" datatype="html">
+      <trans-unit id="6123892565355794580" datatype="html" xml:space="preserve">
         <source>If you remove a word from the list, any comments that are currently awaiting review will not be affected</source>
-        <target state="new">If you remove a word from the list, any comments that are currently awaiting review will not be affected</target>
+        <target state="translated">Wenn du ein Wort aus der Liste löschst, hat das keinen Einfluss auf die Kommentare, die gerade noch überprüft werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">20,21</context>
