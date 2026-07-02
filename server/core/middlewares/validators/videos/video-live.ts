@@ -23,10 +23,17 @@ import { isValidPasswordProtectedPrivacy, isVideoNameValid, isVideoReplayPrivacy
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
-import { areValidationErrors, checkCanManageVideo, doesChannelIdExist, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
+import {
+  areValidationErrors,
+  checkCanManageVideo,
+  checkCanSeeVideo,
+  doesChannelIdExist,
+  doesVideoExist,
+  isValidVideoIdParam
+} from '../shared/index.js'
 import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
-export const videoLiveGetValidatorFactory = (loadType: VideoLoadType) => {
+export const videoLiveGetValidatorFactory = (loadType: Extract<VideoLoadType, 'with-rights' | 'full'>) => {
   return [
     isValidVideoIdParam('videoId'),
 
@@ -34,10 +41,11 @@ export const videoLiveGetValidatorFactory = (loadType: VideoLoadType) => {
       if (areValidationErrors(req, res)) return
       if (!await doesVideoExist(req.params.videoId, res, loadType)) return
 
+      const video = res.locals.videoFull || res.locals.videoWithRights
+      if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.videoId })) return
+
       const videoLive = await VideoLiveModel.loadByVideoIdFull(getVideoWithAttributes(res).id)
-      if (!videoLive) {
-        return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
-      }
+      if (!videoLive) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
       res.locals.videoLive = videoLive
 
@@ -268,15 +276,13 @@ export const videoLiveFindReplaySessionValidator = [
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-rights')) return
 
-    const session = await VideoLiveSessionModel.findSessionOfReplay(res.locals.videoId.id)
-    if (!session) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'No live replay found'
-      })
-    }
+    const video = res.locals.videoWithRights
+    if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.videoId })) return
+
+    const session = await VideoLiveSessionModel.findSessionOfReplay(video.id)
+    if (!session) return res.fail({ status: HttpStatusCode.NOT_FOUND_404, message: req.t('No live replay found') })
 
     res.locals.videoLiveSession = session
 

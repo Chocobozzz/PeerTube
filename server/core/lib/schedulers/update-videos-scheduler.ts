@@ -45,9 +45,9 @@ export class UpdateVideosScheduler extends AbstractScheduler {
         if (published) Notifier.Instance.notifyOnVideoPublishedAfterScheduledUpdate(video)
       } catch (err) {
         logger.error('Cannot update video ' + videoOnly.uuid, { err, ...lTags(videoOnly.uuid) })
+      } finally {
+        mutexReleaser()
       }
-
-      mutexReleaser()
     }
   }
 

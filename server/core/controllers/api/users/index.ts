@@ -304,7 +304,9 @@ async function updateUser (req: express.Request, res: express.Response) {
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged || body.password !== undefined) await OAuthTokenModel.deleteUserToken(userToUpdate.id)
+  if (roleChanged || body.password !== undefined) {
+    await OAuthTokenModel.deleteUserToken({ userId: userToUpdate.id })
+  }
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })), oldUserAuditView)
 
@@ -339,6 +341,7 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
 
   await user.save()
   await Redis.Instance.removePasswordVerificationString(user.id)
+  await OAuthTokenModel.deleteUserToken({ userId: user.id })
 
   logger.info(`User ${user.username} reset its password.`, lTags(user.username))
 
@@ -351,10 +354,10 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
   user.blocked = block
   user.blockedReason = reason || null
 
-  await sequelizeTypescript.transaction(async t => {
-    await OAuthTokenModel.deleteUserToken(user.id, t)
+  await sequelizeTypescript.transaction(async transaction => {
+    await OAuthTokenModel.deleteUserToken({ userId: user.id, transaction })
 
-    await user.save({ transaction: t })
+    await user.save({ transaction })
   })
 
   Emailer.Instance.addUserBlockJob({ username: user.username, email: user.email, language: user.getLanguage(), blocked: block, reason })

@@ -10,7 +10,7 @@ import {
 } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { buildSortDirectionAndField } from '@server/models/shared/index.js'
+import { buildSortDirectionAndField, throwOnInvalidSortColumnName } from '@server/models/shared/index.js'
 import { MUserAccountId, MUserId } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import validator from 'validator'
@@ -1016,7 +1016,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private setSort (column: string, direction: 'ASC' | 'DESC') {
-    if (column.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + column)
+    throwOnInvalidSortColumnName(column)
 
     if (column === 'random') {
       this.sort = 'ORDER BY RANDOM()'

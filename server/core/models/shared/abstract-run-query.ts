@@ -1,5 +1,5 @@
 import { QueryTypes, Sequelize, Transaction } from 'sequelize'
-import { getSort } from './sort.js'
+import { getSort, throwOnInvalidSortColumnName } from './sort.js'
 import { Col } from 'sequelize/lib/utils'
 
 /**
@@ -55,7 +55,7 @@ export class AbstractRunQuery {
 
       const direction = o[1]
 
-      if (columnName.includes(' ')) throw new Error('Invalid column name: ' + columnName)
+      throwOnInvalidSortColumnName(columnName)
 
       // Prefix with the table name if the column name isn't a full path
       // ("id", "displayName", etc. VS "ActorModel.id", "Server.redundancyAllowed", etc.)

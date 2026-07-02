@@ -144,3 +144,9 @@ export function buildSortDirectionAndField (value: string) {
 
   return { direction, field }
 }
+
+export function throwOnInvalidSortColumnName (columnName: string) {
+  if (columnName.match(/^[a-zA-Z."]+$/) === null) {
+    throw new Error('Invalid sort column ' + columnName)
+  }
+}

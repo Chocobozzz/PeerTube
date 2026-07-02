@@ -152,7 +152,7 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (token: OAuthTokenModel) {
-    return TokensCache.Instance.clearCacheByToken(token.accessToken)
+    return TokensCache.Instance.deleteToken(token.accessToken)
   }
 
   static loadByRefreshToken (refreshToken: string) {
@@ -280,17 +280,20 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
 
   // ---------------------------------------------------------------------------
 
-  static deleteUserToken (userId: number, t?: Transaction) {
-    TokensCache.Instance.deleteUserToken(userId)
+  static deleteUserToken (options: {
+    userId: number
+    accessTokenException?: string
+    transaction?: Transaction
+  }) {
+    const { userId, accessTokenException, transaction } = options
 
-    const query = {
-      where: {
-        userId
-      },
-      transaction: t
-    }
+    TokensCache.Instance.deleteUserTokens(userId, accessTokenException)
 
-    return OAuthTokenModel.destroy(query)
+    const where = accessTokenException
+      ? { userId, accessToken: { [Op.ne]: accessTokenException } }
+      : { userId }
+
+    return OAuthTokenModel.destroy({ where, transaction })
   }
 
   toSessionFormattedJSON (activeToken: string): TokenSession {

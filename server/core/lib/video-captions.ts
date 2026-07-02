@@ -2,7 +2,7 @@ import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import { AbstractTranscriber, TranscriptionModel, WhisperBuiltinModel, transcriberFactory } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
-import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
+import { isVideoCaptionLanguageValid, isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -44,6 +44,15 @@ export async function createLocalCaption (options: {
   }) as MVideoCaption
 
   await moveAndProcessCaptionFile({ path }, videoCaption)
+
+  const captionDest = videoCaption.getFSFilePath()
+
+  if (!await isVTTFileValid(captionDest)) {
+    remove(captionDest)
+      .catch(err => logger.error('Cannot remove invalid VTT file', { err, ...lTags(video.uuid) }))
+
+    throw new Error(`Invalid VTT file`)
+  }
 
   const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
 
@@ -236,37 +245,44 @@ export async function onTranscriptionEnded (options: {
     return
   }
 
-  if (!video.language) {
-    video.language = language
-    await video.save()
-  }
+  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
-  if (existing && !existing.automaticallyGenerated) {
-    logger.info(
-      // oxlint-disable-next-line max-len
-      `Do not replace existing caption for video ${video.uuid} after transcription (subtitle may have been added while during the transcription process)`,
-      lTags(video.uuid)
-    )
-    return
-  }
+  try {
+    if (!video.language) {
+      video.language = language
+      await video.save()
+    }
 
-  const caption = await createLocalCaption({
-    video,
-    language,
-    path: vttPath,
-    automaticallyGenerated: true
-  })
+    const existing = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
 
-  if (caption.m3u8Filename) {
-    await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    if (existing && !existing.automaticallyGenerated) {
+      logger.info(
+        // oxlint-disable-next-line max-len
+        `Do not replace existing caption for video ${video.uuid} after transcription (subtitle may have been added while during the transcription process)`,
+        lTags(video.uuid)
+      )
+      return
+    }
+
+    const caption = await createLocalCaption({
+      video,
+      language,
+      path: vttPath,
+      automaticallyGenerated: true
+    })
+
+    if (caption.m3u8Filename) {
+      await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    }
+
+    Notifier.Instance.notifyOfGeneratedVideoTranscription(caption)
+  } finally {
+    videoFileMutexReleaser()
   }
 
   await sequelizeTypescript.transaction(async t => {
     await federateVideoIfNeeded(video, t)
   })
-
-  Notifier.Instance.notifyOfGeneratedVideoTranscription(caption)
 
   logger.info(`Transcription ended for ${video.uuid}`, lTags(video.uuid, ...customLTags))
 }

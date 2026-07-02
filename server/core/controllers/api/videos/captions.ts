@@ -79,6 +79,7 @@ async function listVideoCaptions (req: express.Request, res: express.Response) {
 
 async function createVideoCaption (req: express.Request, res: express.Response) {
   const videoCaptionPhysicalFile: Express.Multer.File = req.files['captionfile'][0]
+  const captionPath = videoCaptionPhysicalFile.path
   const video = res.locals.videoFull
 
   const captionLanguage = req.params.captionLanguage
@@ -86,7 +87,7 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
   const videoCaption = await createLocalCaption({
     video,
     language: captionLanguage,
-    path: videoCaptionPhysicalFile.path,
+    path: captionPath,
     automaticallyGenerated: false
   })
 

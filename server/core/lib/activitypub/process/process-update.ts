@@ -27,6 +27,7 @@ import { upsertAPPlayerSettings } from '../player-settings.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
+import { checkUrlsSameHost } from '../url.js'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate<ActivityUpdateObject>>) {
   const { activity, byActor } = options
@@ -35,7 +36,7 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
   const objectType = object.type
 
   if (objectType === 'Video') {
-    return retryTransactionWrapper(processUpdateVideo, activity)
+    return retryTransactionWrapper(processUpdateVideo, byActor, activity)
   }
 
   if (isActorTypeValid(objectType as ActivityPubActorType)) {
@@ -69,8 +70,13 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processUpdateVideo (activity: ActivityUpdate<VideoObject | string>) {
+async function processUpdateVideo (byActor: MActorSignature, activity: ActivityUpdate<VideoObject | string>) {
   const videoObject = activity.object as VideoObject
+
+  if (!checkUrlsSameHost(byActor.url, videoObject.id)) {
+    logger.warn('Video sent by update is not from the same host as the actor.', { videoObject, byActor })
+    return undefined
+  }
 
   if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
     logger.debug('Video sent by update is not valid.', { videoObject })
@@ -85,7 +91,7 @@ async function processUpdateVideo (activity: ActivityUpdate<VideoObject | string
   // We did not have this video, it has been created so no need to update
   if (created) return
 
-  const updater = new APVideoUpdater(videoObject, video)
+  const updater = new APVideoUpdater(videoObject, video, byActor.url)
   return updater.update(arrayify(activity.to))
 }
 

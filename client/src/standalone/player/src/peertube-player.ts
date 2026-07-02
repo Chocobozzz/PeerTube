@@ -151,13 +151,15 @@ export class PeerTubePlayer {
   }
 
   setPoster (thumbnails: Thumbnail[]) {
+    // window.innerWidth returns sometimes 0 on firefox if we load the page in background
+    // So we fallback to screen.availWidth which seems more reliable, at least on desktop
+    const getScreenWidth = () => window.innerWidth || screen.availWidth
+
     // Use HTML video element to display poster
     if (!this.player) {
       const playerEl = this.options.playerElement()
 
-      // window.innerWidth returns sometimes 0 on firefox if we load the page in background
-      // So we fallback to screen.availWidth which seems more reliable, at least on desktop
-      const width = playerEl.clientWidth || window.innerWidth || screen.availWidth
+      const width = playerEl.clientWidth || getScreenWidth()
 
       this.options.playerElement().poster = findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || ''
       return
@@ -165,7 +167,8 @@ export class PeerTubePlayer {
 
     // Prefer using player poster API
     if (this.player) {
-      const width = this.player.el().clientWidth || window.innerWidth
+      //
+      const width = this.player.el().clientWidth || getScreenWidth()
 
       this.player.poster(findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || '')
     }
