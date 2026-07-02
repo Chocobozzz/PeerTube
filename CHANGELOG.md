@@ -1,5 +1,24 @@
 # Changelog
 
+## v8.2.2
+
+We strongly recommend all administrators upgrade immediately.
+
+### SECURITY
+
+This release addresses vulnerabilities ranging from medium to high severity affecting PeerTube **<= 8.2.1**. Security hardening is also included.
+In a few weeks, this changelog will be updated to disclose the vulnerabilities.
+
+### Bug fixes
+
+ * Accept short UUIDs for `loadByIdOrUUID` and `loadByIdOrUUIDWithFiles` plugin helpers
+ * Allow restricted embed to be displayed on the origin instance
+ * Fix invalid state error on failed move job
+ * Fix missing mutex lock when managing video captions
+ * Fix broken embed when the tab is loaded in the background on Firefox
+ * Fix menu collapse/extend icon on RTL layout
+
+
 ## v8.2.1
 
 ### SECURITY
