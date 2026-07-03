@@ -89,9 +89,9 @@ export class RestExtractor {
   }
 
   private buildErrorMessage (err: any) {
+    if (err.status !== undefined) return this.buildServerErrorMessage(err)
     if (err.error instanceof Error) return err.error.detail || err.error.title
     if (typeof err.error === 'string') return err.error
-    if (err.status !== undefined) return this.buildServerErrorMessage(err)
     if (typeof err === 'string') return err
 
     return err.message || err.detail || $localize`Unknown error`
