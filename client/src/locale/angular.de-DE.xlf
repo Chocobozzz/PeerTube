@@ -6785,17 +6785,17 @@
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5240842733297472555" datatype="html">
+      <trans-unit id="5240842733297472555" datatype="html" xml:space="preserve">
         <source>The auto tags on existing comments will be updated based on the words in this list.</source>
-        <target state="new">The auto tags on existing comments will be updated based on the words in this list.</target>
+        <target state="translated">Die automatischen Tags bestehender Kommentare werden basierend auf den Wörtern in dieser Liste aktualisiert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5908006683848456416" datatype="html">
+      <trans-unit id="5908006683848456416" datatype="html" xml:space="preserve">
         <source>However, the auto-tagging policies will not affect existing comments:</source>
-        <target state="new">However, the auto-tagging policies will not affect existing comments:</target>
+        <target state="translated">Die Auto-Tagging-Richtlinien wirken sich jedoch nicht rückwirkend auf Kommentare aus:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -6821,9 +6821,9 @@
           <context context-type="linenumber">20,21</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4417518529461614977" datatype="html">
+      <trans-unit id="4417518529461614977" datatype="html" xml:space="preserve">
         <source>The auto tags on existing comments and videos will be updated based on the words in this list.</source>
-        <target state="new">The auto tags on existing comments and videos will be updated based on the words in this list.</target>
+        <target state="translated">Die automatischen Tags für bestehende Kommentare und Videos werden basierend auf den Wörtern in dieser Liste aktualisiert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -6853,81 +6853,81 @@
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8198822568347366196" datatype="html">
+      <trans-unit id="8198822568347366196" datatype="html" xml:space="preserve">
         <source>Add a watched words subscription</source>
-        <target state="new">Add a watched words subscription</target>
+        <target state="translated">Beobachtete-Wörter-Abonnement hinzufügen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">65,67</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6076623101349323411" datatype="html">
+      <trans-unit id="6076623101349323411" datatype="html" xml:space="preserve">
         <source>The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list.</source>
-        <target state="new"> The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list. </target>
+        <target state="translated">Die Fernliste wird regelmäßig synchronisiert und automatische Tags für bestehende Kommentare und Videos werden basierend auf den Wörtern in der Liste aktualisiert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3536332983620084462" datatype="html">
+      <trans-unit id="3536332983620084462" datatype="html" xml:space="preserve">
         <source>The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list.</source>
-        <target state="new"> The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list. </target>
+        <target state="translated">Die Fernliste wird regelmäßig synchronisiert und automatische Tags für bestehende Kommentare und Videos werden basierend auf den Wörtern in der Liste aktualisiert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2322571852303891260" datatype="html">
+      <trans-unit id="2322571852303891260" datatype="html" xml:space="preserve">
         <source>Only new comments can be blocked by a new word added to the list</source>
-        <target state="new">Only new comments can be blocked by a new word added to the list</target>
+        <target state="translated">Nur neue Kommentare können durch ein neu zur Liste hinzugefügtes Wort blockiert werden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">87,88</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1627379234330905470" datatype="html">
+      <trans-unit id="1627379234330905470" datatype="html" xml:space="preserve">
         <source>If a word is removed from the list, any comments that are currently awaiting review will not be affected</source>
-        <target state="new">If a word is removed from the list, any comments that are currently awaiting review will not be affected</target>
+        <target state="translated">Wenn ein Wort aus der Liste entfernt wird, sind Kommentare, die derzeit zur Überprüfung anstehen, davon nicht betroffen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">88,89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8886093131637035111" datatype="html">
+      <trans-unit id="8886093131637035111" datatype="html" xml:space="preserve">
         <source>Watched words URL</source>
-        <target state="new">Watched words URL</target>
+        <target state="translated">Beobachtete-Wörter-URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">95,96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2602880137044610698" datatype="html">
+      <trans-unit id="2602880137044610698" datatype="html" xml:space="preserve">
         <source>Watched words URL is required.</source>
-        <target state="new">Watched words URL is required.</target>
+        <target state="translated">Beobachtete-Wörter-URL ist erforderlich.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4147764481886042165" datatype="html">
+      <trans-unit id="4147764481886042165" datatype="html" xml:space="preserve">
         <source>Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments and videos.</source>
-        <target state="new">Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments and videos.</target>
+        <target state="translated">Mit dem Entfernen dieses Abonnements werden die automatischen Tags von &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; entfernt, die Kommentaren und Videos zugeordnet sind.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3433732042719776492" datatype="html">
+      <trans-unit id="3433732042719776492" datatype="html" xml:space="preserve">
         <source>Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments.</source>
-        <target state="new">Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments.</target>
+        <target state="translated">Mit dem Entfernen dieses Abonnements werden die automatischen Tags von &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; entfernt, die Kommentaren und Videos zugeordnet sind.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1212937397936989983" datatype="html">
+      <trans-unit id="1212937397936989983" datatype="html" xml:space="preserve">
         <source>Subscription to &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; deleted.</source>
-        <target state="new">Subscription to &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; deleted.</target>
+        <target state="translated">Abonnement für &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; entfernt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">144</context>
@@ -8131,17 +8131,17 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3946683396888479808" datatype="html">
+      <trans-unit id="3946683396888479808" datatype="html" xml:space="preserve">
         <source>Blocklist URL is required.</source>
-        <target state="new">Blocklist URL is required.</target>
+        <target state="translated">Blocklisten-URL ist erforderlich.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4061698394390279322" datatype="html">
+      <trans-unit id="4061698394390279322" datatype="html" xml:space="preserve">
         <source>Please enter a valid URL.</source>
-        <target state="new">Please enter a valid URL.</target>
+        <target state="translated">Bitte gib eine gültige URL ein.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -9763,17 +9763,17 @@
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5349840085927711709" datatype="html">
+      <trans-unit id="5349840085927711709" datatype="html" xml:space="preserve">
         <source>Automatically block videos:</source>
-        <target state="new">Automatically block videos:</target>
+        <target state="translated">Videos automatisch blockieren:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.html</context>
           <context context-type="linenumber">1,3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="492747807721713007" datatype="html">
+      <trans-unit id="492747807721713007" datatype="html" xml:space="preserve">
         <source>That contain &lt;strong&gt;an external link&lt;/strong&gt;</source>
-        <target state="new">That contain &lt;strong&gt;an external link&lt;/strong&gt;</target>
+        <target state="translated">Die &lt;strong&gt;einen externen Link&lt;/strong&gt; enthalten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -9795,17 +9795,17 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7093801939412883219" datatype="html">
+      <trans-unit id="7093801939412883219" datatype="html" xml:space="preserve">
         <source>Video auto-block policies updated</source>
-        <target state="new">Video auto-block policies updated</target>
+        <target state="translated">Richtlinien zur automatischen Videoblockierung aktualisiert</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5495831699036030311" datatype="html">
+      <trans-unit id="5495831699036030311" datatype="html" xml:space="preserve">
         <source>Add a subscription</source>
-        <target state="new">Add a subscription</target>
+        <target state="translated">Abonnement hinzufügen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">19</context>
@@ -9815,25 +9815,25 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3749773804330190688" datatype="html">
+      <trans-unit id="3749773804330190688" datatype="html" xml:space="preserve">
         <source>Open muted servers filtered by this subscription</source>
-        <target state="new">Open muted servers filtered by this subscription</target>
+        <target state="translated">Stummgeschaltete Server öffnen, die durch dieses Abonnement gefiltert werden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">46,47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8187072229527761312" datatype="html">
+      <trans-unit id="8187072229527761312" datatype="html" xml:space="preserve">
         <source>Open muted accounts filtered by this subscription</source>
-        <target state="new">Open muted accounts filtered by this subscription</target>
+        <target state="translated">Stummgeschaltete Konten öffnen, die durch dieses Abonnement gefiltert werden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">55,56</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="188289424231773769" datatype="html">
+      <trans-unit id="188289424231773769" datatype="html" xml:space="preserve">
         <source>No subscription found matching current filters.</source>
-        <target state="new">No subscription found matching current filters.</target>
+        <target state="translated">Keine Abonnements für die gewählten Filter gefunden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">68</context>
@@ -9843,9 +9843,9 @@
           <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8321738754107271611" datatype="html">
+      <trans-unit id="8321738754107271611" datatype="html" xml:space="preserve">
         <source>No subscription found.</source>
-        <target state="new">No subscription found.</target>
+        <target state="translated">Kein Abonnement gefunden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">70</context>
