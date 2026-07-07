@@ -1,12 +1,4 @@
 <div class="input-group">
-  <input
-    [id]="inputId()" [name]="inputId()" [autocomplete]="autocomplete()" [value]="value()" [placeholder]="placeholder()" [tabindex]="tabindex()"
-    [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly()"
-    #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
-    [ngClass]="{ 'input-error': formError() }"
-    [attr.aria-label]="ariaLabel()"
-    />
-
   @if (withToggle()) {
     <button (click)="toggle()" type="button" class="btn" [title]="toggleTitle">
       @if (show()) {
@@ -15,7 +7,16 @@
         <my-global-icon iconName="eye-close"></my-global-icon>
       }
     </button>
-  }
+}
+
+  <input
+    [id]="inputId()" [name]="inputId()" [autocomplete]="autocomplete()" [value]="value()" [placeholder]="placeholder()" [tabindex]="tabindex()"
+    [(ngModel)]="value" (ngModelChange)="update()" [readonly]="readonly()"
+    #input (click)="input.select()" (input)="update()" (change)="update()" [type]="inputType" class="form-control"
+    [ngClass]="{ 'input-error': formError() }"
+    [attr.aria-label]="ariaLabel()"
+    />
+
 
   @if (withCopy()) {
     <my-copy-button
