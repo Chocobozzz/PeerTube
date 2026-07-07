@@ -7,6 +7,8 @@ import {
   ServerConfig,
   ServerStats,
   VideoCommentPolicy,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType,
   ConstantLabel,
   VideoLicenceType,
   VideoPlaylistPrivacyType,
@@ -129,6 +131,23 @@ export class ServerService {
       {
         id: VideoCommentPolicy.REQUIRES_APPROVAL,
         label: $localize`Any new comment requires approval`
+      }
+    ])
+  }
+
+  getEmbedPrivacyPolicies (): Observable<ConstantLabel<VideoEmbedPrivacyPolicyType>[]> {
+    return of([
+      {
+        id: VideoEmbedPrivacyPolicy.ALL_ALLOWED,
+        label: $localize`Anyone can embed this video`
+      },
+      {
+        id: VideoEmbedPrivacyPolicy.ALLOWLIST,
+        label: $localize`Only allowed domains can embed this video`
+      },
+      {
+        id: VideoEmbedPrivacyPolicy.DISABLED,
+        label: $localize`Nobody can embed this video`
       }
     ])
   }

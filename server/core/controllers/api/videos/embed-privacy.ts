@@ -76,9 +76,11 @@ async function isVideoEmbedOnDomainAllowed (req: express.Request, res: express.R
   const video = res.locals.videoWithBlacklist
   const isOnInstance = req.query.domain === WEBSERVER.HOST
 
-  const domainAllowed = video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED || isOnInstance
-    ? true
-    : await VideoEmbedPrivacyDomainModel.isDomainAllowed(video.id, req.query.domain)
+  const domainAllowed = video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.DISABLED
+    ? false
+    : video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED || isOnInstance
+      ? true
+      : await VideoEmbedPrivacyDomainModel.isDomainAllowed(video.id, req.query.domain)
 
   const user = getAuthUser(res)
 
@@ -86,7 +88,7 @@ async function isVideoEmbedOnDomainAllowed (req: express.Request, res: express.R
     ? null
     : false
 
-  if (domainAllowed === false && user) {
+  if (domainAllowed === false && user && video.embedPrivacyPolicy !== VideoEmbedPrivacyPolicy.DISABLED) {
     userBypassAllowed = await checkCanManageVideo({
       user,
       video: await VideoModel.loadWithRights(video.id),

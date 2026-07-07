@@ -233,12 +233,32 @@ describe('Test video embed privacy validator', function () {
       })
     })
 
+    it('Should fail with domains when disabling embed', async function () {
+      await server.videoEmbedPrivacy.update({
+        videoId: video.id,
+        policy: VideoEmbedPrivacyPolicy.DISABLED,
+        domains: [ 'example.com' ],
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed with correct params', async function () {
       const policy = VideoEmbedPrivacyPolicy.ALLOWLIST
       const domains = [ 'example.com' ]
 
       for (const token of [ server.accessToken, ownerAccessToken, editorAccessToken ]) {
         await server.videoEmbedPrivacy.update({ videoId: video.id, token, policy, domains })
+      }
+    })
+
+    it('Should succeed disabling embed with no domains', async function () {
+      for (const token of [ server.accessToken, ownerAccessToken, editorAccessToken ]) {
+        await server.videoEmbedPrivacy.update({
+          videoId: video.id,
+          token,
+          policy: VideoEmbedPrivacyPolicy.DISABLED,
+          domains: []
+        })
       }
     })
   })
