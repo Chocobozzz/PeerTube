@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse } from '@peertube/peertube-models'
+import { AbuseMessage, AbusePredefinedReasonsString, AbuseState, AdminAbuse, UserAbuse, VideoPrivacy } from '@peertube/peertube-models'
 import {
   AbusesCommand,
   cleanupTests,
@@ -874,6 +874,30 @@ describe('Test abuses', function () {
         expect(abuseMessages[0].message).to.equal('message 2')
         expect(abuseMessages[1].message).to.equal('message 4')
       }
+    })
+  })
+
+  // We had a bug where hooks and DB cascade removal hooks threw an exception
+  describe('User with abuses removal', function () {
+    let userToken: string
+
+    before(async function () {
+      userToken = await servers[0].users.generateUserAndToken('user_42000')
+      const { id } = await servers[0].videos.quickUpload({ token: userToken, name: 'video to be reported', privacy: VideoPrivacy.PRIVATE })
+
+      await commands[0].report({ videoId: id, reason: 'video report' })
+    })
+
+    it('Should remove all users on the platform, except root', async function () {
+      const { data: users } = await servers[0].users.list()
+      for (const user of users) {
+        if (user.username !== 'root') {
+          await servers[0].users.remove({ userId: user.id })
+        }
+      }
+
+      const { data } = await servers[0].users.list()
+      expect(data).to.have.lengthOf(1)
     })
   })
 
