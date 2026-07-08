@@ -263,7 +263,7 @@ export class PeerTubeEmbed {
         this.playerOptionsBuilder.loadVideoParams(this.config, videoInfo)
 
         const live = videoInfo.isLive
-          ? await this.videoFetcher.loadLive(videoInfo)
+          ? await this.videoFetcher.loadLive(videoInfo, this.videoPassword)
           : undefined
 
         const videoFileToken = videoRequiresFileToken(videoInfo)

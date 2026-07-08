@@ -400,7 +400,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       switchMap(video => {
         if (!video.isLive) return of({ video, live: undefined })
 
-        return this.liveVideoService.getVideoLive(video.uuid)
+        return this.liveVideoService.getVideoLive(video.uuid, videoPassword)
           .pipe(map(live => ({ live, video })))
       }),
       switchMap(({ video, live }) => {
