@@ -16,4 +16,9 @@
       transform: scaleX(-1);
     }
   }
+
+  my-input-switch {
+    transform: rotate(180deg);
+    display: inline-block;
+  }
 }

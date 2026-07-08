@@ -46,8 +46,8 @@ export class VideoFetcher {
     return { captionsPromise, chaptersPromise, storyboardsPromise, videoResponse, playerSettingsPromise }
   }
 
-  loadLive (video: VideoDetails) {
-    return this.http.fetch(this.getLiveUrl(video.uuid), { optionalAuth: true })
+  loadLive (video: VideoDetails, videoPassword?: string) {
+    return this.http.fetch(this.getLiveUrl(video.uuid), { optionalAuth: true }, videoPassword)
       .then(res => res.json() as Promise<LiveVideo>)
   }
 

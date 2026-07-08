@@ -127,6 +127,11 @@ export class PeerTubeEmbed {
         res.videosResponse.json() as Promise<ResultList<VideoPlaylistElement>>
       ])
 
+      if (playlist.videosLength === 0) {
+        this.playerHTML.displayError('This playlist is empty', await this.translationsPromise)
+        return undefined
+      }
+
       const allPlaylistElements = await this.playlistFetcher.loadAllPlaylistVideos(playlistId, playlistElementResult)
 
       this.playlistTracker = new PlaylistTracker(playlist, allPlaylistElements)
@@ -263,7 +268,7 @@ export class PeerTubeEmbed {
         this.playerOptionsBuilder.loadVideoParams(this.config, videoInfo)
 
         const live = videoInfo.isLive
-          ? await this.videoFetcher.loadLive(videoInfo)
+          ? await this.videoFetcher.loadLive(videoInfo, this.videoPassword)
           : undefined
 
         const videoFileToken = videoRequiresFileToken(videoInfo)

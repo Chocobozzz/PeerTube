@@ -858,7 +858,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     this.invalidateCache(videoFull)
 
     await this.sendDelete(videoFull, options.transaction)
-    await this.removeFiles(videoFull, options.transaction)
     await this.saveEssentialDataToAbuses(videoFull, options.transaction)
     await this.removeFiles(videoFull, options.transaction)
   }

@@ -5,6 +5,7 @@ import { RestExtractor } from '@app/core'
 import { LiveVideo, LiveVideoCreate, LiveVideoSession, LiveVideoUpdate, ResultList, VideoCreateResult } from '@peertube/peertube-models'
 import { environment } from '../../../environments/environment'
 import { VideoService } from '../shared-main/video/video.service'
+import { VideoPasswordService } from '../shared-main/video/video-password.service'
 
 @Injectable()
 export class LiveVideoService {
@@ -19,9 +20,11 @@ export class LiveVideoService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getVideoLive (videoId: number | string) {
+  getVideoLive (videoId: number | string, videoPassword?: string) {
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
+
     return this.authHttp
-      .get<LiveVideo>(LiveVideoService.BASE_VIDEO_LIVE_URL + videoId)
+      .get<LiveVideo>(LiveVideoService.BASE_VIDEO_LIVE_URL + videoId, { headers })
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

@@ -100,6 +100,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   customCSS: SafeHtml
   broadcastMessage: { message: string, dismissable: boolean, class: string } | null = null
   hotkeysModalOpened = false
+  toastPosition: 'bottom-right' | 'bottom-left' = 'bottom-right'
 
   private serverConfig: HTMLServerConfig
   private userLoaded = false
@@ -167,6 +168,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       adminWelcomeModal.show({ showWelcome })
     })
+
+    if (getLocaleDirection(this.localeId) === 'rtl') {
+      this.toastPosition = 'bottom-left'
+    }
   }
 
   ngAfterViewInit () {
