@@ -102,7 +102,8 @@ const playerKeys = {
   '(skipped {1} buffers) ': '(skipped {1} buffers) ',
   'Video Filter': 'Video Filter',
   'Mirror Video': 'Mirror Video',
-  'Mirror': 'Mirror'
+  'Mirror': 'Mirror',
+  'This playlist is empty': 'This playlist is empty'
 }
 Object.assign(playerKeys, videojs)
 
