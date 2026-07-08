@@ -38,13 +38,15 @@ button {
 }
 
 .dropdown-toggle {
-  color: var(--co-fg);
+  .chevron-down {
+    color: var(--co-fg);
 
-  &:hover,
-  &:active,
-  &:focus,
-  &:focus-visible {
-    color: var(--co-active-fg);
+    &:hover,
+    &:active,
+    &:focus,
+    &:focus-visible {
+      color: var(--co-active-fg);
+    }
   }
 
   &::after {
