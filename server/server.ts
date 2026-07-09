@@ -153,6 +153,7 @@ import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundan
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
+import { omit } from '@peertube/peertube-core-utils'
 
 // ----------- Command line -----------
 
@@ -203,10 +204,10 @@ app.use(express.json({
     const valid = isHTTPSignatureDigestValid(buf, req)
 
     if (valid !== true) {
-      res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Invalid digest'
-      })
+      const err: Error & { status?: number } = new Error('Invalid digest')
+      err.status = HttpStatusCode.FORBIDDEN_403
+
+      throw err
     }
 
     if (req.originalUrl.startsWith('/plugins/')) {
@@ -272,7 +273,10 @@ app.use((err, req, res: express.Response, _next) => {
     ? (process as any)._getActiveRequests()
     : undefined
 
-  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl })
+  // Remove too big metadata
+  const sanitizedErr = omit(err, [ 'body' ])
+
+  logger.error('Error in controller.', { err: sanitizedErr, sql, activeRequests, url: req.originalUrl })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
