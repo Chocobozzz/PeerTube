@@ -76,8 +76,10 @@ export class SegmentValidator {
         `Hashes does not correspond for segment ${filename}/${range} (expected: ${hashShouldBe} instead of ${calculatedSha})`
       )
 
-      return true
+      return false
     }
+
+    return true
   }
 
   destroy () {
