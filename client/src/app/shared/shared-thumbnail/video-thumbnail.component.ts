@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, input, OnChanges, output, viewChild } from '@angular/core'
+import { CommonModule, getLocaleDirection } from '@angular/common'
+import { booleanAttribute, Component, inject, input, LOCALE_ID, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
@@ -28,6 +28,8 @@ export type VideoThumbnailInput = Pick<
   imports: [ CommonModule, RouterLink, NgbTooltip, GlobalIconComponent, FromNowPipe ]
 })
 export class VideoThumbnailComponent implements OnChanges {
+  private localeId = inject(LOCALE_ID)
+
   readonly video = input.required<VideoThumbnailInput>()
   readonly sizes = input.required<string>()
 
@@ -74,6 +76,10 @@ export class VideoThumbnailComponent implements OnChanges {
     this.srcset = thumbnails.filter(t => t.aspectRatio === '16:9')
       .map(t => `${t.fileUrl} ${t.width}w`)
       .join(', ')
+  }
+
+  isRTL () {
+    return getLocaleDirection(this.localeId) === 'rtl'
   }
 
   getWatchIconText () {
