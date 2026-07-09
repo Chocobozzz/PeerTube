@@ -86,7 +86,7 @@ export const privateM3U8PlaylistValidator = [
   }
 ]
 
-export const privateHLSFileValidator = [
+export const hlsFileValidator = [
   param('videoUUID')
     .custom(isUUIDValid),
 

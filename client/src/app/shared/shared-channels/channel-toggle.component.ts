@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common'
-import { Component, forwardRef, inject, input, model, ChangeDetectionStrategy } from '@angular/core'
+import { CommonModule, getLocaleDirection } from '@angular/common'
+import { ChangeDetectionStrategy, Component, forwardRef, inject, input, LOCALE_ID, model } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { AuthService } from '@app/core'
 import { VideoChannel } from '@peertube/peertube-models'
@@ -27,6 +27,7 @@ import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-
 })
 export class ChannelToggleComponent implements ControlValueAccessor {
   private authService = inject(AuthService)
+  private localeId = inject(LOCALE_ID)
 
   readonly checked = model(false)
   readonly channel = input.required<VideoChannel>()
@@ -35,6 +36,10 @@ export class ChannelToggleComponent implements ControlValueAccessor {
 
   get user () {
     return this.authService.getUser()
+  }
+
+  isRTL () {
+    return getLocaleDirection(this.localeId) === 'rtl'
   }
 
   propagateChange = (_: any) => {

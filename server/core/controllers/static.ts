@@ -1,16 +1,16 @@
-import { HttpStatusCode } from '@peertube/peertube-models'
 import { injectQueryToPlaylistUrls } from '@server/lib/hls.js'
 import {
   asyncMiddleware,
   ensureCanAccessPrivateVideoHLSFiles,
   ensureCanAccessVideoPrivateWebVideoFiles,
   handleStaticError,
+  hlsFileValidator,
   optionalAuthenticate,
-  privateHLSFileValidator,
   privateM3U8PlaylistValidator
 } from '@server/middlewares/index.js'
 import cors from 'cors'
 import express from 'express'
+import { readJSON } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config.js'
@@ -60,16 +60,36 @@ staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:playlistNameWithoutExtension([a-z0-9-]+).m3u8',
   privateM3U8PlaylistValidator,
   ...privateHLSStaticMiddlewares,
-  asyncMiddleware(servePrivateM3U8)
+  asyncMiddleware(servePrivateM3U8),
+  handleStaticError
+)
+
+// segments-sha256.json is frequently rewritten (on every new live segment), so we can't rely on express.static/sendFile
+// (stat + range read) that could read a truncated file if it's overwritten between the stat and the read
+staticRouter.use(
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename([a-z0-9-]*segments-sha256\\.json)',
+  hlsFileValidator,
+  ...privateHLSStaticMiddlewares,
+  asyncMiddleware(serveSha256Segments(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE)),
+  handleStaticError
 )
 
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
-  privateHLSFileValidator,
+  hlsFileValidator,
   ...privateHLSStaticMiddlewares,
-  servePrivateHLSFile
+  servePrivateHLSFile,
+  handleStaticError
 )
 // ---------------------------------------------------------------------------
+
+// Same as above: avoid express.static for this frequently rewritten file to prevent serving truncated content
+staticRouter.use(
+  STATIC_PATHS.STREAMING_PLAYLISTS.HLS + '/:videoUUID/:filename([a-z0-9-]*segments-sha256\\.json)',
+  hlsFileValidator,
+  asyncMiddleware(serveSha256Segments(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC)),
+  handleStaticError
+)
 
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
@@ -99,24 +119,19 @@ function servePrivateHLSFile (req: express.Request, res: express.Response) {
   return res.sendFile(path)
 }
 
+function serveSha256Segments (baseDirectory: string) {
+  return async (req: express.Request, res: express.Response) => {
+    const path = join(baseDirectory, req.params.videoUUID, req.params.filename)
+
+    return res.json(await readJSON(path))
+  }
+}
+
 async function servePrivateM3U8 (req: express.Request, res: express.Response) {
   const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.playlistNameWithoutExtension + '.m3u8')
   const filename = req.params.playlistNameWithoutExtension + '.m3u8'
 
-  let playlistContent: string
-
-  try {
-    playlistContent = await readFile(path, 'utf-8')
-  } catch (err) {
-    if (err.message.includes('ENOENT')) {
-      return res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: 'File not found'
-      })
-    }
-
-    throw err
-  }
+  const playlistContent = await readFile(path, 'utf-8')
 
   // Inject token in playlist so players that cannot alter the HTTP request can still watch the video
   const transformedContent = doReinjectVideoFileToken(req)

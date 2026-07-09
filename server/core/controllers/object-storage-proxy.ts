@@ -6,7 +6,7 @@ import {
   ensureCanAccessVideoPrivateWebVideoFiles,
   ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate,
-  privateHLSFileValidator,
+  hlsFileValidator,
   privateWebVideoFileValidator
 } from '@server/middlewares/index.js'
 import cors from 'cors'
@@ -30,7 +30,7 @@ objectStorageProxyRouter.get(
   OBJECT_STORAGE_PROXY_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename',
   ensurePrivateObjectStorageProxyIsEnabled,
   optionalAuthenticate,
-  privateHLSFileValidator,
+  hlsFileValidator,
   asyncMiddleware(ensureCanAccessPrivateVideoHLSFiles),
   asyncMiddleware(proxifyHLSController)
 )
