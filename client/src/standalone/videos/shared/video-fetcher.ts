@@ -57,8 +57,8 @@ export class VideoFetcher {
       .then(token => token.files.token)
   }
 
-  loadEmbedAllowed (video: VideoDetails) {
-    if (!document.referrer) return Promise.resolve({ allowed: false })
+  loadEmbedAllowed (video: VideoDetails): Promise<boolean> {
+    if (!document.referrer) return Promise.resolve(false)
 
     const params = new URLSearchParams()
     params.append('domain', new URL(document.referrer).host)

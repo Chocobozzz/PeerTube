@@ -299,7 +299,7 @@ export class PeerTubeEmbed {
       this.buildPlayerIfNeeded()
     ])
 
-    if (!allowed) {
+    if (allowed !== true) {
       throw new Error('This video is not allowed to be embedded on this domain.')
     }
 
