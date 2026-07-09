@@ -1,6 +1,7 @@
 import { QueryTypes, Sequelize, Transaction } from 'sequelize'
 import { getSort, throwOnInvalidSortColumnName } from './sort.js'
 import { Col } from 'sequelize/lib/utils'
+import { exists } from '@peertube/peertube-core-utils'
 
 /**
  * Abstract builder to run video SQL queries
@@ -76,7 +77,7 @@ export class AbstractRunQuery {
   // ---------------------------------------------------------------------------
 
   protected getLimit (start: number, count: number) {
-    if (!count) return ''
+    if (!exists(count)) return ''
 
     this.replacements.limit = count
     this.replacements.offset = start || 0
