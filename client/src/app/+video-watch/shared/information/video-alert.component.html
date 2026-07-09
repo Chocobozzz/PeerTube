@@ -7,9 +7,10 @@
 @if (isWaitingForLive()) {
   <my-alert type="primary">
     <div i18n>This live is not currently streaming.</div>
-    @if (scheduledLiveDate()) {
+
+    @if (nextScheduledLiveDate()) {
       <div i18n>
-      It will start on {{ scheduledLiveDate() | ptDate: 'short' }}.
+      It will start on {{ nextScheduledLiveDate() | ptDate: 'short' }}.
     </div>
     }
   </my-alert>

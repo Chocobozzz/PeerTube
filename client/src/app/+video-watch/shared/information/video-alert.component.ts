@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core'
+import { Component, computed, inject, input } from '@angular/core'
 import { AuthUser } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
@@ -18,6 +18,17 @@ export class VideoAlertComponent {
   readonly noPlaylistVideoFound = input<boolean>(undefined)
 
   private readonly videoStateMessage = inject(VideoStateMessageService)
+
+  readonly nextScheduledLiveDate = computed(() => {
+    const liveSchedules = this.video()?.liveSchedules
+    if (!liveSchedules || liveSchedules.length === 0) return undefined
+
+    // Allow for a 10 minutes margin to the streamer
+    const minDate = new Date()
+    minDate.setMinutes(minDate.getMinutes() - 10)
+
+    return liveSchedules.find(schedule => new Date(schedule.startAt) > minDate)?.startAt
+  })
 
   canSeeMoreStateInfo () {
     return !!(this.user()?.hasRight(UserRight.UPDATE_ANY_VIDEO))
@@ -55,12 +66,5 @@ export class VideoAlertComponent {
 
   isVideoPasswordProtected () {
     return this.video()?.privacy.id === VideoPrivacy.PASSWORD_PROTECTED
-  }
-
-  scheduledLiveDate () {
-    const liveSchedules = this.video()?.liveSchedules
-    if (!liveSchedules || liveSchedules.length === 0) return undefined
-
-    return liveSchedules[0].startAt
   }
 }
