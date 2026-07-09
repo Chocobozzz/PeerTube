@@ -43,9 +43,16 @@
 
 my-actor-avatar {
   position: absolute;
-  left: 0;
   border: 2px solid pvar(--bg-secondary-400);
   border-radius: $channel-avatar-radius;
+
+  &.is-rtl {
+    right: 0;
+  }
+
+  &:not(.is-rtl) {
+    left: 0;
+  }
 }
 
 .root.active {
