@@ -22,6 +22,7 @@ import { VideoStreamingPlaylistModel } from '@server/models/video/video-streamin
 import { VideoModel } from '@server/models/video/video.js'
 import { MUser, MVideo, MVideoLiveSession, MVideoLiveVideo, MVideoLiveVideoWithSetting } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
+import { pathExists } from 'fs-extra/esm'
 import { readFile, readdir } from 'fs/promises'
 import { Server, createServer } from 'net'
 import context from 'node-media-server/src/node_core_ctx.js'
@@ -626,6 +627,8 @@ class LiveManager {
 
   private async findReplayDirectory (video: MVideo) {
     const directory = getLiveReplayBaseDirectory(video)
+    if (!(await pathExists(directory))) return undefined
+
     const files = await readdir(directory)
 
     if (files.length === 0) return undefined
