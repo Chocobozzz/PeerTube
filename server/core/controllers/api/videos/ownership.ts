@@ -145,8 +145,8 @@ async function listAccountVideoOwnershipChanges (req: express.Request, res: expr
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-function acceptOwnershipChange (req: express.Request, res: express.Response) {
-  return sequelizeTypescript.transaction(async t => {
+async function acceptOwnershipChange (req: express.Request, res: express.Response) {
+  await sequelizeTypescript.transaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = res.locals.videoChannel
 
@@ -180,13 +180,13 @@ function acceptOwnershipChange (req: express.Request, res: express.Response) {
     }
 
     Notifier.Instance.notifyOfAcceptedVideoOwnershipChange(changeOwnership)
-
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-function refuseOwnershipChange (req: express.Request, res: express.Response) {
-  return sequelizeTypescript.transaction(async t => {
+async function refuseOwnershipChange (req: express.Request, res: express.Response) {
+  await sequelizeTypescript.transaction(async t => {
     const changeOwnership = res.locals.changeOwnership
 
     changeOwnership.state = ChangeOwnershipState.REJECTED
@@ -204,13 +204,13 @@ function refuseOwnershipChange (req: express.Request, res: express.Response) {
     })
 
     Notifier.Instance.notifyOfRejectedVideoOwnershipChange(changeOwnership)
-
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-function deleteOwnershipChange (req: express.Request, res: express.Response) {
-  return sequelizeTypescript.transaction(async t => {
+async function deleteOwnershipChange (req: express.Request, res: express.Response) {
+  await sequelizeTypescript.transaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = await VideoChannelModel.loadAndPopulateAccount(changeOwnership.Video.channelId, t)
 
@@ -226,7 +226,7 @@ function deleteOwnershipChange (req: express.Request, res: express.Response) {
     })
 
     logger.info('Video ownership change request %d deleted.', changeOwnership.id)
-
-    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
+
+  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
