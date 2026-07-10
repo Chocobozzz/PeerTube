@@ -117,7 +117,7 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   const audioBitrate = parsedAudio.bitrate
   if (!audioBitrate) return false
 
-  const maxAudioBitrate = getMaxAudioKBitrate('aac', audioBitrate)
+  const maxAudioBitrate = getMaxAudioKBitrate('aac', audioBitrate) * 1000
   if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
 
   const channelLayout = parsedAudio.audioStream['channel_layout']
