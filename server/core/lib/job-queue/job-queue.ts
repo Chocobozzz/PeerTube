@@ -371,7 +371,7 @@ class JobQueue {
       return
     }
 
-    const jobOptions = this.buildJobOptions(options.type as JobType, pick(options, [ 'priority', 'delay' ]))
+    const jobOptions = this.buildJobOptions(options.type as JobType, pick(options, [ 'priority', 'delay', 'deduplicationId' ]))
 
     return queue.add('job', options.payload, jobOptions)
   }
@@ -412,7 +412,7 @@ class JobQueue {
       opts: {
         failParentOnFailure: true,
 
-        ...this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay', 'failParentOnFailure' ]))
+        ...this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay', 'failParentOnFailure', 'deduplicationId' ]))
       }
     }
   }
@@ -561,7 +561,7 @@ class JobQueue {
         // Wants seconds
         age: (JOB_REMOVAL_OPTIONS.FAILURE[queueName] || JOB_REMOVAL_OPTIONS.FAILURE.DEFAULT) / 1000,
 
-        count: JOB_REMOVAL_OPTIONS.COUNT / 1000
+        count: JOB_REMOVAL_OPTIONS.COUNT
       }
     }
   }
