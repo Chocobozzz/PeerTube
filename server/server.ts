@@ -269,7 +269,7 @@ app.use((err, req, res: express.Response, _next) => {
   const sql = err?.parent ? err.parent.sql : undefined
 
   // Help us to debug SequelizeConnectionAcquireTimeoutError errors
-  const activeRequests = err?.name === 'SequelizeConnectionAcquireTimeoutError' && typeof (process as any)._getActiveRequests !== 'function'
+  const activeRequests = err?.name === 'SequelizeConnectionAcquireTimeoutError' && typeof (process as any)._getActiveRequests === 'function'
     ? (process as any)._getActiveRequests()
     : undefined
 
