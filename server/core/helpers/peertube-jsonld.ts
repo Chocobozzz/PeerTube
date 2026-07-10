@@ -47,7 +47,8 @@ export async function compactJSONLDAndCheckRSA2017Signature (fromActor: MActor, 
   return verify.verify(fromActor.publicKey, req.body.signature.signatureValue, 'base64')
 }
 
-function fixCompacted (original: any, compacted: any) {
+function fixCompacted (original: any, compacted: any, depth = 1) {
+  if (depth > 20) return
   if (!original || !compacted) return
 
   for (const [ k, v ] of Object.entries(original)) {
@@ -74,7 +75,7 @@ function fixCompacted (original: any, compacted: any) {
     }
 
     if (typeof v === 'object') {
-      fixCompacted(original[k], compacted[k])
+      fixCompacted(original[k], compacted[k], depth += 1)
     }
   }
 }
