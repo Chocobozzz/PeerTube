@@ -1,4 +1,4 @@
-import { pick } from '@peertube/peertube-core-utils'
+import { exists, pick } from '@peertube/peertube-core-utils'
 import {
   RunnerJobGenerateStoryboardPayload,
   RunnerJobGenerateStoryboardPrivatePayload,
@@ -124,7 +124,7 @@ export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S 
 
     await this.specificUpdate(options)
 
-    if (progress) runnerJob.progress = progress
+    if (exists(progress)) runnerJob.progress = progress
 
     if (!runnerJob.changed()) {
       // Don't update updatedAt too often

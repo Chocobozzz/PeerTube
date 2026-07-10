@@ -1,4 +1,4 @@
-import { arrayify, pick, promisify0 } from '@peertube/peertube-core-utils'
+import { arrayify, exists, pick, promisify0 } from '@peertube/peertube-core-utils'
 import {
   AvailableEncoders,
   EncoderOptionsBuilder,
@@ -144,7 +144,7 @@ export class FFmpegCommandWrapper {
 
       if (this.updateJobProgress) {
         this.command.on('progress', progress => {
-          if (!progress.percent) return
+          if (!exists(progress.percent)) return
 
           // Sometimes ffmpeg returns an invalid progress
           let percent = Math.round(progress.percent)
