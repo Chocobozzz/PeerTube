@@ -279,29 +279,36 @@ class LiveManager {
       return this.abortSession(sessionId)
     }
 
-    if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
-      logger.warn('User quota exceeded. Refusing stream %s.', streamKey, lTags(sessionId, video.uuid))
+    this.videoSessions.set(video.uuid, sessionId)
 
-      try {
-        await this.saveEndingSession({ videoUUID: video.uuid, error: LiveVideoError.QUOTA_EXCEEDED })
-      } catch (err) {
-        logger.error('Cannot save ending session of live with quota exceeded error.', { err, ...lTags(sessionId, video.uuid) })
+    try {
+      if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
+        logger.warn('User quota exceeded. Refusing stream %s.', streamKey, lTags(sessionId, video.uuid))
+
+        try {
+          await this.saveEndingSession({ videoUUID: video.uuid, error: LiveVideoError.QUOTA_EXCEEDED })
+        } catch (err) {
+          logger.error('Cannot save ending session of live with quota exceeded error.', { err, ...lTags(sessionId, video.uuid) })
+        }
+
+        this.videoSessions.delete(video.uuid)
+        return this.abortSession(sessionId)
       }
 
-      return this.abortSession(sessionId)
+      // Cleanup old potential live (could happen with a permanent live)
+      const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
+      if (oldStreamingPlaylist) {
+        if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
+
+        PeerTubeSocket.Instance.sendVideoForceEnd(video)
+
+        await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
+      }
+    } catch (err) {
+      this.videoSessions.delete(video.uuid)
+
+      throw err
     }
-
-    // Cleanup old potential live (could happen with a permanent live)
-    const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
-    if (oldStreamingPlaylist) {
-      if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
-
-      PeerTubeSocket.Instance.sendVideoForceEnd(video)
-
-      await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
-    }
-
-    this.videoSessions.set(video.uuid, sessionId)
 
     logger.debug('Probing ' + inputLocalUrl, lTags(sessionId, video.uuid))
 
