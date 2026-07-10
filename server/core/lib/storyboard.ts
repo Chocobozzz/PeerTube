@@ -34,9 +34,6 @@ export function buildTotalSprites (video: MVideo) {
   const spriteDuration = Math.ceil(video.duration / maxSprites)
   const totalSprites = Math.ceil(video.duration / spriteDuration)
 
-  // We can generate a single line so we don't need a prime number
-  if (totalSprites <= STORYBOARD.SPRITES_MAX_EDGE_COUNT) return { spriteDuration, totalSprites }
-
   return { spriteDuration, totalSprites }
 }
 
