@@ -120,6 +120,7 @@ export class VideoStudioTranscodingJobHandler
     const video = await loadRunnerVideo(runnerJob, this.lTags)
     if (!video) {
       await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
+      return
     }
 
     const videoFilePath = resultPayload.videoFile as string

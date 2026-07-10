@@ -6,8 +6,9 @@ import { CONFIG } from '../initializers/config.js'
 import { REMOTE_SCHEME } from '../initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
 import { logger } from './logger.js'
-import { deleteFileAndCatch, generateRandomString } from './utils.js'
+import { generateRandomString } from './utils.js'
 import { getExtFromMimetype } from './video.js'
+import { deleteFileAndCatch } from './fs.js'
 
 // ---------------------------------------------------------------------------
 // Extract NSFW Filters options to list videos
