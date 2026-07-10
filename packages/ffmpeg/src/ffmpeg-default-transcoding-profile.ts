@@ -3,7 +3,7 @@ import {
   buildStreamSuffix,
   ffprobePromise,
   getAudioStream,
-  getMaxAudioKBitrate,
+  getCopyInfoOrMaxAudioKBitrate,
   getVideoStream,
   getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
@@ -53,7 +53,7 @@ const defaultAACOptionsBuilder: EncoderOptionsBuilder = async ({ input, streamNu
 
   const audioCodecName = parsedAudio.audioStream['codec_name']
 
-  const bitrate = getMaxAudioKBitrate(audioCodecName, parsedAudio.bitrate)
+  const bitrate = getCopyInfoOrMaxAudioKBitrate(audioCodecName, parsedAudio.bitrate)
 
   // Force stereo as it causes some issues with HLS playback in Chrome
   const base = [ '-channel_layout', 'stereo' ]
@@ -117,8 +117,8 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   const audioBitrate = parsedAudio.bitrate
   if (!audioBitrate) return false
 
-  const maxAudioBitrate = getMaxAudioKBitrate('aac', audioBitrate) * 1000
-  if (maxAudioBitrate !== -1 && audioBitrate > maxAudioBitrate) return false
+  const canCopy = getCopyInfoOrMaxAudioKBitrate('aac', audioBitrate) === -1
+  if (!canCopy) return false
 
   const channelLayout = parsedAudio.audioStream['channel_layout']
   // Causes playback issues with Chrome
