@@ -85,6 +85,7 @@ export async function blacklistVideo (videoInstance: MVideoAccountLight, options
 
   if (videoInstance.isLive) {
     LiveManager.Instance.stopSessionOfVideo({ videoUUID: videoInstance.uuid, error: LiveVideoError.BLACKLISTED })
+      .catch(err => logger.error('Cannot stop session of video %s.', videoInstance.uuid, { err }))
   }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)
