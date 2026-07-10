@@ -43,14 +43,13 @@ export abstract class AbstractListQuery extends AbstractRunQuery {
   constructor (
     protected readonly sequelize: Sequelize,
     protected readonly modelInfo: ModelInfo,
-    protected readonly options: AbstractListQueryOptions
+    protected options: AbstractListQueryOptions
   ) {
     super(sequelize)
   }
 
   async get<T extends Model> () {
-    this.options.start = 0
-    this.options.count = 1
+    this.options = { ...this.options, start: 0, count: 1 }
 
     const rows = await this.list<T>()
 
