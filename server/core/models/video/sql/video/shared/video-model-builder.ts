@@ -454,7 +454,7 @@ export class VideoModelBuilder {
 
   private setBlockedServer (row: SQLRow, videoModel: VideoModel) {
     const id = row['VideoChannel.Account.Actor.Server.ServerBlocklist.id']
-    if (!id || this.serverBlocklistDone.has(id)) return
+    if (!id) return
 
     const key = `${videoModel.id}-${id}`
     if (this.serverBlocklistDone.has(key)) return
