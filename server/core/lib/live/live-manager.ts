@@ -183,10 +183,6 @@ class LiveManager {
     })
   }
 
-  isRunning () {
-    return !!this.rtmpServer
-  }
-
   hasSession (sessionId: string) {
     return this.getContext().sessions.has(sessionId)
   }
