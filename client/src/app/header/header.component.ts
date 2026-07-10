@@ -230,7 +230,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (isAndroid()) {
           this.androidAppUrl = `${baseAndroid}/video-channel/${channelId}?host=${host}${fallbackAndroid}`
         } else {
-          this.iosAppUrl = `${baseIOS}/video/${videoId}?host=${host}`
+          this.iosAppUrl = `${baseIOS}/video-channel/${channelId}?host=${host}`
         }
 
         return
