@@ -10,7 +10,7 @@ import {
   UserUpdateMe,
   UserVideoQuota
 } from '@peertube/peertube-models'
-import { from, Observable, of } from 'rxjs'
+import { from, Observable, of, throwError } from 'rxjs'
 import { catchError, concatMap, first, map, shareReplay, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
@@ -35,7 +35,15 @@ export class UserService {
 
   getUserWithCache (userId: number) {
     if (!this.userCache[userId]) {
-      this.userCache[userId] = this.getUser(userId).pipe(shareReplay())
+      this.userCache[userId] = this.getUser(userId)
+        .pipe(
+          shareReplay(),
+          catchError(err => {
+            delete this.userCache[userId]
+
+            return throwError(() => err)
+          })
+        )
     }
 
     return this.userCache[userId]
