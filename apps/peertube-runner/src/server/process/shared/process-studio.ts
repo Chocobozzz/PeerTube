@@ -125,7 +125,7 @@ async function processTask (options: TaskProcessorOptions) {
   const { task } = options
 
   const processor = taskProcessors[options.task.name]
-  if (!process) throw new Error('Unknown task ' + task.name)
+  if (!processor) throw new Error('Unknown task ' + task.name)
 
   return processor(options)
 }
