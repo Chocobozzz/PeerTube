@@ -1,18 +1,11 @@
-import { remove } from 'fs-extra/esm'
+import { ResultList } from '@peertube/peertube-models'
+import { sha256 } from '@peertube/peertube-node-utils'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { join } from 'path'
-import { sha256 } from '@peertube/peertube-node-utils'
-import { ResultList } from '@peertube/peertube-models'
 import { CONFIG } from '../initializers/config.js'
 import { randomBytesPromise } from './core-utils.js'
-import { logger } from './logger.js'
 
-function deleteFileAndCatch (path: string) {
-  remove(path)
-    .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
-}
-
-async function generateRandomString (size: number) {
+export async function generateRandomString (size: number) {
   const raw = await randomBytesPromise(size)
 
   return raw.toString('hex')
@@ -22,7 +15,7 @@ interface FormattableToJSON<U, V> {
   toFormattedJSON(args?: U): V
 }
 
-function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: T[], objectsTotal: number, formattedArg?: U) {
+export function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: T[], objectsTotal: number, formattedArg?: U) {
   const formattedObjects = objects.map(o => o.toFormattedJSON(formattedArg))
 
   return {
@@ -31,7 +24,7 @@ function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: 
   } as ResultList<V>
 }
 
-function generateVideoImportTmpPath (target: string | ParseTorrent, extension = '.mp4') {
+export function generateVideoImportTmpPath (target: string | ParseTorrent, extension = '.mp4') {
   const id = typeof target === 'string'
     ? target
     : target.infoHash
@@ -45,21 +38,11 @@ function generateVideoImportTmpPath (target: string | ParseTorrent, extension = 
  * only the "ede4cba5-742b-46fa-a388-9a6eb3a3aeb3" part. If the filename does
  * not contain a UUID, returns null.
  */
-function getUUIDFromFilename (filename: string) {
+export function getUUIDFromFilename (filename: string) {
   const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/
   const result = filename.match(regex)
 
   if (!result || Array.isArray(result) === false) return null
 
   return result[0]
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  deleteFileAndCatch,
-  generateRandomString,
-  getFormattedObjects,
-  generateVideoImportTmpPath,
-  getUUIDFromFilename
 }

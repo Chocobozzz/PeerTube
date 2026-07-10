@@ -1,5 +1,5 @@
 import { AccessDeniedError } from '@node-oauth/oauth2-server'
-import { pick } from '@peertube/peertube-core-utils'
+import { pick, maskSecret } from '@peertube/peertube-core-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
@@ -67,13 +67,13 @@ async function getAccessToken (bearerToken: string) {
 }
 
 function getClient (clientId: string, clientSecret: string) {
-  logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ').')
+  logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + maskSecret(clientSecret) + ').')
 
   return OAuthClientModel.getByIdAndSecret(clientId, clientSecret)
 }
 
 async function getRefreshToken (refreshToken: string) {
-  logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
+  logger.debug('Getting RefreshToken (refreshToken: ' + maskSecret(refreshToken) + ').')
 
   const tokenInfo = await OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
   if (!tokenInfo) return undefined
@@ -218,7 +218,7 @@ async function saveToken (
     authName = refreshTokenAuthName
   }
 
-  logger.debug(`Saving token ${token.accessToken} for client ${client.id} and user ${user.id}.`)
+  logger.debug(`Saving token ${maskSecret(token.accessToken)} for client ${client.id} and user ${user.id}.`)
 
   const tokenToCreate = {
     ...pick(token, [

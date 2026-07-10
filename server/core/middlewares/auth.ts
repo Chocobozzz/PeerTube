@@ -52,7 +52,7 @@ export function authenticateSocket (socket: Socket, next: (err?: any) => void) {
 
       return next()
     })
-    .catch(err => logger.error('Cannot get access token.', { err }))
+    .catch(err => next(err))
 }
 
 export function optionalAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -110,5 +110,5 @@ export function authenticateRunnerSocket (socket: Socket, next: (err?: any) => v
 
       return next()
     })
-    .catch(err => logger.error('Cannot get runner token.', { err }))
+    .catch(err => next(err))
 }

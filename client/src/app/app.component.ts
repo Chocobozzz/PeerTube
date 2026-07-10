@@ -270,7 +270,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (messageConfig.enabled) {
       // Already dismissed this message?
-      if (messageConfig.dismissable && localStorage.getItem(AppComponent.LS_BROADCAST_MESSAGE) === messageConfig.message) {
+      if (messageConfig.dismissable && peertubeLocalStorage.getItem(AppComponent.LS_BROADCAST_MESSAGE) === messageConfig.message) {
         return
       }
 

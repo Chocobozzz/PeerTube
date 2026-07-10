@@ -71,8 +71,6 @@ export type TranscodeVODOptions =
 export class FFmpegVOD {
   private readonly commandWrapper: FFmpegCommandWrapper
 
-  private ended = false
-
   constructor (options: FFmpegCommandWrapperOptions) {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
@@ -100,12 +98,6 @@ export class FFmpegVOD {
     await this.commandWrapper.runCommand()
 
     await this.fixHLSPlaylistIfNeeded(options)
-
-    this.ended = true
-  }
-
-  isEnded () {
-    return this.ended
   }
 
   private async buildVODCommand (

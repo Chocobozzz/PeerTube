@@ -261,6 +261,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.configSub) this.configSub.unsubscribe()
     if (this.liveVideosSub) this.liveVideosSub.unsubscribe()
 
+    if (this.video?.isLive) this.peertubeSocket.unsubscribeLiveVideos(this.video.id)
+
     // Unbind hotkeys
     this.hotkeysService.remove(this.hotkeys)
 
@@ -968,15 +970,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {
-    if (!this.liveVideosSub) {
-      this.liveVideosSub = this.buildLiveEventsSubscription()
-    }
-
     if (oldVideo && oldVideo.id !== newVideo.id) {
       this.peertubeSocket.unsubscribeLiveVideos(oldVideo.id)
     }
 
     if (!newVideo.isLive) return
+
+    if (!this.liveVideosSub) {
+      this.liveVideosSub = this.buildLiveEventsSubscription()
+    }
 
     await this.peertubeSocket.subscribeToLiveVideosSocket(newVideo.id)
   }

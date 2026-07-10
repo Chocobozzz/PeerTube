@@ -1,13 +1,13 @@
 import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { LoggerTags, logger } from '@server/helpers/logger.js'
-import { deleteFileAndCatch } from '@server/helpers/utils.js'
 import { STORYBOARD } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
 import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { deleteFileAndCatch } from '@server/helpers/fs.js'
 
 export async function buildSpriteSize (videoPath: string) {
   const probe = await ffprobePromise(videoPath)
@@ -33,9 +33,6 @@ export function buildTotalSprites (video: MVideo) {
 
   const spriteDuration = Math.ceil(video.duration / maxSprites)
   const totalSprites = Math.ceil(video.duration / spriteDuration)
-
-  // We can generate a single line so we don't need a prime number
-  if (totalSprites <= STORYBOARD.SPRITES_MAX_EDGE_COUNT) return { spriteDuration, totalSprites }
 
   return { spriteDuration, totalSprites }
 }

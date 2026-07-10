@@ -55,7 +55,7 @@ export async function crawlCollectionPage<T> (
 
     if (Array.isArray(body.orderedItems)) {
       const items = body.orderedItems
-      logger.info('Processing %i ActivityPub items for %s.', items.length, url)
+      logger.info('Processing %i ActivityPub items for %s collection.', items.length, argUrl)
 
       await handler(items)
     }

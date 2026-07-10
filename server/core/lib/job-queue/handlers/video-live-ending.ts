@@ -78,6 +78,12 @@ export async function processVideoLiveEnding (job: Job) {
 
   let replayDirectory = payload.replayDirectory
 
+  if (!replayDirectory) {
+    logger.info(`No replay directory found for live ${video.uuid}, skipping video replay creation.`, { ...lTags(video.uuid) })
+
+    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+  }
+
   // Introduced in PeerTube 7.2, allow to use the appropriate base directory even if the live privacy changed
   if (!isAbsolute(replayDirectory)) {
     replayDirectory = join(getLiveReplayBaseDirectory(video), replayDirectory)

@@ -868,6 +868,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
     LiveManager.Instance.stopSessionOfVideo({ videoUUID: instance.uuid, error: null })
+      .catch(err => logger.error('Cannot stop session of video %s.', instance.uuid, { err }))
   }
 
   static invalidateCache (instance: MVideo) {

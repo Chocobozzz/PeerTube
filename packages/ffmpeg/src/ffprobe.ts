@@ -95,7 +95,7 @@ export async function getAudioStream (videoPath: string, existingProbe?: Ffprobe
   return { absolutePath: data.format.filename }
 }
 
-export function getMaxAudioKBitrate (type: string, bitrate: number) {
+export function getCopyInfoOrMaxAudioKBitrate (type: string, bitrate: number) {
   const maxKBitrate = 384
 
   // If we did not manage to get the bitrate, use an average value

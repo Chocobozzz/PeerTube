@@ -28,10 +28,10 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
 
     logger.log(logLevel, 'Bad HTTP request.', { json, tags })
 
-    res.status(status)
-
     // Cannot display a proper error to the client since headers are already sent
     if (res.headersSent) return
+
+    res.status(status)
 
     res.setHeader('Content-Type', 'application/problem+json')
     res.json(json)
