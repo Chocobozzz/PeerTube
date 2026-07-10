@@ -527,18 +527,41 @@ class JobQueue {
   // ---------------------------------------------------------------------------
 
   private addRepeatableJobs () {
-    this.queues['videos-stats'].add('job', {}, {
-      repeat: REPEAT_JOBS['videos-stats'],
-
-      ...this.buildJobRemovalOptions('videos-stats')
-    }).catch(err => logger.error('Cannot add repeatable job.', { err }))
+    this.pruneRepeatableJobs(this.queues['videos-stats'], 'videos-stats')
+      .then(() =>
+        this.queues['videos-stats'].upsertJobScheduler(
+          'videos-stats',
+          REPEAT_JOBS['videos-stats'],
+          { opts: this.buildJobRemovalOptions('videos-stats') }
+        )
+      ).catch(err => logger.error('Cannot add repeatable job.', { err }))
 
     if (CONFIG.FEDERATION.VIDEOS.CLEANUP_REMOTE_INTERACTIONS) {
-      this.queues['activitypub-cleaner'].add('job', {}, {
-        repeat: REPEAT_JOBS['activitypub-cleaner'],
+      this.pruneRepeatableJobs(this.queues['activitypub-cleaner'], 'activitypub-cleaner')
+        .then(() =>
+          this.queues['activitypub-cleaner'].upsertJobScheduler(
+            'activitypub-cleaner',
+            REPEAT_JOBS['activitypub-cleaner'],
+            { opts: this.buildJobRemovalOptions('activitypub-cleaner') }
+          )
+        ).catch(err => logger.error('Cannot add repeatable job.', { err }))
+    } else {
+      // Remove everything: it may have been added by a previous run where the config flag was enabled,
+      // either as a job scheduler or (before this fix) as a legacy repeatable job
+      this.pruneRepeatableJobs(this.queues['activitypub-cleaner'])
+        .catch(err => logger.error('Cannot remove repeatable job.', { err }))
+    }
+  }
 
-        ...this.buildJobRemovalOptions('activitypub-cleaner')
-      }).catch(err => logger.error('Cannot add repeatable job.', { err }))
+  // Removes repeatable jobs (job schedulers and legacy repeatable jobs added by older PeerTube versions)
+  private async pruneRepeatableJobs (queue: Queue, keepSchedulerId?: string) {
+    const jobSchedulers = await queue.getJobSchedulers()
+
+    for (const jobScheduler of jobSchedulers) {
+      if (jobScheduler.key === keepSchedulerId) continue
+
+      await queue.removeJobScheduler(jobScheduler.key)
+        .catch(err => logger.error('Cannot remove stale repeatable job.', { err, key: jobScheduler.key }))
     }
   }
 
