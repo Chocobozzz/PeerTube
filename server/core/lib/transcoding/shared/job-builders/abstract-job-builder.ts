@@ -2,7 +2,7 @@ import { VideoFileStreamType, VideoResolution } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/framerate.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { DEFAULT_AUDIO_MERGE_RESOLUTION, DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants.js'
+import { DEFAULT_AUDIO_MERGE_FPS, DEFAULT_AUDIO_MERGE_RESOLUTION } from '@server/initializers/constants.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../../transcoding-resolutions.js'
@@ -33,8 +33,8 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
 
     if (videoFile.isAudio()) {
       // The first transcoding job will transcode to this FPS value
-      maxFPS = Math.min(DEFAULT_AUDIO_MERGE_RESOLUTION, CONFIG.TRANSCODING.FPS.MAX)
-      maxResolution = DEFAULT_AUDIO_RESOLUTION
+      maxFPS = Math.min(DEFAULT_AUDIO_MERGE_FPS, CONFIG.TRANSCODING.FPS.MAX)
+      maxResolution = DEFAULT_AUDIO_MERGE_RESOLUTION
 
       mergeOrOptimizePayload = this.buildMergeAudioPayload({
         video,
