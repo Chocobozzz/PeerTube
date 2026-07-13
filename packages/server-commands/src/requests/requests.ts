@@ -301,7 +301,7 @@ function buildFields (req: request.Test, fields: { [fieldName: string]: any }, n
     if (fields[key] === undefined) continue
 
     if (Array.isArray(fields[key]) && fields[key].length === 0) {
-      req.field(key, [])
+      req.field(formKey, [])
       continue
     }
 
