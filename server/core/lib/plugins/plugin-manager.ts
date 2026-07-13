@@ -108,7 +108,7 @@ export class PluginManager implements ServerHook {
 
       const routes = result.registerHelpers.getWebSocketRoutes()
 
-      const wss = routes.find(r => r.route.startsWith(subRoute))
+      const wss = routes.find(r => subRoute === r.route || subRoute.startsWith(r.route + '/'))
       if (!wss) return
 
       try {
