@@ -74,6 +74,8 @@ export function timeToInt (time: number | string) {
 
   let result = 0
   for (let i = 0; i < parts.length; i++) {
+    if (iMultiplier[i] === undefined) return 0
+
     const partInt = parseInt(parts[i], 10)
     if (isNaN(partInt)) return 0
 

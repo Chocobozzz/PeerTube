@@ -9,7 +9,8 @@ import {
   isYesterday,
   millisecondsToTime,
   millisecondsToVttTime,
-  secondsToTime
+  secondsToTime,
+  timeToInt
 } from '@peertube/peertube-core-utils'
 import { expect } from 'chai'
 
@@ -108,6 +109,37 @@ describe('Is last week', function () {
     d.setDate(d.getDate() - 10)
 
     expect(isLastWeek(d)).to.be.false
+  })
+})
+
+describe('Time to int', function () {
+  it('Returns 0 for falsy input', function () {
+    expect(timeToInt(0)).to.equal(0)
+    expect(timeToInt('')).to.equal(0)
+  })
+
+  it('Floors a number input', function () {
+    expect(timeToInt(61.9)).to.equal(61)
+  })
+
+  it('Parses the 00h00m00s format', function () {
+    expect(timeToInt('1h1m1s')).to.equal(3661)
+    expect(timeToInt('1h')).to.equal(3600)
+    expect(timeToInt('90s')).to.equal(90)
+  })
+
+  it('Parses the colon-separated format', function () {
+    expect(timeToInt('20')).to.equal(20)
+    expect(timeToInt('05:20')).to.equal(320)
+    expect(timeToInt('01:02:03')).to.equal(3723)
+  })
+
+  it('Returns 0 instead of NaN for more than 3 colon-separated parts', function () {
+    expect(timeToInt('1:02:03:04')).to.equal(0)
+  })
+
+  it('Returns 0 for an invalid string', function () {
+    expect(timeToInt('abc')).to.equal(0)
   })
 })
 
