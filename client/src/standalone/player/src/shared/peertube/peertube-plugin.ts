@@ -57,6 +57,7 @@ class PeerTubePlugin extends Plugin {
   declare private videoViewOnPlayHandler: (...args: any[]) => void
   declare private videoViewOnSeekedHandler: (...args: any[]) => void
   declare private videoViewOnEndedHandler: (...args: any[]) => void
+  declare private adaptPosterForAudioOnlyPlayHandler: (...args: any[]) => void
 
   declare private stopTimeHandler: (...args: any[]) => void
 
@@ -175,7 +176,14 @@ class PeerTubePlugin extends Plugin {
 
     this.player.on('resolution-change', (_: any, { resolution }: { resolution: number }) => {
       if (this.player.paused()) {
-        this.player.on('play', () => this.adaptPosterForAudioOnly(resolution))
+        if (this.adaptPosterForAudioOnlyPlayHandler) {
+          this.player.off('play', this.adaptPosterForAudioOnlyPlayHandler)
+          this.adaptPosterForAudioOnlyPlayHandler = undefined
+        }
+
+        this.adaptPosterForAudioOnlyPlayHandler = () => this.adaptPosterForAudioOnly(resolution)
+
+        this.player.one('play', this.adaptPosterForAudioOnlyPlayHandler)
         return
       }
 
