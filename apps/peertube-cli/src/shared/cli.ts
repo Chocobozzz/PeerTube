@@ -32,7 +32,7 @@ async function getAdminTokenOrDie (server: PeerTubeServer, username: string, pas
 }
 
 interface Settings {
-  remotes: any[]
+  remotes: string[]
   default: number
 }
 
