@@ -189,7 +189,7 @@ export async function buildYoutubeDLImport (options: {
   // Get video infos
   const youtubeDLInfo = await youtubeDL.getInfoForDownload({ userLanguage })
 
-  if (skipPublishedBeforeOrEq) {
+  if (skipPublishedBeforeOrEq && youtubeDLInfo.originallyPublishedAtWithoutTime) {
     const onlyAfterWithoutTime = new Date(skipPublishedBeforeOrEq)
     onlyAfterWithoutTime.setHours(0, 0, 0, 0)
 
