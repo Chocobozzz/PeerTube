@@ -244,6 +244,7 @@ export class PluginManager implements ServerHook {
     const registered = this.getRegisteredPluginByShortName(name)
     if (!registered) {
       logger.error('Cannot find plugin %s to call on settings changed.', name)
+      return
     }
 
     for (const cb of registered.registerHelpers.getOnSettingsChangedCallbacks()) {
