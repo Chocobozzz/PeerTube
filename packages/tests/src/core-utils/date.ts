@@ -121,6 +121,11 @@ describe('Seconds to time', function () {
     expect(secondsToTime(61.6)).to.equals('1m2s')
     expect(secondsToTime(61.51)).to.equals('1m2s')
   })
+
+  it('Carries the rounding into minutes/hours when crossing a boundary', function () {
+    expect(secondsToTime(59.6)).to.equals('1m')
+    expect(secondsToTime(3599.6)).to.equals('1h')
+  })
 })
 
 describe('Milliseconds to time', function () {

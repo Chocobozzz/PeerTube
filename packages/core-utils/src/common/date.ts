@@ -104,6 +104,8 @@ export function secondsToTime (options: {
 
   if (seconds === 0 && format !== 'full') return '0s'
 
+  seconds = Math.round(seconds)
+
   const formatNumber = (value: number) => {
     if (format === 'locale-string') return value.toLocaleString()
 
@@ -125,7 +127,7 @@ export function secondsToTime (options: {
   else if (minutes >= 1) time += formatNumber(minutes) + minuteSymbol
   else if (format === 'full') time += '00' + minuteSymbol
 
-  seconds = Math.round(seconds) % 60
+  seconds %= 60
   if (seconds >= 1 && seconds < 10 && format === 'full') time += '0' + seconds + secondsSymbol
   else if (seconds >= 1) time += formatNumber(seconds) + secondsSymbol
   else if (format === 'full') time += '00'
