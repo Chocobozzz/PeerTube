@@ -263,7 +263,7 @@ export async function buildYoutubeDLImport (options: {
   })
 
   // Get video subtitles
-  await processYoutubeSubtitles({ youtubeDL, targetUrl, video, userLanguage: user.getLanguage() })
+  await processYoutubeSubtitles({ youtubeDL, targetUrl, video, userLanguage })
 
   let fileExt = `.${youtubeDLInfo.ext}`
   if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
