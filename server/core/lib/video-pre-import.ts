@@ -110,30 +110,30 @@ export async function insertFromImportIntoDB (parameters: {
 export async function buildVideoFromImport ({ channelId, importData, importDataOverride, importType }: {
   channelId: number
   importData: YoutubeDLInfo
-  importDataOverride?: Partial<VideoImportCreate>
+  importDataOverride: Partial<VideoImportCreate>
   importType: 'url' | 'torrent'
 }): Promise<MVideoThumbnails> {
   let videoData = {
-    name: importDataOverride?.name || importData.name || 'Unknown name',
+    name: importDataOverride.name || importData.name || 'Unknown name',
     remote: false,
-    category: importDataOverride?.category || importData.category,
-    licence: importDataOverride?.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
-    language: importDataOverride?.language || importData.language,
-    commentsPolicy: importDataOverride?.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
-    downloadEnabled: importDataOverride?.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
-    waitTranscoding: importDataOverride?.waitTranscoding ?? true,
+    category: importDataOverride.category || importData.category,
+    licence: importDataOverride.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
+    language: importDataOverride.language || importData.language,
+    commentsPolicy: importDataOverride.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+    downloadEnabled: importDataOverride.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+    waitTranscoding: importDataOverride.waitTranscoding ?? true,
     embedPrivacyPolicy: VideoEmbedPrivacyPolicy.ALL_ALLOWED,
     state: VideoState.TO_IMPORT,
-    nsfw: importDataOverride?.nsfw || importData.nsfw || false,
-    nsfwFlags: importDataOverride?.nsfwFlags || NSFWFlag.NONE,
-    nsfwSummary: importDataOverride?.nsfwSummary || null,
-    description: importDataOverride?.description || importData.description,
-    support: importDataOverride?.support || null,
-    privacy: importDataOverride?.privacy || VideoPrivacy.PRIVATE,
+    nsfw: importDataOverride.nsfw || importData.nsfw || false,
+    nsfwFlags: importDataOverride.nsfwFlags || NSFWFlag.NONE,
+    nsfwSummary: importDataOverride.nsfwSummary || null,
+    description: importDataOverride.description || importData.description,
+    support: importDataOverride.support || null,
+    privacy: importDataOverride.privacy || VideoPrivacy.PRIVATE,
     duration: 0, // duration will be set by the import job
     channelId,
-    originallyPublishedAt: importDataOverride?.originallyPublishedAt
-      ? new Date(importDataOverride?.originallyPublishedAt)
+    originallyPublishedAt: importDataOverride.originallyPublishedAt
+      ? new Date(importDataOverride.originallyPublishedAt)
       : importData.originallyPublishedAtWithoutTime
   }
 
@@ -154,9 +154,9 @@ export async function buildYoutubeDLImport (options: {
   targetUrl: string
   channel: MChannelAccountDefault
   user: MUserAccountId
+  importDataOverride: Partial<VideoImportCreate>
 
   channelSync?: MChannelSync
-  importDataOverride?: Partial<VideoImportCreate>
   thumbnailFilePath?: string
 
   skipPublishedBeforeOrEq?: Date
@@ -228,7 +228,7 @@ export async function buildYoutubeDLImport (options: {
     video,
     thumbnails,
     videoChannel: channel,
-    tags: importDataOverride?.tags || youtubeDLInfo.tags,
+    tags: importDataOverride.tags || youtubeDLInfo.tags,
     user,
     videoImportAttributes: {
       targetUrl,
@@ -241,7 +241,7 @@ export async function buildYoutubeDLImport (options: {
 
   await sequelizeTypescript.transaction(async transaction => {
     // Priority to explicitly set description
-    if (importDataOverride?.description) {
+    if (importDataOverride.description) {
       const inserted = await replaceChaptersFromDescriptionIfNeeded({ newDescription: importDataOverride.description, video, transaction })
       if (inserted) return
     }
