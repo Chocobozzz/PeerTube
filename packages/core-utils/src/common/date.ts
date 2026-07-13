@@ -13,7 +13,7 @@ export function isYesterday (d: Date) {
 
 export function isThisWeek (d: Date) {
   const minDateOfThisWeek = new Date()
-  minDateOfThisWeek.setHours(0, 0, 0)
+  minDateOfThisWeek.setHours(0, 0, 0, 0)
 
   // getDay() -> Sunday - Saturday : 0 - 6
   // We want to start our week on Monday
@@ -26,9 +26,9 @@ export function isThisWeek (d: Date) {
 }
 
 export function isThisMonth (d: Date) {
-  const thisMonth = new Date().getMonth()
+  const now = new Date()
 
-  return d.getMonth() === thisMonth
+  return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
 }
 
 export function isLastMonth (d: Date) {
