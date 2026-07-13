@@ -270,7 +270,7 @@ export class VideoDownload {
 
     if (this.video.isLocal()) return { coverPath: thumbnail?.getFSPath() }
 
-    if (thumbnail.fileUrl) {
+    if (thumbnail?.fileUrl) {
       const destination = VideoPathManager.Instance.buildTMPDestination(thumbnail.filename)
 
       await doRequestAndSaveToFile(thumbnail.fileUrl, destination)
