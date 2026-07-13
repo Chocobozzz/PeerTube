@@ -1,7 +1,7 @@
 @if (hasVideoScheduledPublication()) {
   <my-alert type="primary" i18n>
-  This video will be published on {{ video().scheduledUpdate.updateAt | ptDate: 'full' }}.
-</my-alert>
+    This video will be published on {{ video().scheduledUpdate.updateAt | ptDate: 'full'  }}.
+  </my-alert>
 }
 
 @if (isWaitingForLive()) {
@@ -10,16 +10,16 @@
 
     @if (nextScheduledLiveDate()) {
       <div i18n>
-      It will start on {{ nextScheduledLiveDate() | ptDate: 'short' }}.
-    </div>
+        It will start on {{ nextScheduledLiveDate() | ptDate: 'short'  }}.
+      </div>
     }
   </my-alert>
 }
 
 @if (isLiveEnded()) {
   <my-alert type="primary" i18n>
-  This live has ended.
-</my-alert>
+    This live has ended.
+  </my-alert>
 }
 
 @if (getAlertWarning()?.title) {
@@ -44,12 +44,12 @@
 
 @if (noPlaylistVideoFound()) {
   <my-alert i18n type="warning">
-  There are no videos available in this playlist.
-</my-alert>
+    There are no videos available in this playlist.
+  </my-alert>
 }
 
 @if (video()?.canBypassPassword(user())) {
   <my-alert i18n type="warning">
-  This video is password protected.
-</my-alert>
+    This video is password protected.
+  </my-alert>
 }
