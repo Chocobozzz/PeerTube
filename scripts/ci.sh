@@ -159,4 +159,7 @@ elif [ "$1" = "transcription" ]; then
     transcriptionDevToolsFiles=$(findTestFiles ./packages/tests/dist/transcription-devtools)
 
     MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $transcriptionFiles $transcriptionDevToolsFiles
+else
+    echo "Unknown suite: $1"
+    exit 1
 fi
