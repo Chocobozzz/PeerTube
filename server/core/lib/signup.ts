@@ -26,8 +26,9 @@ export async function isSignupAllowed (options: {
   }
 
   const totalUsers = await UserModel.countTotal()
+  if (totalUsers < CONFIG.SIGNUP.LIMIT) return { allowed: true }
 
-  return { allowed: totalUsers < CONFIG.SIGNUP.LIMIT, errorMessage: 'User limit is reached on this instance' }
+  return { allowed: false, errorMessage: 'User limit is reached on this instance' }
 }
 
 export function isSignupAllowedForCurrentIP (ip: string) {
@@ -46,18 +47,18 @@ export function isSignupAllowedForCurrentIP (ip: string) {
     const addrV4 = ipaddr.IPv4.parse(ip)
     const rangeList = {
       whitelist: CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isIPV4Cidr(cidr))
-                       .map(cidr => ipaddr.IPv4.parseCIDR(cidr)),
+        .map(cidr => ipaddr.IPv4.parseCIDR(cidr)),
       blacklist: CONFIG.SIGNUP.FILTERS.CIDR.BLACKLIST.filter(cidr => isIPV4Cidr(cidr))
-                       .map(cidr => ipaddr.IPv4.parseCIDR(cidr))
+        .map(cidr => ipaddr.IPv4.parseCIDR(cidr))
     }
     matched = ipaddr.subnetMatch(addrV4, rangeList, 'unknown')
   } else if (addr.kind() === 'ipv6') {
     const addrV6 = ipaddr.IPv6.parse(ip)
     const rangeList = {
       whitelist: CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isIPV6Cidr(cidr))
-                       .map(cidr => ipaddr.IPv6.parseCIDR(cidr)),
+        .map(cidr => ipaddr.IPv6.parseCIDR(cidr)),
       blacklist: CONFIG.SIGNUP.FILTERS.CIDR.BLACKLIST.filter(cidr => isIPV6Cidr(cidr))
-                       .map(cidr => ipaddr.IPv6.parseCIDR(cidr))
+        .map(cidr => ipaddr.IPv6.parseCIDR(cidr))
     }
     matched = ipaddr.subnetMatch(addrV6, rangeList, 'unknown')
   }

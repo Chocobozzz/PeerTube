@@ -8,7 +8,6 @@ export class PlaylistTracker {
     private readonly playlist: VideoPlaylist,
     private readonly playlistElements: VideoPlaylistElement[]
   ) {
-
   }
 
   getPlaylist () {
@@ -53,7 +52,7 @@ export class PlaylistTracker {
     const prev = this.playlistElements.find(e => e.position === position)
 
     if (!prev?.video) {
-      return this.getNextPlaylistElement(position - 1)
+      return this.getPreviousPlaylistElement(position - 1)
     }
 
     return prev
@@ -68,13 +67,14 @@ export class PlaylistTracker {
 
   setPosition (position: number) {
     this.currentPlaylistElement = this.playlistElements.find(e => e.position === position)
-    if (!this.currentPlaylistElement?.video) {
-      logger.error('Current playlist element is not valid.', this.currentPlaylistElement)
-      this.currentPlaylistElement = this.getNextPlaylistElement()
-    }
 
     if (!this.currentPlaylistElement) {
       throw new Error('This playlist does not have any valid element')
+    }
+
+    if (!this.currentPlaylistElement?.video) {
+      logger.error('Current playlist element is not valid.', this.currentPlaylistElement)
+      this.currentPlaylistElement = this.getNextPlaylistElement()
     }
   }
 

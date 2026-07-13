@@ -13,7 +13,7 @@ export function isYesterday (d: Date) {
 
 export function isThisWeek (d: Date) {
   const minDateOfThisWeek = new Date()
-  minDateOfThisWeek.setHours(0, 0, 0)
+  minDateOfThisWeek.setHours(0, 0, 0, 0)
 
   // getDay() -> Sunday - Saturday : 0 - 6
   // We want to start our week on Monday
@@ -26,9 +26,9 @@ export function isThisWeek (d: Date) {
 }
 
 export function isThisMonth (d: Date) {
-  const thisMonth = new Date().getMonth()
+  const now = new Date()
 
-  return d.getMonth() === thisMonth
+  return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
 }
 
 export function isLastMonth (d: Date) {
@@ -74,6 +74,8 @@ export function timeToInt (time: number | string) {
 
   let result = 0
   for (let i = 0; i < parts.length; i++) {
+    if (iMultiplier[i] === undefined) return 0
+
     const partInt = parseInt(parts[i], 10)
     if (isNaN(partInt)) return 0
 
@@ -104,6 +106,8 @@ export function secondsToTime (options: {
 
   if (seconds === 0 && format !== 'full') return '0s'
 
+  seconds = Math.round(seconds)
+
   const formatNumber = (value: number) => {
     if (format === 'locale-string') return value.toLocaleString()
 
@@ -125,7 +129,7 @@ export function secondsToTime (options: {
   else if (minutes >= 1) time += formatNumber(minutes) + minuteSymbol
   else if (format === 'full') time += '00' + minuteSymbol
 
-  seconds = Math.round(seconds) % 60
+  seconds %= 60
   if (seconds >= 1 && seconds < 10 && format === 'full') time += '0' + seconds + secondsSymbol
   else if (seconds >= 1) time += formatNumber(seconds) + secondsSymbol
   else if (format === 'full') time += '00'

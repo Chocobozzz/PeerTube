@@ -99,6 +99,7 @@ export class PeerTubePlayer {
 
   async load (loadOptions: PeerTubePlayerLoadOptions) {
     this.currentLoadOptions = loadOptions
+    this.videojsDecodeErrors = 0
 
     this.setPoster([])
 
@@ -403,15 +404,17 @@ export class PeerTubePlayer {
   }
 
   private getVideojsOptions (): VideojsPlayerOptions {
-    const posterWidth = this.options.playerElement().clientWidth || this.getScreenWidth()
-
-    const poster = findAppropriateThumbnail(this.currentLoadOptions.thumbnails, posterWidth, '16:9')?.fileUrl || ''
-
     const html5 = {
       preloadTextTracks: false,
       // Prevent a bug on iOS where the text tracks added by peertube plugin are removed on play
       // See https://github.com/Chocobozzz/PeerTube/issues/6351
       nativeTextTracks: false
+    }
+
+    const getPoster = () => {
+      const posterWidth = this.options.playerElement().clientWidth || this.getScreenWidth()
+
+      return findAppropriateThumbnail(this.currentLoadOptions.thumbnails, posterWidth, '16:9')?.fileUrl || ''
     }
 
     const plugins: VideoJSPluginOptions = {
@@ -438,7 +441,7 @@ export class PeerTubePlayer {
 
         videoRatio: () => this.currentLoadOptions.videoRatio,
 
-        poster: () => poster,
+        poster: () => getPoster(),
 
         playbackRate: this.options.playbackRate,
         autoPlayerRatio: this.options.autoPlayerRatio
@@ -476,7 +479,7 @@ export class PeerTubePlayer {
 
       autoplay: this.getAutoPlayValue(this.currentLoadOptions.autoplay),
 
-      poster,
+      poster: getPoster(),
       preload: 'none' as 'none',
 
       inactivityTimeout: this.options.inactivityTimeout,

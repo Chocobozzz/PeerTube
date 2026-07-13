@@ -62,7 +62,7 @@ describe('Test plugin websocket', function () {
   })
 
   it('Should connect to the websocket and receive pong', function (done) {
-    const ws = buildWebSocket(server, basePaths[0])
+    const ws = buildWebSocket(server, basePaths[0] + 'toto')
 
     ws.on('open', () => ws.send('ping'))
     ws.on('message', data => {

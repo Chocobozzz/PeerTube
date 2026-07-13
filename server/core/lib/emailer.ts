@@ -57,7 +57,11 @@ export class Emailer {
 
     try {
       const success = await this.transporter.verify()
-      if (success !== true) this.warnOnConnectionFailure()
+
+      if (success !== true) {
+        this.warnOnConnectionFailure()
+        return
+      }
 
       logger.info('Successfully connected to SMTP server.')
     } catch (err) {

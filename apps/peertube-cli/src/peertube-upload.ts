@@ -27,7 +27,6 @@ const program = new Command('upload')
   .option('-s, --support <support>', 'Video support text')
   .option('--no-wait-transcoding', 'Do not wait transcoding before publishing the video')
   .option('--no-download-enabled', 'Disable video download')
-  .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 
 export function defineUploadProgram () {
   program.action(async options => {

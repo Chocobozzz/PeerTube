@@ -26,6 +26,7 @@ import { buildActorInstance, findAvailableLocalActorName } from './local-actor.j
 import { Redis } from './redis.js'
 import { createLocalVideoChannelWithoutKeys } from './video-channel.js'
 import { createWatchLaterPlaylist } from './video-playlist.js'
+import { createPrivateAndPublicKeys } from '@server/helpers/peertube-crypto.js'
 
 type ChannelNames = { name: string, displayName: string }
 
@@ -91,7 +92,10 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
 }): Promise<{ user: MUserDefault, account: MAccountDefault, videoChannel: MChannelActor }> {
   const { userToCreate, userDisplayName, channelNames, validateUser = true } = parameters
 
-  const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
+  const accountKeys = await createPrivateAndPublicKeys()
+  const channelKeys = await createPrivateAndPublicKeys()
+
+  return sequelizeTypescript.transaction(async t => {
     const userOptions = {
       transaction: t,
       validate: validateUser
@@ -107,25 +111,23 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
       applicationId: null,
       t
     })
+    accountCreated.Actor.publicKey = accountKeys.publicKey
+    accountCreated.Actor.privateKey = accountKeys.privateKey
+    await accountCreated.Actor.save({ transaction: t })
+
     userCreated.Account = accountCreated
 
     const channelAttributes = await buildChannelAttributes({ user: userCreated, transaction: t, channelNames })
     const videoChannel = await createLocalVideoChannelWithoutKeys(channelAttributes, accountCreated, t)
 
+    videoChannel.Actor.publicKey = channelKeys.publicKey
+    videoChannel.Actor.privateKey = channelKeys.privateKey
+    await videoChannel.Actor.save({ transaction: t })
+
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
 
     return { user: userCreated, account: accountCreated, videoChannel, videoPlaylist }
   })
-
-  const [ accountActorWithKeys, channelActorWithKeys ] = await Promise.all([
-    generateAndSaveActorKeys(account.Actor),
-    generateAndSaveActorKeys(videoChannel.Actor)
-  ])
-
-  account.Actor = accountActorWithKeys
-  videoChannel.Actor = channelActorWithKeys
-
-  return { user, account, videoChannel }
 }
 
 export async function createLocalAccountWithoutKeys (parameters: {
@@ -147,6 +149,7 @@ export async function createLocalAccountWithoutKeys (parameters: {
   const url = getLocalAccountActivityPubUrl(name)
   const actor = buildActorInstance(type, url, name)
   actor.accountId = account.id
+
   await actor.save({ transaction: t })
 
   return Object.assign(account, { Actor: actor })

@@ -81,7 +81,7 @@ export class PauseBezel extends Component {
       this.firstPlayDone = false
     }
 
-    player.on('video-change', () => this.videoChangeHandler)
+    player.on('video-change', this.videoChangeHandler)
     player.on('pause', this.playerPauseHandler)
     player.on('play', this.playerPlayHandler)
   }
