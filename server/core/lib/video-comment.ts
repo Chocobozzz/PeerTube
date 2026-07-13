@@ -21,6 +21,7 @@ import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
 import { setAndSaveCommentAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { Notifier } from './notifier/notifier.js'
 import { Hooks } from './plugins/hooks.js'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 
 export async function removeComment (commentArg: MComment, req: express.Request, res: express.Response) {
   let videoCommentInstanceBefore: MCommentOwnerVideo
@@ -56,11 +57,11 @@ export async function approveComment (commentArg: MComment) {
     if (comment.isLocal()) {
       await sendCreateVideoCommentIfNeeded(comment, t)
     } else {
-      sendReplyApproval(comment, 'ApproveReply')
+      afterCommitIfTransaction(t, () => sendReplyApproval(comment, 'ApproveReply'))
     }
 
     if (oldHeldForReview !== comment.heldForReview) {
-      Notifier.Instance.notifyOnNewCommentApproval(comment)
+      afterCommitIfTransaction(t, () => Notifier.Instance.notifyOnNewCommentApproval(comment))
     }
 
     logger.info('Video comment %d approved.', comment.id)
