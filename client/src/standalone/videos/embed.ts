@@ -55,6 +55,9 @@ export class PeerTubeEmbed {
   private alreadyInitialized = false
   private alreadyPlayed = false
 
+  private currentLiveVideo: VideoDetails
+  private currentLiveEndedHandler: () => void
+
   private videoPassword: string
   private videoPasswordFromAPI: string
   private onVideoPasswordFromAPIResolver: (value: string) => void
@@ -353,12 +356,15 @@ export class PeerTubeEmbed {
 
     if (this.videoPassword) this.playerHTML.removeVideoPasswordBlock()
 
+    this.stopCurrentLiveListeners()
+
     if (video.isLive) {
+      this.currentLiveVideo = video
+
       this.liveManager.listenForChanges({
         video,
 
         onPublishedVideo: () => {
-          this.liveManager.stopListeningForChanges(video)
           this.loadVideoAndBuildPlayer({ uuid: video.uuid, forceAutoplay: true })
         },
 
@@ -369,7 +375,8 @@ export class PeerTubeEmbed {
         this.liveManager.displayInfo({ state: video.state.id, translations })
         this.peertubePlayer.disable()
       } else {
-        this.player.one('ended', () => this.endLive(video, translations))
+        this.currentLiveEndedHandler = () => this.endLive(video, translations)
+        this.player.one('ended', this.currentLiveEndedHandler)
       }
     }
 
@@ -423,6 +430,19 @@ export class PeerTubeEmbed {
     this.peertubePlayer.disable()
 
     this.peertubePlayer.setPoster(video.thumbnails)
+  }
+
+  private stopCurrentLiveListeners () {
+    if (!this.currentLiveVideo) return
+
+    this.liveManager.stopListeningForChanges(this.currentLiveVideo)
+
+    if (this.currentLiveEndedHandler) {
+      this.player.off('ended', this.currentLiveEndedHandler)
+      this.currentLiveEndedHandler = undefined
+    }
+
+    this.currentLiveVideo = undefined
   }
 
   private async handlePasswordError (err: PeerTubeServerError) {
