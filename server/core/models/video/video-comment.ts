@@ -9,7 +9,7 @@ import {
 } from '@peertube/peertube-models'
 import { afterCommitIfTransaction, retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger } from '@server/helpers/logger.js'
-import { extractMentions } from '@server/helpers/mentions.js'
+import { extractLocalMentions } from '@server/helpers/mentions.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getLocalApproveReplyActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -698,7 +698,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   extractMentions () {
-    return extractMentions(this.text, this.isLocal())
+    return extractLocalMentions(this.text, this.isLocal())
   }
 
   toFormattedJSON (this: MCommentFormattable) {
