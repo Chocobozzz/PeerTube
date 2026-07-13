@@ -99,6 +99,7 @@ export class PeerTubePlayer {
 
   async load (loadOptions: PeerTubePlayerLoadOptions) {
     this.currentLoadOptions = loadOptions
+    this.videojsDecodeErrors = 0
 
     this.setPoster([])
 
