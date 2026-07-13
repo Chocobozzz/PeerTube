@@ -26,7 +26,7 @@ class UpNextPlugin extends Plugin {
     const component = new EndCard(player, settings)
 
     player.addChild(component)
-    this.on('dispose', () => player.removeChild(component))
+    this.on('dispose', () => component.dispose())
   }
 }
 
