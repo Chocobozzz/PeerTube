@@ -107,6 +107,15 @@ export class SQLCommand {
     await this.updateQuery(`UPDATE "user" SET email = :email WHERE "username" = :username`, { email, username })
   }
 
+  async getUserExternalId (username: string) {
+    const rows = await this.selectQuery<{ pluginAuthExternalId: string }>(
+      `SELECT "pluginAuthExternalId" FROM "user" WHERE "username" = :username`,
+      { username }
+    )
+
+    return rows[0]?.pluginAuthExternalId
+  }
+
   // ---------------------------------------------------------------------------
 
   async setImportUrl (videoImportId: number, importUrl: string) {

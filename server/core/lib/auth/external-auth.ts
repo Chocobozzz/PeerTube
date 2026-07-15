@@ -23,7 +23,7 @@ import { isDevInstance } from '@peertube/peertube-node-utils'
 
 export type ExternalUser =
   & Pick<MUser, 'username' | 'email' | 'role' | 'adminFlags' | 'videoQuotaDaily' | 'videoQuota'>
-  & { displayName: string }
+  & { displayName: string, externalId?: string }
 
 // Token is the key, expiration date is the value
 const authBypassTokens = new Map<string, {
@@ -227,6 +227,10 @@ function isAuthResultValid (npmName: string, authName: string, result: RegisterS
     return false
   }
 
+  if (result.externalId && (typeof result.externalId !== 'string' || result.externalId.length > 255)) {
+    return returnError('externalId')
+  }
+
   return true
 }
 
@@ -240,7 +244,9 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
     adminFlags: pluginResult.adminFlags ?? UserAdminFlag.NONE,
 
     videoQuota: pluginResult.videoQuota,
-    videoQuotaDaily: pluginResult.videoQuotaDaily
+    videoQuotaDaily: pluginResult.videoQuotaDaily,
+
+    externalId: pluginResult.externalId || undefined
   }
 }
 

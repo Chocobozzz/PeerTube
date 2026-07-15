@@ -21,6 +21,13 @@ export interface RegisterServerAuthenticatedResult {
   role?: UserRoleType
   displayName?: string
 
+  // Stable identifier of this user at the identity provider (OIDC `sub` claim, SAML `NameID`, LDAP `uid`/`entryUUID`...)
+  // When provided, PeerTube links/looks up the local account using this id instead of relying only on the email
+  // address, which is more robust across identity provider email changes and avoids account confusion from
+  // email collisions. Optional for backward compatibility.
+  // PeerTube >= 8.3
+  externalId?: string
+
   // PeerTube >= 5.1
   adminFlags?: UserAdminFlagType
 

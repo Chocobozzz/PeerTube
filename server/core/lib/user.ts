@@ -44,6 +44,7 @@ export function buildUser (options: {
   videoQuotaDaily?: number // Default to CONFIG.USER.VIDEO_QUOTA_DAILY
 
   pluginAuth?: string
+  pluginAuthExternalId?: string
 }): MUser {
   const {
     username,
@@ -54,7 +55,8 @@ export function buildUser (options: {
     videoQuota = CONFIG.USER.VIDEO_QUOTA,
     videoQuotaDaily = CONFIG.USER.VIDEO_QUOTA_DAILY,
     adminFlags = UserAdminFlag.NONE,
-    pluginAuth
+    pluginAuth,
+    pluginAuthExternalId
   } = options
 
   return new UserModel({
@@ -77,6 +79,7 @@ export function buildUser (options: {
     videoQuotaDaily,
 
     pluginAuth,
+    pluginAuthExternalId,
 
     newFeaturesInfoRead: Object.values(UserNewFeatureInfo).reduce((all, curr) => all | curr, 0)
   })

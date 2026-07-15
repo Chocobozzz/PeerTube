@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, UserAdminFlag, UserRole } from '@peertube/peertube-models'
+import { HttpStatusCode, UserAdminFlag, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -10,51 +10,8 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { fetchExternalToken, loginExternal } from '@tests/shared/plugins.js'
 import { expect } from 'chai'
-
-async function loginExternal (options: {
-  server: PeerTubeServer
-  npmName: string
-  authName: string
-  username: string
-  query?: any
-  expectedStatus?: HttpStatusCodeType
-  expectedStatusStep2?: HttpStatusCodeType
-}) {
-  const externalAuthToken = await fetchExternalToken(options)
-  if (!externalAuthToken) return
-
-  const resLogin = await options.server.login.loginUsingExternalToken({
-    username: options.username,
-    externalAuthToken,
-    expectedStatus: options.expectedStatusStep2
-  })
-
-  return resLogin.body
-}
-
-async function fetchExternalToken (options: {
-  server: PeerTubeServer
-  npmName: string
-  authName: string
-  query?: any
-  expectedStatus?: HttpStatusCodeType
-}) {
-  const res = await options.server.plugins.getExternalAuth({
-    npmName: options.npmName,
-    npmVersion: '0.0.1',
-    authName: options.authName,
-    query: options.query,
-    expectedStatus: options.expectedStatus || HttpStatusCode.FOUND_302
-  })
-
-  if (res.status !== HttpStatusCode.FOUND_302) return undefined
-
-  const location = res.header.location
-  const { externalAuthToken } = decodeQueryString(location)
-
-  return externalAuthToken as string
-}
 
 describe('Test external auth plugins', function () {
   let server: PeerTubeServer

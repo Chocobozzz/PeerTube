@@ -353,7 +353,13 @@ function register (...) {
           username: 'user'
           email: 'user@example.com'
           role: 2
-          displayName: 'User display name'
+          displayName: 'User display name',
+
+          // Stable identifier of this user in your own system (e.g. LDAP `uid`/`entryUUID`)
+          // When provided, PeerTube links the local account using this id instead of relying only on the
+          // email address, which is more robust if the email changes on your side later on
+          // PeerTube >= 8.3
+          externalId: 'user-1234'
         }
       }
 
@@ -400,6 +406,13 @@ function register (...) {
       email: 'user@example.com'
       role: 2
       displayName: 'User display name',
+
+      // Stable identifier of this user at the identity provider (OIDC `sub` claim, SAML `NameID`...)
+      // When provided, PeerTube links/looks up the local account using this id instead of relying only on the
+      // email address, which is more robust across identity provider email changes and avoids account
+      // confusion from email collisions
+      // PeerTube >= 8.3
+      externalId: 'a1b2c3d4-external-provider-subject-id',
 
       // Custom admin flags (bypass video auto moderation etc.)
       // https://github.com/Chocobozzz/PeerTube/blob/develop/packages/models/src/users/user-flag.model.ts
