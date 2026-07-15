@@ -302,7 +302,7 @@ async function createUserFromExternal (pluginAuth: string, userOptions: External
   const username = await findAvailableLocalActorName(userOptions.username)
 
   const userToCreate = buildUser({
-    ...pick(userOptions, [ 'email', 'role', 'adminFlags', 'videoQuota', 'videoQuotaDaily' ]),
+    ...pick(userOptions, [ 'email', 'role', 'adminFlags', 'videoQuota', 'videoQuotaDaily', 'language' ]),
 
     username,
     emailVerified: null,
@@ -334,7 +334,8 @@ async function updateUserFromExternal (options: {
         role: 'role',
         adminFlags: 'adminFlags',
         videoQuota: 'videoQuota',
-        videoQuotaDaily: 'videoQuotaDaily'
+        videoQuotaDaily: 'videoQuotaDaily',
+        language: 'language'
       }
 
       for (const modelKey of Object.keys(mappingKeys)) {

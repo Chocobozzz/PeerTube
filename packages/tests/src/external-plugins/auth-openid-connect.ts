@@ -19,6 +19,21 @@ describe('Official plugin auth-openid-connect', function () {
   let server: PeerTubeServer
   let openIdLoginUrl: string
 
+  async function getTokensFromKeycloak (options: {
+    peertubeUsername: string
+    keycloakUsername: string
+  }) {
+    const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
+    const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: options.keycloakUsername })
+    const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: options.peertubeUsername, success: true })
+
+    const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
+
+    const { body } = await server.login.loginUsingExternalToken({ username: options.peertubeUsername, externalAuthToken })
+
+    return { accessToken: body.access_token, refreshToken: body.refresh_token }
+  }
+
   before(async function () {
     this.timeout(60000)
 
@@ -112,9 +127,7 @@ describe('Official plugin auth-openid-connect', function () {
         'allowed-group': 'Group 1'
       })
 
-      const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
-      const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'user_group1' })
-      await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'user_group1_example.com', success: true })
+      await getTokensFromKeycloak({ peertubeUsername: 'user_group1_example.com', keycloakUsername: 'user_group1' })
     }
 
     {
@@ -134,28 +147,73 @@ describe('Official plugin auth-openid-connect', function () {
     await updatePluginSettings(server, { 'role-property': 'role' })
 
     {
-      const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
-      const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'moderator' })
-      const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'moderator_example.com', success: true })
-
-      const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
-
-      const { body } = await server.login.loginUsingExternalToken({ username: 'moderator_example.com', externalAuthToken })
-      const me = await server.users.getMyInfo({ token: body.access_token })
+      const { accessToken: token } = await getTokensFromKeycloak({
+        peertubeUsername: 'moderator_example.com',
+        keycloakUsername: 'moderator'
+      })
+      const me = await server.users.getMyInfo({ token })
       expect(me.role.id).to.equal(UserRole.MODERATOR)
     }
 
     {
-      const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
-      const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: 'user_group2' })
-      const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: 'user_group2_example.com', success: true })
+      const { accessToken: token } = await getTokensFromKeycloak({
+        peertubeUsername: 'user_group2_example.com',
+        keycloakUsername: 'user_group2'
+      })
+      const me = await server.users.getMyInfo({ token })
 
-      const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
-
-      const { body } = await server.login.loginUsingExternalToken({ username: 'user_group2_example.com', externalAuthToken })
-      const me = await server.users.getMyInfo({ token: body.access_token })
       expect(me.role.id).to.equal(UserRole.USER)
     }
+  })
+
+  it('Should not check OpenID provider for the external auth token after 10 seconds', async function () {
+    await updatePluginSettings(server, { 'revalidate-refresh-with-idp': false })
+
+    await server.kill()
+    await server.run({
+      oauth2: {
+        token_lifetime: {
+          access_token: '5 seconds',
+          refresh_token: '20 minutes'
+        }
+      }
+    })
+
+    const initialTokens = await getTokensFromKeycloak({
+      peertubeUsername: 'myuser_example.com',
+      keycloakUsername: 'myuser'
+    })
+    await server.users.getMyInfo({ token: initialTokens.accessToken })
+    const { body: refreshedTokens } = await server.login.refreshToken({ refreshToken: initialTokens.refreshToken })
+
+    await wait(10000)
+
+    await server.login.refreshToken({ refreshToken: refreshedTokens.refresh_token })
+  })
+
+  it('Should check OpenID provider for the external auth token after 10 seconds', async function () {
+    await updatePluginSettings(server, { 'revalidate-refresh-with-idp': true })
+
+    const initialTokens = await getTokensFromKeycloak({
+      peertubeUsername: 'myuser_example.com',
+      keycloakUsername: 'myuser'
+    })
+    await server.users.getMyInfo({ token: initialTokens.accessToken })
+    const { body: refreshedTokens } = await server.login.refreshToken({ refreshToken: initialTokens.refreshToken })
+
+    await wait(10000)
+
+    await server.login.refreshToken({ refreshToken: refreshedTokens.refresh_token, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+  })
+
+  it('Should not login if username sanitization is not enabled', async function () {
+    await updatePluginSettings(server, { 'sanitize-username': false })
+
+    const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
+    const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes) })
+    const redirectUrl = await sendBackKeycloakCode({ peertubeRes, kcRes, success: false })
+
+    expect(redirectUrl).to.equal('/login?externalAuthError=true')
   })
 
   after(async function () {
@@ -314,7 +372,10 @@ async function updatePluginSettings (server: PeerTubeServer, override?: Record<s
     'role-property': '',
     'group-property': '',
     'allowed-group': '',
-    'signature-algorithm': 'RS256'
+    'signature-algorithm': 'RS256',
+    'external-id-property': 'sub',
+    'sanitize-username': true,
+    'revalidate-refresh-with-idp': false
   }
 
   await server.plugins.updateSettings({

@@ -147,7 +147,40 @@ describe('Test external auth plugins', function () {
       expect(body.adminFlags).to.equal(UserAdminFlag.NONE)
       expect(body.videoQuota).to.equal(5242880)
       expect(body.videoQuotaDaily).to.equal(-1)
+      expect(body.language).to.be.null
     }
+  })
+
+  it('Should auto login a user with a language provided by the plugin and create it with that language', async function () {
+    const res = await loginExternal({
+      server,
+      npmName: 'test-external-auth-one',
+      authName: 'external-auth-1',
+      query: {
+        username: 'sabin',
+        language: 'fr'
+      },
+      username: 'sabin'
+    })
+
+    const body = await server.users.getMyInfo({ token: res.access_token })
+    expect(body.username).to.equal('sabin')
+    expect(body.language).to.equal('fr')
+  })
+
+  it('Should reject an invalid language returned by an external auth plugin', async function () {
+    const res = await server.plugins.getExternalAuth({
+      npmName: 'test-external-auth-one',
+      npmVersion: '0.0.1',
+      authName: 'external-auth-1',
+      query: {
+        username: 'shadow',
+        language: 'not-a-valid-locale'
+      },
+      expectedStatus: HttpStatusCode.FOUND_302
+    })
+
+    expect(res.header.location).to.equal('/login?externalAuthError=true')
   })
 
   it('Should auto login Kefka, create the user and use the token', async function () {
@@ -172,6 +205,7 @@ describe('Test external auth plugins', function () {
       expect(body.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
       expect(body.videoQuota).to.equal(42000)
       expect(body.videoQuotaDaily).to.equal(42100)
+      expect(body.language).to.equal('fr')
 
       kefkaId = body.id
     }
@@ -239,13 +273,14 @@ describe('Test external auth plugins', function () {
   it('Should login Kefka and update the profile', async function () {
     {
       await server.users.update({ userId: kefkaId, videoQuota: 43000, videoQuotaDaily: 43100 })
-      await server.users.updateMe({ token: kefkaAccessToken, displayName: 'kefka updated' })
+      await server.users.updateMe({ token: kefkaAccessToken, displayName: 'kefka updated', language: 'en' })
 
       const body = await server.users.getMyInfo({ token: kefkaAccessToken })
       expect(body.username).to.equal('kefka')
       expect(body.account.displayName).to.equal('kefka updated')
       expect(body.videoQuota).to.equal(43000)
       expect(body.videoQuotaDaily).to.equal(43100)
+      expect(body.language).to.equal('en')
     }
 
     {
@@ -264,6 +299,8 @@ describe('Test external auth plugins', function () {
       expect(body.account.displayName).to.equal('Kefka Palazzo')
       expect(body.videoQuota).to.equal(42000)
       expect(body.videoQuotaDaily).to.equal(43100)
+      // userUpdater always uses the plugin's new value for language, like it does for displayName/role/videoQuota
+      expect(body.language).to.equal('fr')
     }
   })
 

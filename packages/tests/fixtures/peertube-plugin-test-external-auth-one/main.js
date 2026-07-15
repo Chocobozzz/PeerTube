@@ -16,7 +16,8 @@ async function register ({
           req,
           res,
           username,
-          email: username + '@example.com'
+          email: username + '@example.com',
+          language: req.query.language || undefined
         })
       }
     })
@@ -37,6 +38,7 @@ async function register ({
           adminFlags: 1,
           videoQuota: 42000,
           videoQuotaDaily: 42100,
+          language: 'fr',
 
           // Always use new value except for videoQuotaDaily field
           userUpdater: ({ fieldName, currentValue, newValue }) => {

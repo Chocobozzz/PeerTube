@@ -359,7 +359,11 @@ function register (...) {
           // When provided, PeerTube links the local account using this id instead of relying only on the
           // email address, which is more robust if the email changes on your side later on
           // PeerTube >= 8.3
-          externalId: 'user-1234'
+          externalId: 'user-1234',
+
+          // Interface/email language of the user, must be one of PeerTube's available locales
+          // PeerTube >= 8.3
+          language: 'fr'
         }
       }
 
@@ -423,6 +427,10 @@ function register (...) {
       videoQuota: 1024 * 1024 * 1024, // 1GB
       // PeerTube >= 5.1
       videoQuotaDaily: -1, // Unlimited
+
+      // Interface/email language of the user, must be one of PeerTube's available locales
+      // PeerTube >= 8.3
+      language: 'fr',
 
       // Update the user profile if it already exists
       // Default behaviour is no update
