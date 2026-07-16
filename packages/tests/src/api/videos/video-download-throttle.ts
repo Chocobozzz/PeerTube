@@ -150,4 +150,101 @@ describe('Test video download throttling', function () {
       await cleanupTests([ server ])
     })
   })
+
+  describe('With byte range requests', function () {
+    let server: PeerTubeServer
+    let fileUrl: string
+    let fullBody: Buffer
+
+    before(async function () {
+      this.timeout(120000)
+
+      const { server: s, videoId } = await prepareServer(1, {
+        // High enough to not slow down the test
+        max_total_bytes_per_second: 10 * 1024 * 1024,
+        max_bytes_per_ip_per_second: null
+      })
+      server = s
+
+      const video = await server.videos.get({ id: videoId })
+      fileUrl = video.files.find(f => f.hasVideo === true).fileDownloadUrl
+
+      fullBody = await (await getClassicWebVideoDownload(server, videoId))()
+    })
+
+    it('Should download the full file when no Range header is sent', async function () {
+      const res = await makeRawRequest({
+        url: fileUrl,
+        responseType: 'arraybuffer',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.headers['accept-ranges']).to.equal('bytes')
+      expect(res.headers['content-length']).to.equal('' + fullBody.length)
+      expect(res.body as Buffer).to.deep.equal(fullBody)
+    })
+
+    it('Should support a Range header with a start and an end', async function () {
+      const res = await makeRawRequest({
+        url: fileUrl,
+        responseType: 'arraybuffer',
+        range: 'bytes=0-99',
+        expectedStatus: HttpStatusCode.PARTIAL_CONTENT_206
+      })
+
+      expect(res.headers['content-range']).to.equal(`bytes 0-99/${fullBody.length}`)
+      expect(res.headers['content-length']).to.equal('100')
+      expect(res.body as Buffer).to.deep.equal(fullBody.subarray(0, 100))
+    })
+
+    it('Should support a Range header with only a start', async function () {
+      const res = await makeRawRequest({
+        url: fileUrl,
+        responseType: 'arraybuffer',
+        range: 'bytes=100-',
+        expectedStatus: HttpStatusCode.PARTIAL_CONTENT_206
+      })
+
+      expect(res.headers['content-range']).to.equal(`bytes 100-${fullBody.length - 1}/${fullBody.length}`)
+      expect(res.body as Buffer).to.deep.equal(fullBody.subarray(100))
+    })
+
+    it('Should support a Range header with only a suffix length', async function () {
+      const res = await makeRawRequest({
+        url: fileUrl,
+        responseType: 'arraybuffer',
+        range: 'bytes=-100',
+        expectedStatus: HttpStatusCode.PARTIAL_CONTENT_206
+      })
+
+      const expectedStart = fullBody.length - 100
+      expect(res.headers['content-range']).to.equal(`bytes ${expectedStart}-${fullBody.length - 1}/${fullBody.length}`)
+      expect(res.body as Buffer).to.deep.equal(fullBody.subarray(expectedStart))
+    })
+
+    it('Should ignore a malformed Range header and return the full file', async function () {
+      const res = await makeRawRequest({
+        url: fileUrl,
+        responseType: 'arraybuffer',
+        range: 'bytes=abc-def',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.body as Buffer).to.deep.equal(fullBody)
+    })
+
+    it('Should return 416 for an out of range Range header', async function () {
+      const res = await makeRawRequest({
+        url: fileUrl,
+        range: `bytes=${fullBody.length + 1000}-`,
+        expectedStatus: HttpStatusCode.RANGE_NOT_SATISFIABLE_416
+      })
+
+      expect(res.headers['content-range']).to.equal(`bytes */${fullBody.length}`)
+    })
+
+    after(async function () {
+      await cleanupTests([ server ])
+    })
+  })
 })

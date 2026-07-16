@@ -143,6 +143,7 @@ Object.values(VIDEO_CATEGORIES)
     'Unavailable video',
     'Audio only',
     'Unknown',
+    'Embedding is disabled for this video.',
     'This video is not allowed to be embedded on this domain.'
   ])
   .forEach(v => {

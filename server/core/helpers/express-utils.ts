@@ -1,3 +1,4 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { NSFWFlag, VideosCommonQuery } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import express, { RequestHandler } from 'express'
@@ -5,10 +6,10 @@ import multer, { diskStorage } from 'multer'
 import { CONFIG } from '../initializers/config.js'
 import { REMOTE_SCHEME } from '../initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
+import { deleteFileAndCatch } from './fs.js'
 import { logger } from './logger.js'
 import { generateRandomString } from './utils.js'
 import { getExtFromMimetype } from './video.js'
-import { deleteFileAndCatch } from './fs.js'
 
 // ---------------------------------------------------------------------------
 // Extract NSFW Filters options to list videos
@@ -171,6 +172,41 @@ export function getAuthUser (res: express.Response) {
   return res.locals.oauth
     ? res.locals.oauth.token.User
     : undefined
+}
+
+// Only supports a single "bytes=start-end" range
+export function parseRangeHeader (rangeHeader: string | undefined, size: number):
+  | { start: number, end: number }
+  | 'unsatisfiable'
+  | undefined
+{
+  if (!rangeHeader) return undefined
+
+  const match = /^bytes=(\d*)-(\d*)$/.exec(rangeHeader)
+  if (!match || (!match[1] && !match[2])) return undefined
+
+  const [ , rawStart, rawEnd ] = match
+
+  let start: number
+  let end: number
+
+  if (rawStart === '') {
+    start = Math.max(size - forceNumber(rawEnd), 0)
+
+    end = size - 1
+  } else {
+    start = forceNumber(rawStart)
+
+    end = rawEnd === ''
+      ? size - 1 :
+      Math.min(forceNumber(rawEnd), size - 1)
+  }
+
+  if (Number.isNaN(start) || Number.isNaN(end) || start > end || start >= size) {
+    return 'unsatisfiable'
+  }
+
+  return { start, end }
 }
 
 // ---------------------------------------------------------------------------

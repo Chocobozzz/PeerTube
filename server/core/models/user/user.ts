@@ -249,6 +249,15 @@ type WhereUserIdScopeOptions = { whereUserId?: '$userId' | '"UserModel"."id"' }
     {
       fields: [ 'email' ],
       unique: true
+    },
+    {
+      fields: [ 'pluginAuth', 'pluginAuthExternalId' ],
+      unique: true,
+      where: {
+        pluginAuthExternalId: {
+          [Op.ne]: null
+        }
+      }
     }
   ]
 })
@@ -422,6 +431,13 @@ export class UserModel extends SequelizeModel<UserModel> {
   @Default(null)
   @Column
   declare pluginAuth: string
+
+  // Stable identifier of this user at the plugin's identity provider (OIDC `sub` claim, SAML `NameID`...)
+  // Scoped by `pluginAuth`. Nullable so it can stay unset for local accounts and for plugins that don't send it
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.STRING(255))
+  declare pluginAuthExternalId: string
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
@@ -725,6 +741,17 @@ export class UserModel extends SequelizeModel<UserModel> {
     }
 
     return UserModel.findAll(query)
+  }
+
+  static loadByPluginAuthExternalId (pluginAuth: string, pluginAuthExternalId: string): Promise<MUserDefault> {
+    const query = {
+      where: {
+        pluginAuth,
+        pluginAuthExternalId
+      }
+    }
+
+    return UserModel.findOne(query)
   }
 
   static loadByPendingEmailCaseInsensitive (pendingEmail: string): Promise<MUserDefault[]> {

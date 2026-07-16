@@ -1,4 +1,4 @@
-import { VideoChannelSync, StreamSyncState, type StreamSyncStateType } from '@peertube/peertube-models'
+import { StreamSyncState, VideoChannelSync, type StreamSyncStateType, type VideoPrivacyType } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isVideoChannelSyncStateValid } from '@server/helpers/custom-validators/video-channel-syncs.js'
 import { CONSTRAINTS_FIELDS, STREAM_SYNC_STATE } from '@server/initializers/constants.js'
@@ -45,6 +45,10 @@ export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel>
   @Is('VideoChannelExternalChannelUrl', value => throwIfNotValid(value, isUrlValid, 'externalChannelUrl', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNEL_SYNCS.EXTERNAL_CHANNEL_URL.max))
   declare externalChannelUrl: string
+
+  @AllowNull(true)
+  @Column(DataType.INTEGER)
+  declare videoPrivacy: VideoPrivacyType
 
   @AllowNull(false)
   @Default(StreamSyncState.WAITING_FIRST_RUN)
@@ -152,7 +156,8 @@ export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel>
       externalChannelUrl: this.externalChannelUrl,
       createdAt: this.createdAt.toISOString(),
       channel: this.VideoChannel.toFormattedSummaryJSON(),
-      lastSyncAt: this.lastSyncAt?.toISOString()
+      lastSyncAt: this.lastSyncAt?.toISOString(),
+      videoPrivacy: this.videoPrivacy
     }
   }
 }

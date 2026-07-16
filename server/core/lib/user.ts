@@ -43,7 +43,10 @@ export function buildUser (options: {
   videoQuota?: number // Default to CONFIG.USER.VIDEO_QUOTA
   videoQuotaDaily?: number // Default to CONFIG.USER.VIDEO_QUOTA_DAILY
 
+  language?: string // Default to null (instance default language is used)
+
   pluginAuth?: string
+  pluginAuthExternalId?: string
 }): MUser {
   const {
     username,
@@ -54,7 +57,9 @@ export function buildUser (options: {
     videoQuota = CONFIG.USER.VIDEO_QUOTA,
     videoQuotaDaily = CONFIG.USER.VIDEO_QUOTA_DAILY,
     adminFlags = UserAdminFlag.NONE,
-    pluginAuth
+    language = null,
+    pluginAuth,
+    pluginAuthExternalId
   } = options
 
   return new UserModel({
@@ -67,7 +72,7 @@ export function buildUser (options: {
     videosHistoryEnabled: CONFIG.USER.HISTORY.VIDEOS.ENABLED,
 
     autoPlayVideo: CONFIG.DEFAULTS.PLAYER.AUTO_PLAY,
-    language: null,
+    language,
 
     role,
     emailVerified,
@@ -77,6 +82,7 @@ export function buildUser (options: {
     videoQuotaDaily,
 
     pluginAuth,
+    pluginAuthExternalId,
 
     newFeaturesInfoRead: Object.values(UserNewFeatureInfo).reduce((all, curr) => all | curr, 0)
   })

@@ -618,6 +618,9 @@ const CONFIG = {
     get DISABLE_ROOT_AUTH () {
       return config.get<boolean>('user.disable_root_auth')
     },
+    get ALLOW_CROSS_PROVIDER_AUTH () {
+      return config.get<boolean>('user.allow_cross_provider_auth')
+    },
     get VIDEO_QUOTA () {
       return parseBytes(config.get<number>('user.video_quota'))
     },

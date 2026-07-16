@@ -7,7 +7,17 @@ We strongly recommend all administrators upgrade immediately.
 ### SECURITY
 
 This release addresses vulnerabilities ranging from medium to high severity affecting PeerTube **<= 8.2.1**. Security hardening is also included.
-In a few weeks, this changelog will be updated to disclose the vulnerabilities.
+
+ * **critical** Ensure actor that signs the activity and the video are on the same host when receiving an `Update` activity [GHSA-g9p4-f7h8-hc86](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-g9p4-f7h8-hc86)
+ * **high** Check HLS filename when proxifying HLS files from object storage [GHSA-93rr-g3x2-ffv4](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-93rr-g3x2-ffv4)
+ * **medium** Ensure element belongs to the playlist on update/remove
+ * **medium** Do not leak video UUID on invalid video view
+ * **medium** Ensure user has rights to see private live specific metadata
+ * **hardening** Ensure ZIP entry filename is valid when extracting a ZIP export
+ * **hardening** Escape admin configuration when injecting it in HTML
+ * **hardening** Ensure version from plugin index is valid before injecting it in the CLI
+ * **hardening** Check caption VTT validity when adding a caption to a video
+ * **hardening** Invalidate all user tokens on password reset or password change
 
 ### Bug fixes
 
@@ -221,7 +231,7 @@ If you cannot upgrade to v8.1.8:
 
 ### IMPORTANT NOTES
 
- * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2 [GHSA-pqr4-34h8-g39x](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-pqr4-34h8-g39x)
 
 ### SECURITY
 

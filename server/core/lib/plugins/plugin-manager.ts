@@ -229,7 +229,7 @@ export class PluginManager implements ServerHook {
 
     if (auth.hookTokenValidity) {
       try {
-        const { valid } = await auth.hookTokenValidity({ token, type })
+        const { valid } = await auth.hookTokenValidity({ token, user: token.User, type })
 
         if (valid === false) {
           logger.info('Rejecting %s token validity from auth %s of plugin %s', type, token.authName, token.User.pluginAuth)

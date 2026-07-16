@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit, output, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -226,7 +226,7 @@ export class BulkUpdateVideosInPlaylistModalComponent implements OnInit, OnDestr
           return {
             type: 'success' as const,
             message: formatICU(
-              $localize`{count, plural, =1 {Video added} other {{count} videos added}} to {playlistName}`,
+              $localize`{count, plural, =1 {Video added to {playlistName}} other {{count} videos added to {playlistName}}}`,
               { count: results.length, playlistName: playlist.displayName }
             )
           }
@@ -247,7 +247,7 @@ export class BulkUpdateVideosInPlaylistModalComponent implements OnInit, OnDestr
         return {
           type: 'success' as const,
           message: formatICU(
-            $localize`{count, plural, =1 {Video removed} other {{count} videos removed}} from {playlistName}`,
+            $localize`{count, plural, =1 {Video removed from {playlistName}} other {{count} videos removed from {playlistName}}}`,
             { count: results.length, playlistName: playlist.displayName }
           )
         }

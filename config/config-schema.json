@@ -1667,6 +1667,11 @@
           "type": "boolean",
           "default": false
         },
+        "allow_cross_provider_auth": {
+          "description": "Enable cross authentication when using multiple auth plugins Never enable this unless you know what you're doing. If not used correctly, it can lead to account takeover",
+          "type": "boolean",
+          "default": false
+        },
         "video_quota": {
           "description": "Default value of maximum video bytes the user can upload Does not take into account transcoded files or account export archives (that can include user uploaded files) Byte format is supported (\"1GB\" etc) -1 == unlimited",
           "type": "integer",

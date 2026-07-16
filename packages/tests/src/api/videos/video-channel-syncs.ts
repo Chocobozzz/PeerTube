@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { getAllPrivacies } from '@peertube/peertube-core-utils'
 import { StreamSyncState, VideoImportState, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
 import { areHttpImportTestsDisabled, areYoutubeImportTestsDisabled } from '@peertube/peertube-node-utils'
 import {
@@ -50,7 +51,8 @@ describe('Test channel synchronizations', function () {
       async function listAllVideosOfChannel (channelName: string) {
         return servers[0].videos.listByChannel({
           handle: channelName,
-          include: VideoInclude.NOT_PUBLISHED_STATE
+          include: VideoInclude.NOT_PUBLISHED_STATE,
+          privacyOneOf: getAllPrivacies()
         })
       }
 
@@ -373,6 +375,36 @@ describe('Test channel synchronizations', function () {
           const { total, data } = await listAllVideosOfChannel('channel2')
           expect(total).to.equal(1)
           expect(data[0].name).to.equal('test')
+        }
+      })
+
+      it('Should import videos with the sync default privacy', async function () {
+        this.timeout(120_000)
+
+        const { id: channelId } = await servers[0].channels.create({
+          attributes: {
+            name: 'channel3',
+            support: 'my support test'
+          }
+        })
+
+        const { videoChannelSync } = await servers[0].channelSyncs.create({
+          attributes: {
+            externalChannelUrl: FIXTURE_URLS.youtubePlaylist,
+            videoChannelId: channelId,
+            videoPrivacy: VideoPrivacy.UNLISTED
+          }
+        })
+
+        await forceSyncAll(videoChannelSync.id)
+
+        {
+          const { total, data } = await listAllVideosOfChannel('channel3')
+          expect(total).to.be.at.least(1)
+
+          for (const video of data) {
+            expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
+          }
         }
       })
 

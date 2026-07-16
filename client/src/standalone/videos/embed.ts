@@ -303,7 +303,11 @@ export class PeerTubeEmbed {
     ])
 
     if (allowed !== true) {
-      throw new Error('This video is not allowed to be embedded on this domain.')
+      throw new Error(
+        video.embedPrivacyPolicy.id === VideoEmbedPrivacyPolicy.DISABLED
+          ? 'Embedding is disabled for this video.'
+          : 'This video is not allowed to be embedded on this domain.'
+      )
     }
 
     const playlist = this.playlistTracker

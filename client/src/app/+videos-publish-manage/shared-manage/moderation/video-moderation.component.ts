@@ -6,7 +6,7 @@ import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
 import { VIDEO_NSFW_SUMMARY_VALIDATOR } from '@app/shared/form-validators/video-validators'
 import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
-import { HTMLServerConfig, VideoCommentPolicyType, ConstantLabel } from '@peertube/peertube-models'
+import { HTMLServerConfig, VideoCommentPolicyType, VideoEmbedPrivacyPolicy, VideoEmbedPrivacyPolicyType, ConstantLabel } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
@@ -27,7 +27,7 @@ type Form = {
 
   commentPolicies: FormControl<VideoCommentPolicyType>
 
-  videoPrivacyEmbedEnableAllowlist: FormControl<boolean>
+  videoPrivacyEmbedPolicy: FormControl<VideoEmbedPrivacyPolicyType>
   videoPrivacyEmbedAllowlistDomains: FormControl<string>
 }
 
@@ -50,6 +50,8 @@ type Form = {
   ]
 })
 export class VideoModerationComponent implements OnInit, OnDestroy {
+  protected readonly VideoEmbedPrivacyPolicy = VideoEmbedPrivacyPolicy
+
   private formReactiveService = inject(FormReactiveService)
   private serverService = inject(ServerService)
   private manageController = inject(VideoManageController)
@@ -59,6 +61,7 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
   validationMessages: FormReactiveMessages = {}
 
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[] = []
+  embedPrivacyPolicies: ConstantLabel<VideoEmbedPrivacyPolicyType>[] = []
   serverConfig: HTMLServerConfig
 
   private updatedSub: Subscription
@@ -70,6 +73,9 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
 
     this.serverService.getCommentPolicies()
       .subscribe(res => this.commentPolicies = res)
+
+    this.serverService.getEmbedPrivacyPolicies()
+      .subscribe(res => this.embedPrivacyPolicies = res)
   }
 
   ngOnDestroy () {
@@ -86,7 +92,7 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
       nsfwFlagViolent: null,
       nsfwFlagSex: null,
       nsfwSummary: VIDEO_NSFW_SUMMARY_VALIDATOR,
-      videoPrivacyEmbedEnableAllowlist: null,
+      videoPrivacyEmbedPolicy: null,
       videoPrivacyEmbedAllowlistDomains: UNIQUE_HOSTS_VALIDATOR
     }
 
@@ -117,7 +123,7 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
     })
 
     this.updateNSFWControls(videoEdit.toCommonFormPatch().nsfw)
-    this.updateAllowedDomainsControls(videoEdit.toEmbedPrivacyFormPatch().videoPrivacyEmbedEnableAllowlist)
+    this.updateAllowedDomainsControls(videoEdit.toEmbedPrivacyFormPatch().videoPrivacyEmbedPolicy)
 
     this.trackControlsChange()
   }
@@ -127,9 +133,9 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
       .valueChanges
       .subscribe(newNSFW => this.updateNSFWControls(newNSFW))
 
-    this.form.controls.videoPrivacyEmbedEnableAllowlist
+    this.form.controls.videoPrivacyEmbedPolicy
       .valueChanges
-      .subscribe(newEnableAllowlist => this.updateAllowedDomainsControls(newEnableAllowlist))
+      .subscribe(newPolicy => this.updateAllowedDomainsControls(newPolicy))
   }
 
   private updateNSFWControls (nsfw: boolean) {
@@ -152,12 +158,12 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateAllowedDomainsControls (enableAllowlist: boolean) {
+  private updateAllowedDomainsControls (policy: VideoEmbedPrivacyPolicyType) {
     const controls = [
       this.form.controls.videoPrivacyEmbedAllowlistDomains
     ]
 
-    if (!enableAllowlist) {
+    if (policy !== VideoEmbedPrivacyPolicy.ALLOWLIST) {
       for (const control of controls) {
         control.disable()
       }

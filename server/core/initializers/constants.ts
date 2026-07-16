@@ -62,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1070
+export const LAST_MIGRATION_VERSION = 1080
 
 // ---------------------------------------------------------------------------
 
@@ -766,7 +766,8 @@ export const VIDEO_CHANNEL_ACTIVITY_TARGETS: { [id in VideoChannelActivityTarget
 export const VIDEO_EMBED_PRIVACY_POLICIES: { [id in VideoEmbedPrivacyPolicyType]: string } = {
   [VideoEmbedPrivacyPolicy.ALL_ALLOWED]: 'All allowed',
   [VideoEmbedPrivacyPolicy.ALLOWLIST]: 'Allowlist',
-  [VideoEmbedPrivacyPolicy.REMOTE_RESTRICTIONS]: 'Remote restrictions'
+  [VideoEmbedPrivacyPolicy.REMOTE_RESTRICTIONS]: 'Remote restrictions',
+  [VideoEmbedPrivacyPolicy.DISABLED]: 'Disabled'
 }
 
 export const CHANGE_OWNERSHIP_STATES: { [id in ChangeOwnershipStateType]: string } = {
