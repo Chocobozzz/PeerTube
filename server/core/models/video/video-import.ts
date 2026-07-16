@@ -237,6 +237,20 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
     })
   }
 
+  static updateStateByIds (ids: number[], state: VideoImportStateType, error?: string) {
+    if (ids.length === 0) return
+    return VideoImportModel.update(
+      { state, error },
+      {
+        where: {
+          id: {
+            [Op.in]: ids
+          }
+        }
+      }
+    )
+  }
+
   // ---------------------------------------------------------------------------
 
   getTargetIdentifier () {

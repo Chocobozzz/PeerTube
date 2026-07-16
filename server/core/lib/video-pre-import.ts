@@ -239,50 +239,66 @@ export async function buildYoutubeDLImport (options: {
     videoPasswords: importDataOverride.videoPasswords
   })
 
-  await sequelizeTypescript.transaction(async transaction => {
-    // Priority to explicitly set description
-    if (importDataOverride.description) {
-      const inserted = await replaceChaptersFromDescriptionIfNeeded({ newDescription: importDataOverride.description, video, transaction })
-      if (inserted) return
+  try {
+    await sequelizeTypescript.transaction(async transaction => {
+      // Priority to explicitly set description
+      if (importDataOverride.description) {
+        const inserted = await replaceChaptersFromDescriptionIfNeeded({
+          newDescription: importDataOverride.description,
+          video,
+          transaction
+        })
+        if (inserted) return
+      }
+
+      // Then priority to youtube-dl chapters
+      if (youtubeDLInfo.chapters.length !== 0) {
+        logger.info(
+          `Inserting chapters in video ${video.uuid} from youtube-dl`,
+          { chapters: youtubeDLInfo.chapters, tags: [ 'chapters', video.uuid ] }
+        )
+
+        await replaceChapters({ video, chapters: youtubeDLInfo.chapters, transaction })
+        return
+      }
+
+      if (video.description) {
+        await replaceChaptersFromDescriptionIfNeeded({ newDescription: video.description, video, transaction })
+      }
+    })
+
+    // Get video subtitles
+    await processYoutubeSubtitles({ youtubeDL, targetUrl, video, userLanguage })
+
+    let fileExt = `.${youtubeDLInfo.ext}`
+    if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
+
+    const payload: VideoImportPayload = {
+      type: 'youtube-dl' as 'youtube-dl',
+      videoImportId: videoImport.id,
+      fileExt,
+      generateTranscription: importDataOverride.generateTranscription ?? true,
+      // If part of a sync process, there is a parent job that will aggregate children results
+      preventException: !!channelSync
     }
 
-    // Then priority to youtube-dl chapters
-    if (youtubeDLInfo.chapters.length !== 0) {
-      logger.info(
-        `Inserting chapters in video ${video.uuid} from youtube-dl`,
-        { chapters: youtubeDLInfo.chapters, tags: [ 'chapters', video.uuid ] }
-      )
+    videoImport.payload = payload
+    await videoImport.save()
 
-      await replaceChapters({ video, chapters: youtubeDLInfo.chapters, transaction })
-      return
+    return {
+      videoImport,
+      job: { type: 'video-import' as 'video-import', payload }
+    }
+  } catch (err) {
+    // Auto destroy video import  to not keep a "PENDING" import that never gets a job
+    try {
+      await videoImport.Video.destroy()
+      await videoImport.destroy()
+    } catch (cleanupErr) {
+      logger.error(`Cannot cleanup video import for ${targetUrl} after a build error.`, { err: cleanupErr })
     }
 
-    if (video.description) {
-      await replaceChaptersFromDescriptionIfNeeded({ newDescription: video.description, video, transaction })
-    }
-  })
-
-  // Get video subtitles
-  await processYoutubeSubtitles({ youtubeDL, targetUrl, video, userLanguage })
-
-  let fileExt = `.${youtubeDLInfo.ext}`
-  if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
-
-  const payload: VideoImportPayload = {
-    type: 'youtube-dl' as 'youtube-dl',
-    videoImportId: videoImport.id,
-    fileExt,
-    generateTranscription: importDataOverride.generateTranscription ?? true,
-    // If part of a sync process, there is a parent job that will aggregate children results
-    preventException: !!channelSync
-  }
-
-  videoImport.payload = payload
-  await videoImport.save()
-
-  return {
-    videoImport,
-    job: { type: 'video-import' as 'video-import', payload }
+    throw err
   }
 }
 

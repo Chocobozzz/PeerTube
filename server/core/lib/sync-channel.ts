@@ -1,4 +1,4 @@
-import { VideoChannelSyncState } from '@peertube/peertube-models'
+import { VideoChannelSyncState, VideoImportState } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -50,6 +50,9 @@ export async function synchronizeChannel (options: {
     )
 
     const children: CreateJobTypeAndPayload[] = []
+    // Ids of video imports already persisted in DB
+    // If job creation fails, these must be reverted to FAILED so they are picked up by the retry mechanism instead of staying stuck
+    const touchedVideoImportIds: number[] = []
 
     let buildJobErrors = 0
 
@@ -59,7 +62,7 @@ export async function synchronizeChannel (options: {
       try {
         if (await skipImport({ channel, channelSync, targetUrl, lTags })) continue
 
-        const { job } = await buildYoutubeDLImport({
+        const { job, videoImport } = await buildYoutubeDLImport({
           user,
           channel,
           targetUrl,
@@ -72,6 +75,7 @@ export async function synchronizeChannel (options: {
         })
 
         children.push(job)
+        touchedVideoImportIds.push(videoImport.id)
       } catch (err) {
         if (err instanceof YoutubeDlImportError) {
           if (
@@ -106,6 +110,7 @@ export async function synchronizeChannel (options: {
         )
 
         children.push(await buildRetryImportJob(videoImport))
+        touchedVideoImportIds.push(videoImport.id)
       }
     }
 
@@ -118,7 +123,20 @@ export async function synchronizeChannel (options: {
       }
     }
 
-    await JobQueue.Instance.createJobWithChildren(parent, children)
+    try {
+      await JobQueue.Instance.createJobWithChildren(parent, children)
+    } catch (err) {
+      try {
+        await VideoImportModel.updateStateByIds(touchedVideoImportIds, VideoImportState.FAILED, 'Failed to create the video import job')
+      } catch (updateErr) {
+        logger.error(`Failed to update state of video imports to FAILED after failing to create the video import job`, {
+          updateErr,
+          ...rootLTags()
+        })
+      }
+
+      throw err
+    }
   } catch (err) {
     logger.error(`Failed to import ${externalChannelUrl} in channel ${channelUsername}`, { err, ...rootLTags() })
 
