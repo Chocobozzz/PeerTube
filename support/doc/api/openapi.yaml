@@ -14375,11 +14375,13 @@ components:
         - 1
         - 2
         - 3
+        - 4<
       description: >
         The video embed privacy level:
           - `1` All allowed: anyone can embed the video
           - `2` Allowlist: only the domains in the allowlist can embed the video
           - `3` Remote restrictions: the remote instance has restrictions on where the video can be embedded
+          - `4` Nobody can embed this video
 
     PlayerTheme:
       type: string

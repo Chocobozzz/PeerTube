@@ -14,6 +14,7 @@ import {
   VideoDetails,
   VideoEmbedPrivacy,
   VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType,
   VideoEmbedPrivacyUpdate,
   VideoImportCreate,
   VideoPrivacy,
@@ -81,7 +82,7 @@ type StudioForm = {
 type PlayerSettingsForm = PlayerVideoSettingsUpdate
 
 type EmbedPrivacyForm = {
-  videoPrivacyEmbedEnableAllowlist?: boolean
+  videoPrivacyEmbedPolicy?: VideoEmbedPrivacyPolicyType
   videoPrivacyEmbedAllowlistDomains?: string
 }
 
@@ -960,24 +961,24 @@ export class VideoEdit {
 
   loadFromEmbedPrivacyForm (value: EmbedPrivacyForm) {
     this.embedPrivacy = {
-      policy: value.videoPrivacyEmbedEnableAllowlist
-        ? VideoEmbedPrivacyPolicy.ALLOWLIST
-        : VideoEmbedPrivacyPolicy.ALL_ALLOWED,
+      policy: value.videoPrivacyEmbedPolicy ?? VideoEmbedPrivacyPolicy.ALL_ALLOWED,
 
-      domains: splitAndGetNotEmpty(value.videoPrivacyEmbedAllowlistDomains)
+      domains: value.videoPrivacyEmbedPolicy === VideoEmbedPrivacyPolicy.ALLOWLIST
+        ? splitAndGetNotEmpty(value.videoPrivacyEmbedAllowlistDomains)
+        : []
     }
   }
 
   toEmbedPrivacyFormPatch (): Required<EmbedPrivacyForm> {
     if (!this.embedPrivacy) {
       return {
-        videoPrivacyEmbedEnableAllowlist: false,
+        videoPrivacyEmbedPolicy: VideoEmbedPrivacyPolicy.ALL_ALLOWED,
         videoPrivacyEmbedAllowlistDomains: ''
       }
     }
 
     return {
-      videoPrivacyEmbedEnableAllowlist: this.embedPrivacy.policy === VideoEmbedPrivacyPolicy.ALLOWLIST,
+      videoPrivacyEmbedPolicy: this.embedPrivacy.policy,
       videoPrivacyEmbedAllowlistDomains: this.embedPrivacy.domains.join('\n')
     }
   }

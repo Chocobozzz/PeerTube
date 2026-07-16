@@ -75,6 +75,10 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     return this.embedPrivacyPolicy.id !== VideoEmbedPrivacyPolicy.ALL_ALLOWED
   }
 
+  hasEmbedDisabled () {
+    return this.embedPrivacyPolicy.id === VideoEmbedPrivacyPolicy.DISABLED
+  }
+
   // Try to find the best video file to download
   // It builds an array and prioritizes web videos that play on more third-party players.
   getFilesForDownload () {
