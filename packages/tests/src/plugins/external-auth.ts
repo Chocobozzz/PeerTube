@@ -169,18 +169,20 @@ describe('Test external auth plugins', function () {
   })
 
   it('Should reject an invalid language returned by an external auth plugin', async function () {
-    const res = await server.plugins.getExternalAuth({
+    const res = await loginExternal({
+      server,
       npmName: 'test-external-auth-one',
-      npmVersion: '0.0.1',
       authName: 'external-auth-1',
       query: {
         username: 'shadow',
         language: 'not-a-valid-locale'
       },
-      expectedStatus: HttpStatusCode.FOUND_302
+      username: 'shadow'
     })
 
-    expect(res.header.location).to.equal('/login?externalAuthError=true')
+    const body = await server.users.getMyInfo({ token: res.access_token })
+    expect(body.username).to.equal('shadow')
+    expect(body.language).to.be.null
   })
 
   it('Should auto login Kefka, create the user and use the token', async function () {
@@ -430,10 +432,6 @@ describe('Test external auth plugins', function () {
     expect(auth2).to.not.exist
   })
 
-  after(async function () {
-    await cleanupTests([ server ])
-  })
-
   it('Should forward the redirectUrl if the plugin returns one', async function () {
     const resLogin = await loginExternal({
       server,
@@ -480,5 +478,94 @@ describe('Test external auth plugins', function () {
     const externalAuthToken = searchParams.externalAuthToken as string
 
     await server.login.loginUsingExternalToken({ username: 'cid', externalAuthToken, expectedStatus: HttpStatusCode.OK_200 })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
+  })
+})
+
+describe('Test external auth plugins with some non-default config options', function () {
+  let server: PeerTubeServer
+
+  before(async function () {
+    this.timeout(30000)
+
+    server = await createSingleServer(1, {
+      user: {
+        allow_cross_provider_auth: true
+      }
+    })
+
+    await setAccessTokensToServers([ server ])
+
+    for (const suffix of [ 'two', 'three' ]) {
+      await server.plugins.install({ path: PluginsCommand.getPluginTestPath('-external-auth-' + suffix) })
+    }
+  })
+
+  it('Should allow cross-provider auth when the option is enabled', async function () {
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-three',
+        authName: 'external-auth-7',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
+    }
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-two',
+        authName: 'external-auth-3',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-two')
+    }
+
+    {
+      const res = await loginExternal({
+        server,
+        npmName: 'test-external-auth-three',
+        authName: 'external-auth-7',
+        username: 'cid'
+      })
+
+      const body = await server.users.getMyInfo({ token: res.access_token })
+      expect(body.pluginAuth).to.equal('peertube-plugin-test-external-auth-three')
+    }
+
+    await server.kill()
+    await server.run({
+      user: {
+        allow_cross_provider_auth: false
+      }
+    })
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-three',
+      authName: 'external-auth-7',
+      username: 'cid',
+      expectedStatusStep2: HttpStatusCode.OK_200
+    })
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-two',
+      authName: 'external-auth-3',
+      username: 'cid',
+      expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
+    })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

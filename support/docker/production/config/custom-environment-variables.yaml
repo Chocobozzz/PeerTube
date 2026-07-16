@@ -540,6 +540,9 @@ signup:
         __format: json
 
 user:
+  allow_cross_provider_auth:
+    __name: PEERTUBE_USER_ALLOW_CROSS_PROVIDER_AUTH
+    __format: json
   video_quota:
     __name: PEERTUBE_USER_VIDEO_QUOTA
     __format: json
