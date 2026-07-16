@@ -1,12 +1,19 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { ServerService } from '@app/core'
 import { BuildFormArgument } from '@app/shared/form-validators/form-validator.model'
+import { UNIQUE_HOSTS_VALIDATOR } from '@app/shared/form-validators/host-validators'
 import { VIDEO_NSFW_SUMMARY_VALIDATOR } from '@app/shared/form-validators/video-validators'
-import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
-import { HTMLServerConfig, VideoCommentPolicyType, VideoEmbedPrivacyPolicy, VideoEmbedPrivacyPolicyType, ConstantLabel } from '@peertube/peertube-models'
+import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
+import {
+  ConstantLabel,
+  HTMLServerConfig,
+  VideoCommentPolicyType,
+  VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType
+} from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
 import { PeertubeCheckboxComponent } from '../../../shared/shared-forms/peertube-checkbox.component'
@@ -14,7 +21,6 @@ import { SelectRadioComponent } from '../../../shared/shared-forms/select/select
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { PeerTubeTemplateDirective } from '../../../shared/shared-main/common/peertube-template.directive'
 import { VideoManageController } from '../video-manage-controller.service'
-import { UNIQUE_HOSTS_VALIDATOR } from '@app/shared/form-validators/host-validators'
 
 const debugLogger = debug('peertube:video-manage')
 
