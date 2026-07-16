@@ -76,11 +76,15 @@ async function isVideoEmbedOnDomainAllowed (req: express.Request, res: express.R
   const video = res.locals.videoWithBlacklist
   const isOnInstance = req.query.domain === WEBSERVER.HOST
 
-  const domainAllowed = video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.DISABLED
-    ? false
-    : video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED || isOnInstance
-      ? true
-      : await VideoEmbedPrivacyDomainModel.isDomainAllowed(video.id, req.query.domain)
+  let domainAllowed: boolean
+
+  if (video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.DISABLED) {
+    domainAllowed = false
+  } else if (video.embedPrivacyPolicy === VideoEmbedPrivacyPolicy.ALL_ALLOWED || isOnInstance) {
+    domainAllowed = true
+  } else {
+    domainAllowed = await VideoEmbedPrivacyDomainModel.isDomainAllowed(video.id, req.query.domain)
+  }
 
   const user = getAuthUser(res)
 
