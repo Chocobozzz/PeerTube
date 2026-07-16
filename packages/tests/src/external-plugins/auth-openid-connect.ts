@@ -40,7 +40,10 @@ describe('Official plugin auth-openid-connect', function () {
     server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.plugins.install({ npmName: 'peertube-plugin-auth-openid-connect' })
+    await server.plugins.install({
+      npmName: 'peertube-plugin-auth-openid-connect',
+      pluginVersion: '2.0.0'
+    })
   })
 
   it('Should load openid connect plugin', async function () {
