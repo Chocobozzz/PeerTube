@@ -1,6 +1,7 @@
 import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
+import { parseRangeHeader } from '@server/helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { generateRequestStream } from '@server/helpers/requests.js'
 import { ThrottleStream } from '@server/helpers/stream-throttle.js'
@@ -23,6 +24,7 @@ import { create as createContentDisposition } from 'content-disposition'
 import cors from 'cors'
 import express from 'express'
 import { createReadStream } from 'fs'
+import { stat } from 'fs/promises'
 import { join } from 'path'
 import { pipeline } from 'stream/promises'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
@@ -180,7 +182,7 @@ async function downloadWebVideoFile (req: express.Request, res: express.Response
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
-    return downloadLocalFileWithOptionalThrottle({ res, path, downloadFilename, ip: req.ip })
+    return downloadLocalFileWithOptionalThrottle({ req, res, path, downloadFilename })
   })
 }
 
@@ -223,7 +225,7 @@ async function downloadHLSVideoFile (req: express.Request, res: express.Response
   }
 
   await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
-    return downloadLocalFileWithOptionalThrottle({ res, path, downloadFilename, ip: req.ip })
+    return downloadLocalFileWithOptionalThrottle({ req, res, path, downloadFilename })
   })
 }
 
@@ -320,10 +322,10 @@ function downloadUserExport (req: express.Request, res: express.Response) {
   }
 
   return downloadLocalFileWithOptionalThrottle({
+    req,
     res,
     path: getFSUserExportFilePath(userExport),
-    downloadFilename,
-    ip: req.ip
+    downloadFilename
   })
 }
 
@@ -337,10 +339,10 @@ function downloadOriginalFile (req: express.Request, res: express.Response) {
   }
 
   return downloadLocalFileWithOptionalThrottle({
+    req,
     res,
     path: VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename),
-    downloadFilename,
-    ip: req.ip
+    downloadFilename
   })
 }
 
@@ -401,31 +403,68 @@ function checkAllowResult (res: express.Response, allowParameters: any, result?:
 }
 
 async function downloadLocalFileWithOptionalThrottle (options: {
+  req: express.Request
   res: express.Response
   path: string
   downloadFilename: string
-  ip?: string
 }) {
-  const { res, path, downloadFilename, ip } = options
+  const { req, res, path, downloadFilename } = options
 
   const totalBytesPerSecond = CONFIG.DOWNLOAD.MAX_TOTAL_BYTES_PER_SECOND
   const bytesPerIpPerSecond = CONFIG.DOWNLOAD.MAX_BYTES_PER_IP_PER_SECOND
 
   if (!totalBytesPerSecond && !bytesPerIpPerSecond) return res.download(path, downloadFilename)
 
+  let size: number
+
+  try {
+    const statResult = await stat(path)
+    size = statResult.size
+  } catch (err) {
+    if (err.code === 'ENOENT') return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+    throw err
+  }
+
+  const range = parseRangeHeader(req.headers.range, size)
+  if (range === 'unsatisfiable') {
+    res.setHeader('Content-Range', `bytes */${size}`)
+    return res.sendStatus(HttpStatusCode.RANGE_NOT_SATISFIABLE_416)
+  }
+
   res.setHeader('Content-Disposition', createContentDisposition(downloadFilename))
   res.setHeader('Content-Type', 'application/octet-stream')
+  res.setHeader('Accept-Ranges', 'bytes')
 
-  const readStream = createReadStream(path)
+  if (range) {
+    res.status(HttpStatusCode.PARTIAL_CONTENT_206)
+    res.setHeader('Content-Range', `bytes ${range.start}-${range.end}/${size}`)
+    res.setHeader('Content-Length', range.end - range.start + 1)
+  } else {
+    res.setHeader('Content-Length', size)
+  }
+
+  const readStream = createReadStream(
+    path,
+    range
+      ? { start: range.start, end: range.end }
+      : undefined
+  )
+
   readStream.on('error', err => {
     if (res.headersSent) return
 
     if ((err as any).code === 'ENOENT') return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-    return res.sendStatus(HttpStatusCode.INTERNAL_SERVER_ERROR_500)
+    logger.error(`Cannot read local file ${path} for download`, { err, ...lTags() })
+
+    return res.fail({
+      status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
+      message: err.message
+    })
   })
 
-  await pipeline(readStream, new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip }), res)
+  await pipeline(readStream, new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip: req.ip }), res)
 }
 
 async function redirectVideoDownloadToObjectStorage (options: {
