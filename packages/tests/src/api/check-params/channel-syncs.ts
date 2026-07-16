@@ -1,6 +1,4 @@
-import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
-import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
-import { HttpStatusCode, VideoChannelSyncCreate } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoChannelSyncCreate, VideoPrivacy } from '@peertube/peertube-models'
 import {
   ChannelSyncsCommand,
   createSingleServer,
@@ -10,6 +8,8 @@ import {
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
 
 describe('Test video channel sync API validator', () => {
   const path = '/api/v1/video-channel-syncs'
@@ -86,7 +86,8 @@ describe('Test video channel sync API validator', () => {
     before(function () {
       baseCorrectParams = {
         externalChannelUrl: FIXTURE_URLS.youtubeChannel,
-        videoChannelId: rootChannelId
+        videoChannelId: rootChannelId,
+        videoPrivacy: VideoPrivacy.PUBLIC
       }
     })
 
@@ -185,6 +186,30 @@ describe('Test video channel sync API validator', () => {
 
       const sync = await create(server.accessToken)
       userInfo.syncId = sync.id
+    })
+
+    it('Should fail with an invalid privacy value', async function () {
+      await command.create({
+        token: server.accessToken,
+        attributes: {
+          ...baseCorrectParams,
+
+          videoPrivacy: 999 as any
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail with password protected privacy', async function () {
+      await command.create({
+        token: server.accessToken,
+        attributes: {
+          ...baseCorrectParams,
+
+          videoPrivacy: VideoPrivacy.PASSWORD_PROTECTED
+        },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
 
     it('Should succeed with the correct parameters', async function () {

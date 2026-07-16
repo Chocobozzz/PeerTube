@@ -54,6 +54,11 @@
         </div>
       </div>
 
+      <div class="form-group">
+        <label i18n for="videoPrivacy">Privacy of imported videos</label>
+        <my-select-options inputId="videoPrivacy" [items]="videoPrivacies" formControlName="videoPrivacy"></my-select-options>
+      </div>
+
       <input type="submit" class="peertube-button primary-button" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
     </form>
   </div>

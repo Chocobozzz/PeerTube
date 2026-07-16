@@ -44,6 +44,7 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
   const syncCreated: MChannelSyncFormattable = new VideoChannelSyncModel({
     externalChannelUrl: req.body.externalChannelUrl,
     videoChannelId: req.body.videoChannelId,
+    videoPrivacy: req.body.videoPrivacy,
     state: StreamSyncState.WAITING_FIRST_RUN
   })
 

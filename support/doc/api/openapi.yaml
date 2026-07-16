@@ -13312,6 +13312,10 @@ components:
           nullable: true
         channel:
           $ref: '#/components/schemas/VideoChannel'
+        videoPrivacy:
+          type: integer
+          nullable: true
+          description: Default privacy of videos imported by this synchronization
     VideoChannelSyncList:
       type: object
       properties:
@@ -13331,6 +13335,11 @@ components:
           example: https://youtube.com/c/UC_myfancychannel
         videoChannelId:
           $ref: '#/components/schemas/id'
+        videoPrivacy:
+          type: integer
+          description: |
+            Privacy of imported videos (1 = PUBLIC, 2 = UNLISTED, 3 = PRIVATE, 4 = INTERNAL).
+            Password protected privacy is not supported
     MRSSPeerLink:
       type: object
       xml:
