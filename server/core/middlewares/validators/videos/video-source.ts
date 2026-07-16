@@ -24,8 +24,17 @@ export const videoSourceGetLatestValidator = [
     const video = res.locals.videoWithRights
 
     const user = res.locals.oauth.token.User
-    if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
-      return
+
+    // Allow access if the user can manage the video OR if the uploader enabled original file downloads
+    const canManage = await checkCanManageVideo({
+      user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res: null, checkIsLocal: true, checkIsOwner: false
+    })
+
+    if (!canManage && !video.downloadOriginalFileEnabled) {
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: req.t('You do not have the right to access this video source')
+      })
     }
 
     res.locals.videoSource = await VideoSourceModel.loadLatest(video.id)

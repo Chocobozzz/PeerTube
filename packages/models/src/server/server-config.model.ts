@@ -92,6 +92,7 @@ export interface ServerConfig {
   defaults: {
     publish: {
       downloadEnabled: boolean
+      downloadOriginalFileEnabled: boolean
 
       commentsPolicy: VideoCommentPolicyType
 
@@ -234,6 +235,10 @@ export interface ServerConfig {
 
     web_videos: {
       enabled: boolean
+    }
+
+    originalFile: {
+      keep: boolean
     }
 
     enabledResolutions: number[]

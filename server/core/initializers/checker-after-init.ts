@@ -56,6 +56,7 @@ function checkConfig () {
   checkVideoStudioConfig()
   checkThumbnailsConfig()
   checkBrowseVideosConfig()
+  checkDownloadConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -394,4 +395,10 @@ function checkBrowseVideosConfig () {
 
   const scopeError = getBrowseVideosDefaultScopeError(CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE)
   if (scopeError) throw new Error(scopeError)
+}
+
+function checkDownloadConfig () {
+  if (CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ORIGINAL_FILE_ENABLED && !CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED) {
+    throw new Error('defaults.publish.download_enabled must be true if defaults.publish.download_original_file_enabled is true')
+  }
 }

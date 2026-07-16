@@ -20,7 +20,9 @@
     <ng-container ngbNavItem="original">
       <a ngbNavLink>
         <ng-container i18n>Original file</ng-container>
-        <my-global-icon i18n-ngbTooltip ngbTooltip="Other users cannot download the original file" iconName="shield"></my-global-icon>
+        @if (!video().downloadOriginalFileEnabled) {
+          <my-global-icon i18n-ngbTooltip ngbTooltip="Other users cannot download the original file" iconName="shield"></my-global-icon>
+        }
       </a>
       <ng-template ngbNavContent>
         <ng-template [ngTemplateOutlet]="rootNavContent"></ng-template>

@@ -220,6 +220,9 @@ const CONFIG = {
       get DOWNLOAD_ENABLED () {
         return config.get<boolean>('defaults.publish.download_enabled')
       },
+      get DOWNLOAD_ORIGINAL_FILE_ENABLED () {
+        return config.get<boolean>('defaults.publish.download_original_file_enabled')
+      },
       get COMMENTS_POLICY () {
         return config.get<VideoCommentPolicyType>('defaults.publish.comments_policy')
       },

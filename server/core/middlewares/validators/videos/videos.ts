@@ -478,6 +478,18 @@ export function getCommonVideoEditAttributes () {
       .optional()
       .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have downloadEnabled boolean'),
+    body('downloadOriginalFileEnabled')
+      .optional()
+      .customSanitizer(toBooleanOrNull)
+      .custom(isBooleanValid).withMessage('Should have downloadOriginalFileEnabled boolean')
+      .bail()
+      .custom((value, { req }) => {
+        if (value === true && req.body.downloadEnabled === false) {
+          throw new Error('downloadOriginalFileEnabled cannot be enabled when downloadEnabled is disabled')
+        }
+
+        return true
+      }),
     body('originallyPublishedAt')
       .optional()
       .customSanitizer(toValueOrNull)

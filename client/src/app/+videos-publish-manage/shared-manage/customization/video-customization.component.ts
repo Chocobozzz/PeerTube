@@ -18,6 +18,7 @@ const debugLogger = debug('peertube:video-manage')
 
 type Form = {
   downloadEnabled: FormControl<boolean>
+  downloadOriginalFileEnabled: FormControl<boolean>
   originallyPublishedAt: FormControl<Date>
 
   playerSettings: FormGroup<{
@@ -84,6 +85,7 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
 
     const obj: BuildFormArgumentTyped<Form> = {
       downloadEnabled: null,
+      downloadOriginalFileEnabled: null,
       originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
       playerSettings: {
         theme: null
@@ -99,6 +101,11 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
     this.form = form
     this.formErrors = formErrors
     this.validationMessages = validationMessages
+
+    // Original file download is only relevant when download is enabled: keep the option visible but disabled otherwise
+    const downloadEnabledControl = this.form.get('downloadEnabled')
+    this.updateDownloadOriginalFileState(downloadEnabledControl.value)
+    downloadEnabledControl.valueChanges.subscribe(enabled => this.updateDownloadOriginalFileState(enabled))
 
     this.form.valueChanges.subscribe(() => {
       this.manageController.setFormError($localize`Customization`, 'customization', this.formErrors)
@@ -130,6 +137,28 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
 
   hasPublicationDate () {
     return !!this.form.value.originallyPublishedAt
+  }
+
+  hasOriginalFileToDownload () {
+    // On upload there is no source yet, so rely on the instance config to know if the original file will be kept
+    if (this.videoEdit.isNew()) {
+      return this.serverConfig.transcoding.originalFile.keep
+    }
+
+    // On update, the option only makes sense if the video actually has an original source file
+    return !!this.videoEdit.getVideoSource()?.fileDownloadUrl
+  }
+
+  private updateDownloadOriginalFileState (downloadEnabled: boolean) {
+    const control = this.form.get('downloadOriginalFileEnabled')
+
+    if (downloadEnabled) {
+      control.enable({ emitEvent: false })
+    } else {
+      // Keep the form value consistent so we never submit downloadOriginalFileEnabled=true with downloadEnabled=false
+      control.setValue(false)
+      control.disable({ emitEvent: false })
+    }
   }
 
   resetField (name: string) {

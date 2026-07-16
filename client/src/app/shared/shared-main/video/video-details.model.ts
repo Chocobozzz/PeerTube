@@ -20,6 +20,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
 
   support: string
   downloadEnabled: boolean
+  downloadOriginalFileEnabled: boolean
 
   commentsPolicy: ConstantLabel<VideoCommentPolicyType>
 
@@ -48,6 +49,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.support = hash.support
     this.commentsPolicy = hash.commentsPolicy
     this.downloadEnabled = hash.downloadEnabled
+    this.downloadOriginalFileEnabled = hash.downloadOriginalFileEnabled
 
     this.inputFileUpdatedAt = hash.inputFileUpdatedAt
 

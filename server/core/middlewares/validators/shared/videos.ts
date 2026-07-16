@@ -277,6 +277,10 @@ export async function checkCanAccessVideoSourceFile (options: {
     return true
   }
 
+  if (video.downloadEnabled === true && video.downloadOriginalFileEnabled === true) {
+    return true
+  }
+
   res.sendStatus(HttpStatusCode.FORBIDDEN_403)
   return false
 }

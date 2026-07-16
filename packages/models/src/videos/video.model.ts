@@ -124,6 +124,7 @@ export interface VideoDetails extends Video {
   }
 
   downloadEnabled: boolean
+  downloadOriginalFileEnabled: boolean
 
   // Not optional in details (unlike in parent Video)
   waitTranscoding: boolean

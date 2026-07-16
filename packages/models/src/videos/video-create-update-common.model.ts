@@ -15,6 +15,7 @@ export interface VideoCreateUpdateCommon {
   commentsPolicy?: VideoCommentPolicyType
 
   downloadEnabled?: boolean
+  downloadOriginalFileEnabled?: boolean
 
   nsfw?: boolean
   nsfwSummary?: string

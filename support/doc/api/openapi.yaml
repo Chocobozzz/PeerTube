@@ -3619,6 +3619,9 @@ paths:
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
+                downloadOriginalFileEnabled:
+                  description: "**PeerTube >= 8.3** Enable or disable downloading the original file for this video (requires downloadEnabled)"
+                  type: boolean
                 originallyPublishedAt:
                   description: Date when the content was originally published
                   type: string
@@ -4191,6 +4194,9 @@ paths:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
+                  type: boolean
+                downloadOriginalFileEnabled:
+                  description: "**PeerTube >= 8.3** Enable or disable downloading the original file for this video (requires downloadEnabled)"
                   type: boolean
                 schedules:
                   type: array
@@ -10697,6 +10703,9 @@ components:
               $ref: '#/components/schemas/VideoCommentsPolicyConstant'
             downloadEnabled:
               type: boolean
+            downloadOriginalFileEnabled:
+              type: boolean
+              description: "**PeerTube >= 8.3** Whether the original file can be downloaded"
             inputFileUpdatedAt:
               type: string
               format: date-time
@@ -12259,6 +12268,8 @@ components:
               properties:
                 downloadEnabled:
                   type: boolean
+                downloadOriginalFileEnabled:
+                  type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
                 privacy:
@@ -12466,6 +12477,9 @@ components:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
         downloadEnabled:
           description: Enable or disable downloading for this video
+          type: boolean
+        downloadOriginalFileEnabled:
+          description: "**PeerTube >= 8.3** Enable or disable downloading the original file for this video (requires downloadEnabled)"
           type: boolean
         originallyPublishedAt:
           description: Date when the content was originally published

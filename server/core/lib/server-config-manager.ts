@@ -101,6 +101,7 @@ class ServerConfigManager {
       defaults: {
         publish: {
           downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+          downloadOriginalFileEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ORIGINAL_FILE_ENABLED,
 
           commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
 
@@ -218,6 +219,9 @@ class ServerConfigManager {
         },
         web_videos: {
           enabled: CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.WEB_VIDEOS.ENABLED
+        },
+        originalFile: {
+          keep: CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
         },
         enabledResolutions: this.getEnabledResolutions('vod'),
         profile: CONFIG.TRANSCODING.PROFILE,

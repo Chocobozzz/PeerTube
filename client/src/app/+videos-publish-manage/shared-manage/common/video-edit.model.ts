@@ -127,6 +127,7 @@ type UpdateFromAPIOptions = {
     | 'support'
     | 'commentsPolicy'
     | 'downloadEnabled'
+    | 'downloadOriginalFileEnabled'
     | 'pluginData'
     | 'scheduledUpdate'
     | 'publishedAt'
@@ -334,6 +335,7 @@ export class VideoEdit {
 
     this.common.privacy = serverDefaults.publish.privacy
     this.common.downloadEnabled = serverDefaults.publish.downloadEnabled
+    this.common.downloadOriginalFileEnabled = serverDefaults.publish.downloadOriginalFileEnabled
     this.common.licence = serverDefaults.publish.licence
     this.common.commentsPolicy = serverDefaults.publish.commentsPolicy
     this.common.nsfw = this.serverConfig.instance.isNSFW
@@ -428,6 +430,7 @@ export class VideoEdit {
         commentsPolicy: video.commentsPolicy?.id ?? null,
 
         downloadEnabled: video.downloadEnabled ?? null,
+        downloadOriginalFileEnabled: video.downloadOriginalFileEnabled ?? null,
 
         pluginData: video.pluginData ?? {},
 
@@ -588,6 +591,7 @@ export class VideoEdit {
     if (values.support !== undefined) this.common.support = values.support
     if (values.commentsPolicy !== undefined) this.common.commentsPolicy = values.commentsPolicy
     if (values.downloadEnabled !== undefined) this.common.downloadEnabled = values.downloadEnabled
+    if (values.downloadOriginalFileEnabled !== undefined) this.common.downloadOriginalFileEnabled = values.downloadOriginalFileEnabled
     if (values.thumbnailfile !== undefined) this.common.thumbnailfile = values.thumbnailfile
     if (values.pluginData !== undefined) this.common.pluginData = values.pluginData
 
@@ -697,6 +701,7 @@ export class VideoEdit {
         : null,
 
       downloadEnabled: this.common.downloadEnabled,
+      downloadOriginalFileEnabled: this.common.downloadOriginalFileEnabled,
 
       originallyPublishedAt: this.common.originallyPublishedAt
         ? new Date(this.common.originallyPublishedAt)
@@ -754,6 +759,7 @@ export class VideoEdit {
       waitTranscoding: this.common.waitTranscoding,
       commentsPolicy: this.common.commentsPolicy,
       downloadEnabled: this.common.downloadEnabled,
+      downloadOriginalFileEnabled: this.common.downloadOriginalFileEnabled,
       thumbnailfile: this.common.thumbnailfile,
       scheduleUpdate: this.common.scheduleUpdate || null,
       originallyPublishedAt: this.common.originallyPublishedAt || null
@@ -1188,6 +1194,10 @@ export class VideoEdit {
 
   isPublishedVOD () {
     return !this.metadata.isLive && this.metadata.state === VideoState.PUBLISHED
+  }
+
+  isNew () {
+    return this.isNewVideo
   }
 
   private updateAfterChange () {
