@@ -60,6 +60,11 @@ export class VideoChannelSyncModel extends SequelizeModel<VideoChannelSyncModel>
   @Column(DataType.DATE)
   declare lastSyncAt: Date
 
+  // Publish date of the oldest video a full sync attempted to reach before being interrupted
+  @AllowNull(true)
+  @Column(DataType.DATE)
+  declare fullSyncCutoffAt: Date
+
   @CreatedAt
   declare createdAt: Date
 

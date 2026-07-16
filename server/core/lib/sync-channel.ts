@@ -55,6 +55,8 @@ export async function synchronizeChannel (options: {
     const touchedVideoImportIds: number[] = []
 
     let buildJobErrors = 0
+    let stoppedByRateLimit = false
+    let lastAttemptedPublishedAt: Date | undefined
 
     for (const targetUrl of targetUrls) {
       logger.debug(`Import candidate: ${targetUrl}`, lTags())
@@ -75,6 +77,10 @@ export async function synchronizeChannel (options: {
         })
 
         children.push(job)
+
+        if (videoImport.Video?.originallyPublishedAt) {
+          lastAttemptedPublishedAt = videoImport.Video.originallyPublishedAt
+        }
         touchedVideoImportIds.push(videoImport.id)
       } catch (err) {
         if (err instanceof YoutubeDlImportError) {
@@ -90,6 +96,7 @@ export async function synchronizeChannel (options: {
 
           if (err.isRateLimitError()) {
             logger.info(`Stopping synchronization due to rate limit error in channel ${channelUsername}.`, { err, ...lTags() })
+            stoppedByRateLimit = true
             break
           }
         }
@@ -100,8 +107,18 @@ export async function synchronizeChannel (options: {
       }
     }
 
-    // Retry failed imports from this sync (if any)
     if (channelSync) {
+      // Remember how far we got so we retry a full sync next time
+      if (stoppedByRateLimit) {
+        if (lastAttemptedPublishedAt) channelSync.fullSyncCutoffAt = lastAttemptedPublishedAt
+      } else {
+        // Not interrupted, reset full sync date
+        channelSync.fullSyncCutoffAt = null
+      }
+
+      await channelSync.save()
+
+      // Retry failed imports from this sync (if any)
       const failed = await VideoImportModel.listFailedBySyncId({ channelSyncId: channelSync.id })
       for (const videoImport of failed) {
         logger.info(
