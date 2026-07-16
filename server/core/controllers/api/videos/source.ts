@@ -193,10 +193,7 @@ async function addVideoJobsAfterUpload (video: MVideoFull, videoFile: MVideoFile
 
     {
       type: 'federate-video' as const,
-      payload: {
-        videoUUID: video.uuid,
-        isNewVideoForFederation: false
-      }
+      payload: { videoUUID: video.uuid }
     }
   ]
 
@@ -206,7 +203,6 @@ async function addVideoJobsAfterUpload (video: MVideoFull, videoFile: MVideoFile
         type: 'move-to-object-storage',
         video,
         moveVideoState: {
-          isNewVideo: false,
           previousVideoState: undefined
         }
       })
@@ -218,9 +214,7 @@ async function addVideoJobsAfterUpload (video: MVideoFull, videoFile: MVideoFile
       type: 'transcoding-job-builder' as const,
       payload: {
         videoUUID: video.uuid,
-        optimizeJob: {
-          isNewVideo: false
-        }
+        optimizeJob: {}
       }
     })
   }

@@ -42,9 +42,8 @@ export function buildNextVideoState (currentState?: VideoStateType) {
 export function moveToNextState (options: {
   video: MVideoUUID
   previousVideoState?: VideoStateType
-  isNewVideo?: boolean // Default true
 }) {
-  const { video, previousVideoState, isNewVideo = true } = options
+  const { video, previousVideoState } = options
 
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {
@@ -55,7 +54,7 @@ export function moveToNextState (options: {
 
       // Already in its final state
       if (videoDatabase.state === VideoState.PUBLISHED) {
-        await federateVideoIfNeeded(videoDatabase, false, t)
+        await federateVideoIfNeeded(videoDatabase, t)
 
         logger.debug(`Video ${videoDatabase.uuid} is already published, no state change.`, lTags(videoDatabase.uuid))
 
@@ -65,17 +64,22 @@ export function moveToNextState (options: {
       const newState = buildNextVideoState(videoDatabase.state)
 
       if (newState === VideoState.PUBLISHED) {
-        await moveToPublishedState({ video: videoDatabase, previousVideoState, isNewVideo, transaction: t })
+        await moveToPublishedState({ video: videoDatabase, previousVideoState, transaction: t })
         return true
       }
 
       if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-        await moveToExternalStorageState({ video: videoDatabase, isNewVideo, transaction: t })
+        await moveToExternalStorageState({ video: videoDatabase, transaction: t })
         return true
       }
 
-      // Keep video in failed transcoding state
-      if (videoDatabase.state === VideoState.TRANSCODING_FAILED) {
+      // Keep video in failed state
+      const failedStates = new Set<VideoStateType>([
+        VideoState.TRANSCODING_FAILED,
+        VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED,
+        VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED
+      ])
+      if (failedStates.has(videoDatabase.state)) {
         return true
       }
 
@@ -88,15 +92,14 @@ export function moveToNextState (options: {
 
 export async function moveToExternalStorageState (options: {
   video: MVideoFull
-  isNewVideo: boolean
   transaction: Transaction
 }) {
-  const { video, isNewVideo, transaction } = options
+  const { video, transaction } = options
 
   const previousVideoState = video.state
 
   if (video.state !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    await video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, isNewVideo, transaction)
+    await video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, transaction })
   }
 
   logger.info('Creating external storage move job for video %s.', video.uuid, lTags(video.uuid))
@@ -106,7 +109,7 @@ export async function moveToExternalStorageState (options: {
       await buildMoveVideoJob({
         type: 'move-to-object-storage',
         video,
-        moveVideoState: { isNewVideo, previousVideoState }
+        moveVideoState: { previousVideoState }
       })
     )
 
@@ -120,15 +123,14 @@ export async function moveToExternalStorageState (options: {
 
 export async function moveToFileSystemState (options: {
   video: MVideoFull
-  isNewVideo: boolean
   transaction: Transaction
 }) {
-  const { video, isNewVideo, transaction } = options
+  const { video, transaction } = options
 
   const previousVideoState = video.state
 
   if (video.state !== VideoState.TO_MOVE_TO_FILE_SYSTEM) {
-    await video.setNewState(VideoState.TO_MOVE_TO_FILE_SYSTEM, false, transaction)
+    await video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_FILE_SYSTEM, transaction })
   }
 
   logger.info('Creating move to file system job for video %s.', video.uuid, { tags: [ video.uuid ] })
@@ -138,10 +140,7 @@ export async function moveToFileSystemState (options: {
       await buildMoveVideoJob({
         type: 'move-to-file-system',
         video,
-        moveVideoState: {
-          previousVideoState,
-          isNewVideo
-        }
+        moveVideoState: { previousVideoState }
       })
     )
 
@@ -158,19 +157,19 @@ export async function moveToFileSystemState (options: {
 export function moveToFailedTranscodingState (video: MVideo) {
   if (video.state === VideoState.TRANSCODING_FAILED) return
 
-  return video.setNewState(VideoState.TRANSCODING_FAILED, false, undefined)
+  return video.setNewStateAndPublishedAt({ newState: VideoState.TRANSCODING_FAILED, transaction: undefined })
 }
 
 export function moveToFailedMoveToObjectStorageState (video: MVideo) {
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED) return
 
-  return video.setNewState(VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED, false, undefined)
+  return video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED, transaction: undefined })
 }
 
 export function moveToFailedMoveToFileSystemState (video: MVideo) {
   if (video.state === VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED) return
 
-  return video.setNewState(VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED, false, undefined)
+  return video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED, transaction: undefined })
 }
 
 // ---------------------------------------------------------------------------
@@ -179,18 +178,19 @@ export function moveToFailedMoveToFileSystemState (video: MVideo) {
 
 async function moveToPublishedState (options: {
   video: MVideoFull
-  isNewVideo: boolean
   transaction: Transaction
   previousVideoState?: VideoStateType
 }) {
-  const { video, isNewVideo, transaction, previousVideoState } = options
+  const { video, transaction, previousVideoState } = options
   const previousState = previousVideoState ?? video.state
 
-  logger.info('Publishing video %s.', video.uuid, { isNewVideo, previousState, ...lTags(video.uuid) })
+  logger.info('Publishing video %s.', video.uuid, { previousState, ...lTags(video.uuid) })
 
-  await video.setNewState(VideoState.PUBLISHED, isNewVideo, transaction)
+  const isNewVideo = !video.firstPublishedAt
 
-  await federateVideoIfNeeded(video, isNewVideo, transaction)
+  await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
+
+  await federateVideoIfNeeded(video, transaction)
 
   if (previousState === VideoState.TO_EDIT) {
     Notifier.Instance.notifyOfFinishedVideoStudioEdition(video)

@@ -1,6 +1,6 @@
 {
   "name": "peertube-client",
-  "version": "8.2.1",
+  "version": "8.2.2",
   "private": true,
   "license": "AGPL-3.0",
   "author": {
@@ -65,7 +65,6 @@
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^20.19.43",
     "@types/qrcode": "^1.5.6",
-    "@types/sanitize-html": "^2.16.1",
     "@types/sha.js": "^2.4.4",
     "@vitejs/devtools": "^0.3.3",
     "@wdio/browserstack-service": "^9.29.0",

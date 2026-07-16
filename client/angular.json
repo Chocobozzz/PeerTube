@@ -213,7 +213,6 @@
               "markdown-it-emoji/light",
               "linkifyjs/lib/linkify-html",
               "linkifyjs/lib/plugins/mention",
-              "sanitize-html",
               "debug",
               "@peertube/p2p-media-loader-hlsjs",
               "video.js",
@@ -244,7 +243,10 @@
             "production": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "scripts": true,
+                "styles": false
+              },
               "namedChunks": false,
               "extractLicenses": true,
               "serviceWorker": "src/ngsw-config.json",

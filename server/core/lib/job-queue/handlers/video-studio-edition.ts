@@ -106,7 +106,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
           const video = await VideoModel.load(payload.videoUUID, transaction)
           if (!video || video.state === VideoState.PUBLISHED) return
 
-          await video.setNewState(VideoState.PUBLISHED, false, transaction)
+          await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
         })
       } catch (err) {
         logger.error('Cannot reset video state after studio error', { err, ...lTags })

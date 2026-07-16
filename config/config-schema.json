@@ -1258,17 +1258,6 @@
       },
       "additionalProperties": false
     },
-    "auth": {
-      "type": "object",
-      "properties": {
-        "allow_cross_provider_auth": {
-          "description": "Enable cross authentication when using multiple auth plugins Never enable this unless you known what you're doing, it can leads to account takeover if not used correctly",
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "additionalProperties": false
-    },
     "federation": {
       "type": "object",
       "properties": {
@@ -1675,6 +1664,11 @@
         },
         "disable_root_auth": {
           "description": "Disable local login and OAuth token usage for the built-in `root` user. If enabled, root cannot login and existing root OAuth access/refresh tokens are rejected.",
+          "type": "boolean",
+          "default": false
+        },
+        "allow_cross_provider_auth": {
+          "description": "Enable cross authentication when using multiple auth plugins Never enable this unless you know what you're doing. If not used correctly, it can lead to account takeover",
           "type": "boolean",
           "default": false
         },

@@ -442,11 +442,6 @@ plugins:
     check_latest_versions_interval: '4 hours' # How often you want to check new plugins/themes versions
     url: 'https://packages.joinpeertube.org'
 
-auth::
-  # Enable cross authentication when using multiple auth plugins
-  # Never enable this unless you known what you're doing, it can leads to account takeover if not used correctly
-  allow_cross_provider_auth: false
-
 federation:
   # Enable ActivityPub endpoints (inbox/outbox)
   enabled: true
@@ -622,6 +617,10 @@ user:
   # Disable local login and OAuth token usage for the built-in `root` user.
   # If enabled, root cannot login and existing root OAuth access/refresh tokens are rejected.
   disable_root_auth: false
+
+  # Enable cross authentication when using multiple auth plugins
+  # Never enable this unless you know what you're doing. If not used correctly, it can lead to account takeover
+  allow_cross_provider_auth: false
 
   # Default value of maximum video bytes the user can upload
   # Does not take into account transcoded files or account export archives (that can include user uploaded files)

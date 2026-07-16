@@ -47,7 +47,7 @@ async function processVideo (id: number) {
 
   await processThumbnails({ entity: video, generateFilename: () => generateImageFilename() })
 
-  await federateVideoIfNeeded(video, false)
+  await federateVideoIfNeeded(video)
 }
 
 async function processPlaylist (id: number) {

@@ -5,7 +5,7 @@ import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_TEXT_LANGUAGES } from '../../initi
 import { logger } from '../logger.js'
 import { exists, isFileValid } from './misc.js'
 
-function isVideoCaptionLanguageValid (value: any) {
+export function isVideoCaptionLanguageValid (value: any) {
   return exists(value) && VIDEO_TEXT_LANGUAGES[value] !== undefined
 }
 
@@ -14,7 +14,7 @@ const videoCaptionTypesRegex = [ ...Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYP
   .map(m => `(${m})`)
   .join('|')
 
-function isVideoCaptionFile (files: UploadFilesForCheck, field: string) {
+export function isVideoCaptionFile (files: UploadFilesForCheck, field: string) {
   return isFileValid({
     files,
     mimeTypeRegex: videoCaptionTypesRegex,
@@ -23,7 +23,7 @@ function isVideoCaptionFile (files: UploadFilesForCheck, field: string) {
   })
 }
 
-async function isVTTFileValid (filePath: string) {
+export async function isVTTFileValid (filePath: string) {
   const size = await getFileSize(filePath)
   const content = await readFile(filePath, 'utf8')
 
@@ -31,13 +31,5 @@ async function isVTTFileValid (filePath: string) {
 
   if (size > CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max) return false
 
-  return content?.startsWith('WEBVTT')
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  isVideoCaptionFile,
-  isVTTFileValid,
-  isVideoCaptionLanguageValid
+  return !!content?.startsWith('WEBVTT')
 }

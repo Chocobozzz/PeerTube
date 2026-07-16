@@ -15,7 +15,10 @@ class BezelsPlugin extends Plugin {
     const component = new PauseBezel(player, options)
     player.addChild(component)
 
-    this.on('dispose', () => player.removeChild(component))
+    this.on('dispose', () => {
+      // Component will remove itself from the player
+      component.dispose()
+    })
   }
 }
 

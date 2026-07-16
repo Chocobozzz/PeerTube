@@ -1,16 +1,12 @@
-import {
-  ManageVideoTorrentPayload,
-  VideoFileStream,
-  VideoPrivacy,
-  VideoPrivacyType,
-  VideoState,
-  VideoStateType
-} from '@peertube/peertube-models'
+import { exists } from '@peertube/peertube-core-utils'
+import { ManageVideoTorrentPayload, VideoFileStream, VideoPrivacyType, VideoState, VideoStateType } from '@peertube/peertube-models'
+import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFile, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
 import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from './job-queue/job-queue.js'
+import { lTags } from './object-storage/shared/index.js'
 import { VideoStoryboardJobHandler } from './runners/index.js'
 import { createTranscriptionTaskIfNeeded } from './video-captions.js'
 import { moveFilesIfPrivacyChanged } from './video-privacy.js'
@@ -20,7 +16,6 @@ export async function buildMoveVideoJob (options: {
   type: 'move-to-object-storage' | 'move-to-file-system'
 
   moveVideoState?: {
-    isNewVideo: boolean
     previousVideoState: VideoStateType
   }
 }) {
@@ -62,10 +57,7 @@ export async function buildLocalStoryboardJobIfNeeded (options: {
   if (federate === true) {
     return {
       type: 'federate-video' as 'federate-video',
-      payload: {
-        videoUUID: video.uuid,
-        isNewVideoForFederation: false
-      }
+      payload: { videoUUID: video.uuid }
     }
   }
 
@@ -128,10 +120,7 @@ export async function addVideoJobsAfterCreation (options: {
 
     {
       type: 'federate-video' as 'federate-video',
-      payload: {
-        videoUUID: video.uuid,
-        isNewVideoForFederation: true
-      }
+      payload: { videoUUID: video.uuid }
     }
   ]
 
@@ -142,7 +131,6 @@ export async function addVideoJobsAfterCreation (options: {
         type: 'move-to-object-storage',
         video,
         moveVideoState: {
-          isNewVideo: true,
           previousVideoState: undefined
         }
       })
@@ -154,9 +142,7 @@ export async function addVideoJobsAfterCreation (options: {
       type: 'transcoding-job-builder' as 'transcoding-job-builder',
       payload: {
         videoUUID: video.uuid,
-        optimizeJob: {
-          isNewVideo: true
-        }
+        optimizeJob: {}
       }
     })
   }
@@ -170,25 +156,33 @@ export async function addVideoJobsAfterCreation (options: {
   }
 }
 
-export async function addVideoJobsAfterUpdate (options: {
+export async function onVideoLocalUpdate (options: {
   video: MVideoFull
-  isNewVideoForFederation: boolean
+
+  isNewVideoForSubscription: boolean
 
   nameChanged: boolean
-  oldPrivacy: VideoPrivacyType
+  oldPrivacy?: VideoPrivacyType
 }) {
-  const { video, nameChanged, oldPrivacy, isNewVideoForFederation } = options
+  const { video, nameChanged, oldPrivacy, isNewVideoForSubscription } = options
   const jobs: CreateJobTypeAndPayload[] = []
 
-  const filePathChanged = await moveFilesIfPrivacyChanged(video, oldPrivacy)
+  const filePathChanged = exists(oldPrivacy)
+    ? await moveFilesIfPrivacyChanged(video, oldPrivacy)
+    : false
+
   const hls = video.getHLSPlaylist()
 
   if (filePathChanged && hls) {
+    logger.debug('Updating HLS playlist file paths after privacy change', lTags(video.uuid))
+
     hls.assignP2PMediaLoaderInfoHashes(video, hls.VideoFiles)
     await hls.save()
   }
 
   if (!video.isLive && (nameChanged || filePathChanged)) {
+    logger.debug('Updating video torrent metadata after name or file path change', lTags(video.uuid))
+
     for (const file of (video.VideoFiles || [])) {
       const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
 
@@ -206,18 +200,12 @@ export async function addVideoJobsAfterUpdate (options: {
 
   jobs.push({
     type: 'federate-video',
-    payload: {
-      videoUUID: video.uuid,
-      isNewVideoForFederation
-    }
+    payload: { videoUUID: video.uuid }
   })
 
-  const wasConfidentialVideoForNotification = new Set<VideoPrivacyType>([
-    VideoPrivacy.PRIVATE,
-    VideoPrivacy.UNLISTED
-  ]).has(oldPrivacy)
+  if (isNewVideoForSubscription) {
+    logger.debug('Video is considered new for subscriptions: create the notification job', lTags(video.uuid))
 
-  if (wasConfidentialVideoForNotification) {
     jobs.push({
       type: 'notify',
       payload: {

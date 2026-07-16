@@ -16,6 +16,7 @@ import {
 import { Transaction } from 'sequelize'
 import { haveActorsSameRemoteHost } from '../actors/check-actor.js'
 import { APVideoAbstractBuilder, getVideoAttributesFromObject, updateVideoRates } from './shared/index.js'
+import { checkUrlsSameHost } from '../url.js'
 
 export class APVideoUpdater extends APVideoAbstractBuilder {
   private readonly wasPrivateVideo: boolean
@@ -27,7 +28,8 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
   constructor (
     protected readonly videoObject: VideoObject,
-    private readonly video: MVideoAccountLightBlacklistAllFiles
+    private readonly video: MVideoAccountLightBlacklistAllFiles,
+    private readonly contextUrl: string
   ) {
     super()
 
@@ -45,6 +47,14 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
       this.videoObject.uuid,
       { videoObject: this.videoObject, ...this.lTags() }
     )
+
+    if (!checkUrlsSameHost(this.contextUrl, this.videoObject.id)) {
+      logger.warn('Video sent by update is not from the same host as the context URL.', {
+        videoObject: this.videoObject,
+        contextUrl: this.contextUrl
+      })
+      return undefined
+    }
 
     const oldInputFileUpdatedAt = this.video.inputFileUpdatedAt
 
@@ -93,12 +103,10 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
       await updateVideoRates(videoUpdated, this.videoObject)
 
       // Notify our users?
-      if (this.wasPrivateVideo || this.wasUnlistedVideo) {
-        Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(videoUpdated)
-      }
-
       if (videoUpdated.isLive && oldState !== videoUpdated.state) {
         PeerTubeSocket.Instance.sendVideoLiveNewState(videoUpdated)
+        Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(videoUpdated)
+      } else if (this.wasPrivateVideo || this.wasUnlistedVideo) {
         Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(videoUpdated)
       }
 
@@ -166,9 +174,9 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
   }
 
   private async setOrDeleteLive (videoUpdated: MVideoFull, transaction?: Transaction) {
-    if (!this.video.isLive) return
-
-    if (this.video.isLive) return this.insertOrReplaceLive(videoUpdated, transaction)
+    if (this.video.isLive) {
+      return this.insertOrReplaceLive(videoUpdated, transaction)
+    }
 
     // Delete existing live if it exists
     await VideoLiveModel.destroy({

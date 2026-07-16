@@ -1,24 +1,34 @@
 @if (videoHref()) {
-  <a [ariaLabel]="ariaLabel()" [href]="videoHref()" [target]="videoTarget()" class="video-thumbnail" tabindex="-1">
+  <a [ariaLabel]="ariaLabel()" [href]="videoHref()" [target]="videoTarget()" class="video-thumbnail" [class]="{ 'is-rtl': isRTL() }" tabindex="-1">
     <ng-container *ngTemplateOutlet="aContent"></ng-container>
   </a>
 } @else {
-  <a [ariaLabel]="ariaLabel()" [routerLink]="getVideoRouterLink()" [queryParams]="queryParams()" class="video-thumbnail" tabindex="-1">
+  <a
+    [ariaLabel]="ariaLabel()"
+    [routerLink]="getVideoRouterLink()"
+    [queryParams]="queryParams()"
+    class="video-thumbnail"
+    [class]="{ 'is-rtl': isRTL() }"
+    tabindex="-1"
+  >
     <ng-container *ngTemplateOutlet="aContent"></ng-container>
   </a>
 }
 
 <ng-template #aContent>
-  <img alt="" [attr.src]="src" [srcset]="srcset" [sizes]="sizes()" [ngClass]="{ 'blur-filter': blur() }"  />
+  <img alt="" [attr.src]="src" [srcset]="srcset" [sizes]="sizes()" [ngClass]="{ 'blur-filter': blur() }" />
 
   @if (displayWatchLaterPlaylist()) {
     <div class="actions-overlay">
       <button
         class="watch-icon-overlay button-unstyle"
-        placement="left" [ngbTooltip]="getWatchIconText()" container="body" #watchLaterTooltip="ngbTooltip"
-        (click)="onWatchLaterClick($event)" [attr.aria-label]="inWatchLaterPlaylist() ? removeFromWatchLaterText : addToWatchLaterText"
-        >
-
+        placement="left"
+        [ngbTooltip]="getWatchIconText()"
+        container="body"
+        #watchLaterTooltip="ngbTooltip"
+        (click)="onWatchLaterClick($event)"
+        [attr.aria-label]="inWatchLaterPlaylist() ? removeFromWatchLaterText : addToWatchLaterText"
+      >
         @if (inWatchLaterPlaylist()) {
           <my-global-icon iconName="tick"></my-global-icon>
         } @else {
@@ -32,7 +42,7 @@
   <div class="label-overlay pt-badge badge-danger"><ng-content select="label-danger"></ng-content></div>
 
   @if (video().isLive) {
-    <div  class="live-overlay" [ngClass]="{ 'live-streaming': isLiveStreaming(), 'ended-live': isEndedLive() }">
+    <div class="live-overlay" [ngClass]="{ 'live-streaming': isLiveStreaming(), 'ended-live': isEndedLive() }">
       @if (isLiveStreaming()) {
         <ng-container i18n>LIVE</ng-container>
       } @else if (isEndedLive()) {

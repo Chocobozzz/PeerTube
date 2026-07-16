@@ -3,6 +3,7 @@ import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
+import { getAvatarsJSONAttributes, getBannersJSONAttributes } from '@server/models/shared/sql/actor-helpers.js'
 import { buildSQLAttributes } from '@server/models/shared/table.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -33,8 +34,13 @@ export class UserTableAttributes {
   }
 
   @Memoize()
+  getAvatarAttributesJSON () {
+    return ActorImageModel.getSQLAttributesJSON().join(', ')
+  }
+
+  @Memoize()
   getAccountAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->Actor->Avatars', 'Account.Actor.Avatars.').join(', ')
+    return getAvatarsJSONAttributes('Account->Actor->')
   }
 
   // ---------------------------------------------------------------------------
@@ -56,12 +62,17 @@ export class UserTableAttributes {
 
   @Memoize()
   getChannelAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->VideoChannels->Actor->Avatars', 'Account.VideoChannels.Actor.Avatars.').join(', ')
+    return getAvatarsJSONAttributes('Account->VideoChannels->Actor->')
+  }
+
+  @Memoize()
+  getBannerAttributesJSON () {
+    return ActorImageModel.getSQLAttributesJSON().join(', ')
   }
 
   @Memoize()
   getChannelBannerAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->VideoChannels->Actor->Banners', 'Account.VideoChannels.Actor.Banners.').join(', ')
+    return getBannersJSONAttributes('Account->VideoChannels->Actor->')
   }
 
   // ---------------------------------------------------------------------------
@@ -105,19 +116,14 @@ export class UserTableAttributes {
 
   @Memoize()
   getCollabChannelActorAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes(
-      'Account->Collabs->Channel->Actor->Avatars',
-      'Account.Collabs.Channel.Actor.Avatars.'
-    ).join(', ')
+    return getAvatarsJSONAttributes('Account->Collabs->Channel->Actor->')
   }
 
   @Memoize()
   getCollabChannelActorBannerAttributes () {
-    return ActorImageModel.getSQLAttributes(
-      'Account->Collabs->Channel->Actor->Banners',
-      'Account.Collabs.Channel.Actor.Banners.'
-    ).join(', ')
+    return getBannersJSONAttributes('Account->Collabs->Channel->Actor->')
   }
+
   @Memoize()
   getCollabChannelAccountAttributes () {
     return buildSQLAttributes({

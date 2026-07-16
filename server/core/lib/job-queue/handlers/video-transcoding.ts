@@ -105,7 +105,7 @@ async function handleWebVideoMergeAudioJob (options: {
 
   logger.info('Merge audio transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
+  await onTranscodingEnded({ moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
 async function handleWebVideoOptimizeJob (options: {
@@ -123,7 +123,7 @@ async function handleWebVideoOptimizeJob (options: {
 
   logger.info('Optimize transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
+  await onTranscodingEnded({ moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
 // ---------------------------------------------------------------------------
@@ -144,7 +144,7 @@ async function handleNewWebVideoResolutionJob (options: {
   logger.info('Web Video transcoding job for %s ended.', video.uuid, lTags(video.uuid), { payload })
 
   // Always move video to next state, we're ready enough with this resolution
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState: payload.canMoveVideoState, video })
+  await onTranscodingEnded({ moveVideoToNextState: payload.canMoveVideoState, video })
 }
 
 // ---------------------------------------------------------------------------
@@ -216,5 +216,5 @@ async function handleHLSJob (options: {
   // Splitted audio, wait audio & video generation before moving the video in its next state
   const moveVideoToNextState = payload.canMoveVideoState && !missingStream
 
-  await onTranscodingEnded({ isNewVideo: payload.isNewVideo, moveVideoToNextState, video })
+  await onTranscodingEnded({ moveVideoToNextState, video })
 }

@@ -503,11 +503,6 @@ const CONFIG = {
       URL: config.get<string>('plugins.index.url')
     }
   },
-  AUTH: {
-    get ALLOW_CROSS_PROVIDER_AUTH () {
-      return config.get<boolean>('auth.allow_cross_provider_auth')
-    }
-  },
   FEDERATION: {
     ENABLED: config.get<boolean>('federation.enabled'),
     PREVENT_SSRF: config.get<boolean>('federation.prevent_ssrf'),
@@ -622,6 +617,9 @@ const CONFIG = {
     },
     get DISABLE_ROOT_AUTH () {
       return config.get<boolean>('user.disable_root_auth')
+    },
+    get ALLOW_CROSS_PROVIDER_AUTH () {
+      return config.get<boolean>('user.allow_cross_provider_auth')
     },
     get VIDEO_QUOTA () {
       return parseBytes(config.get<number>('user.video_quota'))

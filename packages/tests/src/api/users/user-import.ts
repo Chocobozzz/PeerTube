@@ -400,6 +400,9 @@ function runTest (withObjectStorage: boolean) {
         expect(publicVideo).to.exist
         expect(publicVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
 
+        expect(publicVideo.originallyPublishedAt).to.exist
+        expect(new Date(publicVideo.originallyPublishedAt)).to.be.below(new Date(publicVideo.publishedAt))
+
         const playerSetting = await remoteServer.playerSettings.getForVideo({
           videoId: publicVideo.uuid,
           token: remoteServer.accessToken,

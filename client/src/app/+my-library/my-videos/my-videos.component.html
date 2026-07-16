@@ -22,13 +22,11 @@
   [inputFilters]="inputFilters"
   canUseMatchSort="true"
 >
-
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No videos} =1 {1 video} other {{{ totalRecords | myNumberFormatter }} videos}}</ng-container>
   </ng-template>
 
   <ng-template #tableCells let-video>
-
     @if (table.isColumnDisplayed('duration')) {
       <td>
         <my-video-cell [video]="video" thumbnail="true" title="false"></my-video-cell>
@@ -94,7 +92,7 @@
 
     @if (table.isColumnDisplayed('published')) {
       <td>
-        {{ video.publishedAt | ptDate: 'short' }}
+        {{ video.publishedAt | ptDate: 'short'  }}
       </td>
     }
 
@@ -131,8 +129,12 @@
     @if (table.isColumnDisplayed('playlists')) {
       <td>
         <div class="badges playlists">
-          @for (playlist of (videosContainedInPlaylists[video.id] || []); track playlist) {
-            <a class="pt-badge pt-badge-keep-case" [class]="getPlaylistBadge(playlist.playlistDisplayName)" [routerLink]="['/w/p/', playlist.playlistShortUUID]">
+          @for (playlist of videosContainedInPlaylists[video.id] || []; track playlist) {
+            <a
+              class="pt-badge pt-badge-keep-case"
+              [class]="getPlaylistBadge(playlist.playlistDisplayName)"
+              [routerLink]="[ '/w/p/', playlist.playlistShortUUID ]"
+            >
               {{ playlist.playlistDisplayName }}
             </a>
           }
@@ -142,20 +144,38 @@
   </ng-template>
 
   <ng-template #actionCell let-video>
-    <my-button class="me-3" i18n-label label="Manage" [ptRouterLink]="[ '/videos', 'manage', video.shortUUID ]" theme="secondary" icon="film" responsiveLabel="true"></my-button>
+    <my-button
+      class="me-3"
+      i18n-label
+      label="Manage"
+      [ptRouterLink]="[ '/videos', 'manage', video.shortUUID ]"
+      theme="secondary"
+      icon="film"
+      responsiveLabel="true"
+    ></my-button>
 
     <my-video-actions-dropdown
-      placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true" [video]="video" [displayOptions]="videoActionsOptions"
-      (videoRemoved)="table.loadData()" (videoFilesRemoved)="table.loadData()" (transcodingCreated)="table.loadData()" (videoExistsInPlaylistChange)="fetchVideosContainedInPlaylists([ video ])"
+      placement="bottom auto"
+      buttonIcon="more-horizontal"
+      buttonStyled="true"
+      [video]="video"
+      [displayOptions]="videoActionsOptions"
+      (videoRemoved)="table.loadData()"
+      (videoFilesRemoved)="table.loadData()"
+      (transcodingCreated)="table.loadData()"
+      (videoExistsInPlaylistChange)="fetchVideosContainedInPlaylists([ video ])"
+      (videoImportRetried)="table.loadData()"
     ></my-video-actions-dropdown>
   </ng-template>
 
   <ng-template #noResults let-search="search" let-hasFilters="hasFilters">
     {{ getNoResults(!!search || hasFilters) }}
   </ng-template>
-
 </my-table>
 
-<my-bulk-update-videos-in-playlist-modal #bulkUpdateVideosInPlaylistModal (saved)="fetchVideosContainedInPlaylists($event)"></my-bulk-update-videos-in-playlist-modal>
+<my-bulk-update-videos-in-playlist-modal
+  #bulkUpdateVideosInPlaylistModal
+  (saved)="fetchVideosContainedInPlaylists($event)"
+></my-bulk-update-videos-in-playlist-modal>
 
 <my-bulk-update-videos-modal #bulkUpdateVideosModal (saved)="table.loadData()"></my-bulk-update-videos-modal>

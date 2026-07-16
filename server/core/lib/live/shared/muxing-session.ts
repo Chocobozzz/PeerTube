@@ -259,7 +259,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
   private watchTSFiles () {
     const startStreamDateTime = new Date().getTime()
 
-    const addHandler = async (segmentPath: string) => {
+    const addHandler = (segmentPath: string) => {
       if (segmentPath.endsWith('.ts') !== true) return
 
       logger.debug('Live add handler of TS file %s.', segmentPath, this.lTags())
@@ -273,18 +273,9 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
       if (this.hasClientSocketInBadHealthWithCache(this.sessionId)) {
         this.emit('bad-socket-health', { videoUUID: this.videoUUID })
-        return
-      }
-
-      // Duration constraint check
-      if (this.isDurationConstraintValid(startStreamDateTime) !== true) {
+      } // Duration constraint check
+      else if (this.isDurationConstraintValid(startStreamDateTime) !== true) {
         this.emit('duration-exceeded', { videoUUID: this.videoUUID })
-        return
-      }
-
-      // Check user quota if the user enabled replay saving
-      if (await this.isQuotaExceeded(segmentPath) === true) {
-        this.emit('quota-exceeded', { videoUUID: this.videoUUID })
       }
     }
 
@@ -379,6 +370,12 @@ class MuxingSession extends EventEmitter implements MuxingSession {
   }
 
   private async processSegment (segmentPath: string) {
+    // Check user quota if the user enabled replay saving
+    if (await this.isQuotaExceeded(segmentPath) === true) {
+      this.emit('quota-exceeded', { videoUUID: this.videoUUID })
+      return
+    }
+
     // Add sha hash of previous segments, because ffmpeg should have finished generating them
     await this.liveSegmentShaStore.addSegmentSha(segmentPath)
 

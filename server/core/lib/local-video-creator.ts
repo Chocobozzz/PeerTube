@@ -9,6 +9,7 @@ import {
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
   VideoPrivacy,
+  VideoState,
   VideoStateType
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
@@ -46,6 +47,8 @@ type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   isLive: boolean
   state: VideoStateType
   inputFilename: string
+
+  firstPublishedAt?: string
 
   embedPrivacyPolicy?: VideoEmbedPrivacyPolicyType
 }
@@ -249,7 +252,7 @@ export class LocalVideoCreator {
             }).catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
           })
         } else {
-          await federateVideoIfNeeded(this.video, true, transaction)
+          await federateVideoIfNeeded(this.video, transaction)
         }
       }).catch(err => {
         // Reset elements to reinsert them in the database
@@ -300,6 +303,17 @@ export class LocalVideoCreator {
   }
 
   private buildVideo (videoInfo: VideoAttributes, channel: MChannel) {
+    const privacy = videoInfo.privacy || VideoPrivacy.PRIVATE
+
+    const now = new Date()
+
+    let firstPublishedAt: Date = null
+    if (videoInfo.firstPublishedAt) {
+      firstPublishedAt = new Date(videoInfo.firstPublishedAt)
+    } else if (privacy !== VideoPrivacy.PRIVATE && videoInfo.state === VideoState.PUBLISHED) {
+      firstPublishedAt = now
+    }
+
     return {
       name: videoInfo.name,
       state: videoInfo.state,
@@ -319,16 +333,18 @@ export class LocalVideoCreator {
 
       description: videoInfo.description,
       support: videoInfo.support,
-      privacy: videoInfo.privacy || VideoPrivacy.PRIVATE,
+      privacy,
       isLive: videoInfo.isLive,
       channelId: channel.id,
       originallyPublishedAt: videoInfo.originallyPublishedAt
         ? new Date(videoInfo.originallyPublishedAt)
         : null,
 
+      firstPublishedAt,
+
       publishedAt: this.videoAttributes.scheduleUpdate?.updateAt
         ? new Date(this.videoAttributes.scheduleUpdate?.updateAt)
-        : undefined,
+        : now,
 
       uuid: buildUUID(),
       duration: videoInfo.duration

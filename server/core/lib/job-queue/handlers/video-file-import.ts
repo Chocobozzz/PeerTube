@@ -1,17 +1,17 @@
-import { Job } from 'bullmq'
-import { copy } from 'fs-extra/esm'
+import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { VideoFileImportPayload } from '@peertube/peertube-models'
-import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { buildNewFile } from '@server/lib/video-file.js'
+import { buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFull } from '@server/types/models/index.js'
-import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
+import { Job } from 'bullmq'
+import { copy } from 'fs-extra/esm'
 import { logger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
-import { buildMoveVideoJob } from '@server/lib/video-jobs.js'
-import { buildNewFile } from '@server/lib/video-file.js'
 
 async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
@@ -32,13 +32,12 @@ async function processVideoFileImport (job: Job) {
         type: 'move-to-object-storage',
         video,
         moveVideoState: {
-          isNewVideo: false,
           previousVideoState: video.state
         }
       })
     )
   } else {
-    await federateVideoIfNeeded(video, false)
+    await federateVideoIfNeeded(video)
   }
 
   return video

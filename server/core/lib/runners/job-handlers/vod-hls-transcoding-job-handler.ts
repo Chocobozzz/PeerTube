@@ -22,7 +22,6 @@ import { hasMissingHLSStreams, loadRunnerVideo } from './shared/utils.js'
 
 type CreateOptions = {
   video: MVideoWithFile
-  isNewVideo: boolean
   deleteWebVideoFiles: boolean
   resolution: number
   fps: number
@@ -69,7 +68,7 @@ export class VODHLSTranscodingJobHandler
     }
 
     const privatePayload: RunnerJobVODHLSTranscodingPrivatePayload = {
-      ...pick(options, [ 'isNewVideo', 'deleteWebVideoFiles', 'inputStreams', 'canMoveVideoState', 'transcodingRequestAt' ]),
+      ...pick(options, [ 'deleteWebVideoFiles', 'inputStreams', 'canMoveVideoState', 'transcodingRequestAt' ]),
 
       videoUUID: video.uuid
     }
@@ -130,7 +129,6 @@ export class VODHLSTranscodingJobHandler
     }
 
     await onTranscodingEnded({
-      isNewVideo: privatePayload.isNewVideo,
       moveVideoToNextState: privatePayload.canMoveVideoState && !missingStream,
       video
     })

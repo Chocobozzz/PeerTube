@@ -20,8 +20,9 @@ import { VideoLiveSessionModel } from '@server/models/video/video-live-session.j
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MUser, MVideo, MVideoLiveSession, MVideoLiveVideo, MVideoLiveVideoWithSetting } from '@server/types/models/index.js'
+import { MUser, MVideo, MVideoLiveVideo, MVideoLiveVideoWithSetting } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
+import { pathExists } from 'fs-extra/esm'
 import { readFile, readdir } from 'fs/promises'
 import { Server, createServer } from 'net'
 import context from 'node-media-server/src/node_core_ctx.js'
@@ -35,10 +36,10 @@ import { getLiveReplayBaseDirectory } from '../paths.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
+import { isUserQuotaValid } from '../user.js'
 import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
-import { isUserQuotaValid } from '../user.js'
 
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
@@ -182,15 +183,11 @@ class LiveManager {
     })
   }
 
-  isRunning () {
-    return !!this.rtmpServer
-  }
-
   hasSession (sessionId: string) {
     return this.getContext().sessions.has(sessionId)
   }
 
-  stopSessionOfVideo (options: {
+  async stopSessionOfVideo (options: {
     videoUUID: string
     error: LiveVideoErrorType | null
 
@@ -213,12 +210,19 @@ class LiveManager {
       return
     }
 
+    this.videoSessions.delete(videoUUID)
+
     logger.info('Stopping live session of video %s', videoUUID, { error, ...lTags(sessionId, videoUUID) })
 
-    this.saveEndingSession(options)
-      .catch(err => logger.error('Cannot save ending session.', { err, ...lTags(sessionId, videoUUID) }))
+    // Await the ending session write before tearing down: abortSession() triggers ffmpeg shutdown,
+    // which eventually fires 'after-cleanup' and onAfterMuxingCleanup() reading this same row
+    // So this write must be committed first to avoid two unsynchronized writers racing on it
+    try {
+      await this.saveEndingSession(options)
+    } catch (err) {
+      logger.error('Cannot save ending session.', { err, ...lTags(sessionId, videoUUID) })
+    }
 
-    this.videoSessions.delete(videoUUID)
     this.abortSession(sessionId)
   }
 
@@ -278,29 +282,36 @@ class LiveManager {
       return this.abortSession(sessionId)
     }
 
-    if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
-      logger.warn('User quota exceeded. Refusing stream %s.', streamKey, lTags(sessionId, video.uuid))
+    this.videoSessions.set(video.uuid, sessionId)
 
-      try {
-        await this.saveEndingSession({ videoUUID: video.uuid, error: LiveVideoError.QUOTA_EXCEEDED })
-      } catch (err) {
-        logger.error('Cannot save ending session of live with quota exceeded error.', { err, ...lTags(sessionId, video.uuid) })
+    try {
+      if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
+        logger.warn('User quota exceeded. Refusing stream %s.', streamKey, lTags(sessionId, video.uuid))
+
+        try {
+          await this.saveEndingSession({ videoUUID: video.uuid, error: LiveVideoError.QUOTA_EXCEEDED })
+        } catch (err) {
+          logger.error('Cannot save ending session of live with quota exceeded error.', { err, ...lTags(sessionId, video.uuid) })
+        }
+
+        this.videoSessions.delete(video.uuid)
+        return this.abortSession(sessionId)
       }
 
-      return this.abortSession(sessionId)
+      // Cleanup old potential live (could happen with a permanent live)
+      const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
+      if (oldStreamingPlaylist) {
+        if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
+
+        PeerTubeSocket.Instance.sendVideoForceEnd(video)
+
+        await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
+      }
+    } catch (err) {
+      this.videoSessions.delete(video.uuid)
+
+      throw err
     }
-
-    // Cleanup old potential live (could happen with a permanent live)
-    const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
-    if (oldStreamingPlaylist) {
-      if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
-
-      PeerTubeSocket.Instance.sendVideoForceEnd(video)
-
-      await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
-    }
-
-    this.videoSessions.set(video.uuid, sessionId)
 
     logger.debug('Probing ' + inputLocalUrl, lTags(sessionId, video.uuid))
 
@@ -444,6 +455,11 @@ class LiveManager {
 
     muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, audioOnlyOutput, localLTags }))
 
+    const safeStopSession = (error: LiveVideoErrorType) => {
+      this.stopSessionOfVideo({ videoUUID, error })
+        .catch(err => logger.error('Cannot stop session of video ' + videoUUID, { err, ...localLTags }))
+    }
+
     muxingSession.on('bad-socket-health', ({ videoUUID }) => {
       logger.error(
         'Too much data in client socket stream (ffmpeg is too slow to transcode the video).' +
@@ -452,23 +468,23 @@ class LiveManager {
         localLTags
       )
 
-      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.BAD_SOCKET_HEALTH })
+      safeStopSession(LiveVideoError.BAD_SOCKET_HEALTH)
     })
 
     muxingSession.on('duration-exceeded', ({ videoUUID }) => {
       logger.info('Stopping session of %s: max duration exceeded.', videoUUID, localLTags)
 
-      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.DURATION_EXCEEDED })
+      safeStopSession(LiveVideoError.DURATION_EXCEEDED)
     })
 
     muxingSession.on('quota-exceeded', ({ videoUUID }) => {
       logger.info('Stopping session of %s: user quota exceeded.', videoUUID, localLTags)
 
-      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.QUOTA_EXCEEDED })
+      safeStopSession(LiveVideoError.QUOTA_EXCEEDED)
     })
 
     muxingSession.on('transcoding-error', ({ videoUUID }) => {
-      this.stopSessionOfVideo({ videoUUID, error: LiveVideoError.FFMPEG_ERROR })
+      safeStopSession(LiveVideoError.FFMPEG_ERROR)
     })
 
     muxingSession.on('transcoding-end', ({ videoUUID }) => {
@@ -482,7 +498,7 @@ class LiveManager {
 
       muxingSession.destroy()
 
-      return this.onAfterMuxingCleanup({ videoUUID, liveSession })
+      return this.onAfterMuxingCleanup({ videoUUID, liveSessionId: liveSession.id })
         .catch(err => logger.error('Error in end transmuxing.', { err, ...localLTags }))
     })
 
@@ -499,7 +515,7 @@ class LiveManager {
           videoUUID,
           error: err.liveVideoErrorCode || LiveVideoError.UNKNOWN_ERROR,
           errorOnReplay: true // Replay cannot be processed as muxing session failed directly
-        })
+        }).catch(stopErr => logger.error('Cannot stop session of video %s.', videoUUID, { err: stopErr, ...localLTags }))
       })
   }
 
@@ -519,7 +535,10 @@ class LiveManager {
       logger.info('Will publish and federate live %s.', video.url, localLTags)
 
       video.state = VideoState.PUBLISHED
-      video.publishedAt = new Date()
+
+      const now = new Date()
+      video.publishedAt = now
+
       video.aspectRatio = audioOnlyOutput
         ? 0
         : ratio
@@ -531,7 +550,7 @@ class LiveManager {
       await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
       try {
-        await federateVideoIfNeeded(video, false)
+        await federateVideoIfNeeded(video)
       } catch (err) {
         logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags })
       }
@@ -557,10 +576,10 @@ class LiveManager {
 
   private async onAfterMuxingCleanup (options: {
     videoUUID: string
-    liveSession?: MVideoLiveSession
+    liveSessionId?: number
     cleanupNow?: boolean // Default false
   }) {
-    const { videoUUID, liveSession: liveSessionArg, cleanupNow = false } = options
+    const { videoUUID, liveSessionId, cleanupNow = false } = options
 
     logger.debug('Live of video %s has been cleaned up. Moving to its next state.', videoUUID, lTags(videoUUID))
 
@@ -570,7 +589,10 @@ class LiveManager {
 
       const live = await VideoLiveModel.loadByVideoId(fullVideo.id)
 
-      const liveSession = liveSessionArg ?? await VideoLiveSessionModel.findLatestSessionOf(fullVideo.id)
+      // Always reload from DB instead of reusing a caller-held instance to prevent concurrency issues
+      const liveSession = liveSessionId
+        ? await VideoLiveSessionModel.load(liveSessionId)
+        : await VideoLiveSessionModel.findLatestSessionOf(fullVideo.id)
 
       // On server restart during a live
       if (!liveSession.endDate) {
@@ -606,7 +628,7 @@ class LiveManager {
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 
-      await federateVideoIfNeeded(fullVideo, false)
+      await federateVideoIfNeeded(fullVideo)
 
       Hooks.runAction('action:live.video.state.updated', { video: fullVideo })
     } catch (err) {
@@ -626,6 +648,8 @@ class LiveManager {
 
   private async findReplayDirectory (video: MVideo) {
     const directory = getLiveReplayBaseDirectory(video)
+    if (!(await pathExists(directory))) return undefined
+
     const files = await readdir(directory)
 
     if (files.length === 0) return undefined

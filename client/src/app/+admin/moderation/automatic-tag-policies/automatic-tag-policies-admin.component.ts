@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { HtmlRendererService, Notifier } from '@app/core'
@@ -8,6 +8,7 @@ import { AutomaticTagAvailableType } from '@peertube/peertube-models'
 import { AutomaticTagPoliciesAdminTag } from './automatic-tag-policies-admin.resolver'
 
 @Component({
+  selector: 'my-automatic-tag-policies-admin',
   templateUrl: './automatic-tag-policies-admin.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [

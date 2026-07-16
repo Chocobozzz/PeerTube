@@ -17,7 +17,6 @@ export type RunnerJobPrivatePayload =
 
 export interface RunnerJobVODWebVideoTranscodingPrivatePayload {
   videoUUID: string
-  isNewVideo: boolean
   deleteInputFileId: number | null
 
   canMoveVideoState: boolean
@@ -25,7 +24,6 @@ export interface RunnerJobVODWebVideoTranscodingPrivatePayload {
 
 export interface RunnerJobVODAudioMergeTranscodingPrivatePayload {
   videoUUID: string
-  isNewVideo: boolean
   deleteInputFileId: number | null
 
   canMoveVideoState: boolean
@@ -33,7 +31,6 @@ export interface RunnerJobVODAudioMergeTranscodingPrivatePayload {
 
 export interface RunnerJobVODHLSTranscodingPrivatePayload {
   videoUUID: string
-  isNewVideo: boolean
   deleteWebVideoFiles: boolean
 
   canMoveVideoState: boolean

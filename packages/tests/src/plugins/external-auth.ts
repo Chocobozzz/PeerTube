@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, UserAdminFlag, UserRole } from '@peertube/peertube-models'
+import { HttpStatusCode, UserAdminFlag, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -10,51 +10,8 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { fetchExternalToken, loginExternal } from '@tests/shared/plugins.js'
 import { expect } from 'chai'
-
-async function loginExternal (options: {
-  server: PeerTubeServer
-  npmName: string
-  authName: string
-  username: string
-  query?: any
-  expectedStatus?: HttpStatusCodeType
-  expectedStatusStep2?: HttpStatusCodeType
-}) {
-  const externalAuthToken = await fetchExternalToken(options)
-  if (!externalAuthToken) return
-
-  const resLogin = await options.server.login.loginUsingExternalToken({
-    username: options.username,
-    externalAuthToken,
-    expectedStatus: options.expectedStatusStep2
-  })
-
-  return resLogin.body
-}
-
-async function fetchExternalToken (options: {
-  server: PeerTubeServer
-  npmName: string
-  authName: string
-  query?: any
-  expectedStatus?: HttpStatusCodeType
-}) {
-  const res = await options.server.plugins.getExternalAuth({
-    npmName: options.npmName,
-    npmVersion: '0.0.1',
-    authName: options.authName,
-    query: options.query,
-    expectedStatus: options.expectedStatus || HttpStatusCode.FOUND_302
-  })
-
-  if (res.status !== HttpStatusCode.FOUND_302) return undefined
-
-  const location = res.header.location
-  const { externalAuthToken } = decodeQueryString(location)
-
-  return externalAuthToken as string
-}
 
 describe('Test external auth plugins', function () {
   let server: PeerTubeServer
@@ -190,7 +147,42 @@ describe('Test external auth plugins', function () {
       expect(body.adminFlags).to.equal(UserAdminFlag.NONE)
       expect(body.videoQuota).to.equal(5242880)
       expect(body.videoQuotaDaily).to.equal(-1)
+      expect(body.language).to.be.null
     }
+  })
+
+  it('Should auto login a user with a language provided by the plugin and create it with that language', async function () {
+    const res = await loginExternal({
+      server,
+      npmName: 'test-external-auth-one',
+      authName: 'external-auth-1',
+      query: {
+        username: 'sabin',
+        language: 'fr'
+      },
+      username: 'sabin'
+    })
+
+    const body = await server.users.getMyInfo({ token: res.access_token })
+    expect(body.username).to.equal('sabin')
+    expect(body.language).to.equal('fr')
+  })
+
+  it('Should reject an invalid language returned by an external auth plugin', async function () {
+    const res = await loginExternal({
+      server,
+      npmName: 'test-external-auth-one',
+      authName: 'external-auth-1',
+      query: {
+        username: 'shadow',
+        language: 'not-a-valid-locale'
+      },
+      username: 'shadow'
+    })
+
+    const body = await server.users.getMyInfo({ token: res.access_token })
+    expect(body.username).to.equal('shadow')
+    expect(body.language).to.be.null
   })
 
   it('Should auto login Kefka, create the user and use the token', async function () {
@@ -215,6 +207,7 @@ describe('Test external auth plugins', function () {
       expect(body.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
       expect(body.videoQuota).to.equal(42000)
       expect(body.videoQuotaDaily).to.equal(42100)
+      expect(body.language).to.equal('fr')
 
       kefkaId = body.id
     }
@@ -282,13 +275,14 @@ describe('Test external auth plugins', function () {
   it('Should login Kefka and update the profile', async function () {
     {
       await server.users.update({ userId: kefkaId, videoQuota: 43000, videoQuotaDaily: 43100 })
-      await server.users.updateMe({ token: kefkaAccessToken, displayName: 'kefka updated' })
+      await server.users.updateMe({ token: kefkaAccessToken, displayName: 'kefka updated', language: 'en' })
 
       const body = await server.users.getMyInfo({ token: kefkaAccessToken })
       expect(body.username).to.equal('kefka')
       expect(body.account.displayName).to.equal('kefka updated')
       expect(body.videoQuota).to.equal(43000)
       expect(body.videoQuotaDaily).to.equal(43100)
+      expect(body.language).to.equal('en')
     }
 
     {
@@ -307,6 +301,8 @@ describe('Test external auth plugins', function () {
       expect(body.account.displayName).to.equal('Kefka Palazzo')
       expect(body.videoQuota).to.equal(42000)
       expect(body.videoQuotaDaily).to.equal(43100)
+      // userUpdater always uses the plugin's new value for language, like it does for displayName/role/videoQuota
+      expect(body.language).to.equal('fr')
     }
   })
 
@@ -436,10 +432,6 @@ describe('Test external auth plugins', function () {
     expect(auth2).to.not.exist
   })
 
-  after(async function () {
-    await cleanupTests([ server ])
-  })
-
   it('Should forward the redirectUrl if the plugin returns one', async function () {
     const resLogin = await loginExternal({
       server,
@@ -487,6 +479,10 @@ describe('Test external auth plugins', function () {
 
     await server.login.loginUsingExternalToken({ username: 'cid', externalAuthToken, expectedStatus: HttpStatusCode.OK_200 })
   })
+
+  after(async function () {
+    await cleanupTests([ server ])
+  })
 })
 
 describe('Test external auth plugins with some non-default config options', function () {
@@ -496,7 +492,7 @@ describe('Test external auth plugins with some non-default config options', func
     this.timeout(30000)
 
     server = await createSingleServer(1, {
-      auth: {
+      user: {
         allow_cross_provider_auth: true
       }
     })
@@ -547,7 +543,7 @@ describe('Test external auth plugins with some non-default config options', func
 
     await server.kill()
     await server.run({
-      auth: {
+      user: {
         allow_cross_provider_auth: false
       }
     })
@@ -567,5 +563,9 @@ describe('Test external auth plugins with some non-default config options', func
       username: 'cid',
       expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
     })
+  })
+
+  after(async function () {
+    await cleanupTests([ server ])
   })
 })

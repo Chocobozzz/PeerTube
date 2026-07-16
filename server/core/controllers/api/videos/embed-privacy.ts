@@ -121,7 +121,7 @@ async function updateVideoEmbedPrivacy (req: express.Request, res: express.Respo
       transaction: t
     })
 
-    await federateVideoIfNeeded(video, false, t)
+    await federateVideoIfNeeded(video, t)
   })
 
   logger.info(`Video embed policy for video with name ${video.name} and uuid ${video.uuid} have been updated`, lTags(video.uuid))

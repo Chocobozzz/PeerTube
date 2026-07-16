@@ -14,8 +14,8 @@ import { decachePlugin } from '@server/helpers/decache.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import express from 'express'
-import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
+import { appendFile, readFile } from 'fs/promises'
 import { Server } from 'http'
 import { createRequire } from 'module'
 import { basename, join } from 'path'
@@ -108,7 +108,7 @@ export class PluginManager implements ServerHook {
 
       const routes = result.registerHelpers.getWebSocketRoutes()
 
-      const wss = routes.find(r => r.route.startsWith(subRoute))
+      const wss = routes.find(r => subRoute === r.route || subRoute.startsWith(r.route + '/'))
       if (!wss) return
 
       try {
@@ -229,7 +229,7 @@ export class PluginManager implements ServerHook {
 
     if (auth.hookTokenValidity) {
       try {
-        const { valid } = await auth.hookTokenValidity({ token, type })
+        const { valid } = await auth.hookTokenValidity({ token, user: token.User, type })
 
         if (valid === false) {
           logger.info('Rejecting %s token validity from auth %s of plugin %s', type, token.authName, token.User.pluginAuth)
@@ -272,6 +272,7 @@ export class PluginManager implements ServerHook {
     const registered = this.getRegisteredPluginByShortName(name)
     if (!registered) {
       logger.error('Cannot find plugin %s to call on settings changed.', name)
+      return
     }
 
     for (const cb of registered.registerHelpers.getOnSettingsChangedCallbacks()) {
@@ -604,16 +605,10 @@ export class PluginManager implements ServerHook {
     }
   }
 
-  private concatFiles (input: string, output: string) {
-    return new Promise<void>((res, rej) => {
-      const inputStream = createReadStream(input)
-      const outputStream = createWriteStream(output, { flags: 'a' })
+  private async concatFiles (input: string, output: string) {
+    const css = await readFile(input, 'utf-8')
 
-      inputStream.pipe(outputStream)
-
-      inputStream.on('end', () => res())
-      inputStream.on('error', err => rej(err))
-    })
+    return appendFile(output, stripSourceMappingURLComments(css))
   }
 
   private async regeneratePluginGlobalCSS () {
@@ -714,4 +709,10 @@ export class PluginManager implements ServerHook {
   static get Instance () {
     return this.instance || (this.instance = new this())
   }
+}
+
+function stripSourceMappingURLComments (css: string) {
+  return css
+    .replace(/\/\*#\s*sourceMappingURL=[^*]*\*\//gs, '')
+    .replace(/\/\/#\s*sourceMappingURL=.*/g, '')
 }

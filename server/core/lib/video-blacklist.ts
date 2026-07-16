@@ -162,6 +162,7 @@ export async function blacklistVideo (videoInstance: MVideoAccountLight, options
 
   if (videoInstance.isLive) {
     LiveManager.Instance.stopSessionOfVideo({ videoUUID: videoInstance.uuid, error: LiveVideoError.BLACKLISTED })
+      .catch(err => logger.error('Cannot stop session of video %s.', videoInstance.uuid, { err }))
   }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)
@@ -177,7 +178,7 @@ export async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: 
 
     // Re federate the video
     if (unfederated === true) {
-      await federateVideoIfNeeded(await VideoModel.loadFull(video.id, t), true, t)
+      await federateVideoIfNeeded(await VideoModel.loadFull(video.id, t), t)
     }
 
     return videoBlacklistType

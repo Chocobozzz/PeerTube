@@ -85,17 +85,18 @@ import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteVideo } from '../../lib/activitypub/send/index.js'
-import {
+import type {
   MAccountId,
   MChannel,
-  MChannelAccountDefault,
   MChannelId,
   MStoryboard,
   MStreamingPlaylist,
   MStreamingPlaylistFilesVideo,
   MUserAccountId,
+  MVideo,
   MVideoAP,
   MVideoAPLight,
+  MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
   MVideoCaptionLanguageUrl,
   MVideoDetails,
@@ -112,9 +113,7 @@ import {
   MVideoWithAllFiles,
   MVideoWithBlacklist,
   MVideoWithFile,
-  MVideoWithRights,
-  type MVideo,
-  type MVideoAccountLight
+  MVideoWithRights
 } from '../../types/models/index.js'
 import { MThumbnail } from '../../types/models/video/thumbnail.js'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file.js'
@@ -619,6 +618,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Column
   declare originallyPublishedAt: Date
 
+  @AllowNull(true)
+  @Default(null)
+  @Column
+  declare firstPublishedAt: Date
+
   @ForeignKey(() => VideoChannelModel)
   @Column
   declare channelId: number
@@ -844,48 +848,48 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     InternalEventEmitter.Instance.emit('video-deleted', { video })
   }
 
+  // ---------------------------------------------------------------------------
+
   @BeforeDestroy
-  static stopLiveIfNeeded (instance: VideoModel) {
+  static async beforeDestroyHook (instance: VideoModel, options: { transaction: Transaction }) {
+    const videoFull = await this.loadFull(instance.id, options.transaction)
+
+    this.stopLiveIfNeeded(videoFull)
+    this.invalidateCache(videoFull)
+
+    await this.sendDelete(videoFull, options.transaction)
+    await this.saveEssentialDataToAbuses(videoFull, options.transaction)
+    await this.removeFiles(videoFull, options.transaction)
+  }
+
+  static stopLiveIfNeeded (instance: MVideo) {
     if (!instance.isLive) return
 
     logger.info('Stopping live of video %s after video deletion.', instance.uuid)
 
     LiveManager.Instance.stopSessionOfVideo({ videoUUID: instance.uuid, error: null })
+      .catch(err => logger.error('Cannot stop session of video %s.', instance.uuid, { err }))
   }
 
-  @BeforeDestroy
-  static invalidateCache (instance: VideoModel) {
+  static invalidateCache (instance: MVideo) {
     ModelCache.Instance.invalidateCache('video', instance.id)
   }
 
-  @BeforeDestroy
-  static async sendDelete (instance: MVideoAccountLight, options: { transaction: Transaction }) {
+  static async sendDelete (instance: MVideoFull, transaction: Transaction) {
     if (!instance.isLocal()) return undefined
     if (!isPrivacyForFederation(instance.privacy)) return undefined
 
-    // Lazy load channels
-    if (!instance.VideoChannel?.Account?.Actor) {
-      instance.VideoChannel = await instance.$get('VideoChannel', {
-        include: [
-          ActorModel,
-          AccountModel
-        ],
-        transaction: options.transaction
-      }) as MChannelAccountDefault
-    }
-
-    return sendDeleteVideo({ video: instance, transaction: options.transaction })
+    return sendDeleteVideo({ video: instance, transaction })
   }
 
-  @BeforeDestroy
-  static async removeFiles (instance: VideoModel, options) {
+  static async removeFiles (instance: MVideoWithAllFiles, transaction: Transaction) {
     const tasks: Promise<any>[] = []
 
     logger.info('Removing files of video ' + instance.url)
 
     if (instance.isLocal()) {
       if (!Array.isArray(instance.VideoFiles)) {
-        instance.VideoFiles = await instance.$get('VideoFiles', { transaction: options.transaction })
+        instance.VideoFiles = await instance.$get('VideoFiles', { transaction })
       }
 
       // Remove physical files and torrents
@@ -895,7 +899,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
       // Remove playlists file
       if (!Array.isArray(instance.VideoStreamingPlaylists)) {
-        instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists', { transaction: options.transaction })
+        instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists', { transaction })
       }
 
       for (const p of instance.VideoStreamingPlaylists) {
@@ -904,7 +908,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
 
       // Remove source files
-      const promiseRemoveSources = VideoSourceModel.listAll(instance.id, options.transaction)
+      const promiseRemoveSources = VideoSourceModel.listAll(instance.id, transaction)
         .then(sources => Promise.all(sources.map(s => instance.removeOriginalFile(s))))
 
       tasks.push(promiseRemoveSources)
@@ -918,24 +922,20 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return undefined
   }
 
-  @BeforeDestroy
-  static async saveEssentialDataToAbuses (instance: VideoModel, options) {
+  static async saveEssentialDataToAbuses (instance: MVideoFull & MVideoFormattableDetails, transaction: Transaction) {
     const tasks: Promise<any>[] = []
 
-    if (!Array.isArray(instance.VideoAbuses)) {
-      instance.VideoAbuses = await instance.$get('VideoAbuses', { transaction: options.transaction })
+    const videoAbuses = await instance.$get('VideoAbuses', { transaction })
+    if (videoAbuses.length === 0) return undefined
 
-      if (instance.VideoAbuses.length === 0) return undefined
-    }
+    logger.info('Saving video abuses details of video %s.', instance.url, { instance })
 
-    logger.info('Saving video abuses details of video %s.', instance.url)
-
-    if (!instance.Trackers) instance.Trackers = await instance.$get('Trackers', { transaction: options.transaction })
+    if (!instance.Trackers) instance.Trackers = await instance.$get('Trackers', { transaction })
     const details = instance.toFormattedDetailsJSON()
 
-    for (const abuse of instance.VideoAbuses) {
+    for (const abuse of videoAbuses) {
       abuse.deletedVideo = details
-      tasks.push(abuse.save({ transaction: options.transaction }))
+      tasks.push(abuse.save({ transaction }))
     }
 
     await Promise.all(tasks)
@@ -2392,13 +2392,19 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   // ---------------------------------------------------------------------------
 
-  async setNewState (newState: VideoStateType, isNewVideo: boolean, transaction: Transaction) {
+  async setNewStateAndPublishedAt (options: {
+    newState: VideoStateType
+    transaction: Transaction
+  }) {
+    const { newState, transaction } = options
+
     if (this.state === newState) throw new Error('Cannot use same state ' + newState)
 
     this.state = newState
 
-    if (this.state === VideoState.PUBLISHED && isNewVideo) {
+    if (this.state === VideoState.PUBLISHED && !this.firstPublishedAt) {
       this.publishedAt = new Date()
+      this.firstPublishedAt = this.publishedAt
     }
 
     await this.save({ transaction })

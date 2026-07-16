@@ -11,14 +11,14 @@ import { exists } from '@server/helpers/custom-validators/misc.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { sendDeleteVideo } from '@server/lib/activitypub/send/send-delete.js'
 import { changeVideoChannelShare } from '@server/lib/activitypub/share.js'
-import { isNewVideoPrivacyForFederation, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
+import { isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
 import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
 import { replaceChaptersFromDescriptionIfNeeded } from '@server/lib/video-chapters.js'
-import { addVideoJobsAfterUpdate } from '@server/lib/video-jobs.js'
+import { onVideoLocalUpdate } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { setVideoPrivacy } from '@server/lib/video-privacy.js'
+import { isNewVideoForSubscription, setVideoPrivacy } from '@server/lib/video-privacy.js'
 import { setVideoTags } from '@server/lib/video.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { getServerAccount } from '@server/models/application/application.js'
@@ -76,7 +76,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(videoFromReq.uuid)
 
   try {
-    const { videoInstanceUpdated, isNewVideoForFederation } = await sequelizeTypescript.transaction(async t => {
+    const { videoInstanceUpdated, newVideoForSubscription } = await sequelizeTypescript.transaction(async t => {
       // Refresh video since thumbnails to prevent concurrent updates
       const video = await VideoModel.loadFull(videoFromReq.id, t)
 
@@ -118,10 +118,16 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Privacy update?
-      let isNewVideoForFederation = false
+      let newVideoForSubscription = false
 
       if (body.privacy !== undefined) {
-        isNewVideoForFederation = await updateVideoPrivacy({
+        newVideoForSubscription = isNewVideoForSubscription({
+          currentPrivacy: video.privacy,
+          newPrivacy: body.privacy,
+          firstPublishedAt: video.firstPublishedAt
+        })
+
+        await updateVideoPrivacy({
           videoInstance: video,
           videoInfoToUpdate: body,
           hadPrivacyForFederation,
@@ -221,16 +227,16 @@ async function updateVideo (req: express.Request, res: express.Response) {
       )
       logger.info('Video with name %s and uuid %s updated.', video.name, video.uuid, lTags(video.uuid))
 
-      return { videoInstanceUpdated, isNewVideoForFederation }
+      return { videoInstanceUpdated, newVideoForSubscription }
     })
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated, body: req.body, req, res })
 
-    await addVideoJobsAfterUpdate({
+    await onVideoLocalUpdate({
       video: videoInstanceUpdated,
       nameChanged: !!body.name,
       oldPrivacy,
-      isNewVideoForFederation
+      isNewVideoForSubscription: newVideoForSubscription
     })
   } catch (err) {
     // If the transaction is retried, sequelize will think the object has not changed
@@ -255,7 +261,6 @@ async function updateVideoPrivacy (options: {
   transaction: Transaction
 }) {
   const { videoInstance, videoInfoToUpdate, hadPrivacyForFederation, transaction } = options
-  const isNewVideoForFederation = isNewVideoPrivacyForFederation(videoInstance.privacy, videoInfoToUpdate.privacy)
 
   const newPrivacy = forceNumber(videoInfoToUpdate.privacy) as VideoPrivacyType
   setVideoPrivacy(videoInstance, newPrivacy)
@@ -274,8 +279,6 @@ async function updateVideoPrivacy (options: {
   if (hadPrivacyForFederation && !isPrivacyForFederation(videoInstance.privacy)) {
     await sendDeleteVideo({ video: videoInstance, deleteForPrivacyChange: true, transaction })
   }
-
-  return isNewVideoForFederation
 }
 
 async function updateSchedule (videoInstance: MVideoFull, videoInfoToUpdate: VideoUpdate, transaction: Transaction) {

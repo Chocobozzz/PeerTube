@@ -44,8 +44,8 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
-  isVideoOriginallyPublishedAtValid,
   isVideoPrivacyValid,
+  isVideoPublicationDateValid,
   isVideoSourceFilenameValid,
   isVideoSupportValid
 } from '../../../helpers/custom-validators/videos.js'
@@ -481,7 +481,7 @@ export function getCommonVideoEditAttributes () {
     body('originallyPublishedAt')
       .optional()
       .customSanitizer(toValueOrNull)
-      .custom(isVideoOriginallyPublishedAtValid),
+      .custom(isVideoPublicationDateValid),
     body('scheduleUpdate')
       .optional()
       .customSanitizer(toValueOrNull),

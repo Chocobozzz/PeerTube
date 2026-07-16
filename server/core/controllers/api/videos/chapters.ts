@@ -54,7 +54,7 @@ async function replaceVideoChapters (req: express.Request, res: express.Response
         transaction: t
       })
 
-      await federateVideoIfNeeded(video, false, t)
+      await federateVideoIfNeeded(video, t)
     })
   })
 

@@ -1,10 +1,4 @@
-import {
-  RunnerJobState,
-  RunnerJobStateType,
-  RunnerJobSuccessPayload,
-  RunnerJobUpdatePayload,
-  RunnerJobVODPrivatePayload
-} from '@peertube/peertube-models'
+import { RunnerJobState, RunnerJobStateType, RunnerJobSuccessPayload, RunnerJobUpdatePayload } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger } from '@server/helpers/logger.js'
 import { moveToFailedTranscodingState, moveToNextState } from '@server/lib/video-state.js'
@@ -52,7 +46,7 @@ export abstract class AbstractVODTranscodingJobHandler<C, U extends RunnerJobUpd
   }) {
     const { runnerJob } = options
 
-    const video = await loadRunnerVideo(options.runnerJob, this.lTags)
+    const video = await loadRunnerVideo(runnerJob, this.lTags)
     if (!video) return
 
     const pending = await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
@@ -65,8 +59,7 @@ export abstract class AbstractVODTranscodingJobHandler<C, U extends RunnerJobUpd
         this.lTags(video.uuid)
       )
 
-      const privatePayload = runnerJob.privatePayload as RunnerJobVODPrivatePayload
-      await retryTransactionWrapper(moveToNextState, { video, isNewVideo: privatePayload.isNewVideo })
+      await retryTransactionWrapper(moveToNextState, { video })
     }
   }
 }

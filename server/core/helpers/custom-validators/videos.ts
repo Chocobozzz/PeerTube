@@ -124,7 +124,7 @@ export function isScheduleVideoUpdatePrivacyValid (value: number) {
   return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
 }
 
-export function isVideoOriginallyPublishedAtValid (value: string | null) {
+export function isVideoPublicationDateValid (value: string | null) {
   return value === null || isDateValid(value)
 }
 

@@ -152,7 +152,6 @@ export type ManageVideoTorrentPayload = {
 interface BaseTranscodingPayload {
   videoUUID: string
   canMoveVideoState: boolean
-  isNewVideo?: boolean
 }
 
 export interface HLSTranscodingPayload extends BaseTranscodingPayload {
@@ -212,12 +211,7 @@ export type MoveStoragePayload = MoveVideoStoragePayload | MoveCaptionPayload
 export interface MoveVideoStoragePayload {
   videoUUID: string
 
-  // FIXME: old API compatibility, remove in PeerTube v9
-  isNewVideo?: boolean
-  previousVideoState?: VideoStateType
-
   moveVideoState?: {
-    isNewVideo: boolean
     previousVideoState: VideoStateType
   }
 }
@@ -314,7 +308,6 @@ export type NotifyPayload = {
 
 export interface FederateVideoPayload {
   videoUUID: string
-  isNewVideoForFederation: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -322,9 +315,9 @@ export interface FederateVideoPayload {
 export interface TranscodingJobBuilderPayload {
   videoUUID: string
 
-  optimizeJob?: {
-    isNewVideo: boolean
-  }
+  // This is a transcoding job to optimize the video
+  // Set {} for now, can accept more options in the future
+  optimizeJob?: {}
 
   // Array of jobs to create
   jobs?: {

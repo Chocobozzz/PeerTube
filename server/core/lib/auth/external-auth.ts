@@ -1,6 +1,9 @@
+import { UserAdminFlag, UserRole } from '@peertube/peertube-models'
+import { isDevInstance } from '@peertube/peertube-node-utils'
 import {
   isUserAdminFlagsValid,
   isUserDisplayNameValid,
+  isUserLanguage,
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoQuotaDailyValid,
@@ -17,13 +20,11 @@ import {
   RegisterServerAuthPassOptions,
   RegisterServerExternalAuthenticatedResult
 } from '@server/types/plugins/register-server-auth.model.js'
-import { UserAdminFlag, UserRole } from '@peertube/peertube-models'
 import { BypassLogin } from './oauth-model.js'
-import { isDevInstance } from '@peertube/peertube-node-utils'
 
 export type ExternalUser =
-  & Pick<MUser, 'username' | 'email' | 'role' | 'adminFlags' | 'videoQuotaDaily' | 'videoQuota'>
-  & { displayName: string }
+  & Pick<MUser, 'username' | 'email' | 'role' | 'adminFlags' | 'videoQuotaDaily' | 'videoQuota' | 'language'>
+  & { displayName: string, externalId?: string }
 
 // Token is the key, expiration date is the value
 const authBypassTokens = new Map<string, {
@@ -39,12 +40,14 @@ async function onExternalUserAuthenticated (options: {
   authName: string
   authResult: RegisterServerExternalAuthenticatedResult
 }) {
-  const { npmName, authName, authResult } = options
+  const { npmName, authName } = options
 
-  if (!authResult.req || !authResult.res) {
+  if (!options.authResult.req || !options.authResult.res) {
     logger.error('Cannot authenticate external user for auth %s of plugin %s: no req or res are provided.', authName, npmName)
     return
   }
+
+  const authResult = sanitizeAuthResult(npmName, authName, { ...options.authResult })
 
   const { res, externalRedirectUri } = authResult
 
@@ -206,6 +209,17 @@ function consumeBypassFromExternalAuth (username: string, externalAuthToken: str
   }
 }
 
+function sanitizeAuthResult (npmName: string, authName: string, result: RegisterServerExternalAuthenticatedResult) {
+  if (result.language && !isUserLanguage(result.language)) {
+    logger.info(
+      'Auth method ' + authName + ' of plugin ' + npmName + ' provided invalid language ' + result.language + ', setting it to null.'
+    )
+    result.language = null
+  }
+
+  return result
+}
+
 function isAuthResultValid (npmName: string, authName: string, result: RegisterServerAuthenticatedResult) {
   const returnError = (field: string) => {
     logger.error('Auth method %s of plugin %s did not provide a valid %s.', authName, npmName, field, { [field]: result[field] })
@@ -221,10 +235,15 @@ function isAuthResultValid (npmName: string, authName: string, result: RegisterS
   if (result.adminFlags && !isUserAdminFlagsValid(result.adminFlags)) return returnError('adminFlags')
   if (result.videoQuota && !isUserVideoQuotaValid(result.videoQuota + '')) return returnError('videoQuota')
   if (result.videoQuotaDaily && !isUserVideoQuotaDailyValid(result.videoQuotaDaily + '')) return returnError('videoQuotaDaily')
+  if (result.language && !isUserLanguage(result.language)) return returnError('language')
 
   if (result.userUpdater && typeof result.userUpdater !== 'function') {
     logger.error('Auth method %s of plugin %s did not provide a valid user updater function.', authName, npmName)
     return false
+  }
+
+  if (result.externalId && (typeof result.externalId !== 'string' || result.externalId.length > 255)) {
+    return returnError('externalId')
   }
 
   return true
@@ -240,15 +259,19 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
     adminFlags: pluginResult.adminFlags ?? UserAdminFlag.NONE,
 
     videoQuota: pluginResult.videoQuota,
-    videoQuotaDaily: pluginResult.videoQuotaDaily
+    videoQuotaDaily: pluginResult.videoQuotaDaily,
+
+    language: pluginResult.language || null,
+
+    externalId: pluginResult.externalId || undefined
   }
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  onExternalUserAuthenticated,
   consumeBypassFromExternalAuth,
   getAuthNameFromRefreshGrant,
-  getBypassFromPasswordGrant
+  getBypassFromPasswordGrant,
+  onExternalUserAuthenticated
 }

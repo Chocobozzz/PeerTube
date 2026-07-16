@@ -121,3 +121,25 @@ export function getAvatarsJSONJoin (options: {
 export function getAvatarsJSONAttributes (base: string) {
   return `"${base}AvatarsJSON"."Avatars" AS "${base.replace(/->/g, '.')}Avatars"`
 }
+
+/**
+ * Build JSON directly in PostgreSQL to reduce amount of rows transferred and processed in JS
+ */
+export function getBannersJSONJoin (options: {
+  attributes: string
+  base: string
+  on: string
+}) {
+  const { attributes, base, on } = options
+
+  return `LEFT JOIN LATERAL (` +
+    `SELECT json_agg(` +
+    `  jsonb_build_object(${attributes})` +
+    `) AS "Banners"` +
+    ` FROM "actorImage" WHERE "actorId" = ${on} AND "type" = ${ActorImageType.BANNER}` +
+    `) AS "${base}BannersJSON" ON TRUE `
+}
+
+export function getBannersJSONAttributes (base: string) {
+  return `"${base}BannersJSON"."Banners" AS "${base.replace(/->/g, '.')}Banners"`
+}

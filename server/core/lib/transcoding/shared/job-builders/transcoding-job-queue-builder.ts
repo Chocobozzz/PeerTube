@@ -92,7 +92,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
     video: MVideo
     resolution: number
     fps: number
-    isNewVideo: boolean
     separatedAudio: boolean
 
     transcodingPriority: TranscodingPriorityType
@@ -112,7 +111,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
       ...pick(options, [
         'resolution',
         'fps',
-        'isNewVideo',
         'separatedAudio',
         'canMoveVideoState',
         'transcodingPriority',
@@ -128,7 +126,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
     video: MVideo
     resolution: number
     fps: number
-    isNewVideo: boolean
 
     transcodingPriority: TranscodingPriorityType
     canMoveVideoState: boolean
@@ -140,7 +137,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
       videoUUID: video.uuid,
 
       ...pick(options, [
-        'isNewVideo',
         'resolution',
         'fps',
         'transcodingPriority',
@@ -151,7 +147,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
 
   protected buildMergeAudioPayload (options: {
     video: MVideo
-    isNewVideo: boolean
     fps: number
     resolution: number
 
@@ -167,7 +162,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
       ...pick(options, [
         'resolution',
         'fps',
-        'isNewVideo',
         'transcodingPriority',
         'canMoveVideoState'
       ])
@@ -176,7 +170,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
 
   protected buildOptimizePayload (options: {
     video: MVideo
-    isNewVideo: boolean
 
     transcodingPriority: TranscodingPriorityType
     canMoveVideoState: boolean
@@ -189,7 +182,6 @@ export class TranscodingJobQueueBuilder extends AbstractJobBuilder<FullPayload> 
       videoUUID: video.uuid,
 
       ...pick(options, [
-        'isNewVideo',
         'transcodingPriority',
         'canMoveVideoState'
       ])

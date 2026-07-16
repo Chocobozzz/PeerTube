@@ -28,10 +28,10 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
 
     logger.log(logLevel, 'Bad HTTP request.', { json, tags })
 
-    res.status(status)
-
     // Cannot display a proper error to the client since headers are already sent
     if (res.headersSent) return
+
+    res.status(status)
 
     res.setHeader('Content-Type', 'application/problem+json')
     res.json(json)
@@ -41,14 +41,8 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
 }
 
 function handleStaticError (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-  const message = err.message || ''
-
-  if (message.includes('ENOENT')) {
-    return res.fail({
-      status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
-      message: err.message,
-      type: err.name
-    })
+  if (err instanceof Error && (err as NodeJS.ErrnoException).code === 'ENOENT') {
+    return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
   }
 
   return next(err)

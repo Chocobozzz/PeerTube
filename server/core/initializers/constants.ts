@@ -62,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1065
+export const LAST_MIGRATION_VERSION = 1080
 
 // ---------------------------------------------------------------------------
 
@@ -579,8 +579,8 @@ export const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100
 
 export let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
-export const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
-export const DEFAULT_AUDIO_MERGE_RESOLUTION = 25
+export const DEFAULT_AUDIO_MERGE_RESOLUTION = VideoResolution.H_480P
+export const DEFAULT_AUDIO_MERGE_FPS = 25
 
 export const VIDEO_RATE_TYPES: { [id: string]: VideoRateType } = {
   LIKE: 'like',

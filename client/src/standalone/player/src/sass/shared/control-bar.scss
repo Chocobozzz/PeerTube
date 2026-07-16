@@ -273,6 +273,8 @@ $chapter-marker-size: 9px;
 
   .vjs-slider {
     background-color: rgba(255, 255, 255, 0.2);
+    // Prevent vjs-slider expanding when hovering on the progress bar if storyboard is enabled
+    min-width: 0;
 
     .vjs-play-progress {
       background: pvar(--pt-player-fg);

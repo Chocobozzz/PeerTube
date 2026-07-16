@@ -6,7 +6,14 @@ import { MVideoShare } from '../../../types/models/video/index.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { broadcastToFollowers, getActorsInvolvedInVideo } from './shared/send-utils.js'
 
-export async function sendVideoAnnounce (byActor: MActorLight, videoShare: MVideoShare, video: MVideo, transaction: Transaction) {
+export async function sendVideoAnnounce (options: {
+  byActor: MActorLight
+  videoShare: MVideoShare
+  video: MVideo
+  transaction: Transaction
+}) {
+  const { byActor, videoShare, video, transaction } = options
+
   const activity = buildAnnounceWithVideoAudience(byActor, videoShare, video)
 
   logger.info('Creating job to send announce %s.', videoShare.url)

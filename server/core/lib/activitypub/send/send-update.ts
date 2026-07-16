@@ -123,7 +123,7 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
 }
 
 export async function sendUpdateVideoPlayerSettings (video: MVideoFull, settings: MPlayerSetting, transaction: Transaction) {
-  if (!canVideoBeFederated(video, false)) return
+  if (!canVideoBeFederated(video)) return
 
   const byActor = video.VideoChannel.Account.Actor
   const settingsUrl = getLocalVideoPlayerSettingsActivityPubUrl(video)

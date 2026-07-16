@@ -40,7 +40,13 @@
     </td>
 
     <td>{{ sync.createdAt | ptDate: 'short' }}</td>
-    <td>{{ sync.lastSyncAt | ptDate: 'short' }}</td>
+    <td>
+      @if (sync.lastSyncAt) {
+        {{ sync.lastSyncAt | ptDate: 'short' }}
+      } @else {
+        <ng-container i18n>Never</ng-container>
+      }
+    </td>
   </ng-template>
 
   <ng-template #actionCell let-sync>

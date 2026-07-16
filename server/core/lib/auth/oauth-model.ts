@@ -1,12 +1,11 @@
 import { AccessDeniedError } from '@node-oauth/oauth2-server'
-import { pick } from '@peertube/peertube-core-utils'
+import { maskSecret, pick } from '@peertube/peertube-core-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { AuthenticatedResultUpdaterFieldName, RegisterServerAuthenticatedResult } from '@server/types/index.js'
 import { MOAuthClient } from '@server/types/models/index.js'
-import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
 import { MUser, MUserDefault } from '@server/types/models/user/user.js'
 import express from 'express'
 import { logger } from '../../helpers/logger.js'
@@ -46,11 +45,9 @@ async function getAccessToken (bearerToken: string) {
 
   if (!bearerToken) return undefined
 
-  let tokenModel: MOAuthTokenUser
+  let tokenModel = TokensCache.Instance.getToken(bearerToken)
 
-  if (TokensCache.Instance.hasToken(bearerToken)) {
-    tokenModel = TokensCache.Instance.getByToken(bearerToken)
-  } else {
+  if (!tokenModel) {
     tokenModel = await OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
 
     if (tokenModel) TokensCache.Instance.setToken(tokenModel)
@@ -70,13 +67,13 @@ async function getAccessToken (bearerToken: string) {
 }
 
 function getClient (clientId: string, clientSecret: string) {
-  logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ').')
+  logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + maskSecret(clientSecret) + ').')
 
   return OAuthClientModel.getByIdAndSecret(clientId, clientSecret)
 }
 
 async function getRefreshToken (refreshToken: string) {
-  logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
+  logger.debug('Getting RefreshToken (refreshToken: ' + maskSecret(refreshToken) + ').')
 
   const tokenInfo = await OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
   if (!tokenInfo) return undefined
@@ -105,33 +102,24 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
   if (bypassLogin?.bypass === true) {
     logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
-    let user = getByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(bypassLogin.user.email), bypassLogin.user.email)
+    const { pluginName, user: externalUser, userUpdater } = bypassLogin
 
-    if (!user) {
-      user = await createUserFromExternal(bypassLogin.pluginName, bypassLogin.user)
-    } else if (user.pluginAuth === bypassLogin.pluginName) {
-      user = await updateUserFromExternal(user, bypassLogin.user, bypassLogin.userUpdater)
-    }
-
-    // Cannot create a user
-    if (!user) throw new AccessDeniedError(req.t('Cannot create such user: an actor with that name already exists.'))
+    const user = await findExternalUserOrThrow({ externalUser, pluginName, userUpdater, req })
 
     // If the user does not belongs to a plugin, it was created before its installation
     // Then we just go through a regular login process
     if (user.pluginAuth !== null) {
       // This user does not belong to this plugin
-      if (user.pluginAuth !== bypassLogin.pluginName) {
-        // Skip ip
-        if (!CONFIG.AUTH.ALLOW_CROSS_PROVIDER_AUTH) {
+      if (user.pluginAuth !== pluginName) {
+        if (CONFIG.USER.ALLOW_CROSS_PROVIDER_AUTH !== true) {
           logger.info(
             'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
-            bypassLogin.pluginName,
-            bypassLogin.user.email,
+            pluginName,
+            externalUser.email,
             user.pluginAuth
           )
 
           return null
-
         } else {
           logger.info(
             'Allowing cross authentication login for %s using plugin %s despite being known from plugin %s',
@@ -140,8 +128,12 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
             user.pluginAuth
           )
 
-          user.pluginAuth = bypassLogin.pluginName
-          user = await updateUserFromExternal(user, bypassLogin.user, bypassLogin.userUpdater)
+          user.pluginAuth = pluginName
+          await updateUserFromExternal({ user, userOptions: externalUser, userUpdater, syncEmail: true })
+
+          // Tokens issued under the previous auth plugin can no longer have their validity checked by that
+          // plugin's hookTokenValidity (the user is not registered under it anymore), so force a fresh login
+          await OAuthTokenModel.deleteUserToken({ userId: user.id })
         }
       }
 
@@ -203,7 +195,7 @@ async function revokeToken (
       redirectUrl = await PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName, token.User, req)
     }
 
-    TokensCache.Instance.clearCacheByToken(token.accessToken)
+    TokensCache.Instance.deleteToken(token.accessToken)
 
     try {
       await token.destroy()
@@ -235,7 +227,7 @@ async function saveToken (
     authName = refreshTokenAuthName
   }
 
-  logger.debug(`Saving token ${token.accessToken} for client ${client.id} and user ${user.id}.`)
+  logger.debug(`Saving token ${maskSecret(token.accessToken)} for client ${client.id} and user ${user.id}.`)
 
   const tokenToCreate = {
     ...pick(token, [
@@ -283,16 +275,56 @@ export {
 
 // ---------------------------------------------------------------------------
 
+async function findExternalUserOrThrow (options: {
+  externalUser: ExternalUser
+  pluginName: string
+  userUpdater: RegisterServerAuthenticatedResult['userUpdater']
+  req: express.Request
+}): Promise<MUserDefault> {
+  const { externalUser, pluginName, userUpdater, req } = options
+
+  if (externalUser.externalId) {
+    const userByExternalId = await UserModel.loadByPluginAuthExternalId(pluginName, externalUser.externalId)
+
+    if (userByExternalId) {
+      // Authoritative match by stable external id: trust it even if the email changed at the identity provider
+      return updateUserFromExternal({ user: userByExternalId, userOptions: externalUser, userUpdater, syncEmail: true })
+    }
+  }
+
+  // Plugin does not supply a stable external id: unchanged email-only behavior
+  const userByEmail = getByEmailPermissive(await UserModel.loadByEmailCaseInsensitive(externalUser.email), externalUser.email)
+  if (!userByEmail) return createUserFromExternal(pluginName, externalUser)
+
+  if (userByEmail.pluginAuth === pluginName) {
+    if (externalUser.externalId && userByEmail.pluginAuthExternalId !== null) {
+      // This account is already linked to a different external id for this plugin
+      // Refuse to silently relink (identity provider email reuse, or a possible hijack attempt)
+      throw new AccessDeniedError(
+        req.t(
+          `Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.`,
+          { pluginName, email: externalUser.email }
+        )
+      )
+    }
+
+    return updateUserFromExternal({ user: userByEmail, userOptions: externalUser, userUpdater, syncEmail: false })
+  }
+
+  return userByEmail
+}
+
 async function createUserFromExternal (pluginAuth: string, userOptions: ExternalUser) {
   const username = await findAvailableLocalActorName(userOptions.username)
 
   const userToCreate = buildUser({
-    ...pick(userOptions, [ 'email', 'role', 'adminFlags', 'videoQuota', 'videoQuotaDaily' ]),
+    ...pick(userOptions, [ 'email', 'role', 'adminFlags', 'videoQuota', 'videoQuotaDaily', 'language' ]),
 
     username,
     emailVerified: null,
     password: null,
-    pluginAuth
+    pluginAuth,
+    pluginAuthExternalId: userOptions.externalId
   })
 
   const { user } = await createUserAccountAndChannelAndPlaylist({
@@ -303,45 +335,59 @@ async function createUserFromExternal (pluginAuth: string, userOptions: External
   return user
 }
 
-async function updateUserFromExternal (
-  user: MUserDefault,
-  userOptions: ExternalUser,
+async function updateUserFromExternal (options: {
+  user: MUserDefault
+  userOptions: ExternalUser
   userUpdater: RegisterServerAuthenticatedResult['userUpdater']
-) {
-  if (!userUpdater) return user
+  syncEmail: boolean
+}) {
+  const { user, userOptions, userUpdater, syncEmail } = options
 
-  {
-    type UserAttributeKeys = keyof AttributesOnly<UserModel>
-    const mappingKeys: { [id in UserAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
-      role: 'role',
-      adminFlags: 'adminFlags',
-      videoQuota: 'videoQuota',
-      videoQuotaDaily: 'videoQuotaDaily'
+  if (userUpdater) {
+    {
+      type UserAttributeKeys = keyof AttributesOnly<UserModel>
+      const mappingKeys: { [id in UserAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
+        role: 'role',
+        adminFlags: 'adminFlags',
+        videoQuota: 'videoQuota',
+        videoQuotaDaily: 'videoQuotaDaily',
+        language: 'language'
+      }
+
+      for (const modelKey of Object.keys(mappingKeys)) {
+        const pluginOptionKey = mappingKeys[modelKey]
+
+        const newValue = userUpdater({ fieldName: pluginOptionKey, currentValue: user[modelKey], newValue: userOptions[pluginOptionKey] })
+        user.set(modelKey, newValue)
+      }
     }
 
-    for (const modelKey of Object.keys(mappingKeys)) {
-      const pluginOptionKey = mappingKeys[modelKey]
+    {
+      type AccountAttributeKeys = keyof Partial<AttributesOnly<AccountModel>>
+      const mappingKeys: { [id in AccountAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
+        name: 'displayName'
+      }
 
-      const newValue = userUpdater({ fieldName: pluginOptionKey, currentValue: user[modelKey], newValue: userOptions[pluginOptionKey] })
-      user.set(modelKey, newValue)
+      for (const modelKey of Object.keys(mappingKeys)) {
+        const optionKey = mappingKeys[modelKey]
+
+        const newValue = userUpdater({ fieldName: optionKey, currentValue: user.Account[modelKey], newValue: userOptions[optionKey] })
+        user.Account.set(modelKey, newValue)
+      }
     }
+
+    logger.debug('Updated user %s with plugin userUpdated function.', user.email, { user, userOptions })
   }
 
-  {
-    type AccountAttributeKeys = keyof Partial<AttributesOnly<AccountModel>>
-    const mappingKeys: { [id in AccountAttributeKeys]?: AuthenticatedResultUpdaterFieldName } = {
-      name: 'displayName'
-    }
-
-    for (const modelKey of Object.keys(mappingKeys)) {
-      const optionKey = mappingKeys[modelKey]
-
-      const newValue = userUpdater({ fieldName: optionKey, currentValue: user.Account[modelKey], newValue: userOptions[optionKey] })
-      user.Account.set(modelKey, newValue)
-    }
+  if (userOptions.externalId && user.pluginAuthExternalId !== userOptions.externalId) {
+    logger.info('Linking external id for user %s (plugin %s).', user.email, user.pluginAuth)
+    user.set('pluginAuthExternalId', userOptions.externalId)
   }
 
-  logger.debug('Updated user %s with plugin userUpdated function.', user.email, { user, userOptions })
+  if (syncEmail && userOptions.email && user.email !== userOptions.email) {
+    logger.info('Updating email of user %s to %s after successful external auth.', user.email, userOptions.email)
+    user.email = userOptions.email
+  }
 
   user.Account = await user.Account.save()
 

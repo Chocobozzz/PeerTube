@@ -120,6 +120,7 @@ export class VideoStudioTranscodingJobHandler
     const video = await loadRunnerVideo(runnerJob, this.lTags)
     if (!video) {
       await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
+      return
     }
 
     const videoFilePath = resultPayload.videoFile as string
@@ -163,7 +164,7 @@ export class VideoStudioTranscodingJobHandler
       const video = await loadRunnerVideo(options.runnerJob, this.lTags, transaction)
       if (!video || video.state === VideoState.PUBLISHED) return
 
-      await video.setNewState(VideoState.PUBLISHED, false, transaction)
+      await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
     })
   }
 }
