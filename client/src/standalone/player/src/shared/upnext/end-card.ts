@@ -90,8 +90,10 @@ export class EndCard extends Component {
   }
 
   dispose () {
-    if (this.onEndedHandler) this.player().off([ 'auto-stopped', 'ended' ], this.onEndedHandler)
-    if (this.onPlayingHandler) this.player().off('playing', this.onPlayingHandler)
+    if (this.player()) {
+      if (this.onEndedHandler) this.player().off([ 'auto-stopped', 'ended' ], this.onEndedHandler)
+      if (this.onPlayingHandler) this.player().off('playing', this.onPlayingHandler)
+    }
 
     if (this.timeout) clearTimeout(this.timeout)
 
