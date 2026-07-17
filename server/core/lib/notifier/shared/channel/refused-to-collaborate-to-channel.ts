@@ -57,11 +57,9 @@ export class RefusedToCollaborateToChannel extends AbstractNotification<Notifica
       to,
       subject: text,
       text,
-      locals: {
-        action: {
-          text: t('Manage your channel', userLanguage),
-          url: channel.getClientManageUrl()
-        }
+      action: {
+        text: t('Manage your channel', userLanguage),
+        url: channel.getClientManageUrl()
       }
     }
   }

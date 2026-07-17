@@ -59,11 +59,9 @@ export class RequestChannelChangeOwnership extends AbstractNotification<MChangeO
         initiator: this.payload.Initiator.getDisplayName(),
         channelName: this.payload.VideoChannel.name
       }),
-      locals: {
-        action: {
-          text: t('Review the request', language),
-          url: WEBSERVER.URL + '/my-account/notifications'
-        }
+      action: {
+        text: t('Review the request', language),
+        url: WEBSERVER.URL + '/my-account/notifications'
       }
     }
   }

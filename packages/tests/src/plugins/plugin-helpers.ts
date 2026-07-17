@@ -5,6 +5,7 @@ import { pathExists } from 'fs-extra/esm'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
+  ConfigCommand,
   createMultipleServers,
   doubleFollow,
   makeGetRequest,
@@ -15,6 +16,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { checkVideoFilesWereRemoved } from '@tests/shared/videos.js'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
@@ -32,10 +34,14 @@ function postCommand (server: PeerTubeServer, command: string, bodyArg?: object)
 describe('Test plugin helpers', function () {
   let servers: PeerTubeServer[]
 
+  const emails: object[] = []
+
   before(async function () {
     this.timeout(60000)
 
-    servers = await createMultipleServers(2)
+    const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
+
+    servers = await createMultipleServers(2, ConfigCommand.getEmailOverrideConfig(emailPort))
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
@@ -114,6 +120,30 @@ describe('Test plugin helpers', function () {
       })
 
       await servers[0].videos.remove({ id: res.uuid })
+    })
+  })
+
+  describe('Email', function () {
+    it('Should send an email', async function () {
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/send-email',
+        fields: {
+          to: 'plugin-email-recipient@example.com',
+          subject: 'Email sent by a plugin',
+          text: 'Hello from plugin four'
+        },
+        expectedStatus: HttpStatusCode.CREATED_201
+      })
+
+      await waitJobs(servers)
+
+      expect(emails).to.have.lengthOf(1)
+
+      const email = emails[0]
+      expect(email['to'][0]['address']).to.equal('plugin-email-recipient@example.com')
+      expect(email['subject']).to.contain('Email sent by a plugin')
+      expect(email['text']).to.contain('Hello from plugin four')
     })
   })
 

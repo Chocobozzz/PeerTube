@@ -57,11 +57,9 @@ export class AcceptedToCollaborateToChannel extends AbstractNotification<Notific
       to,
       subject: text,
       text,
-      locals: {
-        action: {
-          text: t('Manage your channel', userLanguage),
-          url: channel.getClientManageUrl()
-        }
+      action: {
+        text: t('Manage your channel', userLanguage),
+        url: channel.getClientManageUrl()
       }
     }
   }

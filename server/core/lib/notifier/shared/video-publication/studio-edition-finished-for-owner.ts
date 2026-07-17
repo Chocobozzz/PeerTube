@@ -47,12 +47,10 @@ export class StudioEditionFinishedForOwner extends AbstractNotification<MVideoFu
       to,
       subject: t('Edition of your video has finished', to.language),
       text: t('Edition of your video {videoName} has finished.', to.language, { videoName: this.payload.name }),
-      locals: {
-        title: t('Video edition has finished', to.language),
-        action: {
-          text: t('View video', to.language),
-          url: videoUrl
-        }
+      title: t('Video edition has finished', to.language),
+      action: {
+        text: t('View video', to.language),
+        url: videoUrl
       }
     }
   }

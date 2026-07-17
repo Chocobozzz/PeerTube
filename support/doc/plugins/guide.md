@@ -574,6 +574,15 @@ async function register ({
   {
     const video = await peertubeHelpers.videos.loadByUrl('...')
   }
+
+  // Send an email
+  {
+    await peertubeHelpers.email.createJob({
+      to: { email: 'admin@example.com', language: 'en' },
+      subject: 'Hello from my plugin',
+      text: 'Plugin body text'
+    })
+  }
 }
 ```
 

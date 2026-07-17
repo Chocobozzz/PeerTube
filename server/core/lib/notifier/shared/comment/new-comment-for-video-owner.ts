@@ -67,6 +67,15 @@ export class NewCommentForVideoOwner extends AbstractNotification<MCommentOwnerV
       template: 'video-comment-new',
       to,
       subject: t('New comment on your video', to.language),
+
+      action: {
+        text: comment.heldForReview
+          ? t('Review comment', to.language)
+          : t('View comment', to.language),
+
+        url: commentUrl
+      },
+
       locals: {
         accountName: this.payload.Account.getDisplayName(),
         accountUrl: this.payload.Account.getClientUrl(),
@@ -74,14 +83,7 @@ export class NewCommentForVideoOwner extends AbstractNotification<MCommentOwnerV
         commentHtml,
         video,
         videoUrl,
-        requiresApproval: this.payload.heldForReview,
-
-        action: {
-          text: comment.heldForReview
-            ? t('Review comment', to.language)
-            : t('View comment', to.language),
-          url: commentUrl
-        }
+        requiresApproval: this.payload.heldForReview
       }
     }
   }

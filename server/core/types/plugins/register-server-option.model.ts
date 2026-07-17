@@ -134,6 +134,29 @@ export type PeerTubeHelpers = {
     // PeerTube >= 8.3
     getServerVideoAutomaticTags: (options: { videoId: number }) => Promise<MAutomaticTag[]>
   }
+
+  email: {
+    // PeerTube >= 8.3
+    createJob: (payload: {
+      // Language of the email to send. If not provided, the default language of the instance will be used
+      to: { email: string, language?: string }
+
+      // Email subject
+      subject: string
+
+      // Optional title, injected in HTML email
+      title?: string
+
+      // Text inside the HTML email
+      text: string
+
+      // Button that can be added at the end of the email
+      action?: {
+        url: string
+        text: string
+      }
+    }) => Promise<void>
+  }
 }
 
 export type RegisterServerOptions = {

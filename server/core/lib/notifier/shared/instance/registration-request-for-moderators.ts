@@ -1,7 +1,6 @@
 import { UserNotificationType, UserRight } from '@peertube/peertube-models'
 import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
-import { CONFIG } from '@server/initializers/config.js'
 import { adminRegistrationsListUrl } from '@server/lib/client-urls.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -46,13 +45,12 @@ export class RegistrationRequestForModerators extends AbstractNotification<MRegi
       template: 'user-registration-request',
       to,
       subject: t('A new user wants to register: {username}', to.language, { username: this.payload.username }),
+      action: {
+        url: adminRegistrationsListUrl,
+        text: t('View registration request', language)
+      },
       locals: {
-        registration: this.payload,
-        instanceName: CONFIG.INSTANCE.NAME,
-        action: {
-          url: adminRegistrationsListUrl,
-          text: t('View registration request', language)
-        }
+        registration: this.payload
       }
     }
   }
