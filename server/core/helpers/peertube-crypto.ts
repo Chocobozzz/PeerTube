@@ -1,6 +1,6 @@
 import { ParsedDraftSignature, parseRequestSignature, verifyDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { sha256 } from '@peertube/peertube-node-utils'
-import { createCipheriv, createDecipheriv } from 'crypto'
+import { createCipheriv, createDecipheriv, timingSafeEqual } from 'crypto'
 import { Request } from 'express'
 import { BCRYPT_SALT_SIZE, ENCRYPTION, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
 import { MActor } from '../types/models/index.js'
@@ -35,6 +35,22 @@ async function cryptPassword (password: string) {
   const salt = await genSalt(BCRYPT_SALT_SIZE)
 
   return hash(password, salt)
+}
+
+// ---------------------------------------------------------------------------
+// Secret comparison
+// ---------------------------------------------------------------------------
+
+// Prevent timing attacks when comparing secret tokens (email verification, password reset etc.)
+function isSecretEqual (a: string, b: string) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false
+
+  const aBuffer = Buffer.from(a)
+  const bBuffer = Buffer.from(b)
+
+  if (aBuffer.length !== bBuffer.length) return false
+
+  return timingSafeEqual(aBuffer, bBuffer)
 }
 
 // ---------------------------------------------------------------------------
@@ -136,5 +152,6 @@ export {
   encrypt,
   isHTTPSignatureDigestValid,
   isHTTPSignatureVerified,
+  isSecretEqual,
   parseHTTPSignature
 }
