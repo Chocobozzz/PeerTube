@@ -96,8 +96,8 @@ importers:
         specifier: ^11.1.2
         version: 11.1.2
       '@peertube/feed':
-        specifier: ^5.5.0
-        version: 5.5.0
+        specifier: ^5.6.0
+        version: 5.6.0
       '@peertube/peertube-core-utils':
         specifier: workspace:*
         version: link:packages/core-utils
@@ -3509,8 +3509,8 @@ packages:
     resolution: {integrity: sha512-PGKk9dAUVZwDUaGFsGFWwEEDY9C2biBXAkp4kQLnzqhGKw9Kesp5+Tug5rlb5IOpsnKei+DnA5n7XjAQ2xYVCA==}
     engines: {node: '>=16.0.0'}
 
-  '@peertube/feed@5.5.0':
-    resolution: {integrity: sha512-5+dUdm/9eqZzdg+UuO/9awUKWxh3cxf98bvQeeIsib6RRCA9DLgxnHN8QbrbkGSGnj1QWAeQynZixBeAXdkfKA==}
+  '@peertube/feed@5.6.0':
+    resolution: {integrity: sha512-IW3tT68SMMAK4qbeS80psqoMeJw8Z5ML8BRN65TS9MP+O/FLEmBhATxI1xDN9zXCiN2eR537MZV2tYcOgeRv9Q==}
     engines: {node: '>=0.4.0'}
 
   '@peertube/maildev@1.2.0':
@@ -9438,6 +9438,10 @@ packages:
     resolution: {integrity: sha512-QP88BAKvMam/3NxH6vj2o21R6MjxZUAd6nlwAS/pnGvN9IVLocLHxGYIzFhg6fUQ+5th6P4dv4eW9jX3DSIj7A==}
     engines: {node: '>=12'}
 
+  picomatch@4.0.5:
+    resolution: {integrity: sha512-RvwwcruNjI1ncT5xRakeyS9Lf8lcItv34KD+aif+VH9kduAyfYBipGh12274xtenIPZ119/R9BdTBa8gAwSh0A==}
+    engines: {node: '>=12'}
+
   piece-length@2.0.1:
     resolution: {integrity: sha512-dBILiDmm43y0JPISWEmVGKBETQjwJe6mSU9GND+P9KW0SJGUwoU/odyH1nbalOP9i8WSYuqf1lQnaj92Bhw+Ug==}
 
@@ -14473,7 +14477,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@peertube/feed@5.5.0':
+  '@peertube/feed@5.6.0':
     dependencies:
       xml-js: 1.6.11
 
@@ -21715,6 +21719,9 @@ snapshots:
 
   picomatch@4.0.4: {}
 
+  picomatch@4.0.5:
+    optional: true
+
   piece-length@2.0.1: {}
 
   pify@4.0.1: {}
@@ -23722,7 +23729,7 @@ snapshots:
 
   ts-declaration-location@1.0.7(typescript@6.0.3):
     dependencies:
-      picomatch: 4.0.4
+      picomatch: 4.0.5
       typescript: 6.0.3
     optional: true
 
