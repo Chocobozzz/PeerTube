@@ -1,4 +1,5 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { Redis } from '@server/lib/redis.js'
 import express from 'express'
 import { CONFIG } from '../../../initializers/config.js'
 import { sendVerifyRegistrationEmail, sendVerifyRegistrationRequestEmail, sendVerifyUserChangeEmail } from '../../../lib/user.js'
@@ -31,7 +32,11 @@ emailVerificationRouter.post(
   asyncMiddleware(reSendRegistrationVerifyUserEmail)
 )
 
-emailVerificationRouter.post('/:id/verify-email', asyncMiddleware(usersVerifyEmailValidator), asyncMiddleware(verifyUserEmail))
+emailVerificationRouter.post(
+  '/:id/verify-email',
+  asyncMiddleware(usersVerifyEmailValidator),
+  asyncMiddleware(verifyUserEmail)
+)
 
 emailVerificationRouter.post(
   '/registrations/:registrationId/verify-email',
@@ -72,6 +77,8 @@ async function verifyUserEmail (req: express.Request, res: express.Response) {
 
   await user.save()
 
+  await Redis.Instance.deleteUserVerifyEmailLink(user.id)
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
@@ -80,6 +87,8 @@ async function verifyRegistrationEmail (req: express.Request, res: express.Respo
   registration.emailVerified = true
 
   await registration.save()
+
+  await Redis.Instance.deleteRegistrationVerifyEmailLink(registration.id)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

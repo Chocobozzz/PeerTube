@@ -204,6 +204,10 @@ class Redis {
     return this.getValue(this.generateUserVerifyEmailKey(userId))
   }
 
+  deleteUserVerifyEmailLink (userId: number) {
+    return this.removeValue(this.generateUserVerifyEmailKey(userId))
+  }
+
   async setRegistrationVerifyEmailVerificationString (registrationId: number) {
     const generatedString = await generateRandomString(32)
 
@@ -214,6 +218,10 @@ class Redis {
 
   async getRegistrationVerifyEmailLink (registrationId: number) {
     return this.getValue(this.generateRegistrationVerifyEmailKey(registrationId))
+  }
+
+  deleteRegistrationVerifyEmailLink (registrationId: number) {
+    return this.removeValue(this.generateRegistrationVerifyEmailKey(registrationId))
   }
 
   /* ************ Contact form per IP ************ */

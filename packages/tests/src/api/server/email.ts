@@ -337,6 +337,14 @@ describe('Test emails', function () {
     it('Should verify the email', async function () {
       await server.users.verifyEmail({ userId, verificationString })
     })
+
+    it('Should not verify the email again with the same verification string', async function () {
+      await server.users.verifyEmail({
+        userId,
+        verificationString,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
   })
 
   describe('When verifying a registration email', function () {
@@ -391,6 +399,14 @@ describe('Test emails', function () {
 
     it('Should verify the email', async function () {
       await server.registrations.verifyEmail({ registrationId: registrationIdEmail, verificationString })
+    })
+
+    it('Should not verify the email again with the same verification string', async function () {
+      await server.registrations.verifyEmail({
+        registrationId: registrationIdEmail,
+        verificationString,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
   })
 
