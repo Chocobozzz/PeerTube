@@ -575,6 +575,17 @@ async function register ({
     const video = await peertubeHelpers.videos.loadByUrl('...')
   }
 
+  // Update video metadata (thumbnail/preview files and the video channel are not supported)
+  {
+    await peertubeHelpers.videos.updateVideo({
+      videoId: '...',
+      attributes: {
+        name: 'New video name',
+        support: 'New support text'
+      }
+    })
+  }
+
   // Send an email
   {
     await peertubeHelpers.email.createJob({

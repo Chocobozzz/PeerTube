@@ -1,8 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { pathExists } from 'fs-extra/esm'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -18,6 +16,8 @@ import {
 } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { checkVideoFilesWereRemoved } from '@tests/shared/videos.js'
+import { expect } from 'chai'
+import { pathExists } from 'fs-extra/esm'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }
@@ -375,6 +375,36 @@ describe('Test plugin helpers', function () {
 
       expect(body.streams).to.be.an('array')
       expect(body.streams).to.have.lengthOf(2)
+    })
+
+    it('Should update a video', async function () {
+      const { uuid } = await servers[0].videos.quickUpload({
+        name: 'video to update',
+        privacy: VideoPrivacy.PRIVATE,
+        nsfw: false
+      })
+
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/update-video/' + uuid,
+        fields: {
+          name: 'video1 updated by plugin',
+          support: 'support text updated by plugin',
+          nsfw: true,
+          privacy: VideoPrivacy.PUBLIC
+        },
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+        expect(video.name).to.equal('video1 updated by plugin')
+        expect(video.support).to.equal('support text updated by plugin')
+        expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+        expect(video.nsfw).to.be.true
+      }
     })
 
     it('Should remove a video after a view', async function () {

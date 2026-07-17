@@ -22,6 +22,7 @@ import { Server } from 'http'
 import { join } from 'path'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist.js'
 import { JobQueue } from '../job-queue/index.js'
+import { LocalVideoUpdater } from '../local-video-updater.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { ServerConfigManager } from '../server-config-manager.js'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist.js'
@@ -32,7 +33,7 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
     logger: buildPluginLogger(npmName),
 
     database: buildDatabaseHelpers(),
-    videos: buildVideosHelpers(),
+    videos: buildVideosHelpers(npmName),
 
     config: buildConfigHelpers(),
 
@@ -76,7 +77,7 @@ function buildServerHelpers (httpServer: Server) {
   }
 }
 
-function buildVideosHelpers () {
+function buildVideosHelpers (npmName: string) {
   return {
     loadByUrl: (url: string) => {
       return VideoModel.loadByUrl(url)
@@ -96,6 +97,14 @@ function buildVideosHelpers () {
 
         await video.destroy({ transaction: t })
       })
+    },
+
+    updateVideo: async (options: Parameters<PeerTubeHelpers['videos']['updateVideo']>[0]) => {
+      const video = await VideoModel.loadFull(options.videoId)
+      if (!video) return
+
+      const updater = new LocalVideoUpdater({ video, user: null, tags: [ 'plugins', npmName ] })
+      await updater.update(options.attributes)
     },
 
     ffprobe: (path: string) => {

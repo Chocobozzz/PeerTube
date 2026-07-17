@@ -167,6 +167,15 @@ async function register ({
 
       return res.sendStatus(201)
     })
+
+    router.post('/update-video/:id', async (req, res) => {
+      await peertubeHelpers.videos.updateVideo({
+        videoId: req.params.id,
+        attributes: req.body
+      })
+
+      return res.sendStatus(204)
+    })
   }
 
 }

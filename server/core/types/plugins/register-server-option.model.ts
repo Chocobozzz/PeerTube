@@ -10,7 +10,9 @@ import {
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
   ServerConfig,
-  VideoBlacklistCreate
+  VideoBlacklistCreate,
+  VideoCommentPolicyType,
+  VideoPrivacyType
 } from '@peertube/peertube-models'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { Response, Router } from 'express'
@@ -38,6 +40,35 @@ export type PeerTubeHelpers = {
     loadByIdOrUUID: (id: number | string) => Promise<MVideoThumbnails>
 
     removeVideo: (videoId: number) => Promise<void>
+
+    // PeerTube >= 8.3
+    // Update video metadata (does not handle thumbnail/preview files or the video channel)
+    updateVideo: (options: {
+      videoId: number | string
+      attributes: {
+        name?: string
+        category?: number
+        licence?: number
+        language?: string
+        description?: string
+        support?: string
+        privacy?: VideoPrivacyType
+        tags?: string[]
+
+        commentsPolicy?: VideoCommentPolicyType
+
+        downloadEnabled?: boolean
+
+        nsfw?: boolean
+        nsfwSummary?: string
+        nsfwFlags?: number
+
+        waitTranscoding?: boolean
+
+        originallyPublishedAt?: Date | string
+        videoPasswords?: string[]
+      }
+    }) => Promise<void>
 
     ffprobe: (path: string) => Promise<any>
 
