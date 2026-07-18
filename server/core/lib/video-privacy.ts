@@ -14,18 +14,6 @@ const validPrivacySet = new Set<VideoPrivacyType>([
   VideoPrivacy.PASSWORD_PROTECTED
 ])
 
-export function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacyType) {
-  if (video.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
-    video.publishedAt = new Date()
-
-    if (!video.firstPublishedAt) {
-      video.firstPublishedAt = video.publishedAt
-    }
-  }
-
-  video.privacy = newPrivacy
-}
-
 export function isVideoInPrivateDirectory (privacy: VideoPrivacyType) {
   return validPrivacySet.has(privacy)
 }

@@ -21,6 +21,8 @@ import express from 'express'
 import { Server } from 'http'
 import { join } from 'path'
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../blocklist.js'
+import { JobQueue } from '../job-queue/index.js'
+import { LocalVideoUpdater } from '../local-video-updater.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { ServerConfigManager } from '../server-config-manager.js'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist.js'
@@ -31,7 +33,7 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
     logger: buildPluginLogger(npmName),
 
     database: buildDatabaseHelpers(),
-    videos: buildVideosHelpers(),
+    videos: buildVideosHelpers(npmName),
 
     config: buildConfigHelpers(),
 
@@ -45,7 +47,9 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
 
     user: buildUserHelpers(),
 
-    automaticTags: buildAutomaticTagsHelpers()
+    automaticTags: buildAutomaticTagsHelpers(),
+
+    email: buildEmailHelpers()
   }
 }
 
@@ -73,7 +77,7 @@ function buildServerHelpers (httpServer: Server) {
   }
 }
 
-function buildVideosHelpers () {
+function buildVideosHelpers (npmName: string) {
   return {
     loadByUrl: (url: string) => {
       return VideoModel.loadByUrl(url)
@@ -93,6 +97,14 @@ function buildVideosHelpers () {
 
         await video.destroy({ transaction: t })
       })
+    },
+
+    updateVideo: async (options: Parameters<PeerTubeHelpers['videos']['updateVideo']>[0]) => {
+      const video = await VideoModel.loadFull(options.videoId)
+      if (!video) return
+
+      const updater = new LocalVideoUpdater({ video, user: null, tags: [ 'plugins', npmName ] })
+      await updater.update(options.attributes)
     },
 
     ffprobe: (path: string) => {
@@ -306,6 +318,26 @@ function buildAutomaticTagsHelpers () {
       })
 
       return result.map(r => r.AutomaticTag)
+    }
+  }
+}
+
+function buildEmailHelpers () {
+  return {
+    createJob: async (payload: Parameters<PeerTubeHelpers['email']['createJob']>[0]) => {
+      await JobQueue.Instance.createJob({
+        type: 'email',
+        payload: {
+          to: { email: payload.to.email, language: payload.to.language || CONFIG.INSTANCE.DEFAULT_LANGUAGE },
+
+          text: payload.text,
+
+          subject: payload.subject,
+          title: payload.title,
+
+          action: payload.action
+        }
+      })
     }
   }
 }

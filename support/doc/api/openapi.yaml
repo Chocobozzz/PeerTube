@@ -14375,7 +14375,7 @@ components:
         - 1
         - 2
         - 3
-        - 4<
+        - 4
       description: >
         The video embed privacy level:
           - `1` All allowed: anyone can embed the video

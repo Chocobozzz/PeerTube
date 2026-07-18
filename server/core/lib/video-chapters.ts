@@ -1,12 +1,12 @@
 import { parseChapters, sortBy } from '@peertube/peertube-core-utils'
 import { VideoChapter } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { InternalEventEmitter } from './internal-event-emitter.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 
 const lTags = loggerTagsFactory('video', 'chapters')
 

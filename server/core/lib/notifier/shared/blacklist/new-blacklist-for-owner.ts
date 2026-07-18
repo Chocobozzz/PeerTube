@@ -1,7 +1,6 @@
 import { UserNotificationType } from '@peertube/peertube-models'
 import { tu } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
-import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -55,14 +54,13 @@ export class NewBlacklistForOwner extends AbstractNotification<MVideoBlacklistVi
       template: 'video-owner-blacklist-new',
       to,
       subject: tu('Your video has been blocked', user),
+      action: {
+        text: tu('View video', user),
+        url: videoUrl
+      },
       locals: {
-        instanceName: CONFIG.INSTANCE.NAME,
         videoName,
-        reason: this.payload.reason,
-        action: {
-          text: tu('View video', user),
-          url: videoUrl
-        }
+        reason: this.payload.reason
       }
     }
   }

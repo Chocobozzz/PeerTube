@@ -19,33 +19,15 @@
     <my-alert i18n type="primary">
       This video is password protected, please note that recipients will require the corresponding password to access the content.
     </my-alert>
-  } @else if (video().hasEmbedDisabled()) {
+  } @else if (video().hasEmbedDisabled()) { <!-- Display above all tabs so the user understands why embed tab is hidden -->
     <my-alert type="primary">
-      <div i18n>
-        The owner of this video disabled embedding, so it can only be shared using the direct link or the QR code.
-      </div>
-
-      <a
-        i18n
-        class="peertube-button-link secondary-button mt-3"
-        [routerLink]="[ '/videos/', 'manage', video().shortUUID, 'moderation' ]"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Update embed privacy</a>
+      <div i18n>Embedding of this video is disabled, so it can only be shared via the direct link or QR code.</div>
     </my-alert>
   } @else if (video().hasEmbedRestrictions() && isInEmbedTab()) {
     <my-alert type="primary">
       <div i18n>
         This video has embed restrictions and may not be shareable on external websites depending on the chosen restrictions.
       </div>
-
-      <a
-        i18n
-        class="peertube-button-link secondary-button mt-3"
-        [routerLink]="[ '/videos/', 'manage', video().shortUUID, 'moderation' ]"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Update embed privacy</a>
     </my-alert>
   }
 

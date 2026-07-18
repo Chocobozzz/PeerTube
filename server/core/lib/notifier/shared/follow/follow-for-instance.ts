@@ -59,11 +59,9 @@ export class FollowForInstance extends AbstractNotification<MActorFollowFull> {
       to,
       subject: t('New follower for {instanceName}', language, { instanceName: CONFIG.INSTANCE.NAME }),
       text,
-      locals: {
-        action: {
-          text: t('Review followers', language),
-          url: WEBSERVER.URL + '/admin/follows/followers-list'
-        }
+      action: {
+        text: t('Review followers', language),
+        url: WEBSERVER.URL + '/admin/follows/followers-list'
       }
     }
   }

@@ -1,5 +1,5 @@
 <ng-template #tooltipTemplate>
-  Supported markdown formats:
+  <ng-container i18n>Supported markdown formats:</ng-container>
 
   <ul>
     @for (rule of markdownRules; track rule) {
@@ -7,11 +7,11 @@
     }
 
     <li>
-      <a href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer">Mastodon verification link</a>
+      <a i18n href="https://docs.joinmastodon.org/user/profile/#verification" target="_blank" rel="noopener noreferrer">Mastodon verification link</a>
     </li>
   </ul>
 
-  <a class="pt" href="https://wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Learn more about Markdown</a>
+  <a i18n class="pt" href="https://wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Learn more about Markdown</a>
 </ng-template>
 
 <span class="root fake-link" [ngbPopover]="tooltipTemplate">

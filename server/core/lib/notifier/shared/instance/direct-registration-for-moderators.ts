@@ -45,15 +45,15 @@ export class DirectRegistrationForModerators extends AbstractNotification<MUserD
       template: 'user-registered',
       to,
       subject: t('A new user registered on {instanceName}', to.language, { instanceName: CONFIG.INSTANCE.NAME }),
+      action: {
+        text: t('View users', to.language),
+        url: adminUsersListUrl
+      },
       locals: {
         userUsername: this.payload.username,
         userEmail: this.payload.email,
         userPendingEmail: this.payload.pendingEmail,
-        accountUrl: this.payload.Account.getClientUrl(),
-        action: {
-          type: t('View users', to.language),
-          url: adminUsersListUrl
-        }
+        accountUrl: this.payload.Account.getClientUrl()
       }
     }
   }

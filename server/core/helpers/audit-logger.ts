@@ -9,16 +9,22 @@ import {
   VideoImport
 } from '@peertube/peertube-models'
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants.js'
+import { MUser } from '@server/types/models/index.js'
 import { diff } from 'deep-object-diff'
 import express from 'express'
 import { flatten } from 'flat'
 import { join } from 'path'
 import { addColors, config, createLogger, format, transports } from 'winston'
 import { CONFIG } from '../initializers/config.js'
+import { getAuthUser } from './express-utils.js'
 import { jsonLoggerFormat, labelFormatter } from './logger.js'
 
 function getAuditIdFromRes (res: express.Response) {
-  return res.locals.oauth.token.User.username
+  return getAuditIdFromUser(getAuthUser(res))
+}
+
+function getAuditIdFromUser (user: MUser) {
+  return user.username
 }
 
 enum AUDIT_TYPE {
@@ -285,14 +291,15 @@ class VideoChannelSyncAuditView extends EntityAuditView {
 }
 
 export {
-  getAuditIdFromRes,
+  AbuseAuditView,
   auditLoggerFactory,
-  VideoImportAuditView,
-  VideoChannelAuditView,
   CommentAuditView,
+  CustomConfigAuditView,
+  getAuditIdFromRes,
+  getAuditIdFromUser,
   UserAuditView,
   VideoAuditView,
-  AbuseAuditView,
-  CustomConfigAuditView,
-  VideoChannelSyncAuditView
+  VideoChannelAuditView,
+  VideoChannelSyncAuditView,
+  VideoImportAuditView
 }

@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.1
+
+  * Fix adding/removing instances:
+	  * Correctly reset the default instance
+	  * Remove only the selected instance
+
+
 ## v1.2.0
 
   * Use default server values if not provided by CLI

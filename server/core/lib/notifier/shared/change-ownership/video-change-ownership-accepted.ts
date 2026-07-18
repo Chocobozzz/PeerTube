@@ -25,11 +25,9 @@ export class VideoChangeOwnershipAccepted extends AbstractVideoChangeOwnershipRe
         nextOwner: this.payload.NextOwner.getDisplayName(),
         videoName: this.payload.Video.name
       }),
-      locals: {
-        action: {
-          text: t('Review ownership changes', language),
-          url: WEBSERVER.URL + '/my-library/ownership'
-        }
+      action: {
+        text: t('Review ownership changes', language),
+        url: WEBSERVER.URL + '/my-library/ownership'
       }
     }
   }

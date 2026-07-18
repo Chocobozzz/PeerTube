@@ -65,11 +65,9 @@ export class InvitedToCollaborateToChannel extends AbstractNotification<Notifica
       to,
       subject: text,
       text,
-      locals: {
-        action: {
-          text: t('Review the invitation', userLanguage),
-          url: WEBSERVER.URL + '/my-account/notifications'
-        }
+      action: {
+        text: t('Review the invitation', userLanguage),
+        url: WEBSERVER.URL + '/my-account/notifications'
       }
     }
   }

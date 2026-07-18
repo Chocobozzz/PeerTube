@@ -74,11 +74,6 @@ export class PlayerHTML {
       if (incorrectPassword) {
         const videoPasswordError = document.getElementById('video-password-error')
         videoPasswordError.innerText = peertubeTranslate('Incorrect password, please enter a correct password', translations)
-        videoPasswordError.style.transform = 'scale(1.2)'
-
-        setTimeout(() => {
-          videoPasswordError.style.transform = 'scale(1)'
-        }, 500)
       }
 
       const videoPasswordSubmitButton = document.getElementById('video-password-submit')

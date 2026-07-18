@@ -87,9 +87,11 @@ export class PauseBezel extends Component {
   }
 
   dispose () {
-    if (this.playerPauseHandler) this.player().off('pause', this.playerPauseHandler)
-    if (this.playerPlayHandler) this.player().off('play', this.playerPlayHandler)
-    if (this.videoChangeHandler) this.player().off('video-change', this.videoChangeHandler)
+    if (this.player()) {
+      if (this.playerPauseHandler) this.player().off('pause', this.playerPauseHandler)
+      if (this.playerPlayHandler) this.player().off('play', this.playerPlayHandler)
+      if (this.videoChangeHandler) this.player().off('video-change', this.videoChangeHandler)
+    }
 
     super.dispose()
   }

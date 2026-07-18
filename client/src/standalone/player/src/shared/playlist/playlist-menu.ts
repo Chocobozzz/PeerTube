@@ -60,8 +60,10 @@ class PlaylistMenu extends Component {
     this.el().removeEventListener('mouseenter', this.onMouseEnter)
     this.el().removeEventListener('mouseleave', this.onMouseLeave)
 
-    this.player().off('userinactive', this.userInactiveHandler)
-    this.player().off('click', this.onPlayerCick)
+    if (this.player()) {
+      this.player().off('userinactive', this.userInactiveHandler)
+      this.player().off('click', this.onPlayerCick)
+    }
 
     for (const item of this.menuItems) {
       item.dispose()

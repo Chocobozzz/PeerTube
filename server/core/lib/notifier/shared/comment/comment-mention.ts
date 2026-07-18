@@ -104,17 +104,17 @@ export class CommentMention extends AbstractNotification<MCommentOwnerVideo, MUs
       template: 'video-comment-mention',
       to,
       subject: tu('Mention on video {videoName}', user, { videoName: video.name }),
+      action: {
+        text: tu('View comment', user),
+        url: commentUrl
+      },
       locals: {
         comment,
         commentHtml,
         video,
         videoUrl,
         accountName,
-        accountUrl: comment.Account.getClientUrl(),
-        action: {
-          text: tu('View comment', user),
-          url: commentUrl
-        }
+        accountUrl: comment.Account.getClientUrl()
       }
     }
   }

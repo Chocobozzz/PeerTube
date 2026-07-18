@@ -157,6 +157,25 @@ async function register ({
 
       return res.sendStatus(201)
     })
+
+    router.post('/send-email', async (req, res) => {
+      await peertubeHelpers.email.createJob({
+        to: { email: req.body.to, language: 'en' },
+        subject: req.body.subject,
+        text: req.body.text
+      })
+
+      return res.sendStatus(201)
+    })
+
+    router.post('/update-video/:id', async (req, res) => {
+      await peertubeHelpers.videos.updateVideo({
+        videoId: req.params.id,
+        attributes: req.body
+      })
+
+      return res.sendStatus(204)
+    })
   }
 
 }
