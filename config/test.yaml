@@ -19,6 +19,9 @@ rates_limit:
   api:
     window: 10 seconds
     max: 500
+  confirm_token:
+    window: 10 seconds
+    max: 500
   report_abuse:
     window: 10 seconds
     max: 500

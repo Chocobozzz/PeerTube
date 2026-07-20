@@ -3,7 +3,7 @@ import { Redis } from '@server/lib/redis.js'
 import express from 'express'
 import { CONFIG } from '../../../initializers/config.js'
 import { sendVerifyRegistrationEmail, sendVerifyRegistrationRequestEmail, sendVerifyUserChangeEmail } from '../../../lib/user.js'
-import { asyncMiddleware, buildRateLimiter } from '../../../middlewares/index.js'
+import { asyncMiddleware, buildRateLimiter, confirmTokenRateLimiter } from '../../../middlewares/index.js'
 import {
   registrationVerifyEmailValidator,
   usersAskSendRegistrationVerifyEmailValidator,
@@ -34,12 +34,14 @@ emailVerificationRouter.post(
 
 emailVerificationRouter.post(
   '/:id/verify-email',
+  confirmTokenRateLimiter,
   asyncMiddleware(usersVerifyEmailValidator),
   asyncMiddleware(verifyUserEmail)
 )
 
 emailVerificationRouter.post(
   '/registrations/:registrationId/verify-email',
+  confirmTokenRateLimiter,
   asyncMiddleware(registrationVerifyEmailValidator),
   asyncMiddleware(verifyRegistrationEmail)
 )

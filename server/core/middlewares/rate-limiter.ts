@@ -62,6 +62,12 @@ export const apiRateLimiter = buildRateLimiter({
   max: CONFIG.RATES_LIMIT.API.MAX
 })
 
+// Endpoints that consume a token sent by email or generated for the user (reset password, verify email, confirm 2FA)
+export const confirmTokenRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.CONFIRM_TOKEN.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.CONFIRM_TOKEN.MAX
+})
+
 export const activityPubRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.ACTIVITY_PUB.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.ACTIVITY_PUB.MAX

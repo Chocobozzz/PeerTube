@@ -359,6 +359,10 @@ const CONFIG = {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.ask_send_email.window')),
       MAX: config.get<number>('rates_limit.ask_send_email.max')
     },
+    CONFIRM_TOKEN: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.confirm_token.window')),
+      MAX: config.get<number>('rates_limit.confirm_token.max')
+    },
     PLUGINS: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.plugins.window')),
       MAX: config.get<number>('rates_limit.plugins.max')

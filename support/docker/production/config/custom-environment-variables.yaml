@@ -45,6 +45,11 @@ rates_limit:
     max:
       __name: PEERTUBE_RATES_LIMIT_ASK_SEND_EMAIL_MAX
       __format: json
+  confirm_token:
+    window: PEERTUBE_RATES_LIMIT_CONFIRM_TOKEN_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_CONFIRM_TOKEN_MAX
+      __format: json
   receive_client_log:
     window: PEERTUBE_RATES_LIMIT_RECEIVE_CLIENT_LOG_WINDOW
     max:

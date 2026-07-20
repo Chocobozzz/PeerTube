@@ -22,6 +22,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   buildRateLimiter,
+  confirmTokenRateLimiter,
   ensureUserHasRight,
   paginationValidator,
   setDefaultPagination,
@@ -148,6 +149,7 @@ usersRouter.post(
 
 usersRouter.post(
   '/:id/reset-password',
+  confirmTokenRateLimiter,
   asyncMiddleware(usersResetPasswordValidator),
   asyncMiddleware(resetUserPassword)
 )

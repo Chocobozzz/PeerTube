@@ -36,6 +36,11 @@ rates_limit:
     # 3 attempts in 5 min
     window: 5 minutes
     max: 3
+  confirm_token:
+    # Consuming a token sent by email/OTP (reset password, verify email, confirm 2FA)
+    # 10 attempts in 5 min
+    window: 5 minutes
+    max: 10
   receive_client_log:
     # 1 attempt every 2 seconds
     window: 1 minute
