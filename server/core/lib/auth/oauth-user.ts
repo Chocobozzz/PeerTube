@@ -14,6 +14,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { OTP } from '../../initializers/constants.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
+import { Emailer } from '../emailer.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
 import { Redis } from '../redis.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist, getByEmailPermissive } from '../user.js'
@@ -90,7 +91,8 @@ export async function getUserOrThrow (options: {
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) {
-    await Redis.Instance.addLoginFailure(user.id, req.ip)
+    const failures = await Redis.Instance.addLoginFailure(user.id, req.ip)
+    await notifyAccountLockedIfNeeded(user, failures, req.ip)
 
     throwInvalidGrantError()
   }
@@ -108,7 +110,8 @@ export async function getUserOrThrow (options: {
     }
 
     if (await isOTPValid({ encryptedSecret: user.otpSecret, token: oauthHeaders[OTP.HEADER_NAME] }) !== true) {
-      await Redis.Instance.addLoginFailure(user.id, req.ip)
+      const failures = await Redis.Instance.addLoginFailure(user.id, req.ip)
+      await notifyAccountLockedIfNeeded(user, failures, req.ip)
 
       throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
     }
@@ -117,6 +120,18 @@ export async function getUserOrThrow (options: {
   await Redis.Instance.deleteLoginFailures(user.id)
 
   return user
+}
+
+// This is the exact failure that just crossed the threshold and locked the account: notify its owner once per lock
+function notifyAccountLockedIfNeeded (user: MUserDefault, failures: number, ip: string) {
+  if (failures < CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX) return Promise.resolve()
+
+  return Emailer.Instance.addAccountLoginLockedEmailJob({
+    username: user.username,
+    to: user.email,
+    language: user.getLanguage(),
+    ip
+  })
 }
 
 async function handleGetUserBypass (options: {

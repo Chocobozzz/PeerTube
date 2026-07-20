@@ -4,20 +4,26 @@ import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
+  ConfigCommand,
   createSingleServer,
   PeerTubeServer,
   setAccessTokensToServers,
-  TwoFactorCommand
+  TwoFactorCommand,
+  waitJobs
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { expect } from 'chai'
 
 describe('Test login lockout', function () {
   let server: PeerTubeServer
 
   const userUsername = 'user1'
+  const userEmail = userUsername + '@example.com'
   let userId: number
   let userPassword: string
   let userToken: string
+
+  const emails: object[] = []
 
   // Sync with rates_limit.login_lockout in config/test.yaml (window is 5 seconds on a test instance)
   const maxFailures = 10
@@ -28,6 +34,18 @@ describe('Test login lockout', function () {
     expect(body.code).to.equal(ServerErrorCode.TOO_MANY_LOGIN_FAILURES)
   }
 
+  function expectLockedAccountEmailsCount (count: number) {
+    expect(emails).to.have.lengthOf(count)
+    if (count === 0) return
+
+    const email = emails[count - 1]
+    expect(email['to'][0]['address']).to.equal(userEmail)
+    expect(email['subject']).to.contain('temporarily locked')
+    expect(email['text']).to.contain(userUsername)
+  }
+
+  // A single IP's failures only count towards the account lock up to maxFailuresPerIP, so spread
+  // failures across a new fake IP every maxFailuresPerIP calls to actually reach the account threshold
   function xForwardedForAt (index: number) {
     const ipIndex = Math.floor(index / maxFailuresPerIP) + 1
 
@@ -64,6 +82,8 @@ describe('Test login lockout', function () {
   before(async function () {
     this.timeout(30000)
 
+    const port = await MockSmtpServer.Instance.collectEmails(emails)
+
     // Increase the IP based login rate limit so this test only triggers the per-account lockout
     server = await createSingleServer(1, {
       rates_limit: {
@@ -71,7 +91,8 @@ describe('Test login lockout', function () {
           window: '5 minutes',
           max: 1000
         }
-      }
+      },
+      ...ConfigCommand.getEmailOverrideConfig(port)
     })
 
     await setAccessTokensToServers([ server ])
@@ -91,6 +112,9 @@ describe('Test login lockout', function () {
       user: { username: userUsername, password: userPassword },
       expectedStatus: HttpStatusCode.OK_200
     })
+
+    await waitJobs(server)
+    expectLockedAccountEmailsCount(0)
   })
 
   it('Should have reset the counter on successful login', async function () {
@@ -102,6 +126,9 @@ describe('Test login lockout', function () {
       user: { username: userUsername, password: userPassword },
       expectedStatus: HttpStatusCode.OK_200
     })
+
+    await waitJobs(server)
+    expectLockedAccountEmailsCount(0)
   })
 
   it('Should not lock the account from a single IP alone', async function () {
@@ -115,6 +142,9 @@ describe('Test login lockout', function () {
       user: { username: userUsername, password: userPassword },
       expectedStatus: HttpStatusCode.OK_200
     })
+
+    await waitJobs(server)
+    expectLockedAccountEmailsCount(0)
   })
 
   it('Should lock the account after too many password failures spread over several IPs', async function () {
@@ -127,6 +157,11 @@ describe('Test login lockout', function () {
 
     // And of course with an invalid one
     await expectLockedLogin('invalid password')
+
+    await waitJobs(server)
+
+    // Only 1 email, even though 2 more requests hit the account after it was already locked
+    expectLockedAccountEmailsCount(1)
   })
 
   it('Should unlock the account after the lockout expired', async function () {
@@ -167,9 +202,16 @@ describe('Test login lockout', function () {
       otpToken: TwoFactorCommand.buildOTP({ secret: otpRequest.secret }).generate(),
       expectedStatus: HttpStatusCode.OK_200
     })
+
+    await waitJobs(server)
+
+    // The previous lock (password failures) already sent 1 email, this OTP-triggered lock sends a 2nd one
+    expectLockedAccountEmailsCount(2)
   })
 
   after(async function () {
+    await MockSmtpServer.Instance.kill()
+
     await cleanupTests([ server ])
   })
 })

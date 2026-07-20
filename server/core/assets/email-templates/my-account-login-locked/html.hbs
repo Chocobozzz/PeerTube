@@ -1,0 +1,9 @@
+{{#> base title=(t "Your account has been temporarily locked")}}
+  <p>
+    {{t "Your account has been temporarily locked after {maxFailures} failed login attempts, most recently from IP {ip}." maxFailures=maxFailures ip=ip}}
+  </p>
+
+  <p>
+    {{t "It will automatically unlock in about {lockoutMinutes} minutes. If this was not you, we recommend contacting your administrator." lockoutMinutes=lockoutMinutes}}
+  </p>
+{{/base}}

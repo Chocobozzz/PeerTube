@@ -200,6 +200,9 @@ class Redis {
 
     await this.incrementHashField(key, field)
     await this.setExpiration(key, CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.WINDOW_MS)
+
+    // Let the caller know the (capped) total so it can detect the exact failure that triggers the lock
+    return this.getLoginFailures(userId)
   }
 
   async getLoginFailures (userId: number) {
