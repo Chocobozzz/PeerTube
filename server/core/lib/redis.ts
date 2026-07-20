@@ -192,21 +192,22 @@ class Redis {
 
   /* ************ Login failures ************ */
 
-  async addLoginFailure (userId: number) {
+  // Failures are tracked per source IP
+  // Each IP's contribution to the account lock is capped at MAX_PER_IP so a single IP cannot lock an account by themselves
+  async addLoginFailure (userId: number, ip: string) {
     const key = this.generateLoginFailureKey(userId)
+    const field = this.generateLoginFailureIPField(ip)
 
-    const failures = await this.increment(key)
+    await this.incrementHashField(key, field)
     await this.setExpiration(key, CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.WINDOW_MS)
-
-    return failures
   }
 
   async getLoginFailures (userId: number) {
-    const value = await this.getValue(this.generateLoginFailureKey(userId))
+    const failuresPerIP = await this.getHash(this.generateLoginFailureKey(userId))
 
-    return value
-      ? parseInt(value, 10)
-      : 0
+    return Object.values(failuresPerIP).reduce((total, value) => {
+      return total + Math.min(parseInt(value, 10), CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX_PER_IP)
+    }, 0)
   }
 
   deleteLoginFailures (userId: number) {
@@ -514,6 +515,10 @@ class Redis {
     return 'login-failure-' + userId
   }
 
+  private generateLoginFailureIPField (ip: string) {
+    return sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)
+  }
+
   private generateUserVerifyEmailKey (userId: number) {
     return 'verify-email-user-' + userId
   }
@@ -586,6 +591,14 @@ class Redis {
 
   private increment (key: string) {
     return this.client.incr(this.prefix + key)
+  }
+
+  private incrementHashField (key: string, field: string) {
+    return this.client.hincrby(this.prefix + key, field, 1)
+  }
+
+  private getHash (key: string) {
+    return this.client.hgetall(this.prefix + key)
   }
 
   private async exists (key: string) {

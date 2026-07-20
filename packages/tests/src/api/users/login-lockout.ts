@@ -21,20 +21,34 @@ describe('Test login lockout', function () {
 
   // Sync with rates_limit.login_lockout in config/test.yaml (window is 5 seconds on a test instance)
   const maxFailures = 10
+  const maxFailuresPerIP = 3
   const lifetimeMs = 5000
 
   function expectLockout (body: PeerTubeProblemDocument) {
     expect(body.code).to.equal(ServerErrorCode.TOO_MANY_LOGIN_FAILURES)
   }
 
-  async function failLogin (password: string, otpToken?: string) {
+  function xForwardedForAt (index: number) {
+    const ipIndex = Math.floor(index / maxFailuresPerIP) + 1
+
+    return `0.0.0.${ipIndex},127.0.0.1`
+  }
+
+  async function failLogin (password: string, otpToken?: string, xForwardedFor?: string) {
     const { body } = await server.login.loginAndGetResponse({
       user: { username: userUsername, password },
       otpToken,
+      xForwardedFor,
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
 
     return body as unknown as PeerTubeProblemDocument
+  }
+
+  async function failLoginsSpreadOverIPs (count: number, password: string, otpToken?: string) {
+    for (let i = 0; i < count; i++) {
+      await failLogin(password, otpToken, xForwardedForAt(i))
+    }
   }
 
   async function expectLockedLogin (password: string, otpToken?: string) {
@@ -71,9 +85,7 @@ describe('Test login lockout', function () {
   it('Should not lock the account below the failure threshold', async function () {
     this.timeout(30000)
 
-    for (let i = 0; i < maxFailures - 1; i++) {
-      await failLogin('invalid password')
-    }
+    await failLoginsSpreadOverIPs(maxFailures - 1, 'invalid password')
 
     await server.login.login({
       user: { username: userUsername, password: userPassword },
@@ -84,7 +96,18 @@ describe('Test login lockout', function () {
   it('Should have reset the counter on successful login', async function () {
     this.timeout(30000)
 
-    for (let i = 0; i < maxFailures - 1; i++) {
+    await failLoginsSpreadOverIPs(maxFailures - 1, 'invalid password')
+
+    await server.login.login({
+      user: { username: userUsername, password: userPassword },
+      expectedStatus: HttpStatusCode.OK_200
+    })
+  })
+
+  it('Should not lock the account from a single IP alone', async function () {
+    this.timeout(30000)
+
+    for (let i = 0; i < maxFailures * 2; i++) {
       await failLogin('invalid password')
     }
 
@@ -94,12 +117,10 @@ describe('Test login lockout', function () {
     })
   })
 
-  it('Should lock the account after too many password failures', async function () {
+  it('Should lock the account after too many password failures spread over several IPs', async function () {
     this.timeout(30000)
 
-    for (let i = 0; i < maxFailures; i++) {
-      await failLogin('invalid password')
-    }
+    await failLoginsSpreadOverIPs(maxFailures, 'invalid password')
 
     // Even with the correct password
     await expectLockedLogin(userPassword)
@@ -132,7 +153,7 @@ describe('Test login lockout', function () {
     })
 
     for (let i = 0; i < maxFailures; i++) {
-      const body = await failLogin(userPassword, '123456')
+      const body = await failLogin(userPassword, '123456', xForwardedForAt(i))
       expect(body.code).to.equal(ServerErrorCode.INVALID_TWO_FACTOR)
     }
 

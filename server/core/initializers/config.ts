@@ -393,7 +393,8 @@ const CONFIG = {
     },
     LOGIN_LOCKOUT: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login_lockout.window')),
-      MAX: config.get<number>('rates_limit.login_lockout.max')
+      MAX: config.get<number>('rates_limit.login_lockout.max'),
+      MAX_PER_IP: config.get<number>('rates_limit.login_lockout.max_per_ip')
     }
   },
   TRUST_PROXY: config.get<string[]>('trust_proxy'),

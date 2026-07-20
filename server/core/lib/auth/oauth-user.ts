@@ -90,7 +90,7 @@ export async function getUserOrThrow (options: {
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) {
-    await Redis.Instance.addLoginFailure(user.id)
+    await Redis.Instance.addLoginFailure(user.id, req.ip)
 
     throwInvalidGrantError()
   }
@@ -108,7 +108,7 @@ export async function getUserOrThrow (options: {
     }
 
     if (await isOTPValid({ encryptedSecret: user.otpSecret, token: oauthHeaders[OTP.HEADER_NAME] }) !== true) {
-      await Redis.Instance.addLoginFailure(user.id)
+      await Redis.Instance.addLoginFailure(user.id, req.ip)
 
       throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
     }

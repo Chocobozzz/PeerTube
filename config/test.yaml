@@ -28,6 +28,7 @@ rates_limit:
   login_lockout:
     window: 5 seconds
     max: 10
+    max_per_ip: 3
 
 database:
   hostname: '127.0.0.1'
