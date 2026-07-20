@@ -14,17 +14,13 @@ import { generateRandomString } from '@server/helpers/utils.js'
 import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
-import { MUser } from '@server/types/models/index.js'
 import {
   RegisterServerAuthenticatedResult,
   RegisterServerAuthPassOptions,
   RegisterServerExternalAuthenticatedResult
 } from '@server/types/plugins/register-server-auth.model.js'
-import { BypassLogin } from './oauth-model.js'
-
-export type ExternalUser =
-  & Pick<MUser, 'username' | 'email' | 'role' | 'adminFlags' | 'videoQuotaDaily' | 'videoQuota' | 'language'>
-  & { displayName: string, externalId?: string }
+import { BypassLogin } from './bypass-login.model.js'
+import { ExternalUser } from './external-user.model.js'
 
 // Token is the key, expiration date is the value
 const authBypassTokens = new Map<string, {

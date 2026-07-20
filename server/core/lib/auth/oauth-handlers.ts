@@ -7,59 +7,16 @@ import OAuth2Server, {
   UnauthorizedClientError,
   UnsupportedGrantTypeError
 } from '@node-oauth/oauth2-server'
-import { pick } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRegistrationState } from '@peertube/peertube-models'
-import { sha1 } from '@peertube/peertube-node-utils'
-import { randomBytesPromise } from '@server/helpers/core-utils.js'
-import { isOTPValid } from '@server/helpers/otp.js'
-import { CONFIG } from '@server/initializers/config.js'
-import { Redis } from '@server/lib/redis.js'
-import { UserRegistrationModel } from '@server/models/user/user-registration.js'
+import { maskSecret } from '@peertube/peertube-core-utils'
 import { MOAuthClient } from '@server/types/models/index.js'
 import express from 'express'
-import { OTP } from '../../initializers/constants.js'
+import { logger } from '../../helpers/logger.js'
+import { CONFIG } from '../../initializers/config.js'
+import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { Hooks } from '../plugins/hooks.js'
-import { BypassLogin, getAccessToken, getClient, getRefreshToken, getUser, revokeToken, saveToken } from './oauth-model.js'
-
-class MissingTwoFactorError extends Error {
-  code = HttpStatusCode.UNAUTHORIZED_401
-  name = ServerErrorCode.MISSING_TWO_FACTOR
-}
-
-class TooLongPasswordError extends Error {
-  code = HttpStatusCode.BAD_REQUEST_400
-  name = ServerErrorCode.TOO_LONG_PASSWORD
-}
-
-class AccountBlockedError extends Error {
-  code = HttpStatusCode.BAD_REQUEST_400
-  name = ServerErrorCode.ACCOUNT_BLOCKED
-}
-
-class EmailNotVerifiedError extends Error {
-  code = HttpStatusCode.BAD_REQUEST_400
-  name = ServerErrorCode.EMAIL_NOT_VERIFIED
-}
-
-class InvalidTwoFactorError extends Error {
-  code = HttpStatusCode.BAD_REQUEST_400
-  name = ServerErrorCode.INVALID_TWO_FACTOR
-}
-
-class TooManyLoginFailuresError extends Error {
-  code = HttpStatusCode.TOO_MANY_REQUESTS_429
-  name = ServerErrorCode.TOO_MANY_LOGIN_FAILURES
-}
-
-class RegistrationWaitingForApproval extends Error {
-  code = HttpStatusCode.BAD_REQUEST_400
-  name = ServerErrorCode.ACCOUNT_WAITING_FOR_APPROVAL
-}
-
-class RegistrationApprovalRejected extends Error {
-  code = HttpStatusCode.BAD_REQUEST_400
-  name = ServerErrorCode.ACCOUNT_APPROVAL_REJECTED
-}
+import { BypassLogin } from './bypass-login.model.js'
+import { buildToken, getAccessToken, getRefreshToken, revokeToken, saveToken } from './oauth-token.js'
+import { getUserOrThrow } from './oauth-user.js'
 
 /**
  * Reimplement some functions of OAuth2Server to inject external auth methods
@@ -69,20 +26,15 @@ const oAuthServer = new OAuth2Server({
   accessTokenLifetime: CONFIG.OAUTH2.TOKEN_LIFETIME.ACCESS_TOKEN / 1000,
   refreshTokenLifetime: CONFIG.OAUTH2.TOKEN_LIFETIME.REFRESH_TOKEN / 1000,
 
+  // oAuthServer is only used for .authenticate() below, which only calls model.getAccessToken()
+  // (getClient/getRefreshToken/revokeToken/saveToken are called directly, bypassing the OAuth2Server model contract)
   // See https://github.com/oauthjs/node-oauth2-server/wiki/Model-specification for the model specifications
-  model: {
-    getAccessToken,
-    getClient,
-    getRefreshToken,
-    getUser,
-    revokeToken,
-    saveToken
-  } as any // FIXME: typings
+  model: { getAccessToken } as any // FIXME: typings
 })
 
 // ---------------------------------------------------------------------------
 
-async function handleOAuthToken (req: express.Request, options: { refreshTokenAuthName?: string, bypassLogin?: BypassLogin }) {
+export async function handleOAuthToken (req: express.Request, options: { refreshTokenAuthName?: string, bypassLogin?: BypassLogin }) {
   const oauthRequest = new Request(req)
   const { refreshTokenAuthName, bypassLogin } = options
 
@@ -143,22 +95,11 @@ async function handleOAuthToken (req: express.Request, options: { refreshTokenAu
   })
 }
 
-function handleOAuthAuthenticate (
+export function handleOAuthAuthenticate (
   req: express.Request,
   res: express.Response
 ) {
   return oAuthServer.authenticate(new Request(req), new Response(res))
-}
-
-export {
-  handleOAuthAuthenticate,
-  handleOAuthToken,
-  InvalidTwoFactorError,
-  MissingTwoFactorError,
-  TooLongPasswordError,
-  TooManyLoginFailuresError,
-  AccountBlockedError,
-  EmailNotVerifiedError
 }
 
 // ---------------------------------------------------------------------------
@@ -187,34 +128,7 @@ async function handlePasswordGrant (options: {
     throw new InvalidRequestError(req.t('Missing parameter: `password`'))
   }
 
-  const user = await getUser(usernameOrEmail, password, { bypassLogin, req })
-  if (!user) {
-    const registrations = await UserRegistrationModel.listByEmailCaseInsensitiveOrUsername(usernameOrEmail)
-
-    if (registrations.length === 1) {
-      if (registrations[0].state === UserRegistrationState.REJECTED) {
-        throw new RegistrationApprovalRejected(req.t('Registration approval for this account has been rejected'))
-      } else if (registrations[0].state === UserRegistrationState.PENDING) {
-        throw new RegistrationWaitingForApproval(req.t('Registration for this account is awaiting approval'))
-      }
-    }
-
-    throw new InvalidGrantError(req.t('Invalid grant: user credentials are invalid'))
-  }
-
-  if (user.otpSecret) {
-    if (!options.oauthRequest.headers[OTP.HEADER_NAME]) {
-      throw new MissingTwoFactorError(req.t('Missing two factor header'))
-    }
-
-    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: options.oauthRequest.headers[OTP.HEADER_NAME] }) !== true) {
-      await Redis.Instance.addLoginFailure(user.id)
-
-      throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
-    }
-  }
-
-  await Redis.Instance.deleteLoginFailures(user.id)
+  const user = await getUserOrThrow({ usernameOrEmail, password, bypassLogin, req, oauthHeaders: options.oauthRequest.headers })
 
   const now = new Date()
 
@@ -273,42 +187,12 @@ async function handleRefreshGrant (options: {
   return saveToken(token, client, refreshToken.user, { refreshTokenAuthName })
 }
 
-function generateRandomToken () {
-  return randomBytesPromise(256)
-    .then(buffer => sha1(buffer))
-}
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
 
-function getTokenExpiresAt (type: 'access' | 'refresh') {
-  const lifetime = type === 'access'
-    ? CONFIG.OAUTH2.TOKEN_LIFETIME.ACCESS_TOKEN
-    : CONFIG.OAUTH2.TOKEN_LIFETIME.REFRESH_TOKEN
+function getClient (clientId: string, clientSecret: string) {
+  logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + maskSecret(clientSecret) + ').')
 
-  return new Date(Date.now() + lifetime)
-}
-
-async function buildToken (options: {
-  loginDevice: string
-  loginIP: string
-  loginDate: Date
-  lastActivityDevice: string
-  lastActivityIP: string
-  lastActivityDate: Date
-}) {
-  const [ accessToken, refreshToken ] = await Promise.all([ generateRandomToken(), generateRandomToken() ])
-
-  return {
-    accessToken,
-    refreshToken,
-    accessTokenExpiresAt: getTokenExpiresAt('access'),
-    refreshTokenExpiresAt: getTokenExpiresAt('refresh'),
-
-    ...pick(options, [
-      'loginDevice',
-      'loginIP',
-      'loginDate',
-      'lastActivityDevice',
-      'lastActivityIP',
-      'lastActivityDate'
-    ])
-  }
+  return OAuthClientModel.getByIdAndSecret(clientId, clientSecret)
 }
