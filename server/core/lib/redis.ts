@@ -10,6 +10,7 @@ import {
   AP_CLEANER,
   CONTACT_FORM_LIFETIME,
   EMAIL_VERIFY_LIFETIME,
+  LOGIN_LOCKOUT,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
   TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
@@ -188,6 +189,29 @@ class Redis {
 
   async getTwoFactorRequestToken (userId: number, requestToken: string) {
     return this.getValue(this.generateTwoFactorRequestKey(userId, requestToken))
+  }
+
+  /* ************ Login failures ************ */
+
+  async addLoginFailure (userId: number) {
+    const key = this.generateLoginFailureKey(userId)
+
+    const failures = await this.increment(key)
+    await this.setExpiration(key, LOGIN_LOCKOUT.LIFETIME)
+
+    return failures
+  }
+
+  async getLoginFailures (userId: number) {
+    const value = await this.getValue(this.generateLoginFailureKey(userId))
+
+    return value
+      ? parseInt(value, 10)
+      : 0
+  }
+
+  deleteLoginFailures (userId: number) {
+    return this.removeValue(this.generateLoginFailureKey(userId))
   }
 
   /* ************ Email verification ************ */
@@ -485,6 +509,10 @@ class Redis {
 
   private generateTwoFactorRequestKey (userId: number, token: string) {
     return 'two-factor-request-' + userId + '-' + token
+  }
+
+  private generateLoginFailureKey (userId: number) {
+    return 'login-failure-' + userId
   }
 
   private generateUserVerifyEmailKey (userId: number) {

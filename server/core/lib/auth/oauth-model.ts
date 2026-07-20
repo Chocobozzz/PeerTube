@@ -10,13 +10,15 @@ import { MUser, MUserDefault } from '@server/types/models/user/user.js'
 import express from 'express'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
+import { LOGIN_LOCKOUT } from '../../initializers/constants.js'
 import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
+import { Redis } from '../redis.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist, getByEmailPermissive } from '../user.js'
 import { ExternalUser } from './external-auth.js'
-import { AccountBlockedError, EmailNotVerifiedError, TooLongPasswordError } from './oauth.js'
+import { AccountBlockedError, EmailNotVerifiedError, TooLongPasswordError, TooManyLoginFailuresError } from './oauth.js'
 import { TokensCache } from './tokens-cache.js'
 
 type TokenInfo = {
@@ -159,8 +161,17 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
 
   if (isRootAuthDisabled(user)) return null
 
+  // Check the per-account login failures counter so a locked account cannot have its password/OTP brute-forced
+  if (await Redis.Instance.getLoginFailures(user.id) >= LOGIN_LOCKOUT.MAX_FAILURES) {
+    throw new TooManyLoginFailuresError(req.t('Too many login attempts for this account. Please try again later.'))
+  }
+
   const passwordMatch = await user.isPasswordMatch(password)
-  if (passwordMatch !== true) return null
+  if (passwordMatch !== true) {
+    await Redis.Instance.addLoginFailure(user.id)
+
+    return null
+  }
 
   if (isUserPasswordTooLong(password)) {
     throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
@@ -170,7 +181,6 @@ async function getUser (usernameOrEmail?: string, password?: string, options?: {
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
     // Keep this message sync with the client
-    // TODO: use custom server code
     throw new EmailNotVerifiedError(req.t('User email is not verified.'))
   }
 

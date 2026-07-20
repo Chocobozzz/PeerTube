@@ -942,6 +942,12 @@ export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 export const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
 
 export const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
+
+// Lock the account (independently of the source IP) after too many password/OTP login failures
+export const LOGIN_LOCKOUT = {
+  MAX_FAILURES: 10,
+  LIFETIME: 60000 * 5 // 5 minutes
+}
 export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME: `${number} minutes` | `${number} seconds` = '15 minutes'
 
 export const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
@@ -1310,6 +1316,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
     CONTACT_FORM_LIFETIME = 1000 // 1 second
+    LOGIN_LOCKOUT.LIFETIME = 5000 // 5 seconds
 
     JOB_ATTEMPTS['email'] = 1
 

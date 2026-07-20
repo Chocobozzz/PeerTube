@@ -94,7 +94,8 @@ describe('Test application behind a reverse proxy', function () {
   })
 
   it('Should rate limit logins', async function () {
-    const user = { username: 'root', password: 'fail' }
+    // Use an account that does not exist so the IP rate limiter is tested, not the per-account login lockout
+    const user = { username: 'unknown-user', password: 'fail' }
 
     for (let i = 0; i < 18; i++) {
       await server.login.login({ user, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })

@@ -382,6 +382,14 @@ const CONFIG = {
     DOWNLOAD_GENERATE_VIDEO: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.download_generate_video.window')),
       MAX: config.get<number>('rates_limit.download_generate_video.max')
+    },
+    REPORT_ABUSE: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.report_abuse.window')),
+      MAX: config.get<number>('rates_limit.report_abuse.max')
+    },
+    CREATE_COMMENT: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.create_comment.window')),
+      MAX: config.get<number>('rates_limit.create_comment.max')
     }
   },
   TRUST_PROXY: config.get<string[]>('trust_proxy'),

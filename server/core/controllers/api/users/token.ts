@@ -4,9 +4,9 @@ import { buildUUID } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { OTP } from '@server/initializers/constants.js'
-import { getAuthNameFromRefreshGrant, consumeBypassFromExternalAuth, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth.js'
+import { consumeBypassFromExternalAuth, getAuthNameFromRefreshGrant, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth.js'
 import { BypassLogin, revokeToken } from '@server/lib/auth/oauth-model.js'
-import { handleOAuthToken, MissingTwoFactorError } from '@server/lib/auth/oauth.js'
+import { handleOAuthToken, MissingTwoFactorError, TooManyLoginFailuresError } from '@server/lib/auth/oauth.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import {
   asyncMiddleware,
@@ -122,6 +122,8 @@ async function handleToken (req: express.Request, res: express.Response, next: e
       logger.debug('Missing two factor error', { err })
     } else if (err instanceof InvalidGrantError) {
       logger.debug('Invalid grant', { err })
+    } else if (err instanceof TooManyLoginFailuresError) {
+      logger.debug('Too many login failures', { err })
     } else {
       logger.warn('Login error', { err })
     }

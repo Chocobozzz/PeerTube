@@ -230,6 +230,38 @@
             }
           },
           "additionalProperties": false
+        },
+        "report_abuse": {
+          "description": "Abuse reports, limited per authenticated user (each report notifies all moderators)",
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "20 attempts in 1 hour",
+              "type": "string",
+              "default": "1 hour"
+            },
+            "max": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          "additionalProperties": false
+        },
+        "comments": {
+          "description": "Comment/reply creation, limited per authenticated user",
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "60 attempts in 5 minutes",
+              "type": "string",
+              "default": "5 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 60
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

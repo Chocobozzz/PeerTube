@@ -45,6 +45,11 @@ export const ServerErrorCode = {
   MISSING_TWO_FACTOR: 'missing_two_factor',
   TOO_LONG_PASSWORD: 'too_long_password',
   INVALID_TWO_FACTOR: 'invalid_two_factor',
+  /**
+   * Too many password/OTP login failures for this account: login is temporarily
+   * locked independently of the source IP
+   */
+  TOO_MANY_LOGIN_FAILURES: 'too_many_login_failures',
   ACCOUNT_BLOCKED: 'account_blocked',
   EMAIL_NOT_VERIFIED: 'email_not_verified',
 

@@ -13,6 +13,7 @@ import { sha1 } from '@peertube/peertube-node-utils'
 import { randomBytesPromise } from '@server/helpers/core-utils.js'
 import { isOTPValid } from '@server/helpers/otp.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { Redis } from '@server/lib/redis.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { MOAuthClient } from '@server/types/models/index.js'
 import express from 'express'
@@ -43,6 +44,11 @@ class EmailNotVerifiedError extends Error {
 class InvalidTwoFactorError extends Error {
   code = HttpStatusCode.BAD_REQUEST_400
   name = ServerErrorCode.INVALID_TWO_FACTOR
+}
+
+class TooManyLoginFailuresError extends Error {
+  code = HttpStatusCode.TOO_MANY_REQUESTS_429
+  name = ServerErrorCode.TOO_MANY_LOGIN_FAILURES
 }
 
 class RegistrationWaitingForApproval extends Error {
@@ -150,6 +156,7 @@ export {
   InvalidTwoFactorError,
   MissingTwoFactorError,
   TooLongPasswordError,
+  TooManyLoginFailuresError,
   AccountBlockedError,
   EmailNotVerifiedError
 }
@@ -201,9 +208,13 @@ async function handlePasswordGrant (options: {
     }
 
     if (await isOTPValid({ encryptedSecret: user.otpSecret, token: options.oauthRequest.headers[OTP.HEADER_NAME] }) !== true) {
+      await Redis.Instance.addLoginFailure(user.id)
+
       throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
     }
   }
+
+  await Redis.Instance.deleteLoginFailures(user.id)
 
   const now = new Date()
 

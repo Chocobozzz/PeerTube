@@ -64,6 +64,14 @@ rates_limit:
     # 5 attempts in 5 seconds
     window: 5 seconds
     max: 5
+  report_abuse: # Abuse reports, limited per authenticated user (each report notifies all moderators)
+    # 20 attempts in 1 hour
+    window: 1 hour
+    max: 20
+  create_comment: # Comment/reply creation, limited per authenticated user
+    # 60 attempts in 5 minutes
+    window: 5 minutes
+    max: 60
 
 oauth2:
   token_lifetime:
