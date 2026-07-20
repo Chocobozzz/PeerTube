@@ -75,9 +75,9 @@ async function verifyUserEmail (req: express.Request, res: express.Response) {
     user.pendingEmail = null
   }
 
-  await user.save()
-
   await Redis.Instance.deleteUserVerifyEmailLink(user.id)
+
+  await user.save()
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
