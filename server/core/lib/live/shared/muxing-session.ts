@@ -437,7 +437,8 @@ class MuxingSession extends EventEmitter implements MuxingSession {
   private onTranscodedEnded () {
     this.emit('transcoding-end', { videoUUID: this.videoUUID })
 
-    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.inputLocalUrl, this.lTags())
+    // Don't log the input URL, which contains the stream key (a long lived secret)
+    logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.videoUUID, this.lTags())
 
     setTimeout(() => {
       // Wait latest segments generation, and close watchers
