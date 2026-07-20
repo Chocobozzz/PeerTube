@@ -2,7 +2,6 @@ import { AccessDeniedError, InvalidGrantError } from '@node-oauth/oauth2-server'
 import { pick } from '@peertube/peertube-core-utils'
 import { UserRegistrationState } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { isOTPValid } from '@server/helpers/otp.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
@@ -27,8 +26,7 @@ import {
   InvalidTwoFactorError,
   MissingTwoFactorError,
   RegistrationApprovalRejected,
-  RegistrationWaitingForApproval,
-  TooLongPasswordError
+  RegistrationWaitingForApproval
 } from './oauth-errors.js'
 
 export async function getUserOrThrow (options: {
@@ -55,7 +53,7 @@ export async function getUserOrThrow (options: {
 
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
-  const users = await UserModel.loadByUsernameOrEmailCaseInsensitive(usernameOrEmail)
+  const users = await UserModel.listByUsernameOrEmailCaseInsensitive(usernameOrEmail)
   const user = usernameOrEmail.includes('@')
     ? getByEmailPermissive(users, usernameOrEmail)
     : users[0]
@@ -84,10 +82,6 @@ export async function getUserOrThrow (options: {
   // attacker use the lockout itself as a username-enumeration oracle (try N failed logins, see if it flips)
   if (await Redis.Instance.getLoginFailures(user.id) >= CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX) {
     throwInvalidGrantError()
-  }
-
-  if (isUserPasswordTooLong(password)) {
-    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
   }
 
   const passwordMatch = await user.isPasswordMatch(password)

@@ -766,7 +766,7 @@ export class UserModel extends SequelizeModel<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static loadByUsernameOrEmailCaseInsensitive (usernameOrEmail: string): Promise<MUserDefault[]> {
+  static listByUsernameOrEmailCaseInsensitive (usernameOrEmail: string): Promise<MUserDefault[]> {
     const query = {
       where: {
         [Op.or]: [

@@ -74,8 +74,8 @@ rates_limit:
     max: 60
   login_lockout: # Lock an account after too many password/OTP login failures
     window: 5 minutes
-    max: 20 # Requires at least 4 distinct IPs (`max / max_per_ip`) to lock an account
-    max_per_ip: 5 # A single IP's contribution to the account lock is capped at 5 failures
+    max: 60 # Requires at least 10 distinct IPs (`max / max_per_ip`) to lock an account
+    max_per_ip: 6 # A single IP's contribution to the account lock is capped at 6 failures
 
 oauth2:
   token_lifetime:

@@ -8,6 +8,7 @@ import OAuth2Server, {
   UnsupportedGrantTypeError
 } from '@node-oauth/oauth2-server'
 import { maskSecret } from '@peertube/peertube-core-utils'
+import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { MOAuthClient } from '@server/types/models/index.js'
 import express from 'express'
 import { logger } from '../../helpers/logger.js'
@@ -15,6 +16,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { Hooks } from '../plugins/hooks.js'
 import { BypassLogin } from './bypass-login.model.js'
+import { TooLongPasswordError } from './oauth-errors.js'
 import { buildToken, getAccessToken, getRefreshToken, revokeToken, saveToken } from './oauth-token.js'
 import { getUserOrThrow } from './oauth-user.js'
 
@@ -120,12 +122,16 @@ async function handlePasswordGrant (options: {
     password: oauthRequest.body.password
   }, 'filter:oauth.password-grant.get-user.params')
 
-  if (!options.oauthRequest.body.username) {
+  if (!usernameOrEmail) {
     throw new InvalidRequestError(req.t('Missing parameter: `username`'))
   }
 
-  if (!bypassLogin && !options.oauthRequest.body.password) {
+  if (!bypassLogin && !password) {
     throw new InvalidRequestError(req.t('Missing parameter: `password`'))
+  }
+
+  if (password && isUserPasswordTooLong(password)) {
+    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
   }
 
   const user = await getUserOrThrow({ usernameOrEmail, password, bypassLogin, req, oauthHeaders: options.oauthRequest.headers })

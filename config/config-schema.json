@@ -264,23 +264,22 @@
           "additionalProperties": false
         },
         "login_lockout": {
-          "description": "Lock an account (independently of the source IP) after too many password/OTP login failures. Each source IP's failures only count towards the lock up to max_per_ip, so a single attacker IP cannot lock an account by itself; reaching max requires failures from several distinct IPs",
+          "description": "Lock an account after too many password/OTP login failures",
           "type": "object",
           "properties": {
             "window": {
-              "description": "Lock duration once the threshold is reached, and the rolling window during which failures accumulate towards it",
               "type": "string",
               "default": "5 minutes"
             },
             "max": {
-              "description": "Failed login/OTP attempts allowed (summed across contributing IPs, see max_per_ip) before the account is locked",
+              "description": "Requires at least 4 distinct IPs (`max / max_per_ip`) to lock an account",
               "type": "integer",
-              "default": 10
+              "default": 20
             },
             "max_per_ip": {
-              "description": "Cap on how many of a single source IP's failed attempts count towards max",
+              "description": "A single IP's contribution to the account lock is capped at 5 failures",
               "type": "integer",
-              "default": 3
+              "default": 5
             }
           },
           "additionalProperties": false
