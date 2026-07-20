@@ -28,8 +28,7 @@ import {
   MissingTwoFactorError,
   RegistrationApprovalRejected,
   RegistrationWaitingForApproval,
-  TooLongPasswordError,
-  TooManyLoginFailuresError
+  TooLongPasswordError
 } from './oauth-errors.js'
 
 export async function getUserOrThrow (options: {
@@ -81,8 +80,10 @@ export async function getUserOrThrow (options: {
   if (isRootAuthDisabled(user)) throwInvalidGrantError()
 
   // Check the per-account login failures counter so a locked account cannot have its password/OTP brute-forced
+  // Throw the exact same generic error as invalid credentials: a distinct error/status here would let an
+  // attacker use the lockout itself as a username-enumeration oracle (try N failed logins, see if it flips)
   if (await Redis.Instance.getLoginFailures(user.id) >= CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX) {
-    throw new TooManyLoginFailuresError(req.t('Too many login attempts for this account. Please try again later.'))
+    throwInvalidGrantError()
   }
 
   if (isUserPasswordTooLong(password)) {

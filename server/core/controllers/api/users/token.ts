@@ -6,7 +6,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { OTP } from '@server/initializers/constants.js'
 import { BypassLogin } from '@server/lib/auth/bypass-login.model.js'
 import { consumeBypassFromExternalAuth, getAuthNameFromRefreshGrant, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth.js'
-import { MissingTwoFactorError, TooManyLoginFailuresError } from '@server/lib/auth/oauth-errors.js'
+import { MissingTwoFactorError } from '@server/lib/auth/oauth-errors.js'
 import { handleOAuthToken } from '@server/lib/auth/oauth-handlers.js'
 import { revokeToken } from '@server/lib/auth/oauth-token.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -124,8 +124,6 @@ async function handleToken (req: express.Request, res: express.Response, next: e
       logger.debug('Missing two factor error', { err })
     } else if (err instanceof InvalidGrantError) {
       logger.debug('Invalid grant', { err })
-    } else if (err instanceof TooManyLoginFailuresError) {
-      logger.debug('Too many login failures', { err })
     } else {
       logger.warn('Login error', { err })
     }

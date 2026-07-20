@@ -30,8 +30,10 @@ describe('Test login lockout', function () {
   const maxFailuresPerIP = 3
   const lifetimeMs = 5000
 
-  function expectLockout (body: PeerTubeProblemDocument) {
-    expect(body.code).to.equal(ServerErrorCode.TOO_MANY_LOGIN_FAILURES)
+  // A locked account must return the exact same error as invalid credentials: a distinct status/code here
+  // would let an attacker use the lockout itself as a username-enumeration oracle
+  function expectGenericInvalidGrant (body: PeerTubeProblemDocument) {
+    expect(body.code).to.equal(ServerErrorCode.INVALID_GRANT)
   }
 
   function expectLockedAccountEmailsCount (count: number) {
@@ -69,14 +71,16 @@ describe('Test login lockout', function () {
     }
   }
 
+  // Even with the correct password/OTP, a locked account must still be rejected, with a body
+  // indistinguishable from a plain wrong-credentials response (see expectGenericInvalidGrant)
   async function expectLockedLogin (password: string, otpToken?: string) {
     const { body } = await server.login.loginAndGetResponse({
       user: { username: userUsername, password },
       otpToken,
-      expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
 
-    expectLockout(body as unknown as PeerTubeProblemDocument)
+    expectGenericInvalidGrant(body as unknown as PeerTubeProblemDocument)
   }
 
   before(async function () {
@@ -147,8 +151,13 @@ describe('Test login lockout', function () {
     expectLockedAccountEmailsCount(0)
   })
 
-  it('Should lock the account after too many password failures spread over several IPs', async function () {
+  it('Should lock the account after too many failures without leaking it over HTTP', async function () {
     this.timeout(30000)
+
+    const { body: unknownUserBody } = await server.login.loginAndGetResponse({
+      user: { username: 'a-username-that-does-not-exist', password: 'whatever' },
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
 
     await failLoginsSpreadOverIPs(maxFailures, 'invalid password')
 
@@ -158,9 +167,23 @@ describe('Test login lockout', function () {
     // And of course with an invalid one
     await expectLockedLogin('invalid password')
 
+    // The locked-account error must be indistinguishable from the "unknown username" one: same status,
+    // same generic code, same message. Otherwise the lockout itself becomes a username-enumeration oracle
+    const { body: lockedBody } = await server.login.loginAndGetResponse({
+      user: { username: userUsername, password: userPassword },
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
+
+    const unknownUserProblem = unknownUserBody as unknown as PeerTubeProblemDocument
+    const lockedProblem = lockedBody as unknown as PeerTubeProblemDocument
+
+    expectGenericInvalidGrant(unknownUserProblem)
+    expectGenericInvalidGrant(lockedProblem)
+    expect(lockedProblem.detail).to.equal(unknownUserProblem.detail)
+
     await waitJobs(server)
 
-    // Only 1 email, even though 2 more requests hit the account after it was already locked
+    // The lock is real, it is just not observable over HTTP: only the account owner's email reveals it
     expectLockedAccountEmailsCount(1)
   })
 
@@ -192,7 +215,7 @@ describe('Test login lockout', function () {
       expect(body.code).to.equal(ServerErrorCode.INVALID_TWO_FACTOR)
     }
 
-    // Locked, even with the correct password and OTP token
+    // Locked, even with the correct password and OTP token, and still the same generic error
     await expectLockedLogin(userPassword, TwoFactorCommand.buildOTP({ secret: otpRequest.secret }).generate())
 
     await wait(lifetimeMs + 2000)

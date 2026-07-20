@@ -25,11 +25,6 @@ export class InvalidTwoFactorError extends Error {
   name = ServerErrorCode.INVALID_TWO_FACTOR
 }
 
-export class TooManyLoginFailuresError extends Error {
-  code = HttpStatusCode.TOO_MANY_REQUESTS_429
-  name = ServerErrorCode.TOO_MANY_LOGIN_FAILURES
-}
-
 export class RegistrationWaitingForApproval extends Error {
   code = HttpStatusCode.BAD_REQUEST_400
   name = ServerErrorCode.ACCOUNT_WAITING_FOR_APPROVAL
