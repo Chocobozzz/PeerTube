@@ -84,15 +84,15 @@ export async function getUserOrThrow (options: {
     throw new TooManyLoginFailuresError(req.t('Too many login attempts for this account. Please try again later.'))
   }
 
+  if (isUserPasswordTooLong(password)) {
+    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
+  }
+
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) {
     await Redis.Instance.addLoginFailure(user.id)
 
     throwInvalidGrantError()
-  }
-
-  if (isUserPasswordTooLong(password)) {
-    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
   }
 
   checkUserNotBlockedOrThrow(user, req)
