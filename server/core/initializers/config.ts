@@ -390,6 +390,10 @@ const CONFIG = {
     CREATE_COMMENT: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.create_comment.window')),
       MAX: config.get<number>('rates_limit.create_comment.max')
+    },
+    LOGIN_LOCKOUT: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login_lockout.window')),
+      MAX: config.get<number>('rates_limit.login_lockout.max')
     }
   },
   TRUST_PROXY: config.get<string[]>('trust_proxy'),

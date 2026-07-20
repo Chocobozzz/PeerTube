@@ -19,7 +19,7 @@ describe('Test login lockout', function () {
   let userPassword: string
   let userToken: string
 
-  // Sync with LOGIN_LOCKOUT constants (lifetime is 5 seconds on a test instance)
+  // Sync with rates_limit.login_lockout in config/test.yaml (window is 5 seconds on a test instance)
   const maxFailures = 10
   const lifetimeMs = 5000
 

@@ -11,7 +11,7 @@ import { MUser, MUserDefault } from '@server/types/models/user/user.js'
 import express from 'express'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { LOGIN_LOCKOUT, OTP } from '../../initializers/constants.js'
+import { OTP } from '../../initializers/constants.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
@@ -80,7 +80,7 @@ export async function getUserOrThrow (options: {
   if (isRootAuthDisabled(user)) throwInvalidGrantError()
 
   // Check the per-account login failures counter so a locked account cannot have its password/OTP brute-forced
-  if (await Redis.Instance.getLoginFailures(user.id) >= LOGIN_LOCKOUT.MAX_FAILURES) {
+  if (await Redis.Instance.getLoginFailures(user.id) >= CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX) {
     throw new TooManyLoginFailuresError(req.t('Too many login attempts for this account. Please try again later.'))
   }
 

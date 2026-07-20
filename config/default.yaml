@@ -74,6 +74,11 @@ rates_limit:
     # 60 attempts in 5 minutes
     window: 5 minutes
     max: 60
+  login_lockout: # Lock an account (independently of the source IP) after too many password/OTP login failures
+    # Tradeoff: this is keyed per account, not per IP, so an attacker who knows a username can keep it locked
+    # by repeating failed logins once per window. Raise max/lower window if this is a concern for your instance
+    window: 5 minutes
+    max: 10
 
 oauth2:
   token_lifetime:

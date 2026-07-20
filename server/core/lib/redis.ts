@@ -10,7 +10,6 @@ import {
   AP_CLEANER,
   CONTACT_FORM_LIFETIME,
   EMAIL_VERIFY_LIFETIME,
-  LOGIN_LOCKOUT,
   RESUMABLE_UPLOAD_SESSION_LIFETIME,
   TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
@@ -197,7 +196,7 @@ class Redis {
     const key = this.generateLoginFailureKey(userId)
 
     const failures = await this.increment(key)
-    await this.setExpiration(key, LOGIN_LOCKOUT.LIFETIME)
+    await this.setExpiration(key, CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.WINDOW_MS)
 
     return failures
   }

@@ -25,6 +25,9 @@ rates_limit:
   create_comment:
     window: 10 seconds
     max: 500
+  login_lockout:
+    window: 5 seconds
+    max: 10
 
 database:
   hostname: '127.0.0.1'
