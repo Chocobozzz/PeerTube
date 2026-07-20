@@ -1,5 +1,48 @@
 # Changelog
 
+## v8.2.3
+
+### SECURITY
+
+ * Fix P2P segment validator to correctly reject invalid chunks
+ * Forbid embed for videos with embed restrictions if the referer header is not set
+ * Redact OAuth tokens in debug logs
+ * Add max depth when fixing ActivityPub object
+
+### Bug fixes
+
+ * Fix iOS mobile link for channels
+ * Fix input placeholder font size
+ * Correctly remove a private video linked to an abuse
+ * Do not validate search filters on "Enter" press in tag inputs
+ * Improve client notification if the backend returns a 502 HTTP error
+ * Fix various UI bugs/inconsistencies on RTL layout
+ * Fix watching password protected live
+ * Fix password submit button theme in embed
+ * Fix "Invalid width to find appropriate image" error in embed
+ * Fix responsive embed in custom markup (used to build the instance homepage)
+ * Prevent serving invalid segment JSON file for lives
+ * Fix broken control bar when hovering the progress bar on small players
+ * Correctly detect unlisted privacy from remote objects
+ * Abort request on invalid HTTP digest
+ * Correctly take into account `count: 0` in SQL requests
+ * Hide live scheduled date for past dates
+ * Fix infinite loop with S3 pagination
+ * Correctly dedupe refresh remote objects jobs
+ * Do not run scheduled jobs more than needed
+ * Consume all job attempts before throwing an error for move to object storage/file system job
+ * More robust live ending handler
+ * Fix TOCTOU race when starting a live session
+ * More precise live quota exceeded checker
+ * Fix live cleanup race issue
+ * Correctly cleanup tmp directory when handling runner job files
+ * Fix stalled request when rejecting auth for socket endpoints
+ * Fix non-settled promise in video download endpoint when the user closes the stream
+ * Correctly match plugin websocket routes
+ * Don't crash video import if youtube-dl doesn't return a date
+ * Correctly extract mentions followed by a punctuation/newline
+
+
 ## v8.2.2
 
 We strongly recommend all administrators upgrade immediately.
