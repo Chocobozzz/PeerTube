@@ -66,7 +66,7 @@ import { program as cli } from 'commander'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import { frameguard } from 'helmet'
+import { frameguard, xContentTypeOptions } from 'helmet'
 import anonymize from 'ip-anonymize'
 import morgan, { token } from 'morgan'
 
@@ -94,6 +94,8 @@ import { baseCSP } from './core/middlewares/csp.js'
 if (CONFIG.CSP.ENABLED) {
   app.use(baseCSP)
 }
+
+app.use(xContentTypeOptions())
 
 if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
   app.use(frameguard({
