@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { AfterViewInit, Component, ElementRef, LOCALE_ID, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, LOCALE_ID, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, Notifier, RedirectService, SessionStorageService, UserService } from '@app/core'
@@ -266,6 +266,11 @@ The link will expire within 1 hour.`
 
     if (err.body?.code === ServerErrorCode.ACCOUNT_APPROVAL_REJECTED) {
       this.error = $localize`Registration approval has been rejected for this account.`
+      return
+    }
+
+    if (err.body?.code === ServerErrorCode.INVALID_TWO_FACTOR) {
+      this.error = $localize`Invalid two-factor authentication token.`
       return
     }
 
