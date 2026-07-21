@@ -1,11 +1,34 @@
+import { getSanitizeSVGOptions } from '@peertube/peertube-core-utils'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { copy, remove } from 'fs-extra/esm'
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
+import sanitizeHtml from 'sanitize-html'
 import sharp, { type Metadata, type Sharp } from 'sharp'
 import { logger } from './logger.js'
 
 export function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension
+}
+
+// ---------------------------------------------------------------------------
+
+const svgSanitizeOptions = getSanitizeSVGOptions()
+
+// Sanitize a SVG to strip potential XSS
+// It only allows a safe subset of SVG tags and attributes
+// Would be better to use dompurify, but it's very heavy in NodeJS so prefer using the already imported sanitize-html module
+export async function processSVG (options: {
+  path: string
+  destination: string
+}) {
+  const { path, destination } = options
+
+  logger.debug('Sanitizing SVG %s to %s.', path, destination)
+
+  const svg = await readFile(path, 'utf-8')
+  const sanitized = sanitizeHtml(svg, svgSanitizeOptions)
+
+  await writeFile(destination, sanitized, 'utf-8')
 }
 
 export async function processImage (options: {

@@ -2,10 +2,10 @@
 
 import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
 import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
-import { processImage } from '@peertube/peertube-server/core/helpers/image-utils.js'
+import { processImage, processSVG } from '@peertube/peertube-server/core/helpers/image-utils.js'
 import { expect } from 'chai'
-import { remove } from 'fs-extra/esm'
-import { readFile } from 'fs/promises'
+import { ensureDir, remove } from 'fs-extra/esm'
+import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 import sharp from 'sharp'
 
@@ -119,5 +119,102 @@ describe('Image helpers', function () {
 
   after(async function () {
     await remove(imageDestDir)
+  })
+})
+
+describe('SVG sanitization', function () {
+  const svgDir = join(root(), 'test-svg')
+  const svgSrc = join(svgDir, 'input.svg')
+  const svgDest = join(svgDir, 'output.svg')
+
+  async function sanitize (content: string) {
+    await ensureDir(svgDir)
+    await writeFile(svgSrc, content)
+
+    await processSVG({ path: svgSrc, destination: svgDest })
+
+    return readFile(svgDest, 'utf-8')
+  }
+
+  it('Should remove script tags', async function () {
+    const result = await sanitize(
+      '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script><circle cx="5" cy="5" r="5"/></svg>'
+    )
+
+    expect(result).to.not.contain('script')
+    expect(result).to.not.contain('alert')
+    expect(result).to.contain('circle')
+  })
+
+  it('Should remove event handler attributes', async function () {
+    const result = await sanitize(
+      '<svg xmlns="http://www.w3.org/2000/svg" onload="alert(1)"><rect width="10" height="10" onclick="alert(2)"/></svg>'
+    )
+
+    expect(result).to.not.contain('onload')
+    expect(result).to.not.contain('onclick')
+    expect(result).to.not.contain('alert')
+    expect(result).to.contain('rect')
+  })
+
+  it('Should remove foreignObject that can embed arbitrary HTML', async function () {
+    const result = await sanitize(
+      '<svg xmlns="http://www.w3.org/2000/svg">' +
+        '<foreignObject width="100" height="100"><body xmlns="http://www.w3.org/1999/xhtml"><img src=x onerror="alert(1)"></body></foreignObject>' +
+        '</svg>'
+    )
+
+    expect(result).to.not.contain('foreignObject')
+    expect(result).to.not.contain('onerror')
+    expect(result).to.not.contain('alert')
+  })
+
+  it('Should remove javascript: hrefs', async function () {
+    const result = await sanitize(
+      '<svg xmlns="http://www.w3.org/2000/svg">' +
+        '<a href="javascript:alert(1)"><text x="0" y="0">click</text></a>' +
+        '<use xlink:href="javascript:alert(2)"/>' +
+        '</svg>'
+    )
+
+    // oxlint-disable-next-line no-script-url
+    expect(result).to.not.contain('javascript:')
+    expect(result).to.not.contain('alert')
+  })
+
+  it('Should remove animation elements that can inject event handlers', async function () {
+    const result = await sanitize(
+      '<svg xmlns="http://www.w3.org/2000/svg">' +
+        '<rect width="10" height="10"><set attributeName="onload" to="alert(1)"/></rect>' +
+        '<animate attributeName="href" to="javascript:alert(2)"/>' +
+        '</svg>'
+    )
+
+    expect(result).to.not.contain('animate')
+    expect(result.toLowerCase()).to.not.contain('<set')
+    expect(result).to.not.contain('alert')
+    // oxlint-disable-next-line no-script-url
+    expect(result).to.not.contain('javascript:')
+  })
+
+  it('Should keep valid SVG content and case sensitive attributes', async function () {
+    const input = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">' +
+      '<defs><linearGradient id="g" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/></linearGradient></defs>' +
+      '<path d="M10 10 H 90 V 90 H 10 Z" fill="url(#g)" stroke="#000"/>' +
+      '<circle cx="50" cy="50" r="40"/>' +
+      '</svg>'
+
+    const result = await sanitize(input)
+
+    expect(result).to.contain('viewBox="0 0 100 100"')
+    expect(result).to.contain('linearGradient')
+    expect(result).to.contain('gradientUnits="userSpaceOnUse"')
+    expect(result).to.contain('d="M10 10 H 90 V 90 H 10 Z"')
+    expect(result).to.contain('fill="url(#g)"')
+    expect(result).to.contain('circle')
+  })
+
+  after(async function () {
+    await remove(svgDir)
   })
 })
