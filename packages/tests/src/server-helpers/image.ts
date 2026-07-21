@@ -6,6 +6,7 @@ import { processImage, processSVG } from '@peertube/peertube-server/core/helpers
 import { expect } from 'chai'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
+import { tmpdir } from 'os'
 import { join } from 'path'
 import sharp from 'sharp'
 
@@ -123,7 +124,7 @@ describe('Image helpers', function () {
 })
 
 describe('SVG sanitization', function () {
-  const svgDir = join(root(), 'test-svg')
+  const svgDir = join(tmpdir(), 'test-svg')
   const svgSrc = join(svgDir, 'input.svg')
   const svgDest = join(svgDir, 'output.svg')
 

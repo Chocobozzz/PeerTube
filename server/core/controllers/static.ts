@@ -103,7 +103,15 @@ staticRouter.use(
 
 staticRouter.use(
   STATIC_PATHS.UPLOAD_IMAGES,
-  express.static(DIRECTORIES.UPLOAD_IMAGES, { fallthrough: false }),
+  express.static(DIRECTORIES.UPLOAD_IMAGES, {
+    fallthrough: false,
+    setHeaders: (res, filePath) => {
+      // Force a download instead of inline rendering to prevent XSS if the svg is opened directly
+      if (filePath.endsWith('.svg')) {
+        res.setHeader('Content-Disposition', 'attachment')
+      }
+    }
+  }),
   handleStaticError
 )
 
