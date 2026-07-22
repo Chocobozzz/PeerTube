@@ -549,35 +549,27 @@ class PeerTubePlugin extends Plugin {
       if (this.player.isFullscreen()) this.player.focus()
 
       // Re-schedule pause hide when toggling fullscreen so the correct timeout is used
-      if (this.player.paused()) {
-        this.cancelPauseHide()
-        this.schedulePauseHide()
-      }
+      if (this.player.paused() && this.player.hasStarted_) this.schedulePauseHide()
     })
   }
 
   private listenUserInput () {
-    const playerEl = this.player.el()
-
     // Listen for genuine user interactions to reset the pause-hide timer.
-    // We use DOM events directly rather than video.js's 'useractive' because
+    // We listen for these DOM events rather than video.js's 'useractive' because
     // video.js fires 'useractive' via an internal interval (checkUserActivity_)
     // even while paused, which would cancel the hide timeout in a loop.
     const onRealInput = () => {
-      if (!this.player?.paused()) return
+      // Ignore the pre-playback state: controls are already hidden until vjs-has-started
+      if (!this.player?.paused() || !this.player.hasStarted_) return
 
-      if (this.player.hasClass('vjs-paused-inactive')) {
-        this.player.removeClass('vjs-paused-inactive')
-      }
-
-      this.cancelPauseHide()
+      this.player.removeClass('vjs-paused-inactive')
       this.schedulePauseHide()
     }
 
-    playerEl.addEventListener('mousemove', onRealInput)
-    playerEl.addEventListener('keydown', onRealInput)
-    playerEl.addEventListener('touchstart', onRealInput)
-    playerEl.addEventListener('click', onRealInput)
+    this.player.on('mousemove', onRealInput)
+    this.player.on('keydown', onRealInput)
+    this.player.on('touchstart', onRealInput)
+    this.player.on('click', onRealInput)
   }
 
   private listenControlBarMouse () {
@@ -623,7 +615,6 @@ class PeerTubePlugin extends Plugin {
   // ---------------------------------------------------------------------------
 
   private onPause () {
-    this.cancelPauseHide()
     this.schedulePauseHide()
   }
 
@@ -633,6 +624,8 @@ class PeerTubePlugin extends Plugin {
   }
 
   private schedulePauseHide () {
+    this.cancelPauseHide()
+
     // Use longer timeout in fullscreen so users have more time before controls hide
     const timeout = this.player.isFullscreen()
       ? PAUSED_INACTIVE_TIMEOUT_FULLSCREEN
@@ -640,6 +633,12 @@ class PeerTubePlugin extends Plugin {
 
     this.pauseHideTimeout = setTimeout(() => {
       if (!this.player?.paused()) return
+
+      // Don't hide while the user is parked on the controls or has a menu open mirroring the playing-state logic in alterInactivity()
+      if (this.menuOpened || this.mouseInSettings || this.mouseInControlBar) {
+        this.schedulePauseHide()
+        return
+      }
 
       this.player.addClass('vjs-paused-inactive')
       // Do NOT call userActive(false) here: video.js re-fires 'useractive' while paused
