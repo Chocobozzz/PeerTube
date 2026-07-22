@@ -431,7 +431,15 @@ class LiveManager {
 
     const audioOnlyOutput = allResolutions.every(r => r === VideoResolution.H_NOVIDEO)
 
-    const liveSession = await this.saveStartingSession(videoLive)
+    let liveSession: VideoLiveSessionModel
+    try {
+      liveSession = await this.saveStartingSession(videoLive)
+    } catch (err) {
+      logger.error('Cannot save starting live session.', { err, ...localLTags })
+
+      this.videoSessions.delete(videoUUID)
+      return this.abortSession(sessionId)
+    }
 
     LiveQuotaStore.Instance.addNewLive(user.id, sessionId)
 
@@ -511,6 +519,9 @@ class LiveManager {
         logger.error('Cannot run muxing.', { err, ...localLTags })
 
         this.muxingSessions.delete(sessionId)
+
+        LiveQuotaStore.Instance.removeLive(user.id, sessionId)
+
         muxingSession.destroy()
 
         this.stopSessionOfVideo({
