@@ -105,17 +105,22 @@ export async function completeWebVideoFilesCheck (options: {
 
       await Promise.all([
         makeRawRequest({ url: file.torrentUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
-        makeRawRequest({ url: file.torrentDownloadUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
         makeRawRequest({ url: file.metadataUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
-        makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
-        makeRawRequest({
-          url: file.fileDownloadUrl,
-          token,
-          expectedStatus: objectStorageBaseUrl
-            ? HttpStatusCode.FOUND_302
-            : HttpStatusCode.OK_200
-        })
+        makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 })
       ])
+
+      if (video.downloadEnabled) {
+        await Promise.all([
+          makeRawRequest({ url: file.torrentDownloadUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+          makeRawRequest({
+            url: file.fileDownloadUrl,
+            token,
+            expectedStatus: objectStorageBaseUrl
+              ? HttpStatusCode.FOUND_302
+              : HttpStatusCode.OK_200
+          })
+        ])
+      }
     }
 
     expect(file.resolution.id).to.equal(attributeFile.resolution)

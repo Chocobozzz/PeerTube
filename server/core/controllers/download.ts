@@ -1,7 +1,7 @@
 import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
-import { FileStorage, HttpStatusCode, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import { FileStorage, HttpStatusCode, UserRight, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
-import { parseRangeHeader } from '@server/helpers/express-utils.js'
+import { getAuthUser, parseRangeHeader } from '@server/helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { generateRequestStream } from '@server/helpers/requests.js'
 import { ThrottleStream } from '@server/helpers/stream-throttle.js'
@@ -17,7 +17,9 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { checkCanManageChannel } from '@server/middlewares/validators/shared/video-channels.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
+import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MUserExport, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { create as createContentDisposition } from 'content-disposition'
@@ -107,7 +109,8 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   const file = await VideoFileModel.loadWithVideoOrPlaylistByTorrentFilename(req.params.filename)
   if (!file) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  const video = file.getVideo()
+  const video = await VideoModel.loadFull(file.getVideo().id)
+  if (!video) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
   const path = video.isLocal()
     ? join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename)
@@ -367,37 +370,61 @@ type AllowedResult = {
 }
 
 function isTorrentDownloadAllowed (object: {
-  video: MVideo
+  req: express.Request
+  res: express.Response
+  video: MVideoFull
   torrentPath: string
-}): AllowedResult {
-  if (object.video.downloadEnabled !== true) {
-    return { allowed: false, errorMessage: 'Video download is disabled for this video' }
-  }
-
-  return { allowed: true }
+}): Promise<AllowedResult> {
+  return commonDownloadAllowed(object)
 }
 
 function isVideoDownloadAllowed (object: {
-  video: MVideo
+  req: express.Request
+  res: express.Response
+  video: MVideoFull
   videoFile: MVideoFile
   streamingPlaylist?: MStreamingPlaylist
-}): AllowedResult {
-  if (object.video.downloadEnabled !== true) {
-    return { allowed: false, errorMessage: 'Video download is disabled for this video' }
-  }
-
-  return { allowed: true }
+}): Promise<AllowedResult> {
+  return commonDownloadAllowed(object)
 }
 
 function isGeneratedVideoDownloadAllowed (object: {
-  video: MVideo
+  req: express.Request
+  res: express.Response
+  video: MVideoFull
   videoFiles: MVideoFile[]
-}): AllowedResult {
-  if (object.video.downloadEnabled !== true) {
-    return { allowed: false, errorMessage: 'Video download is disabled for this video' }
+}): Promise<AllowedResult> {
+  return commonDownloadAllowed(object)
+}
+
+async function commonDownloadAllowed (object: {
+  req: express.Request
+  res: express.Response
+  video: MVideoFull
+}): Promise<AllowedResult> {
+  const { req, res, video } = object
+
+  const user = getAuthUser(res)
+
+  if (video.downloadEnabled === true) {
+    return { allowed: true }
   }
 
-  return { allowed: true }
+  if (
+    await checkCanManageChannel({
+      user,
+      req,
+      res: null, // Don't send a response here, we want to return the result to the caller
+      checkCanManage: true,
+      checkIsOwner: false,
+      channel: video.VideoChannel,
+      specialRight: UserRight.SEE_ALL_VIDEOS
+    })
+  ) {
+    return { allowed: true }
+  }
+
+  return { allowed: false, errorMessage: req.t('Video download is disabled for this video') }
 }
 
 // ---------------------------------------------------------------------------
