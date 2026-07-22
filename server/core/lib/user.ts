@@ -298,7 +298,8 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
     newPluginVersion: UserNotificationSettingValue.WEB,
     myVideoStudioEditionFinished: UserNotificationSettingValue.WEB,
     myVideoTranscriptionGenerated: UserNotificationSettingValue.WEB,
-    automaticBlocklist: UserNotificationSettingValue.WEB
+    automaticBlocklist: UserNotificationSettingValue.WEB,
+    newLoginSuccess: UserNotificationSettingValue.WEB
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })

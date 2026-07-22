@@ -280,6 +280,26 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
 
   // ---------------------------------------------------------------------------
 
+  static async isNewLogin (options: {
+    userId: number
+    ip: string
+    userAgent: string
+  }) {
+    const { userId, ip, userAgent } = options
+
+    const existing = await OAuthTokenModel.findOne({
+      where: {
+        userId,
+        loginIP: ip ?? null,
+        loginDevice: userAgent ?? null
+      }
+    })
+
+    return !existing
+  }
+
+  // ---------------------------------------------------------------------------
+
   static deleteUserToken (options: {
     userId: number
     accessTokenException?: string

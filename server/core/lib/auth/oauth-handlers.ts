@@ -9,6 +9,7 @@ import OAuth2Server, {
 } from '@node-oauth/oauth2-server'
 import { maskSecret } from '@peertube/peertube-core-utils'
 import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { MOAuthClient } from '@server/types/models/index.js'
 import express from 'express'
 import { logger } from '../../helpers/logger.js'
@@ -16,6 +17,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { Hooks } from '../plugins/hooks.js'
 import { BypassLogin } from './bypass-login.model.js'
+import { notifyOnLoginSuccess } from './login-notifier.js'
 import { TooLongPasswordError } from './oauth-errors.js'
 import { buildToken, getAccessToken, getRefreshToken, revokeToken, saveToken } from './oauth-token.js'
 import { getUserOrThrow } from './oauth-user.js'
@@ -138,6 +140,8 @@ async function handlePasswordGrant (options: {
 
   const now = new Date()
 
+  const isNewDevice = await OAuthTokenModel.isNewLogin({ userId: user.id, ip: options.ip, userAgent: options.userAgent })
+
   const token = await buildToken({
     loginDevice: options.userAgent,
     loginIP: options.ip,
@@ -147,7 +151,12 @@ async function handlePasswordGrant (options: {
     lastActivityDate: now
   })
 
-  return saveToken(token, client, user, { bypassLogin })
+  const result = await saveToken(token, client, user, { bypassLogin })
+
+  notifyOnLoginSuccess({ user, ip: options.ip, userAgent: options.userAgent, isNewDevice })
+    .catch(err => logger.error('Cannot notify user of successful login.', { err }))
+
+  return result
 }
 
 async function handleRefreshGrant (options: {

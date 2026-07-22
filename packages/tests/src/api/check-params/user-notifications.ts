@@ -176,7 +176,8 @@ describe('Test user notifications API validators', function () {
       myVideoStudioEditionFinished: UserNotificationSettingValue.WEB,
       myVideoTranscriptionGenerated: UserNotificationSettingValue.WEB,
       newPluginVersion: UserNotificationSettingValue.WEB,
-      automaticBlocklist: UserNotificationSettingValue.WEB
+      automaticBlocklist: UserNotificationSettingValue.WEB,
+      newLoginSuccess: UserNotificationSettingValue.WEB
     }
 
     it('Should fail with missing fields', async function () {

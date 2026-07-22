@@ -109,7 +109,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
       newPluginVersion: settingsImportData.newPluginVersion,
       myVideoStudioEditionFinished: settingsImportData.myVideoStudioEditionFinished,
       myVideoTranscriptionGenerated: settingsImportData.myVideoTranscriptionGenerated,
-      automaticBlocklist: settingsImportData.automaticBlocklist
+      automaticBlocklist: settingsImportData.automaticBlocklist,
+      newLoginSuccess: settingsImportData.newLoginSuccess
     }
 
     await UserNotificationSettingModel.updateUserSettings(values, this.user.id)

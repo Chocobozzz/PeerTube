@@ -40,7 +40,8 @@ export function getAllNotificationsSettings (): UserNotificationSetting {
     myVideoStudioEditionFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoTranscriptionGenerated: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    automaticBlocklist: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+    automaticBlocklist: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newLoginSuccess: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 }
 
