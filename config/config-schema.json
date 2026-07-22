@@ -124,6 +124,21 @@
           },
           "additionalProperties": false
         },
+        "confirm_token": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "Consuming a token sent by email/OTP (reset password, verify email, confirm 2FA) 10 attempts in 5 min",
+              "type": "string",
+              "default": "5 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          "additionalProperties": false
+        },
         "receive_client_log": {
           "type": "object",
           "properties": {
@@ -227,6 +242,59 @@
             "max": {
               "type": "integer",
               "default": 5
+            }
+          },
+          "additionalProperties": false
+        },
+        "report_abuse": {
+          "description": "Abuse reports, limited per authenticated user (each report notifies all moderators)",
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "20 attempts in 1 hour",
+              "type": "string",
+              "default": "1 hour"
+            },
+            "max": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          "additionalProperties": false
+        },
+        "create_comment": {
+          "description": "Comment/reply creation, limited per authenticated user",
+          "type": "object",
+          "properties": {
+            "window": {
+              "description": "60 attempts in 5 minutes",
+              "type": "string",
+              "default": "5 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 60
+            }
+          },
+          "additionalProperties": false
+        },
+        "login_lockout": {
+          "description": "Lock an account after too many password/OTP login failures",
+          "type": "object",
+          "properties": {
+            "window": {
+              "type": "string",
+              "default": "5 minutes"
+            },
+            "max": {
+              "description": "Requires at least 10 distinct IPs (`max / max_per_ip`) to lock an account",
+              "type": "integer",
+              "default": 60
+            },
+            "max_per_ip": {
+              "description": "A single IP's contribution to the account lock is capped at 6 failures",
+              "type": "integer",
+              "default": 6
             }
           },
           "additionalProperties": false

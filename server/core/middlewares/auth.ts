@@ -1,11 +1,11 @@
 import { HttpStatusCode, HttpStatusCodeType, ServerErrorCodeType } from '@peertube/peertube-models'
-import { getAccessToken } from '@server/lib/auth/oauth-model.js'
+import { getAccessToken } from '@server/lib/auth/oauth-token.js'
+import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
 import express from 'express'
 import { Socket } from 'socket.io'
 import { logger } from '../helpers/logger.js'
-import { handleOAuthAuthenticate } from '../lib/auth/oauth.js'
-import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
+import { handleOAuthAuthenticate } from '../lib/auth/oauth-handlers.js'
 
 export function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   handleOAuthAuthenticate(req, res)

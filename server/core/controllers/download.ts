@@ -118,6 +118,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   const allowParameters = {
     req,
     res,
+    video,
     torrentFilename: req.params.filename,
     torrentPath: path,
     downloadName: downloadFilename
@@ -365,24 +366,37 @@ type AllowedResult = {
   errorMessage?: string
 }
 
-function isTorrentDownloadAllowed (_object: {
+function isTorrentDownloadAllowed (object: {
+  video: MVideo
   torrentPath: string
 }): AllowedResult {
+  if (object.video.downloadEnabled !== true) {
+    return { allowed: false, errorMessage: 'Video download is disabled for this video' }
+  }
+
   return { allowed: true }
 }
 
-function isVideoDownloadAllowed (_object: {
+function isVideoDownloadAllowed (object: {
   video: MVideo
   videoFile: MVideoFile
   streamingPlaylist?: MStreamingPlaylist
 }): AllowedResult {
+  if (object.video.downloadEnabled !== true) {
+    return { allowed: false, errorMessage: 'Video download is disabled for this video' }
+  }
+
   return { allowed: true }
 }
 
-function isGeneratedVideoDownloadAllowed (_object: {
+function isGeneratedVideoDownloadAllowed (object: {
   video: MVideo
   videoFiles: MVideoFile[]
 }): AllowedResult {
+  if (object.video.downloadEnabled !== true) {
+    return { allowed: false, errorMessage: 'Video download is disabled for this video' }
+  }
+
   return { allowed: true }
 }
 

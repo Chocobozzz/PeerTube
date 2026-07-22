@@ -89,6 +89,10 @@ describe('Test users email verification', function () {
     expect(user.emailVerified).to.be.true
   })
 
+  it('Should not verify the email again with the same verification string', async function () {
+    await server.users.verifyEmail({ userId, verificationString, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+  })
+
   it('Should be able to change the user email', async function () {
     let updateVerificationString: string
 

@@ -66,7 +66,7 @@ import { program as cli } from 'commander'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import { frameguard } from 'helmet'
+import { frameguard, xContentTypeOptions } from 'helmet'
 import anonymize from 'ip-anonymize'
 import morgan, { token } from 'morgan'
 
@@ -95,6 +95,8 @@ if (CONFIG.CSP.ENABLED) {
   app.use(baseCSP)
 }
 
+app.use(xContentTypeOptions())
+
 if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
   app.use(frameguard({
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
@@ -102,6 +104,7 @@ if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
 }
 
 // ----------- PeerTube modules -----------
+import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
@@ -155,7 +158,6 @@ import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watche
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
-import { omit } from '@peertube/peertube-core-utils'
 
 // ----------- Command line -----------
 
@@ -171,8 +173,7 @@ cli
 if (isTestOrDevInstance()) {
   app.use(cors({
     origin: '*',
-    exposedHeaders: 'Retry-After',
-    credentials: true
+    exposedHeaders: 'Retry-After'
   }))
 }
 

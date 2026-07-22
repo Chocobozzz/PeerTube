@@ -176,6 +176,8 @@ export function checkMissedConfig () {
     'rates_limit.signup.max',
     'rates_limit.ask_send_email.window',
     'rates_limit.ask_send_email.max',
+    'rates_limit.confirm_token.window',
+    'rates_limit.confirm_token.max',
     'rates_limit.receive_client_log.window',
     'rates_limit.receive_client_log.max',
     'rates_limit.plugins.window',

@@ -38,6 +38,11 @@ rates_limit:
     # 3 attempts in 5 min
     window: 5 minutes
     max: 3
+  confirm_token:
+    # Consuming a token sent by email/OTP (reset password, verify email, confirm 2FA)
+    # 10 attempts in 5 min
+    window: 5 minutes
+    max: 10
   receive_client_log:
     # 1 attempt every 2 seconds
     window: 1 minute
@@ -66,6 +71,18 @@ rates_limit:
     # 5 attempts in 5 seconds
     window: 5 seconds
     max: 5
+  report_abuse: # Abuse reports, limited per authenticated user (each report notifies all moderators)
+    # 20 attempts in 1 hour
+    window: 1 hour
+    max: 20
+  create_comment: # Comment/reply creation, limited per authenticated user
+    # 60 attempts in 5 minutes
+    window: 5 minutes
+    max: 60
+  login_lockout: # Lock an account after too many password/OTP login failures
+    window: 5 minutes
+    max: 60 # Requires at least 10 distinct IPs (`max / max_per_ip`) to lock an account
+    max_per_ip: 6 # A single IP's contribution to the account lock is capped at 6 failures
 
 oauth2:
   token_lifetime:

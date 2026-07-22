@@ -235,6 +235,31 @@ export class Emailer {
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
+  addAccountLoginLockedEmailJob (options: {
+    username: string
+    to: string
+    language: string
+    ip: string
+  }) {
+    const { username, to, language, ip } = options
+
+    const emailPayload: EmailPayload = {
+      template: 'my-account-login-locked',
+      to: { email: to, language },
+      subject: t('Your account has been temporarily locked', language),
+      locals: {
+        username,
+        ip,
+        maxFailures: CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX,
+        lockoutMinutes: Math.round(CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.WINDOW_MS / 60000),
+
+        hideNotificationPreferencesLink: true
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
   addContactFormJob (options: {
     fromEmail: string
 

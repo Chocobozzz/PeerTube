@@ -1,10 +1,11 @@
-import express from 'express'
-import RateLimit, { Options as RateLimitHandlerOptions } from 'express-rate-limit'
 import { UserRole, UserRoleType } from '@peertube/peertube-models'
+import { getAuthUser } from '@server/helpers/express-utils.js'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
+import express from 'express'
+import RateLimit, { ipKeyGenerator, Options as RateLimitHandlerOptions } from 'express-rate-limit'
 import { optionalAuthenticate } from './auth.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 
 const lTags = loggerTagsFactory('rate-limit')
 
@@ -14,11 +15,24 @@ export function buildRateLimiter (options: {
   windowMs: number
   max: number
   skipFailedRequests?: boolean
+
+  // Key the counter on the authenticated user instead of the source IP
+  perUserKey?: boolean
 }) {
   return RateLimit({
     windowMs: options.windowMs,
     max: options.max,
     skipFailedRequests: options.skipFailedRequests,
+
+    keyGenerator: options.perUserKey === true
+      ? (req: express.Request, res: express.Response) => {
+        const user = getAuthUser(res)
+
+        return user
+          ? 'user-' + user.id
+          : ipKeyGenerator(req.ip)
+      }
+      : undefined,
 
     handler: (req, res, next, options) => {
       // Bypass rate limit for registered runners
@@ -46,6 +60,12 @@ export function buildRateLimiter (options: {
 export const apiRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.API.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.API.MAX
+})
+
+// Endpoints that consume a token sent by email or generated for the user (reset password, verify email, confirm 2FA)
+export const confirmTokenRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.CONFIRM_TOKEN.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.CONFIRM_TOKEN.MAX
 })
 
 export const activityPubRateLimiter = buildRateLimiter({

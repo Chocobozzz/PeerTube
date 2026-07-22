@@ -1,12 +1,13 @@
-import express from 'express'
+import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
+import { AbuseCreate, AbuseState, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { logger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation.js'
 import { Notifier } from '@server/lib/notifier/index.js'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message.js'
 import { AbuseModel } from '@server/models/abuse/abuse.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
-import { AbuseCreate, AbuseState, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import express from 'express'
 import { getFormattedObjects } from '../../helpers/utils.js'
 import { sequelizeTypescript } from '../../initializers/database.js'
 import {
@@ -20,6 +21,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  buildRateLimiter,
   checkAbuseValidForMessagesValidator,
   deleteAbuseMessageValidator,
   ensureUserHasRight,
@@ -34,6 +36,14 @@ import { AccountModel } from '../../models/account/account.js'
 const abuseRouter = express.Router()
 
 abuseRouter.use(apiRateLimiter)
+
+// Each accepted report notifies every moderator (in-app + email) and can federate a Flag activity
+// So also limit reports per user
+const reportAbuseRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.REPORT_ABUSE.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.REPORT_ABUSE.MAX,
+  perUserKey: true
+})
 
 abuseRouter.get(
   '/',
@@ -54,7 +64,13 @@ abuseRouter.put(
   asyncMiddleware(abuseUpdateValidator),
   asyncRetryTransactionMiddleware(updateAbuse)
 )
-abuseRouter.post('/', authenticate, asyncMiddleware(abuseReportValidator), asyncRetryTransactionMiddleware(reportAbuse))
+abuseRouter.post(
+  '/',
+  authenticate,
+  reportAbuseRateLimiter,
+  asyncMiddleware(abuseReportValidator),
+  asyncRetryTransactionMiddleware(reportAbuse)
+)
 abuseRouter.delete(
   '/:id',
   authenticate,

@@ -190,6 +190,33 @@ class Redis {
     return this.getValue(this.generateTwoFactorRequestKey(userId, requestToken))
   }
 
+  /* ************ Login failures ************ */
+
+  // Failures are tracked per source IP
+  // Each IP's contribution to the account lock is capped at MAX_PER_IP so a single IP cannot lock an account by themselves
+  async addLoginFailure (userId: number, ip: string) {
+    const key = this.generateLoginFailureKey(userId)
+    const field = this.generateLoginFailureIPField(ip)
+
+    await this.incrementHashField(key, field)
+    await this.setExpiration(key, CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.WINDOW_MS)
+
+    // Let the caller know the (capped) total so it can detect the exact failure that triggers the lock
+    return this.getLoginFailures(userId)
+  }
+
+  async getLoginFailures (userId: number) {
+    const failuresPerIP = await this.getHash(this.generateLoginFailureKey(userId))
+
+    return Object.values(failuresPerIP).reduce((total, value) => {
+      return total + Math.min(parseInt(value, 10), CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX_PER_IP)
+    }, 0)
+  }
+
+  deleteLoginFailures (userId: number) {
+    return this.removeValue(this.generateLoginFailureKey(userId))
+  }
+
   /* ************ Email verification ************ */
 
   async setUserVerifyEmailVerificationString (userId: number) {
@@ -204,6 +231,10 @@ class Redis {
     return this.getValue(this.generateUserVerifyEmailKey(userId))
   }
 
+  deleteUserVerifyEmailLink (userId: number) {
+    return this.removeValue(this.generateUserVerifyEmailKey(userId))
+  }
+
   async setRegistrationVerifyEmailVerificationString (registrationId: number) {
     const generatedString = await generateRandomString(32)
 
@@ -214,6 +245,10 @@ class Redis {
 
   async getRegistrationVerifyEmailLink (registrationId: number) {
     return this.getValue(this.generateRegistrationVerifyEmailKey(registrationId))
+  }
+
+  deleteRegistrationVerifyEmailLink (registrationId: number) {
+    return this.removeValue(this.generateRegistrationVerifyEmailKey(registrationId))
   }
 
   /* ************ Contact form per IP ************ */
@@ -479,6 +514,14 @@ class Redis {
     return 'two-factor-request-' + userId + '-' + token
   }
 
+  private generateLoginFailureKey (userId: number) {
+    return 'login-failure-' + userId
+  }
+
+  private generateLoginFailureIPField (ip: string) {
+    return sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)
+  }
+
   private generateUserVerifyEmailKey (userId: number) {
     return 'verify-email-user-' + userId
   }
@@ -551,6 +594,14 @@ class Redis {
 
   private increment (key: string) {
     return this.client.incr(this.prefix + key)
+  }
+
+  private incrementHashField (key: string, field: string) {
+    return this.client.hincrby(this.prefix + key, field, 1)
+  }
+
+  private getHash (key: string) {
+    return this.client.hgetall(this.prefix + key)
   }
 
   private async exists (key: string) {

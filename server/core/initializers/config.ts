@@ -359,6 +359,10 @@ const CONFIG = {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.ask_send_email.window')),
       MAX: config.get<number>('rates_limit.ask_send_email.max')
     },
+    CONFIRM_TOKEN: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.confirm_token.window')),
+      MAX: config.get<number>('rates_limit.confirm_token.max')
+    },
     PLUGINS: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.plugins.window')),
       MAX: config.get<number>('rates_limit.plugins.max')
@@ -382,6 +386,19 @@ const CONFIG = {
     DOWNLOAD_GENERATE_VIDEO: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.download_generate_video.window')),
       MAX: config.get<number>('rates_limit.download_generate_video.max')
+    },
+    REPORT_ABUSE: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.report_abuse.window')),
+      MAX: config.get<number>('rates_limit.report_abuse.max')
+    },
+    CREATE_COMMENT: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.create_comment.window')),
+      MAX: config.get<number>('rates_limit.create_comment.max')
+    },
+    LOGIN_LOCKOUT: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login_lockout.window')),
+      MAX: config.get<number>('rates_limit.login_lockout.max'),
+      MAX_PER_IP: config.get<number>('rates_limit.login_lockout.max_per_ip')
     }
   },
   TRUST_PROXY: config.get<string[]>('trust_proxy'),
