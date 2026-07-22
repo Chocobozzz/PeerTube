@@ -1,4 +1,4 @@
-import { exists, getResolutionAndFPSLabel, getResolutionLabel, timeToInt } from '@peertube/peertube-core-utils'
+import { exists, generateSwarmId, getResolutionAndFPSLabel, getResolutionLabel, timeToInt } from '@peertube/peertube-core-utils'
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
@@ -34,6 +34,7 @@ type ConstructorOptions =
     | 'hls'
     | 'startTime'
     | 'duration'
+    | 'videoUUID'
   >
 
 export class HLSOptionsBuilder {
@@ -128,6 +129,23 @@ export class HLSOptionsBuilder {
     const loaderOptions: Partial<StreamConfig> = {
       announceTrackers,
       rtcConfig: getRtcConfig(this.options.stunServers),
+
+      streamSwarmIdBuilder: context => {
+        const options = {
+          peerProtocolVersion: context.peerProtocolVersion,
+          streamType: context.streamType,
+          videoUUID: this.options.videoUUID,
+          resolution: context.properties.height || context.properties.width
+            ? Math.min(context.properties.height ?? Infinity, context.properties.width ?? Infinity)
+            : 0
+        }
+
+        const swarmId = generateSwarmId(options)
+
+        debugLogger('Generated swarmId for segment', { options, swarmId })
+
+        return swarmId
+      },
 
       httpRequestSetup: (segmentUrlArg, segmentByteRange, requestAbortSignal, requestByteRange) => {
         const { requiresUserAuth, requiresPassword } = this.options

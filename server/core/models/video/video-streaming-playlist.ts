@@ -1,3 +1,4 @@
+import { generateSwarmId } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   VideoResolution,
@@ -23,7 +24,8 @@ import {
   MStreamingPlaylistFilesVideo,
   MStreamingPlaylistVideo,
   MVideo,
-  MVideoPrivacy
+  MVideoPrivacy,
+  MVideoUUID
 } from '@server/types/models/index.js'
 import memoizee from 'memoizee'
 import { join } from 'path'
@@ -142,22 +144,31 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return doesExist({ sequelize: this.sequelize, query, bind: { infoHash: `{${infoHash}}` } }) // Transform infoHash in a PG array
   }
 
-  static buildP2PMediaLoaderInfoHashes (playlistUrl: string, files: { height: number }[]) {
+  static buildP2PMediaLoaderInfoHashes (videoUUID: string, files: { resolution: number }[]) {
     const hashes: string[] = []
 
-    const version = Math.abs(P2P_MEDIA_LOADER_PEER_VERSION)
+    const version = P2P_MEDIA_LOADER_PEER_VERSION
 
-    // https://github.com/Novage/p2p-media-loader/blob/master/p2p-media-loader-core/lib/p2p-media-manager.ts#L115
-    for (let i = 0; i < files.length; i++) {
-      hashes.push(generateP2PMediaLoaderHash(`v${version}-${playlistUrl}-main-${i}`))
+    for (const file of files) {
+      hashes.push(generateP2PMediaLoaderHash(generateSwarmId({
+        peerProtocolVersion: `v${version}`,
+        streamType: 'main',
+        videoUUID,
+        resolution: file.resolution
+      })))
     }
 
     // Audio only stream
-    if (files.some(f => f.height === 0)) {
-      hashes.push(generateP2PMediaLoaderHash(`v${version}-${playlistUrl}-secondary-0`))
+    if (files.some(f => f.resolution === 0)) {
+      hashes.push(generateP2PMediaLoaderHash(generateSwarmId({
+        peerProtocolVersion: `v${version}`,
+        streamType: 'secondary',
+        videoUUID,
+        resolution: 0
+      })))
     }
 
-    logger.debug('Assigned P2P Media Loader info hashes', { playlistUrl, hashes })
+    logger.debug('Assigned P2P Media Loader info hashes', { videoUUID, hashes })
 
     return hashes
   }
@@ -288,10 +299,8 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID, storage } })
   }
 
-  assignP2PMediaLoaderInfoHashes (video: MVideo, files: { height: number }[]) {
-    const masterPlaylistUrl = this.getMasterPlaylistUrl(video)
-
-    this.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(masterPlaylistUrl, files)
+  assignP2PMediaLoaderInfoHashes (video: MVideoUUID, files: { resolution: number }[]) {
+    this.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(video.uuid, files)
   }
 
   // ---------------------------------------------------------------------------

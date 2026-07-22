@@ -38,7 +38,8 @@ import {
   MVideo,
   MVideoFile,
   MVideoId,
-  MVideoLive
+  MVideoLive,
+  MVideoUUID
 } from '@server/types/models/index.js'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, extname } from 'path'
@@ -71,7 +72,7 @@ export function getFileAttributesFromUrl (
       })
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrlObject.mediaType)
-    const resolution = fileUrlObject.height
+    const resolution = Math.min(fileUrlObject.height ?? Infinity, fileUrlObject.width ?? Infinity)
 
     const [ videoId, videoStreamingPlaylistId ] = isStreamingPlaylist(videoOrPlaylist)
       ? [ null, videoOrPlaylist.id ]
@@ -160,7 +161,7 @@ function buildFileStreams (fileUrl: ActivityVideoUrlObject, resolution: number) 
 
 // ---------------------------------------------------------------------------
 
-export function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
+export function getStreamingPlaylistAttributesFromObject (video: MVideoId & MVideoUUID, videoObject: VideoObject) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u))
   if (playlistUrls.length === 0) return []
 
@@ -182,7 +183,10 @@ export function getStreamingPlaylistAttributesFromObject (video: MVideoId, video
 
       segmentsSha256Url: segmentsSha256UrlObject?.href ?? null,
 
-      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
+      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(
+        video.uuid,
+        files.map(f => ({ resolution: Math.min(f.height ?? Infinity, f.width ?? Infinity) }))
+      ),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
       videoId: video.id,
 

@@ -25,35 +25,37 @@ const trackerServer = new TrackerServer({
   http: false,
   udp: false,
   ws: false,
-  filter: async function (infoHash, params, cb) {
+  filter: async function (infohashHex: string, params, cb) {
     if (CONFIG.TRACKER.ENABLED === false) {
       return cb(new Error('Tracker is disabled on this instance.'))
     }
+
+    const infohash = Buffer.from(infohashHex, 'hex').toString('binary')
 
     const ip = params.type === 'ws'
       ? params.ip
       : params.httpReq.ip
 
-    const key = ip + '-' + infoHash
+    const key = ip + '-' + infohash
 
     peersIps[ip] = peersIps[ip] ? peersIps[ip] + 1 : 1
     peersIpInfoHash[key] = peersIpInfoHash[key] ? peersIpInfoHash[key] + 1 : 1
 
     if (CONFIG.TRACKER.REJECT_TOO_MANY_ANNOUNCES && peersIpInfoHash[key] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
-      return cb(new Error(`Too many requests (${peersIpInfoHash[key]} of ip ${ip} for torrent ${infoHash}`))
+      return cb(new Error(`Too many requests (${peersIpInfoHash[key]} of ip ${ip} for torrent ${infohash}`))
     }
 
     try {
       if (CONFIG.TRACKER.PRIVATE === false) return cb()
 
-      const playlistExists = await VideoStreamingPlaylistModel.doesInfohashExistCached(infoHash)
+      const playlistExists = await VideoStreamingPlaylistModel.doesInfohashExistCached(infohash)
       if (playlistExists === true) return cb()
 
-      // Classic infohash (not p2p-media-loader custom one), use arg directly
-      const videoFileExists = await VideoFileModel.doesInfohashExistCached(infoHash)
+      // Classic infohash (not p2p-media-loader custom one), stored as hex, use arg directly
+      const videoFileExists = await VideoFileModel.doesInfohashExistCached(infohashHex)
       if (videoFileExists === true) return cb()
 
-      cb(new Error(`Unknown infoHash ${infoHash} requested by ip ${ip}`))
+      cb(new Error(`Unknown infoHash ${infohash} requested by ip ${ip}`))
 
       // Close socket connection and block IP for a few time
       if (params.type === 'ws') {

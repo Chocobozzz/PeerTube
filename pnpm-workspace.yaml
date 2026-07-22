@@ -28,6 +28,12 @@ onlyBuiltDependencies:
   - utf-8-validate
   - utp-native
 
+overrides:
+  '@types/express': 4.17.9
+  '@types/express-serve-static-core': 4.19.5
+  p2p-media-loader-core: link:../p2p-media-loader/packages/p2p-media-loader-core
+  p2p-media-loader-hlsjs: link:../p2p-media-loader/packages/p2p-media-loader-hlsjs
+
 patchedDependencies:
   '@types/markdown-it': pnpm-patches/@types__markdown-it.patch
   sharp: pnpm-patches/sharp.patch

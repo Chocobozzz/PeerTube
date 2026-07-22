@@ -180,6 +180,8 @@
     "opentelemetry-instrumentation-sequelize": "^0.41.0",
     "otpauth": "^9.5.1",
     "p-queue": "^9.3.0",
+    "p2p-media-loader-core": "link:../p2p-media-loader/packages/p2p-media-loader-core",
+    "p2p-media-loader-hlsjs": "link:../p2p-media-loader/packages/p2p-media-loader-hlsjs",
     "parse-torrent": "^11.0.21",
     "password-generator": "^3.0.0",
     "pg": "^8.22.0",

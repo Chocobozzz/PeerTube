@@ -1251,9 +1251,8 @@ export const TRACKER_RATE_LIMITS = {
   BLOCK_IP_LIFETIME: parseDurationToMs('3 minutes')
 }
 
-// We use -2 instead of 2 because of historical reason
-// When p2p-media-loader bumps to v3, we'll be able to switch to 3 directly
-export const P2P_MEDIA_LOADER_PEER_VERSION = -2
+// Bump when the p2p-media-loader peer protocol/infohash derivation changes in an incompatible way
+export const P2P_MEDIA_LOADER_PEER_VERSION = 2
 
 // ---------------------------------------------------------------------------
 

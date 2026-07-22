@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { getHLS, removeFragmentedMP4Ext, uuidRegex, wait } from '@peertube/peertube-core-utils'
+import { generateSwarmId, getHLS, removeFragmentedMP4Ext, uuidRegex, wait } from '@peertube/peertube-core-utils'
 import {
   FileStorage,
   HttpStatusCode,
@@ -93,12 +93,17 @@ export async function checkPlaylistInfohash (options: {
   const { sqlCommand, video, files } = options
   const hls = getHLS(video)
 
-  const version = 2
+  const peerProtocolVersion = 'v2'
 
-  for (let i = 0; i < files.length; i++) {
-    const str = files[0].resolution.id === VideoResolution.H_NOVIDEO && files.length !== 0
-      ? `v${version}-${hls.playlistUrl}-secondary-0`
-      : `v${version}-${hls.playlistUrl}-main-${i}`
+  for (const file of files) {
+    const isAudioOnly = file.resolution.id === VideoResolution.H_NOVIDEO
+
+    const str = generateSwarmId({
+      peerProtocolVersion,
+      streamType: isAudioOnly ? 'secondary' : 'main',
+      videoUUID: video.uuid,
+      resolution: isAudioOnly ? 0 : file.resolution.id
+    })
 
     const infohash = generateP2PMediaLoaderHash(str)
     const dbInfohashes = await sqlCommand.getPlaylistInfohash(hls.id)
