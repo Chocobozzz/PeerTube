@@ -299,11 +299,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
       logger.debug('Live delete handler of TS file %s.', segmentPath, this.lTags())
 
-      try {
-        await this.liveSegmentShaStore.removeSegmentSha(segmentPath)
-      } catch (err) {
-        logger.warn('Cannot remove segment sha %s from sha store', segmentPath, { err, ...this.lTags() })
-      }
+      this.liveSegmentShaStore.removeSegmentSha(segmentPath)
 
       if (this.streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
         try {
