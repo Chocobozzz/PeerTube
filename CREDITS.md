@@ -12,9 +12,9 @@
  * fran secs
  * Payman Moghadam
  * Ihor Hordiichuk
+ * Leif-Jöran Olsson
  * kontrollanten
  * Filip Bengtsson
- * Leif-Jöran Olsson
  * Berto Te
  * Simon Brosdetzko
  * Jiri Podhorecky
@@ -34,6 +34,7 @@
  * Clemens Schielicke
  * Luca Calcaterra
  * Oliwier Jaszczyszyn
+ * Lefteris T.
  * Racida S
  * Balázs Meskó
  * Blood Axe
@@ -41,7 +42,6 @@
  * John Livingston
  * Wicklow
  * Eivind Ødegård
- * Lefteris T.
  * Tirifto
  * Kim
  * Wuzzy
@@ -55,10 +55,10 @@
  * Mohamad Reza
  * Ettore Atalan
  * Quentin PAGÈS
+ * Free coss
  * Kimsible
  * Felix Ableitner
  * Frank Sträter
- * Free coss
  * dxuser514
  * Andrea Gavioli
  * Mürteza MERT
@@ -139,6 +139,7 @@
  * Paolo Mauri
  * Sergey Zigachev
  * Txopi
+ * Voxel
  * Benjamin Bouvier
  * Cavernosa
  * Framasoft Weblate user 1402
@@ -147,6 +148,7 @@
  * Jure Repinc
  * Kemal Oktay Aktoğan
  * Lucas Declercq
+ * Miguel A. Bouzada Fdz.
  * Ryan He
  * Sirxy
  * Viorel-Cătălin Răpițeanu
@@ -160,7 +162,6 @@
  * Florent Poinsaut
  * Jayme Soares Almeida Cruz
  * Lety Does Stuff
- * Miguel A. Bouzada Fdz.
  * Nassim Bounouas
  * Rafael Fontenelle
  * Thomas Kuntz
@@ -244,7 +245,6 @@
  * Ugaitz
  * Vaclovas Intas
  * Vincent Finance
- * Voxel
  * ar9708
  * aschaap
  * clementbrizard
@@ -422,6 +422,7 @@
  * YiDai
  * Yogesh K S
  * ahmadsharifian
+ * amlor
  * bopol
  * brucekomike
  * darek
@@ -457,6 +458,7 @@
  * Aleksandr Sokolov
  * Alessandro Molina
  * Alexander F. Rødseth
+ * Alexander peczon
  * Alexey Cluster
  * Ali Alim
  * Alperen Abak
@@ -475,6 +477,7 @@
  * Armando Lüscher
  * Artem Prosvetov
  * Arthur Lutz
+ * Asyncnomi
  * Austin Heap
  * Autom
  * Ben Abbott
@@ -501,6 +504,7 @@
  * David Dobryakov
  * DeeJayBro
  * DeepL
+ * Defendi
  * Deval
  * Dimitri DI GUSTO
  * Dimitrios Glentadakis
@@ -671,6 +675,7 @@
  * Simon Gilliot
  * Simounet
  * Snue
+ * Soisik Froger
  * Stefan Schüller
  * Steffen
  * Steffen Möller
@@ -714,7 +719,6 @@
  * alexma233
  * allmiha2
  * aloxe
- * amlor
  * anmol26s
  * april
  * augier
@@ -753,6 +757,7 @@
  * mira.bat
  * mj-saunders
  * morteza
+ * nicfab
  * no
  * norrist
  * nxjoseph

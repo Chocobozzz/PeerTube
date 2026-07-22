@@ -953,6 +953,37 @@ describe('Test config', function () {
         })
       })
 
+      describe('SVG', function () {
+        let svgUrl: string
+
+        it('Should update instance favicon with an SVG', async function () {
+          await server.config.updateInstanceLogo({ type: 'favicon', fixture: 'peertube.svg' })
+
+          const htmlConfig = await server.config.getConfig()
+
+          const favicons = htmlConfig.instance.logo.filter(l => l.type === 'favicon')
+          expect(favicons).to.have.lengthOf(1)
+          expect(favicons[0].isFallback).to.be.false
+
+          svgUrl = favicons[0].fileUrl
+          expect(svgUrl).to.match(/\.svg$/)
+
+          await testFileExistsOnFSOrNot(server, 'uploads/images', basename(svgUrl), true)
+        })
+
+        it('Should serve the SVG with a Content-Disposition attachment header', async function () {
+          const res = await makeRawRequest({ url: svgUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+          expect(res.headers['content-disposition']).to.equal('attachment')
+        })
+
+        it('Should remove the SVG favicon', async function () {
+          await server.config.deleteInstanceLogo({ type: 'favicon' })
+
+          await testFileExistsOnFSOrNot(server, 'uploads/images', basename(svgUrl), false)
+        })
+      })
+
       describe('Default logo', function () {
         before(async function () {
           await server.config.updateInstanceImage({ type: ActorImageType.AVATAR, fixture: 'avatar.png' })

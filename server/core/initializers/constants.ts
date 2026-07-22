@@ -62,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1085
+export const LAST_MIGRATION_VERSION = 1090
 
 // ---------------------------------------------------------------------------
 
@@ -931,9 +931,11 @@ export let PRIVATE_RSA_KEY_SIZE = 2048
 export const BCRYPT_SALT_SIZE = 10
 
 export const ENCRYPTION = {
-  ALGORITHM: 'aes-256-cbc',
-  IV: 16,
-  SALT: 'peertube',
+  ALGORITHM: 'aes-256-gcm',
+  IV: 12, // 96-bit IV, the NIST-recommended size for GCM
+  SALT: 16, // random salt length
+  AUTH_TAG: 16,
+  KEY_LENGTH: 32,
   ENCODING: 'hex' as Encoding
 }
 
