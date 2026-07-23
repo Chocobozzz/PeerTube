@@ -1,4 +1,5 @@
 import { TokenSession } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
 import { MUserAccountId } from '@server/types/models/index.js'
 import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token.js'
@@ -280,20 +281,26 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
 
   // ---------------------------------------------------------------------------
 
-  static deleteUserToken (options: {
+  static async deleteUserToken (options: {
     userId: number
     accessTokenException?: string
     transaction?: Transaction
   }) {
     const { userId, accessTokenException, transaction } = options
 
-    TokensCache.Instance.deleteUserTokens(userId, accessTokenException)
-
     const where = accessTokenException
       ? { userId, accessToken: { [Op.ne]: accessTokenException } }
       : { userId }
 
-    return OAuthTokenModel.destroy({ where, transaction })
+    // Bulk destroy does not run the afterDestroy hook, so we have to invalidate the cache ourselves
+    // It has to be done once the rows are gone
+    const destroyed = await OAuthTokenModel.destroy({ where, transaction })
+
+    afterCommitIfTransaction(transaction, () => {
+      TokensCache.Instance.deleteUserTokens(userId, accessTokenException)
+    })
+
+    return destroyed
   }
 
   toSessionFormattedJSON (activeToken: string): TokenSession {

@@ -7,7 +7,7 @@ import { OTP } from '@server/initializers/constants.js'
 import { BypassLogin } from '@server/lib/auth/bypass-login.model.js'
 import { consumeBypassFromExternalAuth, getAuthNameFromRefreshGrant, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth.js'
 import { MissingTwoFactorError } from '@server/lib/auth/oauth-errors.js'
-import { handleOAuthToken } from '@server/lib/auth/oauth-handlers.js'
+import { handleOAuthClient, handleOAuthToken } from '@server/lib/auth/oauth-handlers.js'
 import { revokeToken } from '@server/lib/auth/oauth-token.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import {
@@ -91,18 +91,20 @@ async function handleToken (req: express.Request, res: express.Response, next: e
   const grantType = req.body.grant_type
 
   try {
+    const client = await handleOAuthClient(req)
+
     const bypassLogin = await buildByPassLogin(req, grantType)
 
     const refreshTokenAuthName = grantType === 'refresh_token'
       ? await getAuthNameFromRefreshGrant(req.body.refresh_token)
       : undefined
 
-    const options = {
+    const token = await handleOAuthToken({
+      req,
+      client,
       refreshTokenAuthName,
       bypassLogin
-    }
-
-    const token = await handleOAuthToken(req, options)
+    })
 
     res.set('Cache-Control', 'no-store')
     res.set('Pragma', 'no-cache')

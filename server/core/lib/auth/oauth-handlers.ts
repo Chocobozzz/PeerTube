@@ -18,7 +18,7 @@ import { Hooks } from '../plugins/hooks.js'
 import { BypassLogin } from './bypass-login.model.js'
 import { TooLongPasswordError } from './oauth-errors.js'
 import { buildToken, getAccessToken, getRefreshToken, revokeToken, saveToken } from './oauth-token.js'
-import { getUserOrThrow } from './oauth-user.js'
+import { checkUserNotBlockedOrThrow, getUserOrThrow } from './oauth-user.js'
 
 /**
  * Reimplement some functions of OAuth2Server to inject external auth methods
@@ -36,9 +36,10 @@ const oAuthServer = new OAuth2Server({
 
 // ---------------------------------------------------------------------------
 
-export async function handleOAuthToken (req: express.Request, options: { refreshTokenAuthName?: string, bypassLogin?: BypassLogin }) {
+// First handler called on the token endpoint: it also validates the shape of the request, so we don't run any
+// plugin login or consume the external auth token of a request we will reject later anyway
+export async function handleOAuthClient (req: express.Request) {
   const oauthRequest = new Request(req)
-  const { refreshTokenAuthName, bypassLogin } = options
 
   if (oauthRequest.method !== 'POST') {
     throw new InvalidRequestError('Invalid request: method must be POST')
@@ -73,6 +74,20 @@ export async function handleOAuthToken (req: express.Request, options: { refresh
     throw new UnauthorizedClientError('Unauthorized client: `grant_type` is invalid')
   }
 
+  return client
+}
+
+export async function handleOAuthToken (options: {
+  req: express.Request
+  client: OAuthClientModel
+  refreshTokenAuthName?: string
+  bypassLogin?: BypassLogin
+}) {
+  const { req, client, refreshTokenAuthName, bypassLogin } = options
+
+  const oauthRequest = new Request(req)
+
+  const grantType = oauthRequest.body.grant_type
   const ip = req.ip
   const userAgent = req.headers['user-agent']
 
@@ -177,6 +192,8 @@ async function handleRefreshGrant (options: {
   if (refreshToken.refreshTokenExpiresAt && refreshToken.refreshTokenExpiresAt < new Date()) {
     throw new InvalidGrantError(req.t('Invalid grant: refresh token has expired'))
   }
+
+  checkUserNotBlockedOrThrow(refreshToken.user, req)
 
   await revokeToken({ refreshToken: refreshToken.refreshToken })
 
