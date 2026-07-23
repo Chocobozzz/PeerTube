@@ -1,12 +1,11 @@
 import { ChangeOwnershipState, ChangeOwnershipStateType, HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
-import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
+import { canVideoBeFederated, scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
-import { MVideoFull } from '@server/types/models/index.js'
+import { MVideoWithRights } from '@server/types/models/index.js'
 import express from 'express'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
-import { sendUpdateVideo } from '../../../lib/activitypub/send/index.js'
 import { changeVideoChannelShare } from '../../../lib/activitypub/share.js'
 import { Notifier } from '../../../lib/notifier/notifier.js'
 import {
@@ -150,19 +149,21 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
     const changeOwnership = res.locals.changeOwnership
     const channel = res.locals.videoChannel
 
-    // We need more attributes for federation
-    const targetVideo = await VideoModel.loadFull(changeOwnership.Video.id, t)
+    // We need the blacklist and the channel to know if we can federate the video
+    const targetVideo = await VideoModel.loadWithRights(changeOwnership.Video.id, t)
 
     const oldVideoChannel = await VideoChannelModel.loadAndPopulateAccount(targetVideo.channelId, t)
 
     targetVideo.channelId = channel.id
 
-    const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoFull
+    const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoWithRights
     targetVideoUpdated.VideoChannel = channel
 
     if (canVideoBeFederated(targetVideoUpdated)) {
       await changeVideoChannelShare(targetVideoUpdated, oldVideoChannel, t)
-      await sendUpdateVideo(targetVideoUpdated, t, oldVideoChannel.Account.Actor)
+
+      // Send the update on behalf of the previous owner so its followers are also notified
+      scheduleVideoFederation({ video: targetVideoUpdated, overriddenBy: oldVideoChannel.Account.Actor, transaction: t })
     }
 
     changeOwnership.state = ChangeOwnershipState.ACCEPTED

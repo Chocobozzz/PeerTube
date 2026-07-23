@@ -1,7 +1,7 @@
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
-import { federateVideoIfNeeded } from '../activitypub/videos/index.js'
+import { scheduleVideoFederation } from '../activitypub/videos/index.js'
 import { Redis } from '../redis.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
@@ -35,7 +35,7 @@ export class VideoStatsBufferScheduler extends AbstractScheduler {
 
         if (!views && !downloads) continue
 
-        const video = await VideoModel.loadFull(videoId)
+        const video = await VideoModel.load(videoId)
         if (!video) {
           logger.debug(`Video ${videoId} does not exist anymore, skipping videos stats addition.`, lTags())
           continue
@@ -55,7 +55,7 @@ export class VideoStatsBufferScheduler extends AbstractScheduler {
         }
 
         // Send video update
-        await federateVideoIfNeeded(video)
+        scheduleVideoFederation({ video })
       } catch (err) {
         logger.error(`Cannot process local video stats buffer of video ${videoId}.`, { err, ...lTags() })
       }

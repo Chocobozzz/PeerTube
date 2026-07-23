@@ -1,7 +1,7 @@
 import { HttpStatusCode, VideoChannelActivityAction, VideoChapterUpdate } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/federate.js'
+import { scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
 import { replaceChapters } from '@server/lib/video-chapters.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
@@ -54,7 +54,7 @@ async function replaceVideoChapters (req: express.Request, res: express.Response
         transaction: t
       })
 
-      await federateVideoIfNeeded(video, t)
+      scheduleVideoFederation({ video, transaction: t })
     })
   })
 

@@ -141,14 +141,14 @@ activityPubClientRouter.get(
   executeIfActivityPub,
   activityPubRateLimiter,
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
-  asyncMiddleware(videoGetValidatorFactory('full')),
+  asyncMiddleware(videoGetValidatorFactory('ap')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get(
   '/videos/watch/:id/activity',
   executeIfActivityPub,
   activityPubRateLimiter,
-  asyncMiddleware(videoGetValidatorFactory('full')),
+  asyncMiddleware(videoGetValidatorFactory('ap')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get(
@@ -332,18 +332,15 @@ function getAccountVideoRateFactory (rateType: VideoRateType) {
 }
 
 async function videoController (req: express.Request, res: express.Response) {
-  const video = res.locals.videoFull
+  const videoAP = res.locals.videoAP
 
-  if (redirectIfNotOwned(video.url, res)) return
-
-  // We need captions to render AP object
-  const videoAP = await video.lightAPToFullAP(undefined)
+  if (redirectIfNotOwned(videoAP.url, res)) return
 
   const audience = getVideoAudience({ account: videoAP.VideoChannel.Account, channel: videoAP.VideoChannel, privacy: videoAP.privacy })
   const videoObject = audiencify(await videoAP.toActivityPubObject(), audience)
 
   if (req.path.endsWith('/activity')) {
-    const data = buildCreateActivity(videoAP.url, video.VideoChannel.Account.Actor, videoObject, audience)
+    const data = buildCreateActivity(videoAP.url, videoAP.VideoChannel.Account.Actor, videoObject, audience)
     return activityPubResponse(activityPubContextify(data, 'Video', getContextFilter()), res)
   }
 

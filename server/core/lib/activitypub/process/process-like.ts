@@ -7,7 +7,7 @@ import { getAPId } from '../../../lib/activitypub/activity.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
-import { canVideoBeFederated, federateVideoIfNeeded, maybeGetOrCreateAPVideo } from '../videos/index.js'
+import { canVideoBeFederated, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
 async function processLikeActivity (options: APProcessorOptions<ActivityLike>) {
   const { activity, byActor } = options
@@ -38,7 +38,7 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
   }
 
   return sequelizeTypescript.transaction(async t => {
-    const video = await VideoModel.loadFull(onlyVideo.id, t)
+    const video = await VideoModel.load(onlyVideo.id, t)
 
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
     if (existingRate?.type === 'like') return
@@ -59,6 +59,6 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
 
     await rate.save({ transaction: t })
 
-    await federateVideoIfNeeded(video, t)
+    scheduleVideoFederation({ video, transaction: t })
   })
 }

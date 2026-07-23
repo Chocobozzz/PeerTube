@@ -14,6 +14,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { ScheduleVideoUpdateModel } from '../../../schedule-video-update.js'
+import { StoryboardModel } from '../../../storyboard.js'
 import { TagModel } from '../../../tag.js'
 import { ThumbnailModel } from '../../../thumbnail.js'
 import { VideoBlacklistModel } from '../../../video-blacklist.js'
@@ -48,6 +49,7 @@ export class VideoModelBuilder {
   private liveScheduleDone: Set<any>
   private redundancyDone: Set<any>
   private scheduleVideoUpdateDone: Set<any>
+  private storyboardDone: Set<any>
 
   private trackersDone: Set<string>
   private tagsDone: Set<string>
@@ -116,6 +118,7 @@ export class VideoModelBuilder {
         this.addCaption(row, videoModel)
         this.setBlacklisted(row, videoModel)
         this.setScheduleVideoUpdate(row, videoModel)
+        this.setStoryboard(row, videoModel)
       } else {
         if (include & VideoInclude.BLACKLISTED) {
           this.setBlacklisted(row, videoModel)
@@ -164,6 +167,7 @@ export class VideoModelBuilder {
     this.redundancyDone = new Set()
     this.scheduleVideoUpdateDone = new Set()
     this.liveScheduleDone = new Set()
+    this.storyboardDone = new Set()
 
     this.accountBlocklistDone = new Set()
     this.serverBlocklistDone = new Set()
@@ -366,13 +370,19 @@ export class VideoModelBuilder {
   }
 
   private addPlaylistInfohashes (row: SQLRow, streamingPlaylist: VideoStreamingPlaylistModel) {
-    const hashes = row['VideoStreamingPlaylists.InfohashesJSON'] as any as string[] || []
+    const key = 'VideoStreamingPlaylists.InfohashesJSON'
+    if (!(key in row)) return
+
+    const hashes = row[key] as any as string[] || []
 
     streamingPlaylist.InfoHashes = hashes.map(h => new VideoInfohashModel({ infohash: Buffer.from(h, 'hex') }, this.buildOpts))
   }
 
   private addFileInfohash (row: SQLRow, prefixKey: string, videoFile: VideoFileModel) {
-    const hashes = row[`${prefixKey}.InfohashJSON`] as any as string[] || []
+    const key = `${prefixKey}.InfohashJSON`
+    if (!(key in row)) return
+
+    const hashes = row[key] as any as string[] || []
 
     videoFile.InfoHash = hashes.length !== 0
       ? new VideoInfohashModel({ infohash: Buffer.from(hashes[0], 'hex') }, this.buildOpts)
@@ -523,6 +533,16 @@ export class VideoModelBuilder {
     videoModel.VideoLive.LiveSchedules.push(liveScheduleModel)
 
     this.liveScheduleDone.add(id)
+  }
+
+  private setStoryboard (row: SQLRow, videoModel: VideoModel) {
+    const id = row['Storyboard.id']
+    if (!id || this.storyboardDone.has(id)) return
+
+    const attributes = this.grab(row, this.tables.getStoryboardAttributes(), 'Storyboard')
+    videoModel.Storyboard = new StoryboardModel(attributes, this.buildOpts)
+
+    this.storyboardDone.add(id)
   }
 
   private setSource (row: SQLRow, videoModel: VideoModel) {

@@ -1,6 +1,7 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from '@server/lib/thumbnail.js'
@@ -196,10 +197,7 @@ async function addVideoJobsAfterUpload (video: MVideoFull, videoFile: MVideoFile
 
     await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
 
-    {
-      type: 'federate-video' as const,
-      payload: { videoUUID: video.uuid }
-    }
+    buildNonDuplicatedFederateVideoJob({ video })
   ]
 
   if (video.state === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {

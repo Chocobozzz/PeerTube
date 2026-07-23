@@ -30,7 +30,7 @@ import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
-import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { Hooks } from './plugins/hooks.js'
@@ -256,7 +256,7 @@ export class LocalVideoCreator {
             }).catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
           })
         } else {
-          await federateVideoIfNeeded(this.video, transaction)
+          scheduleVideoFederation({ video: this.video, transaction })
         }
       }).catch(err => {
         // Reset elements to reinsert them in the database

@@ -19,7 +19,7 @@ import {
   MUser,
   MUserDefault,
   MVideoAbuseVideoFull,
-  MVideoAccountLightBlacklistAllFiles
+  MVideoAccountLightBlacklist
 } from '@server/types/models/index.js'
 import { LiveVideoCreate, VideoCommentCreate, VideoCreate, VideoImportCreate } from '@peertube/peertube-models'
 import { UserModel } from '../models/user/user.js'
@@ -109,7 +109,7 @@ function isPostImportVideoAccepted (object: {
 
 async function createVideoAbuse (options: {
   baseAbuse: FilteredModelAttributes<AbuseModel>
-  videoInstance: MVideoAccountLightBlacklistAllFiles
+  videoInstance: MVideoAccountLightBlacklist
   startAt: number
   endAt: number
   transaction: Transaction

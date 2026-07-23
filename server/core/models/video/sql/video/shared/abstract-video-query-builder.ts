@@ -116,7 +116,7 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
-  protected includeWebVideoFiles () {
+  protected includeWebVideoFiles (includeInfohashes: boolean) {
     this.addJoin('LEFT JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
 
     this.attributes = {
@@ -125,10 +125,10 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
       ...this.buildAttributesObject('VideoFiles', this.tables.getFileAttributes())
     }
 
-    this.includeFileInfohashJSONJoin('VideoFiles')
+    if (includeInfohashes) this.includeFileInfohashJSONJoin('VideoFiles')
   }
 
-  protected includeStreamingPlaylistFiles () {
+  protected includeStreamingPlaylistFiles (includeInfohashes: boolean) {
     this.addJoin(
       'LEFT JOIN "videoStreamingPlaylist" AS "VideoStreamingPlaylists" ON "VideoStreamingPlaylists"."videoId" = "video"."id"'
     )
@@ -145,8 +145,10 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
       ...this.buildAttributesObject('VideoStreamingPlaylists->VideoFiles', this.tables.getFileAttributes())
     }
 
-    this.includeFileInfohashJSONJoin('VideoStreamingPlaylists->VideoFiles')
-    this.includePlaylistInfohashesJSON()
+    if (includeInfohashes) {
+      this.includeFileInfohashJSONJoin('VideoStreamingPlaylists->VideoFiles')
+      this.includePlaylistInfohashesJSON()
+    }
   }
 
   private includePlaylistInfohashesJSON () {
@@ -371,6 +373,18 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
       ...this.attributes,
 
       ...this.buildAttributesObject('VideoCaptions', this.tables.getCaptionAttributes())
+    }
+  }
+
+  protected includeStoryboard () {
+    this.addJoin(
+      'LEFT OUTER JOIN "storyboard" AS "Storyboard" ON "video"."id" = "Storyboard"."videoId"'
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      ...this.buildAttributesObject('Storyboard', this.tables.getStoryboardAttributes())
     }
   }
 

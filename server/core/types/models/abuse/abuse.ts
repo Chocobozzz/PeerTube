@@ -5,7 +5,7 @@ import { PickWith } from '@peertube/peertube-typescript-utils'
 import { AbuseModel } from '../../../models/abuse/abuse.js'
 import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl } from '../account/index.js'
 import { MComment, MCommentOwner, MCommentUrl, MCommentVideo, MVideoUrl } from '../video/index.js'
-import { MVideo, MVideoAccountLightBlacklistAllFiles } from '../video/video.js'
+import { MVideo, MVideoAccountLightBlacklist } from '../video/video.js'
 
 type Use<K extends keyof AbuseModel, M> = PickWith<AbuseModel, K, M>
 type UseVideoAbuse<K extends keyof VideoAbuseModel, M> = PickWith<VideoAbuseModel, K, M>
@@ -35,14 +35,14 @@ export type MVideoAbuseVideoUrl =
 
 export type MVideoAbuseVideoFull =
   & MVideoAbuse
-  & UseVideoAbuse<'Video', Omit<MVideoAccountLightBlacklistAllFiles, 'VideoFiles' | 'VideoStreamingPlaylists'>>
+  & UseVideoAbuse<'Video', MVideoAccountLightBlacklist>
 
 export type MVideoAbuseFormattable =
   & MVideoAbuse
   & UseVideoAbuse<
     'Video',
     Pick<
-      MVideoAccountLightBlacklistAllFiles,
+      MVideoAccountLightBlacklist,
       | 'id'
       | 'uuid'
       | 'name'

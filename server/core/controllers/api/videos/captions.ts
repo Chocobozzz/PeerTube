@@ -10,7 +10,7 @@ import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
-import { federateVideoIfNeeded } from '../../../lib/activitypub/videos/index.js'
+import { scheduleVideoFederation } from '../../../lib/activitypub/videos/index.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares/index.js'
 import {
   addVideoCaptionValidator,
@@ -105,7 +105,7 @@ async function createVideoCaption (req: express.Request, res: express.Response) 
         transaction: t
       })
 
-      return federateVideoIfNeeded(video, t)
+      scheduleVideoFederation({ video, transaction: t })
     })
   })
 
@@ -137,7 +137,7 @@ async function deleteVideoCaption (req: express.Request, res: express.Response) 
         transaction: t
       })
 
-      return federateVideoIfNeeded(video, t)
+      scheduleVideoFederation({ video, transaction: t })
     })
   })
 

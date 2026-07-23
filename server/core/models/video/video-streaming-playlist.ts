@@ -286,10 +286,11 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     const replace = (t: Transaction) => VideoInfohashModel.replacePlaylistInfohashes(this.id, hashes, t)
 
     // Keep the delete + insert atomic even when the caller has no transaction
-    if (transaction) await replace(transaction)
-    else await sequelizeTypescript.transaction(replace)
+    const infoHashes = transaction
+      ? await replace(transaction)
+      : await sequelizeTypescript.transaction(replace)
 
-    this.InfoHashes = hashes.map(h => new VideoInfohashModel({ infohash: Buffer.from(h, 'binary') }))
+    this.InfoHashes = infoHashes
   }
 
   // ---------------------------------------------------------------------------

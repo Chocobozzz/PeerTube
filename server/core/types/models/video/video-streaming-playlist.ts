@@ -43,9 +43,14 @@ export type MStreamingPlaylistRedundancies =
   & Use<'RedundancyVideos', MVideoRedundancyFileUrl[]>
 
 export type MStreamingPlaylistFormattable =
+  & MStreamingPlaylist
+  & Use<'VideoFiles', MVideoFile[]>
+  & PickWithOpt<VideoStreamingPlaylistModel, 'RedundancyVideos', MVideoRedundancyFileUrl[]>
+
+// Infohashes are needed to build the P2P media loader tags of the AP object
+export type MStreamingPlaylistAP =
   & MStreamingPlaylistInfoHash
   & Use<'VideoFiles', MVideoFileInfoHash[]>
-  & PickWithOpt<VideoStreamingPlaylistModel, 'RedundancyVideos', MVideoRedundancyFileUrl[]>
 
 export function isStreamingPlaylist (value: MVideo | MStreamingPlaylistVideo): value is MStreamingPlaylistVideo {
   return !!(value as MStreamingPlaylist).videoId

@@ -76,6 +76,8 @@ export class VideoInfohashModel extends SequelizeModel<VideoInfohashModel> {
 
   // p2p-media-loader infohashes are 20 ASCII characters (base64), announced as those 20 bytes
   static replacePlaylistInfohashes (playlistId: number, hashes: string[], transaction?: Transaction) {
+    if (!playlistId) throw new Error('playlistId is required')
+
     logger.debug('Replacing infohash for streaming playlist %d', playlistId, { hashes })
 
     return this.replaceInfohashes({
@@ -87,6 +89,8 @@ export class VideoInfohashModel extends SequelizeModel<VideoInfohashModel> {
 
   // Classic BitTorrent infohash stored as its 40 char hex on the video file
   static async replaceFileInfohash (fileId: number, infohashHex: string | null, transaction?: Transaction) {
+    if (!fileId) throw new Error('fileId is required')
+
     logger.debug('Replacing infohash for file %d', fileId, { infohashHex })
 
     const results = await this.replaceInfohashes({

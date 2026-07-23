@@ -4,6 +4,7 @@ import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } fr
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -125,10 +126,7 @@ export async function onVideoStudioEnded (options: {
 
     await JobQueue.Instance.createSequentialJobFlow(
       await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
-      {
-        type: 'federate-video' as 'federate-video',
-        payload: { videoUUID: video.uuid }
-      },
+      buildNonDuplicatedFederateVideoJob({ video }),
       {
         type: 'transcoding-job-builder' as 'transcoding-job-builder',
         payload: {

@@ -6,7 +6,7 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
-import { federateVideoIfNeeded } from './activitypub/videos/index.js'
+import { scheduleVideoFederation } from './activitypub/videos/index.js'
 import { JobQueue } from './job-queue/index.js'
 import { Notifier } from './notifier/index.js'
 import { buildMoveVideoJob } from './video-jobs.js'
@@ -54,7 +54,7 @@ export function moveToNextState (options: {
 
       // Already in its final state
       if (videoDatabase.state === VideoState.PUBLISHED) {
-        await federateVideoIfNeeded(videoDatabase, t)
+        scheduleVideoFederation({ video: videoDatabase, transaction: t })
 
         logger.debug(`Video ${videoDatabase.uuid} is already published, no state change.`, lTags(videoDatabase.uuid))
 
@@ -190,7 +190,7 @@ async function moveToPublishedState (options: {
 
   await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
 
-  await federateVideoIfNeeded(video, transaction)
+  scheduleVideoFederation({ video, transaction })
 
   if (previousState === VideoState.TO_EDIT) {
     Notifier.Instance.notifyOfFinishedVideoStudioEdition(video)

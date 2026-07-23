@@ -12,7 +12,6 @@ import { englishLanguage, t } from '@server/helpers/i18n.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
-import { VideoModel } from '@server/models/video/video.js'
 import {
   MUser,
   MVideoAccountLight,
@@ -27,7 +26,7 @@ import { logger, loggerTagsFactory } from '../helpers/logger.js'
 import { CONFIG } from '../initializers/config.js'
 import { VideoBlacklistModel } from '../models/video/video-blacklist.js'
 import { sendDeleteVideo } from './activitypub/send/index.js'
-import { federateVideoIfNeeded, isPrivacyForFederation } from './activitypub/videos/index.js'
+import { isPrivacyForFederation, scheduleVideoFederation } from './activitypub/videos/index.js'
 import { LiveManager } from './live/live-manager.js'
 import { Notifier } from './notifier/index.js'
 import { Hooks } from './plugins/hooks.js'
@@ -178,7 +177,7 @@ export async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: 
 
     // Re federate the video
     if (unfederated === true) {
-      await federateVideoIfNeeded(await VideoModel.loadFull(video.id, t), t)
+      scheduleVideoFederation({ video, transaction: t })
     }
 
     return videoBlacklistType

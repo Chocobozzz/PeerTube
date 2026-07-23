@@ -21,7 +21,7 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model.j
 import { MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { federateVideoIfNeeded, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
+import { getOrCreateAPVideo, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo<ActivityUndoObject>>) {
   const { activity, byActor } = options
@@ -75,7 +75,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    const video = await VideoModel.loadFull(onlyVideo.id, t)
+    const video = await VideoModel.load(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
     if (rate?.type !== 'like') {
       logger.warn('Unknown like by account %d for video %d.', byActor.Account.id, video.id)
@@ -86,7 +86,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
     await video.decrement('likes', { transaction: t })
 
     video.likes--
-    await federateVideoIfNeeded(video, t)
+    scheduleVideoFederation({ video, transaction: t })
   })
 }
 
@@ -99,7 +99,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    const video = await VideoModel.loadFull(onlyVideo.id, t)
+    const video = await VideoModel.load(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislikeActivity.id, t)
     if (rate?.type !== 'dislike') {
       logger.warn(`Unknown dislike by account %d for video %d.`, byActor.Account.id, video.id)
@@ -110,7 +110,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     await video.decrement('dislikes', { transaction: t })
     video.dislikes--
 
-    await federateVideoIfNeeded(video, t)
+    scheduleVideoFederation({ video, transaction: t })
   })
 }
 

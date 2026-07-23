@@ -6,6 +6,7 @@ import {
   getVideoStreamDuration
 } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -209,7 +210,7 @@ export async function onWebVideoFileTranscoding (options: {
 
   const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  const videoFile = await buildNewFile({ mode: 'web-video', path: videoOutputPath })
+  let videoFile = await buildNewFile({ mode: 'web-video', path: videoOutputPath })
   videoFile.videoId = video.id
 
   try {
@@ -240,9 +241,11 @@ export async function onWebVideoFileTranscoding (options: {
     const existingFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
     if (existingFile) await video.removeWebVideoFile(existingFile)
 
-    await sequelizeTypescript.transaction(async t => {
-      await VideoFileModel.customUpsert(videoFile, 'video', t)
-      await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHash, t)
+    await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        videoFile = await VideoFileModel.customUpsert(videoFile, 'video', t)
+        await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHash, t)
+      })
     })
 
     video.VideoFiles = await video.$get('VideoFiles')

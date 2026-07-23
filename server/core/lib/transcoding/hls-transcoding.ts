@@ -131,12 +131,14 @@ export async function onHLSVideoFileTranscoding (options: {
       await oldFile.destroy()
     }
 
-    const savedVideoFile = await sequelizeTypescript.transaction(async t => {
-      const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', t) as MVideoFile
+    const savedVideoFile = await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', t) as MVideoFile
 
-      await VideoInfohashModel.replaceFileInfohash(savedVideoFile.id, infoHash, t)
+        await VideoInfohashModel.replaceFileInfohash(savedVideoFile.id, infoHash, t)
 
-      return savedVideoFile
+        return savedVideoFile
+      })
     })
 
     if (playlistGenerated) {

@@ -31,7 +31,7 @@ import {
   MVideoFormattableAdditionalAttributes,
   MVideoFormattableDetails
 } from '../../../types/models/index.js'
-import { MVideoFileInfoHash } from '../../../types/models/video/video-file.js'
+import { MVideoFile } from '../../../types/models/video/video-file.js'
 import { sortByResolutionDesc } from './shared/index.js'
 
 export type VideoFormattingJSONOptions = {
@@ -238,7 +238,7 @@ export function streamingPlaylistsModelToFormattedJSON (
 
 export function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
-  videoFiles: MVideoFileInfoHash[],
+  videoFiles: MVideoFile[],
   options?: {
     includePlaylistUrl?: true
     includeMagnet?: boolean
@@ -247,7 +247,7 @@ export function videoFilesModelToFormattedJSON (
 
 export function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
-  videoFiles: MVideoFileInfoHash[],
+  videoFiles: MVideoFile[],
   options: {
     includePlaylistUrl?: boolean // default false
     includeMagnet?: boolean // default true
@@ -283,7 +283,7 @@ export function videoFilesModelToFormattedJSON (
         width: videoFile.width,
         height: videoFile.height,
 
-        magnetUri: includeMagnet && videoFile.hasTorrent()
+        magnetUri: includeMagnet && videoFile.canBuildMagnetUri()
           ? generateMagnetUri(video, videoFile, trackerUrls)
           : undefined,
 

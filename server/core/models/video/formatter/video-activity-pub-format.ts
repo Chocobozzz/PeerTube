@@ -26,7 +26,7 @@ import {
   getLocalVideoPlayerSettingsActivityPubUrl,
   getLocalVideoSharesActivityPubUrl
 } from '../../../lib/activitypub/url.js'
-import { MStreamingPlaylistFormattable, MUserId, MVideo, MVideoAP, MVideoFileInfoHash } from '../../../types/models/index.js'
+import { MStreamingPlaylistAP, MUserId, MVideo, MVideoAP, MVideoFileInfoHash } from '../../../types/models/index.js'
 import { sortByResolutionDesc } from './shared/index.js'
 import { getCategoryLabel, getLanguageLabel, getLicenceLabel } from './video-api-format.js'
 
@@ -231,7 +231,7 @@ function buildVideoFileUrls (options: {
       fps: file.fps
     })
 
-    if (file.hasTorrent()) {
+    if (file.canBuildMagnetUri()) {
       urls.push({
         type: 'Link',
         mediaType: 'application/x-bittorrent' as 'application/x-bittorrent',
@@ -269,7 +269,7 @@ function buildStreamingPlaylistUrls (video: MVideoAP): ActivityPlaylistUrlObject
     }))
 }
 
-function buildStreamingPlaylistTags (video: MVideoAP, playlist: MStreamingPlaylistFormattable) {
+function buildStreamingPlaylistTags (video: MVideoAP, playlist: MStreamingPlaylistAP) {
   return [
     ...(playlist.InfoHashes ?? []).map(i => ({ type: 'Infohash' as 'Infohash', name: i.toP2PMediaLoaderInfohash() })),
 

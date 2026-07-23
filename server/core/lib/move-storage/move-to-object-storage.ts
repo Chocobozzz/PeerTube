@@ -21,7 +21,7 @@ import { MVideoSource } from '@server/types/models/video/video-source.js'
 import { remove } from 'fs-extra/esm'
 import { rmdir } from 'fs/promises'
 import { join } from 'path'
-import { federateVideoIfNeeded } from '../activitypub/videos/federate.js'
+import { scheduleVideoFederation } from '../activitypub/videos/federate.js'
 import { moveCaptionToStorage } from './shared/move-caption.js'
 import { moveVideoToStorage, onMoveVideoToStorageFailure } from './shared/move-video.js'
 
@@ -53,8 +53,8 @@ export async function moveVideoToObjectStorage (options: {
   if (options.moveVideoState) {
     await moveToNextState({ video: { uuid: videoUUID }, ...moveVideoState })
   } else {
-    const videoFull = await VideoModel.loadFull(videoUUID)
-    if (videoFull) await federateVideoIfNeeded(videoFull)
+    const video = await VideoModel.load(videoUUID)
+    if (video) scheduleVideoFederation({ video })
   }
 }
 

@@ -49,7 +49,7 @@ import {
   isVideoFileSizeValid
 } from '../../helpers/custom-validators/videos.js'
 import { DOWNLOAD_PATHS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
-import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
+import { MVideoFile, MVideoFileInfoHash, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
 import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { VideoInfohashModel } from './video-infohash.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
@@ -406,7 +406,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
       ? await VideoFileModel.loadHLSFile({ ...baseFind, playlistId: videoFile.videoStreamingPlaylistId })
       : await VideoFileModel.loadWebVideoFile({ ...baseFind, videoId: videoFile.videoId })
 
-    if (!element) return videoFile.save({ transaction })
+    if (!element) {
+      videoFile.isNewRecord = true
+
+      return videoFile.save({ transaction })
+    }
 
     for (const k of Object.keys(videoFile.toJSON())) {
       element.set(k, videoFile[k])
@@ -455,6 +459,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
   hasTorrent () {
     return !!this.torrentFilename
+  }
+
+  // A magnet URI also needs the infohash, which is not fetched by every video query
+  canBuildMagnetUri (this: MVideoFile): this is MVideoFileInfoHash {
+    return !!this.torrentFilename && !!(this as MVideoFileInfoHash).InfoHash
   }
 
   getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {

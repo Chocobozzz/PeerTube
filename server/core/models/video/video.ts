@@ -25,7 +25,7 @@ import {
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { getPrivaciesForFederation } from '@server/helpers/video.js'
-import { isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
+import { isPrivacyForFederation, MVideoToFederate } from '@server/lib/activitypub/videos/federate.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { LiveManager } from '@server/lib/live/live-manager.js'
 import {
@@ -70,7 +70,7 @@ import {
 } from 'sequelize-typescript'
 import { peertubeTruncate } from '../../helpers/core-utils.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
-import { isArray, isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc.js'
+import { isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc.js'
 import {
   isNSFWFlagsValid,
   isNSFWSummaryValid,
@@ -89,16 +89,13 @@ import type {
   MAccountId,
   MChannel,
   MChannelId,
-  MStoryboard,
   MStreamingPlaylist,
   MStreamingPlaylistFilesVideo,
   MUserAccountId,
   MVideo,
   MVideoAP,
-  MVideoAPLight,
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
-  MVideoCaptionLanguageUrl,
   MVideoDetails,
   MVideoFileVideo,
   MVideoFormattable,
@@ -852,14 +849,15 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   @BeforeDestroy
   static async beforeDestroyHook (instance: VideoModel, options: { transaction: Transaction }) {
-    const videoFull = await this.loadFull(instance.id, options.transaction)
+    // We need infohashes to save the magnet URIs of the video in its abuses
+    const video = await this.loadAP(instance.id, options.transaction)
 
-    this.stopLiveIfNeeded(videoFull)
-    this.invalidateCache(videoFull)
+    this.stopLiveIfNeeded(video)
+    this.invalidateCache(video)
 
-    await this.sendDelete(videoFull, options.transaction)
-    await this.saveEssentialDataToAbuses(videoFull, options.transaction)
-    await this.removeFiles(videoFull, options.transaction)
+    await this.sendDelete(video, options.transaction)
+    await this.saveEssentialDataToAbuses(video, options.transaction)
+    await this.removeFiles(video, options.transaction)
   }
 
   static stopLiveIfNeeded (instance: MVideo) {
@@ -875,7 +873,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     ModelCache.Instance.invalidateCache('video', instance.id)
   }
 
-  static async sendDelete (instance: MVideoFull, transaction: Transaction) {
+  static async sendDelete (instance: MVideoAccountLight, transaction: Transaction) {
     if (!instance.isLocal()) return undefined
     if (!isPrivacyForFederation(instance.privacy)) return undefined
 
@@ -922,7 +920,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return undefined
   }
 
-  static async saveEssentialDataToAbuses (instance: MVideoFull & MVideoFormattableDetails, transaction: Transaction) {
+  static async saveEssentialDataToAbuses (instance: MVideoFormattableDetails, transaction: Transaction) {
     const tasks: Promise<any>[] = []
 
     const videoAbuses = await instance.$get('VideoAbuses', { transaction })
@@ -1496,10 +1494,17 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return queryBuilder.queryVideo({ url, transaction, type: 'account-blacklist-files' })
   }
 
-  static loadFull (id: number | string, t?: Transaction, userId?: number): Promise<MVideoFull> {
+  static loadFull (id: number | string, t?: Transaction): Promise<MVideoFull> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
-    return queryBuilder.queryVideo({ id, transaction: t, type: 'full', userId })
+    return queryBuilder.queryVideo({ id, transaction: t, type: 'full' })
+  }
+
+  // Contains everything needed to build the ActivityPub object of the video
+  static loadAP (id: number | string, t?: Transaction): Promise<MVideoAP> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction: t, type: 'ap' })
   }
 
   static loadWithRights (id: number | string, t?: Transaction, userId?: number): Promise<MVideoWithRights> {
@@ -1666,21 +1671,20 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return VideoModel.update({ support: ofChannel.support }, options)
   }
 
-  static async getAllIdsFromChannel (options: {
+  // Only the attributes needed to know if these videos have to be federated
+  static listForFederationFromChannel (options: {
     videoChannel: MChannelId
     count: number
-  }): Promise<number[]> {
+  }): Promise<MVideoToFederate[]> {
     const { videoChannel, count } = options
 
-    const videos = await VideoModel.findAll({
-      attributes: [ 'id' ],
+    return VideoModel.findAll({
+      attributes: [ 'uuid', 'privacy', 'state' ],
       where: {
         channelId: videoChannel.id
       },
       limit: count
     })
-
-    return videos.map(v => v.id)
   }
 
   static async getAllIdsByAccount (options: {
@@ -2116,32 +2120,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       'filter:activity-pub.video.json-ld.build.result',
       { video: this }
     )
-  }
-
-  async lightAPToFullAP (this: MVideoAPLight, transaction: Transaction): Promise<MVideoAP> {
-    const videoAP = this as MVideoAP
-
-    const getCaptions = () => {
-      if (isArray(videoAP.VideoCaptions)) return videoAP.VideoCaptions
-
-      return this.$get('VideoCaptions', {
-        attributes: [ 'filename', 'language', 'fileUrl', 'storage', 'automaticallyGenerated', 'm3u8Filename', 'm3u8Url' ],
-        transaction
-      }) as Promise<MVideoCaptionLanguageUrl[]>
-    }
-
-    const getStoryboard = () => {
-      if (videoAP.Storyboard) return videoAP.Storyboard
-
-      return this.$get('Storyboard', { transaction }) as Promise<MStoryboard>
-    }
-
-    const [ captions, storyboard ] = await Promise.all([ getCaptions(), getStoryboard() ])
-
-    return Object.assign(this, {
-      VideoCaptions: captions,
-      Storyboard: storyboard
-    })
   }
 
   getTruncatedDescription () {

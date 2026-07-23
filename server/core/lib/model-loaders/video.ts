@@ -1,6 +1,7 @@
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoModel } from '@server/models/video/video.js'
 import {
+  MVideoAP,
   MVideoAccountLightBlacklistAllFiles,
   MVideoFormattableDetails,
   MVideoFull,
@@ -14,6 +15,7 @@ import { getOrCreateAPVideo } from '../activitypub/videos/get.js'
 
 type VideoLoadType =
   | 'for-api'
+  | 'ap'
   | 'full'
   | 'with-blacklist'
   | 'with-thumbnails'
@@ -23,6 +25,7 @@ type VideoLoadType =
   | 'unsafe-immutable-only'
 
 function loadVideo (id: number | string, fetchType: 'for-api', userId?: number): Promise<MVideoFormattableDetails>
+function loadVideo (id: number | string, fetchType: 'ap'): Promise<MVideoAP>
 function loadVideo (id: number | string, fetchType: 'full', userId?: number): Promise<MVideoFull>
 function loadVideo (id: number | string, fetchType: 'with-blacklist', userId?: number): Promise<MVideoWithBlacklist>
 function loadVideo (id: number | string, fetchType: 'with-thumbnails', userId?: number): Promise<MVideoThumbnails>
@@ -33,15 +36,17 @@ function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnails | MVideoWithRights>
+): Promise<MVideoAP | MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnails | MVideoWithRights>
 function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnails> {
+): Promise<MVideoAP | MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnails> {
   if (fetchType === 'for-api') return VideoModel.loadForGetAPI({ id, userId })
 
-  if (fetchType === 'full') return VideoModel.loadFull(id, undefined, userId)
+  if (fetchType === 'ap') return VideoModel.loadAP(id)
+
+  if (fetchType === 'full') return VideoModel.loadFull(id)
 
   if (fetchType === 'unsafe-immutable-only') return VideoModel.loadImmutableAttributes(id)
 

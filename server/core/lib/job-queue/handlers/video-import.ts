@@ -40,7 +40,7 @@ import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoFileModel } from '../../../models/video/video-file.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
+import { scheduleVideoFederation } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { createLocalVideoThumbnailsFromVideo } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
@@ -245,9 +245,7 @@ async function processFile (options: {
 
           await replaceChaptersIfNotExist({ video, chapters: containerChapters, transaction: t })
 
-          // Now we can federate the video (reload from database, we need more attributes)
-          const videoForFederation = await VideoModel.loadFull(video.uuid, t)
-          await federateVideoIfNeeded(videoForFederation, t)
+          scheduleVideoFederation({ video, transaction: t })
 
           // Update video import object
           videoImportWithFiles.state = VideoImportState.SUCCESS
@@ -255,7 +253,8 @@ async function processFile (options: {
 
           logger.info('Video %s imported.', video.uuid)
 
-          return { videoImportUpdated, video: videoForFederation }
+          // Reload the video from the database, notifications need more attributes
+          return { videoImportUpdated, video: await VideoModel.loadFull(video.uuid, t) }
         })
       })
 

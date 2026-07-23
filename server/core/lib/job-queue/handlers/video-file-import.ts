@@ -1,7 +1,7 @@
 import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { VideoFileImportPayload } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -38,7 +38,7 @@ async function processVideoFileImport (job: Job) {
       })
     )
   } else {
-    await federateVideoIfNeeded(video)
+    scheduleVideoFederation({ video })
   }
 
   return video
@@ -73,10 +73,9 @@ async function updateVideoFile (video: MVideoFull, inputFilePath: string) {
 
   const { infoHash, torrentFilename } = await createTorrentForFile(video, newVideoFile)
   newVideoFile.torrentFilename = torrentFilename
+  await newVideoFile.save()
 
   const infohashModel = await VideoInfohashModel.replaceFileInfohash(newVideoFile.id, infoHash)
-
-  await newVideoFile.save()
 
   video.VideoFiles.push(Object.assign(newVideoFile, { InfoHash: infohashModel }))
 }
