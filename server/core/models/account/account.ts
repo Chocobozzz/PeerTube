@@ -427,7 +427,7 @@ export class AccountModel extends SequelizeModel<AccountModel> {
 
   static listLocalsForSitemap (sort: string): Promise<MAccountHost[]> {
     return AccountModel.unscoped().findAll({
-      attributes: [],
+      attributes: [ 'updatedAt' ],
       offset: 0,
       order: getSort(sort),
       include: [
