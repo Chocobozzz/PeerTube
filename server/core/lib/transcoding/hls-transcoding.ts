@@ -3,8 +3,9 @@ import { canCopyForHLS, getVideoStreamDuration, HLSFromTSTranscodeOptions, HLSTr
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
-import { MVideo } from '@server/types/models/index.js'
+import { createTorrentForFile } from '@server/lib/webtorrent.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
+import { MVideo, MVideoFile } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { Job } from 'bullmq'
 import { ensureDir, move } from 'fs-extra/esm'
@@ -116,7 +117,8 @@ export async function onHLSVideoFileTranscoding (options: {
       await video.save()
     }
 
-    await createTorrentAndSetInfoHash(playlist, newVideoFile)
+    const { infoHash, torrentFilename } = await createTorrentForFile(playlist, newVideoFile)
+    newVideoFile.torrentFilename = torrentFilename
 
     const oldFile = await VideoFileModel.loadHLSFile({
       playlistId: playlist.id,
@@ -129,7 +131,13 @@ export async function onHLSVideoFileTranscoding (options: {
       await oldFile.destroy()
     }
 
-    const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
+    const savedVideoFile = await sequelizeTypescript.transaction(async t => {
+      const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', t) as MVideoFile
+
+      await VideoInfohashModel.replaceFileInfohash(savedVideoFile.id, infoHash, t)
+
+      return savedVideoFile
+    })
 
     if (playlistGenerated) {
       await createAllCaptionPlaylistsOnFSIfNeeded(video)

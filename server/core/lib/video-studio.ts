@@ -3,7 +3,9 @@ import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { createTorrentAndSetInfoHashFromPath } from '@server/lib/webtorrent.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MUser, MVideoFile, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { move, remove } from 'fs-extra/esm'
@@ -107,10 +109,15 @@ export async function onVideoStudioEnded (options: {
 
     await safeCleanupStudioTMPFiles(tasks)
 
-    await createTorrentAndSetInfoHashFromPath(video, newFile, outputPath)
+    const { infoHash, torrentFilename } = await createTorrentForFileFromPath(video, newFile, outputPath)
     await removeAllFiles(video, newFile)
 
-    await newFile.save()
+    await sequelizeTypescript.transaction(async t => {
+      newFile.torrentFilename = torrentFilename
+      await newFile.save({ transaction: t })
+
+      await VideoInfohashModel.replaceFileInfohash(newFile.id, infoHash, t)
+    })
 
     video.duration = await getVideoStreamDuration(outputPath)
     video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })

@@ -1,5 +1,6 @@
 import { PickWith } from '@peertube/peertube-typescript-utils'
 import { VideoFileModel } from '../../../models/video/video-file.js'
+import { MInfohash } from './video-infohash.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo } from './video-streaming-playlist.js'
 import { MVideo, MVideoUUID } from './video.js'
 
@@ -7,7 +8,11 @@ type Use<K extends keyof VideoFileModel, M> = PickWith<VideoFileModel, K, M>
 
 // ############################################################################
 
-export type MVideoFile = Omit<VideoFileModel, 'Video' | 'VideoStreamingPlaylist'>
+export type MVideoFile = Omit<VideoFileModel, 'Video' | 'VideoStreamingPlaylist' | 'InfoHash'>
+
+export type MVideoFileInfoHash =
+  & MVideoFile
+  & Use<'InfoHash', MInfohash>
 
 export type MVideoFileVideo =
   & MVideoFile

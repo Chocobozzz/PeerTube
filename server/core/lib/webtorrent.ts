@@ -3,7 +3,8 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { createTorrentFromWorker } from '@server/lib/worker/parent-process.js'
-import { MVideoFile } from '@server/types/models/video/video-file.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
+import { MVideoFile, MVideoFileInfoHash } from '@server/types/models/video/video-file.js'
 import { MStreamingPlaylistVideo } from '@server/types/models/video/video-streaming-playlist.js'
 import { MVideo } from '@server/types/models/video/video.js'
 import bencode from 'bencode'
@@ -111,13 +112,13 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentPat
   })
 }
 
-export function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+export function createTorrentForFile (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoOrPlaylist), videoPath => {
-    return createTorrentAndSetInfoHashFromPath(videoOrPlaylist, videoFile, videoPath)
+    return createTorrentForFileFromPath(videoOrPlaylist, videoFile, videoPath)
   })
 }
 
-export async function createTorrentAndSetInfoHashFromPath (
+export async function createTorrentForFileFromPath (
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo,
   videoFile: MVideoFile,
   filePath: string
@@ -147,11 +148,14 @@ export async function createTorrentAndSetInfoHashFromPath (
 
   // FIXME: typings: parseTorrent now returns an async result
   const parsedTorrent = await (parseTorrent(torrentContent) as unknown as Promise<parseTorrent.Instance>)
-  videoFile.infoHash = parsedTorrent.infoHash
-  videoFile.torrentFilename = torrentFilename
+
+  return {
+    infoHash: parsedTorrent.infoHash,
+    torrentFilename: torrentFilename
+  }
 }
 
-export async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
+export async function updateTorrentForFileAndSave (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
 
   if (!videoFile.torrentFilename) {
@@ -186,12 +190,15 @@ export async function updateTorrentMetadata (videoOrPlaylist: MVideo | MStreamin
   await remove(oldTorrentPath)
 
   videoFile.torrentFilename = newTorrentFilename
-  videoFile.infoHash = sha1(bencode.encode(decoded.info))
+
+  await VideoInfohashModel.replaceFileInfohash(videoFile.id, sha1(bencode.encode(decoded.info)))
+
+  await videoFile.save()
 }
 
 export function generateMagnetUri (
   video: MVideo,
-  videoFile: MVideoFile,
+  videoFile: MVideoFileInfoHash,
   trackerUrls: string[]
 ) {
   const xs = videoFile.getTorrentUrl()
@@ -205,7 +212,7 @@ export function generateMagnetUri (
     xs,
     announce,
     urlList,
-    infoHash: videoFile.infoHash,
+    infoHash: videoFile.InfoHash.toHexInfohash(),
     name: video.name
   }
 

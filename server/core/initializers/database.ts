@@ -74,6 +74,7 @@ import { VideoLiveModel } from '../models/video/video-live.js'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
 import { VideoShareModel } from '../models/video/video-share.js'
+import { VideoInfohashModel } from '../models/video/video-infohash.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
@@ -189,6 +190,7 @@ export async function initDatabaseModels (silent: boolean) {
     UserNotificationModel,
     UserNotificationSettingModel,
     VideoStreamingPlaylistModel,
+    VideoInfohashModel,
     VideoPlaylistModel,
     VideoPlaylistElementModel,
     LocalVideoViewerModel,

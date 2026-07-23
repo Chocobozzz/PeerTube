@@ -24,8 +24,14 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_STATES
 } from '../../../initializers/constants.js'
-import { MServer, MStreamingPlaylistRedundanciesOpt, MVideoFormattable, MVideoFormattableDetails } from '../../../types/models/index.js'
-import { MVideoFile } from '../../../types/models/video/video-file.js'
+import {
+  MServer,
+  MStreamingPlaylistFormattable,
+  MVideoFormattable,
+  MVideoFormattableAdditionalAttributes,
+  MVideoFormattableDetails
+} from '../../../types/models/index.js'
+import { MVideoFileInfoHash } from '../../../types/models/video/video-file.js'
 import { sortByResolutionDesc } from './shared/index.js'
 
 export type VideoFormattingJSONOptions = {
@@ -208,7 +214,7 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
 
 export function streamingPlaylistsModelToFormattedJSON (
   video: MVideoFormattable,
-  playlists: MStreamingPlaylistRedundanciesOpt[]
+  playlists: MStreamingPlaylistFormattable[]
 ): VideoStreamingPlaylist[] {
   if (isArray(playlists) === false) return []
 
@@ -232,7 +238,7 @@ export function streamingPlaylistsModelToFormattedJSON (
 
 export function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
-  videoFiles: MVideoFile[],
+  videoFiles: MVideoFileInfoHash[],
   options?: {
     includePlaylistUrl?: true
     includeMagnet?: boolean
@@ -241,7 +247,7 @@ export function videoFilesModelToFormattedJSON (
 
 export function videoFilesModelToFormattedJSON (
   video: MVideoFormattable,
-  videoFiles: MVideoFile[],
+  videoFiles: MVideoFileInfoHash[],
   options: {
     includePlaylistUrl?: boolean // default false
     includeMagnet?: boolean // default true
@@ -332,7 +338,7 @@ export function getStateLabel (id: number) {
 // Private
 // ---------------------------------------------------------------------------
 
-function buildAdditionalAttributes (video: MVideoFormattable, options: VideoFormattingJSONOptions) {
+function buildAdditionalAttributes (video: MVideoFormattable & MVideoFormattableAdditionalAttributes, options: VideoFormattingJSONOptions) {
   const add = options.additionalAttributes
 
   const result: Partial<VideoAdditionalAttributes> = {}

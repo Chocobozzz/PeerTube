@@ -19,15 +19,10 @@ import {
   MChannelHostOnly,
   MChannelSummary
 } from './video-channel.js'
-import { MVideoFile } from './video-file.js'
+import { MVideoFile, MVideoFileInfoHash } from './video-file.js'
 import { MVideoLiveWithSchedules } from './video-live.js'
 import { MVideoSource } from './video-source.js'
-import {
-  MStreamingPlaylistFiles,
-  MStreamingPlaylistRedundancies,
-  MStreamingPlaylistRedundanciesAll,
-  MStreamingPlaylistRedundanciesOpt
-} from './video-streaming-playlist.js'
+import { MStreamingPlaylistFiles, MStreamingPlaylistFormattable, MStreamingPlaylistRedundanciesAll } from './video-streaming-playlist.js'
 
 type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 
@@ -153,7 +148,7 @@ export type MVideoWithAllFiles =
 
 export type MVideoAccountLightBlacklistAllFiles =
   & MVideo
-  & Use<'VideoFiles', MVideoFile[]>
+  & Use<'VideoFiles', MVideoFileInfoHash[]>
   & Use<'Thumbnails', MThumbnail[]>
   & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
   & Use<'VideoChannel', MChannelAccountLight>
@@ -199,9 +194,9 @@ export type MVideoFull =
   & Use<'Tags', MTag[]>
   & Use<'VideoChannel', MChannelAccountLight>
   & Use<'UserVideoHistories', MUserVideoHistoryTime[]>
-  & Use<'VideoFiles', MVideoFile[]>
+  & Use<'VideoFiles', MVideoFileInfoHash[]>
   & Use<'ScheduleVideoUpdate', MScheduleVideoUpdate>
-  & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
+  & Use<'VideoStreamingPlaylists', MStreamingPlaylistFormattable[]>
   & Use<'VideoLive', MVideoLiveWithSchedules>
 
 // ############################################################################
@@ -212,10 +207,10 @@ export type MVideoAP =
   & MVideo
   & Use<'Tags', MTag[]>
   & Use<'VideoChannel', MChannelAccountLight>
-  & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
+  & Use<'VideoStreamingPlaylists', MStreamingPlaylistFormattable[]>
   & Use<'VideoCaptions', MVideoCaptionLanguageUrl[]>
   & Use<'VideoBlacklist', MVideoBlacklistUnfederated>
-  & Use<'VideoFiles', MVideoFile[]>
+  & Use<'VideoFiles', MVideoFileInfoHash[]>
   & Use<'Thumbnails', MThumbnail[]>
   & Use<'VideoLive', MVideoLiveWithSchedules>
   & Use<'Storyboard', MStoryboard>
@@ -230,8 +225,8 @@ export type MVideoDetails =
   & Use<'ScheduleVideoUpdate', MScheduleVideoUpdate>
   & Use<'Thumbnails', MThumbnail[]>
   & Use<'UserVideoHistories', MUserVideoHistoryTime[]>
-  & Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]>
-  & Use<'VideoFiles', MVideoFile[]>
+  & Use<'VideoStreamingPlaylists', MStreamingPlaylistFormattable[]>
+  & Use<'VideoFiles', MVideoFileInfoHash[]>
   & Use<'Trackers', MTrackerUrl[]>
 
 export type MVideoForUser =
@@ -253,10 +248,12 @@ export type MVideoFormattable =
   & MVideoThumbnails
   & PickWithOpt<VideoModel, 'UserVideoHistories', MUserVideoHistoryTime[]>
   & Use<'VideoChannel', MChannelAccountSummaryFormattable>
+
+export type MVideoFormattableAdditionalAttributes =
   & PickWithOpt<VideoModel, 'ScheduleVideoUpdate', Pick<MScheduleVideoUpdate, 'updateAt' | 'privacy'>>
   & PickWithOpt<VideoModel, 'VideoBlacklist', Pick<MVideoBlacklist, 'reason'>>
-  & PickWithOpt<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
-  & PickWithOpt<VideoModel, 'VideoFiles', MVideoFile[]>
+  & PickWithOpt<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistFormattable[]>
+  & PickWithOpt<VideoModel, 'VideoFiles', MVideoFileInfoHash[]>
   & PickWithOpt<VideoModel, 'VideoLive', MVideoLiveWithSchedules>
   & PickWithOpt<VideoModel, 'VideoAutomaticTags', MVideoAutomaticTagWithTag[]>
   & PickWithOpt<VideoModel, 'Tags', MTag[]>
@@ -266,6 +263,6 @@ export type MVideoFormattableDetails =
   & MVideoFormattable
   & Use<'VideoChannel', MChannelFormattable>
   & Use<'Tags', MTag[]>
-  & Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]>
+  & Use<'VideoStreamingPlaylists', MStreamingPlaylistFormattable[]>
   & Use<'VideoFiles', MVideoFile[]>
   & PickWithOpt<VideoModel, 'Trackers', MTrackerUrl[]>

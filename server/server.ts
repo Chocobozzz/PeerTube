@@ -104,7 +104,6 @@ if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
 }
 
 // ----------- PeerTube modules -----------
-import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
@@ -276,10 +275,10 @@ app.use((err, req, res: express.Response, _next) => {
     ? (process as any)._getActiveRequests()
     : undefined
 
-  // Remove too big metadata
-  const sanitizedErr = omit(err, [ 'body' ])
+  // Remove too big metadata and alter original error to keep type
+  err.body = undefined
 
-  logger.error('Error in controller.', { err: sanitizedErr, sql, activeRequests, url: req.originalUrl })
+  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,

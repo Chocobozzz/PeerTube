@@ -331,7 +331,7 @@ export class LocalVideoUpdater {
     if (filePathChanged && hls) {
       logger.debug('Updating HLS playlist file paths after privacy change', this.lTags())
 
-      hls.assignP2PMediaLoaderInfoHashes(video, hls.VideoFiles)
+      await hls.buildAndSetInfoHashes(video, hls.VideoFiles)
       await hls.save()
     }
   }

@@ -7,8 +7,7 @@ import { WebSocketServer } from 'ws'
 import { logger } from '../helpers/logger.js'
 import { CONFIG } from '../initializers/config.js'
 import { LRU_CACHE, TRACKER_RATE_LIMITS } from '../initializers/constants.js'
-import { VideoFileModel } from '../models/video/video-file.js'
-import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
+import { VideoInfohashModel } from '../models/video/video-infohash.js'
 
 export const trackerRouter = express.Router()
 
@@ -30,32 +29,26 @@ const trackerServer = new TrackerServer({
       return cb(new Error('Tracker is disabled on this instance.'))
     }
 
-    const infohash = Buffer.from(infohashHex, 'hex').toString('binary')
-
     const ip = params.type === 'ws'
       ? params.ip
       : params.httpReq.ip
 
-    const key = ip + '-' + infohash
+    const key = ip + '-' + infohashHex
 
     peersIps[ip] = peersIps[ip] ? peersIps[ip] + 1 : 1
     peersIpInfoHash[key] = peersIpInfoHash[key] ? peersIpInfoHash[key] + 1 : 1
 
     if (CONFIG.TRACKER.REJECT_TOO_MANY_ANNOUNCES && peersIpInfoHash[key] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
-      return cb(new Error(`Too many requests (${peersIpInfoHash[key]} of ip ${ip} for torrent ${infohash}`))
+      return cb(new Error(`Too many requests (${peersIpInfoHash[key]} of ip ${ip} for torrent ${infohashHex}`))
     }
 
     try {
       if (CONFIG.TRACKER.PRIVATE === false) return cb()
 
-      const playlistExists = await VideoStreamingPlaylistModel.doesInfohashExistCached(infohash)
-      if (playlistExists === true) return cb()
+      const infohashExists = await VideoInfohashModel.doesInfohashExistCached(infohashHex)
+      if (infohashExists === true) return cb()
 
-      // Classic infohash (not p2p-media-loader custom one), stored as hex, use arg directly
-      const videoFileExists = await VideoFileModel.doesInfohashExistCached(infohashHex)
-      if (videoFileExists === true) return cb()
-
-      cb(new Error(`Unknown infoHash ${infohash} requested by ip ${ip}`))
+      cb(new Error(`Unknown infoHash ${infohashHex} requested by ip ${ip}`))
 
       // Close socket connection and block IP for a few time
       if (params.type === 'ws') {

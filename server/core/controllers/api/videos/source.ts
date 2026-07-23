@@ -14,7 +14,7 @@ import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
+import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { move } from 'fs-extra/esm'
 import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
@@ -93,7 +93,12 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
   const videoPhysicalFile = res.locals.updateVideoFileResumable
   const user = res.locals.oauth.token.User
 
-  const videoFile = await buildNewFile({ path: videoPhysicalFile.path, mode: 'web-video', ffprobe: res.locals.ffprobe })
+  const videoFile = await buildNewFile({
+    path: videoPhysicalFile.path,
+    mode: 'web-video',
+    ffprobe: res.locals.ffprobe
+  }) as MVideoFileInfoHash
+
   const originalFilename = videoPhysicalFile.originalname
 
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(res.locals.videoFull.uuid)

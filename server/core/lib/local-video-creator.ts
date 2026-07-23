@@ -25,7 +25,7 @@ import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
+import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
@@ -93,7 +93,7 @@ export class LocalVideoCreator {
   private readonly videoAttributeResultHook: VideoAttributeHookFilter
 
   private video: MVideoFull
-  private videoFile: MVideoFile
+  private videoFile: MVideoFileInfoHash
   private videoPath: string
 
   constructor (
@@ -142,7 +142,11 @@ export class LocalVideoCreator {
     this.video.url = getLocalVideoActivityPubUrl(this.video)
 
     if (this.videoFilePath) {
-      this.videoFile = await buildNewFile({ path: this.videoFilePath, mode: 'web-video', ffprobe: this.videoFileProbe })
+      this.videoFile = await buildNewFile({
+        path: this.videoFilePath,
+        mode: 'web-video',
+        ffprobe: this.videoFileProbe
+      }) as MVideoFileInfoHash
 
       this.videoPath = VideoPathManager.Instance.getFSVideoFileOutputPath(this.video, this.videoFile)
       await move(this.videoFilePath, this.videoPath)

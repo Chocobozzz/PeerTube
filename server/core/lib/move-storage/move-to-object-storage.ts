@@ -13,7 +13,7 @@ import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/p
 import { updateHLSMasterOnCaptionChange } from '@server/lib/video-captions.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { moveToFailedMoveToObjectStorageState, moveToNextState } from '@server/lib/video-state.js'
-import { updateTorrentMetadata } from '@server/lib/webtorrent.js'
+import { updateTorrentForFileAndSave } from '@server/lib/webtorrent.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoCaption, MVideoFile, MVideoWithAllFiles } from '@server/types/models/index.js'
@@ -199,7 +199,7 @@ async function moveHLSFiles (video: MVideoWithAllFiles) {
     }
 
     if (updatedFile === true) {
-      playlist.assignP2PMediaLoaderInfoHashes(video, playlist.VideoFiles)
+      await playlist.buildAndSetInfoHashes(video, playlist.VideoFiles)
       playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
 
       await playlist.save()
@@ -222,8 +222,7 @@ async function onVideoFileMoved (options: {
 
   file.storage = FileStorage.OBJECT_STORAGE
 
-  await updateTorrentMetadata(videoOrPlaylist, file)
-  await file.save()
+  await updateTorrentForFileAndSave(videoOrPlaylist, file)
 
   logger.debug('Removing %s because it\'s now on object storage', oldPath, lTagsBase())
   await remove(oldPath)

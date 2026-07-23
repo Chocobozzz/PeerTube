@@ -10,6 +10,7 @@ import {
 import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import {
   buildObjectStorageHLSPrivateFileUrl,
   buildObjectStoragePublicFileUrl,
@@ -27,22 +28,13 @@ import {
   MVideoPrivacy,
   MVideoUUID
 } from '@server/types/models/index.js'
-import memoizee from 'memoizee'
 import { join } from 'path'
 import { Op, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, Is, Table, UpdatedAt } from 'sequelize-typescript'
-import { isArrayOf } from '../../helpers/custom-validators/misc.js'
-import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos.js'
-import {
-  CONSTRAINTS_FIELDS,
-  MEMOIZE_LENGTH,
-  MEMOIZE_TTL,
-  P2P_MEDIA_LOADER_PEER_VERSION,
-  STATIC_PATHS,
-  WEBSERVER
-} from '../../initializers/constants.js'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, Table, UpdatedAt } from 'sequelize-typescript'
+import { CONSTRAINTS_FIELDS, P2P_MEDIA_LOADER_PEER_VERSION, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
-import { SequelizeModel, doesExist, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, doesExist } from '../shared/index.js'
+import { VideoInfohashModel } from './video-infohash.js'
 import { VideoModel } from './video.js'
 
 @Table({
@@ -54,10 +46,6 @@ import { VideoModel } from './video.js'
     {
       fields: [ 'videoId', 'type' ],
       unique: true
-    },
-    {
-      fields: [ 'p2pMediaLoaderInfohashes' ],
-      using: 'gin'
     }
   ]
 })
@@ -79,11 +67,6 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
   declare playlistUrl: string
-
-  @AllowNull(false)
-  @Is('VideoStreamingPlaylistInfoHashes', value => throwIfNotValid(value, v => isArrayOf(v, isVideoFileInfoHashValid), 'info hashes'))
-  @Column(DataType.ARRAY(DataType.STRING))
-  declare p2pMediaLoaderInfohashes: string[]
 
   @AllowNull(false)
   @Column
@@ -131,18 +114,13 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   })
   declare RedundancyVideos: Awaited<VideoRedundancyModel>[]
 
-  static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist.bind(VideoStreamingPlaylistModel), {
-    promise: true,
-    max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
-    maxAge: MEMOIZE_TTL.INFO_HASH_EXISTS
+  @HasMany(() => VideoInfohashModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'CASCADE'
   })
-
-  static doesInfohashExist (infoHash: string) {
-    // Don't add a LIMIT 1 here to prevent seq scan by PostgreSQL (not sure why id doesn't use the index when we add a LIMIT)
-    const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE "p2pMediaLoaderInfohashes" @> $infoHash'
-
-    return doesExist({ sequelize: this.sequelize, query, bind: { infoHash: `{${infoHash}}` } }) // Transform infoHash in a PG array
-  }
+  declare InfoHashes: Awaited<VideoInfohashModel>[]
 
   static buildP2PMediaLoaderInfoHashes (videoUUID: string, files: { resolution: number }[]) {
     const hashes: string[] = []
@@ -278,7 +256,6 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
         storage: FileStorage.FILE_SYSTEM,
-        p2pMediaLoaderInfohashes: [],
         playlistFilename: generateHLSMasterPlaylistFilename(video.isLive),
         segmentsSha256Filename: generateHlsSha256SegmentsFilename(video.isLive),
         videoId: video.id
@@ -299,8 +276,20 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID, storage } })
   }
 
-  assignP2PMediaLoaderInfoHashes (video: MVideoUUID, files: { resolution: number }[]) {
-    this.p2pMediaLoaderInfohashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(video.uuid, files)
+  buildAndSetInfoHashes (video: MVideoUUID, files: { resolution: number }[], transaction?: Transaction) {
+    const hashes = VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(video.uuid, files)
+
+    return this.setInfoHashes(hashes, transaction)
+  }
+
+  async setInfoHashes (hashes: string[], transaction?: Transaction) {
+    const replace = (t: Transaction) => VideoInfohashModel.replacePlaylistInfohashes(this.id, hashes, t)
+
+    // Keep the delete + insert atomic even when the caller has no transaction
+    if (transaction) await replace(transaction)
+    else await sequelizeTypescript.transaction(replace)
+
+    this.InfoHashes = hashes.map(h => new VideoInfohashModel({ infohash: Buffer.from(h, 'binary') }))
   }
 
   // ---------------------------------------------------------------------------

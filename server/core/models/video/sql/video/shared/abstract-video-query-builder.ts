@@ -4,8 +4,8 @@ import { Sequelize } from 'sequelize'
 import validator from 'validator'
 import { AbstractRunQuery } from '../../../../shared/abstract-run-query.js'
 import { createSafeIn } from '../../../../shared/index.js'
-import { VideoTableAttributes } from './video-table-attributes.js'
 import { TableAttributeOptions } from './table-attributes-options.model.js'
+import { VideoTableAttributes } from './video-table-attributes.js'
 
 /**
  * Abstract builder to create SQL query and fetch video models
@@ -124,6 +124,8 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoFiles', this.tables.getFileAttributes())
     }
+
+    this.includeFileInfohashJSONJoin('VideoFiles')
   }
 
   protected includeStreamingPlaylistFiles () {
@@ -141,6 +143,42 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
       ...this.buildAttributesObject('VideoStreamingPlaylists', this.tables.getStreamingPlaylistAttributes()),
       ...this.buildAttributesObject('VideoStreamingPlaylists->VideoFiles', this.tables.getFileAttributes())
+    }
+
+    this.includeFileInfohashJSONJoin('VideoStreamingPlaylists->VideoFiles')
+    this.includePlaylistInfohashesJSON()
+  }
+
+  private includePlaylistInfohashesJSON () {
+    this.addJoin(
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg(ENCODE("infohash", 'hex')) AS "infohashes" ` +
+        `FROM "videoInfohash" WHERE "videoStreamingPlaylistId" = "VideoStreamingPlaylists"."id"` +
+        `) AS "VideoStreamingPlaylists->InfohashesJSON" ON TRUE`
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      '"VideoStreamingPlaylists->InfohashesJSON"."infohashes"': '"VideoStreamingPlaylists.InfohashesJSON"'
+    }
+  }
+
+  private includeFileInfohashJSONJoin (prefix: string) {
+    const alias = `${prefix}->InfohashJSON`
+    const flatPrefix = prefix.replace(/->/g, '.')
+
+    this.addJoin(
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg(ENCODE("infohash", 'hex')) AS "infoHash" ` +
+        `FROM "videoInfohash" WHERE "videoFileId" = "${prefix}"."id"` +
+        `) AS "${alias}" ON TRUE`
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      [`"${alias}"."infoHash"`]: `"${flatPrefix}.InfohashJSON"`
     }
   }
 

@@ -5,7 +5,8 @@ import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { buildNewFile } from '@server/lib/video-file.js'
 import { buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
+import { createTorrentForFile } from '@server/lib/webtorrent.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
@@ -70,8 +71,12 @@ async function updateVideoFile (video: MVideoFull, inputFilePath: string) {
   const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newVideoFile)
   await copy(inputFilePath, outputPath)
 
-  video.VideoFiles.push(newVideoFile)
-  await createTorrentAndSetInfoHash(video, newVideoFile)
+  const { infoHash, torrentFilename } = await createTorrentForFile(video, newVideoFile)
+  newVideoFile.torrentFilename = torrentFilename
+
+  const infohashModel = await VideoInfohashModel.replaceFileInfohash(newVideoFile.id, infoHash)
 
   await newVideoFile.save()
+
+  video.VideoFiles.push(Object.assign(newVideoFile, { InfoHash: infohashModel }))
 }

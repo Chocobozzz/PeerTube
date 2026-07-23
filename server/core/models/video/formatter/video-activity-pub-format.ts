@@ -26,7 +26,7 @@ import {
   getLocalVideoPlayerSettingsActivityPubUrl,
   getLocalVideoSharesActivityPubUrl
 } from '../../../lib/activitypub/url.js'
-import { MStreamingPlaylistFiles, MUserId, MVideo, MVideoAP, MVideoFile } from '../../../types/models/index.js'
+import { MStreamingPlaylistFormattable, MUserId, MVideo, MVideoAP, MVideoFileInfoHash } from '../../../types/models/index.js'
 import { sortByResolutionDesc } from './shared/index.js'
 import { getCategoryLabel, getLanguageLabel, getLicenceLabel } from './video-api-format.js'
 
@@ -203,7 +203,7 @@ function buildPreviewAPAttribute (video: MVideoAP): ActivityPubStoryboard[] {
 
 function buildVideoFileUrls (options: {
   video: MVideo
-  files: MVideoFile[]
+  files: MVideoFileInfoHash[]
   user?: MUserId
 }): ActivityUrlObject[] {
   const { video, files } = options
@@ -269,9 +269,9 @@ function buildStreamingPlaylistUrls (video: MVideoAP): ActivityPlaylistUrlObject
     }))
 }
 
-function buildStreamingPlaylistTags (video: MVideoAP, playlist: MStreamingPlaylistFiles) {
+function buildStreamingPlaylistTags (video: MVideoAP, playlist: MStreamingPlaylistFormattable) {
   return [
-    ...playlist.p2pMediaLoaderInfohashes.map(i => ({ type: 'Infohash' as 'Infohash', name: i })),
+    ...(playlist.InfoHashes ?? []).map(i => ({ type: 'Infohash' as 'Infohash', name: i.toP2PMediaLoaderInfohash() })),
 
     {
       type: 'Link',

@@ -110,7 +110,7 @@ export async function checkPlaylistInfohash (options: {
 
     expect(dbInfohashes).to.include(infohash)
 
-    await checkTrackerInfohash(video.account.host, infohash)
+    await checkTrackerInfohash(video.account.host, Buffer.from(infohash, 'ascii').toString('hex'))
   }
 }
 
