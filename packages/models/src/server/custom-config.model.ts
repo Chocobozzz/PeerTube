@@ -154,6 +154,13 @@ export interface CustomConfig {
       keep: boolean
     }
 
+    remux: {
+      h264: boolean
+      av1: boolean
+      vp9: boolean
+      opus: boolean
+    }
+
     allowAdditionalExtensions: boolean
     allowAudioFiles: boolean
 

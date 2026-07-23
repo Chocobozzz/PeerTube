@@ -12142,6 +12142,18 @@ components:
               properties:
                 keep:
                   type: boolean
+            remux:
+              type: object
+              description: Input codecs allowed to be remuxed (stream copied) instead of re-encoded. Disabled codecs are always re-encoded
+              properties:
+                h264:
+                  type: boolean
+                av1:
+                  type: boolean
+                vp9:
+                  type: boolean
+                opus:
+                  type: boolean
             allowAdditionalExtensions:
               type: boolean
               description: Allow your users to upload .mkv, .mov, .avi, .wmv, .flv, .f4v, .3g2, .3gp, .mts, m2ts, .mxf, .nut videos

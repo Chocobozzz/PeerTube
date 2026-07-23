@@ -73,7 +73,55 @@ async function generateVideoWithFramerate (fps = 120, size = '1280x720') {
   return tempFixturePath
 }
 
+type CodecFixtureOptions = {
+  videoCodec: 'libaom-av1' | 'libvpx-vp9' | 'libx264' | 'mpeg2video'
+  audioCodec: 'aac' | 'libopus' | 'libvorbis'
+  pixelFormat?: 'yuv420p' | 'yuv420p10le'
+  container: 'mp4' | 'mkv'
+}
+
+async function generateVideoWithCodec (name: string, options: CodecFixtureOptions) {
+  const tempFixturePath = buildAbsoluteFixturePath(name, true)
+
+  await ensureDir(dirname(tempFixturePath))
+
+  if (await pathExists(tempFixturePath)) return tempFixturePath
+
+  const ffmpeg = (await import('fluent-ffmpeg')).default
+
+  console.log('Generating fixture %s.', name)
+
+  return new Promise<string>((res, rej) => {
+    const cmd = ffmpeg()
+      .input('testsrc=size=320x240:rate=25:duration=2')
+      .inputFormat('lavfi')
+      .input('sine=frequency=440:duration=2')
+      .inputFormat('lavfi')
+      .videoCodec(options.videoCodec)
+      .audioCodec(options.audioCodec)
+      .outputOptions([ '-pix_fmt', options.pixelFormat ?? 'yuv420p' ])
+      .outputOptions([ '-b:v', '200k' ])
+      .outputOptions([ '-b:a', '96k' ])
+      .outputOptions([ '-shortest' ])
+
+    if (options.videoCodec === 'libaom-av1') {
+      cmd.outputOptions([ '-cpu-used', '8', '-row-mt', '1' ])
+    }
+    if (options.videoCodec === 'libvpx-vp9') {
+      cmd.outputOptions([ '-deadline', 'realtime', '-cpu-used', '8' ])
+    }
+
+    cmd
+      .format(options.container)
+      .output(tempFixturePath)
+      .on('error', rej)
+      .on('end', () => res(tempFixturePath))
+      .run()
+  })
+}
+
 export {
   generateHighBitrateVideo,
-  generateVideoWithFramerate
+  generateVideoWithFramerate,
+  generateVideoWithCodec
 }

@@ -409,6 +409,12 @@ function customConfig (): CustomConfig {
       originalFile: {
         keep: CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
       },
+      remux: {
+        h264: CONFIG.TRANSCODING.REMUX.H264,
+        av1: CONFIG.TRANSCODING.REMUX.AV1,
+        vp9: CONFIG.TRANSCODING.REMUX.VP9,
+        opus: CONFIG.TRANSCODING.REMUX.OPUS
+      },
       remoteRunners: {
         enabled: CONFIG.TRANSCODING.REMOTE_RUNNERS.ENABLED
       },
@@ -630,6 +636,9 @@ function convertCustomConfigBody (body: CustomConfig) {
     if (/^\d{3,4}p$/.exec(k)) return k
     if (k === '0p') return k
     if (k === 'p2p') return k
+
+    // Remux codec names must not be snake_cased (e.g. h264 -> h_264)
+    if (k === 'h264' || k === 'av1' || k === 'vp9') return k
 
     return snakeCase(k)
   }

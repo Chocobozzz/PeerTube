@@ -92,6 +92,10 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.transcoding.hls.enabled).to.be.true
   expect(data.transcoding.hls.splitAudioAndVideo).to.be.false
   expect(data.transcoding.originalFile.keep).to.be.false
+  expect(data.transcoding.remux.h264).to.be.true
+  expect(data.transcoding.remux.av1).to.be.true
+  expect(data.transcoding.remux.vp9).to.be.true
+  expect(data.transcoding.remux.opus).to.be.true
 
   expect(data.live.enabled).to.be.false
   expect(data.live.allowReplay).to.be.false
@@ -281,6 +285,12 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       originalFile: {
         keep: true
+      },
+      remux: {
+        h264: true,
+        av1: false,
+        vp9: true,
+        opus: false
       },
       allowAdditionalExtensions: true,
       allowAudioFiles: true,

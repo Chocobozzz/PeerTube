@@ -670,6 +670,20 @@ const CONFIG = {
         return config.get<boolean>('transcoding.original_file.keep')
       }
     },
+    REMUX: {
+      get H264 () {
+        return config.get<boolean>('transcoding.remux.h264')
+      },
+      get AV1 () {
+        return config.get<boolean>('transcoding.remux.av1')
+      },
+      get VP9 () {
+        return config.get<boolean>('transcoding.remux.vp9')
+      },
+      get OPUS () {
+        return config.get<boolean>('transcoding.remux.opus')
+      }
+    },
     get ALLOW_ADDITIONAL_EXTENSIONS () {
       return config.get<boolean>('transcoding.allow_additional_extensions')
     },
