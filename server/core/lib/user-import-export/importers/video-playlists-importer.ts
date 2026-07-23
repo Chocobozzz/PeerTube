@@ -1,17 +1,9 @@
+import { pick } from '@peertube/peertube-core-utils'
 import { VideoPlaylistPrivacy, VideoPlaylistType, VideoPlaylistsExportJSON } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { MChannelBannerAccountDefault, MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
-import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '@server/lib/activitypub/url.js'
-import { VideoChannelModel } from '@server/models/video/video-channel.js'
-import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
-import { AbstractUserImporter } from './abstract-user-importer.js'
-import { sendCreateVideoPlaylist } from '@server/lib/activitypub/send/send-create.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
-import { createLocalPlaylistThumbnailsFromImage } from '@server/lib/thumbnail.js'
-import { CONSTRAINTS_FIELDS, USER_IMPORT } from '@server/initializers/constants.js'
-import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
-import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
+import { isActorPreferredUsernameValid } from '@server/helpers/custom-validators/activitypub/actor.js'
+import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { isArray } from '@server/helpers/custom-validators/misc.js'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
@@ -19,13 +11,21 @@ import {
   isVideoPlaylistTimestampValid,
   isVideoPlaylistTypeValid
 } from '@server/helpers/custom-validators/video-playlists.js'
-import { isActorPreferredUsernameValid } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
-import { pick } from '@peertube/peertube-core-utils'
+import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONSTRAINTS_FIELDS, USER_IMPORT } from '@server/initializers/constants.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { sendCreateVideoPlaylist } from '@server/lib/activitypub/send/send-create.js'
+import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '@server/lib/activitypub/url.js'
+import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
+import { createLocalPlaylistThumbnailsFromImage } from '@server/lib/thumbnail.js'
+import { generateThumbnailForPlaylistIfNeeded } from '@server/lib/video-playlist.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { generateThumbnailForPlaylist } from '@server/lib/video-playlist.js'
+import { MChannelBannerAccountDefault, MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
 const lTags = loggerTagsFactory('user-import')
 
@@ -149,8 +149,9 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
       })
     }
 
-    await sequelizeTypescript.transaction(async t => {
+    const createdElements = await sequelizeTypescript.transaction(async t => {
       let position = await VideoPlaylistElementModel.getNextPositionOf(playlist.id, t)
+      const createdElements: VideoPlaylistElementModel[] = []
 
       for (const elementToCreate of elementsToCreate) {
         const playlistElement = new VideoPlaylistElementModel({
@@ -165,15 +166,27 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
         playlistElement.url = getLocalVideoPlaylistElementActivityPubUrl(playlist, playlistElement)
         await playlistElement.save({ transaction: t })
 
-        if (playlist.shouldGenerateThumbnailWithNewElement(playlistElement)) {
-          const video = await VideoModel.loadFull(elementToCreate.videoId)
-
-          generateThumbnailForPlaylist(playlist, video)
-            .catch(err => logger.error('Cannot generate thumbnail from playlist', { err }))
-        }
+        createdElements.push(playlistElement)
 
         position++
       }
+
+      return createdElements
     })
+
+    // Generate the playlist thumbnail outside of the transaction, from the first element that has one
+    await playlist.reloadThumbnails()
+
+    for (const element of createdElements) {
+      if (playlist.hasThumbnail()) break
+
+      const video = await VideoModel.loadFull(element.videoId)
+
+      try {
+        await generateThumbnailForPlaylistIfNeeded({ videoPlaylist: playlist, element, video })
+      } catch (err) {
+        logger.error('Cannot generate thumbnail of playlist', { err, ...lTags() })
+      }
+    }
   }
 }

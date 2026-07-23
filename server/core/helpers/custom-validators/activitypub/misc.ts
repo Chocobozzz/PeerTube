@@ -66,12 +66,23 @@ export function setValidRemoteIcon (entity: any) {
   if (entity.icon && !isArray(entity.icon)) entity.icon = [ entity.icon ]
   if (!entity.icon) entity.icon = []
 
+  const existingSizes = new Set<string>()
+
   entity.icon = entity.icon.filter(icon => {
-    return icon.type === 'Image' &&
+    const isValid = icon.type === 'Image' &&
       isActivityPubUrlValid(icon.url) &&
       !!MIMETYPES.IMAGE.MIMETYPE_EXT[icon.mediaType] &&
       validator.default.isInt(icon.width + '', { min: 0 }) &&
       validator.default.isInt(icon.height + '', { min: 0 })
+
+    if (!isValid) return false
+
+    // We store at most one icon per size, so ignore the next ones the remote instance may have sent
+    const size = `${icon.width}x${icon.height}`
+    if (existingSizes.has(size)) return false
+    existingSizes.add(size)
+
+    return true
   })
 
   return true

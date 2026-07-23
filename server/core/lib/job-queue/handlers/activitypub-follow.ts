@@ -1,18 +1,18 @@
-import { Job } from 'bullmq'
-import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { ActivitypubFollowPayload } from '@peertube/peertube-models'
+import { getApplicationActorOfHost } from '@server/helpers/activity-pub-utils.js'
+import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url.js'
+import { Job } from 'bullmq'
 import { sanitizeHost } from '../../../helpers/core-utils.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { REMOTE_SCHEME, SERVER_ACTOR_NAME, WEBSERVER } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
-import { ActorModel } from '../../../models/actor/actor.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
+import { ActorModel } from '../../../models/actor/actor.js'
 import { MActor, MActorFull } from '../../../types/models/index.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../activitypub/actors/index.js'
 import { sendFollow } from '../../activitypub/send/index.js'
 import { Notifier } from '../../notifier/index.js'
-import { getApplicationActorOfHost } from '@server/helpers/activity-pub-utils.js'
 
 async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload
@@ -56,7 +56,7 @@ async function processActivityPubFollow (job: Job) {
 
   const fromActor = await ActorModel.load(payload.followerActorId)
 
-  return retryTransactionWrapper(follow, fromActor, targetActor, payload.isAutoFollow)
+  return retryTransactionWrapper(() => follow(fromActor, targetActor, payload.isAutoFollow))
 }
 // ---------------------------------------------------------------------------
 

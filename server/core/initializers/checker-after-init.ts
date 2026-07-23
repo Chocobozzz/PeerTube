@@ -386,6 +386,12 @@ function checkThumbnailsConfig () {
   if (!isArray(CONFIG.THUMBNAILS.SIZES) || CONFIG.THUMBNAILS.SIZES.length === 0) {
     throw new Error('thumbnails.sizes must not be empty')
   }
+
+  // A video/playlist can only have one thumbnail of a given size
+  const sizes = CONFIG.THUMBNAILS.SIZES.map(s => `${s.width}x${s.height}`)
+  if (new Set(sizes).size !== sizes.length) {
+    throw new Error('thumbnails.sizes must not contain multiple sizes with the same width and height')
+  }
 }
 
 function checkBrowseVideosConfig () {

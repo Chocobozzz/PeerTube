@@ -26,8 +26,8 @@ import { createOrUpdateCacheFile } from '../cache-file.js'
 import { upsertAPPlayerSettings } from '../player-settings.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
 import { checkUrlsSameHost } from '../url.js'
+import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate<ActivityUpdateObject>>) {
   const { activity, byActor } = options
@@ -36,27 +36,27 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
   const objectType = object.type
 
   if (objectType === 'Video') {
-    return retryTransactionWrapper(processUpdateVideo, byActor, activity)
+    return retryTransactionWrapper(() => processUpdateVideo(byActor, activity as ActivityUpdate<VideoObject | string>))
   }
 
   if (isActorTypeValid(objectType as ActivityPubActorType)) {
     // We need more attributes
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
-    return retryTransactionWrapper(processUpdateActor, byActorFull, object)
+    return retryTransactionWrapper(() => processUpdateActor(byActorFull, object as ActivityPubActor))
   }
 
   if (objectType === 'CacheFile') {
     // We need more attributes
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
-    return retryTransactionWrapper(processUpdateCacheFile, byActorFull, activity, object)
+    return retryTransactionWrapper(() => processUpdateCacheFile(byActorFull, activity as ActivityUpdate<CacheFileObject | string>, object))
   }
 
   if (objectType === 'Playlist') {
-    return retryTransactionWrapper(processUpdatePlaylist, byActor, activity, object)
+    return retryTransactionWrapper(() => processUpdatePlaylist(byActor, activity as ActivityUpdate<PlaylistObject | string>, object))
   }
 
   if (objectType === 'PlayerSettings') {
-    return retryTransactionWrapper(processUpdatePlayerSettings, byActor, object)
+    return retryTransactionWrapper(() => processUpdatePlayerSettings(byActor, object))
   }
 
   return undefined

@@ -622,36 +622,17 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   // ---------------------------------------------------------------------------
 
   async replaceAndSaveThumbnails (thumbnails: MThumbnail[], transaction?: Transaction) {
-    if (thumbnails.length === 0) {
-      throw new Error('Cannot replace thumbnails with an empty array, at least one thumbnail is required')
-    }
-
-    let oldThumbnails = Array.isArray(this.Thumbnails)
-      ? [ ...this.Thumbnails ]
-      : []
-
-    this.Thumbnails = []
-
-    for (const thumbnail of thumbnails) {
-      thumbnail.videoPlaylistId = this.id
-
-      const savedThumbnail = await thumbnail.save({ transaction })
-      oldThumbnails = oldThumbnails.filter(t => t.id !== savedThumbnail.id)
-
-      this.Thumbnails.push(savedThumbnail)
-    }
-
-    for (const oldThumbnail of oldThumbnails) {
-      await oldThumbnail.destroy({ transaction })
-    }
+    this.Thumbnails = await ThumbnailModel.replaceAllOf({ thumbnails, videoPlaylistId: this.id, transaction })
   }
 
   async removeThumbnails (t: Transaction) {
-    for (const thumbnail of this.Thumbnails) {
-      await thumbnail.destroy({ transaction: t })
-    }
+    await ThumbnailModel.removeAllOf({ videoPlaylistId: this.id, transaction: t })
 
     this.Thumbnails = []
+  }
+
+  async reloadThumbnails (t?: Transaction) {
+    this.Thumbnails = await ThumbnailModel.listOf({ videoPlaylistId: this.id, transaction: t })
   }
 
   hasThumbnail () {

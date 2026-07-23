@@ -17,7 +17,7 @@ export async function onTranscodingEnded (options: {
   await VideoJobInfoModel.decrease(video.uuid, 'pendingTranscode')
 
   if (moveVideoToNextState) {
-    const changedState = await retryTransactionWrapper(moveToNextState, { video })
+    const changedState = await retryTransactionWrapper(() => moveToNextState({ video }))
 
     // Still send the transcoded file to external storage if needed
     if (!changedState && CONFIG.OBJECT_STORAGE.ENABLED && await hasVideoResourcesToBeMoved(video, FileStorage.OBJECT_STORAGE)) {

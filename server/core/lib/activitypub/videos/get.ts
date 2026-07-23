@@ -78,7 +78,7 @@ export async function getOrCreateAPVideo (
 
   try {
     const creator = new APVideoCreator(videoObject)
-    const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(creator.create.bind(creator))
+    const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(() => creator.create())
 
     await syncVideoExternalAttributes(videoCreated, videoObject, syncParam)
 

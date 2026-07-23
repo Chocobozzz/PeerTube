@@ -1,7 +1,7 @@
-import Bluebird from 'bluebird'
-import { URL } from 'url'
 import { ActivityPubOrderedCollection } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import Bluebird from 'bluebird'
+import { URL } from 'url'
 import { logger } from '../../helpers/logger.js'
 import { ACTIVITY_PUB, WEBSERVER } from '../../initializers/constants.js'
 import { fetchAP } from './activity.js'
@@ -61,5 +61,5 @@ export async function crawlCollectionPage<T> (
     }
   }
 
-  if (cleaner) await retryTransactionWrapper(cleaner, startDate)
+  if (cleaner) await retryTransactionWrapper(() => cleaner(startDate))
 }

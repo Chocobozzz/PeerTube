@@ -10,7 +10,8 @@ import { canVideoBeFederated, federateVideoIfNeeded, maybeGetOrCreateAPVideo } f
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityDislike>) {
   const { activity, byActor } = options
-  return retryTransactionWrapper(processDislike, activity, byActor)
+
+  return retryTransactionWrapper(() => processDislike(activity, byActor))
 }
 
 // ---------------------------------------------------------------------------

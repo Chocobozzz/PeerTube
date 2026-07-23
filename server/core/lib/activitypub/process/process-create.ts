@@ -46,19 +46,25 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
     // Comments will be fetched from videos
     if (options.fromFetch) return
 
-    return retryTransactionWrapper(processCreateVideoComment, activity, activityObject, byActor, options.fromFetch)
+    return retryTransactionWrapper(() => {
+      return processCreateVideoComment(activity as ActivityCreate<VideoCommentObject | string>, activityObject, byActor, false)
+    })
   }
 
   if (activityType === 'WatchAction') {
-    return retryTransactionWrapper(processCreateWatchAction, activityObject)
+    return retryTransactionWrapper(() => processCreateWatchAction(activityObject))
   }
 
   if (activityType === 'CacheFile') {
-    return retryTransactionWrapper(processCreateCacheFile, activity, activityObject, byActor)
+    return retryTransactionWrapper(() => {
+      return processCreateCacheFile(activity as ActivityCreate<CacheFileObject | string>, activityObject, byActor)
+    })
   }
 
   if (activityType === 'Playlist') {
-    return retryTransactionWrapper(processCreatePlaylist, activity, activityObject, byActor)
+    return retryTransactionWrapper(() => {
+      return processCreatePlaylist(activity as ActivityCreate<PlaylistObject | string>, activityObject, byActor)
+    })
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })

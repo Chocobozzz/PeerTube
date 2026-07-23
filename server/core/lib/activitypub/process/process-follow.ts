@@ -1,8 +1,8 @@
-import { Transaction } from 'sequelize'
 import { ActivityFollow } from '@peertube/peertube-models'
 import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
+import { Transaction } from 'sequelize'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
@@ -22,7 +22,7 @@ async function processFollowActivity (options: APProcessorOptions<ActivityFollow
   const activityId = activity.id
   const objectId = getAPId(activity.object)
 
-  return retryTransactionWrapper(processFollow, byActor, activityId, objectId)
+  return retryTransactionWrapper(() => processFollow(byActor, activityId, objectId))
 }
 
 // ---------------------------------------------------------------------------

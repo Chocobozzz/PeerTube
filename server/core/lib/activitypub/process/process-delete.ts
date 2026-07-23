@@ -15,7 +15,9 @@ import {
   MActorSignature,
   MChannelAccountActor,
   MChannelActor,
-  MCommentOwnerVideo
+  MCommentOwnerVideo,
+  MVideoAccountLightBlacklistAllFiles,
+  MVideoPlaylistAccountThumbnail
 } from '../../../types/models/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 
@@ -35,20 +37,20 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
       const accountToDelete = byActorFull.Account as MAccountActor
       accountToDelete.Actor = byActorFull
 
-      return retryTransactionWrapper(processDeleteAccount, accountToDelete)
+      return retryTransactionWrapper(() => processDeleteAccount(accountToDelete))
     } else if (isChannelActor(byActorFull.type)) {
       if (!byActorFull.VideoChannel) throw new Error('Actor ' + byActorFull.url + ' is a group but we cannot find it in database.')
 
       const channelToDelete = byActorFull.VideoChannel as MChannelAccountActor & { Actor: MActorFull }
       channelToDelete.Actor = byActorFull
-      return retryTransactionWrapper(processDeleteVideoChannel, channelToDelete)
+      return retryTransactionWrapper(() => processDeleteVideoChannel(channelToDelete))
     }
   }
 
   {
     const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(objectUrl)
     if (videoCommentInstance) {
-      return retryTransactionWrapper(processDeleteVideoComment, byActor, videoCommentInstance, activity)
+      return retryTransactionWrapper(() => processDeleteVideoComment(byActor, videoCommentInstance, activity))
     }
   }
 
@@ -57,7 +59,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
     if (videoInstance) {
       if (videoInstance.isLocal()) throw new Error(`Remote instance cannot delete owned video ${videoInstance.url}.`)
 
-      return retryTransactionWrapper(processDeleteVideo, byActor, videoInstance)
+      return retryTransactionWrapper(() => processDeleteVideo(byActor, videoInstance))
     }
   }
 
@@ -66,7 +68,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
     if (videoPlaylist) {
       if (videoPlaylist.isLocal()) throw new Error(`Remote instance cannot delete owned playlist ${videoPlaylist.url}.`)
 
-      return retryTransactionWrapper(processDeleteVideoPlaylist, byActor, videoPlaylist)
+      return retryTransactionWrapper(() => processDeleteVideoPlaylist(byActor, videoPlaylist))
     }
   }
 
@@ -81,7 +83,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processDeleteVideo (actor: MActor, videoToDelete: VideoModel) {
+async function processDeleteVideo (actor: MActor, videoToDelete: MVideoAccountLightBlacklistAllFiles) {
   logger.debug('Removing remote video "%s".', videoToDelete.uuid)
 
   await sequelizeTypescript.transaction(async t => {
@@ -95,7 +97,7 @@ async function processDeleteVideo (actor: MActor, videoToDelete: VideoModel) {
   logger.info('Remote video with uuid %s removed.', videoToDelete.uuid)
 }
 
-async function processDeleteVideoPlaylist (actor: MActor, playlistToDelete: VideoPlaylistModel) {
+async function processDeleteVideoPlaylist (actor: MActor, playlistToDelete: MVideoPlaylistAccountThumbnail) {
   logger.debug('Removing remote video playlist "%s".', playlistToDelete.uuid)
 
   await sequelizeTypescript.transaction(async t => {
