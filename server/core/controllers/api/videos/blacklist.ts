@@ -1,6 +1,6 @@
 import express from 'express'
 import { blacklistVideo, unblacklistVideo } from '@server/lib/video-blacklist.js'
-import { HttpStatusCode, UserRight, VideoBlacklistCreate } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRight, VideoBlacklistCreate, VideoBlacklistUpdate } from '@peertube/peertube-models'
 import { logger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -82,8 +82,10 @@ async function addVideoToBlacklistController (req: express.Request, res: express
 
 async function updateVideoBlacklistController (req: express.Request, res: express.Response) {
   const videoBlacklist = res.locals.videoBlacklist
+  const body: VideoBlacklistUpdate = req.body
 
-  if (req.body.reason !== undefined) videoBlacklist.reason = req.body.reason
+  if (body.reason !== undefined) videoBlacklist.reason = body.reason
+  if (body.internalNote !== undefined) videoBlacklist.internalNote = body.internalNote
 
   await sequelizeTypescript.transaction(t => {
     return videoBlacklist.save({ transaction: t })

@@ -58,6 +58,7 @@ export class ChannelsExporter extends ActorExporter<ChannelExportJSON> {
       displayName: channel.getDisplayName(),
       description: channel.description,
       support: channel.support,
+      publicEmail: channel.publicEmail,
 
       playerSettings: this.exportPlayerSettingsJSON(playerSettings),
 

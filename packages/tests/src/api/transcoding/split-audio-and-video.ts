@@ -12,7 +12,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { DEFAULT_AUDIO_RESOLUTION } from '@peertube/peertube-server/core/initializers/constants.js'
+import { DEFAULT_AUDIO_MERGE_RESOLUTION } from '@peertube/peertube-server/core/initializers/constants.js'
 import { checkDirectoryIsEmpty, checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { expect } from 'chai'
@@ -80,7 +80,7 @@ describe('Test HLS with audio and video splitted', function () {
         videoUUID: uuid,
         hlsOnly,
         splittedAudio: true,
-        resolutions: [ DEFAULT_AUDIO_RESOLUTION, 360, 240 ],
+        resolutions: [ DEFAULT_AUDIO_MERGE_RESOLUTION, 360, 240 ],
         objectStorageBaseUrl
       })
     })

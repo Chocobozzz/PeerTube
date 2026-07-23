@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, inject, input, output, viewChild } from '@angular/core'
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  inject,
+  input,
+  output,
+  viewChild
+} from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { VideoEdit } from '@app/+videos-publish-manage/shared-manage/common/video-edit.model'
@@ -7,12 +18,12 @@ import { VideoManageController } from '@app/+videos-publish-manage/shared-manage
 import { AuthService, CanComponentDeactivate, HooksService, MetaService, Notifier, ServerService } from '@app/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserVideoQuota, VideoPrivacyType } from '@peertube/peertube-models'
+import { SelectChannelItem } from '@pt-types'
 import debug from 'debug'
 import { truncate } from 'lodash-es'
 import { Subscription } from 'rxjs'
-import { SelectChannelItem } from '@pt-types'
 import { ImageInputComponent } from '../../../shared/shared-forms/image-input.component'
-import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { VideoManageContainerComponent } from '../../shared-manage/video-manage-container.component'
@@ -27,11 +38,12 @@ const debugLogger = debug('peertube:video-publish')
     '../shared/common-publish.scss',
     './video-upload.component.scss'
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     DragDropDirective,
     GlobalIconComponent,
     NgbTooltip,
-    SelectChannelComponent,
+    SelectChannelUserComponent,
     FormsModule,
     ImageInputComponent,
     ButtonComponent,
@@ -209,10 +221,13 @@ export class VideoUploadComponent implements OnInit, OnDestroy, AfterViewInit, C
   private uploadFile (file: File, thumbnailfile?: File) {
     const serverConfig = this.serverService.getHTMLConfig()
 
+    const channel = this.userChannels().find(c => c.id === this.firstStepChannelId)
     this.videoEdit = VideoEdit.createFromUpload(serverConfig, {
       name: this.buildVideoFilename(file.name),
       channelId: this.firstStepChannelId,
-      support: this.userChannels().find(c => c.id === this.firstStepChannelId).support ?? '',
+      channelName: channel.name,
+      channelDisplayName: channel.displayName,
+      support: channel.support ?? '',
       user: this.authService.getUser()
     })
 

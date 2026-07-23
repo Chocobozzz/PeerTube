@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input, viewChild } from '@angular/core'
+import { Component, OnInit, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
@@ -21,6 +21,7 @@ import { AbuseService } from '../abuse.service'
   selector: 'my-video-report',
   templateUrl: './video-report.component.html',
   styleUrls: [ './report.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     FormsModule,

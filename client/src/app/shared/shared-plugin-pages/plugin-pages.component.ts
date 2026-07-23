@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, inject, viewChild } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, OnDestroy, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { MetaService, PluginService } from '@app/core'
 import { logger } from '@root-helpers/logger'
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/internal/Subscription'
 
 @Component({
   templateUrl: './plugin-pages.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class PluginPagesComponent implements OnDestroy, AfterViewInit {

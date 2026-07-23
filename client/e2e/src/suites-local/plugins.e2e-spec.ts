@@ -1,7 +1,7 @@
 import { AdminPluginPage } from '../po/admin-plugin.po'
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
-import { getCheckbox, isMobileDevice, prepareWebBrowser, waitServerUp } from '../utils'
+import { getCheckbox, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Plugins', () => {
   let videoPublishPage: VideoPublishPage
@@ -24,7 +24,7 @@ describe('Plugins', () => {
   })
 
   beforeEach(async () => {
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     videoPublishPage = new VideoPublishPage()
     adminPluginPage = new AdminPluginPage()
 

@@ -124,7 +124,7 @@ export function isScheduleVideoUpdatePrivacyValid (value: number) {
   return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
 }
 
-export function isVideoOriginallyPublishedAtValid (value: string | null) {
+export function isVideoPublicationDateValid (value: string | null) {
   return value === null || isDateValid(value)
 }
 
@@ -152,8 +152,7 @@ export function isVideoMagnetUriValid (value: string) {
 }
 
 export function isPasswordValid (password: string) {
-  return password.length >= CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.min &&
-    password.length < CONSTRAINTS_FIELDS.VIDEO_PASSWORD.LENGTH.max
+  return validator.default.isLength(password, CONSTRAINTS_FIELDS.VIDEOS.PASSWORD)
 }
 
 export function isValidPasswordProtectedPrivacy (req: Request, res: Response) {

@@ -1,7 +1,8 @@
+import { sortBy } from '@peertube/peertube-core-utils'
+import { currentDir } from '@peertube/peertube-node-utils'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { QueryTypes } from 'sequelize'
-import { currentDir } from '@peertube/peertube-node-utils'
 import { logger } from '../helpers/logger.js'
 import { LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
@@ -26,8 +27,12 @@ async function migrate () {
   }
 
   if (actualVersion === null) {
-    await sequelizeTypescript.query('INSERT INTO "application" ("migrationVersion") VALUES (0)')
-    actualVersion = 0
+    logger.error(
+      'Cannot find migration version. The database is corrupted or incomplete. ' +
+        ' If it is a new install, the first run of PeerTube may have resulted in an error: check your previous logs to find it. ' +
+        ' Then, restart PeerTube with an empty database'
+    )
+    process.exit(-1)
   }
 
   // No need migrations, abort
@@ -76,7 +81,7 @@ async function getMigrationScripts () {
       })
     })
 
-  return filesToMigrate
+  return sortBy(filesToMigrate, 'version')
 }
 
 async function executeMigration (actualVersion: number, entity: { version: string, script: string }) {

@@ -3,13 +3,9 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MScheduleVideoUpdate } from '@server/types/models/index.js'
 import { logger, loggerTagsFactory } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
-import { sequelizeTypescript } from '../../initializers/database.js'
 import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-update.js'
-import { isNewVideoPrivacyForFederation } from '../activitypub/videos/federate.js'
+import { LocalVideoUpdater } from '../local-video-updater.js'
 import { Notifier } from '../notifier/index.js'
-import { addVideoJobsAfterUpdate } from '../video-jobs.js'
-import { VideoPathManager } from '../video-path-manager.js'
-import { setVideoPrivacy } from '../video-privacy.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
 const lTags = loggerTagsFactory('schedulers', 'update-videos')
@@ -38,8 +34,6 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       const videoOnly = await VideoModel.load(schedule.videoId)
       if (!videoOnly) continue
 
-      const mutexReleaser = await VideoPathManager.Instance.lockFiles(videoOnly.uuid)
-
       try {
         const { video, published } = await this.updateAVideo(schedule)
 
@@ -47,44 +41,31 @@ export class UpdateVideosScheduler extends AbstractScheduler {
       } catch (err) {
         logger.error('Cannot update video ' + videoOnly.uuid, { err, ...lTags(videoOnly.uuid) })
       }
-
-      mutexReleaser()
     }
   }
 
   private async updateAVideo (schedule: MScheduleVideoUpdate) {
     let oldPrivacy: VideoPrivacyType
-    let isNewVideoForFederation: boolean
     let published = false
 
-    const video = await sequelizeTypescript.transaction(async t => {
-      const video = await VideoModel.loadFull(schedule.videoId, t)
-      if (video.state === VideoState.TO_TRANSCODE) return null
+    let video = await VideoModel.loadFull(schedule.videoId)
+    if (video.state === VideoState.TO_TRANSCODE) return { video, published: false }
 
-      logger.info('Executing scheduled video update on ' + video.uuid, lTags(video.uuid))
+    logger.info('Executing scheduled video update on ' + video.uuid, lTags(video.uuid))
 
-      if (schedule.privacy) {
-        isNewVideoForFederation = isNewVideoPrivacyForFederation(video.privacy, schedule.privacy)
-        oldPrivacy = video.privacy
+    if (schedule.privacy) {
+      oldPrivacy = video.privacy
 
-        setVideoPrivacy(video, schedule.privacy)
-        await video.save({ transaction: t })
+      const updater = new LocalVideoUpdater({ user: null, tags: lTags().tags, video })
 
-        if (oldPrivacy === VideoPrivacy.PRIVATE) {
-          published = true
-        }
+      video = await updater.update({ privacy: schedule.privacy })
+
+      if (oldPrivacy === VideoPrivacy.PRIVATE) {
+        published = true
       }
-
-      await schedule.destroy({ transaction: t })
-
-      return video
-    })
-
-    if (!video) {
-      return { video, published: false }
     }
 
-    await addVideoJobsAfterUpdate({ video, oldPrivacy, isNewVideoForFederation, nameChanged: false })
+    await schedule.destroy()
 
     return { video, published }
   }

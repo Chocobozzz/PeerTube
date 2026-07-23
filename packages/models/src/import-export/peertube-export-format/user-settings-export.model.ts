@@ -4,7 +4,6 @@ import { NSFWPolicyType } from '../../videos/nsfw-policy.type.js'
 export interface UserSettingsExportJSON {
   email: string
 
-  emailPublic: boolean
   nsfwPolicy: NSFWPolicyType
 
   autoPlayVideo: boolean

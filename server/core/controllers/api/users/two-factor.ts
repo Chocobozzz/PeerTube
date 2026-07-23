@@ -3,7 +3,7 @@ import { generateOTPSecret, isOTPValid } from '@server/helpers/otp.js'
 import { encrypt } from '@server/helpers/peertube-crypto.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { Redis } from '@server/lib/redis.js'
-import { asyncMiddleware, authenticate, usersCheckCurrentPasswordFactory } from '@server/middlewares/index.js'
+import { asyncMiddleware, authenticate, confirmTokenRateLimiter, usersCheckCurrentPasswordFactory } from '@server/middlewares/index.js'
 import {
   confirmTwoFactorValidator,
   disableTwoFactorValidator,
@@ -21,6 +21,7 @@ twoFactorRouter.post('/:id/two-factor/request',
 )
 
 twoFactorRouter.post('/:id/two-factor/confirm-request',
+  confirmTokenRateLimiter,
   authenticate,
   asyncMiddleware(requestOrConfirmTwoFactorValidator),
   confirmTwoFactorValidator,

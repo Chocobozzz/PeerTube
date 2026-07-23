@@ -1,15 +1,19 @@
 export interface BlockStatus {
   accounts: {
-    [ handle: string ]: {
+    [handle: string]: {
       blockedByServer: boolean
-      blockedByUser?: boolean
+      blockedByServerSubscription: string | null
+
+      blockedByUser: boolean
     }
   }
 
   hosts: {
-    [ host: string ]: {
+    [host: string]: {
       blockedByServer: boolean
-      blockedByUser?: boolean
+      blockedByServerSubscription: string | null
+
+      blockedByUser: boolean
     }
   }
 }

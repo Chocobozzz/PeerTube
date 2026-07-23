@@ -10,7 +10,7 @@ input[type="text"] {
   @include responsive-width(340px);
 }
 
-my-select-channel,
+my-select-channel-user,
 my-select-options {
   display: block;
   max-width: 340px;

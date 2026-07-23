@@ -10,7 +10,8 @@ import {
   OnInit,
   output,
   SimpleChanges,
-  viewChild
+  viewChild,
+  ChangeDetectionStrategy
 } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier, User } from '@app/core'
@@ -34,6 +35,7 @@ import { Observable } from 'rxjs'
   selector: 'my-video-comment-add',
   templateUrl: './video-comment-add.component.html',
   styleUrls: [ './video-comment-add.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

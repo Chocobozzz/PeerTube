@@ -11,8 +11,7 @@ handled via FFmpeg, with optional distributed runners.
 ## Repository Structure
 
 - **apps/** — Standalone CLI applications (`peertube-cli`, `peertube-runner`)
-- **client/** — Angular frontend SPA (separate build system; ignore for
-  backend work)
+- **client/** — Angular frontend SPA (separate build system)
 - **config/** — YAML configuration files for dev, test, and production
 - **packages/** — Shared workspace packages (monorepo):
   - `core-utils/` — Shared pure-JS utilities

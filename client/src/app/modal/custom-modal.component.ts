@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { logger } from '@root-helpers/logger'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
@@ -7,6 +7,7 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
   selector: 'my-custom-modal',
   templateUrl: './custom-modal.component.html',
   styleUrls: [ './custom-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent ]
 })
 export class CustomModalComponent {

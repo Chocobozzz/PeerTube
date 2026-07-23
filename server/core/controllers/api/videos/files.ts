@@ -80,7 +80,7 @@ async function removeHLSPlaylistController (req: express.Request, res: express.R
   logger.info('Deleting HLS playlist of %s.', video.url, lTags(video.uuid))
   await removeHLSPlaylist(video)
 
-  await federateVideoIfNeeded(video, false, undefined)
+  await federateVideoIfNeeded(video)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -94,7 +94,7 @@ async function removeHLSFileController (req: express.Request, res: express.Respo
   const playlist = await removeHLSFile(video, videoFileId)
   if (playlist) await updateM3U8AndShaPlaylist(video, playlist)
 
-  await federateVideoIfNeeded(video, false, undefined)
+  await federateVideoIfNeeded(video)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -107,7 +107,7 @@ async function removeAllWebVideoFilesController (req: express.Request, res: expr
   logger.info('Deleting Web Video files of %s.', video.url, lTags(video.uuid))
 
   await removeAllWebVideoFiles(video)
-  await federateVideoIfNeeded(video, false, undefined)
+  await federateVideoIfNeeded(video)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -119,7 +119,7 @@ async function removeWebVideoFileController (req: express.Request, res: express.
   logger.info('Deleting Web Video file %d of %s.', videoFileId, video.url, lTags(video.uuid))
 
   await removeWebVideoFile(video, videoFileId)
-  await federateVideoIfNeeded(video, false, undefined)
+  await federateVideoIfNeeded(video)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

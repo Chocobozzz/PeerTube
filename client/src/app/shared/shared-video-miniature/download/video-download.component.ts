@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common'
-import { Component, ElementRef, inject, input, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, HooksService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -22,6 +22,7 @@ type DownloadType = 'video-generate' | 'video-files' | 'subtitle-files'
   selector: 'my-video-download',
   templateUrl: './video-download.component.html',
   styleUrls: [ './video-download.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     SubtitleFilesDownloadComponent,
     VideoFilesDownloadComponent,

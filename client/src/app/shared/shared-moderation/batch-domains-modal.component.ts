@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
@@ -12,6 +12,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
   selector: 'my-batch-domains-modal',
   templateUrl: './batch-domains-modal.component.html',
   styleUrls: [ './batch-domains-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class BatchDomainsModalComponent extends FormReactive implements OnInit {

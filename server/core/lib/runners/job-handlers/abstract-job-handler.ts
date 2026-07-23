@@ -1,4 +1,4 @@
-import { pick } from '@peertube/peertube-core-utils'
+import { exists, pick } from '@peertube/peertube-core-utils'
 import {
   RunnerJobGenerateStoryboardPayload,
   RunnerJobGenerateStoryboardPrivatePayload,
@@ -21,6 +21,7 @@ import {
   RunnerJobVideoStudioTranscodingPrivatePayload
 } from '@peertube/peertube-models'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { RUNNER_JOBS } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -67,7 +68,7 @@ type CreateRunnerJobArg =
     privatePayload: RunnerJobTranscriptionPrivatePayload
   }
 
-export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S extends RunnerJobSuccessPayload> {
+export abstract class AbstractJobHandler<C, UpdatePayload extends RunnerJobUpdatePayload, SuccessPayload extends RunnerJobSuccessPayload> {
   protected readonly lTags = loggerTagsFactory('runner')
 
   // ---------------------------------------------------------------------------
@@ -112,19 +113,19 @@ export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S 
 
   protected abstract specificUpdate (options: {
     runnerJob: MRunnerJob
-    updatePayload?: U
+    updatePayload?: UpdatePayload
   }): Promise<void> | void
 
   async update (options: {
     runnerJob: MRunnerJob
     progress?: number
-    updatePayload?: U
+    updatePayload?: UpdatePayload
   }) {
     const { runnerJob, progress } = options
 
     await this.specificUpdate(options)
 
-    if (progress) runnerJob.progress = progress
+    if (exists(progress)) runnerJob.progress = progress
 
     if (!runnerJob.changed()) {
       // Don't update updatedAt too often
@@ -146,9 +147,9 @@ export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S 
 
   async complete (options: {
     runnerJob: MRunnerJob
-    resultPayload: S
+    resultPayload: SuccessPayload
   }) {
-    const { runnerJob } = options
+    const { runnerJob, resultPayload } = options
 
     runnerJob.state = RunnerJobState.COMPLETING
     await saveInTransactionWithRetries(runnerJob)
@@ -162,6 +163,10 @@ export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S 
 
       runnerJob.state = RunnerJobState.ERRORED
       runnerJob.error = err.message
+    } finally {
+      // specificComplete() moves whatever uploaded file it consumes into permanent storage
+      // Remove anything it left behind in tmp directory
+      this.cleanupResultPayloadFiles(resultPayload)
     }
 
     runnerJob.progress = null
@@ -174,9 +179,21 @@ export abstract class AbstractJobHandler<C, U extends RunnerJobUpdatePayload, S 
     if (affectedCount !== 0) PeerTubeSocket.Instance.sendAvailableJobsPingToRunners()
   }
 
+  private cleanupResultPayloadFiles (resultPayload: SuccessPayload) {
+    // Possible uploaded file paths across all RunnerJobSuccessPayload variants
+    const resultPayloadFileKeys = [ 'videoFile', 'resolutionPlaylistFile', 'vttFile', 'storyboardFile' ] as const
+
+    for (const key of resultPayloadFileKeys) {
+      const value = (resultPayload as Record<string, unknown>)?.[key]
+      if (typeof value !== 'string') continue
+
+      deleteFileAndCatch(value)
+    }
+  }
+
   protected abstract specificComplete (options: {
     runnerJob: MRunnerJob
-    resultPayload: S
+    resultPayload: SuccessPayload
   }): Promise<void> | void
 
   // ---------------------------------------------------------------------------

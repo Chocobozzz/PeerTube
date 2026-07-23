@@ -3,15 +3,18 @@ import {
   AutomaticTagAvailable,
   CommentAutomaticTagPolicies,
   CommentAutomaticTagPoliciesUpdate,
-  HttpStatusCode
+  HttpStatusCode,
+  VideoAutoTagPolicies,
+  VideoAutomaticTagPoliciesUpdate
 } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class AutomaticTagsCommand extends AbstractCommand {
-
-  getCommentPolicies (options: OverrideCommandOptions & {
-    accountName: string
-  }) {
+  getCommentPolicies (
+    options: OverrideCommandOptions & {
+      accountName: string
+    }
+  ) {
     const path = '/api/v1/automatic-tags/policies/accounts/' + options.accountName + '/comments'
 
     return this.getRequestBody<CommentAutomaticTagPolicies>({
@@ -23,9 +26,11 @@ export class AutomaticTagsCommand extends AbstractCommand {
     })
   }
 
-  updateCommentPolicies (options: OverrideCommandOptions & CommentAutomaticTagPoliciesUpdate & {
-    accountName: string
-  }) {
+  updateCommentPolicies (
+    options: OverrideCommandOptions & CommentAutomaticTagPoliciesUpdate & {
+      accountName: string
+    }
+  ) {
     const path = '/api/v1/automatic-tags/policies/accounts/' + options.accountName + '/comments'
 
     return this.putBodyRequest({
@@ -40,9 +45,11 @@ export class AutomaticTagsCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getAccountAvailable (options: OverrideCommandOptions & {
-    accountName: string
-  }) {
+  getAccountAvailable (
+    options: OverrideCommandOptions & {
+      accountName: string
+    }
+  ) {
     const path = '/api/v1/automatic-tags/accounts/' + options.accountName + '/available'
 
     return this.getRequestBody<AutomaticTagAvailable>({
@@ -63,6 +70,33 @@ export class AutomaticTagsCommand extends AbstractCommand {
       path,
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  getServerVideoPolicies (options: OverrideCommandOptions = {}) {
+    const path = '/api/v1/automatic-tags/policies/server/videos'
+
+    return this.getRequestBody<VideoAutoTagPolicies>({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  updateServerVideoPolicies (options: OverrideCommandOptions & VideoAutomaticTagPoliciesUpdate) {
+    const path = '/api/v1/automatic-tags/policies/server/videos'
+
+    return this.putBodyRequest({
+      ...options,
+
+      path,
+      fields: pick(options, [ 'autoBlock' ]),
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 }

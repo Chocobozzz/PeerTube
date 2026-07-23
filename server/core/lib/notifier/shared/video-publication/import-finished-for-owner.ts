@@ -1,4 +1,4 @@
-import { To, UserNotificationType } from '@peertube/peertube-models'
+import { MailTo, UserNotificationType } from '@peertube/peertube-models'
 import { t } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
@@ -56,7 +56,7 @@ export class ImportFinishedForOwner extends AbstractNotification<ImportFinishedF
     return this.createFailEmail(to)
   }
 
-  private createSuccessEmail (to: To) {
+  private createSuccessEmail (to: MailTo) {
     const videoUrl = WEBSERVER.URL + this.videoImport.Video.getWatchStaticPath()
     const language = to.language
     const targetId = this.videoImport.getTargetIdentifier()
@@ -65,16 +65,14 @@ export class ImportFinishedForOwner extends AbstractNotification<ImportFinishedF
       to,
       subject: t('Your video import is complete', language),
       text: t('Your video {targetId} has just finished importing.', language, { targetId }),
-      locals: {
-        action: {
-          text: t('View video', language),
-          url: videoUrl
-        }
+      action: {
+        text: t('View video', language),
+        url: videoUrl
       }
     }
   }
 
-  private createFailEmail (to: To) {
+  private createFailEmail (to: MailTo) {
     const language = to.language
     const targetId = this.videoImport.getTargetIdentifier()
 
@@ -83,13 +81,11 @@ export class ImportFinishedForOwner extends AbstractNotification<ImportFinishedF
     return {
       to,
       subject: t('Your video import encountered an error', language),
+      title: t('Import failed', language),
       text,
-      locals: {
-        title: t('Import failed', language),
-        action: {
-          text: t('Review imports', language),
-          url: myVideoImportsUrl
-        }
+      action: {
+        text: t('Review imports', language),
+        url: myVideoImportsUrl
       }
     }
   }

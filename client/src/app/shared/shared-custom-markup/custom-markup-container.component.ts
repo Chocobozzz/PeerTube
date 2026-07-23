@@ -1,10 +1,11 @@
-import { Component, ComponentRef, ElementRef, OnChanges, OnDestroy, inject, input, viewChild } from '@angular/core'
+import { Component, ComponentRef, ElementRef, OnChanges, OnDestroy, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { CustomMarkupService } from './custom-markup.service'
 import { CustomMarkupComponent } from './peertube-custom-tags/shared'
 
 @Component({
   selector: 'my-custom-markup-container',
   templateUrl: './custom-markup-container.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class CustomMarkupContainerComponent implements OnChanges, OnDestroy {

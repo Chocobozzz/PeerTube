@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -19,6 +19,7 @@ import { BlocklistService } from './blocklist.service'
   selector: 'my-user-ban-modal',
   templateUrl: './user-ban-modal.component.html',
   styleUrls: [ './user-ban-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass, PeertubeCheckboxComponent ]
 })
 export class UserBanModalComponent extends FormReactive implements OnInit {

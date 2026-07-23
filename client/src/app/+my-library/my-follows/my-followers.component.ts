@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, Notifier, resetCurrentPage } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -14,6 +14,7 @@ import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infin
 @Component({
   templateUrl: './my-followers.component.html',
   styleUrls: [ './my-followers.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, AdvancedInputFilterComponent, InfiniteScrollerDirective, ActorAvatarComponent, SearchInputComponent ]
 })
 export class MyFollowersComponent implements OnInit {

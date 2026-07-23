@@ -10,9 +10,9 @@ import {
   doesAccountIdExist,
   doesChannelHandleExist,
   doesChannelIdExist,
-  doesVideoPlaylistExist,
   doesUserFeedTokenCorrespond,
-  doesVideoExist
+  doesVideoExist,
+  doesVideoPlaylistExist
 } from './shared/index.js'
 
 export const feedsFormatValidator = [
@@ -115,6 +115,11 @@ export const videoFeedsPodcastValidator = [
     .optional()
     .customSanitizer(toCompleteUUID)
     .custom(isIdOrUUIDValid),
+
+  query('enclosurePreference')
+    .optional()
+    .isIn([ 'video', 'audio', 'm3u8' ])
+    .withMessage('Should have a valid enclosurePreference (video, audio, or m3u8)'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

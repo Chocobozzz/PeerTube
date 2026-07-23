@@ -1,5 +1,5 @@
 import { getLocaleDirection, NgClass, PlatformLocation } from '@angular/common'
-import { AfterViewInit, Component, DOCUMENT, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { AfterViewInit, Component, DOCUMENT, inject, LOCALE_ID, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationStart, RouteConfigLoadEnd, RouteConfigLoadStart, Router, RouterOutlet } from '@angular/router'
 import {
@@ -46,6 +46,7 @@ import { PeertubeModalService } from './shared/shared-main/peertube-modal/peertu
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     HotkeysCheatSheetComponent,
     NgClass,
@@ -99,6 +100,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   customCSS: SafeHtml
   broadcastMessage: { message: string, dismissable: boolean, class: string } | null = null
   hotkeysModalOpened = false
+  toastPosition: 'bottom-right' | 'bottom-left' = 'bottom-right'
 
   private serverConfig: HTMLServerConfig
   private userLoaded = false
@@ -166,6 +168,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       adminWelcomeModal.show({ showWelcome })
     })
+
+    if (getLocaleDirection(this.localeId) === 'rtl') {
+      this.toastPosition = 'bottom-left'
+    }
   }
 
   ngAfterViewInit () {
@@ -264,7 +270,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (messageConfig.enabled) {
       // Already dismissed this message?
-      if (messageConfig.dismissable && localStorage.getItem(AppComponent.LS_BROADCAST_MESSAGE) === messageConfig.message) {
+      if (messageConfig.dismissable && peertubeLocalStorage.getItem(AppComponent.LS_BROADCAST_MESSAGE) === messageConfig.message) {
         return
       }
 

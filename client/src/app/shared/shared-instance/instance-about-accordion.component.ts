@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { HooksService, Notifier } from '@app/core'
 import {
   NgbAccordionBody,
@@ -19,6 +19,7 @@ import { InstanceFeaturesTableComponent } from './instance-features-table.compon
   selector: 'my-instance-about-accordion',
   templateUrl: './instance-about-accordion.component.html',
   styleUrls: [ './instance-about-accordion.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgbAccordionDirective,
     NgbAccordionItem,

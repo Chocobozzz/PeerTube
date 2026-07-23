@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import {
   booleanAttribute,
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   inject,
@@ -78,6 +79,7 @@ type BulkActions<Data> = DropdownAction<Data[]>[][] | DropdownAction<Data[]>[]
   selector: 'my-table',
   templateUrl: './table.component.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,
@@ -514,7 +516,7 @@ export class TableComponent<
     const start = this.pagination.start + 1
     const end = Math.min(this.pagination.start + this.pagination.count, this.totalRecords)
 
-    return $localize`Showing ${start} to ${end} of ${this.totalRecords} elements`
+    return $localize`Showing ${start} to ${end} of ${this.totalRecords.toLocaleString()} elements`
   }
 
   hasBulkActions () {

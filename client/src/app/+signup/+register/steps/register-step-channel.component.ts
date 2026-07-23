@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input, output } from '@angular/core'
+import { Component, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { VIDEO_CHANNEL_DISPLAY_NAME_VALIDATOR, VIDEO_CHANNEL_NAME_VALIDATOR } from '@app/shared/form-validators/video-channel-validators'
@@ -13,6 +13,7 @@ import { BytesPipe } from '../../../shared/shared-main/common/bytes.pipe'
   selector: 'my-register-step-channel',
   templateUrl: './register-step-channel.component.html',
   styleUrls: [ './step.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, NgClass, BytesPipe ]
 })
 export class RegisterStepChannelComponent extends FormReactive implements OnInit {

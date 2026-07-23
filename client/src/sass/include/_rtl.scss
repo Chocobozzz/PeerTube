@@ -1,0 +1,24 @@
+@use "sass:math";
+@use "_variables" as *;
+@use "_mixins" as *;
+
+// ---------------------------------------------------------------------------
+// RTL layout adaptations
+// Some overrides are also available in bootstrap.scss and primeng.scss
+// ---------------------------------------------------------------------------
+
+:root[dir="rtl"] {
+  my-global-icon {
+    &[iconName="playlists"],
+    &[iconName="help"],
+    &[iconName="syndication"],
+    &[iconName="external-link"] {
+      transform: scaleX(-1);
+    }
+  }
+
+  my-input-switch {
+    transform: rotate(180deg);
+    display: inline-block;
+  }
+}

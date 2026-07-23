@@ -78,6 +78,12 @@ export async function processVideoLiveEnding (job: Job) {
 
   let replayDirectory = payload.replayDirectory
 
+  if (!replayDirectory) {
+    logger.info(`No replay directory found for live ${video.uuid}, skipping video replay creation.`, { ...lTags(video.uuid) })
+
+    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+  }
+
   // Introduced in PeerTube 7.2, allow to use the appropriate base directory even if the live privacy changed
   if (!isAbsolute(replayDirectory)) {
     replayDirectory = join(getLiveReplayBaseDirectory(video), replayDirectory)
@@ -223,7 +229,7 @@ async function saveReplayToExternalVideo (options: {
   await createStoryboardJob(replayVideo)
   await createTranscriptionTaskIfNeeded(replayVideo)
 
-  await moveToNextState({ video: replayVideo, isNewVideo: true })
+  await moveToNextState({ video: replayVideo })
 }
 
 async function copyOrRegenerateThumbnails (options: {
@@ -326,7 +332,7 @@ async function replaceLiveByReplay (options: {
   }
 
   // We consider this is a new video
-  await moveToNextState({ video: videoWithFiles, isNewVideo: true })
+  await moveToNextState({ video: videoWithFiles })
 
   await createStoryboardJob(videoWithFiles)
   await createTranscriptionTaskIfNeeded(videoWithFiles)
@@ -390,7 +396,7 @@ async function cleanupLiveAndFederate (options: {
 
   try {
     const fullVideo = await VideoModel.loadFull(video.id)
-    return federateVideoIfNeeded(fullVideo, false, undefined)
+    return federateVideoIfNeeded(fullVideo)
   } catch (err) {
     logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })
   }

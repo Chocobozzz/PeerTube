@@ -7,7 +7,6 @@ export class UserSettingsExporter extends AbstractUserExporter<UserSettingsExpor
       json: {
         email: this.user.email,
 
-        emailPublic: this.user.emailPublic,
         nsfwPolicy: this.user.nsfwPolicy,
 
         autoPlayVideo: this.user.autoPlayVideo,

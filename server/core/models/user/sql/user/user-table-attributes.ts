@@ -3,11 +3,13 @@ import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
-import { UserModel } from '../../user.js'
+import { getAvatarsJSONAttributes, getBannersJSONAttributes } from '@server/models/shared/sql/actor-helpers.js'
+import { buildSQLAttributes } from '@server/models/shared/table.js'
+import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { UserNotificationSettingModel } from '../../user-notification-setting.js'
-import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
+import { UserModel } from '../../user.js'
 
 export class UserTableAttributes {
   @Memoize()
@@ -32,8 +34,13 @@ export class UserTableAttributes {
   }
 
   @Memoize()
+  getAvatarAttributesJSON () {
+    return ActorImageModel.getSQLAttributesJSON().join(', ')
+  }
+
+  @Memoize()
   getAccountAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->Actor->Avatars', 'Account.Actor.Avatars.').join(', ')
+    return getAvatarsJSONAttributes('Account->Actor->')
   }
 
   // ---------------------------------------------------------------------------
@@ -55,12 +62,17 @@ export class UserTableAttributes {
 
   @Memoize()
   getChannelAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->VideoChannels->Actor->Avatars', 'Account.VideoChannels.Actor.Avatars.').join(', ')
+    return getAvatarsJSONAttributes('Account->VideoChannels->Actor->')
+  }
+
+  @Memoize()
+  getBannerAttributesJSON () {
+    return ActorImageModel.getSQLAttributesJSON().join(', ')
   }
 
   @Memoize()
   getChannelBannerAttributes () {
-    return ActorImageModel.getSQLAttributes('Account->VideoChannels->Actor->Banners', 'Account.VideoChannels.Actor.Banners.').join(', ')
+    return getBannersJSONAttributes('Account->VideoChannels->Actor->')
   }
 
   // ---------------------------------------------------------------------------
@@ -104,17 +116,31 @@ export class UserTableAttributes {
 
   @Memoize()
   getCollabChannelActorAvatarAttributes () {
-    return ActorImageModel.getSQLAttributes(
-      'Account->Collabs->Channel->Actor->Avatars',
-      'Account.Collabs.Channel.Actor.Avatars.'
-    ).join(', ')
+    return getAvatarsJSONAttributes('Account->Collabs->Channel->Actor->')
   }
 
   @Memoize()
   getCollabChannelActorBannerAttributes () {
-    return ActorImageModel.getSQLAttributes(
-      'Account->Collabs->Channel->Actor->Banners',
-      'Account.Collabs.Channel.Actor.Banners.'
-    ).join(', ')
+    return getBannersJSONAttributes('Account->Collabs->Channel->Actor->')
+  }
+
+  @Memoize()
+  getCollabChannelAccountAttributes () {
+    return buildSQLAttributes({
+      model: AccountModel,
+      tableName: 'Account->Collabs->Channel->Account',
+      aliasPrefix: 'Account.Collabs.Channel.Account.',
+      includeAttributes: [ 'id', 'name' ]
+    }).join(', ')
+  }
+
+  @Memoize()
+  getCollabChannelAccountActorAttributes () {
+    return buildSQLAttributes({
+      model: ActorModel,
+      tableName: 'Account->Collabs->Channel->Account->Actor',
+      aliasPrefix: 'Account.Collabs.Channel.Account.Actor.',
+      includeAttributes: [ 'id', 'preferredUsername' ]
+    }).join(', ')
   }
 }

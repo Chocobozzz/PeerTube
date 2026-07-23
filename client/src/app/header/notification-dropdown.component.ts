@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router'
 import { Notifier, PeerTubeSocket, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -15,6 +15,7 @@ import { filter } from 'rxjs/operators'
   selector: 'my-notification-dropdown',
   templateUrl: './notification-dropdown.component.html',
   styleUrls: [ './notification-dropdown.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     UserNotificationsComponent,

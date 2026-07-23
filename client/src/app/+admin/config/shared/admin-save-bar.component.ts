@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy, OnInit, output } from '@angular/core'
+import { Component, inject, input, OnDestroy, OnInit, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormGroup } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { ScreenService, ServerService } from '@app/core'
@@ -12,6 +12,7 @@ import { AlertComponent } from '../../../shared/shared-main/common/alert.compone
   selector: 'my-admin-save-bar',
   styleUrls: [ './admin-save-bar.component.scss' ],
   templateUrl: './admin-save-bar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
     ButtonComponent,

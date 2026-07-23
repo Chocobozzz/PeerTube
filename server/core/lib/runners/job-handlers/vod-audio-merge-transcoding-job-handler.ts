@@ -16,7 +16,6 @@ import { loadRunnerVideo, onVODWebVideoOrAudioMergeTranscodingJob } from './shar
 
 type CreateOptions = {
   video: MVideo
-  isNewVideo: boolean
   resolution: number
   fps: number
   priority: number
@@ -45,7 +44,7 @@ export class VODAudioMergeTranscodingJobHandler
     }
 
     const privatePayload: RunnerJobVODWebVideoTranscodingPrivatePayload = {
-      ...pick(options, [ 'isNewVideo', 'deleteInputFileId', 'canMoveVideoState' ]),
+      ...pick(options, [ 'deleteInputFileId', 'canMoveVideoState' ]),
 
       videoUUID: video.uuid
     }

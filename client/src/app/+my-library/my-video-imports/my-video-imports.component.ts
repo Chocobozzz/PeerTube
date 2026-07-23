@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit, viewChild } from '@angular/core'
+import { Component, inject, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { Notifier } from '@app/core'
 import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
@@ -16,6 +16,7 @@ type DataLoaderParameter = Parameters<MyVideoImportsComponent['_dataLoader']>[0]
 @Component({
   templateUrl: './my-video-imports.component.html',
   styleUrls: [ './my-video-imports.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     CommonModule,

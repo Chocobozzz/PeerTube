@@ -18,15 +18,17 @@ class LiveQuotaStore {
   }
 
   removeLive (userId: number, sessionId: string) {
-    const newLivesPerUser = this.livesPerUser.get(userId)
-                                             .filter(o => o.sessionId !== sessionId)
+    const livesOfUser = this.livesPerUser.get(userId)
+    if (!livesOfUser) return
 
-    this.livesPerUser.set(userId, newLivesPerUser)
+    this.livesPerUser.set(userId, livesOfUser.filter(o => o.sessionId !== sessionId))
   }
 
   addQuotaTo (userId: number, sessionId: string, size: number) {
     const lives = this.livesPerUser.get(userId)
-    const live = lives.find(l => l.sessionId === sessionId)
+    const live = lives?.find(l => l.sessionId === sessionId)
+    // The live may have already ended (and been removed) if this is a late/out-of-order call
+    if (!live) return
 
     live.size += size
   }

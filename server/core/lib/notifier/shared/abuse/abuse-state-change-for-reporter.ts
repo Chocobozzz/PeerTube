@@ -62,8 +62,8 @@ export class AbuseStateChangeForReporter extends AbstractNotification<MAbuseFull
       template: 'abuse-state-change',
       to,
       subject: text,
+      action,
       locals: {
-        action,
         abuseId: this.abuse.id,
         abuseUrl,
         isAccepted: this.abuse.state === AbuseState.ACCEPTED

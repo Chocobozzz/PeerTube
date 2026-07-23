@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, resetCurrentPage, updatePaginationOnDelete } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
@@ -15,6 +15,7 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   selector: 'my-plugin-list-installed',
   templateUrl: './plugin-list-installed.component.html',
   styleUrls: [ './plugin-list-installed.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     InfiniteScrollerDirective,
     PluginCardComponent,

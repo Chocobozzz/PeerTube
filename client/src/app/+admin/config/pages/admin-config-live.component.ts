@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { CanComponentDeactivate, ServerService } from '@app/core'
@@ -74,6 +74,7 @@ type Form = {
   selector: 'my-admin-config-live',
   templateUrl: './admin-config-live.component.html',
   styleUrls: [ './admin-config-common.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

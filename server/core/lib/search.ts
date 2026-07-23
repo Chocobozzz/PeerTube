@@ -1,8 +1,8 @@
 import express from 'express'
 import { CONFIG } from '@server/initializers/config.js'
-import { AccountBlocklistModel } from '@server/models/account/account-blocklist.js'
+import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { ServerBlocklistModel } from '@server/models/server/server-blocklist.js'
+import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
 import { SearchTargetQuery } from '@peertube/peertube-models'
 
 function isSearchIndexSearch (query: SearchTargetQuery) {

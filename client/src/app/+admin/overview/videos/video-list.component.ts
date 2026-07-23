@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -6,12 +6,14 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoFileTokenService } from '@app/shared/shared-main/video/video-file-token.service'
+import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { AccountBlockBadgeInput } from '@app/shared/shared-moderation/account-block-badges.component'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
 import { VideoBlockComponent } from '@app/shared/shared-moderation/video-block.component'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
+import { BulkUpdateVideosModalComponent } from '@app/shared/shared-video/bulk-update-videos-modal.component'
 import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
 import { getAllVideoStates, getVideoStateBadgeClass, getVideoStateLabel } from '@app/shared/shared-video/video-state-utils'
 import { getAllFiles } from '@peertube/peertube-core-utils'
@@ -53,6 +55,7 @@ type ColumnName =
   selector: 'my-video-list',
   templateUrl: './video-list.component.html',
   styleUrls: [ './video-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     VideoActionsDropdownComponent,
@@ -64,6 +67,7 @@ type ColumnName =
     BytesPipe,
     PrivacyBadgeComponent,
     VideoNSFWBadgeComponent,
+    BulkUpdateVideosModalComponent,
     TableComponent,
     NumberFormatterPipe
   ]
@@ -79,8 +83,10 @@ export class VideoListComponent implements OnInit {
   private server = inject(ServerService)
   private videoFileTokenService = inject(VideoFileTokenService)
   private blocklistService = inject(BlocklistService)
+  private videoImportService = inject(VideoImportService)
 
   readonly videoBlockModal = viewChild<VideoBlockComponent>('videoBlockModal')
+  readonly bulkUpdateVideosModal = viewChild<BulkUpdateVideosModalComponent>('bulkUpdateVideosModal')
   readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName>>('table')
 
   bulkActions: DropdownAction<Video[]>[][] = []
@@ -101,7 +107,8 @@ export class VideoListComponent implements OnInit {
     liveInfo: false,
     removeFiles: true,
     transcoding: true,
-    generateTranscription: true
+    generateTranscription: true,
+    retryFailedImport: true
   }
 
   columns: TableColumnInfo<ColumnName>[] = [
@@ -229,13 +236,19 @@ export class VideoListComponent implements OnInit {
     this.bulkActions = [
       [
         {
+          label: $localize`Update...`,
+          handler: videos => this.bulkUpdateVideosModal().show({ videos }),
+          isDisplayed: () => this.authUser.hasRight(UserRight.UPDATE_ANY_VIDEO),
+          iconName: 'edit'
+        },
+        {
           label: $localize`Delete`,
           handler: videos => this.removeVideos(videos),
           isDisplayed: () => this.authUser.hasRight(UserRight.REMOVE_ANY_VIDEO),
           iconName: 'delete'
         },
         {
-          label: $localize`Block`,
+          label: $localize`Block...`,
           handler: videos => this.videoBlockModal().show(videos),
           isDisplayed: videos => this.authUser.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) && videos.every(v => !v.blacklisted),
           iconName: 'no'
@@ -280,6 +293,14 @@ export class VideoListComponent implements OnInit {
           isDisplayed: videos => videos.every(v => v.canGenerateTranscription(this.authUser, this.serverConfig.videoTranscription.enabled)),
           iconName: 'video-lang'
         }
+      ],
+      [
+        {
+          label: $localize`Retry import`,
+          handler: videos => this.retryImport(videos),
+          isDisplayed: videos => videos.every(v => this.authUser.hasRight(UserRight.MANAGE_VIDEO_IMPORTS) && this.isImportFailed(v)),
+          iconName: 'refresh'
+        }
       ]
     ]
   }
@@ -296,6 +317,10 @@ export class VideoListComponent implements OnInit {
     const state = video.state.id
 
     return state === VideoState.TO_IMPORT || state === VideoState.TO_IMPORT_FAILED
+  }
+
+  isImportFailed (video: Video) {
+    return video.state?.id === VideoState.TO_IMPORT_FAILED
   }
 
   hasOriginalFile (video: Video) {
@@ -326,7 +351,7 @@ export class VideoListComponent implements OnInit {
   }
 
   getFilesSize (video: Video) {
-    let total = getAllFiles(video).reduce((p, f) => p += f.size, 0)
+    let total = getAllFiles(video).reduce((p, f) => p + f.size, 0)
 
     if (video.videoSource?.fileDownloadUrl) {
       total += video.videoSource.size || 0
@@ -438,7 +463,7 @@ export class VideoListComponent implements OnInit {
 
   private _dataLoader (
     options: DataLoaderOptionsBase & Partial<Parameters<VideoAdminService['listAdminVideos']>[0]> & {
-      state: VideoStateType | string
+      state?: VideoStateType | string
     }
   ) {
     return this.videoAdminService.listAdminVideos({
@@ -571,6 +596,24 @@ export class VideoListComponent implements OnInit {
               )
             )
           }
+        },
+
+        error: err => this.notifier.handleError(err)
+      })
+  }
+
+  private retryImport (videos: Video[]) {
+    this.videoImportService.retryVideoImportByVideos(videos)
+      .subscribe({
+        next: () => {
+          this.notifier.success(
+            formatICU(
+              $localize`Retry import requested for {count, plural, =1 {1 video} other {{count} videos}}.`,
+              { count: videos.length }
+            )
+          )
+
+          this.table().loadData()
         },
 
         error: err => this.notifier.handleError(err)

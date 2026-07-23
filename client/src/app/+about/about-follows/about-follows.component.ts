@@ -1,5 +1,5 @@
 import { DecimalPipe } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, hasMoreItems, Notifier, RestService, ServerService } from '@app/core'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
@@ -16,6 +16,7 @@ import { SubscriptionImageComponent } from './subscription-image.component'
   selector: 'my-about-follows',
   templateUrl: './about-follows.component.html',
   styleUrls: [ './about-follows.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ActorAvatarComponent,
     ButtonComponent,

@@ -1,5 +1,15 @@
 import { CommonModule } from '@angular/common'
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import {
+  AfterViewChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  inject,
+  viewChild
+} from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { DisableForReuseHook, Notifier, PeerTubeRouterService, ServerService, User, UserService } from '@app/core'
 import { ActorAvatarComponent, ActorAvatarInput } from '@app/shared/shared-actor-image/actor-avatar.component'
@@ -14,6 +24,7 @@ import { OverviewService } from './overview.service'
   selector: 'my-video-overview',
   templateUrl: './video-overview.component.html',
   styleUrls: [ './video-overview.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     InfiniteScrollerDirective,
     RouterLink,

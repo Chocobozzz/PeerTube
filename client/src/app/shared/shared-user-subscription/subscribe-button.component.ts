@@ -1,6 +1,6 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { Component, DestroyRef, OnChanges, inject, input, viewChild } from '@angular/core'
+import { Component, DestroyRef, OnChanges, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, Notifier, RedirectService } from '@app/core'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { FeedFormat, FeedType } from '@peertube/peertube-models'
@@ -16,6 +16,7 @@ import { UserSubscriptionService } from './user-subscription.service'
   selector: 'my-subscribe-button',
   templateUrl: './subscribe-button.component.html',
   styleUrls: [ './subscribe-button.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgClass,
     NgTemplateOutlet,

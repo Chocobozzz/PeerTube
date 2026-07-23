@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { AfterViewInit, Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ComponentPaginationLight, DisableForReuseHook, HooksService, ScreenService } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
@@ -11,6 +11,7 @@ import { VideosListComponent } from '../../shared/shared-video-miniature/videos-
 @Component({
   selector: 'my-video-channel-videos',
   templateUrl: './video-channel-videos.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ VideosListComponent ]
 })
 export class VideoChannelVideosComponent implements OnInit, AfterViewInit, OnDestroy, DisableForReuseHook {

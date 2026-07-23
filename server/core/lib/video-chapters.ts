@@ -1,11 +1,12 @@
 import { parseChapters, sortBy } from '@peertube/peertube-core-utils'
 import { VideoChapter } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { InternalEventEmitter } from './internal-event-emitter.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
 const lTags = loggerTagsFactory('video', 'chapters')
 
@@ -20,7 +21,9 @@ export async function replaceChapters (options: {
 
   await createChapters({ videoId: video.id, chapters, transaction })
 
-  InternalEventEmitter.Instance.emit('chapters-updated', { video })
+  afterCommitIfTransaction(transaction, () => {
+    InternalEventEmitter.Instance.emit('chapters-updated', { video })
+  })
 }
 
 export async function replaceChaptersIfNotExist (options: {
@@ -34,7 +37,9 @@ export async function replaceChaptersIfNotExist (options: {
 
   await createChapters({ videoId: video.id, chapters, transaction })
 
-  InternalEventEmitter.Instance.emit('chapters-updated', { video })
+  afterCommitIfTransaction(transaction, () => {
+    InternalEventEmitter.Instance.emit('chapters-updated', { video })
+  })
 }
 
 export async function replaceChaptersFromDescriptionIfNeeded (options: {
@@ -79,10 +84,10 @@ async function createChapters (options: {
 }) {
   const { chapters, transaction, videoId } = options
 
-  const existingTimecodes = new Set<number>()
+  const existingTimecode = new Set<number>()
 
   for (const chapter of chapters) {
-    if (existingTimecodes.has(chapter.timecode)) continue
+    if (existingTimecode.has(chapter.timecode)) continue
 
     await VideoChapterModel.create({
       title: chapter.title,
@@ -90,7 +95,7 @@ async function createChapters (options: {
       videoId
     }, { transaction })
 
-    existingTimecodes.add(chapter.timecode)
+    existingTimecode.add(chapter.timecode)
   }
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScopedTokensService } from '@app/core'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { FeedFormat, ScopedToken } from '@peertube/peertube-models'
@@ -9,6 +9,7 @@ import { InputTextComponent } from '../../shared/shared-forms/input-text.compone
   selector: 'my-account-applications',
   templateUrl: './my-account-applications.component.html',
   styleUrls: [ './my-account-applications.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InputTextComponent ]
 })
 export class MyAccountApplicationsComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, HostListener, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
@@ -9,6 +9,7 @@ import { VideoManageResolverData } from './video-manage.resolver'
 @Component({
   selector: 'my-video-manage',
   templateUrl: './video-manage.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

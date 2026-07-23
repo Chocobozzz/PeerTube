@@ -30,8 +30,7 @@ const apiRouter = express.Router()
 
 apiRouter.use(cors({
   origin: '*',
-  exposedHeaders: 'Retry-After',
-  credentials: true
+  exposedHeaders: 'Retry-After'
 }))
 
 apiRouter.use('/server', serverRouter)

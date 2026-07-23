@@ -1,5 +1,5 @@
 import { CommonModule, PlatformLocation } from '@angular/common'
-import { Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -104,6 +104,7 @@ type URLOptions = {
   selector: 'my-video-watch',
   templateUrl: './video-watch.component.html',
   styleUrls: [ './video-watch.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     VideoWatchPlaylistComponent,
@@ -260,6 +261,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.configSub) this.configSub.unsubscribe()
     if (this.liveVideosSub) this.liveVideosSub.unsubscribe()
 
+    if (this.video?.isLive) this.peertubeSocket.unsubscribeLiveVideos(this.video.id)
+
     // Unbind hotkeys
     this.hotkeysService.remove(this.hotkeys)
 
@@ -400,7 +403,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       switchMap(video => {
         if (!video.isLive) return of({ video, live: undefined })
 
-        return this.liveVideoService.getVideoLive(video.uuid)
+        return this.liveVideoService.getVideoLive(video.uuid, videoPassword)
           .pipe(map(live => ({ live, video })))
       }),
       switchMap(({ video, live }) => {
@@ -967,15 +970,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private async subscribeToLiveEventsIfNeeded (oldVideo: VideoDetails, newVideo: VideoDetails) {
-    if (!this.liveVideosSub) {
-      this.liveVideosSub = this.buildLiveEventsSubscription()
-    }
-
     if (oldVideo && oldVideo.id !== newVideo.id) {
       this.peertubeSocket.unsubscribeLiveVideos(oldVideo.id)
     }
 
     if (!newVideo.isLive) return
+
+    if (!this.liveVideosSub) {
+      this.liveVideosSub = this.buildLiveEventsSubscription()
+    }
 
     await this.peertubeSocket.subscribeToLiveVideosSocket(newVideo.id)
   }
@@ -1083,7 +1086,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           playlist: this.playlist,
           titles: {
             instanceVideosFeed: $localize`${this.serverConfig.instance.name} - Videos feed`,
-            playlistPodcastFeed: $localize`${this.playlist.displayName} - Podcast feed`
+            playlistPodcastFeed: $localize`${this.playlist.displayName} - Podcast feed`,
+            playlistPodcastAudioFeed: $localize`${this.playlist.displayName} - Apple Podcast audio feed`,
+            playlistPodcastVideoFeed: $localize`${this.playlist.displayName} - Apple Podcast video feed`
           }
         })
       )

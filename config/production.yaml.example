@@ -36,6 +36,11 @@ rates_limit:
     # 3 attempts in 5 min
     window: 5 minutes
     max: 3
+  confirm_token:
+    # Consuming a token sent by email/OTP (reset password, verify email, confirm 2FA)
+    # 10 attempts in 5 min
+    window: 5 minutes
+    max: 10
   receive_client_log:
     # 1 attempt every 2 seconds
     window: 1 minute
@@ -64,6 +69,18 @@ rates_limit:
     # 5 attempts in 5 seconds
     window: 5 seconds
     max: 5
+  report_abuse: # Abuse reports, limited per authenticated user (each report notifies all moderators)
+    # 20 attempts in 1 hour
+    window: 1 hour
+    max: 20
+  create_comment: # Comment/reply creation, limited per authenticated user
+    # 60 attempts in 5 minutes
+    window: 5 minutes
+    max: 60
+  login_lockout: # Lock an account after too many password/OTP login failures
+    window: 5 minutes
+    max: 60 # Requires at least 10 distinct IPs (`max / max_per_ip`) to lock an account
+    max_per_ip: 6 # A single IP's contribution to the account lock is capped at 6 failures
 
 oauth2:
   token_lifetime:
@@ -93,11 +110,12 @@ database:
     max: 5
 
 # Redis server for short time storage
-# You can also specify a 'socket' path to a unix socket but first need to
-# set 'hostname' and 'port' to null
 redis:
+  # You can also specify a 'socket' path to a unix socket but first need to
+  # set 'hostname' and 'port' to null
   hostname: '127.0.0.1'
   port: 6379
+  socket: null
   auth: null
   db: 0
   enable_tls: false
@@ -617,6 +635,10 @@ user:
   # If enabled, root cannot login and existing root OAuth access/refresh tokens are rejected.
   disable_root_auth: false
 
+  # Enable cross authentication when using multiple auth plugins
+  # Never enable this unless you know what you're doing. If not used correctly, it can lead to account takeover
+  allow_cross_provider_auth: false
+
   # Default value of maximum video bytes the user can upload
   # Does not take into account transcoded files or account export archives (that can include user uploaded files)
   # Byte format is supported ("1GB" etc)
@@ -1105,6 +1127,11 @@ followings:
       enabled: false
       # Host your own using https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow
       index_url: ''
+
+blocklist:
+  # Enable /api/v1/server/blocklist/public-log endpoint on your instance to share your blocklist with other instances
+  public_log:
+    enabled: false
 
 theme:
   default: 'default'

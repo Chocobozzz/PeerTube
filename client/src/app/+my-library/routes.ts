@@ -10,8 +10,9 @@ import { LiveVideoService } from '@app/shared/shared-video-live/live-video.servi
 import { WatchedWordsListService } from '@app/shared/shared-watched-words/watched-words-list.service'
 import { LoginGuard } from '../core'
 import { CommentsOnMyVideosComponent } from './comments-on-my-videos/comments-on-my-videos.component'
-import { AutomaticTagService } from './my-auto-tag-policies/automatic-tag.service'
+import { AutomaticTagService } from '@app/shared/shared-moderation/automatic-tag.service'
 import { MyAutoTagPoliciesComponent } from './my-auto-tag-policies/my-auto-tag-policies.component'
+import { autoTagPoliciesResolver } from './my-auto-tag-policies/my-auto-tag-policies.resolver'
 import { MyChannelSpaceComponent } from './my-channel-space.component'
 import { MyFollowersComponent } from './my-follows/my-followers.component'
 import { MySubscriptionsComponent } from './my-follows/my-subscriptions.component'
@@ -28,6 +29,7 @@ import { MyVideoPlaylistsComponent } from './my-video-playlists/my-video-playlis
 import { MyVideoSpaceComponent } from './my-video-space.component'
 import { MyVideosComponent } from './my-videos/my-videos.component'
 import { MyWatchedWordsListComponent } from './my-watched-words-list/my-watched-words-list.component'
+import { MyWatchedWordsSubscriptionsComponent } from './my-watched-words-subscriptions/my-watched-words-subscriptions.component'
 
 const commonConfig = {
   path: '',
@@ -76,8 +78,21 @@ const videoSpaceRoutes = [
   },
 
   {
+    path: 'watched-words/subscriptions',
+    component: MyWatchedWordsSubscriptionsComponent,
+    data: {
+      meta: {
+        title: $localize`Your watched words subscriptions`
+      }
+    }
+  },
+
+  {
     path: 'auto-tag-policies',
     component: MyAutoTagPoliciesComponent,
+    resolve: {
+      tags: autoTagPoliciesResolver
+    },
     data: {
       meta: {
         title: $localize`Your automatic tag policies`

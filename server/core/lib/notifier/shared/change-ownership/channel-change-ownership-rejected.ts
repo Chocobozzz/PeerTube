@@ -28,11 +28,9 @@ export class ChannelChangeOwnershipRejected extends AbstractChannelChangeOwnersh
         nextOwner: this.payload.NextOwner.getDisplayName(),
         channelName: this.payload.VideoChannel.name
       }),
-      locals: {
-        action: {
-          text: t('View your notifications', language),
-          url: WEBSERVER.URL + '/my-account/notifications'
-        }
+      action: {
+        text: t('View your notifications', language),
+        url: WEBSERVER.URL + '/my-account/notifications'
       }
     }
   }

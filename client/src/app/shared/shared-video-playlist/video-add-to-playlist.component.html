@@ -75,20 +75,6 @@
   </button>
 
   @if (isNewPlaylistBlockOpened) {
-    <form class="new-playlist-block" (ngSubmit)="createPlaylist()" [formGroup]="form">
-      <div class="form-group">
-        <label i18n for="displayName">Display name</label>
-        <input
-          type="text" id="displayName" class="form-control"
-          formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
-          >
-
-        @if (formErrors['displayName']) {
-          <div class="form-error" role="alert">{{ formErrors['displayName'] }}</div>
-        }
-      </div>
-
-      <input type="submit" class="peertube-button primary-button" i18n-value value="Create" [disabled]="!form.valid">
-    </form>
+    <my-playlist-create-block (playlistCreated)="onPlaylistCreated()" />
   }
 </div>

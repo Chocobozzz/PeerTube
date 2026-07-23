@@ -1,6 +1,6 @@
 <ng-template #modal>
   <div class="modal-body">
-    <my-admin-config-wizard-stepper #stepper>
+    <my-common-stepper #stepper>
       @if (showWelcome) {
         <cdk-step i18n-label label="Welcome introduction">
           <my-admin-config-wizard-welcome (back)="stepper.previous()" (next)="stepper.next()" (hide)="hide($event)"></my-admin-config-wizard-welcome>
@@ -35,6 +35,6 @@
           <my-admin-config-wizard-documentation (hide)="hide({ doNotOpenAgain: true })"></my-admin-config-wizard-documentation>
         </cdk-step>
       }
-    </my-admin-config-wizard-stepper>
+    </my-common-stepper>
   </div>
 </ng-template>

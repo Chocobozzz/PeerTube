@@ -93,7 +93,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
     video: MVideoFull
     resolution: number
     fps: number
-    isNewVideo: boolean
     separatedAudio: boolean
 
     transcodingPriority: TranscodingPriorityType
@@ -114,7 +113,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
           'video',
           'resolution',
           'fps',
-          'isNewVideo',
           'separatedAudio',
           'canMoveVideoState',
           'transcodingRequestAt',
@@ -132,7 +130,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
     video: MVideoFull
     resolution: number
     fps: number
-    isNewVideo: boolean
 
     transcodingPriority: TranscodingPriorityType
     canMoveVideoState: boolean
@@ -145,7 +142,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
           'video',
           'resolution',
           'fps',
-          'isNewVideo',
           'canMoveVideoState',
           'transcodingPriority',
           'canMoveVideoState'
@@ -161,7 +157,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
   protected buildMergeAudioPayload (options: {
     video: MVideoFull
     inputFile: MVideoFile
-    isNewVideo: boolean
     fps: number
     resolution: number
 
@@ -178,7 +173,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
           'video',
           'resolution',
           'fps',
-          'isNewVideo',
           'canMoveVideoState'
         ]),
 
@@ -192,7 +186,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
   protected buildOptimizePayload (options: {
     video: MVideoFull
     inputFile: MVideoFile
-    isNewVideo: boolean
     fps: number
     resolution: number
 
@@ -209,7 +202,6 @@ export class TranscodingRunnerJobBuilder extends AbstractJobBuilder<FullPayload>
           'video',
           'resolution',
           'fps',
-          'isNewVideo',
           'canMoveVideoState'
         ]),
 

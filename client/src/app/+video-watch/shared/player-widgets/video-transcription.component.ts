@@ -1,5 +1,17 @@
 import { NgClass } from '@angular/common'
-import { Component, ElementRef, HostListener, inject, input, OnChanges, OnInit, output, SimpleChanges, viewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  input,
+  OnChanges,
+  OnInit,
+  output,
+  SimpleChanges,
+  viewChild
+} from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { durationToString, isInViewport } from '@app/helpers'
@@ -10,9 +22,9 @@ import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
 import { Video, VideoCaption } from '@peertube/peertube-models'
 import { parse } from '@plussub/srt-vtt-parser'
+import { SelectOptionsItem } from '@pt-types'
 import debug from 'debug'
 import { debounceTime, distinctUntilChanged, Subject } from 'rxjs'
-import { SelectOptionsItem } from '@pt-types'
 
 const debugLogger = debug('peertube:watch:VideoTranscriptionComponent')
 
@@ -29,6 +41,7 @@ type Segment = {
   selector: 'my-video-transcription',
   templateUrl: './video-transcription.component.html',
   styleUrls: [ './player-widget.component.scss', './video-transcription.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgClass,
     GlobalIconComponent,
@@ -160,8 +173,8 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
             })
 
             this.segments = this.segmentsStore
-          } catch (err) {
-            this.notifier.error($localize`Cannot load transcript: ${err.message}`)
+          } catch (err: unknown) {
+            this.notifier.error($localize`Cannot load transcript: ${(err as Error).message}`)
           }
         },
 

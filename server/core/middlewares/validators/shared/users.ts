@@ -43,8 +43,8 @@ export async function checkUsernameOrEmailDoNotAlreadyExist (options: {
 }) {
   const { username, email, req, res } = options
 
-  const existingUser = await UserModel.loadByUsernameOrEmailCaseInsensitive(username)
-  const existingEmail = await UserModel.loadByUsernameOrEmailCaseInsensitive(email)
+  const existingUser = await UserModel.listByUsernameOrEmailCaseInsensitive(username)
+  const existingEmail = await UserModel.listByUsernameOrEmailCaseInsensitive(email)
 
   if (existingUser.length > 0 || existingEmail.length > 0) {
     res.fail({

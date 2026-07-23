@@ -22,6 +22,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   buildRateLimiter,
+  confirmTokenRateLimiter,
   ensureUserHasRight,
   paginationValidator,
   setDefaultPagination,
@@ -107,7 +108,13 @@ usersRouter.post(
   asyncMiddleware(unblockUser)
 )
 
-usersRouter.get('/:id', authenticate, ensureUserHasRight(UserRight.MANAGE_USERS), asyncMiddleware(usersGetValidator), getUser)
+usersRouter.get(
+  '/:id',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersGetValidator),
+  getUser
+)
 
 usersRouter.post(
   '/',
@@ -142,6 +149,7 @@ usersRouter.post(
 
 usersRouter.post(
   '/:id/reset-password',
+  confirmTokenRateLimiter,
   asyncMiddleware(usersResetPasswordValidator),
   asyncMiddleware(resetUserPassword)
 )
@@ -174,7 +182,7 @@ async function createUser (req: express.Request, res: express.Response) {
     channelNames: body.channelName && { name: body.channelName, displayName: body.channelName }
   })
 
-  auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
+  auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })))
   logger.info('User %s with its channel and account created.', body.username, lTags(user.username))
 
   if (createPassword) {
@@ -298,9 +306,11 @@ async function updateUser (req: express.Request, res: express.Response) {
   const user = await userToUpdate.save()
 
   // Destroy user token to refresh rights
-  if (roleChanged || body.password !== undefined) await OAuthTokenModel.deleteUserToken(userToUpdate.id)
+  if (roleChanged || body.password !== undefined) {
+    await OAuthTokenModel.deleteUserToken({ userId: userToUpdate.id })
+  }
 
-  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })), oldUserAuditView)
 
   logger.info(`Updated user ${user.username} by moderator ${byUser.username}.`, lTags(user.username, byUser.username))
 
@@ -333,6 +343,7 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
 
   await user.save()
   await Redis.Instance.removePasswordVerificationString(user.id)
+  await OAuthTokenModel.deleteUserToken({ userId: user.id })
 
   logger.info(`User ${user.username} reset its password.`, lTags(user.username))
 
@@ -345,13 +356,13 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
   user.blocked = block
   user.blockedReason = reason || null
 
-  await sequelizeTypescript.transaction(async t => {
-    await OAuthTokenModel.deleteUserToken(user.id, t)
+  await sequelizeTypescript.transaction(async transaction => {
+    await OAuthTokenModel.deleteUserToken({ userId: user.id, transaction })
 
-    await user.save({ transaction: t })
+    await user.save({ transaction })
   })
 
   Emailer.Instance.addUserBlockJob({ username: user.username, email: user.email, language: user.getLanguage(), blocked: block, reason })
 
-  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
+  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })), oldUserAuditView)
 }

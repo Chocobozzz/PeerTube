@@ -8,6 +8,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, U
 import { LRU_CACHE, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.js'
 import { AccountModel } from '../account/account.js'
 import { SequelizeModel, getSort } from '../shared/index.js'
+import { WatchedWordsSubscriptionModel } from './watched-words-subscription.js'
 
 @Table({
   tableName: 'watchedWordsList',
@@ -48,6 +49,20 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
   })
   declare Account: Awaited<AccountModel>
 
+  @ForeignKey(() => WatchedWordsSubscriptionModel)
+  @AllowNull(true)
+  @Column
+  declare watchedWordsSubscriptionId: number
+
+  @BelongsTo(() => WatchedWordsSubscriptionModel, {
+    foreignKey: {
+      name: 'watchedWordsSubscriptionId',
+      allowNull: true
+    },
+    onDelete: 'CASCADE'
+  })
+  declare WatchedWordsSubscription: Awaited<WatchedWordsSubscriptionModel>
+
   // accountId => reg expressions
   private static readonly regexCache = new LRUCache<number, { listName: string, regex: RegExp }[]>({
     max: LRU_CACHE.WATCHED_WORDS_REGEX.MAX_SIZE,
@@ -70,14 +85,40 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
   static loadByListName (options: {
     listName: string
     accountId: number
+    watchedWordsSubscriptionId?: number | null
+    transaction?: Transaction
   }) {
-    const { listName, accountId } = options
+    const { listName, accountId, watchedWordsSubscriptionId, transaction } = options
 
     const query = {
-      where: { listName, accountId }
+      where: {
+        listName,
+        accountId,
+
+        ...(watchedWordsSubscriptionId !== undefined
+          ? { watchedWordsSubscriptionId }
+          : {})
+      },
+      transaction
     }
 
     return this.findOne(query)
+  }
+
+  static loadBySubscriptionId (options: {
+    accountId: number
+    watchedWordsSubscriptionId: number
+    transaction: Transaction
+  }) {
+    const { accountId, watchedWordsSubscriptionId, transaction } = options
+
+    return this.findOne<MWatchedWordsList>({
+      where: {
+        accountId,
+        watchedWordsSubscriptionId
+      },
+      transaction
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -101,15 +142,26 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
   }) {
     const { accountId, start, count, sort } = options
 
+    const countQuery = {
+      where: { accountId }
+    }
+
     const query = {
       offset: start,
       limit: count,
       order: getSort(sort),
+      include: [
+        {
+          model: WatchedWordsSubscriptionModel.unscoped(),
+          required: false,
+          attributes: [ 'url' ]
+        }
+      ],
       where: { accountId }
     }
 
     return Promise.all([
-      WatchedWordsListModel.count(query),
+      WatchedWordsListModel.count(countQuery),
       WatchedWordsListModel.findAll(query)
     ]).then(([ total, data ]) => ({ total, data }))
   }
@@ -145,29 +197,53 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
 
     const result = models.map(m => ({ listName: m.listName, regex: wordsToRegExp(m.words) }))
 
-    this.regexCache.set(accountId, result)
+    WatchedWordsListModel.regexCache.set(accountId, result)
 
-    logger.debug('Will cache watched words regex', { accountId, result, tags: [ 'watched-words' ] })
+    logger.debug('Will cache watched words regex', { accountId, listNames: result.map(r => r.listName), tags: [ 'watched-words' ] })
 
     return result
   }
 
-  static createList (options: {
+  static async createList (options: {
     accountId: number
 
     listName: string
     words: string[]
+    watchedWordsSubscriptionId?: number
+
+    transaction?: Transaction
   }) {
+    const list = await super.create<MWatchedWordsList>(options, { transaction: options.transaction })
+
     WatchedWordsListModel.regexCache.delete(options.accountId)
 
-    return super.create(options)
+    return list
   }
 
-  updateList (options: {
+  static removeImportedBySubscription (options: {
+    accountId: number
+    watchedWordsSubscriptionId: number
+    transaction?: Transaction
+  }) {
+    const { accountId, watchedWordsSubscriptionId, transaction } = options
+
+    WatchedWordsListModel.regexCache.delete(accountId)
+
+    return WatchedWordsListModel.destroy({
+      where: {
+        accountId,
+        watchedWordsSubscriptionId
+      },
+      transaction
+    })
+  }
+
+  async updateList (options: {
     listName: string
     words?: string[]
+    transaction?: Transaction
   }) {
-    const { listName, words } = options
+    const { listName, words, transaction } = options
 
     if (words?.length === 0) {
       throw new Error('Cannot update watched words with an empty list')
@@ -176,15 +252,17 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     if (words) this.words = words
     if (listName) this.listName = listName
 
-    WatchedWordsListModel.regexCache.delete(this.accountId)
+    await this.save({ transaction })
 
-    return this.save()
+    WatchedWordsListModel.regexCache.delete(this.accountId)
   }
 
-  destroy () {
-    WatchedWordsListModel.regexCache.delete(this.accountId)
+  async destroy (options: {
+    transaction?: Transaction
+  } = {}) {
+    await super.destroy(options)
 
-    return super.destroy()
+    WatchedWordsListModel.regexCache.delete(this.accountId)
   }
 
   toFormattedJSON (): WatchedWordsList {
@@ -192,6 +270,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
       id: this.id,
       listName: this.listName,
       words: this.words,
+      subscriptionUrl: this.WatchedWordsSubscription?.url ?? null,
       updatedAt: this.updatedAt,
       createdAt: this.createdAt
     }

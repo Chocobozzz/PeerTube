@@ -37,6 +37,13 @@ export class JobService {
       )
   }
 
+  cancelJob (options: { jobId: string | number, jobType: JobType }) {
+    const url = `${JobService.BASE_JOB_URL}/${options.jobType}/${options.jobId}/cancel`
+
+    return this.authHttp.post(url, {})
+      .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
   private prettyPrintData (obj: Job) {
     const data = JSON.stringify(obj.data, null, 2)
 

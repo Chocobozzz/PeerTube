@@ -1,14 +1,15 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { AuthService, Notifier } from '@app/core'
+import { ActivatedRoute } from '@angular/router'
+import { AuthService, HtmlRendererService, Notifier } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
-
+import { AutomaticTagService } from '@app/shared/shared-moderation/automatic-tag.service'
 import { AutomaticTagAvailableType } from '@peertube/peertube-models'
-import { forkJoin } from 'rxjs'
-import { AutomaticTagService } from './automatic-tag.service'
+import { AutoTagPoliciesTag } from './my-auto-tag-policies.resolver'
 
 @Component({
   templateUrl: './my-auto-tag-policies.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     PeertubeCheckboxComponent
@@ -18,19 +19,21 @@ export class MyAutoTagPoliciesComponent implements OnInit {
   private authService = inject(AuthService)
   private autoTagsService = inject(AutomaticTagService)
   private notifier = inject(Notifier)
+  private html = inject(HtmlRendererService)
+  private route = inject(ActivatedRoute)
 
-  tags: { name: string, review: boolean, type: AutomaticTagAvailableType }[] = []
+  tags: AutoTagPoliciesTag[] = []
 
   ngOnInit () {
-    this.loadAvailableTags()
+    this.tags = this.route.snapshot.data['tags']
   }
 
   getLabelText (tag: { name: string, type: AutomaticTagAvailableType }) {
-    if (tag.name === 'external-link') {
-      return $localize`That contain an external link`
-    }
+    const text = tag.name === 'external-link'
+      ? $localize`That contain <strong>an external link</strong>`
+      : $localize`That contain any word from your <strong>${tag.name}</strong> watched word list`
 
-    return $localize`That contain any word from your "${tag.name}" watched word list`
+    return this.html.toSimpleSafeHtml(text)
   }
 
   updatePolicies () {
@@ -45,18 +48,6 @@ export class MyAutoTagPoliciesComponent implements OnInit {
       },
 
       error: err => this.notifier.handleError(err)
-    })
-  }
-
-  private loadAvailableTags () {
-    const accountName = this.authService.getUser().account.name
-
-    forkJoin([
-      this.autoTagsService.listAvailable({ accountName }),
-      this.autoTagsService.getCommentPolicies({ accountName })
-    ]).subscribe(([ resAvailable, policies ]) => {
-      this.tags = resAvailable.available
-        .map(a => ({ name: a.name, type: a.type, review: policies.review.includes(a.name) }))
     })
   }
 }

@@ -33,7 +33,7 @@
 
       <div class="form-group">
         <label i18n for="videoChannel">Video channel</label>
-        <my-select-channel inputId="videoChannel" [items]="userVideoChannels" formControlName="videoChannel"></my-select-channel>
+        <my-select-channel-user inputId="videoChannel" [items]="channels" formControlName="videoChannel"></my-select-channel-user>
 
         @if (formErrors['videoChannel']) {
           <div class="form-error" role="alert">{{ formErrors['videoChannel'] }}</div>
@@ -52,6 +52,11 @@
           <input type="radio" name="existingVideoStrategy" id="doNothing" value="nothing" formControlName="existingVideoStrategy" />
           <label for="doNothing" i18n>Only watch for new publications</label>
         </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="videoPrivacy">Privacy of imported videos</label>
+        <my-select-options inputId="videoPrivacy" [items]="videoPrivacies" formControlName="videoPrivacy"></my-select-options>
       </div>
 
       <input type="submit" class="peertube-button primary-button" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">

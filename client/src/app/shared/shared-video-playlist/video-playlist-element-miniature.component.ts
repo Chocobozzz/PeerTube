@@ -141,15 +141,22 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     const playlistElementValue = this.playlistElement()
     const videoId = playlistElementValue.video ? playlistElementValue.video.id : undefined
 
-    this.videoPlaylistService.removeVideoFromPlaylist(this.playlist().id, playlistElement.id, videoId)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Video removed from ${this.playlist().displayName}`)
-          this.elementRemoved.emit(playlistElement)
-        },
+    this.videoPlaylistService.removeElementsFromPlaylist({
+      playlistId: this.playlist().id,
+      elements: [
+        {
+          playlistElementId: playlistElement.id,
+          videoId
+        }
+      ]
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`Video removed from ${this.playlist().displayName}`)
+        this.elementRemoved.emit(playlistElement)
+      },
 
-        error: err => this.notifier.handleError(err)
-      })
+      error: err => this.notifier.handleError(err)
+    })
 
     this.moreDropdown().close()
   }
@@ -157,22 +164,34 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   updateTimestamps (playlistElement: VideoPlaylistElement) {
     const body: VideoPlaylistElementUpdate = {}
 
-    body.startTimestamp = this.timestampOptions.startTimestampEnabled ? this.timestampOptions.startTimestamp : null
-    body.stopTimestamp = this.timestampOptions.stopTimestampEnabled ? this.timestampOptions.stopTimestamp : null
+    this.videoPlaylistService.updateVideoOfPlaylist({
+      playlistId: this.playlist().id,
+      elements: [
+        {
+          playlistElementId: playlistElement.id,
 
-    this.videoPlaylistService.updateVideoOfPlaylist(this.playlist().id, playlistElement.id, body, this.playlistElement().video.id)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Timestamps updated`)
+          startTimestamp: this.timestampOptions.startTimestampEnabled
+            ? this.timestampOptions.startTimestamp
+            : null,
+          stopTimestamp: this.timestampOptions.stopTimestampEnabled
+            ? this.timestampOptions.stopTimestamp
+            : null,
 
-          playlistElement.startTimestamp = body.startTimestamp
-          playlistElement.stopTimestamp = body.stopTimestamp
+          videoId: this.playlistElement().video.id
+        }
+      ]
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`Timestamps updated`)
 
-          this.cdr.detectChanges()
-        },
+        playlistElement.startTimestamp = body.startTimestamp
+        playlistElement.stopTimestamp = body.stopTimestamp
 
-        error: err => this.notifier.handleError(err)
-      })
+        this.cdr.detectChanges()
+      },
+
+      error: err => this.notifier.handleError(err)
+    })
 
     this.moreDropdown().close()
   }

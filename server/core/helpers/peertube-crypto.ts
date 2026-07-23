@@ -1,6 +1,6 @@
 import { ParsedDraftSignature, parseRequestSignature, verifyDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { sha256 } from '@peertube/peertube-node-utils'
-import { createCipheriv, createDecipheriv } from 'crypto'
+import { CipherGCM, createCipheriv, createDecipheriv, DecipherGCM, timingSafeEqual } from 'crypto'
 import { Request } from 'express'
 import { BCRYPT_SALT_SIZE, ENCRYPTION, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
 import { MActor } from '../types/models/index.js'
@@ -35,6 +35,22 @@ async function cryptPassword (password: string) {
   const salt = await genSalt(BCRYPT_SALT_SIZE)
 
   return hash(password, salt)
+}
+
+// ---------------------------------------------------------------------------
+// Secret comparison
+// ---------------------------------------------------------------------------
+
+// Prevent timing attacks when comparing secret tokens (email verification, password reset etc.)
+function isSecretEqual (a: string, b: string) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false
+
+  const aBuffer = Buffer.from(a)
+  const bBuffer = Buffer.from(b)
+
+  if (aBuffer.length !== bBuffer.length) return false
+
+  return timingSafeEqual(aBuffer, bBuffer)
 }
 
 // ---------------------------------------------------------------------------
@@ -101,28 +117,53 @@ function buildDigest (body: any) {
 // Encryption
 // ---------------------------------------------------------------------------
 
+// Format: salt:iv:authTag:ciphertext in hex format
+// AES-256-GCM authenticates the ciphertext, so decrypt() returns exactly the bytes that were encrypted or throws
 async function encrypt (str: string, secret: string) {
+  const salt = await randomBytesPromise(ENCRYPTION.SALT)
   const iv = await randomBytesPromise(ENCRYPTION.IV)
 
-  const key = await scryptPromise(secret, ENCRYPTION.SALT, 32)
-  const cipher = createCipheriv(ENCRYPTION.ALGORITHM, key, iv)
+  const key = await scryptPromise(secret, salt.toString(ENCRYPTION.ENCODING), ENCRYPTION.KEY_LENGTH)
+  const cipher = createCipheriv(ENCRYPTION.ALGORITHM, key, iv) as CipherGCM
 
-  let encrypted = iv.toString(ENCRYPTION.ENCODING) + ':'
-  encrypted += cipher.update(str, 'utf8', ENCRYPTION.ENCODING)
-  encrypted += cipher.final(ENCRYPTION.ENCODING)
+  let cipherText = cipher.update(str, 'utf8', ENCRYPTION.ENCODING)
+  cipherText += cipher.final(ENCRYPTION.ENCODING)
 
-  return encrypted
+  // The auth tag is only available after final()
+  const authTag = cipher.getAuthTag()
+
+  return [
+    salt.toString(ENCRYPTION.ENCODING),
+    iv.toString(ENCRYPTION.ENCODING),
+    authTag.toString(ENCRYPTION.ENCODING),
+    cipherText
+  ].join(':')
 }
 
 async function decrypt (encryptedArg: string, secret: string) {
-  const [ ivStr, encryptedStr ] = encryptedArg.split(':')
+  const parts = encryptedArg.split(':')
 
-  const iv = Buffer.from(ivStr, 'hex')
-  const key = await scryptPromise(secret, ENCRYPTION.SALT, 32)
+  // Pre-GCM values (2-part CBC) are re-encrypted at boot by the 1090-otp-secret-gcm migration,
+  // so decrypt() only ever sees the GCM format at runtime
+  if (parts.length !== 4) {
+    throw new Error(`Unrecognized encrypted value format (${parts.length} parts)`)
+  }
 
-  const decipher = createDecipheriv(ENCRYPTION.ALGORITHM, key, iv)
+  const [ saltStr, ivStr, authTagStr, cipherText ] = parts
 
-  return decipher.update(encryptedStr, ENCRYPTION.ENCODING, 'utf8') + decipher.final('utf8')
+  // Pin the auth tag to its expected length
+  const authTag = Buffer.from(authTagStr, ENCRYPTION.ENCODING)
+  if (authTag.length !== ENCRYPTION.AUTH_TAG) {
+    throw new Error(`Invalid auth tag length (${authTag.length} bytes)`)
+  }
+
+  const key = await scryptPromise(secret, saltStr, ENCRYPTION.KEY_LENGTH)
+
+  const decipher = createDecipheriv(ENCRYPTION.ALGORITHM, key, Buffer.from(ivStr, ENCRYPTION.ENCODING)) as DecipherGCM
+  decipher.setAuthTag(authTag)
+
+  // final() throws if the auth tag does not match
+  return decipher.update(cipherText, ENCRYPTION.ENCODING, 'utf8') + decipher.final('utf8')
 }
 
 // ---------------------------------------------------------------------------
@@ -136,5 +177,6 @@ export {
   encrypt,
   isHTTPSignatureDigestValid,
   isHTTPSignatureVerified,
+  isSecretEqual,
   parseHTTPSignature
 }

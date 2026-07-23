@@ -99,6 +99,7 @@ export class PeerTubePlayer {
 
   async load (loadOptions: PeerTubePlayerLoadOptions) {
     this.currentLoadOptions = loadOptions
+    this.videojsDecodeErrors = 0
 
     this.setPoster([])
 
@@ -155,9 +156,7 @@ export class PeerTubePlayer {
     if (!this.player) {
       const playerEl = this.options.playerElement()
 
-      // window.innerWidth returns sometimes 0 on firefox if we load the page in background
-      // So we fallback to screen.availWidth which seems more reliable, at least on desktop
-      const width = playerEl.clientWidth || window.innerWidth || screen.availWidth
+      const width = playerEl.clientWidth || this.getScreenWidth()
 
       this.options.playerElement().poster = findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || ''
       return
@@ -165,7 +164,7 @@ export class PeerTubePlayer {
 
     // Prefer using player poster API
     if (this.player) {
-      const width = this.player.el().clientWidth || window.innerWidth
+      const width = this.player.el().clientWidth || this.getScreenWidth()
 
       this.player.poster(findAppropriateThumbnail(thumbnails, width, '16:9')?.fileUrl || '')
     }
@@ -405,15 +404,17 @@ export class PeerTubePlayer {
   }
 
   private getVideojsOptions (): VideojsPlayerOptions {
-    const posterWidth = this.options.playerElement().clientWidth || window.innerWidth
-
-    const poster = findAppropriateThumbnail(this.currentLoadOptions.thumbnails, posterWidth, '16:9')?.fileUrl || ''
-
     const html5 = {
       preloadTextTracks: false,
       // Prevent a bug on iOS where the text tracks added by peertube plugin are removed on play
       // See https://github.com/Chocobozzz/PeerTube/issues/6351
       nativeTextTracks: false
+    }
+
+    const getPoster = () => {
+      const posterWidth = this.options.playerElement().clientWidth || this.getScreenWidth()
+
+      return findAppropriateThumbnail(this.currentLoadOptions.thumbnails, posterWidth, '16:9')?.fileUrl || ''
     }
 
     const plugins: VideoJSPluginOptions = {
@@ -440,7 +441,7 @@ export class PeerTubePlayer {
 
         videoRatio: () => this.currentLoadOptions.videoRatio,
 
-        poster: () => poster,
+        poster: () => getPoster(),
 
         playbackRate: this.options.playbackRate,
         autoPlayerRatio: this.options.autoPlayerRatio
@@ -478,7 +479,7 @@ export class PeerTubePlayer {
 
       autoplay: this.getAutoPlayValue(this.currentLoadOptions.autoplay),
 
-      poster,
+      poster: getPoster(),
       preload: 'none' as 'none',
 
       inactivityTimeout: this.options.inactivityTimeout,
@@ -599,5 +600,12 @@ export class PeerTubePlayer {
     }
 
     return { content }
+  }
+
+  // window.innerWidth returns sometimes 0 on Firefox if we load the page in background
+  // So we also test screen.availWidth which seems more reliable, at least on desktop
+  // Finally fallback to default embed width if both are 0 (can happen when the embed is hidden or collapsed)
+  private getScreenWidth () {
+    return window.innerWidth || screen.availWidth || 560
   }
 }

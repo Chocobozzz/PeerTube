@@ -1,5 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common'
-import { booleanAttribute, Component, OnInit, input } from '@angular/core'
+import { booleanAttribute, Component, OnInit, input, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 
@@ -7,6 +7,7 @@ import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/gl
   selector: 'my-link',
   styleUrls: [ './link.component.scss' ],
   templateUrl: './link.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ RouterLink, NgClass, NgTemplateOutlet, GlobalIconComponent ]
 })
 export class LinkComponent implements OnInit {

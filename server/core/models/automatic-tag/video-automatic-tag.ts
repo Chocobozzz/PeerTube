@@ -1,4 +1,5 @@
-import { Transaction } from 'sequelize'
+import { MVideoAutomaticTagWithTag } from '@server/types/models/automatic-tag/index.js'
+import { Op, Transaction } from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, PrimaryKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account.js'
 import { SequelizeModel } from '../shared/index.js'
@@ -11,7 +12,13 @@ import { AutomaticTagModel } from './automatic-tag.js'
  */
 
 @Table({
-  tableName: 'videoAutomaticTag'
+  tableName: 'videoAutomaticTag',
+  indexes: [
+    {
+      unique: true,
+      fields: [ 'videoId', 'accountId', 'automaticTagId' ]
+    }
+  ]
 })
 export class VideoAutomaticTagModel extends SequelizeModel<VideoAutomaticTagModel> {
   @CreatedAt
@@ -59,15 +66,26 @@ export class VideoAutomaticTagModel extends SequelizeModel<VideoAutomaticTagMode
   })
   declare Video: Awaited<VideoModel>
 
-  static deleteAllOfAccountAndVideo (options: {
-    accountId: number
+  static listByAccountIdsAndVideoId (options: {
     videoId: number
-    transaction: Transaction
+    accountIds: number[]
+    transaction?: Transaction
   }) {
-    const { accountId, videoId, transaction } = options
+    const { accountIds, videoId, transaction } = options
 
-    return this.destroy({
-      where: { accountId, videoId },
+    return this.findAll<MVideoAutomaticTagWithTag>({
+      where: {
+        videoId,
+        accountId: {
+          [Op.in]: accountIds
+        }
+      },
+      include: [
+        {
+          model: AutomaticTagModel,
+          required: true
+        }
+      ],
       transaction
     })
   }

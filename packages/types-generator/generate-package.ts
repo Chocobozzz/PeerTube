@@ -92,14 +92,14 @@ async function run () {
       return dependencies
     }, {})
 
-  const { description, licence, engines, author, repository } = mainPackageJson
+  const { description, license, engines, author, repository } = mainPackageJson
   const typesPackageJson = {
     name: '@peertube/peertube-types',
     description,
     version,
     private: false,
     main: '',
-    license: licence,
+    license,
     engines,
     author,
     repository,

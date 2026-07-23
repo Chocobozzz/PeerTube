@@ -88,7 +88,7 @@ async function run () {
       await createMoveJobIfNeeded({
         video: videoFull,
         targetStorage: FileStorage.OBJECT_STORAGE,
-        handler: () => moveToExternalStorageState({ video: videoFull, isNewVideo: false, transaction: undefined })
+        handler: () => moveToExternalStorageState({ video: videoFull, transaction: undefined })
       })
 
       continue
@@ -99,7 +99,7 @@ async function run () {
         video: videoFull,
         targetStorage: FileStorage.FILE_SYSTEM,
 
-        handler: () => moveToFileSystemState({ video: videoFull, isNewVideo: false, transaction: undefined })
+        handler: () => moveToFileSystemState({ video: videoFull, transaction: undefined })
       })
     }
   }

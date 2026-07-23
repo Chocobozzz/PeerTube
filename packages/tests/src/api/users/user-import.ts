@@ -209,6 +209,7 @@ function runTest (withObjectStorage: boolean) {
       expect(importedSecond.displayName).to.equal('noah display name')
       expect(importedSecond.description).to.equal('noah description')
       expect(importedSecond.support).to.equal('noah support')
+      expect(importedSecond.publicEmail).to.equal('noah@example.com')
 
       const playerSettingSecond = await remoteServer.playerSettings.getForChannel({
         channelHandle: 'noah_second_channel',
@@ -398,6 +399,9 @@ function runTest (withObjectStorage: boolean) {
         const publicVideo = data.find(v => v.name === 'noah public video')
         expect(publicVideo).to.exist
         expect(publicVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+
+        expect(publicVideo.originallyPublishedAt).to.exist
+        expect(new Date(publicVideo.originallyPublishedAt)).to.be.below(new Date(publicVideo.publishedAt))
 
         const playerSetting = await remoteServer.playerSettings.getForVideo({
           videoId: publicVideo.uuid,

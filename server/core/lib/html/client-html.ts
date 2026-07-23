@@ -2,10 +2,10 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import express from 'express'
 import { logger } from '../../helpers/logger.js'
 import { ACCEPT_HEADERS } from '../../initializers/constants.js'
-import { VideoHtml } from './shared/video-html.js'
-import { PlaylistHtml } from './shared/playlist-html.js'
 import { ActorHtml } from './shared/actor-html.js'
 import { PageHtml } from './shared/page-html.js'
+import { PlaylistHtml } from './shared/playlist-html.js'
+import { VideoHtml } from './shared/video-html.js'
 
 class ClientHtml {
   static invalidateCache () {

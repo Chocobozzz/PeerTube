@@ -1,4 +1,4 @@
-import { Component, inject, input, viewChild } from '@angular/core'
+import { Component, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier, RestPagination } from '@app/core'
 import { UserRight, WatchedWordsList } from '@peertube/peertube-models'
@@ -16,6 +16,8 @@ import { WatchedWordsListService } from './watched-words-list.service'
 @Component({
   selector: 'my-watched-words-list-admin-owner',
   templateUrl: './watched-words-list-admin-owner.component.html',
+  styleUrls: [ './watched-words-list-admin-owner.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     ActionDropdownComponent,
@@ -90,7 +92,7 @@ export class WatchedWordsListAdminOwnerComponent {
   }
 
   openCreateOrUpdateList (list?: WatchedWordsList) {
-    this.saveModal().show(list)
+    this.saveModal().show({ mode: this.mode(), list })
   }
 
   onListAddedOrUpdated () {

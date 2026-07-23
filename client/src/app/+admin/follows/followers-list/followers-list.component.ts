@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -19,6 +19,7 @@ type DataLoaderParameter = Parameters<FollowersListComponent['_dataLoader']>[0]
   selector: 'my-followers-list',
   templateUrl: './followers-list.component.html',
   styleUrls: [ './followers-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     GlobalIconComponent,
@@ -152,7 +153,7 @@ export class FollowersListComponent implements OnInit {
     return follow.follower.name + '@' + follow.follower.host
   }
 
-  private _dataLoader (options: DataLoaderOptionsBase & { state: FollowState }) {
+  private _dataLoader (options: DataLoaderOptionsBase & { state?: FollowState }) {
     return this.followService.listFollowers(options)
   }
 }

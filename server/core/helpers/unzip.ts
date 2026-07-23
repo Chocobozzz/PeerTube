@@ -1,6 +1,6 @@
 import { createWriteStream } from 'fs'
 import { ensureDir } from 'fs-extra/esm'
-import { dirname, join } from 'path'
+import { dirname, isAbsolute, join, relative } from 'path'
 import { pipeline } from 'stream'
 import * as yauzl from 'yauzl'
 import { logger, loggerTagsFactory } from './logger.js'
@@ -45,6 +45,11 @@ export async function unzip (options: {
         }
 
         const entryPath = join(destination, entry.fileName)
+        const rel = relative(destination, entryPath)
+        if (rel.startsWith('..') || isAbsolute(rel)) {
+          zipFile.close()
+          return rej(new Error('Unsafe zip entry'))
+        }
 
         try {
           if (entry.fileName.endsWith('/')) {

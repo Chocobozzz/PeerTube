@@ -1,6 +1,7 @@
 import { HttpStatusCode, VideoChannelSyncCreate } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
-import { toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
+import { toBooleanOrNull, toIntOrNull } from '@server/helpers/custom-validators/misc.js'
+import { isVideoChannelSyncPrivacyValid } from '@server/helpers/custom-validators/video-channel-syncs.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import * as express from 'express'
@@ -25,6 +26,11 @@ export const videoChannelSyncValidator = [
 
   body('videoChannelId')
     .isInt(),
+
+  body('videoPrivacy')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoChannelSyncPrivacyValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { getVideoQuotaDailyOptions, getVideoQuotaOptions } from '@app/+admin/shared/user-quota-options'
@@ -152,6 +152,12 @@ type Form = {
     }>
   }>
 
+  blocklist: FormGroup<{
+    publicLog: FormGroup<{
+      enabled: FormControl<boolean>
+    }>
+  }>
+
   followings: FormGroup<{
     instance: FormGroup<{
       autoFollowBack: FormGroup<{
@@ -224,6 +230,7 @@ type Form = {
   selector: 'my-admin-config-general',
   templateUrl: './admin-config-general.component.html',
   styleUrls: [ './admin-config-common.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,
@@ -403,6 +410,11 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
           manualApproval: null
         },
         channels: {
+          enabled: null
+        }
+      },
+      blocklist: {
+        publicLog: {
           enabled: null
         }
       },

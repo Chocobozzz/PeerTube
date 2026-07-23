@@ -111,6 +111,15 @@ export abstract class VideoManage {
 
   // ---------------------------------------------------------------------------
 
+  async getSupportValue () {
+    const supportInput = $('#support')
+    await supportInput.waitForDisplayed()
+
+    return supportInput.getValue()
+  }
+
+  // ---------------------------------------------------------------------------
+
   async refresh (videoName: string) {
     await browser.refresh()
     await browser.waitUntil(async () => {

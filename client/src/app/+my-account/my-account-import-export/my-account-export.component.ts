@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input, viewChild } from '@angular/core'
+import { Component, OnInit, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, ServerService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -15,6 +15,7 @@ import { UserImportExportService } from './user-import-export.service'
   selector: 'my-account-export',
   templateUrl: './my-account-export.component.html',
   styleUrls: [ './my-account-export.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, PeertubeCheckboxComponent, FormsModule, PTDatePipe, BytesPipe, AlertComponent ]
 })
 export class MyAccountExportComponent implements OnInit {

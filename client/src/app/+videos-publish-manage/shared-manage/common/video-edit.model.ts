@@ -14,6 +14,7 @@ import {
   VideoDetails,
   VideoEmbedPrivacy,
   VideoEmbedPrivacyPolicy,
+  VideoEmbedPrivacyPolicyType,
   VideoEmbedPrivacyUpdate,
   VideoImportCreate,
   VideoPrivacy,
@@ -81,13 +82,15 @@ type StudioForm = {
 type PlayerSettingsForm = PlayerVideoSettingsUpdate
 
 type EmbedPrivacyForm = {
-  videoPrivacyEmbedEnableAllowlist?: boolean
+  videoPrivacyEmbedPolicy?: VideoEmbedPrivacyPolicyType
   videoPrivacyEmbedAllowlistDomains?: string
 }
 
 // ---------------------------------------------------------------------------
 
 type LoadFromPublishOptions = Required<Pick<VideoCreate, 'channelId' | 'support'>> & Partial<Pick<VideoCreate, 'name'>> & {
+  channelName: string
+  channelDisplayName: string
   user: AuthUser
 }
 
@@ -127,6 +130,7 @@ type UpdateFromAPIOptions = {
     | 'downloadEnabled'
     | 'pluginData'
     | 'scheduledUpdate'
+    | 'publishedAt'
     | 'originallyPublishedAt'
     | 'duration'
     | 'likes'
@@ -179,6 +183,11 @@ export class VideoEdit {
 
   private videoImport: Pick<VideoImportCreate, 'magnetUri' | 'torrentfile' | 'targetUrl'>
 
+  private initialMetadata: {
+    accountName: string
+    channelId: number
+  }
+
   private metadata: Partial<{
     id: number
     uuid: string
@@ -192,12 +201,14 @@ export class VideoEdit {
     likes: number
     blacklisted: boolean
     blacklistedReason: string
-
-    ownerAccountId: number
-    ownerAccountDisplayName: string
+    publishedAt: Date
 
     live: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
     videoSource: VideoSource
+
+    accountName: string
+    channelName: string
+    channelDisplayName: string
   }> = {}
 
   private videoAttributes: {
@@ -208,6 +219,7 @@ export class VideoEdit {
     state: VideoStateType
     privacy: VideoEditPrivacyType
     isLive: boolean
+    publishedAt: Date
     aspectRatio: number
     duration: number
     views: number
@@ -217,8 +229,9 @@ export class VideoEdit {
     blacklisted: boolean
     blacklistedReason: string
 
-    ownerAccountId: number
-    ownerAccountDisplayName: string
+    accountName: string
+    channelName: string
+    channelDisplayName: string
 
     live?: Pick<LiveVideo, 'rtmpUrl' | 'rtmpsUrl' | 'streamKey'>
   }
@@ -262,6 +275,8 @@ export class VideoEdit {
     return videoEdit
   }
 
+  // False positive
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
   private loadFromImport (options: CreateFromImportOptions) {
     this.loadFromPublish(options, false)
 
@@ -283,6 +298,8 @@ export class VideoEdit {
     return videoEdit
   }
 
+  // False positive
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
   private loadFromLive (options: CreateFromLiveOptions) {
     this.loadFromPublish(options, true)
 
@@ -330,8 +347,14 @@ export class VideoEdit {
     this.metadata.downloads = 0
     this.metadata.likes = 0
 
-    this.metadata.ownerAccountDisplayName = options.user.account.displayName
-    this.metadata.ownerAccountId = options.user.account.id
+    this.metadata.accountName = options.user.account.name
+    this.metadata.channelName = options.channelName
+    this.metadata.channelDisplayName = options.channelDisplayName
+
+    this.initialMetadata = {
+      accountName: this.metadata.accountName,
+      channelId: this.common.channelId
+    }
 
     this.updateAfterChange()
   }
@@ -441,6 +464,7 @@ export class VideoEdit {
     // ---------------------------------------------------------------------------
 
     this.metadata.id = video.id
+    this.metadata.publishedAt = new Date(video.publishedAt.toString())
     this.metadata.uuid = video.uuid
     this.metadata.shortUUID = video.shortUUID
 
@@ -455,8 +479,14 @@ export class VideoEdit {
 
     this.metadata.isLive = video.isLive
 
-    this.metadata.ownerAccountDisplayName = video.channel.ownerAccount.displayName
-    this.metadata.ownerAccountId = video.channel.ownerAccount.id
+    this.metadata.accountName = video.channel.ownerAccount.name
+    this.metadata.channelName = video.channel.name
+    this.metadata.channelDisplayName = video.channel.displayName
+
+    this.initialMetadata = {
+      accountName: this.metadata.accountName,
+      channelId: this.common.channelId
+    }
   }
 
   loadPluginDataDefaults (pluginDefaults: Record<string, string | boolean>) {
@@ -623,6 +653,18 @@ export class VideoEdit {
         ? new Date(values.originallyPublishedAt).toISOString()
         : null
     }
+
+    this.updateAfterChange()
+  }
+
+  loadChannelChange (options: {
+    name: string
+    displayName: string
+    ownerAccountName: string
+  }) {
+    this.metadata.channelName = options.name
+    this.metadata.channelDisplayName = options.displayName
+    this.metadata.accountName = options.ownerAccountName
 
     this.updateAfterChange()
   }
@@ -919,24 +961,24 @@ export class VideoEdit {
 
   loadFromEmbedPrivacyForm (value: EmbedPrivacyForm) {
     this.embedPrivacy = {
-      policy: value.videoPrivacyEmbedEnableAllowlist
-        ? VideoEmbedPrivacyPolicy.ALLOWLIST
-        : VideoEmbedPrivacyPolicy.ALL_ALLOWED,
+      policy: value.videoPrivacyEmbedPolicy ?? VideoEmbedPrivacyPolicy.ALL_ALLOWED,
 
-      domains: splitAndGetNotEmpty(value.videoPrivacyEmbedAllowlistDomains)
+      domains: value.videoPrivacyEmbedPolicy === VideoEmbedPrivacyPolicy.ALLOWLIST
+        ? splitAndGetNotEmpty(value.videoPrivacyEmbedAllowlistDomains)
+        : []
     }
   }
 
   toEmbedPrivacyFormPatch (): Required<EmbedPrivacyForm> {
     if (!this.embedPrivacy) {
       return {
-        videoPrivacyEmbedEnableAllowlist: false,
+        videoPrivacyEmbedPolicy: VideoEmbedPrivacyPolicy.ALL_ALLOWED,
         videoPrivacyEmbedAllowlistDomains: ''
       }
     }
 
     return {
-      videoPrivacyEmbedEnableAllowlist: this.embedPrivacy.policy === VideoEmbedPrivacyPolicy.ALLOWLIST,
+      videoPrivacyEmbedPolicy: this.embedPrivacy.policy,
       videoPrivacyEmbedAllowlistDomains: this.embedPrivacy.domains.join('\n')
     }
   }
@@ -955,6 +997,10 @@ export class VideoEdit {
 
   getVideoAttributes () {
     return this.videoAttributes
+  }
+
+  getInitialAttributes () {
+    return this.initialMetadata
   }
 
   getChaptersEdit () {
@@ -1154,6 +1200,7 @@ export class VideoEdit {
       state: this.metadata.state,
       privacy: this.common.privacy,
       isLive: this.metadata.isLive,
+      publishedAt: this.metadata.publishedAt,
       aspectRatio: this.metadata.aspectRatio,
       views: this.metadata.views,
       downloads: this.metadata.downloads,
@@ -1162,8 +1209,9 @@ export class VideoEdit {
       blacklisted: this.metadata.blacklisted,
       blacklistedReason: this.metadata.blacklistedReason,
 
-      ownerAccountId: this.metadata.ownerAccountId,
-      ownerAccountDisplayName: this.metadata.ownerAccountDisplayName,
+      accountName: this.metadata.accountName,
+      channelName: this.metadata.channelName,
+      channelDisplayName: this.metadata.channelDisplayName,
 
       live: this.metadata.live
     }
@@ -1212,6 +1260,11 @@ export class VideoEdit {
 
   onSave () {
     this.isNewVideo = false
+
+    this.initialMetadata = {
+      accountName: this.metadata.accountName,
+      channelId: this.common.channelId
+    }
   }
 
   enableCheckPluginChanges () {

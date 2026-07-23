@@ -1,4 +1,4 @@
-import { Component, inject, input, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { Component, inject, input, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
@@ -37,6 +37,7 @@ type DataLoaderParameter = Parameters<AbuseListTableComponent['_dataLoader']>[0]
   selector: 'my-abuse-list-table',
   templateUrl: './abuse-list-table.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-list-table.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgbTooltip,
     ActionDropdownComponent,
@@ -338,8 +339,8 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
   private buildInternalActions (): DropdownActionForBuilder<ProcessedAbuse>[] {
     const messagesAction: DropdownActionForBuilder<ProcessedAbuse> = {
       label: this.isAdminView()
-        ? $localize`Messages with reporter`
-        : $localize`Messages with moderators`,
+        ? $localize`Messages with reporter...`
+        : $localize`Messages with moderators...`,
       handler: abuses => this.openAbuseMessagesModal(abuses[0]),
       isDisplayed: abuse => this.isLocalAbuse(abuse),
       enableBulk: false
@@ -376,7 +377,7 @@ export class AbuseListTableComponent implements OnInit, OnDestroy {
       messagesAction,
 
       {
-        label: () => $localize`Set internal note`,
+        label: () => $localize`Set internal note...`,
         handler: abuses => this.openModerationCommentModal(abuses),
         isDisplayed: () => this.isAdminView(),
         enableBulk: true

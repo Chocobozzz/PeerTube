@@ -26,7 +26,10 @@ describe('Official plugin auth-ldap', function () {
     server = await createSingleServer(1)
     await setAccessTokensToServers([ server ])
 
-    await server.plugins.install({ npmName: 'peertube-plugin-auth-ldap' })
+    await server.plugins.install({
+      npmName: 'peertube-plugin-auth-ldap',
+      pluginVersion: '0.1.0'
+    })
   })
 
   it('Should not login with without LDAP settings', async function () {

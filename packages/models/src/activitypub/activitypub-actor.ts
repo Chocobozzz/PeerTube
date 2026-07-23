@@ -21,6 +21,9 @@ export interface ActivityPubActor {
   attributedTo?: ActivityPubAttributedTo[]
 
   support?: string
+
+  email?: string
+
   publicKey: {
     id: string
     owner: string

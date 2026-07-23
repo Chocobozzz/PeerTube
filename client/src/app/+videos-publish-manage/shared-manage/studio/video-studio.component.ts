@@ -1,4 +1,4 @@
-import { Component, Injector, OnDestroy, OnInit, effect, inject, signal } from '@angular/core'
+import { Component, Injector, OnDestroy, OnInit, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core'
 import { FormField, applyEach, form, validate } from '@angular/forms/signals'
 import { ServerService } from '@app/core'
 import { FormErrorComponent } from '@app/shared/shared-forms/form-error.component'
@@ -34,6 +34,7 @@ type StudioModel = {
     '../common/video-manage-page-common.scss',
     './video-studio.component.scss'
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     TimestampInputComponent,
     ReactiveFileComponent,

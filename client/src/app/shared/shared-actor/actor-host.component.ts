@@ -1,4 +1,4 @@
-import { Component, OnChanges, inject, input, viewChild } from '@angular/core'
+import { Component, OnChanges, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
@@ -10,6 +10,7 @@ import { ButtonComponent } from '../shared-main/buttons/button.component'
   selector: 'my-actor-host',
   templateUrl: 'actor-host.component.html',
   styleUrls: [ 'actor-host.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgbDropdownModule, GlobalIconComponent, ButtonComponent, RouterLink ]
 })
 export class ActorHostComponent implements OnChanges {

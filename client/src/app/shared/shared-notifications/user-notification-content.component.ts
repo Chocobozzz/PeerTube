@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, input, output } from '@angular/core'
+import { Component, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
 import { AbuseState, ChangeOwnershipState, VideoChannelCollaboratorState, VideoState } from '@peertube/peertube-models'
@@ -17,6 +17,7 @@ import { UserNotification } from '../shared-main/users/user-notification.model'
   selector: 'my-user-notification-content',
   templateUrl: 'user-notification-content.component.html',
   styleUrls: [ 'user-notification-content.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     GlobalIconComponent,

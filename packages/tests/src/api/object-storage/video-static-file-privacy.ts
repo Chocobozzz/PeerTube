@@ -260,6 +260,16 @@ describe('Object storage for video static file privacy', function () {
       await makeRawRequest({ url: goodUrl, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
     })
 
+    it('Should refuse access to public video files with invalid filename', async function () {
+      const video = await server.videos.getWithToken({ id: privateVideoUUID })
+      const filename = basename(getHLS(video).files[0].fileUrl)
+      const uuid = privateVideoUUID
+
+      const url = `${server.url}/object-storage-proxy/streaming-playlists/hls/private/${uuid}/..%2f${uuid}%2f${filename}`
+
+      await makeRawRequest({ url: url, token: server.accessToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
     it('Should correctly check user token, video file token of private video', async function () {
       this.timeout(60000)
 

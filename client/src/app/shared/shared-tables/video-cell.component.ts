@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, inject, input, OnInit } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ScreenService } from '@app/core'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
@@ -13,6 +13,7 @@ import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.com
   styleUrls: [ 'video-cell.component.scss' ],
   templateUrl: 'video-cell.component.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     RouterLink,

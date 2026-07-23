@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { CanComponentDeactivate, Notifier } from '@app/core'
@@ -18,6 +18,7 @@ type Form = {
   selector: 'my-admin-config-homepage',
   templateUrl: './admin-config-homepage.component.html',
   styleUrls: [ './admin-config-common.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

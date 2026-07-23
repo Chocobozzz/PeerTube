@@ -30,6 +30,24 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
     for (const sync of channelSyncs) {
       const channel = await VideoChannelModel.loadAndPopulateAccount(sync.videoChannelId)
 
+      // A previous full run got interrupted: retry where we stopped to not miss videos
+      if (sync.fullSyncCutoffAt) {
+        logger.info(
+          `Channel sync ${sync.id} has an unfinished full sync (cutoff ${sync.fullSyncCutoffAt.toISOString()}), continuing it`,
+          lTags()
+        )
+
+        await synchronizeChannel({
+          channel,
+          externalChannelUrl: sync.externalChannelUrl,
+          videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.FULL_SYNC_VIDEOS_LIMIT,
+          channelSync: sync,
+          skipPublishedBeforeOrEq: sync.fullSyncCutoffAt
+        })
+
+        continue
+      }
+
       // We can't rely on publication date for playlist elements
       // For example, an old video may have been added to a playlist since the last sync
       let skipPublishedBeforeOrEq: Date

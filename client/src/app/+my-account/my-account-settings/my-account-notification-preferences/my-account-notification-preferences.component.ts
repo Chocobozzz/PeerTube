@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, model } from '@angular/core'
+import { Component, OnInit, inject, model, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, ServerService, User } from '@app/core'
 import { UserNotificationService } from '@app/shared/shared-main/users/user-notification.service'
@@ -11,6 +11,7 @@ import { InputSwitchComponent } from '../../../shared/shared-forms/input-switch.
   selector: 'my-account-notification-preferences',
   templateUrl: './my-account-notification-preferences.component.html',
   styleUrls: [ './my-account-notification-preferences.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InputSwitchComponent, FormsModule ]
 })
 export class MyAccountNotificationPreferencesComponent implements OnInit {
@@ -59,7 +60,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           'abuseNewMessage',
           'abuseAsModerator',
           'videoAutoBlacklistAsModerator',
-          'newUserRegistration'
+          'newUserRegistration',
+          'automaticBlocklist'
         ]
       },
 
@@ -81,7 +83,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,
       autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION,
       newPeerTubeVersion: UserRight.MANAGE_DEBUG,
-      newPluginVersion: UserRight.MANAGE_DEBUG
+      newPluginVersion: UserRight.MANAGE_DEBUG,
+      automaticBlocklist: UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS
     }
   }
 
@@ -107,7 +110,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newPeerTubeVersion: $localize`A new PeerTube version is available`,
       newPluginVersion: $localize`One of your plugin/theme has a new available version`,
       myVideoStudioEditionFinished: $localize`Processing of edits has finished`,
-      myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`
+      myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`,
+      automaticBlocklist: $localize`An account or server was automatically blocked/unblocked by a blocklist subscription`
     }
 
     this.loadNotificationSettings()

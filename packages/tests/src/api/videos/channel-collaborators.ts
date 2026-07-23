@@ -52,6 +52,12 @@ describe('Test channel collaborators', function () {
         expect(c).to.have.property('createdAt')
         expect(c).to.have.property('avatars')
         expect(c).to.have.property('ownerAccountId')
+        expect(c).to.have.property('ownerAccountName')
+      }
+
+      for (const c of me.videoChannelCollaborations) {
+        expect(c.ownerAccountId).to.be.above(0)
+        expect(c.ownerAccountName).to.not.be.empty
       }
     }
 

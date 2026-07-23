@@ -1,5 +1,13 @@
 import { arrayify } from '@peertube/peertube-core-utils'
-import { EmailPayload, MailAction, SendEmailDefaultOptions, To, UserExportState, UserRegistrationState } from '@peertube/peertube-models'
+import {
+  EmailPayload,
+  MailAction,
+  MailBaseLocals,
+  MailFrom,
+  MailTo,
+  UserExportState,
+  UserRegistrationState
+} from '@peertube/peertube-models'
 import { getFilenameWithoutExt, isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
 import { t } from '@server/helpers/i18n.js'
 import { toSafeMailHtml } from '@server/helpers/markdown.js'
@@ -8,7 +16,6 @@ import { UserModel } from '@server/models/user/user.js'
 import { readFileSync } from 'fs'
 import { readdir, readFile } from 'fs/promises'
 import handlebars, { HelperOptions } from 'handlebars'
-import merge from 'lodash-es/merge.js'
 import { createTransport, Transporter } from 'nodemailer'
 import { join } from 'path'
 import { bunyanLogger, logger } from '../helpers/logger.js'
@@ -19,6 +26,35 @@ import { loginUrl, myAccountImportExportUrl } from './client-urls.js'
 import { JobQueue } from './job-queue/index.js'
 import { Hooks } from './plugins/hooks.js'
 import { ServerConfigManager } from './server-config-manager.js'
+
+interface MailMessage {
+  to: string[] | string
+  from: MailFrom
+  subject: string
+  replyTo: string
+}
+
+interface SendMailOptions {
+  template: string
+
+  message: MailMessage
+
+  locals: MailBaseLocals & {
+    text: string
+    subject: string
+
+    WEBSERVER: typeof WEBSERVER
+    signature: string
+
+    instanceName: string
+    fg: string
+    bg: string
+    onPrimary: string
+    primary: string
+    language: string
+    logoUrl: string
+  }
+}
 
 export class Emailer {
   private static instance: Emailer
@@ -57,7 +93,11 @@ export class Emailer {
 
     try {
       const success = await this.transporter.verify()
-      if (success !== true) this.warnOnConnectionFailure()
+
+      if (success !== true) {
+        this.warnOnConnectionFailure()
+        return
+      }
 
       logger.info('Successfully connected to SMTP server.')
     } catch (err) {
@@ -195,6 +235,31 @@ export class Emailer {
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
+  addAccountLoginLockedEmailJob (options: {
+    username: string
+    to: string
+    language: string
+    ip: string
+  }) {
+    const { username, to, language, ip } = options
+
+    const emailPayload: EmailPayload = {
+      template: 'my-account-login-locked',
+      to: { email: to, language },
+      subject: t('Your account has been temporarily locked', language),
+      locals: {
+        username,
+        ip,
+        maxFailures: CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX,
+        lockoutMinutes: Math.round(CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.WINDOW_MS / 60000),
+
+        hideNotificationPreferencesLink: true
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
   addContactFormJob (options: {
     fromEmail: string
 
@@ -260,7 +325,7 @@ export class Emailer {
 
   // ---------------------------------------------------------------------------
 
-  async addUserExportCompletedOrErroredJob (userExport: Pick<MUserExport, 'userId' | 'state' | 'error'>, toOverride?: To) {
+  async addUserExportCompletedOrErroredJob (userExport: Pick<MUserExport, 'userId' | 'state' | 'error'>, toOverride?: MailTo) {
     let template: string
     let subject: string
 
@@ -289,7 +354,7 @@ export class Emailer {
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
-  async addUserImportErroredJob (userImport: Pick<MUserImport, 'userId' | 'error'>, toOverride?: To) {
+  async addUserImportErroredJob (userImport: Pick<MUserImport, 'userId' | 'error'>, toOverride?: MailTo) {
     const to = toOverride ?? await UserModel.loadForEmail(userImport.userId)
 
     const emailPayload: EmailPayload = {
@@ -307,7 +372,7 @@ export class Emailer {
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
-  async addUserImportSuccessJob (userImport: Pick<MUserImport, 'userId' | 'resultSummary'>, toOverride?: To) {
+  async addUserImportSuccessJob (userImport: Pick<MUserImport, 'userId' | 'resultSummary'>, toOverride?: MailTo) {
     const to = toOverride ?? await UserModel.loadForEmail(userImport.userId)
 
     const emailPayload: EmailPayload = {
@@ -374,6 +439,7 @@ export class Emailer {
       transport: this.transporter,
       subjectPrefix: this.buildSubjectPrefix()
     })
+
     const subject = await Hooks.wrapObject(
       options.subject,
       'filter:email.subject.result',
@@ -383,33 +449,34 @@ export class Emailer {
     const errors: Error[] = []
 
     for (const to of arrayify(options.to)) {
-      const baseOptions: SendEmailDefaultOptions = {
-        template: 'common',
+      const sendMailOptions: SendMailOptions = {
+        template: options.template ?? 'common',
         message: {
           to: to.email,
           from: options.from,
           subject,
           replyTo: options.replyTo
         },
-        locals: { // default variables available in all templates
+        locals: {
           WEBSERVER,
           instanceName: CONFIG.INSTANCE.NAME,
-          text: options.text,
           subject,
+          title: options.text,
+          action: options.action,
+          text: options.text, // If MailText
           signature: this.buildSignature(),
+
+          language: to.language,
+          logoUrl: ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 192),
 
           ...this.buildEmailTheme(),
 
-          language: to.language,
-          logoUrl: ServerConfigManager.Instance.getLogoUrl(await getServerActor(), 192)
+          ...(options.locals ?? {})
         }
       }
 
-      // overridden/new variables given for a specific template in the payload
-      const sendOptions = merge(baseOptions, options)
-
       try {
-        const res = await email.send(sendOptions)
+        const res = await email.send(sendMailOptions)
 
         logger.debug('Sent email.', { res })
       } catch (err) {

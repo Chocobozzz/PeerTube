@@ -1,11 +1,11 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input, output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject, input, output } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { ServerService } from '@app/core'
+import { REQUIRED_EMAIL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import {
   USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
-  USER_EMAIL_VALIDATOR,
   USER_USERNAME_VALIDATOR,
   getUserNewPasswordValidator
 } from '@app/shared/form-validators/user-validators'
@@ -20,6 +20,7 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-register-step-user',
   templateUrl: './register-step-user.component.html',
   styleUrls: [ './step.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, NgClass, InputTextComponent, AlertComponent ]
 })
 export class RegisterStepUserComponent extends FormReactive implements OnInit {
@@ -48,7 +49,7 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
       displayName: USER_DISPLAY_NAME_REQUIRED_VALIDATOR,
       username: USER_USERNAME_VALIDATOR,
       password: passwordValidator,
-      email: USER_EMAIL_VALIDATOR
+      email: REQUIRED_EMAIL_VALIDATOR
     })
 
     setTimeout(() => this.formBuilt.emit(this.form))

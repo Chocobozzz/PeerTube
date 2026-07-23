@@ -62,7 +62,7 @@ async function generateVideoWithFramerate (fps = 120, size = '1280x720') {
       ffmpeg()
         .outputOptions([ '-f rawvideo', '-video_size ' + size, '-i /dev/urandom' ])
         .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 5' ])
-        .outputOptions([ `-r ${fps}` ])
+        .outputOptions([ `-vf fps=${fps}` ])
         .output(tempFixturePath)
         .on('error', rej)
         .on('end', () => res(tempFixturePath))

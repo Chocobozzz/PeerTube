@@ -1,6 +1,82 @@
 # Changelog
 
+## v8.2.3
+
+### SECURITY
+
+ * Fix P2P segment validator to correctly reject invalid chunks
+ * Forbid embed for videos with embed restrictions if the referer header is not set
+ * Redact OAuth tokens in debug logs
+ * Add max depth when fixing ActivityPub object
+
+### Bug fixes
+
+ * Fix iOS mobile link for channels
+ * Fix input placeholder font size
+ * Correctly remove a private video linked to an abuse
+ * Do not validate search filters on "Enter" press in tag inputs
+ * Improve client notification if the backend returns a 502 HTTP error
+ * Fix various UI bugs/inconsistencies on RTL layout
+ * Fix watching password protected live
+ * Fix password submit button theme in embed
+ * Fix "Invalid width to find appropriate image" error in embed
+ * Fix responsive embed in custom markup (used to build the instance homepage)
+ * Prevent serving invalid segment JSON file for lives
+ * Fix broken control bar when hovering the progress bar on small players
+ * Correctly detect unlisted privacy from remote objects
+ * Abort request on invalid HTTP digest
+ * Correctly take into account `count: 0` in SQL requests
+ * Hide live scheduled date for past dates
+ * Fix infinite loop with S3 pagination
+ * Correctly dedupe refresh remote objects jobs
+ * Do not run scheduled jobs more than needed
+ * Consume all job attempts before throwing an error for move to object storage/file system job
+ * More robust live ending handler
+ * Fix TOCTOU race when starting a live session
+ * More precise live quota exceeded checker
+ * Fix live cleanup race issue
+ * Correctly cleanup tmp directory when handling runner job files
+ * Fix stalled request when rejecting auth for socket endpoints
+ * Fix non-settled promise in video download endpoint when the user closes the stream
+ * Correctly match plugin websocket routes
+ * Don't crash video import if youtube-dl doesn't return a date
+ * Correctly extract mentions followed by a punctuation/newline
+
+
+## v8.2.2
+
+We strongly recommend all administrators upgrade immediately.
+
+### SECURITY
+
+This release addresses vulnerabilities ranging from medium to high severity affecting PeerTube **<= 8.2.1**. Security hardening is also included.
+
+ * **critical** Ensure actor that signs the activity and the video are on the same host when receiving an `Update` activity [GHSA-g9p4-f7h8-hc86](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-g9p4-f7h8-hc86)
+ * **high** Check HLS filename when proxifying HLS files from object storage [GHSA-93rr-g3x2-ffv4](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-93rr-g3x2-ffv4)
+ * **medium** Ensure element belongs to the playlist on update/remove
+ * **medium** Do not leak video UUID on invalid video view
+ * **medium** Ensure user has rights to see private live specific metadata
+ * **hardening** Ensure ZIP entry filename is valid when extracting a ZIP export
+ * **hardening** Escape admin configuration when injecting it in HTML
+ * **hardening** Ensure version from plugin index is valid before injecting it in the CLI
+ * **hardening** Check caption VTT validity when adding a caption to a video
+ * **hardening** Invalidate all user tokens on password reset or password change
+
+### Bug fixes
+
+ * Accept short UUIDs for `loadByIdOrUUID` and `loadByIdOrUUIDWithFiles` plugin helpers
+ * Allow restricted embed to be displayed on the origin instance
+ * Fix invalid state error on failed move job
+ * Fix missing mutex lock when managing video captions
+ * Fix broken embed when the tab is loaded in the background on Firefox
+ * Fix menu collapse/extend icon on RTL layout
+
+
 ## v8.2.1
+
+### SECURITY
+
+ * Fix XSS in JSON-LD object injected by the server in video watch page [GHSA-jxwq-h9xv-hr28](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-jxwq-h9xv-hr28)
 
 ### Features
 
@@ -198,7 +274,7 @@ If you cannot upgrade to v8.1.8:
 
 ### IMPORTANT NOTES
 
- * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2
+ * Follow v8.1.0 IMPORTANT NOTES if you upgrade from PeerTube <= v8.0.2 [GHSA-pqr4-34h8-g39x](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-pqr4-34h8-g39x)
 
 ### SECURITY
 

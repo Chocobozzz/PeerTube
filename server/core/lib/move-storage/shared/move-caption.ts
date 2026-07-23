@@ -40,7 +40,7 @@ export async function moveCaptionToStorage (options: {
       return sequelizeTypescript.transaction(async t => {
         const videoFull = await VideoModel.loadFull(caption.Video.id, t)
 
-        await federateVideoIfNeeded(videoFull, false, t)
+        await federateVideoIfNeeded(videoFull, t)
       })
     })
   } finally {

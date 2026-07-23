@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, forwardRef, inject, input, OnChanges, OnInit, output } from '@angular/core'
+import { Component, forwardRef, inject, input, OnChanges, OnInit, output, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
@@ -16,6 +16,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, NgbTooltipModule, FormsModule, GlobalIconComponent ]
 })
 export class ReactiveFileComponent implements OnInit, OnChanges, ControlValueAccessor {

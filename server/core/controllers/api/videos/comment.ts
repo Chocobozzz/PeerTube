@@ -13,6 +13,7 @@ import { MCommentFormattable } from '@server/types/models/index.js'
 import express from 'express'
 import { CommentAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
+import { CONFIG } from '../../../initializers/config.js'
 import { Notifier } from '../../../lib/notifier/index.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import { approveComment, buildFormattedCommentTree, createLocalVideoComment, removeComment } from '../../../lib/video-comment.js'
@@ -20,6 +21,7 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
+  buildRateLimiter,
   ensureUserHasRight,
   optionalAuthenticate,
   paginationValidator,
@@ -42,6 +44,14 @@ import { VideoCommentModel } from '../../../models/video/video-comment.js'
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
 
+// Each comment fans out notifications and ActivityPub deliveries to followers
+// So also limit comment creation per user
+const createCommentRateLimiter = buildRateLimiter({
+  windowMs: CONFIG.RATES_LIMIT.CREATE_COMMENT.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.CREATE_COMMENT.MAX,
+  perUserKey: true
+})
+
 videoCommentRouter.get(
   '/:videoId/comment-threads',
   paginationValidator,
@@ -62,12 +72,14 @@ videoCommentRouter.get(
 videoCommentRouter.post(
   '/:videoId/comment-threads',
   authenticate,
+  createCommentRateLimiter,
   asyncMiddleware(addVideoCommentThreadValidator),
   asyncRetryTransactionMiddleware(addVideoCommentThread)
 )
 videoCommentRouter.post(
   '/:videoId/comments/:commentId',
   authenticate,
+  createCommentRateLimiter,
   asyncMiddleware(addVideoCommentReplyValidator),
   asyncRetryTransactionMiddleware(addVideoCommentReply)
 )

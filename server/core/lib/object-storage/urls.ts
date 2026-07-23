@@ -31,16 +31,16 @@ function buildBaseUrl (bucketInfo: BucketInfo) {
   const endpointParsed = getEndpointParsed()
   if (!endpointParsed) return ''
 
-  let baseUrlConfig = bucketInfo.BASE_URL
-  if (baseUrlConfig && !baseUrlConfig.endsWith('/')) baseUrlConfig += '/'
+  const baseUrlConfig = bucketInfo.BASE_URL
+  if (baseUrlConfig) {
+    if (!baseUrlConfig.endsWith('/')) return `${baseUrlConfig}/`
 
-  if (CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE) {
-    const baseUrl = baseUrlConfig || `${endpointParsed.protocol}//${endpointParsed.host}/`
-
-    return baseUrl + `${bucketInfo.BUCKET_NAME}/`
+    return baseUrlConfig
   }
 
-  if (baseUrlConfig) return baseUrlConfig
+  if (CONFIG.OBJECT_STORAGE.FORCE_PATH_STYLE) {
+    return `${endpointParsed.protocol}//${endpointParsed.host}/${bucketInfo.BUCKET_NAME}/`
+  }
 
   return `${endpointParsed.protocol}//${bucketInfo.BUCKET_NAME}.${endpointParsed.host}/`
 }

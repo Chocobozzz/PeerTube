@@ -1,4 +1,4 @@
-import { Component, OnInit, booleanAttribute, forwardRef, input, model } from '@angular/core'
+import { Component, OnInit, booleanAttribute, forwardRef, input, model, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { isMobile } from '@root-helpers/web-browser'
 import { AutoCompleteModule } from 'primeng/autocomplete'
@@ -13,6 +13,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ AutoCompleteModule, FormsModule ]
 })
 export class SelectTagsComponent implements OnInit, ControlValueAccessor {

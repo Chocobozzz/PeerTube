@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common'
-import { Component, inject, viewChild } from '@angular/core'
+import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, Notifier } from '@app/core'
 import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
 import { Account } from '@app/shared/shared-main/account/account.model'
@@ -18,6 +18,7 @@ import { AcceptChangeVideoOwnershipComponent } from './accept-change-video-owner
 @Component({
   selector: 'my-video-ownership-changes',
   templateUrl: './my-video-ownership-changes.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     NgClass,
@@ -66,7 +67,7 @@ export class MyVideoOwnershipChangesComponent {
       ],
       [
         {
-          label: () => $localize`Accept`,
+          label: () => $localize`Accept...`,
           handler: changeOwnership => this.openAcceptModal(changeOwnership),
           isDisplayed: changeOwnership => this.canAcceptOrReject(changeOwnership),
           enableBulk: true

@@ -26,6 +26,7 @@ export async function setVideoTags (options: {
 
 async function getVideoDuration (videoId: number | string) {
   const video = await VideoModel.load(videoId)
+  if (!video) throw new Error(`Video with id ${videoId} not found`)
 
   const duration = video.isLive
     ? undefined

@@ -6,8 +6,9 @@ import { UserAdminFlagType } from './user-flag.model.js'
 import { UserNotificationSetting } from './user-notification-setting.model.js'
 import { UserRoleType } from './user-role.js'
 
-type UserVideoChannel = Omit<VideoChannel, 'ownerAccount'> & {
+export type UserVideoChannel = Omit<VideoChannel, 'ownerAccount'> & {
   ownerAccountId: number
+  ownerAccountName: string
 }
 export interface User {
   id: number
@@ -16,7 +17,6 @@ export interface User {
   pendingEmail: string | null
 
   emailVerified: boolean
-  emailPublic: boolean
 
   nsfwPolicy: NSFWPolicyType
   nsfwFlagsDisplayed: number

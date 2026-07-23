@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   OnInit,
   booleanAttribute,
   inject,
@@ -26,6 +27,7 @@ import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.com
 import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
 import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 export type MiniatureDisplayOptions = {
   date?: boolean
@@ -57,6 +59,7 @@ export type MiniatureDisplayOptions = {
   ]
 })
 export class VideoMiniatureComponent implements OnInit {
+  private destroyRef = inject(DestroyRef)
   private screenService = inject(ScreenService)
   private serverService = inject(ServerService)
   private authService = inject(AuthService)
@@ -275,23 +278,27 @@ export class VideoMiniatureComponent implements OnInit {
 
     this.videoPlaylistService.addVideoInPlaylist(this.watchLaterPlaylist.id, body)
       .subscribe(
-        res => {
+        ([ res ]) => {
           this.watchLaterPlaylist.playlistElementId = res.videoPlaylistElement.id
         }
       )
   }
 
   removeFromWatchLater () {
-    this.videoPlaylistService.removeVideoFromPlaylist(
-      this.watchLaterPlaylist.id,
-      this.watchLaterPlaylist.playlistElementId,
-      this.video().id
-    )
-      .subscribe(
-        _ => {
-          // empty
+    this.videoPlaylistService.removeElementsFromPlaylist({
+      playlistId: this.watchLaterPlaylist.id,
+
+      elements: [
+        {
+          playlistElementId: this.watchLaterPlaylist.playlistElementId,
+          videoId: this.video().id
         }
-      )
+      ]
+    }).subscribe(
+      _ => {
+        // empty
+      }
+    )
   }
 
   isWatchLaterPlaylistDisplayed () {
@@ -333,8 +340,11 @@ export class VideoMiniatureComponent implements OnInit {
     if (this.screenService.isInTouchScreen() || !this.displayVideoActions() || !this.isUserLoggedIn()) return
 
     this.authService.userInformationLoaded
-      .pipe(first(), switchMap(() => this.videoPlaylistService.listenToVideoPlaylistChange(this.video().id)))
-      .subscribe(existResult => {
+      .pipe(
+        first(),
+        switchMap(() => this.videoPlaylistService.listenToVideoPlaylistChange(this.video().id)),
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe(existResult => {
         const watchLaterPlaylist = this.authService.getUser().specialPlaylists.find(p => p.type === VideoPlaylistType.WATCH_LATER)
         const existsInWatchLater = existResult.find(r => r.playlistId === watchLaterPlaylist.id)
         this.inWatchLaterPlaylist = false

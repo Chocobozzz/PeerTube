@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, input } from '@angular/core'
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { DomSanitizer } from '@angular/platform-browser'
 import { RouterModule } from '@angular/router'
@@ -29,6 +29,7 @@ export type LateralMenuConfig = {
   selector: 'my-lateral-menu',
   styleUrls: [ './lateral-menu.component.scss' ],
   templateUrl: './lateral-menu.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     RouterModule,

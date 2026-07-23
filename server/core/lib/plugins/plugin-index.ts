@@ -12,6 +12,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { PEERTUBE_VERSION } from '@server/initializers/constants.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import { PluginManager } from './plugin-manager.js'
+import { isStableOrUnstableVersionValid } from '@server/helpers/custom-validators/misc.js'
 
 export async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) {
   const { start = 0, count = 20, search, sort = 'npmName', pluginType } = options
@@ -70,5 +71,12 @@ export async function getLatestPluginVersion (npmName: string) {
     return undefined
   }
 
-  return results[0].latestVersion
+  const latestVersion = results[0].latestVersion
+
+  if (!isStableOrUnstableVersionValid(latestVersion)) {
+    logger.warn(`Cannot get latest supported plugin version of ${npmName}`, { result: results[0] })
+    return undefined
+  }
+
+  return latestVersion
 }

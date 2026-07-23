@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_form-mixins' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
 
 label {
   display: block;
@@ -9,8 +9,8 @@ label {
   @include font-size(18px);
 }
 
-input[type=text],
-input[type=email] {
+input[type="text"],
+input[type="email"] {
   @include peertube-input-text(100%);
 }
 
@@ -47,6 +47,7 @@ my-alert {
 
 .external-login-blocks {
   min-width: 200px;
+  margin-top: 1rem;
   text-align: center;
 
   .external-login-block {
@@ -75,7 +76,7 @@ my-alert {
   @include margin-left(10px);
   @include margin-right(10px);
   @include margin-bottom(2.5rem);
-  @include rfs (22rem, min-width);
+  @include rfs(22rem, min-width);
 }
 
 .terms-anchor {

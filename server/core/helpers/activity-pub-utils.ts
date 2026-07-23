@@ -64,7 +64,7 @@ export function getAPPublicValue () {
 export function hasAPPublic (collection: string[] | string) {
   const publicValue = getAPPublicValue()
 
-  return arrayify(collection).some(f => f === 'as:Public' || publicValue)
+  return arrayify(collection).some(f => f === 'as:Public' || f === publicValue)
 }
 
 // ---------------------------------------------------------------------------
@@ -259,7 +259,9 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
 
     toot: 'http://joinmastodon.org/ns#',
     indexable: 'toot:indexable',
-    discoverable: 'toot:discoverable'
+    discoverable: 'toot:discoverable',
+
+    email: 'sc:email'
   }),
 
   WatchAction: buildContext({

@@ -3,7 +3,7 @@ import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
+import { go, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Player settings', () => {
   let videoPublishPage: VideoPublishPage
@@ -15,9 +15,9 @@ describe('Player settings', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     videoPublishPage = new VideoPublishPage()
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
+    videoWatchPage = new VideoWatchPage(isSafari())
     myAccountPage = new MyAccountPage()
     anonymousSettingsPage = new AnonymousSettingsPage()
 

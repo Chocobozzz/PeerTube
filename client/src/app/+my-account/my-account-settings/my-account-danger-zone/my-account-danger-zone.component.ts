@@ -1,9 +1,10 @@
-import { Component, inject, input } from '@angular/core'
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, RedirectService, User, UserService } from '@app/core'
 
 @Component({
   selector: 'my-account-danger-zone',
   templateUrl: './my-account-danger-zone.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class MyAccountDangerZoneComponent {

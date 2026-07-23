@@ -63,6 +63,21 @@
         <div>{{ job.finishedOn }}</div>
       </td>
     }
+
+    @if (table.isColumnDisplayed('actions')) {
+      <td class="job-actions">
+        @if (job.canCancel) {
+          <my-button
+            type="button"
+            theme="secondary"
+            i18n-label
+            label="Cancel"
+            i18n-title title="Cancel this job and abort its underlying process"
+            (click)="cancelJob(job)"
+          ></my-button>
+        }
+      </td>
+    }
   </ng-template>
 
   <ng-template #expandedRow let-job>

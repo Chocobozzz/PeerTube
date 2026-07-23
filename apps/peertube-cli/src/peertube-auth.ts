@@ -143,9 +143,17 @@ async function delInstance (url: string) {
   const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
 
   const index = settings.remotes.indexOf(url)
-  settings.remotes.splice(index)
+  if (index === -1) return
 
-  if (settings.default === index) settings.default = -1
+  const defaultUrl = settings.default !== -1
+    ? settings.remotes[settings.default]
+    : undefined
+
+  settings.remotes.splice(index, 1)
+
+  settings.default = defaultUrl !== undefined
+    ? settings.remotes.indexOf(defaultUrl)
+    : -1
 
   await writeSettings(settings)
 
@@ -161,8 +169,10 @@ async function setInstance (url: string, username: string, password: string, isD
     settings.remotes.push(url)
   }
 
-  if (isDefault || settings.remotes.length === 1) {
-    settings.default = settings.remotes.length - 1
+  if (isDefault) {
+    settings.default = settings.remotes.indexOf(url)
+  } else if (settings.remotes.length === 1) {
+    settings.default = 0
   }
 
   await writeSettings(settings)

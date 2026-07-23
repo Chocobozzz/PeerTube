@@ -4,7 +4,7 @@ import { PlayerPage } from '../po/player.po'
 import { SignupPage } from '../po/signup.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
+import { go, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Password protected videos', () => {
   let videoPublishPage: VideoPublishPage
@@ -43,9 +43,9 @@ describe('Password protected videos', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     videoPublishPage = new VideoPublishPage()
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
+    videoWatchPage = new VideoWatchPage(isSafari())
     signupPage = new SignupPage()
     playerPage = new PlayerPage()
     myAccountPage = new MyAccountPage()

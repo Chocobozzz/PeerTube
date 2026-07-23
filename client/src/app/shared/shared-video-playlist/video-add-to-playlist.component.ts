@@ -13,26 +13,16 @@ import {
 } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
-import { FormReactive } from '@app/shared/shared-forms/form-reactive'
-import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { secondsToTime } from '@peertube/peertube-core-utils'
-import {
-  CachedVideoExistInPlaylist,
-  Video,
-  VideoChannelSummary,
-  VideoPlaylistCreate,
-  VideoPlaylistElementCreate,
-  VideoPlaylistElementUpdate,
-  VideoPlaylistPrivacy
-} from '@peertube/peertube-models'
+import { CachedVideoExistInPlaylist, Video, VideoChannelSummary, VideoPlaylistElementCreate } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subject, Subscription } from 'rxjs'
 import { debounceTime, filter } from 'rxjs/operators'
-import { VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR } from '../form-validators/video-playlist-validators'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { TimestampInputComponent } from '../shared-forms/timestamp-input.component'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
+import { PlaylistCreateBlockComponent } from './shared/playlist-create-block.component'
 import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
 
 const debugLogger = debug('peertube:playlists:VideoAddToPlaylistComponent')
@@ -65,11 +55,11 @@ type PlaylistSummary = {
     GlobalIconComponent,
     TimestampInputComponent,
     ReactiveFormsModule,
-    CollaboratorStateComponent
+    CollaboratorStateComponent,
+    PlaylistCreateBlockComponent
   ]
 })
-export class VideoAddToPlaylistComponent extends FormReactive implements OnInit, OnChanges, OnDestroy, DisableForReuseHook {
-  protected formReactiveService = inject(FormReactiveService)
+export class VideoAddToPlaylistComponent implements OnInit, OnChanges, OnDestroy, DisableForReuseHook {
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
   private videoPlaylistService = inject(VideoPlaylistService)
@@ -100,10 +90,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   }
 
   ngOnInit () {
-    this.buildForm({
-      displayName: VIDEO_PLAYLIST_DISPLAY_NAME_VALIDATOR
-    })
-
     this.listenToAccountPlaylistsChangeSub = this.videoPlaylistService.listenToMyAccountPlaylistsChange()
       .subscribe(result => {
         this.playlistsData = result.data
@@ -166,6 +152,12 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.isNewPlaylistBlockOpened = true
   }
 
+  onPlaylistCreated () {
+    this.isNewPlaylistBlockOpened = false
+
+    this.cd.markForCheck()
+  }
+
   toggleMainPlaylist (e: Event, playlist: PlaylistSummary) {
     e.preventDefault()
 
@@ -211,26 +203,6 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     }
 
     this.cd.markForCheck()
-  }
-
-  createPlaylist () {
-    const displayName = this.form.value['displayName']
-
-    const videoPlaylistCreate: VideoPlaylistCreate = {
-      displayName,
-      privacy: VideoPlaylistPrivacy.PRIVATE
-    }
-
-    this.videoPlaylistService.createVideoPlaylist(videoPlaylistCreate)
-      .subscribe({
-        next: () => {
-          this.isNewPlaylistBlockOpened = false
-
-          this.cd.markForCheck()
-        },
-
-        error: err => this.notifier.handleError(err)
-      })
   }
 
   onVideoPlaylistSearchChanged () {
@@ -287,23 +259,28 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   onElementTimestampUpdate (playlist: PlaylistSummary, element: PlaylistElement) {
     if (!element.playlistElementId || element.enabled === false) return
 
-    const body: VideoPlaylistElementUpdate = {
-      startTimestamp: element.startTimestamp,
-      stopTimestamp: element.stopTimestamp
-    }
+    this.videoPlaylistService.updateVideoOfPlaylist({
+      playlistId: playlist.id,
 
-    this.videoPlaylistService.updateVideoOfPlaylist(playlist.id, element.playlistElementId, body, this.video().id)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Timestamps updated`)
+      elements: [
+        {
+          playlistElementId: element.playlistElementId,
+          videoId: this.video().id,
+          startTimestamp: element.startTimestamp,
+          stopTimestamp: element.stopTimestamp
+        }
+      ]
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`Timestamps updated`)
 
-          this.videoExistsInPlaylistChange.emit()
-        },
+        this.videoExistsInPlaylistChange.emit()
+      },
 
-        error: err => this.notifier.handleError(err),
+      error: err => this.notifier.handleError(err),
 
-        complete: () => this.cd.markForCheck()
-      })
+      complete: () => this.cd.markForCheck()
+    })
   }
 
   private isOptionalRowDisplayed (playlist: PlaylistSummary) {
@@ -326,18 +303,23 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   }
 
   private removeVideoFromPlaylist (playlist: PlaylistSummary, elementId: number) {
-    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, elementId, this.video().id)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`Video removed from ${playlist.displayName}`)
+    this.videoPlaylistService.removeElementsFromPlaylist({
+      playlistId: playlist.id,
+      elements: [ {
+        playlistElementId: elementId,
+        videoId: this.video().id
+      } ]
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`Video removed from ${playlist.displayName}`)
 
-          this.videoExistsInPlaylistChange.emit()
-        },
+        this.videoExistsInPlaylistChange.emit()
+      },
 
-        error: err => this.notifier.handleError(err),
+      error: err => this.notifier.handleError(err),
 
-        complete: () => this.cd.markForCheck()
-      })
+      complete: () => this.cd.markForCheck()
+    })
   }
 
   private listenToVideoPlaylistChange () {
@@ -401,7 +383,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
     this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
       .subscribe({
-        next: res => {
+        next: ([ res ]) => {
           const message = body.startTimestamp || body.stopTimestamp
             ? $localize`Video added in ${playlist.displayName} at timestamps ${this.formatTimestamp(element)}`
             : $localize`Video added in ${playlist.displayName}`

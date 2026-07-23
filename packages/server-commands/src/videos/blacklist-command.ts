@@ -2,45 +2,52 @@ import { HttpStatusCode, ResultList, VideoBlacklist, VideoBlacklistType_Type } f
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class BlacklistCommand extends AbstractCommand {
-
-  add (options: OverrideCommandOptions & {
-    videoId: number | string
-    reason?: string
-    unfederate?: boolean
-  }) {
-    const { videoId, reason, unfederate } = options
+  add (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      reason?: string
+      unfederate?: boolean
+      internalNote?: string
+    }
+  ) {
+    const { videoId, reason, unfederate, internalNote } = options
     const path = '/api/v1/videos/' + videoId + '/blacklist'
 
     return this.postBodyRequest({
       ...options,
 
       path,
-      fields: { reason, unfederate },
+      fields: { reason, unfederate, internalNote },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 
-  update (options: OverrideCommandOptions & {
-    videoId: number | string
-    reason?: string
-  }) {
-    const { videoId, reason } = options
+  update (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      reason?: string
+      internalNote?: string
+    }
+  ) {
+    const { videoId, reason, internalNote } = options
     const path = '/api/v1/videos/' + videoId + '/blacklist'
 
     return this.putBodyRequest({
       ...options,
 
       path,
-      fields: { reason },
+      fields: { reason, internalNote },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 
-  remove (options: OverrideCommandOptions & {
-    videoId: number | string
-  }) {
+  remove (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
     const { videoId } = options
     const path = '/api/v1/videos/' + videoId + '/blacklist'
 

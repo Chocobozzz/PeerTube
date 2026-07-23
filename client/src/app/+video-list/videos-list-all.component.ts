@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ComponentPaginationLight, DisableForReuseHook, MetaService, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs'
 
 @Component({
   templateUrl: './videos-list-all.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     VideosListComponent
   ]

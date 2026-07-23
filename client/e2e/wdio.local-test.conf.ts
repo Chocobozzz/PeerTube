@@ -14,6 +14,10 @@ process.env.MOZ_HEADLESS_HEIGHT = '1024'
 
 const windowSizeArg = `--window-size=${process.env.MOZ_HEADLESS_WIDTH},${process.env.MOZ_HEADLESS_HEIGHT}`
 
+const moreArgs = process.env.WDIO_HEADLESS === 'false'
+  ? []
+  : [ '--headless', windowSizeArg ]
+
 module.exports = {
   config: {
     ...mainConfig,
@@ -28,7 +32,7 @@ module.exports = {
         'browserName': 'chrome',
         'acceptInsecureCerts': true,
         'goog:chromeOptions': {
-          args: [ '--disable-gpu', windowSizeArg ],
+          args: [ '--disable-gpu', windowSizeArg, ...moreArgs ],
           prefs
         }
       }
@@ -36,7 +40,7 @@ module.exports = {
       //   'browserName': 'firefox',
       //   'moz:firefoxOptions': {
       //     binary: '/usr/bin/firefox-developer-edition',
-      //     args: [ '--headless', windowSizeArg ],
+      //     args: [ '--headless', windowSizeArg, ...moreArgs ],
 
       //     prefs
       //   }

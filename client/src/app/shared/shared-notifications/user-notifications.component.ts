@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, inject, input, OnInit, output } from '@angular/core'
+import { booleanAttribute, Component, inject, input, OnInit, output, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, hasMoreItems, Notifier } from '@app/core'
 import { Subject } from 'rxjs'
@@ -13,6 +13,7 @@ import { UserNotificationContentComponent } from './user-notification-content.co
   selector: 'my-user-notifications',
   templateUrl: 'user-notifications.component.html',
   styleUrls: [ 'user-notifications.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     RouterLink,

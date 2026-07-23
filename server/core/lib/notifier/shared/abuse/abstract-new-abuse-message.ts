@@ -1,4 +1,4 @@
-import { To, UserNotificationType } from '@peertube/peertube-models'
+import { MailTo, UserNotificationType } from '@peertube/peertube-models'
 import { t } from '@server/helpers/i18n.js'
 import { getAdminAbuseUrl, getUserAbuseUrl } from '@server/lib/client-urls.js'
 import { AccountModel } from '@server/models/account/account.js'
@@ -39,7 +39,7 @@ export abstract class AbstractNewAbuseMessage extends AbstractNotification<NewAb
     return notification
   }
 
-  protected createEmailFor (to: To, target: 'moderator' | 'reporter') {
+  protected createEmailFor (to: MailTo, target: 'moderator' | 'reporter') {
     const text = t('New message on report #{id}', to.language, { id: this.abuse.id })
     const abuseUrl = target === 'moderator'
       ? getAdminAbuseUrl(this.abuse)

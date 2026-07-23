@@ -1,11 +1,18 @@
 import { Routes } from '@angular/router'
 import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
-import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
+import {
+  InstanceAccountBlocklistComponent,
+  InstanceBlocklistSubscriptionsComponent,
+  InstanceServerBlocklistComponent
+} from '@app/+admin/moderation/instance-blocklist'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@peertube/peertube-models'
 import { RegistrationListComponent } from './registration-list'
 import { WatchedWordsListAdminComponent } from './watched-words-list/watched-words-list-admin.component'
+import { WatchedWordsSubscriptionsComponent } from './watched-words-subscriptions/watched-words-subscriptions.component'
+import { AutomaticTagPoliciesAdminComponent } from './automatic-tag-policies/automatic-tag-policies-admin.component'
+import { automaticTagPoliciesAdminResolver } from './automatic-tag-policies/automatic-tag-policies-admin.resolver'
 
 export const moderationRoutes: Routes = [
   {
@@ -54,11 +61,6 @@ export const moderationRoutes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'video-blacklist',
-        redirectTo: 'video-blocks/list',
-        pathMatch: 'full'
-      },
-      {
         path: 'video-blocks/list',
         component: VideoBlockListComponent,
         canActivate: [ UserRightGuard ],
@@ -99,7 +101,7 @@ export const moderationRoutes: Routes = [
         component: InstanceAccountBlocklistComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_ACCOUNTS_BLOCKLIST,
+          userRight: UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST,
           meta: {
             title: $localize`Muted accounts`
           }
@@ -110,9 +112,21 @@ export const moderationRoutes: Routes = [
         component: InstanceServerBlocklistComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_SERVERS_BLOCKLIST,
+          userRight: UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST,
           meta: {
             title: $localize`Muted platforms`
+          }
+        }
+      },
+
+      {
+        path: 'blocklist/subscriptions',
+        component: InstanceBlocklistSubscriptionsComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS,
+          meta: {
+            title: $localize`Mute list subscriptions`
           }
         }
       },
@@ -125,6 +139,33 @@ export const moderationRoutes: Routes = [
           userRight: UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
           meta: {
             title: $localize`Watched words`
+          }
+        }
+      },
+
+      {
+        path: 'watched-words/subscriptions',
+        component: WatchedWordsSubscriptionsComponent,
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
+          meta: {
+            title: $localize`Watched words subscriptions`
+          }
+        }
+      },
+
+      {
+        path: 'watched-words/automatic-tag-policies',
+        component: AutomaticTagPoliciesAdminComponent,
+        resolve: {
+          tags: automaticTagPoliciesAdminResolver
+        },
+        canActivate: [ UserRightGuard ],
+        data: {
+          userRight: UserRight.MANAGE_INSTANCE_AUTO_TAGS,
+          meta: {
+            title: $localize`Auto tag policies`
           }
         }
       }

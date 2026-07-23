@@ -1,0 +1,20 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+my-global-icon {
+  position: relative;
+  left: -1px;
+  top: -1px;
+  width: 21px;
+  height: 21px;
+  line-height: 21px;
+  display: inline-block;
+  color: pvar(--fg-400);
+
+  @include margin-right(13px);
+}
+
+input[type="text"] {
+  @include peertube-input-text(100%);
+}

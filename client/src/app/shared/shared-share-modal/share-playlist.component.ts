@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core'
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { RouterLink } from '@angular/router'
@@ -20,6 +20,7 @@ import { Customizations, TabId } from './video-share.model'
   selector: 'my-share-playlist',
   templateUrl: './share-playlist.component.html',
   styleUrls: [ './share-common.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     NgbNav,

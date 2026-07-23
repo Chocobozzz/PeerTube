@@ -1,0 +1,112 @@
+<h2 class="form-title">
+  <my-global-icon iconName="syndication"></my-global-icon>
+
+  <ng-container i18n>Podcast</ng-container>
+</h2>
+
+<form role="form">
+  @if (mode === 'update') {
+    <div class="pt-two-cols">
+      <div class="title-col">
+        <h3 i18n>PODCAST APPLICATIONS</h3>
+      </div>
+
+      <div class="content-col">
+        <div class="form-group">
+          <label for="podcast-feed-audio" i18n>Podcast feed - Audio & Video</label>
+
+          <div class="form-group-description" i18n>
+            This feed contains both audio and video enclosures so podcast clients can choose their preferred format
+          </div>
+
+          <my-input-text
+            inputId="podcast-feed-audio"
+            [show]="true"
+            [readonly]="true"
+            [withCopy]="true"
+            [withToggle]="false"
+            [value]="podcastFeedUrl"
+            i18n-copiedNotification
+            copiedNotification="Podcast feed URL copied to clipboard!"
+          ></my-input-text>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-two-cols">
+      <div class="title-col">
+        <h3 i18n>APPLE PODCAST</h3>
+      </div>
+
+      <div class="content-col">
+
+        @if (!formModel().publicEmail) {
+          <my-alert type="warning" i18n>
+            Apple Podcast requires a public email to be set in order to submit your podcast.
+          </my-alert>
+        }
+
+        @if (hasAudioTranscodingEnabled()) {
+          <div class="form-group">
+            <label for="podcast-feed-audio" i18n>Apple Podcast - Audio</label>
+
+            <div class="form-group-description" i18n>
+              Use this URL in Apple Podcast if you only want to broadcast only the audio from your videos
+            </div>
+
+            <my-input-text
+              inputId="podcast-feed-audio"
+              [show]="true"
+              [readonly]="true"
+              [withCopy]="true"
+              [withToggle]="false"
+              [value]="audioFeedUrl"
+              i18n-copiedNotification
+              copiedNotification="Apple Podcast feed URL for audio copied to clipboard!"
+            ></my-input-text>
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="podcast-feed-video" i18n>Apple Podcast - Video</label>
+
+          <div class="form-group-description" i18n>
+            Use this URL in Apple Podcast if you only want to broadcast your videos
+          </div>
+
+          <my-input-text
+            inputId="podcast-feed-video"
+            [show]="true"
+            [readonly]="true"
+            [withCopy]="true"
+            [withToggle]="false"
+            [value]="videoFeedUrl"
+            i18n-copiedNotification
+            copiedNotification="Apple Podcast feed URL for videos copied to clipboard!"
+          ></my-input-text>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="pt-two-cols">
+    <div class="title-col">
+      <h3 i18n>PODCAST SETTINGS</h3>
+    </div>
+
+    <div class="content-col">
+      <div class="form-group">
+        <label i18n for="publicEmail">Public email</label>
+
+        <div i18n class="form-group-description">
+          This email will be publicly exposed in podcast RSS feeds, allowing you to prove ownership of your feed. This is required to submit your podcast to
+          Apple Podcast
+        </div>
+
+        <input type="email" id="publicEmail" class="form-control" [formField]="form.publicEmail" [myFormInputError]="form.publicEmail()">
+
+        <my-form-error [field]="form.publicEmail()"></my-form-error>
+      </div>
+    </div>
+  </div>
+</form>

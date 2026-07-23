@@ -171,6 +171,7 @@ describe('Test video privacy', function () {
           const video = await server.videos.get({ id })
 
           expect(video.name).to.equal('unlisted video')
+          expect(video.privacy.id).to.equal(VideoPrivacy.UNLISTED)
         }
       }
     })

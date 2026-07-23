@@ -126,15 +126,6 @@ export class ModelBuilder<T extends SequelizeModel> {
       throw new Error(`Cannot find model builder for ${tableName}. You may have to add an alias in ModelBuilder class`)
     }
 
-    if (!Model) {
-      logger.error(
-        'Cannot build model %s that does not exist',
-        this.buildSequelizeModelName(tableName),
-        { existing: this.sequelize.modelManager.all.map(m => m.name) }
-      )
-      return { created: false, model: null }
-    }
-
     const model = Model.build(json, { raw: true, isNewRecord: false })
 
     this.modelRegistry.set(registryKey, model)

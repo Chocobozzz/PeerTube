@@ -87,6 +87,7 @@ describe('Test watched words', function () {
         expect(data[0].updatedAt).to.exist
         expect(data[0].listName).to.equal('list one')
         expect(data[0].words).to.deep.equal([ 'word4', 'word5' ])
+        expect(data[0].subscriptionUrl).to.be.null
       }
 
       // With sort, start, count
@@ -102,9 +103,11 @@ describe('Test watched words', function () {
 
         expect(data[0].listName).to.equal('list user one')
         expect(data[0].words).to.deep.equal([ 'word1' ])
+        expect(data[0].subscriptionUrl).to.be.null
 
         expect(data[1].listName).to.equal('list user two')
         expect(data[1].words).to.deep.equal([ 'word2', 'word3' ])
+        expect(data[1].subscriptionUrl).to.be.null
       }
 
       {
@@ -157,6 +160,7 @@ describe('Test watched words', function () {
 
       expect(list.listName).to.equal('updated-list')
       expect(list.words).to.deep.equal([ 'updated-word1', 'updated-word2' ])
+      expect(list.subscriptionUrl).to.be.null
     })
 
     it('Should delete watched words lists', async function () {

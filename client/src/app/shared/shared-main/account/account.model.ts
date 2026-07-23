@@ -12,8 +12,11 @@ export class Account extends Actor implements ServerAccount {
 
   mutedByUser: boolean
   mutedByInstance: boolean
+  mutedByInstanceSubscription: string | null
+
   mutedServerByUser: boolean
   mutedServerByInstance: boolean
+  mutedServerByInstanceSubscription: string | null
 
   userId?: number
 
@@ -38,8 +41,10 @@ export class Account extends Actor implements ServerAccount {
 
     this.mutedByUser = false
     this.mutedByInstance = false
+    this.mutedByInstanceSubscription = null
     this.mutedServerByUser = false
     this.mutedServerByInstance = false
+    this.mutedServerByInstanceSubscription = null
   }
 
   updateAvatar (newAvatars: ActorImage[]) {
@@ -52,8 +57,10 @@ export class Account extends Actor implements ServerAccount {
 
   updateBlockStatus (blockStatus: BlockStatus) {
     this.mutedByInstance = blockStatus.accounts[this.nameWithHostForced].blockedByServer
+    this.mutedByInstanceSubscription = blockStatus.accounts[this.nameWithHostForced].blockedByServerSubscription
     this.mutedByUser = blockStatus.accounts[this.nameWithHostForced].blockedByUser
     this.mutedServerByUser = blockStatus.hosts[this.host].blockedByUser
     this.mutedServerByInstance = blockStatus.hosts[this.host].blockedByServer
+    this.mutedServerByInstanceSubscription = blockStatus.hosts[this.host].blockedByServerSubscription
   }
 }

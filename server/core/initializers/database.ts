@@ -33,6 +33,7 @@ import { VideoLiveSessionModel } from '@server/models/video/video-live-session.j
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
+import { WatchedWordsSubscriptionModel } from '@server/models/watched-words/watched-words-subscription.js'
 import { readFileSync } from 'fs'
 import pg from 'pg'
 import { QueryTypes, Transaction } from 'sequelize'
@@ -42,7 +43,7 @@ import { AbuseMessageModel } from '../models/abuse/abuse-message.js'
 import { AbuseModel } from '../models/abuse/abuse.js'
 import { VideoAbuseModel } from '../models/abuse/video-abuse.js'
 import { VideoCommentAbuseModel } from '../models/abuse/video-comment-abuse.js'
-import { AccountBlocklistModel } from '../models/account/account-blocklist.js'
+import { AccountBlocklistModel } from '../models/blocklist/account-blocklist.js'
 import { AccountVideoRateModel } from '../models/account/account-video-rate.js'
 import { AccountModel } from '../models/account/account.js'
 import { ActorFollowModel } from '../models/actor/actor-follow.js'
@@ -53,7 +54,9 @@ import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { OAuthTokenModel } from '../models/oauth/oauth-token.js'
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy.js'
 import { PluginModel } from '../models/server/plugin.js'
-import { ServerBlocklistModel } from '../models/server/server-blocklist.js'
+import { BlocklistLogModel } from '../models/blocklist/blocklist-log.js'
+import { BlocklistSubscriptionModel } from '../models/blocklist/blocklist-subscription.js'
+import { ServerBlocklistModel } from '../models/blocklist/server-blocklist.js'
 import { ServerModel } from '../models/server/server.js'
 import { VideoStatModel } from '../models/stat/video-stat.js'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting.js'
@@ -182,6 +185,8 @@ export async function initDatabaseModels (silent: boolean) {
     VideoLiveReplaySettingModel,
     AccountBlocklistModel,
     ServerBlocklistModel,
+    BlocklistSubscriptionModel,
+    BlocklistLogModel,
     UserNotificationModel,
     UserNotificationSettingModel,
     VideoStreamingPlaylistModel,
@@ -208,6 +213,7 @@ export async function initDatabaseModels (silent: boolean) {
     CommentAutomaticTagModel,
     AutomaticTagModel,
     WatchedWordsListModel,
+    WatchedWordsSubscriptionModel,
     AccountAutomaticTagPolicyModel,
     UploadImageModel,
     VideoLiveScheduleModel,

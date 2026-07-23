@@ -2,7 +2,11 @@ import express from 'express'
 import { body, query } from 'express-validator'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { isBooleanValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
-import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../../helpers/custom-validators/video-blacklist.js'
+import {
+  isVideoBlacklistReasonValid,
+  isVideoBlacklistInternalNoteValid,
+  isVideoBlacklistTypeValid
+} from '../../../helpers/custom-validators/video-blacklist.js'
 import { areValidationErrors, doesVideoBlacklistExist, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
 export const videosBlacklistRemoveValidator = [
@@ -27,6 +31,9 @@ export const videosBlacklistAddValidator = [
   body('reason')
     .optional()
     .custom(isVideoBlacklistReasonValid),
+  body('internalNote')
+    .optional()
+    .custom(isVideoBlacklistInternalNoteValid).withMessage('Should have a valid internal note'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
@@ -50,6 +57,9 @@ export const videosBlacklistUpdateValidator = [
   body('reason')
     .optional()
     .custom(isVideoBlacklistReasonValid).withMessage('Should have a valid reason'),
+  body('internalNote')
+    .optional()
+    .custom(isVideoBlacklistInternalNoteValid).withMessage('Should have a valid internal note'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

@@ -1,14 +1,21 @@
 import { USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
 import { root } from '@peertube/peertube-node-utils'
+import { readJsonSync, writeJSON } from 'fs-extra/esm'
+import { readdir } from 'fs/promises'
+import { join } from 'path'
 import {
   ABUSE_STATES,
   buildLanguages,
+  CHANGE_OWNERSHIP_STATES,
   RUNNER_JOB_STATES,
+  STREAM_SYNC_STATE,
   USER_EXPORT_STATES,
   USER_IMPORT_STATES,
   USER_REGISTRATION_STATES,
   VIDEO_CATEGORIES,
-  VIDEO_CHANNEL_SYNC_STATE,
+  VIDEO_CHANNEL_ACTIVITY_ACTIONS,
+  VIDEO_CHANNEL_ACTIVITY_TARGETS,
+  VIDEO_EMBED_PRIVACY_POLICIES,
   VIDEO_IMPORT_STATES,
   VIDEO_LICENCES,
   VIDEO_PLAYLIST_PRIVACIES,
@@ -16,9 +23,6 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_STATES
 } from '../../server/core/initializers/constants.js'
-import { readJsonSync, writeJSON } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
-import { join } from 'path'
 
 const videojs = readJsonSync(join(root(), 'client', 'src', 'locale', 'videojs.en-US.json'))
 const playerKeys = {
@@ -102,7 +106,8 @@ const playerKeys = {
   '(skipped {1} buffers) ': '(skipped {1} buffers) ',
   'Video Filter': 'Video Filter',
   'Mirror Video': 'Mirror Video',
-  'Mirror': 'Mirror'
+  'Mirror': 'Mirror',
+  'This playlist is empty': 'This playlist is empty'
 }
 Object.assign(playerKeys, videojs)
 
@@ -116,7 +121,11 @@ Object.values(VIDEO_CATEGORIES)
   .concat(Object.values(VIDEO_PLAYLIST_PRIVACIES))
   .concat(Object.values(VIDEO_PLAYLIST_TYPES))
   .concat(Object.values(USER_ROLE_LABELS))
-  .concat(Object.values(VIDEO_CHANNEL_SYNC_STATE))
+  .concat(Object.values(STREAM_SYNC_STATE))
+  .concat(Object.values(VIDEO_CHANNEL_ACTIVITY_ACTIONS))
+  .concat(Object.values(VIDEO_CHANNEL_ACTIVITY_TARGETS))
+  .concat(Object.values(VIDEO_EMBED_PRIVACY_POLICIES))
+  .concat(Object.values(CHANGE_OWNERSHIP_STATES))
   .concat(Object.values(ABUSE_STATES))
   .concat(Object.values(USER_REGISTRATION_STATES))
   .concat(Object.values(RUNNER_JOB_STATES))
@@ -134,6 +143,7 @@ Object.values(VIDEO_CATEGORIES)
     'Unavailable video',
     'Audio only',
     'Unknown',
+    'Embedding is disabled for this video.',
     'This video is not allowed to be embedded on this domain.'
   ])
   .forEach(v => {

@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit, inject, input } from '@angular/core'
+import { Component, forwardRef, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -24,6 +24,7 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, SelectOptionsComponent ]
 })
 export class SelectVideosSortComponent implements ControlValueAccessor, OnInit {

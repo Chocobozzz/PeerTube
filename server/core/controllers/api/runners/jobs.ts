@@ -23,7 +23,7 @@ import {
   VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { createReqFiles } from '@server/helpers/express-utils.js'
+import { cleanUpReqFiles, createReqFiles } from '@server/helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { generateRunnerJobToken } from '@server/helpers/token-generator.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
@@ -316,6 +316,8 @@ async function updateRunnerJobController (req: express.Request, res: express.Res
   const body: RunnerJobUpdateBody = req.body
 
   if (runnerJob.state === RunnerJobState.COMPLETING || runnerJob.state === RunnerJobState.COMPLETED) {
+    cleanUpReqFiles(req)
+
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   }
 

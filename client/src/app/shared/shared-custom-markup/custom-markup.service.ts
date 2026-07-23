@@ -68,8 +68,8 @@ export class CustomMarkupService {
     rootElement.innerHTML = html
 
     for (const selector of Object.keys(this.htmlBuilders)) {
-      rootElement.querySelectorAll(selector)
-        .forEach((e: HTMLElement) => {
+      rootElement.querySelectorAll<HTMLElement>(selector)
+        .forEach(e => {
           try {
             const element = this.execHTMLBuilder(selector, e)
             // Insert as first child
@@ -85,8 +85,8 @@ export class CustomMarkupService {
     const componentRefs: ComponentRef<CustomMarkupComponent>[] = []
 
     for (const selector of Object.keys(this.angularBuilders)) {
-      rootElement.querySelectorAll(selector)
-        .forEach((e: HTMLElement) => {
+      rootElement.querySelectorAll<HTMLElement>(selector)
+        .forEach(e => {
           try {
             const { component, loadedPromise } = this.execAngularBuilder(selector, e)
             if (loadedPromise) loadedPromises.push(loadedPromise)

@@ -1,9 +1,10 @@
-import { booleanAttribute, Component, inject, input } from '@angular/core'
+import { booleanAttribute, Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { ServerService } from '@app/core'
 
 @Component({
   selector: 'my-signup-label',
   templateUrl: './signup-label.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: []
 })
 export class SignupLabelComponent {

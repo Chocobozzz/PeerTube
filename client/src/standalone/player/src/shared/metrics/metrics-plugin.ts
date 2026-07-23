@@ -48,7 +48,7 @@ class MetricsPlugin extends Plugin {
     this.trackErrors()
     this.trackBufferStalled()
 
-    this.one('play', () => {
+    this.player.one('play', () => {
       this.player.on('video-change', () => {
         this.runMetricsIntervalOnPlay()
       })
@@ -63,7 +63,7 @@ class MetricsPlugin extends Plugin {
     super.dispose()
   }
 
-  private runMetricsIntervalOnPlay () {
+  private resetMetrics () {
     this.downloadedBytesP2P = 0
     this.downloadedBytesHTTP = 0
     this.uploadedBytesP2P = 0
@@ -73,6 +73,10 @@ class MetricsPlugin extends Plugin {
     this.bufferStalled = 0
 
     this.lastPlayerNetworkInfo = undefined
+  }
+
+  private runMetricsIntervalOnPlay () {
+    this.resetMetrics()
 
     debugLogger('Will track metrics on next play')
 

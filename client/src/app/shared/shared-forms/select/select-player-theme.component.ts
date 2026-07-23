@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, input, OnInit } from '@angular/core'
+import { Component, forwardRef, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { PlayerSettingsService } from '@app/shared/shared-video/player-settings.service'
@@ -26,6 +26,7 @@ import { SelectOptionsComponent } from './select-options.component'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, SelectOptionsComponent ]
 })
 export class SelectPlayerThemeComponent implements ControlValueAccessor, OnInit {

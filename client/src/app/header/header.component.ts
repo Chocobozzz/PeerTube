@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, LOCALE_ID, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import { AuthService, AuthStatus, AuthUser, HotkeysService, MenuService, RedirectService, ScreenService, ServerService } from '@app/core'
 import { NotificationDropdownComponent } from '@app/header/notification-dropdown.component'
@@ -25,6 +25,7 @@ import { SearchTypeaheadComponent } from './search-typeahead.component'
   selector: 'my-header',
   templateUrl: './header.component.html',
   styleUrls: [ './header.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     NotificationDropdownComponent,
@@ -184,12 +185,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     if (!isAndroid() && !isIphone()) return
 
-    this.mobileMsg = true
-    document.documentElement.classList.add('mobile-app-msg')
-
     const host = window.location.host
     const intentConfig = this.htmlConfig.client.openInApp.android.intent
     const iosConfig = this.htmlConfig.client.openInApp.ios
+
+    if (isAndroid() && intentConfig.enabled === false) return
+    if (isIphone() && iosConfig.enabled === false) return
+
+    this.mobileMsg = true
+    document.documentElement.classList.add('mobile-app-msg')
 
     const getVideoId = (url: string) => {
       const matches = url.match(/^\/w\/([^/?;]+)/)
@@ -230,7 +234,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (isAndroid()) {
           this.androidAppUrl = `${baseAndroid}/video-channel/${channelId}?host=${host}${fallbackAndroid}`
         } else {
-          this.iosAppUrl = `${baseIOS}/video/${videoId}?host=${host}`
+          this.iosAppUrl = `${baseIOS}/video-channel/${channelId}?host=${host}`
         }
 
         return

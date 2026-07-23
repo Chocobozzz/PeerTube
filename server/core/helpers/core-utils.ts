@@ -6,7 +6,7 @@
 */
 
 import { promisify1, promisify2, promisify3 } from '@peertube/peertube-core-utils'
-import { exec, ExecOptions } from 'child_process'
+import { exec } from 'child_process'
 import { ED25519KeyPairOptions, generateKeyPair, randomBytes, RSAKeyPairOptions, scrypt } from 'crypto'
 import truncate from 'lodash-es/truncate.js'
 import { pipeline } from 'stream'
@@ -209,18 +209,6 @@ function parseSemVersion (s: string) {
 
 // ---------------------------------------------------------------------------
 
-function execShell (command: string, options?: ExecOptions) {
-  return new Promise<{ err?: Error, stdout: string, stderr: string }>((res, rej) => {
-    exec(command, options, (err, stdout, stderr) => {
-      if (err) return rej({ err, stdout, stderr })
-
-      return res({ stdout, stderr })
-    })
-  })
-}
-
-// ---------------------------------------------------------------------------
-
 function generateRSAKeyPairPromise (size: number) {
   return new Promise<{ publicKey: string, privateKey: string }>((res, rej) => {
     const options: RSAKeyPairOptions<'pem', 'pem'> = {
@@ -277,7 +265,6 @@ const pipelinePromise = promisify(pipeline)
 export {
   execPromise,
   execPromise2,
-  execShell,
   generateED25519KeyPairPromise,
   generateRSAKeyPairPromise,
   mapToJSON,

@@ -1,4 +1,4 @@
-<form (ngSubmit)="formUpdated()">
+<form>
   <div class="row">
     <div class="col-lg-4 col-md-6 col-xs-12">
       <fieldset class="form-group" role="radiogroup">
@@ -72,7 +72,7 @@
         </div>
 
         <div class="row">
-          <div class="ps-0 col-sm-6">
+          <div class="col-sm-6">
             <input
               (change)="onDurationOrPublishedUpdated()"
               (keydown.enter)="$event.preventDefault()"
@@ -85,7 +85,7 @@
               class="form-control"
             >
           </div>
-          <div class="pe-0 col-sm-6">
+          <div class="col-sm-6">
             <input
               (change)="onDurationOrPublishedUpdated()"
               (keydown.enter)="$event.preventDefault()"
@@ -268,13 +268,13 @@
       <button type="button" i18n class="reset-button me-3" (click)="reset()">Reset</button>
     }
 
-    <input
+    <button
       class="peertube-button primary-button"
-      type="submit"
-      i18n-value
-      value="Filter"
+      type="button"
       i18n-ariaLabel
       aria-label="Filter the results and automatically close the filters panel"
-    >
+      i18n
+      (click)="formUpdated()"
+    >Filter</button>
   </div>
 </form>

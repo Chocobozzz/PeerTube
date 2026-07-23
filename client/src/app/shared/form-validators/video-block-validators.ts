@@ -8,3 +8,11 @@ export const VIDEO_BLOCK_REASON_VALIDATOR: BuildFormValidator = {
     maxlength: $localize`Block reason cannot be more than 300 characters long.`
   }
 }
+
+export const VIDEO_BLOCK_INTERNAL_NOTE_VALIDATOR: BuildFormValidator = {
+  VALIDATORS: [ Validators.minLength(2), Validators.maxLength(300) ],
+  MESSAGES: {
+    minlength: $localize`Internal note must be at least 2 characters long.`,
+    maxlength: $localize`Internal note cannot be more than 300 characters long.`
+  }
+}

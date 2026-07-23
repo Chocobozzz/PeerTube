@@ -96,7 +96,7 @@ body {
 }
 
 #video-password-content {
-  @include margin(1rem, 0, 2rem);
+  @include margin(0, 0, 2rem);
 }
 
 #video-password-input,
@@ -105,20 +105,21 @@ body {
   padding: 1rem;
   margin: 1rem 0.5rem;
   border: 0;
-  font-weight: 600;
+  font-weight: $font-bold;
   border-radius: 3px !important;
   font-size: 18px;
   display: inline-block;
 }
 
 #video-password-submit {
-  color: #fff;
-  background-color: #f2690d;
+  color: pvar(--on-primary) !important;
+  background-color: pvar(--primary) !important;
   cursor: pointer;
 }
 
 #video-password-submit:hover {
-  background-color: #f47825;
+  color: pvar(--on-primary);
+  background-color: pvar(--primary-400);
 }
 
 #video-password-error {

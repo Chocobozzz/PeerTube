@@ -361,7 +361,57 @@ body {
 // RTL compatibility
 // ---------------------------------------------------------------------------
 
-:root[dir="rtl"] .modal .modal-header .modal-title {
-  margin-inline-end: auto;
-  margin-right: unset;
+:root[dir="rtl"] {
+  .modal .modal-header .modal-title {
+    margin-inline-end: auto;
+    margin-right: unset;
+  }
+
+  .input-group {
+    > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+
+      border-top-left-radius: var(--bs-border-radius);
+      border-bottom-left-radius: var(--bs-border-radius);
+    }
+
+    &:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+
+      border-top-right-radius: var(--bs-border-radius);
+      border-bottom-right-radius: var(--bs-border-radius);
+    }
+  }
+
+  .btn-group {
+    > .btn:not(:last-child):not(.dropdown-toggle),
+    > .btn.dropdown-toggle-split:first-child,
+    > .btn-group:not(:last-child) > .btn {
+      border-top-right-radius: var(--bs-border-radius);
+      border-bottom-right-radius: var(--bs-border-radius);
+
+      border-start-end-radius: 0;
+      border-end-end-radius: 0;
+    }
+
+    > .btn:nth-child(n+3),
+    > :not(.btn-check) + .btn,
+    > .btn-group:not(:first-child) > .btn {
+      border-top-left-radius: var(--bs-border-radius);
+      border-bottom-left-radius: var(--bs-border-radius);
+
+      border-start-start-radius: 0 !important;
+      border-end-start-radius: 0 !important;
+    }
+
+    > :not(.btn-check:first-child) + .btn,
+    > .btn-group:not(:first-child) {
+      margin-left: 0;
+      margin-right: 0;
+
+      margin-inline-start: calc(-1 * var(--bs-border-width));
+    }
+  }
 }

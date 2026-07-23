@@ -16,7 +16,6 @@ import {
   isUserBlockedReasonValid,
   isUserDescriptionValid,
   isUserDisplayNameValid,
-  isUserEmailPublicValid,
   isUserFeatureInfo,
   isUserLanguage,
   isUserNoModal,
@@ -33,6 +32,7 @@ import {
 } from '../../../helpers/custom-validators/users.js'
 import { isVideoChannelUsernameValid } from '../../../helpers/custom-validators/video-channels.js'
 import { logger } from '../../../helpers/logger.js'
+import { isSecretEqual } from '../../../helpers/peertube-crypto.js'
 import { isThemeRegistered } from '../../../lib/plugins/theme-utils.js'
 import { Redis } from '../../../lib/redis.js'
 import {
@@ -232,9 +232,6 @@ export const usersUpdateMeValidator = [
   body('password')
     .optional()
     .custom(isUserPasswordValid),
-  body('emailPublic')
-    .optional()
-    .custom(isUserEmailPublicValid),
   body('email')
     .optional()
     .isEmail(),
@@ -438,7 +435,7 @@ export const usersResetPasswordValidator = [
     const user = res.locals.user
     const redisVerificationString = await Redis.Instance.getResetPasswordVerificationString(user.id)
 
-    if (redisVerificationString !== req.body.verificationString) {
+    if (!isSecretEqual(redisVerificationString, req.body.verificationString)) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: 'Invalid verification string.'

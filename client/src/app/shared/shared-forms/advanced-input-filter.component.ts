@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, computed, inject, input, output, signal } from '@angular/core'
+import { Component, OnDestroy, OnInit, computed, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
@@ -125,6 +125,7 @@ export function parseQueryParamsToAdvancedFilters<ServiceParameters extends Reco
   selector: 'my-advanced-input-filter',
   templateUrl: './advanced-input-filter.component.html',
   styleUrls: [ './advanced-input-filter.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgbDropdown,
     NgbDropdownToggle,

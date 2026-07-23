@@ -156,6 +156,53 @@ describe('Test video embed privacy', function () {
     }
   })
 
+  it('Should disable video embed', async function () {
+    await servers[0].videoEmbedPrivacy.update({
+      videoId,
+      policy: VideoEmbedPrivacyPolicy.DISABLED,
+      domains: []
+    })
+
+    const policy = { id: VideoEmbedPrivacyPolicy.DISABLED, label: 'Disabled' }
+
+    {
+      const body = await servers[0].videoEmbedPrivacy.get({ videoId })
+      expect(body).to.deep.equal({ policy, domains: [] } satisfies VideoEmbedPrivacy)
+    }
+
+    {
+      const video = await servers[0].videos.get({ id: videoId })
+      expect(video.embedPrivacyPolicy).to.deep.equal(policy)
+    }
+  })
+
+  it('Should never allow embed when disabled, even on the origin instance or for the owner', async function () {
+    // Called with the default (owner/admin) token: unlike allowlist, manage rights don't bypass a disabled policy
+    {
+      const result = await servers[0].videoEmbedPrivacy.isDomainAllowed({ videoId, domain: 'toto.example.com' })
+      expect(result).to.deep.equal({ domainAllowed: false, userBypassAllowed: false })
+    }
+
+    // The "same instance" shortcut must not bypass a disabled policy either
+    {
+      const result = await servers[0].videoEmbedPrivacy.isDomainAllowed({ videoId, domain: servers[0].host })
+      expect(result).to.deep.equal({ domainAllowed: false, userBypassAllowed: false })
+    }
+
+    // Anonymous requests are blocked too
+    {
+      const result = await servers[0].videoEmbedPrivacy.isDomainAllowed({ videoId, domain: 'toto.example.com', token: null })
+      expect(result).to.deep.equal({ domainAllowed: false, userBypassAllowed: false })
+    }
+  })
+
+  it('Should have federated the disabled video embed policy', async function () {
+    await waitJobs(servers)
+
+    const video = await servers[1].videos.get({ id: videoId })
+    expect(video.embedPrivacyPolicy.id).to.equal(VideoEmbedPrivacyPolicy.REMOTE_RESTRICTIONS)
+  })
+
   after(async function () {
     await cleanupTests(servers)
   })

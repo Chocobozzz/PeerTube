@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, DestroyRef, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RouterOutlet } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
@@ -7,16 +8,20 @@ import { PluginType, UserRight, UserRightType } from '@peertube/peertube-models'
 @Component({
   selector: 'my-admin-settings',
   templateUrl: './admin-settings.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class AdminSettingsComponent implements OnInit {
   private auth = inject(AuthService)
   private server = inject(ServerService)
+  private destroyRef = inject(DestroyRef)
 
   menuEntries: HorizontalMenuEntry[] = []
 
   ngOnInit () {
-    this.server.configReloaded.subscribe(() => this.buildMenu())
+    this.server.configReloaded
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.buildMenu())
 
     this.buildMenu()
   }

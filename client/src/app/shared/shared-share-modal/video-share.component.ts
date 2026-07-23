@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, model, viewChild } from '@angular/core'
+import { Component, ElementRef, inject, input, model, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { HooksService, ServerService } from '@app/core'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -12,6 +12,7 @@ import { Customizations } from './video-share.model'
 @Component({
   selector: 'my-video-share',
   templateUrl: './video-share.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     SharePlaylistComponent,
