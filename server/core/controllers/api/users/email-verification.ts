@@ -77,7 +77,7 @@ async function verifyUserEmail (req: express.Request, res: express.Response) {
     user.pendingEmail = null
   }
 
-  await Redis.Instance.deleteUserVerifyEmailLink(user.id)
+  await Redis.Instance.deleteUserVerifyEmailLink(user.id, req.body.isPendingEmail === true)
 
   await user.save()
 

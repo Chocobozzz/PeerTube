@@ -128,6 +128,48 @@ describe('Test users email verification', function () {
     }
   })
 
+  it('Should not verify a pending email using a verification string minted for the main email', async function () {
+    this.timeout(30000)
+
+    let mainEmailVerificationString: string
+
+    {
+      await server.users.updateMe({
+        token: userAccessToken,
+        email: 'attacker-target@example.com',
+        currentPassword: user1.password
+      })
+
+      await waitJobs(server)
+      expectedEmailsLength++
+      expect(emails).to.have.lengthOf(expectedEmailsLength)
+    }
+
+    {
+      await server.users.askSendVerifyEmail({ email: 'updated@example.com' })
+
+      await waitJobs(server)
+      expectedEmailsLength++
+      expect(emails).to.have.lengthOf(expectedEmailsLength)
+
+      const email = emails[expectedEmailsLength - 1]
+
+      const verificationStringMatches = /verificationString=([a-z0-9]+)/.exec(email['text'])
+      mainEmailVerificationString = verificationStringMatches[1]
+    }
+
+    await server.users.verifyEmail({
+      userId,
+      verificationString: mainEmailVerificationString,
+      isPendingEmail: true,
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+
+    const me = await server.users.getMyInfo({ token: userAccessToken })
+    expect(me.email).to.equal('updated@example.com')
+    expect(me.pendingEmail).to.equal('attacker-target@example.com')
+  })
+
   it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
     await server.config.updateExistingConfig({
