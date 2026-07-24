@@ -31,7 +31,7 @@ describe('Test login notifications', function () {
   before(async function () {
     this.timeout(30000)
 
-    const port = await MockSmtpServer.Instance.collectEmails(emails)
+    const port = await MockSmtpServer.Instance.collectEmails(emails, { loginNotifications: true })
     server = await createSingleServer(1, ConfigCommand.getEmailOverrideConfig(port))
 
     await setAccessTokensToServers([ server ])
