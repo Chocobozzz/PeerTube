@@ -105,7 +105,7 @@ async function getSitemapLocalVideoUrls () {
           url: process.env.EXPERIMENTAL_SITEMAP_VIDEO_URL === 'true'
             ? WEBSERVER.URL + '/videos/watch/' + v.uuid
             : WEBSERVER.URL + v.getWatchStaticPath(),
-          lastmod: v.updatedAt.toISOString(),
+          lastmod: (v.contentUpdatedAt ?? v.publishedAt).toISOString(),
           video: [
             {
               // Sitemap title should be < 100 characters
