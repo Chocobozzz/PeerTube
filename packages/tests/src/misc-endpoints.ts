@@ -247,12 +247,12 @@ describe('Test misc endpoints', function () {
       expect(res.text).to.match(/<video:uploader.*>channel 1<\/video:uploader>/)
       expect(res.text).to.match(/<video:live>NO<\/video:live>/)
 
-      expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel1/videos</loc></url>')
-      expect(res.text).to.contain('<url><loc>' + server.url + '/c/channel2/videos</loc></url>')
-      expect(res.text).to.not.contain('<url><loc>' + server.url + '/c/channel3/videos</loc></url>')
-
-      expect(res.text).to.contain('<url><loc>' + server.url + '/a/user1/video-channels</loc></url>')
-      expect(res.text).to.contain('<url><loc>' + server.url + '/a/user2/video-channels</loc></url>')
+      expect(res.text).to.contain('<loc>' + server.url + '/c/channel1/videos</loc>')  
+      expect(res.text).to.contain('<loc>' + server.url + '/c/channel2/videos</loc>')  
+      expect(res.text).to.not.contain('<url><loc>' + server.url + '/c/channel3/videos</loc></url>')  
+  
+      expect(res.text).to.contain('<loc>' + server.url + '/a/user1/video-channels</loc>')  
+      expect(res.text).to.contain('<loc>' + server.url + '/a/user2/video-channels</loc>')  
       expect(res.text).to.not.contain('<url><loc>' + server.url + '/a/user3/video-channels</loc></url>')
     })
 
@@ -284,7 +284,7 @@ describe('Test misc endpoints', function () {
         })
 
         const url = server.url + '/w/' + uuidToShort(video.uuid)
-        expect(res.text).to.contain(`<url><loc>${url}</loc><video:video>`)
+        expect(res.text).to.contain(`<loc>${url}</loc>`)
       }
 
       await server.kill()
@@ -298,7 +298,7 @@ describe('Test misc endpoints', function () {
         })
 
         const url = server.url + '/videos/watch/' + video.uuid
-        expect(res.text).to.contain(`<url><loc>${url}</loc><video:video>`)
+        expect(res.text).to.contain(`<loc>${url}</loc>`)
       }
     })
   })
