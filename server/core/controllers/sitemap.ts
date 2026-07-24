@@ -58,13 +58,13 @@ async function getSitemap (req: express.Request, res: express.Response) {
 async function getSitemapVideoChannelUrls () {
   const rows = await VideoChannelModel.listLocalsForSitemap('createdAt')
 
-  return rows.map(channel => ({ url: channel.getClientUrl() }))
+  return rows.map(channel => ({ url: channel.getClientUrl(), lastmod: channel.updatedAt?.toISOString() }))
 }
 
 async function getSitemapAccountUrls () {
   const rows = await AccountModel.listLocalsForSitemap('createdAt')
 
-  return rows.map(account => ({ url: account.getClientUrl() }))
+  return rows.map(account => ({ url: account.getClientUrl(), lastmod: account.updatedAt?.toISOString() }))
 }
 
 async function getSitemapLocalVideoUrls () {
@@ -105,6 +105,7 @@ async function getSitemapLocalVideoUrls () {
           url: process.env.EXPERIMENTAL_SITEMAP_VIDEO_URL === 'true'
             ? WEBSERVER.URL + '/videos/watch/' + v.uuid
             : WEBSERVER.URL + v.getWatchStaticPath(),
+          lastmod: (v.contentUpdatedAt ?? v.publishedAt).toISOString(),
           video: [
             {
               // Sitemap title should be < 100 characters
