@@ -1,10 +1,6 @@
 {{#> base title=(t "New login to your account")}}
   <p>
-    {{#if newDevice}}
-      {{{t "A new login to your account on {instanceName} was detected from a <strong>new device</strong>." instanceName=instanceName}}}
-    {{else}}
-      {{{t "A new login to your account on {instanceName} was detected." instanceName=instanceName}}}
-    {{/if}}
+    {{{t "A new login to your account on {instanceName} was detected from a <strong>new device</strong>." instanceName=instanceName}}}
   </p>
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 16px 0;">
@@ -30,12 +26,12 @@
       <td style="padding: 6px 0; font-family: sans-serif; font-size: 14px;">{{location}}</td>
     </tr>
     {{/if}}
-    {{#if userAgent}}
+    {{#if device}}
     <tr>
       <td style="padding: 6px 0; font-family: sans-serif; font-size: 14px; vertical-align: top;">
         <strong>{{t "Browser / device"}}</strong>
       </td>
-      <td style="padding: 6px 0; font-family: sans-serif; font-size: 14px;">{{userAgent}}</td>
+      <td style="padding: 6px 0; font-family: sans-serif; font-size: 14px;">{{device}}</td>
     </tr>
     {{/if}}
   </table>

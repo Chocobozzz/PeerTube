@@ -35,6 +35,4 @@ export interface UserNotificationSetting {
   myVideoTranscriptionGenerated: UserNotificationSettingValueType
 
   automaticBlocklist: UserNotificationSettingValueType
-
-  newLoginSuccess: UserNotificationSettingValueType
 }

@@ -12737,9 +12737,6 @@ components:
         myVideoTranscriptionGenerated:
           $ref: '#/components/schemas/NotificationSettingValue'
 
-        newLoginSuccess:
-          $ref: '#/components/schemas/NotificationSettingValue'
-
     User:
       properties:
         id:

@@ -265,24 +265,20 @@ export class Emailer {
     email: string
     language: string
     ip: string
-    userAgent: string
-    newDevice: boolean
+    device?: string
     location?: string
   }) {
-    const { username, email, language, ip, userAgent, newDevice, location } = options
+    const { username, email, language, ip, device, location } = options
 
     const emailPayload: EmailPayload = {
       template: 'login-success',
       to: { email, language },
-      subject: newDevice
-        ? t('New login to your account from a new device', language)
-        : t('New login to your account', language),
+      subject: t('New login to your account from a new device', language),
       locals: {
         username,
         instanceName: CONFIG.INSTANCE.NAME,
         ip,
-        userAgent,
-        newDevice,
+        device,
         location,
         date: new Date().toLocaleString(language)
       }

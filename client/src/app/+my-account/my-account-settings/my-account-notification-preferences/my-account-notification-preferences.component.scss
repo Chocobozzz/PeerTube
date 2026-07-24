@@ -19,13 +19,6 @@
       width: 350px;
     }
 
-    &:nth-child(2),
-    &:nth-child(3) {
-      width: 90px;
-      display: flex;
-      justify-content: center;
-    }
-
     @media screen and (max-width: #{breakpoint(sm)}) {
       &:first-child {
         width: auto;
@@ -33,8 +26,4 @@
       }
     }
   }
-}
-
-.not-available {
-  color: pvar(--fg-400);
 }

@@ -78,8 +78,7 @@ async function updateNotificationSettings (req: express.Request, res: express.Re
     newPluginVersion: body.newPluginVersion,
     myVideoTranscriptionGenerated: body.myVideoTranscriptionGenerated,
     myVideoStudioEditionFinished: body.myVideoStudioEditionFinished,
-    automaticBlocklist: body.automaticBlocklist,
-    newLoginSuccess: body.newLoginSuccess
+    automaticBlocklist: body.automaticBlocklist
   }
 
   await UserNotificationSettingModel.updateUserSettings(values, user.id)

@@ -26,7 +26,6 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   webNotifications: { [id in keyof UserNotificationSetting]?: boolean } = {}
   labelNotifications: { [id in keyof UserNotificationSetting]?: string } = {}
   rightNotifications: { [id in keyof Partial<UserNotificationSetting>]?: UserRightType } = {}
-  emailOnlyNotifications: (keyof UserNotificationSetting)[] = []
   emailEnabled = false
 
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)
@@ -74,17 +73,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
           'newPeerTubeVersion',
           'newPluginVersion'
         ]
-      },
-
-      {
-        label: $localize`Security`,
-        keys: [
-          'newLoginSuccess'
-        ]
       }
     ]
-
-    this.emailOnlyNotifications = [ 'newLoginSuccess' ]
 
     this.rightNotifications = {
       abuseAsModerator: UserRight.MANAGE_ABUSES,
@@ -121,8 +111,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newPluginVersion: $localize`One of your plugin/theme has a new available version`,
       myVideoStudioEditionFinished: $localize`Processing of edits has finished`,
       myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`,
-      automaticBlocklist: $localize`An account or server was automatically blocked/unblocked by a blocklist subscription`,
-      newLoginSuccess: $localize`A new login to your account was detected`
+      automaticBlocklist: $localize`An account or server was automatically blocked/unblocked by a blocklist subscription`
     }
 
     this.loadNotificationSettings()
@@ -137,10 +126,6 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
 
   hasNotificationsInGroup (group: { keys: (keyof UserNotificationSetting)[] }) {
     return group.keys.some(k => this.hasUserRight(k))
-  }
-
-  hasWebNotification (notificationType: keyof UserNotificationSetting) {
-    return !this.emailOnlyNotifications.includes(notificationType)
   }
 
   getWebLabel (notificationType: keyof UserNotificationSetting) {

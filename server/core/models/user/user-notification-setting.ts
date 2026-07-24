@@ -199,15 +199,6 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
   @Column
   declare automaticBlocklist: UserNotificationSettingValueType
 
-  @AllowNull(false)
-  @Default(null)
-  @Is(
-    'UserNotificationSettingNewLoginSuccess',
-    value => throwIfNotValid(value, isUserNotificationSettingValid, 'newLoginSuccess')
-  )
-  @Column
-  declare newLoginSuccess: UserNotificationSettingValueType
-
   @ForeignKey(() => UserModel)
   @Column
   declare userId: number
@@ -274,8 +265,7 @@ export class UserNotificationSettingModel extends SequelizeModel<UserNotificatio
       myVideoStudioEditionFinished: this.myVideoStudioEditionFinished,
       myVideoTranscriptionGenerated: this.myVideoTranscriptionGenerated,
       newPluginVersion: this.newPluginVersion,
-      automaticBlocklist: this.automaticBlocklist,
-      newLoginSuccess: this.newLoginSuccess
+      automaticBlocklist: this.automaticBlocklist
     }
   }
 }

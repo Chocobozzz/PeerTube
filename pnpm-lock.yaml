@@ -347,6 +347,9 @@ importers:
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
+      ua-parser-js:
+        specifier: ^2.0.10
+        version: 2.0.10
       uuid:
         specifier: ^14.0.1
         version: 14.0.1

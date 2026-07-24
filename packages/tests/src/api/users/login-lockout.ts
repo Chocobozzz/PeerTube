@@ -37,10 +37,13 @@ describe('Test login lockout', function () {
   }
 
   function expectLockedAccountEmailsCount (count: number) {
-    expect(emails).to.have.lengthOf(count)
+    // Successful logins also send a notification email, so only consider the lockout ones
+    const lockedAccountEmails = emails.filter(e => e['subject'].includes('temporarily locked'))
+
+    expect(lockedAccountEmails).to.have.lengthOf(count)
     if (count === 0) return
 
-    const email = emails[count - 1]
+    const email = lockedAccountEmails[count - 1]
     expect(email['to'][0]['address']).to.equal(userEmail)
     expect(email['subject']).to.contain('temporarily locked')
     expect(email['text']).to.contain(userUsername)
