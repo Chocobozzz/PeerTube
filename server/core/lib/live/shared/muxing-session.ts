@@ -109,6 +109,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
   private liveReady = false
 
   private aborted = false
+  private cleanupScheduled = false
 
   private readonly isAbleToUploadVideoWithCache = memoizee((channelUserId: number) => {
     return isUserQuotaValid({ channelUserId, uploadSize: 1000 })
@@ -205,9 +206,23 @@ class MuxingSession extends EventEmitter implements MuxingSession {
   }
 
   destroy () {
+    // Ensure the files watcher is always closed, even when the cleanup was never scheduled
+    // (e.g. an ffmpeg error makes the transcoding wrapper abort() short-circuit without emitting 'end')
+    this.closeWatcher()
+      .catch(err => logger.error('Cannot close files watcher of %s.', this.outDirectory, { err, ...this.lTags() }))
+
     this.removeAllListeners()
     this.isAbleToUploadVideoWithCache.clear()
     this.hasClientSocketInBadHealthWithCache.clear()
+  }
+
+  private closeWatcher () {
+    if (!this.filesWatcher) return Promise.resolve()
+
+    const watcher = this.filesWatcher
+    this.filesWatcher = undefined
+
+    return watcher.close()
   }
 
   private watchMasterFile () {
@@ -284,11 +299,7 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
       logger.debug('Live delete handler of TS file %s.', segmentPath, this.lTags())
 
-      try {
-        await this.liveSegmentShaStore.removeSegmentSha(segmentPath)
-      } catch (err) {
-        logger.warn('Cannot remove segment sha %s from sha store', segmentPath, { err, ...this.lTags() })
-      }
+      this.liveSegmentShaStore.removeSegmentSha(segmentPath)
 
       if (this.streamingPlaylist.storage === FileStorage.OBJECT_STORAGE) {
         try {
@@ -432,6 +443,10 @@ class MuxingSession extends EventEmitter implements MuxingSession {
 
   private onTranscodingError () {
     this.emit('transcoding-error', { videoUUID: this.videoUUID })
+
+    // On ffmpeg error the transcoding wrapper abort() short-circuits and never emits 'end'
+    // So schedule the cleanup here too
+    this.scheduleCleanup()
   }
 
   private onTranscodedEnded () {
@@ -440,14 +455,17 @@ class MuxingSession extends EventEmitter implements MuxingSession {
     // Don't log the input URL, which contains the stream key (a long lived secret)
     logger.info('RTMP transmuxing for video %s ended. Scheduling cleanup', this.videoUUID, this.lTags())
 
+    this.scheduleCleanup()
+  }
+
+  private scheduleCleanup () {
+    // Cleanup can be triggered by both the transcoding end and error paths: only run it once
+    if (this.cleanupScheduled) return
+    this.cleanupScheduled = true
+
     setTimeout(() => {
       // Wait latest segments generation, and close watchers
-
-      const promise = this.filesWatcher
-        ? this.filesWatcher.close()
-        : Promise.resolve()
-
-      promise
+      this.closeWatcher()
         .then(() => {
           // Process remaining segments hash
           for (const key of Object.keys(this.segmentsToProcessPerPlaylist)) {

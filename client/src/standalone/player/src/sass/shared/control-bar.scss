@@ -314,6 +314,12 @@ $chapter-marker-size: 9px;
   --peertube-link-max-width: 200px;
 }
 
+.vjs-peertube-skin.vjs-paused.vjs-paused-inactive .vjs-control-bar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 // Override video.js style
 .vjs-peertube-skin.vjs-live.vjs-live-dvr .vjs-control-bar .vjs-progress-control {
   display: flex;

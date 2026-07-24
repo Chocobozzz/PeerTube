@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getHLS } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, PeerTubeProblemDocument } from '@peertube/peertube-models'
+import { HttpStatusCode, PeerTubeProblemDocument, UserRole } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -66,6 +66,41 @@ describe('Test video downloads enabled/disabled', function () {
     }
 
     await server.videos.generateDownload({
+      token: null,
+      videoId: videoUUID,
+      videoFileIds: generateFileIds,
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+  })
+
+  it('Should allow admin/owner/editors to download video files even if download is disabled', async function () {
+    // Download is still disabled from the previous test
+    const { webVideoUrl, hlsVideoUrl, generateFileIds } = await getVideoUrls()
+
+    const adminToken = await server.users.generateUserAndToken('admin2', UserRole.ADMINISTRATOR)
+    const editorToken = await server.channelCollaborators.createEditor('editor1', server.store.channel.name)
+
+    // Owner of the video is the root account, which uploaded it
+    for (const token of [ server.accessToken, adminToken, editorToken ]) {
+      await makeRawRequest({ url: webVideoUrl, token, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: hlsVideoUrl, token, expectedStatus: HttpStatusCode.OK_200 })
+
+      await server.videos.generateDownload({
+        token,
+        videoId: videoUUID,
+        videoFileIds: generateFileIds,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    }
+
+    // A basic user that does not manage the channel must not bypass the setting
+    const userToken = await server.users.generateUserAndToken('user1')
+
+    await makeRawRequest({ url: webVideoUrl, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    await makeRawRequest({ url: hlsVideoUrl, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+    await server.videos.generateDownload({
+      token: userToken,
       videoId: videoUUID,
       videoFileIds: generateFileIds,
       expectedStatus: HttpStatusCode.FORBIDDEN_403
