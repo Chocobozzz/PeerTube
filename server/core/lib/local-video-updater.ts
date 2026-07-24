@@ -93,14 +93,13 @@ export class LocalVideoUpdater {
         }
   
         // Update contentUpdatedAt if relevant content fields changed  
-        const contentRelevantKeys: (keyof VideoUpdate & FilteredModelAttributes<VideoModel>)[] = [  
-          'name', 'description'  
-        ]  
-        if (contentRelevantKeys.some(key => options[key] !== undefined) ||  
-            (options.thumbnails && options.thumbnails.length !== 0) ||  
-            options.tags !== undefined) {  
+        const nameChanged = options.name !== undefined && options.name !== oldName  
+        const descriptionChanged = options.description !== undefined && options.description !== oldDescription  
+        const thumbnailChanged = options.thumbnails !== undefined && options.thumbnails.length !== 0  
+        if (nameChanged || descriptionChanged || thumbnailChanged) {  
           video.contentUpdatedAt = new Date()  
         }
+
         if (video.nsfw !== true) {
           video.nsfwFlags = NSFWFlag.NONE
           video.nsfwSummary = null
