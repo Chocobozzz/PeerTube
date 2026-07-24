@@ -260,6 +260,33 @@ export class Emailer {
     return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
   }
 
+  addLoginSuccessEmailJob (options: {
+    username: string
+    email: string
+    language: string
+    ip: string
+    device?: string
+    location?: string
+  }) {
+    const { username, email, language, ip, device, location } = options
+
+    const emailPayload: EmailPayload = {
+      template: 'login-success',
+      to: { email, language },
+      subject: t('New login to your account from a new device', language),
+      locals: {
+        username,
+        instanceName: CONFIG.INSTANCE.NAME,
+        ip,
+        device,
+        location,
+        date: new Date().toLocaleString(language)
+      }
+    }
+
+    return JobQueue.Instance.createJobAsync({ type: 'email', payload: emailPayload })
+  }
+
   addContactFormJob (options: {
     fromEmail: string
 

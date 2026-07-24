@@ -59,6 +59,7 @@ import { BlocklistSubscriptionModel } from '../models/blocklist/blocklist-subscr
 import { ServerBlocklistModel } from '../models/blocklist/server-blocklist.js'
 import { ServerModel } from '../models/server/server.js'
 import { VideoStatModel } from '../models/stat/video-stat.js'
+import { UserLoginDeviceModel } from '../models/user/user-login-device.js'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting.js'
 import { ChangeOwnershipModel } from '../models/video/change-ownership.js'
 import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update.js'
@@ -188,6 +189,7 @@ export async function initDatabaseModels (silent: boolean) {
     BlocklistLogModel,
     UserNotificationModel,
     UserNotificationSettingModel,
+    UserLoginDeviceModel,
     VideoStreamingPlaylistModel,
     VideoPlaylistModel,
     VideoPlaylistElementModel,
