@@ -30,8 +30,13 @@ describe('Test video playlists API validator', function () {
 
   let playlist: VideoPlaylistCreateResult
   let userPlaylist: VideoPlaylistCreateResult
+
   let privatePlaylistUUID: string
+  let privatePlaylistElementId: number
+
   let anotherChannelPlaylistUUID: string
+  let anotherChannelPlaylistElementId: number
+
   let privateForEditorPlaylistUUID: string
 
   let watchLaterPlaylistId: number
@@ -93,6 +98,9 @@ describe('Test video playlists API validator', function () {
         }
       })
       anotherChannelPlaylistUUID = created.uuid
+
+      const { id } = await command.addElement({ playlistId: created.shortUUID, attributes: { videoId } })
+      anotherChannelPlaylistElementId = id
     }
 
     {
@@ -103,6 +111,9 @@ describe('Test video playlists API validator', function () {
         }
       })
       privatePlaylistUUID = created.uuid
+
+      const { id } = await command.addElement({ playlistId: created.shortUUID, attributes: { videoId } })
+      privatePlaylistElementId = id
     }
 
     {
@@ -548,9 +559,33 @@ describe('Test video playlists API validator', function () {
     })
 
     it('Should fail for an editor with elements of a private or another channel playlist', async function () {
-      for (const playlistId of [ privatePlaylistUUID, anotherChannelPlaylistUUID ]) {
-        await command.updateElement(getBase({}, { playlistId, expectedStatus: HttpStatusCode.FORBIDDEN_403, token: editorToken }))
-      }
+      await command.updateElement(getBase(
+        {},
+        {
+          playlistId: privatePlaylistUUID,
+          elementId: privatePlaylistElementId,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403,
+          token: editorToken
+        }
+      ))
+
+      await command.updateElement(
+        getBase(
+          {},
+          {
+            playlistId: anotherChannelPlaylistUUID,
+            elementId: anotherChannelPlaylistElementId,
+            expectedStatus: HttpStatusCode.FORBIDDEN_403,
+            token: editorToken
+          }
+        )
+      )
+    })
+
+    it('Should fail if the element id does not belong to the playlist', async function () {
+      const params = getBase({}, { elementId: anotherChannelPlaylistElementId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+      await command.updateElement(params)
     })
 
     it('Should fail with an unknown or incorrect playlist id', async function () {

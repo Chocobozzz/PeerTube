@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router } from '@angular/router'
 import { AuthService, ConfirmService, Notifier } from '@app/core'
@@ -19,6 +19,7 @@ import { VideoChannelEdit } from '../video-channel-edit.model'
   selector: 'my-video-channel-editors',
   templateUrl: './video-channel-editors.component.html',
   styleUrls: [ './video-channel-editors.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

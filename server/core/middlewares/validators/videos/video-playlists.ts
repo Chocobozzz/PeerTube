@@ -288,8 +288,7 @@ export const videoPlaylistsUpdateOrRemoveVideoValidator = [
   isValidPlaylistIdParam('playlistId'),
 
   param('playlistElementId')
-    .customSanitizer(toCompleteUUID)
-    .custom(isIdValid).withMessage('Should have an element id/uuid/short uuid'),
+    .custom(isIdValid).withMessage('Should have an element id'),
 
   body('startTimestamp')
     .optional()
@@ -305,16 +304,6 @@ export const videoPlaylistsUpdateOrRemoveVideoValidator = [
 
     const videoPlaylist = getPlaylist(res)
 
-    const videoPlaylistElement = await VideoPlaylistElementModel.loadById(req.params.playlistElementId)
-    if (!videoPlaylistElement) {
-      res.fail({
-        status: HttpStatusCode.NOT_FOUND_404,
-        message: req.t('Video playlist element not found')
-      })
-      return
-    }
-    res.locals.videoPlaylistElement = videoPlaylistElement
-
     if (
       !await checkCanManagePlaylist({
         user: res.locals.oauth.token.User,
@@ -324,6 +313,20 @@ export const videoPlaylistsUpdateOrRemoveVideoValidator = [
         res
       })
     ) return
+
+    const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndElement({
+      videoPlaylistId: videoPlaylist.id,
+      elementId: req.params.playlistElementId
+    })
+
+    if (!videoPlaylistElement) {
+      res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: req.t('Video playlist element not found')
+      })
+      return
+    }
+    res.locals.videoPlaylistElement = videoPlaylistElement
 
     return next()
   }

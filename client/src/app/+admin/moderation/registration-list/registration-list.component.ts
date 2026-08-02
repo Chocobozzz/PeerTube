@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -29,6 +29,7 @@ type DataLoaderParameter = Parameters<RegistrationListComponent['_dataLoader']>[
   selector: 'my-registration-list',
   templateUrl: './registration-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './registration-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterLink,
     GlobalIconComponent,
@@ -88,13 +89,13 @@ export class RegistrationListComponent implements OnInit {
     const { simpleActions, bulkActions } = buildDropdownSimpleAndBulkActions<UserRegistration>([
       [
         {
-          label: () => $localize`Accept`,
+          label: () => $localize`Accept...`,
           handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'accept'),
           isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING,
           enableBulk: true
         },
         {
-          label: () => $localize`Reject`,
+          label: () => $localize`Reject...`,
           handler: registrations => this.openRegistrationRequestProcessModal(registrations, 'reject'),
           isDisplayed: registration => registration.state.id === UserRegistrationState.PENDING,
           enableBulk: true

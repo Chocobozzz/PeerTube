@@ -1,9 +1,16 @@
 peertube-container {
+  display: block;
+  margin-bottom: 2rem;
+
   > .layout-row {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 2rem;
+
+    > *:not(.header) {
+      flex-grow: 1;
+    }
   }
 
   > .layout-column {
@@ -12,19 +19,11 @@ peertube-container {
   }
 
   .header {
-    margin: 30px 0 15px;
+    margin: 0 0 1rem;
 
     > h4 {
       margin-bottom: 0;
+      line-height: 1; // Align with the top of the container
     }
-  }
-}
-
-// Workaround to detect iOS that doesn't support gap in flexbox
-@supports not (inset: 0) {
-  peertube-video-miniature,
-  peertube-playlist-miniature,
-  peertube-channel-miniature {
-    margin-inline-end: 2rem;
   }
 }

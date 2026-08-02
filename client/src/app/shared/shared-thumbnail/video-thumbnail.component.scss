@@ -1,6 +1,6 @@
-@use '_variables' as *;
-@use '_mixins' as *;
-@use '_miniature' as *;
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_miniature" as *;
 
 .video-thumbnail {
   @include miniature-thumbnail;
@@ -43,20 +43,21 @@
 .live-overlay {
   position: absolute;
   padding: 2px 8px;
-  right: 0;
-  bottom: 0;
   border-top-left-radius: 4px;
+
+  bottom: 0;
+  // right property is defined below
 }
 
 .live-overlay {
   font-weight: $font-bold;
-  color: #F4F4F5;
+  color: #f4f4f5;
 
   &.live-streaming {
-    color: #F4F4F5;
+    color: #f4f4f5;
 
     &::before {
-      content: '';
+      content: "";
       display: inline-block;
       width: 6px;
       height: 6px;
@@ -74,11 +75,11 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  right: 5px;
-  top: 5px;
   opacity: 0;
-
   font-weight: $font-semibold;
+
+  top: 5px;
+  // right property is defined below
 
   div:not(:first-child) {
     margin-top: 2px;
@@ -93,6 +94,28 @@
     width: 22px;
     height: 22px;
 
-    color: #F4F4F5;
+    color: #f4f4f5;
+  }
+}
+
+.video-thumbnail.is-rtl {
+  .duration-overlay,
+  .live-overlay {
+    left: 0;
+  }
+
+  .actions-overlay {
+    left: 5px;
+  }
+}
+
+.video-thumbnail:not(.is-rtl) {
+  .duration-overlay,
+  .live-overlay {
+    right: 0;
+  }
+
+  .actions-overlay {
+    right: 5px;
   }
 }

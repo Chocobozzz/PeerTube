@@ -1,6 +1,6 @@
 import { Clipboard } from '@angular/cdk/clipboard'
 import { NgClass } from '@angular/common'
-import { booleanAttribute, Component, inject, input } from '@angular/core'
+import { booleanAttribute, Component, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { Notifier } from '@app/core'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 
@@ -9,6 +9,7 @@ import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
   styleUrls: [ './copy-button.component.scss' ],
   templateUrl: './copy-button.component.html',
   providers: [ Clipboard ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgClass, GlobalIconComponent ]
 })
 export class CopyButtonComponent {

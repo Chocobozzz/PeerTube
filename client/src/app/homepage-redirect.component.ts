@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { is18nPath } from '@peertube/peertube-core-utils'
 import { RedirectService } from './core/routing/redirect.service'
@@ -13,6 +13,7 @@ import { RedirectService } from './core/routing/redirect.service'
 
 @Component({
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class HomepageRedirectComponent implements OnInit {

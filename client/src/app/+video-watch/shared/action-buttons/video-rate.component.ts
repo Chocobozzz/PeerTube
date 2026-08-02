@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnChanges, OnDestroy, OnInit, inject, input, output } from '@angular/core'
+import { Component, OnChanges, OnDestroy, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { Hotkey, HotkeysService, Notifier, ScreenService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
@@ -12,6 +12,7 @@ import { Observable } from 'rxjs'
   selector: 'my-video-rate',
   templateUrl: './video-rate.component.html',
   styleUrls: [ './video-rate.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgbPopover, NgClass, NgbTooltip, GlobalIconComponent ]
 })
 export class VideoRateComponent implements OnInit, OnChanges, OnDestroy {

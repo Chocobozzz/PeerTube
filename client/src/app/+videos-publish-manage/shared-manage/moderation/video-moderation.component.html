@@ -49,39 +49,38 @@
 
     <div>
       <div class="form-group">
-        <my-peertube-checkbox inputName="videoPrivacyEmbedEnableAllowlist" formControlName="videoPrivacyEmbedEnableAllowlist">
-          <ng-template ptTemplate="label">
-            <ng-container i18n>Restrict embed to the following domains</ng-container>
-          </ng-template>
+        <my-select-radio
+          i18n-label label="Embed" [items]="embedPrivacyPolicies" inputId="videoPrivacyEmbedPolicy"
+          formControlName="videoPrivacyEmbedPolicy"
+        ></my-select-radio>
+      </div>
 
-          <ng-container ngProjectAs="extra">
-            <div class="form-group">
-              <label i18n for="videoPrivacyEmbedAllowlistDomains">Allowed domains</label>
-              <div class="form-group-description">1 domain (without "https://") per line</div>
+      @if (form.value.videoPrivacyEmbedPolicy === VideoEmbedPrivacyPolicy.ALLOWLIST) {
+        <div class="form-group">
+          <label i18n for="videoPrivacyEmbedAllowlistDomains">Allowed domains</label>
+          <div class="form-group-description">1 domain (without "https://") per line</div>
 
-              <textarea
-                placeholder="example.com"
-                formControlName="videoPrivacyEmbedAllowlistDomains"
-                type="text"
-                id="videoPrivacyEmbedAllowlistDomains"
-                name="videoPrivacyEmbedAllowlistDomains"
-                class="form-control"
-                [ngClass]="{ 'input-error': formErrors['videoPrivacyEmbedAllowlistDomains'] }"
-              ></textarea>
+          <textarea
+            placeholder="example.com"
+            formControlName="videoPrivacyEmbedAllowlistDomains"
+            type="text"
+            id="videoPrivacyEmbedAllowlistDomains"
+            name="videoPrivacyEmbedAllowlistDomains"
+            class="form-control"
+            [ngClass]="{ 'input-error': formErrors['videoPrivacyEmbedAllowlistDomains'] }"
+          ></textarea>
 
-              @if (formErrors.videoPrivacyEmbedAllowlistDomains) {
-                <div class="form-error" role="alert">
-                  {{ formErrors.videoPrivacyEmbedAllowlistDomains }}
+          @if (formErrors.videoPrivacyEmbedAllowlistDomains) {
+            <div class="form-error" role="alert">
+              {{ formErrors.videoPrivacyEmbedAllowlistDomains }}
 
-                  @if (form.controls['videoPrivacyEmbedAllowlistDomains'].errors.validHosts) {
-                    <div>{{ form.controls['videoPrivacyEmbedAllowlistDomains'].errors.validHosts.value }}</div>
-                  }
-                </div>
+              @if (form.controls['videoPrivacyEmbedAllowlistDomains'].errors.validHosts) {
+                <div>{{ form.controls['videoPrivacyEmbedAllowlistDomains'].errors.validHosts.value }}</div>
               }
             </div>
-          </ng-container>
-        </my-peertube-checkbox>
-      </div>
+          }
+        </div>
+      }
     </div>
   </div>
 </form>

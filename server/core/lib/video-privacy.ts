@@ -14,14 +14,6 @@ const validPrivacySet = new Set<VideoPrivacyType>([
   VideoPrivacy.PASSWORD_PROTECTED
 ])
 
-export function setVideoPrivacy (video: MVideo, newPrivacy: VideoPrivacyType) {
-  if (video.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
-    video.publishedAt = new Date()
-  }
-
-  video.privacy = newPrivacy
-}
-
 export function isVideoInPrivateDirectory (privacy: VideoPrivacyType) {
   return validPrivacySet.has(privacy)
 }
@@ -46,6 +38,22 @@ export async function moveFilesIfPrivacyChanged (video: MVideoFull, oldPrivacy: 
   }
 
   return false
+}
+
+// Return true if the video was private/unlisted/password protected and now is public/internal
+export function isNewVideoForSubscription (options: {
+  currentPrivacy: VideoPrivacyType
+  newPrivacy: VideoPrivacyType
+  firstPublishedAt: Date
+}) {
+  const { currentPrivacy, newPrivacy, firstPublishedAt } = options
+
+  if (currentPrivacy !== VideoPrivacy.PRIVATE) return false
+  if (firstPublishedAt) return false
+
+  if (newPrivacy !== VideoPrivacy.PUBLIC && newPrivacy !== VideoPrivacy.INTERNAL) return false
+
+  return true
 }
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
 import { Subscription } from 'rxjs'
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs'
 @Component({
   selector: 'my-home-menu',
   templateUrl: './home-menu.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ HorizontalMenuComponent ]
 })
 export class HomeMenuComponent implements OnInit, OnDestroy {

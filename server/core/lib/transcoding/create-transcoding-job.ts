@@ -5,7 +5,6 @@ import { TranscodingJobQueueBuilder, TranscodingRunnerJobBuilder } from './share
 export function createOptimizeOrMergeAudioJobs (options: {
   video: MVideoFull
   videoFile: MVideoFile
-  isNewVideo: boolean
   user: MUserId
 }) {
   return getJobBuilder().createOptimizeOrMergeAudioJobs(options)
@@ -17,7 +16,6 @@ export function createTranscodingJobs (options: {
   transcodingType: 'hls' | 'web-video'
   video: MVideoFull
   resolutions: number[]
-  isNewVideo: boolean
   user: MUserId
 }) {
   return getJobBuilder().createTranscodingJobs(options)

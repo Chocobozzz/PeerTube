@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core'
+import { Component, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { LiveVideoError, LiveVideoErrorType, LiveVideoSession } from '@peertube/peertube-models'
@@ -13,6 +13,7 @@ import { LiveVideoService } from '../../../shared/shared-video-live/live-video.s
     RouterLink,
     PTDatePipe
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ LiveVideoService ]
 })
 export class LiveStreamInformationComponent implements OnInit {

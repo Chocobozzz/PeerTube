@@ -9,6 +9,7 @@ export interface ChannelExportJSON {
     displayName: string
     description: string
     support: string
+    publicEmail: string
 
     updatedAt: string
     createdAt: string

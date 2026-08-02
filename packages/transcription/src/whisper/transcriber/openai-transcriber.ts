@@ -6,18 +6,18 @@ import { AbstractTranscriber, TranscribeArgs } from '../../abstract-transcriber.
 import { TranscriptFile, TranscriptFormat } from '../../transcript-file.js'
 
 export class OpenaiTranscriber extends AbstractTranscriber {
-
   async transcribe ({
     mediaFilePath,
     model,
     language,
     format,
     transcriptDirectory,
-    runId = buildSUUID()
+    runId = buildSUUID(),
+    signal
   }: TranscribeArgs): Promise<TranscriptFile> {
     this.assertLanguageDetectionAvailable(language)
 
-    const $$ = this.getExec(this.getExecEnv())
+    const $$ = this.getExec({ signal, env: this.getExecEnv() })
 
     const languageArgs = language ? [ '--language', language ] : []
 

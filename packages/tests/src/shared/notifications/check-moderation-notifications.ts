@@ -202,6 +202,58 @@ export async function checkVideoAutoBlacklistForModerators (
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
+export async function checkAutomaticBlocklistForModerators (
+  options: CheckerBaseParams & {
+    expectedBlockedAccountsCount: number
+    expectedBlockedHostsCount: number
+    expectedUnblockedAccountsCount: number
+    expectedUnblockedHostsCount: number
+    checkType: CheckerType
+  }
+) {
+  const {
+    expectedBlockedAccountsCount,
+    expectedBlockedHostsCount,
+    expectedUnblockedAccountsCount,
+    expectedUnblockedHostsCount
+  } = options
+
+  const notificationType = UserNotificationType.AUTOMATIC_BLOCKLIST_UPDATE
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.data.blockedAccountsCount).to.equal(expectedBlockedAccountsCount)
+      expect(notification.data.blockedHostsCount).to.equal(expectedBlockedHostsCount)
+      expect(notification.data.unblockedAccountsCount).to.equal(expectedUnblockedAccountsCount)
+      expect(notification.data.unblockedHostsCount).to.equal(expectedUnblockedHostsCount)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        if (n?.type !== notificationType) return true
+        if (!n?.data) return true
+
+        const data = n.data
+
+        return data.blockedAccountsCount !== expectedBlockedAccountsCount ||
+          data.blockedHostsCount !== expectedBlockedHostsCount ||
+          data.unblockedAccountsCount !== expectedUnblockedAccountsCount ||
+          data.unblockedHostsCount !== expectedUnblockedHostsCount
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text: string = email['text']
+
+    return text.includes(`${expectedBlockedAccountsCount} account(s) and ${expectedBlockedHostsCount} server(s) were blocked`) &&
+      text.includes(`${expectedUnblockedAccountsCount} account(s) and ${expectedUnblockedHostsCount} server(s) were unblocked`)
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
 export async function checkNewBlacklistOnMyVideo (
   options: CheckerBaseParams & {
     shortUUID: string

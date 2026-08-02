@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { VIDEO_CHAPTERS_ARRAY_VALIDATOR, VIDEO_CHAPTER_TITLE_VALIDATOR } from '@app/shared/form-validators/video-chapter-validators'
 import { FormReactiveErrors, FormReactiveService, FormReactiveMessages } from '@app/shared/shared-forms/form-reactive.service'
@@ -32,6 +32,7 @@ type Form = {
     './video-chapters.component.scss'
   ],
   templateUrl: './video-chapters.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

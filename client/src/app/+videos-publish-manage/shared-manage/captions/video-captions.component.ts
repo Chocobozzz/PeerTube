@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VideoCaptionEdit, VideoCaptionWithPathEdit } from '@app/+videos-publish-manage/shared-manage/common/video-caption-edit.model'
 import { ServerService } from '@app/core'
@@ -25,6 +25,7 @@ const debugLogger = debug('peertube:video-manage')
     './video-captions.component.scss'
   ],
   templateUrl: './video-captions.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

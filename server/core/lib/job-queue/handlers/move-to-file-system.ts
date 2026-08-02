@@ -11,13 +11,9 @@ export async function processMoveToFileSystem (job: Job) {
   if (isMoveVideoStoragePayload(payload)) { // Move all video related files
     logger.info(`Moving video ${payload.videoUUID} to file system in job ${job.id}.`, lTagsBase(payload.videoUUID))
 
-    const moveVideoState = payload.isNewVideo !== undefined
-      ? { isNewVideo: payload.isNewVideo, previousVideoState: payload.previousVideoState }
-      : payload.moveVideoState
-
     return moveVideoToFS({
       videoUUID: payload.videoUUID,
-      moveVideoState,
+      moveVideoState: payload.moveVideoState,
       loggerTags: lTagsBase().tags
     })
   } else if (isMoveCaptionPayload(payload)) { // Only caption file

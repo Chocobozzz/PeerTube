@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common'
-import { Component, numberAttribute, input } from '@angular/core'
+import { Component, numberAttribute, input, ChangeDetectionStrategy } from '@angular/core'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-progress-bar',
   styleUrls: [ './progress-bar.component.scss' ],
   templateUrl: './progress-bar.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     NgbTooltip

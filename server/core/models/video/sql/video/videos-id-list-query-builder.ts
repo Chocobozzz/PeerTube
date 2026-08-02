@@ -10,7 +10,7 @@ import {
 } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { buildSortDirectionAndField } from '@server/models/shared/index.js'
+import { buildSortDirectionAndField, throwOnInvalidSortColumnName } from '@server/models/shared/index.js'
 import { MUserAccountId, MUserId } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import validator from 'validator'
@@ -446,8 +446,8 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
   private joinPlaylist (playlistId: number) {
     this.joins.push(
-      'INNER JOIN "videoPlaylistElement" ON "video"."id" = "videoPlaylistElement"."videoId" ' +
-        'AND "videoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
+      'INNER JOIN "videoPlaylistElement" "VideoPlaylistElement" ON "video"."id" = "VideoPlaylistElement"."videoId" ' +
+        'AND "VideoPlaylistElement"."videoPlaylistId" = :videoPlaylistId'
     )
 
     this.replacements.videoPlaylistId = playlistId
@@ -1027,17 +1027,22 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private setSort (column: string, direction: 'ASC' | 'DESC') {
-    this.sort = this.buildOrder(column, direction)
-  }
+    throwOnInvalidSortColumnName(column)
 
-  private buildOrder (column: string, direction: 'ASC' | 'DESC') {
-    if (column.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + column)
+    if (column === 'random') {
+      this.sort = 'ORDER BY RANDOM()'
+      return
+    }
 
-    if (column === 'random') return 'ORDER BY RANDOM()'
-    if (column === 'total') return `ORDER BY "total" ${direction}`
+    if (column === 'total') {
+      this.sort = `ORDER BY "total" ${direction}`
+      return
+    }
 
-    if ([ 'trending', 'hot', 'best' ].includes(column)) { // Sort by aggregation
-      return `ORDER BY "score" ${direction}`
+    // Sort by aggregation
+    if ([ 'trending', 'hot', 'best' ].includes(column)) {
+      this.sort = `ORDER BY "score" ${direction}`
+      return
     }
 
     let firstSort: string
@@ -1048,13 +1053,15 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       firstSort = '"publishedAtForOrder"'
     } else if (column === 'localVideoFilesSize') {
       firstSort = '"localVideoFilesSize"'
+    } else if (column === 'playlistElementPosition') {
+      firstSort = '"VideoPlaylistElement"."position"'
     } else if (column.includes('.')) {
       firstSort = column
     } else {
       firstSort = `"video"."${column}"`
     }
 
-    return `ORDER BY ${firstSort} ${direction}, "video"."id" ASC`
+    this.sort = `ORDER BY ${firstSort} ${direction}, "video"."id" ASC`
   }
 
   private setLimit (countArg: number) {

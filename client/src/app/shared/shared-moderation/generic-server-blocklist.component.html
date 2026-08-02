@@ -7,6 +7,7 @@
   [dataLoader]="dataLoader"
   columnConfig="false"
   searchInput="true"
+  [inputFilters]="isInstanceMode() ? inputFilters : undefined"
 >
   <ng-template #totalTitle let-totalRecords>
     <ng-container i18n>{ totalRecords, plural, =0 {No server} =1 {1 server} other {{{ totalRecords | myNumberFormatter }} servers}}</ng-container>
@@ -28,6 +29,21 @@
     </td>
 
     <td>{{ serverBlock.createdAt | ptDate: 'short' }}</td>
+
+    @if (table.isColumnDisplayed('subscriptionName')) {
+      <td>
+        @if (serverBlock.blocklistSubscription) {
+          <a
+            [routerLink]="getBlocklistUrl()"
+            [queryParams]="{ subscriptionName: serverBlock.blocklistSubscription.name }"
+            i18n-title
+            title="Filter muted servers by this subscription"
+          >
+            <span class="pt-badge" [class]="getSubscriptionBadge(serverBlock.blocklistSubscription.name)">{{ serverBlock.blocklistSubscription.name }}</span>
+          </a>
+        }
+      </td>
+    }
   </ng-template>
 
   <ng-template #actionCell let-serverBlock>

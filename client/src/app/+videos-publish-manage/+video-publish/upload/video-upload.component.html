@@ -18,7 +18,7 @@
 
       <div class="form-group form-group-channel">
         <label i18n for="first-step-channel">Channel</label>
-        <my-select-channel inputId="first-step-channel" [items]="userChannels()" [(ngModel)]="firstStepChannelId"></my-select-channel>
+        <my-select-channel-user inputId="first-step-channel" [items]="userChannels()" [(ngModel)]="firstStepChannelId"></my-select-channel-user>
       </div>
 
       @if (uploadingAudioFile) {

@@ -78,6 +78,7 @@ export class ActionDropdownComponent<T, D = never> implements OnChanges {
   labelExtra: TemplateRef<any>
 
   buttonClasses: Record<string, boolean> = {}
+  hasAtLeastAnIconOrAvatar = false
 
   ngOnChanges () {
     this.buttonClasses = {
@@ -88,6 +89,8 @@ export class ActionDropdownComponent<T, D = never> implements OnChanges {
       'primary-button': this.buttonStyled() && this.theme() === 'primary',
       'button-unstyle': !this.buttonStyled()
     }
+
+    this.hasAtLeastAnIconOrAvatar = this.getActions().some(actions => actions.some(a => a.iconName || a.actorAvatar))
   }
 
   getActions (): DropdownAction<T, D>[][] {

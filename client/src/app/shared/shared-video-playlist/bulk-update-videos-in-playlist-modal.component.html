@@ -1,0 +1,47 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Update videos in playlists</h4>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="hide()">
+      <my-global-icon iconName="cross"></my-global-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="mb-4">
+      <input type="text" placeholder="Search playlists" i18n-placeholder [(ngModel)]="videoPlaylistSearch" (ngModelChange)="onVideoPlaylistSearchChanged()" />
+    </div>
+
+    <div class="playlists">
+      @for (playlist of currentPlaylists; track playlist) {
+        <div class="playlist d-flex gap-2 mb-2">
+          <my-peertube-checkbox [inputName]="getPrimaryInputName(playlist)" [(ngModel)]="playlistsEnabled[playlist.id]" [labelText]="playlist.displayName"></my-peertube-checkbox>
+
+          @if (user.isCollaboratingToChannels()) {
+            @if (user.isOwnerOfChannel(playlist.videoChannel)) {
+              <my-collaborator-state class="ms-2" type="owner" small="true"></my-collaborator-state>
+            } @else if (user.isEditorOfChannel(playlist.videoChannel)) {
+              <my-collaborator-state class="ms-2" type="accepted" small="true"></my-collaborator-state>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <button class="mt-4 peertube-button secondary-button" (click)="isNewPlaylistBlockOpened = true" [hidden]="isNewPlaylistBlockOpened">
+      <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
+
+      <span i18n>Create a private playlist</span>
+    </button>
+
+    @if (isNewPlaylistBlockOpened) {
+      <my-playlist-create-block class="d-block mt-3 pt-3" (playlistCreated)="onPlaylistCreated()" />
+    }
+  </div>
+
+  <div class="modal-footer inputs">
+    <input type="button" role="button" i18n-value value="Cancel" class="peertube-button secondary-button" (click)="hide()" (key.enter)="hide()">
+
+    <my-button theme="primary" [loading]="updatingPlaylists" [disabled]="updatingPlaylists" (click)="save()" i18n>Save</my-button>
+  </div>
+</ng-template>

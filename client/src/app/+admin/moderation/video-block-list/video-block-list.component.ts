@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ConfirmService, MarkdownService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { buildDropdownSimpleAndBulkActions } from '@app/shared/shared-main/buttons/action-dropdown-helpers'
@@ -6,8 +6,10 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { AccountBlockBadgeInput } from '@app/shared/shared-moderation/account-block-badges.component'
 import { BlocklistService } from '@app/shared/shared-moderation/blocklist.service'
+import { VideoBlockInternalNoteModalComponent } from '@app/shared/shared-moderation/video-block-internal-note-modal.component'
 import { VideoBlockService } from '@app/shared/shared-moderation/video-block.service'
 import { PrivacyBadgeComponent } from '@app/shared/shared-video/privacy-badge.component'
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { buildVideoEmbedLink, decorateVideoLink } from '@peertube/peertube-core-utils'
 import { ResultList, VideoBlacklist as VideoBlacklistServer, VideoBlacklistType, VideoBlacklistType_Type } from '@peertube/peertube-models'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
@@ -15,6 +17,7 @@ import { switchMap } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 import { AdvancedFilterDef } from '../../../shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '../../../shared/shared-main/buttons/action-dropdown.component'
+import { Nl2BrPipe } from '../../../shared/shared-main/common/nl2br.pipe'
 import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { EmbedComponent } from '../../../shared/shared-main/video/embed.component'
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../../shared/shared-tables/table.component'
@@ -28,6 +31,7 @@ type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../../../shared/shared-moderation/moderation.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ActionDropdownComponent,
     VideoCellComponent,
@@ -36,7 +40,10 @@ type VideoBlacklist = VideoBlacklistServer & { reasonHtml?: string }
     VideoNSFWBadgeComponent,
     TableComponent,
     NumberFormatterPipe,
-    PrivacyBadgeComponent
+    PrivacyBadgeComponent,
+    NgbTooltipModule,
+    VideoBlockInternalNoteModalComponent,
+    Nl2BrPipe
   ]
 })
 export class VideoBlockListComponent implements OnInit {
@@ -49,6 +56,7 @@ export class VideoBlockListComponent implements OnInit {
   private videoService = inject(VideoService)
 
   readonly table = viewChild<TableComponent<VideoBlacklist, DataLoaderParameter>>('table')
+  readonly internalNoteModal = viewChild<VideoBlockInternalNoteModalComponent>('internalNoteModal')
 
   blocklistTypeFilter: VideoBlacklistType_Type
 
@@ -62,8 +70,9 @@ export class VideoBlockListComponent implements OnInit {
       title: $localize`Block type`,
       options: [
         { value: 'all', label: $localize`All` },
-        { value: VideoBlacklistType['AUTO_BEFORE_PUBLISHED'], label: $localize`Automatic blocks` },
-        { value: VideoBlacklistType['MANUAL'], label: $localize`Manual blocks` }
+        { value: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY, label: $localize`Auto-block by instance policy` },
+        { value: VideoBlacklistType.AUTO_BY_AUTO_TAG_POLICY, label: $localize`Auto-block by auto-tag policy` },
+        { value: VideoBlacklistType.MANUAL, label: $localize`Manual blocks` }
       ]
     }
   ]
@@ -73,6 +82,7 @@ export class VideoBlockListComponent implements OnInit {
     { id: 'privacy', label: $localize`Privacy`, sortable: false },
     { id: 'sensitive', label: $localize`Sensitive`, sortable: false },
     { id: 'unfederated', label: $localize`Unfederated`, sortable: false },
+    { id: 'internalNote', label: $localize`Internal note`, sortable: false },
     { id: 'createdAt', label: $localize`Date`, sortable: true }
   ]
 
@@ -89,13 +99,17 @@ export class VideoBlockListComponent implements OnInit {
         {
           label: () => $localize`Internal actions`,
           isHeader: true,
-          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
           enableBulk: true
         },
         {
           label: () => $localize`Switch to manual block`,
           handler: videoBlocks => this.switchVideosBlockToManual(videoBlocks),
-          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED,
+          isDisplayed: videoBlock => videoBlock.type !== VideoBlacklistType.MANUAL,
+          enableBulk: true
+        },
+        {
+          label: () => $localize`Set internal note...`,
+          handler: entries => this.internalNoteModal().openModal(entries),
           enableBulk: true
         }
       ],
@@ -105,6 +119,7 @@ export class VideoBlockListComponent implements OnInit {
           isHeader: true,
           enableBulk: true
         },
+
         {
           label: () => $localize`Unblock`,
           handler: entries => this.unblockVideos(entries),

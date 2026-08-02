@@ -1,5 +1,5 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { VideoResolution } from '@peertube/peertube-models'
+import { EncoderOptions, VideoResolution } from '@peertube/peertube-models'
 import { FfmpegCommand, FfprobeData, FilterSpecification } from 'fluent-ffmpeg'
 import { join } from 'path'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
@@ -142,6 +142,8 @@ export class FFmpegLive {
   ) {
     const { inputUrl, bitrate, ratio, probe, splitAudioAndVideo, command, resolution, fps, streamNum, streamType, hasAudio } = options
 
+    const finalOutputName = `vout${resolution}`
+
     const baseEncoderBuilderParams = {
       input: inputUrl,
 
@@ -171,7 +173,7 @@ export class FFmpegLive {
     if (streamType === 'audio') {
       command.outputOption('-map a:0')
     } else {
-      command.outputOption(`-map [vout${resolution}]`)
+      command.outputOption(`-map [${finalOutputName}]`)
     }
 
     addDefaultEncoderParams({ command, encoder: builderResult.encoder, fps, streamNum })
@@ -192,12 +194,34 @@ export class FFmpegLive {
     } else {
       command.outputOption(`${buildStreamSuffix('-c:v', streamNum)} ${builderResult.encoder}`)
 
-      complexFilter.push({
-        inputs: `vtemp${resolution}`,
-        filter: getScaleFilter(builderResult.result),
-        options: `w=-2:h=${resolution}`,
-        outputs: `vout${resolution}`
-      })
+      // Apply additional video filters from encoder options (e.g., fps)
+      const videoFilters: EncoderOptions['videoFilters'] = [
+        {
+          name: getScaleFilter(builderResult.result),
+          rawOptions: `w=-2:h=${resolution}`
+        },
+
+        ...(builderResult.result.videoFilters || [])
+      ]
+
+      let lastOutputName = `vtemp${resolution}`
+      for (let i = 0; i < videoFilters.length; i++) {
+        const videoFilter = videoFilters[i]
+        const isLastFilter = i === videoFilters.length - 1
+
+        const filterOutput = isLastFilter
+          ? finalOutputName
+          : `vfiltered${resolution}_${i}`
+
+        complexFilter.push({
+          inputs: lastOutputName,
+          filter: videoFilter.name,
+          options: videoFilter.rawOptions,
+          outputs: filterOutput
+        })
+
+        lastOutputName = filterOutput
+      }
 
       if (splitAudioAndVideo) {
         const suffix = hasAudio

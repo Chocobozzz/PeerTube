@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 import { AuthService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
@@ -7,6 +7,7 @@ import { UserRight, UserRightType } from '@peertube/peertube-models'
 @Component({
   selector: 'my-admin-overview',
   templateUrl: './admin-overview.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class AdminOverviewComponent implements OnInit {

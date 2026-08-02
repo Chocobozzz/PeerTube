@@ -35,7 +35,6 @@ export async function moveVideoToFS (options: {
   videoUUID: string
 
   moveVideoState?: {
-    isNewVideo: boolean
     previousVideoState: VideoStateType
   }
 

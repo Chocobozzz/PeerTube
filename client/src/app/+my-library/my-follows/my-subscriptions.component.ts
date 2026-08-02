@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ComponentPagination, Notifier, resetCurrentPage } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -13,6 +13,7 @@ import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/
 @Component({
   templateUrl: './my-subscriptions.component.html',
   styleUrls: [ './my-subscriptions.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     SearchInputComponent,
     InfiniteScrollerDirective,

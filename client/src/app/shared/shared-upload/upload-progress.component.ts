@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core'
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { AlertComponent } from '../shared-main/common/alert.component'
 import { ProgressBarComponent } from '../shared-main/common/progress-bar.component'
 
@@ -6,6 +6,7 @@ import { ProgressBarComponent } from '../shared-main/common/progress-bar.compone
   selector: 'my-upload-progress',
   templateUrl: './upload-progress.component.html',
   styleUrls: [ './upload-progress.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ ProgressBarComponent, AlertComponent ]
 })
 export class UploadProgressComponent {

@@ -60,11 +60,9 @@ export class VideoTranscriptionGeneratedForOwner extends AbstractNotification<MV
         language,
         videoName: video.name
       }),
-      locals: {
-        action: {
-          text: t('View video', userLanguage),
-          url: videoUrl
-        }
+      action: {
+        text: t('View video', userLanguage),
+        url: videoUrl
       }
     }
   }

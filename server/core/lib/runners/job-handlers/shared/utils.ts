@@ -25,7 +25,7 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
 
   await onWebVideoFileTranscoding({ video, videoOutputPath: videoFilePath, deleteWebInputVideoFile, wasAudioFile })
 
-  await onTranscodingEnded({ isNewVideo: privatePayload.isNewVideo, moveVideoToNextState: privatePayload.canMoveVideoState, video })
+  await onTranscodingEnded({ moveVideoToNextState: privatePayload.canMoveVideoState, video })
 }
 
 export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsFn, transaction?: Transaction) {

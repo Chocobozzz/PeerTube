@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, Notifier, PluginService, UserService } from '@app/core'
@@ -46,6 +46,7 @@ type ColumnName =
   selector: 'my-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     CommonModule,
@@ -146,7 +147,7 @@ export class UserListComponent implements OnInit, OnDestroy {
           isDisplayed: users => users.every(u => this.authUser.canManageUser(u))
         },
         {
-          label: $localize`Ban`,
+          label: $localize`Ban...`,
           description: $localize`User won't be able to login anymore, but videos and comments will be kept as is.`,
           handler: users => this.openBanUserModal(users),
           isDisplayed: users => users.every(u => this.authUser.canManageUser(u) && u.blocked === false)

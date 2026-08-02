@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { booleanAttribute, Component, forwardRef, inject, input, OnInit } from '@angular/core'
+import { booleanAttribute, Component, forwardRef, inject, input, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { FileConstraints, HTMLServerConfig } from '@peertube/peertube-models'
@@ -19,6 +19,7 @@ import { ReactiveFileComponent } from './reactive-file.component'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ CommonModule, FormsModule, ReactiveFileComponent, DeleteButtonComponent ]
 })
 export class ImageInputComponent implements OnInit, ControlValueAccessor {

@@ -29,7 +29,6 @@ describe('Test automatic tags', function () {
     await servers[1].config.enableLive({ allowReplay: false })
 
     await doubleFollow(servers[0], servers[1])
-
     ;({ uuid: videoUUID } = await servers[0].videos.quickUpload({ name: 'video' }))
 
     await waitJobs(servers)
@@ -183,13 +182,15 @@ describe('Test automatic tags', function () {
             listName: 'list 3'
           })
 
+          await waitJobs(servers)
+
           await servers[0].comments.createThread({ videoId: videoUUID, text: 'captain nemo' })
           await servers[0].comments.createThread({ videoId: videoUUID, text: 'my nautilus 2' })
           await servers[0].comments.createThread({ videoId: videoUUID, text: 'word 1' })
 
           const { data } = await servers[0].comments.listCommentsOnMyVideos()
-          // Previous comment still have the same automatic tags
-          expect(data.find(c => c.text === 'my nautilus').automaticTags).to.have.lengthOf(0)
+          // Previous comment has been rebuilt using the new watched words list
+          expect(data.find(c => c.text === 'my nautilus').automaticTags).to.have.members([ 'list 3' ])
 
           expect(data.find(c => c.text === 'captain nemo').automaticTags).to.have.lengthOf(0)
           expect(data.find(c => c.text === 'my nautilus 2').automaticTags).to.have.members([ 'list 3' ])
@@ -406,7 +407,7 @@ describe('Test automatic tags', function () {
       })
 
       it('Should update watched words list and assign auto tag on update', async function () {
-        const { uuid } = await servers[0].videos.quickUpload({ name: 'hi minnie' })
+        await servers[0].videos.quickUpload({ name: 'hi minnie' })
 
         {
           const { data } = await servers[0].videos.listAllForAdmin()
@@ -420,42 +421,13 @@ describe('Test automatic tags', function () {
             listName: 'mickey list v2'
           })
 
-          await servers[0].videos.update({ id: uuid, attributes: { name: 'hi minnie v2' } })
+          await waitJobs(servers)
 
           const { data } = await servers[0].videos.listAllForAdmin()
-          expect(data.find(v => v.name === 'hi minnie v2').automaticTags).to.have.members([ 'mickey list v2' ])
+          expect(data.find(v => v.name === 'hi minnie').automaticTags).to.have.members([ 'mickey list v2' ])
         }
       })
 
-      it('Should not update remote video if name/description has not changed', async function () {
-        await servers[1].videos.update({
-          id: liveUUID,
-          attributes: {
-            channelId: servers[0].store.channel.id,
-            tags: [ 'super tag' ]
-          }
-        })
-
-        await waitJobs(servers)
-
-        const { data } = await servers[0].videos.listAllForAdmin()
-        expect(data.find(v => v.name === 'live loulou').automaticTags).to.have.members([ 'donald list', 'mickey list' ])
-      })
-
-      it('Should update remote video if name/description has changed', async function () {
-        await servers[1].videos.update({
-          id: liveUUID,
-          attributes: { name: 'live loulou v2' }
-        })
-
-        await waitJobs(servers)
-
-        const { data } = await servers[0].videos.listAllForAdmin()
-        expect(data.find(v => v.name === 'live loulou v2').automaticTags).to.have.members([ 'donald list', 'mickey list v2' ])
-      })
-    })
-
-    describe('Searching videos with specific tags', function () {
       it('Should search in admin videos with specific automatic tags', async function () {
         {
           const { total, data } = await servers[0].videos.listAllForAdmin({ autoTagOneOf: [ 'picsou list' ] })
@@ -470,8 +442,30 @@ describe('Test automatic tags', function () {
           expect(total).to.equal(2)
           expect(data).to.have.lengthOf(2)
 
-          expect(data.map(d => d.name)).to.have.members([ 'hi minnie v2', 'live loulou v2' ])
+          expect(data.map(d => d.name)).to.have.members([ 'hi minnie', 'live loulou' ])
         }
+      })
+
+      it('Should update remote video if name/description has changed', async function () {
+        await servers[1].videos.update({
+          id: liveUUID,
+          attributes: { name: 'live v2' }
+        })
+
+        await waitJobs(servers)
+
+        const { data } = await servers[0].videos.listAllForAdmin()
+        expect(data.find(v => v.name === 'live v2').automaticTags).to.have.members([ 'mickey list v2' ])
+      })
+
+      it('Should delete watched words list and automatically delete auto tags', async function () {
+        await servers[0].watchedWordsLists.deleteList({ listId: serverListId })
+        await waitJobs(servers)
+
+        const { total, data } = await servers[0].videos.listAllForAdmin({ autoTagOneOf: [ 'mickey list v2' ] })
+        console.log(data)
+        expect(total).to.equal(0)
+        expect(data).to.have.lengthOf(0)
       })
     })
   })

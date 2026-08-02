@@ -28,7 +28,7 @@ export async function changeVideoChannelShare (
 
   await undoShareByVideoChannel(video, oldVideoChannel, t)
 
-  await shareByVideoChannel(video, t)
+  await shareByVideoChannelIfNeeded({ video, skipFederation: false, transaction: t })
 }
 
 export async function addVideoShares (shareUrls: string[], video: MVideoId) {
@@ -46,40 +46,67 @@ export async function addVideoShares (shareUrls: string[], video: MVideoId) {
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
-export async function shareByServer (video: MVideo, t: Transaction) {
+export async function isSharedByServer (options: {
+  video: MVideo
+  transaction: Transaction
+}) {
+  const { video, transaction } = options
+
   const serverActor = await getServerActor()
 
   const serverShareUrl = getLocalVideoAnnounceActivityPubUrl(serverActor, video)
-  const [ serverShare ] = await VideoShareModel.findOrCreate({
-    defaults: {
-      actorId: serverActor.id,
-      videoId: video.id,
-      url: serverShareUrl
-    },
-    where: {
-      url: serverShareUrl
-    },
-    transaction: t
-  })
 
-  return sendVideoAnnounce(serverActor, serverShare, video, t)
+  const share = await VideoShareModel.loadByUrl(serverShareUrl, transaction)
+
+  return !!share
 }
 
-export async function shareByVideoChannel (video: MVideoAccountLight, t: Transaction) {
-  const videoChannelShareUrl = getLocalVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
-  const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
-    defaults: {
-      actorId: video.VideoChannel.Actor.id,
-      videoId: video.id,
-      url: videoChannelShareUrl
-    },
-    where: {
-      url: videoChannelShareUrl
-    },
-    transaction: t
-  })
+export async function shareByServerIfNeeded (options: {
+  video: MVideo
+  skipFederation: boolean
+  transaction: Transaction
+}) {
+  const { video, skipFederation, transaction } = options
 
-  return sendVideoAnnounce(video.VideoChannel.Actor, videoChannelShare, video, t)
+  const serverActor = await getServerActor()
+
+  const serverShareUrl = getLocalVideoAnnounceActivityPubUrl(serverActor, video)
+
+  let share = await VideoShareModel.loadByUrl(serverShareUrl, transaction)
+  if (share) return
+
+  share = await VideoShareModel.create({
+    actorId: serverActor.id,
+    videoId: video.id,
+    url: serverShareUrl
+  }, { transaction: transaction })
+
+  if (skipFederation !== true) {
+    await sendVideoAnnounce({ byActor: serverActor, videoShare: share, video, transaction: transaction })
+  }
+}
+
+export async function shareByVideoChannelIfNeeded (options: {
+  video: MVideoAccountLight
+  skipFederation: boolean
+  transaction: Transaction
+}) {
+  const { video, skipFederation, transaction } = options
+
+  const videoChannelShareUrl = getLocalVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
+
+  let share = await VideoShareModel.loadByUrl(videoChannelShareUrl, transaction)
+  if (share) return
+
+  share = await VideoShareModel.create({
+    actorId: video.VideoChannel.Actor.id,
+    videoId: video.id,
+    url: videoChannelShareUrl
+  }, { transaction: transaction })
+
+  if (skipFederation !== true) {
+    await sendVideoAnnounce({ byActor: video.VideoChannel.Actor, videoShare: share, video, transaction: transaction })
+  }
 }
 
 // ---------------------------------------------------------------------------

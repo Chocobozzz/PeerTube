@@ -1,4 +1,5 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, DestroyRef, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RouterOutlet } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
@@ -7,16 +8,20 @@ import { UserRight, UserRightType } from '@peertube/peertube-models'
 @Component({
   selector: 'my-admin-moderation',
   templateUrl: './admin-moderation.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ HorizontalMenuComponent, RouterOutlet ]
 })
 export class AdminModerationComponent implements OnInit {
+  private destroyRef = inject(DestroyRef)
   private auth = inject(AuthService)
   private server = inject(ServerService)
 
   menuEntries: HorizontalMenuEntry[] = []
 
   ngOnInit () {
-    this.server.configReloaded.subscribe(() => this.buildMenu())
+    this.server.configReloaded
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.buildMenu())
 
     this.buildMenu()
   }
@@ -45,24 +50,34 @@ export class AdminModerationComponent implements OnInit {
       })
     }
 
-    if (this.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST) || this.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
+    if (
+      this.hasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST) || this.hasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST) ||
+      this.hasRight(UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS)
+    ) {
       const item: HorizontalMenuEntry = {
         label: $localize`Mutes`,
         routerLink: '',
         children: []
       }
 
-      if (this.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)) {
+      if (this.hasRight(UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST)) {
         item.children.push({
           label: $localize`Muted accounts`,
           routerLink: '/admin/moderation/blocklist/accounts'
         })
       }
 
-      if (this.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
+      if (this.hasRight(UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST)) {
         item.children.push({
           label: $localize`Muted servers`,
           routerLink: '/admin/moderation/blocklist/servers'
+        })
+      }
+
+      if (this.hasRight(UserRight.MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS)) {
+        item.children.push({
+          label: $localize`Subscriptions`,
+          routerLink: '/admin/moderation/blocklist/subscriptions'
         })
       }
 
@@ -71,11 +86,35 @@ export class AdminModerationComponent implements OnInit {
       this.menuEntries.push(item)
     }
 
-    if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)) {
-      this.menuEntries.push({
+    if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS) || this.hasRight(UserRight.MANAGE_INSTANCE_AUTO_TAGS)) {
+      const item: HorizontalMenuEntry = {
         label: $localize`Watched words`,
-        routerLink: '/admin/moderation/watched-words/list'
-      })
+        routerLink: '',
+        children: []
+      }
+
+      if (this.hasRight(UserRight.MANAGE_INSTANCE_WATCHED_WORDS)) {
+        item.children.push({
+          label: $localize`Lists`,
+          routerLink: '/admin/moderation/watched-words/list'
+        })
+
+        item.children.push({
+          label: $localize`Subscriptions`,
+          routerLink: '/admin/moderation/watched-words/subscriptions'
+        })
+      }
+
+      if (this.hasRight(UserRight.MANAGE_INSTANCE_AUTO_TAGS)) {
+        item.children.push({
+          label: $localize`Auto tag policies`,
+          routerLink: '/admin/moderation/watched-words/automatic-tag-policies'
+        })
+      }
+
+      item.routerLink = item.children[0].routerLink
+
+      this.menuEntries.push(item)
     }
   }
 

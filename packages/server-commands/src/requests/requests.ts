@@ -96,7 +96,7 @@ export function makeActivityPubGetRequest (url: string, path: string, expectedSt
     url,
     path,
     expectedStatus,
-    accept: 'application/activity+json,text/html;q=0.9,\\*/\\*;q=0.8'
+    accept: 'application/activity+json,text/html;q=0.9,*/*;q=0.8'
   })
 }
 
@@ -104,7 +104,7 @@ export function makeActivityPubRawRequest (url: string, expectedStatus: HttpStat
   return makeRawRequest({
     url,
     expectedStatus,
-    accept: 'application/activity+json,text/html;q=0.9,\\*/\\*;q=0.8'
+    accept: 'application/activity+json,text/html;q=0.9,*/*;q=0.8'
   })
 }
 
@@ -301,7 +301,7 @@ function buildFields (req: request.Test, fields: { [fieldName: string]: any }, n
     if (fields[key] === undefined) continue
 
     if (Array.isArray(fields[key]) && fields[key].length === 0) {
-      req.field(key, [])
+      req.field(formKey, [])
       continue
     }
 

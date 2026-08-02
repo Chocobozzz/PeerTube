@@ -1,5 +1,15 @@
 import { NgTemplateOutlet } from '@angular/common'
-import { AfterContentInit, booleanAttribute, Component, contentChildren, forwardRef, input, model, TemplateRef } from '@angular/core'
+import {
+  AfterContentInit,
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  contentChildren,
+  forwardRef,
+  input,
+  model,
+  TemplateRef
+} from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { HelpComponent } from '../shared-main/buttons/help.component'
 import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-template.directive'
@@ -15,6 +25,7 @@ import { PeerTubeTemplateDirective } from '../shared-main/common/peertube-templa
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, NgTemplateOutlet, HelpComponent ]
 })
 export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterContentInit {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { HtmlRendererService } from '@app/core'
 import { ConfirmService } from '@app/core/confirm/confirm.service'
@@ -12,6 +12,7 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
   selector: 'my-confirm',
   templateUrl: './confirm.component.html',
   styleUrls: [ './confirm.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, FormsModule, InputTextComponent ]
 })
 export class ConfirmComponent implements OnInit {

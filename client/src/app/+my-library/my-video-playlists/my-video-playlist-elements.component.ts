@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop'
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, HooksService, Notifier, ScreenService, updatePaginationOnDelete } from '@app/core'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
@@ -17,6 +17,7 @@ import { VideoPlaylistMiniatureComponent } from '../../shared/shared-video-playl
 @Component({
   templateUrl: './my-video-playlist-elements.component.html',
   styleUrls: [ './my-video-playlist-elements.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ButtonComponent,
     VideoPlaylistMiniatureComponent,

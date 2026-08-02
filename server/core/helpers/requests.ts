@@ -39,6 +39,9 @@ export type PeerTubeRequestOptions = {
   jsonResponse?: boolean
 
   followRedirect?: boolean
+
+  // Support AbortSignal for request cancellation (e.g., on job timeout)
+  signal?: AbortSignal
 } & Pick<OptionsInit, 'headers' | 'json' | 'method' | 'searchParams'>
 
 export const unsafeSSRFGot = got.extend({
@@ -273,6 +276,7 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
     json: options.json,
     searchParams: options.searchParams,
     followRedirect: options.followRedirect,
+    signal: options.signal,
     retry: {
       limit: 2
     },

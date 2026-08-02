@@ -1,8 +1,8 @@
 import { LogoType, UploadImageType, UploadImageType_Type } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { buildImageSize, processImage } from '@server/helpers/image-utils.js'
+import { buildImageSize, processImage, processSVG } from '@server/helpers/image-utils.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
-import { copy, remove } from 'fs-extra/esm'
+import { remove } from 'fs-extra/esm'
 import { retryTransactionWrapper } from '../helpers/database-utils.js'
 import { UPLOAD_IMAGES_SIZE } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
@@ -50,7 +50,7 @@ async function generateImageSizes (imagePath: string, type: UploadImageType_Type
     const imageName = buildUUID() + extension
     const destination = UploadImageModel.getFSPathOf(imageName)
 
-    await copy(imagePath, destination)
+    await processSVG({ path: imagePath, destination })
 
     return [ { imageName, imageSize: { width: null, height: null } } ]
   }

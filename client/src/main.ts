@@ -3,14 +3,12 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http'
 import {
   ApplicationRef,
   enableProdMode,
-  enableProfiling,
   importProvidersFrom,
   inject,
   provideAppInitializer,
   provideZoneChangeDetection
 } from '@angular/core'
 import { BrowserModule, bootstrapApplication, enableDebugTools } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouteReuseStrategy, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router'
 import { ServiceWorkerModule } from '@angular/service-worker'
 import { PTPrimeTheme } from '@app/core/theme/primeng/primeng-theme'
@@ -62,8 +60,6 @@ export function loadConfigFactory (
 
 if (environment.production) {
   enableProdMode()
-} else {
-  enableProfiling()
 }
 
 logger.registerServerSending(environment.apiUrl)
@@ -75,7 +71,6 @@ const bootstrap = () => {
 
       importProvidersFrom(
         BrowserModule,
-        BrowserAnimationsModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
       ),
 

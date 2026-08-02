@@ -162,11 +162,11 @@ export type MChannelAccountSummaryFormattable =
 
 export type MChannelFormattable =
   & FunctionProperties<MChannel>
-  & Pick<MChannel, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'support' | 'accountId'>
+  & Pick<MChannel, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'support' | 'accountId' | 'publicEmail'>
   & Use<'Actor', MActorFormattable>
   & PickWithOpt<VideoChannelModel, 'Account', MAccountFormattable>
 
 export type MChannelAP =
-  & Pick<MChannel, 'id' | 'name' | 'description' | 'support' | 'getClientUrl'>
+  & Pick<MChannel, 'id' | 'name' | 'description' | 'support' | 'getClientUrl' | 'publicEmail'>
   & Use<'Actor', MActorAPChannel>
   & Use<'Account', MAccountUrl>

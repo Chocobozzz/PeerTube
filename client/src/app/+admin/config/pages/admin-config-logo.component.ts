@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
@@ -31,6 +31,7 @@ type Form = {
   selector: 'my-admin-config-logo',
   templateUrl: './admin-config-logo.component.html',
   styleUrls: [ './admin-config-logo.component.scss', './admin-config-common.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

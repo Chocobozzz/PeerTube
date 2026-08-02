@@ -8,7 +8,7 @@ type Use<K extends keyof VideoBlacklistModel, M> = PickWith<VideoBlacklistModel,
 
 export type MVideoBlacklist = Omit<VideoBlacklistModel, 'Video'>
 
-export type MVideoBlacklistLight = Pick<MVideoBlacklist, 'id' | 'reason' | 'unfederated'>
+export type MVideoBlacklistLight = Pick<MVideoBlacklist, 'id' | 'reason' | 'internalNote' | 'unfederated'>
 export type MVideoBlacklistUnfederated = Pick<MVideoBlacklist, 'unfederated'>
 
 // ############################################################################

@@ -120,18 +120,13 @@ export async function onVideoStudioEnded (options: {
       await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
       {
         type: 'federate-video' as 'federate-video',
-        payload: {
-          videoUUID: video.uuid,
-          isNewVideoForFederation: false
-        }
+        payload: { videoUUID: video.uuid }
       },
       {
         type: 'transcoding-job-builder' as 'transcoding-job-builder',
         payload: {
           videoUUID: video.uuid,
-          optimizeJob: {
-            isNewVideo: false
-          }
+          optimizeJob: {}
         }
       }
     )

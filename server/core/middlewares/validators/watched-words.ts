@@ -77,7 +77,7 @@ export function addWatchedWordsListValidatorFactory (accountGetter: (res: expres
       if (areValidationErrors(req, res)) return
 
       const listName = req.body.listName
-      if (!await checkListNameIsUnique({ accountId: (await accountGetter(res)).id, listName, res })) return
+      if (!await checkListNameIsUnique({ accountId: (await accountGetter(res)).id, listName, req, res })) return
 
       return next()
     }
@@ -93,7 +93,7 @@ export function updateWatchedWordsListValidatorFactory (accountGetter: (res: exp
 
       const currentList = res.locals.watchedWordsList
       const listName = req.body.listName
-      if (listName && !await checkListNameIsUnique({ accountId: (await accountGetter(res)).id, listName, currentList, res })) return
+      if (listName && !await checkListNameIsUnique({ accountId: (await accountGetter(res)).id, listName, currentList, req, res })) return
 
       return next()
     }
@@ -107,16 +107,17 @@ export function updateWatchedWordsListValidatorFactory (accountGetter: (res: exp
 async function checkListNameIsUnique (options: {
   accountId: number
   listName: string
+  req: express.Request
   res: express.Response
   currentList?: MWatchedWordsList
 }) {
-  const { accountId, listName, currentList, res } = options
+  const { accountId, listName, currentList, req, res } = options
 
   const existing = await WatchedWordsListModel.loadByListName({ accountId, listName })
   if (existing && (currentList?.id !== existing.id)) {
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
-      message: `Watched words list with name ${listName} already exists`
+      message: req.t(`Watched words list with name {listName} already exists`, { listName })
     })
 
     return false

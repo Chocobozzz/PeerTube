@@ -1,12 +1,12 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { peertubeTranslate } from '@peertube/peertube-core-utils'
-import { ResultList, VideoImport, VideoImportCreate } from '@peertube/peertube-models'
+import { ResultList, Video, VideoImport, VideoImportCreate } from '@peertube/peertube-models'
 import { SortMeta } from 'primeng/api'
-import { Observable } from 'rxjs'
-import { catchError, map, switchMap } from 'rxjs/operators'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 
 @Injectable()
@@ -63,6 +63,27 @@ export class VideoImportService {
   retryVideoImport (videoImport: VideoImport) {
     return this.authHttp.post(VideoImportService.BASE_VIDEO_IMPORT_URL + videoImport.id + '/retry', {})
       .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  retryVideoImportByVideos (videos: Pick<Video, 'id'>[]) {
+    const pagination = { start: 0, count: 1 }
+    const sort = { field: 'createdAt', order: -1 }
+
+    return from(videos)
+      .pipe(
+        concatMap(video => {
+          return this.listMyVideoImports({ pagination, sort, includeCollaborations: true, videoId: video.id })
+            .pipe(switchMap(({ data }) => {
+              if (data.length === 0) {
+                throw new Error('No video import found for this video')
+              }
+
+              return this.authHttp.post(VideoImportService.BASE_VIDEO_IMPORT_URL + data[0].id + '/retry', {})
+            }))
+        }),
+        toArray(),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   private extractVideoImports (result: ResultList<VideoImport>): Observable<ResultList<VideoImport>> {

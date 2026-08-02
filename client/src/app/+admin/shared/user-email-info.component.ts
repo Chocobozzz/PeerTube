@@ -1,10 +1,11 @@
-import { Component, booleanAttribute, input } from '@angular/core'
+import { Component, booleanAttribute, input, ChangeDetectionStrategy } from '@angular/core'
 import { User, UserRegistration } from '@peertube/peertube-models'
 
 @Component({
   selector: 'my-user-email-info',
   templateUrl: './user-email-info.component.html',
   styleUrls: [ './user-email-info.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: []
 })
 export class UserEmailInfoComponent {

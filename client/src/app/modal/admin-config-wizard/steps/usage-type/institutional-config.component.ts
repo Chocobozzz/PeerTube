@@ -1,6 +1,6 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 
-import { Component, inject, model, OnInit } from '@angular/core'
+import { Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   BuildFormArgumentTyped,
@@ -25,6 +25,7 @@ type Form = {
 @Component({
   selector: 'my-institutional-config',
   templateUrl: './institutional-config.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ReactiveFormsModule,

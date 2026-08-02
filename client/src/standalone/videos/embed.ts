@@ -9,8 +9,8 @@ import {
   VideoState
 } from '@peertube/peertube-models'
 import type { PeerTubePlayer, VideojsPlayer } from '@peertube/player'
-import { TranslationsManager } from '@root-helpers/translations-manager'
 import { PeerTubeServerError } from '@pt-types'
+import { TranslationsManager } from '@root-helpers/translations-manager'
 import type videojs from 'video.js'
 import { getParamString, logger, videoRequiresFileToken } from '../../root-helpers'
 import { PeerTubeEmbedApi } from './embed-api'
@@ -54,6 +54,9 @@ export class PeerTubeEmbed {
 
   private alreadyInitialized = false
   private alreadyPlayed = false
+
+  private currentLiveVideo: VideoDetails
+  private currentLiveEndedHandler: () => void
 
   private videoPassword: string
   private videoPasswordFromAPI: string
@@ -127,6 +130,11 @@ export class PeerTubeEmbed {
         res.videosResponse.json() as Promise<ResultList<VideoPlaylistElement>>
       ])
 
+      if (playlist.videosLength === 0) {
+        this.playerHTML.displayError('This playlist is empty', await this.translationsPromise)
+        return undefined
+      }
+
       const allPlaylistElements = await this.playlistFetcher.loadAllPlaylistVideos(playlistId, playlistElementResult)
 
       this.playlistTracker = new PlaylistTracker(playlist, allPlaylistElements)
@@ -139,7 +147,7 @@ export class PeerTubeEmbed {
         : 1
 
       this.playlistTracker.setPosition(position)
-    } catch (err) {
+    } catch (err: any) {
       this.playerHTML.displayError(err.message, await this.translationsPromise)
       return undefined
     }
@@ -233,7 +241,7 @@ export class PeerTubeEmbed {
         playerSettingsPromise,
         forceAutoplay
       })
-    } catch (err) {
+    } catch (err: any) {
       if (await this.handlePasswordError(err)) {
         this.loadVideoAndBuildPlayer({ ...options })
         return
@@ -263,7 +271,7 @@ export class PeerTubeEmbed {
         this.playerOptionsBuilder.loadVideoParams(this.config, videoInfo)
 
         const live = videoInfo.isLive
-          ? await this.videoFetcher.loadLive(videoInfo)
+          ? await this.videoFetcher.loadLive(videoInfo, this.videoPassword)
           : undefined
 
         const videoFileToken = videoRequiresFileToken(videoInfo)
@@ -294,8 +302,12 @@ export class PeerTubeEmbed {
       this.buildPlayerIfNeeded()
     ])
 
-    if (!allowed) {
-      throw new Error('This video is not allowed to be embedded on this domain.')
+    if (allowed !== true) {
+      throw new Error(
+        video.embedPrivacyPolicy.id === VideoEmbedPrivacyPolicy.DISABLED
+          ? 'Embedding is disabled for this video.'
+          : 'This video is not allowed to be embedded on this domain.'
+      )
     }
 
     const playlist = this.playlistTracker
@@ -348,12 +360,15 @@ export class PeerTubeEmbed {
 
     if (this.videoPassword) this.playerHTML.removeVideoPasswordBlock()
 
+    this.stopCurrentLiveListeners()
+
     if (video.isLive) {
+      this.currentLiveVideo = video
+
       this.liveManager.listenForChanges({
         video,
 
         onPublishedVideo: () => {
-          this.liveManager.stopListeningForChanges(video)
           this.loadVideoAndBuildPlayer({ uuid: video.uuid, forceAutoplay: true })
         },
 
@@ -364,7 +379,8 @@ export class PeerTubeEmbed {
         this.liveManager.displayInfo({ state: video.state.id, translations })
         this.peertubePlayer.disable()
       } else {
-        this.player.one('ended', () => this.endLive(video, translations))
+        this.currentLiveEndedHandler = () => this.endLive(video, translations)
+        this.player.one('ended', this.currentLiveEndedHandler)
       }
     }
 
@@ -379,7 +395,7 @@ export class PeerTubeEmbed {
     const body = document.getElementById('custom-css')
 
     if (this.playerOptionsBuilder.hasBigPlayBackgroundColor()) {
-      body.style.setProperty('--pt-player-big-play-background-color', this.playerOptionsBuilder.getBigPlayBackgroundColor())
+      body.style.setProperty('--pt-player-big-play-bg', this.playerOptionsBuilder.getBigPlayBackgroundColor())
     }
 
     if (this.playerOptionsBuilder.hasForegroundColor()) {
@@ -418,6 +434,19 @@ export class PeerTubeEmbed {
     this.peertubePlayer.disable()
 
     this.peertubePlayer.setPoster(video.thumbnails)
+  }
+
+  private stopCurrentLiveListeners () {
+    if (!this.currentLiveVideo) return
+
+    this.liveManager.stopListeningForChanges(this.currentLiveVideo)
+
+    if (this.currentLiveEndedHandler) {
+      this.player.off('ended', this.currentLiveEndedHandler)
+      this.currentLiveEndedHandler = undefined
+    }
+
+    this.currentLiveVideo = undefined
   }
 
   private async handlePasswordError (err: PeerTubeServerError) {

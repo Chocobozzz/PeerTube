@@ -2,7 +2,7 @@ import { VideoBlacklist, type VideoBlacklistType_Type } from '@peertube/peertube
 import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/types/models/index.js'
 import { FindOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
-import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist.js'
+import { isVideoBlacklistReasonValid, isVideoBlacklistInternalNoteValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { getBlacklistSort, searchAttribute, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { thumbnailAPIAttributes, ThumbnailModel } from './thumbnail.js'
@@ -23,6 +23,11 @@ export class VideoBlacklistModel extends SequelizeModel<VideoBlacklistModel> {
   @Is('VideoBlacklistReason', value => throwIfNotValid(value, isVideoBlacklistReasonValid, 'reason', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_BLACKLIST.REASON.max))
   declare reason: string
+
+  @AllowNull(true)
+  @Is('VideoBlacklistInternalNote', value => throwIfNotValid(value, isVideoBlacklistInternalNoteValid, 'internalNote', true))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_BLACKLIST.INTERNAL_NOTE.max))
+  declare internalNote: string
 
   @AllowNull(false)
   @Column
@@ -123,6 +128,7 @@ export class VideoBlacklistModel extends SequelizeModel<VideoBlacklistModel> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       reason: this.reason,
+      internalNote: this.internalNote,
       unfederated: this.unfederated,
       type: this.type,
 

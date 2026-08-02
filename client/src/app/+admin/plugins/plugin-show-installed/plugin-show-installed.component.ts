@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { HooksService, Notifier, PluginService, ServerService } from '@app/core'
@@ -14,6 +14,7 @@ import { DynamicFormFieldComponent } from '../../../shared/shared-forms/dynamic-
 @Component({
   selector: 'my-plugin-show-installed',
   templateUrl: './plugin-show-installed.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, DynamicFormFieldComponent ]
 })
 export class PluginShowInstalledComponent extends FormReactive implements OnInit, OnDestroy {

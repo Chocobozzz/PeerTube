@@ -20,7 +20,6 @@ export interface UserUpdateMe {
   language?: string
 
   email?: string
-  emailPublic?: boolean
   currentPassword?: string
   password?: string
 

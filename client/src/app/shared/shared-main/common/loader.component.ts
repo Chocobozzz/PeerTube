@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, input } from '@angular/core'
+import { booleanAttribute, Component, input, ChangeDetectionStrategy } from '@angular/core'
 import { NgStyle } from '@angular/common'
 
 @Component({
@@ -7,6 +7,7 @@ import { NgStyle } from '@angular/common'
   @if (loading()) {
     <div class="spinner-border" [ngStyle]="getStyle()" role="status"></div>
   }`,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgStyle ]
 })
 export class LoaderComponent {

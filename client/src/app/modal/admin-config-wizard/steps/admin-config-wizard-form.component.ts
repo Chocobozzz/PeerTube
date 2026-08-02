@@ -1,6 +1,6 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 import { CommonModule } from '@angular/common'
-import { Component, input, numberAttribute, output } from '@angular/core'
+import { Component, input, numberAttribute, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ColorPickerModule } from 'primeng/colorpicker'
 import { CustomIconComponent } from '../../../shared/shared-icons/custom-icon.component'
@@ -17,6 +17,7 @@ type PlatformType = 'community' | 'institution' | 'private'
   selector: 'my-admin-config-wizard-form',
   templateUrl: './admin-config-wizard-form.component.html',
   styleUrls: [ './admin-config-wizard-form.component.scss', '../shared/admin-config-wizard-modal-common.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

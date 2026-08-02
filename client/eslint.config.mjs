@@ -1,7 +1,7 @@
-import { defineConfig, globalIgnores } from 'eslint/config'
-import love from 'eslint-config-love'
 import stylistic from '@stylistic/eslint-plugin'
 import angular from 'angular-eslint'
+import love from 'eslint-config-love'
+import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   globalIgnores([
@@ -185,7 +185,20 @@ export default defineConfig([
       'radix': 'off',
       'no-plusplus': 'off',
       '@typescript-eslint/no-unnecessary-type-conversion': 'off',
-      'no-promise-executor-return': 'off'
+      'no-promise-executor-return': 'off',
+      'prefer-template': 'off',
+      '@typescript-eslint/no-useless-default-assignment': 'off',
+      '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+      'require-unicode-regexp': 'off',
+      'no-await-in-loop': 'off',
+      // TODO: enable
+      'prefer-named-capture-group': 'off',
+      // TODO: enable
+      'prefer-object-spread': 'off',
+      '@eslint-community/eslint-comments/require-description': 'off',
+      '@typescript-eslint/strict-void-return': 'off',
+      'prefer-object-has-own': 'off',
+      'prefer-arrow-callback': 'off'
     },
 
     languageOptions: {

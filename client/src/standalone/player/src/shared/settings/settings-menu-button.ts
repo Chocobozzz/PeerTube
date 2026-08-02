@@ -63,7 +63,7 @@ class SettingsButton extends Button {
     this.player().one('play', () => this.hideDialog())
   }
 
-  onDocumentClick (event: MouseEvent) {
+  onDocumentClick (event: Event) {
     const element = event.target as HTMLElement
 
     if (element?.classList?.contains('vjs-settings') || element?.parentElement?.classList?.contains('vjs-settings')) {
@@ -172,8 +172,8 @@ class SettingsButton extends Button {
   }
 
   getComponentSize (element: VideojsComponent | HTMLElement) {
-    let width: number = null
-    let height: number = null
+    let width: number
+    let height: number
 
     // Could be component or just DOM element
     if (element instanceof Component) {

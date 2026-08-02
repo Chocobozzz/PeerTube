@@ -57,6 +57,6 @@ async function processDislike (activity: ActivityDislike, byActor: MActorSignatu
 
     await rate.save({ transaction: t })
 
-    await federateVideoIfNeeded(video, false, t)
+    await federateVideoIfNeeded(video, t)
   })
 }

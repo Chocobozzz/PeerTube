@@ -86,10 +86,21 @@ export const privateM3U8PlaylistValidator = [
   }
 ]
 
-export const privateHLSFileValidator = [
+export const hlsFileValidator = [
   param('videoUUID')
     .custom(isUUIDValid),
 
+  param('filename')
+    .custom(v => isSafeFilename(v)),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+export const privateWebVideoFileValidator = [
   param('filename')
     .custom(v => isSafeFilename(v)),
 

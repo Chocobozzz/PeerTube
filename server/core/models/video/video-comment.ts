@@ -9,7 +9,7 @@ import {
 } from '@peertube/peertube-models'
 import { afterCommitIfTransaction, retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger } from '@server/helpers/logger.js'
-import { extractMentions } from '@server/helpers/mentions.js'
+import { extractLocalMentions } from '@server/helpers/mentions.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getLocalApproveReplyActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -43,6 +43,7 @@ import {
   MCommentOwner,
   MCommentOwnerVideoFeed,
   MCommentOwnerVideoReply,
+  MCommentVideo,
   MVideo,
   MVideoImmutable
 } from '../../types/models/video/index.js'
@@ -292,6 +293,17 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     }
 
     return VideoCommentModel.findOne(query)
+  }
+
+  static loadByIdWithVideo (id: number, transaction?: Transaction): Promise<MCommentVideo> {
+    const query = {
+      where: {
+        id
+      },
+      transaction
+    }
+
+    return VideoCommentModel.scope([ ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
   static loadByIdAndPopulateVideoAndAccountAndReply (id: number, transaction?: Transaction): Promise<MCommentOwnerVideoReply> {
@@ -601,6 +613,30 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     })
   }
 
+  static async batchListIds (options: {
+    lastId: number
+    batchSize: number
+    deleted: false
+    videoOwnerId?: number
+  }) {
+    const { lastId, batchSize, videoOwnerId } = options
+
+    const videoOwnerWhere = videoOwnerId
+      ? '"videoChannel"."accountId" = :videoOwnerId AND '
+      : ''
+
+    const rows = await sequelizeTypescript.query<{ id: number }>(
+      `SELECT "videoComment"."id" FROM "videoComment" ` +
+        `INNER JOIN "video" ON "video"."id" = "videoComment"."videoId" ` +
+        `INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ` +
+        `WHERE ${videoOwnerWhere} "deletedAt" IS NULL AND "videoComment"."id" > :lastId ` +
+        `ORDER BY "videoComment"."id" ASC LIMIT :batchSize`,
+      { replacements: { lastId, batchSize, videoOwnerId }, type: QueryTypes.SELECT }
+    )
+
+    return rows.map(r => r.id)
+  }
+
   // ---------------------------------------------------------------------------
 
   static async getStats () {
@@ -698,7 +734,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   }
 
   extractMentions () {
-    return extractMentions(this.text, this.isLocal())
+    return extractLocalMentions(this.text, this.isLocal())
   }
 
   toFormattedJSON (this: MCommentFormattable) {

@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common'
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
 import { AuthService, HooksService, MetaService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign, SimpleMemoize } from '@app/helpers'
@@ -27,6 +27,7 @@ import { SearchFiltersComponent } from './search-filters.component'
   selector: 'my-search',
   styleUrls: [ './search.component.scss' ],
   templateUrl: './search.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     InfiniteScrollerDirective,
     NgbCollapse,
@@ -168,7 +169,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           this.results = this.results.concat(result.data)
         }
 
-        this.pagination.totalItems = results.reduce((p, r) => p += r.total, 0)
+        this.pagination.totalItems = results.reduce((p, r) => p + r.total, 0)
         this.lastSearchTarget = this.advancedSearch.searchTarget
 
         this.hasMoreResults = this.results.length < this.pagination.totalItems

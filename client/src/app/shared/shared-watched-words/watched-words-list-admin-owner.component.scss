@@ -1,0 +1,8 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.subscription-wrapper my-global-icon {
+  color: pvar(--fg-200);
+
+  @include global-icon-size(16px);
+}

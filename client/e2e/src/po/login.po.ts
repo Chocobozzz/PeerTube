@@ -1,9 +1,6 @@
 import { browserSleep, go, isAndroid } from '../utils'
 
 export class LoginPage {
-  constructor (private isMobileDevice: boolean) {
-  }
-
   async login (options: {
     username: string
     password: string

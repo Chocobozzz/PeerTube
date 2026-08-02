@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { PlayerPage } from '../po/player.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { FIXTURE_URLS, go, isMobileDevice, isSafari, prepareWebBrowser } from '../utils'
+import { FIXTURE_URLS, go, isSafari, prepareWebBrowser } from '../utils'
 
 async function checkCorrectlyPlay (playerPage: PlayerPage) {
   await playerPage.playAndPauseVideo(false, 2)
@@ -18,8 +18,8 @@ describe('Private videos all workflow', () => {
   const internalHLSOnlyVideoName = 'Internal E2E test - HLS only'
 
   beforeEach(async () => {
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
-    loginPage = new LoginPage(isMobileDevice())
+    videoWatchPage = new VideoWatchPage(isSafari())
+    loginPage = new LoginPage()
     playerPage = new PlayerPage()
 
     await prepareWebBrowser()

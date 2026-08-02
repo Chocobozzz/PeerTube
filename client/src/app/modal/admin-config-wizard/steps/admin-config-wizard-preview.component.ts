@@ -1,6 +1,6 @@
 import { CdkStepperModule } from '@angular/cdk/stepper'
 
-import { booleanAttribute, Component, inject, input, numberAttribute, OnChanges, output } from '@angular/core'
+import { booleanAttribute, Component, inject, input, numberAttribute, OnChanges, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HtmlRendererService, Notifier, ServerService } from '@app/core'
 import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
@@ -26,6 +26,7 @@ import { InstanceLogoService } from '@app/shared/shared-instance/instance-logo.s
     CdkStepperModule,
     ButtonComponent
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [ AdminConfigService, PluginApiService, InstanceLogoService ]
 })
 export class AdminConfigWizardPreviewComponent implements OnChanges {

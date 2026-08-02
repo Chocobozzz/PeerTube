@@ -46,11 +46,9 @@ export class AutoFollowForInstance extends AbstractNotification<MActorFollowFull
       to,
       subject: t('Auto platform follow', to.language),
       text: t('Your platform automatically followed {identifier}', to.language, { identifier: subscription.getIdentifier() }),
-      locals: {
-        action: {
-          text: t('View subscription', to.language),
-          url: instanceFollowingUrl
-        }
+      action: {
+        text: t('View subscription', to.language),
+        url: instanceFollowingUrl
       }
     }
   }

@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, input, output } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Hotkey, HotkeysService, LocalStorageService } from '@app/core'
 import { Subscription } from 'rxjs'
@@ -9,6 +9,7 @@ import { PeertubeCheckboxComponent } from '../shared/shared-forms/peertube-check
   selector: 'my-hotkeys-cheat-sheet',
   templateUrl: './hotkeys-cheat-sheet.component.html',
   styleUrls: [ './hotkeys-cheat-sheet.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgClass, PeertubeCheckboxComponent, FormsModule ]
 })
 export class HotkeysCheatSheetComponent implements OnInit, OnDestroy {

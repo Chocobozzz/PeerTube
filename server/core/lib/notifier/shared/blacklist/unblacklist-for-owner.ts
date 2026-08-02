@@ -1,7 +1,6 @@
 import { UserNotificationType } from '@peertube/peertube-models'
 import { tu } from '@server/helpers/i18n.js'
 import { logger } from '@server/helpers/logger.js'
-import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -50,13 +49,12 @@ export class UnblacklistForOwner extends AbstractNotification<MVideoAccountLight
       template: 'video-owner-unblacklist',
       to,
       subject: tu('Your video has been unblocked', user),
+      action: {
+        text: tu('View video', user),
+        url: videoUrl
+      },
       locals: {
-        instanceName: CONFIG.INSTANCE.NAME,
-        videoName: video.name,
-        action: {
-          text: tu('View video', user),
-          url: videoUrl
-        }
+        videoName: video.name
       }
     }
   }

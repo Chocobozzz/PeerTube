@@ -1,22 +1,24 @@
-import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier } from '@app/core'
-import { formatICU, listUserChannelsForSelect } from '@app/helpers'
+import { formatICU } from '@app/helpers'
 import { OWNERSHIP_CHANGE_CHANNEL_VALIDATOR } from '@app/shared/form-validators/video-ownership-change-validators'
+import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { ChangeOwnershipService } from '@app/shared/shared-change-ownership/change-ownership.service'
+import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { ChangeOwnership } from '@peertube/peertube-models'
 import { SelectChannelItem } from '@pt-types'
-import { SelectChannelComponent } from '../../../shared/shared-forms/select/select-channel.component'
+import { SelectChannelUserComponent } from '../../../shared/shared-forms/select/channel/select-channel-user.component'
 import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.component'
 
 @Component({
   selector: 'my-accept-change-video-ownership',
   templateUrl: './accept-change-video-ownership.component.html',
   styleUrls: [ './accept-change-video-ownership.component.scss' ],
-  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelComponent ]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, SelectChannelUserComponent ]
 })
 export class AcceptChangeVideoOwnershipComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
@@ -38,8 +40,10 @@ export class AcceptChangeVideoOwnershipComponent extends FormReactive implements
   ngOnInit () {
     this.videoChannels = []
 
-    listUserChannelsForSelect(this.authService, { includeCollaborations: false })
-      .subscribe(channels => this.videoChannels = channels)
+    listChannelsForSelect({
+      authService: this.authService,
+      includeCollaborations: false
+    }).subscribe(channels => this.videoChannels = channels)
 
     this.buildForm({
       channel: OWNERSHIP_CHANGE_CHANNEL_VALIDATOR

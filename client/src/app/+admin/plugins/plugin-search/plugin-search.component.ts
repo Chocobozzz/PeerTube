@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, resetCurrentPage } from '@app/core'
 import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
@@ -18,6 +18,7 @@ import { PluginCardComponent } from '../shared/plugin-card.component'
   selector: 'my-plugin-search',
   templateUrl: './plugin-search.component.html',
   styleUrls: [ './plugin-search.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     AutofocusDirective,

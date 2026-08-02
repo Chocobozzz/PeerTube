@@ -169,6 +169,11 @@ export class UserNotification {
           if (payload.changeOwnership.state.id === ChangeOwnershipState.ACCEPTED) {
             this.url = this.buildChannelUrl(payload.changeOwnership.channel)
           } // Else, no URL: we have buttons instead to accept/decline the request
+          break
+
+        case UserNotificationType.AUTOMATIC_BLOCKLIST_UPDATE:
+          this.url = '/admin/moderation/blocklist/subscriptions'
+          break
       }
     } catch (err: any) {
       this.payload.type = null

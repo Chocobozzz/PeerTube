@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import {
@@ -17,6 +17,7 @@ import { InputTextComponent } from '../../../shared/shared-forms/input-text.comp
   selector: 'my-account-change-password',
   templateUrl: './my-account-change-password.component.html',
   styleUrls: [ './my-account-change-password.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, InputTextComponent, AlertComponent ]
 })
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {

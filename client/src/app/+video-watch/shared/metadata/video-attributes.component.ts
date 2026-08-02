@@ -1,4 +1,4 @@
-import { Component, OnChanges, inject, input } from '@angular/core'
+import { Component, OnChanges, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { HooksService } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -17,6 +17,7 @@ type PluginMetadata = {
   selector: 'my-video-attributes',
   templateUrl: './video-attributes.component.html',
   styleUrls: [ './video-attributes.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ RouterLink, GlobalIconComponent, TimeDurationFormatterPipe, PTDatePipe ]
 })
 export class VideoAttributesComponent implements OnChanges {

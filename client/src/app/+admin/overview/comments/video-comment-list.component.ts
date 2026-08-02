@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, ChangeDetectionStrategy } from '@angular/core'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
 import { FeedFormat } from '@peertube/peertube-models'
 
@@ -7,6 +7,7 @@ import { VideoCommentListAdminOwnerComponent } from '../../../shared/shared-vide
 @Component({
   selector: 'my-video-comment-list',
   templateUrl: './video-comment-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     VideoCommentListAdminOwnerComponent
   ]

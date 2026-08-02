@@ -1,4 +1,11 @@
-import { AVAILABLE_LOCALES, buildFileLocale, escapeHTML, getDefaultLocale, is18nLocale } from '@peertube/peertube-core-utils'
+import {
+  AVAILABLE_LOCALES,
+  buildFileLocale,
+  escapeHTML,
+  escapeHtmlJSONStr,
+  getDefaultLocale,
+  is18nLocale
+} from '@peertube/peertube-core-utils'
 import { HTMLServerConfig } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root, sha256 } from '@peertube/peertube-node-utils'
 import { setClientLanguageCookie } from '@server/helpers/i18n.js'
@@ -147,7 +154,9 @@ export class PageHtml {
   static addServerConfig (htmlStringPage: string, serverConfig: HTMLServerConfig) {
     // Stringify the JSON object, and then stringify the string object so we can inject it into the HTML
     const serverConfigString = JSON.stringify(JSON.stringify(serverConfig))
-    const configScriptTag = `<script type="application/javascript">window.PeerTubeServerConfig = ${serverConfigString}</script>`
+    const configScriptTag = `<script type="application/javascript">` +
+      `window.PeerTubeServerConfig = ${escapeHtmlJSONStr(serverConfigString)}` +
+      `</script>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_CONFIG, configScriptTag)
   }

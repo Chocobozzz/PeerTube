@@ -28,11 +28,11 @@
         <div class="toggle-menu-container">
           @if (collapsed) {
             <button type="button" class="button-unstyle toggle-menu" i18n-title title="Display the lateral menu" (click)="toggleMenu()">
-              <my-global-icon class="transform-rotate-180" iconName="chevron-left"></my-global-icon>
+              <my-global-icon [class]="{ 'transform-rotate-180': !isRTL() }" iconName="chevron-left"></my-global-icon>
             </button>
           } @else {
             <button type="button" class="button-unstyle toggle-menu" i18n-title title= "Hide the lateral menu" (click)="toggleMenu()">
-              <my-global-icon iconName="chevron-left"></my-global-icon>
+              <my-global-icon [class]="{ 'transform-rotate-180': isRTL() }" iconName="chevron-left"></my-global-icon>
             </button>
           }
         </div>

@@ -1,5 +1,5 @@
 import { Location } from '@angular/common'
-import { Component, ElementRef, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
@@ -13,6 +13,7 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   selector: 'my-instance-config-warning-modal',
   templateUrl: './instance-config-warning-modal.component.html',
   styleUrls: [ './instance-config-warning-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ]
 })
 export class InstanceConfigWarningModalComponent implements OnInit {

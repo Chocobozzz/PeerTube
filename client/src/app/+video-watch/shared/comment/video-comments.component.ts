@@ -1,4 +1,16 @@
-import { Component, ElementRef, inject, input, OnChanges, OnDestroy, OnInit, output, SimpleChanges, viewChild } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  output,
+  SimpleChanges,
+  viewChild
+} from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, User } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
@@ -20,6 +32,7 @@ import { VideoCommentComponent } from './video-comment.component'
   selector: 'my-video-comments',
   templateUrl: './video-comments.component.html',
   styleUrls: [ './video-comments.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FeedComponent,
     NgbDropdown,
@@ -175,8 +188,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       this.onDataSubject.next(res.data)
 
       this.hooks.runAction('action:video-watch.video-threads.loaded', 'video-watch', { data: this.componentPagination })
-    } catch (err) {
-      this.notifier.error(err.message)
+    } catch (err: unknown) {
+      this.notifier.error((err as Error).message)
     }
   }
 

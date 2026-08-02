@@ -1,13 +1,6 @@
-import { AbstractControl, ValidationErrors, ValidatorFn, Validators, FormControl } from '@angular/forms'
+import { AbstractControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms'
+import { maxLength, minLength, SchemaPath } from '@angular/forms/signals'
 import { BuildFormValidator } from './form-validator.model'
-
-export const trimValidator: ValidatorFn = (control: FormControl) => {
-  if (control.value.startsWith(' ') || control.value.endsWith(' ')) {
-    return { spaces: true }
-  }
-
-  return null
-}
 
 export const VIDEO_NAME_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(120) ],
@@ -84,6 +77,11 @@ export const VIDEO_SUPPORT_VALIDATOR: BuildFormValidator = {
     minlength: $localize`Video support must be at least 3 characters long.`,
     maxlength: $localize`Video support cannot be more than 1000 characters long.`
   }
+}
+
+export function videoSupportValidator (support: SchemaPath<string>) {
+  minLength(support, 3, { message: $localize`Support must be at least 3 characters long.` })
+  maxLength(support, 1000, { message: $localize`Support cannot be more than 1000 characters long.` })
 }
 
 export const VIDEO_NSFW_SUMMARY_VALIDATOR: BuildFormValidator = {

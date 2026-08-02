@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common'
-import { AfterContentInit, Component, contentChildren, inject, input, model, TemplateRef } from '@angular/core'
+import { AfterContentInit, Component, contentChildren, inject, input, model, TemplateRef, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ComponentPagination, Notifier, resetCurrentPage, User } from '@app/core'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -18,6 +18,7 @@ export type SelectionType = { [id: number]: boolean }
   selector: 'my-videos-selection',
   templateUrl: './videos-selection.component.html',
   styleUrls: [ './videos-selection.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ InfiniteScrollerDirective, PeertubeCheckboxComponent, FormsModule, VideoMiniatureComponent, NgTemplateOutlet ]
 })
 export class VideosSelectionComponent implements AfterContentInit {

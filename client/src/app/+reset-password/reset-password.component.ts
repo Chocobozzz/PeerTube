@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Notifier, ServerService, UserService } from '@app/core'
@@ -11,6 +11,7 @@ import { InputTextComponent } from '../shared/shared-forms/input-text.component'
 @Component({
   templateUrl: './reset-password.component.html',
   styleUrls: [ './reset-password.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, InputTextComponent ]
 })
 export class ResetPasswordComponent extends FormReactive implements OnInit {

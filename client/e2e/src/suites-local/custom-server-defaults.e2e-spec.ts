@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { go, isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
+import { go, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Custom server defaults', () => {
   let videoPublishPage: VideoPublishPage
@@ -11,9 +11,9 @@ describe('Custom server defaults', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     videoPublishPage = new VideoPublishPage()
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
+    videoWatchPage = new VideoWatchPage(isSafari())
 
     await prepareWebBrowser({ hidePrivacyConcerns: false })
   })

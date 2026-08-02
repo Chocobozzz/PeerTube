@@ -678,23 +678,24 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     return ActorFollowModel.sequelize.query(query, options)
   }
 
-  static async updateScoreByFollowingServers (serverIds: number[], value: number, t?: Transaction) {
+  static async updateScoreByFollowingServers (serverIds: number[], scoreValue: number, t?: Transaction) {
     if (serverIds.length === 0) return
 
     const me = await getServerActor()
     const serverIdsString = createSafeIn(ActorFollowModel.sequelize, serverIds)
 
-    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
+    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + :scoreValue, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
       'SELECT "actorFollow"."id" FROM "actorFollow" ' +
       'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" ' +
-      `WHERE "actorFollow"."actorId" = ${me.Account.Actor.id} ` + // I'm the follower
+      `WHERE "actorFollow"."actorId" = :followerActorId ` + // I'm the follower
       `AND "actor"."serverId" IN (${serverIdsString})` + // Criteria on followings
       ')'
 
     const options = {
       type: QueryTypes.BULKUPDATE,
-      transaction: t
+      transaction: t,
+      replacements: { scoreValue, followerActorId: me.Account.Actor.id }
     }
 
     return ActorFollowModel.sequelize.query(query, options)

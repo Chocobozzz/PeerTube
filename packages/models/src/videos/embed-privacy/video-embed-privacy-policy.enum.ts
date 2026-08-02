@@ -3,7 +3,9 @@ export const VideoEmbedPrivacyPolicy = {
   ALLOWLIST: 2,
 
   // Federated server imposes restrictions on the embed
-  REMOTE_RESTRICTIONS: 3
+  REMOTE_RESTRICTIONS: 3,
+
+  DISABLED: 4
 } as const
 
 export type VideoEmbedPrivacyPolicyType = typeof VideoEmbedPrivacyPolicy[keyof typeof VideoEmbedPrivacyPolicy]

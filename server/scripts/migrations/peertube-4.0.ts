@@ -1,7 +1,3 @@
-import Bluebird from 'bluebird'
-import { move } from 'fs-extra/esm'
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
@@ -13,6 +9,10 @@ import {
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
+import Bluebird from 'bluebird'
+import { move } from 'fs-extra/esm'
+import { readFile, writeFile } from 'fs/promises'
+import { join } from 'path'
 
 run()
   .then(() => process.exit(0))
@@ -103,7 +103,7 @@ async function processVideo (videoId: number) {
   await playlist.save()
 
   const allVideo = await VideoModel.loadFull(video.id)
-  await federateVideoIfNeeded(allVideo, false)
+  await federateVideoIfNeeded(allVideo)
 
   console.log(`Successfully moved HLS files of ${video.name}.`)
 }

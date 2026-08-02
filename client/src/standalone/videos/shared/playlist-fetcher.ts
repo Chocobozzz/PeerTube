@@ -4,9 +4,7 @@ import { AuthHTTP } from './auth-http'
 import { getBackendUrl } from './url'
 
 export class PlaylistFetcher {
-
   constructor (private readonly http: AuthHTTP) {
-
   }
 
   async loadPlaylist (playlistId: string) {
@@ -19,7 +17,7 @@ export class PlaylistFetcher {
     try {
       playlistResponse = await playlistPromise
       isResponseOk = playlistResponse.status === HttpStatusCode.OK_200
-    } catch (err) {
+    } catch (err: any) {
       logger.error(err)
       isResponseOk = false
     }

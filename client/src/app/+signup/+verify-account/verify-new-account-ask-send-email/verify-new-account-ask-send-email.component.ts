@@ -1,9 +1,9 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { Notifier, RedirectService, ServerService, UserService } from '@app/core'
-import { USER_EMAIL_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import { REQUIRED_EMAIL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { forkJoin } from 'rxjs'
@@ -12,6 +12,7 @@ import { forkJoin } from 'rxjs'
   selector: 'my-verify-new-account-ask-send-email',
   templateUrl: './verify-new-account-ask-send-email.component.html',
   styleUrls: [ './verify-new-account-ask-send-email.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class VerifyNewAccountAskSendEmailComponent extends FormReactive implements OnInit {
@@ -35,7 +36,7 @@ export class VerifyNewAccountAskSendEmailComponent extends FormReactive implemen
       })
 
     this.buildForm({
-      'verify-email-email': USER_EMAIL_VALIDATOR
+      'verify-email-email': REQUIRED_EMAIL_VALIDATOR
     })
   }
 

@@ -1,1 +1,1 @@
-export * from './feed-format.enum.js'
+export * from './feed.model.js'

@@ -3,38 +3,16 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { actorNameAlphabet } from './custom-validators/activitypub/actor.js'
 import { regexpCapture } from './regexp.js'
 
-export function extractMentions (text: string, isLocal: boolean) {
-  let result: string[] = []
+export function extractLocalMentions (text: string, fromLocalEntity: boolean) {
+  const setHostOptionalChar = fromLocalEntity
+    ? '?'
+    : ''
 
-  const localMention = `@(${actorNameAlphabet}+)`
-  const remoteMention = `${localMention}@${WEBSERVER.HOST}`
+  // FIXME: Use RegExp.escape() when NodeJS 24 is the minimum version required by peertube
+  const mentionRegex = new RegExp(`(?<=^|\\s)@(${actorNameAlphabet}+)(?:@${WEBSERVER.HOST})${setHostOptionalChar}(?=[\\s.,!?)]|$)`, 'gmu')
 
-  const mentionRegex = isLocal
-    ? '(?:(?:' + remoteMention + ')|(?:' + localMention + '))' // Include local mentions?
-    : '(?:' + remoteMention + ')'
+  const results = regexpCapture(text, mentionRegex)
+    .map(([ , username ]) => username)
 
-  const firstMentionRegex = new RegExp(`^${mentionRegex} `, 'g')
-  const endMentionRegex = new RegExp(` ${mentionRegex}$`, 'g')
-  const remoteMentionsRegex = new RegExp(' ' + remoteMention + ' ', 'g')
-
-  result = result.concat(
-    regexpCapture(text, firstMentionRegex)
-      .map(([ , username1, username2 ]) => username1 || username2),
-    regexpCapture(text, endMentionRegex)
-      .map(([ , username1, username2 ]) => username1 || username2),
-    regexpCapture(text, remoteMentionsRegex)
-      .map(([ , username ]) => username)
-  )
-
-  // Include local mentions
-  if (isLocal) {
-    const localMentionsRegex = new RegExp(' ' + localMention + ' ', 'g')
-
-    result = result.concat(
-      regexpCapture(text, localMentionsRegex)
-        .map(([ , username ]) => username)
-    )
-  }
-
-  return uniqify(result)
+  return uniqify(results)
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, input, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 
@@ -6,6 +6,7 @@ import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
   selector: 'my-simple-search-input',
   templateUrl: './simple-search-input.component.html',
   styleUrls: [ './simple-search-input.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, GlobalIconComponent ]
 })
 export class SimpleSearchInputComponent implements OnInit {

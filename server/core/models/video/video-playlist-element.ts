@@ -205,8 +205,16 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
     return VideoPlaylistElementModel.findOne(query)
   }
 
-  static loadById (playlistElementId: number | string): Promise<MVideoPlaylistElement> {
-    return VideoPlaylistElementModel.findByPk(playlistElementId)
+  static loadByPlaylistAndElement (options: {
+    videoPlaylistId: number
+    elementId: number | string
+  }): Promise<MVideoPlaylistElement> {
+    return VideoPlaylistElementModel.findOne({
+      where: {
+        id: options.elementId,
+        videoPlaylistId: options.videoPlaylistId
+      }
+    })
   }
 
   static loadByPlaylistAndElementIdForAP (

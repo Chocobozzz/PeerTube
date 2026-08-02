@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { AuthService, AuthUser, ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
@@ -10,6 +10,7 @@ import { PeerTubeBadgeService } from '@app/shared/shared-main/common/peertube-ba
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { TableColumnInfo, TableComponent, TableQueryParams } from '@app/shared/shared-tables/table.component'
+import { BulkUpdateVideosInPlaylistModalComponent } from '@app/shared/shared-video-playlist/bulk-update-videos-in-playlist-modal.component'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { arrayify } from '@peertube/peertube-core-utils'
@@ -26,6 +27,7 @@ import {
   VideoActionsDisplayType,
   VideoActionsDropdownComponent
 } from '../../shared/shared-video-miniature/video-actions-dropdown.component'
+import { BulkUpdateVideosModalComponent } from '../../shared/shared-video/bulk-update-videos-modal.component'
 import { PrivacyBadgeComponent } from '../../shared/shared-video/privacy-badge.component'
 import { VideoNSFWBadgeComponent } from '../../shared/shared-video/video-nsfw-badge.component'
 import { VideoStateBadgeComponent } from '../../shared/shared-video/video-state-badge.component'
@@ -40,6 +42,8 @@ type ColumnName =
   | 'playlists'
   | 'insights'
   | 'published'
+  | 'category'
+  | 'licence'
   | 'state'
   | 'comments'
 
@@ -53,6 +57,7 @@ type DataLoaderParameter = Parameters<MyVideosComponent['_dataLoader']>[0]
   selector: 'my-videos',
   templateUrl: './my-videos.component.html',
   styleUrls: [ './my-videos.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FormsModule,
     ButtonComponent,
@@ -66,7 +71,9 @@ type DataLoaderParameter = Parameters<MyVideosComponent['_dataLoader']>[0]
     PTDatePipe,
     VideoNSFWBadgeComponent,
     TableComponent,
-    PrivacyBadgeComponent
+    PrivacyBadgeComponent,
+    BulkUpdateVideosInPlaylistModalComponent,
+    BulkUpdateVideosModalComponent
   ]
 })
 export class MyVideosComponent implements OnInit, OnDestroy {
@@ -81,6 +88,8 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute)
 
   readonly table = viewChild<TableComponent<Video, DataLoaderParameter, ColumnName, QueryParams>>('table')
+  readonly bulkUpdateVideosInPlaylistModal = viewChild<BulkUpdateVideosInPlaylistModalComponent>('bulkUpdateVideosInPlaylistModal')
+  readonly bulkUpdateVideosModal = viewChild<BulkUpdateVideosModalComponent>('bulkUpdateVideosModal')
 
   videosContainedInPlaylists: VideosExistInPlaylists = {}
 
@@ -98,7 +107,8 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     muteByServer: false,
     liveInfo: true,
     removeFiles: false,
-    transcoding: false
+    transcoding: false,
+    retryFailedImport: true
   }
 
   user: AuthUser
@@ -137,7 +147,9 @@ export class MyVideosComponent implements OnInit, OnDestroy {
       { id: 'comments', label: $localize`Comments`, selected: true, sortable: true },
       { id: 'published', label: $localize`Published`, selected: true, sortable: true, sortKey: 'publishedAt' },
       { id: 'state', label: $localize`State`, selected: true, sortable: false },
+      { id: 'category', label: $localize`Category`, selected: false, sortable: false },
       { id: 'language', label: $localize`Language`, selected: false, sortable: false },
+      { id: 'licence', label: $localize`Licence`, selected: false, sortable: false },
       { id: 'playlists', label: $localize`Playlists`, selected: true, sortable: false }
     ]
 
@@ -225,7 +237,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
   private _dataLoader (options: {
     pagination: RestPagination
     sort: SortMeta
-    search: string
+    search?: string
     isLive?: boolean
     privacyOneOf?: VideoPrivacyType
     tagsOneOf?: string[]
@@ -254,7 +266,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     }).pipe(tap(({ data }) => this.fetchVideosContainedInPlaylists(data)))
   }
 
-  fetchVideosContainedInPlaylists (videos: Video[]) {
+  fetchVideosContainedInPlaylists (videos: Pick<Video, 'id'>[]) {
     this.playlistService.doVideosExistInPlaylist(videos.map(v => v.id))
       .subscribe(result => {
         this.videosContainedInPlaylists = Object.keys(result).reduce((acc, videoId) => ({
@@ -296,6 +308,21 @@ export class MyVideosComponent implements OnInit, OnDestroy {
 
   private buildActions () {
     this.bulkActions = [
+      [
+        {
+          label: $localize`Add to playlist...`,
+          handler: videos => {
+            this.bulkUpdateVideosInPlaylistModal().show({ videos, videosContainedInPlaylists: this.videosContainedInPlaylists })
+          },
+          iconName: 'playlist-add'
+        },
+        {
+          label: $localize`Update...`,
+          handler: videos => this.bulkUpdateVideosModal().show({ videos }),
+          iconName: 'edit'
+        }
+      ],
+
       [
         {
           label: $localize`Delete`,

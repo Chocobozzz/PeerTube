@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, forwardRef, input, model, numberAttribute, output } from '@angular/core'
+import { booleanAttribute, Component, forwardRef, input, model, numberAttribute, output, ChangeDetectionStrategy } from '@angular/core'
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { SelectOptionsItem } from '../../../../types/select-options-item.model'
@@ -13,6 +13,7 @@ import { SelectOptionsItem } from '../../../../types/select-options-item.model'
       multi: true
     }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ MultiSelectModule, FormsModule ]
 })
 export class SelectCheckboxComponent implements ControlValueAccessor {

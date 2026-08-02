@@ -12,6 +12,7 @@ export async function createLocalVideoChannelWithoutKeys (body: VideoChannelCrea
     name: body.displayName,
     description: body.description,
     support: body.support,
+    publicEmail: body.publicEmail,
     accountId: account.id
   }, { transaction: t })
 
@@ -30,6 +31,6 @@ export async function federateAllVideosOfChannel (videoChannel: MChannelId) {
   for (const videoId of videoIds) {
     const video = await VideoModel.loadFull(videoId)
 
-    await federateVideoIfNeeded(video, false)
+    await federateVideoIfNeeded(video)
   }
 }

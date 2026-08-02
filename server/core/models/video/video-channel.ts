@@ -28,6 +28,7 @@ import {
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
+  isVideoChannelPublicEmailValid,
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels.js'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
@@ -175,6 +176,12 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   declare support: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('VideoChannelPublicEmail', value => throwIfNotValid(value, isVideoChannelPublicEmailValid, 'publicEmail', true))
+  @Column(DataType.STRING(400))
+  declare publicEmail: string
 
   @CreatedAt
   declare createdAt: Date
@@ -565,6 +572,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       displayName: this.getDisplayName(),
       description: this.description,
       support: this.support,
+      publicEmail: this.publicEmail,
       isLocal: this.Actor.isLocal(),
       updatedAt: this.updatedAt,
 
@@ -611,6 +619,9 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       summary: this.description,
       support: this.support,
       postingRestrictedToMods: true,
+
+      email: this.publicEmail,
+
       attributedTo: [
         this.Account.Actor.url
       ]

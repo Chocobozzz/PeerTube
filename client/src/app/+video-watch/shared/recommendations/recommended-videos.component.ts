@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnChanges, OnDestroy, OnInit, inject, input, output } from '@angular/core'
+import { Component, OnChanges, OnDestroy, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
@@ -15,6 +15,7 @@ import { VideoRecommendationService } from './video-recommendation.service'
   selector: 'my-recommended-videos',
   templateUrl: './recommended-videos.component.html',
   styleUrls: [ './recommended-videos.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgClass, NgbTooltip, InputSwitchComponent, FormsModule, VideoMiniatureComponent ]
 })
 export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy {

@@ -1,5 +1,3 @@
-import express from 'express'
-import { Server } from 'http'
 import {
   EncoderOptionsBuilder,
   PluginSettingsManager,
@@ -23,6 +21,9 @@ import {
   RegisterServerOptions,
   RegisterServerWebSocketRouteOptions
 } from '@server/types/plugins/index.js'
+import { RegisterCommentAutoTaggerOptions, RegisterVideoAutoTaggerOptions } from '@server/types/plugins/register-auto-tagger.model.js'
+import express from 'express'
+import { Server } from 'http'
 import { VideoTranscodingProfilesManager } from '../transcoding/default-transcoding-profiles.js'
 import { buildPluginHelpers } from './plugin-helpers-builder.js'
 
@@ -48,6 +49,9 @@ export class RegisterHelpers {
 
   private idAndPassAuths: RegisterServerAuthPassOptions[] = []
   private externalAuths: RegisterServerAuthExternalOptions[] = []
+
+  private readonly commentAutoTagger: Record<string, RegisterCommentAutoTaggerOptions['handler'][]> = {}
+  private readonly videoAutoTagger: Record<string, RegisterVideoAutoTaggerOptions['handler'][]> = {}
 
   private readonly onSettingsChangeCallbacks: SettingsChangeCallback[] = []
 
@@ -85,11 +89,6 @@ export class RegisterHelpers {
     const playlistPrivacyManager = this.videoConstantManagerFactory.createVideoConstantManager<VideoPlaylistPrivacyType>('playlistPrivacy')
 
     const transcodingManager = this.buildTranscodingManager()
-
-    const registerIdAndPassAuth = this.buildRegisterIdAndPassAuth()
-    const registerExternalAuth = this.buildRegisterExternalAuth()
-    const unregisterIdAndPassAuth = this.buildUnregisterIdAndPassAuth()
-    const unregisterExternalAuth = this.buildUnregisterExternalAuth()
 
     const peertubeHelpers = buildPluginHelpers(this.server, this.plugin, this.npmName)
 
@@ -138,10 +137,15 @@ export class RegisterHelpers {
 
       transcodingManager,
 
-      registerIdAndPassAuth,
-      registerExternalAuth,
-      unregisterIdAndPassAuth,
-      unregisterExternalAuth,
+      registerIdAndPassAuth: this.buildRegisterIdAndPassAuth(),
+      registerExternalAuth: this.buildRegisterExternalAuth(),
+      unregisterIdAndPassAuth: this.buildUnregisterIdAndPassAuth(),
+      unregisterExternalAuth: this.buildUnregisterExternalAuth(),
+
+      registerCommentAutoTagger: this.buildRegisterCommentAutoTagger(),
+      registerVideoAutoTagger: this.buildRegisterVideoAutoTagger(),
+      unregisterCommentAutoTagger: this.buildUnregisterCommentAutoTagger(),
+      unregisterVideoAutoTagger: this.buildUnregisterVideoAutoTagger(),
 
       peertubeHelpers
     }
@@ -190,6 +194,18 @@ export class RegisterHelpers {
   getWebSocketRoutes () {
     return this.webSocketRoutes
   }
+
+  // ---------------------------------------------------------------------------
+
+  getCommentAutoTagger () {
+    return this.commentAutoTagger
+  }
+
+  getVideoAutoTagger () {
+    return this.videoAutoTagger
+  }
+
+  // ---------------------------------------------------------------------------
 
   private buildGetRouter () {
     return () => this.router
@@ -341,6 +357,38 @@ export class RegisterHelpers {
       removeAllProfilesAndEncoderPriorities () {
         return self.reinitTranscodingProfilesAndEncoders(self.npmName)
       }
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private buildRegisterCommentAutoTagger () {
+    return (options: RegisterCommentAutoTaggerOptions) => {
+      if (!this.commentAutoTagger[options.autoTagName]) this.commentAutoTagger[options.autoTagName] = []
+
+      this.commentAutoTagger[options.autoTagName].push(options.handler)
+    }
+  }
+
+  private buildRegisterVideoAutoTagger () {
+    return (options: RegisterVideoAutoTaggerOptions) => {
+      if (!this.videoAutoTagger[options.autoTagName]) this.videoAutoTagger[options.autoTagName] = []
+
+      this.videoAutoTagger[options.autoTagName].push(options.handler)
+    }
+  }
+
+  private buildUnregisterCommentAutoTagger () {
+    return (options: RegisterCommentAutoTaggerOptions) => {
+      this.commentAutoTagger[options.autoTagName] = (this.commentAutoTagger[options.autoTagName] || [])
+        .filter(f => f !== options.handler)
+    }
+  }
+
+  private buildUnregisterVideoAutoTagger () {
+    return (options: RegisterVideoAutoTaggerOptions) => {
+      this.videoAutoTagger[options.autoTagName] = (this.videoAutoTagger[options.autoTagName] || [])
+        .filter(f => f !== options.handler)
     }
   }
 }

@@ -30,7 +30,7 @@ $width-size: 275px;
     @include responsive-width($width-size);
   }
 
-  my-select-channel,
+  my-select-channel-user,
   my-select-options,
   .peertube-radio-container,
   .form-group-description {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { VIDEO_CAPTION_FILE_VALIDATOR, VIDEO_CAPTION_LANGUAGE_VALIDATOR } from '@app/shared/form-validators/video-captions-validators'
@@ -15,6 +15,7 @@ import { GlobalIconComponent } from '../../../shared/shared-icons/global-icon.co
   selector: 'my-video-caption-add-modal',
   styleUrls: [ './video-caption-add-modal.component.scss' ],
   templateUrl: './video-caption-add-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, ReactiveFileComponent, SelectOptionsComponent ]
 })
 export class VideoCaptionAddModalComponent extends FormReactive implements OnInit {

@@ -45,10 +45,17 @@ export type Unpacked<T> = T extends (infer U)[] ? U : T
 export type Awaitable<T> = T | PromiseLike<T>
 
 // Thanks https://stackoverflow.com/a/52761156
-export type OverloadedParameters<T> =
-  // oxlint-disable-next-line max-len
-  T extends { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any, (...args: infer A4): any } ? A1 | A2 | A3 | A4 :
-    T extends { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any } ? A1 | A2 | A3 :
-    T extends { (...args: infer A1): any, (...args: infer A2): any } ? A1 | A2 :
-    T extends (...args: infer A) => any ? A
-    : any
+export type OverloadedParameters<T> = T extends
+  { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any, (...args: infer A4): any } ? A1 | A2 | A3 | A4 :
+  T extends { (...args: infer A1): any, (...args: infer A2): any, (...args: infer A3): any } ? A1 | A2 | A3 :
+  T extends { (...args: infer A1): any, (...args: infer A2): any } ? A1 | A2 :
+  T extends (...args: infer A) => any ? A
+  : any
+
+export function arrayOfAllFactory<T> () {
+  return function <U extends T[]> (
+    array: U & ([T] extends [U[number]] ? unknown : 'Missing members')
+  ) {
+    return array
+  }
+}

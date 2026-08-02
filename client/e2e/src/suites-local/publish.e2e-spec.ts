@@ -1,7 +1,7 @@
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
+import { isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Publish video', () => {
   let videoPublishPage: VideoPublishPage
@@ -11,9 +11,9 @@ describe('Publish video', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     videoPublishPage = new VideoPublishPage()
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
+    videoWatchPage = new VideoWatchPage(isSafari())
 
     await prepareWebBrowser()
 

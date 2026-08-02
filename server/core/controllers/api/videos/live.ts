@@ -169,7 +169,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
     })
   })
 
-  await federateVideoIfNeeded(video, false)
+  await federateVideoIfNeeded(video)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

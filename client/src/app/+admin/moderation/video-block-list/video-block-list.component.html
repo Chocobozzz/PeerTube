@@ -25,7 +25,9 @@
       >
         <div>
           @if (videoBlock.type === 2) {
-            <span i18n-title title="The video was blocked due to automatic blocking of new videos" class="pt-badge badge-info badge-small" i18n>Auto block</span>
+            <span i18n-title title="The video was blocked due to automatic blocking of new videos on this instance" class="pt-badge badge-info badge-small" i18n>Auto block - Instance policy</span>
+          } @else if (videoBlock.type === 3) {
+            <span i18n-title title="The video was blocked due to automatic blocking of videos with specific tags" class="pt-badge badge-info badge-small" i18n>Auto block - Auto-tag policy</span>
           }
         </div>
       </my-video-cell>
@@ -45,6 +47,10 @@
       }
     </td>
 
+    <td class="max-width-300px ellipsis" container="body" placement="left auto" [ngbTooltip]="videoBlock.internalNote">
+      {{ videoBlock.internalNote }}
+    </td>
+
     <td>
       {{ videoBlock.createdAt | ptDate: 'short' }}
     </td>
@@ -62,8 +68,17 @@
       <div class="d-flex moderation-expanded">
         <div class="left">
           @if (videoBlock.reasonHtml) {
-            <span class="moderation-expanded-label" i18n>Block reason:</span>
-            <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+            <div>
+              <span class="moderation-expanded-label" i18n>Block reason:</span>
+              <span class="moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+            </div>
+          }
+
+          @if (videoBlock.internalNote) {
+            <div>
+              <span class="moderation-expanded-label" i18n>Internal note:</span>
+              <span class="moderation-expanded-text" [innerHTML]="videoBlock.internalNote | nl2br"></span>
+            </div>
           }
         </div>
 
@@ -82,4 +97,6 @@
     }
   </ng-template>
 </my-table>
+
+<my-video-block-internal-note-modal #internalNoteModal (internalNoteUpdated)="table.loadData()"></my-video-block-internal-note-modal>
 

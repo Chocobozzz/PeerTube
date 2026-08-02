@@ -123,6 +123,13 @@ describe('Test emails', function () {
 
     it('Should reset the password', async function () {
       await server.users.resetPassword({ userId, verificationString, password: 'super_password2' })
+      user.password = 'super_password2'
+    })
+
+    it('Should have invalided user tokens', async function () {
+      await server.users.getMyQuotaUsed({ token: userAccessToken, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+
+      userAccessToken = await server.login.getAccessToken(user)
     })
 
     it('Should not reset the password with the same verification string', async function () {
@@ -330,6 +337,14 @@ describe('Test emails', function () {
     it('Should verify the email', async function () {
       await server.users.verifyEmail({ userId, verificationString })
     })
+
+    it('Should not verify the email again with the same verification string', async function () {
+      await server.users.verifyEmail({
+        userId,
+        verificationString,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
   })
 
   describe('When verifying a registration email', function () {
@@ -384,6 +399,14 @@ describe('Test emails', function () {
 
     it('Should verify the email', async function () {
       await server.registrations.verifyEmail({ registrationId: registrationIdEmail, verificationString })
+    })
+
+    it('Should not verify the email again with the same verification string', async function () {
+      await server.registrations.verifyEmail({
+        registrationId: registrationIdEmail,
+        verificationString,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
   })
 

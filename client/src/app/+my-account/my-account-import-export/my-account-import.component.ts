@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http'
-import { Component, OnDestroy, OnInit, inject, input } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
 import { buildHTTPErrorResponse, genericUploadErrorHandler, getUploadXRetryConfig } from '@app/helpers'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -16,6 +16,7 @@ import { UserImportExportService } from './user-import-export.service'
   selector: 'my-account-import',
   templateUrl: './my-account-import.component.html',
   styleUrls: [ './my-account-import.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ UploadProgressComponent, NgbTooltip, PTDatePipe, AlertComponent ]
 })
 export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponentDeactivate {

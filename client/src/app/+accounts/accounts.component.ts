@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router'
 import {
   AuthService,
@@ -35,6 +35,7 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
 @Component({
   templateUrl: './accounts.component.html',
   styleUrls: [ './accounts.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     ActorAvatarComponent,

@@ -119,7 +119,7 @@ class SettingsMenuItem extends MenuItem {
   }
 
   onSubmenuClick (event: any) {
-    let target = null
+    let target
 
     if (event.type === 'tap') {
       target = event.target

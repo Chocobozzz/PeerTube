@@ -40,7 +40,14 @@ class PeerTubeSocket {
         socket.on('disconnect', () => {
           logger.debug('User %d disconnected from SocketIO notifications.', userId)
 
-          this.userNotificationSockets[userId] = this.userNotificationSockets[userId].filter(s => s !== socket)
+          const remaining = this.userNotificationSockets[userId]?.filter(s => s !== socket)
+
+          // Don't keep an empty array around forever: it would leak one entry per user that ever connected
+          if (!remaining || remaining.length === 0) {
+            delete this.userNotificationSockets[userId]
+          } else {
+            this.userNotificationSockets[userId] = remaining
+          }
         })
       })
 

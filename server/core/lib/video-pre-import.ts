@@ -43,6 +43,9 @@ import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { createLocalVideoThumbnailsFromUrl, createLocalVideoThumbnailsFromImage } from './thumbnail.js'
 import { createLocalCaption } from './video-captions.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
+import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
+import { getServerAccount } from '@server/models/application/application.js'
+import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 
 // ---------------------------------------------------------------------------
 
@@ -73,8 +76,16 @@ export async function insertFromImportIntoDB (parameters: {
       await VideoPasswordModel.addPasswords(videoPasswords, video.id, t)
     }
 
+    const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
+      serverAccount: await getServerAccount(),
+      video,
+      transaction: t
+    })
+    await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount, transaction: t })
+
     await autoBlacklistVideoIfNeeded({
       video: videoCreated,
+      automaticTagsByAccount,
       user,
       notify: false,
       isRemote: false,
@@ -110,30 +121,30 @@ export async function insertFromImportIntoDB (parameters: {
 export async function buildVideoFromImport ({ channelId, importData, importDataOverride, importType }: {
   channelId: number
   importData: YoutubeDLInfo
-  importDataOverride?: Partial<VideoImportCreate>
+  importDataOverride: Partial<VideoImportCreate>
   importType: 'url' | 'torrent'
 }): Promise<MVideoThumbnails> {
   let videoData = {
-    name: importDataOverride?.name || importData.name || 'Unknown name',
+    name: importDataOverride.name || importData.name || 'Unknown name',
     remote: false,
-    category: importDataOverride?.category || importData.category,
-    licence: importDataOverride?.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
-    language: importDataOverride?.language || importData.language,
-    commentsPolicy: importDataOverride?.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
-    downloadEnabled: importDataOverride?.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
-    waitTranscoding: importDataOverride?.waitTranscoding ?? true,
+    category: importDataOverride.category || importData.category,
+    licence: importDataOverride.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
+    language: importDataOverride.language || importData.language,
+    commentsPolicy: importDataOverride.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+    downloadEnabled: importDataOverride.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
+    waitTranscoding: importDataOverride.waitTranscoding ?? true,
     embedPrivacyPolicy: VideoEmbedPrivacyPolicy.ALL_ALLOWED,
     state: VideoState.TO_IMPORT,
-    nsfw: importDataOverride?.nsfw || importData.nsfw || false,
-    nsfwFlags: importDataOverride?.nsfwFlags || NSFWFlag.NONE,
-    nsfwSummary: importDataOverride?.nsfwSummary || null,
-    description: importDataOverride?.description || importData.description,
-    support: importDataOverride?.support || null,
-    privacy: importDataOverride?.privacy || VideoPrivacy.PRIVATE,
+    nsfw: importDataOverride.nsfw || importData.nsfw || false,
+    nsfwFlags: importDataOverride.nsfwFlags || NSFWFlag.NONE,
+    nsfwSummary: importDataOverride.nsfwSummary || null,
+    description: importDataOverride.description || importData.description,
+    support: importDataOverride.support || null,
+    privacy: importDataOverride.privacy || VideoPrivacy.PRIVATE,
     duration: 0, // duration will be set by the import job
     channelId,
-    originallyPublishedAt: importDataOverride?.originallyPublishedAt
-      ? new Date(importDataOverride?.originallyPublishedAt)
+    originallyPublishedAt: importDataOverride.originallyPublishedAt
+      ? new Date(importDataOverride.originallyPublishedAt)
       : importData.originallyPublishedAtWithoutTime
   }
 
@@ -154,9 +165,9 @@ export async function buildYoutubeDLImport (options: {
   targetUrl: string
   channel: MChannelAccountDefault
   user: MUserAccountId
+  importDataOverride: Partial<VideoImportCreate>
 
   channelSync?: MChannelSync
-  importDataOverride?: Partial<VideoImportCreate>
   thumbnailFilePath?: string
 
   skipPublishedBeforeOrEq?: Date
@@ -189,7 +200,7 @@ export async function buildYoutubeDLImport (options: {
   // Get video infos
   const youtubeDLInfo = await youtubeDL.getInfoForDownload({ userLanguage })
 
-  if (skipPublishedBeforeOrEq) {
+  if (skipPublishedBeforeOrEq && youtubeDLInfo.originallyPublishedAtWithoutTime) {
     const onlyAfterWithoutTime = new Date(skipPublishedBeforeOrEq)
     onlyAfterWithoutTime.setHours(0, 0, 0, 0)
 
@@ -228,7 +239,7 @@ export async function buildYoutubeDLImport (options: {
     video,
     thumbnails,
     videoChannel: channel,
-    tags: importDataOverride?.tags || youtubeDLInfo.tags,
+    tags: importDataOverride.tags || youtubeDLInfo.tags,
     user,
     videoImportAttributes: {
       targetUrl,
@@ -239,50 +250,66 @@ export async function buildYoutubeDLImport (options: {
     videoPasswords: importDataOverride.videoPasswords
   })
 
-  await sequelizeTypescript.transaction(async transaction => {
-    // Priority to explicitly set description
-    if (importDataOverride?.description) {
-      const inserted = await replaceChaptersFromDescriptionIfNeeded({ newDescription: importDataOverride.description, video, transaction })
-      if (inserted) return
+  try {
+    await sequelizeTypescript.transaction(async transaction => {
+      // Priority to explicitly set description
+      if (importDataOverride.description) {
+        const inserted = await replaceChaptersFromDescriptionIfNeeded({
+          newDescription: importDataOverride.description,
+          video,
+          transaction
+        })
+        if (inserted) return
+      }
+
+      // Then priority to youtube-dl chapters
+      if (youtubeDLInfo.chapters.length !== 0) {
+        logger.info(
+          `Inserting chapters in video ${video.uuid} from youtube-dl`,
+          { chapters: youtubeDLInfo.chapters, tags: [ 'chapters', video.uuid ] }
+        )
+
+        await replaceChapters({ video, chapters: youtubeDLInfo.chapters, transaction })
+        return
+      }
+
+      if (video.description) {
+        await replaceChaptersFromDescriptionIfNeeded({ newDescription: video.description, video, transaction })
+      }
+    })
+
+    // Get video subtitles
+    await processYoutubeSubtitles({ youtubeDL, targetUrl, video, userLanguage })
+
+    let fileExt = `.${youtubeDLInfo.ext}`
+    if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
+
+    const payload: VideoImportPayload = {
+      type: 'youtube-dl' as 'youtube-dl',
+      videoImportId: videoImport.id,
+      fileExt,
+      generateTranscription: importDataOverride.generateTranscription ?? true,
+      // If part of a sync process, there is a parent job that will aggregate children results
+      preventException: !!channelSync
     }
 
-    // Then priority to youtube-dl chapters
-    if (youtubeDLInfo.chapters.length !== 0) {
-      logger.info(
-        `Inserting chapters in video ${video.uuid} from youtube-dl`,
-        { chapters: youtubeDLInfo.chapters, tags: [ 'chapters', video.uuid ] }
-      )
+    videoImport.payload = payload
+    await videoImport.save()
 
-      await replaceChapters({ video, chapters: youtubeDLInfo.chapters, transaction })
-      return
+    return {
+      videoImport,
+      job: { type: 'video-import' as 'video-import', payload }
+    }
+  } catch (err) {
+    // Auto destroy video import  to not keep a "PENDING" import that never gets a job
+    try {
+      await videoImport.Video.destroy()
+      await videoImport.destroy()
+    } catch (cleanupErr) {
+      logger.error(`Cannot cleanup video import for ${targetUrl} after a build error.`, { err: cleanupErr })
     }
 
-    if (video.description) {
-      await replaceChaptersFromDescriptionIfNeeded({ newDescription: video.description, video, transaction })
-    }
-  })
-
-  // Get video subtitles
-  await processYoutubeSubtitles({ youtubeDL, targetUrl, video, userLanguage: user.getLanguage() })
-
-  let fileExt = `.${youtubeDLInfo.ext}`
-  if (!isVideoFileExtnameValid(fileExt)) fileExt = '.mp4'
-
-  const payload: VideoImportPayload = {
-    type: 'youtube-dl' as 'youtube-dl',
-    videoImportId: videoImport.id,
-    fileExt,
-    generateTranscription: importDataOverride.generateTranscription ?? true,
-    // If part of a sync process, there is a parent job that will aggregate children results
-    preventException: !!channelSync
-  }
-
-  videoImport.payload = payload
-  await videoImport.save()
-
-  return {
-    videoImport,
-    job: { type: 'video-import' as 'video-import', payload }
+    throw err
   }
 }
 

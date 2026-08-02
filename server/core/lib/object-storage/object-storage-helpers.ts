@@ -406,7 +406,7 @@ async function applyOnPrefix (options: {
 
   // Repeat if not all objects could be listed at once (limit of 1000?)
   if (listedObjects.IsTruncated) {
-    await applyOnPrefix({ ...options, continuationToken: listedObjects.ContinuationToken })
+    await applyOnPrefix({ ...options, continuationToken: listedObjects.NextContinuationToken })
   }
 }
 

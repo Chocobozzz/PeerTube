@@ -1,4 +1,4 @@
-import { Component, DestroyRef, OnInit, inject, viewChild } from '@angular/core'
+import { Component, DestroyRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { ServerService } from '@app/core'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 @Component({
   templateUrl: './about-instance-home.component.html',
   styleUrls: [ './about-instance-common.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CustomMarkupContainerComponent,
     SupportModalComponent

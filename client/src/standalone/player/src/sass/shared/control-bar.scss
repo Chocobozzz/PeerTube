@@ -273,6 +273,8 @@ $chapter-marker-size: 9px;
 
   .vjs-slider {
     background-color: rgba(255, 255, 255, 0.2);
+    // Prevent vjs-slider expanding when hovering on the progress bar if storyboard is enabled
+    min-width: 0;
 
     .vjs-play-progress {
       background: pvar(--pt-player-fg);
@@ -310,6 +312,12 @@ $chapter-marker-size: 9px;
 
 .vjs-peertube-skin.vjs-fullscreen .vjs-control-bar {
   --peertube-link-max-width: 200px;
+}
+
+.vjs-peertube-skin.vjs-paused.vjs-paused-inactive .vjs-control-bar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 // Override video.js style

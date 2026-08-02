@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, UserService } from '@app/core'
 import { first } from 'rxjs'
 import { BytesPipe } from '../common/bytes.pipe'
@@ -7,6 +7,7 @@ import { ProgressBarComponent } from '../common/progress-bar.component'
 @Component({
   selector: 'my-user-quota',
   templateUrl: './user-quota.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ BytesPipe, ProgressBarComponent ]
 })
 export class UserQuotaComponent implements OnInit {

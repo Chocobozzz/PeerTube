@@ -130,6 +130,7 @@ export class APActorCreator {
       name: getActorDisplayNameFromObject(this.actorObject),
       description: this.actorObject.summary,
       support: this.actorObject.support,
+      publicEmail: this.actorObject.email,
       accountId: this.ownerActor.Account.id
     }, { transaction: t })
 

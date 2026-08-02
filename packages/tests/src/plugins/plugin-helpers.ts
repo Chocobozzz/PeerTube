@@ -1,10 +1,9 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { pathExists } from 'fs-extra/esm'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
+  ConfigCommand,
   createMultipleServers,
   doubleFollow,
   makeGetRequest,
@@ -15,7 +14,10 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { checkVideoFilesWereRemoved } from '@tests/shared/videos.js'
+import { expect } from 'chai'
+import { pathExists } from 'fs-extra/esm'
 
 function postCommand (server: PeerTubeServer, command: string, bodyArg?: object) {
   const body = { command }
@@ -32,10 +34,14 @@ function postCommand (server: PeerTubeServer, command: string, bodyArg?: object)
 describe('Test plugin helpers', function () {
   let servers: PeerTubeServer[]
 
+  const emails: object[] = []
+
   before(async function () {
     this.timeout(60000)
 
-    servers = await createMultipleServers(2)
+    const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
+
+    servers = await createMultipleServers(2, ConfigCommand.getEmailOverrideConfig(emailPort))
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
@@ -114,6 +120,30 @@ describe('Test plugin helpers', function () {
       })
 
       await servers[0].videos.remove({ id: res.uuid })
+    })
+  })
+
+  describe('Email', function () {
+    it('Should send an email', async function () {
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/send-email',
+        fields: {
+          to: 'plugin-email-recipient@example.com',
+          subject: 'Email sent by a plugin',
+          text: 'Hello from plugin four'
+        },
+        expectedStatus: HttpStatusCode.CREATED_201
+      })
+
+      await waitJobs(servers)
+
+      expect(emails).to.have.lengthOf(1)
+
+      const email = emails[0]
+      expect(email['to'][0]['address']).to.equal('plugin-email-recipient@example.com')
+      expect(email['subject']).to.contain('Email sent by a plugin')
+      expect(email['text']).to.contain('Hello from plugin four')
     })
   })
 
@@ -345,6 +375,36 @@ describe('Test plugin helpers', function () {
 
       expect(body.streams).to.be.an('array')
       expect(body.streams).to.have.lengthOf(2)
+    })
+
+    it('Should update a video', async function () {
+      const { uuid } = await servers[0].videos.quickUpload({
+        name: 'video to update',
+        privacy: VideoPrivacy.PRIVATE,
+        nsfw: false
+      })
+
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/update-video/' + uuid,
+        fields: {
+          name: 'video1 updated by plugin',
+          support: 'support text updated by plugin',
+          nsfw: true,
+          privacy: VideoPrivacy.PUBLIC
+        },
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+        expect(video.name).to.equal('video1 updated by plugin')
+        expect(video.support).to.equal('support text updated by plugin')
+        expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+        expect(video.nsfw).to.be.true
+      }
     })
 
     it('Should remove a video after a view', async function () {

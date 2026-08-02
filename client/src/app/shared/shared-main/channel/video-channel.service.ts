@@ -51,7 +51,7 @@ export class VideoChannelService {
   }
 
   listAccountChannels (options: {
-    account: Account
+    account: Pick<Account, 'nameWithHost'>
     componentPagination?: ComponentPaginationLight
     withStats?: boolean
     sort?: string

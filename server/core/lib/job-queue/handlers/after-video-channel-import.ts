@@ -1,4 +1,4 @@
-import { AfterVideoChannelImportPayload, VideoChannelSyncState, VideoImportPreventExceptionResult } from '@peertube/peertube-models'
+import { AfterVideoChannelImportPayload, StreamSyncState, VideoImportPreventExceptionResult } from '@peertube/peertube-models'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { Job } from 'bullmq'
@@ -28,10 +28,10 @@ export async function processAfterVideoChannelImport (job: Job) {
   }
 
   if (errors > 0) {
-    sync.state = VideoChannelSyncState.FAILED
+    sync.state = StreamSyncState.FAILED
     logger.error(`Finished synchronizing "${sync.VideoChannel.Actor.preferredUsername}" with failures.`, { errors, successes, ...lTags() })
   } else {
-    sync.state = VideoChannelSyncState.SYNCED
+    sync.state = StreamSyncState.SYNCED
     logger.info(`Finished synchronizing "${sync.VideoChannel.Actor.preferredUsername}" successfully.`, { successes, ...lTags() })
   }
 

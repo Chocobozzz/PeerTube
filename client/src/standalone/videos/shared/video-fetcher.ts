@@ -17,7 +17,7 @@ export class VideoFetcher {
     try {
       videoResponse = await videoPromise
       isResponseOk = videoResponse.status === HttpStatusCode.OK_200
-    } catch (err) {
+    } catch (err: any) {
       logger.error(err)
 
       isResponseOk = false
@@ -46,8 +46,8 @@ export class VideoFetcher {
     return { captionsPromise, chaptersPromise, storyboardsPromise, videoResponse, playerSettingsPromise }
   }
 
-  loadLive (video: VideoDetails) {
-    return this.http.fetch(this.getLiveUrl(video.uuid), { optionalAuth: true })
+  loadLive (video: VideoDetails, videoPassword?: string) {
+    return this.http.fetch(this.getLiveUrl(video.uuid), { optionalAuth: true }, videoPassword)
       .then(res => res.json() as Promise<LiveVideo>)
   }
 
@@ -57,8 +57,8 @@ export class VideoFetcher {
       .then(token => token.files.token)
   }
 
-  loadEmbedAllowed (video: VideoDetails) {
-    if (!document.referrer) return Promise.resolve({ allowed: false })
+  loadEmbedAllowed (video: VideoDetails): Promise<boolean> {
+    if (!document.referrer) return Promise.resolve(false)
 
     const params = new URLSearchParams()
     params.append('domain', new URL(document.referrer).host)

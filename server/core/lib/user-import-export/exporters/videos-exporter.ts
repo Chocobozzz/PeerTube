@@ -147,6 +147,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       createdAt: video.createdAt.toISOString(),
       updatedAt: video.updatedAt.toISOString(),
       publishedAt: video.publishedAt.toISOString(),
+      firstPublishedAt: video.firstPublishedAt?.toISOString(),
       originallyPublishedAt: video.originallyPublishedAt
         ? video.originallyPublishedAt.toISOString()
         : undefined,

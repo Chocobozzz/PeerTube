@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { Title } from '@angular/platform-browser'
 import { Router } from '@angular/router'
 import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.component'
@@ -8,6 +8,7 @@ import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
   selector: 'my-error-page',
   templateUrl: './error-page.component.html',
   styleUrls: [ './error-page.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ LoginLinkComponent ]
 })
 export class ErrorPageComponent implements OnInit {

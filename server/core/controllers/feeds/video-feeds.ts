@@ -13,7 +13,6 @@ import {
   commonVideosFiltersValidatorFactory,
   feedsAccountOrChannelFiltersValidator,
   feedsFormatValidator,
-  setDefaultVideosSort,
   setFeedFormatContentType,
   videosSortValidator,
   videoSubscriptionFeedsValidator
@@ -38,7 +37,6 @@ const { middleware: cacheRouteMiddleware } = cacheRouteFactory({
 videoFeedsRouter.get(
   '/videos.:format',
   videosSortValidator,
-  setDefaultVideosSort,
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
@@ -50,7 +48,6 @@ videoFeedsRouter.get(
 videoFeedsRouter.get(
   '/subscriptions.:format',
   videosSortValidator,
-  setDefaultVideosSort,
   feedsFormatValidator,
   setFeedFormatContentType,
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
@@ -97,7 +94,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   const data = await getVideosForFeeds({
     ...buildNSFWFilters({ req, res }),
 
-    sort: req.query.sort,
+    sort: req.query.sort || '-originallyPublishedAt',
     isLocal: req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     accountId: account?.id,
@@ -127,7 +124,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
   const data = await getVideosForFeeds({
     ...buildNSFWFilters({ req, res }),
 
-    sort: req.query.sort,
+    sort: req.query.sort || '-publishedAt',
     isLocal: req.query.isLocal,
     include: req.query.include | VideoInclude.FILES,
     displayOnlyForFollower: {

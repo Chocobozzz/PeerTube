@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { RunnerRegistrationToken } from '@peertube/peertube-models'
@@ -13,6 +13,7 @@ import { RunnerService } from '../runner.service'
   selector: 'my-runner-registration-token-list',
   styleUrls: [ './runner-registration-token-list.component.scss' ],
   templateUrl: './runner-registration-token-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ButtonComponent,
     ActionDropdownComponent,

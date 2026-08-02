@@ -1,17 +1,7 @@
 import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
 import { MyAccountPage } from '../po/my-account.po'
-import {
-  browserSleep,
-  findEmailTo,
-  getEmailPort,
-  getVerificationLink,
-  go,
-  isMobileDevice,
-  MockSMTPServer,
-  prepareWebBrowser,
-  waitServerUp
-} from '../utils'
+import { browserSleep, findEmailTo, getEmailPort, getVerificationLink, go, MockSMTPServer, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('User settings', () => {
   let loginPage: LoginPage
@@ -23,7 +13,7 @@ describe('User settings', () => {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     myAccountPage = new MyAccountPage()
     adminConfigPage = new AdminConfigPage()
 

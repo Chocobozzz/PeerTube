@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
-import { extractMentions } from '@peertube/peertube-server/core/helpers/mentions.js'
+import { extractLocalMentions } from '@peertube/peertube-server/core/helpers/mentions.js'
 
 describe('Comment model', function () {
   it('Should correctly extract mentions', async function () {
@@ -10,8 +10,13 @@ describe('Comment model', function () {
 
     const isLocal = true
 
-    const result = extractMentions(text, isLocal).sort((a, b) => a.localeCompare(b))
+    const result = extractLocalMentions(text, isLocal)
 
-    expect(result).to.deep.equal([ 'another', 'chocobozzz', 'end', 'flo', 'florian', 'jean' ])
+    expect(result).to.deep.equal([ 'florian', 'jean', 'flo', 'another', 'chocobozzz', 'end' ])
+  })
+
+  it('Should correctly extract mentions with adjacent punctuations and newlines', async function () {
+    expect(extractLocalMentions('thanks @bob!', true)).to.deep.equal([ 'bob' ])
+    expect(extractLocalMentions('@bob\n', true)).to.deep.equal([ 'bob' ])
   })
 })

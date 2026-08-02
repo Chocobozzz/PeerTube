@@ -1,0 +1,27 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "_form-mixins" as *;
+
+.bulk-update-field-section {
+  border: 1px solid pvar(--input-border-color);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.bulk-update-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+
+  .remove-field-btn {
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+  }
+}
+
+.bulk-update-add-field {
+  margin-bottom: 1rem;
+}

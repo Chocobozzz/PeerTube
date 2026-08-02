@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, output, viewChild } from '@angular/core'
+import { Component, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { formatICU } from '@app/helpers'
 import { Notifier } from '@app/core'
@@ -16,6 +16,7 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-moderation-comment-modal',
   templateUrl: './moderation-comment-modal.component.html',
   styleUrls: [ './moderation-comment-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, FormsModule, ReactiveFormsModule, NgClass ]
 })
 export class ModerationCommentModalComponent extends FormReactive implements OnInit {

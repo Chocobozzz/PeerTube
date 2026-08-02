@@ -2,7 +2,7 @@ import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { isMobileDevice, isSafari, prepareWebBrowser, waitServerUp } from '../utils'
+import { isSafari, prepareWebBrowser, waitServerUp } from '../utils'
 
 describe('Publish live', function () {
   let videoPublishPage: VideoPublishPage
@@ -13,10 +13,10 @@ describe('Publish live', function () {
   before(async () => {
     await waitServerUp()
 
-    loginPage = new LoginPage(isMobileDevice())
+    loginPage = new LoginPage()
     videoPublishPage = new VideoPublishPage()
     adminConfigPage = new AdminConfigPage()
-    videoWatchPage = new VideoWatchPage(isMobileDevice(), isSafari())
+    videoWatchPage = new VideoWatchPage(isSafari())
 
     await prepareWebBrowser()
 

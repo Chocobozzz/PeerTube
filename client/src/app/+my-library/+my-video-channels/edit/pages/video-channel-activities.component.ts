@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnDestroy, OnInit } from '@angular/core'
+import { Component, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ComponentPagination, hasMoreItems, Notifier, resetCurrentPage } from '@app/core'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
@@ -16,6 +16,7 @@ import { DateGroupLabelComponent } from '@app/shared/shared-main/date/date-group
   selector: 'my-video-channel-activities',
   templateUrl: './video-channel-activities.component.html',
   styleUrls: [ './video-channel-activities.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     FormsModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core'
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
@@ -8,6 +8,7 @@ import { SignupSuccessAfterEmailComponent } from '../../shared/signup-success-af
 @Component({
   selector: 'my-verify-account-email',
   templateUrl: './verify-account-email.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ SignupSuccessAfterEmailComponent, RouterLink, AlertComponent ]
 })
 export class VerifyAccountEmailComponent implements OnInit {

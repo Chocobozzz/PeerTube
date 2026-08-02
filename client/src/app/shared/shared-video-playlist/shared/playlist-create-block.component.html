@@ -1,0 +1,16 @@
+<form (ngSubmit)="createPlaylist()">
+  <div class="form-group">
+    <label i18n for="displayName">Display name</label>
+    <input
+      type="text"
+      id="displayName"
+      class="form-control"
+      [formField]="playlistForm['displayName']"
+      [myFormInputError]="playlistForm.displayName()"
+    >
+
+    <my-form-error [field]="playlistForm.displayName()"></my-form-error>
+  </div>
+
+  <input type="submit" class="peertube-button primary-button" i18n-value value="Create" [disabled]="!playlistForm().valid()">
+</form>

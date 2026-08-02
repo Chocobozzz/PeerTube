@@ -6,14 +6,10 @@
 @if (video().isLocal === false) {
   <div class="attribute attribute-origin">
     <span i18n class="attribute-label">Origin</span>
-    <a
-      class="attribute-value" target="_blank" rel="noopener noreferrer"
-      routerLink="/search" [queryParams]="{ host: getVideoHost() }"
-    >{{ video().originInstanceHost }}</a>
-    <a
-      i18n-title title="Open the video on the origin instance"
-      target="_blank" rel="noopener noreferrer" [href]="video().url"
-      >
+    <a class="attribute-value" target="_blank" rel="noopener noreferrer" routerLink="/search" [queryParams]="{ host: getVideoHost() }">{{
+        video().originInstanceHost
+      }}</a>
+    <a i18n-title title="Open the video on the origin instance" target="_blank" rel="noopener noreferrer" [href]="video().url">
       <my-global-icon iconName="external-link"></my-global-icon>
     </a>
   </div>
@@ -22,64 +18,55 @@
 @if (!!video().inputFileUpdatedAt) {
   <div class="attribute attribute-re-uploaded-on">
     <span i18n class="attribute-label">Video re-upload</span>
-    <span class="attribute-value">{{ video().inputFileUpdatedAt | ptDate: 'short' }}</span>
+    <span class="attribute-value">{{ video().inputFileUpdatedAt | ptDate: 'short'  }}</span>
   </div>
 }
 
 @if (!!video().originallyPublishedAt) {
   <div class="attribute attribute-originally-published-at">
     <span i18n class="attribute-label">Originally published</span>
-    <span class="attribute-value">{{ video().originallyPublishedAt | ptDate: 'shortDate' }}</span>
+    <span class="attribute-value">{{ video().originallyPublishedAt | ptDate: 'shortDate'  }}</span>
   </div>
 }
 
-<div class="attribute attribute-category">
-  <span i18n class="attribute-label">Category</span>
-  @if (!video().category.id) {
-    <span class="attribute-value">{{ video().category.label }}</span>
-  }
-  @if (video().category.id) {
-    <a
-      class="attribute-value"
-      [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video().category.id ], resultType: 'videos' }"
-    >{{ video().category.label }}</a>
-  }
-</div>
+@if (video().category.id) {
+  <div class="attribute attribute-category">
+    <span i18n class="attribute-label">Category</span>
 
-<div class="attribute attribute-licence">
-  <span i18n class="attribute-label">Licence</span>
-  @if (!video().licence.id) {
-    <span class="attribute-value">{{ video().licence.label }}</span>
-  }
-  @if (video().licence.id) {
-    <a
-      class="attribute-value"
-      [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video().licence.id ], resultType: 'videos' }"
-    >{{ video().licence.label }}</a>
-  }
-</div>
+    <a class="attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ categoryOneOf: [ video().category.id ], resultType: 'videos' }">{{
+        video().category.label
+      }}</a>
+  </div>
+}
 
-<div class="attribute attribute-language">
-  <span i18n class="attribute-label">Language</span>
-  @if (!video().language.id) {
-    <span class="attribute-value">{{ video().language.label }}</span>
-  }
-  @if (video().language.id) {
-    <a
-      class="attribute-value"
-      [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video().language.id ], resultType: 'videos' }"
-    >{{ video().language.label }}</a>
-  }
-</div>
+@if (video().licence.id) {
+  <div class="attribute attribute-licence">
+    <span i18n class="attribute-label">Licence</span>
+    <a class="attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ licenceOneOf: [ video().licence.id ], resultType: 'videos' }">{{
+        video().licence.label
+      }}</a>
+  </div>
+}
 
-<div class="attribute attribute-tags">
-  <span i18n class="attribute-label">Tags</span>
-  @for (tag of getVideoTags(); track tag) {
-    <a
-      class="attribute-value pt-badge badge-secondary me-1" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ], resultType: 'videos' }"
-    >{{ tag }}</a>
-  }
-</div>
+@if (video().language.id) {
+  <div class="attribute attribute-language">
+    <span i18n class="attribute-label">Language</span>
+    <a class="attribute-value" [routerLink]="[ '/search' ]" [queryParams]="{ languageOneOf: [ video().language.id ], resultType: 'videos' }">{{
+        video().language.label
+      }}</a>
+  </div>
+}
+
+@if (getVideoTags().length > 0) {
+  <div class="attribute attribute-tags">
+    <span i18n class="attribute-label">Tags</span>
+    @for (tag of getVideoTags(); track tag) {
+      <a class="attribute-value pt-badge badge-secondary me-1" [routerLink]="[ '/search' ]" [queryParams]="{ tagsOneOf: [ tag ], resultType: 'videos' }">{{
+          tag
+        }}</a>
+    }
+  </div>
+}
 
 @if (!video().isLive) {
   <div class="attribute attribute-duration">

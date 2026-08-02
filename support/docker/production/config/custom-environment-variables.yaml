@@ -45,6 +45,11 @@ rates_limit:
     max:
       __name: PEERTUBE_RATES_LIMIT_ASK_SEND_EMAIL_MAX
       __format: json
+  confirm_token:
+    window: PEERTUBE_RATES_LIMIT_CONFIRM_TOKEN_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_CONFIRM_TOKEN_MAX
+      __format: json
   receive_client_log:
     window: PEERTUBE_RATES_LIMIT_RECEIVE_CLIENT_LOG_WINDOW
     max:
@@ -125,6 +130,7 @@ redis:
   port:
     __name: PEERTUBE_REDIS_PORT
     __format: json
+  socket: PEERTUBE_REDIS_SOCKET
   auth: PEERTUBE_REDIS_AUTH
   db:
     __name: PEERTUBE_REDIS_DB
@@ -539,6 +545,9 @@ signup:
         __format: json
 
 user:
+  allow_cross_provider_auth:
+    __name: PEERTUBE_USER_ALLOW_CROSS_PROVIDER_AUTH
+    __format: json
   video_quota:
     __name: PEERTUBE_USER_VIDEO_QUOTA
     __format: json

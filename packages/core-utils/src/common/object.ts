@@ -13,7 +13,7 @@ export function pick<O extends (object & { _attributes?: never }), K extends key
   return result
 }
 
-export function omit<O extends object, K extends keyof O> (object: O, keys: K[]): Exclude<O, K> {
+export function omit<O extends object, K extends keyof O> (object: O, keys: K[]): Omit<O, K> {
   const result: any = {}
   const keysSet = new Set(keys) as Set<string>
 

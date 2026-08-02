@@ -1,4 +1,3 @@
-import debug from 'debug'
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -8,10 +7,11 @@ import {
   OnDestroy,
   TemplateRef,
   ViewContainerRef,
+  contentChild,
   inject,
-  output,
-  contentChild
+  output
 } from '@angular/core'
+import debug from 'debug'
 
 const debugLogger = debug('peertube:main:DeferLoadingDirective')
 
@@ -60,7 +60,7 @@ export class DeferLoadingDirective implements AfterViewInit, OnDestroy {
   }
 
   isLoaded () {
-    return this.view != null
+    return this.view !== null && this.view !== undefined
   }
 
   ngOnDestroy () {

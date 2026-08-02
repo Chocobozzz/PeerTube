@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, viewChild } from '@angular/core'
+import { Component, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ConfirmService, Notifier, ServerService } from '@app/core'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
@@ -22,6 +22,7 @@ type QueryParams = TableQueryParams & {
   selector: 'my-video-redundancies-list',
   templateUrl: './video-redundancies-list.component.html',
   styleUrls: [ './video-redundancies-list.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GlobalIconComponent,
     FormsModule,

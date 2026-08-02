@@ -16,7 +16,7 @@ export function processFederateVideo (job: Job) {
       const video = await VideoModel.loadFull(payload.videoUUID, t)
       if (!video) return
 
-      return federateVideoIfNeeded(video, payload.isNewVideoForFederation, t)
+      return federateVideoIfNeeded(video, t)
     })
   })
 }

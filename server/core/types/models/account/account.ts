@@ -16,7 +16,7 @@ import {
   MActorUsername
 } from '../actor/index.js'
 import { MChannelDefault } from '../video/video-channel.js'
-import { MAccountBlocklistId } from './account-blocklist.js'
+import { MAccountBlocklistId } from '../blocklist/account-blocklist.js'
 import { MChannelCollaboratorChannel } from '../video/video-channel-collaborator.js'
 
 type Use<K extends keyof AccountModel, M> = PickWith<AccountModel, K, M>

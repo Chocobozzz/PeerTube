@@ -1,13 +1,13 @@
 export function Debounce (config: { timeoutMS: number }) {
-  let timeoutRef: NodeJS.Timeout
+  const timeoutRefKey = Symbol('debounce-timeout')
 
   return function (_target, _key, descriptor: PropertyDescriptor) {
     const original = descriptor.value
 
     descriptor.value = function (...args: any[]) {
-      clearTimeout(timeoutRef)
+      clearTimeout(this[timeoutRefKey])
 
-      timeoutRef = setTimeout(() => {
+      this[timeoutRefKey] = setTimeout(() => {
         original.apply(this, args)
       }, config.timeoutMS)
     }

@@ -1,7 +1,7 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { AbuseFilter, AbuseStateType, AbuseVideoIs } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
-import { buildBlockedAccountSQL, buildSortDirectionAndField } from '../../shared/index.js'
+import { buildBlockedAccountSQL, buildSortDirectionAndField, throwOnInvalidSortColumnName } from '../../shared/index.js'
 
 export type BuildAbusesQueryOptions = {
   start: number
@@ -158,6 +158,8 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
 
 function buildAbuseOrder (value: string) {
   const { direction, field } = buildSortDirectionAndField(value)
+
+  throwOnInvalidSortColumnName(field)
 
   return `ORDER BY "abuse"."${field}" ${direction}`
 }

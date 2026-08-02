@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, HtmlRendererService, Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -15,6 +15,7 @@ import { AbuseService } from '../shared-moderation/abuse.service'
   selector: 'my-abuse-message-modal',
   templateUrl: './abuse-message-modal.component.html',
   styleUrls: [ './abuse-message-modal.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, NgClass, FormsModule, ReactiveFormsModule, PTDatePipe ]
 })
 export class AbuseMessageModalComponent extends FormReactive implements OnInit {

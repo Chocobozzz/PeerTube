@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { LateralMenuComponent, LateralMenuConfig } from '../../shared/shared-main/menu/lateral-menu.component'
 
@@ -6,6 +6,7 @@ import { LateralMenuComponent, LateralMenuConfig } from '../../shared/shared-mai
   selector: 'my-admin-config',
   styleUrls: [ './admin-config.component.scss' ],
   templateUrl: './admin-config.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     RouterModule,
     LateralMenuComponent

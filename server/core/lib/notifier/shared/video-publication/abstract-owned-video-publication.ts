@@ -54,13 +54,11 @@ export abstract class AbstractOwnedVideoPublication extends AbstractNotification
     return {
       to,
       subject: t('Your video has been published', language),
+      title: t('Your video is live', language),
       text: t('Your video {videoName} has been published.', language, { videoName: this.payload.name }),
-      locals: {
-        title: t('Your video is live', language),
-        action: {
-          text: t('View video', language),
-          url: videoUrl
-        }
+      action: {
+        text: t('View video', language),
+        url: videoUrl
       }
     }
   }

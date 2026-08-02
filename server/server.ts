@@ -66,7 +66,7 @@ import { program as cli } from 'commander'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import { frameguard } from 'helmet'
+import { frameguard, xContentTypeOptions } from 'helmet'
 import anonymize from 'ip-anonymize'
 import morgan, { token } from 'morgan'
 
@@ -95,6 +95,8 @@ if (CONFIG.CSP.ENABLED) {
   app.use(baseCSP)
 }
 
+app.use(xContentTypeOptions())
+
 if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
   app.use(frameguard({
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
@@ -102,6 +104,7 @@ if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
 }
 
 // ----------- PeerTube modules -----------
+import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
@@ -140,6 +143,7 @@ import { PluginManager } from './core/lib/plugins/plugin-manager.js'
 import { Redis } from './core/lib/redis.js'
 import { ActorFollowScheduler } from './core/lib/schedulers/actor-follow-scheduler.js'
 import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-index-instances.js'
+import { BlocklistSubscriptionsScheduler } from './core/lib/schedulers/blocklist-subscriptions-scheduler.js'
 import { GeoIPUpdateScheduler } from './core/lib/schedulers/geo-ip-update-scheduler.js'
 import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
@@ -150,6 +154,7 @@ import { RunnerJobWatchDogScheduler } from './core/lib/schedulers/runner-job-wat
 import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-scheduler.js'
 import { VideoStatsBufferScheduler } from './core/lib/schedulers/video-stats-buffer-scheduler.js'
 import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
+import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watched-words-subscriptions-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
@@ -168,8 +173,7 @@ cli
 if (isTestOrDevInstance()) {
   app.use(cors({
     origin: '*',
-    exposedHeaders: 'Retry-After',
-    credentials: true
+    exposedHeaders: 'Retry-After'
   }))
 }
 
@@ -203,10 +207,10 @@ app.use(express.json({
     const valid = isHTTPSignatureDigestValid(buf, req)
 
     if (valid !== true) {
-      res.fail({
-        status: HttpStatusCode.FORBIDDEN_403,
-        message: 'Invalid digest'
-      })
+      const err: Error & { status?: number } = new Error('Invalid digest')
+      err.status = HttpStatusCode.FORBIDDEN_403
+
+      throw err
     }
 
     if (req.originalUrl.startsWith('/plugins/')) {
@@ -268,11 +272,14 @@ app.use((err, req, res: express.Response, _next) => {
   const sql = err?.parent ? err.parent.sql : undefined
 
   // Help us to debug SequelizeConnectionAcquireTimeoutError errors
-  const activeRequests = err?.name === 'SequelizeConnectionAcquireTimeoutError' && typeof (process as any)._getActiveRequests !== 'function'
+  const activeRequests = err?.name === 'SequelizeConnectionAcquireTimeoutError' && typeof (process as any)._getActiveRequests === 'function'
     ? (process as any)._getActiveRequests()
     : undefined
 
-  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl })
+  // Remove too big metadata
+  const sanitizedErr = omit(err, [ 'body' ])
+
+  logger.error('Error in controller.', { err: sanitizedErr, sql, activeRequests, url: req.originalUrl })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
@@ -322,6 +329,8 @@ async function startApplication () {
   PluginsCheckScheduler.Instance.enable()
   PeerTubeVersionCheckScheduler.Instance.enable()
   AutoFollowIndexInstances.Instance.enable()
+  BlocklistSubscriptionsScheduler.Instance.enable()
+  WatchedWordsSubscriptionsScheduler.Instance.enable()
   RemoveDanglingResumableUploadsScheduler.Instance.enable()
   VideoChannelSyncLatestScheduler.Instance.enable()
   VideoStatsBufferScheduler.Instance.enable()

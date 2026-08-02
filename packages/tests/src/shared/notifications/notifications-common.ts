@@ -39,7 +39,8 @@ export function getAllNotificationsSettings (): UserNotificationSetting {
     newPeerTubeVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoStudioEditionFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     myVideoTranscriptionGenerated: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+    newPluginVersion: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    automaticBlocklist: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 }
 

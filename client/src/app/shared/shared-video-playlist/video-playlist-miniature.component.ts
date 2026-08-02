@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, booleanAttribute, inject, input } from '@angular/core'
+import { Component, OnInit, booleanAttribute, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { MarkdownService } from '@app/core'
 import { LinkType } from '@pt-types'
 import { LinkComponent } from '../shared-main/common/link.component'
@@ -10,6 +10,7 @@ import { VideoPlaylist } from './video-playlist.model'
   selector: 'my-video-playlist-miniature',
   styleUrls: [ './video-playlist-miniature.component.scss' ],
   templateUrl: './video-playlist-miniature.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgClass, LinkComponent, FromNowPipe ]
 })
 export class VideoPlaylistMiniatureComponent implements OnInit {

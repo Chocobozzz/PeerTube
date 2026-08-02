@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, ElementRef, OnInit, inject, input, output, viewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -15,6 +15,7 @@ import { WatchedWordsListService } from './watched-words-list.service'
   selector: 'my-watched-words-list-save-modal',
   styleUrls: [ './watched-words-list-save-modal.component.scss' ],
   templateUrl: './watched-words-list-save-modal.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ FormsModule, ReactiveFormsModule, GlobalIconComponent, NgClass ]
 })
 export class WatchedWordsListSaveModalComponent extends FormReactive implements OnInit {
@@ -22,6 +23,8 @@ export class WatchedWordsListSaveModalComponent extends FormReactive implements 
   private modalService = inject(NgbModal)
   private notifier = inject(Notifier)
   private watchedWordsService = inject(WatchedWordsListService)
+
+  mode: 'admin' | 'user'
 
   readonly accountName = input.required<string>()
 
@@ -39,15 +42,19 @@ export class WatchedWordsListSaveModalComponent extends FormReactive implements 
     })
   }
 
-  show (list?: WatchedWordsList) {
-    this.listToUpdate = list
+  show (options: {
+    mode: 'admin' | 'user'
+    list?: WatchedWordsList
+  }) {
+    this.mode = options.mode
+    this.listToUpdate = options.list
 
     this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
 
-    if (list) {
+    if (this.listToUpdate) {
       this.form.patchValue({
-        listName: list.listName,
-        words: list.words.join('\n')
+        listName: this.listToUpdate.listName,
+        words: this.listToUpdate.words.join('\n')
       })
     }
   }

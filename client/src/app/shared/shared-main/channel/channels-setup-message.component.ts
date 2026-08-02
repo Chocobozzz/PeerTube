@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input } from '@angular/core'
+import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, User } from '@app/core'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
@@ -8,6 +8,7 @@ import { AlertComponent } from '../common/alert.component'
   selector: 'my-channels-setup-message',
   templateUrl: './channels-setup-message.component.html',
   styleUrls: [ './channels-setup-message.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ GlobalIconComponent, RouterLink, AlertComponent ]
 })
 export class ChannelsSetupMessageComponent implements OnInit {

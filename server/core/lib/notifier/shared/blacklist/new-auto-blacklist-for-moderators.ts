@@ -52,15 +52,15 @@ export class NewAutoBlacklistForModerators extends AbstractNotification<MVideoBl
       template: 'video-auto-blacklist-new',
       to: { email: user.email, language: user.getLanguage() },
       subject: tu('A new video is pending moderation', user),
+      action: {
+        text: tu('Review video', user),
+        url: videoAutoBlacklistUrl
+      },
       locals: {
         channelDisplayName: channel.getDisplayName(),
         channelUrl: channel.getClientUrl(),
         videoUrl: WEBSERVER.URL + video.getWatchStaticPath(),
-        videoName: video.name,
-        action: {
-          text: tu('Review video', user),
-          url: videoAutoBlacklistUrl
-        }
+        videoName: video.name
       }
     }
   }

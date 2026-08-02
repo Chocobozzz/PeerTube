@@ -172,7 +172,7 @@ export class LiveRTMPHLSTranscodingJobHandler
       videoUUID: privatePayload.videoUUID,
       expectedSessionId: privatePayload.sessionId,
       error: errorType[type]
-    })
+    }).catch(err => logger.error('Cannot stop session of video %s.', videoUUID, { err, ...this.lTags(runnerJob.uuid, videoUUID) }))
 
     logger.info('Runner live RTMP to HLS job %s for video %s %s.', runnerJob.uuid, videoUUID, type, this.lTags(runnerJob.uuid, videoUUID))
   }

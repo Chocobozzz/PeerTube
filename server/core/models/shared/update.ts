@@ -1,6 +1,7 @@
 import { QueryTypes, Sequelize, Transaction } from 'sequelize'
 
 const updating = new Set<string>()
+const tableWhitelist = new Set([ 'runnerJob', 'actorFollow', 'videoPlaylist', 'video', 'videoChannel' ])
 
 // Sequelize always skip the update if we only update updatedAt field
 export async function setAsUpdated (options: {
@@ -11,7 +12,7 @@ export async function setAsUpdated (options: {
 }) {
   const { sequelize, table, id, transaction } = options
 
-  if (new Set([ 'runnerJob', 'actorFollow', 'videoPlaylist', 'video', 'videoChannel' ]).has(table) === false) {
+  if (tableWhitelist.has(table) === false) {
     throw new Error('Invalid table')
   }
 
@@ -24,7 +25,7 @@ export async function setAsUpdated (options: {
     await sequelize.query(
       `UPDATE "${table}" SET "updatedAt" = :updatedAt WHERE id = :id`,
       {
-        replacements: { table, id, updatedAt: new Date() },
+        replacements: { id, updatedAt: new Date() },
         type: QueryTypes.UPDATE,
         transaction
       }

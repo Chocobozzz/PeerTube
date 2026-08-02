@@ -69,9 +69,12 @@ export const updateVideoEmbedPrivacyValidator = [
     ) return
 
     const body: VideoEmbedPrivacyUpdate = req.body
-    if (body.policy === VideoEmbedPrivacyPolicy.ALL_ALLOWED && body.domains.length !== 0) {
+    if (
+      (body.policy === VideoEmbedPrivacyPolicy.ALL_ALLOWED || body.policy === VideoEmbedPrivacyPolicy.DISABLED) &&
+      body.domains.length !== 0
+    ) {
       return res.fail({
-        message: req.t('Domains should be empty when policy is in "all allowed" mode')
+        message: req.t('Domains should be empty when policy is in "all allowed" or "disabled" mode')
       })
     }
 

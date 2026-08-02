@@ -1,6 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { canCopyForHLS, getVideoStreamDuration, HLSFromTSTranscodeOptions, HLSTranscodeOptions } from '@peertube/peertube-ffmpeg'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
 import { MVideo } from '@server/types/models/index.js'
@@ -48,7 +49,9 @@ export function generateHlsPlaylistResolution (options: {
   fps: number
   inputFileMutexReleaser: MutexInterface.Releaser
   separatedAudio: boolean
-  job?: Job
+
+  job: Job
+  abortSignal: AbortSignal
 }) {
   return generateHlsPlaylistCommon({
     type: 'hls' as 'hls',
@@ -61,7 +64,8 @@ export function generateHlsPlaylistResolution (options: {
       'fps',
       'separatedAudio',
       'inputFileMutexReleaser',
-      'job'
+      'job',
+      'abortSignal'
     ])
   })
 }
@@ -161,6 +165,7 @@ async function generateHlsPlaylistCommon (options: {
   isAAC?: boolean
 
   job?: Job
+  abortSignal?: AbortSignal
 }) {
   const {
     type,
@@ -173,7 +178,8 @@ async function generateHlsPlaylistCommon (options: {
     isAAC,
     job,
     inputFileMutexReleaser,
-    preventInputFileLocking
+    preventInputFileLocking,
+    abortSignal
   } = options
 
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
@@ -211,15 +217,21 @@ async function generateHlsPlaylistCommon (options: {
     }
   }
 
-  await buildFFmpegVOD(job).transcode(transcodeOptions)
+  try {
+    await buildFFmpegVOD({ job, abortSignal }).transcode(transcodeOptions)
 
-  // Ensure the mutex is released if the ffmpeg command failed and did not release it
-  if (inputFileMutexReleaser) inputFileMutexReleaser()
+    // Ensure the mutex is released if the ffmpeg command failed and did not release it
+    if (inputFileMutexReleaser) inputFileMutexReleaser()
 
-  await onHLSVideoFileTranscoding({
-    video,
-    videoOutputPath,
-    preventInputFileLocking,
-    m3u8OutputPath
-  })
+    await onHLSVideoFileTranscoding({
+      video,
+      videoOutputPath,
+      preventInputFileLocking,
+      m3u8OutputPath
+    })
+  } finally {
+    // Cleanup temporary files
+    deleteFileAndCatch(videoOutputPath)
+    deleteFileAndCatch(m3u8OutputPath)
+  }
 }

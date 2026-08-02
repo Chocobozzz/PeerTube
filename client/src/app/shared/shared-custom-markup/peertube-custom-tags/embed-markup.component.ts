@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, inject, input } from '@angular/core'
+import { Component, ElementRef, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import {
   buildPlaylistEmbedLink,
   buildVideoEmbedLink,
@@ -13,6 +13,7 @@ import { CustomMarkupComponent } from './shared'
 @Component({
   selector: 'my-embed-markup',
   template: '',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class EmbedMarkupComponent implements CustomMarkupComponent, OnInit {

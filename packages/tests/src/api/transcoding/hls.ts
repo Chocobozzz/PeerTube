@@ -11,7 +11,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { DEFAULT_AUDIO_RESOLUTION } from '@peertube/peertube-server/core/initializers/constants.js'
+import { DEFAULT_AUDIO_MERGE_RESOLUTION } from '@peertube/peertube-server/core/initializers/constants.js'
 import { checkDirectoryIsEmpty, checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { join } from 'path'
@@ -72,7 +72,7 @@ describe('Test HLS videos', function () {
         servers,
         videoUUID: uuid,
         hlsOnly,
-        resolutions: [ DEFAULT_AUDIO_RESOLUTION, 360, 240 ],
+        resolutions: [ DEFAULT_AUDIO_MERGE_RESOLUTION, 360, 240 ],
         objectStorageBaseUrl
       })
     })

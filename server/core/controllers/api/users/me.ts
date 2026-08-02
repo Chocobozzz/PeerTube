@@ -52,6 +52,7 @@ import { UserModel } from '../../../models/user/user.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -307,7 +308,6 @@ async function updateMe (req: express.Request, res: express.Response) {
     'noInstanceConfigWarningModal',
     'noAccountSetupWarningModal',
     'noWelcomeModal',
-    'emailPublic',
     'p2pEnabled'
   ]
 
@@ -325,6 +325,14 @@ async function updateMe (req: express.Request, res: express.Response) {
   }
 
   await sequelizeTypescript.transaction(async t => {
+    if (body.password !== undefined) {
+      await OAuthTokenModel.deleteUserToken({
+        userId: user.id,
+        accessTokenException: res.locals.oauth.token.accessToken,
+        transaction: t
+      })
+    }
+
     await user.save({ transaction: t })
 
     if (body.displayName === undefined && body.description === undefined) return
