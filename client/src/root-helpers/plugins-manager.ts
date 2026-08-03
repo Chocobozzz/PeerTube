@@ -22,6 +22,7 @@ import { first, shareReplay } from 'rxjs/operators'
 import { ClientScript } from '../types'
 import { RegisterClientHelpers } from '../types/register-client-option.model'
 import { logger } from './logger'
+import { Router } from '@angular/router'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -54,6 +55,7 @@ const debugLogger = debug('peertube:plugins')
 class PluginsManager {
   private hooks: Hooks = {}
 
+  private router: Router
   private scopes: { [scopeName: string]: PluginInfo[] } = {}
 
   private loadedScripts: { [script: string]: boolean } = {}
@@ -85,6 +87,7 @@ class PluginsManager {
   private readonly backendUrl: string
 
   constructor (options: {
+    router?: Router
     doAction?: ClientDoAction
     peertubeHelpersFactory: PeertubeHelpersFactory
     onFormFields?: OnFormFields
@@ -92,6 +95,7 @@ class PluginsManager {
     onClientRoute?: OnClientRoute
     backendUrl?: string
   }) {
+    this.router = options.router
     this.doAction = options.doAction
     this.peertubeHelpersFactory = options.peertubeHelpersFactory
     this.onFormFields = options.onFormFields
@@ -286,6 +290,7 @@ class PluginsManager {
     return dynamicImport(absURL)
       .then((script: ClientScript) => {
         return script.register({
+          router: this.router,
           doAction,
           registerHook,
           registerVideoField,

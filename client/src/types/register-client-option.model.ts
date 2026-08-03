@@ -1,3 +1,4 @@
+import { Router } from '@angular/router'
 import {
   ClientDoAction,
   MyUser,
@@ -10,6 +11,8 @@ import {
 } from '@peertube/peertube-models'
 
 export type RegisterClientOptions = {
+  router: Router
+
   doAction: ClientDoAction
 
   registerHook: (options: RegisterClientHookOptions) => void
