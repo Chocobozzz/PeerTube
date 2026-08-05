@@ -59,7 +59,7 @@ export abstract class AbstractVODTranscodingJobHandler<C, U extends RunnerJobUpd
         this.lTags(video.uuid)
       )
 
-      await retryTransactionWrapper(moveToNextState, { video })
+      await retryTransactionWrapper(() => moveToNextState({ video }))
     }
   }
 }

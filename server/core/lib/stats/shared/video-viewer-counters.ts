@@ -149,6 +149,10 @@ export class VideoViewerCounters {
     let watchers = this.viewersPerVideo.get(video.id)
 
     if (!watchers || replaceCurrentViewers) {
+      for (const watcher of watchers || []) {
+        this.idToViewer.delete(watcher.id)
+      }
+
       watchers = []
       this.viewersPerVideo.set(video.id, watchers)
     }

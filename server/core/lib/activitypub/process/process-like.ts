@@ -12,7 +12,7 @@ import { canVideoBeFederated, federateVideoIfNeeded, maybeGetOrCreateAPVideo } f
 async function processLikeActivity (options: APProcessorOptions<ActivityLike>) {
   const { activity, byActor } = options
 
-  return retryTransactionWrapper(processLikeVideo, byActor, activity)
+  return retryTransactionWrapper(() => processLikeVideo(byActor, activity))
 }
 
 // ---------------------------------------------------------------------------

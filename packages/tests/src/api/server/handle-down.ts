@@ -306,14 +306,22 @@ describe('Test handle downs', function () {
 
     await killallServers([ servers[0] ])
 
-    // Wait video expiration
-    await wait(11000)
+    async function isFollowingRemoved () {
+      const { data } = await servers[1].follows.getFollowings({ search: servers[0].host })
 
-    for (let i = 0; i < 3; i++) {
+      return data.length === 0
+    }
+
+    // Trigger video refreshes against the dead server until the actor follow scheduler
+    // has applied enough penalties to remove the stale following (score based, not time based)
+    let i = 0
+    while (!(await isFollowingRemoved())) {
+      const id = videoIdsServer1[i % videoIdsServer1.length]
+      i++
+
       try {
-        await servers[1].videos.get({ id: videoIdsServer1[i] })
+        await servers[1].videos.get({ id })
         await waitJobs([ servers[1] ])
-        await wait(1500)
       } catch {}
     }
 

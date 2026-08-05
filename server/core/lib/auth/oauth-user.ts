@@ -11,6 +11,7 @@ import express from 'express'
 import { logger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { OTP } from '../../initializers/constants.js'
+import { sequelizeTypescript } from '../../initializers/database.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { Emailer } from '../emailer.js'
@@ -141,9 +142,10 @@ async function handleGetUserBypass (options: {
 
   const user = await findExternalUserOrThrow({ externalUser, pluginName, userUpdater, req })
 
-  // If the user does not belongs to a plugin, it was created before its installation
-  // Then we just go through a regular login process
+  // If the user does not belongs to a plugin, then we just go through a regular login process
   if (user.pluginAuth !== null) {
+    checkUserNotBlockedOrThrow(user, req)
+
     // This user does not belong to this plugin
     if (user.pluginAuth !== pluginName) {
       if (CONFIG.USER.ALLOW_CROSS_PROVIDER_AUTH !== true) {
@@ -166,15 +168,13 @@ async function handleGetUserBypass (options: {
         )
 
         user.pluginAuth = pluginName
-        await updateUserFromExternal({ user, userOptions: externalUser, userUpdater, syncEmail: true })
+        await updateUserFromExternal({ user, userOptions: externalUser, userUpdater, syncEmail: true, req })
 
         // Tokens issued under the previous auth plugin can no longer have their validity checked by that
         // plugin's hookTokenValidity (the user is not registered under it anymore), so force a fresh login
         await OAuthTokenModel.deleteUserToken({ userId: user.id })
       }
     }
-
-    checkUserNotBlockedOrThrow(user, req)
 
     return user
   }
@@ -196,8 +196,13 @@ async function findExternalUserOrThrow (options: {
     const userByExternalId = await UserModel.loadByPluginAuthExternalId(pluginName, externalUser.externalId)
 
     if (userByExternalId) {
+      // Check the block before updating: a blocked account must not have its profile rewritten by the plugin
+      checkUserNotBlockedOrThrow(userByExternalId, req)
+
       // Authoritative match by stable external id: trust it even if the email changed at the identity provider
-      return updateUserFromExternal({ user: userByExternalId, userOptions: externalUser, userUpdater, syncEmail: true })
+      await updateUserFromExternal({ user: userByExternalId, userOptions: externalUser, userUpdater, syncEmail: true, req })
+
+      return userByExternalId
     }
   }
 
@@ -217,7 +222,11 @@ async function findExternalUserOrThrow (options: {
       )
     }
 
-    return updateUserFromExternal({ user: userByEmail, userOptions: externalUser, userUpdater, syncEmail: false })
+    checkUserNotBlockedOrThrow(userByEmail, req)
+
+    await updateUserFromExternal({ user: userByEmail, userOptions: externalUser, userUpdater, syncEmail: false, req })
+
+    return userByEmail
   }
 
   return userByEmail
@@ -249,8 +258,9 @@ async function updateUserFromExternal (options: {
   userOptions: ExternalUser
   userUpdater: RegisterServerAuthenticatedResult['userUpdater']
   syncEmail: boolean
+  req: express.Request
 }) {
-  const { user, userOptions, userUpdater, syncEmail } = options
+  const { user, userOptions, userUpdater, syncEmail, req } = options
 
   if (userUpdater) {
     {
@@ -294,19 +304,30 @@ async function updateUserFromExternal (options: {
   }
 
   if (syncEmail && userOptions.email && user.email !== userOptions.email) {
+    await checkExternalEmailIsFreeOrThrow(user, userOptions.email, req)
+
     logger.info('Updating email of user %s to %s after successful external auth.', user.email, userOptions.email)
     user.email = userOptions.email
   }
 
-  user.Account = await user.Account.save()
+  return sequelizeTypescript.transaction(async transaction => {
+    user.Account = await user.Account.save({ transaction })
 
-  return user.save()
+    return user.save({ transaction })
+  })
 }
 
-// ---------------------------------------------------------------------------
-// Private
-// ---------------------------------------------------------------------------
+async function checkExternalEmailIsFreeOrThrow (user: MUserDefault, email: string, req: express.Request) {
+  const others = (await UserModel.loadByEmailCaseInsensitive(email)).filter(u => u.id !== user.id)
+  if (others.length === 0) return
 
-function checkUserNotBlockedOrThrow (user: MUser, req: express.Request) {
+  logger.error('Cannot sync email %s of user %s after external auth: already used by user %s.', email, user.email, others[0].id)
+
+  throw new AccessDeniedError(
+    req.t('Refusing external auth bypass: {email} is already used by another account.', { email })
+  )
+}
+
+export function checkUserNotBlockedOrThrow (user: MUser, req: express.Request) {
   if (user.blocked) throw new AccountBlockedError(req.t('User is blocked.'))
 }

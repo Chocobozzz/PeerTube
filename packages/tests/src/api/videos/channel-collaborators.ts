@@ -375,10 +375,15 @@ describe('Test channel collaborators', function () {
       })
 
       it('Should list playlists from collab channels', async function () {
-        for (const displayName of [ 'playlist1', 'playlist2' ]) {
+        const toCreate = [
+          { displayName: 'playlist1', privacy: VideoPrivacy.PUBLIC },
+          { displayName: 'playlist2', privacy: VideoPrivacy.UNLISTED }
+        ]
+
+        for (const { displayName, privacy } of toCreate) {
           const playlist = await servers[0].playlists.create({
             token: collaborator1,
-            attributes: { displayName, privacy: VideoPrivacy.PUBLIC, videoChannelId: channelCollabId }
+            attributes: { displayName, privacy, videoChannelId: channelCollabId }
           })
           playlistId = playlist.uuid
         }

@@ -94,7 +94,7 @@ export const usersVerifyEmailValidator = [
     if (!await checkUserIdExist(req.params.id, res)) return
 
     const user = res.locals.user
-    const redisVerificationString = await Redis.Instance.getUserVerifyEmailLink(user.id)
+    const redisVerificationString = await Redis.Instance.getUserVerifyEmailLink(user.id, req.body.isPendingEmail === true)
 
     if (!isSecretEqual(redisVerificationString, req.body.verificationString)) {
       return res.fail({ status: HttpStatusCode.FORBIDDEN_403, message: 'Invalid verification string.' })

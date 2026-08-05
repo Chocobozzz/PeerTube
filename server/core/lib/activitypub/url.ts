@@ -163,3 +163,11 @@ export function checkUrlsSameHost (url1: string, url2: string) {
 
   return idHost?.toLowerCase() === actorHost?.toLowerCase()
 }
+
+export function isLocalUrl (url: string) {
+  try {
+    return new URL(url).host?.toLowerCase() === WEBSERVER.HOST.toLowerCase()
+  } catch {
+    return false
+  }
+}

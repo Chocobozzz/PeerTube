@@ -1,7 +1,8 @@
 import { Activity, ActivityType } from '@peertube/peertube-models'
+import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 import validator from 'validator'
 import { isAbuseReasonValid } from '../abuses.js'
-import { exists } from '../misc.js'
+import { exists, isDateValid } from '../misc.js'
 import { sanitizeAndCheckActorObject } from './actor.js'
 import { isCacheFileObjectValid } from './cache-file.js'
 import { isActivityPubUrlValid, isBaseActivityValid, isObjectValid } from './misc.js'
@@ -11,14 +12,24 @@ import { sanitizeAndCheckVideoCommentObject } from './video-comments.js'
 import { sanitizeAndCheckVideoTorrentObject } from './videos.js'
 import { isWatchActionObjectValid } from './watch-action.js'
 
+const collectionTypes = new Set([ 'Collection', 'CollectionPage', 'OrderedCollection', 'OrderedCollectionPage' ])
+
 export function isRootActivityValid (activity: any) {
-  return isCollection(activity) || isActivity(activity)
+  if (!exists(activity)) return false
+
+  if (collectionTypes.has(activity.type)) return isCollection(activity)
+
+  return isActivity(activity)
 }
 
 function isCollection (activity: any) {
-  return (activity.type === 'Collection' || activity.type === 'OrderedCollection') &&
-    validator.default.isInt(activity.totalItems, { min: 0 }) &&
-    Array.isArray(activity.items)
+  if (!validator.default.isInt(activity.totalItems + '', { min: 0 })) return false
+
+  if (activity.type === 'Collection' || activity.type === 'CollectionPage') {
+    return Array.isArray(activity.items)
+  }
+
+  return Array.isArray(activity.orderedItems)
 }
 
 function isActivity (activity: any) {
@@ -77,9 +88,22 @@ export function isAnnounceActivityValid (activity: any) {
 }
 
 export function isViewActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'View') &&
-    isActivityPubUrlValid(activity.actor) &&
-    isActivityPubUrlValid(activity.object)
+  if (!isBaseActivityValid(activity, 'View')) return false
+  if (!isActivityPubUrlValid(activity.actor)) return false
+  if (!isActivityPubUrlValid(activity.object)) return false
+
+  if (exists(activity.expires)) {
+    // isDateValid() expects a string
+    if (typeof activity.expires !== 'string' || !isDateValid(activity.expires)) return false
+
+    const expires = new Date(activity.expires).getTime()
+    if (isNaN(expires)) return false
+
+    // Add a 10x margin to the max expires to allow for some clock drift or custom view lifetime between servers
+    if (expires > new Date().getTime() + (VIEW_LIFETIME.VIEWER_COUNTER * 10)) return false
+  }
+
+  return true
 }
 
 export function isCreateActivityValid (activity: any) {

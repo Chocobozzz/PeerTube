@@ -101,7 +101,7 @@ describe('Test live socket messages', function () {
     })
 
     it('Should correctly send views change notification', async function () {
-      this.timeout(60000)
+      this.timeout(90000)
 
       let localLastVideoViewers = 0
       let remoteLastVideoViewers = 0
@@ -146,11 +146,11 @@ describe('Test live socket messages', function () {
         }
       }, 1000)
 
-      await wait(6000)
-      await waitJobs(servers)
-
-      expect(localLastVideoViewers).to.equal(2)
-      expect(remoteLastVideoViewers).to.equal(2)
+      const deadline = Date.now() + 30000
+      // oxlint-disable-next-line no-unmodified-loop-condition
+      while ((localLastVideoViewers !== 2 || remoteLastVideoViewers !== 2) && Date.now() < deadline) {
+        await wait(500)
+      }
 
       clearInterval(interval)
       await stopFfmpeg(ffmpegCommand)

@@ -1,5 +1,13 @@
 # Changelog
 
+## v8.2.4
+
+### SECURITY
+
+This release addresses vulnerabilities ranging from medium to high severity affecting PeerTube **<= 8.2.3**.
+In a few days, this changelog will be updated to disclose the vulnerabilities.
+
+
 ## v8.2.3
 
 ### SECURITY

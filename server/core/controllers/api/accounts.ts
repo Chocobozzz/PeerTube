@@ -77,6 +77,7 @@ accountsRouter.get(
 
 accountsRouter.get(
   '/:handle/video-channels',
+  optionalAuthenticate,
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
   listAccountChannelsValidator,
   paginationValidator,
