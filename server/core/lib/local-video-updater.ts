@@ -91,13 +91,10 @@ export class LocalVideoUpdater {
         for (const key of keysToUpdate) {
           if (options[key] !== undefined) video.set(key, options[key])
         }
-  
-        // Update contentUpdatedAt if relevant content fields changed  
-        const nameChanged = options.name !== undefined && options.name !== oldName  
-        const descriptionChanged = options.description !== undefined && options.description !== oldDescription  
-        const thumbnailChanged = options.thumbnails !== undefined && options.thumbnails.length !== 0  
-        if (nameChanged || descriptionChanged || thumbnailChanged) {  
-          video.contentUpdatedAt = new Date()  
+
+        // Update sitemapContentUpdatedAt if relevant content fields changed
+        if (this.hasSitemapContentChanged({ ...options, oldName, oldDescription })) {
+          video.sitemapContentUpdatedAt = new Date()
         }
 
         if (video.nsfw !== true) {
@@ -400,5 +397,22 @@ export class LocalVideoUpdater {
         }
       }
     ]
+  }
+
+  private hasSitemapContentChanged (options: {
+    name?: string
+    description?: string
+    thumbnails?: MThumbnail[]
+
+    oldName: string
+    oldDescription: string
+  }) {
+    const { name, description, thumbnails, oldName, oldDescription } = options
+
+    const nameChanged = name !== undefined && name !== oldName
+    const descriptionChanged = description !== undefined && description !== oldDescription
+    const thumbnailChanged = thumbnails !== undefined && thumbnails.length !== 0
+
+    return nameChanged || descriptionChanged || thumbnailChanged
   }
 }
