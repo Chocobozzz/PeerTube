@@ -11,7 +11,7 @@ async function up (utils: {
   )
 
   await utils.sequelize.query(
-    `UPDATE "video" SET "sitemapContentUpdatedAt" = "updatedAt" WHERE "contentUpdatedAt" IS NULL`,
+    `UPDATE "video" SET "sitemapContentUpdatedAt" = "updatedAt" WHERE "sitemapContentUpdatedAt" IS NULL`,
     { transaction: utils.transaction }
   )
 }
