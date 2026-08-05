@@ -1,6 +1,6 @@
 import { CONFIG } from '@server/initializers/config.js'
 import { createHmac } from 'crypto'
-import { Transaction } from 'sequelize'
+import { DestroyOptions, Op, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { SequelizeModel } from '../shared/index.js'
 import { UserModel } from './user.js'
@@ -55,13 +55,28 @@ export class UserLoginDeviceModel extends SequelizeModel<UserLoginDeviceModel> {
 
     const fingerprint = this.buildFingerprint({ ip, userAgent })
 
-    const [ , created ] = await UserLoginDeviceModel.findOrCreate({
+    const [ device, created ] = await UserLoginDeviceModel.findOrCreate({
       where: { userId, fingerprint },
       defaults: { userId, fingerprint },
       transaction
     })
 
+    // Bump the last-seen date of this already known device, so it's not pruned by removeOldDevices() while still in use
+    if (!created) await device.update({ updatedAt: new Date() }, { transaction })
+
     return created
+  }
+
+  static removeOldDevices (beforeDate: string) {
+    const query: DestroyOptions = {
+      where: {
+        updatedAt: {
+          [Op.lt]: beforeDate
+        }
+      }
+    }
+
+    return UserLoginDeviceModel.destroy(query)
   }
 
   static removeUserDevices (userId: number, transaction?: Transaction) {

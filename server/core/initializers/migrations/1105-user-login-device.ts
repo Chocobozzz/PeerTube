@@ -20,13 +20,6 @@ CREATE TABLE IF NOT EXISTS "userLoginDevice" (
 
     await utils.sequelize.query(query, { transaction })
   }
-
-  {
-    await utils.sequelize.query(
-      `CREATE UNIQUE INDEX IF NOT EXISTS "user_login_device_user_id_fingerprint" ON "userLoginDevice" ("userId", "fingerprint")`,
-      { transaction }
-    )
-  }
 }
 
 function down () {

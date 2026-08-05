@@ -381,8 +381,12 @@ export const SCHEDULER_INTERVALS_MS = {
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
   CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL,
   BLOCKLIST_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
-  WATCHED_WORDS_SUBSCRIPTIONS_SYNC: 60000 * 60 // 1 hour
+  WATCHED_WORDS_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
+  REMOVE_OLD_USER_LOGIN_DEVICES: 60000 * 60 * 24 // 1 day
 }
+
+// Devices not seen again after this delay are forgotten, so a login from that IP/user-agent pair will be treated as new again
+export const USER_LOGIN_DEVICE_MAX_AGE = 60000 * 60 * 24 * 365 // 1 year
 
 // ---------------------------------------------------------------------------
 

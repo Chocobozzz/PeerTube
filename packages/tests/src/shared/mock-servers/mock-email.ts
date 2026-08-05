@@ -13,10 +13,11 @@ class MockSmtpServer {
 
   private constructor () {}
 
-  // Every successful login from a new device sends a notification email. Most tests don't expect it and
-  // assert on the total number of collected emails, so ignore these emails unless explicitly asked
-  collectEmails (emailsCollection: object[], options: { loginNotifications?: boolean } = {}) {
-    this.collectLoginNotifications = options.loginNotifications === true
+  collectEmails (emailsCollection: object[], options: {
+    // If true, will collect emails about new logins
+    collectLoginNotifications?: boolean // Default: false
+  } = {}) {
+    this.collectLoginNotifications = options.collectLoginNotifications === true
 
     const outgoingHost = process.env.MAILDEV_RELAY_HOST
     const outgoingPort = process.env.MAILDEV_RELAY_PORT
