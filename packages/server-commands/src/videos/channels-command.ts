@@ -39,6 +39,7 @@ export class ChannelsCommand extends AbstractCommand {
       count?: number
       sort?: string
       withStats?: boolean
+      statsDays?: number
       search?: string
       includeCollaborations?: boolean
     }
@@ -50,7 +51,7 @@ export class ChannelsCommand extends AbstractCommand {
       ...options,
 
       path,
-      query: { sort, ...pick(options, [ 'start', 'count', 'withStats', 'search', 'includeCollaborations' ]) },
+      query: { sort, ...pick(options, [ 'start', 'count', 'withStats', 'statsDays', 'search', 'includeCollaborations' ]) },
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

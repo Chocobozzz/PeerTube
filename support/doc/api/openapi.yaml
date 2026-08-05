@@ -6182,9 +6182,22 @@ paths:
         - $ref: '#/components/parameters/name'
         - name: withStats
           in: query
-          description: include daily view statistics for the last 30 days and total views (only if authenticated as the account user)
+          description: include view statistics time series and total views (only if authenticated as the account user)
           schema:
             type: boolean
+        - name: statsDays
+          in: query
+          description: >
+            number of days of view statistics to include when `withStats` is true (only if authenticated as the account user).
+            `0` means all time (since the channel's earliest recorded stat).
+            Aggregation (day / week / month) is chosen from each channel's effective history span
+            within the selected range, not from the preset alone.
+            Weekly buckets are labeled as such in the client tooltip (e.g. "Week of May 11").
+            When `withStats` is true, `totalViews` is the sum of views in the selected range (not lifetime).
+          schema:
+            type: integer
+            enum: [30, 90, 365, 0]
+            default: 30
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/search'

@@ -1,6 +1,6 @@
 import { getOriginUrl } from '@app/helpers'
 import { maxBy } from '@peertube/peertube-core-utils'
-import { ActorImage, Account as ServerAccount, VideoChannel as ServerVideoChannel, ViewsPerDate } from '@peertube/peertube-models'
+import { ActorImage, Account as ServerAccount, VideoChannel as ServerVideoChannel, VideoChannelStatsGroupInterval, ViewsPerDate } from '@peertube/peertube-models'
 import { Actor } from '../account/actor.model'
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
@@ -24,6 +24,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   videosCount?: number
 
   viewsPerDay?: ViewsPerDate[]
+  viewsGroupInterval?: VideoChannelStatsGroupInterval
   totalViews?: number
 
   static GET_ACTOR_BANNER_URL (channel: Partial<Pick<ServerVideoChannel, 'banners'>>) {
@@ -71,6 +72,8 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     if (hash.viewsPerDay) {
       this.viewsPerDay = hash.viewsPerDay.map(v => ({ ...v, date: new Date(v.date) }))
     }
+
+    this.viewsGroupInterval = hash.viewsGroupInterval
 
     if (hash.totalViews !== null && hash.totalViews !== undefined) {
       this.totalViews = hash.totalViews

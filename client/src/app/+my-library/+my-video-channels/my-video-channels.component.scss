@@ -18,13 +18,14 @@ input[type="text"] {
 
 .channel-info {
   display: flex;
+  align-items: center;
   gap: 1rem;
 }
 
 .metadata {
   display: flex;
   flex-direction: column;
-  align-self: flex-start;
+  flex-shrink: 0;
   min-width: 1px;
 }
 
@@ -58,18 +59,17 @@ input[type="text"] {
   color: pvar(--fg);
 }
 
+.chart-container {
+  flex: 1 1 auto;
+  min-width: 240px;
+  height: 120px;
+}
+
 .buttons {
   display: flex;
   flex-wrap: wrap;
+  flex-shrink: 0;
   gap: 0.5rem;
-
-  @include margin-left(auto);
-}
-
-.chart-container {
-  // Sync these values with the template
-  width: 40vw;
-  height: 100px;
 }
 
 @media screen and (max-width: $small-view) {
@@ -78,17 +78,13 @@ input[type="text"] {
     align-items: center;
     text-align: center;
     padding-bottom: 1rem;
-    align-items: center;
   }
 
   .metadata {
-    align-self: normal;
     align-items: center;
   }
 
   .buttons {
     text-align: center;
-
-    @include margin-left(0);
   }
 }

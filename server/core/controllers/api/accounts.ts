@@ -164,6 +164,7 @@ async function listAccountChannels (req: express.Request, res: express.Response)
     count: req.query.count,
     sort: req.query.sort,
     withStats: req.query.withStats,
+    statsDays: req.query.statsDays,
     includeCollaborations: req.query.includeCollaborations,
     search: req.query.search
   })

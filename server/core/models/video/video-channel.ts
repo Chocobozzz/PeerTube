@@ -401,10 +401,11 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   static listByAccountForAPI (
     options: Pick<ListVideoChannelsOptions, 'accountId' | 'includeCollaborations' | 'search' | 'start' | 'count' | 'sort'> & {
       withStats?: boolean
+      statsDays?: number
     }
   ) {
     const listOptions = options.withStats
-      ? { ...options, statsDaysPrior: 30 }
+      ? { ...options, statsDaysPrior: options.statsDays === undefined ? 30 : options.statsDays }
       : options
 
     return this.listForApi(listOptions)
@@ -549,6 +550,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   toFormattedJSON (this: MChannelFormattable): VideoChannel {
     const viewsPerDayString = this.get('viewsPerDay') as string
     const videosCount = this.get('videosCount') as number
+    const viewsGroupInterval = this.get('viewsGroupInterval') as VideoChannel['viewsGroupInterval']
 
     let viewsPerDay: { date: Date, views: number }[]
 
@@ -580,6 +582,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
       videosCount,
       viewsPerDay,
+      viewsGroupInterval,
       totalViews,
 
       avatars: actor.avatars

@@ -17,6 +17,7 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { maxBy, minBy } from '@peertube/peertube-core-utils'
+import { VideoChannelStatsDays, VideoChannelStatsGroupInterval, getVideoChannelStatsGroupInterval } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '@pt-types'
 import { ChartData, ChartOptions, TooltipItem, TooltipModel } from 'chart.js'
 import { ChartModule } from 'primeng/chart'
@@ -31,7 +32,7 @@ import { DeferLoadingDirective } from '../../shared/shared-main/common/defer-loa
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 
-type CustomChartData = ChartData & { startDate: string, total: number }
+type CustomChartData = ChartData & { startDate: string, total: number, tooltipTitles: string[] }
 type DisplayFilter = 'all' | 'owned'
 
 @Component({
@@ -85,6 +86,14 @@ export class MyVideoChannelsComponent implements OnInit {
     { id: 'owned', label: $localize`Only channels owned by me` }
   ]
 
+  statsDays: VideoChannelStatsDays = 30
+  statsDaysItems: SelectOptionsItem<VideoChannelStatsDays>[] = [
+    { id: 30, label: $localize`Last 30 days` },
+    { id: 90, label: $localize`Last 90 days` },
+    { id: 365, label: $localize`Last year` },
+    { id: 0, label: $localize`All time` }
+  ]
+
   private pagesDone = new Set<number>()
 
   get isInSmallView () {
@@ -123,6 +132,10 @@ export class MyVideoChannelsComponent implements OnInit {
     this.resetDataAndReload()
   }
 
+  onStatsDaysChanged () {
+    this.loadChannelsStats()
+  }
+
   // ---------------------------------------------------------------------------
 
   private resetDataAndReload () {
@@ -157,17 +170,21 @@ export class MyVideoChannelsComponent implements OnInit {
     this.loadMoreVideoChannels()
   }
 
-  private loadMoreVideoChannels () {
-    if (this.pagesDone.has(this.pagination.currentPage)) return
-    this.pagesDone.add(this.pagination.currentPage)
-
-    const channelBaseOptions = {
+  private getChannelBaseOptions () {
+    return {
       account: this.authService.getUser().account,
       search: this.search,
       componentPagination: this.pagination,
       includeCollaborations: this.displayFilter === 'all',
       sort: '-updatedAt'
     }
+  }
+
+  private loadMoreVideoChannels () {
+    if (this.pagesDone.has(this.pagination.currentPage)) return
+    this.pagesDone.add(this.pagination.currentPage)
+
+    const channelBaseOptions = this.getChannelBaseOptions()
 
     const base = this.authService.userInformationLoaded.pipe(first())
 
@@ -179,36 +196,67 @@ export class MyVideoChannelsComponent implements OnInit {
         this.pagination.totalItems = res.total
 
         this.onChannelDataSubject.next(res.data)
-      }),
-      switchMap(() => this.videoChannelService.listAccountChannels({ ...channelBaseOptions, withStats: true }))
+      })
     ).subscribe({
+      next: () => this.loadChannelsStats(),
+
+      error: err => this.notifier.handleError(err)
+    })
+  }
+
+  private loadChannelsStats () {
+    if (this.videoChannels.length === 0) return
+
+    const channelBaseOptions = this.getChannelBaseOptions()
+
+    // Reload stats for every currently loaded channel (not only the last scrolled page)
+    this.videoChannelService.listAccountChannels({
+      ...channelBaseOptions,
+      withStats: true,
+      statsDays: this.statsDays,
+      componentPagination: {
+        currentPage: 1,
+        itemsPerPage: Math.max(this.videoChannels.length, this.pagination.itemsPerPage)
+      }
+    }).subscribe({
       next: res => {
         for (const channelWithStats of res.data) {
           const channel = this.videoChannels.find(c => c.id === channelWithStats.id)
+          if (!channel) continue
 
           channel.viewsPerDay = channelWithStats.viewsPerDay
+          channel.viewsGroupInterval = channelWithStats.viewsGroupInterval
           channel.videosCount = channelWithStats.videosCount
           channel.totalViews = channelWithStats.totalViews
         }
 
-        this.videoChannelsChartData = this.videoChannels.map(v => ({
-          labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
-          datasets: [
-            {
-              label: $localize`Views for the day`,
-              data: v.viewsPerDay.map(day => day.views),
-              fill: false,
-              borderColor: '#c6c6c6'
-            }
-          ],
+        this.videoChannelsChartData = this.videoChannels.map(v => {
+          const viewsPerDay = v.viewsPerDay || []
+          const groupInterval = v.viewsGroupInterval || getVideoChannelStatsGroupInterval(this.statsDays)
+          const barColor = getComputedStyle(document.documentElement).getPropertyValue('--border-primary').trim() || '#fd7e14'
 
-          total: v.viewsPerDay.map(day => day.views)
-            .reduce((p, c) => p + c, 0),
+          return {
+            labels: viewsPerDay.map(day => this.formatStatsAxisLabel(day.date, groupInterval)),
+            tooltipTitles: viewsPerDay.map(day => this.formatStatsTooltipTitle(day.date, groupInterval)),
+            datasets: [
+              {
+                label: $localize`Views`,
+                data: viewsPerDay.map(day => day.views),
+                backgroundColor: barColor,
+                hoverBackgroundColor: barColor,
+                maxBarThickness: 16,
+                borderRadius: 2
+              }
+            ],
 
-          startDate: v.viewsPerDay.length !== 0
-            ? v.viewsPerDay[0].date.toLocaleDateString()
-            : ''
-        }))
+            total: viewsPerDay.map(day => day.views)
+              .reduce((p, c) => p + c, 0),
+
+            startDate: viewsPerDay.length !== 0
+              ? this.formatStatsAxisLabel(viewsPerDay[0].date, groupInterval)
+              : ''
+          }
+        })
 
         this.buildChartOptions()
       },
@@ -219,11 +267,39 @@ export class MyVideoChannelsComponent implements OnInit {
 
   // ---------------------------------------------------------------------------
 
+  private formatStatsAxisLabel (date: Date, groupInterval: VideoChannelStatsGroupInterval) {
+    if (groupInterval === 'month') {
+      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+    }
+
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  }
+
+  private formatStatsTooltipTitle (date: Date, groupInterval: VideoChannelStatsGroupInterval) {
+    if (groupInterval === 'month') {
+      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+    }
+
+    if (groupInterval === 'week') {
+      const weekStart = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+      return $localize`Week of ${weekStart}`
+    }
+
+    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+  }
+
   private buildChartOptions () {
-    const channelsMinimumDailyViews = Math.min(...this.videoChannels.map(v => minBy(v.viewsPerDay, 'views').views))
-    const channelsMaximumDailyViews = Math.max(...this.videoChannels.map(v => maxBy(v.viewsPerDay, 'views').views))
+    const channelsWithStats = this.videoChannels.filter(v => v.viewsPerDay?.length)
+    if (channelsWithStats.length === 0) return
+
+    const channelsMaximumDailyViews = Math.max(...channelsWithStats.map(v => maxBy(v.viewsPerDay, 'views').views))
+    const styles = getComputedStyle(document.documentElement)
+    const tickColor = styles.getPropertyValue('--fg-300').trim() || '#8c8c8c'
+    const gridColor = styles.getPropertyValue('--bg-secondary-350').trim() || 'rgba(255, 255, 255, 0.08)'
 
     this.chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: false
@@ -231,41 +307,77 @@ export class MyVideoChannelsComponent implements OnInit {
         tooltip: {
           mode: 'index',
           intersect: false,
-          external: function ({ tooltip }: { tooltip: TooltipModel<any> }) {
-            if (!tooltip) return
-
-            // disable displaying the color box
-            tooltip.options.displayColors = false
-          },
+          displayColors: false,
           callbacks: {
-            label: (tooltip: TooltipItem<any>) => `${tooltip.formattedValue} views`
+            title: items => {
+              const item = items[0]
+              if (!item) return ''
+
+              const tooltipTitles = (item.chart.data as CustomChartData).tooltipTitles
+              return tooltipTitles?.[item.dataIndex] ?? item.label ?? ''
+            },
+            label: (tooltip: TooltipItem<any>) => formatICU(
+              $localize`${tooltip.raw} {value, plural, =1 {view} other {views}}`,
+              { value: tooltip.raw as number }
+            )
           }
         }
       },
       scales: {
         x: {
-          display: false
+          display: true,
+          border: {
+            display: false
+          },
+          grid: {
+            display: false
+          },
+          ticks: {
+            autoSkip: true,
+            maxTicksLimit: 4,
+            maxRotation: 0,
+            color: tickColor,
+            font: {
+              size: 11
+            }
+          }
         },
         y: {
-          display: false,
-          min: Math.max(0, channelsMinimumDailyViews - (3 * channelsMaximumDailyViews / 100)),
-          max: Math.max(1, channelsMaximumDailyViews)
+          display: true,
+          beginAtZero: true,
+          suggestedMax: Math.max(1, channelsMaximumDailyViews),
+          border: {
+            display: false
+          },
+          grid: {
+            color: gridColor
+          },
+          ticks: {
+            maxTicksLimit: 3,
+            color: tickColor,
+            font: {
+              size: 11
+            },
+            callback: value => {
+              const n = Number(value)
+              if (!Number.isFinite(n)) return value
+
+              return Math.abs(n) >= 1000
+                ? `${Math.round(n / 100) / 10}k`
+                : n
+            }
+          }
         }
       },
       layout: {
         padding: {
-          left: 15,
-          right: 15,
-          top: 10,
+          left: 0,
+          right: 4,
+          top: 4,
           bottom: 0
         }
       },
-      elements: {
-        point: {
-          radius: 0
-        }
-      },
-      hover: {
+      interaction: {
         mode: 'index',
         intersect: false
       }

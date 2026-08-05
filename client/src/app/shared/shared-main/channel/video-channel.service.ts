@@ -9,6 +9,7 @@ import {
   VideoChannelCollaborator,
   VideoChannelCreate,
   VideoChannel as VideoChannelServer,
+  VideoChannelStatsDays,
   VideoChannelUpdate,
   VideosImportInChannelCreate
 } from '@peertube/peertube-models'
@@ -54,11 +55,12 @@ export class VideoChannelService {
     account: Pick<Account, 'nameWithHost'>
     componentPagination?: ComponentPaginationLight
     withStats?: boolean
+    statsDays?: VideoChannelStatsDays
     sort?: string
     search?: string
     includeCollaborations?: boolean
   }): Observable<ResultList<VideoChannel>> {
-    const { account, componentPagination, withStats = false, sort, search, includeCollaborations = false } = options
+    const { account, componentPagination, withStats = false, statsDays, sort, search, includeCollaborations = false } = options
 
     const defaultCount = Math.min(this.serverService.getHTMLConfig().videoChannels.maxPerUser, 100) // 100 is the max count on server side
 
@@ -70,6 +72,7 @@ export class VideoChannelService {
     params = this.restService.addRestGetParams(params, pagination, sort)
     params = params.set('withStats', withStats + '')
 
+    if (statsDays !== undefined) params = params.set('statsDays', statsDays + '')
     if (search) params = params.set('search', search)
     if (includeCollaborations) params = params.set('includeCollaborations', 'true')
 

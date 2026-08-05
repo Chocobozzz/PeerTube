@@ -1,11 +1,11 @@
-import { HttpStatusCode, VideosImportInChannelCreate } from '@peertube/peertube-models'
+import { HttpStatusCode, VIDEO_CHANNEL_STATS_DAYS_OPTIONS, VideosImportInChannelCreate } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { MChannelAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { isBooleanValid, isIdValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelDisplayNameValid,
@@ -114,6 +114,11 @@ export const listAccountChannelsValidator = [
   query('withStats')
     .optional()
     .customSanitizer(toBooleanOrNull),
+
+  query('statsDays')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .isIn(VIDEO_CHANNEL_STATS_DAYS_OPTIONS).withMessage(`Should have a valid statsDays value (${VIDEO_CHANNEL_STATS_DAYS_OPTIONS.join(', ')})`),
 
   query('includeCollaborations')
     .optional()
