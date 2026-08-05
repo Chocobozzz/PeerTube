@@ -14,7 +14,7 @@ class RedundancyUrlManager {
     this.map.delete(segmentUrl)
 
     const baseUrl = getBaseUrl(customSegmentUrl)
-    const oldLength = baseUrl.length
+    const oldLength = this.baseUrls.length
 
     this.baseUrls = this.baseUrls.filter(u => u !== baseUrl && u !== baseUrl + '/')
 
@@ -24,6 +24,11 @@ class RedundancyUrlManager {
   }
 
   onSegmentSuccess (segmentUrl: string) {
+    this.map.delete(segmentUrl)
+  }
+
+  // The segment may be requested again with another base URL, so forget the one we assigned to it
+  onSegmentAbort (segmentUrl: string) {
     this.map.delete(segmentUrl)
   }
 

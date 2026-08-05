@@ -1,12 +1,12 @@
 import { VideoInclude, VideoIncludeType } from '@peertube/peertube-models'
-import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
 import { VideoAutomaticTagModel } from '@server/models/automatic-tag/video-automatic-tag.js'
-import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy.js'
+import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
+import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy.js'
 import { ServerModel } from '@server/models/server/server.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
@@ -14,16 +14,18 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { ScheduleVideoUpdateModel } from '../../../schedule-video-update.js'
+import { StoryboardModel } from '../../../storyboard.js'
 import { TagModel } from '../../../tag.js'
 import { ThumbnailModel } from '../../../thumbnail.js'
 import { VideoBlacklistModel } from '../../../video-blacklist.js'
 import { VideoChannelModel } from '../../../video-channel.js'
 import { VideoFileModel } from '../../../video-file.js'
+import { VideoInfohashModel } from '../../../video-infohash.js'
 import { VideoLiveModel } from '../../../video-live.js'
 import { VideoStreamingPlaylistModel } from '../../../video-streaming-playlist.js'
 import { VideoModel } from '../../../video.js'
-import { VideoTableAttributes } from './video-table-attributes.js'
 import { TableAttributeOptions } from './table-attributes-options.model.js'
+import { VideoTableAttributes } from './video-table-attributes.js'
 
 type SQLRow = { [id: string]: string | number }
 
@@ -47,6 +49,7 @@ export class VideoModelBuilder {
   private liveScheduleDone: Set<any>
   private redundancyDone: Set<any>
   private scheduleVideoUpdateDone: Set<any>
+  private storyboardDone: Set<any>
 
   private trackersDone: Set<string>
   private tagsDone: Set<string>
@@ -115,6 +118,7 @@ export class VideoModelBuilder {
         this.addCaption(row, videoModel)
         this.setBlacklisted(row, videoModel)
         this.setScheduleVideoUpdate(row, videoModel)
+        this.setStoryboard(row, videoModel)
       } else {
         if (include & VideoInclude.BLACKLISTED) {
           this.setBlacklisted(row, videoModel)
@@ -163,6 +167,7 @@ export class VideoModelBuilder {
     this.redundancyDone = new Set()
     this.scheduleVideoUpdateDone = new Set()
     this.liveScheduleDone = new Set()
+    this.storyboardDone = new Set()
 
     this.accountBlocklistDone = new Set()
     this.serverBlocklistDone = new Set()
@@ -327,6 +332,7 @@ export class VideoModelBuilder {
 
     const attributes = this.grab(row, this.tables.getFileAttributes(), 'VideoFiles')
     const videoFileModel = new VideoFileModel(attributes, this.buildOpts)
+    this.addFileInfohash(row, 'VideoFiles', videoFileModel)
     videoModel.VideoFiles.push(videoFileModel)
 
     this.videoFileMemo[id] = videoFileModel
@@ -339,6 +345,8 @@ export class VideoModelBuilder {
     const attributes = this.grab(row, this.tables.getStreamingPlaylistAttributes(), 'VideoStreamingPlaylists')
     const streamingPlaylist = new VideoStreamingPlaylistModel(attributes, this.buildOpts)
     streamingPlaylist.VideoFiles = []
+
+    this.addPlaylistInfohashes(row, streamingPlaylist)
 
     videoModel.VideoStreamingPlaylists.push(streamingPlaylist)
 
@@ -353,9 +361,32 @@ export class VideoModelBuilder {
 
     const attributes = this.grab(row, this.tables.getFileAttributes(), 'VideoStreamingPlaylists.VideoFiles')
     const videoFileModel = new VideoFileModel(attributes, this.buildOpts)
+
+    this.addFileInfohash(row, 'VideoStreamingPlaylists.VideoFiles', videoFileModel)
+
     streamingPlaylist.VideoFiles.push(videoFileModel)
 
     this.videoFileMemo[id] = videoFileModel
+  }
+
+  private addPlaylistInfohashes (row: SQLRow, streamingPlaylist: VideoStreamingPlaylistModel) {
+    const key = 'VideoStreamingPlaylists.InfohashesJSON'
+    if (!(key in row)) return
+
+    const hashes = row[key] as any as string[] || []
+
+    streamingPlaylist.InfoHashes = hashes.map(h => new VideoInfohashModel({ infohash: Buffer.from(h, 'hex') }, this.buildOpts))
+  }
+
+  private addFileInfohash (row: SQLRow, prefixKey: string, videoFile: VideoFileModel) {
+    const key = `${prefixKey}.InfohashJSON`
+    if (!(key in row)) return
+
+    const hashes = row[key] as any as string[] || []
+
+    videoFile.InfoHash = hashes.length !== 0
+      ? new VideoInfohashModel({ infohash: Buffer.from(hashes[0], 'hex') }, this.buildOpts)
+      : null
   }
 
   private addRedundancy (row: SQLRow, prefix: string, to: VideoStreamingPlaylistModel) {
@@ -502,6 +533,16 @@ export class VideoModelBuilder {
     videoModel.VideoLive.LiveSchedules.push(liveScheduleModel)
 
     this.liveScheduleDone.add(id)
+  }
+
+  private setStoryboard (row: SQLRow, videoModel: VideoModel) {
+    const id = row['Storyboard.id']
+    if (!id || this.storyboardDone.has(id)) return
+
+    const attributes = this.grab(row, this.tables.getStoryboardAttributes(), 'Storyboard')
+    videoModel.Storyboard = new StoryboardModel(attributes, this.buildOpts)
+
+    this.storyboardDone.add(id)
   }
 
   private setSource (row: SQLRow, videoModel: VideoModel) {

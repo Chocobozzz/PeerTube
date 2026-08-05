@@ -9,6 +9,7 @@ import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MAccount, MActor, MActorFull, MActorFullActor, MActorImages, MChannel, MServer } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { upsertAPPlayerSettings } from '../../player-settings.js'
+import { isLocalUrl } from '../../url.js'
 import { updateActorImages } from '../image.js'
 import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImagesInfoFromObject } from './object-to-model-attributes.js'
 import { fetchActorFollowsCount } from './url-to-object.js'
@@ -25,6 +26,11 @@ export class APActorCreator {
 
   async create (): Promise<MActorFull> {
     logger.debug('Creating remote actor from object', { actorObject: this.actorObject, ...this.lTags() })
+
+    // A remote actor must never be registered with our own host
+    if (isLocalUrl(this.actorObject.id)) {
+      throw new Error(`Cannot create remote actor ${this.actorObject.id} with a local URL`)
+    }
 
     const { followersCount, followingCount } = await fetchActorFollowsCount(this.actorObject)
 

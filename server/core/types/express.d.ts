@@ -59,6 +59,7 @@ import {
   MComment,
   MCommentOwnerVideoReply,
   MUserDefault,
+  MVideoAP,
   MVideoBlacklist,
   MVideoCaptionVideo,
   MVideoFull,
@@ -155,6 +156,7 @@ declare module 'express' {
       ffprobe?: FfprobeData
 
       videoAPI?: MVideoFormattableDetails
+      videoAP?: MVideoAP
       videoFull?: MVideoFull
       videoImmutable?: MVideoImmutable
       videoWithBlacklist?: MVideoWithBlacklist

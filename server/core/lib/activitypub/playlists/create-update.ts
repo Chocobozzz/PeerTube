@@ -15,7 +15,7 @@ import Bluebird from 'bluebird'
 import { getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/index.js'
 import { crawlCollectionPage } from '../crawl.js'
-import { checkUrlsSameHost } from '../url.js'
+import { checkUrlsSameHost, isLocalUrl } from '../url.js'
 import { getOrCreateAPVideo } from '../videos/index.js'
 import {
   fetchRemotePlaylistElement,
@@ -63,6 +63,11 @@ export async function createOrUpdateVideoPlaylist (options: {
   to?: string[]
 }) {
   const { playlistObject, contextUrl, to } = options
+
+  // Federation must never create or update a playlist we own
+  if (isLocalUrl(playlistObject.id)) {
+    throw new Error(`Cannot create or update local playlist ${playlistObject.id} from a remote actor`)
+  }
 
   if (!checkUrlsSameHost(playlistObject.id, contextUrl)) {
     throw new Error(`Playlist ${playlistObject.id} is not on the same host as context URL ${contextUrl}`)

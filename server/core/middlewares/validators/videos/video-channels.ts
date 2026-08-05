@@ -1,4 +1,4 @@
-import { HttpStatusCode, VideosImportInChannelCreate } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRight, VideosImportInChannelCreate } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
@@ -14,7 +14,7 @@ import {
   isVideoChannelUsernameValid
 } from '../../../helpers/custom-validators/video-channels.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
-import { areValidationErrors, checkUserQuota, doesChannelHandleExist } from '../shared/index.js'
+import { areValidationErrors, checkCanManageAccount, checkUserQuota, doesChannelHandleExist } from '../shared/index.js'
 import { doesVideoChannelSyncIdExist } from '../shared/video-channel-syncs.js'
 
 export const videoChannelsAddValidator = [
@@ -121,6 +121,12 @@ export const listAccountChannelsValidator = [
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
+
+    if (req.query.withStats === true) {
+      const user = res.locals.oauth?.token.User
+
+      if (!checkCanManageAccount({ account: res.locals.account, user, specialRight: UserRight.MANAGE_USERS, req, res })) return
+    }
 
     return next()
   }

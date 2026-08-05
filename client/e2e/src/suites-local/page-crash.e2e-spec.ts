@@ -1,3 +1,5 @@
+/* eslint-disable no-loop-func */
+
 import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'

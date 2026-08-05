@@ -6,7 +6,7 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
-import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
 
 export async function buildSpriteSize (videoPath: string) {
@@ -89,7 +89,7 @@ export async function insertStoryboardInDatabase (options: {
       }, { transaction })
 
       if (federate) {
-        await federateVideoIfNeeded(video, transaction)
+        scheduleVideoFederation({ video, transaction })
       }
     })
   })

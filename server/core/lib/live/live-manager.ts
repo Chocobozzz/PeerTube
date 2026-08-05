@@ -29,7 +29,7 @@ import context from 'node-media-server/src/node_core_ctx.js'
 import nodeMediaServerLogger from 'node-media-server/src/node_core_logger.js'
 import NodeRtmpSession from 'node-media-server/src/node_rtmp_session.js'
 import { Server as ServerTLS, createServer as createServerTLS } from 'tls'
-import { federateVideoIfNeeded } from '../activitypub/videos/index.js'
+import { scheduleVideoFederation } from '../activitypub/videos/index.js'
 import { JobQueue } from '../job-queue/index.js'
 import { Notifier } from '../notifier/notifier.js'
 import { getLiveReplayBaseDirectory } from '../paths.js'
@@ -562,11 +562,7 @@ class LiveManager {
 
       await wait(getLiveSegmentTime(live.latencyMode) * 1000 * VIDEO_LIVE.EDGE_LIVE_DELAY_SEGMENTS_NOTIFICATION)
 
-      try {
-        await federateVideoIfNeeded(video)
-      } catch (err) {
-        logger.error('Cannot federate live video %s.', video.url, { err, ...localLTags })
-      }
+      scheduleVideoFederation({ video })
 
       Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
       PeerTubeSocket.Instance.sendVideoLiveNewState(video)
@@ -641,7 +637,7 @@ class LiveManager {
 
       PeerTubeSocket.Instance.sendVideoLiveNewState(fullVideo)
 
-      await federateVideoIfNeeded(fullVideo)
+      scheduleVideoFederation({ video: fullVideo })
 
       Hooks.runAction('action:live.video.state.updated', { video: fullVideo })
     } catch (err) {

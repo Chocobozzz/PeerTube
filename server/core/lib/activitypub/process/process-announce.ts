@@ -1,12 +1,14 @@
 import { ActivityAnnounce } from '@peertube/peertube-models'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
+import { checkUrlsSameHost } from '../url.js'
 import { maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 async function processAnnounceActivity (options: APProcessorOptions<ActivityAnnounce>) {
@@ -17,7 +19,7 @@ async function processAnnounceActivity (options: APProcessorOptions<ActivityAnno
   // Announces by accounts are not supported
   if (actorAnnouncer.type !== 'Application' && actorAnnouncer.type !== 'Group') return
 
-  return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity, notify)
+  return retryTransactionWrapper(() => processVideoShare(actorAnnouncer, activity, notify))
 }
 
 // ---------------------------------------------------------------------------
@@ -30,6 +32,12 @@ export {
 
 async function processVideoShare (actorAnnouncer: MActorSignature, activity: ActivityAnnounce, notify: boolean) {
   const objectUri = getAPId(activity.object)
+
+  // The share is identified by the announce URL, so don't let an actor use (and so squat) the announce URL of another host
+  if (checkUrlsSameHost(activity.id, actorAnnouncer.url) !== true) {
+    logger.warn('Ignoring announce %s that has not the same host than actor %s.', activity.id, actorAnnouncer.url)
+    return
+  }
 
   const { video, created: videoCreated } = await maybeGetOrCreateAPVideo({ videoObject: objectUri })
   if (!video) return

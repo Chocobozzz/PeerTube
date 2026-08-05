@@ -3,7 +3,7 @@ import { sanitizeAndCheckPlayerSettingsObject } from '@server/helpers/custom-val
 import { MChannelDefault, MVideoIdUrl } from '../../types/models/index.js'
 import { upsertPlayerSettings } from '../player-settings.js'
 import { fetchAPObjectIfNeeded } from './activity.js'
-import { checkUrlsSameHost } from './url.js'
+import { checkUrlsSameHost, isLocalUrl } from './url.js'
 
 export async function upsertAPPlayerSettings (options: {
   video: MVideoIdUrl
@@ -19,6 +19,11 @@ export async function upsertAPPlayerSettings (options: {
 
   if (!sanitizeAndCheckPlayerSettingsObject(settingsObject, video ? 'video' : 'channel')) {
     throw new Error(`Player settings ${settingsObject.id} object is not valid`)
+  }
+
+  // Federation must never update the player settings of a video/channel we own
+  if (isLocalUrl(settingsObject.id)) {
+    throw new Error(`Cannot update local player settings ${settingsObject.id} from a remote actor`)
   }
 
   if (!checkUrlsSameHost(settingsObject.id, contextUrl)) {

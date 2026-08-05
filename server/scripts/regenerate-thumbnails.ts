@@ -7,7 +7,7 @@ import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideoFull, MVideoPlaylistFull } from '@server/types/models/index.js'
+import { MVideoAP, MVideoPlaylistFull } from '@server/types/models/index.js'
 import Bluebird from 'bluebird'
 import { program } from 'commander'
 import { pathExists } from 'fs-extra/esm'
@@ -41,13 +41,13 @@ async function run () {
 }
 
 async function processVideo (id: number) {
-  const video = await VideoModel.loadFull(id)
+  const video = await VideoModel.loadAP(id)
 
   console.log('Processing video %s.', video.name)
 
   await processThumbnails({ entity: video, generateFilename: () => generateImageFilename() })
 
-  await federateVideoIfNeeded(video)
+  await federateVideoIfNeeded({ video })
 }
 
 async function processPlaylist (id: number) {
@@ -64,7 +64,7 @@ async function processPlaylist (id: number) {
 }
 
 async function processThumbnails (options: {
-  entity: MVideoFull | MVideoPlaylistFull
+  entity: MVideoAP | MVideoPlaylistFull
   generateFilename: () => string
 }) {
   const { entity, generateFilename } = options

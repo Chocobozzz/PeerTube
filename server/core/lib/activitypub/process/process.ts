@@ -53,26 +53,40 @@ export async function processActivities (
   const actorsCache: { [ url: string ]: MActorSignature } = {}
 
   for (const activity of activities) {
+    if (!activity || typeof activity !== 'object') {
+      logger.warn('Cannot process invalid activity.', { activity })
+      continue
+    }
+
     if (!signatureActor && [ 'Create', 'Announce', 'Like' ].includes(activity.type) === false) {
       logger.error('Cannot process activity %s (type: %s) without the actor signature.', activity.id, activity.type)
       continue
     }
 
-    const actorUrl = getAPId(activity.actor)
+    let byActor: MActorSignature
 
-    // When we fetch remote data, we don't have signature
-    if (signatureActor && actorUrl !== signatureActor.url) {
-      logger.warn('Signature mismatch between %s and %s, skipping.', actorUrl, signatureActor.url)
+    // Activities fetched from a remote instance are not validated, so a malformed one must not prevent processing the others
+    try {
+      const actorUrl = getAPId(activity.actor)
+      if (!actorUrl) throw new Error('Cannot find the actor URL of the activity')
+
+      // When we fetch remote data, we don't have signature
+      if (signatureActor && actorUrl !== signatureActor.url) {
+        logger.warn('Signature mismatch between %s and %s, skipping.', actorUrl, signatureActor.url)
+        continue
+      }
+
+      if (outboxUrl && checkUrlsSameHost(outboxUrl, actorUrl) !== true) {
+        logger.warn('Host mismatch between outbox URL %s and actor URL %s, skipping.', outboxUrl, actorUrl)
+        continue
+      }
+
+      byActor = signatureActor || actorsCache[actorUrl] || await getOrCreateAPActor(actorUrl)
+      actorsCache[actorUrl] = byActor
+    } catch (err) {
+      logger.warn('Cannot get the actor of activity %s, skipping.', activity.id, { err })
       continue
     }
-
-    if (outboxUrl && checkUrlsSameHost(outboxUrl, actorUrl) !== true) {
-      logger.warn('Host mismatch between outbox URL %s and actor URL %s, skipping.', outboxUrl, actorUrl)
-      continue
-    }
-
-    const byActor = signatureActor || actorsCache[actorUrl] || await getOrCreateAPActor(actorUrl)
-    actorsCache[actorUrl] = byActor
 
     const activityProcessor = processActivity[activity.type]
     if (activityProcessor === undefined) {

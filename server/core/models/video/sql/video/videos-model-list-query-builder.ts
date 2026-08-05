@@ -50,7 +50,9 @@ export class VideosModelListQueryBuilder extends AbstractVideoQueryBuilder {
           ...pick(options, [ 'transaction', 'logging', 'tableAttributes' ]),
 
           ids: videoIds,
-          includeRedundancy: options.includeRedundancy === true
+          includeRedundancy: options.includeRedundancy === true,
+          // The API can format the files of listed videos, which requires infohashes to build magnet URIs
+          includeInfohashes: true
         }
 
         const [ rowsWebVideoFiles, rowsStreamingPlaylist ] = await Promise.all([

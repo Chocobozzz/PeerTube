@@ -6,9 +6,12 @@ import {
   getVideoStreamDuration
 } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
-import { createTorrentAndSetInfoHash } from '@server/lib/webtorrent.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { createTorrentForFile } from '@server/lib/webtorrent.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
@@ -207,7 +210,7 @@ export async function onWebVideoFileTranscoding (options: {
 
   const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  const videoFile = await buildNewFile({ mode: 'web-video', path: videoOutputPath })
+  let videoFile = await buildNewFile({ mode: 'web-video', path: videoOutputPath })
   videoFile.videoId = video.id
 
   try {
@@ -225,7 +228,8 @@ export async function onWebVideoFileTranscoding (options: {
 
     await move(videoOutputPath, outputPath, { overwrite: true })
 
-    await createTorrentAndSetInfoHash(video, videoFile)
+    const { infoHash, torrentFilename } = await createTorrentForFile(video, videoFile)
+    videoFile.torrentFilename = torrentFilename
 
     if (deleteWebInputVideoFile) {
       await saveNewOriginalFileIfNeeded(video, deleteWebInputVideoFile)
@@ -237,14 +241,20 @@ export async function onWebVideoFileTranscoding (options: {
     const existingFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })
     if (existingFile) await video.removeWebVideoFile(existingFile)
 
-    await VideoFileModel.customUpsert(videoFile, 'video', undefined)
+    await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        videoFile = await VideoFileModel.customUpsert(videoFile, 'video', t)
+        await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHash, t)
+      })
+    })
+
     video.VideoFiles = await video.$get('VideoFiles')
 
     if (wasAudioFile) {
       await addLocalOrRemoteStoryboardJobIfNeeded({ video, federate: false })
     }
 
-    return { video, videoFile }
+    return { videoFile }
   } finally {
     mutexReleaser()
   }

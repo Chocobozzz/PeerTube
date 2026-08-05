@@ -1,9 +1,9 @@
+import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
+import { AbuseState, ActivityFlag } from '@peertube/peertube-models'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
-import { AbuseState, ActivityFlag } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
 import { logger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -14,7 +14,7 @@ import { MAccountDefault, MActorSignature, MCommentOwnerVideo } from '../../../t
 async function processFlagActivity (options: APProcessorOptions<ActivityFlag>) {
   const { activity, byActor } = options
 
-  return retryTransactionWrapper(processCreateAbuse, activity, byActor)
+  return retryTransactionWrapper(() => processCreateAbuse(activity, byActor))
 }
 
 // ---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
 
   const tags = Array.isArray(flag.tag) ? flag.tag : []
   const predefinedReasons = tags.map(tag => abusePredefinedReasonsMap[tag.name])
-                                .filter(v => !isNaN(v))
+    .filter(v => !isNaN(v))
 
   const startAt = flag.startAt
   const endAt = flag.endAt

@@ -17,7 +17,7 @@ import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
 import { dirname, join } from 'path'
-import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { buildCaptionM3U8Content, updateM3U8AndShaPlaylist } from './hls.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
@@ -280,9 +280,7 @@ export async function onTranscriptionEnded (options: {
     videoFileMutexReleaser()
   }
 
-  await sequelizeTypescript.transaction(async t => {
-    await federateVideoIfNeeded(video, t)
-  })
+  scheduleVideoFederation({ video })
 
   logger.info(`Transcription ended for ${video.uuid}`, lTags(video.uuid, ...customLTags))
 }

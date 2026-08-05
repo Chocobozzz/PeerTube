@@ -21,34 +21,36 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model.j
 import { MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
-import { federateVideoIfNeeded, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
+import { getOrCreateAPVideo, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo<ActivityUndoObject>>) {
   const { activity, byActor } = options
   const activityToUndo = activity.object
 
   if (activityToUndo.type === 'Like') {
-    return retryTransactionWrapper(processUndoLike, byActor, activity)
+    return retryTransactionWrapper(() => processUndoLike(byActor, activity as ActivityUndo<ActivityLike>))
   }
 
   if (activityToUndo.type === 'Create') {
     const objectToUndo = await fetchAPObjectIfNeeded<CacheFileObject>(activityToUndo.object)
 
     if (objectToUndo.type === 'CacheFile') {
-      return retryTransactionWrapper(processUndoCacheFile, byActor, activity, objectToUndo)
+      return retryTransactionWrapper(() => {
+        return processUndoCacheFile(byActor, activity as ActivityUndo<ActivityCreate<CacheFileObject>>, objectToUndo)
+      })
     }
   }
 
   if (activityToUndo.type === 'Dislike') {
-    return retryTransactionWrapper(processUndoDislike, byActor, activity)
+    return retryTransactionWrapper(() => processUndoDislike(byActor, activity as ActivityUndo<ActivityDislike>))
   }
 
   if (activityToUndo.type === 'Follow') {
-    return retryTransactionWrapper(processUndoFollow, byActor, activityToUndo)
+    return retryTransactionWrapper(() => processUndoFollow(byActor, activityToUndo))
   }
 
   if (activityToUndo.type === 'Announce') {
-    return retryTransactionWrapper(processUndoAnnounce, byActor, activityToUndo)
+    return retryTransactionWrapper(() => processUndoAnnounce(byActor, activityToUndo))
   }
 
   logger.warn('Unknown activity object type %s -> %s when undo activity.', activityToUndo.type, { activity: activity.id })
@@ -73,7 +75,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    const video = await VideoModel.loadFull(onlyVideo.id, t)
+    const video = await VideoModel.load(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
     if (rate?.type !== 'like') {
       logger.warn('Unknown like by account %d for video %d.', byActor.Account.id, video.id)
@@ -84,7 +86,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
     await video.decrement('likes', { transaction: t })
 
     video.likes--
-    await federateVideoIfNeeded(video, t)
+    scheduleVideoFederation({ video, transaction: t })
   })
 }
 
@@ -97,7 +99,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    const video = await VideoModel.loadFull(onlyVideo.id, t)
+    const video = await VideoModel.load(onlyVideo.id, t)
     const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislikeActivity.id, t)
     if (rate?.type !== 'dislike') {
       logger.warn(`Unknown dislike by account %d for video %d.`, byActor.Account.id, video.id)
@@ -108,7 +110,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     await video.decrement('dislikes', { transaction: t })
     video.dislikes--
 
-    await federateVideoIfNeeded(video, t)
+    scheduleVideoFederation({ video, transaction: t })
   })
 }
 
@@ -173,6 +175,11 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
 function processUndoFollow (follower: MActorSignature, followActivity: ActivityFollow) {
   return sequelizeTypescript.transaction(async t => {
     const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
+    if (!following) {
+      logger.warn('Unknown actor %s to undo the follow of %s.', followActivity.object, follower.url)
+      return
+    }
+
     const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, following.id, t)
 
     if (!actorFollow) {

@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.",
-  "version": "8.2.3",
+  "version": "8.2.4",
   "private": true,
   "license": "AGPL-3.0",
   "engines": {
@@ -256,6 +256,8 @@
     "mocha": "^11.7.6",
     "oxlint": "^1.70.0",
     "oxlint-tsgolint": "^0.23.0",
+    "p2p-media-loader-core": "github:Chocobozzz/p2p-media-loader#v4-external-test&path:packages/p2p-media-loader-core",
+    "p2p-media-loader-hlsjs": "github:Chocobozzz/p2p-media-loader#v4-external-test&path:packages/p2p-media-loader-hlsjs",
     "pixelmatch": "^7.2.0",
     "proxy": "^4.1.0",
     "rollup": "^4.62.2",

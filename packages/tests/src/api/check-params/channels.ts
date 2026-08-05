@@ -93,6 +93,40 @@ describe('Test video channels API validator', function () {
         expectedStatus: HttpStatusCode.OK_200
       })
     })
+
+    it('Should fail to list withStats without being authenticated', async function () {
+      await server.channels.listByAccount({
+        accountName: 'fake',
+        withStats: true,
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail to list withStats of another account', async function () {
+      await server.channels.listByAccount({
+        accountName: 'fake',
+        withStats: true,
+        token: server.accessToken,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await server.channels.listByAccount({
+        accountName: 'root',
+        withStats: true,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed to list withStats of its own account', async function () {
+      await server.channels.listByAccount({
+        accountName: 'fake',
+        withStats: true,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
   })
 
   describe('When adding a video channel', function () {

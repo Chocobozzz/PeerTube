@@ -7,7 +7,7 @@ import { retryTransactionWrapper } from '../helpers/database-utils.js'
 
 export type RequestPromiseHandler = ValidationChain | ExpressPromiseHandler
 
-function asyncMiddleware (fun: RequestPromiseHandler | RequestPromiseHandler[]) {
+export function asyncMiddleware (fun: RequestPromiseHandler | RequestPromiseHandler[]) {
   return async (req: Request, res: Response, next: NextFunction) => {
     if (Array.isArray(fun) !== true) {
       return Promise.resolve((fun as RequestHandler)(req, res, next))
@@ -32,17 +32,8 @@ function asyncMiddleware (fun: RequestPromiseHandler | RequestPromiseHandler[]) 
   }
 }
 
-function asyncRetryTransactionMiddleware (fun: (req: Request, res: Response, next: NextFunction) => Promise<any>) {
+export function asyncRetryTransactionMiddleware (fun: (req: Request, res: Response, next: NextFunction) => Promise<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
-    return Promise.resolve(
-      retryTransactionWrapper(fun, req, res, next)
-    ).catch(err => next(err))
+    return Promise.resolve(retryTransactionWrapper(() => fun(req, res, next))).catch(err => next(err))
   }
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  asyncMiddleware,
-  asyncRetryTransactionMiddleware
 }

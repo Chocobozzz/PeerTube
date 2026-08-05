@@ -6,6 +6,7 @@ import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MAccount, MActor, MActorFull, MChannel } from '@server/types/models/index.js'
 import { upsertAPPlayerSettings } from '../player-settings.js'
+import { checkUrlsSameHost, isLocalUrl } from '../url.js'
 import { getOrCreateAPOwner } from './get.js'
 import { updateActorImages } from './image.js'
 import { fetchActorFollowsCount } from './shared/index.js'
@@ -23,6 +24,8 @@ export class APActorUpdater {
   }
 
   async update () {
+    this.checkActorIdentityBindingOrThrow()
+
     const avatarsInfo = getImagesInfoFromObject(this.actorObject, ActorImageType.AVATAR)
     const bannersInfo = getImagesInfoFromObject(this.actorObject, ActorImageType.BANNER)
 
@@ -99,6 +102,25 @@ export class APActorUpdater {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot update the remote account.', { err })
       throw err
+    }
+  }
+
+  // An actor can only update itself: its new AP id must stay on the host it is already associated to
+  private checkActorIdentityBindingOrThrow () {
+    const { id, publicKey } = this.actorObject
+    const currentUrl = this.actor.url
+
+    if (!checkUrlsSameHost(currentUrl, id)) {
+      throw new Error(`Actor ${currentUrl} cannot be updated with object id ${id} that is not on the same host`)
+    }
+
+    // A remote actor must never claim our own host
+    if (!this.actor.isLocal() && isLocalUrl(id)) {
+      throw new Error(`Remote actor ${currentUrl} cannot be updated with local URL ${id}`)
+    }
+
+    if (publicKey.owner !== id) {
+      throw new Error(`Public key owner ${publicKey.owner} of actor ${id} does not match the actor id`)
     }
   }
 

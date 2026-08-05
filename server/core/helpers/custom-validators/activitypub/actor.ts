@@ -75,6 +75,7 @@ export function sanitizeAndCheckActorObject (actor: ActivityPubActor) {
     isActivityPubUrlValid(actor.inbox) &&
     isActorPreferredUsernameValid(actor.preferredUsername) &&
     isActorPublicKeyObjectValid(actor.publicKey) &&
+    actor.publicKey.owner === actor.id &&
     isActorEndpointsObjectValid(actor.endpoints) &&
     (!actor.outbox || isActivityPubUrlValid(actor.outbox)) &&
     (!actor.following || isActivityPubUrlValid(actor.following)) &&

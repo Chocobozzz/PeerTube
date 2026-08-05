@@ -62,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1095
+export const LAST_MIGRATION_VERSION = 1105
 
 // ---------------------------------------------------------------------------
 
@@ -571,8 +571,21 @@ export const VIEW_LIFETIME = {
 }
 export let VIEWER_SYNC_REDIS = 30000 // Sync viewer into redis
 
+export const MAX_REMOTE_VIEWERS_COUNTER = 1_000_000
+
 export const STATS_LIFETIME = {
   DOWNLOADS: 60000 * 60 // 1 hour
+}
+
+export const REMOTE_DOWNLOADS = {
+  DEDUPLICATION_LIFETIME: 60000 * 60 * 24, // 24 hours
+  RATE_LIMIT_LIFETIME: 60000 * 60, // 1 hour
+  // Max downloads of a specific video we accept from a specific instance in RATE_LIMIT_LIFETIME
+  MAX_PER_HOST_PER_VIDEO: 500
+}
+
+export const REMOTE_VIEWS = {
+  DEDUPLICATION_LIFETIME: 60000 * 60 * 24 // 24 hours
 }
 
 export const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100
@@ -1251,9 +1264,8 @@ export const TRACKER_RATE_LIMITS = {
   BLOCK_IP_LIFETIME: parseDurationToMs('3 minutes')
 }
 
-// We use -2 instead of 2 because of historical reason
-// When p2p-media-loader bumps to v3, we'll be able to switch to 3 directly
-export const P2P_MEDIA_LOADER_PEER_VERSION = -2
+// Bump when the p2p-media-loader peer protocol/infohash derivation changes in an incompatible way
+export const P2P_MEDIA_LOADER_PEER_VERSION = 2
 
 // ---------------------------------------------------------------------------
 

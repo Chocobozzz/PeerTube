@@ -9,7 +9,6 @@ interface StatsCardOptions extends VideojsComponentOptions {
   videoUUID: string
   videoIsLive: boolean
   mode: 'web-video' | 'p2p-media-loader'
-  p2pEnabled: boolean
 }
 
 interface PlayerNetworkInfo {
@@ -37,6 +36,7 @@ class StatsCard extends Component {
   declare updateInterval: any
 
   declare mode: 'web-video' | 'p2p-media-loader'
+  declare p2pEnabled: boolean
 
   declare metadataStore: any
 
@@ -105,6 +105,9 @@ class StatsCard extends Component {
 
       const p2pStats = data.p2p
       const httpStats = data.http
+
+      // The player may have disabled P2P even if the user enabled it (small latency live for example)
+      this.p2pEnabled = !!p2pStats
 
       this.playerNetworkInfo.downloadSpeed = bytes((p2pStats?.downloadSpeed || 0) + (httpStats.downloadSpeed || 0)).join(' ')
       this.playerNetworkInfo.uploadSpeed = bytes(p2pStats?.uploadSpeed || 0).join(' ')
@@ -324,7 +327,7 @@ class StatsCard extends Component {
       ? `${(progress * 100).toFixed(1)}% (${(progress * duration).toFixed(1)}s)`
       : undefined
 
-    const p2pEnabled = this.options_.p2pEnabled && this.mode === 'p2p-media-loader'
+    const p2pEnabled = this.p2pEnabled && this.mode === 'p2p-media-loader'
 
     this.setInfoValue(this.playerMode, this.mode === 'p2p-media-loader' ? 'P2P Media Loader (v2)' : 'Web Video')
     this.setInfoValue(this.uuid, this.options_.videoUUID)

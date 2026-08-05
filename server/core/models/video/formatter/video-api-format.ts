@@ -24,7 +24,13 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_STATES
 } from '../../../initializers/constants.js'
-import { MServer, MStreamingPlaylistRedundanciesOpt, MVideoFormattable, MVideoFormattableDetails } from '../../../types/models/index.js'
+import {
+  MServer,
+  MStreamingPlaylistFormattable,
+  MVideoFormattable,
+  MVideoFormattableAdditionalAttributes,
+  MVideoFormattableDetails
+} from '../../../types/models/index.js'
 import { MVideoFile } from '../../../types/models/video/video-file.js'
 import { sortByResolutionDesc } from './shared/index.js'
 
@@ -208,7 +214,7 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
 
 export function streamingPlaylistsModelToFormattedJSON (
   video: MVideoFormattable,
-  playlists: MStreamingPlaylistRedundanciesOpt[]
+  playlists: MStreamingPlaylistFormattable[]
 ): VideoStreamingPlaylist[] {
   if (isArray(playlists) === false) return []
 
@@ -277,7 +283,7 @@ export function videoFilesModelToFormattedJSON (
         width: videoFile.width,
         height: videoFile.height,
 
-        magnetUri: includeMagnet && videoFile.hasTorrent()
+        magnetUri: includeMagnet && videoFile.canBuildMagnetUri()
           ? generateMagnetUri(video, videoFile, trackerUrls)
           : undefined,
 
@@ -332,7 +338,7 @@ export function getStateLabel (id: number) {
 // Private
 // ---------------------------------------------------------------------------
 
-function buildAdditionalAttributes (video: MVideoFormattable, options: VideoFormattingJSONOptions) {
+function buildAdditionalAttributes (video: MVideoFormattable & MVideoFormattableAdditionalAttributes, options: VideoFormattingJSONOptions) {
   const add = options.additionalAttributes
 
   const result: Partial<VideoAdditionalAttributes> = {}

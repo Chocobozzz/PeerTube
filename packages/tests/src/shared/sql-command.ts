@@ -171,12 +171,13 @@ export class SQLCommand {
   // ---------------------------------------------------------------------------
 
   async getPlaylistInfohash (playlistId: number) {
-    const query = 'SELECT "p2pMediaLoaderInfohashes" FROM "videoStreamingPlaylist" WHERE id = :playlistId'
+    const query = `SELECT CONVERT_FROM("infohash", 'SQL_ASCII') AS "infohash" ` +
+      `FROM "videoInfohash" WHERE "videoStreamingPlaylistId" = :playlistId`
 
-    const result = await this.selectQuery<{ p2pMediaLoaderInfohashes: string }>(query, { playlistId })
+    const result = await this.selectQuery<{ infohash: string }>(query, { playlistId })
     if (!result || result.length === 0) return []
 
-    return result[0].p2pMediaLoaderInfohashes
+    return result.map(r => r.infohash)
   }
 
   // ---------------------------------------------------------------------------

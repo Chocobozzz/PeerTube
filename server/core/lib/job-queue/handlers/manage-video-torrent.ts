@@ -1,11 +1,14 @@
-import { Job } from 'bullmq'
-import { extractVideo } from '@server/helpers/video.js'
-import { createTorrentAndSetInfoHash, updateTorrentMetadata } from '@server/lib/webtorrent.js'
-import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { VideoModel } from '@server/models/video/video.js'
-import { VideoFileModel } from '@server/models/video/video-file.js'
-import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { ManageVideoTorrentPayload } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { extractVideo } from '@server/helpers/video.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
+import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { createTorrentForFile, updateTorrentForFileAndSave } from '@server/lib/webtorrent.js'
+import { VideoFileModel } from '@server/models/video/video-file.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
+import { VideoModel } from '@server/models/video/video.js'
+import { Job } from 'bullmq'
 import { logger } from '../../../helpers/logger.js'
 
 async function processManageVideoTorrent (job: Job) {
@@ -38,17 +41,26 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
     await video.reload()
     await file.reload()
 
-    await createTorrentAndSetInfoHash(video, file)
+    const { infoHash, torrentFilename } = await createTorrentForFile(video, file)
 
-    // Refresh videoFile because the createTorrentAndSetInfoHash could be long
-    const refreshedFile = await VideoFileModel.loadWithVideo(file.id)
+    const saved = await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async transaction => {
+        // Refresh videoFile because the createTorrentAndSetInfoHash could be long
+        // Also reload on every attempt: after a rollback the previous instance has no changed attribute left to save
+        const refreshedFile = await VideoFileModel.loadWithVideo(file.id, transaction)
+        if (!refreshedFile) return false
+
+        refreshedFile.torrentFilename = torrentFilename
+        await refreshedFile.save({ transaction })
+
+        await VideoInfohashModel.replaceFileInfohash(refreshedFile.id, infoHash, transaction)
+
+        return true
+      })
+    })
+
     // File does not exist anymore, remove the generated torrent
-    if (!refreshedFile) return file.removeTorrent()
-
-    refreshedFile.infoHash = file.infoHash
-    refreshedFile.torrentFilename = file.torrentFilename
-
-    await refreshedFile.save()
+    if (!saved) await file.removeTorrent()
   } finally {
     fileMutexReleaser()
   }
@@ -67,9 +79,7 @@ async function doUpdateMetadataAction (payload: ManageVideoTorrentPayload & { ac
   const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(extractedVideo.uuid)
 
   try {
-    await updateTorrentMetadata(video || streamingPlaylist, file)
-
-    await file.save()
+    await updateTorrentForFileAndSave(video || streamingPlaylist, file)
   } finally {
     fileMutexReleaser()
   }

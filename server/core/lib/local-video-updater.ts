@@ -20,7 +20,7 @@ import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { Transaction } from 'sequelize'
 import { sendDeleteVideo } from './activitypub/send/send-delete.js'
 import { changeVideoChannelShare } from './activitypub/share.js'
-import { isPrivacyForFederation } from './activitypub/videos/index.js'
+import { buildNonDuplicatedFederateVideoJob, isPrivacyForFederation } from './activitypub/videos/index.js'
 import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { CreateJobTypeAndPayload, JobQueue } from './job-queue/job-queue.js'
@@ -331,7 +331,7 @@ export class LocalVideoUpdater {
     if (filePathChanged && hls) {
       logger.debug('Updating HLS playlist file paths after privacy change', this.lTags())
 
-      hls.assignP2PMediaLoaderInfoHashes(video, hls.VideoFiles)
+      await hls.buildAndSetInfoHashes(video, hls.VideoFiles)
       await hls.save()
     }
   }
@@ -367,16 +367,11 @@ export class LocalVideoUpdater {
   }
 
   private buildFederationJob (options: {
-    video: MVideoUUID
+    video: MVideoFull
   }): CreateJobTypeAndPayload[] {
     const { video } = options
 
-    return [
-      {
-        type: 'federate-video',
-        payload: { videoUUID: video.uuid }
-      }
-    ]
+    return [ buildNonDuplicatedFederateVideoJob({ video }) ]
   }
 
   private buildNotifyJobIfNeeded (options: {
