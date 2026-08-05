@@ -1,6 +1,12 @@
 import { getOriginUrl } from '@app/helpers'
 import { maxBy } from '@peertube/peertube-core-utils'
-import { ActorImage, Account as ServerAccount, VideoChannel as ServerVideoChannel, VideoChannelStatsGroupInterval, ViewsPerDate } from '@peertube/peertube-models'
+import {
+  ActorImage,
+  Account as ServerAccount,
+  VideoChannel as ServerVideoChannel,
+  VideoChannelStatsGroupInterval,
+  ViewsPerDate
+} from '@peertube/peertube-models'
 import { Actor } from '../account/actor.model'
 
 export class VideoChannel extends Actor implements ServerVideoChannel {
