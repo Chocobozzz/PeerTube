@@ -102,8 +102,8 @@ async function processVideo (videoId: number) {
   // Everything worked, we can save the playlist now
   await playlist.save()
 
-  const allVideo = await VideoModel.loadFull(video.id)
-  await federateVideoIfNeeded(allVideo)
+  const videoAP = await VideoModel.loadAP(video.id)
+  await federateVideoIfNeeded({ video: videoAP })
 
   console.log(`Successfully moved HLS files of ${video.name}.`)
 }

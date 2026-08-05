@@ -1,11 +1,8 @@
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { logger, LoggerTags, loggerTagsFactory } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/federate.js'
+import { scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
-import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylistVideoUUID, MVideoCaption } from '@server/types/models/index.js'
 
 export async function moveCaptionToStorage (options: {
@@ -36,13 +33,7 @@ export async function moveCaptionToStorage (options: {
   try {
     await moveCaptionFiles([ caption ], hls)
 
-    await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
-        const videoFull = await VideoModel.loadFull(caption.Video.id, t)
-
-        await federateVideoIfNeeded(videoFull, t)
-      })
-    })
+    scheduleVideoFederation({ video: caption.Video })
   } finally {
     fileMutexReleaser()
   }

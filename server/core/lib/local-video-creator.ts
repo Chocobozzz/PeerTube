@@ -25,12 +25,12 @@ import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
+import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
-import { federateVideoIfNeeded } from './activitypub/videos/federate.js'
+import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { Hooks } from './plugins/hooks.js'
@@ -93,7 +93,7 @@ export class LocalVideoCreator {
   private readonly videoAttributeResultHook: VideoAttributeHookFilter
 
   private video: MVideoFull
-  private videoFile: MVideoFile
+  private videoFile: MVideoFileInfoHash
   private videoPath: string
 
   constructor (
@@ -142,7 +142,11 @@ export class LocalVideoCreator {
     this.video.url = getLocalVideoActivityPubUrl(this.video)
 
     if (this.videoFilePath) {
-      this.videoFile = await buildNewFile({ path: this.videoFilePath, mode: 'web-video', ffprobe: this.videoFileProbe })
+      this.videoFile = await buildNewFile({
+        path: this.videoFilePath,
+        mode: 'web-video',
+        ffprobe: this.videoFileProbe
+      }) as MVideoFileInfoHash
 
       this.videoPath = VideoPathManager.Instance.getFSVideoFileOutputPath(this.video, this.videoFile)
       await move(this.videoFilePath, this.videoPath)
@@ -252,7 +256,7 @@ export class LocalVideoCreator {
             }).catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
           })
         } else {
-          await federateVideoIfNeeded(this.video, transaction)
+          scheduleVideoFederation({ video: this.video, transaction })
         }
       }).catch(err => {
         // Reset elements to reinsert them in the database

@@ -363,7 +363,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
   static listLocalsForSitemap (sort: string): Promise<MChannelHost[]> {
     const query = {
-      attributes: [],
+      attributes: [ 'updatedAt' ],
       offset: 0,
       order: getSort(sort),
       include: [

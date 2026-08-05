@@ -1,11 +1,11 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { pipelineToResponse } from '@server/helpers/express-utils.js'
 import { generateRequestStream } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import cors from 'cors'
 import express from 'express'
 import { join } from 'node:path'
-import { pipeline } from 'node:stream/promises'
 import { LAZY_STATIC_PATHS, STATIC_MAX_AGE } from '../initializers/constants.js'
 
 import { AvatarImageFileCache } from '@server/lib/files-cache/avatar-image-file-cache.js'
@@ -121,5 +121,5 @@ async function getTorrent (req: express.Request, res: express.Response) {
   // Proxify remote request without cache
   const remoteUrl = file.getRemoteTorrentUrl(file.getVideo())
 
-  await pipeline(generateRequestStream(remoteUrl), res)
+  await pipelineToResponse({ streams: [ generateRequestStream(remoteUrl) ], res, logLabel: `torrent download of ${remoteUrl}` })
 }

@@ -3,6 +3,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFile, MVideoUUID } from '@server/types/models/index.js'
+import { buildNonDuplicatedFederateVideoJob } from './activitypub/videos/federate.js'
 import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from './job-queue/job-queue.js'
 import { VideoStoryboardJobHandler } from './runners/index.js'
 import { createTranscriptionTaskIfNeeded } from './video-captions.js'
@@ -51,10 +52,7 @@ export async function buildLocalStoryboardJobIfNeeded (options: {
   }
 
   if (federate === true) {
-    return {
-      type: 'federate-video' as 'federate-video',
-      payload: { videoUUID: video.uuid }
-    }
+    return buildNonDuplicatedFederateVideoJob({ video })
   }
 
   return undefined
@@ -114,10 +112,7 @@ export async function addVideoJobsAfterCreation (options: {
       }
     },
 
-    {
-      type: 'federate-video' as 'federate-video',
-      payload: { videoUUID: video.uuid }
-    }
+    buildNonDuplicatedFederateVideoJob({ video })
   ]
 
   // No transcoding, move the file directly on object storage

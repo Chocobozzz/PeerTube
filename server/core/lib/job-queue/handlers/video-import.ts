@@ -24,9 +24,10 @@ import { buildNewFile } from '@server/lib/video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded, buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
-import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
+import { createTorrentForFile, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
 import { Job } from 'bullmq'
@@ -39,7 +40,7 @@ import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoFileModel } from '../../../models/video/video-file.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { federateVideoIfNeeded } from '../../activitypub/videos/index.js'
+import { scheduleVideoFederation } from '../../activitypub/videos/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { createLocalVideoThumbnailsFromVideo } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
@@ -215,16 +216,22 @@ async function processFile (options: {
 
       const thumbnails = await generateThumbnails({ videoImportWithFiles, videoFile, ffprobe })
 
-      // Create torrent
-      await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
+      const { infoHash, torrentFilename } = await createTorrentForFile(videoImportWithFiles.Video, videoFile)
 
       const { videoImportUpdated, video } = await retryTransactionWrapper(() => {
         return sequelizeTypescript.transaction(async t => {
           // Refresh video
           const video = await VideoModel.load(videoImportWithFiles.videoId, t)
-          if (!video) throw new Error('Video linked to import ' + videoImportWithFiles.videoId + ' does not exist anymore.')
+          if (!video) {
+            await videoFile.removeTorrent()
 
+            throw new Error('Video linked to import ' + videoImportWithFiles.videoId + ' does not exist anymore.')
+          }
+
+          videoFile.torrentFilename = torrentFilename
           await videoFile.save({ transaction: t })
+
+          await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHash, t)
 
           // Update video DB object
           video.duration = duration
@@ -238,9 +245,7 @@ async function processFile (options: {
 
           await replaceChaptersIfNotExist({ video, chapters: containerChapters, transaction: t })
 
-          // Now we can federate the video (reload from database, we need more attributes)
-          const videoForFederation = await VideoModel.loadFull(video.uuid, t)
-          await federateVideoIfNeeded(videoForFederation, t)
+          scheduleVideoFederation({ video, transaction: t })
 
           // Update video import object
           videoImportWithFiles.state = VideoImportState.SUCCESS
@@ -248,7 +253,8 @@ async function processFile (options: {
 
           logger.info('Video %s imported.', video.uuid)
 
-          return { videoImportUpdated, video: videoForFederation }
+          // Reload the video from the database, notifications need more attributes
+          return { videoImportUpdated, video: await VideoModel.loadFull(video.uuid, t) }
         })
       })
 

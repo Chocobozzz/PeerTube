@@ -12,6 +12,7 @@ import {
   MUserAccountUrl,
   MUserId,
   MVideo,
+  MVideoAP,
   MVideoAccountLight,
   MVideoFormattableDetails,
   MVideoFull,
@@ -42,6 +43,10 @@ export async function doesVideoExist (id: number | string, res: Response, fetchT
   switch (fetchType) {
     case 'for-api':
       res.locals.videoAPI = video as MVideoFormattableDetails
+      break
+
+    case 'ap':
+      res.locals.videoAP = video as MVideoAP
       break
 
     case 'full':

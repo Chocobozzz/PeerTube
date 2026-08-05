@@ -3,6 +3,8 @@ import { NSFWFlag, VideosCommonQuery } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import express, { RequestHandler } from 'express'
 import multer, { diskStorage } from 'multer'
+import { Duplex, Readable } from 'stream'
+import { pipeline } from 'stream/promises'
 import { CONFIG } from '../initializers/config.js'
 import { REMOTE_SCHEME } from '../initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
@@ -207,6 +209,27 @@ export function parseRangeHeader (rangeHeader: string | undefined, size: number)
   }
 
   return { start, end }
+}
+
+// Pipe streams to the HTTP response, ignoring the errors emitted when the client aborts the request
+export async function pipelineToResponse (options: {
+  streams: (Readable | Duplex)[]
+  res: express.Response
+  logLabel: string
+}) {
+  const { streams, res, logLabel } = options
+
+  try {
+    await pipeline([ ...streams, res ])
+  } catch (err) {
+    // The client can close the connection at any time: this is not a server error
+    if ([ 'ERR_STREAM_PREMATURE_CLOSE', 'ECONNRESET', 'EPIPE' ].includes(err.code)) {
+      logger.debug(`Client aborted ${logLabel}`, { err })
+      return
+    }
+
+    throw err
+  }
 }
 
 // ---------------------------------------------------------------------------

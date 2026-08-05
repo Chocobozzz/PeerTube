@@ -6,13 +6,19 @@ class MockSmtpServer {
   private started = false
   private maildev: any
   private emails: object[]
+  private collectLoginNotifications = false
   private relayingEmail: Promise<void>
 
   private
 
   private constructor () {}
 
-  collectEmails (emailsCollection: object[]) {
+  collectEmails (emailsCollection: object[], options: {
+    // If true, will collect emails about new logins
+    collectLoginNotifications?: boolean // Default: false
+  } = {}) {
+    this.collectLoginNotifications = options.collectLoginNotifications === true
+
     const outgoingHost = process.env.MAILDEV_RELAY_HOST
     const outgoingPort = process.env.MAILDEV_RELAY_PORT
       ? parseInt(process.env.MAILDEV_RELAY_PORT)
@@ -38,6 +44,8 @@ class MockSmtpServer {
       })
 
       this.maildev.on('new', email => {
+        if (!this.collectLoginNotifications && email.subject?.includes('New login to your account')) return
+
         this.emails.push(email)
 
         if (outgoingHost || outgoingPort) {

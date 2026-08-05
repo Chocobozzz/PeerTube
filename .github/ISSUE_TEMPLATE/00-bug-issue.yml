@@ -28,7 +28,7 @@ body:
     attributes:
       label: Additional information
       value: |
-          * PeerTube instance:
+          * PeerTube instance (found in https://instanceURL/about/instance/tech):
             * URL:
             * Version:
             * NodeJS version:

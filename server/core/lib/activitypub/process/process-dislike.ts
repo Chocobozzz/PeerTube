@@ -6,7 +6,7 @@ import { sequelizeTypescript } from '../../../initializers/database.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
-import { canVideoBeFederated, federateVideoIfNeeded, maybeGetOrCreateAPVideo } from '../videos/index.js'
+import { canVideoBeFederated, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityDislike>) {
   const { activity, byActor } = options
@@ -37,7 +37,7 @@ async function processDislike (activity: ActivityDislike, byActor: MActorSignatu
   }
 
   return sequelizeTypescript.transaction(async t => {
-    const video = await VideoModel.loadFull(onlyVideo.id, t)
+    const video = await VideoModel.load(onlyVideo.id, t)
 
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
     if (existingRate?.type === 'dislike') return
@@ -58,6 +58,6 @@ async function processDislike (activity: ActivityDislike, byActor: MActorSignatu
 
     await rate.save({ transaction: t })
 
-    await federateVideoIfNeeded(video, t)
+    scheduleVideoFederation({ video, transaction: t })
   })
 }

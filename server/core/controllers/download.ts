@@ -1,7 +1,7 @@
 import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, UserRight, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
-import { getAuthUser, parseRangeHeader } from '@server/helpers/express-utils.js'
+import { getAuthUser, parseRangeHeader, pipelineToResponse } from '@server/helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { generateRequestStream } from '@server/helpers/requests.js'
 import { ThrottleStream } from '@server/helpers/stream-throttle.js'
@@ -28,7 +28,6 @@ import express from 'express'
 import { createReadStream } from 'fs'
 import { stat } from 'fs/promises'
 import { join } from 'path'
-import { pipeline } from 'stream/promises'
 import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
   asyncMiddleware,
@@ -145,7 +144,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
 
   const remoteUrl = file.getRemoteTorrentUrl(video)
 
-  await pipeline(generateRequestStream(remoteUrl), res)
+  await pipelineToResponse({ streams: [ generateRequestStream(remoteUrl) ], res, logLabel: `torrent download of ${remoteUrl}` })
 }
 
 // ---------------------------------------------------------------------------
@@ -505,7 +504,11 @@ async function downloadLocalFileWithOptionalThrottle (options: {
     })
   })
 
-  await pipeline(readStream, new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip: req.ip }), res)
+  await pipelineToResponse({
+    streams: [ readStream, new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip: req.ip }) ],
+    res,
+    logLabel: `download of ${path}`
+  })
 }
 
 async function redirectVideoDownloadToObjectStorage (options: {

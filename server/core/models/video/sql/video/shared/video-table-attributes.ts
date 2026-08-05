@@ -81,7 +81,6 @@ export class VideoTableAttributes {
       'fileUrl',
       'torrentFilename',
       'torrentUrl',
-      'infoHash',
       'fps',
       'metadataUrl',
       'videoStreamingPlaylistId',
@@ -100,7 +99,6 @@ export class VideoTableAttributes {
       'playlistUrl',
       'playlistFilename',
       'type',
-      'p2pMediaLoaderInfohashes',
       'p2pMediaLoaderPeerVersion',
       'segmentsSha256Filename',
       'segmentsSha256Url',
@@ -226,6 +224,23 @@ export class VideoTableAttributes {
     return [ 'id', 'language', 'fileUrl', 'storage', 'filename', 'automaticallyGenerated', 'm3u8Filename', 'm3u8Url' ]
   }
 
+  getStoryboardAttributes () {
+    return [
+      'id',
+      'filename',
+      'totalHeight',
+      'totalWidth',
+      'spriteHeight',
+      'spriteWidth',
+      'spriteDuration',
+      'fileUrl',
+      'cached',
+      'videoId',
+      'createdAt',
+      'updatedAt'
+    ]
+  }
+
   getActorAttributes () {
     let attributeKeys = [
       'id',
@@ -314,6 +329,7 @@ export class VideoTableAttributes {
       'originallyPublishedAt',
       'inputFileUpdatedAt',
       'firstPublishedAt',
+      'sitemapContentUpdatedAt',
       'channelId',
       'createdAt',
       'updatedAt',
