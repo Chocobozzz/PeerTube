@@ -31,7 +31,7 @@ describe('Test login notifications', function () {
   before(async function () {
     this.timeout(30000)
 
-    const port = await MockSmtpServer.Instance.collectEmails(emails, { loginNotifications: true })
+    const port = await MockSmtpServer.Instance.collectEmails(emails, { collectLoginNotifications: true })
     server = await createSingleServer(1, ConfigCommand.getEmailOverrideConfig(port))
 
     await setAccessTokensToServers([ server ])
@@ -39,15 +39,13 @@ describe('Test login notifications', function () {
     await server.users.create({ username: user.username, password: user.password })
   })
 
-  it('Should send an email on a login from a new device', async function () {
+  it('Should not send an email on the first login after signup', async function () {
     this.timeout(30000)
 
     await server.login.login({ user, userAgent: firefoxUserAgent })
     await waitJobs(server)
 
-    const userEmails = getUserEmails()
-    expect(userEmails).to.have.lengthOf(1)
-    expect(userEmails[0]['subject']).to.contain('new device')
+    expect(getUserEmails()).to.have.lengthOf(0)
   })
 
   it('Should not send an email when logging in again from the same device', async function () {
@@ -56,7 +54,7 @@ describe('Test login notifications', function () {
     await server.login.login({ user, userAgent: firefoxUserAgent })
     await waitJobs(server)
 
-    expect(getUserEmails()).to.have.lengthOf(1)
+    expect(getUserEmails()).to.have.lengthOf(0)
   })
 
   it('Should send an email on a login from another device', async function () {
@@ -66,8 +64,17 @@ describe('Test login notifications', function () {
     await waitJobs(server)
 
     const userEmails = getUserEmails()
-    expect(userEmails).to.have.lengthOf(2)
-    expect(userEmails[1]['subject']).to.contain('new device')
+    expect(userEmails).to.have.lengthOf(1)
+    expect(userEmails[0]['subject']).to.contain('new device')
+  })
+
+  it('Should not send an email when logging in again from that second device', async function () {
+    this.timeout(30000)
+
+    await server.login.login({ user, userAgent: 'another-device' })
+    await waitJobs(server)
+
+    expect(getUserEmails()).to.have.lengthOf(1)
   })
 
   after(async function () {

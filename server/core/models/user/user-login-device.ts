@@ -44,7 +44,7 @@ export class UserLoginDeviceModel extends SequelizeModel<UserLoginDeviceModel> {
 
   // ---------------------------------------------------------------------------
 
-  // Returns true if the device was not already known for this user
+  // Returns true if the device was not already known for this user, excluding their very first device ever
   static async registerDevice (options: {
     userId: number
     ip: string
@@ -55,6 +55,8 @@ export class UserLoginDeviceModel extends SequelizeModel<UserLoginDeviceModel> {
 
     const fingerprint = this.buildFingerprint({ ip, userAgent })
 
+    const priorDevicesCount = await UserLoginDeviceModel.count({ where: { userId }, transaction })
+
     const [ device, created ] = await UserLoginDeviceModel.findOrCreate({
       where: { userId, fingerprint },
       defaults: { userId, fingerprint },
@@ -64,7 +66,7 @@ export class UserLoginDeviceModel extends SequelizeModel<UserLoginDeviceModel> {
     // Bump the last-seen date of this already known device, so it's not pruned by removeOldDevices() while still in use
     if (!created) await device.update({ updatedAt: new Date() }, { transaction })
 
-    return created
+    return created && priorDevicesCount > 0
   }
 
   static removeOldDevices (beforeDate: string) {
