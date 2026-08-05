@@ -127,6 +127,36 @@ describe('Test video channels API validator', function () {
         expectedStatus: HttpStatusCode.OK_200
       })
     })
+
+    it('Should fail with an invalid statsDays value', async function () {
+      await server.channels.listByAccount({
+        accountName: 'fake',
+        withStats: true,
+        statsDays: 7,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/accounts/fake/video-channels',
+        token: userInfo.accessToken,
+        query: { withStats: true, statsDays: 'abc' },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should succeed with valid statsDays values', async function () {
+      for (const statsDays of [ 30, 90, 365, 0 ]) {
+        await server.channels.listByAccount({
+          accountName: 'fake',
+          withStats: true,
+          statsDays,
+          token: userInfo.accessToken,
+          expectedStatus: HttpStatusCode.OK_200
+        })
+      }
+    })
   })
 
   describe('When adding a video channel', function () {
