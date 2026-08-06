@@ -81,6 +81,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { CONFIG } from './config.js'
+import { VIDEO_SEARCH_INDEXED_DESCRIPTION_LENGTH } from './constants.js'
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -225,7 +226,7 @@ export async function initDatabaseModels (silent: boolean) {
     VideoChannelCollaboratorModel,
     ActorReservedModel,
     VideoEmbedPrivacyDomainModel,
-    VideoSearchModel,
+    VideoSearchModel
   ])
 
   // Check extensions exist in the database
@@ -271,12 +272,21 @@ async function checkPostgresExtension (extension: 'pg_trgm' | 'unaccent') {
   }
 }
 
-function createFunctions () {
-  const query = `CREATE OR REPLACE FUNCTION immutable_unaccent(text)
+async function createFunctions () {
+  const unaccentQuery = `CREATE OR REPLACE FUNCTION immutable_unaccent(text)
   RETURNS text AS
 $func$
 SELECT public.unaccent('public.unaccent', $1::text)
 $func$  LANGUAGE sql IMMUTABLE;`
 
-  return sequelizeTypescript.query(query, { raw: true })
+  await sequelizeTypescript.query(unaccentQuery, { raw: true })
+
+  const searchVectorQuery = `CREATE OR REPLACE FUNCTION video_search_vector(name text, description text)
+  RETURNS tsvector AS
+$func$
+SELECT setweight(to_tsvector('simple', immutable_unaccent(coalesce(name, ''))), 'A') ||
+       setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(description, ''), ${VIDEO_SEARCH_INDEXED_DESCRIPTION_LENGTH}))), 'B')
+$func$  LANGUAGE sql IMMUTABLE;`
+
+  await sequelizeTypescript.query(searchVectorQuery, { raw: true })
 }

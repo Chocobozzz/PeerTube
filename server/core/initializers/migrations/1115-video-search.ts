@@ -8,16 +8,21 @@ async function up (utils: {
   const { transaction } = utils
 
   await utils.sequelize.query(
-    `CREATE TABLE "videoSearch" (
+    `CREATE TABLE IF NOT EXISTS "videoSearch" (
+      "id" SERIAL,
       "videoId" INTEGER NOT NULL REFERENCES "video" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-      "searchVector" tsvector NOT NULL
+      "searchVector" tsvector NOT NULL,
+      PRIMARY KEY ("id")
     )`,
     { transaction }
   )
 }
 
-function down (options) {
+function down () {
   throw new Error('Not implemented.')
 }
 
-export { down, up }
+export {
+  down,
+  up
+}

@@ -8,22 +8,16 @@ run()
   })
 
 async function run () {
-  try {
-    await fillVideoSearchTable()
-  } catch (err) {
-    console.error('An error occurred while filling the videoSearch table:', err)
-  }
+  await fillVideoSearchTable()
 }
 
 async function fillVideoSearchTable () {
   console.log('Filling videoSearch table with existing videos...')
 
+  // video_search_vector() is created by the server on startup, so this builds the exact same vector as the trigger
   await sequelizeTypescript.query(`
     INSERT INTO "videoSearch" ("videoId", "searchVector")
-    SELECT
-      "id",
-      setweight(to_tsvector('simple', unaccent(coalesce(name, ''))), 'A') ||
-      setweight(to_tsvector('simple', unaccent(coalesce(description, ''))), 'B')
+    SELECT "id", video_search_vector(name, description)
     FROM "video"
     ON CONFLICT ("videoId") DO UPDATE SET
       "searchVector" = EXCLUDED."searchVector"

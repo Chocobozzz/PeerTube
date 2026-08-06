@@ -582,6 +582,90 @@ describe('Test videos search', function () {
     }
   })
 
+  describe('Full text search', function () {
+    // Distinctive tokens so these videos can't collide with the search assertions above
+    before(async function () {
+      this.timeout(120000)
+
+      await server.videos.upload({
+        attributes: {
+          name: 'kryptonite harmonica',
+          description: 'A quenelle of pamplemousse served on a bed of zarzuela'
+        }
+      })
+
+      await server.videos.upload({
+        attributes: { name: 'quenelle & pamplemousse!' }
+      })
+
+      // Only the first 1000 chars of the description are indexed
+      await server.videos.upload({
+        attributes: {
+          name: 'long description video',
+          description: 'sarrasine '.repeat(150) + 'bouillabaisse'
+        }
+      })
+    })
+
+    it('Should find a video by a word of its description only', async function () {
+      const body = await command.searchVideos({ search: 'zarzuela' })
+
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('kryptonite harmonica')
+    })
+
+    it('Should rank a name match above a description only match', async function () {
+      const body = await command.searchVideos({ search: 'quenelle', sort: '-match' })
+
+      expect(body.total).to.equal(2)
+      expect(body.data[0].name).to.equal('quenelle & pamplemousse!')
+      expect(body.data[1].name).to.equal('kryptonite harmonica')
+    })
+
+    it('Should match every word of a multi word search', async function () {
+      const body = await command.searchVideos({ search: 'harmonica kryptonite' })
+
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('kryptonite harmonica')
+    })
+
+    it('Should not fail on searches containing tsquery operators', async function () {
+      // to_tsquery() would raise "syntax error in tsquery" on these if they reached it unsanitized
+      for (const search of [ 'quenelle!', 'quenelle & pamplemousse', 'quenelle | pamplemousse', 'what? (really)', '12:30' ]) {
+        const body = await command.searchVideos({ search })
+
+        expect(body.total).to.be.at.least(0)
+      }
+    })
+
+    it('Should not fail on a search without any lexeme', async function () {
+      for (const search of [ '   ', '!!!', '((()))', '...' ]) {
+        const body = await command.searchVideos({ search })
+
+        expect(body.total).to.equal(0)
+      }
+    })
+
+    it('Should still find a video with an accented and prefixed search', async function () {
+      const body = await command.searchVideos({ search: 'pämplemoussé' })
+
+      expect(body.total).to.equal(2)
+    })
+
+    it('Should index the beginning of a long description', async function () {
+      const body = await command.searchVideos({ search: 'sarrasine' })
+
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('long description video')
+    })
+
+    it('Should not index a description past the indexed length limit', async function () {
+      const body = await command.searchVideos({ search: 'bouillabaisse' })
+
+      expect(body.total).to.equal(0)
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

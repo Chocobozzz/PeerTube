@@ -6,7 +6,8 @@ import { VideoModel } from '../video/video.js'
   tableName: 'videoSearch',
   timestamps: false,
   indexes: [
-    { fields: [ 'videoId' ] },
+    // Must be unique: the search vector trigger inserts with ON CONFLICT ("videoId")
+    { fields: [ 'videoId' ], unique: true },
     { fields: [ 'searchVector' ], using: 'gin' }
   ]
 })
