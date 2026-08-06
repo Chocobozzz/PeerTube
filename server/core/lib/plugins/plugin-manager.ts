@@ -80,6 +80,10 @@ export class PluginManager implements ServerHook {
   private hooks: { [name: string]: HookInformationValue[] } = {}
   private translations: PluginLocalesTranslations = {}
 
+  // Plugins are registered after the HTTP server started accepting requests
+  // And are never registered at all when PeerTube runs with `--no-plugins`
+  private registrationDone = false
+
   private server: Server
 
   private constructor () {
@@ -224,8 +228,10 @@ export class PluginManager implements ServerHook {
   }
 
   async isTokenValid (token: MOAuthTokenUser, type: 'access' | 'refresh') {
+    if (!this.registrationDone) return true
+
     const auth = this.getAuth(token.User.pluginAuth, token.authName)
-    if (!auth) return true
+    if (!auth) return false // Token is invalid since the auth doesn't exist anymore
 
     if (auth.hookTokenValidity) {
       try {
@@ -331,6 +337,8 @@ export class PluginManager implements ServerHook {
     }
 
     this.sortHooksByPriority()
+
+    this.registrationDone = true
   }
 
   async removeUnsecurePluginsIfNeededBeforeRegistration () {

@@ -10,7 +10,7 @@ import {
 import { getAuthUser } from '@server/helpers/express-utils.js'
 import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { VIDEO_EMBED_PRIVACY_POLICIES, WEBSERVER } from '@server/initializers/constants.js'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
@@ -127,7 +127,7 @@ async function updateVideoEmbedPrivacy (req: express.Request, res: express.Respo
       transaction: t
     })
 
-    await federateVideoIfNeeded(video, t)
+    scheduleVideoFederation({ video, transaction: t })
   })
 
   logger.info(`Video embed policy for video with name ${video.name} and uuid ${video.uuid} have been updated`, lTags(video.uuid))

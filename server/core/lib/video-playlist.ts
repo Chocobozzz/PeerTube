@@ -1,14 +1,17 @@
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { sequelizeTypescript } from '@server/initializers/database.js'
 import { SequelizeModel } from '@server/models/shared/sequelize-type.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
-import { copy } from 'fs-extra/esm'
+import { Mutex } from 'async-mutex'
+import { copy, remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
 import { Transaction } from 'sequelize'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
-import { MAccount, MVideoThumbnails } from '../types/models/index.js'
+import { MAccount, MVideoPlaylistElement, MVideoThumbnails } from '../types/models/index.js'
 import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
@@ -32,7 +35,34 @@ export async function createWatchLaterPlaylist (account: MAccount, t: Transactio
   return videoPlaylist
 }
 
-export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnails) {
+// Generate the playlist thumbnail from the thumbnail of the video that has just been added, if the playlist needs one
+export function generateThumbnailForPlaylistIfNeeded (options: {
+  videoPlaylist: MVideoPlaylistThumbnail
+  element: MVideoPlaylistElement
+  video: MVideoThumbnails
+}) {
+  const { videoPlaylist, element, video } = options
+
+  return runInPlaylistThumbnailMutex(videoPlaylist, async () => {
+    if (videoPlaylist.shouldGenerateThumbnailWithNewElement(element) !== true) return
+
+    await generateThumbnailForPlaylist(videoPlaylist, video)
+  })
+}
+
+// The first element of the playlist changed: regenerate the automatic thumbnail from the new first element
+export function regeneratePlaylistThumbnailIfNeeded (videoPlaylist: MVideoPlaylistThumbnail) {
+  return runInPlaylistThumbnailMutex(videoPlaylist, async () => {
+    if (videoPlaylist.hasGeneratedThumbnail() !== true) return
+
+    await videoPlaylist.removeThumbnails(undefined)
+
+    const firstElement = await VideoPlaylistElementModel.loadFirstElementWithVideoThumbnail(videoPlaylist.id)
+    if (firstElement) await generateThumbnailForPlaylist(videoPlaylist, firstElement.Video)
+  })
+}
+
+async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnails) {
   logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
   const videoThumbnail = video.getBestThumbnail('16:9')
@@ -42,9 +72,10 @@ export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylis
   }
 
   const tmpImageName = generateImageFilename(extname(videoThumbnail.filename))
+  const tmpImagePath = join(CONFIG.STORAGE.TMP_DIR, tmpImageName)
 
   if (video.isLocal() === true) {
-    await copy(videoThumbnail.getFSPath(), join(CONFIG.STORAGE.TMP_DIR, tmpImageName))
+    await copy(videoThumbnail.getFSPath(), tmpImagePath)
   } else {
     await downloadImage({
       url: videoThumbnail.fileUrl,
@@ -53,14 +84,67 @@ export async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylis
     })
   }
 
-  const thumbnails = await createLocalPlaylistThumbnailsFromImage({
-    inputPath: join(CONFIG.STORAGE.TMP_DIR, tmpImageName),
-    playlist: videoPlaylist,
-    automaticallyGenerated: true,
-    keepOriginal: false
-  })
+  try {
+    // Another process (or a thumbnail uploaded by the user) can replace the thumbnails of this playlist at the same time:
+    // the unique index on the thumbnail size is what prevents duplicates, so just retry and let the last writer win
+    await retryTransactionWrapper(async () => {
+      // Build the thumbnails inside the retry: sequelize would not insert again the models of a rolled back attempt
+      const thumbnails = await createLocalPlaylistThumbnailsFromImage({
+        inputPath: tmpImagePath,
+        playlist: videoPlaylist,
+        automaticallyGenerated: true,
+        keepOriginal: true
+      })
 
-  await videoPlaylist.replaceAndSaveThumbnails(thumbnails, undefined)
+      try {
+        await sequelizeTypescript.transaction(t => videoPlaylist.replaceAndSaveThumbnails(thumbnails, t))
+      } catch (err) {
+        // The next attempt generates new files, so don't leak the ones we just created
+        await Promise.all(
+          thumbnails.map(thumbnail => {
+            return thumbnail.removeFile()
+              .catch(removeErr => logger.error('Cannot remove thumbnail file %s.', thumbnail.filename, { err: removeErr }))
+          })
+        )
+
+        throw err
+      }
+    }, { retryUniqueConstraintViolation: true })
+  } finally {
+    await remove(tmpImagePath)
+  }
+}
+
+// Multiple requests can concurrently add/remove/reorder elements of the same playlist and so try to generate
+// its automatic thumbnail at the same time
+const playlistThumbnailMutexes = new Map<number, { mutex: Mutex, users: number }>()
+
+async function runInPlaylistThumbnailMutex<T> (videoPlaylist: MVideoPlaylistThumbnail, fn: () => Promise<T>) {
+  const playlistId = videoPlaylist.id
+
+  let entry = playlistThumbnailMutexes.get(playlistId)
+  if (!entry) {
+    entry = { mutex: new Mutex(), users: 0 }
+    playlistThumbnailMutexes.set(playlistId, entry)
+  }
+
+  // Count ourselves before waiting for the lock so the entry cannot be removed under us
+  entry.users++
+
+  const releaser = await entry.mutex.acquire()
+
+  try {
+    await videoPlaylist.reloadThumbnails()
+
+    return await fn()
+  } finally {
+    releaser()
+
+    entry.users--
+
+    // Don't leak mutexes of playlists that are not updated anymore
+    if (entry.users === 0) playlistThumbnailMutexes.delete(playlistId)
+  }
 }
 
 export async function reorderPlaylistOrElementsPosition<T extends typeof VideoPlaylistElementModel | typeof VideoPlaylistModel> (options: {

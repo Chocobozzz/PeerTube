@@ -59,6 +59,7 @@ import { BlocklistSubscriptionModel } from '../models/blocklist/blocklist-subscr
 import { ServerBlocklistModel } from '../models/blocklist/server-blocklist.js'
 import { ServerModel } from '../models/server/server.js'
 import { VideoStatModel } from '../models/stat/video-stat.js'
+import { UserLoginDeviceModel } from '../models/user/user-login-device.js'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting.js'
 import { ChangeOwnershipModel } from '../models/video/change-ownership.js'
 import { ScheduleVideoUpdateModel } from '../models/video/schedule-video-update.js'
@@ -75,6 +76,7 @@ import { VideoPlaylistElementModel } from '../models/video/video-playlist-elemen
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
 import { VideoSearchModel } from '../models/video/video-search.js'
 import { VideoShareModel } from '../models/video/video-share.js'
+import { VideoInfohashModel } from '../models/video/video-infohash.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
@@ -189,7 +191,9 @@ export async function initDatabaseModels (silent: boolean) {
     BlocklistLogModel,
     UserNotificationModel,
     UserNotificationSettingModel,
+    UserLoginDeviceModel,
     VideoStreamingPlaylistModel,
+    VideoInfohashModel,
     VideoPlaylistModel,
     VideoPlaylistElementModel,
     LocalVideoViewerModel,

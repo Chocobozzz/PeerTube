@@ -7,6 +7,7 @@ export type FileQueryOptions = {
   url?: string
 
   includeRedundancy: boolean
+  includeInfohashes: boolean
 
   transaction?: Transaction
 
@@ -41,7 +42,7 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
       '"video"."id"': ''
     }
 
-    this.includeWebVideoFiles()
+    this.includeWebVideoFiles(options.includeInfohashes)
 
     this.whereId(options)
 
@@ -53,7 +54,7 @@ export class VideoFileQueryBuilder extends AbstractVideoQueryBuilder {
       '"video"."id"': ''
     }
 
-    this.includeStreamingPlaylistFiles()
+    this.includeStreamingPlaylistFiles(options.includeInfohashes)
 
     if (options.includeRedundancy) {
       this.includeStreamingPlaylistRedundancies(options.tableAttributes)

@@ -104,7 +104,6 @@ if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
 }
 
 // ----------- PeerTube modules -----------
-import { omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
@@ -150,6 +149,7 @@ import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-sched
 import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
 import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
 import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
+import { RemoveOldUserLoginDevicesScheduler } from './core/lib/schedulers/remove-old-user-login-devices-scheduler.js'
 import { RunnerJobWatchDogScheduler } from './core/lib/schedulers/runner-job-watch-dog-scheduler.js'
 import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-scheduler.js'
 import { VideoStatsBufferScheduler } from './core/lib/schedulers/video-stats-buffer-scheduler.js'
@@ -276,10 +276,10 @@ app.use((err, req, res: express.Response, _next) => {
     ? (process as any)._getActiveRequests()
     : undefined
 
-  // Remove too big metadata
-  const sanitizedErr = omit(err, [ 'body' ])
+  // Remove too big metadata and alter original error to keep type
+  err.body = undefined
 
-  logger.error('Error in controller.', { err: sanitizedErr, sql, activeRequests, url: req.originalUrl })
+  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl })
 
   return res.fail({
     status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
@@ -338,6 +338,7 @@ async function startApplication () {
   RunnerJobWatchDogScheduler.Instance.enable()
   RemoveExpiredUserExportsScheduler.Instance.enable()
   UpdateTokenSessionScheduler.Instance.enable()
+  RemoveOldUserLoginDevicesScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 

@@ -114,6 +114,11 @@ export type CreateJobOptions = {
   priority?: number
   failParentOnFailure?: boolean
   deduplicationId?: string
+
+  // Instead of dropping the job added while another one with the same deduplication id is active,
+  // store it and automatically create it when the active job has finished
+  // It guarantees we don't miss a change that occurred during the processing of the active job
+  deduplicationKeepLastIfActive?: boolean
 }
 
 const handlers: { [id in JobType]: (job: Job, signal?: AbortSignal) => Promise<any> } = {
@@ -383,7 +388,10 @@ class JobQueue {
       return
     }
 
-    const jobOptions = this.buildJobOptions(options.type as JobType, pick(options, [ 'priority', 'delay', 'deduplicationId' ]))
+    const jobOptions = this.buildJobOptions(
+      options.type as JobType,
+      pick(options, [ 'priority', 'delay', 'deduplicationId', 'deduplicationKeepLastIfActive' ])
+    )
 
     return queue.add('job', options.payload, jobOptions)
   }
@@ -424,7 +432,10 @@ class JobQueue {
       opts: {
         failParentOnFailure: true,
 
-        ...this.buildJobOptions(job.type as JobType, pick(job, [ 'priority', 'delay', 'failParentOnFailure', 'deduplicationId' ]))
+        ...this.buildJobOptions(
+          job.type as JobType,
+          pick(job, [ 'priority', 'delay', 'failParentOnFailure', 'deduplicationId', 'deduplicationKeepLastIfActive' ])
+        )
       }
     }
   }
@@ -438,7 +449,8 @@ class JobQueue {
 
       deduplication: options.deduplicationId
         ? {
-          id: options.deduplicationId
+          id: options.deduplicationId,
+          keepLastIfActive: options.deduplicationKeepLastIfActive
         }
         : undefined,
 

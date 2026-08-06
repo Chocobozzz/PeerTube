@@ -24,7 +24,6 @@ import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost, isStreamingPlaylist } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
-import memoizee from 'memoizee'
 import { join } from 'path'
 import { FindOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -36,6 +35,7 @@ import {
   Default,
   DefaultScope,
   ForeignKey,
+  HasOne,
   Is,
   Scopes,
   Table,
@@ -45,13 +45,13 @@ import validator from 'validator'
 import {
   isVideoFPSResolutionValid,
   isVideoFileExtnameValid,
-  isVideoFileInfoHashValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid
 } from '../../helpers/custom-validators/videos.js'
-import { DOWNLOAD_PATHS, LAZY_STATIC_PATHS, MEMOIZE_LENGTH, MEMOIZE_TTL, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
-import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
+import { DOWNLOAD_PATHS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
+import { MVideoFile, MVideoFileInfoHash, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../types/models/video/video-file.js'
 import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
+import { VideoInfohashModel } from './video-infohash.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
 
@@ -106,10 +106,6 @@ export enum ScopeNames {
 @Table({
   tableName: 'videoFile',
   indexes: [
-    {
-      fields: [ 'infoHash' ]
-    },
-
     {
       fields: [ 'torrentFilename' ],
       unique: true
@@ -169,11 +165,6 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @Is('VideoFileExtname', value => throwIfNotValid(value, isVideoFileExtnameValid, 'extname'))
   @Column
   declare extname: string
-
-  @AllowNull(true)
-  @Is('VideoFileInfohash', value => throwIfNotValid(value, isVideoFileInfoHashValid, 'info hash', true))
-  @Column
-  declare infoHash: string
 
   @AllowNull(false)
   @Default(-1)
@@ -244,17 +235,13 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   })
   declare VideoStreamingPlaylist: Awaited<VideoStreamingPlaylistModel>
 
-  static doesInfohashExistCached = memoizee(VideoFileModel.doesInfohashExist.bind(VideoFileModel), {
-    promise: true,
-    max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
-    maxAge: MEMOIZE_TTL.INFO_HASH_EXISTS
+  @HasOne(() => VideoInfohashModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'CASCADE'
   })
-
-  static doesInfohashExist (infoHash: string) {
-    const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
-
-    return doesExist({ sequelize: this.sequelize, query, bind: { infoHash } })
-  }
+  declare InfoHash: Awaited<VideoInfohashModel>
 
   static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
     const videoFile = await VideoFileModel.loadWithVideoOrPlaylist(id, videoIdOrUUID)
@@ -419,7 +406,11 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
       ? await VideoFileModel.loadHLSFile({ ...baseFind, playlistId: videoFile.videoStreamingPlaylistId })
       : await VideoFileModel.loadWebVideoFile({ ...baseFind, videoId: videoFile.videoId })
 
-    if (!element) return videoFile.save({ transaction })
+    if (!element) {
+      videoFile.isNewRecord = true
+
+      return videoFile.save({ transaction })
+    }
 
     for (const k of Object.keys(videoFile.toJSON())) {
       element.set(k, videoFile[k])
@@ -467,7 +458,12 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   }
 
   hasTorrent () {
-    return this.infoHash && this.torrentFilename
+    return !!this.torrentFilename
+  }
+
+  // A magnet URI also needs the infohash, which is not fetched by every video query
+  canBuildMagnetUri (this: MVideoFile): this is MVideoFileInfoHash {
+    return !!this.torrentFilename && !!(this as MVideoFileInfoHash).InfoHash
   }
 
   getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {

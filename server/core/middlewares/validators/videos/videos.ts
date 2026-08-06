@@ -308,7 +308,7 @@ export async function checkVideoFollowConstraints (req: express.Request, res: ex
   })
 }
 
-type FetchType = Extract<VideoLoadType, 'for-api' | 'full' | 'with-blacklist' | 'unsafe-immutable-only'>
+type FetchType = Extract<VideoLoadType, 'for-api' | 'ap' | 'full' | 'with-blacklist' | 'unsafe-immutable-only'>
 export const videoGetValidatorFactory = (fetchType: FetchType) => {
   return [
     isValidVideoIdParam('id'),

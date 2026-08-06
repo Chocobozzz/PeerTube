@@ -1,5 +1,3 @@
-import { updateTorrentMetadata } from '@server/lib/webtorrent.js'
-import { getServerActor } from '@server/models/application/application.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import {
@@ -11,16 +9,18 @@ import {
   getLocalVideoPlaylistActivityPubUrl,
   getLocalVideoPlaylistElementActivityPubUrl
 } from '@server/lib/activitypub/url.js'
+import { updateTorrentForFileAndSave } from '@server/lib/webtorrent.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { ActorModel } from '@server/models/actor/actor.js'
+import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
+import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
+import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { VideoShareModel } from '@server/models/video/video-share.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MActorAccount } from '@server/types/models/index.js'
-import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
-import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 
 run()
   .then(() => process.exit(0))
@@ -177,18 +177,14 @@ async function run () {
 
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
-      await updateTorrentMetadata(video, file)
-
-      await file.save()
+      await updateTorrentForFileAndSave(video, file)
     }
 
     const playlist = video.getHLSPlaylist()
     for (const file of (playlist?.VideoFiles || [])) {
       console.log('Updating fragmented torrent file %s of video %s.', file.resolution, video.uuid)
 
-      await updateTorrentMetadata(playlist, file)
-
-      await file.save()
+      await updateTorrentForFileAndSave(playlist, file)
     }
   }
 }

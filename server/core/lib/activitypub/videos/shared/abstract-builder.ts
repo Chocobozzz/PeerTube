@@ -13,12 +13,14 @@ import { getServerAccount } from '@server/models/application/application.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
+import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistFilesVideo,
+  MStreamingPlaylistFormattable,
   MVideo,
   MVideoCaption,
   MVideoFile,
@@ -140,14 +142,10 @@ export abstract class APVideoAbstractBuilder {
   protected async setWebVideoFiles (video: MVideoFull, t: Transaction) {
     const oldFiles = video.VideoFiles || []
 
-    const newVideoFiles = getFileAttributesFromUrl(video, this.videoObject.url, oldFiles).map(a => new VideoFileModel(a))
+    const toCreate = getFileAttributesFromUrl(video, this.videoObject.url, oldFiles)
+      .map(({ file, infoHash }) => ({ file: new VideoFileModel(file), infoHash }))
 
-    // Remove video files that do not exist anymore
-    await deleteAllModels(filterNonExistingModels(oldFiles, newVideoFiles), t)
-
-    // Update or add other one
-    const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'video', t))
-    video.VideoFiles = await Promise.all(upsertTasks)
+    video.VideoFiles = await this.saveFiles({ toCreate, oldFiles, t, mode: 'video' })
   }
 
   protected async updateChapters (video: MVideoFull) {
@@ -182,20 +180,27 @@ export abstract class APVideoAbstractBuilder {
   }
 
   protected async setStreamingPlaylists (video: MVideoFull, t: Transaction) {
-    const streamingPlaylistAttributes = getStreamingPlaylistAttributesFromObject(video, this.videoObject)
-    const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
+    const toCreate = getStreamingPlaylistAttributesFromObject(video, this.videoObject)
 
     // Remove video playlists that do not exist anymore
-    await deleteAllModels(filterNonExistingModels(video.VideoStreamingPlaylists || [], newStreamingPlaylists), t)
+    await deleteAllModels(
+      filterNonExistingModels(
+        video.VideoStreamingPlaylists || [],
+        toCreate.map(({ playlist }) => new VideoStreamingPlaylistModel(playlist))
+      ),
+      t
+    )
 
     const oldPlaylists = video.VideoStreamingPlaylists
     video.VideoStreamingPlaylists = []
 
-    for (const playlistAttributes of streamingPlaylistAttributes) {
-      const streamingPlaylistModel = await this.insertOrReplaceStreamingPlaylist(playlistAttributes, t)
+    for (const { playlist, tags, infoHashes } of toCreate) {
+      const streamingPlaylistModel = await this.insertOrReplaceStreamingPlaylist(playlist, t)
       streamingPlaylistModel.Video = video
 
-      await this.setStreamingPlaylistFiles(oldPlaylists, streamingPlaylistModel, playlistAttributes.tagAPObject, t)
+      await streamingPlaylistModel.setInfoHashes(infoHashes ?? [], t)
+
+      await this.setStreamingPlaylistFiles(oldPlaylists, streamingPlaylistModel, tags ?? [], t)
 
       video.VideoStreamingPlaylists.push(streamingPlaylistModel)
     }
@@ -204,7 +209,7 @@ export abstract class APVideoAbstractBuilder {
   private async insertOrReplaceStreamingPlaylist (attributes: CreationAttributes<VideoStreamingPlaylistModel>, t: Transaction) {
     const [ streamingPlaylist ] = await VideoStreamingPlaylistModel.upsert(attributes, { returning: true, transaction: t })
 
-    return streamingPlaylist as MStreamingPlaylistFilesVideo
+    return streamingPlaylist as MStreamingPlaylistFilesVideo & MStreamingPlaylistFormattable
   }
 
   private getStreamingPlaylistFiles (oldPlaylists: MStreamingPlaylistFiles[], type: VideoStreamingPlaylistType_Type) {
@@ -222,17 +227,13 @@ export abstract class APVideoAbstractBuilder {
   ) {
     const oldStreamingPlaylistFiles = this.getStreamingPlaylistFiles(oldPlaylists || [], playlistModel.type)
 
-    const newVideoFiles: MVideoFile[] = getFileAttributesFromUrl(
+    const toCreate = getFileAttributesFromUrl(
       playlistModel,
       tagObjects,
       oldStreamingPlaylistFiles
-    ).map(a => new VideoFileModel(a))
+    ).map(({ file, infoHash }) => ({ file: new VideoFileModel(file), infoHash }))
 
-    await deleteAllModels(filterNonExistingModels(oldStreamingPlaylistFiles, newVideoFiles), t)
-
-    // Update or add other one
-    const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'streaming-playlist', t))
-    playlistModel.VideoFiles = await Promise.all(upsertTasks)
+    playlistModel.VideoFiles = await this.saveFiles({ toCreate, oldFiles: oldStreamingPlaylistFiles, t, mode: 'streaming-playlist' })
   }
 
   protected async setAutomaticTags (options: {
@@ -252,5 +253,28 @@ export abstract class APVideoAbstractBuilder {
     await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount, transaction })
 
     return automaticTagsByAccount
+  }
+
+  protected async saveFiles (options: {
+    toCreate: { file: MVideoFile, infoHash: string }[]
+    oldFiles: MVideoFile[]
+    t: Transaction
+    mode: 'video' | 'streaming-playlist'
+  }) {
+    const { toCreate, oldFiles, t, mode } = options
+
+    // Remove video files that do not exist anymore
+    await deleteAllModels(filterNonExistingModels(oldFiles, toCreate.map(({ file }) => file)), t)
+
+    // Update or add other one
+    const upsertTasks = toCreate.map(async ({ file, infoHash }) => {
+      const newFile = await VideoFileModel.customUpsert(file, mode, t)
+
+      newFile.InfoHash = await VideoInfohashModel.replaceFileInfohash(newFile.id, infoHash, t)
+
+      return newFile
+    })
+
+    return Promise.all(upsertTasks)
   }
 }

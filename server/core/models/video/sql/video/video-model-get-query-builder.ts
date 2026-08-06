@@ -12,6 +12,7 @@ import { TableAttributeOptions } from './shared/table-attributes-options.model.j
 
 export type GetType =
   | 'api'
+  | 'ap'
   | 'full'
   | 'account-blacklist'
   | 'account-blacklist-files'
@@ -23,18 +24,23 @@ export type GetType =
   | 'video'
   | 'seo'
 
-const videoFilesInclude = new Set<GetType>([ 'api', 'full', 'account-blacklist-files', 'all-files' ])
-const captionsInclude = new Set<GetType>([ 'seo' ])
+const videoFilesInclude = new Set<GetType>([ 'api', 'ap', 'full', 'account-blacklist-files', 'all-files' ])
+// Infohashes are only needed to build magnet URIs (API) and P2P media loader tags (AP)
+const infohashesInclude = new Set<GetType>([ 'api', 'ap' ])
+const captionsInclude = new Set<GetType>([ 'ap', 'seo' ])
+const storyboardInclude = new Set<GetType>([ 'ap' ])
 
 const trackersInclude = new Set<GetType>([ 'api' ])
-const liveInclude = new Set<GetType>([ 'api', 'full' ])
-const scheduleUpdateInclude = new Set<GetType>([ 'api', 'full' ])
-const tagsInclude = new Set<GetType>([ 'api', 'full', 'seo' ])
-const userHistoryInclude = new Set<GetType>([ 'api', 'full' ])
-const accountInclude = new Set<GetType>([ 'api', 'full', 'account', 'account-blacklist', 'account-blacklist-files', 'seo' ])
+const liveInclude = new Set<GetType>([ 'api', 'ap', 'full' ])
+// `ap` also needs it: the video destroy hook saves a formatted version of the video in its abuses
+const scheduleUpdateInclude = new Set<GetType>([ 'api', 'ap', 'full' ])
+const tagsInclude = new Set<GetType>([ 'api', 'ap', 'full', 'seo' ])
+const userHistoryInclude = new Set<GetType>([ 'api' ])
+const accountInclude = new Set<GetType>([ 'api', 'ap', 'full', 'account', 'account-blacklist', 'account-blacklist-files', 'seo' ])
 
 const blacklistedInclude = new Set<GetType>([
   'api',
+  'ap',
   'full',
   'account-blacklist',
   'account-blacklist-files',
@@ -44,6 +50,7 @@ const blacklistedInclude = new Set<GetType>([
 
 const thumbnailsInclude = new Set<GetType>([
   'api',
+  'ap',
   'full',
   'account-blacklist-files',
   'all-files',
@@ -84,7 +91,8 @@ export class VideoModelGetQueryBuilder {
     const fileQueryOptions = {
       ...pick(options, [ 'id', 'url', 'transaction', 'logging', 'tableAttributes' ]),
 
-      includeRedundancy: this.shouldIncludeRedundancies(options)
+      includeRedundancy: this.shouldIncludeRedundancies(options),
+      includeInfohashes: infohashesInclude.has(options.type)
     }
 
     const [ videoRows, webVideoFilesRows, streamingPlaylistFilesRows ] = await Promise.all([
@@ -175,6 +183,10 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
 
     if (captionsInclude.has(options.type)) {
       this.includeCaptions()
+    }
+
+    if (storyboardInclude.has(options.type)) {
+      this.includeStoryboard()
     }
 
     this.whereId(options)

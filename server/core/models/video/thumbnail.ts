@@ -1,10 +1,11 @@
 import { ActivityIconObject, Thumbnail, type ThumbnailAspectRatio } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MThumbnail } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
-import { Op } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 import {
   AfterDestroy,
   AllowNull,
@@ -23,6 +24,18 @@ import { SequelizeModel } from '../shared/sequelize-type.js'
 import { buildSQLAttributes } from '../shared/table.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
+
+// A thumbnail always belongs to a video or to a playlist, never to both
+type ThumbnailOwner =
+  | { videoId: number, videoPlaylistId?: never }
+  | { videoPlaylistId: number, videoId?: never }
+
+function pickOwner (owner: ThumbnailOwner): ThumbnailOwner {
+  if (owner.videoId !== undefined) return { videoId: owner.videoId }
+  if (owner.videoPlaylistId !== undefined) return { videoPlaylistId: owner.videoPlaylistId }
+
+  throw new Error('Cannot build thumbnail query without a video id or a video playlist id')
+}
 
 export const thumbnailAPIAttributes = [
   'filename',
@@ -43,6 +56,25 @@ export const thumbnailAPIAttributes = [
     },
     {
       fields: [ 'filename' ],
+      unique: true
+    },
+    // A video/playlist can only have one thumbnail of a given size
+    {
+      fields: [ 'videoId', 'width', 'height' ],
+      where: {
+        videoId: {
+          [Op.ne]: null
+        }
+      },
+      unique: true
+    },
+    {
+      fields: [ 'videoPlaylistId', 'width', 'height' ],
+      where: {
+        videoPlaylistId: {
+          [Op.ne]: null
+        }
+      },
       unique: true
     }
   ]
@@ -110,10 +142,11 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   declare updatedAt: Date
 
   @AfterDestroy
-  static removeFiles (instance: ThumbnailModel) {
-    // Don't block the transaction
-    instance.removeFile()
-      .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
+  static removeFiles (instance: ThumbnailModel, options: { transaction?: Transaction }) {
+    afterCommitIfTransaction(options.transaction, () => {
+      instance.removeFile()
+        .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, { err }))
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -145,6 +178,55 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
         }
       }
     })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  static listOf (options: ThumbnailOwner & { transaction?: Transaction }) {
+    return ThumbnailModel.findAll({
+      where: pickOwner(options),
+      transaction: options.transaction
+    })
+  }
+
+  // Always fetch the thumbnails from the database to prevent concurrency issues
+  static async removeAllOf (options: ThumbnailOwner & { transaction?: Transaction }) {
+    for (const thumbnail of await ThumbnailModel.listOf(options)) {
+      await thumbnail.destroy({ transaction: options.transaction })
+    }
+  }
+
+  static async replaceAllOf (options: ThumbnailOwner & {
+    thumbnails: MThumbnail[]
+    transaction?: Transaction
+  }) {
+    const { thumbnails, transaction } = options
+    const owner = pickOwner(options)
+
+    if (thumbnails.length === 0) {
+      throw new Error('Cannot replace thumbnails with an empty array, at least one thumbnail is required')
+    }
+
+    // Thumbnails that are updated in place instead of being re-created
+    const keptIds = new Set(thumbnails.map(t => t.id).filter(id => !!id))
+
+    // Remove the old thumbnails first, otherwise the new ones would conflict with the unique constraint on their size
+    for (const thumbnail of await ThumbnailModel.listOf({ ...owner, transaction })) {
+      if (keptIds.has(thumbnail.id)) continue
+
+      await thumbnail.destroy({ transaction })
+    }
+
+    const savedThumbnails: ThumbnailModel[] = []
+
+    for (const thumbnail of thumbnails) {
+      if (owner.videoId !== undefined) thumbnail.videoId = owner.videoId
+      else thumbnail.videoPlaylistId = owner.videoPlaylistId
+
+      savedThumbnails.push(await thumbnail.save({ transaction }))
+    }
+
+    return savedThumbnails
   }
 
   // ---------------------------------------------------------------------------

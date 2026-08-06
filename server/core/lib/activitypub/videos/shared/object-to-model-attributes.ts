@@ -38,7 +38,8 @@ import {
   MVideo,
   MVideoFile,
   MVideoId,
-  MVideoLive
+  MVideoLive,
+  MVideoUUID
 } from '@server/types/models/index.js'
 import { decode as magnetUriDecode } from 'magnet-uri'
 import { basename, extname } from 'path'
@@ -60,7 +61,8 @@ export function getFileAttributesFromUrl (
   const fileUrlObjects = urls.filter(u => isAPVideoUrlObject(u))
   if (fileUrlObjects.length === 0) return []
 
-  const attributes: FilteredModelAttributes<VideoFileModel>[] = []
+  const result: { file: FilteredModelAttributes<VideoFileModel>, infoHash: string }[] = []
+
   for (const fileUrlObject of fileUrlObjects) {
     // Fetch associated metadata url, if any
     const metadata = urls.filter(isAPVideoFileUrlMetadataObject)
@@ -71,7 +73,7 @@ export function getFileAttributesFromUrl (
       })
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrlObject.mediaType)
-    const resolution = fileUrlObject.height
+    const resolution = Math.min(fileUrlObject.height ?? Infinity, fileUrlObject.width ?? Infinity)
 
     const [ videoId, videoStreamingPlaylistId ] = isStreamingPlaylist(videoOrPlaylist)
       ? [ null, videoOrPlaylist.id ]
@@ -99,7 +101,6 @@ export function getFileAttributesFromUrl (
       filename: basename(fileUrl),
       fileUrl,
 
-      infoHash,
       torrentFilename,
       torrentUrl,
 
@@ -111,10 +112,10 @@ export function getFileAttributesFromUrl (
       videoStreamingPlaylistId
     }
 
-    attributes.push(attribute)
+    result.push({ file: attribute, infoHash })
   }
 
-  return attributes
+  return result
 }
 
 function buildFileFormatFlags (fileUrl: ActivityVideoUrlObject, isStreamingPlaylist: boolean) {
@@ -160,17 +161,20 @@ function buildFileStreams (fileUrl: ActivityVideoUrlObject, resolution: number) 
 
 // ---------------------------------------------------------------------------
 
-export function getStreamingPlaylistAttributesFromObject (video: MVideoId, videoObject: VideoObject) {
+export function getStreamingPlaylistAttributesFromObject (video: MVideoId & MVideoUUID, videoObject: VideoObject) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u))
   if (playlistUrls.length === 0) return []
 
-  const attributes: (FilteredModelAttributes<VideoStreamingPlaylistModel> & { tagAPObject?: ActivityTagObject[] })[] = []
+  const result: {
+    playlist: FilteredModelAttributes<VideoStreamingPlaylistModel>
+    tags?: ActivityTagObject[]
+    infoHashes: string[]
+  }[] = []
+
   for (const playlistUrlObject of playlistUrls) {
     const segmentsSha256UrlObject = playlistUrlObject.tag.find(isAPPlaylistSegmentHashesUrlObject)
 
-    const files = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u))
-
-    const attribute = {
+    const playlist = {
       type: VideoStreamingPlaylistType.HLS,
 
       playlistFilename: basename(playlistUrlObject.href),
@@ -181,18 +185,26 @@ export function getStreamingPlaylistAttributesFromObject (video: MVideoId, video
         : null,
 
       segmentsSha256Url: segmentsSha256UrlObject?.href ?? null,
-
-      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
-      videoId: video.id,
-
-      tagAPObject: playlistUrlObject.tag
+      videoId: video.id
     }
 
-    attributes.push(attribute)
+    result.push({
+      playlist,
+
+      tags: playlistUrlObject.tag,
+
+      // Persisted into the dedicated infohash table once the playlist is upserted (see setStreamingPlaylists)
+      infoHashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(
+        video.uuid,
+        playlistUrlObject.tag
+          .filter(u => isAPVideoUrlObject(u))
+          .map(f => ({ resolution: Math.min(f.height ?? Infinity, f.width ?? Infinity) }))
+      )
+    })
   }
 
-  return attributes
+  return result
 }
 
 export function getLiveAttributesFromObject (video: MVideoId, videoObject: VideoObject) {

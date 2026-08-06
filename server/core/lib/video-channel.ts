@@ -4,7 +4,7 @@ import { VideoChannelModel } from '../models/video/video-channel.js'
 import { VideoModel } from '../models/video/video.js'
 import { MAccountId, MChannelId } from '../types/models/index.js'
 import { getLocalVideoChannelActivityPubUrl } from './activitypub/url.js'
-import { federateVideoIfNeeded } from './activitypub/videos/index.js'
+import { scheduleVideoFederation } from './activitypub/videos/index.js'
 import { buildActorInstance } from './local-actor.js'
 
 export async function createLocalVideoChannelWithoutKeys (body: VideoChannelCreate, account: MAccountId, t: Sequelize.Transaction) {
@@ -26,11 +26,9 @@ export async function createLocalVideoChannelWithoutKeys (body: VideoChannelCrea
 }
 
 export async function federateAllVideosOfChannel (videoChannel: MChannelId) {
-  const videoIds = await VideoModel.getAllIdsFromChannel({ videoChannel, count: 1000 })
+  const videos = await VideoModel.listForFederationFromChannel({ videoChannel, count: 1000 })
 
-  for (const videoId of videoIds) {
-    const video = await VideoModel.loadFull(videoId)
-
-    await federateVideoIfNeeded(video)
+  for (const video of videos) {
+    scheduleVideoFederation({ video })
   }
 }

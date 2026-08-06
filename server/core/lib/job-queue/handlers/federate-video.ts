@@ -2,6 +2,7 @@ import { FederateVideoPayload } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { ActorModel } from '@server/models/actor/actor.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { Job } from 'bullmq'
 import { logger } from '../../../helpers/logger.js'
@@ -13,10 +14,14 @@ export function processFederateVideo (job: Job) {
 
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async t => {
-      const video = await VideoModel.loadFull(payload.videoUUID, t)
+      const video = await VideoModel.loadAP(payload.videoUUID, t)
       if (!video) return
 
-      return federateVideoIfNeeded(video, t)
+      const overriddenByActor = payload.overriddenByActorId
+        ? await ActorModel.loadFull(payload.overriddenByActorId, t)
+        : undefined
+
+      return federateVideoIfNeeded({ video, overriddenByActor, transaction: t })
     })
   })
 }

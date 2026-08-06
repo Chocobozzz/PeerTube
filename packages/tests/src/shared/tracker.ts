@@ -1,12 +1,12 @@
 import { makeGetRequest } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
-export async function checkTrackerInfohash (serverUrl: string, infohash: string) {
+export async function checkTrackerInfohash (serverUrl: string, infohashHex: string) {
   const path = '/tracker/announce'
 
   // From bittorrent-tracker
   // oxlint-disable-next-line @typescript-eslint/no-deprecated
-  const infohashBinary = escape(Buffer.from(infohash, 'hex').toString('binary')).replace(/[@*/+]/g, function (char) {
+  const infohashBinary = escape(Buffer.from(infohashHex, 'hex').toString('binary')).replace(/[@*/+]/g, function (char) {
     return '%' + char.charCodeAt(0).toString(16).toUpperCase()
   })
 

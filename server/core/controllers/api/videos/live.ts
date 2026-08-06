@@ -15,7 +15,7 @@ import { getFormattedObjects } from '@server/helpers/utils.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
@@ -169,7 +169,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
     })
   })
 
-  await federateVideoIfNeeded(video)
+  scheduleVideoFederation({ video })
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

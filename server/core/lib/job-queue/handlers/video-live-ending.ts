@@ -3,7 +3,7 @@ import { VideoFileStream, VideoLiveEndingPayload, VideoState } from '@peertube/p
 import { peertubeTruncate } from '@server/helpers/core-utils.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
-import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
+import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live/index.js'
 import {
   generateHLSMasterPlaylistFilename,
@@ -395,8 +395,11 @@ async function cleanupLiveAndFederate (options: {
   }
 
   try {
-    const fullVideo = await VideoModel.loadFull(video.id)
-    return federateVideoIfNeeded(fullVideo)
+    // Reload the video: the cleanup may have changed its state
+    const refreshedVideo = await VideoModel.load(video.id)
+    if (!refreshedVideo) return
+
+    scheduleVideoFederation({ video: refreshedVideo })
   } catch (err) {
     logger.warn('Cannot federate live after cleanup', { videoId: video.id, err })
   }

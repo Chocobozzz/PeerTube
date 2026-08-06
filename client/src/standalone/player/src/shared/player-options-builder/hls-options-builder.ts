@@ -1,11 +1,11 @@
-import { exists, getResolutionAndFPSLabel, getResolutionLabel, timeToInt } from '@peertube/peertube-core-utils'
+import { exists, generateSwarmId, getResolutionAndFPSLabel, getResolutionLabel, timeToInt } from '@peertube/peertube-core-utils'
 import { LiveVideoLatencyMode } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { isSameOrigin } from '@root-helpers/url'
 import debug from 'debug'
 import { Level } from 'hls.js'
-import type { CoreConfig, StreamConfig } from 'p2p-media-loader-core'
+import type { CoreConfig } from 'p2p-media-loader-core'
 import { getAverageBandwidthInStore } from '../../peertube-player-local-storage'
 import {
   HLSPluginOptions,
@@ -34,6 +34,7 @@ type ConstructorOptions =
     | 'hls'
     | 'startTime'
     | 'duration'
+    | 'videoUUID'
   >
 
 export class HLSOptionsBuilder {
@@ -47,11 +48,13 @@ export class HLSOptionsBuilder {
       logger.info('No segmentsSha256Url found. Disabling P2P & redundancy.')
     }
 
-    const redundancyUrlManager = segmentsSha256Url
+    const p2pEnabled = this.isP2PEnabled()
+
+    const redundancyUrlManager = p2pEnabled
       ? new RedundancyUrlManager(this.options.hls.redundancyBaseUrls)
       : null
 
-    const segmentValidator = segmentsSha256Url
+    const segmentValidator = p2pEnabled
       ? new SegmentValidator({
         segmentsSha256Url,
         authorizationHeader: this.options.authorizationHeader,
@@ -64,14 +67,14 @@ export class HLSOptionsBuilder {
 
     const p2pMediaLoaderConfig = await this.options.pluginsManager.runHook(
       'filter:internal.player.p2p-media-loader.options.result',
-      this.getP2PMediaLoaderOptions({ redundancyUrlManager, segmentValidator })
+      this.getP2PMediaLoaderOptions({ redundancyUrlManager, segmentValidator, p2pEnabled })
     )
 
     const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
       requiresUserAuth: this.options.requiresUserAuth,
       videoFileToken: this.options.videoFileToken,
 
-      p2pEnabled: segmentsSha256Url && this.options.p2pEnabled,
+      p2pEnabled,
 
       redundancyUrlManager,
       type: 'application/x-mpegURL',
@@ -103,11 +106,22 @@ export class HLSOptionsBuilder {
 
   // ---------------------------------------------------------------------------
 
+  private isP2PEnabled () {
+    if (!this.options.hls.segmentsSha256Url) return false
+    if (!this.options.p2pEnabled) return false
+
+    // Segments of small latency lives are too short to be efficiently shared
+    if (this.options.isLive && this.options.liveOptions.latencyMode === LiveVideoLatencyMode.SMALL_LATENCY) return false
+
+    return true
+  }
+
   private getP2PMediaLoaderOptions (options: {
     redundancyUrlManager: RedundancyUrlManager | null
     segmentValidator: SegmentValidator | null
+    p2pEnabled: boolean
   }) {
-    const { redundancyUrlManager, segmentValidator } = options
+    const { redundancyUrlManager, segmentValidator, p2pEnabled } = options
 
     let isP2PUploadDisabled = false
     if (
@@ -125,9 +139,26 @@ export class HLSOptionsBuilder {
       ? this.getP2PMediaLoaderLiveOptions()
       : this.getP2PMediaLoaderVODOptions()
 
-    const loaderOptions: Partial<StreamConfig> = {
+    const loaderOptions: Partial<CoreConfig> = {
       announceTrackers,
       rtcConfig: getRtcConfig(this.options.stunServers),
+
+      streamSwarmIdBuilder: context => {
+        const options = {
+          peerProtocolVersion: context.peerProtocolVersion,
+          streamType: context.streamType,
+          videoUUID: this.options.videoUUID,
+          resolution: context.properties.height || context.properties.width
+            ? Math.min(context.properties.height ?? Infinity, context.properties.width ?? Infinity)
+            : 0
+        }
+
+        const swarmId = generateSwarmId(options)
+
+        debugLogger('Generated swarmId for segment', { options, swarmId })
+
+        return swarmId
+      },
 
       httpRequestSetup: (segmentUrlArg, segmentByteRange, requestAbortSignal, requestByteRange) => {
         const { requiresUserAuth, requiresPassword } = this.options
@@ -166,7 +197,7 @@ export class HLSOptionsBuilder {
         ? segmentValidator.validate.bind(segmentValidator)
         : null,
 
-      isP2PDisabled: !this.options.p2pEnabled,
+      isP2PDisabled: !p2pEnabled,
       isP2PUploadDisabled,
 
       swarmId: this.options.hls.playlistUrl,
@@ -178,25 +209,8 @@ export class HLSOptionsBuilder {
   }
 
   private getP2PMediaLoaderLiveOptions (): Partial<CoreConfig> {
-    const base = {
+    return {
       highDemandTimeWindow: 4
-    }
-
-    const latencyMode = this.options.liveOptions.latencyMode
-
-    switch (latencyMode) {
-      case LiveVideoLatencyMode.SMALL_LATENCY:
-        return {
-          ...base,
-
-          isP2PDisabled: true
-        }
-
-      case LiveVideoLatencyMode.HIGH_LATENCY:
-        return base
-
-      default:
-        return base
     }
   }
 

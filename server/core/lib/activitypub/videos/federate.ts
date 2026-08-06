@@ -1,17 +1,71 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { VideoPrivacy, VideoPrivacyType, VideoState, VideoStateType } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { MVideoAPLight, MVideoWithBlacklistRights } from '@server/types/models/index.js'
+import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from '@server/lib/job-queue/job-queue.js'
+import { MActor, MActorId, MVideo, MVideoAP, MVideoUUID, MVideoWithBlacklistRights } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { sendCreateVideo, sendUpdateVideo } from '../send/index.js'
 import { isSharedByServer, shareByServerIfNeeded, shareByVideoChannelIfNeeded } from '../share.js'
 
-export async function federateVideoIfNeeded (videoArg: MVideoAPLight, transaction?: Transaction) {
-  if (!canVideoBeFederated(videoArg)) return
+// Enough to know if it's worth creating a federation job for this video
+export type MVideoToFederate = MVideoUUID & Pick<MVideo, 'privacy' | 'state'>
 
-  const alreadyShared = await isSharedByServer({ video: videoArg, transaction })
+export type FederateVideoJobOptions = {
+  video: MVideoToFederate
 
-  const video = await videoArg.lightAPToFullAP(transaction)
+  // Actor that overrides the video channel account actor to send the update activity
+  overriddenBy?: MActorId
+}
+
+// bullmq drops a deduplicated job before storing it, so a flow job would vanish while its children still reference it as their parent
+export function buildNonDuplicatedFederateVideoJob (options: FederateVideoJobOptions): CreateJobTypeAndPayload & CreateJobOptions {
+  const { video, overriddenBy } = options
+
+  return {
+    type: 'federate-video',
+    payload: {
+      videoUUID: video.uuid,
+      overriddenByActorId: overriddenBy?.id
+    }
+  }
+}
+
+// Deduplicate the job by video, so jobs scheduled here don't federate the same video in parallel
+// `keepLastIfActive` also guarantees a change that occurred while the video was being federated is federated afterwards
+export function scheduleVideoFederation (options: FederateVideoJobOptions & { transaction?: Transaction }) {
+  const { video, overriddenBy, transaction } = options
+
+  // Check federation possibility early
+  // Delay blacklist check in job execution
+  if (!isPrivacyForFederation(video.privacy) || !isStateForFederation(video.state)) return
+
+  // Keep a dedicated key per overriding actor: a job deduplicated against a *waiting* one is dropped, and we would
+  // then lose the update sent on behalf of that actor (its followers would never be notified)
+  const deduplicationId = overriddenBy
+    ? `federate-video-${video.uuid}-by-${overriddenBy.id}`
+    : `federate-video-${video.uuid}`
+
+  const job = {
+    ...buildNonDuplicatedFederateVideoJob(options),
+
+    deduplicationId,
+    deduplicationKeepLastIfActive: true
+  }
+
+  afterCommitIfTransaction(transaction, () => JobQueue.Instance.createJobAsync(job))
+}
+
+export async function federateVideoIfNeeded (options: {
+  video: MVideoAP
+  overriddenByActor?: MActor
+  transaction?: Transaction
+}) {
+  const { video, overriddenByActor, transaction } = options
+
+  if (!canVideoBeFederated(video)) return
+
+  const alreadyShared = await isSharedByServer({ video, transaction })
 
   if (!alreadyShared) {
     await sendCreateVideo(video, transaction)
@@ -27,7 +81,7 @@ export async function federateVideoIfNeeded (videoArg: MVideoAPLight, transactio
       shareByVideoChannelIfNeeded({ video, skipFederation: true, transaction })
     ])
 
-    await sendUpdateVideo(video, transaction)
+    await sendUpdateVideo(video, transaction, overriddenByActor)
   }
 }
 

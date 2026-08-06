@@ -308,6 +308,9 @@ export type NotifyPayload = {
 
 export interface FederateVideoPayload {
   videoUUID: string
+
+  // Actor that overrides the video channel account actor to send the update activity
+  overriddenByActorId?: number
 }
 
 // ---------------------------------------------------------------------------

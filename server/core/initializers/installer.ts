@@ -190,25 +190,29 @@ async function createRunnerRegistrationTokenIfNotExist () {
 }
 
 async function createVideoSearchTriggerIfNotExist () {
-  await sequelizeTypescript.query(`
-    CREATE OR REPLACE FUNCTION "video_search_vector_update"() RETURNS trigger AS $$
-    BEGIN
-      INSERT INTO "videoSearch" ("videoId", "searchVector")
-      VALUES (
-        NEW."id",
-        setweight(to_tsvector('simple', unaccent(coalesce(NEW.name, ''))), 'A') ||
-        setweight(to_tsvector('simple', unaccent(coalesce(NEW.description, ''))), 'B')
-      )
-      ON CONFLICT ("videoId") DO UPDATE SET
-        "searchVector" = EXCLUDED."searchVector";
-      RETURN NEW;
-    END;
-    $$ LANGUAGE plpgsql
-  `)
+  try {
+    await sequelizeTypescript.query(`
+      CREATE OR REPLACE FUNCTION "video_search_vector_update"() RETURNS trigger AS $$
+      BEGIN
+        INSERT INTO "videoSearch" ("videoId", "searchVector")
+        VALUES (
+          NEW."id",
+          setweight(to_tsvector('simple', unaccent(coalesce(NEW.name, ''))), 'A') ||
+          setweight(to_tsvector('simple', unaccent(coalesce(NEW.description, ''))), 'B')
+        )
+        ON CONFLICT ("videoId") DO UPDATE SET
+          "searchVector" = EXCLUDED."searchVector";
+        RETURN NEW;
+      END;
+      $$ LANGUAGE plpgsql
+    `)
 
-  await sequelizeTypescript.query(`
-    CREATE OR REPLACE TRIGGER "video_search_vector_trigger"
-    AFTER INSERT OR UPDATE OF name, description ON "video"
-    FOR EACH ROW EXECUTE FUNCTION "video_search_vector_update"()
-  `)
+    await sequelizeTypescript.query(`
+      CREATE OR REPLACE TRIGGER "video_search_vector_trigger"
+      AFTER INSERT OR UPDATE OF name, description ON "video"
+      FOR EACH ROW EXECUTE FUNCTION "video_search_vector_update"()
+    `)
+  } catch (err) {
+    logger.error('Cannot create video search trigger.', { err })
+  }
 }

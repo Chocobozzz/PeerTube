@@ -462,7 +462,7 @@ describe('Test video channels', function () {
 
   it('Should report correct channel views per days', async function () {
     {
-      const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
+      const { data } = await servers[0].channels.listByAccount({ accountName, token: servers[0].accessToken, withStats: true })
 
       for (const channel of data) {
         expect(channel).to.haveOwnProperty('viewsPerDay')
@@ -483,7 +483,7 @@ describe('Test video channels', function () {
       // Wait the repeatable job
       await wait(8000)
 
-      const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
+      const { data } = await servers[0].channels.listByAccount({ accountName, token: servers[0].accessToken, withStats: true })
       const channelWithView = data.find(channel => channel.id === servers[0].store.channel.id)
       expect(channelWithView.viewsPerDay.slice(-1)[0].views).to.equal(2)
     }
@@ -492,7 +492,7 @@ describe('Test video channels', function () {
   it('Should report correct total views count', async function () {
     // check if there's the property
     {
-      const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
+      const { data } = await servers[0].channels.listByAccount({ accountName, token: servers[0].accessToken, withStats: true })
 
       for (const channel of data) {
         expect(channel).to.haveOwnProperty('totalViews')
@@ -502,14 +502,14 @@ describe('Test video channels', function () {
 
     // Check if the totalViews count can be updated
     {
-      const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
+      const { data } = await servers[0].channels.listByAccount({ accountName, token: servers[0].accessToken, withStats: true })
       const channelWithView = data.find(channel => channel.id === servers[0].store.channel.id)
       expect(channelWithView.totalViews).to.equal(2)
     }
   })
 
   it('Should report correct videos count', async function () {
-    const { data } = await servers[0].channels.listByAccount({ accountName, withStats: true })
+    const { data } = await servers[0].channels.listByAccount({ accountName, token: servers[0].accessToken, withStats: true })
 
     const totoChannel = data.find(c => c.name === 'toto_channel')
     const rootChannel = data.find(c => c.name === 'root_channel')

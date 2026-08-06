@@ -12,7 +12,7 @@ import {
   MActor,
   MActorLight,
   MChannelDefault,
-  MVideoAPLight,
+  MVideoAP,
   MVideoFull,
   MVideoPlaylistFull,
   MVideoRedundancyVideo
@@ -22,10 +22,8 @@ import { getLocalChannelPlayerSettingsActivityPubUrl, getLocalVideoPlayerSetting
 import { canVideoBeFederated } from '../videos/federate.js'
 import { broadcastToFollowers, getActorsInvolvedInVideo, sendVideoRelatedActivity } from './shared/send-utils.js'
 
-export async function sendUpdateVideo (videoArg: MVideoAPLight, transaction: Transaction, overriddenByActor?: MActor) {
-  if (!canVideoBeFederated(videoArg)) return undefined
-
-  const video = await videoArg.lightAPToFullAP(transaction)
+export async function sendUpdateVideo (video: MVideoAP, transaction: Transaction, overriddenByActor?: MActor) {
+  if (!canVideoBeFederated(video)) return undefined
 
   logger.info('Creating job to update video %s.', video.url)
 

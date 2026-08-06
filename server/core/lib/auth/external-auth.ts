@@ -186,7 +186,9 @@ function consumeBypassFromExternalAuth (username: string, externalAuthToken: str
   }
 
   if (user.username !== username) {
-    throw new Error(`Cannot authenticate user ${user.username} with invalid username ${username}`)
+    logger.error(`Cannot authenticate user ${user.username} with invalid username ${username}`)
+
+    throw new Error(`Cannot authenticate user with invalid username ${username}`)
   }
 
   logger.info(

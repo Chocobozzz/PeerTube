@@ -49,7 +49,7 @@ export async function updateStreamingPlaylistsInfohashesIfNeeded () {
         const playlist = await VideoStreamingPlaylistModel.loadWithVideo(playlistId, t)
         const videoFiles = await VideoFileModel.listByStreamingPlaylist(playlistId, t)
 
-        playlist.assignP2PMediaLoaderInfoHashes(playlist.Video, videoFiles)
+        await playlist.buildAndSetInfoHashes(playlist.Video, videoFiles, t)
         playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
 
         await playlist.save({ transaction: t })
@@ -67,7 +67,7 @@ export async function updateM3U8AndShaPlaylist (video: MVideo, playlist: MStream
 
     // Refresh playlist, operations can take some time
     playlistWithFiles = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlist.id)
-    playlistWithFiles.assignP2PMediaLoaderInfoHashes(video, playlistWithFiles.VideoFiles)
+    await playlistWithFiles.buildAndSetInfoHashes(video, playlistWithFiles.VideoFiles)
     await playlistWithFiles.save()
 
     video.setHLSPlaylist(playlistWithFiles)
