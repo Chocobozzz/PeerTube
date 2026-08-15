@@ -58,5 +58,7 @@ ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 # Expose API, RTMP and RTMPS ports
 EXPOSE 9000 1935 1936
 
+STOPSIGNAL SIGINT
+
 # Run the application
 CMD [ "node", "dist/server" ]
