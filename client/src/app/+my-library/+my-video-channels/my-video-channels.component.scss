@@ -63,9 +63,10 @@ input[type="text"] {
 .chart-container {
   flex: 1 1 auto;
   min-width: 240px;
-  height: 120px;
-  margin: 0 1rem;
   max-width: 600px;
+
+  // Sync this value with the template
+  height: 120px;
 }
 
 .buttons {

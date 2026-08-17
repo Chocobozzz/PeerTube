@@ -12,6 +12,11 @@ export class ScreenService {
     this.refreshWindowInnerWidth()
   }
 
+  isInMediumView () {
+    // Keep it sync with SASS variable
+    return this.getWindowInnerWidth() < 1000
+  }
+
   isInSmallView () {
     // Keep it sync with SASS variable
     return this.getWindowInnerWidth() < 800

@@ -9,26 +9,28 @@ export type ViewsPerDate = {
 // 0 means "all time" (no lower bound on the date range)
 export const VIDEO_CHANNEL_STATS_DAYS_ALL_TIME = 0
 
-export const VIDEO_CHANNEL_STATS_DAYS_OPTIONS = [ 30, 90, 365, VIDEO_CHANNEL_STATS_DAYS_ALL_TIME ] as const
+export const VIDEO_CHANNEL_STATS_DAYS_DEFAULT = 30
+
+export const VIDEO_CHANNEL_STATS_DAYS_OPTIONS = [ VIDEO_CHANNEL_STATS_DAYS_DEFAULT, 90, 365, VIDEO_CHANNEL_STATS_DAYS_ALL_TIME ] as const
 
 export type VideoChannelStatsDays = typeof VIDEO_CHANNEL_STATS_DAYS_OPTIONS[number]
 
-// Bucket size used for viewsPerDay points. Chosen from the effective data span
-// (min(selected range, channel history)), not from the preset alone.
+// Bucket size used for viewsPerDay points
 export type VideoChannelStatsGroupInterval = 'day' | 'week' | 'month'
 
 // ~2 months → daily; up to a bit over a year → weekly; longer → monthly
-export function getVideoChannelStatsGroupIntervalFromSpan (spanDays: number): VideoChannelStatsGroupInterval {
-  if (spanDays > 400) return 'month'
-  if (spanDays >= 60) return 'week'
-  return 'day'
-}
+// Also used to build the SQL that computes viewsGroupInterval server side
+export const VIDEO_CHANNEL_STATS_MONTH_GROUP_THRESHOLD_DAYS = 400
+export const VIDEO_CHANNEL_STATS_WEEK_GROUP_THRESHOLD_DAYS = 60
 
+// Fallback for when viewsGroupInterval is not available yet. Exact for a bounded range, best effort
+// for "all time" where only the server knows the channel history
 export function getVideoChannelStatsGroupInterval (statsDays: VideoChannelStatsDays): VideoChannelStatsGroupInterval {
-  // Fallback when only the preset is known (no per-channel history yet).
-  // Prefer getVideoChannelStatsGroupIntervalFromSpan when the effective span is available.
   if (statsDays === VIDEO_CHANNEL_STATS_DAYS_ALL_TIME) return 'month'
-  return getVideoChannelStatsGroupIntervalFromSpan(statsDays)
+  if (statsDays > VIDEO_CHANNEL_STATS_MONTH_GROUP_THRESHOLD_DAYS) return 'month'
+  if (statsDays >= VIDEO_CHANNEL_STATS_WEEK_GROUP_THRESHOLD_DAYS) return 'week'
+
+  return 'day'
 }
 
 export interface VideoChannel extends Actor {
@@ -43,9 +45,11 @@ export interface VideoChannel extends Actor {
   ownerAccount?: Account
 
   videosCount?: number
-  viewsPerDay?: ViewsPerDate[] // chronologically ordered; bucket size is viewsGroupInterval
+  // Chronologically ordered, always spans the whole requested statsDays range so channels can be compared to each other
+  // Bucket size is viewsGroupInterval
+  viewsPerDay?: ViewsPerDate[]
   viewsGroupInterval?: VideoChannelStatsGroupInterval
-  // When withStats is true: sum of views in the selected statsDays range (from videoStat)
+  // Lifetime views of all the channel videos, not bound to the selected statsDays range
   totalViews?: number
 
   banners: ActorImage[]

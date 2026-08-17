@@ -1,4 +1,10 @@
-import { ActorImageType, VideoChannelCollaboratorState } from '@peertube/peertube-models'
+import {
+  ActorImageType,
+  VIDEO_CHANNEL_STATS_DAYS_ALL_TIME,
+  VIDEO_CHANNEL_STATS_MONTH_GROUP_THRESHOLD_DAYS,
+  VIDEO_CHANNEL_STATS_WEEK_GROUP_THRESHOLD_DAYS,
+  VideoChannelCollaboratorState
+} from '@peertube/peertube-models'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { buildServerIdsFollowedBy } from '@server/models/shared/index.js'
@@ -204,59 +210,48 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
   private buildChannelStatsJoin () {
     if (this.builtChannelStatsJoin) return
 
-    // Per-channel series: start at max(range start, first recorded stat), and pick day/week/month
-    // from that effective span so a young channel on "All time" / "Last year" does not get one
-    // coarse monthly bar.
-    const statsRangeStart = this.options.statsDaysPrior === 0
-      ? null
-      : `date_trunc('day', now()) - make_interval(days => :statsDaysPrior)`
+    // On a bounded range, every channel of the page shares the same x axis and the same bucket size and can be compared to the others
+    // "All time" has no boundary: it starts at the first recorded stat of the channel (a young channel keeps a fine bucket size)
+    const seriesCTE = this.options.statsDaysPrior === VIDEO_CHANNEL_STATS_DAYS_ALL_TIME
+      // dprint-ignore
+      ? 'series AS ( ' +
+          'SELECT COALESCE(date_trunc(\'day\', MIN("videoStat"."startDate")), date_trunc(\'day\', now())) AS start_date ' +
+          'FROM "videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
+          'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
+        ')'
+      : 'series AS ( ' +
+        `SELECT date_trunc('day', now()) - make_interval(days => :statsDaysPrior) AS start_date` +
+        ')'
 
-    if (statsRangeStart !== null) {
+    if (this.options.statsDaysPrior !== VIDEO_CHANNEL_STATS_DAYS_ALL_TIME) {
       this.replacements.statsDaysPrior = this.options.statsDaysPrior
     }
 
-    // Calculate the minimum start date for the stats series
-    const paramsCte = statsRangeStart === null
-      // dprint-ignore
-      ? 'params AS ( ' +
-          'SELECT COALESCE(date_trunc(\'day\', channel_stats.first_stat), date_trunc(\'day\', now())) AS raw_start ' +
-          'FROM channel_stats' +
-        ')'
-      // dprint-ignore
-      : 'params AS ( ' +
-          'SELECT GREATEST(' +
-            `${statsRangeStart}, ` +
-            `COALESCE(date_trunc('day', channel_stats.first_stat), ${statsRangeStart})` +
-          ') AS raw_start ' +
-          'FROM channel_stats' +
-        ')'
+    this.replacements.statsMonthGroupThresholdDays = VIDEO_CHANNEL_STATS_MONTH_GROUP_THRESHOLD_DAYS
+    this.replacements.statsWeekGroupThresholdDays = VIDEO_CHANNEL_STATS_WEEK_GROUP_THRESHOLD_DAYS
 
     // Computed once per channel row (instead of once per selected attribute) and shared by
-    // viewsPerDay/viewsGroupInterval/totalViews below via the params/params2 CTEs.
-    // Keep grp thresholds in sync with getVideoChannelStatsGroupIntervalFromSpan
+    // viewsPerDay/viewsGroupInterval below via the CTEs
     this.join +=
       // dprint-ignore
       'LEFT JOIN LATERAL ( ' +
-        'WITH channel_stats AS ( ' +
-          'SELECT MIN("videoStat"."startDate") AS first_stat ' +
-          'FROM "videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
-          'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
-        `), ${paramsCte}, ` +
-        'params2 AS ( ' +
-          'SELECT raw_start, ' +
+        `WITH ${seriesCTE}, ` +
+        'series_group AS ( ' +
+          // Keep in sync with getVideoChannelStatsGroupInterval, which mirrors this for the client fallback
+          'SELECT start_date, ' +
             'CASE ' +
-              'WHEN EXTRACT(EPOCH FROM (now() - raw_start)) / 86400.0 > 400 THEN \'month\' ' +
-              'WHEN EXTRACT(EPOCH FROM (now() - raw_start)) / 86400.0 >= 60 THEN \'week\' ' +
+              'WHEN EXTRACT(EPOCH FROM (date_trunc(\'day\', now()) - start_date)) / 86400.0 > :statsMonthGroupThresholdDays THEN \'month\' ' +
+              'WHEN EXTRACT(EPOCH FROM (date_trunc(\'day\', now()) - start_date)) / 86400.0 >= :statsWeekGroupThresholdDays THEN \'week\' ' +
               'ELSE \'day\' ' +
             'END AS grp ' +
-          'FROM params' +
+          'FROM series' +
         '), periods AS ( ' +
-          'SELECT gs.day AS day, params2.grp AS grp, params2.raw_start AS raw_start ' +
-          'FROM params2, ' +
+          'SELECT gs.day AS day, series_group.grp AS grp, series_group.start_date AS start_date ' +
+          'FROM series_group, ' +
           'LATERAL generate_series( ' +
-            'date_trunc(params2.grp, params2.raw_start), ' +
-            'date_trunc(params2.grp, now()), ' +
-            'CASE params2.grp ' +
+            'date_trunc(series_group.grp, series_group.start_date), ' +
+            'date_trunc(series_group.grp, now()), ' +
+            'CASE series_group.grp ' +
               'WHEN \'day\' THEN interval \'1 day\' ' +
               'WHEN \'week\' THEN interval \'1 week\' ' +
               'ELSE interval \'1 month\' ' +
@@ -273,20 +268,13 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
                 '"videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
                 'AND "video"."channelId" = "VideoChannelModel"."id"' +
               ') ON date_trunc(periods.grp, "videoStat"."startDate") = periods.day ' +
-                // Match the totalViews lower bound: the first (week/month) bucket's floor can precede
-                // raw_start, so without this a channel's first bar would count views that totalViews excludes
-                'AND "videoStat"."startDate" >= periods.raw_start ' +
+                // The first (week/month) bucket floor can precede the range start, so without this
+                // the first bar would also count views that happened before the requested range
+                'AND "videoStat"."startDate" >= periods.start_date ' +
               'GROUP BY day ORDER BY day ' +
             ') t' +
           ') AS "viewsPerDay", ' +
-          '(SELECT grp FROM params2) AS "viewsGroupInterval", ' +
-          '(' +
-            'SELECT COALESCE(SUM("videoStat".views), 0) ' +
-            'FROM "videoStat" ' +
-            'INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
-            'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
-            'AND "videoStat"."startDate" >= (SELECT raw_start FROM params)' +
-          ') AS "totalViews"' +
+          '(SELECT grp FROM series_group) AS "viewsGroupInterval"' +
       ') AS "ChannelStats" ON TRUE '
 
     this.builtChannelStatsJoin = true
@@ -318,7 +306,13 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
         `(SELECT COUNT(*) FROM "video" WHERE "channelId" = "VideoChannelModel"."id") AS "videosCount"`,
         '"ChannelStats"."viewsPerDay" AS "viewsPerDay"',
         '"ChannelStats"."viewsGroupInterval" AS "viewsGroupInterval"',
-        '"ChannelStats"."totalViews" AS "totalViews"'
+        // Lifetime views: unlike viewsPerDay it is not bound to statsDaysPrior, and it uses the video
+        // view counter so it also includes federated views and views older than the "videoStat" retention
+        '(' +
+          'SELECT COALESCE(SUM("video".views), 0) ' +
+          'FROM "video" ' +
+          'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
+          ') AS "totalViews"'
       )
     }
   }

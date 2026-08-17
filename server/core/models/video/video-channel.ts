@@ -1,4 +1,11 @@
-import { ActivityPubActor, ActivityUrlObject, VideoChannel, VideoChannelSummary, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  ActivityPubActor,
+  ActivityUrlObject,
+  VIDEO_CHANNEL_STATS_DAYS_DEFAULT,
+  VideoChannel,
+  VideoChannelSummary,
+  VideoPrivacy
+} from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { getLocalActorPlayerSettingsActivityPubUrl } from '@server/lib/activitypub/url.js'
@@ -405,7 +412,7 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
     }
   ) {
     const listOptions = options.withStats
-      ? { ...options, statsDaysPrior: options.statsDays === undefined ? 30 : options.statsDays }
+      ? { ...options, statsDaysPrior: options.statsDays ?? VIDEO_CHANNEL_STATS_DAYS_DEFAULT }
       : options
 
     return this.listForApi(listOptions)

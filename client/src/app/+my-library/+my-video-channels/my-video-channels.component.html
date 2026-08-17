@@ -33,7 +33,7 @@
   }
 
   <div class="video-channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onChannelDataSubject.asObservable()">
-    @for (videoChannel of videoChannels; track videoChannel; let i = $index) {
+    @for (videoChannel of videoChannels; track videoChannel) {
       <div class="channel">
         <div class="channel-info">
           <my-actor-avatar [actor]="videoChannel" actorType="channel" [internalHref]="[ '/c', videoChannel.nameWithHost ]" size="120"></my-actor-avatar>
@@ -66,15 +66,15 @@
             </div>
           </div>
 
-          @if (!isInSmallView) {
+          @if (displayChart) {
             <div class="chart-container">
               <div myDeferLoading>
                 <ng-template>
-                  @if (chartOptions && videoChannelsChartData && videoChannelsChartData[i]) {
+                  @if (chartOptions && videoChannelsChartData[videoChannel.id]) {
                     <p-chart
                       width="100%" height="120px"
-                      type="bar" [data]="videoChannelsChartData[i]" [options]="chartOptions"
-                      [ariaLabel]="getChartAriaLabel(videoChannelsChartData[i])"
+                      type="bar" [data]="videoChannelsChartData[videoChannel.id]" [options]="chartOptions"
+                      [ariaLabel]="getChartAriaLabel(videoChannelsChartData[videoChannel.id])"
                     ></p-chart>
                   }
                 </ng-template>

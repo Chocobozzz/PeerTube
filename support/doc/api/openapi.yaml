@@ -6201,12 +6201,14 @@ paths:
         - name: statsDays
           in: query
           description: >
-            number of days of view statistics to include when `withStats` is true (only if authenticated as the account user).
+            number of days of view statistics to include in `viewsPerDay` when `withStats` is true
+            (only if authenticated as the account user).
             `0` means all time (since the channel's earliest recorded stat).
-            Aggregation (day / week / month) is chosen from each channel's effective history span
-            within the selected range, not from the preset alone.
-            Weekly buckets are labeled as such in the client tooltip (e.g. "Week of May 11").
-            When `withStats` is true, `totalViews` is the sum of views in the selected range (not lifetime).
+            `viewsPerDay` always spans the whole requested range so channels can be compared to each other.
+            Its bucket size is reported in `viewsGroupInterval`: it is derived from the requested range,
+            narrowed to the channel history so that a young channel on a long range is not aggregated
+            into a single coarse bucket.
+            `totalViews` is unaffected by this parameter and always reports lifetime views.
           schema:
             type: integer
             enum: [30, 90, 365, 0]
@@ -13351,6 +13353,32 @@ components:
                 $ref: '#/components/schemas/ActorImage'
             ownerAccount:
               $ref: '#/components/schemas/Account'
+            videosCount:
+              type: integer
+              description: only included when `withStats` is true
+            viewsPerDay:
+              type: array
+              description: >
+                only included when `withStats` is true. Chronologically ordered, spans the whole `statsDays`
+                range. Each point aggregates `viewsGroupInterval` worth of views, starting at `date`
+              items:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date-time
+                  views:
+                    type: integer
+            viewsGroupInterval:
+              type: string
+              description: bucket size of `viewsPerDay`, only included when `withStats` is true
+              enum:
+                - day
+                - week
+                - month
+            totalViews:
+              type: integer
+              description: lifetime views of all the channel videos, only included when `withStats` is true
 
     VideoChannelEdit:
       properties:

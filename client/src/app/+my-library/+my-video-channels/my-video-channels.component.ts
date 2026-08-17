@@ -18,7 +18,14 @@ import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/coll
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/shared-main/channel/video-channel.service'
 import { maxBy } from '@peertube/peertube-core-utils'
-import { VideoChannelStatsDays, VideoChannelStatsGroupInterval, getVideoChannelStatsGroupInterval } from '@peertube/peertube-models'
+import {
+  VIDEO_CHANNEL_STATS_DAYS_ALL_TIME,
+  VIDEO_CHANNEL_STATS_DAYS_DEFAULT,
+  VIDEO_CHANNEL_STATS_DAYS_OPTIONS,
+  VideoChannelStatsDays,
+  VideoChannelStatsGroupInterval,
+  getVideoChannelStatsGroupInterval
+} from '@peertube/peertube-models'
 import { SelectOptionsItem } from '@pt-types'
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js'
 import { ChartModule } from 'primeng/chart'
@@ -67,7 +74,7 @@ export class MyVideoChannelsComponent implements OnInit {
 
   videoChannels: VideoChannel[] = []
 
-  videoChannelsChartData: CustomChartData[]
+  videoChannelsChartData: { [id: number]: CustomChartData } = {}
 
   chartOptions: ChartOptions
 
@@ -87,18 +94,18 @@ export class MyVideoChannelsComponent implements OnInit {
     { id: 'owned', label: $localize`Only channels owned by me` }
   ]
 
-  statsDays: VideoChannelStatsDays = 30
+  statsDays: VideoChannelStatsDays = VIDEO_CHANNEL_STATS_DAYS_DEFAULT
   statsDaysItems: SelectOptionsItem<VideoChannelStatsDays>[] = [
-    { id: 30, label: $localize`Last 30 days` },
+    { id: VIDEO_CHANNEL_STATS_DAYS_DEFAULT, label: $localize`Last 30 days` },
     { id: 90, label: $localize`Last 90 days` },
     { id: 365, label: $localize`Last year` },
-    { id: 0, label: $localize`All time` }
+    { id: VIDEO_CHANNEL_STATS_DAYS_ALL_TIME, label: $localize`All time` }
   ]
 
   private pagesDone = new Set<number>()
 
-  get isInSmallView () {
-    return this.screenService.isInSmallView()
+  get displayChart () {
+    return !this.screenService.isInMediumView()
   }
 
   get user () {
@@ -108,6 +115,11 @@ export class MyVideoChannelsComponent implements OnInit {
   ngOnInit () {
     if (this.route.snapshot.queryParamMap.get('displayFilter') === 'owned') {
       this.displayFilter = 'owned'
+    }
+
+    const statsDays = parseInt(this.route.snapshot.queryParamMap.get('statsDays'), 10)
+    if (VIDEO_CHANNEL_STATS_DAYS_OPTIONS.includes(statsDays as VideoChannelStatsDays)) {
+      this.statsDays = statsDays as VideoChannelStatsDays
     }
   }
 
@@ -138,6 +150,7 @@ export class MyVideoChannelsComponent implements OnInit {
   private resetDataAndReload () {
     resetCurrentPage(this.pagination)
     this.videoChannels = []
+    this.videoChannelsChartData = {}
     this.pagesDone.clear()
 
     this.loadMoreVideoChannels()
@@ -181,9 +194,10 @@ export class MyVideoChannelsComponent implements OnInit {
     if (this.pagesDone.has(this.pagination.currentPage)) return
     this.pagesDone.add(this.pagination.currentPage)
 
-    const pageNumber = this.pagination.currentPage
-    const pageSize = this.pagination.itemsPerPage
     const channelBaseOptions = this.getChannelBaseOptions()
+
+    // Snapshot the pagination so the stats request targets the same window as the list request
+    const statsPagination = { ...this.pagination }
 
     const base = this.authService.userInformationLoaded.pipe(first())
 
@@ -198,17 +212,25 @@ export class MyVideoChannelsComponent implements OnInit {
       })
     ).subscribe({
       // Only fetch stats for the page that was just loaded, not every channel loaded so far
-      next: () => this.loadChannelsStats({ currentPage: pageNumber, itemsPerPage: pageSize }),
+      next: () => this.loadChannelsStats(statsPagination),
 
       error: err => this.notifier.handleError(err)
     })
   }
 
   onStatsDaysChanged () {
+    this.peertubeRouter.silentNavigate([], {
+      ...this.route.snapshot.queryParams,
+
+      statsDays: this.statsDays === VIDEO_CHANNEL_STATS_DAYS_DEFAULT
+        ? null
+        : this.statsDays
+    })
+
     if (this.videoChannels.length === 0) return
 
     // Refresh all channel stats, chunked by 100 (the max count accepted server side)
-    const chunkSize = 100
+    const chunkSize = Math.min(this.videoChannels.length, 100)
 
     for (let start = 0; start < this.videoChannels.length; start += chunkSize) {
       this.loadChannelsStats({
@@ -242,13 +264,13 @@ export class MyVideoChannelsComponent implements OnInit {
           channel.totalViews = channelWithStats.totalViews
         }
 
-        const barColor = getComputedStyle(document.documentElement).getPropertyValue('--border-primary').trim() || '#fd7e14'
+        const barColor = getComputedStyle(document.documentElement).getPropertyValue('--border-primary')
 
-        this.videoChannelsChartData = this.videoChannels.map(v => {
+        for (const v of this.videoChannels) {
           const viewsPerDay = v.viewsPerDay || []
           const groupInterval = v.viewsGroupInterval || getVideoChannelStatsGroupInterval(this.statsDays)
 
-          return {
+          this.videoChannelsChartData[v.id] = {
             labels: viewsPerDay.map(day => this.formatStatsAxisLabel(day.date, groupInterval)),
             tooltipTitles: viewsPerDay.map(day => this.formatStatsTooltipTitle(day.date, groupInterval)),
             datasets: [
@@ -269,7 +291,7 @@ export class MyVideoChannelsComponent implements OnInit {
               ? this.formatStatsAxisLabel(viewsPerDay[0].date, groupInterval)
               : ''
           }
-        })
+        }
 
         this.buildChartOptions()
       },
@@ -307,8 +329,8 @@ export class MyVideoChannelsComponent implements OnInit {
 
     const channelsMaximumDailyViews = Math.max(...channelsWithStats.map(v => maxBy(v.viewsPerDay, 'views').views))
     const styles = getComputedStyle(document.documentElement)
-    const tickColor = styles.getPropertyValue('--fg-300').trim() || '#8c8c8c'
-    const gridColor = styles.getPropertyValue('--bg-secondary-350').trim() || 'rgba(255, 255, 255, 0.08)'
+    const tickColor = styles.getPropertyValue('--fg-300')
+    const gridColor = styles.getPropertyValue('--bg-secondary-350')
 
     this.chartOptions = {
       responsive: true,
