@@ -190,7 +190,7 @@ const parsed = load(yamlContent) as Record<string, unknown>
 const commentMap = extractComments(yamlContent)
 
 const schema: JsonSchema = {
-  $schema: 'https://json-schema.org/draft-07/schema',
+  $schema: 'https://json-schema.org/draft/2020-12/schema',
   title: 'PeerTube Configuration',
   description:
     'Full configuration schema for a PeerTube server instance. ' +
