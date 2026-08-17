@@ -1,7 +1,4 @@
-import {
-  ActorImageType,
-  VideoChannelCollaboratorState
-} from '@peertube/peertube-models'
+import { ActorImageType, VideoChannelCollaboratorState } from '@peertube/peertube-models'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { buildServerIdsFollowedBy } from '@server/models/shared/index.js'
@@ -230,20 +227,28 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
       // coarse monthly bar.
       const statsRangeStart = this.options.statsDaysPrior === 0
         ? null
-        : `date_trunc('day', now()) - '${this.options.statsDaysPrior} day'::interval`
+        : `date_trunc('day', now()) - make_interval(days => :statsDaysPrior)`
+
+      if (statsRangeStart !== null) {
+        this.replacements.statsDaysPrior = this.options.statsDaysPrior
+      }
 
       const channelStatsCte =
+        // dprint-ignore
         'channel_stats AS ( ' +
           'SELECT MIN("videoStat"."startDate") AS first_stat ' +
           'FROM "videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
           'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
         ')'
 
+      // Calculate the minimum start date for the stats series
       const paramsCte = statsRangeStart === null
+        // dprint-ignore
         ? 'params AS ( ' +
             'SELECT COALESCE(date_trunc(\'day\', channel_stats.first_stat), date_trunc(\'day\', now())) AS raw_start ' +
             'FROM channel_stats' +
           ')'
+        // dprint-ignore
         : 'params AS ( ' +
             'SELECT GREATEST(' +
               `${statsRangeStart}, ` +
@@ -252,8 +257,10 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
             'FROM channel_stats' +
           ')'
 
+      // Calculate group interval (day/week/month) based on the effective span of the stats series
       // Keep thresholds in sync with getVideoChannelStatsGroupIntervalFromSpan
       const params2Cte =
+        // dprint-ignore
         'params2 AS ( ' +
           'SELECT raw_start, ' +
             'CASE ' +
@@ -271,7 +278,7 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
           'FROM ( ' +
             `WITH ${channelStatsCte}, ${paramsCte}, ${params2Cte}, ` +
             'periods AS ( ' +
-              'SELECT gs.day AS day, params2.grp AS grp ' +
+              'SELECT gs.day AS day, params2.grp AS grp, params2.raw_start AS raw_start ' +
               'FROM params2, ' +
               'LATERAL generate_series( ' +
                 'date_trunc(params2.grp, params2.raw_start), ' +
@@ -289,6 +296,9 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
               '"videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
               'AND "video"."channelId" = "VideoChannelModel"."id"' +
             ') ON date_trunc(periods.grp, "videoStat"."startDate") = periods.day ' +
+              // Match the totalViews lower bound: the first (week/month) bucket's floor can precede
+              // raw_start, so without this a channel's first bar would count views that totalViews excludes
+              'AND "videoStat"."startDate" >= periods.raw_start ' +
             'GROUP BY day ORDER BY day ' +
           ') t' +
         ') AS "viewsPerDay"'

@@ -67,16 +67,18 @@
           </div>
 
           @if (!isInSmallView) {
-            <div class="chart-container" myDeferLoading>
-              <ng-template>
-                @if (chartOptions && videoChannelsChartData && videoChannelsChartData[i]) {
-                  <p-chart
-                    width="100%" height="120px"
-                    type="bar" [data]="videoChannelsChartData[i]" [options]="chartOptions"
-                    [ariaLabel]="getChartAriaLabel(videoChannelsChartData[i])"
-                  ></p-chart>
-                }
-              </ng-template>
+            <div class="chart-container">
+              <div myDeferLoading>
+                <ng-template>
+                  @if (chartOptions && videoChannelsChartData && videoChannelsChartData[i]) {
+                    <p-chart
+                      width="100%" height="120px"
+                      type="bar" [data]="videoChannelsChartData[i]" [options]="chartOptions"
+                      [ariaLabel]="getChartAriaLabel(videoChannelsChartData[i])"
+                    ></p-chart>
+                  }
+                </ng-template>
+              </div>
             </div>
           }
 

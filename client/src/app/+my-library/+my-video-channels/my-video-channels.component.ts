@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router'
 import {
   AuthService,
   ComponentPagination,
+  ComponentPaginationLight,
   Notifier,
   PeerTubeRouterService,
   ScreenService,
@@ -132,10 +133,6 @@ export class MyVideoChannelsComponent implements OnInit {
     this.resetDataAndReload()
   }
 
-  onStatsDaysChanged () {
-    this.loadChannelsStats()
-  }
-
   // ---------------------------------------------------------------------------
 
   private resetDataAndReload () {
@@ -184,6 +181,8 @@ export class MyVideoChannelsComponent implements OnInit {
     if (this.pagesDone.has(this.pagination.currentPage)) return
     this.pagesDone.add(this.pagination.currentPage)
 
+    const pageNumber = this.pagination.currentPage
+    const pageSize = this.pagination.itemsPerPage
     const channelBaseOptions = this.getChannelBaseOptions()
 
     const base = this.authService.userInformationLoaded.pipe(first())
@@ -198,28 +197,37 @@ export class MyVideoChannelsComponent implements OnInit {
         this.onChannelDataSubject.next(res.data)
       })
     ).subscribe({
-      next: () => this.loadChannelsStats(),
+      // Only fetch stats for the page that was just loaded, not every channel loaded so far
+      next: () => this.loadChannelsStats({ currentPage: pageNumber, itemsPerPage: pageSize }),
 
       error: err => this.notifier.handleError(err)
     })
   }
 
-  private loadChannelsStats () {
+  onStatsDaysChanged () {
     if (this.videoChannels.length === 0) return
 
-    const channelBaseOptions = this.getChannelBaseOptions()
+    // Refresh all channel stats
+    this.loadChannelsStats({
+      currentPage: 1,
+      itemsPerPage: Math.min(Math.max(this.videoChannels.length, this.pagination.itemsPerPage), 100) // 100 is the max count on server side
+    })
+  }
 
-    // Reload stats for every currently loaded channel (not only the last scrolled page)
+  private loadChannelsStats (componentPagination: ComponentPaginationLight) {
+    const channelBaseOptions = this.getChannelBaseOptions()
+    const requestedStatsDays = this.statsDays
+
     this.videoChannelService.listAccountChannels({
       ...channelBaseOptions,
       withStats: true,
-      statsDays: this.statsDays,
-      componentPagination: {
-        currentPage: 1,
-        itemsPerPage: Math.max(this.videoChannels.length, this.pagination.itemsPerPage)
-      }
+      statsDays: requestedStatsDays,
+      componentPagination
     }).subscribe({
       next: res => {
+        // statsDays changed again since this request was sent: a newer request will supersede it
+        if (requestedStatsDays !== this.statsDays) return
+
         for (const channelWithStats of res.data) {
           const channel = this.videoChannels.find(c => c.id === channelWithStats.id)
           if (!channel) continue
@@ -316,10 +324,11 @@ export class MyVideoChannelsComponent implements OnInit {
               const tooltipTitles = (item.chart.data as CustomChartData).tooltipTitles
               return tooltipTitles?.[item.dataIndex] ?? item.label ?? ''
             },
-            label: (tooltip: TooltipItem<any>) => formatICU(
-              $localize`${tooltip.raw} {value, plural, =1 {view} other {views}}`,
-              { value: tooltip.raw as number }
-            )
+            label: (tooltip: TooltipItem<any>) =>
+              formatICU(
+                $localize`${tooltip.raw} {value, plural, =1 {view} other {views}}`,
+                { value: tooltip.raw as number }
+              )
           }
         }
       },
