@@ -1,9 +1,11 @@
 import { UserRight } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { getAbuseIdentifier } from '@server/lib/activitypub/url.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserWithNotificationSetting } from '@server/types/models/index.js'
 import { AbstractNewAbuseMessage } from './abstract-new-abuse-message.js'
+
+const logger = createLogger()
 
 export class NewAbuseMessageForModerators extends AbstractNewAbuseMessage {
   private moderators: MUserDefault[]

@@ -2,11 +2,10 @@ import { HttpStatusCode, JobType } from '@peertube/peertube-models'
 import express from 'express'
 import { param, query } from 'express-validator'
 import { isValidJobState, isValidJobType } from '../../helpers/custom-validators/jobs.js'
-import { loggerTagsFactory } from '../../helpers/logger.js'
 import { JobQueue } from '../../lib/job-queue/index.js'
 import { areValidationErrors } from './shared/index.js'
 
-const lTags = loggerTagsFactory('validators', 'jobs')
+const tags = [ 'validators', 'jobs' ]
 
 export const listJobsValidator = [
   param('state')
@@ -18,7 +17,7 @@ export const listJobsValidator = [
     .custom(isValidJobType),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res, lTags())) return
+    if (areValidationErrors(req, res, { tags })) return
 
     return next()
   }
@@ -29,7 +28,7 @@ export const cancelJobValidator = [
   param('jobId').isString().not().isEmpty(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (areValidationErrors(req, res, lTags())) return
+    if (areValidationErrors(req, res, { tags })) return
 
     const jobType = req.params.jobType as JobType
     const jobId = req.params.jobId

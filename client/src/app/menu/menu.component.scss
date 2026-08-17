@@ -130,12 +130,6 @@
 
   @include disable-default-a-behaviour;
 
-  &:hover,
-  &:focus-visible {
-    opacity: 1;
-    background-color: pvar(--menu-bg-450);
-  }
-
   my-global-icon {
     width: 22px;
     height: 22px;
@@ -145,6 +139,17 @@
 
     + *:not(.visually-hidden) {
       @include margin-left(12px);
+    }
+  }
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+    color: pvar(--menu-fg-600);
+    background-color: pvar(--menu-bg-550);
+
+    my-global-icon {
+      color: pvar(--menu-fg-600);
     }
   }
 }
@@ -181,6 +186,7 @@
   }
 
   &.active {
+    color: pvar(--menu-fg-600);
     font-weight: $font-bold;
 
     my-global-icon {

@@ -133,6 +133,12 @@
       color: pvar(--fg);
     }
   }
+
+  .comment-action-options-placeholder {
+    display: inline-block;
+    width: 21px;
+    height: 21px;
+  }
 }
 
 my-video-comment-add {
@@ -142,7 +148,24 @@ my-video-comment-add {
   }
 }
 
-@media screen and (max-width: 600px) {
+.view-replies {
+  font-weight: $font-semibold;
+  cursor: pointer;
+  position: relative;
+
+  .chevron-down,
+  .chevron-right {
+    @include margin-left(0);
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .view-replies {
+    @include font-size(14px);
+  }
+}
+
+@media screen and (max-width: $small-view) {
   .is-child .left {
     @include margin-right(0.25rem);
   }

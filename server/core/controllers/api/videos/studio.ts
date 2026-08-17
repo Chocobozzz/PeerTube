@@ -151,7 +151,7 @@ async function buildWatermarkTask (task: VideoStudioTaskWatermark, indice: numbe
 
 function buildRemoveSegmentsTask (task: VideoStudioTaskRemoveSegments) {
   return Promise.resolve({
-    name: task.name as 'remove-segments',
+    name: task.name,
     options: {
       segments: task.options.segments
     }

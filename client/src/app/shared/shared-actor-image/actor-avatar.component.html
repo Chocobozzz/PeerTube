@@ -11,11 +11,14 @@
 </ng-template>
 
 @if (actor() && href()) {
-  <a [href]="href()" target="_blank" rel="noopener noreferrer" [title]="getTitle()">
+  <a
+    [href]="href()" target="_blank" rel="noopener noreferrer"
+    [ariaHidden]="ariaHidden()" [title]="getTitle()" [tabindex]="ariaHidden() ? -1 : 0"
+  >
     <ng-template *ngTemplateOutlet="img"></ng-template>
   </a>
 } @else if (actor() && internalHref()) {
-  <a [routerLink]="internalHref()" [title]="getTitle()">
+  <a [routerLink]="internalHref()" [ariaHidden]="ariaHidden()" [title]="getTitle()" [tabindex]="ariaHidden() ? -1 : 0">
     <ng-template *ngTemplateOutlet="img"></ng-template>
   </a>
 } @else {

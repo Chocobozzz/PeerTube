@@ -123,7 +123,7 @@ describe('Test videos views API validators', function () {
     it('Should fail with an invalid start date', async function () {
       await testEndpoint({
         videoId,
-        startDate: 'fake' as any,
+        startDate: 'fake',
         endDate: new Date().toISOString(),
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
@@ -133,7 +133,7 @@ describe('Test videos views API validators', function () {
       await testEndpoint({
         videoId,
         startDate: new Date().toISOString(),
-        endDate: 'fake' as any,
+        endDate: 'fake',
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })

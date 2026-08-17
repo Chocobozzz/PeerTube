@@ -1,9 +1,11 @@
 import { ActivityFollow, ActivityReject } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { MActor } from '../../../types/models/index.js'
 import { getLocalActorFollowRejectActivityPubUrl } from '../url.js'
 import { buildFollowActivity } from './send-follow.js'
 import { unicastTo } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 function sendReject (followUrl: string, follower: MActor, following: MActor) {
   if (!follower.serverId) { // This should never happen

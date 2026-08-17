@@ -11,7 +11,9 @@ import express from 'express'
 import { body, param } from 'express-validator'
 import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
+
+const logger = createLogger()
 
 const tags = [ 'views' ]
 

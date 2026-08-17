@@ -1,6 +1,5 @@
 import { pipelinePromise } from '@server/helpers/core-utils.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import Bluebird from 'bluebird'
 import { createReadStream, createWriteStream } from 'fs'
@@ -8,7 +7,7 @@ import { ensureDir } from 'fs-extra/esm'
 import { dirname } from 'path'
 import { Readable } from 'stream'
 import { getClient } from './shared/client.js'
-import { lTags } from './shared/logger.js'
+import { objectStorageLogger as logger } from './shared/logger.js'
 
 import type { _Object, ObjectCannedACL, PutObjectCommandInput, S3Client } from '@aws-sdk/client-s3'
 
@@ -57,7 +56,7 @@ async function storeObject (options: {
 }): Promise<void> {
   const { inputPath, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
-  logger.debug('Uploading file %s to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Uploading file %s to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME)
 
   const fileStream = createReadStream(inputPath)
 
@@ -73,7 +72,7 @@ async function storeContent (options: {
 }): Promise<void> {
   const { content, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
-  logger.debug('Uploading %s content to %s%s in bucket %s', content, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Uploading %s content to %s%s in bucket %s', content, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME)
 
   return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate, contentType })
 }
@@ -87,7 +86,7 @@ async function storeStream (options: {
 }): Promise<void> {
   const { stream, objectStorageKey, bucketInfo, isPrivate, contentType } = options
 
-  logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME)
 
   return uploadToStorage({ objectStorageKey, content: stream, bucketInfo, isPrivate, contentType })
 }
@@ -106,7 +105,7 @@ async function updateObjectACL (options: {
 
   const key = buildKey(objectStorageKey, bucketInfo)
 
-  logger.debug('Updating ACL file %s in bucket %s', key, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Updating ACL file %s in bucket %s', key, bucketInfo.BUCKET_NAME)
 
   const { PutObjectAclCommand } = await import('@aws-sdk/client-s3')
 
@@ -135,13 +134,13 @@ async function updatePrefixACL (options: {
 
   const { PutObjectAclCommand } = await import('@aws-sdk/client-s3')
 
-  logger.debug('Updating ACL of files in prefix %s in bucket %s', prefix, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Updating ACL of files in prefix %s in bucket %s', prefix, bucketInfo.BUCKET_NAME)
 
   return applyOnPrefix({
     prefix,
     bucketInfo,
     commandBuilder: obj => {
-      logger.debug('Updating ACL of %s inside prefix %s in bucket %s', obj.Key, prefix, bucketInfo.BUCKET_NAME, lTags())
+      logger.debug('Updating ACL of %s inside prefix %s in bucket %s', obj.Key, prefix, bucketInfo.BUCKET_NAME)
 
       return new PutObjectAclCommand({
         Bucket: bucketInfo.BUCKET_NAME,
@@ -161,7 +160,7 @@ function removeObject (objectStorageKey: string, bucketInfo: BucketInfo) {
 }
 
 async function removeObjectByFullKey (fullKey: string, bucketInfo: Pick<BucketInfo, 'BUCKET_NAME'>) {
-  logger.debug('Removing file %s in bucket %s', fullKey, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Removing file %s in bucket %s', fullKey, bucketInfo.BUCKET_NAME)
 
   const { DeleteObjectCommand } = await import('@aws-sdk/client-s3')
 
@@ -179,7 +178,7 @@ async function removeObjectByFullKey (fullKey: string, bucketInfo: Pick<BucketIn
 }
 
 async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
-  logger.debug('Removing prefix %s in bucket %s', prefix, bucketInfo.BUCKET_NAME, lTags())
+  logger.debug('Removing prefix %s in bucket %s', prefix, bucketInfo.BUCKET_NAME)
 
   const { DeleteObjectCommand } = await import('@aws-sdk/client-s3')
 
@@ -187,7 +186,7 @@ async function removePrefix (prefix: string, bucketInfo: BucketInfo) {
     prefix,
     bucketInfo,
     commandBuilder: obj => {
-      logger.debug('Removing %s inside prefix %s in bucket %s', obj.Key, prefix, bucketInfo.BUCKET_NAME, lTags())
+      logger.debug('Removing %s inside prefix %s in bucket %s', obj.Key, prefix, bucketInfo.BUCKET_NAME)
 
       return new DeleteObjectCommand({
         Bucket: bucketInfo.BUCKET_NAME,
@@ -346,7 +345,7 @@ async function uploadToStorage (options: {
     // For more information, see https://docs.aws.amazon.com/AmazonS3/latest/API/API_CompleteMultipartUpload.html
     if (!response.Bucket) {
       const message = `Error uploading ${objectStorageKey} to bucket ${bucketInfo.BUCKET_NAME}`
-      logger.error(message, { response, ...lTags() })
+      logger.error(message, { response })
       throw new Error(message)
     }
 
@@ -355,7 +354,7 @@ async function uploadToStorage (options: {
       bucketInfo.PREFIX,
       objectStorageKey,
       bucketInfo.BUCKET_NAME,
-      { ...lTags(), responseMetadata: response.$metadata }
+      { responseMetadata: response.$metadata }
     )
   } catch (err) {
     // oxlint-disable-next-line @typescript-eslint/only-throw-error
@@ -391,7 +390,7 @@ async function applyOnPrefix (options: {
   if (isArray(listedObjects.Contents) !== true) {
     const message = `Cannot apply function on ${commandPrefix} prefix in bucket ${bucketInfo.BUCKET_NAME}: no files listed.`
 
-    logger.error(message, { response: listedObjects, ...lTags() })
+    logger.error(message, { response: listedObjects })
     throw new Error(message)
   }
 

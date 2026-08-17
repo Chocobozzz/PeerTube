@@ -17,9 +17,9 @@ cp -r "./client/src/locale" "./client/dist/locale"
 mkdir -p "./dist/core/lib"
 
 npm run tsc -- -b -v --incremental server/tsconfig.json
-npm run resolve-tspaths:server
+npm run tsc-alias:server
 
 cp -r "./server/core/static" "./server/core/assets" ./dist/core
 cp -r "./server/locales" ./dist
 
-./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run resolve-tspaths:server && NODE_ENV=dev node --inspect --enable-source-maps dist/server"' server/tsconfig.json
+./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run tsc-alias:server && NODE_ENV=dev node --inspect --enable-source-maps dist/server"' server/tsconfig.json

@@ -11,6 +11,7 @@ export type VideoThumbnailInput = Pick<
   VideoServerModel,
   | 'duration'
   | 'id'
+  | 'name'
   | 'uuid'
   | 'shortUUID'
   | 'isLive'
@@ -45,7 +46,9 @@ export class VideoThumbnailComponent implements OnChanges {
   readonly inWatchLaterPlaylist = input<boolean, boolean | string>(false, { transform: booleanAttribute })
   readonly playOverlay = input<boolean, boolean | string>(true, { transform: booleanAttribute })
 
-  readonly ariaLabel = input.required<string>()
+  // Hide the thumbnail link from assistive technologies, for example when the parent component already renders a link to the video
+  readonly ariaHidden = input(false, { transform: booleanAttribute })
+  readonly ariaLabel = input<string>()
   readonly blur = input.required({ transform: booleanAttribute })
 
   readonly watchLaterTooltip = viewChild<NgbTooltip>('watchLaterTooltip')
@@ -58,6 +61,9 @@ export class VideoThumbnailComponent implements OnChanges {
 
   src: string
   srcset: string
+
+  ariaLabelText: string
+  a11yOverlaysSummary: string
 
   constructor () {
     this.addToWatchLaterText = $localize`Add to watch later`
@@ -77,10 +83,34 @@ export class VideoThumbnailComponent implements OnChanges {
     this.srcset = thumbnails.filter(t => t.aspectRatio === '16:9')
       .map(t => `${t.fileUrl} ${t.width}w`)
       .join(', ')
+
+    this.ariaLabelText = this.buildAriaLabel()
+    this.a11yOverlaysSummary = this.buildA11yOverlaysSummary()
   }
 
   isRTL () {
     return getLocaleDirection(this.localeId) === 'rtl'
+  }
+
+  // ---------------------------------------------------------------------------
+  // Accessibility
+  // ---------------------------------------------------------------------------
+
+  private buildAriaLabel () {
+    return this.ariaLabel() || $localize`Watch video ${this.video().name}`
+  }
+
+  // Text equivalent of the overlays rendered inside the thumbnail link, used when that link is hidden from assistive technologies
+  private buildA11yOverlaysSummary () {
+    const parts: string[] = []
+
+    if (this.video().isLive) parts.push(this.getLiveOverlayLabel())
+    else if (this.getDurationLabel()) parts.push(this.getDurationOverlayLabel())
+
+    const progressPercent = this.getProgressPercent()
+    if (progressPercent) parts.push($localize`You watched ${progressPercent}% of this video`)
+
+    return parts.join('. ')
   }
 
   getWatchIconText () {
@@ -123,6 +153,14 @@ export class VideoThumbnailComponent implements OnChanges {
 
   getDurationOverlayLabel () {
     return $localize`Video duration is ${this.getDurationLabel()}`
+  }
+
+  getLiveOverlayLabel () {
+    if (this.isLiveStreaming()) return $localize`Live`
+    if (this.isEndedLive()) return $localize`Live ended`
+    if (this.isScheduledLive()) return $localize`Scheduled live ${this.scheduledLiveDate().toLocaleString()}`
+
+    return $localize`Waiting for live`
   }
 
   getVideoRouterLink () {

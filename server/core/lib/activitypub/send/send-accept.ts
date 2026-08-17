@@ -1,9 +1,11 @@
 import { ActivityAccept, ActivityFollow } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { MActor, MActorFollowActors } from '../../../types/models/index.js'
 import { getLocalActorFollowAcceptActivityPubUrl } from '../url.js'
 import { buildFollowActivity } from './send-follow.js'
 import { unicastTo } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 function sendAccept (actorFollow: MActorFollowActors) {
   const follower = actorFollow.ActorFollower

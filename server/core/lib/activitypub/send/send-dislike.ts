@@ -1,10 +1,12 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityDislike } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../types/models/index.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { getVideoDislikeActivityPubUrlByLocalActor } from '../url.js'
 import { sendVideoRelatedActivityToOrigin } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 function sendDislike (byActor: MActor, video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to dislike %s.', video.url)
@@ -24,7 +26,7 @@ function buildDislikeActivity (url: string, byActor: MActorAudience, video: MVid
   return audiencify(
     {
       id: url,
-      type: 'Dislike' as 'Dislike',
+      type: 'Dislike',
       actor: byActor.url,
       object: video.url
     },

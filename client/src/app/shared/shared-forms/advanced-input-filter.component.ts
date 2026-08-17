@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, computed, inject, input, output, signal, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, inject, input, output, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
@@ -39,7 +39,7 @@ export type SelectFilterDef<ServiceParameters extends Record<string, any>> = {
     type: 'select'
     key: Key
     title: string
-    items: SelectOptionsItem<ServiceParameters[Key]>[]
+    items: SelectOptionsItem<string>[] // Force a string to prevent type issues ("1" !== 1)
     clearable?: boolean // default true
     filter?: boolean // default false
   }
@@ -236,11 +236,12 @@ export class AdvancedInputFilterComponent<ServiceParameters extends Record<strin
 
   getSelectValue (key: string): string | undefined {
     const v = this.filterState()[key]
+
     return v !== undefined ? String(v) : undefined
   }
 
   setSelectValue (key: string, value: string | undefined) {
-    this.filterState.update(s => ({ ...s, [key]: value || undefined }))
+    this.filterState.update(s => ({ ...s, [key]: value ? String(value) : undefined }))
   }
 
   // ---------------------------------------------------------------------------

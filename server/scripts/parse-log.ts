@@ -1,4 +1,6 @@
-import { program } from 'commander'
+import { createCommand } from '@commander-js/extra-typings'
+import { buildSearchTags, labelFormatter, mtimeSortFilesDesc } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { createReadStream } from 'fs'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
@@ -7,17 +9,19 @@ import { createInterface } from 'readline'
 import { format as sqlFormat } from 'sql-formatter'
 import { inspect } from 'util'
 import * as winston from 'winston'
-import { labelFormatter, mtimeSortFilesDesc } from '@server/helpers/logger.js'
-import { CONFIG } from '@server/initializers/config.js'
 
-program
-  .option('-l, --level [level]', 'Level log (debug/info/warn/error)')
-  .option('-f, --files [file...]', 'Files to parse. If not provided, the script will parse the latest log file from config)')
-  .option('-t, --tags [tags...]', 'Display only lines with these tags')
-  .option('-n, --not-tags [tags...]', 'Do not display lines containing these tags')
+const program = createCommand()
+  .description('Parse PeerTube log files and display them in a human readable format')
+  .option('-l, --level <level>', 'Level log (debug/info/warn/error)')
+  .option('-f, --files <file...>', 'Files to parse. If not provided, the script will parse the latest log file from config)')
+  .option('-t, --tags <tags...>', 'Display only lines with these tags')
+  .option('-n, --not-tags <tags...>', 'Do not display lines containing these tags')
   .parse(process.argv)
 
 const options = program.opts()
+
+const tags = buildSearchTags(options.tags)
+const notTags = buildSearchTags(options.notTags)
 
 const excludedKeys = {
   level: true,
@@ -32,7 +36,7 @@ function keysExcluder (key, value) {
   return excludedKeys[key] === true ? undefined : value
 }
 
-const loggerFormat = winston.format.printf((info) => {
+const loggerFormat = winston.format.printf(info => {
   let additionalInfos = JSON.stringify(info, keysExcluder, 2)
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
@@ -101,11 +105,11 @@ function readFile (file: string) {
     rl.on('line', line => {
       try {
         const log = JSON.parse(line)
-        if (options.tags && !containsTags(log.tags, options.tags)) {
+        if (tags && !containsTags(log.tags, tags)) {
           return
         }
 
-        if (options.notTags && containsTags(log.tags, options.notTags)) {
+        if (notTags && containsTags(log.tags, notTags)) {
           return
         }
 
@@ -148,13 +152,11 @@ function toTimeFormat (time: string) {
   return d.toLocaleString() + `.${d.getMilliseconds()}`
 }
 
-function containsTags (loggerTags: string[], optionsTags: string[]) {
+function containsTags (loggerTags: string[], optionsTags: Set<string>) {
   if (!loggerTags) return false
 
   for (const lt of loggerTags) {
-    for (const ot of optionsTags) {
-      if (lt === ot) return true
-    }
+    if (optionsTags.has(lt)) return true
   }
 
   return false

@@ -6,8 +6,10 @@ import { MActor } from '../types/models/index.js'
 import { getAllContext } from './activity-pub-utils.js'
 import { jsonld } from './custom-jsonld-signature.js'
 import { isArray } from './custom-validators/misc.js'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
 import { assertIsInWorkerThread } from './threads.js'
+
+const logger = createLogger()
 
 type ExpressRequest = { body: any }
 

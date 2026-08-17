@@ -1,7 +1,7 @@
 import { FileStorage } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
@@ -21,11 +21,11 @@ import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storag
 import { getHLSDirectory, getHLSResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
 
+const logger = createLogger('video-path-manager')
+
 type MakeAvailableCB<T> = (path: string) => Awaitable<T>
 type MakeAvailableMultipleCB<T> = (paths: string[]) => Awaitable<T>
 type MakeAvailableCreateMethod = { method: () => Awaitable<string>, clean: boolean }
-
-const lTags = loggerTagsFactory('video-path-manager')
 
 class VideoPathManager {
   private static instance: VideoPathManager
@@ -175,7 +175,7 @@ class VideoPathManager {
     const mutex = this.videoFileMutexStore.get(videoUUID)
     const releaser = await mutex.acquire()
 
-    logger.debug('Locked files of %s.', videoUUID, lTags(videoUUID))
+    logger.debug('Locked files of %s.', videoUUID)
 
     return releaser
   }
@@ -185,7 +185,7 @@ class VideoPathManager {
 
     mutex.release()
 
-    logger.debug('Released lockfiles of %s.', videoUUID, lTags(videoUUID))
+    logger.debug('Released lockfiles of %s.', videoUUID)
   }
 
   private async makeAvailableFactory<T> (options: {

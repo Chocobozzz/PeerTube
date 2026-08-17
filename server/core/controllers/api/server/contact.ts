@@ -1,9 +1,11 @@
 import express from 'express'
 import { ContactForm, HttpStatusCode } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { Emailer } from '../../../lib/emailer.js'
 import { Redis } from '../../../lib/redis.js'
 import { asyncMiddleware, contactAdministratorValidator } from '../../../middlewares/index.js'
+
+const logger = createLogger()
 
 const contactRouter = express.Router()
 

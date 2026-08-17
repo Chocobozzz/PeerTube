@@ -20,7 +20,7 @@ import { Server } from 'http'
 import { createRequire } from 'module'
 import { basename, join } from 'path'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins.js'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants.js'
 import { PluginModel } from '../../models/server/plugin.js'
@@ -33,6 +33,8 @@ import {
 import { ClientHtml } from '../html/client-html.js'
 import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './package-manager.js'
 import { RegisterHelpers } from './register-helpers.js'
+
+const logger = createLogger()
 
 const require = createRequire(import.meta.url)
 

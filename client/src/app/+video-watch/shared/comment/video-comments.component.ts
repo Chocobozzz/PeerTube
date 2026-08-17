@@ -9,11 +9,13 @@ import {
   OnInit,
   output,
   SimpleChanges,
+  TemplateRef,
   viewChild
 } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, User } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { InfiniteScrollerDirective } from '@app/shared/shared-main/common/infinite-scroller.directive'
 import { LoaderComponent } from '@app/shared/shared-main/common/loader.component'
 import { FeedComponent } from '@app/shared/shared-main/feeds/feed.component'
@@ -22,9 +24,18 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoCommentThreadTree } from '@app/shared/shared-video-comment/video-comment-thread-tree.model'
 import { VideoComment } from '@app/shared/shared-video-comment/video-comment.model'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
-import { NgbDropdown, NgbDropdownButtonItem, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
+import {
+  NgbDropdown,
+  NgbDropdownButtonItem,
+  NgbDropdownItem,
+  NgbDropdownMenu,
+  NgbDropdownToggle,
+  NgbModal,
+  NgbModalRef
+} from '@ng-bootstrap/ng-bootstrap'
 import { PeerTubeProblemDocument, ServerErrorCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import { lastValueFrom, Subject, Subscription } from 'rxjs'
+import { NumberFormatterPipe } from '../../../shared/shared-main/common/number-formatter.pipe'
 import { VideoCommentAddComponent } from './video-comment-add.component'
 import { VideoCommentComponent } from './video-comment.component'
 
@@ -43,7 +54,9 @@ import { VideoCommentComponent } from './video-comment.component'
     VideoCommentAddComponent,
     InfiniteScrollerDirective,
     VideoCommentComponent,
-    LoaderComponent
+    LoaderComponent,
+    NumberFormatterPipe,
+    GlobalIconComponent
   ]
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
@@ -54,8 +67,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   private activatedRoute = inject(ActivatedRoute)
   private hooks = inject(HooksService)
   private pluginService = inject(PluginService)
+  private modalService = inject(NgbModal)
 
   readonly commentHighlightBlock = viewChild<ElementRef>('commentHighlightBlock')
+  readonly repliesModal = viewChild<TemplateRef<any>>('repliesModal')
+
   readonly video = input<VideoDetails>(undefined)
   readonly videoPassword = input<string>(undefined)
   readonly user = input<User>(undefined)
@@ -83,11 +99,17 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   threadComments: { [id: number]: VideoCommentThreadTree } = {}
   threadLoading: { [id: number]: boolean } = {}
 
+  // Comments too deeply nested to be displayed inline continue in a modal, where they become a root comment again.
+  // We keep the visited comments so the user can navigate back to where they come from
+  repliesModalStack: { comment: VideoComment, parentComments: VideoComment[] }[] = []
+  repliesModalTree: VideoCommentThreadTree
+
   syndicationItems: Syndication[] = []
 
   onDataSubject = new Subject<any[]>()
 
   private sub: Subscription
+  private repliesModalRef: NgbModalRef
 
   ngOnInit () {
     this.pluginService.addAction('video-watch-comment-list:load-data', () => this.loadMoreThreads(true))
@@ -113,6 +135,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.pluginService.removeAction('video-watch-comment-list:load-data')
 
     if (this.sub) this.sub.unsubscribe()
+    if (this.repliesModalRef) this.repliesModalRef.close()
   }
 
   viewReplies (commentId: number, highlightThread = false) {
@@ -121,11 +144,12 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     const params = {
       videoId: this.video().uuid,
       threadId: commentId,
+      maxDepth: this.videoCommentService.getMaxInlineCommentDepth(),
       videoPassword: this.videoPassword()
     }
 
     const obs = this.hooks.wrapObsFun(
-      this.videoCommentService.getVideoThreadComments.bind(this.videoCommentService),
+      this.videoCommentService.getThread.bind(this.videoCommentService),
       params,
       'video-watch',
       'filter:api.video-watch.video-thread-replies.list.params',
@@ -170,7 +194,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     const obs = this.hooks.wrapObsFun(
-      this.videoCommentService.getVideoCommentThreads.bind(this.videoCommentService),
+      this.videoCommentService.listThreads.bind(this.videoCommentService),
       params,
       'video-watch',
       'filter:api.video-watch.video-threads.list.params',
@@ -209,6 +233,61 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   onThreadCreated (commentTree: VideoCommentThreadTree) {
     this.viewReplies(commentTree.comment.id)
+  }
+
+  // ---------------------------------------------------------------------------
+  // Replies that are too deeply nested to be displayed inline
+  // ---------------------------------------------------------------------------
+
+  onWantedToViewRepliesInModal (root: {
+    comment: VideoComment
+    parentComments: VideoComment[]
+  }): void {
+    this.repliesModalStack.push(root)
+    this.setRepliesModalRoot(root.comment)
+
+    if (this.repliesModalRef) return
+
+    this.repliesModalRef = this.modalService.open(this.repliesModal(), { centered: true, size: 'lg' })
+
+    // The result promise rejects when the modal is dismissed (ESC/backdrop click): nothing to do
+    this.repliesModalRef.result
+      .catch((): undefined => undefined)
+      .finally(() => {
+        this.repliesModalRef = undefined
+        this.repliesModalStack = []
+        this.repliesModalTree = undefined
+      })
+  }
+
+  onRepliesModalBack () {
+    this.repliesModalStack.pop()
+
+    const previousRoot = this.getRepliesModalRoot()
+    if (!previousRoot) return this.closeRepliesModal()
+
+    this.setRepliesModalRoot(previousRoot.comment)
+  }
+
+  closeRepliesModal () {
+    if (!this.repliesModalRef) return
+
+    this.repliesModalRef.close()
+  }
+
+  getRepliesModalRoot () {
+    return this.repliesModalStack[this.repliesModalStack.length - 1]
+  }
+
+  // The comment becomes a root comment again: my-video-comment fetches its replies itself
+  private setRepliesModalRoot (comment: VideoComment) {
+    this.repliesModalTree = {
+      comment,
+      children: [],
+      totalChildren: comment.totalReplies,
+      fetchedChildren: 0,
+      hasDisplayedChildren: true
+    }
   }
 
   handleSortChange (sort: string) {
@@ -310,6 +389,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   private resetVideo () {
     const video = this.video()
     if (video.commentsPolicy.id === VideoCommentPolicy.DISABLED) return
+
+    this.closeRepliesModal()
 
     // Reset all our fields
     this.highlightedThread = null

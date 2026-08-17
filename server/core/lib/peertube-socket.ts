@@ -6,9 +6,11 @@ import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { MRunner } from '@server/types/models/runners/index.js'
 import { UserNotificationModelForApi } from '@server/types/models/user/index.js'
 import { LiveVideoEventPayload, LiveVideoEventType } from '@peertube/peertube-models'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { authenticateRunnerSocket, authenticateSocket } from '../middlewares/index.js'
 import { isDevInstance } from '@peertube/peertube-node-utils'
+
+const logger = createLogger()
 
 class PeerTubeSocket {
   private static instance: PeerTubeSocket

@@ -1,3 +1,5 @@
+<h1 class="visually-hidden" i18n>Search results</h1>
+
 <div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [dataObservable]="onSearchDataSubject.asObservable()" class="search-result">
   <div class="results-header">
     <div class="first-line">
@@ -55,15 +57,18 @@
         ></my-actor-avatar>
 
         <div class="video-channel-info">
-          @if (!isExternalChannelUrl()) {
-            <a [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">
-              <ng-container *ngTemplateOutlet="aContent"></ng-container>
-            </a>
-          } @else {
-            <a [href]="getExternalChannelUrl(result)" target="_blank" class="video-channel-names">
-              <ng-container *ngTemplateOutlet="aContent"></ng-container>
-            </a>
-          }
+          <!-- Keep the same heading level as the video and playlist results so every entry is reachable with heading navigation -->
+          <div role="heading" aria-level="2">
+            @if (!isExternalChannelUrl()) {
+              <a [routerLink]="getInternalChannelUrl(result)" class="video-channel-names">
+                <ng-container *ngTemplateOutlet="aContent"></ng-container>
+              </a>
+            } @else {
+              <a [href]="getExternalChannelUrl(result)" target="_blank" class="video-channel-names">
+                <ng-container *ngTemplateOutlet="aContent"></ng-container>
+              </a>
+            }
+          </div>
 
           <ng-template #aContent>
             <div class="video-channel-display-name me-2">{{ result.displayName }}</div>
@@ -82,7 +87,7 @@
       <div class="entry video">
         <my-video-miniature
           [video]="result" [user]="userMiniature" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
-          [displayOptions]="videoDisplayOptions" [videoLinkType]="getLinkType()"
+          [displayOptions]="videoDisplayOptions" [videoLinkType]="getLinkType()" [headingLevel]="2"
           (videoBlocked)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
         ></my-video-miniature>
       </div>
@@ -91,7 +96,7 @@
       <div class="entry video-playlist">
         <my-video-playlist-miniature
           [playlist]="result" displayAsRow="true" displayChannel="true" toManage="false"
-          [linkType]="getLinkType()"
+          [linkType]="getLinkType()" [headingLevel]="2"
         ></my-video-playlist-miniature>
       </div>
     }

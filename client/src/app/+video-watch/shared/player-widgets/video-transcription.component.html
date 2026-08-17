@@ -1,24 +1,24 @@
 <div class="widget-root">
 
-  <div class="widget-header d-flex justify-content-between">
-    <div class="widget-title" i18n>Transcription</div>
+  <div class="widget-top">
+    <div class="widget-header d-flex justify-content-between">
+      <div class="widget-title" i18n>Transcription</div>
 
-    <div>
-      <button
-        class="border-0 p-0 me-3 settings-button" title="Settings" i18n-title
-        (click)="isSettingsPanelCollapsed = !isSettingsPanelCollapsed" [attr.aria-expanded]="!isSettingsPanelCollapsed" aria-controls="video-transcription-settings-panel"
-        >
-        <my-global-icon iconName="filter"></my-global-icon>
-      </button>
+      <div>
+        <button
+          class="border-0 p-0 me-3 settings-button" title="Settings" i18n-title
+          (click)="isSettingsPanelCollapsed = !isSettingsPanelCollapsed" [attr.aria-expanded]="!isSettingsPanelCollapsed" aria-controls="video-transcription-settings-panel"
+          >
+          <my-global-icon iconName="filter"></my-global-icon>
+        </button>
 
-      <button class="border-0 p-0" title="Close transcription widget" i18n-title (click)="closeTranscription.emit()">
-        <my-global-icon iconName="cross"></my-global-icon>
-      </button>
+        <button class="border-0 p-0" title="Close transcription widget" i18n-title (click)="closeTranscription.emit()">
+          <my-global-icon iconName="cross"></my-global-icon>
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div class="widget-content">
-    <div class="widget-content-padded">
+    <div class="widget-content-padded pt-2">
 
       <div
         id="video-transcription-settings-panel" class="settings-panel"
@@ -38,14 +38,17 @@
       </div>
 
       <input
+        #searchInput
         type="text" class="mb-3" name="search-transcript" i18n-placeholder placeholder="Search transcript"
         (input)="onSearchChange($event)"
         >
-
-      @if (search && segments.length === 0) {
-        <div i18n>No results for your search</div>
-      }
     </div>
+  </div>
+
+  <div #segmentsContainer class="widget-content" [class.has-resync-button]="!autoScrollEnabled">
+    @if (search && segments.length === 0) {
+      <div class="widget-content-padded" i18n>No results for your search</div>
+    }
 
     @for (segment of segments; track segment) {
       <div
@@ -60,4 +63,7 @@
     }
   </div>
 
+  @if (!autoScrollEnabled) {
+    <my-button class="resync-button" theme="primary" label="Synchronize with video" i18n-label (click)="resyncWithVideo()"></my-button>
+  }
 </div>

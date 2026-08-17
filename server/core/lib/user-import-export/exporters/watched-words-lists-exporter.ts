@@ -2,8 +2,7 @@ import { WatchedWordsListsJSON } from '@peertube/peertube-models'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import { AbstractUserExporter } from './abstract-user-exporter.js'
 
-export class WatchedWordsListsExporter extends AbstractUserExporter <WatchedWordsListsJSON> {
-
+export class WatchedWordsListsExporter extends AbstractUserExporter<WatchedWordsListsJSON> {
   async export () {
     const data = await WatchedWordsListModel.listForExport({ accountId: this.user.Account.id })
 
@@ -15,7 +14,7 @@ export class WatchedWordsListsExporter extends AbstractUserExporter <WatchedWord
           createdAt: list.createdAt.toISOString(),
           updatedAt: list.updatedAt.toISOString()
         }))
-      } as WatchedWordsListsJSON,
+      },
 
       staticFiles: []
     }

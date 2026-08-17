@@ -1,7 +1,7 @@
 import { VideoViewEvent } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { GeoIP } from '@server/helpers/geo-ip.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { MAX_LOCAL_VIEWER_WATCH_SECTIONS, VIEWER_SYNC_REDIS, VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { sendCreateWatchAction } from '@server/lib/activitypub/send/index.js'
@@ -13,7 +13,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 
-const lTags = loggerTagsFactory('views')
+const logger = createLogger('views')
 
 type LocalViewerStats = {
   firstUpdated: number // Date.getTime()
@@ -61,21 +61,28 @@ export class VideoViewerStats {
   }) {
     const { video, ip, viewEvent, currentTime, sessionId, client, operatingSystem, device } = options
 
-    logger.debug(
-      'Adding local viewer to video stats %s.',
-      video.uuid,
-      { currentTime, viewEvent, sessionId, client, operatingSystem, device, ...lTags(video.uuid) }
-    )
+    logger.debug('Adding local viewer to video stats %s.', video.uuid, {
+      currentTime,
+      viewEvent,
+      sessionId,
+      client,
+      operatingSystem,
+      device
+    })
 
     const nowMs = new Date().getTime()
 
     let stats: LocalViewerStats = await this.getLocalVideoViewer({ sessionId, videoId: video.id })
 
     if (stats && stats.watchSections.length >= MAX_LOCAL_VIEWER_WATCH_SECTIONS) {
-      logger.warn(
-        'Too much watch section to store for a viewer, skipping this one',
-        { currentTime, viewEvent, sessionId, client, operatingSystem, device, ...lTags(video.uuid) }
-      )
+      logger.warn('Too much watch section to store for a viewer, skipping this one', {
+        currentTime,
+        viewEvent,
+        sessionId,
+        client,
+        operatingSystem,
+        device
+      })
       return
     }
 
@@ -125,7 +132,7 @@ export class VideoViewerStats {
 
     stats.watchTime = this.buildWatchTimeFromSections(stats.watchSections)
 
-    logger.debug('Set local video viewer stats for video %s.', video.uuid, { stats, ...lTags(video.uuid) })
+    logger.debug('Set local video viewer stats for video %s.', video.uuid, { stats })
 
     this.setLocalVideoViewer(sessionId, video.id, stats)
   }
@@ -144,7 +151,7 @@ export class VideoViewerStats {
     if (this.processingViewersStats) return
     this.processingViewersStats = true
 
-    if (!isTestOrDevInstance()) logger.info('Processing viewer statistics.', lTags())
+    if (!isTestOrDevInstance()) logger.info('Processing viewer statistics.')
 
     const now = new Date().getTime()
 
@@ -157,11 +164,11 @@ export class VideoViewerStats {
         const stats: LocalViewerStats = await this.getLocalVideoViewerByKey(key)
 
         if (!stats) {
-          logger.warn('Cannot read viewer stats for Redis key %s, removing invalid entry.', key, lTags())
+          logger.warn('Cannot read viewer stats for Redis key %s, removing invalid entry.', key)
           try {
             await this.deleteLocalVideoViewersKeys(key)
           } catch (err) {
-            logger.error('Cannot delete invalid viewer stats for Redis key %s.', key, { err, ...lTags() })
+            logger.error('Cannot delete invalid viewer stats for Redis key %s.', key, { err })
           }
           continue
         }
@@ -185,11 +192,11 @@ export class VideoViewerStats {
 
           await this.deleteLocalVideoViewersKeys(key)
         } catch (err) {
-          logger.error('Cannot process viewer stats for Redis key %s.', key, { err, stats, ...lTags() })
+          logger.error('Cannot process viewer stats for Redis key %s.', key, { err, stats })
         }
       }
     } catch (err) {
-      logger.error('Error in video save viewers stats scheduler.', { err, ...lTags() })
+      logger.error('Error in video save viewers stats scheduler.', { err })
     }
 
     this.processingViewersStats = false

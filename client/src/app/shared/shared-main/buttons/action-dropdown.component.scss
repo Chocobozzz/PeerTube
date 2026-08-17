@@ -101,7 +101,8 @@ button {
 }
 
 .icon-placeholder {
-  width: 22px;
+  min-width: 22px;
+  max-width: 22px;
 
   @include margin-right(0.5rem);
 }

@@ -38,7 +38,7 @@ import { readFileSync } from 'fs'
 import pg from 'pg'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { AbuseMessageModel } from '../models/abuse/abuse-message.js'
 import { AbuseModel } from '../models/abuse/abuse.js'
 import { VideoAbuseModel } from '../models/abuse/video-abuse.js'
@@ -74,12 +74,16 @@ import { VideoImportModel } from '../models/video/video-import.js'
 import { VideoLiveModel } from '../models/video/video-live.js'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
+import { VideoSearchModel } from '../models/video/video-search.js'
 import { VideoShareModel } from '../models/video/video-share.js'
 import { VideoInfohashModel } from '../models/video/video-infohash.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { CONFIG } from './config.js'
+import { VIDEO_SEARCH_INDEXED_DESCRIPTION_LENGTH } from './constants.js'
+
+const logger = createLogger()
 
 pg.defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -223,7 +227,8 @@ export async function initDatabaseModels (silent: boolean) {
     PlayerSettingModel,
     VideoChannelCollaboratorModel,
     ActorReservedModel,
-    VideoEmbedPrivacyDomainModel
+    VideoEmbedPrivacyDomainModel,
+    VideoSearchModel
   ])
 
   // Check extensions exist in the database
@@ -269,12 +274,21 @@ async function checkPostgresExtension (extension: 'pg_trgm' | 'unaccent') {
   }
 }
 
-function createFunctions () {
-  const query = `CREATE OR REPLACE FUNCTION immutable_unaccent(text)
+async function createFunctions () {
+  const unaccentQuery = `CREATE OR REPLACE FUNCTION immutable_unaccent(text)
   RETURNS text AS
 $func$
 SELECT public.unaccent('public.unaccent', $1::text)
 $func$  LANGUAGE sql IMMUTABLE;`
 
-  return sequelizeTypescript.query(query, { raw: true })
+  await sequelizeTypescript.query(unaccentQuery, { raw: true })
+
+  const searchVectorQuery = `CREATE OR REPLACE FUNCTION video_search_vector(name text, description text)
+  RETURNS tsvector AS
+$func$
+SELECT setweight(to_tsvector('simple', immutable_unaccent(coalesce(name, ''))), 'A') ||
+       setweight(to_tsvector('simple', immutable_unaccent(left(coalesce(description, ''), ${VIDEO_SEARCH_INDEXED_DESCRIPTION_LENGTH}))), 'B')
+$func$  LANGUAGE sql IMMUTABLE;`
+
+  await sequelizeTypescript.query(searchVectorQuery, { raw: true })
 }

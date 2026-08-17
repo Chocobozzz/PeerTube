@@ -6,15 +6,14 @@ import { activityPubCollection } from '@server/lib/activitypub/collection.js'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 
-export class LikesExporter extends AbstractUserExporter <LikesExportJSON> {
-
+export class LikesExporter extends AbstractUserExporter<LikesExportJSON> {
   async export () {
     const likes = await AccountVideoRateModel.listRatesOfAccountIdForExport(this.user.Account.id, 'like')
 
     return {
       json: {
         likes: this.formatLikesJSON(likes)
-      } as LikesExportJSON,
+      },
 
       activityPub: await this.formatLikesAP(likes),
 

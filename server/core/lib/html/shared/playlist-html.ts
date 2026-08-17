@@ -115,7 +115,7 @@ export class PlaylistHtml {
       schemaType: 'ItemList',
 
       ogType: addOG
-        ? 'video' as 'video'
+        ? 'video'
         : undefined,
 
       twitterCard: addTwitterCard

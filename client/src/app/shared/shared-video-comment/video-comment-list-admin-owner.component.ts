@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, input, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
 import { formatICU } from '@app/helpers'
@@ -309,12 +309,12 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
   private _dataLoader (
     options:
       & DataLoaderOptionsBase
-      & Parameters<VideoCommentService['listAdminVideoComments']>[0]
-      & Parameters<VideoCommentService['listVideoCommentsOfMyVideos']>[0]
+      & Parameters<VideoCommentService['listAdminComments']>[0]
+      & Parameters<VideoCommentService['listCommentsOfMyVideos']>[0]
   ) {
     const method = this.mode() === 'admin'
-      ? this.videoCommentService.listAdminVideoComments.bind(this.videoCommentService)
-      : this.videoCommentService.listVideoCommentsOfMyVideos.bind(this.videoCommentService)
+      ? this.videoCommentService.listAdminComments.bind(this.videoCommentService)
+      : this.videoCommentService.listCommentsOfMyVideos.bind(this.videoCommentService)
 
     return method(options)
       .pipe(

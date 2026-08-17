@@ -3,7 +3,9 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { isLocalUrl } from '@server/lib/activitypub/url.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { isRootActivityValid } from '../../../helpers/custom-validators/activitypub/activity.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
+
+const logger = createLogger()
 
 async function activityPubValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   logger.debug('Checking activity pub parameters')

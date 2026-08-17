@@ -1,10 +1,10 @@
 import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
-import { AbstractTranscriber, TranscriptionModel, WhisperBuiltinModel, transcriberFactory } from '@peertube/peertube-transcription'
+import { AbstractTranscriber, transcriberFactory, TranscriptionModel, WhisperBuiltinModel } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
 import { isVideoCaptionLanguageValid, isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -12,7 +12,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFull, MVideoId, MVideoUUID, MVideoUrl } from '@server/types/models/index.js'
+import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFull, MVideoId, MVideoUrl, MVideoUUID } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
@@ -24,7 +24,7 @@ import { Notifier } from './notifier/notifier.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
 
-const lTags = loggerTagsFactory('video-caption')
+const logger = createLogger('caption')
 
 export async function createLocalCaption (options: {
   video: MVideo
@@ -49,7 +49,7 @@ export async function createLocalCaption (options: {
 
   if (!await isVTTFileValid(captionDest)) {
     remove(captionDest)
-      .catch(err => logger.error('Cannot remove invalid VTT file', { err, ...lTags(video.uuid) }))
+      .catch(err => logger.error('Cannot remove invalid VTT file', { err }))
 
     throw new Error(`Invalid VTT file`)
   }
@@ -71,7 +71,7 @@ export async function createLocalCaption (options: {
     await JobQueue.Instance.createJob({ type: 'move-to-object-storage', payload: { captionId: videoCaption.id } })
   }
 
-  logger.info(`Created/replaced caption ${videoCaption.filename} of ${language} of video ${video.uuid}`, lTags(video.uuid))
+  logger.info(`Created/replaced caption ${videoCaption.filename} of ${language} of video ${video.uuid}`)
 
   return Object.assign(videoCaption, { Video: video })
 }
@@ -90,10 +90,7 @@ export async function createAllCaptionPlaylistsOnFSIfNeeded (video: MVideo) {
       caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, video)
       await caption.save()
     } catch (err) {
-      logger.error(
-        `Cannot create caption playlist ${caption.filename} (${caption.language}) of video ${video.uuid}`,
-        { ...lTags(video.uuid), err }
-      )
+      logger.error(`Cannot create caption playlist ${caption.filename} (${caption.language}) of video ${video.uuid}`, { err })
     }
   }
 }
@@ -106,7 +103,7 @@ export async function updateHLSMasterOnCaptionChangeIfNeeded (video: MVideo) {
 }
 
 export async function updateHLSMasterOnCaptionChange (video: MVideo, hls: MStreamingPlaylist) {
-  logger.debug(`Updating HLS master playlist of video ${video.uuid} after caption change`, lTags(video.uuid))
+  logger.debug(`Updating HLS master playlist of video ${video.uuid} after caption change`)
 
   await updateM3U8AndShaPlaylist(video, hls)
 }
@@ -127,11 +124,11 @@ export async function createTranscriptionTaskIfNeeded (video: MVideoId & MVideoU
   if (CONFIG.VIDEO_TRANSCRIPTION.ENABLED !== true) return
 
   if (!await VideoModel.loadHasStream(video.id, VideoFileStream.AUDIO)) {
-    logger.info(`Do not create transcription job for ${video.url} that doesn't have an audio stream`, lTags(video.uuid))
+    logger.info(`Do not create transcription job for ${video.url} that doesn't have an audio stream`)
     return
   }
 
-  logger.info(`Creating transcription job for ${video.url}`, lTags(video.uuid))
+  logger.info(`Creating transcription job for ${video.url}`)
 
   if (CONFIG.VIDEO_TRANSCRIPTION.REMOTE_RUNNERS.ENABLED === true) {
     await new TranscriptionJobHandler().create({ video })
@@ -171,7 +168,7 @@ export async function generateSubtitle (options: {
       })
 
       if (!CONFIG.VIDEO_TRANSCRIPTION.ENGINE_PATH) {
-        logger.info(`Installing transcriber ${transcriber.engine.name} to generate subtitles`, lTags())
+        logger.info(`Installing transcriber ${transcriber.engine.name} to generate subtitles`)
         await transcriber.install(DIRECTORIES.LOCAL_PIP_DIRECTORY)
       }
     }
@@ -180,17 +177,14 @@ export async function generateSubtitle (options: {
 
     const video = await VideoModel.loadFull(options.video.uuid)
     if (!video) {
-      logger.info('Do not process transcription, video does not exist anymore.', lTags(options.video.uuid))
+      logger.info('Do not process transcription, video does not exist anymore.')
       return undefined
     }
 
     const file = video.getMaxQualityFile(VideoFileStream.AUDIO)
 
     if (!file) {
-      logger.info(
-        `Do not run transcription for ${video.uuid} in ${outputPath} because it does not contain an audio stream`,
-        { video, ...lTags(video.uuid) }
-      )
+      logger.info(`Do not run transcription for ${video.uuid} in ${outputPath} because it does not contain an audio stream`, { video })
 
       return
     }
@@ -199,7 +193,7 @@ export async function generateSubtitle (options: {
       // Release input file mutex now we are going to run the command
       setTimeout(() => inputFileMutexReleaser(), 1000)
 
-      logger.info(`Running transcription for ${video.uuid} in ${outputPath}`, lTags(video.uuid))
+      logger.info(`Running transcription for ${video.uuid} in ${outputPath}`)
 
       const transcriptFile = await transcriber.transcribe({
         mediaFilePath: inputPath,
@@ -217,7 +211,7 @@ export async function generateSubtitle (options: {
 
       const refreshedVideo = await VideoModel.loadFull(video.uuid)
       if (!refreshedVideo) {
-        logger.info(`Do not process transcription for video ${video.uuid}: it does not exist anymore.`, lTags(video.uuid))
+        logger.info(`Do not process transcription for video ${video.uuid}: it does not exist anymore.`)
         return
       }
 
@@ -228,7 +222,7 @@ export async function generateSubtitle (options: {
     if (inputFileMutexReleaser) inputFileMutexReleaser()
 
     VideoJobInfoModel.decrease(options.video.uuid, 'pendingTranscription')
-      .catch(err => logger.error('Cannot decrease pendingTranscription job count', { err, ...lTags(options.video.uuid) }))
+      .catch(err => logger.error('Cannot decrease pendingTranscription job count', { err }))
   }
 }
 
@@ -236,12 +230,11 @@ export async function onTranscriptionEnded (options: {
   video: MVideoFull
   language: string
   vttPath: string
-  lTags?: (string | number)[]
 }) {
-  const { video, language, vttPath, lTags: customLTags = [] } = options
+  const { video, language, vttPath } = options
 
   if (!isVideoCaptionLanguageValid(language)) {
-    logger.warn(`Invalid transcription language for video ${video.uuid}`, lTags(video.uuid))
+    logger.warn(`Invalid transcription language for video ${video.uuid}`)
     return
   }
 
@@ -257,9 +250,7 @@ export async function onTranscriptionEnded (options: {
 
     if (existing && !existing.automaticallyGenerated) {
       logger.info(
-        // oxlint-disable-next-line max-len
-        `Do not replace existing caption for video ${video.uuid} after transcription (subtitle may have been added while during the transcription process)`,
-        lTags(video.uuid)
+        `Do not replace existing caption for video ${video.uuid} after transcription (subtitle may have been added while during the transcription process)`
       )
       return
     }
@@ -282,14 +273,14 @@ export async function onTranscriptionEnded (options: {
 
   scheduleVideoFederation({ video })
 
-  logger.info(`Transcription ended for ${video.uuid}`, lTags(video.uuid, ...customLTags))
+  logger.info(`Transcription ended for ${video.uuid}`)
 }
 
 export async function upsertCaptionPlaylistOnFS (caption: MVideoCaption, video: MVideo) {
   const m3u8Filename = VideoCaptionModel.generateM3U8Filename(caption.filename)
   const m3u8Destination = VideoPathManager.Instance.getFSHLSOutputPath(video, m3u8Filename)
 
-  logger.debug(`Creating caption playlist ${m3u8Destination} of video ${video.uuid}`, lTags(video.uuid))
+  logger.debug(`Creating caption playlist ${m3u8Destination} of video ${video.uuid}`)
 
   const content = buildCaptionM3U8Content({ video, caption })
   await ensureDir(dirname(m3u8Destination))

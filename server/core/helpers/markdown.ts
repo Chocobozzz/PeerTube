@@ -8,6 +8,9 @@ import MarkdownItClass from 'markdown-it'
 import markdownItEmoji from 'markdown-it-emoji/lib/light.mjs'
 import sanitizeHtml from 'sanitize-html'
 
+type MarkdownIt = InstanceType<typeof MarkdownItClass>
+type MarkdownItWithPlainText = MarkdownIt & { plainText: string }
+
 const defaultSanitizeOptions = getDefaultSanitizeOptions()
 const textOnlySanitizeOptions = getTextOnlySanitizeOptions()
 const hrefOnlySanitizeOptions = getMailHtmlSanitizeOptions()
@@ -18,7 +21,7 @@ const markdownItForSafeHtml = new MarkdownItClass('default', { linkify: true, br
 
 const markdownItForPlainText = new MarkdownItClass('default', { linkify: false, breaks: true, html: false })
   .use(markdownItEmoji)
-  .use(plainTextPlugin)
+  .use(plainTextPlugin) as MarkdownItWithPlainText
 
 export const toSafeHtml = (text: string) => {
   if (!text) return ''
@@ -52,19 +55,22 @@ export const toSafeMailHtml = (text: string) => {
 // Private
 // ---------------------------------------------------------------------------
 
+type MarkdownItState = InstanceType<MarkdownIt['core']['State']>
+type MarkdownItToken = MarkdownItState['tokens'][number]
+
 // Thanks: https://github.com/wavesheep/markdown-it-plain-text
-function plainTextPlugin (markdownIt: any) {
-  function plainTextRule (state: any) {
+function plainTextPlugin (markdownIt: MarkdownIt) {
+  function plainTextRule (state: MarkdownItState) {
     const text = scan(state.tokens)
 
-    markdownIt.plainText = text
+    ;(markdownIt as MarkdownItWithPlainText).plainText = text
   }
 
-  function scan (tokens: any[]) {
+  function scan (tokens: MarkdownItToken[]) {
     let lastSeparator = ''
     let text = ''
 
-    function buildSeparator (token: any) {
+    function buildSeparator (token: MarkdownItToken) {
       if (token.type === 'list_item_close') {
         lastSeparator = ', '
       }

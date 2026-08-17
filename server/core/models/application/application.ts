@@ -66,6 +66,11 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
   @Column(DataType.JSONB)
   declare configPart: ConfigPart
 
+  @AllowNull(false)
+  @Default([])
+  @Column(DataType.ARRAY(DataType.STRING))
+  declare manualMigrationScriptsRun: string[]
+
   @HasOne(() => AccountModel, {
     foreignKey: {
       allowNull: true
@@ -98,6 +103,20 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     const configPart = this.lastRunConfigPart || application.configPart
 
     return configPart?.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL !== CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL
+  }
+
+  static async hasManualMigrationScriptRun (scriptName: string) {
+    const application = await this.load()
+
+    return application.manualMigrationScriptsRun.includes(scriptName)
+  }
+
+  static async setManualMigrationScriptRun (scriptName: string) {
+    const application = await this.load()
+    if (application.manualMigrationScriptsRun.includes(scriptName)) return
+
+    application.manualMigrationScriptsRun = [ ...application.manualMigrationScriptsRun, scriptName ]
+    await application.save()
   }
 
   static async updateNodeVersionsOrConfig () {

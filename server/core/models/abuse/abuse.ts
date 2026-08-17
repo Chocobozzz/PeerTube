@@ -40,11 +40,11 @@ import {
   MAbuseUserFormattable,
   MUserAccountId
 } from '../../types/models/index.js'
-import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
+import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account.js'
 import { SequelizeModel, getSort, parseAggregateResult, throwIfNotValid } from '../shared/index.js'
 import { ThumbnailModel, thumbnailAPIAttributes } from '../video/thumbnail.js'
 import { VideoBlacklistModel } from '../video/video-blacklist.js'
-import { SummaryOptions as ChannelSummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
 import { ScopeNames as CommentScopeNames, VideoCommentModel } from '../video/video-comment.js'
 import { VideoModel, ScopeNames as VideoScopeNames } from '../video/video.js'
 import { BuildAbusesQueryOptions, buildAbuseListQuery } from './sql/abuse-query-builder.js'
@@ -123,7 +123,7 @@ export enum ScopeNames {
           model: AccountModel.scope({
             method: [
               AccountScopeNames.SUMMARY,
-              { actorRequired: false } as AccountSummaryOptions
+              { actorRequired: false }
             ]
           }),
           as: 'ReporterAccount'
@@ -132,7 +132,7 @@ export enum ScopeNames {
           model: AccountModel.scope({
             method: [
               AccountScopeNames.SUMMARY,
-              { actorRequired: false } as AccountSummaryOptions
+              { actorRequired: false }
             ]
           }),
           as: 'FlaggedAccount'
@@ -166,7 +166,7 @@ export enum ScopeNames {
                   model: VideoChannelModel.scope({
                     method: [
                       VideoChannelScopeNames.SUMMARY,
-                      { withAccount: false, actorRequired: false } as ChannelSummaryOptions
+                      { withAccount: false, actorRequired: false }
                     ]
                   }),
                   required: false
@@ -606,7 +606,7 @@ export class AbuseModel extends SequelizeModel<AbuseModel> {
     const endAt = this.VideoAbuse?.endAt
 
     return {
-      type: 'Flag' as 'Flag',
+      type: 'Flag',
       content: this.reason,
       mediaType: 'text/markdown',
       object,

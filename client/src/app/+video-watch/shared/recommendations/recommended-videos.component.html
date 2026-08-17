@@ -25,7 +25,7 @@
       <my-video-miniature
         [displayOptions]="displayOptions" [video]="video" [user]="user" [displayAsRow]="displayAsRow()"
         (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (muted)="onVideoRemoved()"
-        actorImageSize="32" thumbnailSizes="201px"
+        actorImageSize="32" thumbnailSizes="201px" [headingLevel]="3"
         >
       </my-video-miniature>
       @if (!playlist() && i === 0 && length > 1 && autoPlayNextVideo) {

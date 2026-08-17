@@ -1,7 +1,7 @@
 import { UserNotificationSettingValue, UserNotificationSettingValueType } from '@peertube/peertube-models'
 import { MRegistration, MUser, MUserDefault, MUserWithNotificationSetting } from '@server/types/models/user/index.js'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist.js'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import {
   MAbuseFull,
@@ -61,7 +61,7 @@ import {
   VideoTranscriptionGeneratedForOwner
 } from './shared/index.js'
 
-const lTags = loggerTagsFactory('notifier')
+const logger = createLogger('notifier')
 
 class Notifier {
   private readonly notificationModels = {
@@ -119,7 +119,7 @@ class Notifier {
   notifyOnNewVideoOrLiveIfNeeded (video: MVideoAccountLight): void {
     const models = this.notificationModels.newVideoOrLive
 
-    logger.debug('Notify on new video or live if needed', { video: video.url, ...lTags() })
+    logger.debug('Notify on new video or live if needed', { video: video.url })
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
@@ -128,7 +128,7 @@ class Notifier {
   notifyOnVideoPublishedAfterTranscoding (video: MVideoAccountLight & MVideoWithSchedule): void {
     const models = this.notificationModels.publicationAfterTranscoding
 
-    logger.debug('Notify on published video after transcoding', { video: video.url, ...lTags() })
+    logger.debug('Notify on published video after transcoding', { video: video.url })
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify owner that its video %s has been published after transcoding.', video.url, { err }))
@@ -137,7 +137,7 @@ class Notifier {
   notifyOnVideoPublishedAfterScheduledUpdate (video: MVideoAccountLight & MVideoWithSchedule): void {
     const models = this.notificationModels.publicationAfterScheduleUpdate
 
-    logger.debug('Notify on published video after scheduled update', { video: video.url, ...lTags() })
+    logger.debug('Notify on published video after scheduled update', { video: video.url })
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify owner that its video %s has been published after scheduled update.', video.url, { err }))
@@ -146,7 +146,7 @@ class Notifier {
   notifyOnVideoPublishedAfterRemovedFromAutoBlacklist (video: MVideoAccountLight & MVideoWithSchedule): void {
     const models = this.notificationModels.publicationAfterAutoUnblacklist
 
-    logger.debug('Notify on published video after being removed from auto blacklist', { video: video.url, ...lTags() })
+    logger.debug('Notify on published video after being removed from auto blacklist', { video: video.url })
 
     this.sendNotifications(models, video)
       .catch(err => {
@@ -157,7 +157,7 @@ class Notifier {
   notifyOnNewComment (comment: MCommentOwnerVideo): void {
     const models = this.notificationModels.newComment
 
-    logger.debug('Notify on new comment', { comment: comment.url, ...lTags() })
+    logger.debug('Notify on new comment', { comment: comment.url })
 
     this.sendNotifications(models, comment)
       .catch(err => logger.error('Cannot notify of new comment %s.', comment.url, { err }))
@@ -166,7 +166,7 @@ class Notifier {
   notifyOnNewCommentApproval (comment: MCommentOwnerVideo): void {
     const models = this.notificationModels.commentApproval
 
-    logger.debug('Notify on comment approval', { comment: comment.url, ...lTags() })
+    logger.debug('Notify on comment approval', { comment: comment.url })
 
     this.sendNotifications(models, comment)
       .catch(err => logger.error('Cannot notify on comment approval %s.', comment.url, { err }))
@@ -175,7 +175,7 @@ class Notifier {
   notifyOnNewAbuse (payload: NewAbusePayload): void {
     const models = this.notificationModels.newAbuse
 
-    logger.debug('Notify on new abuse', { abuse: payload.abuseInstance.id, ...lTags() })
+    logger.debug('Notify on new abuse', { abuse: payload.abuseInstance.id })
 
     this.sendNotifications(models, payload)
       .catch(err => logger.error('Cannot notify of new abuse %d.', payload.abuseInstance.id, { err }))
@@ -184,7 +184,7 @@ class Notifier {
   notifyOnVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo): void {
     const models = this.notificationModels.newAutoBlacklist
 
-    logger.debug('Notify on video auto blacklist', { video: videoBlacklist?.Video?.url, ...lTags() })
+    logger.debug('Notify on video auto blacklist', { video: videoBlacklist?.Video?.url })
 
     this.sendNotifications(models, videoBlacklist)
       .catch(err => logger.error('Cannot notify of auto-blacklist of video %s.', videoBlacklist.Video.url, { err }))
@@ -193,7 +193,7 @@ class Notifier {
   notifyOnVideoBlacklist (videoBlacklist: MVideoBlacklistVideo): void {
     const models = this.notificationModels.newBlacklist
 
-    logger.debug('Notify on video manual blacklist', { video: videoBlacklist?.Video?.url, ...lTags() })
+    logger.debug('Notify on video manual blacklist', { video: videoBlacklist?.Video?.url })
 
     this.sendNotifications(models, videoBlacklist)
       .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', videoBlacklist.Video.url, { err }))
@@ -202,7 +202,7 @@ class Notifier {
   notifyOnVideoUnblacklist (video: MVideoAccountLight): void {
     const models = this.notificationModels.unblacklist
 
-    logger.debug('Notify on video unblacklist', { video: video.url, ...lTags() })
+    logger.debug('Notify on video unblacklist', { video: video.url })
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
@@ -211,7 +211,7 @@ class Notifier {
   notifyOnFinishedVideoImport (payload: ImportFinishedForOwnerPayload): void {
     const models = this.notificationModels.importFinished
 
-    logger.debug('Notify on finished video import', { import: payload.videoImport.getTargetIdentifier(), ...lTags() })
+    logger.debug('Notify on finished video import', { import: payload.videoImport.getTargetIdentifier() })
 
     this.sendNotifications(models, payload)
       .catch(err => {
@@ -222,7 +222,7 @@ class Notifier {
   notifyOnNewDirectRegistration (user: MUserDefault): void {
     const models = this.notificationModels.directRegistration
 
-    logger.debug('Notify on new direct registration', { user: user.username, ...lTags() })
+    logger.debug('Notify on new direct registration', { user: user.username })
 
     this.sendNotifications(models, user)
       .catch(err => logger.error('Cannot notify moderators of new user registration (%s).', user.username, { err }))
@@ -231,7 +231,7 @@ class Notifier {
   notifyOnNewRegistrationRequest (registration: MRegistration): void {
     const models = this.notificationModels.registrationRequest
 
-    logger.debug('Notify on new registration request', { registration: registration.username, ...lTags() })
+    logger.debug('Notify on new registration request', { registration: registration.username })
 
     this.sendNotifications(models, registration)
       .catch(err => logger.error('Cannot notify moderators of new registration request (%s).', registration.username, { err }))
@@ -243,7 +243,7 @@ class Notifier {
     const following = actorFollow?.ActorFollowing?.VideoChannel?.getDisplayName()
     const follower = actorFollow?.ActorFollower?.Account?.getDisplayName()
 
-    logger.debug('Notify on new user follow', { following, follower, ...lTags() })
+    logger.debug('Notify on new user follow', { following, follower })
 
     this.sendNotifications(models, actorFollow)
       .catch(err => {
@@ -254,7 +254,7 @@ class Notifier {
   notifyOfNewInstanceFollow (actorFollow: MActorFollowFull): void {
     const models = this.notificationModels.instanceFollow
 
-    logger.debug('Notify on new instance follow', { follower: actorFollow.ActorFollower.url, ...lTags() })
+    logger.debug('Notify on new instance follow', { follower: actorFollow.ActorFollower.url })
 
     this.sendNotifications(models, actorFollow)
       .catch(err => logger.error('Cannot notify administrators of new follower %s.', actorFollow.ActorFollower.url, { err }))
@@ -263,7 +263,7 @@ class Notifier {
   notifyOfAutoInstanceFollowing (actorFollow: MActorFollowFull): void {
     const models = this.notificationModels.autoInstanceFollow
 
-    logger.debug('Notify on new instance auto following', { following: actorFollow.ActorFollowing.url, ...lTags() })
+    logger.debug('Notify on new instance auto following', { following: actorFollow.ActorFollowing.url })
 
     this.sendNotifications(models, actorFollow)
       .catch(err => logger.error('Cannot notify administrators of auto instance following %s.', actorFollow.ActorFollowing.url, { err }))
@@ -272,7 +272,7 @@ class Notifier {
   notifyOnAbuseStateChange (abuse: MAbuseFull): void {
     const models = this.notificationModels.abuseStateChange
 
-    logger.debug('Notify on abuse state change', { abuse: abuse.id, ...lTags() })
+    logger.debug('Notify on abuse state change', { abuse: abuse.id })
 
     this.sendNotifications(models, abuse)
       .catch(err => logger.error('Cannot notify of abuse %d state change.', abuse.id, { err }))
@@ -281,7 +281,7 @@ class Notifier {
   notifyOnAbuseMessage (abuse: MAbuseFull, message: MAbuseMessage): void {
     const models = this.notificationModels.newAbuseMessage
 
-    logger.debug('Notify on abuse message', { abuse: abuse.id, message, ...lTags() })
+    logger.debug('Notify on abuse message', { abuse: abuse.id, message })
 
     this.sendNotifications(models, { abuse, message })
       .catch(err => logger.error('Cannot notify on new abuse %d message.', abuse.id, { err }))
@@ -290,7 +290,7 @@ class Notifier {
   notifyOfNewPeerTubeVersion (application: MApplication, latestVersion: string) {
     const models = this.notificationModels.newPeertubeVersion
 
-    logger.debug('Notify on new peertube version', { currentVersion: application.version, latestVersion, ...lTags() })
+    logger.debug('Notify on new peertube version', { currentVersion: application.version, latestVersion })
 
     this.sendNotifications(models, { application, latestVersion })
       .catch(err => logger.error('Cannot notify on new PeerTube version %s.', latestVersion, { err }))
@@ -299,7 +299,7 @@ class Notifier {
   notifyOfNewPluginVersion (plugin: MPlugin) {
     const models = this.notificationModels.newPluginVersion
 
-    logger.debug('Notify on new plugin version', { plugin: plugin.name, ...lTags() })
+    logger.debug('Notify on new plugin version', { plugin: plugin.name })
 
     this.sendNotifications(models, plugin)
       .catch(err => logger.error('Cannot notify on new plugin version %s.', plugin.name, { err }))
@@ -313,7 +313,7 @@ class Notifier {
   }) {
     const models = this.notificationModels.automaticBlocklist
 
-    logger.debug(`Notify on automatic blocklist subscription update`, { ...options, ...lTags() })
+    logger.debug(`Notify on automatic blocklist subscription update`, { ...options })
 
     this.sendNotifications(models, options)
       .catch(err => logger.error(`Cannot notify on automatic blocklist update.`, { err, ...options }))
@@ -322,7 +322,7 @@ class Notifier {
   notifyOfFinishedVideoStudioEdition (video: MVideoFull) {
     const models = this.notificationModels.videoStudioEditionFinished
 
-    logger.debug('Notify on finished video studio edition', { video: video.url, ...lTags() })
+    logger.debug('Notify on finished video studio edition', { video: video.url })
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify on finished studio edition %s.', video.url, { err }))
@@ -332,7 +332,7 @@ class Notifier {
     const models = this.notificationModels.videoTranscriptionGenerated
     const video = caption.Video
 
-    logger.debug('Notify on generated video transcription', { language: caption.language, video: video.url, ...lTags() })
+    logger.debug('Notify on generated video transcription', { language: caption.language, video: video.url })
 
     this.sendNotifications(models, caption)
       .catch(err => logger.error('Cannot notify on generated video transcription %s of video %s.', caption.language, video.url, { err }))
@@ -344,7 +344,7 @@ class Notifier {
     const channelName = channel.Actor.preferredUsername
     const collaboratorName = collaborator.Account.Actor.preferredUsername
 
-    logger.debug('Notify on channel collaborator invitation', { channelName, collaboratorName, ...lTags() })
+    logger.debug('Notify on channel collaborator invitation', { channelName, collaboratorName })
 
     this.sendNotifications(models, { channel, collaborator })
       .catch(err => logger.error(`Cannot notify ${collaboratorName} of invitation to collaborate to channel ${channelName}`, { err }))
@@ -356,7 +356,7 @@ class Notifier {
     const channelName = channel.Actor.preferredUsername
     const channelOwner = collaborator.Account.Actor.preferredUsername
 
-    logger.debug('Notify of accepted channel collaboration invitation', { channelName, channelOwner, ...lTags() })
+    logger.debug('Notify of accepted channel collaboration invitation', { channelName, channelOwner })
 
     this.sendNotifications(models, { channel, collaborator })
       .catch(err => logger.error(`Cannot notify ${channelOwner} of accepted invitation to collaborate to channel ${channelName}`, { err }))
@@ -368,7 +368,7 @@ class Notifier {
     const channelName = channel.Actor.preferredUsername
     const channelOwner = collaborator.Account.Actor.preferredUsername
 
-    logger.debug('Notify of refused channel collaboration invitation', { channelName, channelOwner, ...lTags() })
+    logger.debug('Notify of refused channel collaboration invitation', { channelName, channelOwner })
 
     this.sendNotifications(models, { channel, collaborator })
       .catch(err => logger.error(`Cannot notify ${channelOwner} of refused invitation to collaborate to channel ${channelName}`, { err }))
@@ -381,7 +381,7 @@ class Notifier {
   notifyOfRequestedVideoOwnershipChange (changeOwnership: MChangeOwnershipFull) {
     const models = this.notificationModels.changeVideoOwnershipRequest
 
-    logger.debug('Notify on requested video ownership change', { id: changeOwnership.id, video: changeOwnership.Video.url, ...lTags() })
+    logger.debug('Notify on requested video ownership change', { id: changeOwnership.id, video: changeOwnership.Video.url })
 
     this.sendNotifications(models, changeOwnership)
       .catch(err => logger.error('Cannot notify requested video ownership change %d.', changeOwnership.id, { err }))
@@ -390,7 +390,7 @@ class Notifier {
   notifyOfAcceptedVideoOwnershipChange (changeOwnership: MChangeOwnershipFull) {
     const models = this.notificationModels.changeVideoOwnershipAccepted
 
-    logger.debug('Notify on accepted video ownership change', { id: changeOwnership.id, video: changeOwnership.Video.url, ...lTags() })
+    logger.debug('Notify on accepted video ownership change', { id: changeOwnership.id, video: changeOwnership.Video.url })
 
     this.sendNotifications(models, changeOwnership)
       .catch(err => logger.error('Cannot notify accepted video ownership change %d.', changeOwnership.id, { err }))
@@ -399,7 +399,7 @@ class Notifier {
   notifyOfRejectedVideoOwnershipChange (changeOwnership: MChangeOwnershipFull) {
     const models = this.notificationModels.changeVideoOwnershipRejected
 
-    logger.debug('Notify on rejected video ownership change', { id: changeOwnership.id, video: changeOwnership.Video.url, ...lTags() })
+    logger.debug('Notify on rejected video ownership change', { id: changeOwnership.id, video: changeOwnership.Video.url })
 
     this.sendNotifications(models, changeOwnership)
       .catch(err => logger.error('Cannot notify rejected video ownership change %d.', changeOwnership.id, { err }))
@@ -414,7 +414,7 @@ class Notifier {
 
     const channelName = changeOwnership.VideoChannel.Actor.preferredUsername
 
-    logger.debug(`Notify on requested channel ${channelName} ownership change`, { id: changeOwnership.id, channelName, ...lTags() })
+    logger.debug(`Notify on requested channel ${channelName} ownership change`, { id: changeOwnership.id, channelName })
 
     this.sendNotifications(models, changeOwnership)
       .catch(err => logger.error('Cannot notify requested channel ownership change %d.', changeOwnership.id, { err }))
@@ -425,7 +425,7 @@ class Notifier {
 
     const channelName = changeOwnership.VideoChannel.Actor.preferredUsername
 
-    logger.debug(`Notify on accepted channel ${channelName} ownership change`, { id: changeOwnership.id, channelName, ...lTags() })
+    logger.debug(`Notify on accepted channel ${channelName} ownership change`, { id: changeOwnership.id, channelName })
 
     this.sendNotifications(models, changeOwnership)
       .catch(err => logger.error('Cannot notify accepted channel ownership change %d.', changeOwnership.id, { err }))
@@ -436,7 +436,7 @@ class Notifier {
 
     const channelName = changeOwnership.VideoChannel.Actor.preferredUsername
 
-    logger.debug(`Notify on rejected channel ${channelName} ownership change`, { id: changeOwnership.id, channelName, ...lTags() })
+    logger.debug(`Notify on rejected channel ${channelName} ownership change`, { id: changeOwnership.id, channelName })
 
     this.sendNotifications(models, changeOwnership)
       .catch(err => logger.error('Cannot notify rejected channel ownership change %d.', changeOwnership.id, { err }))

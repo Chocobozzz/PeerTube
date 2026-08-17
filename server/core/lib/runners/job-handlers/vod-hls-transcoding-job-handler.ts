@@ -8,7 +8,7 @@ import {
   VODHLSTranscodingSuccess
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { onHLSVideoFileTranscoding } from '@server/lib/transcoding/hls-transcoding.js'
@@ -19,6 +19,8 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractVODTranscodingJobHandler } from './abstract-vod-transcoding-job-handler.js'
 import { hasMissingHLSStreams, loadRunnerVideo } from './shared/utils.js'
+
+const logger = createLogger('vod', 'transcoding')
 
 type CreateOptions = {
   video: MVideoWithFile
@@ -39,52 +41,54 @@ type CreateOptions = {
 export class VODHLSTranscodingJobHandler
   extends AbstractVODTranscodingJobHandler<CreateOptions, RunnerJobUpdatePayload, VODHLSTranscodingSuccess>
 {
-  async create (options: CreateOptions) {
+  create (options: CreateOptions) {
     const { video, resolution, fps, dependsOnRunnerJob, separatedAudio, priority } = options
 
     const jobUUID = buildUUID()
 
-    const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+    return logger.withContext([ jobUUID, video.uuid ], async () => {
+      const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
 
-    const payload: RunnerJobVODHLSTranscodingPayload = {
-      input: {
-        videoFileUrl: generateRunnerTranscodingInputFileUrl({
-          jobUUID,
-          videoUUID: video.uuid,
-          type: resolution === VideoResolution.H_NOVIDEO
-            ? 'audio'
-            : 'video'
-        }),
+      const payload: RunnerJobVODHLSTranscodingPayload = {
+        input: {
+          videoFileUrl: generateRunnerTranscodingInputFileUrl({
+            jobUUID,
+            videoUUID: video.uuid,
+            type: resolution === VideoResolution.H_NOVIDEO
+              ? 'audio'
+              : 'video'
+          }),
 
-        separatedAudioFileUrl: separatedAudioFile
-          ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
-          : []
-      },
-      output: {
-        resolution,
-        fps,
-        separatedAudio
+          separatedAudioFileUrl: separatedAudioFile
+            ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
+            : []
+        },
+        output: {
+          resolution,
+          fps,
+          separatedAudio
+        }
       }
-    }
 
-    const privatePayload: RunnerJobVODHLSTranscodingPrivatePayload = {
-      ...pick(options, [ 'deleteWebVideoFiles', 'inputStreams', 'canMoveVideoState', 'transcodingRequestAt' ]),
+      const privatePayload: RunnerJobVODHLSTranscodingPrivatePayload = {
+        ...pick(options, [ 'deleteWebVideoFiles', 'inputStreams', 'canMoveVideoState', 'transcodingRequestAt' ]),
 
-      videoUUID: video.uuid
-    }
+        videoUUID: video.uuid
+      }
 
-    const job = await this.createRunnerJob({
-      type: 'vod-hls-transcoding',
-      jobUUID,
-      payload,
-      privatePayload,
-      priority,
-      dependsOnRunnerJob
+      const job = await this.createRunnerJob({
+        type: 'vod-hls-transcoding',
+        jobUUID,
+        payload,
+        privatePayload,
+        priority,
+        dependsOnRunnerJob
+      })
+
+      await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingTranscode')
+
+      return job
     })
-
-    await VideoJobInfoModel.increaseOrCreate(video.uuid, 'pendingTranscode')
-
-    return job
   }
 
   // ---------------------------------------------------------------------------
@@ -96,43 +100,42 @@ export class VODHLSTranscodingJobHandler
     const { runnerJob, resultPayload } = options
     const privatePayload = runnerJob.privatePayload as RunnerJobVODHLSTranscodingPrivatePayload
 
-    const video = await loadRunnerVideo(runnerJob, this.lTags)
+    const video = await loadRunnerVideo(runnerJob)
     if (!video) return
 
-    const videoFilePath = resultPayload.videoFile as string
-    const resolutionPlaylistFilePath = resultPayload.resolutionPlaylistFile as string
+    await logger.withContext([ video.uuid ], async () => {
+      const videoFilePath = resultPayload.videoFile as string
+      const resolutionPlaylistFilePath = resultPayload.resolutionPlaylistFile as string
 
-    await onHLSVideoFileTranscoding({
-      video,
-      m3u8OutputPath: resolutionPlaylistFilePath,
-      videoOutputPath: videoFilePath
-    })
-
-    // Splitted audio? Wait audio generation before moving the video in its next state
-    const missingStream = await hasMissingHLSStreams({
-      inputStreams: privatePayload.inputStreams,
-      transcodingRequestAt: privatePayload.transcodingRequestAt,
-      videoId: video.uuid
-    })
-
-    if (!missingStream && privatePayload.deleteWebVideoFiles === true) {
-      const resolutionExceptions = CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
-        ? [ VideoResolution.H_NOVIDEO ]
-        : []
-
-      logger.info('Removing web video files of %s now we have a HLS version of it.', video.uuid, {
-        resolutionExceptions,
-        ...this.lTags(video.uuid)
+      await onHLSVideoFileTranscoding({
+        video,
+        m3u8OutputPath: resolutionPlaylistFilePath,
+        videoOutputPath: videoFilePath
       })
 
-      await removeAllWebVideoFiles(video, { resolutionExceptions })
-    }
+      // Splitted audio? Wait audio generation before moving the video in its next state
+      const missingStream = await hasMissingHLSStreams({
+        inputStreams: privatePayload.inputStreams,
+        transcodingRequestAt: privatePayload.transcodingRequestAt,
+        videoId: video.uuid
+      })
 
-    await onTranscodingEnded({
-      moveVideoToNextState: privatePayload.canMoveVideoState && !missingStream,
-      video
+      if (!missingStream && privatePayload.deleteWebVideoFiles === true) {
+        const resolutionExceptions = CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+          ? [ VideoResolution.H_NOVIDEO ]
+          : []
+
+        logger.info('Removing web video files of %s now we have a HLS version of it.', video.uuid, { resolutionExceptions })
+
+        await removeAllWebVideoFiles(video, { resolutionExceptions })
+      }
+
+      await onTranscodingEnded({
+        moveVideoToNextState: privatePayload.canMoveVideoState && !missingStream,
+        video
+      })
+
+      logger.info('Runner VOD HLS job %s for %s ended.', runnerJob.uuid, video.uuid)
     })
-
-    logger.info('Runner VOD HLS job %s for %s ended.', runnerJob.uuid, video.uuid, this.lTags(runnerJob.uuid, video.uuid))
   }
 }

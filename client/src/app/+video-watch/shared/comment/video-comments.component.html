@@ -1,7 +1,7 @@
 <div>
   <div class="title-block">
     <h2>
-      {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{ totalNotDeletedComments }} Comments}}
+      {totalNotDeletedComments, plural, =0 {Comments} =1 {1 Comment} other {{{ totalNotDeletedComments | myNumberFormatter }} Comments}}
     </h2>
 
     <my-feed class="me-1" [syndicationItems]="syndicationItems"></my-feed>
@@ -48,6 +48,7 @@
             (wantedToDelete)="onWantedToDelete($event)"
             (wantedToRedraft)="onWantedToRedraft($event)"
             (wantedToApprove)="onWantToApprove($event)"
+            (wantedToViewRepliesInModal)="onWantedToViewRepliesInModal($event)"
             (threadCreated)="onThreadCreated($event)"
             (resetReply)="onResetReply()"
             (timestampClicked)="handleTimestampClicked($event)"
@@ -70,6 +71,7 @@
               (wantedToDelete)="onWantedToDelete($event)"
               (wantedToRedraft)="onWantedToRedraft($event)"
               (wantedToApprove)="onWantToApprove($event)"
+              (wantedToViewRepliesInModal)="onWantedToViewRepliesInModal($event)"
               (threadCreated)="onThreadCreated($event)"
               (resetReply)="onResetReply()"
               (timestampClicked)="handleTimestampClicked($event)"
@@ -107,3 +109,42 @@
     <div i18n>Comments are disabled.</div>
   }
 </div>
+
+<ng-template #repliesModal>
+  <div class="modal-header">
+    @if (repliesModalStack.length > 1) {
+      <button class="border-0 p-0 me-2" title="Go back to the previous comment" i18n-title (click)="onRepliesModalBack()">
+        <my-global-icon iconName="chevron-left" ariaHidden="true"></my-global-icon>
+      </button>
+    }
+
+    <h4 class="modal-title" i18n>Replies to {{ getRepliesModalRoot()?.comment?.account?.displayName || 'Unknown' }}</h4>
+
+    <button class="border-0 p-0" title="Close this modal" i18n-title (click)="closeRepliesModal()">
+      <my-global-icon iconName="cross" ariaHidden="true"></my-global-icon>
+    </button>
+  </div>
+
+  <div class="modal-body replies-modal-body">
+    <!-- The stack is emptied when the modal is closed, but the template can still be rendered while it fades out -->
+    @if (getRepliesModalRoot(); as repliesModalRoot) {
+      <my-video-comment
+        [comment]="repliesModalRoot.comment"
+        [video]="video()"
+        [videoPassword]="videoPassword()"
+        [inReplyToCommentId]="inReplyToCommentId"
+        [commentTree]="repliesModalTree"
+        [parentComments]="repliesModalRoot.parentComments"
+        [autoLoadReplies]="true"
+        (wantedToReply)="onWantedToReply($event)"
+        (wantedToDelete)="onWantedToDelete($event)"
+        (wantedToRedraft)="onWantedToRedraft($event)"
+        (wantedToApprove)="onWantToApprove($event)"
+        (wantedToViewRepliesInModal)="onWantedToViewRepliesInModal($event)"
+        (resetReply)="onResetReply()"
+        (timestampClicked)="handleTimestampClicked($event)"
+        [redraftValue]="commentReplyRedraftValue"
+      ></my-video-comment>
+    }
+  </div>
+</ng-template>

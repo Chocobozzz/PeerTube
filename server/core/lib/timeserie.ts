@@ -1,4 +1,6 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
+
+const logger = createLogger()
 
 function buildGroupByAndBoundaries (startDateString: string, endDateString: string) {
   const startDate = new Date(startDateString)

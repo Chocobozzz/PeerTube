@@ -33,7 +33,7 @@ import { VideoLiveSessionModel } from '@server/models/video/video-live-session.j
 import { MVideoLive } from '@server/types/models/index.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
-import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -43,7 +43,7 @@ import {
   setLiveSessionsSort
 } from '../../../middlewares/index.js'
 
-const lTags = loggerTagsFactory('api', 'live')
+const logger = createLogger('api', 'live')
 
 const liveRouter = express.Router()
 
@@ -137,41 +137,43 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
   const videoLive = res.locals.videoLive
 
-  await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
-      const newReplaySettingModel = await updateReplaySettings(videoLive, body, t)
+  return logger.withContext([ video.uuid ], async () => {
+    await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        const newReplaySettingModel = await updateReplaySettings(videoLive, body, t)
 
-      if (newReplaySettingModel) videoLive.replaySettingId = newReplaySettingModel.id
-      else videoLive.replaySettingId = null
+        if (newReplaySettingModel) videoLive.replaySettingId = newReplaySettingModel.id
+        else videoLive.replaySettingId = null
 
-      if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
-      if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
-      if (exists(body.dvrWindow)) videoLive.dvrWindow = body.dvrWindow
+        if (exists(body.permanentLive)) videoLive.permanentLive = body.permanentLive
+        if (exists(body.latencyMode)) videoLive.latencyMode = body.latencyMode
+        if (exists(body.dvrWindow)) videoLive.dvrWindow = body.dvrWindow
 
-      if (body.schedules !== undefined) {
-        await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
-        videoLive.LiveSchedules = []
+        if (body.schedules !== undefined) {
+          await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, t)
+          videoLive.LiveSchedules = []
 
-        if (isArray(body.schedules)) {
-          videoLive.LiveSchedules = await VideoLiveScheduleModel.addToLiveId(videoLive.id, body.schedules.map(s => s.startAt), t)
+          if (isArray(body.schedules)) {
+            videoLive.LiveSchedules = await VideoLiveScheduleModel.addToLiveId(videoLive.id, body.schedules.map(s => s.startAt), t)
+          }
         }
-      }
 
-      video.VideoLive = await videoLive.save({ transaction: t })
+        video.VideoLive = await videoLive.save({ transaction: t })
 
-      await VideoChannelActivityModel.addVideoActivity({
-        action: VideoChannelActivityAction.UPDATE,
-        user: res.locals.oauth.token.User,
-        channel: video.VideoChannel,
-        video,
-        transaction: t
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.UPDATE,
+          user: res.locals.oauth.token.User,
+          channel: video.VideoChannel,
+          video,
+          transaction: t
+        })
       })
     })
+
+    scheduleVideoFederation({ video })
+
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
-
-  scheduleVideoFederation({ video })
-
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateReplaySettings (videoLive: MVideoLive, body: LiveVideoUpdate, t: Transaction) {
@@ -198,60 +200,61 @@ async function updateReplaySettings (videoLive: MVideoLive, body: LiveVideoUpdat
 async function addLiveVideo (req: express.Request, res: express.Response) {
   const videoInfo: LiveVideoCreate = req.body
 
-  const thumbnailfile = getVideoThumbnailFile(req.files)
+  await logger.inContext(async () => {
+    const thumbnailfile = getVideoThumbnailFile(req.files)
 
-  const localVideoCreator = new LocalVideoCreator({
-    channel: res.locals.videoChannel,
-    chapters: undefined,
-    fallbackChapters: {
-      fromDescription: false,
-      finalFallback: undefined
-    },
-    liveAttributes: pick(videoInfo, [
-      'saveReplay',
-      'permanentLive',
-      'latencyMode',
-      'dvrWindow',
-      'replaySettings',
-      'schedules'
-    ]),
-    videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
-    lTags,
-    videoAttributes: {
-      ...videoInfo,
+    const localVideoCreator = new LocalVideoCreator({
+      channel: res.locals.videoChannel,
+      chapters: undefined,
+      fallbackChapters: {
+        fromDescription: false,
+        finalFallback: undefined
+      },
+      liveAttributes: pick(videoInfo, [
+        'saveReplay',
+        'permanentLive',
+        'latencyMode',
+        'dvrWindow',
+        'replaySettings',
+        'schedules'
+      ]),
+      videoAttributeResultHook: 'filter:api.video.live.video-attribute.result',
+      videoAttributes: {
+        ...videoInfo,
 
-      duration: 0,
-      state: VideoState.WAITING_FOR_LIVE,
-      isLive: true,
-      inputFilename: null
-    },
-    videoFile: undefined,
-    user: res.locals.oauth.token.User,
+        duration: 0,
+        state: VideoState.WAITING_FOR_LIVE,
+        isLive: true,
+        inputFilename: null
+      },
+      videoFile: undefined,
+      user: res.locals.oauth.token.User,
 
-    thumbnail: thumbnailfile
-      ? {
-        path: thumbnailfile.path,
-        automaticallyGenerated: false,
-        keepOriginal: false
+      thumbnail: thumbnailfile
+        ? {
+          path: thumbnailfile.path,
+          automaticallyGenerated: false,
+          keepOriginal: false
+        }
+        : {
+          path: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
+          automaticallyGenerated: true,
+          keepOriginal: true
+        }
+    })
+
+    const { video } = await localVideoCreator.create()
+
+    logger.info('Video live %s with uuid %s created.', videoInfo.name, video.uuid)
+
+    Hooks.runAction('action:api.live-video.created', { video, req, res })
+
+    return res.json({
+      video: {
+        id: video.id,
+        shortUUID: uuidToShort(video.uuid),
+        uuid: video.uuid
       }
-      : {
-        path: ASSETS_PATH.DEFAULT_LIVE_BACKGROUND,
-        automaticallyGenerated: true,
-        keepOriginal: true
-      }
-  })
-
-  const { video } = await localVideoCreator.create()
-
-  logger.info('Video live %s with uuid %s created.', videoInfo.name, video.uuid, lTags())
-
-  Hooks.runAction('action:api.live-video.created', { video, req, res })
-
-  return res.json({
-    video: {
-      id: video.id,
-      shortUUID: uuidToShort(video.uuid),
-      uuid: video.uuid
-    }
+    })
   })
 }

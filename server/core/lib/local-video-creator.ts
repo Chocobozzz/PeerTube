@@ -14,7 +14,7 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getServerAccount } from '@server/models/application/application.js'
@@ -41,6 +41,8 @@ import { buildNewFile, createVideoSource } from './video-file.js'
 import { addVideoJobsAfterCreation } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
 import { setVideoTags } from './video.js'
+
+const logger = createLogger('video')
 
 type VideoAttributes = Omit<VideoCreate, 'channelId'> & {
   duration: number
@@ -81,8 +83,6 @@ type VideoAttributeHookFilter =
   | 'filter:api.video.live.video-attribute.result'
 
 export class LocalVideoCreator {
-  private readonly lTags: LoggerTagsFn
-
   private readonly videoFilePath: string | undefined
   private readonly videoFileProbe: FfprobeData
 
@@ -98,8 +98,6 @@ export class LocalVideoCreator {
 
   constructor (
     private readonly options: {
-      lTags: LoggerTagsFn
-
       videoFile: {
         path: string
         probe: FfprobeData
@@ -129,15 +127,17 @@ export class LocalVideoCreator {
     this.channel = options.channel
 
     this.videoAttributeResultHook = options.videoAttributeResultHook
-
-    this.lTags = options.lTags
   }
 
   async create () {
     this.video = new VideoModel(
       await Hooks.wrapObject(this.buildVideo(this.videoAttributes, this.channel), this.videoAttributeResultHook)
-    ) as MVideoFull
+    )
 
+    return logger.withContext([ this.video.uuid ], () => this.runCreate())
+  }
+
+  private async runCreate () {
     this.video.VideoChannel = this.channel
     this.video.url = getLocalVideoActivityPubUrl(this.video)
 
@@ -253,7 +253,7 @@ export class LocalVideoCreator {
               video: this.video,
               videoFile: this.videoFile,
               generateTranscription: this.videoAttributes.generateTranscription ?? true
-            }).catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err, ...this.lTags(this.video.uuid) }))
+            }).catch(err => logger.error('Cannot build new video jobs of %s.', this.video.uuid, { err }))
           })
         } else {
           scheduleVideoFederation({ video: this.video, transaction })

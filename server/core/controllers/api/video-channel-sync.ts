@@ -1,6 +1,6 @@
 import { HttpStatusCode, VideoChannelActivityAction, StreamSyncState } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import {
   apiRateLimiter,
@@ -15,6 +15,8 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { MChannelSyncFormattable } from '@server/types/models/index.js'
 import express from 'express'
+
+const logger = createLogger()
 
 const videoChannelSyncRouter = express.Router()
 const auditLogger = auditLoggerFactory('channel-syncs')

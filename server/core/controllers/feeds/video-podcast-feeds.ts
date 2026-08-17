@@ -4,7 +4,7 @@ import { buildDownloadFilesUrl, getResolutionLabel, sortObjectComparator } from 
 import { ActorImageType, FeedEnclosurePreference, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
 import { buildNSFWFilters } from '@server/helpers/express-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -31,6 +31,8 @@ import {
   getVideosForFeeds,
   initFeed
 } from './shared/index.js'
+
+const logger = createLogger()
 
 const videoPodcastFeedsRouter = express.Router()
 

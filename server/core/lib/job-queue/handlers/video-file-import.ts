@@ -11,10 +11,12 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { copy } from 'fs-extra/esm'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
 
-async function processVideoFileImport (job: Job) {
+const logger = createLogger()
+
+export async function processVideoFileImport (job: Job) {
   const payload = job.data as VideoFileImportPayload
   logger.info('Processing video file import in job %s.', job.id)
 
@@ -25,31 +27,29 @@ async function processVideoFileImport (job: Job) {
     return undefined
   }
 
-  await updateVideoFile(video, payload.filePath)
+  return logger.withContext([ video.uuid ], async () => {
+    await updateVideoFile(video, payload.filePath)
 
-  if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await JobQueue.Instance.createJob(
-      await buildMoveVideoJob({
-        type: 'move-to-object-storage',
-        video,
-        moveVideoState: {
-          previousVideoState: video.state
-        }
-      })
-    )
-  } else {
-    scheduleVideoFederation({ video })
-  }
+    if (CONFIG.OBJECT_STORAGE.ENABLED) {
+      await JobQueue.Instance.createJob(
+        await buildMoveVideoJob({
+          type: 'move-to-object-storage',
+          video,
+          moveVideoState: {
+            previousVideoState: video.state
+          }
+        })
+      )
+    } else {
+      scheduleVideoFederation({ video })
+    }
 
-  return video
+    return video
+  })
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  processVideoFileImport
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function updateVideoFile (video: MVideoFull, inputFilePath: string) {

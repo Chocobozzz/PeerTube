@@ -1,11 +1,13 @@
 import { ChannelExportJSON, PlayerChannelSettings } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MChannelBannerAccountDefault } from '@server/types/models/index.js'
 import { MPlayerSetting } from '@server/types/models/video/player-setting.js'
 import { ExportResult } from './abstract-user-exporter.js'
 import { ActorExporter } from './actor-exporter.js'
+
+const logger = createLogger()
 
 export class ChannelsExporter extends ActorExporter<ChannelExportJSON> {
   async export () {

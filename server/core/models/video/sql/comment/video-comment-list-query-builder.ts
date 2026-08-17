@@ -1,5 +1,6 @@
 import { VideoChannelCollaboratorState, VideoPrivacy } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
+import { buildSortDirectionAndField } from '@server/models/shared/sort.js'
 import { getAccountJoin, getActorJoin, getAvatarsJSONJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
 import { Sequelize } from 'sequelize'
 import { createSafeIn } from '../../../shared/index.js'
@@ -13,6 +14,23 @@ export interface ListVideoCommentsOptions extends AbstractListQueryOptions {
   videoId?: number
   threadId?: number
   accountId?: number
+
+  // Filer on these comments
+  commentIds?: number[]
+  // Filter on comments that are in reply to these comments
+  inReplyToCommentIds?: number[]
+
+  // Select a truncated tree of the replies of a comment
+  // First level is paginated using `start`/`count`
+  // Deeper level only keeps the first `repliesPerLevel` replies of each of its parents
+  replyTree?: {
+    parentCommentId: number
+    start: number
+    count: number
+    maxDepth: number
+    repliesPerLevel: number
+    maxComments: number
+  }
 
   blockerAccountIds?: number[]
 
@@ -37,6 +55,10 @@ export interface ListVideoCommentsOptions extends AbstractListQueryOptions {
   searchVideo?: string
 
   includeReplyCounters?: boolean
+
+  // The reply tree keeps deleted comments as tombstones so their own children stay attached:
+  // set this to also count them in `totalReplies`, or the count won't match what `replyTree`/`replies` actually return
+  totalRepliesIncludeDeleted?: boolean
 }
 
 export class VideoCommentListQueryBuilder extends AbstractListQuery {
@@ -60,6 +82,18 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     if (this.options.includeReplyCounters && !this.options.videoId) {
       throw new Error('Cannot include reply counters without videoId')
     }
+
+    if (this.options.replyTree && (this.options.start !== undefined || this.options.count !== undefined)) {
+      throw new Error('Cannot use start/count with replyTree, it is paginated using replyTree.start/replyTree.count')
+    }
+  }
+
+  // The reply tree needs a recursive CTE
+  // PostgreSQL accepts non recursive CTE in a `WITH RECURSIVE`, so we can always use it as soon as one of our CTE is recursive
+  protected buildCTE (cte: string[]) {
+    if (cte.length === 0 || !this.options.replyTree) return super.buildCTE(cte)
+
+    return `WITH RECURSIVE ${cte.join(', ')} `
   }
   // ---------------------------------------------------------------------------
 
@@ -76,6 +110,20 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
       this.replacements.threadId = this.options.threadId
 
       where.push('("VideoCommentModel"."id" = :threadId OR "VideoCommentModel"."originCommentId" = :threadId)')
+    }
+
+    if (this.options.commentIds) {
+      where.push(`"VideoCommentModel"."id" IN (${createSafeIn(this.sequelize, this.options.commentIds)})`)
+    }
+
+    if (this.options.inReplyToCommentIds) {
+      const idsString = createSafeIn(this.sequelize, this.options.inReplyToCommentIds)
+
+      where.push(`"VideoCommentModel"."inReplyToCommentId" IN (${idsString})`)
+    }
+
+    if (this.options.replyTree) {
+      this.buildReplyTreeCTE()
     }
 
     if (this.options.accountId) {
@@ -98,19 +146,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
       where.push('"VideoCommentModel"."deletedAt" IS NULL')
     }
 
-    if (this.options.heldForReview === true) {
-      where.push('"VideoCommentModel"."heldForReview" IS TRUE')
-    } else if (this.options.heldForReview === false) {
-      const base = '"VideoCommentModel"."heldForReview" IS FALSE'
-
-      if (this.options.heldForReviewAccountIdException) {
-        this.replacements.heldForReviewAccountIdException = this.options.heldForReviewAccountIdException
-
-        where.push(`(${base} OR "VideoCommentModel"."accountId" = :heldForReviewAccountIdException)`)
-      } else {
-        where.push(base)
-      }
-    }
+    where = where.concat(this.getHeldForReviewWhere('VideoCommentModel'))
 
     if (this.options.autoTagOneOf) {
       const tags = this.options.autoTagOneOf.map(t => t.toLowerCase())
@@ -460,12 +496,16 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     // Help the planner by providing videoId that should filter out many comments
     this.replacements.videoId = this.options.videoId
 
+    const deletedWhere = this.options.totalRepliesIncludeDeleted === true
+      ? ''
+      : 'AND "deletedAt" IS NULL '
+
     this.subQueryLateralJoin += `LEFT JOIN LATERAL (` +
       `SELECT COUNT("replies"."id") AS "count" FROM "videoComment" AS "replies" ` +
       `INNER JOIN "video" ON "video"."id" = "replies"."videoId" AND "replies"."videoId" = :videoId ` +
       `LEFT JOIN "videoChannel" ON "video"."channelId" = "videoChannel"."id" ` +
       `WHERE ("replies"."inReplyToCommentId" = "VideoCommentModel"."id" OR "replies"."originCommentId" = "VideoCommentModel"."id") ` +
-      `AND "deletedAt" IS NULL ` +
+      `${deletedWhere}` +
       `AND ${blockWhereString} ` +
       `) "totalReplies" ON TRUE `
   }
@@ -484,6 +524,94 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
   }
 
   // ---------------------------------------------------------------------------
+
+  private getHeldForReviewWhere (commentTableName: string) {
+    if (this.options.heldForReview === true) {
+      return [ `"${commentTableName}"."heldForReview" IS TRUE` ]
+    }
+
+    if (this.options.heldForReview === false) {
+      const base = `"${commentTableName}"."heldForReview" IS FALSE`
+
+      if (this.options.heldForReviewAccountIdException) {
+        this.replacements.heldForReviewAccountIdException = this.options.heldForReviewAccountIdException
+
+        return [ `(${base} OR "${commentTableName}"."accountId" = :heldForReviewAccountIdException)` ]
+      }
+
+      return [ base ]
+    }
+
+    return []
+  }
+
+  // Walk down the replies of a comment, keeping only `repliesPerLevel` of each parent
+  // The LATERAL is applied on every iteration, so cutting a comment also cuts its own descendants
+  private buildReplyTreeCTE () {
+    const { parentCommentId, start, count, maxDepth, repliesPerLevel, maxComments } = this.options.replyTree
+
+    Object.assign(this.replacements, {
+      treeParentCommentId: parentCommentId,
+      treeStart: start,
+      treeCount: count,
+      treeMaxDepth: maxDepth,
+      treeRepliesPerLevel: repliesPerLevel,
+      treeMaxComments: maxComments
+    })
+
+    const buildWhere = (on: string) => {
+      const where = [ `"replyTree"."inReplyToCommentId" = ${on}`, ...this.getHeldForReviewWhere('replyTree') ]
+
+      if (this.options.videoId) where.push('"replyTree"."videoId" = :videoId')
+
+      return where.join(' AND ')
+    }
+
+    // The first level is the one the client paginates with start/count, so it must match the
+    // sort order the outer query uses, and blocklists must be applied before LIMIT/OFFSET
+    // or pagination would duplicate/skip replies
+    const direction = this.options.sort
+      ? buildSortDirectionAndField(this.options.sort).direction
+      : 'ASC'
+
+    const order = `ORDER BY "replyTree"."createdAt" ${direction}, "replyTree"."id" ASC`
+
+    const firstLevelJoin = this.options.blockerAccountIds
+      ? 'INNER JOIN "video" AS "replyTreeVideo" ON "replyTreeVideo"."id" = "replyTree"."videoId" ' +
+        'INNER JOIN "videoChannel" AS "replyTreeChannel" ON "replyTreeChannel"."id" = "replyTreeVideo"."channelId" '
+      : ''
+
+    const firstLevelWhere = this.options.blockerAccountIds
+      ? [ buildWhere(':treeParentCommentId'), ...this.getBlockWhere('replyTree', 'replyTreeChannel') ].join(' AND ')
+      : buildWhere(':treeParentCommentId')
+
+    this.subQueryCTE.push(
+      '"replyTreeAll" AS (' +
+        // The first level is the one the client paginates through
+        `SELECT * FROM (` +
+        `  SELECT "replyTree"."id", 0 AS "treeDepth" FROM "videoComment" AS "replyTree" ` +
+        `  ${firstLevelJoin}` +
+        `  WHERE ${firstLevelWhere} ${order} LIMIT :treeCount OFFSET :treeStart` +
+        `) AS "replyTreeFirstLevel" ` +
+        `UNION ALL ` +
+        // Recursive query
+        // Blocklists are not taken into account here to keep the query cheap
+        // We accept a blocked comment may consume a slot and slightly reduce the number of replies of a parent
+        `SELECT "replyTreeChild"."id", "replyTreeAll"."treeDepth" + 1 ` +
+        `FROM "replyTreeAll", LATERAL (` +
+        `  SELECT "replyTree"."id" FROM "videoComment" AS "replyTree" ` +
+        `  WHERE ${buildWhere('"replyTreeAll"."id"')} ${order} LIMIT :treeRepliesPerLevel` +
+        `) AS "replyTreeChild" ` +
+        `WHERE "replyTreeAll"."treeDepth" + 1 < :treeMaxDepth` +
+        ')',
+      // Never send back more comments than this
+      // Truncating the deepest levels first keeps the tree readable
+      // The client can still unfold what we dropped with other HTTP requests
+      '"replyTree" AS (SELECT "id" FROM "replyTreeAll" LIMIT :treeMaxComments)'
+    )
+
+    this.subQueryJoin += ' INNER JOIN "replyTree" ON "replyTree"."id" = "VideoCommentModel"."id" '
+  }
 
   private getBlockWhere (commentTableName: string, channelTableName: string) {
     const where: string[] = []

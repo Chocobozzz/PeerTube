@@ -1,6 +1,6 @@
 import { UserNotificationType } from '@peertube/peertube-models'
 import { t } from '@server/helpers/i18n.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -12,6 +12,8 @@ import {
   UserNotificationModelForApi
 } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
+
+const logger = createLogger()
 
 export abstract class AbstractOwnedVideoPublication extends AbstractNotification<MVideoWithRights & MVideoWithSchedule> {
   protected user: MUserDefault

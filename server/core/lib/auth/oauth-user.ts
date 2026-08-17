@@ -8,7 +8,7 @@ import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { AuthenticatedResultUpdaterFieldName, RegisterServerAuthenticatedResult } from '@server/types/index.js'
 import { MUser, MUserDefault } from '@server/types/models/user/user.js'
 import express from 'express'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { OTP } from '../../initializers/constants.js'
 import { sequelizeTypescript } from '../../initializers/database.js'
@@ -29,6 +29,8 @@ import {
   RegistrationApprovalRejected,
   RegistrationWaitingForApproval
 } from './oauth-errors.js'
+
+const logger = createLogger()
 
 export async function getUserOrThrow (options: {
   usernameOrEmail?: string

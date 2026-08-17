@@ -26,6 +26,10 @@
     color: $fg;
     background-color: $active-bg;
     border-color: $border-color;
+
+    my-global-icon {
+      color: $fg !important;
+    }
   }
 
   // Override bootstrap
@@ -35,6 +39,10 @@
     color: $fg !important;
     background-color: $active-bg !important;
     border-color: $border-color !important;
+
+    my-global-icon {
+      color: $fg !important;
+    }
   }
 
   &:hover {

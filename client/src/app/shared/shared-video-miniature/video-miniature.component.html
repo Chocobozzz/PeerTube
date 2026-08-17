@@ -1,6 +1,6 @@
 <div class="video-miniature" [ngClass]="getClasses()" (mouseenter)="loadActions()" (focusin)="loadActions()">
   <my-video-thumbnail
-    [ariaLabel]="getAriaLabel()"
+    ariaHidden="true"
     [blur]="hasNSFWBlur()"
     [video]="video()"
     [videoRouterLink]="videoRouterLink"
@@ -25,7 +25,7 @@
 
   <ng-template #nsfwWarningButton>
     @if (hasNSFWWarning()) {
-      <button type="button" class="nsfw-warning button-unstyle ms-auto ps-1" [attr.aria-label]="nsfwTooltip" [ngbTooltip]="nsfwTooltip">
+      <button type="button" class="nsfw-warning button-unstyle ms-auto ps-1" [ariaLabel]="nsfwTooltip" [ngbTooltip]="nsfwTooltip">
         <my-global-icon iconName="eye-close"></my-global-icon>
       </button>
     }
@@ -42,6 +42,7 @@
               [size]="actorImageSize()"
               [actor]="video().channel"
               [internalHref]="[ '/c', video().byVideoChannel ]"
+              [ariaHidden]="displayOptions().by"
             ></my-actor-avatar>
           } @else if (displayOwnerAccount()) {
             <my-actor-avatar
@@ -50,6 +51,7 @@
               [size]="actorImageSize()"
               [actor]="video().account"
               [internalHref]="[ '/c', video().byVideoChannel ]"
+              [ariaHidden]="displayOptions().by"
             ></my-actor-avatar>
           }
         }
@@ -62,8 +64,7 @@
               [href]="ownerHref"
               [target]="ownerTarget"
               inheritParentStyle="true"
-              [ariaLabel]="getAriaLabel()"
-              [title]="displayOwnerAccount() ? authorAccount : authorChannel"
+              [title]="getOwnerLinkTitle()"
             >
               @if (displayOwnerAccount()) {
                 {{ authorAccount }}
@@ -71,9 +72,11 @@
                 {{ authorChannel }}
               }
             </my-link>
+
             @if (!video().isLocal) {
               <my-actor-host [host]="video().account.host"></my-actor-host>
             }
+
             @if (!displayAsRow()) {
               <ng-container *ngTemplateOutlet="nsfwWarningButton"></ng-container>
             }
@@ -88,25 +91,30 @@
         [href]="videoHref"
         [target]="videoTarget"
         inheritParentStyle="true"
-        [ariaLabel]="getAriaLabel()"
+        [ariaLabel]="getVideoAriaLabel()"
         [title]="video().name"
         class="video-name"
         className="ellipsis-multiline-2"
+        [attr.role]="headingLevel() ? 'heading' : null"
+        [attr.aria-level]="headingLevel()"
       >
         {{ video().name }}
       </my-link>
 
-      <div class="video-actions">
-        @if (showActions) {
-          <my-video-actions-dropdown
-            [video]="video()"
-            [displayOptions]="videoActionsDisplayOptions()"
-            placement="bottom-left bottom-right left auto"
-            (videoRemoved)="onVideoRemoved()"
-            (videoBlocked)="onVideoBlocked()"
-            (videoUnblocked)="onVideoUnblocked()"
-            (muted)="onMuted()"
-          ></my-video-actions-dropdown>
+      <div class="video-actions" #videoActionsEl>
+        @defer (on viewport(videoActionsEl); prefetch on idle) {
+          @if (showActions) {
+            <my-video-actions-dropdown
+              [video]="video()"
+              [displayOptions]="videoActionsDisplayOptions()"
+              [ariaLabel]="getVideoActionsLabel()"
+              placement="bottom-left bottom-right left auto"
+              (videoRemoved)="onVideoRemoved()"
+              (videoBlocked)="onVideoBlocked()"
+              (videoUnblocked)="onVideoUnblocked()"
+              (muted)="onMuted()"
+            ></my-video-actions-dropdown>
+          }
         }
       </div>
 

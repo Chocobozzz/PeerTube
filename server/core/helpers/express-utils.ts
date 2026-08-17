@@ -9,9 +9,11 @@ import { CONFIG } from '../initializers/config.js'
 import { REMOTE_SCHEME } from '../initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
 import { deleteFileAndCatch } from './fs.js'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
 import { generateRandomString } from './utils.js'
 import { getExtFromMimetype } from './video.js'
+
+const logger = createLogger()
 
 // ---------------------------------------------------------------------------
 // Extract NSFW Filters options to list videos

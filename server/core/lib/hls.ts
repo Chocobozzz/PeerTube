@@ -11,7 +11,7 @@ import flatten from 'lodash-es/flatten.js'
 import PQueue from 'p-queue'
 import { basename, dirname, join } from 'path'
 import { getAudioStreamCodec, getVideoStreamCodec } from '../helpers/ffmpeg/index.js'
-import { logger, loggerTagsFactory } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests.js'
 import { generateRandomString } from '../helpers/utils.js'
 import { CONFIG } from '../initializers/config.js'
@@ -23,20 +23,20 @@ import { storeHLSFileFromContent } from './object-storage/index.js'
 import { generateHLSMasterPlaylistFilename, generateHlsSha256SegmentsFilename, getHLSResolutionPlaylistFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
 
-const lTags = loggerTagsFactory('hls')
+const logger = createLogger('hls')
 
 export async function updateStreamingPlaylistsInfohashesIfNeeded () {
   let playlistsToUpdateIds = new Set(await VideoStreamingPlaylistModel.listIdsByIncorrectPeerVersion())
 
   if (playlistsToUpdateIds.size !== 0) {
-    logger.info(`Will update ${playlistsToUpdateIds.size} streaming playlists infohash because of protocol version change.`, lTags())
+    logger.info(`Will update ${playlistsToUpdateIds.size} streaming playlists infohash because of protocol version change.`)
   }
 
   if (await ApplicationModel.streamingPlaylistBaseUrlChanged()) {
     const localIds = await VideoStreamingPlaylistModel.listIdsLocals()
 
     if (localIds.length !== 0) {
-      logger.info(`Will update ${localIds.length} local streaming playlists infohash because of object storage base URL change.`, lTags())
+      logger.info(`Will update ${localIds.length} local streaming playlists infohash because of object storage base URL change.`)
 
       playlistsToUpdateIds = new Set([ ...playlistsToUpdateIds, ...localIds ])
     }
@@ -164,12 +164,12 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
         content: masterPlaylistContent
       })
 
-      logger.info(`Updated master playlist file of video ${video.uuid} to object storage`, lTags(video.uuid))
+      logger.info(`Updated master playlist file of video ${video.uuid} to object storage`)
     } else {
       const masterPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.playlistFilename)
       await writeFile(masterPlaylistPath, masterPlaylistContent)
 
-      logger.info(`Updated master playlist file ${masterPlaylistPath} of video ${video.uuid}`, lTags(video.uuid))
+      logger.info(`Updated master playlist file ${masterPlaylistPath} of video ${video.uuid}`)
     }
 
     return playlist.save()

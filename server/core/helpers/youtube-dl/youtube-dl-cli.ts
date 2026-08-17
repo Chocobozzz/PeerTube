@@ -4,15 +4,15 @@ import { CONFIG } from '@server/initializers/config.js'
 import { execa, Options as ExecaNodeOptions } from 'execa'
 import { ensureDir, pathExists } from 'fs-extra/esm'
 import { chmod, writeFile } from 'fs/promises'
-import { OptionsOfBufferResponseBody } from 'got'
 import { dirname, join } from 'path'
-import { logger, loggerTagsFactory } from '../logger.js'
+import { REQUEST_TIMEOUTS } from '../../initializers/constants.js'
+import { createLogger } from '../logger.js'
 import { getProxy, isProxyEnabled } from '../proxy.js'
-import { isBinaryResponse, unsafeSSRFGot } from '../requests.js'
+import { doBufferRequest, isBinaryResponse, PeerTubeRequestOptions } from '../requests.js'
+
+const logger = createLogger('youtube-dl')
 
 type ProcessOptions = Pick<ExecaNodeOptions, 'cwd' | 'maxBuffer'>
-
-const lTags = loggerTagsFactory('youtube-dl')
 
 const youtubeDLBinaryPath = join(CONFIG.STORAGE.BIN_DIR, CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME)
 
@@ -30,21 +30,22 @@ export class YoutubeDLCLI {
   static async updateYoutubeDLBinary () {
     const url = CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.URL
 
-    logger.info('Updating youtubeDL binary from %s.', url, lTags())
+    logger.info('Updating youtubeDL binary from %s.', url)
 
-    const gotOptions: OptionsOfBufferResponseBody = {
-      context: { bodyKBLimit: 100_000 },
-      responseType: 'buffer'
+    const requestOptions: PeerTubeRequestOptions & { preventSSRF?: false } = {
+      bodyKBLimit: 100_000,
+      timeout: REQUEST_TIMEOUTS.FILE,
+      preventSSRF: false
     }
 
     if (process.env.YOUTUBE_DL_DOWNLOAD_BEARER_TOKEN) {
-      gotOptions.headers = {
+      requestOptions.headers = {
         authorization: 'Bearer ' + process.env.YOUTUBE_DL_DOWNLOAD_BEARER_TOKEN
       }
     }
 
     try {
-      let gotResult = await unsafeSSRFGot(url, gotOptions)
+      let gotResult = await doBufferRequest(url, requestOptions)
 
       if (!isBinaryResponse(gotResult)) {
         const json = JSON.parse(Buffer.from(gotResult.rawBody).toString())
@@ -55,7 +56,7 @@ export class YoutubeDLCLI {
         const releaseAsset = latest.assets.find(a => a.name === releaseName)
         if (!releaseAsset) throw new Error(`Cannot find appropriate release with name ${releaseName} in release assets`)
 
-        gotResult = await unsafeSSRFGot(releaseAsset.browser_download_url, gotOptions)
+        gotResult = await doBufferRequest(releaseAsset.browser_download_url, requestOptions)
       }
 
       if (!isBinaryResponse(gotResult)) {
@@ -68,9 +69,9 @@ export class YoutubeDLCLI {
         await chmod(youtubeDLBinaryPath, '744')
       }
 
-      logger.info('youtube-dl updated %s.', youtubeDLBinaryPath, lTags())
+      logger.info('youtube-dl updated %s.', youtubeDLBinaryPath)
     } catch (err) {
-      logger.error('Cannot update youtube-dl from %s.', url, { err, ...lTags() })
+      logger.error('Cannot update youtube-dl from %s.', url, { err })
     }
   }
 
@@ -231,7 +232,7 @@ export class YoutubeDLCLI {
 
     const output = await subProcess
 
-    logger.debug('Run youtube-dl command.', { command: output.command, ...lTags() })
+    logger.debug('Run youtube-dl command.', { command: output.command })
 
     return output.stdout
       ? output.stdout.trim().split(/\r?\n/)
@@ -255,7 +256,7 @@ export class YoutubeDLCLI {
         ? config[randomInt(0, config.length)]
         : getProxy()
 
-      logger.debug('Using proxy %s for YoutubeDL', proxy, lTags())
+      logger.debug('Using proxy %s for YoutubeDL', proxy)
 
       return [ '--proxy', proxy ].concat(args)
     }
@@ -283,21 +284,20 @@ export class YoutubeDLCLI {
     if (!await pathExists(cookiesPath)) {
       logger.error(
         'yt-dlp cookies are enabled but the cookies file %s does not exist. Continuing without cookies.',
-        cookiesPath,
-        lTags()
+        cookiesPath
       )
 
       return args
     }
 
-    logger.debug('Using cookies file %s for YoutubeDL', cookiesPath, lTags())
+    logger.debug('Using cookies file %s for YoutubeDL', cookiesPath)
 
     return [ '--cookies', cookiesPath ].concat(args)
   }
 
   private wrapWithFFmpegOptions (args: string[]) {
     if (process.env.FFMPEG_PATH) {
-      logger.debug('Using ffmpeg location %s for YoutubeDL', process.env.FFMPEG_PATH, lTags())
+      logger.debug('Using ffmpeg location %s for YoutubeDL', process.env.FFMPEG_PATH)
 
       return [ '--ffmpeg-location', process.env.FFMPEG_PATH ].concat(args)
     }

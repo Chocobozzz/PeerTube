@@ -4,8 +4,12 @@
 
 ### SECURITY
 
-This release addresses vulnerabilities ranging from medium to high severity affecting PeerTube **<= 8.2.3**.
-In a few days, this changelog will be updated to disclose the vulnerabilities.
+This release addresses vulnerabilities ranging from medium to high severity affecting PeerTube **<= 8.2.3**. Security hardening is also included.
+
+ * **high** Unauthenticated ActivityPub Actor URL/key rebinding enables local playlist takeover in PeerTube [GHSA-37jf-59fg-9hpr](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-37jf-59fg-9hpr). Thanks to [D0HY30N](https://github.com/D0HY30N) for the report
+ * **medium** Email-verification bypass via client-controlled isPendingEmail parameter [GHSA-wp9f-cmff-p8r2](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-wp9f-cmff-p8r2). Thanks to Felipe Faria from BluckerTV for the report
+ * Add more security checks and receiving remote views/downloads
+ * Refuse to display channel stats using `withStats` query parameter to other users/anonymous
 
 
 ## v8.2.3

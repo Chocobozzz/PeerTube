@@ -1,5 +1,5 @@
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { REMOTE_DOWNLOADS, REMOTE_VIEWS, VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sendDownload } from '@server/lib/activitypub/send/send-download.js'
@@ -10,7 +10,7 @@ import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
 import { Redis } from '../../redis.js'
 
-const lTags = loggerTagsFactory('views')
+const logger = createLogger('views')
 
 export class VideoStats {
   private readonly viewsCache = new LRUCache<string, boolean>({
@@ -45,7 +45,7 @@ export class VideoStats {
   }) {
     const { video, sessionId, watchTime } = options
 
-    logger.debug('Adding local view to video %s.', video.uuid, { watchTime, ...lTags(video.uuid) })
+    logger.debug('Adding local view to video %s.', video.uuid, { watchTime })
 
     if (!await this.hasEnoughWatchTime(video, watchTime)) return false
 
@@ -67,11 +67,11 @@ export class VideoStats {
   }) {
     const { video, viewerId } = options
 
-    logger.debug('Adding remote view to video %s.', video.uuid, { viewerId, ...lTags(video.uuid) })
+    logger.debug('Adding remote view to video %s.', video.uuid, { viewerId })
 
     if (viewerId) {
       if (this.remoteViewsCache.has(viewerId)) {
-        logger.debug('Ignoring already processed remote view %s.', viewerId, lTags(video.uuid))
+        logger.debug('Ignoring already processed remote view %s.', viewerId)
 
         return false
       }
@@ -132,7 +132,7 @@ export class VideoStats {
   }) {
     const { video } = options
 
-    logger.debug('Adding local download to video %s.', video.uuid, { ...lTags(video.uuid) })
+    logger.debug('Adding local download to video %s.', video.uuid)
 
     await this.addDownload(video)
 
@@ -148,10 +148,10 @@ export class VideoStats {
   }) {
     const { video, downloadId, byActorUrl } = options
 
-    logger.debug('Adding remote download to video %s.', video.uuid, { downloadId, ...lTags(video.uuid) })
+    logger.debug('Adding remote download to video %s.', video.uuid, { downloadId })
 
     if (this.remoteDownloadsCache.has(downloadId)) {
-      logger.debug('Ignoring already processed remote download %s.', downloadId, lTags(video.uuid))
+      logger.debug('Ignoring already processed remote download %s.', downloadId)
 
       return false
     }
@@ -163,7 +163,7 @@ export class VideoStats {
     this.remoteDownloadsPerHostCache.set(rateLimitKey, hostDownloads, { noUpdateTTL: true })
 
     if (hostDownloads > REMOTE_DOWNLOADS.MAX_PER_HOST_PER_VIDEO) {
-      logger.warn('Too many remote downloads of video %s sent by %s, ignoring.', video.uuid, byActorUrl, lTags(video.uuid))
+      logger.warn('Too many remote downloads of video %s sent by %s, ignoring.', video.uuid, byActorUrl)
 
       return false
     }

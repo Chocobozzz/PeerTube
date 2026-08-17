@@ -1,13 +1,13 @@
 import { isProdInstance, isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { sendFollow } from '@server/lib/activitypub/send/send-follow.js'
 import { setAsUpdated } from '@server/models/shared/update.js'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { ACTOR_FOLLOW_SCORE, SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { ActorFollowModel } from '../../models/actor/actor-follow.js'
 import { ActorFollowHealthCache } from '../actor-follow-health-cache.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 const FOLLOW_RESEND_STALE_MS = 1000 * 60 * 60 * 24 * 7 // 7 days
 const FOLLOW_RESEND_BATCH_SIZE = 100
@@ -24,7 +24,7 @@ export class ActorFollowScheduler extends AbstractScheduler {
   protected async internalExecute () {
     // Run too often in test/dev instances
     if (isProdInstance()) {
-      logger.info('Processing actor follows scheduler.', lTags())
+      logger.info('Processing actor follows scheduler.')
     }
 
     await this.processPendingScores()
@@ -62,12 +62,12 @@ export class ActorFollowScheduler extends AbstractScheduler {
   }
 
   private async removeBadActorFollows () {
-    if (!isTestOrDevInstance()) logger.info('Removing bad actor follows (scheduler).', lTags())
+    if (!isTestOrDevInstance()) logger.info('Removing bad actor follows (scheduler).')
 
     try {
       await ActorFollowModel.removeBadActorFollows()
     } catch (err) {
-      logger.error('Error in bad actor follows scheduler.', { err, ...lTags() })
+      logger.error('Error in bad actor follows scheduler.', { err })
     }
   }
 
@@ -89,10 +89,10 @@ export class ActorFollowScheduler extends AbstractScheduler {
       }
 
       if (!isTestOrDevInstance()) {
-        logger.info('Queued %d stale actor follows for resend.', actorFollows.length, lTags())
+        logger.info('Queued %d stale actor follows for resend.', actorFollows.length)
       }
     } catch (err) {
-      logger.error('Error in stale actor follow resend scheduler.', { err, ...lTags() })
+      logger.error('Error in stale actor follow resend scheduler.', { err })
     }
   }
 

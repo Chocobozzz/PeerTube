@@ -16,7 +16,8 @@ import {
   toIntOrNull
 } from '../../../helpers/custom-validators/misc.js'
 import { isValidVideoCommentText } from '../../../helpers/custom-validators/video-comments.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
+import { VIDEO_COMMENTS_TREE } from '../../../initializers/constants.js'
 import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import { MCommentOwnerVideoReply, MVideo, MVideoAccountLight } from '../../../types/models/video/index.js'
@@ -32,6 +33,8 @@ import {
   isValidVideoIdParam,
   isValidVideoPasswordHeader
 } from '../shared/index.js'
+
+const logger = createLogger()
 
 export const listAllVideoCommentsForAdminValidator = [
   ...getCommonVideoCommentsValidators(),
@@ -121,12 +124,15 @@ export const listVideoCommentThreadsValidator = [
 export const listVideoThreadCommentsValidator = [
   isValidVideoIdParam('videoId'),
 
-  param('threadId')
-    .custom(isIdValid),
+  param('threadId').custom(isIdValid),
+
+  ...getCommentTreeValidators(),
+
   isValidVideoPasswordHeader(),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
+    if (!checkCommentTreeSearchedComments(req, res, { useCountParam: false })) return
     if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
     if (!await doesVideoCommentThreadExist(req.params.threadId, res.locals.videoWithBlacklist, res)) return
 
@@ -135,6 +141,70 @@ export const listVideoThreadCommentsValidator = [
     return next()
   }
 ]
+
+export const listVideoCommentRepliesValidator = [
+  isValidVideoIdParam('videoId'),
+
+  param('commentId').custom(isIdValid),
+
+  ...getCommentTreeValidators(),
+
+  isValidVideoPasswordHeader(),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    if (!checkCommentTreeSearchedComments(req, res, { useCountParam: true })) return
+    if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
+    if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoWithBlacklist, res)) return
+
+    if (!await checkCanSeeVideo({ req, res, paramId: req.params.videoId, video: res.locals.videoWithBlacklist })) return
+
+    return next()
+  }
+]
+
+function getCommentTreeValidators () {
+  return [
+    query('maxDepth')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .isInt({ min: 1, max: VIDEO_COMMENTS_TREE.DEPTH.MAX }),
+
+    query('repliesPerLevel')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .isInt({ min: 1, max: VIDEO_COMMENTS_TREE.REPLIES_PER_LEVEL.MAX })
+  ]
+}
+
+// maxDepth and repliesPerLevel are valid on their own but multiply each other, so we also have to check
+// how many comments the database may have to walk through to build the tree
+function checkCommentTreeSearchedComments (req: express.Request, res: express.Response, options: { useCountParam: boolean }) {
+  const { useCountParam } = options
+
+  const maxDepth = req.query.maxDepth ?? VIDEO_COMMENTS_TREE.DEPTH.DEFAULT
+  const repliesPerLevel = req.query.repliesPerLevel ?? VIDEO_COMMENTS_TREE.REPLIES_PER_LEVEL.DEFAULT
+  // The thread endpoint is not paginated (it always fetches `repliesPerLevel` comments on its first level)
+  // and does not have a pagination validator, so `count` is only meaningful (and validated) on the replies endpoint
+  const count = useCountParam
+    ? req.query.count
+    : repliesPerLevel
+
+  const searchedComments = repliesPerLevel === 1
+    ? count * maxDepth
+    : count * (Math.pow(repliesPerLevel, maxDepth) - 1) / (repliesPerLevel - 1)
+
+  if (searchedComments <= VIDEO_COMMENTS_TREE.MAX_SEARCHED_COMMENTS) return true
+
+  res.fail({
+    message: `This combination of count, repliesPerLevel and maxDepth could search up to ${Math.round(searchedComments)} comments, ` +
+      `and the maximum is ${VIDEO_COMMENTS_TREE.MAX_SEARCHED_COMMENTS}. Decrease maxDepth or repliesPerLevel`
+  })
+
+  return false
+}
+
+// ---------------------------------------------------------------------------
 
 export const addVideoCommentThreadValidator = [
   isValidVideoIdParam('videoId'),

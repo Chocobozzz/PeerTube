@@ -1,6 +1,6 @@
 import { ActivityPubActor, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
 import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
-import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorModel } from '@server/models/actor/actor.js'
@@ -14,18 +14,21 @@ import { updateActorImages } from '../image.js'
 import { getActorAttributesFromObject, getActorDisplayNameFromObject, getImagesInfoFromObject } from './object-to-model-attributes.js'
 import { fetchActorFollowsCount } from './url-to-object.js'
 
-export class APActorCreator {
-  private readonly lTags: LoggerTagsFn
+const logger = createLogger('ap', 'actor', 'create')
 
+export class APActorCreator {
   constructor (
     private readonly actorObject: ActivityPubActor,
     private readonly ownerActor?: MActorFullActor
-  ) {
-    this.lTags = loggerTagsFactory('ap', 'actor', 'create', this.actorObject.id)
+  ) {}
+
+  // Wraps `runCreate` so every logger call it makes (including in inner/async functions) is tagged with this actor
+  async create (): Promise<MActorFull> {
+    return logger.withContext([ this.actorObject.id ], () => this.runCreate())
   }
 
-  async create (): Promise<MActorFull> {
-    logger.debug('Creating remote actor from object', { actorObject: this.actorObject, ...this.lTags() })
+  private async runCreate (): Promise<MActorFull> {
+    logger.debug('Creating remote actor from object', { actorObject: this.actorObject })
 
     // A remote actor must never be registered with our own host
     if (isLocalUrl(this.actorObject.id)) {
@@ -47,7 +50,7 @@ export class APActorCreator {
       })
 
       if (existingActor) {
-        logger.debug(`Actor ${existingActor.id} already exists, updating existing one`, this.lTags())
+        logger.debug(`Actor ${existingActor.id} already exists, updating existing one`)
 
         // Re-init unique keys
         existingActor.preferredUsername = actorInstance.preferredUsername

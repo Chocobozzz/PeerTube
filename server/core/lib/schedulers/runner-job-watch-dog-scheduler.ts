@@ -1,11 +1,11 @@
 import { CONFIG } from '@server/initializers/config.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { getRunnerJobHandlerClass } from '../runners/index.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers', 'runner')
+const logger = createLogger('schedulers', 'runner')
 
 export class RunnerJobWatchDogScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -38,13 +38,15 @@ export class RunnerJobWatchDogScheduler extends AbstractScheduler {
     })
 
     for (const stalled of [ ...vodStalledJobs, ...liveStalledJobs, ...transcriptionStalledJobs, ...studioStalledJobs ]) {
-      logger.info('Abort stalled runner job %s (%s)', stalled.uuid, stalled.type, lTags(stalled.uuid, stalled.type))
+      await logger.withContext([ stalled.uuid, stalled.type ], async () => {
+        logger.info('Abort stalled runner job %s (%s)', stalled.uuid, stalled.type)
 
-      const Handler = getRunnerJobHandlerClass(stalled)
+        const Handler = getRunnerJobHandlerClass(stalled)
 
-      await new Handler().abort({
-        runnerJob: stalled,
-        abortNotSupportedErrorMessage: 'Stalled runner job'
+        await new Handler().abort({
+          runnerJob: stalled,
+          abortNotSupportedErrorMessage: 'Stalled runner job'
+        })
       })
     }
   }

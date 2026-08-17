@@ -148,7 +148,7 @@ export class VideoHtml {
       },
 
       ogType: addOG
-        ? 'video' as 'video'
+        ? 'video'
         : undefined,
 
       twitterCard: addTwitterCard

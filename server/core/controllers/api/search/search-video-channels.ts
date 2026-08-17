@@ -10,7 +10,7 @@ import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@ser
 import { getServerActor } from '@server/models/application/application.js'
 import { HttpStatusCode, ResultList, VideoChannel, VideoChannelsSearchQueryAfterSanitize } from '@peertube/peertube-models'
 import { isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../../lib/activitypub/actors/index.js'
 import {
@@ -26,6 +26,8 @@ import {
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
 import { MChannelAccountDefault } from '../../../types/models/index.js'
 import { searchLocalUrl } from './shared/index.js'
+
+const logger = createLogger()
 
 const searchChannelsRouter = express.Router()
 

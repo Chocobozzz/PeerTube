@@ -12,7 +12,7 @@ import {
   isVideoPlaylistTypeValid
 } from '@server/helpers/custom-validators/video-playlists.js'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, USER_IMPORT } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { sendCreateVideoPlaylist } from '@server/lib/activitypub/send/send-create.js'
@@ -27,7 +27,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MChannelBannerAccountDefault, MVideoPlaylistFull, MVideoPlaylistThumbnail } from '@server/types/models/index.js'
 import { AbstractUserImporter } from './abstract-user-importer.js'
 
-const lTags = loggerTagsFactory('user-import')
+const logger = createLogger()
 
 type ImportObject = VideoPlaylistsExportJSON['videoPlaylists'][0]
 type SanitizedObject = Pick<ImportObject, 'type' | 'displayName' | 'privacy' | 'elements' | 'description' | 'channel' | 'archiveFiles'>
@@ -61,7 +61,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
     const existingPlaylist = await VideoPlaylistModel.loadRegularByAccountAndName(this.user.Account, playlistImportData.displayName)
 
     if (existingPlaylist) {
-      logger.info(`Do not import playlist ${playlistImportData.displayName} that already exists in the account`, lTags())
+      logger.info(`Do not import playlist ${playlistImportData.displayName} that already exists in the account`)
       return { duplicate: true }
     }
 
@@ -73,7 +73,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
 
     await sendCreateVideoPlaylist(videoPlaylist, undefined)
 
-    logger.info('Video playlist %s imported.', videoPlaylist.name, lTags(videoPlaylist.uuid))
+    logger.info('Video playlist %s imported.', videoPlaylist.name, { tags: videoPlaylist.uuid })
 
     return { duplicate: false }
   }
@@ -138,7 +138,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
       const video = await loadOrCreateVideoIfAllowedForUser(element.videoUrl)
 
       if (!video) {
-        logger.debug(`Cannot get or create video ${element.videoUrl} to create playlist element in user import`, lTags())
+        logger.debug(`Cannot get or create video ${element.videoUrl} to create playlist element in user import`)
         continue
       }
 
@@ -185,7 +185,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
       try {
         await generateThumbnailForPlaylistIfNeeded({ videoPlaylist: playlist, element, video })
       } catch (err) {
-        logger.error('Cannot generate thumbnail of playlist', { err, ...lTags() })
+        logger.error('Cannot generate thumbnail of playlist', { err })
       }
     }
   }

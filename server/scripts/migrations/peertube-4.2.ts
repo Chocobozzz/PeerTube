@@ -10,9 +10,12 @@ import { sendUpdateActor } from '@server/lib/activitypub/send/index.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorModel } from '@server/models/actor/actor.js'
+import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { MAccountDefault, MActorDefault, MChannelDefault } from '@server/types/models/index.js'
 import { join } from 'path'
+
+const MIGRATION_NAME = 'peertube-4.2'
 
 run()
   .then(() => process.exit(0))
@@ -22,9 +25,10 @@ run()
   })
 
 async function run () {
+  await initDatabaseModels(true)
+
   console.log('Generate avatar miniatures from existing avatars.')
 
-  await initDatabaseModels(true)
   JobQueue.Instance.init()
 
   const accounts: AccountModel[] = await AccountModel.findAll({
@@ -64,6 +68,8 @@ async function run () {
       }
     }
   }
+
+  await ApplicationModel.setManualMigrationScriptRun(MIGRATION_NAME)
 
   console.log('Generation finished!')
 }

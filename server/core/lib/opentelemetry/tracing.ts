@@ -1,6 +1,8 @@
 import type { Span, Tracer } from '@opentelemetry/api'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+
+const logger = createLogger()
 
 let tracer: Tracer | TrackerMock
 

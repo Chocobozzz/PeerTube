@@ -25,7 +25,7 @@
     @for (object of objects; track object) {
       <div class="section videos">
         <div class="section-header d-flex flex-wrap justify-content-between align-items-start mb-3">
-          <h1 class="section-title">
+          <h2 class="section-title">
             @if (object.channel) {
               <my-actor-avatar my-actor-avatar size="40" actorType="channel" [actor]="object.channel"></my-actor-avatar>
             }
@@ -34,12 +34,12 @@
 
             <span class="fg-100 fs-7 mx-2">·</span>
             <span i18n class="fg-100 fs-7">{{ object.type }}</span>
-          </h1>
+          </h2>
         </div>
 
         @for (video of object.videos; track video) {
           <div class="video-wrapper">
-            <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true"></my-video-miniature>
+            <my-video-miniature [video]="video" [user]="userMiniature" [displayVideoActions]="true" [headingLevel]="3"></my-video-miniature>
           </div>
         }
       </div>

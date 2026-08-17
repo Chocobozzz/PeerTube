@@ -1,4 +1,4 @@
-import { HttpStatusCode, ResultList, VideoImport, VideoImportCreate, VideoImportState } from '@peertube/peertube-models'
+import { HttpStatusCode, ResultList, VideoImport, VideoImportCreate, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
@@ -117,15 +117,16 @@ export class VideoImportsCommand extends AbstractCommand {
     videoChannelSyncId?: number
     search?: string
     includeCollaborations?: boolean
+    stateOneOf?: VideoImportStateType[]
   } = {}) {
-    const { id, videoId, sort, targetUrl, videoChannelSyncId, search, includeCollaborations } = options
+    const { id, videoId, sort, targetUrl, videoChannelSyncId, search, includeCollaborations, stateOneOf } = options
     const path = '/api/v1/users/me/videos/imports'
 
     return this.getRequestBody<ResultList<VideoImport>>({
       ...options,
 
       path,
-      query: { id, videoId, sort, targetUrl, videoChannelSyncId, search, includeCollaborations },
+      query: { id, videoId, sort, targetUrl, videoChannelSyncId, search, includeCollaborations, stateOneOf },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

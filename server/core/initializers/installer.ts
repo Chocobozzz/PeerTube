@@ -8,7 +8,7 @@ import { ensureDir, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { generatePassword } from 'password-generator'
 import { join } from 'path'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user.js'
 import { ApplicationModel } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
@@ -16,6 +16,8 @@ import { applicationExist, clientsExist, usersExist } from './checker-after-init
 import { CONFIG } from './config.js'
 import { ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH, DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
+
+const logger = createLogger()
 
 async function installApplication () {
   try {
@@ -28,6 +30,7 @@ async function installApplication () {
             createOAuthClientIfNotExist(),
             createOAuthAdminIfNotExist(),
             createRunnerRegistrationTokenIfNotExist(),
+            createVideoSearchTriggerIfNotExist(),
             initPNPM()
           ])
         }),
@@ -171,7 +174,17 @@ async function createApplicationIfNotExist () {
   const application = await ApplicationModel.create({
     migrationVersion: LAST_MIGRATION_VERSION,
     nodeVersion: process.version,
-    nodeABIVersion: getNodeABIVersion()
+    nodeABIVersion: getNodeABIVersion(),
+    // Scripts that existed before the manual migration tracking system was introduced: assume already run
+    manualMigrationScriptsRun: [
+      'peertube-4.0',
+      'peertube-4.2',
+      'peertube-5.0',
+      'peertube-6.3',
+      'peertube-7.2',
+      'peertube-8.0',
+      'peertube-8.1'
+    ]
   })
 
   return createApplicationActor(application.id)
@@ -186,4 +199,29 @@ async function createRunnerRegistrationTokenIfNotExist () {
   })
 
   await token.save()
+}
+
+async function createVideoSearchTriggerIfNotExist () {
+  try {
+    // video_search_vector() is created in database.ts
+    await sequelizeTypescript.query(`
+    CREATE OR REPLACE FUNCTION "video_search_vector_update"() RETURNS trigger AS $$
+    BEGIN
+      INSERT INTO "videoSearch" ("videoId", "searchVector")
+      VALUES (NEW."id", video_search_vector(NEW.name, NEW.description))
+      ON CONFLICT ("videoId") DO UPDATE SET
+        "searchVector" = EXCLUDED."searchVector";
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql
+  `)
+
+    await sequelizeTypescript.query(`
+    CREATE OR REPLACE TRIGGER "video_search_vector_trigger"
+    AFTER INSERT OR UPDATE OF name, description ON "video"
+    FOR EACH ROW EXECUTE FUNCTION "video_search_vector_update"()
+  `)
+  } catch (err) {
+    logger.error('Cannot create video search trigger.', { err })
+  }
 }

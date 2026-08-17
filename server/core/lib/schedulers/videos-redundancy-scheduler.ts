@@ -10,7 +10,7 @@ import {
   MVideoWithAllFiles
 } from '@server/types/models/index.js'
 import { join } from 'path'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { DIRECTORIES, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers/constants.js'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
@@ -22,7 +22,7 @@ import { removeVideoRedundancy } from '../redundancy.js'
 import { generateHLSRedundancyUrl } from '../video-urls.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers', 'redundancy')
+const logger = createLogger('schedulers', 'redundancy')
 
 type CandidateToDuplicate = {
   redundancy: VideosRedundancyStrategy
@@ -43,7 +43,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const videoToDuplicate = await VideoModel.loadWithFiles(videoId)
 
     if (!videoToDuplicate) {
-      logger.warn('Video to manually duplicate %d does not exist anymore.', videoId, lTags())
+      logger.warn('Video to manually duplicate %d does not exist anymore.', videoId)
       return
     }
 
@@ -56,7 +56,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
   protected async internalExecute () {
     for (const redundancyConfig of CONFIG.REDUNDANCY.VIDEOS.STRATEGIES) {
-      logger.info('Running redundancy scheduler for strategy %s.', redundancyConfig.strategy, lTags())
+      logger.info('Running redundancy scheduler for strategy %s.', redundancyConfig.strategy)
 
       try {
         const videoToDuplicate = await this.findVideoToDuplicate(redundancyConfig)
@@ -68,23 +68,20 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
           streamingPlaylists: videoToDuplicate.VideoStreamingPlaylists
         }
 
-        await this.purgeCacheIfNeeded(candidateToDuplicate)
+        await logger.withContext([ videoToDuplicate.uuid ], async () => {
+          await this.purgeCacheIfNeeded(candidateToDuplicate)
 
-        if (await this.isTooHeavy(candidateToDuplicate)) {
-          logger.info('Video %s is too big for our cache, skipping.', videoToDuplicate.url, lTags(videoToDuplicate.uuid))
-          continue
-        }
+          if (await this.isTooHeavy(candidateToDuplicate)) {
+            logger.info('Video %s is too big for our cache, skipping.', videoToDuplicate.url)
+            return
+          }
 
-        logger.info(
-          'Will duplicate video %s in redundancy scheduler "%s".',
-          videoToDuplicate.url,
-          redundancyConfig.strategy,
-          lTags(videoToDuplicate.uuid)
-        )
+          logger.info('Will duplicate video %s in redundancy scheduler "%s".', videoToDuplicate.url, redundancyConfig.strategy)
 
-        await this.createVideoRedundancies(candidateToDuplicate)
+          await this.createVideoRedundancies(candidateToDuplicate)
+        })
       } catch (err) {
-        logger.error('Cannot run videos redundancy %s.', redundancyConfig.strategy, { err, ...lTags() })
+        logger.error('Cannot run videos redundancy %s.', redundancyConfig.strategy, { err })
       }
     }
 
@@ -101,39 +98,43 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const expired = await VideoRedundancyModel.listLocalExpired()
 
     for (const redundancyModel of expired) {
-      try {
-        const redundancyConfig = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
+      await logger.withContext([ redundancyModel.getVideoUUID() ], async () => {
+        try {
+          const redundancyConfig = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
 
-        // If the admin disabled the redundancy, remove this redundancy instead of extending it
-        if (!redundancyConfig) {
-          logger.info(
-            'Destroying redundancy %s because the redundancy %s does not exist anymore.',
-            redundancyModel.url,
-            redundancyModel.strategy
+          // If the admin disabled the redundancy, remove this redundancy instead of extending it
+          if (!redundancyConfig) {
+            logger.info(
+              'Destroying redundancy %s because the redundancy %s does not exist anymore.',
+              redundancyModel.url,
+              redundancyModel.strategy
+            )
+
+            await removeVideoRedundancy(redundancyModel)
+            return
+          }
+
+          const { totalUsed } = await VideoRedundancyModel.getStats(redundancyConfig.strategy)
+
+          // If the admin decreased the cache size, remove this redundancy instead of extending it
+          if (totalUsed > redundancyConfig.size) {
+            logger.info('Destroying redundancy %s because the cache size %s is too heavy.', redundancyModel.url, redundancyModel.strategy)
+
+            await removeVideoRedundancy(redundancyModel)
+            return
+          }
+
+          await this.extendsRedundancy(redundancyModel)
+        } catch (err) {
+          logger.error(
+            'Cannot extend or remove expiration of %s video from our redundancy system.',
+            this.buildEntryLogId(redundancyModel),
+            {
+              err
+            }
           )
-
-          await removeVideoRedundancy(redundancyModel)
-          continue
         }
-
-        const { totalUsed } = await VideoRedundancyModel.getStats(redundancyConfig.strategy)
-
-        // If the admin decreased the cache size, remove this redundancy instead of extending it
-        if (totalUsed > redundancyConfig.size) {
-          logger.info('Destroying redundancy %s because the cache size %s is too heavy.', redundancyModel.url, redundancyModel.strategy)
-
-          await removeVideoRedundancy(redundancyModel)
-          continue
-        }
-
-        await this.extendsRedundancy(redundancyModel)
-      } catch (err) {
-        logger.error(
-          'Cannot extend or remove expiration of %s video from our redundancy system.',
-          this.buildEntryLogId(redundancyModel),
-          { err, ...lTags(redundancyModel.getVideoUUID()) }
-        )
-      }
+      })
     }
   }
 
@@ -152,15 +153,13 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const expired = await VideoRedundancyModel.listRemoteExpired()
 
     for (const redundancyModel of expired) {
-      try {
-        await removeVideoRedundancy(redundancyModel)
-      } catch (err) {
-        logger.error(
-          'Cannot remove redundancy %s from our redundancy system.',
-          this.buildEntryLogId(redundancyModel),
-          lTags(redundancyModel.getVideoUUID())
-        )
-      }
+      await logger.withContext([ redundancyModel.getVideoUUID() ], async () => {
+        try {
+          await removeVideoRedundancy(redundancyModel)
+        } catch (err) {
+          logger.error('Cannot remove redundancy %s from our redundancy system.', this.buildEntryLogId(redundancyModel))
+        }
+      })
     }
   }
 
@@ -183,7 +182,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const video = await this.loadAndRefreshVideo(data.video.url)
 
     if (!video) {
-      logger.info('Video %s we want to duplicate does not existing anymore, skipping.', data.video.url, lTags(data.video.uuid))
+      logger.info('Video %s we want to duplicate does not existing anymore, skipping.', data.video.url)
 
       return
     }
@@ -217,7 +216,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const playlist = Object.assign(playlistArg, { Video: video })
     const serverActor = await getServerActor()
 
-    logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, strategy, lTags(video.uuid))
+    logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, strategy)
 
     const destDirectory = join(DIRECTORIES.HLS_REDUNDANCY, video.uuid)
     const masterPlaylistUrl = playlist.getMasterPlaylistUrl(video)
@@ -239,11 +238,11 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     await sendCreateCacheFile(serverActor, video, createdModel)
 
-    logger.info('Duplicated playlist %s -> %s.', masterPlaylistUrl, createdModel.url, lTags(video.uuid))
+    logger.info('Duplicated playlist %s -> %s.', masterPlaylistUrl, createdModel.url)
   }
 
   private async extendsExpirationOf (redundancy: MVideoRedundancyVideo, expiresAfterMs: number) {
-    logger.info('Extending expiration of %s.', redundancy.url, lTags(redundancy.getVideoUUID()))
+    logger.info('Extending expiration of %s.', redundancy.url)
 
     const serverActor = await getServerActor()
 
@@ -275,7 +274,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const videoSize = this.getTotalFileSizes(candidateToDuplicate.streamingPlaylists)
     const willUse = alreadyUsed + videoSize
 
-    logger.debug('Checking candidate size.', { maxSize, alreadyUsed, videoSize, willUse, ...lTags(candidateToDuplicate.video.uuid) })
+    logger.debug('Checking candidate size.', { maxSize, alreadyUsed, videoSize, willUse })
 
     return willUse > maxSize
   }

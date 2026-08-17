@@ -1,13 +1,15 @@
 import { canVideoFileBeEdited } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, ServerFilterHookName, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { isVideoFileMimeTypeValid, isVideoFileSizeValid } from '@server/helpers/custom-validators/videos.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, VIDEO_STATES } from '@server/initializers/constants.js'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUserId, MVideo } from '@server/types/models/index.js'
 import express from 'express'
 import { checkUserQuota } from '../../shared/index.js'
+
+const logger = createLogger()
 
 export async function commonVideoFileChecks (options: {
   req: express.Request

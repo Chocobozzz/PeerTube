@@ -1,9 +1,11 @@
 import { VideoViewEvent } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { VideoScope, VideoStats, VideoViewerCounters, VideoViewerStats, ViewerScope } from './shared/index.js'
+
+const logger = createLogger('stats')
 
 /**
  * If processing a local view:
@@ -21,8 +23,6 @@ import { VideoScope, VideoStats, VideoViewerCounters, VideoViewerStats, ViewerSc
  * A viewer that watched only a few seconds of a video may not increment the video views counter
  * Viewers statistics are sent to origin instance using the `WatchAction` ActivityPub object
  */
-
-const lTags = loggerTagsFactory('stats')
 
 export class VideoStatsManager {
   private static instance: VideoStatsManager
@@ -57,7 +57,7 @@ export class VideoStatsManager {
       sessionId = sha256(CONFIG.SECRETS + '-' + ip)
     }
 
-    logger.debug(`Processing local view for ${video.url}, ip ${ip} and session id ${sessionId}.`, lTags())
+    logger.debug(`Processing local view for ${video.url}, ip ${ip} and session id ${sessionId}.`)
 
     await this.videoViewerStats.addLocalViewer({ video, ip, sessionId, viewEvent, currentTime, client, operatingSystem, device })
 
@@ -80,7 +80,7 @@ export class VideoStatsManager {
   }) {
     const { video, viewerId, viewerExpires, viewerResultCounter } = options
 
-    logger.debug('Processing remote view for %s.', video.url, { viewerExpires, viewerId, ...lTags() })
+    logger.debug('Processing remote view for %s.', video.url, { viewerExpires, viewerId })
 
     // Viewer
     if (viewerExpires) {
@@ -102,7 +102,7 @@ export class VideoStatsManager {
   }) {
     const { video } = options
 
-    logger.debug('Processing local download for %s.', video.url, lTags())
+    logger.debug('Processing local download for %s.', video.url)
 
     await this.videoStats.addLocalDownload({ video })
   }
@@ -114,7 +114,7 @@ export class VideoStatsManager {
   }) {
     const { video, downloadId, byActorUrl } = options
 
-    logger.debug('Processing remote download for %s.', video.url, lTags())
+    logger.debug('Processing remote download for %s.', video.url)
 
     await this.videoStats.addRemoteDownload({ video, downloadId, byActorUrl })
   }

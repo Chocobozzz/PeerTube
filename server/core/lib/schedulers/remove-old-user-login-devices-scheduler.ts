@@ -1,9 +1,9 @@
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS, USER_LOGIN_DEVICE_MAX_AGE } from '../../initializers/constants.js'
 import { UserLoginDeviceModel } from '../../models/user/user-login-device.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export class RemoveOldUserLoginDevicesScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -15,7 +15,7 @@ export class RemoveOldUserLoginDevicesScheduler extends AbstractScheduler {
   }
 
   protected internalExecute () {
-    logger.info('Removing old user login devices.', lTags())
+    logger.info('Removing old user login devices.')
 
     const now = new Date()
     const beforeDate = new Date(now.getTime() - USER_LOGIN_DEVICE_MAX_AGE).toISOString()

@@ -1,6 +1,8 @@
 import { move, remove } from 'fs-extra/esm'
 import { rename } from 'fs/promises'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
+
+const logger = createLogger()
 
 export async function tryAtomicMove (src: string, destination: string) {
   try {

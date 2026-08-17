@@ -1,6 +1,6 @@
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { exists } from '@server/helpers/custom-validators/misc.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sendView } from '@server/lib/activitypub/send/send-view.js'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
@@ -9,7 +9,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 
-const lTags = loggerTagsFactory('views')
+const logger = createLogger('views')
 
 export type ViewerScope = 'local' | 'remote'
 export type VideoScope = 'local' | 'remote'
@@ -42,7 +42,7 @@ export class VideoViewerCounters {
   }) {
     const { video, sessionId } = options
 
-    logger.debug('Adding local viewer to video viewers counter %s.', video.uuid, { ...lTags(video.uuid) })
+    logger.debug('Adding local viewer to video viewers counter %s.', video.uuid)
 
     const viewerId = sessionId + '-' + video.uuid
     const viewer = this.idToViewer.get(viewerId)
@@ -67,7 +67,7 @@ export class VideoViewerCounters {
   }) {
     const { video, viewerExpires, viewerId } = options
 
-    logger.debug('Adding remote viewer to local video %s.', video.uuid, { viewerId, viewerExpires, ...lTags(video.uuid) })
+    logger.debug('Adding remote viewer to local video %s.', video.uuid, { viewerId, viewerExpires })
 
     const viewer = this.idToViewer.get(viewerId)
     if (viewer) {
@@ -89,11 +89,7 @@ export class VideoViewerCounters {
   }) {
     const { video, viewerExpires, viewerId, viewerResultCounter } = options
 
-    logger.debug(
-      'Adding remote viewer to remote video %s.',
-      video.uuid,
-      { viewerId, viewerResultCounter, viewerExpires, ...lTags(video.uuid) }
-    )
+    logger.debug('Adding remote viewer to remote video %s.', video.uuid, { viewerId, viewerResultCounter, viewerExpires })
 
     this.addViewerToVideo({
       video,
@@ -180,7 +176,7 @@ export class VideoViewerCounters {
     this.processingViewerCounters = true
 
     if (!isTestOrDevInstance()) {
-      logger.debug('Updating video viewer counters.', lTags())
+      logger.debug('Updating video viewer counters.')
     }
 
     try {
@@ -216,7 +212,7 @@ export class VideoViewerCounters {
         }
       }
     } catch (err) {
-      logger.error('Error in video viewer counters scheduler.', { err, ...lTags() })
+      logger.error('Error in video viewer counters scheduler.', { err })
     }
 
     this.processingViewerCounters = false
@@ -226,7 +222,7 @@ export class VideoViewerCounters {
     const totalViewers = this.getTotalViewersOf(video)
     PeerTubeSocket.Instance.sendVideoViewsUpdate(video, totalViewers)
 
-    logger.debug('Video viewers update for %s is %d.', video.url, totalViewers, lTags())
+    logger.debug('Video viewers update for %s is %d.', video.url, totalViewers)
   }
 
   private async federateViewerIfNeeded (video: MVideoImmutable, viewer: Viewer) {

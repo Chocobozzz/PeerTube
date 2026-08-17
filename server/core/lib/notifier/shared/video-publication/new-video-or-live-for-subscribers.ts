@@ -1,11 +1,13 @@
 import { UserNotificationType, VideoPrivacy, VideoState } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { UserNotificationModel } from '@server/models/user/user-notification.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserWithNotificationSetting, MVideoAccountLight, UserNotificationModelForApi } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 import { t } from '@server/helpers/i18n.js'
+
+const logger = createLogger()
 
 export class NewVideoOrLiveForSubscribers extends AbstractNotification<MVideoAccountLight> {
   private users: MUserWithNotificationSetting[]

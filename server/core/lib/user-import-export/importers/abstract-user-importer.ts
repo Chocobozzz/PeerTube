@@ -1,13 +1,13 @@
 import { getFileSize } from '@peertube/peertube-node-utils'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { MUserDefault } from '@server/types/models/user/user.js'
 import { pathExists, readJSON, remove } from 'fs-extra/esm'
 import { dirname, resolve } from 'path'
 
-const lTags = loggerTagsFactory('user-import')
+const logger = createLogger()
 
-export abstract class AbstractUserImporter <
+export abstract class AbstractUserImporter<
   ROOT_OBJECT,
   OBJECT extends { archiveFiles?: Record<string, string | Record<string, string>> },
   SANITIZED_OBJECT
@@ -58,22 +58,21 @@ export abstract class AbstractUserImporter <
           }
         }
       } catch (err) {
-        logger.error(`Cannot remove file ${file} after successful import`, { err, ...lTags() })
+        logger.error(`Cannot remove file ${file} after successful import`, { err })
       }
     }
   }
 
   protected async isFileValidOrLog (filePath: string, maxSize: number) {
     if (!await pathExists(filePath)) {
-      logger.warn(`Do not import file ${filePath} that do not exist in zip`, lTags())
+      logger.warn(`Do not import file ${filePath} that do not exist in zip`)
       return false
     }
 
     const size = await getFileSize(filePath)
     if (size > maxSize) {
       logger.warn(
-        `Do not import too big file ${filePath} (${size} > ${maxSize})`,
-        lTags()
+        `Do not import too big file ${filePath} (${size} > ${maxSize})`
       )
       return false
     }
@@ -94,7 +93,7 @@ export abstract class AbstractUserImporter <
         const sanitized = this.sanitize(importObject)
 
         if (!sanitized) {
-          logger.warn('Do not import object after invalid sanitization', { importObject, ...lTags() })
+          logger.warn('Do not import object after invalid sanitization', { importObject })
           summary.errors++
           continue
         }
@@ -106,7 +105,7 @@ export abstract class AbstractUserImporter <
         if (result.duplicate === true) summary.duplicates++
         else summary.success++
       } catch (err) {
-        logger.error('Cannot import object from ' + this.jsonFilePath, { err, importObject, ...lTags() })
+        logger.error('Cannot import object from ' + this.jsonFilePath, { err, importObject })
 
         summary.errors++
       }

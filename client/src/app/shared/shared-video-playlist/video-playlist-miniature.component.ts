@@ -29,6 +29,10 @@ export class VideoPlaylistMiniatureComponent implements OnInit {
 
   readonly linkType = input<LinkType>('internal')
 
+  // Level of the playlist title in the page heading hierarchy (renders role="heading" + aria-level instead of a real h1-h6 tag,
+  // since the miniature can be reused at different nesting depths depending on the page)
+  readonly headingLevel = input<number>(undefined)
+
   ownerRouterLink: any
   ownerHref: string
   ownerTarget: string

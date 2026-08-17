@@ -21,7 +21,7 @@ jobs:
           - 6379:6379
 
       postgres:
-        image: postgres:10
+        image: postgres:14
         ports:
           - 5432:5432
         env:

@@ -1,7 +1,7 @@
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoBlacklistCreate } from '@peertube/peertube-models'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
-import { buildLogger } from '@server/helpers/logger.js'
+import { buildWinstonLogger, createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -27,6 +27,8 @@ import { PeerTubeSocket } from '../peertube-socket.js'
 import { ServerConfigManager } from '../server-config-manager.js'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist.js'
 import { VideoPathManager } from '../video-path-manager.js'
+
+const logger = createLogger('plugin')
 
 function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: string): PeerTubeHelpers {
   return {
@@ -60,7 +62,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function buildPluginLogger (npmName: string) {
-  return buildLogger({ labelSuffix: npmName })
+  return buildWinstonLogger({ labelSuffix: npmName })
 }
 
 function buildDatabaseHelpers () {
@@ -103,8 +105,10 @@ function buildVideosHelpers (npmName: string) {
       const video = await VideoModel.loadFull(options.videoId)
       if (!video) return
 
-      const updater = new LocalVideoUpdater({ video, user: null, tags: [ 'plugins', npmName ] })
-      await updater.update(options.attributes)
+      await logger.withContext([ npmName, video.uuid ], async () => {
+        const updater = new LocalVideoUpdater({ video, user: null })
+        await updater.update(options.attributes)
+      })
     },
 
     ffprobe: (path: string) => {
@@ -217,7 +221,9 @@ function buildModerationHelpers () {
       const video = await VideoModel.loadFull(options.videoIdOrUUID)
       if (!video) return
 
-      await blacklistVideo(video, options.createOptions)
+      await logger.withContext([ video.uuid ], async () => {
+        await blacklistVideo(video, options.createOptions)
+      })
     },
 
     unblacklistVideo: async (options: { videoIdOrUUID: number | string }) => {

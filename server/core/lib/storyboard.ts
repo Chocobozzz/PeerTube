@@ -1,6 +1,6 @@
 import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { LoggerTags, logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { STORYBOARD } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
@@ -8,6 +8,8 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
 import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
+
+const logger = createLogger()
 
 export async function buildSpriteSize (videoPath: string) {
   const probe = await ffprobePromise(videoPath)
@@ -54,7 +56,6 @@ export function findGridSize (options: {
 
 export async function insertStoryboardInDatabase (options: {
   videoUUID: string
-  lTags: LoggerTags
   filename: string
   destination: string
   imageSize: { width: number, height: number }
@@ -63,13 +64,13 @@ export async function insertStoryboardInDatabase (options: {
   spriteDuration: number
   federate: boolean
 }) {
-  const { videoUUID, lTags, imageSize, spriteHeight, spriteWidth, spriteDuration, destination, filename, federate } = options
+  const { videoUUID, imageSize, spriteHeight, spriteWidth, spriteDuration, destination, filename, federate } = options
 
   await retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction(async transaction => {
       const video = await VideoModel.loadFull(videoUUID, transaction)
       if (!video) {
-        logger.info(`Video ${videoUUID} does not exist anymore, skipping storyboard generation.`, lTags)
+        logger.info(`Video ${videoUUID} does not exist anymore, skipping storyboard generation.`)
         deleteFileAndCatch(destination)
         return
       }

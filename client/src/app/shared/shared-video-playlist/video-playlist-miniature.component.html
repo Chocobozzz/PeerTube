@@ -19,6 +19,8 @@
       <my-link
         [internalLink]="playlistRouterLink" [href]="playlistHref" [target]="playlistTarget" inheritParentStyle="true" inheritParentDimension="true"
         [title]="playlist().displayName" class="miniature-name" className="ellipsis-multiline-2"
+        [attr.role]="headingLevel() ? 'heading' : null"
+        [attr.aria-level]="headingLevel()"
         >
         {{ playlist().displayName }}
       </my-link>

@@ -2,6 +2,7 @@ import {
   AbortRunnerJobBody,
   AcceptRunnerJobResult,
   ErrorRunnerJobBody,
+  GenerateStoryboardSuccess,
   HttpStatusCode,
   ListRunnerJobsQuery,
   LiveRTMPHLSTranscodingUpdatePayload,
@@ -15,7 +16,6 @@ import {
   RunnerJobUpdatePayload,
   ServerErrorCode,
   TranscriptionSuccess,
-  GenerateStoryboardSuccess,
   UserRight,
   VODAudioMergeTranscodingSuccess,
   VODHLSTranscodingSuccess,
@@ -24,7 +24,7 @@ import {
 } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { cleanUpReqFiles, createReqFiles } from '@server/helpers/express-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { generateRunnerJobToken } from '@server/helpers/token-generator.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -56,6 +56,8 @@ import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
 import express, { UploadFiles } from 'express'
 
+const logger = createLogger('api', 'runner')
+
 const postRunnerJobSuccessVideoFiles = createReqFiles(
   [ 'payload[videoFile]', 'payload[resolutionPlaylistFile]', 'payload[vttFile]', 'payload[storyboardFile]' ],
   {
@@ -70,8 +72,6 @@ const runnerJobUpdateVideoFiles = createReqFiles(
   [ 'payload[videoChunkFile]', 'payload[resolutionPlaylistFile]', 'payload[masterPlaylistFile]' ],
   { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.M3U8.MIMETYPE_EXT }
 )
-
-const lTags = loggerTagsFactory('api', 'runner')
 
 const runnerJobsRouter = express.Router()
 
@@ -176,122 +176,132 @@ export {
 
 async function requestRunnerJob (req: express.Request, res: express.Response) {
   const runner = res.locals.runner
-  const body = req.body as RequestRunnerJobBody
-  const availableJobs = await RunnerJobModel.listAvailableJobs(body.jobTypes)
 
-  logger.debug('Runner %s requests for a job.', runner.name, { availableJobs, ...lTags(runner.name) })
+  return logger.withContext([ runner.name ], async () => {
+    const body = req.body as RequestRunnerJobBody
+    const availableJobs = await RunnerJobModel.listAvailableJobs(body.jobTypes)
 
-  const result: RequestRunnerJobResult = {
-    availableJobs: availableJobs.map(j => ({
-      uuid: j.uuid,
-      type: j.type,
-      payload: j.payload
-    }))
-  }
+    logger.debug('Runner %s requests for a job.', runner.name, { availableJobs })
 
-  if (body.version && runner.version !== body.version) {
-    runner.version = body.version
-    await runner.save()
-  }
+    const result: RequestRunnerJobResult = {
+      availableJobs: availableJobs.map(j => ({
+        uuid: j.uuid,
+        type: j.type,
+        payload: j.payload
+      }))
+    }
 
-  updateLastRunnerContact(req, runner)
+    if (body.version && runner.version !== body.version) {
+      runner.version = body.version
+      await runner.save()
+    }
 
-  return res.json(result)
+    updateLastRunnerContact(req, runner)
+
+    return res.json(result)
+  })
 }
 
 async function acceptRunnerJob (req: express.Request, res: express.Response) {
   const runner = res.locals.runner
   const runnerJob = res.locals.runnerJob
 
-  const newRunnerJob = await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
-      await runnerJob.reload({ transaction })
+  return logger.withContext([ runner.name, runnerJob.uuid, runnerJob.type ], async () => {
+    const newRunnerJob = await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async transaction => {
+        await runnerJob.reload({ transaction })
 
-      if (runnerJob.state !== RunnerJobState.PENDING) {
-        res.fail({
-          type: ServerErrorCode.RUNNER_JOB_NOT_IN_PENDING_STATE,
-          message: 'This job is not in pending state anymore',
-          status: HttpStatusCode.CONFLICT_409
-        })
+        if (runnerJob.state !== RunnerJobState.PENDING) {
+          res.fail({
+            type: ServerErrorCode.RUNNER_JOB_NOT_IN_PENDING_STATE,
+            message: 'This job is not in pending state anymore',
+            status: HttpStatusCode.CONFLICT_409
+          })
 
-        return undefined
-      }
+          return undefined
+        }
 
-      runnerJob.state = RunnerJobState.PROCESSING
-      runnerJob.processingJobToken = generateRunnerJobToken()
-      runnerJob.startedAt = new Date()
-      runnerJob.runnerId = runner.id
+        runnerJob.state = RunnerJobState.PROCESSING
+        runnerJob.processingJobToken = generateRunnerJobToken()
+        runnerJob.startedAt = new Date()
+        runnerJob.runnerId = runner.id
 
-      return runnerJob.save({ transaction })
+        return runnerJob.save({ transaction })
+      })
     })
-  })
-  if (!newRunnerJob) return
+    if (!newRunnerJob) return
 
-  newRunnerJob.Runner = runner as RunnerModel
+    newRunnerJob.Runner = runner as RunnerModel
 
-  const result: AcceptRunnerJobResult = {
-    job: {
-      ...newRunnerJob.toFormattedJSON(),
+    const result: AcceptRunnerJobResult = {
+      job: {
+        ...newRunnerJob.toFormattedJSON(),
 
-      jobToken: newRunnerJob.processingJobToken
+        jobToken: newRunnerJob.processingJobToken
+      }
     }
-  }
 
-  updateLastRunnerContact(req, runner)
+    updateLastRunnerContact(req, runner)
 
-  logger.info(
-    'Remote runner %s has accepted job %s (%s)',
-    runner.name,
-    runnerJob.uuid,
-    runnerJob.type,
-    lTags(runner.name, runnerJob.uuid, runnerJob.type)
-  )
+    logger.info(
+      'Remote runner %s has accepted job %s (%s)',
+      runner.name,
+      runnerJob.uuid,
+      runnerJob.type
+    )
 
-  return res.json(result)
+    return res.json(result)
+  })
 }
 
 async function abortRunnerJob (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const body: AbortRunnerJobBody = req.body
 
-  logger.info(
-    'Remote runner %s is aborting job %s (%s)',
-    runner.name,
-    runnerJob.uuid,
-    runnerJob.type,
-    { reason: body.reason, ...lTags(runner.name, runnerJob.uuid, runnerJob.type) }
-  )
+  return logger.withContext([ runner.name, runnerJob.uuid, runnerJob.type ], async () => {
+    const body: AbortRunnerJobBody = req.body
 
-  const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
-  await new RunnerJobHandler().abort({ runnerJob })
+    logger.info(
+      'Remote runner %s is aborting job %s (%s)',
+      runner.name,
+      runnerJob.uuid,
+      runnerJob.type,
+      { reason: body.reason }
+    )
 
-  updateLastRunnerContact(req, runnerJob.Runner)
+    const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
+    await new RunnerJobHandler().abort({ runnerJob })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    updateLastRunnerContact(req, runnerJob.Runner)
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 async function errorRunnerJob (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const body: ErrorRunnerJobBody = req.body
 
-  runnerJob.failures += 1
+  return logger.withContext([ runner.name, runnerJob.uuid, runnerJob.type ], async () => {
+    const body: ErrorRunnerJobBody = req.body
 
-  logger.error(
-    'Remote runner %s had an error with job %s (%s)',
-    runner.name,
-    runnerJob.uuid,
-    runnerJob.type,
-    { errorMessage: body.message, totalFailures: runnerJob.failures, ...lTags(runner.name, runnerJob.uuid, runnerJob.type) }
-  )
+    runnerJob.failures += 1
 
-  const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
-  await new RunnerJobHandler().error({ runnerJob, message: body.message })
+    logger.error(
+      'Remote runner %s had an error with job %s (%s)',
+      runner.name,
+      runnerJob.uuid,
+      runnerJob.type,
+      { errorMessage: body.message, totalFailures: runnerJob.failures }
+    )
 
-  updateLastRunnerContact(req, runnerJob.Runner)
+    const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
+    await new RunnerJobHandler().error({ runnerJob, message: body.message })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    updateLastRunnerContact(req, runnerJob.Runner)
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -313,37 +323,40 @@ const jobUpdateBuilders: {
 async function updateRunnerJobController (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const body: RunnerJobUpdateBody = req.body
 
-  if (runnerJob.state === RunnerJobState.COMPLETING || runnerJob.state === RunnerJobState.COMPLETED) {
-    cleanUpReqFiles(req)
+  return logger.withContext([ runner.name, runnerJob.uuid, runnerJob.type ], async () => {
+    const body: RunnerJobUpdateBody = req.body
+
+    if (runnerJob.state === RunnerJobState.COMPLETING || runnerJob.state === RunnerJobState.COMPLETED) {
+      cleanUpReqFiles(req)
+
+      return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    }
+
+    const payloadBuilder = jobUpdateBuilders[runnerJob.type]
+    const updatePayload = payloadBuilder
+      ? payloadBuilder(body.payload, req.files)
+      : undefined
+
+    logger.debug(
+      'Remote runner %s is updating job %s (%s)',
+      runnerJob.Runner.name,
+      runnerJob.uuid,
+      runnerJob.type,
+      { body, updatePayload }
+    )
+
+    const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
+    await new RunnerJobHandler().update({
+      runnerJob,
+      progress: req.body.progress,
+      updatePayload
+    })
+
+    updateLastRunnerContact(req, runnerJob.Runner)
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
-  }
-
-  const payloadBuilder = jobUpdateBuilders[runnerJob.type]
-  const updatePayload = payloadBuilder
-    ? payloadBuilder(body.payload, req.files as UploadFiles)
-    : undefined
-
-  logger.debug(
-    'Remote runner %s is updating job %s (%s)',
-    runnerJob.Runner.name,
-    runnerJob.uuid,
-    runnerJob.type,
-    { body, updatePayload, ...lTags(runner.name, runnerJob.uuid, runnerJob.type) }
-  )
-
-  const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
-  await new RunnerJobHandler().update({
-    runnerJob,
-    progress: req.body.progress,
-    updatePayload
   })
-
-  updateLastRunnerContact(req, runnerJob.Runner)
-
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 // ---------------------------------------------------------------------------
@@ -406,24 +419,27 @@ const jobSuccessPayloadBuilders: {
 async function postRunnerJobSuccess (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
   const runner = runnerJob.Runner
-  const body: RunnerJobSuccessBody = req.body
 
-  const resultPayload = jobSuccessPayloadBuilders[runnerJob.type](body.payload, req.files as UploadFiles)
+  return logger.withContext([ runner.name, runnerJob.uuid, runnerJob.type ], async () => {
+    const body: RunnerJobSuccessBody = req.body
 
-  logger.info(
-    'Remote runner %s is sending success result for job %s (%s)',
-    runnerJob.Runner.name,
-    runnerJob.uuid,
-    runnerJob.type,
-    { resultPayload, ...lTags(runner.name, runnerJob.uuid, runnerJob.type) }
-  )
+    const resultPayload = jobSuccessPayloadBuilders[runnerJob.type](body.payload, req.files)
 
-  const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
-  await new RunnerJobHandler().complete({ runnerJob, resultPayload })
+    logger.info(
+      'Remote runner %s is sending success result for job %s (%s)',
+      runnerJob.Runner.name,
+      runnerJob.uuid,
+      runnerJob.type,
+      { resultPayload }
+    )
 
-  updateLastRunnerContact(req, runnerJob.Runner)
+    const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
+    await new RunnerJobHandler().complete({ runnerJob, resultPayload })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    updateLastRunnerContact(req, runnerJob.Runner)
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -433,27 +449,31 @@ async function postRunnerJobSuccess (req: express.Request, res: express.Response
 async function cancelRunnerJob (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
 
-  logger.info('Cancelling job %s (%s)', runnerJob.uuid, runnerJob.type, lTags(runnerJob.uuid, runnerJob.type))
+  return logger.withContext([ runnerJob.uuid, runnerJob.type ], async () => {
+    logger.info('Cancelling job %s (%s)', runnerJob.uuid, runnerJob.type)
 
-  const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
-  await new RunnerJobHandler().cancel({ runnerJob })
+    const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
+    await new RunnerJobHandler().cancel({ runnerJob })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 async function deleteRunnerJob (req: express.Request, res: express.Response) {
   const runnerJob = res.locals.runnerJob
 
-  logger.info('Deleting job %s (%s)', runnerJob.uuid, runnerJob.type, lTags(runnerJob.uuid, runnerJob.type))
+  return logger.withContext([ runnerJob.uuid, runnerJob.type ], async () => {
+    logger.info('Deleting job %s (%s)', runnerJob.uuid, runnerJob.type)
 
-  if (runnerJobCanBeCancelled(runnerJob)) {
-    const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
-    await new RunnerJobHandler().cancel({ runnerJob })
-  }
+    if (runnerJobCanBeCancelled(runnerJob)) {
+      const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
+      await new RunnerJobHandler().cancel({ runnerJob })
+    }
 
-  await runnerJob.destroy()
+    await runnerJob.destroy()
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 async function listRunnerJobs (req: express.Request, res: express.Response) {

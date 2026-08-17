@@ -24,7 +24,7 @@
         @if (transcriptionWidgetOpened) {
           <my-video-transcription
             [video]="video" [captions]="videoCaptions" [currentTime]="getCurrentTime()"
-            (segmentClicked)="handleTimestampClicked($event)" (closeTranscription)="transcriptionWidgetOpened = false"
+            (segmentClicked)="handleTimestampClicked($event)" (closeTranscription)="closeTranscriptionWidget()"
           ></my-video-transcription>
         }
       </div>
@@ -50,12 +50,15 @@
                   •
                   <my-video-views-counter [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
                 </div>
+
                 <my-action-buttons
+                  #actionButtons
                   [video]="video" [videoPassword]="videoPassword" [videoCaptions]="videoCaptions"
                   [isUserLoggedIn]="isUserLoggedIn()" [isUserOwner]="isUserOwner()"
                   [transcriptionWidgetOpened]="transcriptionWidgetOpened"
                   [playlist]="playlist" [currentTime]="getCurrentTime()" [currentPlaylistPosition]="getCurrentPlaylistPosition()"
-                  (showTranscriptionWidget)="transcriptionWidgetOpened = true" (hideTranscriptionWidget)="transcriptionWidgetOpened = false"
+                  (showTranscriptionWidget)="openTranscriptionWidget()" (hideTranscriptionWidget)="closeTranscriptionWidget()"
+                  (modalOpened)="onActionButtonsModalOpened($event)" (modalClosed)="onActionButtonsModalClosed($event)"
                 ></my-action-buttons>
               </div>
             </div>

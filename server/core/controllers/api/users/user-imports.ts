@@ -1,25 +1,25 @@
 import express from 'express'
-import {
-  asyncMiddleware,
-  authenticate
-} from '../../../middlewares/index.js'
+import { asyncMiddleware, authenticate } from '../../../middlewares/index.js'
 import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import {
   getLatestImportStatusValidator,
   userImportRequestResumableInitValidator,
   userImportRequestResumableValidator
 } from '@server/middlewares/validators/users/user-import.js'
-import { HttpStatusCode, UserImportState, UserImportUploadResult } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { HttpStatusCode, UserImportState } from '@peertube/peertube-models'
+import { createLogger } from '@server/helpers/logger.js'
 import { UserImportModel } from '@server/models/user/user-import.js'
 import { getFSUserImportFilePath } from '@server/lib/paths.js'
 import { move } from 'fs-extra/esm'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 
+const logger = createLogger()
+
 const userImportRouter = express.Router()
 
-userImportRouter.get('/:userId/imports/latest',
+userImportRouter.get(
+  '/:userId/imports/latest',
   authenticate,
   asyncMiddleware(getLatestImportStatusValidator),
   asyncMiddleware(getLatestImport)
@@ -68,7 +68,7 @@ async function addUserImportResumable (req: express.Request, res: express.Respon
     userImport: {
       id: userImport.id
     }
-  } as UserImportUploadResult)
+  })
 }
 
 async function getLatestImport (req: express.Request, res: express.Response) {

@@ -1,8 +1,10 @@
 import { ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { MActorImage, MActorImages } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
+
+const logger = createLogger()
 
 type ImageInfo = {
   name: string

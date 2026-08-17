@@ -1,8 +1,10 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import express from 'express'
 import { body, header } from 'express-validator'
 import { areValidationErrors } from './shared/utils.js'
 import { cleanUpReqFiles } from '@server/helpers/express-utils.js'
+
+const logger = createLogger()
 
 export const resumableInitValidator = [
   body('filename')

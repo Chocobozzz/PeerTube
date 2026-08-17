@@ -42,6 +42,10 @@ p-multiselect-item {
   font-size: pvar(--input-placeholder-font-size);
 }
 
+.p-autocomplete-input-multiple .p-chip-remove-icon {
+  line-height: 1;
+}
+
 // ---------------------------------------------------------------------------
 // Toast (notifications)
 // ---------------------------------------------------------------------------

@@ -3,11 +3,13 @@ import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MActorAudience, MActorLight, MVideoImmutable, MVideoUrl } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { getLocalVideoViewActivityPubUrl } from '../url.js'
 import { sendVideoRelatedActivity } from './shared/send-utils.js'
 import { canVideoBeFederated } from '../videos/index.js'
+
+const logger = createLogger()
 
 async function sendView (options: {
   byActor: MActorLight

@@ -2,8 +2,7 @@ import { UserVideoHistoryExportJSON } from '@peertube/peertube-models'
 import { AbstractUserExporter } from './abstract-user-exporter.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
 
-export class UserVideoHistoryExporter extends AbstractUserExporter <UserVideoHistoryExportJSON> {
-
+export class UserVideoHistoryExporter extends AbstractUserExporter<UserVideoHistoryExportJSON> {
   async export () {
     const videos = await UserVideoHistoryModel.listForExport(this.user)
 
@@ -15,7 +14,7 @@ export class UserVideoHistoryExporter extends AbstractUserExporter <UserVideoHis
           createdAt: v.createdAt.toISOString(),
           updatedAt: v.updatedAt.toISOString()
         }))
-      } as UserVideoHistoryExportJSON,
+      },
 
       staticFiles: []
     }

@@ -2,25 +2,28 @@ import { uniqify } from '@peertube/peertube-core-utils'
 import { getFFmpegVersion } from '@peertube/peertube-ffmpeg'
 import { VideoRedundancyConfigFilter } from '@peertube/peertube-models'
 import { isProdInstance } from '@peertube/peertube-node-utils'
-import config from 'config'
 import { readFileSync, writeFileSync } from 'fs'
 import { basename } from 'path'
 import { URL } from 'url'
 import { parseBytes, parseSemVersion } from '../helpers/core-utils.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
 import { getBrowseVideosDefaultSortError, getBrowseVideosDefaultScopeError } from '../helpers/custom-validators/browse-videos.js'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
-import { CONFIG, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
+import { CONFIG, getConfigModule, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
 import { WEBSERVER } from './constants.js'
+
+const logger = createLogger()
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
 
   const parsed = new URL(actor.url)
   if (WEBSERVER.HOST !== parsed.host) {
+    const config = getConfigModule()
+
     const NODE_ENV = config.util.getEnv('NODE_ENV')
     const NODE_CONFIG_DIR = config.util.getEnv('NODE_CONFIG_DIR')
 
@@ -36,7 +39,7 @@ async function checkActivityPubUrls () {
 
 // Some checks on configuration files or throw if there is an error
 function checkConfig () {
-  const configFiles = config.util.getConfigSources().map(s => s.name).join(' -> ')
+  const configFiles = getConfigModule().util.getConfigSources().map(s => s.name).join(' -> ')
   logger.info('Using following configuration file hierarchy: %s.', configFiles)
 
   checkRemovedConfigKeys()
@@ -113,6 +116,8 @@ export {
 // ---------------------------------------------------------------------------
 
 function checkRemovedConfigKeys () {
+  const config = getConfigModule()
+
   // Moved configuration keys
   if (config.has('services.csp-logger')) {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
@@ -218,7 +223,7 @@ function checkRemoteRedundancyConfig () {
 function checkStorageConfig () {
   // Check storage directory locations
   if (isProdInstance()) {
-    const configStorage = config.get<{ [name: string]: string }>('storage')
+    const configStorage = getConfigModule().get<{ [name: string]: string }>('storage')
 
     for (const key of Object.keys(configStorage)) {
       if (configStorage[key].startsWith('storage/')) {

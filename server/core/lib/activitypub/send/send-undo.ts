@@ -1,6 +1,6 @@
 import { ActivityAudience, ActivityDislike, ActivityLike, ActivityUndo, ActivityUndoObject, ContextType } from '@peertube/peertube-models'
 import { Transaction } from 'sequelize'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 import {
   MActor,
@@ -26,6 +26,8 @@ import {
   sendVideoRelatedActivityToOrigin,
   unicastTo
 } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const me = actorFollow.ActorFollower
@@ -135,7 +137,7 @@ function undoActivityData<T extends ActivityUndoObject> (
 
   return audiencify(
     {
-      type: 'Undo' as 'Undo',
+      type: 'Undo',
       id: url,
       actor: byActor.url,
       object

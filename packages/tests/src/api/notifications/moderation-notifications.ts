@@ -74,7 +74,8 @@ describe('Test moderation notifications', function () {
       this.timeout(50000)
 
       const name = 'video for abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
+      // Uploaded by the admin so userToken1 (a regular user) can report it without owning it
+      const video = await servers[0].videos.upload({ attributes: { name } })
 
       await servers[0].abuses.report({ token: userToken1, videoId: video.id, reason: 'super reason' })
 
@@ -181,7 +182,8 @@ describe('Test moderation notifications', function () {
       }
 
       const name = 'abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
+      // Uploaded by the admin so userToken1 (the reporter) does not own the reported video
+      const video = await servers[0].videos.upload({ attributes: { name } })
 
       const body = await servers[0].abuses.report({ token: userToken1, videoId: video.id, reason: 'super reason' })
       abuseId = body.abuse.id
@@ -228,7 +230,8 @@ describe('Test moderation notifications', function () {
       }
 
       const name = 'abuse ' + buildUUID()
-      const video = await servers[0].videos.upload({ token: userToken1, attributes: { name } })
+      // Uploaded by the admin so userToken1 (the reporter) does not own the reported video
+      const video = await servers[0].videos.upload({ attributes: { name } })
 
       {
         const body = await servers[0].abuses.report({ token: userToken1, videoId: video.id, reason: 'super reason' })

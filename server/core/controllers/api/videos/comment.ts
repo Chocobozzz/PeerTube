@@ -1,22 +1,22 @@
 import { pick } from '@peertube/peertube-core-utils'
-import {
-  HttpStatusCode,
-  ResultList,
-  ThreadsResultList,
-  UserRight,
-  VideoCommentCreate,
-  VideoCommentPolicy,
-  VideoCommentThreads
-} from '@peertube/peertube-models'
+import { HttpStatusCode, ResultList, ThreadsResultList, UserRight, VideoCommentCreate, VideoCommentPolicy } from '@peertube/peertube-models'
+import { getAuthUser } from '@server/helpers/express-utils.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MCommentFormattable } from '@server/types/models/index.js'
 import express from 'express'
 import { CommentAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
+import { VIDEO_COMMENTS_TREE } from '../../../initializers/constants.js'
 import { Notifier } from '../../../lib/notifier/index.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
-import { approveComment, buildFormattedCommentTree, createLocalVideoComment, removeComment } from '../../../lib/video-comment.js'
+import {
+  approveComment,
+  buildFormattedCommentTree,
+  buildFormattedCommentTrees,
+  createLocalVideoComment,
+  removeComment
+} from '../../../lib/video-comment.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -25,6 +25,7 @@ import {
   ensureUserHasRight,
   optionalAuthenticate,
   paginationValidator,
+  setDefaultCommentRepliesSort,
   setDefaultPagination,
   setDefaultSort
 } from '../../../middlewares/index.js'
@@ -33,6 +34,7 @@ import {
   addVideoCommentThreadValidator,
   approveVideoCommentValidator,
   listAllVideoCommentsForAdminValidator,
+  listVideoCommentRepliesValidator,
   listVideoCommentThreadsValidator,
   listVideoThreadCommentsValidator,
   removeVideoCommentValidator,
@@ -67,6 +69,16 @@ videoCommentRouter.get(
   asyncMiddleware(listVideoThreadCommentsValidator),
   optionalAuthenticate,
   asyncMiddleware(listVideoThreadComments)
+)
+videoCommentRouter.get(
+  '/:videoId/comments/:commentId/replies',
+  paginationValidator,
+  videoCommentsValidator,
+  setDefaultCommentRepliesSort,
+  setDefaultPagination,
+  optionalAuthenticate,
+  asyncMiddleware(listVideoCommentRepliesValidator),
+  asyncMiddleware(listVideoCommentReplies)
 )
 
 videoCommentRouter.post(
@@ -183,12 +195,12 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   return res.json({
     ...getFormattedObjects(resultList.data, resultList.total),
     totalNotDeletedComments: resultList.totalNotDeletedComments
-  } as VideoCommentThreads)
+  })
 }
 
 async function listVideoThreadComments (req: express.Request, res: express.Response) {
   const video = res.locals.videoWithBlacklist
-  const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
+  const user = getAuthUser(res)
 
   let resultList: ResultList<MCommentFormattable>
 
@@ -196,14 +208,22 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
     const apiOptions = await Hooks.wrapObject({
       video,
       threadId: res.locals.videoCommentThread.id,
+      maxDepth: req.query.maxDepth ?? VIDEO_COMMENTS_TREE.DEPTH.DEFAULT,
+      repliesPerLevel: req.query.repliesPerLevel ?? VIDEO_COMMENTS_TREE.REPLIES_PER_LEVEL.DEFAULT,
       user
     }, 'filter:api.video-thread-comments.list.params')
 
-    resultList = await Hooks.wrapPromiseFun(
-      VideoCommentModel.listThreadCommentsForApi.bind(VideoCommentModel),
-      apiOptions,
-      'filter:api.video-thread-comments.list.result'
-    )
+    const result = await VideoCommentModel.listThreadCommentsForApi(apiOptions)
+
+    // This hook predates the reply tree feature: it historically received `{ total, data }` with the
+    // thread root as `data[0]`, so keep that contract instead of exposing the new `{ comment, total, data }` shape
+    resultList = result.comment
+      ? await Hooks.wrapObject(
+        { total: result.total, data: [ result.comment, ...result.data ] },
+        'filter:api.video-thread-comments.list.result',
+        apiOptions
+      )
+      : { total: 0, data: [] }
   } else {
     resultList = {
       total: 0,
@@ -218,7 +238,50 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
     })
   }
 
-  return res.json(buildFormattedCommentTree(resultList))
+  const [ comment, ...replies ] = resultList.data
+
+  return res.json(buildFormattedCommentTree({
+    comment,
+    totalChildren: resultList.total,
+    replies
+  }))
+}
+
+async function listVideoCommentReplies (req: express.Request, res: express.Response) {
+  const video = res.locals.videoWithBlacklist
+  const comment = res.locals.videoCommentFull
+  const user = getAuthUser(res)
+
+  let resultList: ResultList<MCommentFormattable>
+
+  if (video.commentsPolicy !== VideoCommentPolicy.DISABLED) {
+    const apiOptions = await Hooks.wrapObject({
+      video,
+      parentCommentId: comment.id,
+      start: req.query.start,
+      count: req.query.count,
+      sort: req.query.sort,
+      maxDepth: req.query.maxDepth ?? VIDEO_COMMENTS_TREE.DEPTH.DEFAULT,
+      repliesPerLevel: req.query.repliesPerLevel ?? VIDEO_COMMENTS_TREE.REPLIES_PER_LEVEL.DEFAULT,
+      user
+    }, 'filter:api.video-comment-replies.list.params')
+
+    resultList = await Hooks.wrapPromiseFun(
+      VideoCommentModel.listRepliesForApi.bind(VideoCommentModel),
+      apiOptions,
+      'filter:api.video-comment-replies.list.result'
+    )
+  } else {
+    resultList = {
+      total: 0,
+      data: []
+    }
+  }
+
+  return res.json({
+    total: resultList.total,
+    data: buildFormattedCommentTrees({ parentCommentId: comment.id, replies: resultList.data })
+  })
 }
 
 async function addVideoCommentThread (req: express.Request, res: express.Response) {

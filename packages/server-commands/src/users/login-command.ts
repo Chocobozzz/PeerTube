@@ -79,6 +79,7 @@ export class LoginCommand extends AbstractCommand {
   logout (
     options: OverrideCommandOptions & {
       token: string
+      headers?: { [name: string]: string }
     }
   ) {
     const path = '/api/v1/users/revoke-token'

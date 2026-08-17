@@ -1,7 +1,7 @@
 import express from 'express'
 import { sanitizeUrl } from '@server/helpers/core-utils.js'
 import { isUserAbleToSearchRemoteURI } from '@server/helpers/express-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { pickSearchPlaylistQuery } from '@server/helpers/query.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
@@ -26,6 +26,8 @@ import {
   videoPlaylistsSearchSortValidator
 } from '../../../middlewares/index.js'
 import { searchLocalUrl } from './shared/index.js'
+
+const logger = createLogger()
 
 const searchPlaylistsRouter = express.Router()
 

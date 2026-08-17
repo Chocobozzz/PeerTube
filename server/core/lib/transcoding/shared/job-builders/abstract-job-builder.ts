@@ -1,13 +1,13 @@
 import { VideoFileStreamType, VideoResolution } from '@peertube/peertube-models'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/framerate.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DEFAULT_AUDIO_MERGE_FPS, DEFAULT_AUDIO_MERGE_RESOLUTION } from '@server/initializers/constants.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { buildOriginalFileResolution, computeResolutionsToTranscode } from '../../transcoding-resolutions.js'
 
-const lTags = loggerTagsFactory('transcoding')
+const logger = createLogger('transcoding')
 
 export type TranscodingPriorityType = 'required' | 'optional'
 
@@ -141,7 +141,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
     const inputStreams = video.getStreamTypes()
     const maxResolution = Math.max(...resolutions)
 
-    logger.info(`Manually creating transcoding jobs for ${transcodingType}`, { resolutions, maxResolution, ...lTags(video.uuid) })
+    logger.info(`Manually creating transcoding jobs for ${transcodingType}`, { resolutions, maxResolution })
 
     const inputFPS = video.getMaxFPS()
 
@@ -237,7 +237,7 @@ export abstract class AbstractJobBuilder<P extends { transcodingPriority: Transc
       options
     )
 
-    logger.debug('Lower resolutions built for %s.', video.uuid, { resolutionsEnabled, ...lTags(video.uuid) })
+    logger.debug('Lower resolutions built for %s.', video.uuid, { resolutionsEnabled })
 
     const sequentialPayloads: P[][] = []
 

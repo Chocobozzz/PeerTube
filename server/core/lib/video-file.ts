@@ -8,7 +8,7 @@ import {
 } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoFileFormatFlag, VideoFileMetadata, VideoFileStream, VideoResolution } from '@peertube/peertube-models'
 import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -19,6 +19,8 @@ import { move, remove } from 'fs-extra/esm'
 import { storeOriginalVideoFile } from './object-storage/videos.js'
 import { generateHLSVideoFilename, generateWebVideoFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
+
+const logger = createLogger()
 
 export async function buildNewFile (options: {
   path: string
@@ -122,7 +124,11 @@ export async function removeAllWebVideoFiles (video: MVideoWithAllFiles, options
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
-    for (const file of video.VideoFiles) {
+    // Reload the files: another job may have updated them (their torrent filename for example) while we were waiting for the mutex
+    const files = await video.$get('VideoFiles')
+    video.VideoFiles = files
+
+    for (const file of files) {
       if (resolutionExceptions.includes(file.resolution)) continue
 
       await video.removeWebVideoFile(file)
@@ -146,11 +152,15 @@ export async function removeWebVideoFile (video: MVideoWithAllFiles, fileToDelet
 
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
   try {
-    const toDelete = files.find(f => f.id === fileToDeleteId)
-    await video.removeWebVideoFile(toDelete)
-    await toDelete.destroy()
+    // Reload the file: another job may have updated it (its torrent filename for example) while we were waiting for the mutex
+    const toDelete = await VideoFileModel.load(fileToDeleteId)
 
-    video.VideoFiles = files.filter(f => f.id !== toDelete.id)
+    if (toDelete) {
+      await video.removeWebVideoFile(toDelete)
+      await toDelete.destroy()
+    }
+
+    video.VideoFiles = files.filter(f => f.id !== fileToDeleteId)
   } finally {
     videoFileMutexReleaser()
   }
@@ -221,9 +231,7 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
   if (!videoSource || videoSource.keptOriginalFilename) return
   videoSource.keptOriginalFilename = videoFile.filename
 
-  const lTags = loggerTagsFactory(video.uuid)
-
-  logger.info(`Storing original video file ${videoSource.keptOriginalFilename} of video ${video.name}`, lTags())
+  logger.info(`Storing original video file ${videoSource.keptOriginalFilename} of video ${video.name}`)
 
   const sourcePath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
 
@@ -250,7 +258,7 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
     try {
       await video.removeOriginalFile(oldSource)
     } catch (err) {
-      logger.error('Cannot delete old original file ' + oldSource.keptOriginalFilename, { err, ...lTags() })
+      logger.error('Cannot delete old original file ' + oldSource.keptOriginalFilename, { err })
     }
   }
 }

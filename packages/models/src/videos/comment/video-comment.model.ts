@@ -54,5 +54,12 @@ export type VideoCommentThreads = ResultList<VideoComment> & { totalNotDeletedCo
 
 export interface VideoCommentThreadTree {
   comment: VideoComment
+
+  // May contain less elements than `totalChildren`: the tree is truncated in depth and in width
   children: VideoCommentThreadTree[]
+
+  // Total direct replies of `comment` the current user can see
+  totalChildren: number
 }
+
+export type VideoCommentReplies = ResultList<VideoCommentThreadTree>

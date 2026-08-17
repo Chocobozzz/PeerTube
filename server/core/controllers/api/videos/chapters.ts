@@ -1,5 +1,6 @@
 import { HttpStatusCode, VideoChannelActivityAction, VideoChapterUpdate } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
 import { replaceChapters } from '@server/lib/video-chapters.js'
@@ -8,6 +9,8 @@ import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import express from 'express'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate } from '../../../middlewares/index.js'
 import { updateVideoChaptersValidator, videoGetValidatorFactory } from '../../../middlewares/validators/index.js'
+
+const logger = createLogger('api', 'chapter')
 
 const videoChaptersRouter = express.Router()
 
@@ -42,21 +45,23 @@ async function replaceVideoChapters (req: express.Request, res: express.Response
   const body = req.body as VideoChapterUpdate
   const video = res.locals.videoFull
 
-  await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
-      await replaceChapters({ video, chapters: body.chapters, transaction: t })
+  await logger.withContext([ video.uuid ], async () => {
+    await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        await replaceChapters({ video, chapters: body.chapters, transaction: t })
 
-      await VideoChannelActivityModel.addVideoActivity({
-        action: VideoChannelActivityAction.UPDATE_CHAPTERS,
-        user: res.locals.oauth.token.User,
-        channel: video.VideoChannel,
-        video,
-        transaction: t
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.UPDATE_CHAPTERS,
+          user: res.locals.oauth.token.User,
+          channel: video.VideoChannel,
+          video,
+          transaction: t
+        })
+
+        scheduleVideoFederation({ video, transaction: t })
       })
-
-      scheduleVideoFederation({ video, transaction: t })
     })
-  })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }

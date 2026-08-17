@@ -1,5 +1,7 @@
 import { Model } from 'sequelize-typescript'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
+
+const logger = createLogger()
 
 type ModelCacheType =
   'server-account'

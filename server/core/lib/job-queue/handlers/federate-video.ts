@@ -5,7 +5,9 @@ import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { Job } from 'bullmq'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
+
+const logger = createLogger()
 
 export function processFederateVideo (job: Job) {
   const payload = job.data as FederateVideoPayload

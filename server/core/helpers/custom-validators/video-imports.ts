@@ -2,7 +2,7 @@ import 'multer'
 import { UploadFilesForCheck } from 'express'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_IMPORT_STATES } from '../../initializers/constants.js'
-import { exists, isFileValid } from './misc.js'
+import { exists, isArray, isFileValid } from './misc.js'
 
 function isVideoImportTargetUrlValid (url: string) {
   const isURLOptions = {
@@ -20,6 +20,10 @@ function isVideoImportTargetUrlValid (url: string) {
 
 function isVideoImportStateValid (value: any) {
   return exists(value) && VIDEO_IMPORT_STATES[value] !== undefined
+}
+
+function isVideoImportStateArrayValid (value: any) {
+  return isArray(value) && value.every(v => isVideoImportStateValid(v))
 }
 
 // MacOS sends application/octet-stream
@@ -41,6 +45,7 @@ function isVideoImportTorrentFile (files: UploadFilesForCheck) {
 
 export {
   isVideoImportStateValid,
+  isVideoImportStateArrayValid,
   isVideoImportTargetUrlValid,
   isVideoImportTorrentFile
 }

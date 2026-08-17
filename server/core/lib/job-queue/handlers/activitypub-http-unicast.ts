@@ -1,9 +1,11 @@
 import { Job } from 'bullmq'
 import { ActivitypubHttpUnicastPayload } from '@peertube/peertube-models'
 import { buildGlobalHTTPHeaders, buildSignedRequestOptions, computeBody } from '@server/lib/activitypub/send/http.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { ActorFollowHealthCache } from '../../actor-follow-health-cache.js'
 import { httpUnicastFromWorker } from '@server/lib/worker/parent-process.js'
+
+const logger = createLogger()
 
 async function processActivityPubHttpUnicast (job: Job) {
   logger.info('Processing ActivityPub unicast in job %s.', job.id)

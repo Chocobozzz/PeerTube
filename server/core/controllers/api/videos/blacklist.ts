@@ -1,7 +1,7 @@
-import express from 'express'
-import { blacklistVideo, unblacklistVideo } from '@server/lib/video-blacklist.js'
 import { HttpStatusCode, UserRight, VideoBlacklistCreate, VideoBlacklistUpdate } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { blacklistVideo, unblacklistVideo } from '@server/lib/video-blacklist.js'
+import express from 'express'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import {
@@ -19,6 +19,8 @@ import {
   videosBlacklistUpdateValidator
 } from '../../../middlewares/index.js'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist.js'
+
+const logger = createLogger()
 
 const blacklistRouter = express.Router()
 
@@ -73,11 +75,13 @@ async function addVideoToBlacklistController (req: express.Request, res: express
   const videoInstance = res.locals.videoWithRights
   const body: VideoBlacklistCreate = req.body
 
-  await blacklistVideo(videoInstance, body)
+  await logger.withContext([ videoInstance.uuid ], async () => {
+    await blacklistVideo(videoInstance, body)
 
-  logger.info('Video %s blacklisted.', videoInstance.uuid)
+    logger.info('Video %s blacklisted.', videoInstance.uuid)
 
-  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
+    return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
+  })
 }
 
 async function updateVideoBlacklistController (req: express.Request, res: express.Response) {

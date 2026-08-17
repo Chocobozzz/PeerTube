@@ -1,14 +1,18 @@
 import { NgClass } from '@angular/common'
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
   inject,
   input,
+  NgZone,
   OnChanges,
+  OnDestroy,
   OnInit,
   output,
+  Renderer2,
   SimpleChanges,
   viewChild
 } from '@angular/core'
@@ -17,6 +21,7 @@ import { Notifier } from '@app/core'
 import { durationToString, isInViewport } from '@app/helpers'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
+import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { Nl2BrPipe } from '@app/shared/shared-main/common/nl2br.pipe'
 import { VideoCaptionService } from '@app/shared/shared-main/video-caption/video-caption.service'
 import { NgbCollapse } from '@ng-bootstrap/ng-bootstrap'
@@ -48,14 +53,19 @@ type Segment = {
     NgbCollapse,
     FormsModule,
     SelectOptionsComponent,
-    Nl2BrPipe
+    Nl2BrPipe,
+    ButtonComponent
   ]
 })
-export class VideoTranscriptionComponent implements OnInit, OnChanges {
+export class VideoTranscriptionComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private notifier = inject(Notifier)
   private captionService = inject(VideoCaptionService)
+  private zone = inject(NgZone)
+  private renderer = inject(Renderer2)
 
   readonly settingsPanel = viewChild<ElementRef>('settingsPanel')
+  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput')
+  readonly segmentsContainer = viewChild<ElementRef<HTMLElement>>('segmentsContainer')
 
   readonly video = input<Video>(undefined)
   readonly captions = input<VideoCaption[]>(undefined)
@@ -79,8 +89,16 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
   // true when collapsed has been shown (after the transition)
   settingsPanelShown: boolean
 
+  // false when the user manually scrolled the segments, disabling the auto scroll to the played segment
+  autoScrollEnabled = true
+
   private segmentsStore: Segment[] = []
   private searchSubject = new Subject<string>()
+
+  // Scroll position we set automatically when syncing with the video
+  // undefined when the segments have just been replaced and the container position is not settled yet
+  private expectedScrollTop = 0
+  private unlistenScroll: () => void
 
   @HostListener('document:click', [ '$event' ])
   clickout (event: Event) {
@@ -98,6 +116,19 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
         distinctUntilChanged()
       )
       .subscribe(search => this.filterSegments(search))
+  }
+
+  ngAfterViewInit () {
+    const container = this.segmentsContainer().nativeElement
+
+    // Scroll events are emitted very often: don't run change detection for each of them
+    this.zone.runOutsideAngular(() => {
+      this.unlistenScroll = this.renderer.listen(container, 'scroll', () => this.onSegmentsScroll(container))
+    })
+  }
+
+  ngOnDestroy () {
+    if (this.unlistenScroll) this.unlistenScroll()
   }
 
   ngOnChanges (changes: SimpleChanges) {
@@ -125,10 +156,12 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
     this.search = ''
 
     this.segmentsStore = []
-    this.segments = []
+    this.setSegments([])
 
     this.activeSegment = undefined
     this.currentCaption = undefined
+
+    this.autoScrollEnabled = true
 
     this.isSettingsPanelCollapsed = true
     this.settingsPanelShown = false
@@ -172,7 +205,7 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
               }
             })
 
-            this.segments = this.segmentsStore
+            this.setSegments(this.segmentsStore)
           } catch (err: unknown) {
             this.notifier.error($localize`Cannot load transcript: ${(err as Error).message}`)
           }
@@ -196,15 +229,63 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
     this.segmentClicked.emit(segment.start)
   }
 
+  resyncWithVideo () {
+    this.autoScrollEnabled = true
+
+    // The active segment may be filtered out by the search: display the whole transcript so we can scroll to it
+    this.clearSearch()
+
+    this.scrollToActiveSegment({ force: true })
+  }
+
   // ---------------------------------------------------------------------------
+
+  // Run outside of the Angular zone
+  private onSegmentsScroll (container: HTMLElement) {
+    if (!this.autoScrollEnabled) return
+
+    // The segments have just been replaced: the browser may still adjust the scroll position
+    if (this.expectedScrollTop === undefined) return
+
+    // We scrolled the container ourselves
+    if (Math.abs(container.scrollTop - this.expectedScrollTop) < 1) return
+
+    this.zone.run(() => {
+      this.autoScrollEnabled = false
+    })
+  }
+
+  private clearSearch () {
+    const input = this.searchInput()?.nativeElement
+    if (input) input.value = ''
+
+    // Update the segments right away but also feed the subject, so the same search can be typed again
+    this.searchSubject.next('')
+    this.filterSegments('')
+  }
 
   private filterSegments (search: string) {
     this.search = search
 
     const searchLowercase = search.toLocaleLowerCase()
 
-    this.segments = this.segmentsStore.filter(s => {
+    this.setSegments(this.segmentsStore.filter(s => {
       return s.text.toLocaleLowerCase().includes(searchLowercase)
+    }))
+  }
+
+  private setSegments (segments: Segment[]) {
+    this.segments = segments
+
+    // Restore expected scroll when the container will be rendered
+    this.expectedScrollTop = undefined
+
+    setTimeout(() => {
+      const container = this.segmentsContainer()?.nativeElement
+
+      this.expectedScrollTop = container
+        ? container.scrollTop
+        : 0
     })
   }
 
@@ -224,19 +305,39 @@ export class VideoTranscriptionComponent implements OnInit, OnChanges {
       }
     }
 
-    if (lastActiveSegment !== this.activeSegment) {
-      setTimeout(() => {
-        const element = document.querySelector<HTMLElement>('.segment-' + this.activeSegment.start)
-        if (!element) return // Can happen with a search
-
-        const container = document.querySelector<HTMLElement>('.widget-root')
-
-        if (isInViewport(element, container)) return
-
-        container.scrollTop = element.offsetTop
-
-        debugLogger(`Set transcription segment ${this.activeSegment.start} in viewport`)
-      })
+    if (lastActiveSegment !== this.activeSegment && this.autoScrollEnabled) {
+      this.scrollToActiveSegment()
     }
+  }
+
+  private scrollToActiveSegment (options: { force?: boolean } = {}) {
+    const { force = false } = options
+
+    setTimeout(() => {
+      const container = this.segmentsContainer()?.nativeElement
+      if (!container) return
+
+      if (!this.activeSegment) {
+        if (force) this.setScrollTop(container, 0)
+
+        return
+      }
+
+      const element = container.querySelector<HTMLElement>('.segment-' + this.activeSegment.start)
+      if (!element) return // Can happen with a search
+
+      if (!force && isInViewport(element, container)) return
+
+      this.setScrollTop(container, container.scrollTop + element.getBoundingClientRect().top - container.getBoundingClientRect().top)
+
+      debugLogger(`Set transcription segment ${this.activeSegment.start} in viewport`)
+    })
+  }
+
+  private setScrollTop (container: HTMLElement, scrollTop: number) {
+    container.scrollTop = scrollTop
+
+    // The browser may have clamped the value, so use the effective position as reference
+    this.expectedScrollTop = container.scrollTop
   }
 }

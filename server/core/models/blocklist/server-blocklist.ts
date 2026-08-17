@@ -153,7 +153,7 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
       `AND "serverBlocklist"."accountId" IN (${createSafeIn(ServerBlocklistModel.sequelize, byAccountIds)})`
 
     return ServerBlocklistModel.sequelize.query(rawQuery, {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
       replacements: { hosts }
     })
   }

@@ -14,7 +14,7 @@ export class BlocklistExporter extends AbstractUserExporter<BlocklistExportJSON>
       json: {
         instances: instancesBlocklist.map(b => ({ host: b })),
         actors: accountsBlocklist.map(h => ({ handle: h }))
-      } as BlocklistExportJSON,
+      },
 
       staticFiles: []
     }

@@ -1,7 +1,7 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { deleteInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { createRebuildAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import { fetchAndValidateWatchedWordsSubscriptionActions } from '@server/lib/watched-words-subscriptions.js'
@@ -32,6 +32,8 @@ import {
   watchedWordsListsSortValidator,
   watchedWordsSubscriptionsSortValidator
 } from '../../middlewares/index.js'
+
+const logger = createLogger()
 
 const watchedWordsRouter = express.Router()
 

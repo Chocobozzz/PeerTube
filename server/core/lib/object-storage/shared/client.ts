@@ -1,9 +1,8 @@
 import type { S3Client } from '@aws-sdk/client-s3'
-import { logger } from '@server/helpers/logger.js'
 import { isProxyEnabled } from '@server/helpers/proxy.js'
 import { getProxyAgent } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { lTags } from './logger.js'
+import { objectStorageLogger as logger } from './logger.js'
 
 let s3ClientPromise: Promise<S3Client>
 export function getClient () {
@@ -32,7 +31,7 @@ export function getClient () {
       responseChecksumValidation: 'WHEN_REQUIRED'
     })
 
-    logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION, lTags())
+    logger.info('Initialized S3 client %s with region %s.', getEndpoint(), OBJECT_STORAGE.REGION)
 
     return s3Client
   })()

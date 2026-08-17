@@ -6,9 +6,12 @@ import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import { MVideoThumbnails } from '@server/types/models/index.js'
 import express from 'express'
 import { createReqFiles } from '../../../helpers/express-utils.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videosUpdateValidator } from '../../../middlewares/index.js'
+
+const logger = createLogger('api', 'video')
 
 const updateRouter = express.Router()
 
@@ -36,17 +39,19 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const body: VideoUpdate = req.body
   const user = res.locals.oauth.token.User
 
-  const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req)
+  await logger.inContext(async () => {
+    const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req)
 
-  const localVideoUpdater = new LocalVideoUpdater({ user, tags: [ 'api', 'video' ], video: videoFromReq })
+    const localVideoUpdater = new LocalVideoUpdater({ user, video: videoFromReq })
 
-  const video = await localVideoUpdater.update({ ...body, thumbnails, channel: res.locals.videoChannel })
+    const video = await localVideoUpdater.update({ ...body, thumbnails, channel: res.locals.videoChannel })
 
-  Hooks.runAction('action:api.video.updated', { video, body: req.body, req, res })
+    Hooks.runAction('action:api.video.updated', { video, body: req.body, req, res })
 
-  return res.type('json')
-    .status(HttpStatusCode.NO_CONTENT_204)
-    .end()
+    return res.type('json')
+      .status(HttpStatusCode.NO_CONTENT_204)
+      .end()
+  })
 }
 
 async function buildVideoThumbnailsFromReq (video: MVideoThumbnails, req: express.Request) {

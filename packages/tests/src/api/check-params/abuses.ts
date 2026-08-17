@@ -281,6 +281,32 @@ describe('Test abuses API validators', function () {
 
       await makePostBodyRequest({ url: server.url, path, token: userToken, fields, expectedStatus: HttpStatusCode.OK_200 })
     })
+
+    it('Should fail to report a video the reporter owns', async function () {
+      const fields = { video: { id: server.store.videoCreated.id }, reason: 'my super reason' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail to report a video the reporter collaborates on', async function () {
+      const collaboratorToken = await server.channelCollaborators.createEditor('abuse_collaborator', 'root_channel')
+
+      const fields = { video: { id: server.store.videoCreated.id }, reason: 'my super reason' }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: collaboratorToken,
+        fields,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
   })
 
   describe('When updating an abuse', function () {

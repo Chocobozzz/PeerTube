@@ -1,11 +1,11 @@
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { MActorImage } from '@server/types/models/index.js'
 import { refreshActorIfNeeded } from '../activitypub/actors/refresh.js'
 import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 
-const lTags = loggerTagsFactory('lazy-load', 'avatar-image')
+const logger = createLogger('lazy-load', 'avatar-image')
 
 export class AvatarImageFileCache extends AbstractImageFileCache<MActorImage> {
   protected loadModel (filename: string) {
@@ -26,7 +26,7 @@ export class AvatarImageFileCache extends AbstractImageFileCache<MActorImage> {
 
       await refreshActorIfNeeded({ actor, fetchedType: 'partial' })
     } catch (err) {
-      logger.error('Error while refreshing actor for avatar image lazy fetch', { ...lTags(), err })
+      logger.error('Error while refreshing actor for avatar image lazy fetch', { err })
     }
   }
 }

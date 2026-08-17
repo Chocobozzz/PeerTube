@@ -1,11 +1,13 @@
 import { Transaction } from 'sequelize'
 import { getServerActor } from '@server/models/application/application.js'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { SERVER_ACTOR_NAME } from '../../initializers/constants.js'
 import { ServerModel } from '../../models/server/server.js'
 import { MActorFollowActors } from '../../types/models/index.js'
 import { JobQueue } from '../job-queue/index.js'
+
+const logger = createLogger()
 
 async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors, transaction?: Transaction) {
   if (!CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_BACK.ENABLED) return

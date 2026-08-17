@@ -9,7 +9,7 @@ import {
   VideoObject,
   VideoState
 } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { spdxToPeertubeLicence } from '@server/helpers/video.js'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
@@ -33,6 +33,8 @@ import {
   setValidRemoteIcon
 } from './misc.js'
 import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
+
+const logger = createLogger()
 
 export function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&

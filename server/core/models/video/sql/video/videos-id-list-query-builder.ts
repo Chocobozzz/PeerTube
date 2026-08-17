@@ -22,6 +22,21 @@ import { createSafeIn, parseRowCountResult } from '../../../shared/index.js'
  * We don't list classic SQL builder classes used by other models because for performance reasons
  */
 
+// Used to normalize ts_rank() into the [0, 1] range of word_similarity()
+const TS_RANK_NAME_MATCH = 0.61
+
+// to_tsquery() parses its argument as a tsquery expression: `&`, `|`, `!`, `<->`, parentheses and `:` weight markers
+// So raw user input like "rock & roll", "hello!" or "12:30" makes it throw a syntax error
+// Returns '' when the search holds no lexeme at all
+function buildTSQueryTerms (search: string) {
+  return search
+    .replace(/[^\p{L}\p{N}_]/gu, ' ')
+    .split(/\s+/)
+    .filter(term => term.length !== 0)
+    .map(term => `${term}:*`)
+    .join(' & ')
+}
+
 export type DisplayOnlyForFollowerOptions = {
   actorId: number
   orLocalVideos: boolean
@@ -829,10 +844,32 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.queryConfig = 'SET pg_trgm.word_similarity_threshold = 0.40;'
 
+    // A search made only of punctuation ("!!!", "...") has no lexeme to look for: skip the full text search
+    const tsQueryTerms = buildTSQueryTerms(search)
+    const hasFTS = tsQueryTerms !== ''
+
+    if (hasFTS) {
+      this.cte.push(
+        // Build the tsquery once instead of once per referencing expression
+        `"tsQuery" AS (SELECT to_tsquery('simple', immutable_unaccent(${this.sequelize.escape(tsQueryTerms)})) AS "query")`,
+        '"ftsSearch" AS (' +
+          '  SELECT "videoSearch"."videoId" AS "id", ' +
+          // ts_rank tops out at ~0.61 for a name-only match while word_similarity returns 1 for the same match.
+          // Normalize by that constant so both CTE similarities share a [0, 1]
+          // A description-only match scores ~0.4, i.e. below any name match
+          `  LEAST(ts_rank("videoSearch"."searchVector", "tsQuery"."query") / ${TS_RANK_NAME_MATCH}, 1) AS similarity ` +
+          '  FROM "videoSearch", "tsQuery" ' +
+          '  WHERE "videoSearch"."searchVector" @@ "tsQuery"."query"' +
+          ')'
+      )
+
+      this.joins.push('LEFT JOIN "ftsSearch" ON "video"."id" = "ftsSearch"."id"')
+    }
+
     this.cte.push(
       '"trigramSearch" AS (' +
         '  SELECT "video"."id", ' +
-        `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) as similarity ` +
+        `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) AS similarity ` +
         '  FROM "video" ' +
         '  WHERE lower(immutable_unaccent(' + escapedSearch + ')) <% lower(immutable_unaccent("video"."name")) OR ' +
         '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
@@ -842,6 +879,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.joins.push('LEFT JOIN "trigramSearch" ON "video"."id" = "trigramSearch"."id"')
 
     let base = '(' +
+      (hasFTS
+        ? '  "ftsSearch"."id" IS NOT NULL OR '
+        : '') +
       '  "trigramSearch"."id" IS NOT NULL OR ' +
       '  EXISTS (' +
       '    SELECT 1 FROM "videoTag" ' +
@@ -858,7 +898,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     this.and.push(base)
 
-    let attribute = `COALESCE("trigramSearch"."similarity", 0)`
+    let attribute = hasFTS
+      ? 'GREATEST(COALESCE("ftsSearch"."similarity", 0), COALESCE("trigramSearch"."similarity", 0))'
+      : 'COALESCE("trigramSearch"."similarity", 0)'
+
     if (this.group) attribute = `AVG(${attribute})`
 
     if (!isCount) {

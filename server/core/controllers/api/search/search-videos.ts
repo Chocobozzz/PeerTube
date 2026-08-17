@@ -11,7 +11,7 @@ import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@ser
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
   asyncMiddleware,
@@ -28,6 +28,8 @@ import { guessAdditionalAttributesFromQuery } from '../../../models/video/format
 import { VideoModel } from '../../../models/video/video.js'
 import { MVideoAccountLightBlacklistAllFiles } from '../../../types/models/index.js'
 import { searchLocalUrl } from './shared/index.js'
+
+const logger = createLogger()
 
 const searchVideosRouter = express.Router()
 

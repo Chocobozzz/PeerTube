@@ -1,5 +1,5 @@
 import express from 'express'
-import { FileStorage, HttpStatusCode, UserExportRequest, UserExportRequestResult, UserExportState } from '@peertube/peertube-models'
+import { FileStorage, HttpStatusCode, UserExportRequest, UserExportState } from '@peertube/peertube-models'
 import {
   asyncMiddleware,
   authenticate,
@@ -65,7 +65,7 @@ async function requestExport (req: express.Request, res: express.Response) {
     export: {
       id: exportModel.id
     }
-  } as UserExportRequestResult)
+  })
 }
 
 async function listUserExports (req: express.Request, res: express.Response) {

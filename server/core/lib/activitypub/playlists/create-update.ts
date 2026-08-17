@@ -2,7 +2,7 @@ import { guessAspectRatio } from '@peertube/peertube-core-utils'
 import { ActivityIconObject, HttpStatusCode, PlaylistObject } from '@peertube/peertube-models'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -24,34 +24,35 @@ import {
   playlistObjectToDBAttributes
 } from './shared/index.js'
 
-const lTags = loggerTagsFactory('ap', 'video-playlist')
+const logger = createLogger('ap', 'playlist')
 
 export async function createAccountPlaylists (playlistUrls: string[], account: MAccountHost) {
   logger.info(
-    `Creating or updating ${playlistUrls.length} playlists for account ${account.Actor.preferredUsername}`,
-    lTags()
+    `Creating or updating ${playlistUrls.length} playlists for account ${account.Actor.preferredUsername}`
   )
 
   await Bluebird.map(playlistUrls, async playlistUrl => {
-    if (!checkUrlsSameHost(playlistUrl, account.Actor.url)) {
-      logger.warn(`Playlist ${playlistUrl} is not on the same host as owner account ${account.Actor.url}`, lTags(playlistUrl))
-      return
-    }
-
-    try {
-      const exists = await VideoPlaylistModel.doesPlaylistExist(playlistUrl)
-      if (exists === true) return
-
-      const { playlistObject } = await fetchRemoteVideoPlaylist(playlistUrl)
-
-      if (playlistObject === undefined) {
-        throw new Error(`Cannot refresh remote playlist ${playlistUrl}: invalid body.`)
+    await logger.withContext([ playlistUrl ], async () => {
+      if (!checkUrlsSameHost(playlistUrl, account.Actor.url)) {
+        logger.warn(`Playlist ${playlistUrl} is not on the same host as owner account ${account.Actor.url}`)
+        return
       }
 
-      return createOrUpdateVideoPlaylist({ playlistObject, contextUrl: playlistUrl })
-    } catch (err) {
-      logger.warn(`Cannot create or update playlist ${playlistUrl}`, { err, ...lTags(playlistUrl) })
-    }
+      try {
+        const exists = await VideoPlaylistModel.doesPlaylistExist(playlistUrl)
+        if (exists === true) return
+
+        const { playlistObject } = await fetchRemoteVideoPlaylist(playlistUrl)
+
+        if (playlistObject === undefined) {
+          throw new Error(`Cannot refresh remote playlist ${playlistUrl}: invalid body.`)
+        }
+
+        return createOrUpdateVideoPlaylist({ playlistObject, contextUrl: playlistUrl })
+      } catch (err) {
+        logger.warn(`Cannot create or update playlist ${playlistUrl}`, { err })
+      }
+    })
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
@@ -73,7 +74,7 @@ export async function createOrUpdateVideoPlaylist (options: {
     throw new Error(`Playlist ${playlistObject.id} is not on the same host as context URL ${contextUrl}`)
   }
 
-  logger.debug(`Creating or updating playlist ${playlistObject.id}`, lTags(playlistObject.id))
+  logger.debug(`Creating or updating playlist ${playlistObject.id}`)
 
   const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
 
@@ -159,10 +160,10 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
       await playlist.replaceAndSaveThumbnails(thumbnails, t)
     })
   } catch (err) {
-    logger.debug(`Failed to update thumbnail for playlist ${playlist.url} with icon ${icons[0].url}, maybe because of concurrent request`, {
-      err,
-      ...lTags(playlist.uuid, playlist.url)
-    })
+    logger.debug(
+      `Failed to update thumbnail for playlist ${playlist.url} with icon ${icons[0].url}, maybe because of concurrent request`,
+      { err }
+    )
   }
 }
 
@@ -179,7 +180,7 @@ async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MV
     })
   )
 
-  logger.info('Rebuilt playlist %s with %s elements.', playlist.url, elementsToCreate.length, lTags(playlist.uuid, playlist.url))
+  logger.info('Rebuilt playlist %s with %s elements.', playlist.url, elementsToCreate.length)
 
   return elementsToCreate.length
 }
@@ -199,7 +200,7 @@ async function buildElementsDBAttributes (elementUrls: string[], playlist: MVide
         ? 'debug'
         : 'warn'
 
-      logger.log(logLevel, `Cannot add playlist element ${elementUrl}`, { err, ...lTags(playlist.uuid, playlist.url) })
+      logger.log(logLevel, `Cannot add playlist element ${elementUrl}`, { err })
     }
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 

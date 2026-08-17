@@ -12,7 +12,7 @@ import {
   isVideoStudioTaskWatermark
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
@@ -21,6 +21,8 @@ import { basename } from 'path'
 import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
+
+const logger = createLogger('studio', 'transcoding')
 
 type CreateOptions = {
   video: MVideoWithFile
@@ -38,58 +40,60 @@ export class VideoStudioTranscodingJobHandler
     const jobUUID = buildUUID()
     const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
 
-    const payload: RunnerJobStudioTranscodingPayload = {
-      input: {
-        videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'video' }),
+    return logger.withContext([ jobUUID, video.uuid ], async () => {
+      const payload: RunnerJobStudioTranscodingPayload = {
+        input: {
+          videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'video' }),
 
-        separatedAudioFileUrl: separatedAudioFile
-          ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
-          : []
-      },
-      output: {},
-      tasks: tasks.map(t => {
-        if (isVideoStudioTaskIntro(t) || isVideoStudioTaskOutro(t)) {
-          return {
-            ...t,
+          separatedAudioFileUrl: separatedAudioFile
+            ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
+            : []
+        },
+        output: {},
+        tasks: tasks.map(t => {
+          if (isVideoStudioTaskIntro(t) || isVideoStudioTaskOutro(t)) {
+            return {
+              ...t,
 
-            options: {
-              ...t.options,
+              options: {
+                ...t.options,
 
-              file: generateRunnerEditionTranscodingVideoInputFileUrl(jobUUID, video.uuid, basename(t.options.file))
+                file: generateRunnerEditionTranscodingVideoInputFileUrl(jobUUID, video.uuid, basename(t.options.file))
+              }
             }
           }
-        }
 
-        if (isVideoStudioTaskWatermark(t)) {
-          return {
-            ...t,
+          if (isVideoStudioTaskWatermark(t)) {
+            return {
+              ...t,
 
-            options: {
-              ...t.options,
+              options: {
+                ...t.options,
 
-              file: generateRunnerEditionTranscodingVideoInputFileUrl(jobUUID, video.uuid, basename(t.options.file))
+                file: generateRunnerEditionTranscodingVideoInputFileUrl(jobUUID, video.uuid, basename(t.options.file))
+              }
             }
           }
-        }
 
-        return t
+          return t
+        })
+      }
+
+      const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
+        videoUUID: video.uuid,
+        originalTasks: tasks
+      }
+
+      const job = await this.createRunnerJob({
+        type: 'video-studio-transcoding',
+        jobUUID,
+        payload,
+        privatePayload,
+        priority
       })
-    }
 
-    const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
-      videoUUID: video.uuid,
-      originalTasks: tasks
-    }
-
-    const job = await this.createRunnerJob({
-      type: 'video-studio-transcoding',
-      jobUUID,
-      payload,
-      privatePayload,
-      priority
+      return job
     })
-
-    return job
   }
 
   // ---------------------------------------------------------------------------
@@ -117,22 +121,19 @@ export class VideoStudioTranscodingJobHandler
     const { runnerJob, resultPayload } = options
     const privatePayload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
-    const video = await loadRunnerVideo(runnerJob, this.lTags)
+    const video = await loadRunnerVideo(runnerJob)
     if (!video) {
       await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
       return
     }
 
-    const videoFilePath = resultPayload.videoFile as string
+    await logger.withContext([ video.uuid ], async () => {
+      const videoFilePath = resultPayload.videoFile as string
 
-    await onVideoStudioEnded({ video, editionResultPath: videoFilePath, tasks: privatePayload.originalTasks })
+      await onVideoStudioEnded({ video, editionResultPath: videoFilePath, tasks: privatePayload.originalTasks })
 
-    logger.info(
-      'Runner video edition transcoding job %s for %s ended.',
-      runnerJob.uuid,
-      video.uuid,
-      this.lTags(video.uuid, runnerJob.uuid)
-    )
+      logger.info('Runner video edition transcoding job %s for %s ended.', runnerJob.uuid, video.uuid)
+    })
   }
 
   protected specificError (options: {
@@ -158,13 +159,16 @@ export class VideoStudioTranscodingJobHandler
     const { runnerJob } = options
 
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
-    await safeCleanupStudioTMPFiles(payload.originalTasks)
 
-    await sequelizeTypescript.transaction(async transaction => {
-      const video = await loadRunnerVideo(options.runnerJob, this.lTags, transaction)
+    const video = await sequelizeTypescript.transaction(async transaction => {
+      const video = await loadRunnerVideo(options.runnerJob, transaction)
       if (!video || video.state === VideoState.PUBLISHED) return
 
       await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
+
+      return video
     })
+
+    await logger.withContext([ video.uuid ], () => safeCleanupStudioTMPFiles(payload.originalTasks))
   }
 }

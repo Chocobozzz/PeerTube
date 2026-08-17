@@ -10,11 +10,13 @@ import express from 'express'
 import { body, param, query } from 'express-validator'
 import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor.js'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers.js'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { WEBSERVER } from '../../initializers/constants.js'
 import { ActorFollowModel } from '../../models/actor/actor-follow.js'
 import { ActorModel } from '../../models/actor/actor.js'
 import { areValidationErrors } from './shared/index.js'
+
+const logger = createLogger()
 
 const listFollowsValidator = [
   query('state')

@@ -29,7 +29,7 @@
   @include padding-right(1rem);
 
   .name {
-    color: pvar(--fg-400);
+    color: pvar(--fg);
 
     @include ellipsis;
     @include font-size(14px);

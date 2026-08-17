@@ -1,5 +1,5 @@
 import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
@@ -22,7 +22,8 @@ import {
   videoPasswordsSortValidator
 } from '../../../middlewares/validators/index.js'
 
-const lTags = loggerTagsFactory('api', 'video')
+const logger = createLogger('api', 'video')
+
 const videoPasswordRouter = express.Router()
 
 videoPasswordRouter.get(
@@ -73,66 +74,71 @@ async function listVideoPasswords (req: express.Request, res: express.Response) 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function updateVideoPasswordList (req: express.Request, res: express.Response) {
+function updateVideoPasswordList (req: express.Request, res: express.Response) {
   const video = res.locals.videoWithRights
   const videoId = video.id
 
-  const passwordArray = req.body.passwords as string[]
+  return logger.withContext([ video.uuid ], async () => {
+    const passwordArray = req.body.passwords as string[]
 
-  await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
-    await VideoPasswordModel.deleteAllPasswords(videoId, t)
-    await VideoPasswordModel.addPasswords(passwordArray, videoId, t)
+    await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
+      await VideoPasswordModel.deleteAllPasswords(videoId, t)
+      await VideoPasswordModel.addPasswords(passwordArray, videoId, t)
+
+      await VideoChannelActivityModel.addVideoActivity({
+        action: VideoChannelActivityAction.UPDATE_PASSWORDS,
+        user: res.locals.oauth.token.User,
+        channel: video.VideoChannel,
+        video,
+        transaction: t
+      })
+    })
+
+    logger.info(`Video passwords for video with name ${video.name} and uuid ${video.uuid} have been updated`)
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
+}
+
+function addVideoPassword (req: express.Request, res: express.Response) {
+  const video = res.locals.videoWithRights
+  const videoId = video.id
+
+  return logger.withContext([ video.uuid ], async () => {
+    const newPassword = req.body.password as string
+
+    await sequelizeTypescript.transaction(t => {
+      return VideoPasswordModel.addPassword(newPassword, videoId, t)
+    })
+
+    logger.info(`Video password for video with name ${video.name} and uuid ${video.uuid} have been added`)
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
+}
+
+function removeVideoPassword (req: express.Request, res: express.Response) {
+  const videoInstance = res.locals.videoWithRights
+  const password = res.locals.videoPassword
+
+  return logger.withContext([ videoInstance.uuid ], async () => {
+    await VideoPasswordModel.deletePassword(password.id)
 
     await VideoChannelActivityModel.addVideoActivity({
       action: VideoChannelActivityAction.UPDATE_PASSWORDS,
       user: res.locals.oauth.token.User,
-      channel: video.VideoChannel,
-      video,
-      transaction: t
+      channel: videoInstance.VideoChannel,
+      video: videoInstance,
+      transaction: null
     })
+
+    logger.info(
+      'Password with id %d of video named %s and uuid %s has been deleted.',
+      password.id,
+      videoInstance.name,
+      videoInstance.uuid
+    )
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
-
-  logger.info(`Video passwords for video with name ${video.name} and uuid ${video.uuid} have been updated`, lTags(video.uuid))
-
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
-}
-
-async function addVideoPassword (req: express.Request, res: express.Response) {
-  const video = res.locals.videoWithRights
-  const videoId = video.id
-
-  const newPassword = req.body.password as string
-
-  await sequelizeTypescript.transaction(t => {
-    return VideoPasswordModel.addPassword(newPassword, videoId, t)
-  })
-
-  logger.info(`Video password for video with name ${video.name} and uuid ${video.uuid} have been added`, lTags(video.uuid))
-
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
-}
-
-async function removeVideoPassword (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoWithRights
-  const password = res.locals.videoPassword
-
-  await VideoPasswordModel.deletePassword(password.id)
-
-  await VideoChannelActivityModel.addVideoActivity({
-    action: VideoChannelActivityAction.UPDATE_PASSWORDS,
-    user: res.locals.oauth.token.User,
-    channel: videoInstance.VideoChannel,
-    video: videoInstance,
-    transaction: null
-  })
-
-  logger.info(
-    'Password with id %d of video named %s and uuid %s has been deleted.',
-    password.id,
-    videoInstance.name,
-    videoInstance.uuid,
-    lTags(videoInstance.uuid)
-  )
-
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

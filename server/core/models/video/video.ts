@@ -81,7 +81,7 @@ import {
   isVideoStateValid,
   isVideoSupportValid
 } from '../../helpers/custom-validators/videos.js'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants.js'
 import { sendDeleteVideo } from '../../lib/activitypub/send/index.js'
@@ -158,7 +158,7 @@ import { TagModel } from './tag.js'
 import { ThumbnailModel, thumbnailAPIAttributes } from './thumbnail.js'
 import { VideoBlacklistModel } from './video-blacklist.js'
 import { VideoCaptionModel } from './video-caption.js'
-import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoCommentModel } from './video-comment.js'
 import { VideoFileModel } from './video-file.js'
 import { VideoImportModel } from './video-import.js'
@@ -171,7 +171,7 @@ import { VideoSourceModel } from './video-source.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoTagModel } from './video-tag.js'
 
-const lTags = loggerTagsFactory('video')
+const logger = createLogger('video')
 
 const videoSummaryAttributes = [
   'id',
@@ -219,7 +219,7 @@ export type ForAPIOptions = {
             {
               withAccount: true,
               withAccountBlockerIds: options.withAccountBlockerIds
-            } as SummaryOptions
+            }
           ]
         }),
         required: true
@@ -853,16 +853,18 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   // ---------------------------------------------------------------------------
 
   @BeforeDestroy
-  static async beforeDestroyHook (instance: VideoModel, options: { transaction: Transaction }) {
-    // We need infohashes to save the magnet URIs of the video in its abuses
-    const video = await this.loadAP(instance.id, options.transaction)
+  static beforeDestroyHook (instance: VideoModel, options: { transaction: Transaction }) {
+    return logger.withContext([ instance.uuid ], async () => {
+      // We need infohashes to save the magnet URIs of the video in its abuses
+      const video = await this.loadAP(instance.id, options.transaction)
 
-    this.stopLiveIfNeeded(video)
-    this.invalidateCache(video)
+      this.stopLiveIfNeeded(video)
+      this.invalidateCache(video)
 
-    await this.sendDelete(video, options.transaction)
-    await this.saveEssentialDataToAbuses(video, options.transaction)
-    await this.removeFiles(video, options.transaction)
+      await this.sendDelete(video, options.transaction)
+      await this.saveEssentialDataToAbuses(video, options.transaction)
+      await this.removeFiles(video, options.transaction)
+    })
   }
 
   static stopLiveIfNeeded (instance: MVideo) {
@@ -2188,7 +2190,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       promises.push(removeWebVideoObjectStorage(videoFile))
     }
 
-    logger.debug(`Removing files associated to web video ${videoFile.filename}`, { videoFile, ...lTags(this.uuid) })
+    logger.debug(`Removing files associated to web video ${videoFile.filename}`, { videoFile })
 
     return Promise.all(promises)
   }
@@ -2235,7 +2237,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
           } catch (err) {
             logger.error(
               `Cannot remove caption ${caption.filename} (${caption.language}) playlist files associated to video ${this.name}`,
-              { video: this, ...lTags(this.uuid) }
+              { video: this }
             )
           }
         }
@@ -2260,10 +2262,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
     }
 
-    logger.debug(
-      `Removing files associated to streaming playlist of video ${this.url}`,
-      { playlist, isRedundancy, ...lTags(this.uuid) }
-    )
+    logger.debug(`Removing files associated to streaming playlist of video ${this.url}`, { playlist, isRedundancy })
   }
 
   async removeStreamingPlaylistVideoFile (streamingPlaylist: MStreamingPlaylist, videoFile: MVideoFile) {
@@ -2279,10 +2278,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       await removeHLSFileObjectStorageByFilename(this, resolutionFilename)
     }
 
-    logger.debug(
-      `Removing files associated to streaming playlist video file ${videoFile.filename}`,
-      { streamingPlaylist, ...lTags(this.uuid) }
-    )
+    logger.debug(`Removing files associated to streaming playlist video file ${videoFile.filename}`, { streamingPlaylist })
   }
 
   async removeStreamingPlaylistFile (streamingPlaylist: MStreamingPlaylist, filename: string) {
@@ -2293,7 +2289,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       await removeHLSFileObjectStorageByFilename(this, filename)
     }
 
-    logger.debug(`Removing streaming playlist file ${filename}`, lTags(this.uuid))
+    logger.debug(`Removing streaming playlist file ${filename}`)
   }
 
   async removeOriginalFile (videoSource: MVideoSource) {
@@ -2306,7 +2302,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       await removeOriginalFileObjectStorage(videoSource)
     }
 
-    logger.debug(`Removing original video file ${videoSource.keptOriginalFilename}`, lTags(this.uuid))
+    logger.debug(`Removing original video file ${videoSource.keptOriginalFilename}`)
   }
 
   // ---------------------------------------------------------------------------

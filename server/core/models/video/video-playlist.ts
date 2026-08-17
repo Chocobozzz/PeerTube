@@ -796,13 +796,13 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     return activityPubCollectionPagination(this.url, handler, page)
       .then(o => {
         return Object.assign(o, {
-          type: 'Playlist' as 'Playlist',
+          type: 'Playlist' as const,
 
           audience: this.VideoChannel?.Actor.url,
 
           name: this.name,
           content: this.description,
-          mediaType: 'text/markdown' as 'text/markdown',
+          mediaType: 'text/markdown' as const,
           uuid: this.uuid,
           videoChannelPosition: this.videoChannelPosition,
           published: this.createdAt.toISOString(),

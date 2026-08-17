@@ -1,6 +1,6 @@
 import { UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
 import { tu } from '@server/helpers/i18n.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { toSafeHtml } from '@server/helpers/markdown.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { getServerAccount } from '@server/models/application/application.js'
@@ -16,6 +16,8 @@ import {
   UserNotificationModelForApi
 } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/index.js'
+
+const logger = createLogger()
 
 export class CommentMention extends AbstractNotification<MCommentOwnerVideo, MUserNotifSettingAccount> {
   private users: MUserDefault[]

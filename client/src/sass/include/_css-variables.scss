@@ -74,7 +74,7 @@
   --pt-player-fg: #fff;
   --pt-player-big-play-bg: rgba(0, 0, 0, 0.8);
 
-  --menu-fg: #{pvar(--fg-400)};
+  --menu-fg: #{pvar(--fg-350)};
   --menu-bg: #{pvar(--bg-secondary-400)};
 
   --header-fg: #{pvar(--fg)};
@@ -112,13 +112,22 @@
   &[data-pt-theme="default"] {
     --is-dark: 0;
 
-    --primary: #FF8F37;
+    --primary-650: hsl(20, 100%, 49%);
+    --primary-550: hsl(24, 90%, 50%);
+    --primary: hsl(26, 100%, 61%);
+    --primary-500: hsl(26, 100%, 61%);
+    --primary-450: hsl(26, 98%, 65%);
     --border-primary: #{pvar(--primary-650)};
 
-    --fg: hsl(0 14% 2%);
-    --fg-200: hsl(0 14% 29%);
+    --fg: hsl(0 0% 4%);
+    --fg-450: hsl(0 0% 7%);
+    --fg-400: hsl(0 13% 12%);
+    --fg-350: hsl(0 14% 16%);
+    --fg-300: hsl(0 13% 21%);
+    --fg-200: hsl(0 16% 29%);
+    --fg-100: hsl(0, 9%, 51%);
 
-    --bg: hsl(250 5% 96%);
+    --bg: hsl(240 5% 96%);
     --bg-secondary: hsl(0 12% 72%);
     --bg-secondary-500: hsl(0 12% 72%);
     --bg-secondary-450: hsl(0 13% 81%);
@@ -144,7 +153,13 @@
   &[data-pt-theme="peertube-core-dark-brown"] {
     --is-dark: 1;
 
-    --primary: #FD9C50;
+    --primary-650: hsl(20, 100%, 49%);
+    --primary-550: hsl(24, 90%, 50%);
+    --primary: hsl(26, 100%, 61%);
+    --primary-500: hsl(26, 100%, 61%);
+    --primary-450: hsl(26, 98%, 65%);
+    --border-primary: #{pvar(--primary-650)};
+
     --on-primary: #111;
     --border-primary: #{pvar(--primary-350)};
 
@@ -153,10 +168,21 @@
     --input-danger-fg: #FEBBB2;
     --input-danger-bg: #9C221C;
 
-    --fg: hsl(0 10% 96%);
+    --fg: hsl(240 5% 96%);
+    --fg-450: hsl(0 13% 92%);
+    --fg-400: hsl(0 19% 89%);
+    --fg-350: hsl(0 19% 89%); // Same as --fg-400 on purpose
+    --fg-300: hsl(0 13% 81%);
+    --fg-200: hsl(0 12% 72%);
+    --fg-100: hsl(0 9% 51%);
 
-    --bg: hsl(0 14% 7%);
-    --bg-secondary: hsl(0 14% 22%);
+    --bg: hsl(0 0% 7%);
+    --bg-secondary: hsl(0 16% 29%);
+    --bg-secondary-450: hsl(0 13% 21%);
+    --bg-secondary-400: hsl(0 14% 16%);
+    --bg-secondary-350: hsl(0 13% 12%);
+
+    --secondary-icon-color: hsl(0, 12%, 72%);
 
     --alert-primary-fg: #{pvar(--on-primary)};
     --alert-primary-bg: #cd9e7a;

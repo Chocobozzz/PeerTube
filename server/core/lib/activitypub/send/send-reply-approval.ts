@@ -1,8 +1,10 @@
 import { ActivityApproveReply, ActivityRejectReply } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { MCommentOwnerVideoReply } from '../../../types/models/index.js'
 import { getLocalApproveReplyActivityPubUrl } from '../url.js'
 import { unicastTo } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 // We can support type: 'RejectReply' in the future
 export function sendReplyApproval (comment: MCommentOwnerVideoReply, type: 'ApproveReply') {

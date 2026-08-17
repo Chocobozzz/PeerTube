@@ -1,19 +1,18 @@
-import { AccountExportJSON, ActorImageType } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { AbstractUserImporter } from './abstract-user-importer.js'
-import { updateLocalActorImageFiles } from '@server/lib/local-actor.js'
-import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { MAccountDefault } from '@server/types/models/index.js'
-import { isUserDescriptionValid, isUserDisplayNameValid } from '@server/helpers/custom-validators/users.js'
 import { pick } from '@peertube/peertube-core-utils'
+import { AccountExportJSON, ActorImageType } from '@peertube/peertube-models'
+import { isUserDescriptionValid, isUserDisplayNameValid } from '@server/helpers/custom-validators/users.js'
+import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { createLogger } from '@server/helpers/logger.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { updateLocalActorImageFiles } from '@server/lib/local-actor.js'
+import { MAccountDefault } from '@server/types/models/index.js'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
-const lTags = loggerTagsFactory('user-import')
+const logger = createLogger()
 
 type SanitizedObject = Pick<AccountExportJSON, 'description' | 'displayName' | 'archiveFiles'>
 
-export class AccountImporter extends AbstractUserImporter <AccountExportJSON, AccountExportJSON, SanitizedObject> {
-
+export class AccountImporter extends AbstractUserImporter<AccountExportJSON, AccountExportJSON, SanitizedObject> {
   protected getImportObjects (json: AccountExportJSON) {
     return [ json ]
   }
@@ -36,7 +35,7 @@ export class AccountImporter extends AbstractUserImporter <AccountExportJSON, Ac
 
     await this.importAvatar(account, accountImportData)
 
-    logger.info('Account %s imported.', account.name, lTags())
+    logger.info('Account %s imported.', account.name)
 
     return { duplicate: false }
   }

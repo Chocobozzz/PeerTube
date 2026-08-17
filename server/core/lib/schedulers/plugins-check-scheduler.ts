@@ -1,6 +1,6 @@
 import { compareSemVer } from '@peertube/peertube-core-utils'
 import chunk from 'lodash-es/chunk.js'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { PluginModel } from '../../models/server/plugin.js'
@@ -8,7 +8,7 @@ import { Notifier } from '../notifier/index.js'
 import { getLatestPluginsVersion } from '../plugins/plugin-index.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export class PluginsCheckScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -26,7 +26,7 @@ export class PluginsCheckScheduler extends AbstractScheduler {
   private async checkLatestPluginsVersion () {
     if (CONFIG.PLUGINS.INDEX.ENABLED === false) return
 
-    logger.info('Checking latest plugins version.', lTags())
+    logger.info('Checking latest plugins version.')
 
     const plugins = await PluginModel.listInstalled()
 
@@ -60,11 +60,11 @@ export class PluginsCheckScheduler extends AbstractScheduler {
               Notifier.Instance.notifyOfNewPluginVersion(plugin)
             }
 
-            logger.info(`Plugin ${result.npmName} has a new latest version ${plugin.latestVersion}`, lTags())
+            logger.info(`Plugin ${result.npmName} has a new latest version ${plugin.latestVersion}`)
           }
         }
       } catch (err) {
-        logger.error('Cannot get latest plugins version.', { npmNames, err, ...lTags() })
+        logger.error('Cannot get latest plugins version.', { npmNames, err })
       }
     }
   }

@@ -1,8 +1,10 @@
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { VideoStatModel } from '@server/models/stat/video-stat.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { Redis } from '../../redis.js'
+
+const logger = createLogger()
 
 /**
  * Add number of stats grabbed in a time-range to the database, so we can calculate stats timeseries

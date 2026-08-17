@@ -4,7 +4,7 @@ import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url.j
 import { Job } from 'bullmq'
 import { sanitizeHost } from '../../../helpers/core-utils.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { REMOTE_SCHEME, SERVER_ACTOR_NAME, WEBSERVER } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
@@ -13,6 +13,8 @@ import { MActor, MActorFull } from '../../../types/models/index.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../activitypub/actors/index.js'
 import { sendFollow } from '../../activitypub/send/index.js'
 import { Notifier } from '../../notifier/index.js'
+
+const logger = createLogger()
 
 async function processActivityPubFollow (job: Job) {
   const payload = job.data as ActivitypubFollowPayload

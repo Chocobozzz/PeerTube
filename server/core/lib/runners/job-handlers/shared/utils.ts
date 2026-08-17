@@ -3,13 +3,15 @@ import {
   RunnerJobVODWebVideoTranscodingPrivatePayload,
   VideoFileStreamType
 } from '@peertube/peertube-models'
-import { logger, LoggerTagsFn } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { onTranscodingEnded } from '@server/lib/transcoding/ended-transcoding.js'
 import { onWebVideoFileTranscoding } from '@server/lib/transcoding/web-transcoding.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFull } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { Transaction } from 'sequelize'
+
+const logger = createLogger()
 
 export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
   video: MVideoFull
@@ -28,12 +30,12 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
   await onTranscodingEnded({ moveVideoToNextState: privatePayload.canMoveVideoState, video })
 }
 
-export async function loadRunnerVideo (runnerJob: MRunnerJob, lTags: LoggerTagsFn, transaction?: Transaction) {
+export async function loadRunnerVideo (runnerJob: MRunnerJob, transaction?: Transaction) {
   const videoUUID = runnerJob.privatePayload.videoUUID
 
   const video = await VideoModel.loadFull(videoUUID, transaction)
   if (!video) {
-    logger.info('Video %s does not exist anymore after runner job.', videoUUID, lTags(videoUUID))
+    logger.info('Video %s does not exist anymore after runner job.', videoUUID)
     return undefined
   }
 

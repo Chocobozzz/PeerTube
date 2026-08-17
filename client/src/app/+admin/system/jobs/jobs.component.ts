@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterLink } from '@angular/router'
 import { ConfirmService, Notifier, RestPagination, ServerService } from '@app/core'
@@ -131,7 +131,7 @@ export class JobsComponent {
 
       case 'delayed':
       case 'prioritized':
-      case 'paused':
+      case 'wait':
         return [ 'pt-badge', 'badge-brown' ]
 
       case 'failed':

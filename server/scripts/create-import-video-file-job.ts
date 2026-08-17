@@ -1,6 +1,6 @@
+import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { program } from 'commander'
 import { resolve } from 'path'
-import { isUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { initDatabaseModels } from '../core/initializers/database.js'
 import { JobQueue } from '../core/lib/job-queue/index.js'
 import { VideoModel } from '../core/models/video/video.js'

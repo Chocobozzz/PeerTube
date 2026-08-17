@@ -2,11 +2,13 @@ import { ActivityAudience, ActivityDownload } from '@peertube/peertube-models'
 import { VideoModel } from '@server/models/video/video.js'
 import { MActorAudience, MActorLight, MVideoImmutable, MVideoUrl } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { audiencify, getPublicAudience } from '../audience.js'
 import { getDownloadsActivityPubUrl } from '../url.js'
 import { canVideoBeFederated } from '../videos/index.js'
 import { sendVideoRelatedActivity } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 async function sendDownload (options: {
   byActor: MActorLight
@@ -61,7 +63,7 @@ function buildDownloadActivity (options: {
 
   return audiencify({
     id: url,
-    type: 'Download' as 'Download',
+    type: 'Download',
     actor: byActor.url,
     object: video.url
   }, audience)

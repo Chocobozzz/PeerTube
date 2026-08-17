@@ -1,5 +1,5 @@
 import { FileStorage, VideoStateType } from '@peertube/peertube-models'
-import { logger, LoggerTags, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
 import { buildCaptionM3U8Content } from '@server/lib/hls.js'
 import {
@@ -25,7 +25,7 @@ import { scheduleVideoFederation } from '../activitypub/videos/federate.js'
 import { moveCaptionToStorage } from './shared/move-caption.js'
 import { moveVideoToStorage, onMoveVideoToStorageFailure } from './shared/move-video.js'
 
-const lTagsBase = loggerTagsFactory('object-storage', 'move-object-storage')
+const logger = createLogger()
 
 export async function moveVideoToObjectStorage (options: {
   videoUUID: string
@@ -33,14 +33,11 @@ export async function moveVideoToObjectStorage (options: {
   moveVideoState?: {
     previousVideoState: VideoStateType
   }
-
-  loggerTags: LoggerTags['tags']
 }) {
-  const { videoUUID, moveVideoState, loggerTags } = options
+  const { videoUUID, moveVideoState } = options
 
   await moveVideoToStorage({
     videoUUID,
-    loggerTags: [ ...lTagsBase().tags, ...loggerTags ],
 
     targetStorage: FileStorage.OBJECT_STORAGE,
 
@@ -60,30 +57,19 @@ export async function moveVideoToObjectStorage (options: {
 
 export function moveCaptionToObjectStorage (options: {
   captionId: number
-  loggerTags: LoggerTags['tags']
 }) {
-  const { captionId, loggerTags } = options
+  const { captionId } = options
 
-  return moveCaptionToStorage({
-    captionId,
-    loggerTags: [ ...lTagsBase().tags, ...loggerTags ],
-    moveCaptionFiles
-  })
+  return moveCaptionToStorage({ captionId, moveCaptionFiles })
 }
 
 export async function onMoveVideoToObjectStorageFailure (options: {
   videoUUID: string
-  loggerTags: LoggerTags['tags']
   err: Error
 }) {
-  const { videoUUID, err, loggerTags } = options
+  const { videoUUID, err } = options
 
-  await onMoveVideoToStorageFailure({
-    videoUUID,
-    err,
-    loggerTags: [ ...lTagsBase().tags, ...loggerTags ],
-    moveToFailedState: moveToFailedMoveToObjectStorageState
-  })
+  await onMoveVideoToStorageFailure({ videoUUID, err, moveToFailedState: moveToFailedMoveToObjectStorageState })
 }
 
 // ---------------------------------------------------------------------------
@@ -97,7 +83,7 @@ async function moveVideoSourceFile (source: MVideoSource) {
   source.storage = FileStorage.OBJECT_STORAGE
   await source.save()
 
-  logger.debug('Removing original video file ' + sourcePath + ' because it\'s now on object storage', lTagsBase())
+  logger.debug('Removing original video file ' + sourcePath + ' because it\'s now on object storage')
 
   await remove(sourcePath)
 }
@@ -117,7 +103,7 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
 
       await caption.save()
 
-      logger.debug(`Removing video caption file ${captionPath} because it's now on object storage`, lTagsBase())
+      logger.debug(`Removing video caption file ${captionPath} because it's now on object storage`)
       await remove(captionPath)
     }
 
@@ -140,7 +126,7 @@ async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreamingPlayl
       await caption.save()
 
       if (m3u8PathToRemove) {
-        logger.debug(`Removing video caption playlist file ${m3u8PathToRemove} because it's now on object storage`, lTagsBase())
+        logger.debug(`Removing video caption playlist file ${m3u8PathToRemove} because it's now on object storage`)
         await remove(m3u8PathToRemove)
       }
     }
@@ -224,6 +210,6 @@ async function onVideoFileMoved (options: {
 
   await updateTorrentForFileAndSave(videoOrPlaylist, file)
 
-  logger.debug('Removing %s because it\'s now on object storage', oldPath, lTagsBase())
+  logger.debug('Removing %s because it\'s now on object storage', oldPath)
   await remove(oldPath)
 }

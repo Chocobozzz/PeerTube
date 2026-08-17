@@ -1,5 +1,5 @@
 import { ConstantManager } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import {
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
@@ -7,6 +7,8 @@ import {
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PRIVACIES
 } from '@server/initializers/constants.js'
+
+const logger = createLogger()
 
 type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'
 type VideoConstant = Record<number | string, string>

@@ -1,12 +1,18 @@
+import { wait } from '@peertube/peertube-core-utils'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Transaction } from 'sequelize'
 import { Model } from 'sequelize-typescript'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
+
+const logger = createLogger()
 
 export type RetryTransactionWrapperOptions = {
   // Also retry when the transaction failed because of a unique constraint violation
   retryUniqueConstraintViolation?: boolean // default false
 }
+
+const RETRY_BASE_DELAY_MS = 50
+const RETRY_MAX_DELAY_MS = 1000
 
 export async function retryTransactionWrapper<T> (
   functionToRetry: () => Promise<T>,
@@ -33,8 +39,17 @@ export async function retryTransactionWrapper<T> (
 
         throw err
       }
+
+      await wait(getRetryDelayMs(attempts))
     }
   }
+}
+
+// Don't collide concurrent serializations
+function getRetryDelayMs (attempts: number) {
+  const maxDelay = Math.min(RETRY_MAX_DELAY_MS, RETRY_BASE_DELAY_MS * 2 ** (attempts - 1))
+
+  return Math.floor(Math.random() * maxDelay)
 }
 
 export function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>> (

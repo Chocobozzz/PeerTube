@@ -193,7 +193,7 @@ describe('Test video embed privacy validator', function () {
     it('Should fail with missing policy', async function () {
       await server.videoEmbedPrivacy.update({
         videoId: video.id,
-        policy: undefined as any,
+        policy: undefined,
         domains: [],
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
@@ -219,7 +219,7 @@ describe('Test video embed privacy validator', function () {
       await server.videoEmbedPrivacy.update({
         videoId: video.id,
         policy: VideoEmbedPrivacyPolicy.ALL_ALLOWED,
-        domains: undefined as any,
+        domains: undefined,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })

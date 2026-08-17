@@ -43,7 +43,7 @@ import {
   MChannelSummaryFormattable,
   type MChannel
 } from '../../types/models/video/index.js'
-import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account.js'
+import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/account.js'
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel, actorSummaryAttributes } from '../actor/actor.js'
 import { ServerModel, serverSummaryAttributes } from '../server/server.js'
@@ -106,7 +106,7 @@ export type SummaryOptions = {
     if (options.withAccount === true) {
       include.push({
         model: AccountModel.scope({
-          method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
+          method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } ]
         }),
         required: true
       })

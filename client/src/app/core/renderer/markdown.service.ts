@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import {
   buildVideoLink,
   COMPLETE_RULES,
@@ -8,7 +8,7 @@ import {
   TEXT_RULES,
   TEXT_WITH_HTML_RULES
 } from '@peertube/peertube-core-utils'
-import MarkdownIt, { PluginSimple } from 'markdown-it'
+import type { MarkdownIt } from 'markdown-it'
 import { HtmlRendererService } from './html-renderer.service'
 
 type MarkdownParsers = {
@@ -137,7 +137,7 @@ export class MarkdownService {
           this.emojiModule = (await import('markdown-it-emoji/lib/light.mjs')).default
         }
 
-        this.markdownParsers[name].use(this.emojiModule as PluginSimple)
+        this.markdownParsers[name].use(this.emojiModule)
       }
     }
 
@@ -162,6 +162,7 @@ export class MarkdownService {
     const MarkdownItClass = (await import('markdown-it')).default
 
     const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: config.breaks, html: config.html })
+    markdownIt.linkify.set({ fuzzyLink: true })
 
     for (const rule of config.rules) {
       markdownIt.enable(rule)

@@ -1,9 +1,11 @@
 import { Transaction } from 'sequelize'
 import { ActivityFollow } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { MActor, MActorFollowActors } from '../../../types/models/index.js'
 import { unicastTo } from './shared/send-utils.js'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
+
+const logger = createLogger()
 
 export function sendFollow (actorFollow: MActorFollowActors, t: Transaction | undefined) {
   const me = actorFollow.ActorFollower

@@ -2,11 +2,15 @@ import { VideoBlacklist, type VideoBlacklistType_Type } from '@peertube/peertube
 import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/types/models/index.js'
 import { FindOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Table, UpdatedAt } from 'sequelize-typescript'
-import { isVideoBlacklistReasonValid, isVideoBlacklistInternalNoteValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist.js'
+import {
+  isVideoBlacklistReasonValid,
+  isVideoBlacklistInternalNoteValid,
+  isVideoBlacklistTypeValid
+} from '../../helpers/custom-validators/video-blacklist.js'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
 import { getBlacklistSort, searchAttribute, SequelizeModel, throwIfNotValid } from '../shared/index.js'
 import { thumbnailAPIAttributes, ThumbnailModel } from './thumbnail.js'
-import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from './video-channel.js'
 import { VideoModel } from './video.js'
 
 @Table({
@@ -84,7 +88,7 @@ export class VideoBlacklistModel extends SequelizeModel<VideoBlacklistModel> {
         where: searchAttribute(search, 'name'),
         include: [
           {
-            model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
+            model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } ] }),
             required: true
           },
           {

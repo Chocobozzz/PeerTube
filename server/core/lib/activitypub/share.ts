@@ -2,7 +2,7 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
 import Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
 import { VideoShareModel } from '../../models/video/video-share.js'
 import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video/index.js'
@@ -11,20 +11,14 @@ import { getOrCreateAPActor } from './actors/index.js'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send/index.js'
 import { checkUrlsSameHost, getLocalVideoAnnounceActivityPubUrl } from './url.js'
 
-const lTags = loggerTagsFactory('share')
+const logger = createLogger('share')
 
 export async function changeVideoChannelShare (
   video: MVideoAccountLight,
   oldVideoChannel: MChannelActorLight,
   t: Transaction
 ) {
-  logger.info(
-    'Updating video channel of video %s: %s -> %s.',
-    video.uuid,
-    oldVideoChannel.name,
-    video.VideoChannel.name,
-    lTags(video.uuid)
-  )
+  logger.info('Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name)
 
   await undoShareByVideoChannel(video, oldVideoChannel, t)
 

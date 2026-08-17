@@ -1,9 +1,9 @@
 import { GeoIP } from '@server/helpers/geo-ip.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export class GeoIPUpdateScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -15,7 +15,7 @@ export class GeoIPUpdateScheduler extends AbstractScheduler {
   }
 
   protected internalExecute () {
-    logger.info('Running GeoIP update scheduler', lTags())
+    logger.info('Running GeoIP update scheduler')
 
     return GeoIP.Instance.updateDatabases()
   }

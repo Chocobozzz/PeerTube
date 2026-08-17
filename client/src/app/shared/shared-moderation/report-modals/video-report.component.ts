@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnInit, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { Component, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { ABUSE_REASON_VALIDATOR } from '@app/shared/form-validators/abuse-validators'
@@ -43,6 +43,8 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   readonly modal = viewChild<NgbModal>('modal')
 
+  readonly modalClosed = output()
+
   error: string = null
   predefinedReasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
 
@@ -81,6 +83,8 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   show () {
     this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false, size: 'lg' })
+
+    this.openedModal.hidden.subscribe(() => this.modalClosed.emit())
   }
 
   hide () {

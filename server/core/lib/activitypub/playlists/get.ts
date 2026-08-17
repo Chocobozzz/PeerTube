@@ -1,3 +1,4 @@
+import { createLogger } from '@server/helpers/logger.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylistFullSummary } from '@server/types/models/index.js'
 import { getAPId } from '../activity.js'
@@ -5,22 +6,26 @@ import { createOrUpdateVideoPlaylist } from './create-update.js'
 import { schedulePlaylistRefreshIfNeeded } from './refresh.js'
 import { fetchRemoteVideoPlaylist } from './shared/index.js'
 
-export async function getOrCreateAPVideoPlaylist (playlistUrl: string): Promise<MVideoPlaylistFullSummary> {
-  const playlistFromDatabase = await VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(playlistUrl)
+const logger = createLogger('ap', 'playlist')
 
-  if (playlistFromDatabase) {
-    schedulePlaylistRefreshIfNeeded(playlistFromDatabase)
+export function getOrCreateAPVideoPlaylist (playlistUrl: string): Promise<MVideoPlaylistFullSummary> {
+  return logger.withContext([ playlistUrl ], async () => {
+    const playlistFromDatabase = await VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(playlistUrl)
 
-    return playlistFromDatabase
-  }
+    if (playlistFromDatabase) {
+      schedulePlaylistRefreshIfNeeded(playlistFromDatabase)
 
-  const { playlistObject } = await fetchRemoteVideoPlaylist(playlistUrl)
-  if (!playlistObject) throw new Error('Cannot fetch remote playlist with url: ' + playlistUrl)
+      return playlistFromDatabase
+    }
 
-  // playlistUrl is just an alias/redirection, so process object id instead
-  if (playlistObject.id !== playlistUrl) return getOrCreateAPVideoPlaylist(getAPId(playlistObject))
+    const { playlistObject } = await fetchRemoteVideoPlaylist(playlistUrl)
+    if (!playlistObject) throw new Error('Cannot fetch remote playlist with url: ' + playlistUrl)
 
-  const playlistCreated = await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: playlistUrl })
+    // playlistUrl is just an alias/redirection, so process object id instead
+    if (playlistObject.id !== playlistUrl) return getOrCreateAPVideoPlaylist(getAPId(playlistObject))
 
-  return playlistCreated
+    const playlistCreated = await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: playlistUrl })
+
+    return playlistCreated
+  })
 }

@@ -1,6 +1,6 @@
 import { AutoMuteAction, AutoMuteList, StreamSyncState } from '@peertube/peertube-models'
 import { handleToNameAndHost } from '@server/helpers/actors.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
 import { fetchAndValidateAutoMuteList } from '@server/lib/blocklist-subscriptions.js'
 import {
@@ -19,7 +19,7 @@ import { MBlocklistSubscription } from '@server/types/models/index.js'
 import { Notifier } from '../notifier/notifier.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -44,12 +44,11 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
           .catch(err =>
             logger.error('Cannot update blocklist subscription state after failed synchronization.', {
               err,
-              url: subscription.url,
-              ...lTags()
+              url: subscription.url
             })
           )
 
-        logger.error('Cannot synchronize blocklist subscription.', { err, url: subscription.url, ...lTags() })
+        logger.error('Cannot synchronize blocklist subscription.', { err, url: subscription.url })
       }
     }
   }
@@ -60,7 +59,7 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
   }) {
     const { subscription, serverAccountId } = options
 
-    logger.info(`Synchronizing blocklist subscription "${subscription.name}" (${subscription.url}).`, lTags())
+    logger.info(`Synchronizing blocklist subscription "${subscription.name}" (${subscription.url}).`)
 
     await subscription.update({ state: StreamSyncState.PROCESSING })
 
@@ -69,7 +68,6 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
     const body: AutoMuteList = await fetchAndValidateAutoMuteList(subscription.url, subscription.lastActionCreatedAt)
 
     logger.debug('Fetched blocklist subscription data.', {
-      ...lTags(),
       subscriptionUrl: subscription.url,
       actionsCount: body.actions.length
     })

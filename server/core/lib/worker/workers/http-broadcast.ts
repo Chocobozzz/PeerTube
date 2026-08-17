@@ -1,7 +1,9 @@
 import Bluebird from 'bluebird'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { doRequest, PeerTubeRequestOptions } from '@server/helpers/requests.js'
 import { BROADCAST_CONCURRENCY } from '@server/initializers/constants.js'
+
+const logger = createLogger()
 
 async function httpBroadcast (payload: {
   uris: string[]

@@ -15,9 +15,13 @@ import {
   isAbuseVideoIsValid
 } from '@server/helpers/custom-validators/abuses.js'
 import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID, toIntOrNull } from '@server/helpers/custom-validators/misc.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message.js'
+import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
+import { MUserAccountId, MVideoFull } from '@server/types/models/index.js'
 import { areValidationErrors, doesAbuseExist, doesAccountIdExist, doesCommentIdExist, doesVideoExist } from './shared/index.js'
+
+const logger = createLogger()
 
 const abuseReportValidator = [
   body('account.id')
@@ -64,6 +68,8 @@ const abuseReportValidator = [
       res.fail({ message: 'video id or account id or comment id is required.' })
       return
     }
+
+    if (body.video?.id && !await checkUserCanReportVideo({ user: res.locals.oauth.token.User, video: res.locals.videoFull, req, res })) return
 
     return next()
   }
@@ -238,6 +244,33 @@ const deleteAbuseMessageValidator = [
     return next()
   }
 ]
+
+// ---------------------------------------------------------------------------
+
+async function checkUserCanReportVideo (options: {
+  user: MUserAccountId
+  video: MVideoFull
+  req: express.Request
+  res: express.Response
+}) {
+  const { user, video, req, res } = options
+
+  const channel = video.VideoChannel
+
+  const isOwner = channel.Account.userId === user.id
+  const isCollaborator = !isOwner && await VideoChannelCollaboratorModel.isCollaborator({ user, channel })
+
+  if (isOwner || isCollaborator) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('You cannot report a video you own or collaborate on.')
+    })
+
+    return false
+  }
+
+  return true
+}
 
 // ---------------------------------------------------------------------------
 

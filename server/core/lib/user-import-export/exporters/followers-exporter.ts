@@ -22,7 +22,7 @@ export class FollowersExporter extends AbstractUserExporter<FollowersExportJSON>
     }
 
     return {
-      json: { followers: followersJSON } as FollowersExportJSON,
+      json: { followers: followersJSON },
 
       staticFiles: []
     }

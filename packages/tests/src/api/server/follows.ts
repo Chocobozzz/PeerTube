@@ -509,8 +509,8 @@ describe('Test follows', function () {
           expect(comment.account.name).to.equal('root')
           expect(comment.account.host).to.equal(servers[2].host)
           expect(comment.totalReplies).to.equal(3)
-          expect(dateIsValid(comment.createdAt as string)).to.be.true
-          expect(dateIsValid(comment.updatedAt as string)).to.be.true
+          expect(dateIsValid(comment.createdAt)).to.be.true
+          expect(dateIsValid(comment.updatedAt)).to.be.true
 
           const threadId = comment.threadId
 
@@ -540,7 +540,7 @@ describe('Test follows', function () {
           expect(deletedComment.inReplyToCommentId).to.be.null
           expect(deletedComment.account).to.be.null
           expect(deletedComment.totalReplies).to.equal(2)
-          expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
+          expect(dateIsValid(deletedComment.deletedAt)).to.be.true
 
           const tree = await servers[0].comments.getThread({ videoId: video4.id, threadId: deletedComment.threadId })
           const [ commentRoot, deletedChildRoot ] = tree.children

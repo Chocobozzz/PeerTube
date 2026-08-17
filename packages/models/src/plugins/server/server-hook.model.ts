@@ -90,6 +90,11 @@ export const serverFilterHookObject = {
   'filter:api.video-thread-comments.list.params': true,
   'filter:api.video-thread-comments.list.result': true,
 
+  // Filter params/result used to list replies of a specific comment
+  // PeerTube >= 8.3
+  'filter:api.video-comment-replies.list.params': true,
+  'filter:api.video-comment-replies.list.result': true,
+
   // Filter get stats result
   'filter:api.server.stats.get.result': true,
 

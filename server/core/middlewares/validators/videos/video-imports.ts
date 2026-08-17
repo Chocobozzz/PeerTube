@@ -1,20 +1,26 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserRight, VideoImportCreate, VideoImportState } from '@peertube/peertube-models'
+import { HttpStatusCode, RETRYABLE_VIDEO_IMPORT_STATES, UserRight, VideoImportCreate, VideoImportState } from '@peertube/peertube-models'
 import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
 import { isPreImportVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUserAccountId, MVideoImportDefault } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
-import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports.js'
+import { isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import {
+  isVideoImportStateArrayValid,
+  isVideoImportTargetUrlValid,
+  isVideoImportTorrentFile
+} from '../../../helpers/custom-validators/video-imports.js'
 import { isValidPasswordProtectedPrivacy, isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
 import { areValidationErrors, checkCanManageVideo, doesChannelIdExist, doesVideoImportExist } from '../shared/index.js'
 import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
+
+const logger = createLogger()
 
 export const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -111,6 +117,11 @@ export const listMyVideoImportsValidator = [
     .optional()
     .custom(isIdValid),
 
+  query('stateOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(isVideoImportStateArrayValid).withMessage('Should have a valid stateOneOf array'),
+
   query('includeCollaborations')
     .optional()
     .customSanitizer(toBooleanOrNull),
@@ -174,10 +185,10 @@ export const videoImportRetryValidator = [
     if (!await doesVideoImportExist(forceNumber(req.params.id), res)) return
     if (!await checkCanManageImport({ user: res.locals.oauth.token.User, videoImport: res.locals.videoImport, req, res })) return
 
-    if (res.locals.videoImport.state !== VideoImportState.FAILED) {
+    if (!RETRYABLE_VIDEO_IMPORT_STATES.includes(res.locals.videoImport.state)) {
       return res.fail({
         status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('Cannot retry a non failed video import')
+        message: req.t('Cannot retry a non failed or cancelled video import')
       })
     }
 

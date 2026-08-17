@@ -1,5 +1,5 @@
-import { Component, OnChanges, OnInit, inject, input, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
-import { AuthService, ConfirmService, HooksService, Notifier, ServerService, UserService } from '@app/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnChanges, inject, input, output, viewChild } from '@angular/core'
+import { AuthService, ConfirmService, HooksService, Notifier, UserService } from '@app/core'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
 import { Account } from '../shared-main/account/account.model'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
@@ -25,11 +25,11 @@ export type UserModerationDisplayType = {
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ UserBanModalComponent, ActionDropdownComponent ]
 })
-export class UserModerationDropdownComponent implements OnInit, OnChanges {
+export class UserModerationDropdownComponent implements OnChanges {
+  private cd = inject(ChangeDetectorRef)
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
-  private serverService = inject(ServerService)
   private userAdminService = inject(UserAdminService)
   private blocklistService = inject(BlocklistService)
   private bulkService = inject(BulkService)
@@ -62,13 +62,6 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
 
   userActions: DropdownAction<{ user: User, account: AccountMutedStatus }>[][] = []
 
-  requiresEmailVerification = false
-
-  ngOnInit () {
-    this.serverService.getConfig()
-      .subscribe(config => this.requiresEmailVerification = config.signup.requiresEmailVerification)
-  }
-
   ngOnChanges () {
     this.buildActions()
   }
@@ -85,7 +78,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
   onUserBanned ({ muted }: { muted: boolean }) {
     if (muted) this.account().mutedByInstance = true
 
-    this.userChanged.emit()
+    this.emitUserChanged()
   }
 
   async unbanUser (user: User) {
@@ -96,7 +89,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${user.username} unbanned.`)
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -119,7 +112,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${user.username} deleted.`)
-          this.userDeleted.emit()
+          this.emitUserDeleted()
         },
 
         error: err => this.notifier.handleError(err)
@@ -131,7 +124,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       .subscribe({
         next: () => {
           this.notifier.success($localize`User ${user.username} email set as verified`)
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -156,7 +149,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Account ${account.nameWithHost} muted.`)
 
           this.account().mutedByUser = true
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -170,7 +163,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Account ${account.nameWithHost} unmuted.`)
 
           this.account().mutedByUser = false
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -184,7 +177,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`${host} muted.`)
 
           this.account().mutedServerByUser = true
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -198,7 +191,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`${host} unmuted.`)
 
           this.account().mutedServerByUser = false
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -212,7 +205,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Account ${account.nameWithHost} muted by your platform.`)
 
           this.account().mutedByInstance = true
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -226,7 +219,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Account ${account.nameWithHost} unmuted by your platform.`)
 
           this.account().mutedByInstance = false
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -240,7 +233,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Instance ${host} muted by the instance.`)
 
           this.account().mutedServerByInstance = true
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -254,7 +247,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           this.notifier.success($localize`Instance ${host} unmuted by the instance.`)
 
           this.account().mutedServerByInstance = false
-          this.userChanged.emit()
+          this.emitUserChanged()
         },
 
         error: err => this.notifier.handleError(err)
@@ -280,6 +273,17 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     return [ '/admin', 'overview', 'users', 'update', user.id ]
   }
 
+  // We mutate the account object above, and our OnPush parent may not bind our outputs, so nothing else marks this view dirty
+  private emitUserChanged () {
+    this.userChanged.emit()
+    this.cd.markForCheck()
+  }
+
+  private emitUserDeleted () {
+    this.userDeleted.emit()
+    this.cd.markForCheck()
+  }
+
   private isMyUser (user: User) {
     return this.authService.getUser().id === user?.id
   }
@@ -303,6 +307,8 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     if (instanceModerationActions.length !== 0) userActions.push(...instanceModerationActions)
 
     this.userActions = await this.hooks.wrapObject(userActions, 'moderation', 'filter:user-moderation.actions.create.result')
+
+    this.cd.markForCheck()
   }
 
   private buildMyAccountModerationActions () {

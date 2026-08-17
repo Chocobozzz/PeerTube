@@ -422,7 +422,7 @@ describe('Test video studio API validator', function () {
 
       it('Should fail with invalid segment end', async function () {
         await removeSegments([ { start: 1, end: 0 } ])
-        await removeSegments([ { start: 1, end: -1 } ] as any)
+        await removeSegments([ { start: 1, end: -1 } ])
         await removeSegments([ { start: 1, end: 'tintin' } ] as any)
       })
 

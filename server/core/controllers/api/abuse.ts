@@ -1,6 +1,6 @@
 import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
 import { AbuseCreate, AbuseState, HttpStatusCode, UserRight } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation.js'
 import { Notifier } from '@server/lib/notifier/index.js'
@@ -32,6 +32,8 @@ import {
   setDefaultSort
 } from '../../middlewares/index.js'
 import { AccountModel } from '../../models/account/account.js'
+
+const logger = createLogger()
 
 const abuseRouter = express.Router()
 

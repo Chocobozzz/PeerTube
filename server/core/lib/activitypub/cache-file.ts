@@ -1,8 +1,10 @@
 import { CacheFileObject, VideoStreamingPlaylistType } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
+
+const logger = createLogger()
 
 export async function createOrUpdateCacheFile (
   cacheFileObject: CacheFileObject,

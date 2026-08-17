@@ -4,6 +4,7 @@ import {
   ResultList,
   VideoComment,
   VideoCommentForAdminOrUser,
+  VideoCommentReplies,
   VideoCommentThreads,
   VideoCommentThreadTree
 } from '@peertube/peertube-models'
@@ -106,6 +107,8 @@ export class CommentsCommand extends AbstractCommand {
     options: OverrideCommandOptions & {
       videoId: number | string
       threadId: number
+      maxDepth?: number
+      repliesPerLevel?: number
     }
   ) {
     const { videoId, threadId } = options
@@ -115,6 +118,33 @@ export class CommentsCommand extends AbstractCommand {
       ...options,
 
       path,
+      query: pick(options, [ 'maxDepth', 'repliesPerLevel' ]),
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  listReplies (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+      commentId: number
+      start?: number
+      count?: number
+      sort?: string
+      maxDepth?: number
+      repliesPerLevel?: number
+      videoPassword?: string
+    }
+  ) {
+    const { videoId, commentId, videoPassword } = options
+    const path = '/api/v1/videos/' + videoId + '/comments/' + commentId + '/replies'
+
+    return this.getRequestBody<VideoCommentReplies>({
+      ...options,
+
+      path,
+      query: pick(options, [ 'start', 'count', 'sort', 'maxDepth', 'repliesPerLevel' ]),
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

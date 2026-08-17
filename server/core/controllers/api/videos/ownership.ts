@@ -3,7 +3,7 @@ import { canVideoBeFederated, scheduleVideoFederation } from '@server/lib/activi
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoWithRights } from '@server/types/models/index.js'
 import express from 'express'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { changeVideoChannelShare } from '../../../lib/activitypub/share.js'
@@ -24,6 +24,8 @@ import {
 import { ChangeOwnershipModel } from '../../../models/video/change-ownership.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
 import { VideoModel } from '../../../models/video/video.js'
+
+const logger = createLogger()
 
 const ownershipVideoRouter = express.Router()
 

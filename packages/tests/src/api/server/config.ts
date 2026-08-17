@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { wait } from '@peertube/peertube-core-utils'
 import { ActorImageType, CustomConfig, HttpStatusCode, LogoType, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
@@ -187,7 +188,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       categories: [ 1, 2 ],
 
       isNSFW: true,
-      defaultNSFWPolicy: 'warn' as 'warn',
+      defaultNSFWPolicy: 'warn',
 
       serverCountry: 'France',
       support: {
@@ -979,6 +980,8 @@ describe('Test config', function () {
 
         it('Should remove the SVG favicon', async function () {
           await server.config.deleteInstanceLogo({ type: 'favicon' })
+          // Wait a bit for the file to be deleted
+          await wait(500)
 
           await testFileExistsOnFSOrNot(server, 'uploads/images', basename(svgUrl), false)
         })

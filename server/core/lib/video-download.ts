@@ -1,7 +1,7 @@
 import { FFmpegContainer } from '@peertube/peertube-ffmpeg'
 import { FileStorage } from '@peertube/peertube-models'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/ffmpeg-options.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { buildRequestError, doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
 import { ThrottleStream } from '@server/helpers/stream-throttle.js'
 import { REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
@@ -10,7 +10,6 @@ import { createReadStream } from 'fs'
 import { remove } from 'fs-extra/esm'
 import { PassThrough, Readable, Writable } from 'stream'
 import { pipeline } from 'stream/promises'
-import { lTags } from './object-storage/shared/index.js'
 import {
   getHLSFileReadStream,
   getWebVideoFileReadStream,
@@ -18,6 +17,8 @@ import {
   makeWebVideoFileAvailable
 } from './object-storage/videos.js'
 import { VideoPathManager } from './video-path-manager.js'
+
+const logger = createLogger('video-download')
 
 export class VideoDownload {
   static totalDownloads = 0
@@ -46,114 +47,116 @@ export class VideoDownload {
     bytesPerIpPerSecond: number
     ip: string
   }) {
-    const totalBytesPerSecond = options?.totalBytesPerSecond
-    const bytesPerIpPerSecond = options?.bytesPerIpPerSecond
-    const ip = options?.ip
+    return logger.withContext([ this.video.uuid ], async () => {
+      const totalBytesPerSecond = options?.totalBytesPerSecond
+      const bytesPerIpPerSecond = options?.bytesPerIpPerSecond
+      const ip = options?.ip
 
-    let rejectOnStreamError: (err: Error) => void
-    const streamErrorPromise = new Promise<never>((_, rej) => {
-      rejectOnStreamError = rej
-    })
+      let rejectOnStreamError: (err: Error) => void
+      const streamErrorPromise = new Promise<never>((_, rej) => {
+        rejectOnStreamError = rej
+      })
 
-    const run = async () => {
-      VideoDownload.totalDownloads++
+      const run = async () => {
+        VideoDownload.totalDownloads++
 
-      const maxResolution = await this.buildMuxInputs(rejectOnStreamError)
+        const maxResolution = await this.buildMuxInputs(rejectOnStreamError)
 
-      // Include cover to audio file?
-      const { coverPath, isTmpDestination } = maxResolution === 0
-        ? await this.buildCoverInput()
-        : { coverPath: undefined, isTmpDestination: false }
+        // Include cover to audio file?
+        const { coverPath, isTmpDestination } = maxResolution === 0
+          ? await this.buildCoverInput()
+          : { coverPath: undefined, isTmpDestination: false }
 
-      if (coverPath && isTmpDestination) {
-        this.tmpDestinations.push(coverPath)
-      }
-
-      // Prefer sending the file directly if possible
-      if (this.allowDirectSending && !coverPath && this.inputs.length === 1) {
-        logger.info(`Piping single file for video ${this.video.url}`, { input: this.inputsToLog()[0], ...lTags(this.video.uuid) })
-
-        const input = typeof this.inputs[0] === 'string'
-          ? createReadStream(this.inputs[0])
-          : this.inputs[0]
-
-        const throttleStream = totalBytesPerSecond || bytesPerIpPerSecond
-          ? new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip })
-          : new PassThrough()
-
-        try {
-          await pipeline(input, throttleStream, output)
-        } catch (err) {
-          if ((err?.message || '').includes('Output stream closed')) {
-            logger.info(`Client aborted direct download for video ${this.video.url}`, lTags(this.video.uuid))
-            return
-          }
-
-          throw err
+        if (coverPath && isTmpDestination) {
+          this.tmpDestinations.push(coverPath)
         }
 
-        return
-      }
+        // Prefer sending the file directly if possible
+        if (this.allowDirectSending && !coverPath && this.inputs.length === 1) {
+          logger.info(`Piping single file for video ${this.video.url}`, { input: this.inputsToLog()[0] })
 
-      logger.info(`Muxing files for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
+          const input = typeof this.inputs[0] === 'string'
+            ? createReadStream(this.inputs[0])
+            : this.inputs[0]
 
-      this.ffmpegContainer = new FFmpegContainer(getFFmpegCommandWrapperOptions('vod'))
+          const throttleStream = totalBytesPerSecond || bytesPerIpPerSecond
+            ? new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip })
+            : new PassThrough()
 
-      const throttleStream = totalBytesPerSecond || bytesPerIpPerSecond
-        ? new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip })
-        : undefined
+          try {
+            await pipeline(input, throttleStream, output)
+          } catch (err) {
+            if ((err?.message || '').includes('Output stream closed')) {
+              logger.info(`Client aborted direct download for video ${this.video.url}`)
+              return
+            }
 
-      const finalOutput = throttleStream ?? output
+            throw err
+          }
 
-      const throttlePipeline = throttleStream
-        ? pipeline(throttleStream, output)
-        : Promise.resolve()
-
-      try {
-        // Run in parallel to prevent throttlePipeline unhandled rejection if an input stream errors
-        await Promise.all([
-          this.ffmpegContainer.mergeInputs({
-            inputs: this.inputs,
-            output: finalOutput,
-            logError: false,
-
-            // Include a cover if this is an audio file
-            coverPath
-          }),
-
-          throttlePipeline
-        ])
-
-        logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
-      } catch (err) {
-        const message = err?.message || ''
-
-        if (message.includes('Output stream closed')) {
-          logger.info(`Client aborted mux for video ${this.video.url}`, lTags(this.video.uuid))
           return
         }
 
-        if (err.inputStreamError) {
-          err.inputStreamError = buildRequestError(err.inputStreamError)
+        logger.info(`Muxing files for video ${this.video.url}`, { inputs: this.inputsToLog() })
+
+        this.ffmpegContainer = new FFmpegContainer(getFFmpegCommandWrapperOptions('vod'))
+
+        const throttleStream = totalBytesPerSecond || bytesPerIpPerSecond
+          ? new ThrottleStream({ totalBytesPerSecond, bytesPerIpPerSecond, ip })
+          : undefined
+
+        const finalOutput = throttleStream ?? output
+
+        const throttlePipeline = throttleStream
+          ? pipeline(throttleStream, output)
+          : Promise.resolve()
+
+        try {
+          // Run in parallel to prevent throttlePipeline unhandled rejection if an input stream errors
+          await Promise.all([
+            this.ffmpegContainer.mergeInputs({
+              inputs: this.inputs,
+              output: finalOutput,
+              logError: false,
+
+              // Include a cover if this is an audio file
+              coverPath
+            }),
+
+            throttlePipeline
+          ])
+
+          logger.info(`Mux ended for video ${this.video.url}`, { inputs: this.inputsToLog() })
+        } catch (err) {
+          const message = err?.message || ''
+
+          if (message.includes('Output stream closed')) {
+            logger.info(`Client aborted mux for video ${this.video.url}`)
+            return
+          }
+
+          if (err.inputStreamError) {
+            err.inputStreamError = buildRequestError(err.inputStreamError)
+          }
+
+          logger.warn(`Cannot mux files of video ${this.video.url}`, { err, inputs: this.inputsToLog() })
+
+          throw err
+        } finally {
+          // cleanup() may already have force killed and unset ffmpegContainer if a stream errored and won the race below
+          this.ffmpegContainer?.forceKill()
         }
-
-        logger.warn(`Cannot mux files of video ${this.video.url}`, { err, inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
-
-        throw err
-      } finally {
-        // cleanup() may already have force killed and unset ffmpegContainer if a stream errored and won the race below
-        this.ffmpegContainer?.forceKill()
       }
-    }
 
-    try {
-      // If a stream errors, don't wait for run() to notice: reject immediately so the caller isn't stuck
-      // run() keeps executing in the background but will abort once cleanup() destroys its streams/ffmpeg process
-      await Promise.race([ run(), streamErrorPromise ])
-    } finally {
-      this.cleanup()
-        .catch(cleanupErr => logger.error('Cannot cleanup after mux error', { err: cleanupErr, ...lTags(this.video.uuid) }))
-    }
+      try {
+        // If a stream errors, don't wait for run() to notice: reject immediately so the caller isn't stuck
+        // run() keeps executing in the background but will abort once cleanup() destroys its streams/ffmpeg process
+        await Promise.race([ run(), streamErrorPromise ])
+      } finally {
+        this.cleanup()
+          .catch(cleanupErr => logger.error('Cannot cleanup after mux error', { err: cleanupErr }))
+      }
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -179,8 +182,7 @@ export class VideoDownload {
 
           logger.warn(`Cannot build mux input of video ${this.video.url}`, {
             err,
-            inputs: this.inputsToLog(),
-            ...lTags(this.video.uuid)
+            inputs: this.inputsToLog()
           })
 
           // cleanup() is already run by muxToMergeVideoFiles's finally block once this rejection wins the race
@@ -316,7 +318,7 @@ export class VideoDownload {
 
     for (const destination of this.tmpDestinations) {
       await remove(destination)
-        .catch(err => logger.error('Cannot remove tmp destination', { err, destination, ...lTags(this.video.uuid) }))
+        .catch(err => logger.error('Cannot remove tmp destination', { err, destination }))
     }
 
     for (const input of this.inputs) {
@@ -330,6 +332,6 @@ export class VideoDownload {
       this.ffmpegContainer = undefined
     }
 
-    logger.debug(`Cleaned muxing for video ${this.video.url}`, { inputs: this.inputsToLog(), ...lTags(this.video.uuid) })
+    logger.debug(`Cleaned muxing for video ${this.video.url}`, { inputs: this.inputsToLog() })
   }
 }

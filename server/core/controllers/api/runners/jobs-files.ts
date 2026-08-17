@@ -1,5 +1,5 @@
 import { FileStorage, RunnerJobState, VideoFileStream } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { proxifyHLS, proxifyWebVideoFile } from '@server/lib/object-storage/index.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { getStudioTaskFilePath } from '@server/lib/video-studio.js'
@@ -12,7 +12,7 @@ import {
 import { MVideoFileStreamingPlaylistVideo, MVideoFileVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 
-const lTags = loggerTagsFactory('api', 'runner')
+const logger = createLogger('api', 'runner')
 
 const runnerJobFilesRouter = express.Router()
 
@@ -62,17 +62,13 @@ async function getMaxQualityAudioFile (req: express.Request, res: express.Respon
   const runner = runnerJob.Runner
   const video = res.locals.videoFull
 
-  logger.info(
-    'Get max quality separated audio file of video %s of job %s for runner %s',
-    video.uuid,
-    runnerJob.uuid,
-    runner.name,
-    lTags(runner.name, runnerJob.id, runnerJob.type)
-  )
+  return logger.withContext([ runner.name, runnerJob.id, runnerJob.type ], () => {
+    logger.info('Get max quality separated audio file of video %s of job %s for runner %s', video.uuid, runnerJob.uuid, runner.name)
 
-  const file = video.getMaxQualityFile(VideoFileStream.AUDIO) || video.getMaxQualityFile(VideoFileStream.VIDEO)
+    const file = video.getMaxQualityFile(VideoFileStream.AUDIO) || video.getMaxQualityFile(VideoFileStream.VIDEO)
 
-  return serveVideoFile({ video, file, req, res })
+    return serveVideoFile({ video, file, req, res })
+  })
 }
 
 async function getMaxQualityVideoFile (req: express.Request, res: express.Response) {
@@ -80,17 +76,13 @@ async function getMaxQualityVideoFile (req: express.Request, res: express.Respon
   const runner = runnerJob.Runner
   const video = res.locals.videoFull
 
-  logger.info(
-    'Get max quality file of video %s of job %s for runner %s',
-    video.uuid,
-    runnerJob.uuid,
-    runner.name,
-    lTags(runner.name, runnerJob.id, runnerJob.type)
-  )
+  return logger.withContext([ runner.name, runnerJob.id, runnerJob.type ], () => {
+    logger.info('Get max quality file of video %s of job %s for runner %s', video.uuid, runnerJob.uuid, runner.name)
 
-  const file = video.getMaxQualityFile(VideoFileStream.VIDEO) || video.getMaxQualityFile(VideoFileStream.AUDIO)
+    const file = video.getMaxQualityFile(VideoFileStream.VIDEO) || video.getMaxQualityFile(VideoFileStream.AUDIO)
 
-  return serveVideoFile({ video, file, req, res })
+    return serveVideoFile({ video, file, req, res })
+  })
 }
 
 async function serveVideoFile (options: {
@@ -132,17 +124,13 @@ function getMaxQualityVideoThumbnail (req: express.Request, res: express.Respons
   const runner = runnerJob.Runner
   const video = res.locals.videoFull
 
-  logger.info(
-    'Get max quality preview file of video %s of job %s for runner %s',
-    video.uuid,
-    runnerJob.uuid,
-    runner.name,
-    lTags(runner.name, runnerJob.id, runnerJob.type)
-  )
+  return logger.withContext([ runner.name, runnerJob.id, runnerJob.type ], () => {
+    logger.info('Get max quality preview file of video %s of job %s for runner %s', video.uuid, runnerJob.uuid, runner.name)
 
-  const file = video.getBestThumbnail('16:9')
+    const file = video.getBestThumbnail('16:9')
 
-  return res.sendFile(file.getFSPath())
+    return res.sendFile(file.getFSPath())
+  })
 }
 
 function getVideoStudioTaskFile (req: express.Request, res: express.Response) {
@@ -151,14 +139,9 @@ function getVideoStudioTaskFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
   const filename = req.params.filename
 
-  logger.info(
-    'Get video studio task file %s of video %s of job %s for runner %s',
-    filename,
-    video.uuid,
-    runnerJob.uuid,
-    runner.name,
-    lTags(runner.name, runnerJob.id, runnerJob.type)
-  )
+  return logger.withContext([ runner.name, runnerJob.id, runnerJob.type ], () => {
+    logger.info('Get video studio task file %s of video %s of job %s for runner %s', filename, video.uuid, runnerJob.uuid, runner.name)
 
-  return res.sendFile(getStudioTaskFilePath(filename))
+    return res.sendFile(getStudioTaskFilePath(filename))
+  })
 }

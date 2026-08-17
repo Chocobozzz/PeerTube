@@ -11,6 +11,7 @@ import {
   numberAttribute,
   output
 } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy } from '@peertube/peertube-models'
@@ -27,7 +28,6 @@ import { VideoThumbnailComponent } from '../shared-thumbnail/video-thumbnail.com
 import { VideoPlaylistService } from '../shared-video-playlist/video-playlist.service'
 import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.component'
 import { VideoActionsDisplayType, VideoActionsDropdownComponent } from './video-actions-dropdown.component'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 export type MiniatureDisplayOptions = {
   date?: boolean
@@ -98,6 +98,10 @@ export class VideoMiniatureComponent implements OnInit {
   readonly displayAsRow = input(false, { transform: booleanAttribute })
 
   readonly videoLinkType = input<LinkType>('internal')
+
+  // Level of the video title in the page heading hierarchy (renders role="heading" + aria-level instead of a real h1-h6 tag,
+  // since the miniature can be reused at different nesting depths depending on the page)
+  readonly headingLevel = input<number>(undefined)
 
   readonly videoBlocked = output()
   readonly videoUnblocked = output()
@@ -233,8 +237,21 @@ export class VideoMiniatureComponent implements OnInit {
     return this.video().privacy.id === VideoPrivacy.PASSWORD_PROTECTED
   }
 
-  getAriaLabel () {
+  // The owner link always targets the channel page, even when we display the account name (see buildOwnerLink)
+  getOwnerLinkTitle () {
+    const owner = this.displayOwnerAccount()
+      ? this.authorAccount
+      : this.authorChannel
+
+    return $localize`Go to the channel page of ${owner}`
+  }
+
+  getVideoAriaLabel () {
     return $localize`Watch video ${this.video().name}`
+  }
+
+  getVideoActionsLabel () {
+    return $localize`Open actions of video ${this.video().name}`
   }
 
   loadActions () {

@@ -1,4 +1,4 @@
-import { pick, wait } from '@peertube/peertube-core-utils'
+import { pick, timeoutPromise, wait } from '@peertube/peertube-core-utils'
 import {
   ffprobePromise,
   getVideoStreamBitrate,
@@ -9,7 +9,7 @@ import {
 } from '@peertube/peertube-ffmpeg'
 import { LiveVideoError, LiveVideoErrorType, VideoResolution, VideoState } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -41,6 +41,8 @@ import { LiveQuotaStore } from './live-quota-store.js'
 import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
 
+const logger = createLogger('live')
+
 // Disable node media server logs
 nodeMediaServerLogger.setLogType(0)
 
@@ -54,13 +56,15 @@ const config = {
   }
 }
 
-const lTags = loggerTagsFactory('live')
-
 class LiveManager {
   private static instance: LiveManager
 
   private readonly muxingSessions = new Map<string, MuxingSession>()
   private readonly videoSessions = new Map<string, string>()
+
+  // Video UUID -> cleanup of its current/last muxing session
+  // A permanent live can be streamed again before the previous session finished to write its files on disk
+  private readonly sessionCleanups = new Map<string, { sessionId: string, cleanup: Promise<void> }>()
 
   private rtmpServer: Server
   private rtmpsServer: ServerTLS
@@ -73,28 +77,32 @@ class LiveManager {
   init () {
     const events = this.getContext().nodeEvent
     events.on('postPublish', (sessionId: string, streamPath: string) => {
-      // Don't log streamPath: it contains the stream key, which is a long lived secret
-      logger.debug('RTMP received stream', { id: sessionId, ...lTags(sessionId) })
+      logger.withContext([ sessionId ], () => {
+        // Don't log streamPath: it contains the stream key, which is a long lived secret
+        logger.debug('RTMP received stream', { id: sessionId })
 
-      const splittedPath = streamPath.split('/')
-      if (splittedPath.length !== 3 || splittedPath[1] !== VIDEO_LIVE.RTMP.BASE_PATH) {
-        logger.warn('Live path is incorrect.', { ...lTags(sessionId) })
-        return this.abortSession(sessionId)
-      }
+        const splittedPath = streamPath.split('/')
+        if (splittedPath.length !== 3 || splittedPath[1] !== VIDEO_LIVE.RTMP.BASE_PATH) {
+          logger.warn('Live path is incorrect.')
+          return this.abortSession(sessionId)
+        }
 
-      const session = this.getContext().sessions.get(sessionId)
-      const inputLocalUrl = session.inputOriginLocalUrl + streamPath
-      const inputPublicUrl = session.inputOriginPublicUrl + streamPath
+        const session = this.getContext().sessions.get(sessionId)
+        const inputLocalUrl = session.inputOriginLocalUrl + streamPath
+        const inputPublicUrl = session.inputOriginPublicUrl + streamPath
 
-      this.handleSession({ sessionId, inputPublicUrl, inputLocalUrl, streamKey: splittedPath[2] })
-        .catch(err => logger.error('Cannot handle session', { err, ...lTags(sessionId) }))
+        this.handleSession({ sessionId, inputPublicUrl, inputLocalUrl, streamKey: splittedPath[2] })
+          .catch(err => logger.error('Cannot handle session', { err }))
+      })
     })
 
     events.on('donePublish', (sessionId: string) => {
-      logger.info('Live session ended.', { sessionId, ...lTags(sessionId) })
+      logger.withContext([ sessionId ], () => {
+        logger.info('Live session ended.', { sessionId })
 
-      // Force session aborting, so we kill ffmpeg even if it still has data to process (slow CPU)
-      setTimeout(() => this.abortSession(sessionId), 2000)
+        // Force session aborting, so we kill ffmpeg even if it still has data to process (slow CPU)
+        setTimeout(() => this.abortSession(sessionId), VIDEO_LIVE.ABORT_DELAY_ON_RTMP_DISCONNECT)
+      })
     })
 
     registerConfigChangedHandler(() => {
@@ -110,14 +118,14 @@ class LiveManager {
 
     // Cleanup broken lives, that were terminated by a server restart for example
     this.handleBrokenLives()
-      .catch(err => logger.error('Cannot handle broken lives.', { err, ...lTags() }))
+      .catch(err => logger.error('Cannot handle broken lives.', { err }))
   }
 
   async run () {
     this.running = true
 
     if (CONFIG.LIVE.RTMP.ENABLED) {
-      logger.info('Running RTMP server on port %d', CONFIG.LIVE.RTMP.PORT, lTags())
+      logger.info('Running RTMP server on port %d', CONFIG.LIVE.RTMP.PORT)
 
       this.rtmpServer = createServer(socket => {
         const session = new NodeRtmpSession(config, socket)
@@ -128,14 +136,14 @@ class LiveManager {
       })
 
       this.rtmpServer.on('error', err => {
-        logger.error('Cannot run RTMP server.', { err, ...lTags() })
+        logger.error('Cannot run RTMP server.', { err })
       })
 
       this.rtmpServer.listen(CONFIG.LIVE.RTMP.PORT, CONFIG.LIVE.RTMP.HOSTNAME)
     }
 
     if (CONFIG.LIVE.RTMPS.ENABLED) {
-      logger.info('Running RTMPS server on port %d', CONFIG.LIVE.RTMPS.PORT, lTags())
+      logger.info('Running RTMPS server on port %d', CONFIG.LIVE.RTMPS.PORT)
 
       const [ key, cert ] = await Promise.all([
         readFile(CONFIG.LIVE.RTMPS.KEY_FILE),
@@ -152,7 +160,7 @@ class LiveManager {
       })
 
       this.rtmpsServer.on('error', err => {
-        logger.error('Cannot run RTMPS server.', { err, ...lTags() })
+        logger.error('Cannot run RTMPS server.', { err })
       })
 
       this.rtmpsServer.listen(CONFIG.LIVE.RTMPS.PORT, CONFIG.LIVE.RTMPS.HOSTNAME)
@@ -163,14 +171,14 @@ class LiveManager {
     this.running = false
 
     if (this.rtmpServer) {
-      logger.info('Stopping RTMP server.', lTags())
+      logger.info('Stopping RTMP server.')
 
       this.rtmpServer.close()
       this.rtmpServer = undefined
     }
 
     if (this.rtmpsServer) {
-      logger.info('Stopping RTMPS server.', lTags())
+      logger.info('Stopping RTMPS server.')
 
       this.rtmpsServer.close()
       this.rtmpsServer = undefined
@@ -198,37 +206,44 @@ class LiveManager {
     const { videoUUID, expectedSessionId, error } = options
 
     const sessionId = this.videoSessions.get(videoUUID)
+
     if (!sessionId) {
-      logger.debug('No live session to stop for video %s', videoUUID, lTags(sessionId, videoUUID))
+      logger.debug('No live session to stop for video %s', videoUUID)
       return
     }
 
-    if (expectedSessionId && expectedSessionId !== sessionId) {
-      logger.debug(
-        `No live session ${expectedSessionId} to stop for video ${videoUUID} (current session: ${sessionId})`,
-        lTags(sessionId, videoUUID)
-      )
-      return
-    }
+    await logger.withContext([ videoUUID ], async () => {
+      if (expectedSessionId && expectedSessionId !== sessionId) {
+        logger.debug(`No live session ${expectedSessionId} to stop for video ${videoUUID} (current session: ${sessionId})`)
+        return
+      }
 
-    this.videoSessions.delete(videoUUID)
+      this.videoSessions.delete(videoUUID)
 
-    logger.info('Stopping live session of video %s', videoUUID, { error, ...lTags(sessionId, videoUUID) })
+      logger.info('Stopping live session of video %s', videoUUID, { error })
 
-    // Await the ending session write before tearing down: abortSession() triggers ffmpeg shutdown,
-    // which eventually fires 'after-cleanup' and onAfterMuxingCleanup() reading this same row
-    // So this write must be committed first to avoid two unsynchronized writers racing on it
-    try {
-      await this.saveEndingSession(options)
-    } catch (err) {
-      logger.error('Cannot save ending session.', { err, ...lTags(sessionId, videoUUID) })
-    }
+      // Await the ending session write before tearing down: abortSession() triggers ffmpeg shutdown,
+      // which eventually fires 'after-cleanup' and onAfterMuxingCleanup() reading this same row
+      // So this write must be committed first to avoid two unsynchronized writers racing on it
+      try {
+        await this.saveEndingSession(options)
+      } catch (err) {
+        logger.error('Cannot save ending session.', { err })
+      }
 
-    this.abortSession(sessionId)
+      this.abortSession(sessionId)
+    })
   }
 
   private getContext () {
     return context
+  }
+
+  // Don't remove the cleanup of a more recent session of the same video
+  private deleteSessionCleanup (videoUUID: string, sessionId: string) {
+    if (this.sessionCleanups.get(videoUUID)?.sessionId !== sessionId) return
+
+    this.sessionCleanups.delete(videoUUID)
   }
 
   private abortSession (sessionId: string) {
@@ -255,153 +270,165 @@ class LiveManager {
   }) {
     const { inputLocalUrl, inputPublicUrl, sessionId, streamKey } = options
 
-    logger.debug(`Handling session ${sessionId}`, lTags(sessionId))
+    logger.debug(`Handling session ${sessionId}`)
 
     const videoLive = await VideoLiveModel.loadByStreamKey(streamKey)
     if (!videoLive) {
       // Don't log the stream key, which is a long lived secret
-      logger.warn('Unknown live video stream key.', lTags(sessionId))
+      logger.warn('Unknown live video stream key.')
       return this.abortSession(sessionId)
     }
 
     const video = videoLive.Video
-    if (video.isBlacklisted()) {
-      logger.warn('Video is blacklisted. Refusing stream of video %s.', video.uuid, lTags(sessionId, video.uuid))
-      return this.abortSession(sessionId)
-    }
 
-    const user = await UserModel.loadByLiveId(videoLive.id)
-    if (user.blocked) {
-      logger.warn('User is blocked. Refusing stream of video %s.', video.uuid, lTags(sessionId, video.uuid))
-      return this.abortSession(sessionId)
-    }
+    await logger.withContext([ video.uuid ], async () => {
+      if (video.isBlacklisted()) {
+        logger.warn('Video is blacklisted. Refusing stream of video %s.', video.uuid)
+        return this.abortSession(sessionId)
+      }
 
-    if (this.videoSessions.has(video.uuid)) {
-      logger.warn(
-        `Video ${video.uuid} has already a live session ${this.videoSessions.get(video.uuid)}. Refusing stream.`,
-        lTags(sessionId, video.uuid)
-      )
-      return this.abortSession(sessionId)
-    }
+      const user = await UserModel.loadByLiveId(videoLive.id)
+      if (user.blocked) {
+        logger.warn('User is blocked. Refusing stream of video %s.', video.uuid)
+        return this.abortSession(sessionId)
+      }
 
-    this.videoSessions.set(video.uuid, sessionId)
+      if (this.videoSessions.has(video.uuid)) {
+        logger.warn(`Video ${video.uuid} has already a live session ${this.videoSessions.get(video.uuid)}. Refusing stream.`)
+        return this.abortSession(sessionId)
+      }
 
-    try {
-      if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
-        logger.warn('User quota exceeded. Refusing stream of video %s.', video.uuid, lTags(sessionId, video.uuid))
+      this.videoSessions.set(video.uuid, sessionId)
 
-        try {
-          await this.saveEndingSession({ videoUUID: video.uuid, error: LiveVideoError.QUOTA_EXCEEDED })
-        } catch (err) {
-          logger.error('Cannot save ending session of live with quota exceeded error.', { err, ...lTags(sessionId, video.uuid) })
+      try {
+        if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
+          logger.warn('User quota exceeded. Refusing stream of video %s.', video.uuid)
+
+          try {
+            await this.saveEndingSession({ videoUUID: video.uuid, error: LiveVideoError.QUOTA_EXCEEDED })
+          } catch (err) {
+            logger.error('Cannot save ending session of live with quota exceeded error.', { err })
+          }
+
+          this.videoSessions.delete(video.uuid)
+          return this.abortSession(sessionId)
         }
+
+        // A previous session of this permanent live may still be writing its last segments on disk
+        // Wait for it, so we don't cleanup/write the same files from two sessions at the same time
+        const previous = this.sessionCleanups.get(video.uuid)
+        if (previous) {
+          logger.info(
+            'Waiting for the previous live session %s of video %s to be cleaned up.',
+            previous.sessionId,
+            video.uuid
+          )
+
+          // Never block this live forever if the previous cleanup is stuck (a hanging object storage upload for example)
+          try {
+            await timeoutPromise(previous.cleanup, VIDEO_LIVE.PREVIOUS_SESSION_CLEANUP_TIMEOUT)
+          } catch (err) {
+            logger.warn(
+              'Previous live session %s of video %s is still not cleaned up, starting the new session anyway.',
+              previous.sessionId,
+              video.uuid,
+              { err }
+            )
+          }
+        }
+
+        // Cleanup old potential live (could happen with a permanent live)
+        const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
+        if (oldStreamingPlaylist) {
+          if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
+
+          PeerTubeSocket.Instance.sendVideoForceEnd(video)
+
+          await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
+        }
+      } catch (err) {
+        this.videoSessions.delete(video.uuid)
+
+        throw err
+      }
+
+      logger.debug('Probing ' + inputLocalUrl)
+
+      const now = Date.now()
+      let probe: FfprobeData
+
+      try {
+        probe = await ffprobePromise(inputLocalUrl)
+      } catch (err) {
+        logger.error('Cannot probe ' + inputLocalUrl, { err })
 
         this.videoSessions.delete(video.uuid)
         return this.abortSession(sessionId)
       }
 
-      // Cleanup old potential live (could happen with a permanent live)
-      const oldStreamingPlaylist = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
-      if (oldStreamingPlaylist) {
-        if (!videoLive.permanentLive) throw new Error('Found previous session in a non permanent live: ' + video.uuid)
+      const [ { resolution, ratio }, fps, bitrate, hasAudio, hasVideo ] = await Promise.all([
+        getVideoStreamDimensionsInfo(inputLocalUrl, probe),
+        getVideoStreamFPS(inputLocalUrl, probe),
+        getVideoStreamBitrate(inputLocalUrl, probe),
+        hasAudioStream(inputLocalUrl, probe),
+        hasVideoStream(inputLocalUrl, probe)
+      ])
 
-        PeerTubeSocket.Instance.sendVideoForceEnd(video)
+      if (!hasAudio && !hasVideo) {
+        logger.warn('Not audio and video streams were found for video %s. Refusing stream %s.', video.uuid, streamKey)
 
-        await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
+        this.videoSessions.delete(video.uuid)
+        return this.abortSession(sessionId)
       }
-    } catch (err) {
-      this.videoSessions.delete(video.uuid)
 
-      throw err
-    }
-
-    logger.debug('Probing ' + inputLocalUrl, lTags(sessionId, video.uuid))
-
-    const now = Date.now()
-    let probe: FfprobeData
-
-    try {
-      probe = await ffprobePromise(inputLocalUrl)
-    } catch (err) {
-      logger.error('Cannot probe ' + inputLocalUrl, { err, ...lTags(sessionId, video.uuid) })
-
-      this.videoSessions.delete(video.uuid)
-      return this.abortSession(sessionId)
-    }
-
-    const [ { resolution, ratio }, fps, bitrate, hasAudio, hasVideo ] = await Promise.all([
-      getVideoStreamDimensionsInfo(inputLocalUrl, probe),
-      getVideoStreamFPS(inputLocalUrl, probe),
-      getVideoStreamBitrate(inputLocalUrl, probe),
-      hasAudioStream(inputLocalUrl, probe),
-      hasVideoStream(inputLocalUrl, probe)
-    ])
-
-    if (!hasAudio && !hasVideo) {
-      logger.warn(
-        'Not audio and video streams were found for video %s. Refusing stream %s.',
-        video.uuid,
-        streamKey,
-        lTags(sessionId, video.uuid)
+      logger.info(
+        '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
+        inputLocalUrl,
+        Date.now() - now,
+        bitrate,
+        fps,
+        resolution
       )
 
-      this.videoSessions.delete(video.uuid)
-      return this.abortSession(sessionId)
-    }
-
-    logger.info(
-      '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
-      inputLocalUrl,
-      Date.now() - now,
-      bitrate,
-      fps,
-      resolution,
-      lTags(sessionId, video.uuid)
-    )
-
-    const allResolutions = await Hooks.wrapObject(
-      this.buildAllResolutionsToTranscode(resolution, hasAudio),
-      'filter:transcoding.auto.resolutions-to-transcode.result',
-      { video }
-    )
-
-    if (!hasAudio && allResolutions.length === 1 && allResolutions[0] === VideoResolution.H_NOVIDEO) {
-      logger.warn(
-        'Cannot stream live to audio only because no video stream is available for video %s. Refusing stream %s.',
-        video.uuid,
-        streamKey,
-        lTags(sessionId, video.uuid)
+      const allResolutions = await Hooks.wrapObject(
+        this.buildAllResolutionsToTranscode(resolution, hasAudio),
+        'filter:transcoding.auto.resolutions-to-transcode.result',
+        { video }
       )
 
-      this.videoSessions.delete(video.uuid)
-      return this.abortSession(sessionId)
-    }
+      if (!hasAudio && allResolutions.length === 1 && allResolutions[0] === VideoResolution.H_NOVIDEO) {
+        logger.warn(
+          'Cannot stream live to audio only because no video stream is available for video %s. Refusing stream %s.',
+          video.uuid,
+          streamKey
+        )
 
-    logger.info(
-      'Handling live video of original resolution %d.',
-      resolution,
-      { allResolutions, ...lTags(sessionId, video.uuid) }
-    )
+        this.videoSessions.delete(video.uuid)
+        return this.abortSession(sessionId)
+      }
 
-    return this.runMuxingSession({
-      sessionId,
-      videoLive,
+      logger.info('Handling live video of original resolution %d.', resolution, { allResolutions })
 
-      user,
+      return this.runMuxingSession({
+        sessionId,
+        videoLive,
 
-      inputLocalUrl,
-      inputPublicUrl,
+        user,
 
-      fps,
-      bitrate,
-      ratio,
+        inputLocalUrl,
+        inputPublicUrl,
 
-      inputResolution: resolution,
-      allResolutions,
+        fps,
+        bitrate,
+        ratio,
 
-      hasAudio,
-      hasVideo,
-      probe
+        inputResolution: resolution,
+        allResolutions,
+
+        hasAudio,
+        hasVideo,
+        probe
+      })
     })
   }
 
@@ -427,7 +454,6 @@ class LiveManager {
   }) {
     const { sessionId, videoLive, user, ratio, allResolutions } = options
     const videoUUID = videoLive.Video.uuid
-    const localLTags = lTags(sessionId, videoUUID)
 
     const audioOnlyOutput = allResolutions.every(r => r === VideoResolution.H_NOVIDEO)
 
@@ -435,7 +461,7 @@ class LiveManager {
     try {
       liveSession = await this.saveStartingSession(videoLive)
     } catch (err) {
-      logger.error('Cannot save starting live session.', { err, ...localLTags })
+      logger.error('Cannot save starting live session.', { err })
 
       this.videoSessions.delete(videoUUID)
       return this.abortSession(sessionId)
@@ -463,37 +489,39 @@ class LiveManager {
       ])
     })
 
-    muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, audioOnlyOutput, localLTags }))
+    // Track the cleanup from the session creation: a new session must not write in the live directory before this one flushed its files
+    this.sessionCleanups.set(videoUUID, { sessionId, cleanup: muxingSession.waitForCleanup() })
+
+    muxingSession.on('live-ready', () => this.publishAndFederateLive({ live: videoLive, ratio, audioOnlyOutput }))
 
     const safeStopSession = (error: LiveVideoErrorType) => {
       this.stopSessionOfVideo({ videoUUID, error })
-        .catch(err => logger.error('Cannot stop session of video ' + videoUUID, { err, ...localLTags }))
+        .catch(err => logger.error('Cannot stop session of video ' + videoUUID, { err }))
     }
 
     muxingSession.on('bad-socket-health', ({ videoUUID }) => {
       logger.error(
         'Too much data in client socket stream (ffmpeg is too slow to transcode the video).' +
           ' Stopping session of video %s.',
-        videoUUID,
-        localLTags
+        videoUUID
       )
 
       safeStopSession(LiveVideoError.BAD_SOCKET_HEALTH)
     })
 
     muxingSession.on('duration-exceeded', ({ videoUUID }) => {
-      logger.info('Stopping session of %s: max duration exceeded.', videoUUID, localLTags)
+      logger.info('Stopping session of %s: max duration exceeded.', videoUUID)
 
       safeStopSession(LiveVideoError.DURATION_EXCEEDED)
     })
 
     muxingSession.on('quota-exceeded', ({ videoUUID }) => {
-      logger.info('Stopping session of %s: user quota exceeded.', videoUUID, localLTags)
+      logger.info('Stopping session of %s: user quota exceeded.', videoUUID)
 
       safeStopSession(LiveVideoError.QUOTA_EXCEEDED)
     })
 
-    muxingSession.on('transcoding-error', ({ videoUUID }) => {
+    muxingSession.on('transcoding-error', () => {
       safeStopSession(LiveVideoError.FFMPEG_ERROR)
     })
 
@@ -503,32 +531,35 @@ class LiveManager {
 
     muxingSession.on('after-cleanup', ({ videoUUID }) => {
       this.muxingSessions.delete(sessionId)
+      this.deleteSessionCleanup(videoUUID, sessionId)
 
       LiveQuotaStore.Instance.removeLive(user.id, sessionId)
 
       muxingSession.destroy()
 
       return this.onAfterMuxingCleanup({ videoUUID, liveSessionId: liveSession.id })
-        .catch(err => logger.error('Error in end transmuxing.', { err, ...localLTags }))
+        .catch(err => logger.error('Error in end transmuxing.', { err }))
     })
 
     this.muxingSessions.set(sessionId, muxingSession)
 
     muxingSession.runMuxing()
       .catch(err => {
-        logger.error('Cannot run muxing.', { err, ...localLTags })
+        logger.error('Cannot run muxing.', { err })
 
         this.muxingSessions.delete(sessionId)
+        this.deleteSessionCleanup(videoUUID, sessionId)
 
         LiveQuotaStore.Instance.removeLive(user.id, sessionId)
 
+        // Resolves the cleanup promise, so a new session of this permanent live is not blocked
         muxingSession.destroy()
 
         this.stopSessionOfVideo({
           videoUUID,
           error: err.liveVideoErrorCode || LiveVideoError.UNKNOWN_ERROR,
           errorOnReplay: true // Replay cannot be processed as muxing session failed directly
-        }).catch(stopErr => logger.error('Cannot stop session of video %s.', videoUUID, { err: stopErr, ...localLTags }))
+        }).catch(stopErr => logger.error('Cannot stop session of video %s.', videoUUID, { err: stopErr }))
       })
   }
 
@@ -536,16 +567,15 @@ class LiveManager {
     live: MVideoLiveVideo
     audioOnlyOutput: boolean
     ratio: number
-    localLTags: { tags: (string | number)[] }
   }) {
-    const { live, ratio, audioOnlyOutput, localLTags } = options
+    const { live, ratio, audioOnlyOutput } = options
 
     const videoId = live.videoId
 
     try {
       const video = await VideoModel.loadFull(videoId)
 
-      logger.info('Will publish and federate live %s.', video.url, localLTags)
+      logger.info('Will publish and federate live %s.', video.url)
 
       video.state = VideoState.PUBLISHED
 
@@ -569,18 +599,19 @@ class LiveManager {
 
       Hooks.runAction('action:live.video.state.updated', { video })
     } catch (err) {
-      logger.error('Cannot save/federate live video %d.', videoId, { err, ...localLTags })
+      logger.error('Cannot save/federate live video %d.', videoId, { err })
     }
   }
 
   private onMuxingFFmpegEnd (videoUUID: string, sessionId: string) {
-    // Session already cleaned up
-    if (!this.videoSessions.has(videoUUID)) return
+    // Session already cleaned up, or a more recent session of this permanent live already registered itself:
+    // the transcoding process of an ending session can exit long after the next one started
+    if (this.videoSessions.get(videoUUID) !== sessionId) return
 
     this.videoSessions.delete(videoUUID)
 
     this.saveEndingSession({ videoUUID, error: null })
-      .catch(err => logger.error('Cannot save ending session.', { err, ...lTags(sessionId) }))
+      .catch(err => logger.error('Cannot save ending session.', { err }))
   }
 
   private async onAfterMuxingCleanup (options: {
@@ -590,7 +621,7 @@ class LiveManager {
   }) {
     const { videoUUID, liveSessionId, cleanupNow = false } = options
 
-    logger.debug('Live of video %s has been cleaned up. Moving to its next state.', videoUUID, lTags(videoUUID))
+    logger.debug('Live of video %s has been cleaned up. Moving to its next state.', videoUUID)
 
     try {
       const fullVideo = await VideoModel.loadFull(videoUUID)
@@ -641,7 +672,7 @@ class LiveManager {
 
       Hooks.runAction('action:live.video.state.updated', { video: fullVideo })
     } catch (err) {
-      logger.error('Cannot save/federate new video state of live streaming of video %s.', videoUUID, { err, ...lTags(videoUUID) })
+      logger.error('Cannot save/federate new video state of live streaming of video %s.', videoUUID, { err })
     }
   }
 
@@ -651,7 +682,9 @@ class LiveManager {
     const videoUUIDs = await VideoModel.listPublishedLiveUUIDs()
 
     for (const uuid of videoUUIDs) {
-      await this.onAfterMuxingCleanup({ videoUUID: uuid, cleanupNow: true })
+      await logger.withContext([ uuid ], async () => {
+        await this.onAfterMuxingCleanup({ videoUUID: uuid, cleanupNow: true })
+      })
     }
   }
 

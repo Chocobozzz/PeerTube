@@ -1,5 +1,7 @@
 import { execPromise, execPromise2 } from './core-utils.js'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
+
+const logger = createLogger()
 
 export async function getServerCommit () {
   try {

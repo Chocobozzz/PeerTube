@@ -37,16 +37,21 @@ describe('Test abuses', function () {
   })
 
   describe('Video abuses', function () {
+    let video1OwnerToken: string
+
     before(async function () {
       this.timeout(50000)
 
+      video1OwnerToken = await servers[0].users.generateUserAndToken('video1_owner')
+
       // Upload some videos on each servers
+      // Video 1 is not owned by root so root (used as the default reporter in this suite) can report it
       {
         const attributes = {
           name: 'my super name for server 1',
           description: 'my super description for server 1'
         }
-        await servers[0].videos.upload({ attributes })
+        await servers[0].videos.upload({ token: video1OwnerToken, attributes })
       }
 
       {
@@ -104,7 +109,7 @@ describe('Test abuses', function () {
 
         expect(abuse.comment).to.be.null
 
-        expect(abuse.flaggedAccount.name).to.equal('root')
+        expect(abuse.flaggedAccount.name).to.equal('video1_owner')
         expect(abuse.flaggedAccount.host).to.equal(servers[0].host)
 
         expect(abuse.video.countReports).to.equal(1)
@@ -149,7 +154,7 @@ describe('Test abuses', function () {
 
         expect(abuse1.comment).to.be.null
 
-        expect(abuse1.flaggedAccount.name).to.equal('root')
+        expect(abuse1.flaggedAccount.name).to.equal('video1_owner')
         expect(abuse1.flaggedAccount.host).to.equal(servers[0].host)
 
         expect(abuse1.state.id).to.equal(AbuseState.PENDING)
@@ -352,13 +357,13 @@ describe('Test abuses', function () {
 
       expect(await list({ searchVideo: 'my second super name for server 1' })).to.have.lengthOf(1)
 
-      expect(await list({ searchVideoChannel: 'root' })).to.have.lengthOf(4)
+      expect(await list({ searchVideoChannel: 'video1_owner' })).to.have.lengthOf(4)
       expect(await list({ searchVideoChannel: 'aaaa' })).to.have.lengthOf(0)
 
       expect(await list({ searchReporter: 'user2' })).to.have.lengthOf(1)
       expect(await list({ searchReporter: 'root' })).to.have.lengthOf(5)
 
-      expect(await list({ searchReportee: 'root' })).to.have.lengthOf(5)
+      expect(await list({ searchReportee: 'video1_owner' })).to.have.lengthOf(4)
       expect(await list({ searchReportee: 'aaaa' })).to.have.lengthOf(0)
 
       expect(await list({ videoIs: 'deleted' })).to.have.lengthOf(1)
@@ -430,7 +435,8 @@ describe('Test abuses', function () {
         expect(abuse.comment.video.uuid).to.equal(servers[0].store.videoCreated.uuid)
 
         expect(abuse.countReportsForReporter).to.equal(5)
-        expect(abuse.countReportsForReportee).to.equal(5)
+        // root does not own video 1 anymore, so it is only reported here as the comment author
+        expect(abuse.countReportsForReportee).to.equal(1)
       }
 
       {
@@ -460,7 +466,7 @@ describe('Test abuses', function () {
         const abuse = body.data[0]
         expect(abuse.reason).to.equal('it is a bad comment')
         expect(abuse.countReportsForReporter).to.equal(6)
-        expect(abuse.countReportsForReportee).to.equal(5)
+        expect(abuse.countReportsForReportee).to.equal(1)
 
         const abuse2 = body.data[1]
 

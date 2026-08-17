@@ -8,7 +8,7 @@ import {
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
 import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import {
@@ -36,6 +36,8 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy.js'
 import { SequelizeModel, doesExist } from '../shared/index.js'
 import { VideoInfohashModel } from './video-infohash.js'
 import { VideoModel } from './video.js'
+
+const logger = createLogger()
 
 @Table({
   tableName: 'videoStreamingPlaylist',

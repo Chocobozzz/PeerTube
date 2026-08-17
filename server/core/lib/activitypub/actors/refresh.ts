@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CachePromiseFactory } from '@server/helpers/promise-cache.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
@@ -9,6 +9,8 @@ import { MActorFull, MActorOutdated, MActorUrl } from '@server/types/models/inde
 import { fetchRemoteActor } from './shared/index.js'
 import { APActorUpdater } from './updater.js'
 import { getUrlFromWebfinger } from './webfinger.js'
+
+const logger = createLogger('ap', 'actor', 'refresh')
 
 type RefreshResult<T> = Promise<{ actor: T | MActorFull, refreshed: boolean }>
 
@@ -51,39 +53,39 @@ async function doRefresh<T extends MActorFull | MActorOutdated> (options: Refres
     ? actorArg as MActorFull
     : await ActorModel.loadAndPopulateAccountAndChannel(actorArg.id)
 
-  const lTags = loggerTagsFactory('ap', 'actor', 'refresh', actor.url)
+  return logger.withContext([ actor.url ], async () => {
+    logger.info('Refreshing actor %s.', actor.url)
 
-  logger.info('Refreshing actor %s.', actor.url, lTags())
+    try {
+      const actorUrl = await getActorUrl(actor)
+      const { actorObject } = await fetchRemoteActor(actorUrl)
 
-  try {
-    const actorUrl = await getActorUrl(actor)
-    const { actorObject } = await fetchRemoteActor(actorUrl)
+      if (actorObject === undefined) {
+        logger.info('Cannot fetch remote actor %s in refresh actor.', actorUrl)
+        return { actor, refreshed: false }
+      }
 
-    if (actorObject === undefined) {
-      logger.info('Cannot fetch remote actor %s in refresh actor.', actorUrl)
+      const updater = new APActorUpdater(actorObject, actor)
+      await updater.update()
+
+      return { refreshed: true, actor }
+    } catch (err) {
+      const statusCode = (err as PeerTubeRequestError).statusCode
+
+      if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
+        logger.info('Deleting actor %s because there is a 404/410 in refresh actor.', actor.url)
+
+        actor.Account
+          ? await actor.Account.destroy()
+          : await actor.VideoChannel.destroy()
+
+        return { actor: undefined, refreshed: false }
+      }
+
+      logger.info('Cannot refresh actor %s.', actor.url, { err })
       return { actor, refreshed: false }
     }
-
-    const updater = new APActorUpdater(actorObject, actor)
-    await updater.update()
-
-    return { refreshed: true, actor }
-  } catch (err) {
-    const statusCode = (err as PeerTubeRequestError).statusCode
-
-    if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
-      logger.info('Deleting actor %s because there is a 404/410 in refresh actor.', actor.url, lTags())
-
-      actor.Account
-        ? await actor.Account.destroy()
-        : await actor.VideoChannel.destroy()
-
-      return { actor: undefined, refreshed: false }
-    }
-
-    logger.info('Cannot refresh actor %s.', actor.url, { err, ...lTags() })
-    return { actor, refreshed: false }
-  }
+  })
 }
 
 function getActorUrl (actor: MActorFull) {

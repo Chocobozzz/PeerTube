@@ -2,6 +2,8 @@ import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/da
 import { ApplicationModel } from '@server/models/application/application.js'
 import { QueryTypes } from 'sequelize'
 
+const MIGRATION_NAME = 'peertube-8.0'
+
 run()
   .then(() => process.exit(0))
   .catch(err => {
@@ -40,6 +42,8 @@ async function run () {
 
     i++
   }
+
+  await ApplicationModel.setManualMigrationScriptRun(MIGRATION_NAME)
 
   console.log('Done!')
 }

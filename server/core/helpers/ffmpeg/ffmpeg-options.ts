@@ -1,8 +1,10 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { FFMPEG_NICE } from '@server/initializers/constants.js'
 import { FFmpegCommandWrapperOptions } from '@peertube/peertube-ffmpeg'
 import { AvailableEncoders } from '@peertube/peertube-models'
+
+const logger = createLogger()
 
 type CommandType = 'live' | 'vod' | 'thumbnail'
 

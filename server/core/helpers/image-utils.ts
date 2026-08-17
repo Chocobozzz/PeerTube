@@ -4,7 +4,9 @@ import { copy, remove } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
 import sanitizeHtml from 'sanitize-html'
 import sharp, { type Metadata, type Sharp } from 'sharp'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
+
+const logger = createLogger()
 
 export function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension

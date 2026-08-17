@@ -13,7 +13,7 @@
     "application-config": "^3.0.0",
     "cli-table3": "^0.6.5",
     "netrc-parser": "^3.1.6",
-    "tsdown": "0.21.0-beta.2"
+    "tsdown": "0.22.14"
   },
   "exports": {
     ".": "./dist/peertube.mjs"

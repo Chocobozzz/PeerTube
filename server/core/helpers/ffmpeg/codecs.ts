@@ -1,7 +1,9 @@
 import { FfprobeData } from 'fluent-ffmpeg'
 import { getAudioStream, getVideoStream } from '@peertube/peertube-ffmpeg'
-import { logger } from '../logger.js'
+import { createLogger } from '../logger.js'
 import { forceNumber } from '@peertube/peertube-core-utils'
+
+const logger = createLogger()
 
 export async function getVideoStreamCodec (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStream(path, existingProbe)

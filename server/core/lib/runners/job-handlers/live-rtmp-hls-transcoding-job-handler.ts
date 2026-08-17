@@ -8,7 +8,7 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { tryAtomicMove } from '@server/helpers/fs.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { JOB_PRIORITY } from '@server/initializers/constants.js'
 import { LiveManager } from '@server/lib/live/index.js'
 import { MStreamingPlaylist, MVideo } from '@server/types/models/index.js'
@@ -16,6 +16,8 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { AbstractJobHandler } from './abstract-job-handler.js'
+
+const logger = createLogger('live', 'transcoding')
 
 type CreateOptions = {
   video: MVideo
@@ -39,37 +41,39 @@ type CreateOptions = {
 export class LiveRTMPHLSTranscodingJobHandler
   extends AbstractJobHandler<CreateOptions, LiveRTMPHLSTranscodingUpdatePayload, LiveRTMPHLSTranscodingSuccess>
 {
-  async create (options: CreateOptions) {
+  create (options: CreateOptions) {
     const { video, rtmpUrl, toTranscode, playlist, segmentDuration, segmentListSize, outputDirectory, sessionId } = options
-
     const jobUUID = buildUUID()
-    const payload: RunnerJobLiveRTMPHLSTranscodingPayload = {
-      input: {
-        rtmpUrl
-      },
-      output: {
-        toTranscode,
-        segmentListSize,
-        segmentDuration
+
+    return logger.withContext([ jobUUID, video.uuid ], async () => {
+      const payload: RunnerJobLiveRTMPHLSTranscodingPayload = {
+        input: {
+          rtmpUrl
+        },
+        output: {
+          toTranscode,
+          segmentListSize,
+          segmentDuration
+        }
       }
-    }
 
-    const privatePayload: RunnerJobLiveRTMPHLSTranscodingPrivatePayload = {
-      videoUUID: video.uuid,
-      masterPlaylistName: playlist.playlistFilename,
-      sessionId,
-      outputDirectory
-    }
+      const privatePayload: RunnerJobLiveRTMPHLSTranscodingPrivatePayload = {
+        videoUUID: video.uuid,
+        masterPlaylistName: playlist.playlistFilename,
+        sessionId,
+        outputDirectory
+      }
 
-    const job = await this.createRunnerJob({
-      type: 'live-rtmp-hls-transcoding',
-      jobUUID,
-      payload,
-      privatePayload,
-      priority: JOB_PRIORITY.REQUIRED_TRANSCODING
+      const job = await this.createRunnerJob({
+        type: 'live-rtmp-hls-transcoding',
+        jobUUID,
+        payload,
+        privatePayload,
+        priority: JOB_PRIORITY.REQUIRED_TRANSCODING
+      })
+
+      return job
     })
-
-    return job
   }
 
   // ---------------------------------------------------------------------------
@@ -84,33 +88,30 @@ export class LiveRTMPHLSTranscodingJobHandler
     const outputDirectory = privatePayload.outputDirectory
     const videoUUID = privatePayload.videoUUID
 
-    // Always process the chunk first before moving m3u8 that references this chunk
-    if (updatePayload.type === 'add-chunk') {
-      await tryAtomicMove(
-        updatePayload.videoChunkFile as string,
-        join(outputDirectory, updatePayload.videoChunkFilename)
-      )
-    } else if (updatePayload.type === 'remove-chunk') {
-      await remove(join(outputDirectory, updatePayload.videoChunkFilename))
-    }
+    await logger.withContext([ videoUUID ], async () => {
+      // Always process the chunk first before moving m3u8 that references this chunk
+      if (updatePayload.type === 'add-chunk') {
+        await tryAtomicMove(
+          updatePayload.videoChunkFile as string,
+          join(outputDirectory, updatePayload.videoChunkFilename)
+        )
+      } else if (updatePayload.type === 'remove-chunk') {
+        await remove(join(outputDirectory, updatePayload.videoChunkFilename))
+      }
 
-    if (updatePayload.resolutionPlaylistFile && updatePayload.resolutionPlaylistFilename) {
-      await tryAtomicMove(
-        updatePayload.resolutionPlaylistFile as string,
-        join(outputDirectory, updatePayload.resolutionPlaylistFilename)
-      )
-    }
+      if (updatePayload.resolutionPlaylistFile && updatePayload.resolutionPlaylistFilename) {
+        await tryAtomicMove(
+          updatePayload.resolutionPlaylistFile as string,
+          join(outputDirectory, updatePayload.resolutionPlaylistFilename)
+        )
+      }
 
-    if (updatePayload.masterPlaylistFile) {
-      await tryAtomicMove(updatePayload.masterPlaylistFile as string, join(outputDirectory, privatePayload.masterPlaylistName))
-    }
+      if (updatePayload.masterPlaylistFile) {
+        await tryAtomicMove(updatePayload.masterPlaylistFile as string, join(outputDirectory, privatePayload.masterPlaylistName))
+      }
 
-    logger.debug(
-      'Runner live RTMP to HLS job %s for %s updated.',
-      runnerJob.uuid,
-      videoUUID,
-      { updatePayload, ...this.lTags(videoUUID, runnerJob.uuid) }
-    )
+      logger.debug('Runner live RTMP to HLS job %s for %s updated.', runnerJob.uuid, videoUUID, { updatePayload })
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -162,18 +163,20 @@ export class LiveRTMPHLSTranscodingJobHandler
     const privatePayload = runnerJob.privatePayload as RunnerJobLiveRTMPHLSTranscodingPrivatePayload
     const videoUUID = privatePayload.videoUUID
 
-    const errorType = {
-      ended: null,
-      errored: LiveVideoError.RUNNER_JOB_ERROR,
-      cancelled: LiveVideoError.RUNNER_JOB_CANCEL
-    }
+    logger.withContext([ videoUUID ], () => {
+      const errorType = {
+        ended: null,
+        errored: LiveVideoError.RUNNER_JOB_ERROR,
+        cancelled: LiveVideoError.RUNNER_JOB_CANCEL
+      }
 
-    LiveManager.Instance.stopSessionOfVideo({
-      videoUUID: privatePayload.videoUUID,
-      expectedSessionId: privatePayload.sessionId,
-      error: errorType[type]
-    }).catch(err => logger.error('Cannot stop session of video %s.', videoUUID, { err, ...this.lTags(runnerJob.uuid, videoUUID) }))
+      LiveManager.Instance.stopSessionOfVideo({
+        videoUUID: privatePayload.videoUUID,
+        expectedSessionId: privatePayload.sessionId,
+        error: errorType[type]
+      }).catch(err => logger.error('Cannot stop session of video %s.', videoUUID, { err }))
 
-    logger.info('Runner live RTMP to HLS job %s for video %s %s.', runnerJob.uuid, videoUUID, type, this.lTags(runnerJob.uuid, videoUUID))
+      logger.info('Runner live RTMP to HLS job %s for video %s %s.', runnerJob.uuid, videoUUID, type)
+    })
   }
 }

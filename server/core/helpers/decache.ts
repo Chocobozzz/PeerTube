@@ -18,18 +18,6 @@ export function decachePlugin (require: NodeJS.Require, libraryPath: string) {
   })
 }
 
-export function decacheModule (require: NodeJS.Require, name: string) {
-  const moduleName = find(require, name)
-
-  if (!moduleName) return
-
-  searchCache(require, moduleName, function (mod) {
-    delete require.cache[mod.id]
-
-    removeCachedPath(mod.path)
-  })
-}
-
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------

@@ -2,8 +2,10 @@ import { UploadFilesForCheck } from 'express'
 import { readFile } from 'fs/promises'
 import { getFileSize } from '@peertube/peertube-node-utils'
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_TEXT_LANGUAGES } from '../../initializers/constants.js'
-import { logger } from '../logger.js'
+import { createLogger } from '../logger.js'
 import { exists, isFileValid } from './misc.js'
+
+const logger = createLogger()
 
 export function isVideoCaptionLanguageValid (value: any) {
   return exists(value) && VIDEO_TEXT_LANGUAGES[value] !== undefined

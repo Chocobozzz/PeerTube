@@ -3,7 +3,7 @@ import { PathLike } from 'fs-extra/esm'
 import { Transaction } from 'sequelize'
 import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger.js'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { AbuseModel } from '@server/models/abuse/abuse.js'
 import { VideoAbuseModel } from '@server/models/abuse/video-abuse.js'
 import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse.js'
@@ -27,6 +27,8 @@ import { VideoCommentModel } from '../models/video/video-comment.js'
 import { VideoModel } from '../models/video/video.js'
 import { sendAbuse } from './activitypub/send/send-flag.js'
 import { Notifier } from './notifier/index.js'
+
+const logger = createLogger()
 
 export type AcceptResult = {
   accepted: boolean

@@ -1,7 +1,9 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { JobQueue } from '../job-queue/index.js'
+
+const logger = createLogger()
 
 async function addFetchOutboxJob (actor: Pick<ActorModel, 'id' | 'outboxUrl'>) {
   // Don't fetch ourselves

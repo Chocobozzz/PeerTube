@@ -34,6 +34,11 @@
   }
 }
 
+.replies-modal-body {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
 #dropdown-sort-comments {
   font-weight: $font-semibold;
   text-transform: uppercase;

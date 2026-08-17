@@ -519,23 +519,27 @@ describe('Test live', function () {
       await testFfmpegStreamError(command, true)
     })
 
-    it('Should succeed with the correct params', async function () {
+    it('Should succeed with the correct params and list the live', async function () {
       this.timeout(60000)
 
       const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: liveVideo.streamKey })
-      await testFfmpegStreamError(command, false)
-    })
 
-    it('Should list this live now someone stream into it', async function () {
-      for (const server of servers) {
-        const { total, data } = await server.videos.list()
+      try {
+        await waitUntilLivePublishedOnAllServers(servers, liveVideo.uuid)
 
-        expect(total).to.equal(1)
-        expect(data).to.have.lengthOf(1)
+        for (const server of servers) {
+          const { total, data } = await server.videos.list()
 
-        const video = data[0]
-        expect(video.name).to.equal('user live')
-        expect(video.isLive).to.be.true
+          expect(total).to.equal(1)
+          expect(data).to.have.lengthOf(1)
+
+          const video = data[0]
+          expect(video.name).to.equal('user live')
+          expect(video.isLive).to.be.true
+        }
+      } finally {
+        // Don't leak the ffmpeg process in the next tests if an assertion above failed
+        await stopFfmpeg(command)
       }
     })
 

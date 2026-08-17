@@ -4,7 +4,7 @@ import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { Transaction } from 'sequelize'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { getAPId } from '../../../lib/activitypub/activity.js'
@@ -15,6 +15,8 @@ import { MActorFollow, MActorFull, MActorId, MActorSignature } from '../../../ty
 import { Notifier } from '../../notifier/index.js'
 import { autoFollowBackIfNeeded } from '../follow.js'
 import { sendAccept, sendReject } from '../send/index.js'
+
+const logger = createLogger()
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options

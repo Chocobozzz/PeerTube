@@ -819,7 +819,7 @@ describe('Test managing runners', function () {
           await server.runnerJobs.success({
             jobUUID: job.uuid,
             jobToken: job.jobToken,
-            payload: { hello: 'video_short.mp4' } as any,
+            payload: { hello: 'video_short.mp4' },
             runnerToken,
             expectedStatus: HttpStatusCode.BAD_REQUEST_400
           })
@@ -840,7 +840,7 @@ describe('Test managing runners', function () {
           await server.runnerJobs.success({
             jobUUID: job.uuid,
             jobToken: job.jobToken,
-            payload: { videoFile: 'video_short.mp4' } as any,
+            payload: { videoFile: 'video_short.mp4' },
             runnerToken,
             expectedStatus: HttpStatusCode.BAD_REQUEST_400
           })
@@ -857,7 +857,7 @@ describe('Test managing runners', function () {
           await server.runnerJobs.success({
             jobUUID: job.uuid,
             jobToken: job.jobToken,
-            payload: { hello: 'video_short.mp4' } as any,
+            payload: { hello: 'video_short.mp4' },
             runnerToken,
             expectedStatus: HttpStatusCode.BAD_REQUEST_400
           })
@@ -869,7 +869,7 @@ describe('Test managing runners', function () {
           await server.runnerJobs.success({
             jobUUID: studioAcceptedJob.uuid,
             jobToken: studioAcceptedJob.jobToken,
-            payload: { hello: 'video_short.mp4' } as any,
+            payload: { hello: 'video_short.mp4' },
             runnerToken,
             expectedStatus: HttpStatusCode.BAD_REQUEST_400
           })

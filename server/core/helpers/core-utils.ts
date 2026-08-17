@@ -186,8 +186,6 @@ function pageToStartAndCount (page: number, itemsPerPage: number) {
 
 // ---------------------------------------------------------------------------
 
-type SemVersion = { major: number, minor: number, patch: number }
-
 /**
  * Parses a semantic version string into its separate components.
  * Fairly lax, and allows for missing or additional segments in the string.
@@ -204,7 +202,7 @@ function parseSemVersion (s: string) {
     major: parseInt(parsed[1]),
     minor: parseInt(parsed[2]),
     patch: parsed[3] ? parseInt(parsed[3]) : 0
-  } as SemVersion
+  }
 }
 
 // ---------------------------------------------------------------------------

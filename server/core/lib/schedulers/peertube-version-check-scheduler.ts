@@ -2,13 +2,13 @@ import { doJSONRequest } from '@server/helpers/requests.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { compareSemVer } from '@peertube/peertube-core-utils'
 import { JoinPeerTubeVersions } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { PEERTUBE_VERSION, SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { Notifier } from '../notifier/index.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export class PeerTubeVersionCheckScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -26,12 +26,12 @@ export class PeerTubeVersionCheckScheduler extends AbstractScheduler {
   private async checkLatestVersion () {
     if (CONFIG.PEERTUBE.CHECK_LATEST_VERSION.ENABLED === false) return
 
-    logger.info('Checking latest PeerTube version.', lTags())
+    logger.info('Checking latest PeerTube version.')
 
     const { body } = await doJSONRequest<JoinPeerTubeVersions>(CONFIG.PEERTUBE.CHECK_LATEST_VERSION.URL, { preventSSRF: false })
 
     if (!body?.peertube?.latestVersion) {
-      logger.warn('Cannot check latest PeerTube version: body is invalid.', { body, ...lTags() })
+      logger.warn('Cannot check latest PeerTube version: body is invalid.', { body })
       return
     }
 

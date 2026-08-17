@@ -8,7 +8,7 @@ import {
   VideoUpdate
 } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromUser, VideoAuditView } from '@server/helpers/audit-logger.js'
-import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
@@ -31,9 +31,9 @@ import { isNewVideoForSubscription, moveFilesIfPrivacyChanged } from './video-pr
 import { setVideoTags } from './video.js'
 
 const auditLogger = auditLoggerFactory('videos')
+const logger = createLogger('video')
 
 export class LocalVideoUpdater {
-  private readonly lTags: LoggerTagsFn
   private readonly oldVideo: MVideoFull
   private readonly user: MUserAccountUrl | null
 
@@ -43,14 +43,11 @@ export class LocalVideoUpdater {
   private readonly oldVideoAuditView: VideoAuditView
 
   constructor (options: {
-    tags: (string | number)[]
-
     video: MVideoFull
     user: MUserAccountUrl | null
   }) {
     this.user = options.user
     this.oldVideo = options.video
-    this.lTags = loggerTagsFactory(...options.tags, options.video.uuid)
 
     this.hadPrivacyForFederation = isPrivacyForFederation(this.oldVideo.privacy)
     this.oldPrivacy = this.oldVideo.privacy
@@ -58,7 +55,14 @@ export class LocalVideoUpdater {
     this.oldVideoAuditView = new VideoAuditView(this.oldVideo.toFormattedDetailsJSON())
   }
 
-  async update (options: Omit<VideoUpdate, 'thumbnailfile' | 'previewfile'> & {
+  update (options: Omit<VideoUpdate, 'thumbnailfile' | 'previewfile'> & {
+    thumbnails?: MThumbnail[]
+    channel?: MChannelBannerAccountDefault
+  }) {
+    return logger.withContext([ this.oldVideo.uuid ], () => this.runUpdate(options))
+  }
+
+  private async runUpdate (options: Omit<VideoUpdate, 'thumbnailfile' | 'previewfile'> & {
     thumbnails?: MThumbnail[]
     channel?: MChannelBannerAccountDefault
   }) {
@@ -225,7 +229,7 @@ export class LocalVideoUpdater {
           )
         }
 
-        logger.info('Video with name %s and uuid %s updated.', video.name, video.uuid, this.lTags())
+        logger.info('Video with name %s and uuid %s updated.', video.name, video.uuid)
 
         return { video, newVideoForSubscription }
       })
@@ -334,7 +338,7 @@ export class LocalVideoUpdater {
     const hls = video.getHLSPlaylist()
 
     if (filePathChanged && hls) {
-      logger.debug('Updating HLS playlist file paths after privacy change', this.lTags())
+      logger.debug('Updating HLS playlist file paths after privacy change')
 
       await hls.buildAndSetInfoHashes(video, hls.VideoFiles)
       await hls.save()
@@ -351,7 +355,7 @@ export class LocalVideoUpdater {
     const jobs: CreateJobTypeAndPayload[] = []
 
     if (!video.isLive && (nameChanged || filePathChanged)) {
-      logger.debug('Updating video torrent metadata after name or file path change', this.lTags())
+      logger.debug('Updating video torrent metadata after name or file path change')
 
       for (const file of (video.VideoFiles || [])) {
         const payload: ManageVideoTorrentPayload = { action: 'update-metadata', videoId: video.id, videoFileId: file.id }
@@ -386,7 +390,7 @@ export class LocalVideoUpdater {
     const { video, newVideoForSubscription } = options
     if (!newVideoForSubscription) return []
 
-    logger.debug('Video is considered new for subscriptions: create the notification job', this.lTags())
+    logger.debug('Video is considered new for subscriptions: create the notification job')
 
     return [
       {

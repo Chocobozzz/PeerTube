@@ -42,6 +42,11 @@ export const clientFilterHookObject = {
   'filter:api.video-watch.video-thread-replies.list.params': true,
   'filter:api.video-watch.video-thread-replies.list.result': true,
 
+  // Filter params/result of the function that fetch the replies of a comment nested in a thread of the video-watch page
+  // PeerTube >= 8.3
+  'filter:api.video-watch.video-comment-replies.list.params': true,
+  'filter:api.video-watch.video-comment-replies.list.result': true,
+
   // Filter params/result of the function that fetch videos according to the user search
   'filter:api.search.videos.list.params': true,
   'filter:api.search.videos.list.result': true,

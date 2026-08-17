@@ -266,7 +266,7 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
       `AND (${handlesWhere.join(' OR ')})`
 
     return AccountBlocklistModel.sequelize.query(rawQuery, {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
       replacements: { byAccountIds, localHandles, remoteHandles }
     })
   }

@@ -6,6 +6,8 @@ packages:
   - client/packages/*
   - client/src/standalone/player
 
+blockExoticSubdeps: false
+
 ignoredBuiltDependencies:
   - sharp
 
@@ -31,13 +33,10 @@ onlyBuiltDependencies:
 overrides:
   '@types/express': 4.17.9
   '@types/express-serve-static-core': 4.19.5
-  'p2p-media-loader-core': "github:Chocobozzz/p2p-media-loader#v4-external-test&path:packages/p2p-media-loader-core"
-  'p2p-media-loader-hlsjs': "github:Chocobozzz/p2p-media-loader#v4-external-test&path:packages/p2p-media-loader-hlsjs"
+  p2p-media-loader-core: github:Chocobozzz/p2p-media-loader#v4-external-test&path:packages/p2p-media-loader-core
+  p2p-media-loader-hlsjs: github:Chocobozzz/p2p-media-loader#v4-external-test&path:packages/p2p-media-loader-hlsjs
 
 patchedDependencies:
-  '@types/markdown-it': pnpm-patches/@types__markdown-it.patch
   sharp: pnpm-patches/sharp.patch
   tinykeys: pnpm-patches/tinykeys.patch
   video.js: pnpm-patches/video.js.patch
-
-blockExoticSubdeps: false

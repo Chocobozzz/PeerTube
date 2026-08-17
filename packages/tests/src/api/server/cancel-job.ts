@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { Job, JobState, JobType, VideoDetails, VideoPrivacy, VideoStudioTask } from '@peertube/peertube-models'
+import { Job, JobType, VideoDetails, VideoPrivacy, VideoStudioTask } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
 import { generateHighBitrateVideo } from '@tests/shared/generate.js'
 import { expect } from 'chai'
@@ -29,7 +29,7 @@ async function waitForJobCancellation (server: PeerTubeServer, uuid: string, job
 }
 
 async function findActiveJobByUUID (server: PeerTubeServer, uuid: string, jobType: JobType) {
-  const { data } = await server.jobs.list({ state: 'active' as JobState, jobType })
+  const { data } = await server.jobs.list({ state: 'active', jobType })
 
   return data.find(j => j.data?.videoUUID === uuid)
 }

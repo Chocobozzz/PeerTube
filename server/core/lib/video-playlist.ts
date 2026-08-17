@@ -1,7 +1,7 @@
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { SequelizeModel } from '@server/models/shared/sequelize-type.js'
@@ -17,6 +17,8 @@ import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
 import downloadImage from './image-downloader.js'
 import { createLocalPlaylistThumbnailsFromImage } from './thumbnail.js'
+
+const logger = createLogger()
 
 export async function createWatchLaterPlaylist (account: MAccount, t: Transaction) {
   const videoPlaylist: MVideoPlaylistOwner = new VideoPlaylistModel({

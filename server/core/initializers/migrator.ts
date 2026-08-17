@@ -3,9 +3,11 @@ import { currentDir } from '@peertube/peertube-node-utils'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { QueryTypes } from 'sequelize'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
+
+const logger = createLogger()
 
 async function migrate () {
   const tables = await sequelizeTypescript.getQueryInterface().showAllTables()

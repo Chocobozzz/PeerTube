@@ -1,5 +1,5 @@
 import { WatchedWordsList } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { wordsToRegExp } from '@server/helpers/regexp.js'
 import { MAccountId, MWatchedWordsList } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
@@ -9,6 +9,8 @@ import { LRU_CACHE, USER_EXPORT_MAX_ITEMS } from '../../initializers/constants.j
 import { AccountModel } from '../account/account.js'
 import { SequelizeModel, getSort } from '../shared/index.js'
 import { WatchedWordsSubscriptionModel } from './watched-words-subscription.js'
+
+const logger = createLogger()
 
 @Table({
   tableName: 'watchedWordsList',

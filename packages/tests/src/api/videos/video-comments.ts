@@ -71,8 +71,8 @@ describe('Test video comments', function () {
       expect(comment.account.url).to.equal(server.url + '/accounts/root')
       expect(comment.totalReplies).to.equal(0)
       expect(comment.totalRepliesFromVideoAuthor).to.equal(0)
-      expect(dateIsValid(comment.createdAt as string)).to.be.true
-      expect(dateIsValid(comment.updatedAt as string)).to.be.true
+      expect(dateIsValid(comment.createdAt)).to.be.true
+      expect(dateIsValid(comment.updatedAt)).to.be.true
     })
 
     it('Should list threads of this video', async function () {
@@ -97,8 +97,8 @@ describe('Test video comments', function () {
 
       expect(comment.totalReplies).to.equal(0)
       expect(comment.totalRepliesFromVideoAuthor).to.equal(0)
-      expect(dateIsValid(comment.createdAt as string)).to.be.true
-      expect(dateIsValid(comment.updatedAt as string)).to.be.true
+      expect(dateIsValid(comment.createdAt)).to.be.true
+      expect(dateIsValid(comment.updatedAt)).to.be.true
 
       threadId = comment.threadId
     })
@@ -110,8 +110,8 @@ describe('Test video comments', function () {
       expect(rootComment.inReplyToCommentId).to.be.null
       expect(rootComment.text).equal('my super first comment')
       expect(rootComment.videoId).to.equal(videoId)
-      expect(dateIsValid(rootComment.createdAt as string)).to.be.true
-      expect(dateIsValid(rootComment.updatedAt as string)).to.be.true
+      expect(dateIsValid(rootComment.createdAt)).to.be.true
+      expect(dateIsValid(rootComment.updatedAt)).to.be.true
     })
 
     it('Should create multiple replies in this thread', async function () {
@@ -469,6 +469,278 @@ describe('Test video comments', function () {
 
       const video = await server.videos.get({ id: testVideoUUID })
       expect(video.comments).to.equal(0)
+    })
+  })
+
+  describe('Comment tree truncation', function () {
+    let treeVideoId: number
+    let treeVideoUUID: string
+    let deepThreadId: number
+    let wideThreadId: number
+
+    before(async function () {
+      this.timeout(120000)
+
+      const { id, uuid } = await server.videos.upload()
+      treeVideoId = id
+      treeVideoUUID = uuid
+    })
+
+    it('Should truncate the thread tree in depth', async function () {
+      const thread = await command.createThread({ videoId: treeVideoUUID, text: 'depth 0' })
+      deepThreadId = thread.id
+
+      let parentId = thread.id
+      for (let i = 1; i <= 8; i++) {
+        const reply = await command.addReply({ videoId: treeVideoId, toCommentId: parentId, text: 'depth ' + i })
+        parentId = reply.id
+      }
+
+      const tree = await command.getThread({ videoId: treeVideoUUID, threadId: deepThreadId })
+
+      let node = tree
+      for (let i = 1; i <= 5; i++) {
+        expect(node.children, 'children of depth ' + (i - 1)).to.have.lengthOf(1)
+        expect(node.totalChildren).to.equal(1)
+
+        node = node.children[0]
+        expect(node.comment.text).to.equal('depth ' + i)
+      }
+
+      // Deeper replies have to be re-fetched
+      expect(node.children).to.have.lengthOf(0)
+      expect(node.totalChildren).to.equal(1)
+    })
+
+    it('Should respect the maxDepth parameter', async function () {
+      const tree = await command.getThread({ videoId: treeVideoUUID, threadId: deepThreadId, maxDepth: 1 })
+
+      expect(tree.children).to.have.lengthOf(1)
+      expect(tree.children[0].comment.text).to.equal('depth 1')
+      expect(tree.children[0].children).to.have.lengthOf(0)
+      expect(tree.children[0].totalChildren).to.equal(1)
+    })
+
+    it('Should fetch the replies of a nested comment', async function () {
+      const tree = await command.getThread({ videoId: treeVideoUUID, threadId: deepThreadId, maxDepth: 5 })
+
+      let node = tree
+      for (let i = 1; i <= 5; i++) node = node.children[0]
+
+      const { total, data } = await command.listReplies({ videoId: treeVideoUUID, commentId: node.comment.id })
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+
+      expect(data[0].comment.text).to.equal('depth 6')
+      expect(data[0].children).to.have.lengthOf(1)
+      expect(data[0].children[0].comment.text).to.equal('depth 7')
+    })
+
+    it('Should truncate the thread tree in width', async function () {
+      this.timeout(60000)
+
+      const thread = await command.createThread({ videoId: treeVideoUUID, text: 'wide thread' })
+
+      for (let i = 0; i < 13; i++) {
+        await command.addReply({ videoId: treeVideoId, toCommentId: thread.id, text: 'wide reply ' + i })
+      }
+
+      const tree = await command.getThread({ videoId: treeVideoUUID, threadId: thread.id })
+      expect(tree.children).to.have.lengthOf(10)
+      expect(tree.totalChildren).to.equal(13)
+      expect(tree.children[0].comment.text).to.equal('wide reply 0')
+
+      const { total, data } = await command.listReplies({
+        videoId: treeVideoUUID,
+        commentId: thread.id,
+        start: 10,
+        count: 10,
+        sort: 'createdAt'
+      })
+      expect(total).to.equal(13)
+      expect(data).to.have.lengthOf(3)
+      expect(data[0].comment.text).to.equal('wide reply 10')
+      expect(data[2].comment.text).to.equal('wide reply 12')
+
+      wideThreadId = thread.id
+    })
+
+    it('Should respect the repliesPerLevel parameter', async function () {
+      {
+        const tree = await command.getThread({ videoId: treeVideoUUID, threadId: wideThreadId, repliesPerLevel: 3 })
+
+        expect(tree.children).to.have.lengthOf(3)
+        expect(tree.totalChildren).to.equal(13)
+        expect(tree.children[0].comment.text).to.equal('wide reply 0')
+      }
+
+      {
+        const tree = await command.getThread({ videoId: treeVideoUUID, threadId: wideThreadId, repliesPerLevel: 13 })
+
+        expect(tree.children).to.have.lengthOf(13)
+        expect(tree.totalChildren).to.equal(13)
+      }
+    })
+
+    it('Should limit the replies of every parent of a nested level', async function () {
+      this.timeout(120000)
+
+      const thread = await command.createThread({ videoId: treeVideoUUID, text: 'nested wide thread' })
+
+      for (const parentText of [ 'parent 0', 'parent 1' ]) {
+        const parent = await command.addReply({ videoId: treeVideoId, toCommentId: thread.id, text: parentText })
+
+        for (let i = 0; i < 12; i++) {
+          await command.addReply({ videoId: treeVideoId, toCommentId: parent.id, text: `${parentText} reply ${i}` })
+        }
+      }
+
+      const tree = await command.getThread({ videoId: treeVideoUUID, threadId: thread.id })
+      expect(tree.children).to.have.lengthOf(2)
+
+      for (const child of tree.children) {
+        expect(child.children).to.have.lengthOf(10)
+        expect(child.totalChildren).to.equal(12)
+        expect(child.children[0].comment.text).to.equal(`${child.comment.text} reply 0`)
+      }
+    })
+  })
+
+  describe('Comment replies sort', function () {
+    let treeVideoId: number
+    let treeVideoUUID: string
+    let wideThreadId: number
+    let nestedWideThreadId: number
+
+    // Text of the replies of the wide thread, in the order they were created
+    const wideReplyTexts: string[] = []
+
+    before(async function () {
+      this.timeout(240000)
+
+      const { id, uuid } = await server.videos.upload()
+      treeVideoId = id
+      treeVideoUUID = uuid
+
+      {
+        const thread = await command.createThread({ videoId: treeVideoUUID, text: 'wide thread' })
+        wideThreadId = thread.id
+
+        for (let i = 0; i < 13; i++) {
+          const text = 'wide reply ' + i
+          await command.addReply({ videoId: treeVideoId, toCommentId: thread.id, text })
+          wideReplyTexts.push(text)
+        }
+      }
+
+      {
+        const thread = await command.createThread({ videoId: treeVideoUUID, text: 'nested wide thread' })
+        nestedWideThreadId = thread.id
+
+        for (const parentText of [ 'parent 0', 'parent 1' ]) {
+          const parent = await command.addReply({ videoId: treeVideoId, toCommentId: thread.id, text: parentText })
+
+          for (let i = 0; i < 3; i++) {
+            await command.addReply({ videoId: treeVideoId, toCommentId: parent.id, text: `${parentText} reply ${i}` })
+          }
+        }
+      }
+    })
+
+    it('Should sort the replies chronologically by default, like the thread tree', async function () {
+      const { total, data } = await command.listReplies({ videoId: treeVideoUUID, commentId: wideThreadId })
+
+      expect(total).to.equal(13)
+      expect(data.map(d => d.comment.text)).to.deep.equal(wideReplyTexts)
+    })
+
+    it('Should sort the replies in reverse chronological order', async function () {
+      const { total, data } = await command.listReplies({ videoId: treeVideoUUID, commentId: wideThreadId, sort: '-createdAt' })
+
+      expect(total).to.equal(13)
+      expect(data.map(d => d.comment.text)).to.deep.equal([ ...wideReplyTexts ].reverse())
+    })
+
+    it('Should paginate the replies consistently with the sort', async function () {
+      for (const sort of [ 'createdAt', '-createdAt' ]) {
+        const expectedTexts = sort === 'createdAt'
+          ? wideReplyTexts
+          : [ ...wideReplyTexts ].reverse()
+
+        const fetchedTexts: string[] = []
+
+        for (let start = 0; start < 13; start += 5) {
+          const { total, data } = await command.listReplies({
+            videoId: treeVideoUUID,
+            commentId: wideThreadId,
+            start,
+            count: 5,
+            sort
+          })
+
+          expect(total, 'total of ' + sort).to.equal(13)
+          fetchedTexts.push(...data.map(d => d.comment.text))
+        }
+
+        // No reply is duplicated or skipped when unfolding page after page
+        expect(fetchedTexts, 'replies of ' + sort).to.deep.equal(expectedTexts)
+      }
+    })
+
+    it('Should apply the sort to the nested levels too', async function () {
+      {
+        const { data } = await command.listReplies({ videoId: treeVideoUUID, commentId: nestedWideThreadId, sort: 'createdAt' })
+
+        expect(data.map(d => d.comment.text)).to.deep.equal([ 'parent 0', 'parent 1' ])
+
+        for (const parent of data) {
+          expect(parent.children.map(c => c.comment.text))
+            .to.deep.equal([ 0, 1, 2 ].map(i => `${parent.comment.text} reply ${i}`))
+        }
+      }
+
+      {
+        const { data } = await command.listReplies({ videoId: treeVideoUUID, commentId: nestedWideThreadId, sort: '-createdAt' })
+
+        expect(data.map(d => d.comment.text)).to.deep.equal([ 'parent 1', 'parent 0' ])
+
+        for (const parent of data) {
+          expect(parent.children.map(c => c.comment.text))
+            .to.deep.equal([ 2, 1, 0 ].map(i => `${parent.comment.text} reply ${i}`))
+        }
+      }
+    })
+
+    it('Should truncate the widest replies of the sort', async function () {
+      {
+        const { data } = await command.listReplies({
+          videoId: treeVideoUUID,
+          commentId: nestedWideThreadId,
+          sort: '-createdAt',
+          repliesPerLevel: 2
+        })
+
+        for (const parent of data) {
+          expect(parent.children.map(c => c.comment.text))
+            .to.deep.equal([ 2, 1 ].map(i => `${parent.comment.text} reply ${i}`))
+          expect(parent.totalChildren).to.equal(3)
+        }
+      }
+
+      {
+        const { data } = await command.listReplies({
+          videoId: treeVideoUUID,
+          commentId: nestedWideThreadId,
+          sort: 'createdAt',
+          repliesPerLevel: 2
+        })
+
+        for (const parent of data) {
+          expect(parent.children.map(c => c.comment.text))
+            .to.deep.equal([ 0, 1 ].map(i => `${parent.comment.text} reply ${i}`))
+          expect(parent.totalChildren).to.equal(3)
+        }
+      }
     })
   })
 

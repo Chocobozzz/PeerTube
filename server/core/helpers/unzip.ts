@@ -3,9 +3,9 @@ import { ensureDir } from 'fs-extra/esm'
 import { dirname, isAbsolute, join, relative } from 'path'
 import { pipeline } from 'stream'
 import * as yauzl from 'yauzl'
-import { logger, loggerTagsFactory } from './logger.js'
+import { createLogger } from './logger.js'
 
-const lTags = loggerTagsFactory('unzip')
+const logger = createLogger('unzip')
 
 export async function unzip (options: {
   source: string
@@ -17,7 +17,7 @@ export async function unzip (options: {
 
   await ensureDir(destination)
 
-  logger.info(`Unzip ${source} to ${destination}`, lTags())
+  logger.info(`Unzip ${source} to ${destination}`)
 
   return new Promise<void>((res, rej) => {
     yauzl.open(source, { lazyEntries: true }, (err, zipFile) => {
@@ -54,7 +54,7 @@ export async function unzip (options: {
         try {
           if (entry.fileName.endsWith('/')) {
             await ensureDir(entryPath)
-            logger.debug(`Creating directory from zip ${entryPath}`, lTags())
+            logger.debug(`Creating directory from zip ${entryPath}`)
 
             zipFile.readEntry()
             return
@@ -68,7 +68,7 @@ export async function unzip (options: {
         zipFile.openReadStream(entry, (readErr, readStream) => {
           if (readErr) return rej(readErr)
 
-          logger.debug(`Creating file from zip ${entryPath}`, lTags())
+          logger.debug(`Creating file from zip ${entryPath}`)
 
           const writeStream = createWriteStream(entryPath)
           writeStream.on('close', () => zipFile.readEntry())

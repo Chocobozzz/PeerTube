@@ -1,14 +1,16 @@
-import express from 'express'
-import { readdir, readFile } from 'fs/promises'
-import { join } from 'path'
 import { pick } from '@peertube/peertube-core-utils'
 import { ClientLogCreate, HttpStatusCode, ServerLogLevel, UserRight } from '@peertube/peertube-models'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { logger, mtimeSortFilesDesc } from '@server/helpers/logger.js'
+import { buildSearchTags, createLogger, mtimeSortFilesDesc } from '@server/helpers/logger.js'
+import express from 'express'
+import { readdir, readFile } from 'fs/promises'
+import { join } from 'path'
 import { CONFIG } from '../../../initializers/config.js'
 import { AUDIT_LOG_FILENAME, LOG_FILENAME, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers/constants.js'
 import { asyncMiddleware, authenticate, buildRateLimiter, ensureUserHasRight, optionalAuthenticate } from '../../../middlewares/index.js'
 import { createClientLogValidator, getAuditLogsValidator, getLogsValidator } from '../../../middlewares/validators/logs.js'
+
+const logger = createLogger()
 
 const createClientLogRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.RECEIVE_CLIENT_LOG.WINDOW_MS,
@@ -17,26 +19,11 @@ const createClientLogRateLimiter = buildRateLimiter({
 
 const logsRouter = express.Router()
 
-logsRouter.post('/logs/client',
-  createClientLogRateLimiter,
-  optionalAuthenticate,
-  createClientLogValidator,
-  createClientLog
-)
+logsRouter.post('/logs/client', createClientLogRateLimiter, optionalAuthenticate, createClientLogValidator, createClientLog)
 
-logsRouter.get('/logs',
-  authenticate,
-  ensureUserHasRight(UserRight.MANAGE_LOGS),
-  getLogsValidator,
-  asyncMiddleware(getLogs)
-)
+logsRouter.get('/logs', authenticate, ensureUserHasRight(UserRight.MANAGE_LOGS), getLogsValidator, asyncMiddleware(getLogs))
 
-logsRouter.get('/audit-logs',
-  authenticate,
-  ensureUserHasRight(UserRight.MANAGE_LOGS),
-  getAuditLogsValidator,
-  asyncMiddleware(getAuditLogs)
-)
+logsRouter.get('/audit-logs', authenticate, ensureUserHasRight(UserRight.MANAGE_LOGS), getAuditLogsValidator, asyncMiddleware(getAuditLogs))
 
 // ---------------------------------------------------------------------------
 
@@ -79,7 +66,7 @@ async function getLogs (req: express.Request, res: express.Response) {
     startDateQuery: req.query.startDate,
     endDateQuery: req.query.endDate,
     level: req.query.level || 'info',
-    tagsOneOf: req.query.tagsOneOf,
+    tagsOneOf: buildSearchTags(req.query.tagsOneOf),
     nameFilter: logNameFilter
   })
 
@@ -92,13 +79,9 @@ async function generateOutput (options: {
 
   level: ServerLogLevel
   nameFilter: RegExp
-  tagsOneOf?: string[]
+  tagsOneOf?: Set<string>
 }) {
-  const { startDateQuery, level, nameFilter } = options
-
-  const tagsOneOf = Array.isArray(options.tagsOneOf) && options.tagsOneOf.length !== 0
-    ? new Set(options.tagsOneOf)
-    : undefined
+  const { startDateQuery, level, nameFilter, tagsOneOf } = options
 
   const logFiles = await readdir(CONFIG.STORAGE.LOG_DIR)
   const sortedLogFiles = await mtimeSortFilesDesc(logFiles, CONFIG.STORAGE.LOG_DIR)
@@ -143,7 +126,7 @@ async function getOutputFromFile (options: {
 
   let logTime: number
 
-  const logsLevel: { [ id in ServerLogLevel ]: number } = {
+  const logsLevel: { [id in ServerLogLevel]: number } = {
     audit: -1,
     debug: 0,
     info: 1,

@@ -29,7 +29,8 @@ describe('Test per-user rate limits', function () {
     user1Token = await server.users.generateUserAndToken('user1')
     user2Token = await server.users.generateUserAndToken('user2')
 
-    const { id } = await server.videos.upload()
+    const videoOwnerToken = await server.users.generateUserAndToken('video-owner')
+    const { id } = await server.videos.upload({ token: videoOwnerToken })
     videoId = id
   })
 

@@ -57,9 +57,9 @@ describe('Test jobs', function () {
       if (job.type === 'videos-stats') job = body.data[1]
 
       expect(job.state).to.equal('completed')
-      expect(dateIsValid(job.createdAt as string)).to.be.true
-      expect(dateIsValid(job.processedOn as string)).to.be.true
-      expect(dateIsValid(job.finishedOn as string)).to.be.true
+      expect(dateIsValid(job.createdAt)).to.be.true
+      expect(dateIsValid(job.processedOn)).to.be.true
+      expect(dateIsValid(job.finishedOn)).to.be.true
     }
 
     {

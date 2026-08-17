@@ -16,10 +16,12 @@ import express from 'express'
 import { pathExists } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { CUSTOM_HTML_TAG_COMMENTS, FILES_CONTENT_HASH, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER } from '../../../initializers/constants.js'
 import { ServerConfigManager } from '../../server-config-manager.js'
 import { TagsHtml } from './tags-html.js'
+
+const logger = createLogger()
 
 export class PageHtml {
   private static htmlCache: { [path: string]: string } = {}

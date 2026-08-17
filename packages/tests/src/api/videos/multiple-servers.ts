@@ -872,8 +872,8 @@ describe('Test multiple servers', function () {
           expect(comment.account.name).to.equal('root')
           expect(comment.account.host).to.equal(servers[0].host)
           expect(comment.totalReplies).to.equal(3)
-          expect(dateIsValid(comment.createdAt as string)).to.be.true
-          expect(dateIsValid(comment.updatedAt as string)).to.be.true
+          expect(dateIsValid(comment.createdAt)).to.be.true
+          expect(dateIsValid(comment.updatedAt)).to.be.true
         }
 
         {
@@ -883,8 +883,8 @@ describe('Test multiple servers', function () {
           expect(comment.account.name).to.equal('root')
           expect(comment.account.host).to.equal(servers[2].host)
           expect(comment.totalReplies).to.equal(0)
-          expect(dateIsValid(comment.createdAt as string)).to.be.true
-          expect(dateIsValid(comment.updatedAt as string)).to.be.true
+          expect(dateIsValid(comment.createdAt)).to.be.true
+          expect(dateIsValid(comment.updatedAt)).to.be.true
         }
       }
     })
@@ -977,8 +977,8 @@ describe('Test multiple servers', function () {
           expect(comment.account.name).to.equal('root')
           expect(comment.account.host).to.equal(servers[2].host)
           expect(comment.totalReplies).to.equal(0)
-          expect(dateIsValid(comment.createdAt as string)).to.be.true
-          expect(dateIsValid(comment.updatedAt as string)).to.be.true
+          expect(dateIsValid(comment.createdAt)).to.be.true
+          expect(dateIsValid(comment.updatedAt)).to.be.true
         }
 
         {
@@ -990,9 +990,9 @@ describe('Test multiple servers', function () {
           expect(deletedComment.inReplyToCommentId).to.be.null
           expect(deletedComment.account).to.be.null
           expect(deletedComment.totalReplies).to.equal(2)
-          expect(dateIsValid(deletedComment.createdAt as string)).to.be.true
-          expect(dateIsValid(deletedComment.updatedAt as string)).to.be.true
-          expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
+          expect(dateIsValid(deletedComment.createdAt)).to.be.true
+          expect(dateIsValid(deletedComment.updatedAt)).to.be.true
+          expect(dateIsValid(deletedComment.deletedAt)).to.be.true
         }
       }
     })

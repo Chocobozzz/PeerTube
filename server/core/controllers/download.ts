@@ -2,7 +2,7 @@ import { forceNumber, maxBy } from '@peertube/peertube-core-utils'
 import { FileStorage, HttpStatusCode, UserRight, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { getAuthUser, parseRangeHeader, pipelineToResponse } from '@server/helpers/express-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { generateRequestStream } from '@server/helpers/requests.js'
 import { ThrottleStream } from '@server/helpers/stream-throttle.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -39,7 +39,7 @@ import {
   videosGenerateDownloadValidator
 } from '../middlewares/index.js'
 
-const lTags = loggerTagsFactory('download')
+const logger = createLogger('download')
 
 const downloadRouter = express.Router()
 
@@ -149,168 +149,181 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
 
 // ---------------------------------------------------------------------------
 
-async function downloadWebVideoFile (req: express.Request, res: express.Response) {
+function downloadWebVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
 
-  const videoFile = getVideoFileFromReq(req, video.VideoFiles)
-  if (!videoFile) {
-    return res.fail({
-      status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Video file not found'
+  return logger.withContext([ video.uuid ], async () => {
+    const videoFile = getVideoFileFromReq(req, video.VideoFiles)
+    if (!videoFile) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Video file not found'
+      })
+    }
+
+    const allowParameters = {
+      req,
+      res,
+      video,
+      videoFile
+    }
+
+    const allowedResult = await Hooks.wrapFun(
+      isVideoDownloadAllowed,
+      allowParameters,
+      'filter:api.download.video.allowed.result'
+    )
+
+    if (!checkAllowResult(res, allowParameters, allowedResult)) return
+
+    const downloadFilename = buildDownloadFilename({ video, resolution: videoFile.resolution, extname: videoFile.extname })
+
+    VideoStatsManager.Instance.processLocalDownload({ video })
+      .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err }))
+
+    if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
+      return redirectVideoDownloadToObjectStorage({ res, video, file: videoFile, downloadFilename })
+    }
+
+    await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
+      return downloadLocalFileWithOptionalThrottle({ req, res, path, downloadFilename })
     })
-  }
-
-  const allowParameters = {
-    req,
-    res,
-    video,
-    videoFile
-  }
-
-  const allowedResult = await Hooks.wrapFun(
-    isVideoDownloadAllowed,
-    allowParameters,
-    'filter:api.download.video.allowed.result'
-  )
-
-  if (!checkAllowResult(res, allowParameters, allowedResult)) return
-
-  const downloadFilename = buildDownloadFilename({ video, resolution: videoFile.resolution, extname: videoFile.extname })
-
-  VideoStatsManager.Instance.processLocalDownload({ video })
-    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
-
-  if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
-    return redirectVideoDownloadToObjectStorage({ res, video, file: videoFile, downloadFilename })
-  }
-
-  await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), path => {
-    return downloadLocalFileWithOptionalThrottle({ req, res, path, downloadFilename })
   })
 }
 
-async function downloadHLSVideoFile (req: express.Request, res: express.Response) {
+function downloadHLSVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
-  const streamingPlaylist = getHLSPlaylist(video)
-  if (!streamingPlaylist) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  const videoFile = getVideoFileFromReq(req, streamingPlaylist.VideoFiles)
-  if (!videoFile) {
-    return res.fail({
-      status: HttpStatusCode.NOT_FOUND_404,
-      message: 'Video file not found'
+  return logger.withContext([ video.uuid ], async () => {
+    const streamingPlaylist = getHLSPlaylist(video)
+    if (!streamingPlaylist) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+
+    const videoFile = getVideoFileFromReq(req, streamingPlaylist.VideoFiles)
+    if (!videoFile) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Video file not found'
+      })
+    }
+
+    const allowParameters = {
+      req,
+      res,
+      video,
+      streamingPlaylist,
+      videoFile
+    }
+
+    const allowedResult = await Hooks.wrapFun(
+      isVideoDownloadAllowed,
+      allowParameters,
+      'filter:api.download.video.allowed.result'
+    )
+
+    if (!checkAllowResult(res, allowParameters, allowedResult)) return
+
+    VideoStatsManager.Instance.processLocalDownload({ video })
+      .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err }))
+
+    const downloadFilename = buildDownloadFilename({
+      video,
+      streamingPlaylist,
+      resolution: videoFile.resolution,
+      extname: videoFile.extname
     })
-  }
 
-  const allowParameters = {
-    req,
-    res,
-    video,
-    streamingPlaylist,
-    videoFile
-  }
+    if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
+      return redirectVideoDownloadToObjectStorage({ res, video, streamingPlaylist, file: videoFile, downloadFilename })
+    }
 
-  const allowedResult = await Hooks.wrapFun(
-    isVideoDownloadAllowed,
-    allowParameters,
-    'filter:api.download.video.allowed.result'
-  )
-
-  if (!checkAllowResult(res, allowParameters, allowedResult)) return
-
-  VideoStatsManager.Instance.processLocalDownload({ video })
-    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
-
-  const downloadFilename = buildDownloadFilename({ video, streamingPlaylist, resolution: videoFile.resolution, extname: videoFile.extname })
-
-  if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
-    return redirectVideoDownloadToObjectStorage({ res, video, streamingPlaylist, file: videoFile, downloadFilename })
-  }
-
-  await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
-    return downloadLocalFileWithOptionalThrottle({ req, res, path, downloadFilename })
+    await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(streamingPlaylist), path => {
+      return downloadLocalFileWithOptionalThrottle({ req, res, path, downloadFilename })
+    })
   })
 }
 
 // ---------------------------------------------------------------------------
 
-async function downloadGeneratedVideoFile (req: express.Request, res: express.Response) {
+function downloadGeneratedVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
-  const filesToSelect = req.query.videoFileIds
 
-  const videoFiles = video.getAllFiles()
-    .filter(f => filesToSelect.includes(f.id))
+  return logger.withContext([ video.uuid ], async () => {
+    const filesToSelect = req.query.videoFileIds
 
-  if (videoFiles.length === 0) {
-    return res.fail({
-      status: HttpStatusCode.NOT_FOUND_404,
-      message: `No files found (${filesToSelect.join(', ')}) to download video ${video.url}`
-    })
-  }
+    const videoFiles = video.getAllFiles()
+      .filter(f => filesToSelect.includes(f.id))
 
-  if (videoFiles.filter(f => f.hasVideo()).length > 1 || videoFiles.filter(f => f.hasAudio()).length > 1) {
-    return res.fail({
-      status: HttpStatusCode.BAD_REQUEST_400,
-      // In theory we could, but ffmpeg-fluent doesn't support multiple input streams so prefer to reject this specific use case
-      message: `Cannot generate a container with multiple video/audio files. PeerTube supports a maximum of 1 audio and 1 video file`
-    })
-  }
+    if (videoFiles.length === 0) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: `No files found (${filesToSelect.join(', ')}) to download video ${video.url}`
+      })
+    }
 
-  const allowParameters = {
-    req,
-    res,
-    video,
-    videoFiles
-  }
+    if (videoFiles.filter(f => f.hasVideo()).length > 1 || videoFiles.filter(f => f.hasAudio()).length > 1) {
+      return res.fail({
+        status: HttpStatusCode.BAD_REQUEST_400,
+        // In theory we could, but ffmpeg-fluent doesn't support multiple input streams so prefer to reject this specific use case
+        message: `Cannot generate a container with multiple video/audio files. PeerTube supports a maximum of 1 audio and 1 video file`
+      })
+    }
 
-  const allowedResult = await Hooks.wrapFun(
-    isGeneratedVideoDownloadAllowed,
-    allowParameters,
-    'filter:api.download.generated-video.allowed.result'
-  )
+    const allowParameters = {
+      req,
+      res,
+      video,
+      videoFiles
+    }
 
-  if (!checkAllowResult(res, allowParameters, allowedResult)) return
+    const allowedResult = await Hooks.wrapFun(
+      isGeneratedVideoDownloadAllowed,
+      allowParameters,
+      'filter:api.download.generated-video.allowed.result'
+    )
 
-  if (VideoDownload.totalDownloads >= CONFIG.DOWNLOAD_GENERATE_VIDEO.MAX_PARALLEL_DOWNLOADS) {
-    return res.fail({
-      status: HttpStatusCode.TOO_MANY_REQUESTS_429,
-      message: req.t(`Too many parallel downloads on this server. Please try again later.`)
-    })
-  }
+    if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
-  const maxResolutionFile = maxBy(videoFiles, 'resolution')
+    if (VideoDownload.totalDownloads >= CONFIG.DOWNLOAD_GENERATE_VIDEO.MAX_PARALLEL_DOWNLOADS) {
+      return res.fail({
+        status: HttpStatusCode.TOO_MANY_REQUESTS_429,
+        message: req.t(`Too many parallel downloads on this server. Please try again later.`)
+      })
+    }
 
-  // Prefer m4a extension for the user if this is a mp4 audio file only
-  const extname = maxResolutionFile.resolution === VideoResolution.H_NOVIDEO && maxResolutionFile.extname === '.mp4'
-    ? '.m4a'
-    : maxResolutionFile.extname
+    const maxResolutionFile = maxBy(videoFiles, 'resolution')
 
-  // If there is the extension, we want to simulate a "raw file" and so not send the content disposition header
-  const urlPath = new URL(req.originalUrl, WEBSERVER.URL).pathname
-  if (!urlPath.endsWith('.mp4') && !urlPath.endsWith('.m4a')) {
-    const downloadFilename = buildDownloadFilename({ video, extname })
-    res.setHeader('Content-disposition', createContentDisposition(downloadFilename))
-  }
+    // Prefer m4a extension for the user if this is a mp4 audio file only
+    const extname = maxResolutionFile.resolution === VideoResolution.H_NOVIDEO && maxResolutionFile.extname === '.mp4'
+      ? '.m4a'
+      : maxResolutionFile.extname
 
-  res.type(extname)
+    // If there is the extension, we want to simulate a "raw file" and so not send the content disposition header
+    const urlPath = new URL(req.originalUrl, WEBSERVER.URL).pathname
+    if (!urlPath.endsWith('.mp4') && !urlPath.endsWith('.m4a')) {
+      const downloadFilename = buildDownloadFilename({ video, extname })
+      res.setHeader('Content-disposition', createContentDisposition(downloadFilename))
+    }
 
-  VideoStatsManager.Instance.processLocalDownload({ video })
-    .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err, ...lTags(video.uuid) }))
+    res.type(extname)
 
-  try {
-    await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res, {
-      totalBytesPerSecond: CONFIG.DOWNLOAD.MAX_TOTAL_BYTES_PER_SECOND,
-      bytesPerIpPerSecond: CONFIG.DOWNLOAD.MAX_BYTES_PER_IP_PER_SECOND,
-      ip: req.ip
-    })
-  } catch (err) {
-    // muxToMergeVideoFiles has already logged the error
-    res.fail({
-      status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
-      title: req.t('Cannot process video download at the moment. Please try again later.'),
-      message: err.message
-    })
-  }
+    VideoStatsManager.Instance.processLocalDownload({ video })
+      .catch(err => logger.error(`Cannot process local download stats for video ${video.uuid}`, { err }))
+
+    try {
+      await new VideoDownload({ video, videoFiles }).muxToMergeVideoFiles(res, {
+        totalBytesPerSecond: CONFIG.DOWNLOAD.MAX_TOTAL_BYTES_PER_SECOND,
+        bytesPerIpPerSecond: CONFIG.DOWNLOAD.MAX_BYTES_PER_IP_PER_SECOND,
+        ip: req.ip
+      })
+    } catch (err) {
+      // muxToMergeVideoFiles has already logged the error
+      res.fail({
+        status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
+        title: req.t('Cannot process video download at the moment. Please try again later.'),
+        message: err.message
+      })
+    }
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -430,7 +443,7 @@ async function commonDownloadAllowed (object: {
 
 function checkAllowResult (res: express.Response, allowParameters: any, result?: AllowedResult) {
   if (result?.allowed !== true) {
-    logger.info('Download is not allowed.', { result, allowParameters, ...lTags() })
+    logger.info('Download is not allowed.', { result, allowParameters })
 
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
@@ -496,7 +509,7 @@ async function downloadLocalFileWithOptionalThrottle (options: {
 
     if ((err as any).code === 'ENOENT') return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-    logger.error(`Cannot read local file ${path} for download`, { err, ...lTags() })
+    logger.error(`Cannot read local file ${path} for download`, { err })
 
     return res.fail({
       status: HttpStatusCode.INTERNAL_SERVER_ERROR_500,
@@ -524,7 +537,7 @@ async function redirectVideoDownloadToObjectStorage (options: {
     ? await generateHLSFilePresignedUrl({ streamingPlaylist, file, downloadFilename })
     : await generateWebVideoPresignedUrl({ file, downloadFilename })
 
-  logger.debug('Generating pre-signed URL %s for video %s', url, video.uuid, lTags())
+  logger.debug('Generating pre-signed URL %s for video %s', url, video.uuid)
 
   return res.redirect(url)
 }
@@ -538,7 +551,7 @@ async function redirectUserExportToObjectStorage (options: {
 
   const url = await generateUserExportPresignedUrl({ userExport, downloadFilename })
 
-  logger.debug('Generating pre-signed URL %s for user export %s', url, userExport.filename, lTags())
+  logger.debug('Generating pre-signed URL %s for user export %s', url, userExport.filename)
 
   return res.redirect(url)
 }
@@ -552,7 +565,7 @@ async function redirectOriginalFileToObjectStorage (options: {
 
   const url = await generateOriginalFilePresignedUrl({ videoSource, downloadFilename })
 
-  logger.debug('Generating pre-signed URL %s for original video file %s', url, videoSource.keptOriginalFilename, lTags())
+  logger.debug('Generating pre-signed URL %s for original video file %s', url, videoSource.keptOriginalFilename)
 
   return res.redirect(url)
 }

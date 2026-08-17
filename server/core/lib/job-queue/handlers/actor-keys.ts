@@ -2,7 +2,9 @@ import { Job } from 'bullmq'
 import { generateAndSaveActorKeys } from '@server/lib/activitypub/actors/index.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ActorKeysPayload } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
+
+const logger = createLogger()
 
 export async function processActorKeys (job: Job) {
   const payload = job.data as ActorKeysPayload

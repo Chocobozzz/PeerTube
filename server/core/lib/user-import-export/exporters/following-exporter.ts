@@ -11,7 +11,7 @@ export class FollowingExporter extends AbstractUserExporter<FollowingExportJSON>
     const followingJSON = this.formatFollowingJSON(following, this.user.Account.Actor.getFullIdentifier())
 
     return {
-      json: { following: followingJSON } as FollowingExportJSON,
+      json: { following: followingJSON },
 
       staticFiles: [],
 

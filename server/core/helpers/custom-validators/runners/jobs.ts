@@ -34,7 +34,7 @@ export function isRunnerJobSuccessPayloadValid (value: RunnerJobSuccessPayload, 
   return isRunnerJobVODWebVideoResultPayloadValid(value as VODWebVideoTranscodingSuccess, type, files) ||
     isRunnerJobVODHLSResultPayloadValid(value as VODHLSTranscodingSuccess, type, files) ||
     isRunnerJobVODAudioMergeResultPayloadValid(value as VODHLSTranscodingSuccess, type, files) ||
-    isRunnerJobLiveRTMPHLSResultPayloadValid(value as LiveRTMPHLSTranscodingSuccess, type) ||
+    isRunnerJobLiveRTMPHLSResultPayloadValid(value, type) ||
     isRunnerJobVideoStudioResultPayloadValid(value as VideoStudioTranscodingSuccess, type, files) ||
     isRunnerJobTranscriptionResultPayloadValid(value as TranscriptionSuccess, type, files) ||
     isRunnerJobGenerateStoryboardResultPayloadValid(value as GenerateStoryboardSuccess, type, files)

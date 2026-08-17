@@ -59,7 +59,7 @@ export async function doesVideoExist (id: number | string, res: Response, fetchT
 
     case 'none':
     case 'id':
-      res.locals.videoId = video as MVideoId
+      res.locals.videoId = video
       break
 
     case 'with-blacklist':

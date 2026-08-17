@@ -1,13 +1,13 @@
 import { UserRole, UserRoleType } from '@peertube/peertube-models'
 import { getAuthUser } from '@server/helpers/express-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
 import express from 'express'
 import RateLimit, { ipKeyGenerator, Options as RateLimitHandlerOptions } from 'express-rate-limit'
 import { optionalAuthenticate } from './auth.js'
 
-const lTags = loggerTagsFactory('rate-limit')
+const logger = createLogger('rate-limit')
 
 const whitelistRoles = new Set<UserRoleType>([ UserRole.ADMINISTRATOR, UserRole.MODERATOR ])
 
@@ -78,7 +78,7 @@ export const activityPubRateLimiter = buildRateLimiter({
 // ---------------------------------------------------------------------------
 
 function sendRateLimited (req: express.Request, res: express.Response, options: RateLimitHandlerOptions) {
-  logger.debug('Rate limit exceeded for route ' + req.originalUrl, { route: req.originalUrl, ip: req.ip, ...lTags() })
+  logger.debug('Rate limit exceeded for route ' + req.originalUrl, { route: req.originalUrl, ip: req.ip })
 
   return res.status(options.statusCode).send(options.message)
 }

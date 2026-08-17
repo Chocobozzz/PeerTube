@@ -7,7 +7,7 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { generateImageFilename, getImageSize } from '@server/helpers/image-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { JOB_PRIORITY, STORYBOARD } from '@server/initializers/constants.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -19,7 +19,7 @@ import { buildSpriteSize, buildTotalSprites, findGridSize, insertStoryboardInDat
 import { generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 
-const lTagsBase = loggerTagsFactory('storyboard', 'runners')
+const logger = createLogger('storyboard')
 
 type CreateOptions = {
   videoUUID: string
@@ -28,47 +28,49 @@ type CreateOptions = {
 export class VideoStoryboardJobHandler extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, GenerateStoryboardSuccess> {
   async create (options: CreateOptions) {
     const { videoUUID } = options
-    const lTags = lTagsBase(videoUUID)
 
     const jobUUID = buildUUID()
 
     const video = await VideoModel.loadFull(videoUUID)
-    const inputFile = video.getMaxQualityFile(VideoFileStream.VIDEO)
 
-    return VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
-      const { spriteHeight, spriteWidth } = await buildSpriteSize(videoPath)
+    return logger.withContext([ jobUUID, video.uuid ], async () => {
+      const inputFile = video.getMaxQualityFile(VideoFileStream.VIDEO)
 
-      const { spriteDuration, totalSprites } = buildTotalSprites(video)
-      if (totalSprites === 0) {
-        logger.info(`Do not generate remote storyboard job of ${videoUUID} because the video is not long enough`, lTags)
-        return
-      }
+      return VideoPathManager.Instance.makeAvailableVideoFile(inputFile, async videoPath => {
+        const { spriteHeight, spriteWidth } = await buildSpriteSize(videoPath)
 
-      const spritesCount = findGridSize({ toFind: totalSprites, maxEdgeCount: STORYBOARD.SPRITES_MAX_EDGE_COUNT })
+        const { spriteDuration, totalSprites } = buildTotalSprites(video)
+        if (totalSprites === 0) {
+          logger.info(`Do not generate remote storyboard job of ${videoUUID} because the video is not long enough`)
+          return
+        }
 
-      const payload: RunnerJobGenerateStoryboardPayload = {
-        input: {
-          videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID, type: 'video' })
-        },
-        sprites: {
-          size: { height: spriteHeight, width: spriteWidth },
-          count: spritesCount,
-          duration: spriteDuration
-        },
-        output: {}
-      }
+        const spritesCount = findGridSize({ toFind: totalSprites, maxEdgeCount: STORYBOARD.SPRITES_MAX_EDGE_COUNT })
 
-      const privatePayload: RunnerJobGenerateStoryboardPrivatePayload = { videoUUID }
+        const payload: RunnerJobGenerateStoryboardPayload = {
+          input: {
+            videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID, type: 'video' })
+          },
+          sprites: {
+            size: { height: spriteHeight, width: spriteWidth },
+            count: spritesCount,
+            duration: spriteDuration
+          },
+          output: {}
+        }
 
-      const job = await this.createRunnerJob({
-        type: 'generate-video-storyboard',
-        jobUUID,
-        payload,
-        privatePayload,
-        priority: JOB_PRIORITY.STORYBOARD
+        const privatePayload: RunnerJobGenerateStoryboardPrivatePayload = { videoUUID }
+
+        const job = await this.createRunnerJob({
+          type: 'generate-video-storyboard',
+          jobUUID,
+          payload,
+          privatePayload,
+          priority: JOB_PRIORITY.STORYBOARD
+        })
+
+        return job
       })
-
-      return job
     })
   }
 
@@ -86,30 +88,31 @@ export class VideoStoryboardJobHandler extends AbstractJobHandler<CreateOptions,
     const video = await VideoModel.loadFull(runnerJob.privatePayload.videoUUID)
     if (!video) return
 
-    const destinationFilename = generateImageFilename()
-    const destinationPath = join(CONFIG.STORAGE.STORYBOARDS_DIR, destinationFilename)
+    await logger.withContext([ video.uuid ], async () => {
+      const destinationFilename = generateImageFilename()
+      const destinationPath = join(CONFIG.STORAGE.STORYBOARDS_DIR, destinationFilename)
 
-    await move(resultPayload.storyboardFile as string, destinationPath)
+      await move(resultPayload.storyboardFile as string, destinationPath)
 
-    const { sprites } = runnerJob.payload as RunnerJobGenerateStoryboardPayload
+      const { sprites } = runnerJob.payload as RunnerJobGenerateStoryboardPayload
 
-    await insertStoryboardInDatabase({
-      videoUUID: video.uuid,
-      lTags: this.lTags(video.uuid, runnerJob.uuid),
+      await insertStoryboardInDatabase({
+        videoUUID: video.uuid,
 
-      filename: destinationFilename,
-      destination: destinationPath,
+        filename: destinationFilename,
+        destination: destinationPath,
 
-      imageSize: await getImageSize(destinationPath),
+        imageSize: await getImageSize(destinationPath),
 
-      spriteHeight: sprites.size.height,
-      spriteWidth: sprites.size.width,
-      spriteDuration: sprites.duration,
+        spriteHeight: sprites.size.height,
+        spriteWidth: sprites.size.width,
+        spriteDuration: sprites.duration,
 
-      federate: true
+        federate: true
+      })
+
+      logger.info('Runner storyboard job %s for %s ended.', runnerJob.uuid, video.uuid)
     })
-
-    logger.info('Runner storyboard job %s for %s ended.', runnerJob.uuid, video.uuid, this.lTags(video.uuid, runnerJob.uuid))
   }
 
   protected specificError (_options: { runnerJob: MRunnerJob }) {}

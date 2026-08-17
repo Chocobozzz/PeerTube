@@ -1,5 +1,4 @@
 import { LiveVideoErrorType } from '@peertube/peertube-models'
-import { LoggerTagsFn } from '@server/helpers/logger.js'
 import { MStreamingPlaylistVideo, MVideoLiveVideo } from '@server/types/models/index.js'
 import EventEmitter from 'events'
 import { FfprobeData } from 'fluent-ffmpeg'
@@ -26,8 +25,6 @@ declare interface AbstractTranscodingWrapper {
 interface AbstractTranscodingWrapperOptions {
   streamingPlaylist: MStreamingPlaylistVideo
   videoLive: MVideoLiveVideo
-
-  lTags: LoggerTagsFn
 
   sessionId: string
   inputLocalUrl: string
@@ -77,14 +74,10 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
 
   protected readonly outDirectory: string
 
-  protected readonly lTags: LoggerTagsFn
-
   protected readonly streamingPlaylist: MStreamingPlaylistVideo
 
   constructor (options: AbstractTranscodingWrapperOptions) {
     super()
-
-    this.lTags = options.lTags
 
     this.videoLive = options.videoLive
     this.videoUUID = options.videoLive.Video.uuid
@@ -111,9 +104,11 @@ abstract class AbstractTranscodingWrapper extends EventEmitter {
   abstract run (): Promise<void>
 
   abstract abort (abortError?: LiveVideoErrorType): void
+
+  abstract destroy (): void
 }
 
 export {
-  type AbstractTranscodingWrapperOptions,
-  AbstractTranscodingWrapper
+  AbstractTranscodingWrapper,
+  type AbstractTranscodingWrapperOptions
 }

@@ -1,18 +1,18 @@
 import { uniqify } from '@peertube/peertube-core-utils'
 import { AutomaticTagAvailable, AutomaticTagPolicy, CommentAutomaticTagPolicies, VideoAutoTagPolicies } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import { MAccount, MAccountId, MComment, MVideo } from '@server/types/models/index.js'
-import Linkifyit from 'linkify-it'
+import { LinkifyIt } from 'linkify-it'
 import { Transaction } from 'sequelize'
 import { PluginManager } from '../plugins/plugin-manager.js'
 
-const lTags = loggerTagsFactory('automatic-tags')
+const logger = createLogger('automatic-tags')
 
-const linkifyit = new Linkifyit()
+const linkifyIt = new LinkifyIt({ fuzzyLink: true })
 
 export class AutomaticTagger {
   private static readonly SPECIAL_TAGS = {
@@ -51,11 +51,11 @@ export class AutomaticTagger {
         result[ownerAccount.id] = uniqify(tags)
       }
 
-      logger.debug('Built automatic tags for comment', { text, result, ...lTags() })
+      logger.debug('Built automatic tags for comment', { text, result })
 
       return result
     } catch (err) {
-      logger.error('Cannot build comment automatic tags', { text, err, ...lTags() })
+      logger.error('Cannot build comment automatic tags', { text, err })
 
       return {}
     }
@@ -80,13 +80,12 @@ export class AutomaticTagger {
         videoDescription: video.description,
         videoNameTags,
         videoDescriptionTags,
-        pluginTags,
-        ...lTags()
+        pluginTags
       })
 
       return { [serverAccount.id]: uniqify([ ...videoNameTags, ...videoDescriptionTags, ...pluginTags ]) }
     } catch (err) {
-      logger.error('Cannot build video automatic tags', { video, err, ...lTags() })
+      logger.error('Cannot build video automatic tags', { video, err })
 
       return {}
     }
@@ -106,8 +105,7 @@ export class AutomaticTagger {
     const watchedWords = await WatchedWordsListModel.buildWatchedWordsRegexp({ accountId: account.id, transaction })
 
     logger.debug(`Got watched words regex for account ${account.id}`, {
-      listNames: watchedWords.map(r => r.listName),
-      ...lTags()
+      listNames: watchedWords.map(r => r.listName)
     })
 
     for (const { listName, regex } of watchedWords) {
@@ -117,7 +115,7 @@ export class AutomaticTagger {
           automaticTags.push(listName)
         }
       } catch (err) {
-        logger.error('Cannot test regex against text', { listName, regex: regex.toString(), err, ...lTags() })
+        logger.error('Cannot test regex against text', { listName, regex: regex.toString(), err })
       }
     }
 
@@ -128,7 +126,7 @@ export class AutomaticTagger {
       tagsDone.add(AutomaticTagger.SPECIAL_TAGS.EXTERNAL_LINK)
     }
 
-    logger.debug('Built automatic tags for text', { text, automaticTags, ...lTags() })
+    logger.debug('Built automatic tags for text', { text, automaticTags })
 
     return automaticTags
   }
@@ -153,7 +151,7 @@ export class AutomaticTagger {
 
             if (result) pluginTags.push(autoTagName)
           } catch (err) {
-            logger.error('Cannot execute auto tagger of plugin ' + npmName, { err, ...lTags() })
+            logger.error('Cannot execute auto tagger of plugin ' + npmName, { err })
           }
         }
       }
@@ -165,10 +163,10 @@ export class AutomaticTagger {
   private hasExternalLinks (text: string) {
     if (!text) return false
 
-    const matches = linkifyit.match(text)
+    const matches = linkifyIt.match(text)
     if (!matches) return false
 
-    logger.debug('Found external links in text', { matches, text, ...lTags() })
+    logger.debug('Found external links in text', { matches, text })
 
     return matches.some(({ url }) => new URL(url).host !== WEBSERVER.HOST)
   }

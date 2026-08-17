@@ -1,7 +1,8 @@
 import { UserImportResultSummary, UserImportState } from '@peertube/peertube-models'
 import { getFilenameWithoutExt, getFileSize } from '@peertube/peertube-node-utils'
+import { parseBytes } from '@server/helpers/core-utils.js'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { unzip } from '@server/helpers/unzip.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserImport } from '@server/types/models/index.js'
@@ -20,9 +21,8 @@ import { UserVideoHistoryImporter } from './importers/user-video-history-importe
 import { VideoPlaylistsImporter } from './importers/video-playlists-importer.js'
 import { VideosImporter } from './importers/videos-importer.js'
 import { WatchedWordsListsImporter } from './importers/watched-words-lists-importer.js'
-import { parseBytes } from '@server/helpers/core-utils.js'
 
-const lTags = loggerTagsFactory('user-import')
+const logger = createLogger('user-import')
 
 export class UserImporter {
   private extractedDirectory: string
@@ -63,25 +63,27 @@ export class UserImporter {
 
       const user = await UserModel.loadByIdFull(importModel.userId)
 
-      for (const { name, importer } of this.buildImporters(user)) {
-        try {
-          const { duplicates, errors, success } = await importer.import()
+      await logger.withContext([ user.username ], async () => {
+        for (const { name, importer } of this.buildImporters(user)) {
+          try {
+            const { duplicates, errors, success } = await importer.import()
 
-          resultSummary.stats[name].duplicates += duplicates
-          resultSummary.stats[name].errors += errors
-          resultSummary.stats[name].success += success
-        } catch (err) {
-          logger.error(`Cannot import ${importer.getJSONFilePath()} from ${inputZip}`, { err, ...lTags() })
+            resultSummary.stats[name].duplicates += duplicates
+            resultSummary.stats[name].errors += errors
+            resultSummary.stats[name].success += success
+          } catch (err) {
+            logger.error(`Cannot import ${importer.getJSONFilePath()} from ${inputZip}`, { err })
 
-          resultSummary.stats[name].errors++
+            resultSummary.stats[name].errors++
+          }
         }
-      }
 
-      importModel.state = UserImportState.COMPLETED
-      importModel.resultSummary = resultSummary
-      await saveInTransactionWithRetries(importModel)
+        importModel.state = UserImportState.COMPLETED
+        importModel.resultSummary = resultSummary
+        await saveInTransactionWithRetries(importModel)
+      })
     } catch (err) {
-      logger.error('Cannot import user archive', { err, ...lTags() })
+      logger.error('Cannot import user archive', { err })
 
       try {
         importModel.state = UserImportState.ERRORED
@@ -89,7 +91,7 @@ export class UserImporter {
 
         await saveInTransactionWithRetries(importModel)
       } catch (innerErr) {
-        logger.error('Cannot set import error state', { err: innerErr, ...lTags() })
+        logger.error('Cannot set import error state', { err: innerErr })
       }
 
       throw err
@@ -98,7 +100,7 @@ export class UserImporter {
         await remove(getFSUserImportFilePath(importModel))
         await remove(this.extractedDirectory)
       } catch (innerErr) {
-        logger.error('Cannot remove import archive and directory after failure', { err: innerErr, ...lTags() })
+        logger.error('Cannot remove import archive and directory after failure', { err: innerErr })
       }
     }
   }

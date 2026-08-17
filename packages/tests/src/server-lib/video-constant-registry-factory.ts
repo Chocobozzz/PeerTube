@@ -60,7 +60,7 @@ describe('VideoConstantManagerFactory', function () {
     it('Should be able to add a video licence constant', () => {
       const successfullyAdded = videoLicenceManager.addConstant(42, 'European Union Public Licence')
       expect(successfullyAdded).to.be.true
-      expect(videoLicenceManager.getConstantValue(42 as any)).to.equal('European Union Public Licence')
+      expect(videoLicenceManager.getConstantValue(42)).to.equal('European Union Public Licence')
     })
 
     it('Should be able to reset video licence constants', () => {

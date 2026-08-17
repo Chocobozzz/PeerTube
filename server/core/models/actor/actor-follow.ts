@@ -31,7 +31,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import {
   ACTOR_FOLLOW_SCORE,
   CONSTRAINTS_FIELDS,
@@ -48,6 +48,8 @@ import { VideoChannelModel } from '../video/video-channel.js'
 import { ActorModel, unusedActorAttributesForAPI } from './actor.js'
 import { InstanceListFollowersQueryBuilder, ListFollowersOptions } from './sql/instance-list-followers-query-builder.js'
 import { InstanceListFollowingQueryBuilder, ListFollowingOptions } from './sql/instance-list-following-query-builder.js'
+
+const logger = createLogger()
 
 @Table({
   tableName: 'actorFollow',

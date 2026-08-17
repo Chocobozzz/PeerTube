@@ -2,17 +2,26 @@ import { signAsDraftToRequest } from '@misskey-dev/node-http-message-signatures'
 import { CONFIG } from '@server/initializers/config.js'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
-import got, { OptionsInit, OptionsOfTextResponseBody, OptionsOfUnknownResponseBodyWrapped, Request, RequestError, Response } from 'got'
+import got, {
+  Got,
+  OptionsInit,
+  OptionsOfBufferResponseBody,
+  OptionsOfTextResponseBody,
+  OptionsOfUnknownResponseBodyWrapped,
+  Request,
+  RequestError,
+  Response
+} from 'got'
 import { gotSsrf } from 'got-ssrf'
 import http from 'http'
 import https from 'https'
 import { HttpProxyAgent, HttpsProxyAgent } from '../helpers/hpagent.js'
 import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants.js'
 import { pipelinePromise } from './core-utils.js'
-import { logger, loggerTagsFactory } from './logger.js'
+import { createLogger } from './logger.js'
 import { getProxy, isProxyEnabled } from './proxy.js'
 
-const lTags = loggerTagsFactory('request')
+const logger = createLogger('request')
 
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
@@ -44,7 +53,7 @@ export type PeerTubeRequestOptions = {
   signal?: AbortSignal
 } & Pick<OptionsInit, 'headers' | 'json' | 'method' | 'searchParams'>
 
-export const unsafeSSRFGot = got.extend({
+const unsafeSSRFGot = got.extend({
   ...getProxyAgent(),
 
   headers: {
@@ -72,7 +81,7 @@ export const unsafeSSRFGot = got.extend({
         if (progress.transferred > bodyLimit && progress.percent !== 1) {
           const message = `Exceeded the download limit of ${bodyLimit} B`
           const error = new Error(message)
-          logger.warn(message, lTags())
+          logger.warn(message)
 
           if (options.isStream) {
             ;(promiseOrStream as Request).destroy(error)
@@ -124,13 +133,13 @@ export const unsafeSSRFGot = got.extend({
 
     beforeRetry: [
       (error: RequestError, retryCount: number) => {
-        logger.debug('Retrying request to %s.', error.request.requestUrl, { retryCount, error: buildRequestError(error), ...lTags() })
+        logger.debug('Retrying request to %s.', error.request.requestUrl, { retryCount, error: buildRequestError(error) })
       }
     ]
   }
 })
 
-export const peertubeGot = CONFIG.FEDERATION.PREVENT_SSRF
+export const peertubeGot: Got = CONFIG.FEDERATION.PREVENT_SSRF
   ? got.extend(gotSsrf, unsafeSSRFGot)
   : unsafeSSRFGot
 
@@ -162,6 +171,19 @@ export function doJSONRequest<T> (url: string, options: PeerTubeRequestOptions &
     })
 }
 
+export function doBufferRequest (url: string, options: PeerTubeRequestOptions & { preventSSRF?: false } = {}) {
+  const gotOptions = buildGotOptions(options) as OptionsOfBufferResponseBody
+
+  const gotInstance = options.preventSSRF === false
+    ? unsafeSSRFGot
+    : peertubeGot
+
+  return gotInstance(url, { ...gotOptions, responseType: 'buffer' })
+    .catch(err => {
+      throw buildRequestError(err)
+    })
+}
+
 export async function doRequestAndSaveToFile (url: string, destPath: string, options: PeerTubeRequestOptions = {}) {
   const gotOptions = buildGotOptions({ ...options, timeout: options.timeout ?? REQUEST_TIMEOUTS.FILE })
 
@@ -174,7 +196,7 @@ export async function doRequestAndSaveToFile (url: string, destPath: string, opt
     )
   } catch (err) {
     remove(destPath)
-      .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err, ...lTags() }))
+      .catch(err => logger.error('Cannot remove %s after request failure.', destPath, { err }))
 
     throw buildRequestError(err)
   }
@@ -198,7 +220,7 @@ export function getProxyAgent () {
 
   const proxy = getProxy()
 
-  logger.info('Using proxy %s.', proxy, lTags())
+  logger.info('Using proxy %s.', proxy)
 
   const proxyAgentOptions = {
     keepAlive: true,

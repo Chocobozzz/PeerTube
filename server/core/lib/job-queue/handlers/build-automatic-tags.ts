@@ -1,5 +1,5 @@
 import { BuildAutomaticTagsPayload } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAndSaveCommentAutomaticTags, setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
 import { getServerAccount } from '@server/models/application/application.js'
@@ -8,14 +8,14 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MAccount } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 
-const lTags = loggerTagsFactory('job-queue')
+const logger = createLogger('job-queue')
 
 const BATCH_SIZE = 250
 
 export async function processBuildAutomaticTags (job: Job): Promise<void> {
   const payload = job.data as BuildAutomaticTagsPayload
 
-  logger.info('Processing build automatic tags in job %s.', job.id, { payload, ...lTags() })
+  logger.info('Processing build automatic tags in job %s.', job.id, { payload })
 
   const serverAccount = await getServerAccount()
   const accountId = payload.accountId
@@ -45,8 +45,7 @@ export async function processBuildAutomaticTags (job: Job): Promise<void> {
   logger.info('Processed build automatic tags in job %s.', job.id, {
     payload,
     rebuiltComments: totalRebuiltComments,
-    rebuiltVideos: totalRebuiltVideos,
-    ...lTags()
+    rebuiltVideos: totalRebuiltVideos
   })
 }
 

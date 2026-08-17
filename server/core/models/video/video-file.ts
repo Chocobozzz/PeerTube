@@ -8,7 +8,7 @@ import {
   type VideoFileStreamType,
   VideoResolution
 } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { extractVideo } from '@server/helpers/video.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildRemoteUrl } from '@server/lib/activitypub/url.js'
@@ -54,6 +54,8 @@ import { SequelizeModel, doesExist, parseAggregateResult, throwIfNotValid } from
 import { VideoInfohashModel } from './video-infohash.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
 import { VideoModel } from './video.js'
+
+const logger = createLogger()
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',

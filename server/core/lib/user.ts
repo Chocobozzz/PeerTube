@@ -8,7 +8,7 @@ import {
   UserRole,
   UserRoleType
 } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { UserModel } from '@server/models/user/user.js'
 import { Transaction } from 'sequelize'
@@ -27,6 +27,8 @@ import { Redis } from './redis.js'
 import { createLocalVideoChannelWithoutKeys } from './video-channel.js'
 import { createWatchLaterPlaylist } from './video-playlist.js'
 import { createPrivateAndPublicKeys } from '@server/helpers/peertube-crypto.js'
+
+const logger = createLogger()
 
 type ChannelNames = { name: string, displayName: string }
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
@@ -33,6 +33,8 @@ import {
   RegisteredServerSettings,
   UserRight
 } from '@peertube/peertube-models'
+
+const logger = createLogger()
 
 const pluginRouter = express.Router()
 

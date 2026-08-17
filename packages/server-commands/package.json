@@ -13,8 +13,8 @@
   },
   "type": "module",
   "devDependencies": {
-    "@types/superagent": "^8.1.9",
-    "@types/supertest": "^7.2.0",
+    "@types/superagent": "^8.1.11",
+    "@types/supertest": "^7.2.1",
     "supertest": "^7.2.2"
   },
   "scripts": {

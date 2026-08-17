@@ -1,5 +1,5 @@
 import { FileStorage, UserExportState, type FileStorageType, type UserExport, type UserExportStateType } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import {
   DOWNLOAD_PATHS,
@@ -20,6 +20,8 @@ import { doesExist } from '../shared/query.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
 import { getSort } from '../shared/sort.js'
 import { UserModel } from './user.js'
+
+const logger = createLogger()
 
 @Table({
   tableName: 'userExport',

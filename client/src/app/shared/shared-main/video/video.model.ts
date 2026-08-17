@@ -249,15 +249,15 @@ export class Video implements VideoServerModel {
 
   // ---------------------------------------------------------------------------
 
-  isBlockableBy (user: AuthUser) {
+  canBeBlockedBy (user: AuthUser) {
     return this.blacklisted !== true && user?.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
 
-  isUnblockableBy (user: AuthUser) {
+  canBeUnblockedBy (user: AuthUser) {
     return this.blacklisted === true && user?.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
 
-  isUpdatableBy (user: AuthUser) {
+  canBeUpdatedBy (user: AuthUser) {
     return user && this.isLocal === true && (
       user.isOwnerOfChannel(this.channel) ||
       user.isEditorOfChannel(this.channel) ||
@@ -265,16 +265,16 @@ export class Video implements VideoServerModel {
     )
   }
 
-  isStudioEditableBy (options: {
+  canBeStudioEditedBy (options: {
     user: AuthUser
     studioEnabled: boolean
   }) {
     return options.studioEnabled &&
       this.state?.id === VideoState.PUBLISHED &&
-      this.isUpdatableBy(options.user)
+      this.canBeUpdatedBy(options.user)
   }
 
-  isRemovableBy (user: AuthUser) {
+  canBeRemovedBy (user: AuthUser) {
     return user && this.isLocal === true && (
       user.isOwnerOfChannel(this.channel) ||
       user.isEditorOfChannel(this.channel) ||
@@ -292,13 +292,20 @@ export class Video implements VideoServerModel {
       )
   }
 
-  isLiveInfoAvailableBy (user: AuthUser) {
+  canDisplayLiveInfoBy (user: AuthUser) {
     return this.isLive &&
       user && this.isLocal === true && (
         user.isOwnerOfChannel(this.channel) ||
         user.isEditorOfChannel(this.channel) ||
         user.hasRight(UserRight.GET_ANY_LIVE)
       )
+  }
+
+  canBeReportedBy (user: AuthUser) {
+    if (!user) return false
+
+    return user.isOwnerOfChannel(this.channel) === false &&
+      user.isEditorOfChannel(this.channel) === false
   }
 
   // ---------------------------------------------------------------------------

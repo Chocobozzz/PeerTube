@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import cors from 'cors'
 import express from 'express'
 import { abuseRouter } from './abuse.js'
@@ -25,6 +25,8 @@ import { videoChannelRouter } from './video-channels/index.js'
 import { videoPlaylistRouter } from './video-playlist.js'
 import { videosRouter } from './videos/index.js'
 import { watchedWordsRouter } from './watched-words.js'
+
+const logger = createLogger()
 
 const apiRouter = express.Router()
 

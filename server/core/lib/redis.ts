@@ -3,7 +3,7 @@ import { exists } from '@server/helpers/custom-validators/misc.js'
 import { Redis as IoRedis, RedisOptions } from 'ioredis'
 import { readFileSync } from 'node:fs'
 import { ConnectionOptions } from 'node:tls'
-import { logger, loggerTagsFactory } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { generateRandomString } from '../helpers/utils.js'
 import { CONFIG } from '../initializers/config.js'
 import {
@@ -18,7 +18,7 @@ import {
   WEBSERVER
 } from '../initializers/constants.js'
 
-const lTags = loggerTagsFactory('redis')
+const logger = createLogger('redis')
 
 type StatKind = 'views' | 'downloads'
 
@@ -38,25 +38,25 @@ class Redis {
     this.initialized = true
 
     const redisMode = CONFIG.REDIS.SENTINEL.ENABLED ? 'sentinel' : 'standalone'
-    logger.info(`Connecting to Redis in "${redisMode}" mode...`, lTags())
+    logger.info(`Connecting to Redis in "${redisMode}" mode...`)
 
     this.client = new IoRedis(Redis.getRedisClientOptions('', { enableAutoPipelining: true }, true))
-    this.client.on('error', err => logger.error('Redis failed to connect', { err, ...lTags() }))
+    this.client.on('error', err => logger.error('Redis failed to connect', { err }))
     this.client.on('connect', () => {
-      logger.info('Connected to redis.', lTags())
+      logger.info('Connected to redis.')
 
       this.connected = true
     })
     this.client.on('reconnecting', ms => {
-      logger.error(`Reconnecting to redis in ${ms}.`, lTags())
+      logger.error(`Reconnecting to redis in ${ms}.`)
     })
     this.client.on('close', () => {
-      logger.error('Connection to redis has closed.', lTags())
+      logger.error('Connection to redis has closed.')
       this.connected = false
     })
 
     this.client.on('end', () => {
-      logger.error('Connection to redis has closed and no more reconnects will be done.', lTags())
+      logger.error('Connection to redis has closed and no more reconnects will be done.')
     })
 
     this.prefix = 'redis-' + WEBSERVER.HOST + '-'
@@ -70,7 +70,7 @@ class Redis {
       if (logOptions) {
         logger.info(
           `Using sentinel redis options`,
-          { sentinels: CONFIG.REDIS.SENTINEL.SENTINELS, name: CONFIG.REDIS.SENTINEL.MASTER_NAME, ...lTags() }
+          { sentinels: CONFIG.REDIS.SENTINEL.SENTINELS, name: CONFIG.REDIS.SENTINEL.MASTER_NAME }
         )
       }
 
@@ -105,7 +105,7 @@ class Redis {
     if (logOptions) {
       logger.info(
         `Using standalone redis options`,
-        { db: CONFIG.REDIS.DB, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT, path: CONFIG.REDIS.SOCKET, ...lTags() }
+        { db: CONFIG.REDIS.DB, host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT, path: CONFIG.REDIS.SOCKET }
       )
     }
 
@@ -571,7 +571,7 @@ class Redis {
     try {
       return JSON.parse(value)
     } catch (err) {
-      logger.warn('Cannot parse Redis key %s.', key, { err, ...lTags() })
+      logger.warn('Cannot parse Redis key %s.', key, { err })
       return null
     }
   }

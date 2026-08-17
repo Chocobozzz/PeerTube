@@ -8,3 +8,5 @@ export const VideoImportState = {
 } as const
 
 export type VideoImportStateType = typeof VideoImportState[keyof typeof VideoImportState]
+
+export const RETRYABLE_VIDEO_IMPORT_STATES: VideoImportStateType[] = [ VideoImportState.FAILED, VideoImportState.CANCELLED ]

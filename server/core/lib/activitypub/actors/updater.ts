@@ -1,6 +1,6 @@
 import { ActivityPubActor, ActorImageType } from '@peertube/peertube-models'
 import { resetSequelizeInstance, runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
@@ -11,6 +11,8 @@ import { getOrCreateAPOwner } from './get.js'
 import { updateActorImages } from './image.js'
 import { fetchActorFollowsCount } from './shared/index.js'
 import { getImagesInfoFromObject } from './shared/object-to-model-attributes.js'
+
+const logger = createLogger()
 
 export class APActorUpdater {
   private readonly accountOrChannel: MAccount | MChannel

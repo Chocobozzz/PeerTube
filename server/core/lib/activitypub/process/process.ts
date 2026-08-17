@@ -1,6 +1,6 @@
 import { Activity, ActivityType } from '@peertube/peertube-models'
 import { StatsManager } from '@server/lib/stat-manager.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorDefault, MActorSignature } from '../../../types/models/index.js'
 import { getAPId } from '../activity.js'
@@ -20,6 +20,8 @@ import { processUndoActivity } from './process-undo.js'
 import { processUpdateActivity } from './process-update.js'
 import { processViewActivity } from './process-view.js'
 import { processDownloadActivity } from './process-download.js'
+
+const logger = createLogger()
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,

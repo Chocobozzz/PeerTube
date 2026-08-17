@@ -1,11 +1,13 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CachePromise } from '@server/helpers/promise-cache.js'
 import { doRequestAndSaveToFile, PeerTubeRequestError } from '@server/helpers/requests.js'
 import { LRU_CACHE, STATIC_MAX_AGE } from '@server/initializers/constants.js'
 import express from 'express'
 import { LRUCache } from 'lru-cache'
 import { Model } from 'sequelize'
+
+const logger = createLogger()
 
 export type FileModel = {
   fileUrl: string

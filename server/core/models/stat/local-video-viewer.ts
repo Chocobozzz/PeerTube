@@ -392,7 +392,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
     }
 
     const queryOptions: QueryOptionsWithType<QueryTypes.SELECT> = {
-      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
       replacements: { videoId, startDate, endDate }
     }
 

@@ -1,7 +1,6 @@
 import { arrayify } from '@peertube/peertube-core-utils'
 import {
   ActivityPubActor,
-  ActivityPubActorType,
   ActivityUpdate,
   ActivityUpdateObject,
   CacheFileObject,
@@ -14,7 +13,7 @@ import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file.js'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
@@ -29,6 +28,8 @@ import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { checkUrlsSameHost, isLocalUrl } from '../url.js'
 import { APVideoUpdater, canVideoBeFederated, getOrCreateAPVideo, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
+const logger = createLogger()
+
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate<ActivityUpdateObject>>) {
   const { activity, byActor } = options
 
@@ -39,7 +40,7 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
     return retryTransactionWrapper(() => processUpdateVideo(byActor, activity as ActivityUpdate<VideoObject | string>))
   }
 
-  if (isActorTypeValid(objectType as ActivityPubActorType)) {
+  if (isActorTypeValid(objectType)) {
     // An actor can only update itself: the object id must be the actor that signed the activity
     const actorObjectId = getAPId(object as ActivityPubActor)
     if (actorObjectId !== byActor.url) {

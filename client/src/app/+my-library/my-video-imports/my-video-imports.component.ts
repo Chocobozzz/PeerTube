@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit, viewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { ActionDropdownComponent, DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
@@ -7,7 +7,7 @@ import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { VideoImportService } from '@app/shared/shared-main/video/video-import.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { ActorCellComponent } from '@app/shared/shared-tables/actor-cell.component'
-import { VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
+import { RETRYABLE_VIDEO_IMPORT_STATES, VideoImport, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
 import { NumberFormatterPipe } from '../../shared/shared-main/common/number-formatter.pipe'
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../../shared/shared-tables/table.component'
 
@@ -34,6 +34,45 @@ export class MyVideoImportsComponent implements OnInit {
   readonly table = viewChild<TableComponent<VideoImport, DataLoaderParameter>>('table')
 
   inputFilters: AdvancedFilterDef<DataLoaderParameter>[] = [
+    {
+      key: 'state',
+      type: 'select',
+      title: $localize`State`,
+      clearable: true,
+      items: [
+        {
+          // Filter require a string type
+          id: '' + VideoImportState.PENDING,
+          label: $localize`PENDING`,
+          classes: [ 'pt-badge', this.getVideoImportStateClass(VideoImportState.PENDING) ]
+        },
+        {
+          id: '' + VideoImportState.PROCESSING,
+          label: $localize`PROCESSING`,
+          classes: [ 'pt-badge', this.getVideoImportStateClass(VideoImportState.PROCESSING) ]
+        },
+        {
+          id: '' + VideoImportState.SUCCESS,
+          label: $localize`SUCCESS`,
+          classes: [ 'pt-badge', this.getVideoImportStateClass(VideoImportState.SUCCESS) ]
+        },
+        {
+          id: '' + VideoImportState.FAILED,
+          label: $localize`FAILED`,
+          classes: [ 'pt-badge', this.getVideoImportStateClass(VideoImportState.FAILED) ]
+        },
+        {
+          id: '' + VideoImportState.REJECTED,
+          label: $localize`REJECTED`,
+          classes: [ 'pt-badge', this.getVideoImportStateClass(VideoImportState.REJECTED) ]
+        },
+        {
+          id: '' + VideoImportState.CANCELLED,
+          label: $localize`CANCELLED`,
+          classes: [ 'pt-badge', this.getVideoImportStateClass(VideoImportState.CANCELLED) ]
+        }
+      ]
+    },
     {
       key: 'targetUrl',
       type: 'text',
@@ -90,7 +129,7 @@ export class MyVideoImportsComponent implements OnInit {
         label: $localize`Retry import`,
         iconName: 'refresh',
         handler: videoImport => this.retryImport(videoImport),
-        isDisplayed: videoImport => this.isVideoImportFailed(videoImport)
+        isDisplayed: videoImport => RETRYABLE_VIDEO_IMPORT_STATES.includes(videoImport.state.id)
       },
       {
         label: $localize`Delete import task`,
@@ -187,9 +226,20 @@ export class MyVideoImportsComponent implements OnInit {
       videoChannelSyncId?: number
       targetUrl?: string
       search?: string
+      state?: string // Filter requires a string type
     }
   ) {
-    return this.videoImportService.listMyVideoImports({ ...options, includeCollaborations: true })
+    const { state, ...otherOptions } = options
+
+    return this.videoImportService.listMyVideoImports({
+      ...otherOptions,
+
+      stateOneOf: state
+        ? [ +state as VideoImportStateType ]
+        : undefined,
+
+      includeCollaborations: true
+    })
   }
 
   private _hasExpandedRow (videoImport: VideoImport) {

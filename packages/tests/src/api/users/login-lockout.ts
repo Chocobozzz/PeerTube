@@ -80,7 +80,7 @@ describe('Test login lockout', function () {
       expectedStatus: HttpStatusCode.BAD_REQUEST_400
     })
 
-    expectGenericInvalidGrant(body as unknown as PeerTubeProblemDocument)
+    expectGenericInvalidGrant(body)
   }
 
   before(async function () {

@@ -1,8 +1,5 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { FfmpegCommand } from 'fluent-ffmpeg'
-import { readFile } from 'fs/promises'
 import { wait } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
@@ -29,6 +26,9 @@ import {
   testFfmpegStreamError,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
+import { FfmpegCommand } from 'fluent-ffmpeg'
+import { readFile } from 'fs/promises'
 
 describe('Test runner live transcoding', function () {
   let server: PeerTubeServer
@@ -240,7 +240,7 @@ describe('Test runner live transcoding', function () {
 
       await server.runnerJobs.success({ jobUUID, runnerToken, jobToken: acceptedJob.jobToken, payload: {} })
 
-      await wait(1500)
+      await server.live.waitUntilEnded({ videoId: video.uuid })
       await waitJobs([ server ])
 
       {

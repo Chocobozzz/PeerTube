@@ -6,8 +6,10 @@ import {
   isSignatureValueValid
 } from '../../../helpers/custom-validators/activitypub/signature.js'
 import { isDateValid } from '../../../helpers/custom-validators/misc.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { areValidationErrors } from '../shared/index.js'
+
+const logger = createLogger()
 
 const signatureValidator = [
   body('signature.type')

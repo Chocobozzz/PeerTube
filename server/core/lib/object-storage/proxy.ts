@@ -1,6 +1,6 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildReinjectVideoFileTokenQuery } from '@server/controllers/shared/m3u8-playlist.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { StreamReplacer } from '@server/helpers/stream-replacer.js'
 import { MVideo } from '@server/types/models/index.js'
 import express from 'express'
@@ -9,6 +9,8 @@ import { injectQueryToPlaylistUrls } from '../hls.js'
 import { getHLSFileReadStream, getWebVideoFileReadStream } from './videos.js'
 
 import type { GetObjectCommandOutput } from '@aws-sdk/client-s3'
+
+const logger = createLogger()
 
 export async function proxifyWebVideoFile (options: {
   req: express.Request

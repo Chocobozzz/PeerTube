@@ -120,7 +120,9 @@ class PeerTubePlugin extends Plugin {
       const muted = playerOptions.muted !== undefined ? playerOptions.muted : getStoredMute()
       if (muted !== undefined) this.player.muted(muted)
 
-      const savedPlaybackRate = this.options.playbackRate ?? getStoredPlaybackRate()
+      const savedPlaybackRate = this.options.isLive()
+        ? undefined
+        : this.options.playbackRate ?? getStoredPlaybackRate()
       if (savedPlaybackRate !== undefined) {
         this.currentPlaybackRate = savedPlaybackRate
         this.player.playbackRate(this.currentPlaybackRate)
@@ -137,6 +139,9 @@ class PeerTubePlugin extends Plugin {
       })
 
       this.player.on('ratechange', () => {
+        // Live playback rate is forced to 1 and can't be changed by the user, so don't track/save it
+        if (this.options.isLive()) return
+
         this.currentPlaybackRate = this.player.playbackRate()
         this.player.defaultPlaybackRate(this.currentPlaybackRate)
 
@@ -320,7 +325,13 @@ class PeerTubePlugin extends Plugin {
     if (this.hasAutoplay() !== false) this.player.addClass('vjs-has-autoplay')
     else this.player.removeClass('vjs-has-autoplay')
 
-    if (this.currentPlaybackRate && this.currentPlaybackRate !== 1) {
+    if (this.options.isLive()) {
+      if (this.player.playbackRate() !== 1) {
+        debugLogger('Resetting playback rate to 1 because this is a live')
+
+        this.player.playbackRate(1)
+      }
+    } else if (this.currentPlaybackRate && this.currentPlaybackRate !== 1) {
       debugLogger('Setting playback rate to ' + this.currentPlaybackRate)
 
       this.player.playbackRate(this.currentPlaybackRate)

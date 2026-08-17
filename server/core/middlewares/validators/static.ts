@@ -6,7 +6,7 @@ import {
   isUUIDValid,
   toBooleanOrNull
 } from '@server/helpers/custom-validators/misc.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { LRU_CACHE } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -16,6 +16,8 @@ import { param, query } from 'express-validator'
 import { LRUCache } from 'lru-cache'
 import { basename } from 'path'
 import { areValidationErrors, checkCanAccessVideoStaticFiles, isValidVideoPasswordHeader } from './shared/index.js'
+
+const logger = createLogger()
 
 type LRUValue = {
   allowed: boolean

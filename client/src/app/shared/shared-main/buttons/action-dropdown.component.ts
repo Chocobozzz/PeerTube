@@ -67,6 +67,7 @@ export class ActionDropdownComponent<T, D = never> implements OnChanges {
   readonly buttonStyled = input(true, { transform: booleanAttribute })
 
   readonly label = input<string>(undefined)
+  readonly ariaLabel = input<string>($localize`Open actions`)
   readonly theme = input<DropdownTheme>('secondary')
 
   readonly openChange = output<boolean>()

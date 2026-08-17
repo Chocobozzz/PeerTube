@@ -88,7 +88,7 @@ export async function presetVOD (options: {
       fps,
       streamType,
 
-      videoType: 'vod' as 'vod'
+      videoType: 'vod'
     })
 
     if (!builderResult) {

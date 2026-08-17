@@ -1,7 +1,7 @@
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityPubActor, APObjectId } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { ActorLoadByUrlType, loadActorByUrl } from '@server/lib/model-loaders/index.js'
 import {
@@ -15,6 +15,8 @@ import { fetchAPObjectIfNeeded, getAPId } from '../activity.js'
 import { checkUrlsSameHost } from '../url.js'
 import { refreshActorIfNeeded } from './refresh.js'
 import { APActorCreator, fetchRemoteActor } from './shared/index.js'
+
+const logger = createLogger()
 
 // FIXME: use an object for params
 function getOrCreateAPActor (

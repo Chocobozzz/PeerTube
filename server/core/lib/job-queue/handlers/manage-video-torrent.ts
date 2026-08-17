@@ -9,7 +9,9 @@ import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { Job } from 'bullmq'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
+
+const logger = createLogger()
 
 async function processManageVideoTorrent (job: Job) {
   const payload = job.data as ManageVideoTorrentPayload
@@ -35,35 +37,37 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
 
   if (!video || !file) return
 
-  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+  await logger.withContext([ video.uuid ], async () => {
+    const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  try {
-    await video.reload()
-    await file.reload()
+    try {
+      await video.reload()
+      await file.reload()
 
-    const { infoHash, torrentFilename } = await createTorrentForFile(video, file)
+      const { infoHash, torrentFilename } = await createTorrentForFile(video, file)
 
-    const saved = await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
-        // Refresh videoFile because the createTorrentAndSetInfoHash could be long
-        // Also reload on every attempt: after a rollback the previous instance has no changed attribute left to save
-        const refreshedFile = await VideoFileModel.loadWithVideo(file.id, transaction)
-        if (!refreshedFile) return false
+      const saved = await retryTransactionWrapper(() => {
+        return sequelizeTypescript.transaction(async transaction => {
+          // Refresh videoFile because the createTorrentAndSetInfoHash could be long
+          // Also reload on every attempt: after a rollback the previous instance has no changed attribute left to save
+          const refreshedFile = await VideoFileModel.loadWithVideo(file.id, transaction)
+          if (!refreshedFile) return false
 
-        refreshedFile.torrentFilename = torrentFilename
-        await refreshedFile.save({ transaction })
+          refreshedFile.torrentFilename = torrentFilename
+          await refreshedFile.save({ transaction })
 
-        await VideoInfohashModel.replaceFileInfohash(refreshedFile.id, infoHash, transaction)
+          await VideoInfohashModel.replaceFileInfohash(refreshedFile.id, infoHash, transaction)
 
-        return true
+          return true
+        })
       })
-    })
 
-    // File does not exist anymore, remove the generated torrent
-    if (!saved) await file.removeTorrent()
-  } finally {
-    fileMutexReleaser()
-  }
+      // File does not exist anymore, remove the generated torrent
+      if (!saved) await file.removeTorrent()
+    } finally {
+      fileMutexReleaser()
+    }
+  })
 }
 
 async function doUpdateMetadataAction (payload: ManageVideoTorrentPayload & { action: 'update-metadata' }) {
@@ -76,13 +80,23 @@ async function doUpdateMetadataAction (payload: ManageVideoTorrentPayload & { ac
   if ((!video && !streamingPlaylist) || !file) return
 
   const extractedVideo = extractVideo(video || streamingPlaylist)
-  const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(extractedVideo.uuid)
 
-  try {
-    await updateTorrentForFileAndSave(video || streamingPlaylist, file)
-  } finally {
-    fileMutexReleaser()
-  }
+  await logger.withContext([ extractedVideo.uuid ], async () => {
+    const fileMutexReleaser = await VideoPathManager.Instance.lockFiles(extractedVideo.uuid)
+
+    try {
+      // Reload the file: another job may have updated it (its torrent filename for example) while we were waiting for the mutex
+      const refreshedFile = await VideoFileModel.load(file.id)
+      if (!refreshedFile) {
+        logger.debug('Do not update torrent metadata for file %d: does not exist anymore.', file.id)
+        return
+      }
+
+      await updateTorrentForFileAndSave(video || streamingPlaylist, refreshedFile)
+    } finally {
+      fileMutexReleaser()
+    }
+  })
 }
 
 async function loadVideoOrLog (videoId: number) {

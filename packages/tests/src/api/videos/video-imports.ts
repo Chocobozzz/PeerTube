@@ -323,6 +323,23 @@ describe('Test video imports', function () {
         }
       })
 
+      it('Should filter my imports on stateOneOf', async function () {
+        const { total, data: videoImports } = await servers[0].videoImports.listMyVideoImports({
+          stateOneOf: [ VideoImportState.SUCCESS ]
+        })
+
+        const totalExpected = areYoutubeImportTestsDisabled()
+          ? 2
+          : 3
+
+        expect(total).to.equal(totalExpected)
+        expect(videoImports).to.have.lengthOf(totalExpected)
+
+        for (const videoImport of videoImports) {
+          expect(videoImport.state.id).to.equal(VideoImportState.SUCCESS)
+        }
+      })
+
       it('Should import a video on server 2 with some fields', async function () {
         if (areYoutubeImportTestsDisabled()) return
 
@@ -668,6 +685,34 @@ describe('Test video imports', function () {
 
       const video = await server.videos.getWithToken({ id: data[0].video.id })
       expect(video.state.id).to.equal(VideoState.PUBLISHED)
+    })
+
+    it('Should retry a cancelled import job', async function () {
+      this.timeout(60_000)
+
+      await server.jobs.pauseJobQueue()
+
+      const cancelledImportId = await importVideo('to retry from cancel')
+      await server.videoImports.cancel({ importId: cancelledImportId })
+
+      await server.jobs.resumeJobQueue()
+      await waitJobs([ server ])
+
+      {
+        const { data } = await server.videoImports.listMyVideoImports({ id: cancelledImportId })
+        expect(data[0].state.id).to.equal(VideoImportState.CANCELLED)
+      }
+
+      await server.videoImports.retry({ importId: cancelledImportId })
+      await waitJobs([ server ])
+
+      {
+        const { data } = await server.videoImports.listMyVideoImports({ id: cancelledImportId })
+        expect(data[0].state.id).to.equal(VideoImportState.SUCCESS)
+
+        const video = await server.videos.getWithToken({ id: data[0].video.id })
+        expect(video.state.id).to.equal(VideoState.PUBLISHED)
+      }
     })
 
     after(async function () {

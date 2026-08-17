@@ -1,7 +1,9 @@
 import { arrayify } from '@peertube/peertube-core-utils'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import isPlainObject from 'lodash-es/isPlainObject.js'
 import { ModelStatic, Sequelize, Model as SequelizeModel } from 'sequelize'
+
+const logger = createLogger()
 
 /**
  * Build Sequelize models from sequelize raw query (that must use { nest: true } options)

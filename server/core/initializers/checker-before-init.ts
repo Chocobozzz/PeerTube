@@ -1,12 +1,16 @@
 import { promisify0 } from '@peertube/peertube-core-utils'
-import config from 'config'
 import { parseSemVersion } from '../helpers/core-utils.js'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
+import { getConfigModule } from './config.js'
+
+const logger = createLogger()
 
 // ONLY USE CORE MODULES IN THIS FILE!
 
 // Check the config files
 export function checkMissedConfig () {
+  const config = getConfigModule()
+
   const required = [
     'listen.port',
     'listen.hostname',

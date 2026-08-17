@@ -1,4 +1,4 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { MInfohash } from '@server/types/models/video/video-infohash.js'
 import memoizee from 'memoizee'
 import { Op, Transaction } from 'sequelize'
@@ -7,6 +7,8 @@ import { MEMOIZE_LENGTH, MEMOIZE_TTL } from '../../initializers/constants.js'
 import { SequelizeModel, doesExist } from '../shared/index.js'
 import { VideoFileModel } from './video-file.js'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist.js'
+
+const logger = createLogger()
 
 @Table({
   tableName: 'videoInfohash',

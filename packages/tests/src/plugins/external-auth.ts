@@ -444,7 +444,7 @@ describe('Test external auth plugins', function () {
     expect(redirectUrl).to.equal('https://example.com/redirectUrl')
   })
 
-  it('Should call the plugin\'s onLogout method with the request', async function () {
+  it('Should call the plugin\'s onLogout method with the request headers and cookies', async function () {
     const resLogin = await loginExternal({
       server,
       npmName: 'test-external-auth-three',
@@ -452,8 +452,12 @@ describe('Test external auth plugins', function () {
       username: 'cid'
     })
 
-    const { redirectUrl } = await server.login.logout({ token: resLogin.access_token })
-    expect(redirectUrl).to.equal('https://example.com/redirectUrl?access_token=' + resLogin.access_token)
+    const { redirectUrl } = await server.login.logout({
+      token: resLogin.access_token,
+      headers: { cookie: 'session_id=toto' }
+    })
+
+    expect(redirectUrl).to.equal('https://example.com/redirectUrl?access_token=' + resLogin.access_token + '&session_id=toto')
   })
 
   it('Should redirect to an external site after login if externalRedirectUri is set', async function () {

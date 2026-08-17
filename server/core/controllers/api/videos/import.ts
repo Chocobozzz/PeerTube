@@ -17,12 +17,12 @@ import express from 'express'
 import { move } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
 import { decode } from 'magnet-uri'
-import parseTorrent, { Instance } from 'parse-torrent'
+import parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { JobQueue } from '../../../lib/job-queue/job-queue.js'
@@ -35,6 +35,8 @@ import {
   videoImportDeleteValidator,
   videoImportRetryValidator
 } from '../../../middlewares/index.js'
+
+const logger = createLogger()
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -140,42 +142,44 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
     importType: 'torrent'
   })
 
-  const thumbnails = await processThumbnails(req, video)
+  await logger.withContext([ video.uuid ], async () => {
+    const thumbnails = await processThumbnails(req, video)
 
-  const videoImport = await insertFromImportIntoDB({
-    video,
-    thumbnails,
-    videoChannel: res.locals.videoChannel,
-    tags: body.tags || undefined,
-    user,
-    videoPasswords: body.videoPasswords,
-    videoImportAttributes: {
-      magnetUri,
-      torrentName,
-      state: VideoImportState.PENDING,
-      userId: user.id
+    const videoImport = await insertFromImportIntoDB({
+      video,
+      thumbnails,
+      videoChannel: res.locals.videoChannel,
+      tags: body.tags || undefined,
+      user,
+      videoPasswords: body.videoPasswords,
+      videoImportAttributes: {
+        magnetUri,
+        torrentName,
+        state: VideoImportState.PENDING,
+        userId: user.id
+      }
+    })
+
+    const payload: VideoImportPayload = {
+      type: torrentfile
+        ? 'torrent-file'
+        : 'magnet-uri',
+
+      videoImportId: videoImport.id,
+      preventException: false,
+      generateTranscription: body.generateTranscription,
+      torrentPath: torrentfile?.path ?? null
     }
+
+    videoImport.payload = payload
+    await videoImport.save()
+
+    await JobQueue.Instance.createJob({ type: 'video-import', payload })
+
+    auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
+
+    return res.json(videoImport.toFormattedJSON()).end()
   })
-
-  const payload: VideoImportPayload = {
-    type: torrentfile
-      ? 'torrent-file'
-      : 'magnet-uri',
-
-    videoImportId: videoImport.id,
-    preventException: false,
-    generateTranscription: body.generateTranscription,
-    torrentPath: torrentfile?.path ?? null
-  }
-
-  videoImport.payload = payload
-  await videoImport.save()
-
-  await JobQueue.Instance.createJob({ type: 'video-import', payload })
-
-  auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
-
-  return res.json(videoImport.toFormattedJSON()).end()
 }
 
 function statusFromYtDlImportError (err: YoutubeDlImportError): HttpStatusCodeType {
@@ -279,5 +283,5 @@ function extractNameFromArray (name: string | string[]) {
 async function parseTorrentPromise (torrentFilePath: string) {
   const buf = await readFile(torrentFilePath)
 
-  return parseTorrent(buf) as Instance
+  return parseTorrent(buf)
 }

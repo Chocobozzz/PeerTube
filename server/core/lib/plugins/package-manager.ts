@@ -4,9 +4,11 @@ import { outputJSON, pathExists, remove } from 'fs-extra/esm'
 import { readFile, rename, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { isNpmPluginNameValid } from '../../helpers/custom-validators/plugins.js'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { getLatestPluginVersion } from './plugin-index.js'
+
+const logger = createLogger()
 
 export async function installNpmPlugin (npmName: string, versionArg?: string) {
   // Security check

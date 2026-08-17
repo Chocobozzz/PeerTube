@@ -1,12 +1,14 @@
 import { ContextType } from '@peertube/peertube-models'
 import { signAndContextify } from '@server/helpers/activity-pub-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@server/initializers/constants.js'
 import { buildDigestFromWorker, signJsonLDObjectFromWorker } from '@server/lib/worker/parent-process.js'
 import { ActorReservedModel } from '@server/models/actor/actor-reserved.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { getContextFilter } from '../context.js'
+
+const logger = createLogger()
 
 type Payload<T> = { body: T, contextType: ContextType, signatureActorId?: number }
 

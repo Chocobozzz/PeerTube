@@ -18,7 +18,7 @@ import { readdir, readFile } from 'fs/promises'
 import handlebars, { HelperOptions } from 'handlebars'
 import { createTransport, Transporter } from 'nodemailer'
 import { join } from 'path'
-import { bunyanLogger, logger } from '../helpers/logger.js'
+import { bunyanLogger, createLogger } from '../helpers/logger.js'
 import { CONFIG, isEmailEnabled } from '../initializers/config.js'
 import { WEBSERVER } from '../initializers/constants.js'
 import { MRegistration, MUserExport, MUserImport } from '../types/models/index.js'
@@ -26,6 +26,8 @@ import { loginUrl, myAccountImportExportUrl } from './client-urls.js'
 import { JobQueue } from './job-queue/index.js'
 import { Hooks } from './plugins/hooks.js'
 import { ServerConfigManager } from './server-config-manager.js'
+
+const logger = createLogger()
 
 interface MailMessage {
   to: string[] | string

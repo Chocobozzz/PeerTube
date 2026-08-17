@@ -1,4 +1,7 @@
 import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/database.js'
+import { ApplicationModel } from '@server/models/application/application.js'
+
+const MIGRATION_NAME = 'peertube-7.2'
 
 run()
   .then(() => process.exit(0))
@@ -15,6 +18,8 @@ async function run () {
     const query = 'UPDATE "video" SET "comments" = (SELECT COUNT(*) FROM "videoComment" WHERE "videoComment"."videoId" = "video"."id")'
     await sequelizeTypescript.query(query)
   }
+
+  await ApplicationModel.setManualMigrationScriptRun(MIGRATION_NAME)
 
   console.log('Done!')
 }

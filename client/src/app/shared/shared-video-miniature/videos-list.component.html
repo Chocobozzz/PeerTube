@@ -45,6 +45,7 @@
             [displayAsRow]="displayAsRow()"
             [displayVideoActions]="displayVideoActions()"
             [displayOptions]="displayOptions"
+            [headingLevel]="3"
             (videoBlocked)="removeVideoFromArray(live)"
             (videoRemoved)="removeVideoFromArray(live)"
           >
@@ -73,6 +74,7 @@
           [displayAsRow]="displayAsRow()"
           [displayVideoActions]="displayVideoActions()"
           [displayOptions]="displayOptions"
+          [headingLevel]="getVideosHeadingLevel()"
           (videoBlocked)="removeVideoFromArray(video)"
           (videoRemoved)="removeVideoFromArray(video)"
         >

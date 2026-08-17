@@ -11,7 +11,7 @@ import { maskSecret } from '@peertube/peertube-core-utils'
 import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { MOAuthClient } from '@server/types/models/index.js'
 import express from 'express'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { OAuthClientModel } from '../../models/oauth/oauth-client.js'
 import { Hooks } from '../plugins/hooks.js'
@@ -20,6 +20,8 @@ import { notifyOnLoginSuccess } from './login-notifier.js'
 import { TooLongPasswordError } from './oauth-errors.js'
 import { buildToken, getAccessToken, getRefreshToken, revokeToken, saveToken } from './oauth-token.js'
 import { checkUserNotBlockedOrThrow, getUserOrThrow } from './oauth-user.js'
+
+const logger = createLogger()
 
 /**
  * Reimplement some functions of OAuth2Server to inject external auth methods

@@ -1,6 +1,5 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -11,6 +10,7 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test logs', function () {
   let server: PeerTubeServer
@@ -94,7 +94,7 @@ describe('Test logs', function () {
     it('Should filter by tag', async function () {
       const now = new Date()
 
-      const { uuid } = await server.videos.upload({ attributes: { name: 'video 6' } })
+      const { uuid, shortUUID } = await server.videos.upload({ attributes: { name: 'video 6' } })
       await waitJobs([ server ])
 
       {
@@ -102,14 +102,37 @@ describe('Test logs', function () {
         expect(body).to.have.lengthOf(0)
       }
 
-      {
-        const body = await logsCommand.getLogs({ startDate: now, level: 'debug', tagsOneOf: [ uuid ] })
+      for (const tag of [ uuid, shortUUID ]) {
+        const body = await logsCommand.getLogs({ startDate: now, level: 'debug', tagsOneOf: [ tag ] })
         expect(body).to.not.have.lengthOf(0)
 
         for (const line of body) {
           expect(line.tags).to.contain(uuid)
         }
       }
+    })
+
+    it('Should tag transcoding job logs with the video uuid', async function () {
+      this.timeout(60000)
+
+      await server.config.enableMinimumTranscoding()
+
+      const now = new Date()
+
+      const { uuid } = await server.videos.upload({ attributes: { name: 'video 6b' } })
+      await waitJobs([ server ])
+
+      const body = await logsCommand.getLogs({ startDate: now, level: 'debug', tagsOneOf: [ uuid ] })
+      const logsString = JSON.stringify(body)
+
+      expect(body).to.not.have.lengthOf(0)
+      expect(logsString.includes('Processing transcoding job')).to.be.true
+
+      for (const line of body) {
+        expect(line.tags).to.contain(uuid)
+      }
+
+      await server.config.disableTranscoding()
     })
 
     it('Should log ping/HTTP requests', async function () {

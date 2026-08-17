@@ -1,4 +1,4 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { JOB_CONCURRENCY, WORKER_THREADS } from '@server/initializers/constants.js'
 import { join } from 'path'
 import { Piscina } from 'piscina'
@@ -7,6 +7,8 @@ import type createTorrentPromise from './workers/create-torrent.js'
 import type httpBroadcast from './workers/http-broadcast.js'
 import type httpUnicast from './workers/http-unicast.js'
 import type signJsonLDObject from './workers/sign-json-ld-object.js'
+
+const logger = createLogger()
 
 // ---------------------------------------------------------------------------
 

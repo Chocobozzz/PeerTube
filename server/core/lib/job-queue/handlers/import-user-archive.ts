@@ -1,20 +1,20 @@
-import { Job } from 'bullmq'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
 import { ImportUserArchivePayload } from '@peertube/peertube-models'
-import { UserImportModel } from '@server/models/user/user-import.js'
-import { UserImporter } from '@server/lib/user-import-export/user-importer.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { Emailer } from '@server/lib/emailer.js'
+import { UserImporter } from '@server/lib/user-import-export/user-importer.js'
+import { UserImportModel } from '@server/models/user/user-import.js'
+import { Job } from 'bullmq'
 
-const lTags = loggerTagsFactory('user-import')
+const logger = createLogger('user-import')
 
 export async function processImportUserArchive (job: Job): Promise<void> {
   const payload = job.data as ImportUserArchivePayload
   const importModel = await UserImportModel.load(payload.userImportId)
 
-  logger.info(`Processing importing user archive ${payload.userImportId} in job ${job.id}`, lTags())
+  logger.info(`Processing importing user archive ${payload.userImportId} in job ${job.id}`)
 
   if (!importModel) {
-    logger.info(`User import ${payload.userImportId} does not exist anymore, do not create import data.`, lTags())
+    logger.info(`User import ${payload.userImportId} does not exist anymore, do not create import data.`)
     return
   }
 
@@ -24,7 +24,7 @@ export async function processImportUserArchive (job: Job): Promise<void> {
   try {
     await Emailer.Instance.addUserImportSuccessJob(importModel)
 
-    logger.info(`User import ${payload.userImportId} ended`, lTags())
+    logger.info(`User import ${payload.userImportId} ended`)
   } catch (err) {
     await Emailer.Instance.addUserImportErroredJob(importModel)
 

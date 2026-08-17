@@ -1,12 +1,14 @@
 import express from 'express'
 import { handleToNameAndHost } from '@server/helpers/actors.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
 import { MActorAccountId, MUserAccountId } from '@server/types/models/index.js'
 import { BlockStatus } from '@peertube/peertube-models'
 import { apiRateLimiter, asyncMiddleware, blocklistStatusValidator, optionalAuthenticate } from '../../middlewares/index.js'
+
+const logger = createLogger()
 
 const blocklistRouter = express.Router()
 

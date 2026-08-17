@@ -38,6 +38,8 @@ export class VideosSelectionComponent implements AfterContentInit {
 
   readonly getVideosObservableFunction = input<(page: number, sort?: VideoSortField) => Observable<ResultList<Video>>>(undefined)
 
+  readonly headingLevel = input(2)
+
   readonly templates = contentChildren(PeerTubeTemplateDirective)
 
   readonly selection = model<SelectionType>({})

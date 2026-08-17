@@ -7,7 +7,7 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
   VIDEO_CATEGORIES,
@@ -56,6 +56,8 @@ import { transcodingRouter } from './transcoding.js'
 import { updateRouter } from './update.js'
 import { uploadRouter } from './upload.js'
 import { viewRouter } from './view.js'
+
+const logger = createLogger()
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()

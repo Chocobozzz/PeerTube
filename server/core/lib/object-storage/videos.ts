@@ -1,4 +1,3 @@
-import { logger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { MVideo, MVideoCaption, MVideoFile, MVideoPrivacy, MVideoUUID } from '@server/types/models/index.js'
@@ -15,9 +14,9 @@ import {
 } from './keys.js'
 import {
   createObjectReadStream,
-  lTags,
   listKeysOfPrefix,
   makeAvailable,
+  objectStorageLogger as logger,
   removeObject,
   removeObjectByFullKey,
   removePrefix,
@@ -168,7 +167,7 @@ export function removeCaptionObjectStorage (videoCaption: MVideoCaption) {
 export async function makeHLSFileAvailable (video: MVideoUUID, filename: string, destination: string) {
   const key = generateHLSObjectStorageKey(video, filename)
 
-  logger.info('Fetching HLS file %s from object storage to %s.', key, destination, lTags())
+  logger.info('Fetching HLS file %s from object storage to %s.', key, destination)
 
   await makeAvailable({
     key,
@@ -176,7 +175,7 @@ export async function makeHLSFileAvailable (video: MVideoUUID, filename: string,
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
   })
 
-  logger.debug('Fetched HLS file %s from object storage to %s.', key, destination, lTags())
+  logger.debug('Fetched HLS file %s from object storage to %s.', key, destination)
 
   return destination
 }
@@ -184,7 +183,7 @@ export async function makeHLSFileAvailable (video: MVideoUUID, filename: string,
 export async function makeWebVideoFileAvailable (filename: string, destination: string) {
   const key = generateWebVideoObjectStorageKey(filename)
 
-  logger.info('Fetching Web Video file %s from object storage to %s.', key, destination, lTags())
+  logger.info('Fetching Web Video file %s from object storage to %s.', key, destination)
 
   await makeAvailable({
     key,
@@ -198,7 +197,7 @@ export async function makeWebVideoFileAvailable (filename: string, destination: 
 export async function makeOriginalFileAvailable (keptOriginalFilename: string, destination: string) {
   const key = generateOriginalVideoObjectStorageKey(keptOriginalFilename)
 
-  logger.info('Fetching Original Video file %s from object storage to %s.', key, destination, lTags())
+  logger.info('Fetching Original Video file %s from object storage to %s.', key, destination)
 
   await makeAvailable({
     key,
@@ -212,7 +211,7 @@ export async function makeOriginalFileAvailable (keptOriginalFilename: string, d
 export async function makeCaptionFileAvailable (filename: string, destination: string) {
   const key = generateCaptionObjectStorageKey(filename)
 
-  logger.info('Fetching Caption file %s from object storage to %s.', key, destination, lTags())
+  logger.info('Fetching Caption file %s from object storage to %s.', key, destination)
 
   await makeAvailable({
     key,

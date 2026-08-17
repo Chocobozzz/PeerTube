@@ -1,8 +1,8 @@
 import Bluebird from 'bluebird'
 import { randomInt } from 'node:crypto'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export abstract class AbstractScheduler {
   protected abstract schedulerIntervalMs: number
@@ -61,7 +61,7 @@ export abstract class AbstractScheduler {
     try {
       await this.internalExecute()
     } catch (err) {
-      logger.error('Cannot execute ' + this.constructor.name + ' scheduler.', { err, ...lTags() })
+      logger.error('Cannot execute ' + this.constructor.name + ' scheduler.', { err })
     } finally {
       this.isRunning = false
     }

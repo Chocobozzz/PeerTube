@@ -1,4 +1,4 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerAccount } from '@server/models/application/application.js'
@@ -16,6 +16,8 @@ import {
 import { AccountBlocklistModel } from '../models/blocklist/account-blocklist.js'
 import { BlocklistLogModel } from '../models/blocklist/blocklist-log.js'
 import { ServerBlocklistModel } from '../models/blocklist/server-blocklist.js'
+
+const logger = createLogger()
 
 export async function addAccountInBlocklist (options: {
   byAccountId: number

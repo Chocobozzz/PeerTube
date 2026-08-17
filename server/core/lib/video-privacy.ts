@@ -1,12 +1,12 @@
 import { FileStorage, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { MVideo, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { move } from 'fs-extra/esm'
 import { join } from 'path'
 import { updateHLSFilesACL, updateWebVideoFileACL } from './object-storage/index.js'
 
-const lTags = loggerTagsFactory('video-privacy')
+const logger = createLogger('video-privacy')
 
 const validPrivacySet = new Set<VideoPrivacyType>([
   VideoPrivacy.PRIVATE,
@@ -80,7 +80,7 @@ async function moveFiles (options: {
       try {
         await updateWebVideoFileACL(video, file)
       } catch (err) {
-        logger.error(objectStorageErrorMsg, { err, ...lTags('object-storage', video.uuid) })
+        logger.error(objectStorageErrorMsg, { err })
       }
     }
   }
@@ -94,7 +94,7 @@ async function moveFiles (options: {
       try {
         await updateHLSFilesACL(video)
       } catch (err) {
-        logger.error(objectStorageErrorMsg, { err, ...lTags('object-storage', video.uuid) })
+        logger.error(objectStorageErrorMsg, { err })
       }
     }
   }

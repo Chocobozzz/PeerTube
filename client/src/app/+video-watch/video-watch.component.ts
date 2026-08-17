@@ -1,5 +1,17 @@
 import { CommonModule, PlatformLocation } from '@angular/common'
-import { ChangeDetectionStrategy, Component, ElementRef, inject, LOCALE_ID, NgZone, OnDestroy, OnInit, viewChild } from '@angular/core'
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  Injector,
+  LOCALE_ID,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  viewChild
+} from '@angular/core'
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router'
 import {
   AuthService,
@@ -9,6 +21,7 @@ import {
   HotkeysService,
   MetaService,
   Notifier,
+  PeerTubeRouterService,
   PeerTubeSocket,
   PluginService,
   RestExtractor,
@@ -68,7 +81,7 @@ import { DateToggleComponent } from '../shared/shared-main/date/date-toggle.comp
 import { PluginPlaceholderComponent } from '../shared/shared-main/plugins/plugin-placeholder.component'
 import { VideoViewsCounterComponent } from '../shared/shared-video/video-views-counter.component'
 import { PlayerStylesComponent } from './player-styles.component'
-import { ActionButtonsComponent } from './shared/action-buttons/action-buttons.component'
+import { ActionButtonsComponent, VideoWatchModalName } from './shared/action-buttons/action-buttons.component'
 import { VideoCommentsComponent } from './shared/comment/video-comments.component'
 import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
 import { VideoAlertComponent } from './shared/information/video-alert.component'
@@ -151,10 +164,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private location = inject(PlatformLocation)
   private metaService = inject(MetaService)
   private localeId = inject(LOCALE_ID)
+  private peertubeRouter = inject(PeerTubeRouterService)
+  private injector = inject(Injector)
 
   readonly videoWatchPlaylist = viewChild<VideoWatchPlaylistComponent>('videoWatchPlaylist')
   readonly subscribeButton = viewChild<SubscribeButtonComponent>('subscribeButton')
   readonly playerElement = viewChild<ElementRef<HTMLVideoElement>>('playerElement')
+  readonly actionButtons = viewChild<ActionButtonsComponent>('actionButtons')
 
   peertubePlayer: PeerTubePlayer
   theaterEnabled = false
@@ -174,6 +190,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   noPlaylistVideoFound = false
 
   transcriptionWidgetOpened = false
+
+  private initialModalQueryParamHandled = false
+  private initialTranscriptionQueryParamHandled = false
+
+  private lastHandledStartQueryParam: string
 
   private nextRecommendedVideoId = ''
   private nextRecommendedVideoTitle = ''
@@ -290,6 +311,87 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   // ---------------------------------------------------------------------------
 
+  openTranscriptionWidget () {
+    this.transcriptionWidgetOpened = true
+
+    this.updateTranscriptionQueryParam(true)
+  }
+
+  closeTranscriptionWidget () {
+    this.transcriptionWidgetOpened = false
+
+    this.updateTranscriptionQueryParam(false)
+  }
+
+  private updateTranscriptionQueryParam (opened: boolean) {
+    this.silentNavigate({ transcription: opened ? true : null })
+  }
+
+  private restoreTranscriptionWidgetIfNeeded () {
+    if (!this.initialTranscriptionQueryParamHandled) {
+      this.initialTranscriptionQueryParamHandled = true
+
+      const requestedFromQueryParam = toBoolean(this.route.snapshot.queryParams.transcription) === true
+
+      if (requestedFromQueryParam && this.videoCaptions.length !== 0) {
+        this.transcriptionWidgetOpened = true
+      } else if (requestedFromQueryParam) {
+        // Captions are gone (or were never there): drop the stale query param instead of opening an empty widget
+        this.updateTranscriptionQueryParam(false)
+      }
+    }
+
+    if (this.transcriptionWidgetOpened && this.videoCaptions.length === 0) {
+      this.closeTranscriptionWidget()
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
+  onActionButtonsModalOpened (modal: VideoWatchModalName) {
+    if (modal === 'download' || modal === 'share') {
+      this.silentNavigate({ openModal: modal })
+    }
+  }
+
+  onActionButtonsModalClosed (modal: VideoWatchModalName) {
+    if (modal === 'download' || modal === 'share') {
+      this.silentNavigate({ openModal: null })
+    }
+  }
+
+  private restoreModalFromQueryParamIfNeeded () {
+    if (this.initialModalQueryParamHandled) return
+
+    this.initialModalQueryParamHandled = true
+
+    afterNextRender(() => this.openModalFromQueryParamIfNeeded(), { injector: this.injector })
+  }
+
+  private openModalFromQueryParamIfNeeded () {
+    const openModal = this.route.snapshot.queryParams.openModal
+    if (openModal !== 'download' && openModal !== 'share') return
+
+    const actionButtons = this.actionButtons()
+    if (!actionButtons) return
+
+    if (openModal === 'download' && actionButtons.isVideoDownloadable()) {
+      actionButtons.showDownloadModal()
+      return
+    }
+
+    if (openModal === 'share') {
+      actionButtons.showShareModal()
+      return
+    }
+  }
+
+  private silentNavigate (queryParams: Params) {
+    this.peertubeRouter.silentNavigate([], { ...this.route.snapshot.queryParams, ...queryParams }, this.route)
+  }
+
+  // ---------------------------------------------------------------------------
+
   handleTimestampClicked (timestamp: number) {
     if (!this.peertubePlayer || this.video.isLive) return
 
@@ -358,7 +460,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.videoWatchPlaylist().updatePlaylistIndex(this.playlistPosition)
 
       const start = queryParams['start']
-      if (this.peertubePlayer?.getPlayer() && start) {
+      if (this.peertubePlayer?.getPlayer() && start && start !== this.lastHandledStartQueryParam) {
+        this.lastHandledStartQueryParam = start
+
         this.peertubePlayer.setCurrentTime(parseInt(start, 10))
       }
     })
@@ -538,6 +642,27 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
   }
 
+  private async isDisplayCancelledBecauseNSFW (video: VideoDetails, loggedInOrAnonymousUser: User) {
+    if (!video.isNSFWHiddenForUser(loggedInOrAnonymousUser, this.serverConfig)) return false
+
+    const res = await this.confirmService.confirm(
+      $localize`This video contains sensitive content. Are you sure you want to display the video page?`,
+      $localize`Sensitive video`,
+      {
+        confirmButtonText: $localize`Display the page`,
+        cancelButtonText: $localize`Quit that page`,
+        moreInfo: video.nsfwSummary
+          ? {
+            title: $localize`Learn more`,
+            content: video.nsfwSummary
+          }
+          : undefined
+      }
+    )
+
+    return res === false
+  }
+
   private async onVideoFetched (options: {
     video: VideoDetails
     live: LiveVideo
@@ -579,27 +704,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.remoteServerDown = false
     this.currentTime = undefined
 
-    if (this.transcriptionWidgetOpened && this.videoCaptions.length === 0) {
-      this.transcriptionWidgetOpened = false
+    this.restoreTranscriptionWidgetIfNeeded()
+
+    if (await this.isDisplayCancelledBecauseNSFW(video, loggedInOrAnonymousUser) === true) {
+      return this.location.back()
     }
 
-    if (this.video.isNSFWHiddenForUser(loggedInOrAnonymousUser, this.serverConfig)) {
-      const res = await this.confirmService.confirm(
-        $localize`This video contains sensitive content. Are you sure you want to display the video page?`,
-        $localize`Sensitive video`,
-        {
-          confirmButtonText: $localize`Display the page`,
-          cancelButtonText: $localize`Quit that page`,
-          moreInfo: video.nsfwSummary
-            ? {
-              title: $localize`Learn more`,
-              content: video.nsfwSummary
-            }
-            : undefined
-        }
-      )
-      if (res === false) return this.location.back()
-    }
+    this.restoreModalFromQueryParamIfNeeded()
 
     this.buildHotkeysHelp(video)
     this.setMetaTags(video)

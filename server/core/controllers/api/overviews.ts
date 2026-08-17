@@ -1,5 +1,5 @@
 import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -9,6 +9,8 @@ import { buildNSFWFilters } from '../../helpers/express-utils.js'
 import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares/index.js'
 import { TagModel } from '../../models/video/tag.js'
+
+const logger = createLogger()
 
 const overviewsRouter = express.Router()
 

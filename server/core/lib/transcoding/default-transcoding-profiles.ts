@@ -1,6 +1,8 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { FFmpegCommandWrapper, getDefaultAvailableEncoders } from '@peertube/peertube-ffmpeg'
 import { AvailableEncoders, EncoderOptionsBuilder } from '@peertube/peertube-models'
+
+const logger = createLogger()
 
 // ---------------------------------------------------------------------------
 // Profile manager to get and change default profiles

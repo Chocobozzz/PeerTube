@@ -1,5 +1,5 @@
 import { VideoObject } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory, LoggerTagsFn } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
@@ -8,17 +8,19 @@ import { MVideoFull, MVideoThumbnails } from '@server/types/models/index.js'
 import { APVideoAbstractBuilder } from './abstract-builder.js'
 import { getVideoAttributesFromObject } from './object-to-model-attributes.js'
 
-export class APVideoCreator extends APVideoAbstractBuilder {
-  protected lTags: LoggerTagsFn
+const logger = createLogger('ap', 'video', 'create')
 
+export class APVideoCreator extends APVideoAbstractBuilder {
   constructor (protected readonly videoObject: VideoObject) {
     super()
-
-    this.lTags = loggerTagsFactory('ap', 'video', 'create', this.videoObject.uuid, this.videoObject.id)
   }
 
-  async create () {
-    logger.debug('Adding remote video %s.', this.videoObject.id, { ...this.videoObject, ...this.lTags() })
+  create () {
+    return logger.withContext([ this.videoObject.uuid, this.videoObject.id ], () => this.runCreate())
+  }
+
+  private async runCreate () {
+    logger.debug('Adding remote video %s.', this.videoObject.id, { ...this.videoObject })
 
     const channelActor = await this.getOrCreateVideoChannelFromVideoObject()
     const channel = channelActor.VideoChannel
@@ -55,7 +57,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
         transaction: t
       })
 
-      logger.info('Remote video with uuid %s inserted.', this.videoObject.uuid, this.lTags())
+      logger.info('Remote video with uuid %s inserted.', this.videoObject.uuid)
 
       Hooks.runAction('action:activity-pub.remote-video.created', { video: videoCreated, videoAPObject: this.videoObject })
 

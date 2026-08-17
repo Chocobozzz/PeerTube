@@ -1,6 +1,7 @@
 import { getLocaleDirection, NgClass } from '@angular/common'
 import {
   booleanAttribute,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -49,6 +50,7 @@ import { Observable } from 'rxjs'
   ]
 })
 export class VideoCommentAddComponent extends FormReactive implements OnChanges, OnInit {
+  private cd = inject(ChangeDetectorRef)
   protected formReactiveService = inject(FormReactiveService)
   private notifier = inject(Notifier)
   private videoCommentService = inject(VideoCommentService)
@@ -157,12 +159,16 @@ export class VideoCommentAddComponent extends FormReactive implements OnChanges,
         this.addingComment = false
         this.commentCreated.emit(comment)
         this.form.reset()
+
+        this.cd.markForCheck()
       },
 
       error: err => {
         this.addingComment = false
 
         this.notifier.handleError(err)
+
+        this.cd.markForCheck()
       }
     })
   }

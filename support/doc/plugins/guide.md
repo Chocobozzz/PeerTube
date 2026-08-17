@@ -336,7 +336,8 @@ function register (...) {
     getWeight: () => 60,
 
     // Optional function called by PeerTube when the user clicked on the logout button
-    onLogout: user => {
+    // The logout request is also provided, so you can read its headers or its cookies (PeerTube >= 8.3)
+    onLogout: (user, req) => {
       console.log('User %s logged out.', user.username')
     },
 
@@ -1295,7 +1296,8 @@ If you want to create an antispam/moderation plugin, you could use the following
  * `filter:api.video-thread.create.accept.result`: to accept or not local thread
  * `filter:api.video-comment-reply.create.accept.result`: to accept or not local replies
  * `filter:api.video-threads.list.result`: to change/hide the text of threads
- * `filter:api.video-thread-comments.list.result`: to change/hide the text of replies
+ * `filter:api.video-thread-comments.list.result`: to change/hide the text of replies. Since PeerTube 8.3 this hook only receives a truncated view of the thread, and its `total` is the number of direct replies of the root comment
+ * `filter:api.video-comment-replies.list.result`: to change/hide the text of the replies loaded after the thread (PeerTube >= 8.3)
  * `filter:video.auto-blacklist.result`: to automatically blacklist local or remote videos
  * `filter:admin-users-list.bulk-actions.create.result`: to add bulk actions in the admin users list
  * `filter:admin-video-comments-list.actions.create.result`: to add actions in the admin video comments list

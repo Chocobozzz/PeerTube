@@ -1,14 +1,16 @@
 // Thanks: https://github.com/kwhitley/apicache
 // We duplicated the library because it is unmaintened and prevent us to upgrade to recent NodeJS versions
 
-import express from 'express'
-import { OutgoingHttpHeaders } from 'http'
 import { HttpStatusCodeType } from '@peertube/peertube-models'
 import { isTestInstance } from '@peertube/peertube-node-utils'
 import { parseDurationToMs } from '@server/helpers/core-utils.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { Redis } from '@server/lib/redis.js'
 import { asyncMiddleware } from '@server/middlewares/index.js'
+import express from 'express'
+import { OutgoingHttpHeaders } from 'http'
+
+const logger = createLogger()
 
 export interface APICacheOptions {
   headerBlacklist?: string[]
@@ -133,7 +135,7 @@ export class ApiCache {
 
       // Seconds since epoch, used to properly decrement max-age headers in cached responses.
       timestamp: new Date().getTime() / 1000
-    } as CacheObject
+    }
   }
 
   private async cacheResponse (key: string, value: object, duration: number) {
@@ -248,6 +250,8 @@ export class ApiCache {
     }
 
     Object.assign(headers, this.filterBlacklistedHeaders(cacheObject.headers || {}), {
+      'x-request-id': response.getHeader('x-request-id'),
+
       // Set properly decremented max-age header
       // This ensures that max-age is in sync with the cache expiration
       'cache-control': 'max-age=' +

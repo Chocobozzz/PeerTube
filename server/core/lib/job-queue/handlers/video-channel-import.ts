@@ -1,11 +1,13 @@
 import { Job } from 'bullmq'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { synchronizeChannel } from '@server/lib/sync-channel.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { MChannelSync } from '@server/types/models/index.js'
 import { VideoChannelImportPayload } from '@peertube/peertube-models'
+
+const logger = createLogger()
 
 export async function processVideoChannelImport (job: Job) {
   const payload = job.data as VideoChannelImportPayload

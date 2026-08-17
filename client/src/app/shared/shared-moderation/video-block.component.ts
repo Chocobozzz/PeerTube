@@ -28,6 +28,7 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
   readonly modal = viewChild<NgbModal>('modal')
 
   readonly videoBlocked = output()
+  readonly modalClosed = output()
 
   videos: Video[]
 
@@ -64,6 +65,8 @@ export class VideoBlockComponent extends FormReactive implements OnInit {
     this.videos = videos
 
     this.openedModal = this.modalService.open(this.modal(), { centered: true, keyboard: false })
+
+    this.openedModal.hidden.subscribe(() => this.modalClosed.emit())
   }
 
   hide () {

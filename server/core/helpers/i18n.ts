@@ -9,7 +9,9 @@ import { readdir } from 'fs/promises'
 import i18next from 'i18next'
 import ICU from 'i18next-icu'
 import { join } from 'path'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
+
+const logger = createLogger()
 
 export async function initI18n () {
   const locales = await readdir(SERVER_INTERNAL_LOCALES_BASE_PATH)

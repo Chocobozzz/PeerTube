@@ -194,6 +194,13 @@ export class VideosListComponent implements OnInit, OnDestroy {
     return video.id
   }
 
+  // The "Videos" section title is only rendered when a "Lives" section precedes it, so don't introduce a heading level gap otherwise
+  getVideosHeadingLevel () {
+    return this.highlightedLives.length !== 0
+      ? 3
+      : 2
+  }
+
   onNearOfBottom () {
     if (this.disabled()) return
 

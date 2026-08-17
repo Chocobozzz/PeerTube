@@ -66,8 +66,10 @@ staticRouter.use(
 
 // segments-sha256.json is frequently rewritten (on every new live segment), so we can't rely on express.static/sendFile
 // (stat + range read) that could read a truncated file if it's overwritten between the stat and the read
+// Use {0,} and not * in the filename pattern: path-to-regexp (express 4) replaces every * by (.*), which would turn
+// [a-z0-9-]* into [a-z0-9-](.*) and so would not match the live 'segments-sha256.json' file that has no prefix
 staticRouter.use(
-  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename([a-z0-9-]*segments-sha256\\.json)',
+  STATIC_PATHS.STREAMING_PLAYLISTS.PRIVATE_HLS + ':videoUUID/:filename([a-z0-9-]{0,}segments-sha256\\.json)',
   hlsFileValidator,
   ...privateHLSStaticMiddlewares,
   asyncMiddleware(serveSha256Segments(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE)),
@@ -85,7 +87,7 @@ staticRouter.use(
 
 // Same as above: avoid express.static for this frequently rewritten file to prevent serving truncated content
 staticRouter.use(
-  STATIC_PATHS.STREAMING_PLAYLISTS.HLS + '/:videoUUID/:filename([a-z0-9-]*segments-sha256\\.json)',
+  STATIC_PATHS.STREAMING_PLAYLISTS.HLS + '/:videoUUID/:filename([a-z0-9-]{0,}segments-sha256\\.json)',
   hlsFileValidator,
   asyncMiddleware(serveSha256Segments(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC)),
   handleStaticError

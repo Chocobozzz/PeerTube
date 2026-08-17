@@ -1,10 +1,12 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { remove } from 'fs-extra'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import { QueryTypes } from 'sequelize'
 import { CONFIG } from '../config.js'
+
+const logger = createLogger()
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -18,7 +20,7 @@ async function up (utils: {
 
     const rows = await utils.sequelize.query<{ videoFileId: number }>(query, {
       transaction,
-      type: QueryTypes.SELECT as QueryTypes.SELECT
+      type: QueryTypes.SELECT
     })
 
     for (const { videoFileId } of rows) {
@@ -63,5 +65,6 @@ function down (options) {
 }
 
 export {
-  down, up
+  down,
+  up
 }

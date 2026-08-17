@@ -1,8 +1,10 @@
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { Secret, TOTP } from 'otpauth'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
 import { decrypt } from './peertube-crypto.js'
+
+const logger = createLogger()
 
 async function isOTPValid (options: {
   encryptedSecret: string

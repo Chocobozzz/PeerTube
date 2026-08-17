@@ -3,12 +3,12 @@ import { JobQueue } from '@server/lib/job-queue/index.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import chunk from 'lodash-es/chunk.js'
-import { logger, loggerTagsFactory } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { SCHEDULER_INTERVALS_MS, SERVER_ACTOR_NAME } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export class AutoFollowIndexInstances extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -30,7 +30,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
 
     const indexUrl = CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
 
-    logger.info(`Auto follow instances of index ${indexUrl}`, lTags())
+    logger.info(`Auto follow instances of index ${indexUrl}`)
 
     try {
       const serverActor = await getServerActor()
@@ -42,7 +42,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
 
       const { body } = await doJSONRequest<any>(indexUrl, { searchParams, preventSSRF: false })
       if (!body.data || Array.isArray(body.data) === false) {
-        logger.error(`Cannot auto follow instances of index ${indexUrl}. Please check the auto follow URL.`, { body, ...lTags() })
+        logger.error(`Cannot auto follow instances of index ${indexUrl}. Please check the auto follow URL.`, { body })
         return
       }
 
@@ -64,7 +64,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
         }
       }
     } catch (err) {
-      logger.error(`Cannot auto follow hosts of index ${indexUrl}.`, { err, ...lTags() })
+      logger.error(`Cannot auto follow hosts of index ${indexUrl}.`, { err })
     }
   }
 

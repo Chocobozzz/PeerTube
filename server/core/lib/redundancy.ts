@@ -1,5 +1,5 @@
 import { Transaction } from 'sequelize'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -8,7 +8,7 @@ import { Activity } from '@peertube/peertube-models'
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy.js'
 import { sendUndoCacheFile } from './activitypub/send/index.js'
 
-const lTags = loggerTagsFactory('redundancy')
+const logger = createLogger('redundancy')
 
 async function removeVideoRedundancy (videoRedundancy: MVideoRedundancyVideo, t?: Transaction) {
   const serverActor = await getServerActor()
@@ -30,7 +30,7 @@ async function removeRedundanciesOfServer (serverId: number) {
 async function isRedundancyAccepted (activity: Activity, byActor: MActorSignature) {
   const configAcceptFrom = CONFIG.REMOTE_REDUNDANCY.VIDEOS.ACCEPT_FROM
   if (configAcceptFrom === 'nobody') {
-    logger.info('Do not accept remote redundancy %s due instance accept policy.', activity.id, lTags())
+    logger.info('Do not accept remote redundancy %s due instance accept policy.', activity.id)
     return false
   }
 
@@ -41,7 +41,7 @@ async function isRedundancyAccepted (activity: Activity, byActor: MActorSignatur
     if (allowed !== true) {
       logger.info(
         'Do not accept remote redundancy %s because actor %s is not followed by our instance.',
-        activity.id, byActor.url, lTags()
+        activity.id, byActor.url
       )
       return false
     }

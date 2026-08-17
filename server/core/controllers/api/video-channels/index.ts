@@ -19,7 +19,7 @@ import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../../helpers/audit-logger.js'
 import { resetSequelizeInstance } from '../../../helpers/database-utils.js'
 import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
@@ -62,6 +62,8 @@ import { VideoModel } from '../../../models/video/video.js'
 import { ownershipChannelRouter } from './ownership.js'
 import { channelCollaborators } from './video-channel-collaborators.js'
 import { videoChannelLogosRouter } from './video-channel-logos.js'
+
+const logger = createLogger()
 
 const auditLogger = auditLoggerFactory('channels')
 

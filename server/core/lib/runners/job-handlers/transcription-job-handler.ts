@@ -7,6 +7,7 @@ import {
   TranscriptionSuccess
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { createLogger } from '@server/helpers/logger.js'
 import { JOB_PRIORITY } from '@server/initializers/constants.js'
 import { onTranscriptionEnded } from '@server/lib/video-captions.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
@@ -15,6 +16,8 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
 import { loadRunnerVideo } from './shared/utils.js'
+
+const logger = createLogger('transcription')
 
 type CreateOptions = {
   video: MVideoUUID
@@ -67,15 +70,17 @@ export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, R
       videoUUID: video.uuid
     }
 
-    const job = await this.createRunnerJob({
-      type: 'video-transcription',
-      jobUUID,
-      payload,
-      privatePayload,
-      priority: JOB_PRIORITY.TRANSCRIPTION
-    })
+    return logger.withContext([ jobUUID, video.uuid ], async () => {
+      const job = await this.createRunnerJob({
+        type: 'video-transcription',
+        jobUUID,
+        payload,
+        privatePayload,
+        priority: JOB_PRIORITY.TRANSCRIPTION
+      })
 
-    return job
+      return job
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -86,16 +91,17 @@ export class TranscriptionJobHandler extends AbstractJobHandler<CreateOptions, R
   }) {
     const { runnerJob, resultPayload } = options
 
-    const video = await loadRunnerVideo(runnerJob, this.lTags)
+    const video = await loadRunnerVideo(runnerJob)
     if (!video) return
 
-    await VideoJobInfoModel.decrease(options.runnerJob.privatePayload.videoUUID, 'pendingTranscription')
+    await logger.withContext([ video.uuid ], async () => {
+      await VideoJobInfoModel.decrease(options.runnerJob.privatePayload.videoUUID, 'pendingTranscription')
 
-    await onTranscriptionEnded({
-      video,
-      language: resultPayload.inputLanguage,
-      vttPath: resultPayload.vttFile as string,
-      lTags: this.lTags().tags
+      await onTranscriptionEnded({
+        video,
+        language: resultPayload.inputLanguage,
+        vttPath: resultPayload.vttFile as string
+      })
     })
   }
 }

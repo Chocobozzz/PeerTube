@@ -4,8 +4,10 @@ import { UserModel } from '@server/models/user/user.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { Job } from 'bullmq'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
+
+const logger = createLogger()
 
 /**
  * Create transcoding jobs.

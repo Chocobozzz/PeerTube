@@ -31,7 +31,7 @@ import {
   isUserVideosHistoryEnabledValid
 } from '../../../helpers/custom-validators/users.js'
 import { isVideoChannelUsernameValid } from '../../../helpers/custom-validators/video-channels.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { isSecretEqual } from '../../../helpers/peertube-crypto.js'
 import { isThemeRegistered } from '../../../lib/plugins/theme-utils.js'
 import { Redis } from '../../../lib/redis.js'
@@ -45,6 +45,8 @@ import {
   doesVideoExist,
   isValidVideoIdParam
 } from '../shared/index.js'
+
+const logger = createLogger()
 
 export const usersListValidator = [
   query('blocked')

@@ -1,11 +1,11 @@
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MStoryboard } from '@server/types/models/index.js'
 import { scheduleVideoRefreshIfNeeded } from '../activitypub/videos/index.js'
 import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 
-const lTags = loggerTagsFactory('lazy-load', 'video-storyboards')
+const logger = createLogger('lazy-load', 'storyboard')
 
 export class VideoStoryboardsImageFileCache extends AbstractImageFileCache<MStoryboard> {
   protected loadModel (filename: string) {
@@ -26,7 +26,7 @@ export class VideoStoryboardsImageFileCache extends AbstractImageFileCache<MStor
 
       scheduleVideoRefreshIfNeeded(video)
     } catch (err) {
-      logger.error('Error while refreshing video for lazy fetch', { ...lTags(), err })
+      logger.error('Error while refreshing video for lazy fetch', { err })
     }
   }
 }

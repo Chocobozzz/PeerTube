@@ -1,6 +1,6 @@
 import { pick, sortBy } from '@peertube/peertube-core-utils'
 import { ActivityCreate, FileStorage, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { audiencify, getVideoAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { buildChaptersAPHasPart } from '@server/lib/activitypub/video-chapters.js'
@@ -40,6 +40,8 @@ import { createReadStream } from 'fs'
 import { extname, join } from 'path'
 import { PassThrough, Readable } from 'stream'
 import { AbstractUserExporter, ExportResult } from './abstract-user-exporter.js'
+
+const logger = createLogger()
 
 export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
   // oxlint-disable-next-line no-useless-constructor
@@ -349,7 +351,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       attachment: this.options.withVideoFiles && exportedVideoFileOrSource
         ? [
           {
-            type: 'Video' as 'Video',
+            type: 'Video',
             url: join(this.options.relativeStaticDirPath, this.getArchiveVideoFilePath(video, exportedVideoFileOrSource)),
 
             // FIXME: typings

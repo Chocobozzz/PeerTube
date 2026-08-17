@@ -1,6 +1,6 @@
 import { VideoState, VideoStateType } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -11,7 +11,7 @@ import { JobQueue } from './job-queue/index.js'
 import { Notifier } from './notifier/index.js'
 import { buildMoveVideoJob } from './video-jobs.js'
 
-const lTags = loggerTagsFactory('video-state')
+const logger = createLogger('video-state')
 
 export function buildNextVideoState (currentState?: VideoStateType) {
   if (currentState === VideoState.PUBLISHED) {
@@ -56,7 +56,7 @@ export function moveToNextState (options: {
       if (videoDatabase.state === VideoState.PUBLISHED) {
         scheduleVideoFederation({ video: videoDatabase, transaction: t })
 
-        logger.debug(`Video ${videoDatabase.uuid} is already published, no state change.`, lTags(videoDatabase.uuid))
+        logger.debug(`Video ${videoDatabase.uuid} is already published, no state change.`)
 
         return false
       }
@@ -102,7 +102,7 @@ export async function moveToExternalStorageState (options: {
     await video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, transaction })
   }
 
-  logger.info('Creating external storage move job for video %s.', video.uuid, lTags(video.uuid))
+  logger.info('Creating external storage move job for video %s.', video.uuid)
 
   try {
     await JobQueue.Instance.createJob(
@@ -115,7 +115,7 @@ export async function moveToExternalStorageState (options: {
 
     return true
   } catch (err) {
-    logger.error('Cannot add move to object storage job', { err, ...lTags(video.uuid) })
+    logger.error('Cannot add move to object storage job', { err })
 
     return false
   }
@@ -133,7 +133,7 @@ export async function moveToFileSystemState (options: {
     await video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_FILE_SYSTEM, transaction })
   }
 
-  logger.info('Creating move to file system job for video %s.', video.uuid, { tags: [ video.uuid ] })
+  logger.info('Creating move to file system job for video %s.', video.uuid)
 
   try {
     await JobQueue.Instance.createJob(
@@ -146,7 +146,7 @@ export async function moveToFileSystemState (options: {
 
     return true
   } catch (err) {
-    logger.error('Cannot add move to file system job', { err, ...lTags(video.uuid) })
+    logger.error('Cannot add move to file system job', { err })
 
     return false
   }
@@ -184,7 +184,7 @@ async function moveToPublishedState (options: {
   const { video, transaction, previousVideoState } = options
   const previousState = previousVideoState ?? video.state
 
-  logger.info('Publishing video %s.', video.uuid, { previousState, ...lTags(video.uuid) })
+  logger.info('Publishing video %s.', video.uuid, { previousState })
 
   const isNewVideo = !video.firstPublishedAt
 

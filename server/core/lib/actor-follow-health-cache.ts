@@ -1,4 +1,6 @@
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
+
+const logger = createLogger()
 
 // Cache follows scores, instead of writing them too often in database
 // Keep data in memory, we don't really need Redis here as we don't really care to loose some scores

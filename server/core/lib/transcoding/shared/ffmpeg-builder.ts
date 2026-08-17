@@ -1,8 +1,10 @@
 import { FFmpegVOD } from '@peertube/peertube-ffmpeg'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { Job } from 'bullmq'
 import { VideoTranscodingProfilesManager } from '../default-transcoding-profiles.js'
+
+const logger = createLogger()
 
 export function buildFFmpegVOD (options: {
   job?: Job

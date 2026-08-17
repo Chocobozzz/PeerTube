@@ -1,7 +1,7 @@
 import { sortBy } from '@peertube/peertube-core-utils'
 import { ThumbnailAspectRatio, VideoFileStream } from '@peertube/peertube-models'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import Bluebird from 'bluebird'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { remove } from 'fs-extra/esm'
@@ -16,7 +16,7 @@ import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js
 import downloadImage from './image-downloader.js'
 import { VideoPathManager } from './video-path-manager.js'
 
-const lTags = loggerTagsFactory('thumbnail')
+const logger = createLogger('thumbnail')
 
 type ImageSize = { height: number, width: number, aspectRatio: ThumbnailAspectRatio }
 
@@ -92,8 +92,7 @@ export function updateRemotePlaylistThumbnailFromUrl (options: {
     if (existingThumbnail) {
       logger.debug(
         `Remote thumbnail changed for playlist ${playlist.url}, ` +
-          `updating filename from ${existingThumbnail.filename} to ${generatedFilename}`,
-        lTags(playlist.uuid)
+          `updating filename from ${existingThumbnail.filename} to ${generatedFilename}`
       )
     }
 
@@ -137,7 +136,7 @@ export async function createLocalVideoThumbnailsFromImage (options: {
     try {
       await remove(inputPath)
     } catch (err) {
-      logger.error('Cannot remove original image after thumbnail generation.', { err, ...lTags() })
+      logger.error('Cannot remove original image after thumbnail generation.', { err })
     }
   }
 
@@ -284,8 +283,7 @@ export function updateRemoteVideoThumbnail (options: {
   if (hasThumbnailUrlChanged({ existingThumbnail, fileUrl, video, extension })) {
     if (existingThumbnail) {
       logger.debug(
-        `Remote thumbnail changed for video ${video.url}, updating filename from ${existingThumbnail.filename} to ${generatedFilename}`,
-        lTags(video.uuid)
+        `Remote thumbnail changed for video ${video.url}, updating filename from ${existingThumbnail.filename} to ${generatedFilename}`
       )
     }
 
@@ -314,7 +312,7 @@ export function updateRemoteVideoThumbnail (options: {
 export async function regenerateLocalVideoThumbnailsFromVideoIfNeeded (video: MVideoWithAllFiles, ffprobe: FfprobeData) {
   if (video.Thumbnails.some(t => t.automaticallyGenerated === false)) return
 
-  logger.info('Re-generate thumbnails for video ' + video.url, lTags(video.uuid))
+  logger.info('Re-generate thumbnails for video ' + video.url)
 
   const thumbnails = await createLocalVideoThumbnailsFromVideo({
     video,
@@ -455,12 +453,12 @@ async function generateImageFromVideoFile (options: {
 
     return destination
   } catch (err) {
-    logger.error('Cannot generate image from video %s.', fromPath, { err, ...lTags() })
+    logger.error('Cannot generate image from video %s.', fromPath, { err })
 
     try {
       await remove(pendingImagePath)
     } catch (err) {
-      logger.debug('Cannot remove pending image path after generation error.', { err, ...lTags() })
+      logger.debug('Cannot remove pending image path after generation error.', { err })
     }
 
     throw err
@@ -472,7 +470,7 @@ function getImageExtension (input: string) {
 
   if (MIMETYPES.IMAGE.EXT_MIMETYPE[extension]) return extension
 
-  logger.warn('Cannot determine image extension from input ' + input, lTags())
+  logger.warn('Cannot determine image extension from input ' + input)
 
   return '.jpg'
 }

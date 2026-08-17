@@ -1,7 +1,9 @@
 import { Job } from 'bullmq'
 import { EmailPayload } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { Emailer } from '../../emailer.js'
+
+const logger = createLogger()
 
 export function processEmail (job: Job) {
   const payload = job.data as EmailPayload

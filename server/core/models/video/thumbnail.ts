@@ -18,12 +18,14 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, FILES_CACHE, LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
 import { buildSQLAttributes } from '../shared/table.js'
 import { VideoPlaylistModel } from './video-playlist.js'
 import { VideoModel } from './video.js'
+
+const logger = createLogger()
 
 // A thumbnail always belongs to a video or to a playlist, never to both
 type ThumbnailOwner =

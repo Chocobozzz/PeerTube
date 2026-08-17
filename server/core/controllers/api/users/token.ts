@@ -1,7 +1,7 @@
 import { InvalidGrantError } from '@node-oauth/oauth2-server'
-import { ResultList, ScopedToken, TokenSession } from '@peertube/peertube-models'
+import { ResultList, TokenSession } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { OTP } from '@server/initializers/constants.js'
 import { BypassLogin } from '@server/lib/auth/bypass-login.model.js'
@@ -22,7 +22,10 @@ import {
 } from '@server/middlewares/index.js'
 import { manageTokenSessionsValidator, revokeTokenSessionValidator } from '@server/middlewares/validators/token.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
+import cookieParser from 'cookie-parser'
 import express from 'express'
+
+const logger = createLogger()
 
 const tokensRouter = express.Router()
 
@@ -42,6 +45,8 @@ tokensRouter.post(
   '/revoke-token',
   openapiOperationDoc({ operationId: 'revokeOAuthToken' }),
   authenticate,
+  // Ensure cookies are available for auth plugins `onLogout`
+  cookieParser(),
   asyncMiddleware(handleTokenRevocation)
 )
 
@@ -63,6 +68,8 @@ tokensRouter.post(
   authenticate,
   asyncMiddleware(manageTokenSessionsValidator),
   asyncMiddleware(revokeTokenSessionValidator),
+  // The API router is mounted before the global cookie parser, so parse them here for auth plugins `onLogout`
+  cookieParser(),
   asyncMiddleware(revokeTokenSession)
 )
 
@@ -181,7 +188,7 @@ function getScopedTokens (req: express.Request, res: express.Response) {
 
   return res.json({
     feedToken: user.feedToken
-  } as ScopedToken)
+  })
 }
 
 async function renewScopedTokens (req: express.Request, res: express.Response) {
@@ -192,7 +199,7 @@ async function renewScopedTokens (req: express.Request, res: express.Response) {
 
   return res.json({
     feedToken: user.feedToken
-  } as ScopedToken)
+  })
 }
 
 async function buildByPassLogin (req: express.Request, grantType: string): Promise<BypassLogin> {

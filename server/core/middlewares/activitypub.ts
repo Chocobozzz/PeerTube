@@ -5,9 +5,11 @@ import { isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/pee
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
 import { NextFunction, Request, Response } from 'express'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../lib/activitypub/actors/index.js'
+
+const logger = createLogger()
 
 export async function checkSignature (req: Request, res: Response, next: NextFunction) {
   try {

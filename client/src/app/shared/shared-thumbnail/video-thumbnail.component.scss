@@ -2,6 +2,11 @@
 @use "_mixins" as *;
 @use "_miniature" as *;
 
+// Positioning context of ".actions-overlay", which is a sibling of ".video-thumbnail" and not one of its children
+:host {
+  position: relative;
+}
+
 .video-thumbnail {
   @include miniature-thumbnail;
 }
@@ -77,9 +82,11 @@
   flex-direction: column;
   opacity: 0;
   font-weight: $font-semibold;
+  z-index: z(miniature);
 
   top: 5px;
-  // right property is defined below
+
+  @include right(5px);
 
   div:not(:first-child) {
     margin-top: 2px;
@@ -103,19 +110,11 @@
   .live-overlay {
     left: 0;
   }
-
-  .actions-overlay {
-    left: 5px;
-  }
 }
 
 .video-thumbnail:not(.is-rtl) {
   .duration-overlay,
   .live-overlay {
     right: 0;
-  }
-
-  .actions-overlay {
-    right: 5px;
   }
 }

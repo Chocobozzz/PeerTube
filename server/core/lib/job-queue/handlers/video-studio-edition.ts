@@ -26,97 +26,97 @@ import { MutexInterface } from 'async-mutex'
 import { Job } from 'bullmq'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
-import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { buildPromiseForAbortSignal } from './shared/job-helpers.js'
 
-const lTagsBase = loggerTagsFactory('video-studio')
+const logger = createLogger('studio')
 
 async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
   const abortPromise = buildPromiseForAbortSignal(abortSignal)
 
-  const run = async () => {
-    const payload = job.data as VideoStudioEditionPayload
-    const lTags = lTagsBase(payload.videoUUID)
+  const payload = job.data as VideoStudioEditionPayload
 
-    logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id, lTags)
+  // Inner functions (processTask, buildFFmpegEdition...) inherit these tags without having to inject them
+  const run = () =>
+    logger.withContext([ payload.videoUUID ], async () => {
+      logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id)
 
-    let inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
-
-    try {
-      const video = await VideoModel.loadFull(payload.videoUUID)
-
-      // No video, maybe deleted?
-      if (!video) {
-        logger.info('Can\'t process job %d, video does not exist.', job.id, lTags)
-
-        await safeCleanupStudioTMPFiles(payload.tasks)
-        return undefined
-      }
-
-      await checkUserQuotaOrThrow(video, payload)
-
-      await video.reload()
-
-      const editionResultPath = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({
-        videoPath: originalVideoFilePath,
-        separatedAudioPath
-      }) => {
-        let tmpInputFilePath: string
-        let outputPath: string
-
-        for (const task of payload.tasks) {
-          const outputFilename = buildUUID() + extname(originalVideoFilePath)
-          outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
-
-          await processTask({
-            videoInputPath: tmpInputFilePath ?? originalVideoFilePath,
-
-            separatedAudioInputPath: tmpInputFilePath
-              ? undefined
-              : separatedAudioPath,
-
-            inputFileMutexReleaser,
-
-            video,
-            outputPath,
-            task,
-            lTags,
-
-            abortSignal
-          })
-
-          if (tmpInputFilePath) await remove(tmpInputFilePath)
-
-          // For the next iteration
-          tmpInputFilePath = outputPath
-          inputFileMutexReleaser = undefined
-        }
-
-        return outputPath
-      })
-
-      logger.info('Video edition ended for video %s.', video.uuid, lTags)
-
-      await onVideoStudioEnded({ video, editionResultPath, tasks: payload.tasks })
-    } catch (err) {
-      await safeCleanupStudioTMPFiles(payload.tasks)
+      let inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
 
       try {
-        await sequelizeTypescript.transaction(async transaction => {
-          const video = await VideoModel.load(payload.videoUUID, transaction)
-          if (!video || video.state === VideoState.PUBLISHED) return
+        const video = await VideoModel.loadFull(payload.videoUUID)
 
-          await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
+        // No video, maybe deleted?
+        if (!video) {
+          logger.info('Can\'t process job %d, video does not exist.', job.id)
+
+          await safeCleanupStudioTMPFiles(payload.tasks)
+          return undefined
+        }
+
+        await checkUserQuotaOrThrow(video, payload)
+
+        await video.reload()
+
+        const editionResultPath = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({
+          videoPath: originalVideoFilePath,
+          separatedAudioPath
+        }) => {
+          let tmpInputFilePath: string
+          let outputPath: string
+
+          for (const task of payload.tasks) {
+            const outputFilename = buildUUID() + extname(originalVideoFilePath)
+            outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
+
+            await processTask({
+              videoInputPath: tmpInputFilePath ?? originalVideoFilePath,
+
+              separatedAudioInputPath: tmpInputFilePath
+                ? undefined
+                : separatedAudioPath,
+
+              inputFileMutexReleaser,
+
+              video,
+              outputPath,
+              task,
+
+              abortSignal
+            })
+
+            if (tmpInputFilePath) await remove(tmpInputFilePath)
+
+            // For the next iteration
+            tmpInputFilePath = outputPath
+            inputFileMutexReleaser = undefined
+          }
+
+          return outputPath
         })
-      } catch (err) {
-        logger.error('Cannot reset video state after studio error', { err, ...lTags })
-      }
 
-      throw err
-    } finally {
-      if (inputFileMutexReleaser) inputFileMutexReleaser()
-    }
-  }
+        logger.info('Video edition ended for video %s.', video.uuid)
+
+        await onVideoStudioEnded({ video, editionResultPath, tasks: payload.tasks })
+      } catch (err) {
+        await safeCleanupStudioTMPFiles(payload.tasks)
+
+        try {
+          await sequelizeTypescript.transaction(async transaction => {
+            const video = await VideoModel.load(payload.videoUUID, transaction)
+            if (!video || video.state === VideoState.PUBLISHED) return
+
+            await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
+          })
+        } catch (err) {
+          logger.error('Cannot reset video state after studio error', { err })
+        }
+
+        throw err
+      } finally {
+        if (inputFileMutexReleaser) inputFileMutexReleaser()
+      }
+    })
 
   return Promise.race([ run(), abortPromise ])
 }
@@ -138,7 +138,6 @@ type TaskProcessorOptions<T extends VideoStudioTaskPayload = VideoStudioTaskPayl
   outputPath: string
   video: MVideo
   task: T
-  lTags: { tags: (string | number)[] }
 
   abortSignal?: AbortSignal
 }
@@ -152,9 +151,9 @@ const taskProcessors: { [id in VideoStudioTask['name']]: (options: TaskProcessor
 }
 
 async function processTask (options: TaskProcessorOptions) {
-  const { video, task, lTags } = options
+  const { video, task } = options
 
-  logger.info('Processing %s task for video %s.', task.name, video.uuid, { task, ...lTags })
+  logger.info('Processing %s task for video %s.', task.name, video.uuid, { task })
 
   const processor = taskProcessors[options.task.name]
   if (!process) throw new Error('Unknown task ' + task.name)
@@ -163,9 +162,9 @@ async function processTask (options: TaskProcessorOptions) {
 }
 
 function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload>) {
-  const { task, lTags, abortSignal } = options
+  const { task, abortSignal } = options
 
-  logger.debug('Will add intro/outro to the video.', { options, ...lTags })
+  logger.debug('Will add intro/outro to the video.', { options })
 
   return buildFFmpegEdition(abortSignal).addIntroOutro({
     ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
@@ -178,9 +177,9 @@ function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTaskIntr
 }
 
 function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
-  const { task, lTags, abortSignal } = options
+  const { task, abortSignal } = options
 
-  logger.debug('Will cut the video.', { options, ...lTags })
+  logger.debug('Will cut the video.', { options })
 
   return buildFFmpegEdition(abortSignal).cutVideo({
     ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
@@ -191,9 +190,9 @@ function processCut (options: TaskProcessorOptions<VideoStudioTaskCutPayload>) {
 }
 
 function processRemoveSegments (options: TaskProcessorOptions<VideoStudioTaskRemoveSegmentsPayload>) {
-  const { task, lTags, abortSignal } = options
+  const { task, abortSignal } = options
 
-  logger.debug('Will remove segments from the video.', { options, ...lTags })
+  logger.debug('Will remove segments from the video.', { options })
 
   return buildFFmpegEdition(abortSignal).removeSegments({
     ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),
@@ -203,9 +202,9 @@ function processRemoveSegments (options: TaskProcessorOptions<VideoStudioTaskRem
 }
 
 function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWatermarkPayload>) {
-  const { task, lTags, abortSignal } = options
+  const { task, abortSignal } = options
 
-  logger.debug('Will add watermark to the video.', { options, ...lTags })
+  logger.debug('Will add watermark to the video.', { options })
 
   return buildFFmpegEdition(abortSignal).addWatermark({
     ...pick(options, [ 'inputFileMutexReleaser', 'videoInputPath', 'separatedAudioInputPath', 'outputPath' ]),

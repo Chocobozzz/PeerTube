@@ -4,7 +4,7 @@ import {
   WatchedWordsSubscriptionAction,
   WatchedWordsSubscriptionActions
 } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { fetchAndValidateWatchedWordsSubscriptionActions } from '@server/lib/watched-words-subscriptions.js'
@@ -14,7 +14,7 @@ import { MWatchedWordsSubscription } from '@server/types/models/index.js'
 import { createRebuildAutomaticTagsJob } from '../automatic-tags/automatic-tags.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers')
+const logger = createLogger('schedulers')
 
 export class WatchedWordsSubscriptionsScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -38,15 +38,14 @@ export class WatchedWordsSubscriptionsScheduler extends AbstractScheduler {
         logger.error('Cannot synchronize watched words subscription.', {
           err,
           url: subscription.url,
-          subscriptionId: subscription.id,
-          ...lTags()
+          subscriptionId: subscription.id
         })
       }
     }
   }
 
   private async syncSubscription (subscription: MWatchedWordsSubscription) {
-    logger.info(`Synchronizing watched words subscription "${subscription.name}" (${subscription.url}).`, lTags())
+    logger.info(`Synchronizing watched words subscription "${subscription.name}" (${subscription.url}).`)
 
     await subscription.update({ state: StreamSyncState.PROCESSING })
 
@@ -109,8 +108,7 @@ export class WatchedWordsSubscriptionsScheduler extends AbstractScheduler {
             accountId: subscription.accountId,
             subscriptionId: subscription.id,
             listName,
-            existingListId: existing.id,
-            ...lTags()
+            existingListId: existing.id
           }
         )
         return StreamSyncState.FAILED
@@ -156,8 +154,7 @@ export class WatchedWordsSubscriptionsScheduler extends AbstractScheduler {
           subscriptionId: subscription.id,
           listName,
           maxItems: CONSTRAINTS_FIELDS.WATCHED_WORDS.WORDS.max,
-          itemsToStore: wordsSet.size,
-          ...lTags()
+          itemsToStore: wordsSet.size
         })
 
         return StreamSyncState.FAILED

@@ -1,5 +1,4 @@
-import Bluebird from 'bluebird'
-import { Job } from 'bullmq'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   isAnnounceActivityValid,
   isDislikeActivityValid,
@@ -14,16 +13,17 @@ import { Redis } from '@server/lib/redis.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoShareModel } from '@server/models/video/video-share.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
+import Bluebird from 'bluebird'
+import { Job } from 'bullmq'
+import { createLogger } from '../../../helpers/logger.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 
-const lTags = loggerTagsFactory('ap-cleaner')
+const logger = createLogger('ap-cleaner')
 
 // Job to clean remote interactions off local videos
 
 async function processActivityPubCleaner (_job: Job) {
-  logger.info('Processing ActivityPub cleaner.', lTags())
+  logger.info('Processing ActivityPub cleaner.')
 
   {
     const rateUrls = await AccountVideoRateModel.listRemoteRateUrlsOfLocalVideos()
@@ -70,60 +70,62 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateObjectIfNeeded <T> (options: {
+async function updateObjectIfNeeded<T> (options: {
   url: string
   bodyValidator: (body: any) => boolean
   updater: (url: string, newUrl: string) => Promise<T>
-  deleter: (url: string) => Promise<T> }
-): Promise<{ data: T, status: 'deleted' | 'updated' } | null> {
+  deleter: (url: string) => Promise<T>
+}): Promise<{ data: T, status: 'deleted' | 'updated' } | null> {
   const { url, bodyValidator, updater, deleter } = options
 
-  const on404OrTombstone = async () => {
-    logger.info('Removing remote AP object %s.', url, lTags(url))
-    const data = await deleter(url)
+  return logger.withContext([ url ], async () => {
+    const on404OrTombstone = async () => {
+      logger.info('Removing remote AP object %s.', url)
+      const data = await deleter(url)
 
-    return { status: 'deleted' as 'deleted', data }
-  }
-
-  try {
-    const { body } = await fetchAP<any>(url)
-
-    // If not same id, check same host and update
-    if (!body?.id || !bodyValidator(body)) throw new Error(`Body or body id of ${url} is invalid`)
-
-    if (body.type === 'Tombstone') {
-      return on404OrTombstone()
+      return { status: 'deleted' as 'deleted', data }
     }
 
-    const newUrl = body.id
-    if (newUrl !== url) {
-      if (checkUrlsSameHost(newUrl, url) !== true) {
-        throw new Error(`New url ${newUrl} has not the same host than old url ${url}`)
+    try {
+      const { body } = await fetchAP<any>(url)
+
+      // If not same id, check same host and update
+      if (!body?.id || !bodyValidator(body)) throw new Error(`Body or body id of ${url} is invalid`)
+
+      if (body.type === 'Tombstone') {
+        return on404OrTombstone()
       }
 
-      logger.info('Updating remote AP object %s.', url, lTags(url))
-      const data = await updater(url, newUrl)
+      const newUrl = body.id
+      if (newUrl !== url) {
+        if (checkUrlsSameHost(newUrl, url) !== true) {
+          throw new Error(`New url ${newUrl} has not the same host than old url ${url}`)
+        }
 
-      return { status: 'updated', data }
+        logger.info('Updating remote AP object %s.', url)
+        const data = await updater(url, newUrl)
+
+        return { status: 'updated', data }
+      }
+
+      return null
+    } catch (err) {
+      // Does not exist anymore, remove entry
+      if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
+        return on404OrTombstone()
+      }
+
+      logger.debug('Remote AP object %s is unavailable.', url)
+
+      const unavailability = await Redis.Instance.addAPUnavailability(url)
+      if (unavailability >= AP_CLEANER.UNAVAILABLE_TRESHOLD) {
+        logger.info('Removing unavailable AP resource %s.', url)
+        return on404OrTombstone()
+      }
+
+      return null
     }
-
-    return null
-  } catch (err) {
-    // Does not exist anymore, remove entry
-    if ((err as PeerTubeRequestError).statusCode === HttpStatusCode.NOT_FOUND_404) {
-      return on404OrTombstone()
-    }
-
-    logger.debug('Remote AP object %s is unavailable.', url, lTags(url))
-
-    const unavailability = await Redis.Instance.addAPUnavailability(url)
-    if (unavailability >= AP_CLEANER.UNAVAILABLE_TRESHOLD) {
-      logger.info('Removing unavailable AP resource %s.', url, lTags(url))
-      return on404OrTombstone()
-    }
-
-    return null
-  }
+  })
 }
 
 function rateOptionsFactory () {
@@ -142,7 +144,7 @@ function rateOptionsFactory () {
       return { videoId, type }
     },
 
-    deleter: async (url) => {
+    deleter: async url => {
       const rate = await AccountVideoRateModel.loadByUrl(url, undefined)
 
       const videoId = rate.videoId
@@ -168,7 +170,7 @@ function shareOptionsFactory () {
       return undefined
     },
 
-    deleter: async (url) => {
+    deleter: async url => {
       const share = await VideoShareModel.loadByUrl(url, undefined)
 
       await share.destroy()
@@ -191,7 +193,7 @@ function commentOptionsFactory () {
       return undefined
     },
 
-    deleter: async (url) => {
+    deleter: async url => {
       const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
 
       await comment.destroy()

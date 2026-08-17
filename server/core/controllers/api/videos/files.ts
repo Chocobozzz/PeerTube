@@ -1,5 +1,5 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { updateM3U8AndShaPlaylist } from '@server/lib/hls.js'
 import { removeAllWebVideoFiles, removeHLSFile, removeHLSPlaylist, removeWebVideoFile } from '@server/lib/video-file.js'
@@ -18,7 +18,8 @@ import {
   videoGetValidatorFactory
 } from '../../../middlewares/index.js'
 
-const lTags = loggerTagsFactory('api', 'video')
+const logger = createLogger('api', 'video')
+
 const filesRouter = express.Router()
 
 filesRouter.get(
@@ -77,26 +78,30 @@ async function getVideoFileMetadata (req: express.Request, res: express.Response
 async function removeHLSPlaylistController (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
 
-  logger.info('Deleting HLS playlist of %s.', video.url, lTags(video.uuid))
-  await removeHLSPlaylist(video)
+  return logger.withContext([ video.uuid ], async () => {
+    logger.info('Deleting HLS playlist of %s.', video.url)
+    await removeHLSPlaylist(video)
 
-  scheduleVideoFederation({ video })
+    scheduleVideoFederation({ video })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 async function removeHLSFileController (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
   const videoFileId = +req.params.videoFileId
 
-  logger.info('Deleting HLS file %d of %s.', videoFileId, video.url, lTags(video.uuid))
+  return logger.withContext([ video.uuid ], async () => {
+    logger.info('Deleting HLS file %d of %s.', videoFileId, video.url)
 
-  const playlist = await removeHLSFile(video, videoFileId)
-  if (playlist) await updateM3U8AndShaPlaylist(video, playlist)
+    const playlist = await removeHLSFile(video, videoFileId)
+    if (playlist) await updateM3U8AndShaPlaylist(video, playlist)
 
-  scheduleVideoFederation({ video })
+    scheduleVideoFederation({ video })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -104,22 +109,26 @@ async function removeHLSFileController (req: express.Request, res: express.Respo
 async function removeAllWebVideoFilesController (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
 
-  logger.info('Deleting Web Video files of %s.', video.url, lTags(video.uuid))
+  return logger.withContext([ video.uuid ], async () => {
+    logger.info('Deleting Web Video files of %s.', video.url)
 
-  await removeAllWebVideoFiles(video)
-  scheduleVideoFederation({ video })
+    await removeAllWebVideoFiles(video)
+    scheduleVideoFederation({ video })
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 async function removeWebVideoFileController (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
-
   const videoFileId = +req.params.videoFileId
-  logger.info('Deleting Web Video file %d of %s.', videoFileId, video.url, lTags(video.uuid))
 
-  await removeWebVideoFile(video, videoFileId)
-  scheduleVideoFederation({ video })
+  return logger.withContext([ video.uuid ], async () => {
+    logger.info('Deleting Web Video file %d of %s.', videoFileId, video.url)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    await removeWebVideoFile(video, videoFileId)
+    scheduleVideoFederation({ video })
+
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }

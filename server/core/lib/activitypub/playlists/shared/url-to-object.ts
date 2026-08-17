@@ -1,34 +1,34 @@
+import { PlaylistElementObject, PlaylistObject } from '@peertube/peertube-models'
 import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '@server/helpers/custom-validators/activitypub/playlist.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
-import { PlaylistElementObject, PlaylistObject } from '@peertube/peertube-models'
+import { createLogger } from '@server/helpers/logger.js'
 import { fetchAP } from '../../activity.js'
 import { checkUrlsSameHost } from '../../url.js'
 
-async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusCode: number, playlistObject: PlaylistObject }> {
-  const lTags = loggerTagsFactory('ap', 'video-playlist', playlistUrl)
+const logger = createLogger('ap', 'playlist')
 
-  logger.info('Fetching remote playlist %s.', playlistUrl, lTags())
+export async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusCode: number, playlistObject: PlaylistObject }> {
+  logger.info('Fetching remote playlist %s.', playlistUrl)
 
   const { body, statusCode } = await fetchAP<any>(playlistUrl)
 
   if (isPlaylistObjectValid(body) === false || checkUrlsSameHost(body.id, playlistUrl) !== true) {
-    logger.debug('Remote video playlist JSON is not valid.', { body, ...lTags() })
+    logger.debug('Remote video playlist JSON is not valid.', { body })
     return { statusCode, playlistObject: undefined }
   }
 
   if (!isArray(body.to)) {
-    logger.debug('Remote video playlist JSON does not have a valid audience.', { body, ...lTags() })
+    logger.debug('Remote video playlist JSON does not have a valid audience.', { body })
     return { statusCode, playlistObject: undefined }
   }
 
   return { statusCode, playlistObject: body }
 }
 
-async function fetchRemotePlaylistElement (elementUrl: string): Promise<{ statusCode: number, elementObject: PlaylistElementObject }> {
-  const lTags = loggerTagsFactory('ap', 'video-playlist', 'element', elementUrl)
-
-  logger.debug('Fetching remote playlist element %s.', elementUrl, lTags())
+export async function fetchRemotePlaylistElement (
+  elementUrl: string
+): Promise<{ statusCode: number, elementObject: PlaylistElementObject }> {
+  logger.debug('Fetching remote playlist element %s.', elementUrl)
 
   const { body, statusCode } = await fetchAP<PlaylistElementObject>(elementUrl)
 
@@ -39,9 +39,4 @@ async function fetchRemotePlaylistElement (elementUrl: string): Promise<{ status
   }
 
   return { statusCode, elementObject: body }
-}
-
-export {
-  fetchRemoteVideoPlaylist,
-  fetchRemotePlaylistElement
 }

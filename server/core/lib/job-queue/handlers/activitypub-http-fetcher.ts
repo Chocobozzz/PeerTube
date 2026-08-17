@@ -1,7 +1,7 @@
 import { ActivitypubHttpFetcherPayload, FetchType } from '@peertube/peertube-models'
 import { AccountModel } from '@server/models/account/account.js'
 import { Job } from 'bullmq'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { VideoModel } from '../../../models/video/video.js'
@@ -11,6 +11,8 @@ import { createAccountPlaylists } from '../../activitypub/playlists/index.js'
 import { processActivities } from '../../activitypub/process/index.js'
 import { addVideoShares } from '../../activitypub/share.js'
 import { addVideoComments } from '../../activitypub/video-comments.js'
+
+const logger = createLogger()
 
 async function processActivityPubHttpFetcher (job: Job) {
   logger.info('Processing ActivityPub fetcher in job %s.', job.id)
@@ -25,9 +27,9 @@ async function processActivityPubHttpFetcher (job: Job) {
 
   const fetcherType: { [id in FetchType]: (items: any[]) => Promise<any> } = {
     'activity': items => processActivities(items, { outboxUrl: payload.uri, fromFetch: true }),
-    'video-shares': items => addVideoShares(items, video),
+    'video-shares': items => logger.withContext([ video.uuid ], () => addVideoShares(items, video)),
     'video-comments': items => addVideoComments(items),
-    'account-playlists': items => createAccountPlaylists(items, account)
+    'account-playlists': items => logger.withContext([ account.Actor.url ], () => createAccountPlaylists(items, account))
   }
 
   const cleanerType: { [id in FetchType]?: (crawlStartDate: Date) => Promise<any> } = {

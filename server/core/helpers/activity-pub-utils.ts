@@ -2,10 +2,12 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import { ContextType } from '@peertube/peertube-models'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '@server/initializers/constants.js'
 import { isArray } from './custom-validators/misc.js'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
 import { buildDigest } from './peertube-crypto.js'
 import type { signJsonLDObject } from './peertube-jsonld.js'
 import { doJSONRequest } from './requests.js'
+
+const logger = createLogger()
 
 export type ContextFilter = <T>(arg: T) => Promise<T>
 

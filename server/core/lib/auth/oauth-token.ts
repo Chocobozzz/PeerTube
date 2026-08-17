@@ -5,12 +5,14 @@ import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { MOAuthClient } from '@server/types/models/index.js'
 import { MUser } from '@server/types/models/user/user.js'
 import express from 'express'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { isRootAuthDisabled } from './auth-utils.js'
 import { BypassLogin } from './bypass-login.model.js'
 import { TokensCache } from './tokens-cache.js'
+
+const logger = createLogger()
 
 export async function getAccessToken (bearerToken: string) {
   logger.debug('Getting access token.')

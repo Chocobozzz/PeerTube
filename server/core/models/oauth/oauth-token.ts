@@ -17,12 +17,14 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { AccountModel } from '../account/account.js'
 import { ActorModel } from '../actor/actor.js'
 import { getSort, SequelizeModel } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { OAuthClientModel } from './oauth-client.js'
+
+const logger = createLogger()
 
 export type OAuthTokenInfo = {
   refreshToken: string
@@ -188,7 +190,7 @@ export class OAuthTokenModel extends SequelizeModel<OAuthTokenModel> {
           },
           user: token.User,
           token
-        } as OAuthTokenInfo
+        }
       })
       .catch(err => {
         logger.error('getRefreshToken error.', { err })

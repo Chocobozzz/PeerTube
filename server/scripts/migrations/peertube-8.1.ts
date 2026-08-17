@@ -1,9 +1,12 @@
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/database.js'
+import { ApplicationModel } from '@server/models/application/application.js'
 import Bluebird from 'bluebird'
 import { move } from 'fs-extra'
 import { readdir } from 'fs/promises'
 import { join } from 'path'
+
+const MIGRATION_NAME = 'peertube-8.1'
 
 run()
   .then(() => process.exit(0))
@@ -13,6 +16,8 @@ run()
   })
 
 async function run () {
+  await initDatabaseModels(true)
+
   try {
     await movePreviewsToThumbnails()
   } catch (err) {
@@ -48,6 +53,8 @@ async function run () {
   } catch (err) {
     console.error('An error occurred while updating local video caption URLs:', err)
   }
+
+  await ApplicationModel.setManualMigrationScriptRun(MIGRATION_NAME)
 }
 
 async function movePreviewsToThumbnails () {

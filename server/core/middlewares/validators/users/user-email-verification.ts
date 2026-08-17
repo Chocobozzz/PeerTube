@@ -6,10 +6,12 @@ import { UserModel } from '@server/models/user/user.js'
 import express from 'express'
 import { body, param } from 'express-validator'
 import { isSecretEqual } from '../../../helpers/peertube-crypto.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { Redis } from '../../../lib/redis.js'
 import { areValidationErrors, checkUserIdExist } from '../shared/index.js'
 import { checkRegistrationEmailExistPermissive, checkRegistrationIdExist } from './shared/user-registrations.js'
+
+const logger = createLogger()
 
 export const usersAskSendUserVerifyEmailValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),

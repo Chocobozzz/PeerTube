@@ -2,7 +2,7 @@ import express from 'express'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { removeRedundanciesOfServer, removeVideoRedundancy } from '../../../lib/redundancy.js'
 import {
   asyncMiddleware,
@@ -19,6 +19,8 @@ import {
   removeVideoRedundancyValidator,
   updateServerRedundancyValidator
 } from '../../../middlewares/validators/redundancy.js'
+
+const logger = createLogger()
 
 const serverRedundancyRouter = express.Router()
 

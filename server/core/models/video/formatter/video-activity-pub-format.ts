@@ -49,13 +49,13 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
       type: 'Link',
       mediaType: 'text/html',
       href: WEBSERVER.URL + video.getWatchStaticPath()
-    } as ActivityUrlObject,
+    },
 
     {
       type: 'Link',
       mediaType: 'text/html',
       href: video.url
-    } as ActivityUrlObject,
+    },
 
     ...buildVideoFileUrls({ video, files: video.VideoFiles }),
 
@@ -65,7 +65,7 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
   ]
 
   return {
-    type: 'Video' as 'Video',
+    type: 'Video',
     id: video.url,
     name: video.name,
     duration: getActivityStreamDuration(video.duration),
@@ -310,19 +310,15 @@ function buildTags (video: MVideoAP): (ActivitySensitiveTagObject | ActivityHash
     : []
 
   return [
-    ...tags.map(t =>
-      ({
-        type: 'Hashtag' as 'Hashtag',
-        name: t.name
-      }) as ActivityHashTagObject
-    ),
+    ...tags.map((t): ActivityHashTagObject => ({
+      type: 'Hashtag',
+      name: t.name
+    })),
 
-    ...nsfwFlagsToString(video.nsfwFlags).map(f =>
-      ({
-        type: 'SensitiveTag' as 'SensitiveTag',
-        name: f
-      }) as ActivitySensitiveTagObject
-    )
+    ...nsfwFlagsToString(video.nsfwFlags).map((f): ActivitySensitiveTagObject => ({
+      type: 'SensitiveTag',
+      name: f
+    }))
   ]
 }
 

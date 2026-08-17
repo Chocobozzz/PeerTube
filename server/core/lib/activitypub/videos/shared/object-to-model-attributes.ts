@@ -241,7 +241,7 @@ export function getCaptionAttributesFromObject (video: MVideoId, videoObject: Vi
       m3u8Filename: VideoCaptionModel.generateM3U8Filename(filename),
       m3u8Url: url.find(u => u.mediaType === 'application/x-mpegURL')?.href,
       cached: false
-    } as Partial<AttributesOnly<VideoCaptionModel>>
+    }
   })
 }
 

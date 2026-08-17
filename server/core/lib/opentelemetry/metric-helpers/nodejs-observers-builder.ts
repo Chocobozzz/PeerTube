@@ -1,9 +1,11 @@
 import { Meter, ObservableResult } from '@opentelemetry/api'
 import { AggregationType, InstrumentType, ViewOptions } from '@opentelemetry/sdk-metrics'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { readdir } from 'fs/promises'
 import { constants, NodeGCPerformanceDetail, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
+
+const logger = createLogger()
 
 // Thanks to https://github.com/siimon/prom-client
 // We took their logic and adapter it for opentelemetry

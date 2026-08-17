@@ -21,7 +21,7 @@ import { body } from 'express-validator'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isValidPasswordProtectedPrivacy, isVideoNameValid, isVideoReplayPrivacyValid } from '../../../helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import {
   areValidationErrors,
@@ -32,6 +32,8 @@ import {
   isValidVideoIdParam
 } from '../shared/index.js'
 import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
+
+const logger = createLogger()
 
 export const videoLiveGetValidatorFactory = (loadType: Extract<VideoLoadType, 'with-rights' | 'full'>) => {
   return [

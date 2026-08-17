@@ -1,5 +1,5 @@
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { createTranscodingJobs } from '@server/lib/transcoding/create-transcoding-job.js'
@@ -8,7 +8,8 @@ import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import express from 'express'
 import { asyncMiddleware, authenticate, createTranscodingValidator, ensureUserHasRight } from '../../../middlewares/index.js'
 
-const lTags = loggerTagsFactory('api', 'video')
+const logger = createLogger('api', 'video')
+
 const transcodingRouter = express.Router()
 
 transcodingRouter.post(
@@ -27,49 +28,50 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function createTranscoding (req: express.Request, res: express.Response) {
+function createTranscoding (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
-  logger.info('Creating %s transcoding job for %s.', req.body.transcodingType, video.url, lTags())
 
-  const body: VideoTranscodingCreate = req.body
+  return logger.withContext([ video.uuid ], async () => {
+    logger.info('Creating %s transcoding job for %s.', req.body.transcodingType, video.url)
 
-  await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingTranscode')
+    const body: VideoTranscodingCreate = req.body
 
-  const maxResolution = video.getMaxResolution()
-  const hasAudio = video.hasAudio()
+    await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingTranscode')
 
-  const resolutions = await Hooks.wrapObject(
-    computeResolutionsToTranscode({
-      input: maxResolution,
-      type: 'vod',
-      includeInput: true,
-      strictLower: false,
-      hasAudio,
-      forceAudioResolution: body.transcodingType === 'web-video' && CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
-    }),
-    'filter:transcoding.manual.resolutions-to-transcode.result',
-    body
-  )
+    const maxResolution = video.getMaxResolution()
+    const hasAudio = video.hasAudio()
 
-  logger.debug(`Resolutions built for manual transcoding ${body.transcodingType} for video ${video.uuid}`, {
-    resolutions,
+    const resolutions = await Hooks.wrapObject(
+      computeResolutionsToTranscode({
+        input: maxResolution,
+        type: 'vod',
+        includeInput: true,
+        strictLower: false,
+        hasAudio,
+        forceAudioResolution: body.transcodingType === 'web-video' && CONFIG.TRANSCODING.ALWAYS_TRANSCODE_PODCAST_OPTIMIZED_AUDIO
+      }),
+      'filter:transcoding.manual.resolutions-to-transcode.result',
+      body
+    )
 
-    ...lTags(video.uuid)
-  })
+    logger.debug(`Resolutions built for manual transcoding ${body.transcodingType} for video ${video.uuid}`, {
+      resolutions
+    })
 
-  if (resolutions.length === 0) {
+    if (resolutions.length === 0) {
+      return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    }
+
+    video.state = VideoState.TO_TRANSCODE
+    await video.save()
+
+    await createTranscodingJobs({
+      video,
+      resolutions,
+      transcodingType: body.transcodingType,
+      user: null // Don't specify priority since these transcoding jobs are fired by the admin
+    })
+
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
-  }
-
-  video.state = VideoState.TO_TRANSCODE
-  await video.save()
-
-  await createTranscodingJobs({
-    video,
-    resolutions,
-    transcodingType: body.transcodingType,
-    user: null // Don't specify priority since these transcoding jobs are fired by the admin
   })
-
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

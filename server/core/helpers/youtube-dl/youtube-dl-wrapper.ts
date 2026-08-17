@@ -8,12 +8,12 @@ import { inspect } from 'util'
 import { isVideoFileExtnameValid } from '../custom-validators/videos.js'
 import { isResolvingToUnicastOnly } from '../dns.js'
 import { t } from '../i18n.js'
-import { logger, loggerTagsFactory } from '../logger.js'
+import { createLogger } from '../logger.js'
 import { generateVideoImportTmpPath } from '../utils.js'
 import { YoutubeDLCLI } from './youtube-dl-cli.js'
 import { YoutubeDLInfo, YoutubeDLInfoBuilder } from './youtube-dl-info-builder.js'
 
-const lTags = loggerTagsFactory('youtube-dl')
+const logger = createLogger('youtube-dl')
 
 export const YoutubeDlImportErrorCode = {
   FETCH_ERROR: 0,
@@ -159,7 +159,7 @@ export class YoutubeDLWrapper {
     })
 
     if (!Array.isArray(list)) {
-      logger.debug(`List info from youtube-dl is not an array for ${this.url}.`, { info: inspect(list), ...lTags() })
+      logger.debug(`List info from youtube-dl is not an array for ${this.url}.`, { info: inspect(list) })
 
       throw new YoutubeDlImportError({
         message: t(`YoutubeDL could not get list info from ${this.url}: ${inspect(list)}`, userLanguage, { targetUrl: this.url }),
@@ -182,7 +182,7 @@ export class YoutubeDLWrapper {
     const files = await youtubeDL.getSubs({ url: this.url, format: 'vtt', processOptions: { cwd } })
     if (!files) return []
 
-    logger.debug('Get subtitles from youtube dl.', { url: this.url, files, ...lTags() })
+    logger.debug('Get subtitles from youtube dl.', { url: this.url, files })
 
     const subtitles = files.reduce((acc, filename) => {
       const matched = filename.match(/\.([a-z]{2})(-[a-z]+)?\.(vtt|ttml)/i)
@@ -213,7 +213,7 @@ export class YoutubeDLWrapper {
     // Leave empty the extension, youtube-dl will add it
     const pathWithoutExtension = generateVideoImportTmpPath(this.url, '')
 
-    logger.info('Importing youtubeDL video %s to %s', this.url, pathWithoutExtension, lTags())
+    logger.info('Importing youtubeDL video %s to %s', this.url, pathWithoutExtension)
 
     const youtubeDL = await YoutubeDLCLI.safeGet()
 
@@ -242,11 +242,11 @@ export class YoutubeDLWrapper {
     } catch (err) {
       this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
         .then(path => {
-          logger.debug('Error in youtube-dl import, deleting file if exists.', { err, pathToDelete: path, ...lTags() })
+          logger.debug('Error in youtube-dl import, deleting file if exists.', { err, pathToDelete: path })
 
           if (path) return remove(path)
         })
-        .catch(innerErr => logger.error('Cannot remove file in youtubeDL error.', { innerErr, ...lTags() }))
+        .catch(innerErr => logger.error('Cannot remove file in youtubeDL error.', { innerErr }))
 
       throw err
     }

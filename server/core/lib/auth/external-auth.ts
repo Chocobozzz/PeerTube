@@ -9,7 +9,7 @@ import {
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid
 } from '@server/helpers/custom-validators/users.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { generateRandomString } from '@server/helpers/utils.js'
 import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
@@ -21,6 +21,8 @@ import {
 } from '@server/types/plugins/register-server-auth.model.js'
 import { BypassLogin } from './bypass-login.model.js'
 import { ExternalUser } from './external-user.model.js'
+
+const logger = createLogger()
 
 // Token is the key, expiration date is the value
 const authBypassTokens = new Map<string, {

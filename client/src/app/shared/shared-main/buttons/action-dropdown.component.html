@@ -10,8 +10,7 @@
       class="action-button border-0"
       [ngClass]="buttonClasses"
       ngbDropdownToggle
-      aria-label="Open actions"
-      i18n-aria-label
+      [ariaLabel]="ariaLabel()"
       >
       @if (label()) {
         <span class="me-2 dropdown-toggle-label">

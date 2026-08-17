@@ -1,7 +1,9 @@
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { createCipheriv, createDecipheriv, randomBytes, scryptSync } from 'crypto'
 import * as Sequelize from 'sequelize'
 import { CONFIG } from '../config.js'
+
+const logger = createLogger()
 
 // Crypto is inlined (rather than imported from peertube-crypto.ts) so this migration stays a frozen,
 // self-contained artifact: removing the legacy CBC fallback from the helper later cannot break it
@@ -15,7 +17,7 @@ async function up (utils: {
 }): Promise<void> {
   const rows = await utils.sequelize.query<{ id: number, otpSecret: string }>(
     'SELECT "id", "otpSecret" FROM "user" WHERE "otpSecret" IS NOT NULL',
-    { type: Sequelize.QueryTypes.SELECT as Sequelize.QueryTypes.SELECT, transaction: utils.transaction }
+    { type: Sequelize.QueryTypes.SELECT, transaction: utils.transaction }
   )
 
   let removed = 0

@@ -1,7 +1,9 @@
 import Bluebird from 'bluebird'
 import { ServerActionHookName, ServerFilterHookName } from '@peertube/peertube-models'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { PluginManager } from './plugin-manager.js'
+
+const logger = createLogger()
 
 type PromiseFunction <U, T> = (params: U) => Promise<T> | Bluebird<T>
 type RawFunction <U, T> = (params: U) => T

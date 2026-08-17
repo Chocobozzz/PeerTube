@@ -1,8 +1,10 @@
 import express from 'express'
 import { HttpStatusCode, UserVideoRateUpdate } from '@peertube/peertube-models'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoUpdateRateValidator } from '../../../middlewares/index.js'
 import { userRateVideo } from '@server/lib/rate.js'
+
+const logger = createLogger()
 
 const rateVideoRouter = express.Router()
 

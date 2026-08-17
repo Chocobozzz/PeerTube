@@ -234,8 +234,13 @@ export async function onWebVideoFileTranscoding (options: {
     if (deleteWebInputVideoFile) {
       await saveNewOriginalFileIfNeeded(video, deleteWebInputVideoFile)
 
-      await video.removeWebVideoFile(deleteWebInputVideoFile)
-      await deleteWebInputVideoFile.destroy()
+      // Reload the file: another job may have updated it (its torrent filename for example) while we were transcoding
+      const inputFileToDelete = await VideoFileModel.load(deleteWebInputVideoFile.id)
+
+      if (inputFileToDelete) {
+        await video.removeWebVideoFile(inputFileToDelete)
+        await inputFileToDelete.destroy()
+      }
     }
 
     const existingFile = await VideoFileModel.loadWebVideoFile({ videoId: video.id, fps: videoFile.fps, resolution: videoFile.resolution })

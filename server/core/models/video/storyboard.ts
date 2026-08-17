@@ -5,10 +5,12 @@ import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Op, Transaction } from 'sequelize'
 import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, FILES_CACHE, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel } from '../shared/index.js'
 import { VideoModel } from './video.js'
+
+const logger = createLogger()
 
 @Table({
   tableName: 'storyboard',

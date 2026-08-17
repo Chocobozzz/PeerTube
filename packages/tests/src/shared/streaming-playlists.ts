@@ -190,7 +190,7 @@ export async function checkResolutionsInMasterPlaylist (options: {
   if (splittedAudio && hasAudio && hasVideo) {
     expect(masterPlaylist).to.match(
       new RegExp(
-        `#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="(group_Audio|audio)",NAME="(Audio|audio_0)"(,AUTOSELECT=YES)?,DEFAULT=YES,URI="[^.]*0.m3u8"`
+        `#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="(group_Audio|audio)",NAME="(Audio|audio_0)"(,AUTOSELECT=YES)?,DEFAULT=YES(,CHANNELS="2")?,URI="[^.]*0.m3u8"`
       )
     )
   }

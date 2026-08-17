@@ -5,7 +5,9 @@ import { Request } from 'express'
 import { BCRYPT_SALT_SIZE, ENCRYPTION, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
 import { MActor } from '../types/models/index.js'
 import { generateRSAKeyPairPromise, randomBytesPromise, scryptPromise } from './core-utils.js'
-import { logger } from './logger.js'
+import { createLogger } from './logger.js'
+
+const logger = createLogger()
 
 function createPrivateAndPublicKeys () {
   logger.info('Generating a RSA key...')

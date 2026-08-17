@@ -1,4 +1,4 @@
-import { VideoChannelCollaboratorState } from '@peertube/peertube-models'
+import { VideoChannelCollaboratorState, VideoImportStateType } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { getAvatarsJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
 import { Sequelize } from 'sequelize'
@@ -12,6 +12,7 @@ export interface ListVideoImportsOptions extends AbstractListQueryOptions {
   search?: string
   targetUrl?: string
   videoChannelSyncId?: number
+  stateOneOf?: VideoImportStateType[]
 
   collaborationAccountId?: number
 }
@@ -87,6 +88,12 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
       where.push('"VideoImportModel"."videoChannelSyncId" = :videoChannelSyncId')
 
       this.replacements.videoChannelSyncId = this.options.videoChannelSyncId
+    }
+
+    if (this.options.stateOneOf?.length) {
+      where.push('"VideoImportModel"."state" IN (:stateOneOf)')
+
+      this.replacements.stateOneOf = this.options.stateOneOf
     }
 
     if (this.options.search) {

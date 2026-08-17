@@ -1,6 +1,8 @@
 import { VideoResolution } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
-import { logger } from '../logger.js'
+import { createLogger } from '../logger.js'
+
+const logger = createLogger()
 
 export function computeOutputFPS (options: {
   inputFPS: number

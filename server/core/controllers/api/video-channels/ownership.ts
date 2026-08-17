@@ -4,7 +4,7 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import express from 'express'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
@@ -24,6 +24,8 @@ import {
 } from '../../../middlewares/index.js'
 import { ChangeOwnershipModel } from '../../../models/video/change-ownership.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
+
+const logger = createLogger()
 
 const ownershipChannelRouter = express.Router()
 

@@ -34,7 +34,7 @@ import { Job } from 'bullmq'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { move, remove } from 'fs-extra/esm'
 import { stat } from 'fs/promises'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, JOB_TTL } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoFileModel } from '../../../models/video/video-file.js'
@@ -45,46 +45,47 @@ import { Notifier } from '../../notifier/index.js'
 import { createLocalVideoThumbnailsFromVideo } from '../../thumbnail.js'
 import { JobQueue } from '../job-queue.js'
 
-async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
+const logger = createLogger()
+
+export async function processVideoImport (job: Job): Promise<VideoImportPreventExceptionResult> {
   const payload = job.data as VideoImportPayload
 
   const videoImport = await getVideoImportOrDie(payload)
-  if (videoImport.state === VideoImportState.CANCELLED) {
-    logger.info('Do not process import since it has been cancelled', { payload })
-    return { resultType: 'success' }
-  }
 
-  if (videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
-    logger.info('Do not process import since it has reached the maximum number of attempts', { payload, attempts: videoImport.attempts })
+  return logger.withContext([ videoImport.Video.uuid ], async () => {
+    if (videoImport.state === VideoImportState.CANCELLED) {
+      logger.info('Do not process import since it has been cancelled', { payload })
+      return { resultType: 'success' }
+    }
 
-    return { resultType: 'error' }
-  }
+    if (videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
+      logger.info('Do not process import since it has reached the maximum number of attempts', { payload, attempts: videoImport.attempts })
 
-  videoImport.attempts += 1
-  videoImport.state = VideoImportState.PROCESSING
-  await videoImport.save()
+      return { resultType: 'error' }
+    }
 
-  try {
-    if (payload.type === 'youtube-dl') await processYoutubeDLImport(job, videoImport, payload)
-    if (payload.type === 'magnet-uri' || payload.type === 'torrent-file') await processTorrentImport(job, videoImport, payload)
+    videoImport.attempts += 1
+    videoImport.state = VideoImportState.PROCESSING
+    await videoImport.save()
 
-    return { resultType: 'success' }
-  } catch (err) {
-    // Processors already handle video import state change on error
+    try {
+      if (payload.type === 'youtube-dl') await processYoutubeDLImport(job, videoImport, payload)
+      if (payload.type === 'magnet-uri' || payload.type === 'torrent-file') await processTorrentImport(job, videoImport, payload)
 
-    if (!payload.preventException) throw err
+      return { resultType: 'success' }
+    } catch (err) {
+      // Processors already handle video import state change on error
 
-    logger.warn('Catch error in video import to send value to parent job.', { payload, err })
-    return { resultType: 'error' }
-  }
+      if (!payload.preventException) throw err
+
+      logger.warn('Catch error in video import to send value to parent job.', { payload, err })
+      return { resultType: 'error' }
+    }
+  })
 }
 
 // ---------------------------------------------------------------------------
-
-export {
-  processVideoImport
-}
-
+// Private
 // ---------------------------------------------------------------------------
 
 async function processTorrentImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportTorrentPayload) {

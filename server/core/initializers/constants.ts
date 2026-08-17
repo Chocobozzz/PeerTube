@@ -62,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1110
+export const LAST_MIGRATION_VERSION = 1125
 
 // ---------------------------------------------------------------------------
 
@@ -81,6 +81,22 @@ export const PAGINATION = {
       MAX: 50
     }
   }
+}
+
+// Comment trees are truncated so we don't have to build/send/render a whole thread at once
+export const VIDEO_COMMENTS_TREE = {
+  DEPTH: {
+    DEFAULT: 5,
+    MAX: 10
+  },
+  REPLIES_PER_LEVEL: {
+    DEFAULT: 10,
+    MAX: 30
+  },
+  MAX_COMMENTS_PER_REQUEST: 300,
+  // A tree can make the database walk through `count * (repliesPerLevel ^ maxDepth - 1) / (repliesPerLevel - 1)`
+  // comments before we truncate it to MAX_COMMENTS_PER_REQUEST
+  MAX_SEARCHED_COMMENTS: 2_000_000
 }
 
 export const WEBSERVER = {
@@ -382,8 +398,20 @@ export const SCHEDULER_INTERVALS_MS = {
   CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL,
   BLOCKLIST_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
   WATCHED_WORDS_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
-  REMOVE_OLD_USER_LOGIN_DEVICES: 60000 * 60 * 24 // 1 day
+  REMOVE_OLD_USER_LOGIN_DEVICES: 60000 * 60 * 24, // 1 day
+  CHECK_MANUAL_MIGRATION_SCRIPTS: 60000 * 60 * 12 // 12 hours
 }
+
+export const MANUAL_MIGRATION_SCRIPTS = [
+  'peertube-4.0',
+  'peertube-4.2',
+  'peertube-5.0',
+  'peertube-6.3',
+  'peertube-7.2',
+  'peertube-8.0',
+  'peertube-8.1',
+  'peertube-8.3'
+]
 
 // Devices not seen again after this delay are forgotten, so a login from that IP/user-agent pair will be treated as new again
 export const USER_LOGIN_DEVICE_MAX_AGE = 60000 * 60 * 24 * 365 // 1 year
@@ -593,6 +621,9 @@ export const REMOTE_VIEWS = {
 }
 
 export const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100
+
+// Changing this requires re-indexing existing videos
+export const VIDEO_SEARCH_INDEXED_DESCRIPTION_LENGTH = 1000
 
 export let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
@@ -1173,6 +1204,17 @@ export const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_D
 export const VIDEO_LIVE = {
   EXTENSION: '.ts',
   CLEANUP_DELAY: 1000 * 60 * 5, // 5 minutes
+  // Delay before aborting a session on RTMP disconnection, so we kill ffmpeg even if it still has data to process
+  ABORT_DELAY_ON_RTMP_DISCONNECT: 2000, // 2 seconds
+  // Max time we wait for ffmpeg to exit after we sent it a SIGINT, before killing it
+  FFMPEG_EXIT_TIMEOUT: 10000, // 10 seconds
+  // Time we give a remote runner to flush its last chunks after we aborted the session
+  // If this delay is too short, the last chunks of this session can land in the directory *after* we told everyone we released it
+  REMOTE_RUNNER_FLUSH_DELAY: 5000, // 5 seconds
+  // Max time a new session waits for the previous session of a permanent live to release the live directory
+  PREVIOUS_SESSION_CLEANUP_TIMEOUT: 30000, // 30 seconds
+  // Max time we wait for ffmpeg to fill the live master playlist it just created before giving up on it
+  MASTER_PLAYLIST_READ_TIMEOUT: 5000, // 5 seconds
   SEGMENT_TIME_SECONDS: {
     DEFAULT_LATENCY: 4, // 4 seconds
     SMALL_LATENCY: 2 // 2 seconds

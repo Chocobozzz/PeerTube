@@ -1,13 +1,14 @@
-import express, { Request, Response, NextFunction, RequestHandler } from 'express'
-import { buildLogger } from '@server/helpers/logger.js'
+import { install } from '@logtape/adaptor-winston'
+import { buildWinstonLogger } from '@server/helpers/logger.js'
 import { getResumableUploadPath } from '@server/helpers/upload.js'
-import { CONFIG } from '@server/initializers/config.js'
-import { FileQuery, LogLevel, Uploadx, Metadata as UploadXMetadata } from '@uploadx/core'
-import { extname } from 'path'
 import { authenticate } from '@server/middlewares/auth.js'
 import { resumableInitValidator } from '@server/middlewares/validators/resumable-upload.js'
+import { FileQuery, Uploadx, Metadata as UploadXMetadata } from '@uploadx/core'
+import express, { NextFunction, Request, RequestHandler, Response } from 'express'
+import { extname } from 'path'
 
-const logger = buildLogger({ labelSuffix: 'uploadx' })
+const logger = buildWinstonLogger({ labelSuffix: 'uploadx' })
+install(logger)
 
 export const uploadx = new Uploadx({
   directory: getResumableUploadPath(),
@@ -16,14 +17,6 @@ export const uploadx = new Uploadx({
 
   // Could be big with a big thumbnail
   maxMetadataSize: '10MB',
-
-  logger: {
-    logLevel: CONFIG.LOG.LEVEL as LogLevel,
-    debug: logger.debug.bind(logger),
-    info: logger.info.bind(logger),
-    warn: logger.warn.bind(logger),
-    error: logger.error.bind(logger)
-  },
 
   userIdentifier: (_, res: express.Response) => {
     if (!res.locals.oauth) return undefined

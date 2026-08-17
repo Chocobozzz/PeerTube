@@ -45,80 +45,82 @@ import { Job } from 'bullmq'
 import { pathExists, remove } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { isAbsolute, join } from 'path'
-import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 
-const lTags = loggerTagsFactory('live', 'job')
+const logger = createLogger('live', 'job')
 
 export async function processVideoLiveEnding (job: Job) {
   const payload = job.data as VideoLiveEndingPayload
 
-  logger.info('Processing video live ending for %s.', payload.videoId, { payload, ...lTags() })
+  await logger.withContext([ payload.videoId ], async () => {
+    logger.info('Processing video live ending for %s.', payload.videoId, { payload })
 
-  function logError () {
-    logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId, lTags())
-  }
-
-  const video = await VideoModel.loadWithThumbnails(payload.videoId)
-  const live = await VideoLiveModel.loadByVideoId(payload.videoId)
-  const liveSession = await VideoLiveSessionModel.load(payload.liveSessionId)
-
-  if (!video || !live || !liveSession) {
-    logError()
-    return
-  }
-
-  const permanentLive = live.permanentLive
-
-  liveSession.endingProcessed = true
-  await liveSession.save()
-
-  if (liveSession.saveReplay !== true) {
-    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
-  }
-
-  let replayDirectory = payload.replayDirectory
-
-  if (!replayDirectory) {
-    logger.info(`No replay directory found for live ${video.uuid}, skipping video replay creation.`, { ...lTags(video.uuid) })
-
-    return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
-  }
-
-  // Introduced in PeerTube 7.2, allow to use the appropriate base directory even if the live privacy changed
-  if (!isAbsolute(replayDirectory)) {
-    replayDirectory = join(getLiveReplayBaseDirectory(video), replayDirectory)
-  }
-
-  const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
-
-  try {
-    await video.reload()
-
-    if (await hasReplayFiles(replayDirectory) !== true) {
-      logger.info(`No replay files found for live ${video.uuid}, skipping video replay creation.`, { ...lTags(video.uuid) })
-
-      await cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
-    } else if (permanentLive) {
-      await saveReplayToExternalVideo({
-        liveVideo: video,
-        liveSession,
-        publishedAt: payload.publishedAt,
-        replayDirectory
-      })
-
-      await cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
-    } else {
-      await replaceLiveByReplay({
-        video,
-        liveSession,
-        live,
-        permanentLive,
-        replayDirectory
-      })
+    function logError () {
+      logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId)
     }
-  } finally {
-    inputFileMutexReleaser()
-  }
+
+    const video = await VideoModel.loadWithThumbnails(payload.videoId)
+    const live = await VideoLiveModel.loadByVideoId(payload.videoId)
+    const liveSession = await VideoLiveSessionModel.load(payload.liveSessionId)
+
+    if (!video || !live || !liveSession) {
+      logError()
+      return
+    }
+
+    const permanentLive = live.permanentLive
+
+    liveSession.endingProcessed = true
+    await liveSession.save()
+
+    if (liveSession.saveReplay !== true) {
+      return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+    }
+
+    let replayDirectory = payload.replayDirectory
+
+    if (!replayDirectory) {
+      logger.info(`No replay directory found for live ${video.uuid}, skipping video replay creation.`)
+
+      return cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+    }
+
+    // Introduced in PeerTube 7.2, allow to use the appropriate base directory even if the live privacy changed
+    if (!isAbsolute(replayDirectory)) {
+      replayDirectory = join(getLiveReplayBaseDirectory(video), replayDirectory)
+    }
+
+    const inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+
+    try {
+      await video.reload()
+
+      if (await hasReplayFiles(replayDirectory) !== true) {
+        logger.info(`No replay files found for live ${video.uuid}, skipping video replay creation.`)
+
+        await cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+      } else if (permanentLive) {
+        await saveReplayToExternalVideo({
+          liveVideo: video,
+          liveSession,
+          publishedAt: payload.publishedAt,
+          replayDirectory
+        })
+
+        await cleanupLiveAndFederate({ permanentLive, video, streamingPlaylistId: payload.streamingPlaylistId })
+      } else {
+        await replaceLiveByReplay({
+          video,
+          liveSession,
+          live,
+          permanentLive,
+          replayDirectory
+        })
+      }
+    } finally {
+      inputFileMutexReleaser()
+    }
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -140,8 +142,7 @@ async function saveReplayToExternalVideo (options: {
     logger.warn(
       'Live video %d or its replay settings %d do not exist anymore, skipping external replay creation.',
       options.liveVideo.id,
-      liveSession.replaySettingId,
-      lTags()
+      liveSession.replaySettingId
     )
     return
   }
@@ -173,63 +174,62 @@ async function saveReplayToExternalVideo (options: {
     channelId: liveVideo.channelId
   }) as MVideoWithAllFiles & MVideoTag
 
-  replayVideo.Thumbnails = []
-  replayVideo.VideoFiles = []
-  replayVideo.VideoStreamingPlaylists = []
+  await logger.withContext([ replayVideo.uuid ], async () => {
+    replayVideo.Thumbnails = []
+    replayVideo.VideoFiles = []
+    replayVideo.VideoStreamingPlaylists = []
 
-  replayVideo.url = getLocalVideoActivityPubUrl(replayVideo)
+    replayVideo.url = getLocalVideoActivityPubUrl(replayVideo)
 
-  await replayVideo.save()
+    await replayVideo.save()
 
-  await setVideoTags({ video: replayVideo, tags: liveVideo.Tags.map(t => t.name) })
+    await setVideoTags({ video: replayVideo, tags: liveVideo.Tags.map(t => t.name) })
 
-  liveSession.replayVideoId = replayVideo.id
-  await liveSession.save()
+    liveSession.replayVideoId = replayVideo.id
+    await liveSession.save()
 
-  // If live is blacklisted, also blacklist the replay
-  const blacklist = await VideoBlacklistModel.loadByVideoId(liveVideo.id)
-  if (blacklist) {
-    await VideoBlacklistModel.create({
-      videoId: replayVideo.id,
-      unfederated: blacklist.unfederated,
-      reason: blacklist.reason,
-      type: blacklist.type
-    })
-  }
+    // If live is blacklisted, also blacklist the replay
+    const blacklist = await VideoBlacklistModel.loadByVideoId(liveVideo.id)
+    if (blacklist) {
+      await VideoBlacklistModel.create({
+        videoId: replayVideo.id,
+        unfederated: blacklist.unfederated,
+        reason: blacklist.reason,
+        type: blacklist.type
+      })
+    }
 
-  // Inherit player settings
-  const playerSettings = await PlayerSettingModel.loadByVideoId(liveVideo.id)
-  if (playerSettings) {
-    await PlayerSettingModel.create({
-      videoId: replayVideo.id,
-      theme: playerSettings.theme
-    })
-  }
+    // Inherit player settings
+    const playerSettings = await PlayerSettingModel.loadByVideoId(liveVideo.id)
+    if (playerSettings) {
+      await PlayerSettingModel.create({
+        videoId: replayVideo.id,
+        theme: playerSettings.theme
+      })
+    }
 
-  // Inherit video embed privacy
-  const domains = await VideoEmbedPrivacyDomainModel.list(liveVideo.id)
-  if (domains.length !== 0) {
-    await VideoEmbedPrivacyDomainModel.addDomains(domains.map(d => d.domain), replayVideo.id)
-  }
+    // Inherit video embed privacy
+    const domains = await VideoEmbedPrivacyDomainModel.list(liveVideo.id)
+    if (domains.length !== 0) {
+      await VideoEmbedPrivacyDomainModel.addDomains(domains.map(d => d.domain), replayVideo.id)
+    }
 
-  await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })
+    await assignReplayFilesToVideo({ video: replayVideo, replayDirectory })
 
-  logger.info(`Removing replay directory ${replayDirectory}`, lTags(liveVideo.uuid))
-  await remove(replayDirectory)
+    logger.info(`Removing replay directory ${replayDirectory}`)
+    await remove(replayDirectory)
 
-  try {
-    await copyOrRegenerateThumbnails({ liveVideo, replayVideo })
-  } catch (err) {
-    logger.error(
-      `Cannot copy/regenerate thumbnails of ended live ${liveVideo.uuid} to external video ${replayVideo.uuid}`,
-      lTags(liveVideo.uuid, replayVideo.uuid)
-    )
-  }
+    try {
+      await copyOrRegenerateThumbnails({ liveVideo, replayVideo })
+    } catch (err) {
+      logger.error(`Cannot copy/regenerate thumbnails of ended live ${liveVideo.uuid} to external video ${replayVideo.uuid}`)
+    }
 
-  await createStoryboardJob(replayVideo)
-  await createTranscriptionTaskIfNeeded(replayVideo)
+    await createStoryboardJob(replayVideo)
+    await createTranscriptionTaskIfNeeded(replayVideo)
 
-  await moveToNextState({ video: replayVideo })
+    await moveToNextState({ video: replayVideo })
+  })
 }
 
 async function copyOrRegenerateThumbnails (options: {
@@ -276,8 +276,7 @@ async function replaceLiveByReplay (options: {
     logger.warn(
       'Live video %d or its replay settings %d do not exist anymore, skipping live-to-replay replacement.',
       liveVideo.id,
-      liveSession.replaySettingId,
-      lTags()
+      liveSession.replaySettingId
     )
     return
   }
@@ -285,7 +284,7 @@ async function replaceLiveByReplay (options: {
   const hlsPlaylist = videoWithFiles.getHLSPlaylist()
   const replayInAnotherDirectory = isVideoInPublicDirectory(liveVideo.privacy) !== isVideoInPublicDirectory(replaySettings.privacy)
 
-  logger.info(`Replacing live ${liveVideo.uuid} by replay ${replayDirectory}.`, { replayInAnotherDirectory, ...lTags(liveVideo.uuid) })
+  logger.info(`Replacing live ${liveVideo.uuid} by replay ${replayDirectory}.`, { replayInAnotherDirectory })
 
   await cleanupTMPLiveFiles(videoWithFiles, hlsPlaylist)
 
@@ -328,7 +327,7 @@ async function replaceLiveByReplay (options: {
   try {
     await regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, undefined)
   } catch (err) {
-    logger.error(`Cannot regenerate thumbnails of ended live ${videoWithFiles.uuid}`, lTags(liveVideo.uuid))
+    logger.error(`Cannot regenerate thumbnails of ended live ${videoWithFiles.uuid}`)
   }
 
   // We consider this is a new video
@@ -346,7 +345,7 @@ async function assignReplayFilesToVideo (options: {
 
   const concatenatedTsFiles = await readdir(replayDirectory)
 
-  logger.info(`Assigning replays ${replayDirectory} to video ${video.uuid}.`, { concatenatedTsFiles, ...lTags(video.uuid) })
+  logger.info(`Assigning replays ${replayDirectory} to video ${video.uuid}.`, { concatenatedTsFiles })
 
   for (const concatenatedTsFile of concatenatedTsFiles) {
     // Generating hls playlist can be long, reload the video in this case

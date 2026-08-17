@@ -4,7 +4,7 @@ import { activityPubCollectionPagination } from '@server/lib/activitypub/collect
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { MActorLight } from '@server/types/models/index.js'
 import express from 'express'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { getVideoAudience } from '../../lib/activitypub/audience.js'
 import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send/index.js'
 import {
@@ -16,6 +16,8 @@ import {
 import { apPaginationValidator } from '../../middlewares/validators/activitypub/index.js'
 import { VideoModel } from '../../models/video/video.js'
 import { activityPubResponse } from './utils.js'
+
+const logger = createLogger()
 
 const outboxRouter = express.Router()
 

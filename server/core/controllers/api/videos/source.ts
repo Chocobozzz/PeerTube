@@ -18,7 +18,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { move } from 'fs-extra/esm'
-import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import {
   asyncMiddleware,
   authenticate,
@@ -27,7 +27,7 @@ import {
   videoSourceGetLatestValidator
 } from '../../../middlewares/index.js'
 
-const lTags = loggerTagsFactory('api', 'video')
+const logger = createLogger('api', 'video')
 
 const videoSourceRouter = express.Router()
 
@@ -90,7 +90,11 @@ function getVideoLatestSource (req: express.Request, res: express.Response) {
   return res.json(res.locals.videoSource.toFormattedJSON())
 }
 
-async function replaceVideoSourceResumable (req: express.Request, res: express.Response) {
+function replaceVideoSourceResumable (req: express.Request, res: express.Response) {
+  return logger.withContext([ res.locals.videoFull.uuid ], () => doReplaceVideoSourceResumable(req, res))
+}
+
+async function doReplaceVideoSourceResumable (req: express.Request, res: express.Response) {
   const videoPhysicalFile = res.locals.updateVideoFileResumable
   const user = res.locals.oauth.token.User
 
@@ -174,7 +178,7 @@ async function replaceVideoSourceResumable (req: express.Request, res: express.R
 
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
 
-    logger.info('Replaced video file of video %s with uuid %s.', video.name, video.uuid, lTags(video.uuid))
+    logger.info('Replaced video file of video %s with uuid %s.', video.name, video.uuid)
 
     Hooks.runAction('action:api.video.file-updated', { video, req, res })
 

@@ -1,7 +1,9 @@
 import express from 'express'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode } from '@peertube/peertube-models'
+
+const logger = createLogger()
 
 export async function addDurationToVideoFileIfNeeded (options: {
   res: express.Response

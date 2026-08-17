@@ -1,7 +1,9 @@
+import { isIdOrUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import express from 'express'
 import { param, validationResult } from 'express-validator'
-import { isIdOrUUIDValid, toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
+
+const logger = createLogger()
 
 function areValidationErrors (
   req: express.Request,
@@ -10,13 +12,15 @@ function areValidationErrors (
     omitLog?: boolean
     omitBodyLog?: boolean
     tags?: (number | string)[]
-  } = {}) {
+  } = {}
+) {
   const { omitLog = false, omitBodyLog = false, tags = [] } = options
 
   if (!omitLog) {
     logger.debug(
       'Checking %s - %s parameters',
-      req.method, req.originalUrl,
+      req.method,
+      req.originalUrl,
       {
         body: omitBodyLog
           ? 'omitted'
@@ -64,6 +68,6 @@ function isValidPlaylistIdParam (paramName: string) {
 
 export {
   areValidationErrors,
-  isValidVideoIdParam,
-  isValidPlaylistIdParam
+  isValidPlaylistIdParam,
+  isValidVideoIdParam
 }

@@ -3,7 +3,7 @@ import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { Transaction } from 'sequelize'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
@@ -18,6 +18,8 @@ import {
   sendVideoRelatedActivity,
   unicastTo
 } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 async function sendDeleteVideo (options: {
   video: MVideoAccountLight

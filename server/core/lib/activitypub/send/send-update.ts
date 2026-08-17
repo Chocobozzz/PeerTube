@@ -3,7 +3,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { PlayerSettingModel } from '@server/models/video/player-setting.js'
 import { MPlayerSetting } from '@server/types/models/video/player-setting.js'
 import { Transaction } from 'sequelize'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { AccountModel } from '../../../models/account/account.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { VideoModel } from '../../../models/video/video.js'
@@ -21,6 +21,8 @@ import { audiencify, getPlaylistAudience, getPublicAudience, getVideoAudience } 
 import { getLocalChannelPlayerSettingsActivityPubUrl, getLocalVideoPlayerSettingsActivityPubUrl, getUpdateActivityPubUrl } from '../url.js'
 import { canVideoBeFederated } from '../videos/federate.js'
 import { broadcastToFollowers, getActorsInvolvedInVideo, sendVideoRelatedActivity } from './shared/send-utils.js'
+
+const logger = createLogger()
 
 export async function sendUpdateVideo (video: MVideoAP, transaction: Transaction, overriddenByActor?: MActor) {
   if (!canVideoBeFederated(video)) return undefined
@@ -181,7 +183,7 @@ function buildUpdateActivity (
 
   return audiencify(
     {
-      type: 'Update' as 'Update',
+      type: 'Update',
       id: url,
       actor: byActor.url,
       object: audiencify(object, audience)

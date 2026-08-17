@@ -6,7 +6,7 @@ Main dependencies supported by PeerTube:
 
  * `node` LTS (**>= 22.12 and <25**)
  * `pnpm` >= 10.x
- * `postgres` >=10.x
+ * `postgres` >=14.x
  * `redis-server` >=6.2
  * `ffmpeg` >=4.3 (using a ffmpeg static build [is not recommended](https://github.com/Chocobozzz/PeerTube/issues/6308))
  * `python` >=3.8
@@ -14,6 +14,10 @@ Main dependencies supported by PeerTube:
 
 
 _note_: only **LTS** versions of external dependencies are supported. If no LTS version matching the version constraint is available, only **release** versions are supported.
+
+_note_: some distributions still ship a PostgreSQL older than 14 in their default repositories. Check with `psql --version` after
+installing, and if it is too old, install a supported release from the
+[PostgreSQL official repositories](https://www.postgresql.org/download/) instead of the distribution package.
 
 [[toc]]
 
@@ -51,7 +55,11 @@ _note_: only **LTS** versions of external dependencies are supported. If no LTS 
     ffmpeg -version # Should be >= 4.1
     g++ -v # Should be >= 5.x
     redis-server --version # Should be >= 6.x
+    psql --version # Should be >= 14
     ```
+
+    Debian 11 (bullseye) and Ubuntu 20.04 ship PostgreSQL 13 or older: on these releases install PostgreSQL from the
+    [PostgreSQL APT repository](https://www.postgresql.org/download/linux/ubuntu/) instead.
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
 
@@ -96,6 +104,9 @@ sudo systemctl start redis postgresql
     sudo yum update
     sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git devtoolset-7
     ```
+
+    :warning: The CentOS 7 base repository provides PostgreSQL 9.2, which is too old for PeerTube. Install PostgreSQL >= 14 from
+    the [PostgreSQL Yum repository](https://www.postgresql.org/download/linux/redhat/) instead of the `postgresql*` packages above.
 
 1. You need to use a more up to date version of G++ in order to run the `npm run install-node-dependencies` command, hence the installation of devtoolset-7.
 
@@ -147,8 +158,12 @@ sudo systemctl enable --now postgresql
     sudo dnf update
     sudo dnf install epel-release
     sudo dnf update
+    sudo dnf module enable postgresql:16 # Default stream is PostgreSQL 10, too old for PeerTube
     sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git unzip
+    psql --version # Should be >= 14
     ```
+
+    Use `sudo dnf module list postgresql` to see the streams available on your release, and pick the most recent one >= 14.
 
 1. You'll need a symlink for python3 to python for youtube-dl to work
 
@@ -197,7 +212,9 @@ sudo systemctl enable --now postgresql
 
 1. Install PostgreSQL and Python3 and other stuff:
     ```sh
+    sudo dnf module enable -y postgresql:16 # Default stream is PostgreSQL 10, too old for PeerTube
     sudo dnf install -y nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git python3 python3-pip
+    psql --version # Should be >= 14
     sudo ln -s /usr/bin/python3 /usr/bin/python
     sudo PGSETUP_INITDB_OPTIONS='--auth-host=md5' postgresql-setup --initdb --unit postgresql
     sudo systemctl enable --now redis
@@ -338,7 +355,9 @@ sudo systemctl enable --now postgresql
 1. Run:
 
     ```sh
+    sudo dnf module enable postgresql:16 # Default stream is PostgreSQL 10, too old for PeerTube
     sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git
+    psql --version # Should be >= 14
     ```
 
 1. You'll need a symlink for python3 to python for youtube-dl to work
@@ -413,7 +432,7 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
     ```sh
     pkg
     pkg update
-    pkg install -y sudo bash wget git python nginx pkgconf postgresql13-server postgresql13-contrib redis openssl node npm ffmpeg unzip
+    pkg install -y sudo bash wget git python nginx pkgconf postgresql16-server postgresql16-contrib redis openssl node npm ffmpeg unzip
     ```
 
 1. install `sharp` build dependencies: https://sharp.pixelplumbing.com/install/#building-from-source
@@ -457,14 +476,14 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 1. Add the packages:
 
     ```sh
-    brew install ffmpeg nginx postgresql openssl gcc make redis git
+    brew install ffmpeg nginx postgresql@16 openssl gcc make redis git
     brew install pnpm
     ```
 
 1. Run the services:
 
     ```sh
-    brew services run postgresql
+    brew services run postgresql@16
     brew services run redis
     ```
 
@@ -479,7 +498,7 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
     net-libs/nodejs
     sys-apps/pnpm
     media-video/ffmpeg[x264] # Optionally add vorbis,vpx
-    dev-db/postgresql
+    dev-db/postgresql:16 # Any slot >= 14 works
     dev-db/redis
     dev-vcs/git
     app-arch/unzip
@@ -517,9 +536,9 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 
     ```sh
     rc-update add redis
-    rc-update add postgresql-11
+    rc-update add postgresql-16
     rc-service redis start
-    rc-service postgresql-11 start
+    rc-service postgresql-16 start
     ```
 
 1. Create Python version symlink for youtube-dl:

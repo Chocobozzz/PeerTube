@@ -5,13 +5,9 @@ async function up (utils: {
   queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
+  // No need to update `sitemapContentUpdatedAt`, we'll use `publishedAt` by default
   await utils.sequelize.query(
     `ALTER TABLE "video" ADD COLUMN IF NOT EXISTS "sitemapContentUpdatedAt" TIMESTAMP WITH TIME ZONE`,
-    { transaction: utils.transaction }
-  )
-
-  await utils.sequelize.query(
-    `UPDATE "video" SET "sitemapContentUpdatedAt" = "updatedAt" WHERE "sitemapContentUpdatedAt" IS NULL`,
     { transaction: utils.transaction }
   )
 }

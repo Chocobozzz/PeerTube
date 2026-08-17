@@ -1,5 +1,5 @@
 import { VideoFileStream, VideoInclude } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
@@ -11,6 +11,8 @@ import { apiRateLimiter, asyncMiddleware, cacheRoute } from '../middlewares/inde
 import { AccountModel } from '../models/account/account.js'
 import { VideoChannelModel } from '../models/video/video-channel.js'
 import { VideoModel } from '../models/video/video.js'
+
+const logger = createLogger()
 
 const sitemapRouter = express.Router()
 

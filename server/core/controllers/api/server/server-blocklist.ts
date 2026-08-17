@@ -1,5 +1,5 @@
 import { AutoMuteList, BlocklistLogAction, HttpStatusCode, UserRight } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { fetchAndValidateAutoMuteList } from '@server/lib/blocklist-subscriptions.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -37,6 +37,8 @@ import { AccountBlocklistModel } from '../../../models/blocklist/account-blockli
 import { BlocklistLogModel } from '../../../models/blocklist/blocklist-log.js'
 import { BlocklistSubscriptionModel } from '../../../models/blocklist/blocklist-subscription.js'
 import { ServerBlocklistModel } from '../../../models/blocklist/server-blocklist.js'
+
+const logger = createLogger()
 
 const serverBlocklistRouter = express.Router()
 

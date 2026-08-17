@@ -11,7 +11,7 @@ export const engines: TranscriptionEngine[] = [
     license: 'MIT',
     supportedModelFormats: [ 'PyTorch' ],
     languageDetection: true,
-    version: '20231117'
+    version: '20250625'
   },
   {
     name: 'whisper-ctranslate2',

@@ -4,8 +4,10 @@ import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token
 import { RunnerModel } from '@server/models/runner/runner.js'
 import express from 'express'
 import { Socket } from 'socket.io'
-import { logger } from '../helpers/logger.js'
+import { addLoggerContextTags, createLogger } from '../helpers/logger.js'
 import { handleOAuthAuthenticate } from '../lib/auth/oauth-handlers.js'
+
+const logger = createLogger()
 
 export function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   handleOAuthAuthenticate(req, res)
@@ -18,6 +20,9 @@ export function authenticate (req: express.Request, res: express.Response, next:
         lastActivityIP: req.ip,
         lastActivityDevice: req.header('user-agent')
       })
+
+      // A global middleware create the context
+      addLoggerContextTags(token.User.username)
 
       return next()
     })

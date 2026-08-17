@@ -9,18 +9,20 @@ import {
   disableTwoFactorValidator,
   requestOrConfirmTwoFactorValidator
 } from '@server/middlewares/validators/two-factor.js'
-import { HttpStatusCode, TwoFactorEnableResult } from '@peertube/peertube-models'
+import { HttpStatusCode } from '@peertube/peertube-models'
 
 const twoFactorRouter = express.Router()
 
-twoFactorRouter.post('/:id/two-factor/request',
+twoFactorRouter.post(
+  '/:id/two-factor/request',
   authenticate,
   asyncMiddleware(usersCheckCurrentPasswordFactory(req => req.params.id)),
   asyncMiddleware(requestOrConfirmTwoFactorValidator),
   asyncMiddleware(requestTwoFactor)
 )
 
-twoFactorRouter.post('/:id/two-factor/confirm-request',
+twoFactorRouter.post(
+  '/:id/two-factor/confirm-request',
   confirmTokenRateLimiter,
   authenticate,
   asyncMiddleware(requestOrConfirmTwoFactorValidator),
@@ -28,7 +30,8 @@ twoFactorRouter.post('/:id/two-factor/confirm-request',
   asyncMiddleware(confirmRequestTwoFactor)
 )
 
-twoFactorRouter.post('/:id/two-factor/disable',
+twoFactorRouter.post(
+  '/:id/two-factor/disable',
   authenticate,
   asyncMiddleware(usersCheckCurrentPasswordFactory(req => req.params.id)),
   asyncMiddleware(disableTwoFactorValidator),
@@ -57,7 +60,7 @@ async function requestTwoFactor (req: express.Request, res: express.Response) {
       secret,
       uri
     }
-  } as TwoFactorEnableResult)
+  })
 }
 
 async function confirmRequestTwoFactor (req: express.Request, res: express.Response) {

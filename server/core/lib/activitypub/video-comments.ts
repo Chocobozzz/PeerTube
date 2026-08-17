@@ -3,7 +3,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import Bluebird from 'bluebird'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments.js'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
 import { VideoCommentModel } from '../../models/video/video-comment.js'
 import {
@@ -23,6 +23,8 @@ import { getOrCreateAPActor } from './actors/index.js'
 import { checkUrlsSameHost } from './url.js'
 import { canVideoBeFederated, getOrCreateAPVideo } from './videos/index.js'
 
+const logger = createLogger()
+
 type ResolveThreadParams = {
   url: string
   comments?: MCommentOwner[]
@@ -35,16 +37,18 @@ export async function addVideoComments (commentUrls: string[]) {
   if (CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS !== true) return
 
   return Bluebird.map(commentUrls, async commentUrl => {
-    try {
-      await resolveThread({ url: commentUrl, isVideo: false })
-    } catch (err) {
-      if (err.statusCode === HttpStatusCode.NOT_FOUND_404 || err.statusCode === HttpStatusCode.GONE_410) {
-        logger.debug(`Cannot resolve thread ${commentUrl} that does not exist anymore`, { err })
-        return
-      }
+    await logger.withContext([ commentUrl ], async () => {
+      try {
+        await resolveThread({ url: commentUrl, isVideo: false })
+      } catch (err) {
+        if (err.statusCode === HttpStatusCode.NOT_FOUND_404 || err.statusCode === HttpStatusCode.GONE_410) {
+          logger.debug(`Cannot resolve thread ${commentUrl} that does not exist anymore`, { err })
+          return
+        }
 
-      logger.info(`Cannot resolve thread ${commentUrl}`, { err })
-    }
+        logger.info(`Cannot resolve thread ${commentUrl}`, { err })
+      }
+    })
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 

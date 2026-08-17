@@ -2,7 +2,7 @@ import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, HttpStat
 import { InboxManager } from '@server/lib/activitypub/inbox-manager.js'
 import express from 'express'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity.js'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import {
   accountHandleGetValidatorFactory,
   activityPubRateLimiter,
@@ -12,6 +12,8 @@ import {
   videoChannelsHandleValidatorFactory
 } from '../../middlewares/index.js'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity.js'
+
+const logger = createLogger()
 
 const inboxRouter = express.Router()
 

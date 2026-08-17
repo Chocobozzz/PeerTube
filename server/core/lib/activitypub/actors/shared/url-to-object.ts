@@ -1,9 +1,11 @@
 import { ActivityPubActor, ActivityPubOrderedCollection } from '@peertube/peertube-models'
 import { sanitizeAndCheckActorObject } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { fetchAP } from '../../activity.js'
 import { checkUrlsSameHost } from '../../url.js'
+
+const logger = createLogger()
 
 export async function fetchRemoteActor (
   actorUrl: string,

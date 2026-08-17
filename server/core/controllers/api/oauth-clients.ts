@@ -2,9 +2,11 @@ import express from 'express'
 import { HttpStatusCode, OAuthClientLocal } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OAuthClientModel } from '@server/models/oauth/oauth-client.js'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { apiRateLimiter, asyncMiddleware, openapiOperationDoc } from '../../middlewares/index.js'
+
+const logger = createLogger()
 
 const oauthClientsRouter = express.Router()
 

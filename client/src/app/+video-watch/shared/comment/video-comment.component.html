@@ -44,12 +44,17 @@
             myTimestampRouteTransformer
           ></div>
 
-          <div class="comment-actions">
+          <div class="comment-actions" #userCommentActionsEl>
             <button (click)="onWantToReply()" class="comment-action-reply border-0 p-0" i18n>Reply</button>
-            <my-user-moderation-dropdown
-              [prependActions]="prependModerationActions" [buttonStyled]="false"
-              buttonSize="small" [account]="commentAccount" [user]="commentUser" i18n-label label="Options" placement="bottom-left auto"
-            ></my-user-moderation-dropdown>
+
+            @defer (on viewport(userCommentActionsEl); prefetch on idle) {
+              <my-user-moderation-dropdown
+                [prependActions]="prependModerationActions" [buttonStyled]="false"
+                buttonSize="small" [account]="commentAccount" [user]="commentUser" i18n-label label="Options" placement="bottom-left auto"
+              ></my-user-moderation-dropdown>
+            } @placeholder {
+              <span class="comment-action-options-placeholder"></span>
+            }
           </div>
         }
 
@@ -88,10 +93,12 @@
                   [inReplyToCommentId]="inReplyToCommentId()"
                   [commentTree]="commentChild"
                   [parentComments]="newParentComments"
+                  [depth]="depth() + 1"
                   (wantedToReply)="onWantToReply($event)"
                   (wantedToDelete)="onWantToDelete($event)"
                   (wantedToRedraft)="onWantToRedraft($event)"
                   (wantedToApprove)="onWantToApprove($event)"
+                  (wantedToViewRepliesInModal)="wantedToViewRepliesInModal.emit($event)"
                   (resetReply)="onResetReply()"
                   (timestampClicked)="handleTimestampClicked($event)"
                   [redraftValue]="redraftValue()"
@@ -99,6 +106,28 @@
               </div>
             }
           </div>
+
+          @if (getNotFetchedRepliesCount() > 0) {
+            <button (click)="viewMoreReplies()" class="view-replies mb-2 button-unstyle">
+              @if (mustViewRepliesInModal()) {
+                <span class="chevron-right"></span>
+              } @else {
+                <span class="chevron-down"></span>
+              }
+
+              @if (commentTree().children.length === 0) {
+                <ng-container i18n>
+                  View {getNotFetchedRepliesCount(), plural, =1 {1 reply} other {{{ getNotFetchedRepliesCount() }} replies}}
+                </ng-container>
+              } @else {
+                <ng-container i18n>
+                  View {getNotFetchedRepliesCount(), plural, =1 {1 more reply} other {{{ getNotFetchedRepliesCount() }} more replies}}
+                </ng-container>
+              }
+
+              <my-loader size="sm" class="ms-1" [loading]="loadingReplies"></my-loader>
+            </button>
+          }
         }
         <ng-content></ng-content>
       </div>
@@ -106,7 +135,7 @@
   </div>
 }
 
-@if (prependModerationActions) {
+@defer (when showCommentReportModal) {
   <my-comment-report #commentReportModal [comment]="comment()"></my-comment-report>
 }
 

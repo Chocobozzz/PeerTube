@@ -15,10 +15,12 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, DIRECTORIES, STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel } from '../shared/index.js'
+
+const logger = createLogger()
 
 // Image uploads that are not suitable for other tables actor images (avatars/banners)
 // Can be used to store instance images like logos, favicons, etc.

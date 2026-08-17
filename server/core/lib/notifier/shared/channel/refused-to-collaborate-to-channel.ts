@@ -1,10 +1,12 @@
 import { UserNotificationSettingValue, UserNotificationType } from '@peertube/peertube-models'
 import { t } from '@server/helpers/i18n.js'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserWithNotificationSetting } from '@server/types/models/index.js'
 import { AbstractNotification } from '../common/abstract-notification.js'
 import { buildCollaborateToChannelNotification, NotificationCollaboratePayload } from './collaborate-to-channel-utils.js'
+
+const logger = createLogger()
 
 export class RefusedToCollaborateToChannel extends AbstractNotification<NotificationCollaboratePayload> {
   private user: MUserDefault

@@ -6,7 +6,7 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import express from 'express'
 import { createReqFiles } from '../../../helpers/express-utils.js'
-import { logger, loggerTagsFactory } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -20,7 +20,7 @@ import {
 } from '../../../middlewares/validators/index.js'
 import { VideoCaptionModel } from '../../../models/video/video-caption.js'
 
-const lTags = loggerTagsFactory('api', 'video-caption')
+const logger = createLogger('api', 'caption')
 
 const reqVideoCaptionAdd = createReqFiles([ 'captionfile' ], MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT)
 
@@ -58,17 +58,19 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function createGenerateVideoCaption (req: express.Request, res: express.Response) {
+function createGenerateVideoCaption (req: express.Request, res: express.Response) {
   const video = res.locals.videoWithRights
 
-  const body = req.body as VideoCaptionGenerate
-  if (body.forceTranscription === true) {
-    await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingTranscription')
-  }
+  return logger.withContext([ video.uuid ], async () => {
+    const body = req.body as VideoCaptionGenerate
+    if (body.forceTranscription === true) {
+      await VideoJobInfoModel.abortAllTasks(video.uuid, 'pendingTranscription')
+    }
 
-  await createTranscriptionTaskIfNeeded(video)
+    await createTranscriptionTaskIfNeeded(video)
 
-  return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+    return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+  })
 }
 
 async function listVideoCaptions (req: express.Request, res: express.Response) {
@@ -77,73 +79,78 @@ async function listVideoCaptions (req: express.Request, res: express.Response) {
   return res.json(getFormattedObjects(data, data.length))
 }
 
-async function createVideoCaption (req: express.Request, res: express.Response) {
+function createVideoCaption (req: express.Request, res: express.Response) {
   const videoCaptionPhysicalFile: Express.Multer.File = req.files['captionfile'][0]
   const captionPath = videoCaptionPhysicalFile.path
   const video = res.locals.videoFull
 
-  const captionLanguage = req.params.captionLanguage
+  return logger.withContext([ video.uuid ], async () => {
+    const captionLanguage = req.params.captionLanguage
 
-  const videoCaption = await createLocalCaption({
-    video,
-    language: captionLanguage,
-    path: captionPath,
-    automaticallyGenerated: false
-  })
-
-  if (videoCaption.m3u8Filename) {
-    await updateHLSMasterOnCaptionChangeIfNeeded(video)
-  }
-
-  await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
-      await VideoChannelActivityModel.addVideoActivity({
-        action: VideoChannelActivityAction.UPDATE_CAPTIONS,
-        user: res.locals.oauth.token.User,
-        channel: video.VideoChannel,
-        video,
-        transaction: t
-      })
-
-      scheduleVideoFederation({ video, transaction: t })
+    const videoCaption = await createLocalCaption({
+      video,
+      language: captionLanguage,
+      path: captionPath,
+      automaticallyGenerated: false
     })
+
+    if (videoCaption.m3u8Filename) {
+      await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    }
+
+    await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.UPDATE_CAPTIONS,
+          user: res.locals.oauth.token.User,
+          channel: video.VideoChannel,
+          video,
+          transaction: t
+        })
+
+        scheduleVideoFederation({ video, transaction: t })
+      })
+    })
+
+    Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
+
+    return res.status(HttpStatusCode.NO_CONTENT_204).end()
   })
-
-  Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
-
-  return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function deleteVideoCaption (req: express.Request, res: express.Response) {
   const video = res.locals.videoFull
   const videoCaption = res.locals.videoCaption
-  const hasM3U8 = !!videoCaption.m3u8Filename
 
-  await sequelizeTypescript.transaction(async t => {
-    await videoCaption.destroy({ transaction: t })
-  })
+  return logger.withContext([ video.uuid ], async () => {
+    const hasM3U8 = !!videoCaption.m3u8Filename
 
-  if (hasM3U8) {
-    await updateHLSMasterOnCaptionChangeIfNeeded(video)
-  }
-
-  await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
-      await VideoChannelActivityModel.addVideoActivity({
-        action: VideoChannelActivityAction.UPDATE_CAPTIONS,
-        user: res.locals.oauth.token.User,
-        channel: video.VideoChannel,
-        video,
-        transaction: t
-      })
-
-      scheduleVideoFederation({ video, transaction: t })
+    await sequelizeTypescript.transaction(async t => {
+      await videoCaption.destroy({ transaction: t })
     })
+
+    if (hasM3U8) {
+      await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    }
+
+    await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async t => {
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.UPDATE_CAPTIONS,
+          user: res.locals.oauth.token.User,
+          channel: video.VideoChannel,
+          video,
+          transaction: t
+        })
+
+        scheduleVideoFederation({ video, transaction: t })
+      })
+    })
+
+    logger.info('Video caption %s of video %s deleted.', videoCaption.language, video.uuid)
+
+    Hooks.runAction('action:api.video-caption.deleted', { caption: videoCaption, req, res })
+
+    return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
   })
-
-  logger.info('Video caption %s of video %s deleted.', videoCaption.language, video.uuid, lTags(video.uuid))
-
-  Hooks.runAction('action:api.video-caption.deleted', { caption: videoCaption, req, res })
-
-  return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }

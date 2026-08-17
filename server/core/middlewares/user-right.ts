@@ -1,6 +1,8 @@
 import express from 'express'
 import { HttpStatusCode, UserRightType } from '@peertube/peertube-models'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
+
+const logger = createLogger()
 
 export function ensureUserHasRight (userRight: UserRightType) {
   return function (req: express.Request, res: express.Response, next: express.NextFunction) {

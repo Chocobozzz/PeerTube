@@ -1,7 +1,9 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import express from 'express'
 import { ProblemDocument, ProblemDocumentExtension } from 'http-problem-details'
+
+const logger = createLogger()
 
 function apiFailMiddleware (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.fail = options => {

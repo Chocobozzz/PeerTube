@@ -1,4 +1,4 @@
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -7,7 +7,7 @@ import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { synchronizeChannel } from '../sync-channel.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers', 'channel-synchronization')
+const logger = createLogger('schedulers', 'channel-synchronization')
 
 export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -19,11 +19,11 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
 
   protected async internalExecute () {
     if (!CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED) {
-      logger.debug('Discard channels synchronization as the feature is disabled', lTags())
+      logger.debug('Discard channels synchronization as the feature is disabled')
       return
     }
 
-    logger.info('Checking channels to synchronize', lTags())
+    logger.info('Checking channels to synchronize')
 
     const channelSyncs = await VideoChannelSyncModel.listSyncs()
 
@@ -33,8 +33,7 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
       // A previous full run got interrupted: retry where we stopped to not miss videos
       if (sync.fullSyncCutoffAt) {
         logger.info(
-          `Channel sync ${sync.id} has an unfinished full sync (cutoff ${sync.fullSyncCutoffAt.toISOString()}), continuing it`,
-          lTags()
+          `Channel sync ${sync.id} has an unfinished full sync (cutoff ${sync.fullSyncCutoffAt.toISOString()}), continuing it`
         )
 
         await synchronizeChannel({

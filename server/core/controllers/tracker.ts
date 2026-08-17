@@ -4,10 +4,12 @@ import { createServer } from 'http'
 import { LRUCache } from 'lru-cache'
 import proxyAddr from 'proxy-addr'
 import { WebSocketServer } from 'ws'
-import { logger } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { CONFIG } from '../initializers/config.js'
 import { LRU_CACHE, TRACKER_RATE_LIMITS } from '../initializers/constants.js'
 import { VideoInfohashModel } from '../models/video/video-infohash.js'
+
+const logger = createLogger()
 
 export const trackerRouter = express.Router()
 

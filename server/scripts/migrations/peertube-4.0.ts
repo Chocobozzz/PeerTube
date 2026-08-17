@@ -7,12 +7,15 @@ import {
   getHLSResolutionPlaylistFilename
 } from '@server/lib/paths.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
+import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import Bluebird from 'bluebird'
 import { move } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
+
+const MIGRATION_NAME = 'peertube-4.0'
 
 run()
   .then(() => process.exit(0))
@@ -22,9 +25,9 @@ run()
   })
 
 async function run () {
-  console.log('Migrate old HLS paths to new format.')
-
   await initDatabaseModels(true)
+
+  console.log('Migrate old HLS paths to new format.')
 
   JobQueue.Instance.init()
 
@@ -37,6 +40,8 @@ async function run () {
       console.error('Cannot process video %s.', { err })
     }
   }, { concurrency: 5 })
+
+  await ApplicationModel.setManualMigrationScriptRun(MIGRATION_NAME)
 
   console.log('Migration finished!')
 }

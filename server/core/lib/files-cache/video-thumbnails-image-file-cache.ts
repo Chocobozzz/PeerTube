@@ -1,11 +1,11 @@
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MThumbnail } from '@server/types/models/index.js'
 import { scheduleVideoRefreshIfNeeded } from '../activitypub/videos/refresh.js'
 import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 
-const lTags = loggerTagsFactory('lazy-load', 'video-thumbnails')
+const logger = createLogger('lazy-load', 'thumbnail')
 
 export class VideoThumbnailsImageFileCache extends AbstractImageFileCache<MThumbnail> {
   protected loadModel (filename: string) {
@@ -26,7 +26,7 @@ export class VideoThumbnailsImageFileCache extends AbstractImageFileCache<MThumb
 
       scheduleVideoRefreshIfNeeded(video)
     } catch (err) {
-      logger.error('Error while refreshing video for lazy fetch', { ...lTags(), err })
+      logger.error('Error while refreshing video for lazy fetch', { err })
     }
   }
 }

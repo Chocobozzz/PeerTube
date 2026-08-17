@@ -52,6 +52,9 @@ export class ActorAvatarComponent implements OnInit, OnChanges {
 
   readonly title = input<string>()
 
+  // Hide the avatar link from assistive technologies, for example when the parent component renders another link to the same actor
+  readonly ariaHidden = input(false, { transform: booleanAttribute })
+
   getTitle () {
     if (this.title()) return this.title()
     if (this.isAccount()) return $localize`${this.actor().name} (account page)`

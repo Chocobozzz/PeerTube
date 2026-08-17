@@ -1,6 +1,6 @@
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import { mapToJSON } from '@server/helpers/core-utils.js'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { LRU_CACHE } from '@server/initializers/constants.js'
 import { MStreamingPlaylistVideo } from '@server/types/models/index.js'
 import { writeJson } from 'fs-extra/esm'
@@ -10,7 +10,7 @@ import { basename, dirname, join } from 'path'
 import { buildSha256Segment } from '../hls.js'
 import { storeHLSFileFromPath } from '../object-storage/index.js'
 
-const lTags = loggerTagsFactory('live')
+const logger = createLogger('live')
 
 class LiveSegmentShaStore {
   private readonly segmentsSha256 = new Map<string, string>()
@@ -50,11 +50,11 @@ class LiveSegmentShaStore {
 
     // This segment has already been removed (its "unlink" event ran before we finished hashing it)
     if (this.removedSegments.delete(segmentName)) {
-      logger.debug('Segment %s was removed before its hash could be added, ignoring it.', segmentPath, lTags(this.videoUUID))
+      logger.debug('Segment %s was removed before its hash could be added, ignoring it.', segmentPath)
       return
     }
 
-    logger.debug('Adding live sha segment %s.', segmentPath, lTags(this.videoUUID))
+    logger.debug('Adding live sha segment %s.', segmentPath)
 
     const shaResult = await buildSha256Segment(segmentPath)
 
@@ -66,15 +66,10 @@ class LiveSegmentShaStore {
   removeSegmentSha (segmentPath: string) {
     const segmentName = basename(segmentPath)
 
-    logger.debug('Removing live sha segment %s.', segmentPath, lTags(this.videoUUID))
+    logger.debug('Removing live sha segment %s.', segmentPath)
 
     if (!this.segmentsSha256.has(segmentName)) {
-      logger.debug(
-        'Unknown segment in live segment hash store for video %s and segment %s.',
-        this.videoUUID,
-        segmentPath,
-        lTags(this.videoUUID)
-      )
+      logger.debug('Unknown segment in live segment hash store for video %s and segment %s.', this.videoUUID, segmentPath)
 
       // Its hash may still be pending (addSegmentSha hasn't run yet)
       // Remember it so we discard the hash instead of leaking it
@@ -112,7 +107,7 @@ class LiveSegmentShaStore {
   }
 
   private async writeOnce () {
-    logger.debug(`Writing segment sha JSON ${this.sha256Path} of ${this.videoUUID} on disk.`, lTags(this.videoUUID))
+    logger.debug(`Writing segment sha JSON ${this.sha256Path} of ${this.videoUUID} on disk.`)
 
     // Atomic write: use rename instead of move that is not atomic
     // FIXME: jsonfile typings

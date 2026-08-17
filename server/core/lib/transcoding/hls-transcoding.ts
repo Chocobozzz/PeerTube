@@ -31,7 +31,7 @@ export async function generateHlsPlaylistResolutionFromTS (options: {
   preventInputFileLocking?: boolean
 }) {
   return generateHlsPlaylistCommon({
-    type: 'hls-from-ts' as 'hls-from-ts',
+    type: 'hls-from-ts',
 
     videoInputPath: options.concatenatedTsFilePath,
 
@@ -55,7 +55,7 @@ export function generateHlsPlaylistResolution (options: {
   abortSignal: AbortSignal
 }) {
   return generateHlsPlaylistCommon({
-    type: 'hls' as 'hls',
+    type: 'hls',
 
     ...pick(options, [
       'videoInputPath',

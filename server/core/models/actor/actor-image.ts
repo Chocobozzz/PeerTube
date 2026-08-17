@@ -5,11 +5,13 @@ import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Op, Transaction } from 'sequelize'
 import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
-import { logger } from '../../helpers/logger.js'
+import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { FILES_CACHE, LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
 import { SequelizeModel, buildSQLAttributes } from '../shared/index.js'
 import { ActorModel } from './actor.js'
+
+const logger = createLogger()
 
 @Table({
   tableName: 'actorImage',

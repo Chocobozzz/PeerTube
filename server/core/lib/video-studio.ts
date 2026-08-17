@@ -1,7 +1,7 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
@@ -19,7 +19,7 @@ import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-fil
 import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
 
-const lTags = loggerTagsFactory('video-studio')
+const logger = createLogger('studio')
 
 export function buildTaskFileFieldname (indice: number, fieldName = 'file') {
   return `tasks[${indice}][options][${fieldName}]`
@@ -34,7 +34,7 @@ export function getStudioTaskFilePath (filename: string) {
 }
 
 export async function safeCleanupStudioTMPFiles (tasks: VideoStudioTaskPayload[]) {
-  logger.info('Removing TMP studio task files', { tasks, ...lTags() })
+  logger.info('Removing TMP studio task files', { tasks })
 
   for (const task of tasks) {
     try {

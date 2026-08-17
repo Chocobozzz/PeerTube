@@ -548,10 +548,15 @@ describe('Test users', function () {
 
     it('Should report correct abuses counts', async function () {
       const reason = 'my super bad reason'
-      await server.abuses.report({ token: user17AccessToken, videoId, reason })
+      // root does not own this video (user17 does), so root can report it and it counts as an incrimination against user17
+      await server.abuses.report({ videoId, reason })
 
       const body1 = await server.abuses.getAdminList()
       const abuseId = body1.data[0].id
+
+      // user17 reports something it does not own to increase its abusesCreatedCount
+      const rootAccount = await server.accounts.get({ accountName: 'root' })
+      await server.abuses.report({ token: user17AccessToken, accountId: rootAccount.id, reason: 'another reason' })
 
       const user2 = await server.users.get({ userId: user17Id, withStats: true })
       expect(user2.abusesCount).to.equal(1) // number of incriminations

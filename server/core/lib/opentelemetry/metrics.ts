@@ -2,7 +2,7 @@ import { Meter, metrics } from '@opentelemetry/api'
 import { PrometheusExporter } from '@opentelemetry/exporter-prometheus'
 import { MeterProvider } from '@opentelemetry/sdk-metrics'
 import { PlaybackMetricCreate } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideoImmutable } from '@server/types/models/index.js'
 import { Application, Request, Response } from 'express'
@@ -18,6 +18,8 @@ import {
   ViewersObserversBuilder
 } from './metric-helpers/index.js'
 import { WorkerThreadsObserversBuilder } from './metric-helpers/worker-threads-observers.js'
+
+const logger = createLogger()
 
 class OpenTelemetryMetrics {
   private static instance: OpenTelemetryMetrics

@@ -1,5 +1,6 @@
-import { AutomaticTagPolicy, ResultList, UserRight, VideoCommentPolicy, VideoCommentThreadTree } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { AutomaticTagPolicy, UserRight, VideoCommentPolicy, VideoCommentThreadTree } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerAccount } from '@server/models/application/application.js'
@@ -22,7 +23,8 @@ import { AutomaticTagger } from './automatic-tags/automatic-tagger.js'
 import { setAndSaveCommentAutomaticTags } from './automatic-tags/automatic-tags.js'
 import { Notifier } from './notifier/notifier.js'
 import { Hooks } from './plugins/hooks.js'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
+
+const logger = createLogger()
 
 export async function removeComment (commentArg: MComment, req: express.Request, res: express.Response) {
   let videoCommentInstanceBefore: MCommentOwnerVideo
@@ -128,36 +130,56 @@ export async function createLocalVideoComment (options: {
   })
 }
 
-export function buildFormattedCommentTree (resultList: ResultList<MCommentFormattable>): VideoCommentThreadTree {
-  // Comments are sorted by id ASC
-  const comments = resultList.data
+// `replies` is a flat and truncated view of the descendants of `parentCommentId
+export function buildFormattedCommentTrees (options: {
+  parentCommentId: number
+  replies: MCommentFormattable[]
+}): VideoCommentThreadTree[] {
+  const { parentCommentId, replies } = options
 
-  const comment = comments.shift()
-  const thread: VideoCommentThreadTree = {
-    comment: comment.toFormattedJSON(),
-    children: []
+  const roots: VideoCommentThreadTree[] = []
+  const idx: { [id: number]: VideoCommentThreadTree } = {}
+
+  for (const reply of replies) {
+    const formattedComment = reply.toFormattedJSON()
+
+    idx[reply.id] = {
+      comment: formattedComment,
+      children: [],
+
+      totalChildren: formattedComment.totalReplies
+    }
   }
-  const idx = {
-    [comment.id]: thread
-  }
 
-  while (comments.length !== 0) {
-    const childComment = comments.shift()
-
-    const childCommentThread: VideoCommentThreadTree = {
-      comment: childComment.toFormattedJSON(),
-      children: []
+  // The flat list is not sorted by depth, so we can only attach children once every node exists
+  for (const reply of replies) {
+    if (reply.inReplyToCommentId === parentCommentId) {
+      roots.push(idx[reply.id])
+      continue
     }
 
-    const parentCommentThread = idx[childComment.inReplyToCommentId]
-    // Maybe the parent comment was blocked by the admin/user
-    if (!parentCommentThread) continue
+    // Maybe the parent comment was blocked by the admin/user, or truncated from the tree
+    const parentNode = idx[reply.inReplyToCommentId]
+    if (!parentNode) continue
 
-    parentCommentThread.children.push(childCommentThread)
-    idx[childComment.id] = childCommentThread
+    parentNode.children.push(idx[reply.id])
   }
 
-  return thread
+  return roots
+}
+
+export function buildFormattedCommentTree (options: {
+  comment: MCommentFormattable
+  totalChildren: number
+  replies: MCommentFormattable[]
+}): VideoCommentThreadTree {
+  const { comment, totalChildren, replies } = options
+
+  return {
+    comment: comment.toFormattedJSON(),
+    children: buildFormattedCommentTrees({ parentCommentId: comment.id, replies }),
+    totalChildren
+  }
 }
 
 export async function shouldCommentBeHeldForReview (options: {

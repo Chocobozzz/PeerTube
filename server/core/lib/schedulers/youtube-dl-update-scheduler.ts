@@ -1,9 +1,9 @@
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { YoutubeDLCLI } from '@server/helpers/youtube-dl/index.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers', 'youtube-dl')
+const logger = createLogger('schedulers', 'youtube-dl')
 
 export class YoutubeDlUpdateScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -15,7 +15,7 @@ export class YoutubeDlUpdateScheduler extends AbstractScheduler {
   }
 
   protected internalExecute () {
-    logger.info('Running youtube-dl updated scheduler', lTags())
+    logger.info('Running youtube-dl updated scheduler')
 
     return YoutubeDLCLI.updateYoutubeDLBinary()
   }

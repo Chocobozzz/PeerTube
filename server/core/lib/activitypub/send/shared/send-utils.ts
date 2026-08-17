@@ -5,7 +5,7 @@ import { VideoShareModel } from '@server/models/video/video-share.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { Transaction } from 'sequelize'
 import { afterCommitIfTransaction } from '../../../../helpers/database-utils.js'
-import { logger } from '../../../../helpers/logger.js'
+import { createLogger } from '../../../../helpers/logger.js'
 import { ActorFollowModel } from '../../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../../models/actor/actor.js'
 import {
@@ -19,6 +19,8 @@ import {
 } from '../../../../types/models/index.js'
 import { JobQueue } from '../../../job-queue/index.js'
 import { getDirectAudience, getVideoAudience } from '../../audience.js'
+
+const logger = createLogger()
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight

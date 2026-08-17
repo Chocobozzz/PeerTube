@@ -1,6 +1,6 @@
 import { escapeHTML, forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { getOrCreateAPActor } from '@server/lib/activitypub/actors/get.js'
 import { loadActorUrlOrGetFromWebfinger } from '@server/lib/activitypub/actors/webfinger.js'
 import { AccountModel } from '@server/models/account/account.js'
@@ -12,6 +12,8 @@ import express from 'express'
 import { EMBED_SIZE, WEBSERVER } from '../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, oembedValidator } from '../middlewares/index.js'
 import { accountHandleGetValidatorFactory } from '../middlewares/validators/index.js'
+
+const logger = createLogger()
 
 const servicesRouter = express.Router()
 

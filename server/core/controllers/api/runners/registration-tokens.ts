@@ -1,5 +1,5 @@
 import express from 'express'
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { generateRunnerRegistrationToken } from '@server/helpers/token-generator.js'
 import {
   apiRateLimiter,
@@ -15,7 +15,7 @@ import { deleteRegistrationTokenValidator } from '@server/middlewares/validators
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
 import { HttpStatusCode, ListRunnerRegistrationTokensQuery, UserRight } from '@peertube/peertube-models'
 
-const lTags = loggerTagsFactory('api', 'runner')
+const logger = createLogger('api', 'runner')
 
 const runnerRegistrationTokensRouter = express.Router()
 
@@ -54,7 +54,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function generateRegistrationToken (req: express.Request, res: express.Response) {
-  logger.info('Generating new runner registration token.', lTags())
+  logger.info('Generating new runner registration token.')
 
   const registrationToken = new RunnerRegistrationTokenModel({
     registrationToken: generateRunnerRegistrationToken()
@@ -66,7 +66,7 @@ async function generateRegistrationToken (req: express.Request, res: express.Res
 }
 
 async function deleteRegistrationToken (req: express.Request, res: express.Response) {
-  logger.info('Removing runner registration token.', lTags())
+  logger.info('Removing runner registration token.')
 
   const runnerRegistrationToken = res.locals.runnerRegistrationToken
 

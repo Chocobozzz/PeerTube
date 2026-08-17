@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { omit } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, NSFWFlag, VideoCommentPolicy, VideoImportCreate, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, NSFWFlag, VideoCommentPolicy, VideoImportCreate, VideoImportState, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -80,8 +80,36 @@ describe('Test video imports API validator', function () {
       })
     })
 
+    it('Should fail with an invalid stateOneOf', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: myPath,
+        query: { stateOneOf: 'invalid' },
+        token: server.accessToken
+      })
+    })
+
+    it('Should fail with an invalid stateOneOf array', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: myPath,
+        query: { stateOneOf: [ 42 ] },
+        token: server.accessToken
+      })
+    })
+
     it('Should succeed with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path: myPath, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken })
+    })
+
+    it('Should succeed with a valid stateOneOf param', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: myPath,
+        query: { stateOneOf: [ VideoImportState.PENDING, VideoImportState.SUCCESS ] },
+        expectedStatus: HttpStatusCode.OK_200,
+        token: server.accessToken
+      })
     })
   })
 
@@ -504,6 +532,7 @@ describe('Test video imports API validator', function () {
     let sqlCommand: SQLCommand
     let importId: number
     let successId: number
+    let cancelledId: number
 
     before(async function () {
       this.timeout(60000)
@@ -524,6 +553,16 @@ describe('Test video imports API validator', function () {
         const res = await server.videoImports.quickImport({ name: 'Success', targetUrl: FIXTURE_URLS.goodVideo })
         successId = res.id
       }
+
+      await server.jobs.pauseJobQueue()
+
+      {
+        const res = await server.videoImports.quickImport({ name: 'To retry from cancel', targetUrl: FIXTURE_URLS.goodVideo })
+        cancelledId = res.id
+      }
+
+      await server.videoImports.cancel({ importId: cancelledId })
+      await server.jobs.resumeJobQueue()
 
       await waitJobs([ server ])
     })
@@ -548,6 +587,12 @@ describe('Test video imports API validator', function () {
       this.timeout(60000)
 
       await server.videoImports.retry({ importId: successId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed to retry a cancelled import', async function () {
+      this.timeout(60000)
+
+      await server.videoImports.retry({ importId: cancelledId, token: editorToken })
     })
 
     it('Should succeed to retry', async function () {

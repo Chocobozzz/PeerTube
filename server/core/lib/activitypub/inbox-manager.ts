@@ -1,10 +1,12 @@
 import PQueue from 'p-queue'
-import { logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
 import { MActorDefault, MActorSignature } from '@server/types/models/index.js'
 import { Activity, ActivityType } from '@peertube/peertube-models'
 import { StatsManager } from '../stat-manager.js'
 import { processActivities } from './process/index.js'
+
+const logger = createLogger()
 
 export class InboxManager {
   private static instance: InboxManager

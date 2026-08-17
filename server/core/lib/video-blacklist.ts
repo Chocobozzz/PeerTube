@@ -22,7 +22,7 @@ import {
   MVideoWithSchedule
 } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
-import { logger, loggerTagsFactory } from '../helpers/logger.js'
+import { createLogger } from '../helpers/logger.js'
 import { CONFIG } from '../initializers/config.js'
 import { VideoBlacklistModel } from '../models/video/video-blacklist.js'
 import { sendDeleteVideo } from './activitypub/send/index.js'
@@ -31,7 +31,7 @@ import { LiveManager } from './live/live-manager.js'
 import { Notifier } from './notifier/index.js'
 import { Hooks } from './plugins/hooks.js'
 
-const lTags = loggerTagsFactory('blacklist')
+const logger = createLogger('blacklist')
 
 export async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight
@@ -99,7 +99,7 @@ async function _autoBlacklist (options: {
     afterCommitIfTransaction(transaction, () => Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist))
   }
 
-  logger.info('Video %s auto-blacklisted.', video.uuid, lTags(video.uuid))
+  logger.info('Video %s auto-blacklisted.', video.uuid)
 }
 
 function _autoBlacklistByInstancePolicyNeeded (parameters: {

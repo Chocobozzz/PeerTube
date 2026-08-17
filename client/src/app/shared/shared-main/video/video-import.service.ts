@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService, ServerService, UserService } from '@app/core'
 import { objectToFormData } from '@app/helpers'
 import { peertubeTranslate } from '@peertube/peertube-core-utils'
-import { ResultList, Video, VideoImport, VideoImportCreate } from '@peertube/peertube-models'
+import { ResultList, Video, VideoImport, VideoImportCreate, VideoImportStateType } from '@peertube/peertube-models'
 import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
@@ -35,6 +35,7 @@ export class VideoImportService {
     videoChannelSyncId?: number
     targetUrl?: string
     search?: string
+    stateOneOf?: VideoImportStateType[]
   }): Observable<ResultList<VideoImport>> {
     const { pagination, sort, ...otherOptions } = options
 

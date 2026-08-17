@@ -8,6 +8,9 @@ export const setDefaultVideoRedundanciesSort = setDefaultSortFactory('name')
 export const setDefaultSearchSort = setDefaultSortFactory('-match')
 export const setBlacklistSort = setDefaultSortFactory('-createdAt')
 
+// Replies are unfolded on top of a thread tree, which is always built in chronological order
+export const setDefaultCommentRepliesSort = setDefaultSortFactory('createdAt')
+
 export const setLiveSessionsSort = setDefaultSortFactory('startDate')
 
 // ---------------------------------------------------------------------------

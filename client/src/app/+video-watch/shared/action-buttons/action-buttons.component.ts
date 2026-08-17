@@ -6,12 +6,18 @@ import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
 import { VideoShareComponent } from '@app/shared/shared-share-modal/video-share.component'
 import { SupportModalComponent } from '@app/shared/shared-support-modal/support-modal.component'
 import { VideoDownloadComponent } from '@app/shared/shared-video-miniature/download/video-download.component'
-import { VideoActionsDisplayType, VideoActionsDropdownComponent } from '@app/shared/shared-video-miniature/video-actions-dropdown.component'
+import {
+  VideoActionsDisplayType,
+  VideoActionsDropdownComponent,
+  VideoActionsModalName
+} from '@app/shared/shared-video-miniature/video-actions-dropdown.component'
 import { VideoAddToPlaylistComponent } from '@app/shared/shared-video-playlist/video-add-to-playlist.component'
 import { VideoPlaylist } from '@app/shared/shared-video-playlist/video-playlist.model'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle, NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { UserVideoRateType, VideoCaption, VideoPrivacy } from '@peertube/peertube-models'
 import { VideoRateComponent } from './video-rate.component'
+
+export type VideoWatchModalName = VideoActionsModalName | 'share'
 
 @Component({
   selector: 'my-action-buttons',
@@ -41,6 +47,7 @@ export class ActionButtonsComponent implements OnChanges {
   readonly videoShareModal = viewChild<VideoShareComponent>('videoShareModal')
   readonly supportModal = viewChild<SupportModalComponent>('supportModal')
   readonly videoDownloadModal = viewChild<VideoDownloadComponent>('videoDownloadModal')
+  readonly videoActionsDropdown = viewChild<VideoActionsDropdownComponent>('videoActionsDropdown')
 
   readonly video = input<VideoDetails>(undefined)
   readonly videoPassword = input<string>(undefined)
@@ -57,6 +64,9 @@ export class ActionButtonsComponent implements OnChanges {
 
   readonly showTranscriptionWidget = output()
   readonly hideTranscriptionWidget = output()
+
+  readonly modalOpened = output<VideoWatchModalName>()
+  readonly modalClosed = output<VideoWatchModalName>()
 
   likesBarTooltipText = ''
 
@@ -99,11 +109,20 @@ export class ActionButtonsComponent implements OnChanges {
   }
 
   showDownloadModal () {
+    // Logged-in users download the video through the "..." dropdown, which has its own modal instance
+    if (this.isUserLoggedIn()) {
+      this.videoActionsDropdown()?.showDownloadModal()
+      return
+    }
+
+    this.modalOpened.emit('download')
+
     this.videoDownloadModal().show(this.video(), this.videoCaptions())
   }
 
   isVideoDownloadable () {
     const video = this.video()
+
     return video && video instanceof VideoDetails && video.downloadEnabled && !video.isLive
   }
 
@@ -112,6 +131,8 @@ export class ActionButtonsComponent implements OnChanges {
   }
 
   showShareModal () {
+    this.modalOpened.emit('share')
+
     this.videoShareModal().show(this.currentTime(), this.currentPlaylistPosition())
   }
 

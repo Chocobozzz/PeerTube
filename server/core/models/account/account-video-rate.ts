@@ -12,7 +12,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS, VIDEO_RATE_TYPES } from '../../initializers/constants.js'
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
-import { SummaryOptions, VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
+import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
 import { VideoModel } from '../video/video.js'
 import { AccountModel } from './account.js'
 
@@ -191,7 +191,7 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
             required: true,
             include: [
               {
-                model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
+                model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } ] }),
                 required: true
               }
             ]

@@ -1,9 +1,9 @@
-import { logger, loggerTagsFactory } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
 import { uploadx } from '../uploadx.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
-const lTags = loggerTagsFactory('schedulers', 'resumable-upload', 'cleaner')
+const logger = createLogger('schedulers', 'resumable-upload', 'cleaner')
 
 export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
   private static instance: AbstractScheduler
@@ -18,7 +18,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    logger.info('Removing dangling resumable uploads', lTags())
+    logger.info('Removing dangling resumable uploads')
 
     const now = new Date().getTime()
 
@@ -26,7 +26,7 @@ export class RemoveDanglingResumableUploadsScheduler extends AbstractScheduler {
       // Remove files that were not updated since the last execution
       await uploadx.storage.purge(now - this.lastExecutionTimeMs)
     } catch (error) {
-      logger.error('Failed to handle file during resumable video upload folder cleanup', { error, ...lTags() })
+      logger.error('Failed to handle file during resumable video upload folder cleanup', { error })
     } finally {
       this.lastExecutionTimeMs = now
     }

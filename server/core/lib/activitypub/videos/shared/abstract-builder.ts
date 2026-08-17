@@ -2,7 +2,7 @@ import { guessAspectRatio } from '@peertube/peertube-core-utils'
 import { ActivityTagObject, VideoChaptersObject, VideoObject, VideoStreamingPlaylistType_Type } from '@peertube/peertube-models'
 import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
 import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { LoggerTagsFn, logger } from '@server/helpers/logger.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AutomaticTagger } from '@server/lib/automatic-tags/automatic-tagger.js'
 import { setAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
@@ -42,9 +42,10 @@ import {
 } from './object-to-model-attributes.js'
 import { getTrackerUrls, setVideoTrackers } from './trackers.js'
 
+const logger = createLogger()
+
 export abstract class APVideoAbstractBuilder {
   protected abstract videoObject: VideoObject
-  protected abstract lTags: LoggerTagsFn
 
   protected async getOrCreateVideoChannelFromVideoObject () {
     const channel = await findOwner({
@@ -62,7 +63,7 @@ export abstract class APVideoAbstractBuilder {
   protected async setThumbnails (video: MVideoThumbnails, t?: Transaction) {
     const icons = this.videoObject.icon
     if (icons.length === 0) {
-      logger.warn('Cannot find thumbnails in video object', { object: this.videoObject, ...this.lTags() })
+      logger.warn('Cannot find thumbnails in video object', { object: this.videoObject })
       return undefined
     }
 
@@ -153,11 +154,11 @@ export abstract class APVideoAbstractBuilder {
 
     const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts)
     if (!isVideoChaptersObjectValid(body)) {
-      logger.warn('Chapters AP object is not valid, skipping', { body, ...this.lTags() })
+      logger.warn('Chapters AP object is not valid, skipping', { body })
       return
     }
 
-    logger.debug('Fetched chapters AP object', { body, ...this.lTags() })
+    logger.debug('Fetched chapters AP object', { body })
 
     return retryTransactionWrapper(() => {
       return sequelizeTypescript.transaction(async t => {

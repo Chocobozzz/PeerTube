@@ -1,7 +1,7 @@
 import { ActivityDelete } from '@peertube/peertube-models'
 import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
 import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
-import { logger } from '../../../helpers/logger.js'
+import { createLogger } from '../../../helpers/logger.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
@@ -20,6 +20,8 @@ import {
   MVideoPlaylistAccountThumbnail
 } from '../../../types/models/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
+
+const logger = createLogger()
 
 async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
   const { activity, byActor } = options

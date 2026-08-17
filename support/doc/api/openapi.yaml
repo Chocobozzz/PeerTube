@@ -2383,6 +2383,15 @@ paths:
           description: Search in video names
           schema:
             type: string
+        -
+          name: stateOneOf
+          in: query
+          required: false
+          description: Filter on import state
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/VideoImportStateConstant/properties/id'
       responses:
         '200':
           description: successful operation
@@ -4067,7 +4076,7 @@ paths:
   /api/v1/videos/imports/{id}/retry:
     post:
       summary: Retry video import
-      description: "**PeerTube >= 8.0** Retry a pending video import"
+      description: "**PeerTube >= 8.0** Retry a failed or cancelled (**PeerTube >= 8.3**) video import"
       security:
         - OAuth2: []
       tags:
@@ -4573,6 +4582,8 @@ paths:
                       $ref: '#/components/schemas/Abuse'
     post:
       summary: Report an abuse
+      description: >
+        You cannot report a video that you own or on which you are a collaborator (video channel editor).
       security:
         - OAuth2: []
       tags:
@@ -4638,6 +4649,8 @@ paths:
                         $ref: '#/components/schemas/id'
         '400':
           description: incorrect request parameters
+        '403':
+          description: cannot report a video you own or that you collaborate on
 
   '/api/v1/abuses/{abuseId}':
     put:
@@ -6315,11 +6328,17 @@ paths:
   '/api/v1/videos/{id}/comment-threads/{threadId}':
     get:
       summary: Get a thread
+      description: >
+        Since PeerTube 8.3 the returned tree is truncated: only the first replies of each comment are included, and only
+        down to `maxDepth` nesting levels. Use `GET /api/v1/videos/{id}/comments/{commentId}/replies` to fetch the
+        replies that are missing, comparing `children` and `totalChildren` of each node of the tree.
       tags:
         - Video Comments
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/threadId'
+        - $ref: '#/components/parameters/commentMaxDepth'
+        - $ref: '#/components/parameters/commentRepliesPerLevel'
         - $ref: '#/components/parameters/videoPasswordHeader'
       responses:
         '200':
@@ -6328,6 +6347,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoCommentThreadTree'
+
+  '/api/v1/videos/{id}/comments/{commentId}/replies':
+    get:
+      summary: List replies of a comment
+      description: >
+        **PeerTube >= 8.3** List the direct replies of a comment, each of them nested up to `maxDepth` levels. Used to unfold the parts of a
+        thread that `GET /api/v1/videos/{id}/comment-threads/{threadId}` truncated.
+      tags:
+        - Video Comments
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/commentId'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/commentRepliesSort'
+        - $ref: '#/components/parameters/commentMaxDepth'
+        - $ref: '#/components/parameters/commentRepliesPerLevel'
+        - $ref: '#/components/parameters/videoPasswordHeader'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 13
+                    description: Total number of direct replies of the comment
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/VideoCommentThreadTree'
 
   '/api/v1/videos/comments':
     get:
@@ -9437,6 +9490,50 @@ components:
       description: The comment id
       schema:
         $ref: '#/components/schemas/VideoComment/properties/id'
+    commentMaxDepth:
+      name: maxDepth
+      in: query
+      required: false
+      description: >
+        Number of nesting levels to include below the requested comment.
+
+        Bounded by `repliesPerLevel` and `count`, see the note on `repliesPerLevel`
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 10
+        default: 5
+    commentRepliesPerLevel:
+      name: repliesPerLevel
+      in: query
+      required: false
+      description: >
+        Number of direct replies to include for each comment of the tree. Does not apply to the first level of
+        `GET /api/v1/videos/{id}/comments/{commentId}/replies`, which is paginated using `start` and `count`.
+
+        A tree can make the server walk through
+        `count * (repliesPerLevel ^ maxDepth - 1) / (repliesPerLevel - 1)` comments, which grows exponentially.
+        Combinations above 2000000 are rejected
+        A deep tree has to be narrow and a wide tree has to be shallow.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 30
+        default: 10
+    commentRepliesSort:
+      name: sort
+      in: query
+      required: false
+      description: >
+        Sort the direct replies of the comment. Deeper levels of the tree are always sorted the same way.
+
+        Defaults to `createdAt` so the replies are appended to the thread tree in the order it was built
+      schema:
+        type: string
+        default: createdAt
+        enum:
+        - createdAt
+        - -createdAt
     isLive:
       name: isLive
       in: query
@@ -10918,7 +11015,12 @@ components:
             - 1
             - 2
             - 3
-          description: 'The video import state (Pending = `1`, Success = `2`, Failed = `3`)'
+            - 4
+            - 5
+            - 6
+          description: >
+            The video import state (Pending = `1`, Success = `2`, Failed = `3`, Rejected = `4`, Cancelled = `5`,
+            Processing = `6`)
         label:
           type: string
           example: Pending
@@ -11231,8 +11333,16 @@ components:
           $ref: '#/components/schemas/VideoComment'
         children:
           type: array
+          description: >
+            Direct replies of `comment`. The server truncates the tree in depth (see the `maxDepth` parameter) and in
+            width, so this array may contain less elements than `totalChildren`. Missing replies can be fetched using
+            `GET /api/v1/videos/{id}/comments/{commentId}/replies`
           items:
             $ref: '#/components/schemas/VideoCommentThreadTree'
+        totalChildren:
+          type: integer
+          minimum: 0
+          description: Total number of direct replies of `comment` the current user can see
     VideoCommentForOwnerOrAdmin:
       properties:
         id:

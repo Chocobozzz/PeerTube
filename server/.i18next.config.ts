@@ -25,7 +25,7 @@ const handlebarsPlugin = () => ({
           if (!keys.has(uniqueKey)) {
             keys.set(uniqueKey, {
               key,
-              defaultValue: 'key',
+              defaultValue: key,
               ns: 'translation'
             })
           }

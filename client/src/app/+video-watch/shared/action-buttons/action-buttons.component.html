@@ -35,26 +35,28 @@
       </div>
     }
 
-    @if (!isUserLoggedIn() && !video().isLive) {
-      @if (isVideoDownloadable()) {
-        <button
-          class="action-button action-button-download"
-          (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
-          aria-label="Open the modal to download this video" i18n-ariaLabel
-          >
-          <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
-          <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
-        </button>
-      }
+    @if (!isUserLoggedIn() && isVideoDownloadable()) {
+      <button
+        class="action-button action-button-download"
+        (click)="showDownloadModal()" (keydown.enter)="showDownloadModal()"
+        aria-label="Open the modal to download this video" i18n-ariaLabel
+      >
+        <my-global-icon iconName="download" aria-hidden="true"></my-global-icon>
+        <span class="icon-text d-none d-sm-inline" i18n>DOWNLOAD</span>
+      </button>
+    }
 
-      <my-video-download #videoDownloadModal [videoPassword]="videoPassword()"></my-video-download>
+    @if (!isUserLoggedIn() && !video().isLive) {
+      <my-video-download #videoDownloadModal [videoPassword]="videoPassword()" (modalClosed)="modalClosed.emit('download')"></my-video-download>
     }
 
     <my-video-actions-dropdown
+      #videoActionsDropdown
       [video]="video()" [videoCaptions]="videoCaptions()" [transcriptionWidgetOpened]="transcriptionWidgetOpened()"
       [displayOptions]="videoActionsOptions" (videoRemoved)="onVideoRemoved()"
       (showTranscriptionWidget)="showTranscriptionWidget.emit()" (hideTranscriptionWidget)="hideTranscriptionWidget.emit()"
       placement="bottom auto" buttonIcon="more-horizontal" buttonStyled="true"
+      (modalClosed)="modalClosed.emit($event)" (modalOpened)="modalOpened.emit($event)"
       actionAvailabilityHint="true"
     ></my-video-actions-dropdown>
   </div>
@@ -75,5 +77,9 @@
 
 @if (video()) {
   <my-support-modal #supportModal [name]="video().channel.displayName" [content]="video().support"></my-support-modal>
-  <my-video-share #videoShareModal [video]="video()" [videoCaptions]="videoCaptions()" [playlist]="playlist()"></my-video-share>
+
+  <my-video-share
+    #videoShareModal [video]="video()" [videoCaptions]="videoCaptions()" [playlist]="playlist()"
+    (modalClosed)="modalClosed.emit('share')"
+  ></my-video-share>
 }
