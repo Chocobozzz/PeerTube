@@ -118,7 +118,8 @@ export const listAccountChannelsValidator = [
   query('statsDays')
     .optional()
     .customSanitizer(toIntOrNull)
-    .isIn(VIDEO_CHANNEL_STATS_DAYS_OPTIONS).withMessage(`Should have a valid statsDays value (${VIDEO_CHANNEL_STATS_DAYS_OPTIONS.join(', ')})`),
+    .isIn(VIDEO_CHANNEL_STATS_DAYS_OPTIONS)
+    .withMessage(`Should have a valid statsDays value (${VIDEO_CHANNEL_STATS_DAYS_OPTIONS.join(', ')})`),
 
   query('includeCollaborations')
     .optional()

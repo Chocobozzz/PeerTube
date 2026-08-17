@@ -30,6 +30,7 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
   private builtAccountAvatarJoin = false
   private builtChannelAvatarJoin = false
   private builtChannelBannerJoin = false
+  private builtChannelStatsJoin = false
 
   constructor (
     protected readonly sequelize: Sequelize,
@@ -200,12 +201,107 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
     this.builtChannelBannerJoin = true
   }
 
+  private buildChannelStatsJoin () {
+    if (this.builtChannelStatsJoin) return
+
+    // Per-channel series: start at max(range start, first recorded stat), and pick day/week/month
+    // from that effective span so a young channel on "All time" / "Last year" does not get one
+    // coarse monthly bar.
+    const statsRangeStart = this.options.statsDaysPrior === 0
+      ? null
+      : `date_trunc('day', now()) - make_interval(days => :statsDaysPrior)`
+
+    if (statsRangeStart !== null) {
+      this.replacements.statsDaysPrior = this.options.statsDaysPrior
+    }
+
+    // Calculate the minimum start date for the stats series
+    const paramsCte = statsRangeStart === null
+      // dprint-ignore
+      ? 'params AS ( ' +
+          'SELECT COALESCE(date_trunc(\'day\', channel_stats.first_stat), date_trunc(\'day\', now())) AS raw_start ' +
+          'FROM channel_stats' +
+        ')'
+      // dprint-ignore
+      : 'params AS ( ' +
+          'SELECT GREATEST(' +
+            `${statsRangeStart}, ` +
+            `COALESCE(date_trunc('day', channel_stats.first_stat), ${statsRangeStart})` +
+          ') AS raw_start ' +
+          'FROM channel_stats' +
+        ')'
+
+    // Computed once per channel row (instead of once per selected attribute) and shared by
+    // viewsPerDay/viewsGroupInterval/totalViews below via the params/params2 CTEs.
+    // Keep grp thresholds in sync with getVideoChannelStatsGroupIntervalFromSpan
+    this.join +=
+      // dprint-ignore
+      'LEFT JOIN LATERAL ( ' +
+        'WITH channel_stats AS ( ' +
+          'SELECT MIN("videoStat"."startDate") AS first_stat ' +
+          'FROM "videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
+          'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
+        `), ${paramsCte}, ` +
+        'params2 AS ( ' +
+          'SELECT raw_start, ' +
+            'CASE ' +
+              'WHEN EXTRACT(EPOCH FROM (now() - raw_start)) / 86400.0 > 400 THEN \'month\' ' +
+              'WHEN EXTRACT(EPOCH FROM (now() - raw_start)) / 86400.0 >= 60 THEN \'week\' ' +
+              'ELSE \'day\' ' +
+            'END AS grp ' +
+          'FROM params' +
+        '), periods AS ( ' +
+          'SELECT gs.day AS day, params2.grp AS grp, params2.raw_start AS raw_start ' +
+          'FROM params2, ' +
+          'LATERAL generate_series( ' +
+            'date_trunc(params2.grp, params2.raw_start), ' +
+            'date_trunc(params2.grp, now()), ' +
+            'CASE params2.grp ' +
+              'WHEN \'day\' THEN interval \'1 day\' ' +
+              'WHEN \'week\' THEN interval \'1 week\' ' +
+              'ELSE interval \'1 month\' ' +
+            'END' +
+          ') AS gs(day) ' +
+        ') ' +
+        'SELECT ' +
+          '(' +
+            `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
+            'FROM ( ' +
+              'SELECT periods.day AS day, COALESCE(SUM("videoStat".views), 0) AS views ' +
+              'FROM periods ' +
+              'LEFT JOIN (' +
+                '"videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
+                'AND "video"."channelId" = "VideoChannelModel"."id"' +
+              ') ON date_trunc(periods.grp, "videoStat"."startDate") = periods.day ' +
+                // Match the totalViews lower bound: the first (week/month) bucket's floor can precede
+                // raw_start, so without this a channel's first bar would count views that totalViews excludes
+                'AND "videoStat"."startDate" >= periods.raw_start ' +
+              'GROUP BY day ORDER BY day ' +
+            ') t' +
+          ') AS "viewsPerDay", ' +
+          '(SELECT grp FROM params2) AS "viewsGroupInterval", ' +
+          '(' +
+            'SELECT COALESCE(SUM("videoStat".views), 0) ' +
+            'FROM "videoStat" ' +
+            'INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
+            'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
+            'AND "videoStat"."startDate" >= (SELECT raw_start FROM params)' +
+          ') AS "totalViews"' +
+      ') AS "ChannelStats" ON TRUE '
+
+    this.builtChannelStatsJoin = true
+  }
+
   // ---------------------------------------------------------------------------
 
   protected buildQueryJoin () {
     this.buildChannelAvatarsJoin()
     this.buildAccountAvatarsJoin()
     this.buildChannelBannersJoin()
+
+    if (this.options.statsDaysPrior !== undefined) {
+      this.buildChannelStatsJoin()
+    }
   }
 
   protected buildQueryAttributes () {
@@ -219,109 +315,10 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
 
     if (this.options.statsDaysPrior !== undefined) {
       this.attributes.push(
-        `(SELECT COUNT(*) FROM "video" WHERE "channelId" = "VideoChannelModel"."id") AS "videosCount"`
-      )
-
-      // Per-channel series: start at max(range start, first recorded stat), and pick day/week/month
-      // from that effective span so a young channel on "All time" / "Last year" does not get one
-      // coarse monthly bar.
-      const statsRangeStart = this.options.statsDaysPrior === 0
-        ? null
-        : `date_trunc('day', now()) - make_interval(days => :statsDaysPrior)`
-
-      if (statsRangeStart !== null) {
-        this.replacements.statsDaysPrior = this.options.statsDaysPrior
-      }
-
-      const channelStatsCte =
-        // dprint-ignore
-        'channel_stats AS ( ' +
-          'SELECT MIN("videoStat"."startDate") AS first_stat ' +
-          'FROM "videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
-          'WHERE "video"."channelId" = "VideoChannelModel"."id"' +
-        ')'
-
-      // Calculate the minimum start date for the stats series
-      const paramsCte = statsRangeStart === null
-        // dprint-ignore
-        ? 'params AS ( ' +
-            'SELECT COALESCE(date_trunc(\'day\', channel_stats.first_stat), date_trunc(\'day\', now())) AS raw_start ' +
-            'FROM channel_stats' +
-          ')'
-        // dprint-ignore
-        : 'params AS ( ' +
-            'SELECT GREATEST(' +
-              `${statsRangeStart}, ` +
-              `COALESCE(date_trunc('day', channel_stats.first_stat), ${statsRangeStart})` +
-            ') AS raw_start ' +
-            'FROM channel_stats' +
-          ')'
-
-      // Calculate group interval (day/week/month) based on the effective span of the stats series
-      // Keep thresholds in sync with getVideoChannelStatsGroupIntervalFromSpan
-      const params2Cte =
-        // dprint-ignore
-        'params2 AS ( ' +
-          'SELECT raw_start, ' +
-            'CASE ' +
-              'WHEN EXTRACT(EPOCH FROM (now() - raw_start)) / 86400.0 > 400 THEN \'month\' ' +
-              'WHEN EXTRACT(EPOCH FROM (now() - raw_start)) / 86400.0 >= 60 THEN \'week\' ' +
-              'ELSE \'day\' ' +
-            'END AS grp ' +
-          'FROM params' +
-        ')'
-
-      this.attributes.push(
-        // dprint-ignore
-        '(' +
-          `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
-          'FROM ( ' +
-            `WITH ${channelStatsCte}, ${paramsCte}, ${params2Cte}, ` +
-            'periods AS ( ' +
-              'SELECT gs.day AS day, params2.grp AS grp, params2.raw_start AS raw_start ' +
-              'FROM params2, ' +
-              'LATERAL generate_series( ' +
-                'date_trunc(params2.grp, params2.raw_start), ' +
-                'date_trunc(params2.grp, now()), ' +
-                'CASE params2.grp ' +
-                  'WHEN \'day\' THEN interval \'1 day\' ' +
-                  'WHEN \'week\' THEN interval \'1 week\' ' +
-                  'ELSE interval \'1 month\' ' +
-                'END' +
-              ') AS gs(day) ' +
-            ') ' +
-            'SELECT periods.day AS day, COALESCE(SUM("videoStat".views), 0) AS views ' +
-            'FROM periods ' +
-            'LEFT JOIN (' +
-              '"videoStat" INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
-              'AND "video"."channelId" = "VideoChannelModel"."id"' +
-            ') ON date_trunc(periods.grp, "videoStat"."startDate") = periods.day ' +
-              // Match the totalViews lower bound: the first (week/month) bucket's floor can precede
-              // raw_start, so without this a channel's first bar would count views that totalViews excludes
-              'AND "videoStat"."startDate" >= periods.raw_start ' +
-            'GROUP BY day ORDER BY day ' +
-          ') t' +
-        ') AS "viewsPerDay"'
-      )
-
-      this.attributes.push(
-        // dprint-ignore
-        '(' +
-          `WITH ${channelStatsCte}, ${paramsCte}, ${params2Cte} ` +
-          'SELECT grp FROM params2' +
-        ') AS "viewsGroupInterval"'
-      )
-
-      this.attributes.push(
-        // dprint-ignore
-        '(' +
-          `WITH ${channelStatsCte}, ${paramsCte} ` +
-          'SELECT COALESCE(SUM("videoStat".views), 0) ' +
-          'FROM "videoStat" ' +
-          'INNER JOIN "video" ON "videoStat"."videoId" = "video"."id" ' +
-          'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
-          'AND "videoStat"."startDate" >= (SELECT raw_start FROM params)' +
-        ') AS "totalViews"'
+        `(SELECT COUNT(*) FROM "video" WHERE "channelId" = "VideoChannelModel"."id") AS "videosCount"`,
+        '"ChannelStats"."viewsPerDay" AS "viewsPerDay"',
+        '"ChannelStats"."viewsGroupInterval" AS "viewsGroupInterval"',
+        '"ChannelStats"."totalViews" AS "totalViews"'
       )
     }
   }

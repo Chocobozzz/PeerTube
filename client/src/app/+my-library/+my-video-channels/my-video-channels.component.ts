@@ -207,11 +207,15 @@ export class MyVideoChannelsComponent implements OnInit {
   onStatsDaysChanged () {
     if (this.videoChannels.length === 0) return
 
-    // Refresh all channel stats
-    this.loadChannelsStats({
-      currentPage: 1,
-      itemsPerPage: Math.min(Math.max(this.videoChannels.length, this.pagination.itemsPerPage), 100) // 100 is the max count on server side
-    })
+    // Refresh all channel stats, chunked by 100 (the max count accepted server side)
+    const chunkSize = 100
+
+    for (let start = 0; start < this.videoChannels.length; start += chunkSize) {
+      this.loadChannelsStats({
+        currentPage: (start / chunkSize) + 1,
+        itemsPerPage: chunkSize
+      })
+    }
   }
 
   private loadChannelsStats (componentPagination: ComponentPaginationLight) {
@@ -238,10 +242,11 @@ export class MyVideoChannelsComponent implements OnInit {
           channel.totalViews = channelWithStats.totalViews
         }
 
+        const barColor = getComputedStyle(document.documentElement).getPropertyValue('--border-primary').trim() || '#fd7e14'
+
         this.videoChannelsChartData = this.videoChannels.map(v => {
           const viewsPerDay = v.viewsPerDay || []
           const groupInterval = v.viewsGroupInterval || getVideoChannelStatsGroupInterval(this.statsDays)
-          const barColor = getComputedStyle(document.documentElement).getPropertyValue('--border-primary').trim() || '#fd7e14'
 
           return {
             labels: viewsPerDay.map(day => this.formatStatsAxisLabel(day.date, groupInterval)),
