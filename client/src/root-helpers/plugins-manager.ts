@@ -4,6 +4,7 @@ import {
   ClientDoAction,
   ClientHookName,
   clientHookObject,
+  ClientRouter,
   ClientScriptJSON,
   HTMLServerConfig,
   PluginClientScope,
@@ -22,7 +23,6 @@ import { first, shareReplay } from 'rxjs/operators'
 import { ClientScript } from '../types'
 import { RegisterClientHelpers } from '../types/register-client-option.model'
 import { logger } from './logger'
-import { Router } from '@angular/router'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -55,7 +55,6 @@ const debugLogger = debug('peertube:plugins')
 class PluginsManager {
   private hooks: Hooks = {}
 
-  private router: Router
   private scopes: { [scopeName: string]: PluginInfo[] } = {}
 
   private loadedScripts: { [script: string]: boolean } = {}
@@ -79,6 +78,7 @@ class PluginsManager {
     'moderation': new ReplaySubject<boolean>(1)
   }
 
+  private readonly router: ClientRouter
   private readonly doAction: ClientDoAction
   private readonly peertubeHelpersFactory: PeertubeHelpersFactory
   private readonly onFormFields: OnFormFields
@@ -87,7 +87,7 @@ class PluginsManager {
   private readonly backendUrl: string
 
   constructor (options: {
-    router?: Router
+    router?: ClientRouter
     doAction?: ClientDoAction
     peertubeHelpersFactory: PeertubeHelpersFactory
     onFormFields?: OnFormFields

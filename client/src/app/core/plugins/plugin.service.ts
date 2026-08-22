@@ -73,12 +73,11 @@ export class PluginService implements ClientHook {
   private pluginsManager: PluginsManager
 
   private actions = new Map<ClientDoActionName, ClientDoActionCallback>()
-
   constructor () {
     this.loadTranslations()
 
     this.pluginsManager = new PluginsManager({
-      router: this.router,
+      router: this.buildRouter(),
       doAction: this.doAction.bind(this),
       peertubeHelpersFactory: this.buildPeerTubeHelpers.bind(this),
       onFormFields: this.onFormFields.bind(this),
@@ -242,6 +241,12 @@ export class PluginService implements ClientHook {
     }
 
     this.clientRoutes[parentRoute][route] = options
+  }
+
+  private buildRouter () {
+    return {
+      navigateByUrl: (url: string) => this.router.navigateByUrl(url)
+    }
   }
 
   private buildPeerTubeHelpers (pluginInfo: PluginInfo): RegisterClientHelpers {
