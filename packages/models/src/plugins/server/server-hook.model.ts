@@ -167,7 +167,10 @@ export const serverFilterHookObject = {
   'filter:notifier.notification.enabled.result': true,
 
   // PeerTube >= 8.1
-  'filter:feed.videos.list.result': true
+  'filter:feed.videos.list.result': true,
+
+  // Peertube >= 8.3
+  'filter:api.account.get.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
