@@ -13493,7 +13493,7 @@
       </trans-unit>
       <trans-unit id="8294583621306221742" datatype="html" xml:space="preserve">
         <source>new live transcoding profiles can be added by PeerTube plugins</source>
-        <target state="translated">Los complementos de PeerTube pueden agregar nuevos perfiles de transcodificación en directo</target>
+        <target state="translated">Los plugins de PeerTube pueden agregar nuevos perfiles de transcodificación en directo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">257</context>
@@ -13529,7 +13529,7 @@
       </trans-unit>
       <trans-unit id="3283660108004661843" datatype="html" xml:space="preserve">
         <source>Enable remote runners for lives</source>
-        <target state="translated">Habilitar los codificadores remotos para emisiones en directo</target>
+        <target state="translated">Habilitar los ejecutores remotos para emisiones en directo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">217</context>
@@ -13537,7 +13537,7 @@
       </trans-unit>
       <trans-unit id="2752892225115021926" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process live transcoding.</source>
-        <target state="translated">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>ejecutores remotos<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para procesar la transcodificación del directo.</target>
+        <target state="translated">Usar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>ejecutores remotos<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para procesar la transcodificación del directo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">220</context>
