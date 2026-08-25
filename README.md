@@ -132,6 +132,10 @@ See the [production guide](https://docs.joinpeertube.org/install/any-os), which 
 
 See the [community packages](https://docs.joinpeertube.org/install/unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/docker.md)).
 
+You can also deploy PeerTube with one click on [RepoCloud](https://repocloud.io/details/PeerTube/):
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/PeerTube/)
+
 :book: Documentation
 ----------------------------------------------------------------
 
