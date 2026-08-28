@@ -46,6 +46,21 @@ export class SQLCommand {
     return this.updateQuery(`UPDATE video SET ${this.escapeColumnName(field)} = :value WHERE uuid = :uuid`, { value, uuid })
   }
 
+  createVideoStat (options: {
+    uuid: string
+    views: number
+    startDate: string
+    downloads?: number
+  }) {
+    const { uuid, views, startDate, downloads = 0 } = options
+
+    return this.updateQuery(
+      `INSERT INTO "videoStat" ("startDate", "endDate", "views", "downloads", "videoId", "createdAt") ` +
+        `SELECT :startDate, :startDate, :views, :downloads, video.id, NOW() FROM video WHERE video.uuid = :uuid`,
+      { startDate, views, downloads, uuid }
+    )
+  }
+
   setPlaylistField (uuid: string, field: string, value: string) {
     return this.updateQuery(`UPDATE "videoPlaylist" SET ${this.escapeColumnName(field)} = :value WHERE uuid = :uuid`, { value, uuid })
   }

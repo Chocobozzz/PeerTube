@@ -1,3 +1,4 @@
+import { getAllPrivacies } from '@peertube/peertube-core-utils'
 import {
   CacheFileObject,
   RedundancyInformation,
@@ -9,6 +10,7 @@ import {
   VideoRedundancyStrategyWithManual
 } from '@peertube/peertube-models'
 import { isTestInstance } from '@peertube/peertube-node-utils'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MActor, MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models/index.js'
 import sample from 'lodash-es/sample.js'
@@ -37,7 +39,6 @@ import { ScheduleVideoUpdateModel } from '../video/schedule-video-update.js'
 import { VideoChannelModel } from '../video/video-channel.js'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist.js'
 import { VideoModel } from '../video/video.js'
-import { getAllPrivacies } from '@peertube/peertube-core-utils'
 
 const logger = createLogger()
 
@@ -128,18 +129,23 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
   declare Actor: Awaited<ActorModel>
 
   @BeforeDestroy
-  static async removeFile (instance: VideoRedundancyModel) {
+  static removeFile (instance: VideoRedundancyModel, options: { transaction?: Transaction }) {
     if (!instance.isLocal()) return
 
-    const videoStreamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(instance.videoStreamingPlaylistId)
+    return afterCommitIfTransaction(options.transaction, async () => {
+      try {
+        const videoStreamingPlaylist = await VideoStreamingPlaylistModel.loadWithVideo(instance.videoStreamingPlaylistId)
 
-    const videoUUID = videoStreamingPlaylist.Video.uuid
-    logger.info('Removing duplicated video streaming playlist %s.', videoUUID)
+        const videoUUID = videoStreamingPlaylist.Video.uuid
+        logger.info('Removing duplicated video streaming playlist of video ' + videoUUID)
 
-    videoStreamingPlaylist.Video.removeAllStreamingPlaylistFiles({ playlist: videoStreamingPlaylist, isRedundancy: true })
-      .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
+        await videoStreamingPlaylist.Video.removeAllStreamingPlaylistFiles({ playlist: videoStreamingPlaylist, isRedundancy: true })
+      } catch (err) {
+        logger.error('Cannot delete duplicated video streaming playlist ' + instance.videoStreamingPlaylistId, { err })
+      }
 
-    return undefined
+      return undefined
+    })
   }
 
   static async listLocalByStreamingPlaylistId (videoStreamingPlaylistId: number): Promise<MVideoRedundancyVideo[]> {

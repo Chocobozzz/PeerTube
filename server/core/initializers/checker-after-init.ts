@@ -14,6 +14,7 @@ import {
   isObjectStorageEnabledFor,
   objectStorageSectionTypes
 } from '../lib/object-storage/config.js'
+import { checkVideoFilesLifecycleConfig } from '../lib/video-files-lifecycle/video-files-lifecycle-config.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
@@ -62,6 +63,7 @@ function checkConfig () {
   checkLiveConfig()
   checkObjectStorageConfig()
   checkVideoStudioConfig()
+  checkVideoFilesLifecycleConfig()
   checkThumbnailsConfig()
   checkBrowseVideosConfig()
 }

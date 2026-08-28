@@ -65,6 +65,7 @@ export class JobsComponent {
     'transcoding-job-builder',
     'video-channel-import',
     'video-file-import',
+    'video-files-lifecycle',
     'video-import',
     'video-live-ending',
     'video-redundancy',
