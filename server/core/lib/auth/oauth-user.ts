@@ -51,7 +51,10 @@ export async function getUserOrThrow (options: {
 
     // Continue the password process if handleGetUserBypass returns undefined,
     // which means the user does not belong to the plugin and we should go through a regular login process
-    if (user) return user
+    if (user) {
+      await checkTwoFactorOrThrow(user, oauthHeaders, req)
+      return user
+    }
   }
 
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
@@ -104,24 +107,28 @@ export async function getUserOrThrow (options: {
     throw new EmailNotVerifiedError(req.t('User email is not verified.'))
   }
 
-  if (user.otpSecret) {
+  await checkTwoFactorOrThrow(user, oauthHeaders, req)
+
+  await Redis.Instance.deleteLoginFailures(user.id)
+
+  return user
+}
+
+async function checkTwoFactorOrThrow (user: MUserDefault, oauthHeaders: Record<string, string>, req: express.Request) {
+  if (!user.otpSecret) return
+
     if (!oauthHeaders[OTP.HEADER_NAME]) {
       throw new MissingTwoFactorError(req.t('Missing two factor header'))
     }
 
-    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: oauthHeaders[OTP.HEADER_NAME] }) !== true) {
+    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: oauthHeaders[OTP.HEADER_NAME] }) === true) return
+
       if (CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.ENABLED) {
         const failures = await Redis.Instance.addLoginFailure(user.id, req.ip)
         await notifyAccountLockedIfNeeded(user, failures, req.ip)
       }
 
       throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
-    }
-  }
-
-  await Redis.Instance.deleteLoginFailures(user.id)
-
-  return user
 }
 
 // This is the exact failure that just crossed the threshold and locked the account: notify its owner once per lock
