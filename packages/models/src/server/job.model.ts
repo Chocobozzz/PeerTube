@@ -29,6 +29,7 @@ export type JobType =
   | 'transcoding-job-builder'
   | 'video-channel-import'
   | 'video-file-import'
+  | 'video-files-lifecycle'
   | 'video-import'
   | 'video-live-ending'
   | 'video-redundancy'
@@ -257,6 +258,14 @@ export function isMoveUploadImagePayload (payload: any): payload is MoveUploadIm
 
 export function isMoveVideoPlaylistPayload (payload: any): payload is MoveVideoPlaylistPayload {
   return 'videoPlaylistId' in payload
+}
+
+// ---------------------------------------------------------------------------
+
+export interface VideoFilesLifecyclePayload {
+  videoUUID: string
+
+  policyName: string
 }
 
 // ---------------------------------------------------------------------------

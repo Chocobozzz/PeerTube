@@ -15,11 +15,15 @@ import { VideoModel } from '../video/video.js'
 @Table({
   tableName: 'videoStat',
   updatedAt: false,
-  indexes: [ {
-    fields: [ 'videoId' ]
-  }, {
-    fields: [ 'startDate' ]
-  } ]
+  indexes: [
+    {
+      fields: [ 'startDate' ]
+    },
+    {
+      // Used by the video files lifecycle policies
+      fields: [ 'videoId', 'startDate' ]
+    }
+  ]
 })
 export class VideoStatModel extends SequelizeModel<VideoStatModel> {
   @CreatedAt
@@ -89,6 +93,16 @@ export class VideoStatModel extends SequelizeModel<VideoStatModel> {
         limit: MAX_SQL_DELETE_ITEMS
       })
     })
+  }
+
+  static async getOldestLocalStatDate (): Promise<Date> {
+    const query = `SELECT "videoStat"."startDate" FROM "videoStat" ` +
+      `INNER JOIN "video" ON "video"."id" = "videoStat"."videoId" AND "video"."remote" IS FALSE ` +
+      `ORDER BY "videoStat"."startDate" ASC LIMIT 1`
+
+    const rows = await VideoStatModel.sequelize.query<{ startDate: Date }>(query, { type: QueryTypes.SELECT })
+
+    return rows[0]?.startDate
   }
 
   static async getDownloadTimeserieStats (options: {

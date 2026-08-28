@@ -218,6 +218,7 @@ import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-
 import { RemoveOldUserLoginDevicesScheduler } from './core/lib/schedulers/remove-old-user-login-devices-scheduler.js'
 import { RunnerJobWatchDogScheduler } from './core/lib/schedulers/runner-job-watch-dog-scheduler.js'
 import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-scheduler.js'
+import { VideoFilesLifecycleScheduler } from './core/lib/schedulers/video-files-lifecycle-scheduler.js'
 import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
 import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watched-words-subscriptions-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
@@ -457,6 +458,7 @@ async function startApplication () {
   UpdateTokenSessionScheduler.Instance.enable()
   RemoveOldUserLoginDevicesScheduler.Instance.enable()
   ManualMigrationScriptsScheduler.Instance.enable()
+  VideoFilesLifecycleScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 
