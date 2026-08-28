@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, User } from '@app/core'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
+import { ServerErrorCode } from '@peertube/peertube-models'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 
 @Component({
@@ -39,7 +40,13 @@ export class MyAccountTwoFactorButtonComponent implements OnInit {
           this.notifier.success($localize`Two factor authentication disabled`)
         },
 
-        error: err => this.notifier.handleError(err)
+        error: err => {
+          if (err.body?.code === ServerErrorCode.CURRENT_PASSWORD_IS_INVALID) {
+            return this.notifier.error($localize`Please check your password and try again.`, $localize`Password not recognized`)
+          }
+
+          return this.notifier.handleError(err)
+        }
       })
   }
 }

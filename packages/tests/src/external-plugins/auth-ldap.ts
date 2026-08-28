@@ -1,13 +1,14 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, UserRole } from '@peertube/peertube-models'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
+import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, TwoFactorCommand } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
 describe('Official plugin auth-ldap', function () {
   let server: PeerTubeServer
   let accessToken: string
   let userId: number
+  let otpSecret: string
 
   const pluginSettings = {
     'bind-credentials': 'GoodNewsEveryone',
@@ -75,6 +76,45 @@ describe('Official plugin auth-ldap', function () {
     userId = body.id
   })
 
+  it('Should enable two factor authentication with the LDAP password', async function () {
+    await server.twoFactor.request({
+      userId,
+      token: accessToken,
+      currentPassword: 'incorrect password',
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+
+    const { otpRequest } = await server.twoFactor.request({ userId, token: accessToken, currentPassword: 'fry' })
+    otpSecret = otpRequest.secret
+
+    await server.twoFactor.confirmRequest({
+      userId,
+      token: accessToken,
+      requestToken: otpRequest.requestToken,
+      otpToken: TwoFactorCommand.buildOTP({ secret: otpSecret }).generate()
+    })
+  })
+
+  it('Should require a valid OTP token when logging in with LDAP', async function () {
+    await server.login.login({
+      user: { username: 'fry', password: 'fry' },
+      expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+    })
+
+    await server.login.login({
+      user: { username: 'fry', password: 'fry' },
+      otpToken: '123456',
+      expectedStatus: HttpStatusCode.BAD_REQUEST_400
+    })
+
+    const { access_token } = await server.login.login({
+      user: { username: 'fry', password: 'fry' },
+      otpToken: TwoFactorCommand.buildOTP({ secret: otpSecret }).generate()
+    })
+
+    accessToken = access_token
+  })
+
   it('Should upload a video', async function () {
     await server.videos.upload({ token: accessToken, attributes: { name: 'my super video' } })
   })
@@ -90,6 +130,22 @@ describe('Official plugin auth-ldap', function () {
 
   it('Should be able to login if the user is unbanned', async function () {
     await server.users.unbanUser({ userId })
+
+    await server.login.login({
+      user: { username: 'fry@planetexpress.com', password: 'fry' },
+      otpToken: TwoFactorCommand.buildOTP({ secret: otpSecret }).generate()
+    })
+  })
+
+  it('Should disable two factor authentication with the LDAP password', async function () {
+    await server.twoFactor.disable({
+      userId,
+      token: accessToken,
+      currentPassword: 'incorrect password',
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+
+    await server.twoFactor.disable({ userId, token: accessToken, currentPassword: 'fry' })
 
     await server.login.login({ user: { username: 'fry@planetexpress.com', password: 'fry' } })
   })

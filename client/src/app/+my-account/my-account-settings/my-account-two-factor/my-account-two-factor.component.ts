@@ -5,6 +5,8 @@ import { AuthService, Notifier, User } from '@app/core'
 import { USER_EXISTING_PASSWORD_VALIDATOR, USER_OTP_TOKEN_VALIDATOR } from '@app/shared/form-validators/user-validators'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { TwoFactorService } from '@app/shared/shared-users/two-factor.service'
+import { ServerErrorCode } from '@peertube/peertube-models'
+import { PeerTubeHTTPError } from '@root-helpers/errors'
 import { QRCodeComponent } from 'angularx-qrcode'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
 
@@ -62,7 +64,7 @@ export class MyAccountTwoFactorComponent implements OnInit {
         this.step = 'confirm'
       },
 
-      error: err => this.notifier.handleError(err)
+      error: err => this.handleRequestError(err)
     })
   }
 
@@ -91,6 +93,14 @@ export class MyAccountTwoFactorComponent implements OnInit {
 
     this.formPassword = form
     this.formErrorsPassword = formErrors
+  }
+
+  private handleRequestError (err: PeerTubeHTTPError) {
+    if (err.body?.code === ServerErrorCode.CURRENT_PASSWORD_IS_INVALID) {
+      return this.notifier.error($localize`Please check your password and try again.`, $localize`Password not recognized`)
+    }
+
+    return this.notifier.handleError(err)
   }
 
   private buildOTPForm () {
