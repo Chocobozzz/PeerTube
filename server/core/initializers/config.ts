@@ -5,6 +5,7 @@ import {
   PlayerTheme,
   ThumbnailAspectRatio,
   VideoCommentPolicyType,
+  VideoLifecyclePolicy,
   VideoPrivacyType,
   VideoRedundancyConfigFilter,
   VideosRedundancyStrategy
@@ -1012,6 +1013,21 @@ const CONFIG = {
       get ENABLED () {
         return config.get<boolean>('video_file.update.enabled')
       }
+    },
+    LIFECYCLE: {
+      get ENABLED () {
+        return config.get<boolean>('video_file.lifecycle.enabled')
+      },
+      CHECK_INTERVAL: parseDurationToMs(config.get<string>('video_file.lifecycle.check_interval')),
+      get DRY_RUN () {
+        return config.get<boolean>('video_file.lifecycle.dry_run')
+      },
+      get MAX_VIDEOS_PER_RUN () {
+        return config.get<number>('video_file.lifecycle.max_videos_per_run')
+      },
+      get POLICIES () {
+        return buildVideoFileLifecyclePolicies(config.get<any[]>('video_file.lifecycle.policies'))
+      }
     }
   },
   VIDEO_TRANSCRIPTION: {
@@ -1423,6 +1439,14 @@ function getLocalConfigDir () {
   if (configSources.length === 0) throw new Error('Invalid config source.')
 
   return dirname(configSources[0].name)
+}
+
+// `checkVideoFilesLifecycleConfig` is in charge of the validation
+// Return the value as is when it's not an array, so it can complain about a policy list that is not correctly uncommented
+function buildVideoFileLifecyclePolicies (objs: any[]): VideoLifecyclePolicy[] {
+  if (!objs) return []
+
+  return objs
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {

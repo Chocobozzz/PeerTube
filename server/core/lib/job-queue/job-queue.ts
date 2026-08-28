@@ -22,6 +22,7 @@ import {
   TranscodingJobBuilderPayload,
   VideoChannelImportPayload,
   VideoFileImportPayload,
+  VideoFilesLifecyclePayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
   VideoRedundancyPayload,
@@ -73,6 +74,7 @@ import { processNotify } from './handlers/notify.js'
 import { processTranscodingJobBuilder } from './handlers/transcoding-job-builder.js'
 import { processVideoChannelImport } from './handlers/video-channel-import.js'
 import { processVideoFileImport } from './handlers/video-file-import.js'
+import { processVideoFilesLifecycle } from './handlers/video-files-lifecycle.js'
 import { processVideoImport } from './handlers/video-import.js'
 import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideosStats } from './handlers/video-stats.js'
@@ -92,6 +94,7 @@ export type CreateJobTypeAndPayload =
   | { type: 'activitypub-cleaner', payload: {} }
   | { type: 'activitypub-follow', payload: ActivitypubFollowPayload }
   | { type: 'video-file-import', payload: VideoFileImportPayload }
+  | { type: 'video-files-lifecycle', payload: VideoFilesLifecyclePayload }
   | { type: 'video-transcoding', payload: VideoTranscodingPayload }
   | { type: 'email', payload: EmailPayload }
   | { type: 'transcoding-job-builder', payload: TranscodingJobBuilderPayload }
@@ -147,6 +150,7 @@ const handlers: { [id in JobType]: (job: Job, signal?: AbortSignal) => Promise<a
   'notify': processNotify,
   'video-channel-import': processVideoChannelImport,
   'video-file-import': processVideoFileImport,
+  'video-files-lifecycle': processVideoFilesLifecycle,
   'video-import': processVideoImport,
   'video-live-ending': processVideoLiveEnding,
   'video-redundancy': processVideoRedundancy,
@@ -186,6 +190,7 @@ const jobTypes: JobType[] = [
   'transcoding-job-builder',
   'video-channel-import',
   'video-file-import',
+  'video-files-lifecycle',
   'video-import',
   'video-live-ending',
   'video-redundancy',

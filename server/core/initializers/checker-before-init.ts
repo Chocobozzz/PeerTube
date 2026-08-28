@@ -115,6 +115,11 @@ export function checkMissedConfig () {
     'video_studio.enabled',
     'video_studio.remote_runners.enabled',
     'video_file.update.enabled',
+    'video_file.lifecycle.enabled',
+    'video_file.lifecycle.check_interval',
+    'video_file.lifecycle.dry_run',
+    'video_file.lifecycle.max_videos_per_run',
+    'video_file.lifecycle.policies',
     'remote_runners.stalled_jobs.vod',
     'remote_runners.stalled_jobs.live',
     'thumbnails.generation_from_video.frames_to_analyze',
@@ -299,6 +304,16 @@ export function checkMissedConfig () {
     for (const r of redundancyVideos) {
       if (!r.size) miss.push('redundancy.videos.strategies.size')
       if (!r.min_lifetime) miss.push('redundancy.videos.strategies.min_lifetime')
+    }
+  }
+
+  const lifecyclePolicies = config.get<any>('video_file.lifecycle.policies')
+
+  if (Array.isArray(lifecyclePolicies)) {
+    for (const p of lifecyclePolicies) {
+      if (!p?.name) miss.push('video_file.lifecycle.policies.name')
+      if (!p?.criteria) miss.push('video_file.lifecycle.policies.criteria')
+      if (!p?.action) miss.push('video_file.lifecycle.policies.action')
     }
   }
 

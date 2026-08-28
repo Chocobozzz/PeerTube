@@ -2299,6 +2299,40 @@
             }
           },
           "additionalProperties": false
+        },
+        "lifecycle": {
+          "description": "Automatically prune video files to reduce your storage usage Policies are evaluated in order: the first policy matching a video is applied on it, the next ones are skipped",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "check_interval": {
+              "description": "How often PeerTube evaluates the policies below",
+              "type": "string",
+              "default": "1 day"
+            },
+            "dry_run": {
+              "description": "Log what PeerTube would do, without deleting any file",
+              "type": "boolean",
+              "default": false
+            },
+            "max_videos_per_run": {
+              "description": "Maximum number of videos processed in one run, so a misconfigured policy degrades your library gradually",
+              "type": "integer",
+              "default": 1000
+            },
+            "policies": {
+              "description": "Just uncomment the policies you want",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

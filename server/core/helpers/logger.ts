@@ -372,6 +372,7 @@ export type StaticLoggerTag =
   | 'user-import'
   | 'users'
   | 'video-download'
+  | 'video-files-lifecycle'
   | 'video-path-manager'
   | 'video-privacy'
   | 'video-state'

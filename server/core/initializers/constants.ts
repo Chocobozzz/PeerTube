@@ -62,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1125
+export const LAST_MIGRATION_VERSION = 1130
 
 // ---------------------------------------------------------------------------
 
@@ -247,6 +247,7 @@ export const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-redundancy': 1,
   'video-live-ending': 1,
   'video-studio-edition': 1,
+  'video-files-lifecycle': 1,
   'manage-video-torrent': 1,
   'video-channel-import': 1,
   'after-video-channel-import': 1,
@@ -279,6 +280,7 @@ export const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'v
   'video-redundancy': 1,
   'video-live-ending': 10,
   'video-studio-edition': 1,
+  'video-files-lifecycle': 1, // Keep it to 1 so we don't delete/move many files at the same time
   'manage-video-torrent': 1, // Keep it to 1 to prevent concurrency issues
   'move-to-object-storage': 1,
   'move-to-file-system': 1,
@@ -304,6 +306,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-studio-edition': 1000 * 3600 * 10, // 10 hours
+  'video-files-lifecycle': 1000 * 3600, // 1 hour
   'video-import': CONFIG.IMPORT.VIDEOS.TIMEOUT,
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes

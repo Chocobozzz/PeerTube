@@ -17,6 +17,7 @@ import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove
 import { RemoveOldStatsScheduler } from '@server/lib/schedulers/remove-old-stats-scheduler.js'
 import { UpdateVideosScheduler } from '@server/lib/schedulers/update-videos-scheduler.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
+import { VideoFilesLifecycleScheduler } from '@server/lib/schedulers/video-files-lifecycle-scheduler.js'
 import { VideoStatsBufferScheduler } from '@server/lib/schedulers/video-stats-buffer-scheduler.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import express from 'express'
@@ -66,6 +67,7 @@ async function runCommand (req: express.Request, res: express.Response) {
     'process-update-videos-scheduler': () => UpdateVideosScheduler.Instance.execute(),
     'process-video-channel-sync-latest': () => VideoChannelSyncLatestScheduler.Instance.execute(),
     'process-remove-old-stats': () => RemoveOldStatsScheduler.Instance.execute(),
+    'process-video-files-lifecycle': () => VideoFilesLifecycleScheduler.Instance.execute(),
     'test-emails': () => testEmails(req, res)
   }
 

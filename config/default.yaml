@@ -888,6 +888,55 @@ video_file:
     # Add ability for users to replace the video file of an existing video
     enabled: false
 
+  # Automatically prune video files to reduce your storage usage
+  # Policies are evaluated in order: the first policy matching a video is applied on it, the next ones are skipped
+  lifecycle:
+    enabled: false
+
+    # How often PeerTube evaluates the policies below
+    check_interval: '1 day'
+
+    # Log what PeerTube would do, without deleting any file
+    dry_run: false
+
+    # Maximum number of videos processed in one run, so a misconfigured policy degrades your library gradually
+    max_videos_per_run: 1000
+
+    policies: # Just uncomment the policies you want
+#      -
+#        # Must be unique, used in logs
+#        name: 'prune-files'
+#        # All the criteria must match for the action to be applied on the video
+#        # All available criteria type are listed below
+#        criteria:
+#          -
+#            # Videos that have at most/at least x views in the last y days
+#            # Downloads are counted as views
+#            # Available operators: [ 'lte', 'gte' ]
+#            # "lte" with a count of 0 selects the videos that have not been viewed nor downloaded at all
+#            type: 'views-since'
+#            operator: 'lte'
+#            count: 0
+#            days: 365
+#        action:
+#          # Delete every resolution of the video below its max resolution
+#          # The video is still playable in its max resolution
+#          # Available actions for now: [ { type: 'delete-resolutions', keep: 'max' } ]
+#          # More actions may be added in the future
+#          type: 'delete-resolutions'
+#          keep: 'max'
+#      -
+#        name: 'prune-unpopular-files'
+#        criteria:
+#          -
+#            type: 'views-since'
+#            operator: 'lte'
+#            count: 10
+#            days: 90
+#        action:
+#          type: 'delete-resolutions'
+#          keep: 'max'
+
 import:
   # Add ability for your users to import remote videos (from YouTube, torrent...)
   videos:

@@ -7,6 +7,7 @@ import { basename } from 'path'
 import { URL } from 'url'
 import { parseBytes, parseSemVersion } from '../helpers/core-utils.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
+import { checkVideoFilesLifecycleConfig } from '../lib/video-files-lifecycle/video-files-lifecycle-config.js'
 import { getBrowseVideosDefaultSortError, getBrowseVideosDefaultScopeError } from '../helpers/custom-validators/browse-videos.js'
 import { createLogger } from '../helpers/logger.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
@@ -57,6 +58,7 @@ function checkConfig () {
   checkLiveConfig()
   checkObjectStorageConfig()
   checkVideoStudioConfig()
+  checkVideoFilesLifecycleConfig()
   checkThumbnailsConfig()
   checkBrowseVideosConfig()
 }

@@ -7448,6 +7448,7 @@ paths:
                         - process-update-videos-scheduler
                         - process-video-channel-sync-latest
                         - process-remove-old-stats
+                        - process-video-files-lifecycle
                   required:
                     - command
                 - type: object
@@ -12479,6 +12480,7 @@ components:
         - transcoding-job-builder
         - video-channel-import
         - video-file-import
+        - video-files-lifecycle
         - video-import
         - video-live-ending
         - video-redundancy
