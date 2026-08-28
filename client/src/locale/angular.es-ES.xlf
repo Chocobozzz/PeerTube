@@ -15099,9 +15099,9 @@ color: red;
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="793118536096339449" datatype="html">
+      <trans-unit id="793118536096339449" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No sync} =1 {1 sync} other {<x id="INTERPOLATION"/> syncs}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No sync} =1 {1 sync} other {<x id="INTERPOLATION"/> syncs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No sincronizados} =1 {1 sincronizado} other {<x id="INTERPOLATION"/> sincronizados}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">17</context>
@@ -15267,9 +15267,9 @@ color: red;
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4051889386110039096" datatype="html">
+      <trans-unit id="4051889386110039096" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No import} =1 {1 import} other {<x id="INTERPOLATION"/> imports}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No import} =1 {1 import} other {<x id="INTERPOLATION"/> imports}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sin importaciones} =1 {1 importación} other {<x id="INTERPOLATION"/> importaciones }}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.html</context>
           <context context-type="linenumber">15</context>
