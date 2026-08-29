@@ -15560,9 +15560,9 @@ color: red;
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8173902679178787744" datatype="html">
+      <trans-unit id="8173902679178787744" datatype="html" xml:space="preserve">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="translated">Una vez que elimines tu cuenta, no hay vuelta atrás. Se te pedirá que confirmes esta acción.</target>
+        <target state="translated">Una vez hayas eliminado tu cuenta, no hay vuelta atrás. Se te pedirá que confirmes esta acción.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">2</context>
@@ -15608,9 +15608,9 @@ color: red;
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="228548407872312756" datatype="html">
+      <trans-unit id="228548407872312756" datatype="html" xml:space="preserve">
         <source>Owner account page</source>
-        <target state="translated">Página de cuenta del propietario</target>
+        <target state="translated">Página de la cuenta del dueño</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-subscriptions.component.html</context>
           <context context-type="linenumber">26</context>
@@ -15688,9 +15688,9 @@ color: red;
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1156913594298737082" datatype="html">
+      <trans-unit id="1156913594298737082" datatype="html" xml:space="preserve">
         <source>See more menu items</source>
-        <target state="new">See more menu items</target>
+        <target state="translated">Ver más opciones del menú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/menu/list-overflow.component.html</context>
           <context context-type="linenumber">16</context>
@@ -15740,33 +15740,33 @@ color: red;
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8627640588059476624" datatype="html">
+      <trans-unit id="8627640588059476624" datatype="html" xml:space="preserve">
         <source>An editor can manage videos in this channel</source>
-        <target state="new">An editor can manage videos in this channel</target>
+        <target state="translated">Un editor puede gestionar los vídeos de este canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775433842284877534" datatype="html">
+      <trans-unit id="3775433842284877534" datatype="html" xml:space="preserve">
         <source>Owner of the channel</source>
-        <target state="new">Owner of the channel</target>
+        <target state="translated">Dueño del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2996672568437579118" datatype="html">
+      <trans-unit id="2996672568437579118" datatype="html" xml:space="preserve">
         <source>Invited to be an editor to manage videos in this channel</source>
-        <target state="new">Invited to be an editor to manage videos in this channel</target>
+        <target state="translated">Me han invitado a ser editor para gestionar los vídeos de este canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/collaborator-state.component.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4498682414491138092" datatype="html">
+      <trans-unit id="4498682414491138092" datatype="html" xml:space="preserve">
         <source>Yesterday</source>
-        <target state="new">Yesterday</target>
+        <target state="translated">Ayer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">26</context>
@@ -15776,9 +15776,9 @@ color: red;
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5073473933031004097" datatype="html">
+      <trans-unit id="5073473933031004097" datatype="html" xml:space="preserve">
         <source>This week</source>
-        <target state="new">This week</target>
+        <target state="translated">Esta semana</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -15788,9 +15788,9 @@ color: red;
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="842657237693374355" datatype="html">
+      <trans-unit id="842657237693374355" datatype="html" xml:space="preserve">
         <source>This month</source>
-        <target state="new">This month</target>
+        <target state="translated">Este mes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">28</context>
@@ -15800,9 +15800,9 @@ color: red;
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4463380307954693363" datatype="html">
+      <trans-unit id="4463380307954693363" datatype="html" xml:space="preserve">
         <source>Last month</source>
-        <target state="new">Last month</target>
+        <target state="translated">El mes pasado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -15812,9 +15812,9 @@ color: red;
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7473676707373218484" datatype="html">
+      <trans-unit id="7473676707373218484" datatype="html" xml:space="preserve">
         <source>Older</source>
-        <target state="new">Older</target>
+        <target state="translated">Más antiguo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/date-group-label.component.ts</context>
           <context context-type="linenumber">30</context>
