@@ -16016,9 +16016,9 @@ color: red;
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7481574586191936140" datatype="html">
+      <trans-unit id="7481574586191936140" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>to <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>to <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Bienvenido<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>to <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -16104,17 +16104,17 @@ color: red;
           <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9186529157286281693" datatype="html">
+      <trans-unit id="9186529157286281693" datatype="html" xml:space="preserve">
         <source>Last 24 hours</source>
-        <target state="new">Last 24 hours</target>
+        <target state="translated">Últimas 24 horas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">341</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8089238718524110373" datatype="html">
+      <trans-unit id="8089238718524110373" datatype="html" xml:space="preserve">
         <source>Live as of <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></source>
-        <target state="translated">Directo de <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></target>
+        <target state="translated">En directo desde <x id="PH" equiv-text="this.toMediumDate(new Date(session.startDate))"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">349</context>
@@ -16128,9 +16128,9 @@ color: red;
           <context context-type="linenumber">360</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6902066221893318076" datatype="html">
+      <trans-unit id="6902066221893318076" datatype="html" xml:space="preserve">
         <source>VIEWS</source>
-        <target state="new">VIEWS</target>
+        <target state="translated">VISTAS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">375</context>
@@ -16138,47 +16138,47 @@ color: red;
       </trans-unit>
       <trans-unit id="2405893290244253562" datatype="html" xml:space="preserve">
         <source>A view means that someone watched the video for several seconds (10 seconds by default)</source>
-        <target state="translated">Una visualización significa que alguien vio el vídeo durante algunos segundos (10 segundos por defecto)</target>
+        <target state="translated">Una vista es una persona que vio el vídeo durante algunos segundos (10 segundos por defecto)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6241152435233737914" datatype="html">
+      <trans-unit id="6241152435233737914" datatype="html" xml:space="preserve">
         <source>DOWNLOADS</source>
-        <target state="new">DOWNLOADS</target>
+        <target state="translated">DESCARGAS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">380</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6837594486982933976" datatype="html">
+      <trans-unit id="6837594486982933976" datatype="html" xml:space="preserve">
         <source>LIKES</source>
-        <target state="new">LIKES</target>
+        <target state="translated">ME GUSTA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7292844496438783099" datatype="html">
+      <trans-unit id="7292844496438783099" datatype="html" xml:space="preserve">
         <source>AVERAGE WATCH TIME</source>
-        <target state="new">AVERAGE WATCH TIME</target>
+        <target state="translated">TIEMPO MEDIO DE VISIONADO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">391</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4302414285233819411" datatype="html">
+      <trans-unit id="4302414285233819411" datatype="html" xml:space="preserve">
         <source>TOTAL WATCH TIME</source>
-        <target state="new">TOTAL WATCH TIME</target>
+        <target state="translated">TIEMPO TOTAL DE VISIONADO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">395</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5898795291446911875" datatype="html">
+      <trans-unit id="5898795291446911875" datatype="html" xml:space="preserve">
         <source>PEAK VIEWERS</source>
-        <target state="new">PEAK VIEWERS</target>
+        <target state="translated">MÁXIMO DE AUDIENCIA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">399</context>
@@ -16224,9 +16224,9 @@ color: red;
           <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7112532281224432421" datatype="html">
+      <trans-unit id="7112532281224432421" datatype="html" xml:space="preserve">
         <source>Likes</source>
-        <target state="translated">Gustan</target>
+        <target state="translated">Me gusta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-videos-sort.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -16240,25 +16240,25 @@ color: red;
           <context context-type="linenumber">402</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7783808619122709343" datatype="html">
+      <trans-unit id="7783808619122709343" datatype="html" xml:space="preserve">
         <source>UNIQUE VIEWERS</source>
-        <target state="new">UNIQUE VIEWERS</target>
+        <target state="translated">VISITAS UNICAS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">406</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3952157513492420828" datatype="html">
+      <trans-unit id="3952157513492420828" datatype="html" xml:space="preserve">
         <source>COUNTRIES</source>
-        <target state="new">COUNTRIES</target>
+        <target state="translated">PAISES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1122460335094529756" datatype="html">
+      <trans-unit id="1122460335094529756" datatype="html" xml:space="preserve">
         <source>REGIONS</source>
-        <target state="new">REGIONS</target>
+        <target state="translated">REGIONES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">420</context>
@@ -16322,7 +16322,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7678377121420709355" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> does not require email verification.</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> no requiere de verificación email.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> no requiere una verificación email.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-new-account-ask-send-email/verify-new-account-ask-send-email.component.html</context>
           <context context-type="linenumber">22</context>
@@ -16336,9 +16336,9 @@ color: red;
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6040639330855198542" datatype="html">
+      <trans-unit id="6040639330855198542" datatype="html" xml:space="preserve">
         <source>Ask to send an email to verify your account</source>
-        <target state="translated">Pida enviar un correo electrónico para verificar tucuenta</target>
+        <target state="translated">Pedir el envio de un correo electrónico para verificar tu cuenta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/routes.ts</context>
           <context context-type="linenumber">25</context>
@@ -16392,9 +16392,9 @@ color: red;
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8412827353958624080" datatype="html">
+      <trans-unit id="8412827353958624080" datatype="html" xml:space="preserve">
         <source>Your account request has been sent!</source>
-        <target state="translated">¡Su solicitud de cuenta ha sido enviada!</target>
+        <target state="translated">¡Tu solicitud de cuenta ha sido enviada!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">14</context>
@@ -16408,17 +16408,17 @@ color: red;
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7273859988396814188" datatype="html">
+      <trans-unit id="7273859988396814188" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration request. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Revisa tu correo electrónico<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> para validar tu cuenta y completar tu solicitud de registro. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7056036938435794110" datatype="html">
+      <trans-unit id="7056036938435794110" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Check your email<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to validate your account and complete your registration. </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Revisa tu correo electrónico<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> para validar tu cuenta y completar tu registro. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">26</context>
@@ -16440,9 +16440,9 @@ color: red;
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3771835663520262845" datatype="html">
+      <trans-unit id="3771835663520262845" datatype="html" xml:space="preserve">
         <source>1 domain (without "http://") per line</source>
-        <target state="new">1 domain (without "http://") per line</target>
+        <target state="translated">1 dominio (sin «http://») por línea</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.html</context>
           <context context-type="linenumber">13,15</context>
