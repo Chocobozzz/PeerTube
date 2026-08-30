@@ -15858,7 +15858,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8737239042780015707" datatype="html" xml:space="preserve">
         <source>Email verification sent!</source>
-        <target state="translated">¡Verificación email enviada!</target>
+        <target state="translated">¡Email de verificación enviado!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">15</context>
@@ -15866,7 +15866,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8557236926089115309" datatype="html" xml:space="preserve">
         <source>Resend your verification email</source>
-        <target state="translated">Reenviar su verificación de correo</target>
+        <target state="translated">Reenviar su email de verificación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">17</context>
@@ -15956,9 +15956,9 @@ color: red;
           <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7418836785553125957" datatype="html">
+      <trans-unit id="7418836785553125957" datatype="html" xml:space="preserve">
         <source>Create a new video channel</source>
-        <target state="translated">Crea un nuevo canal de video</target>
+        <target state="translated">Crear un nuevo canal de video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/routes.ts</context>
           <context context-type="linenumber">62</context>
@@ -15992,17 +15992,17 @@ color: red;
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5163476652584280983" datatype="html">
+      <trans-unit id="5163476652584280983" datatype="html" xml:space="preserve">
         <source>Browse videos on PeerTube to add them in your playlist.</source>
-        <target state="new">Browse videos on PeerTube to add them in your playlist.</target>
+        <target state="translated">Explora los vídeos de PeerTube para añadirlos a tu lista de reproducción.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context>
           <context context-type="linenumber">28,29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2882288950250980214" datatype="html">
+      <trans-unit id="2882288950250980214" datatype="html" xml:space="preserve">
         <source>See the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; href=&quot;https://docs.joinpeertube.org/use/library#playlist&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information.</source>
-        <target state="new">See the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; href=&quot;https://docs.joinpeertube.org/use/library#playlist&quot;&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information.</target>
+        <target state="translated">Mira la <x id="START_LINK" ctype="x-a" equiv-text="&lt;a target=&quot;_blank&quot; href=&quot;https://docs.joinpeertube.org/use/library#playlist&quot;&gt;"/>documentación<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>para obtener más información.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.html</context>
           <context context-type="linenumber">29,30</context>
