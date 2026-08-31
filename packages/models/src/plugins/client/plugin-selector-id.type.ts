@@ -8,4 +8,6 @@ export type PluginSelectorId =
   'about-instance-other-information' |
   'about-menu-instance' |
   'about-menu-peertube' |
-  'about-menu-network'
+  'about-menu-network' |
+  'profile-form-username-description' |
+  'profile-description'

@@ -6,7 +6,7 @@
   <div class="form-group">
     <label i18n for="username">Username</label>
     <input type="text" id="username" class="form-control" formControlName="username" readonly>
-    <div id="plugin-selector-profile-username-description" class="form-group-description" i18n>
+    <div myPluginSelector pluginSelectorId="profile-form-username-description" class="form-group-description" i18n>
       People can find you using &#64;{{ user().username }}&#64;{{ instanceHost }}
     </div>
   </div>
@@ -25,7 +25,7 @@
 
     <my-help helpType="markdownText" supportRelMe="true"></my-help>
 
-    <div id="plugin-selector-profile-description">
+    <div myPluginSelector pluginSelectorId="profile-description">
       <my-markdown-textarea
         inputId="description"
         formControlName="description"
