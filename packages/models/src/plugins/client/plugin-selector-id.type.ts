@@ -9,5 +9,5 @@ export type PluginSelectorId =
   'about-menu-instance' |
   'about-menu-peertube' |
   'about-menu-network' |
-  'profile-form-username-description' |
-  'profile-description'
+  'profile-form-username-field-group' |
+  'profile-form-description-field-group'
