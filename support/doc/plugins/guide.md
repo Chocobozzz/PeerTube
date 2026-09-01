@@ -1213,7 +1213,7 @@ You built files are in the `dist/` directory. Check `package.json` to correctly 
 You need to have a local PeerTube instance with an administrator account.
 If you're using dev server on your local computer, test your plugin on `localhost:9000` using `npm run dev` because plugin CSS is not injected in Angular webserver (`localhost:3000`).
 
-Install PeerTube CLI (can be installed on another computer/server than the PeerTube instance):
+Install [PeerTube CLI](https://docs.joinpeertube.org/maintain/tools) (can be installed on another computer/server than the PeerTube instance):
 
 ```bash
 npm install -g @peertube/peertube-cli
@@ -1232,6 +1232,16 @@ If the PeerTube instance is running on another server/computer, you must copy yo
 ```sh
 peertube-cli plugins install --path /your/absolute/plugin-or-theme/path
 ```
+
+`plugins install` copies the directory into the instance plugin storage instead of linking to it,
+so rebuilding your plugin/theme afterwards does not change what the instance runs.
+To load a new build, update the `version` key in your `package.json` and reinstall it:
+
+```sh
+peertube-cli plugins update --path /your/absolute/plugin-or-theme/path
+```
+
+Reusing the same version reinstalls the copy the instance already has, so your changes look like they were ignored.
 
 ### Publish
 
