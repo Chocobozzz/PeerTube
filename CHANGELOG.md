@@ -40,6 +40,7 @@
  * Add explicit Redis socket configuration in `redis.socket` to provide the redis socket path
  * Add `user.allow_cross_provider_auth` configuration to support multiple auth plugins for the same PeerTube user [#7655](https://github.com/Chocobozzz/PeerTube/pull/7655)
  * Add opt-in configuration to automatically add the username and HTTP request id as tags in the log file: `log.tag_requests`
+ * Add `enabled` configuration to every `rates_limit` section, so a specific rate limiter can be disabled [#6089](https://github.com/Chocobozzz/PeerTube/issues/6089)
 
 ### Plugins/Themes/Embed API
 
