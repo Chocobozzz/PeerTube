@@ -580,6 +580,7 @@ const CONFIG = {
   REDUNDANCY: {
     VIDEOS: {
       CHECK_INTERVAL: parseDurationToMs(config.get<string>('redundancy.videos.check_interval')),
+      TIMEOUT: parseDurationToMs(config.get<string>('redundancy.videos.timeout')),
       STRATEGIES: buildVideosRedundancy(config.get<any[]>('redundancy.videos.strategies'))
     }
   },
