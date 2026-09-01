@@ -44,6 +44,7 @@ import {
   Worker,
   WorkerOptions
 } from 'bullmq'
+import { RedisOptions } from 'ioredis'
 import { createLogger } from '../../helpers/logger.js'
 import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
 import { Hooks } from '../plugins/hooks.js'
@@ -201,6 +202,10 @@ const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcriptio
 
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
 
+// Recommended by BullMQ: let ioredis retry forever so blocking commands are not rejected during a transient
+// socket drop, and skip the ready check that would otherwise stall the reconnection
+const bullMQRedisOptions: RedisOptions = { maxRetriesPerRequest: null, enableReadyCheck: false }
+
 class JobQueue {
   private static instance: JobQueue
 
@@ -230,7 +235,7 @@ class JobQueue {
     }
 
     this.flowProducer = new FlowProducer({
-      connection: Redis.getRedisClientOptions('FlowProducer'),
+      connection: Redis.getRedisClientOptions('FlowProducer', bullMQRedisOptions),
       prefix: this.jobRedisPrefix
     })
     this.flowProducer.on('error', err => {
@@ -251,7 +256,7 @@ class JobQueue {
       autorun: false,
       concurrency: this.getJobConcurrency(handlerName),
       prefix: this.jobRedisPrefix,
-      connection: Redis.getRedisClientOptions('Worker'),
+      connection: Redis.getRedisClientOptions('Worker', bullMQRedisOptions),
       maxStalledCount: 10
     }
 
@@ -302,7 +307,7 @@ class JobQueue {
 
   private buildQueue (handlerName: JobType) {
     const queueOptions: QueueOptions = {
-      connection: Redis.getRedisClientOptions('Queue'),
+      connection: Redis.getRedisClientOptions('Queue', bullMQRedisOptions),
       prefix: this.jobRedisPrefix
     }
 
@@ -320,7 +325,7 @@ class JobQueue {
   private buildQueueEvent (handlerName: JobType) {
     const queueEventsOptions: QueueEventsOptions = {
       autorun: false,
-      connection: Redis.getRedisClientOptions('QueueEvent'),
+      connection: Redis.getRedisClientOptions('QueueEvent', bullMQRedisOptions),
       prefix: this.jobRedisPrefix
     }
 
