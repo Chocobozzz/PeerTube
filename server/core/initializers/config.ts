@@ -458,6 +458,7 @@ export const CONFIG = buildConfig({
   REDUNDANCY: {
     VIDEOS: {
       CHECK_INTERVAL: staticKey('redundancy.videos.check_interval', { transform: parseDurationToMs }),
+      TIMEOUT: staticKey('redundancy.videos.timeout', { transform: parseDurationToMs }),
       STRATEGIES: staticKey('redundancy.videos.strategies', { transform: buildVideosRedundancy })
     }
   },

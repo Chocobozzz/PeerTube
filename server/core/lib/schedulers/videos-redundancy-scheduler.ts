@@ -16,7 +16,7 @@ import { readdir, stat } from 'fs/promises'
 import { join } from 'path'
 import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { DIRECTORIES, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers/constants.js'
+import { DIRECTORIES, REDUNDANCY, VIDEO_REDUNDANCY_TIMEOUT } from '../../initializers/constants.js'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send/index.js'
 import { getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url.js'
@@ -213,7 +213,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
       // The redundancy may be in creation: its files are downloaded before the creation of its model
       const { mtimeMs } = await stat(directory)
-      if (Date.now() - mtimeMs < VIDEO_IMPORT_TIMEOUT) continue
+      if (Date.now() - mtimeMs < VIDEO_REDUNDANCY_TIMEOUT) continue
 
       logger.info('Removing orphan redundancy directory %s.', directory)
 
@@ -231,7 +231,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       if (duplicatedUUIDs.has(videoUUID)) continue
 
       // Pending redundancy creation, skip it
-      if (Date.now() - lastModified.getTime() < VIDEO_IMPORT_TIMEOUT) continue
+      if (Date.now() - lastModified.getTime() < VIDEO_REDUNDANCY_TIMEOUT) continue
 
       logger.info('Removing orphan redundancy objects of video %s.', videoUUID)
 
@@ -327,7 +327,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   }) {
     const { video, playlist, masterPlaylistUrl, toleranceKB } = options
 
-    await downloadPlaylistSegments(masterPlaylistUrl, getHLSRedundancyDirectory(video), VIDEO_IMPORT_TIMEOUT, toleranceKB)
+    await downloadPlaylistSegments(masterPlaylistUrl, getHLSRedundancyDirectory(video), VIDEO_REDUNDANCY_TIMEOUT, toleranceKB)
 
     return { storage: FileStorage.FILE_SYSTEM, fileUrl: generateHLSRedundancyUrl(video, playlist) }
   }
@@ -342,7 +342,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const tmpDirectory = join(CONFIG.STORAGE.TMP_DIR, 'redundancy-' + buildUUID())
 
     try {
-      await downloadPlaylistSegments(masterPlaylistUrl, tmpDirectory, VIDEO_IMPORT_TIMEOUT, toleranceKB)
+      await downloadPlaylistSegments(masterPlaylistUrl, tmpDirectory, VIDEO_REDUNDANCY_TIMEOUT, toleranceKB)
 
       try {
         await storeRedundancyDirectory(video, tmpDirectory)
