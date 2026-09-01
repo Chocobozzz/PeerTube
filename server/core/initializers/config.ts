@@ -533,6 +533,9 @@ const CONFIG = {
       MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.max_file_size')),
       MAX_FILES: config.get<number>('log.rotation.max_files')
     },
+    AUDIT: {
+      ENABLED: config.get<boolean>('log.audit.enabled')
+    },
     ANONYMIZE_IP: config.get<boolean>('log.anonymize_ip'),
     TAG_REQUESTS: config.get<boolean>('log.tag_requests'),
     LOG_PING_REQUESTS: config.get<boolean>('log.log_ping_requests'),

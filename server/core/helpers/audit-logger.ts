@@ -58,6 +58,8 @@ const auditLogger = createLogger({
 })
 
 function auditLoggerWrapper (domain: string, user: string, action: AUDIT_TYPE, entity: EntityAuditView, oldEntity: EntityAuditView = null) {
+  if (CONFIG.LOG.AUDIT.ENABLED !== true) return
+
   let entityInfos: object
 
   if (action === AUDIT_TYPE.UPDATE && oldEntity) {

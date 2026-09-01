@@ -295,6 +295,9 @@ log:
     max_file_size: 12MB
     max_files: 20
 
+  audit:
+    enabled: true # Log administration and moderation actions in a dedicated audit log file
+
   anonymize_ip: false
 
   # Tag every log line produced while handling a request with a request id, and with the authenticated user's username
