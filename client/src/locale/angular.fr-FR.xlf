@@ -737,7 +737,7 @@
       </trans-unit>
       <trans-unit id="4000711509477961911" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> accepted the ownership change request for video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>a accepté la demande de changement de propriétaire pour la vidéo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.changeOwnership.nextOwnerAccount.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a accepté la demande de changement de propriétaire pour la vidéo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.changeOwnership.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">285,288</context>
@@ -809,7 +809,7 @@
       </trans-unit>
       <trans-unit id="4310216892495659501" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 account} other {<x id="INTERPOLATION"/> accounts}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 account} other {<x id="INTERPOLATION"/> comptes}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 compte} other {<x id="INTERPOLATION"/> comptes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">347</context>
@@ -821,7 +821,7 @@
       </trans-unit>
       <trans-unit id="235399294437017099" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {1 server} other {<x id="INTERPOLATION"/> servers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 server} other {<x id="INTERPOLATION"/> serveurs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 serveur} other {<x id="INTERPOLATION"/> serveurs}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">347</context>
@@ -1671,7 +1671,7 @@
       </trans-unit>
       <trans-unit id="2337568529008297902" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {field} other {fields}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {field} other {champs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {champ} other {champs}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
           <context context-type="linenumber">111</context>
@@ -3115,7 +3115,7 @@
       </trans-unit>
       <trans-unit id="132000401491362683" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> allows registration. However, be careful to check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> before creating an account. You may also search for another PeerTube platform to match your exact needs at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> autorise l'inscription. Cependant, veillez à vérifier les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/> Conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> avant de créer un compte. Vous pouvez également rechercher une autre plateforme PeerTube qui correspond exactement à vos besoins à l'adresse suivante : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> autorise l'inscription. Cependant, veillez à vérifier les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> avant de créer un compte. Vous pouvez également rechercher une autre plateforme PeerTube qui correspond exactement à vos besoins à l'adresse suivante : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">22</context>
@@ -3123,7 +3123,7 @@
       </trans-unit>
       <trans-unit id="7036955472108988787" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> doesn't allow for user registration. You may check the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more details or find a PeerTube platform that gives you the possibility to sign up for an account and upload your videos there. Find yours among multiple platforms at: <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="needs-translation"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> n'autorise pas l'inscription des utilisateurs·ices. Vous pouvez consulter les<x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour plus de détails ou trouver une plateforme PeerTube qui vous offre la possibilité de créer un compte et d'y publier vos vidéos. Trouvez celle qui vous convient parmi plusieurs plateformes sur : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> n'autorise pas l'inscription des utilisateurs·ices. Vous pouvez consulter les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary terms-anchor d-inline&quot; (click)=&quot;onTermsClick($event, instanceInformation)&quot; href=&quot;/about/instance#terms&quot;&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_LINK_1" equiv-text="&lt;a class=&quot;terms-link&quot; target=&quot;_blank&quot; routerLink=&quot;/about/instance&quot;&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour plus de détails ou trouver une plateforme PeerTube qui vous offre la possibilité de créer un compte et d'y publier vos vidéos. Trouvez celle qui vous convient parmi plusieurs plateformes sur : <x id="START_LINK_2" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://joinpeertube.org/instances&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.html</context>
           <context context-type="linenumber">27</context>
@@ -4113,7 +4113,7 @@
       </trans-unit>
       <trans-unit id="5330788940795142335" datatype="html" xml:space="preserve">
         <source>Please consider configuring these fields to help people to choose <x id="START_TAG_STRONG"/>the appropriate instance<x id="CLOSE_TAG_STRONG"/>. Without them, your instance may not be referenced on the <x id="START_LINK"/>JoinPeerTube website<x id="CLOSE_LINK"/>. </source>
-        <target state="needs-translation">Prenez le temps de remplir ces champs, ils aideront les visiteurs à choisir <x id="START_TAG_STRONG"/>l'instance la plus appropriée <x id="CLOSE_TAG_STRONG"/>. Sans eux, votre instance pourrait ne pas être listée sur <x id="START_LINK"/>JoinPeerTube <x id="CLOSE_LINK"/>, </target>
+        <target state="translated">Prenez le temps de remplir ces champs, ils aideront les visiteurs à choisir <x id="START_TAG_STRONG"/>l'instance la plus appropriée<x id="CLOSE_TAG_STRONG"/>. Sans eux, votre instance pourrait ne pas être listée sur <x id="START_LINK"/>JoinPeerTube<x id="CLOSE_LINK"/>, </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">41</context>
@@ -6320,7 +6320,7 @@
       </trans-unit>
       <trans-unit id="6206893322435329922" datatype="html" xml:space="preserve">
         <source>You can require comments to be approved depending on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>your auto-tags policies<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Vous pouvez demander que les commentaires soient approuvés en fonction de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>votre politique d'étiquetage automatique <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Vous pouvez demander que les commentaires soient approuvés en fonction de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/auto-tag-policies&quot; target=&quot;_blank&quot;&gt;"/>votre politique d'étiquetage automatique<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">44</context>
@@ -6492,7 +6492,7 @@
       </trans-unit>
       <trans-unit id="2190068095391152848" datatype="html" xml:space="preserve">
         <source>This is text that helps people watching your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>understand how to support you<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. You can use <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>Markdown Language<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, including <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>links to your fundraising tools<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="translated">Ce texte aide les personnes qui regardent votre vidéo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>à comprendre comment vous soutenir<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Vous pouvez utiliser <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>le langage Markdown <x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/> , y compris <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>des liens vers vos outils de collecte de fonds<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Ce texte aide les personnes qui regardent votre vidéo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>à comprendre comment vous soutenir<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Vous pouvez utiliser <x id="START_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;my-markdown-hint helpType=&quot;markdownText&quot;&gt;"/>le langage Markdown<x id="CLOSE_TAG_MY_MARKDOWN_HINT" ctype="x-my_markdown_hint" equiv-text="&lt;/my-markdown-hint&gt;"/>, y compris <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>des liens vers vos outils de collecte de fonds<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">62</context>
@@ -6500,7 +6500,7 @@
       </trans-unit>
       <trans-unit id="2993337224487346050" datatype="html" xml:space="preserve">
         <source>Do you want to use the same text for all your videos? You can define <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a default text and support button<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in your <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>channel settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Vous souhaitez utiliser le même texte pour toutes vos vidéos ? Vous pouvez définir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>un texte par défaut et des boutons de soutien<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> dans les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>paramètres de votre chaîne <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> . </target>
+        <target state="translated">Vous souhaitez utiliser le même texte pour toutes vos vidéos ? Vous pouvez définir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>un texte par défaut et des boutons de soutien<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> dans les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;getChannelUpdateUrl()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>paramètres de votre chaîne<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">71</context>
@@ -8439,7 +8439,7 @@
       </trans-unit>
       <trans-unit id="701669367074099795" datatype="html" xml:space="preserve">
         <source>There are no videos available in this playlist.</source>
-        <target state="translated">Il n'y a pas de vidéo valide dans cette liste</target>
+        <target state="translated">Il n'y a pas de vidéo valide dans cette liste.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">47,48</context>
@@ -9891,7 +9891,7 @@
       </trans-unit>
       <trans-unit id="5349840085927711709" datatype="html" xml:space="preserve">
         <source>Automatically block videos:</source>
-        <target state="translated">Vidéos automatiquement bloquées</target>
+        <target state="translated">Vidéos automatiquement bloquées :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.html</context>
           <context context-type="linenumber">1,3</context>
@@ -10247,7 +10247,7 @@
       </trans-unit>
       <trans-unit id="341804802839774363" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this comment} other {<x id="count"/> comments}}?</source>
-        <target state="translated">Voulez vous vraiment supprimer {count, plural, =1 {ce commentaire} other {<x id="count"/> commentaires}}?</target>
+        <target state="translated">Voulez vous vraiment supprimer {count, plural, =1 {ce commentaire} other {<x id="count"/> commentaires}} ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">383</context>
@@ -11343,7 +11343,7 @@
       </trans-unit>
       <trans-unit id="6417143148487697946" datatype="html" xml:space="preserve">
         <source>Are you sure you want to cancel job <x id="PH" equiv-text="job.id"/>?</source>
-        <target state="translated">Êtes-vous sûr de vouloir annuler le traitement <x id="PH" equiv-text="job.id"/>?</target>
+        <target state="translated">Êtes-vous sûr de vouloir annuler le traitement <x id="PH" equiv-text="job.id"/> ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -12199,7 +12199,7 @@
       </trans-unit>
       <trans-unit id="246592664950440386" datatype="html" xml:space="preserve">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes </source>
-        <target state="translated">Utilisez <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>les plugins &amp; les thèmes <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour des modifications plus importantes. </target>
+        <target state="translated">Utilisez <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/plugins&quot;&gt;"/>les plugins &amp; les thèmes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour des modifications plus importantes. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">47</context>
@@ -12239,7 +12239,7 @@
       </trans-unit>
       <trans-unit id="2281003783374799495" datatype="html" xml:space="preserve">
         <source>You can preview your UI customization but <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>don't forget to save your changes<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> once you are happy with the results.</source>
-        <target state="translated">Vous pouvez prévisualiser votre personnalisation de l'interface utilisateur, mais <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/> n'oubliez pas d'enregistrer vos modifications <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> une fois que vous êtes satisfait du résultat.</target>
+        <target state="translated">Vous pouvez prévisualiser votre personnalisation de l'interface utilisateur, mais <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>n'oubliez pas d'enregistrer vos modifications<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> une fois que vous êtes satisfait du résultat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">68</context>
@@ -12399,7 +12399,7 @@
       </trans-unit>
       <trans-unit id="4924378635140045267" datatype="html" xml:space="preserve">
         <source>⚠️ This functionality requires a lot of attention and extra moderation</source>
-        <target state="translated">⚠️ Cette fonctionnalité requiert beaucoup d’attention et une modération supplémentaire.</target>
+        <target state="translated">⚠️ Cette fonctionnalité requiert beaucoup d’attention et une modération supplémentaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">185</context>
@@ -13775,7 +13775,7 @@
       </trans-unit>
       <trans-unit id="7432023059007277803" datatype="html" xml:space="preserve">
         <source>If you also enable HLS output, video storage will be multiplied by 2</source>
-        <target state="translated">Si vous activez également HLS, le stockage vidéo sera multiplié par 2.</target>
+        <target state="translated">Si vous activez également HLS, le stockage vidéo sera multiplié par 2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">89</context>
@@ -13815,7 +13815,7 @@
       </trans-unit>
       <trans-unit id="3823200654587476401" datatype="html" xml:space="preserve">
         <source>If you also enable Web Videos output, video storage will be multiplied by 2</source>
-        <target state="translated">Si vous activez également les Vidéos Web, l'espace de stockage vidéo sera multiplié par 2.</target>
+        <target state="translated">Si vous activez également les Vidéos Web, l'espace de stockage vidéo sera multiplié par 2</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">104</context>
@@ -15027,7 +15027,7 @@
       </trans-unit>
       <trans-unit id="4704830002959987080" datatype="html" xml:space="preserve">
         <source>Deleting this subscription will unblock all accounts and servers that were muted because of it. Are you sure you want to delete the subscription to "<x id="PH" equiv-text="subscription.name"/>"?</source>
-        <target state="translated">Effacer cet abonnement débloquera tous les comptes et les serveurs qui ont été masqués à cause de lui. Êtes-vous sûr de vouloir effacer l'abonnement "<x id="PH" equiv-text="subscription.name"/>"?</target>
+        <target state="translated">Effacer cet abonnement débloquera tous les comptes et les serveurs qui ont été masqués à cause de lui. Êtes-vous sûr de vouloir effacer l'abonnement "<x id="PH" equiv-text="subscription.name"/>" ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -16919,7 +16919,7 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="135286612733607700" datatype="html">
+      <trans-unit id="135286612733607700" datatype="html" xml:space="preserve">
         <source>It is free and open-source software, under <x id="START_LINK"/>AGPLv3 licence<x id="CLOSE_LINK"/>. </source>
         <target state="translated">C'est un logiciel libre et open source, sous <x id="START_LINK"/>licence AGPLv3<x id="CLOSE_LINK"/>. </target>
         <context-group purpose="location">
@@ -17389,7 +17389,7 @@
       </trans-unit>
       <trans-unit id="9070783060207315765" datatype="html" xml:space="preserve">
         <source>I am at least <x id="INTERPOLATION" equiv-text="{{ minimumAge() }}"/> years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (hasCodeOfConduct()) {"/> and to the <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/> of <x id="INTERPOLATION_1" equiv-text="{{ instanceName() }}"/> </source>
-        <target state="translated">J'ai au moins <x id="INTERPOLATION" equiv-text="{{ minimumAge() }}"/> ans et j'accepte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>les conditions générales d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (hasCodeOfConduct()) {"/> ainsi que<x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>le Code de Conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/>de<x id="INTERPOLATION_1" equiv-text="{{ instanceName() }}"/> </target>
+        <target state="translated">J'ai au moins <x id="INTERPOLATION" equiv-text="{{ minimumAge() }}"/> ans et j'accepte <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onTermsClick($event)&quot; href='#'&gt;"/>les conditions générales d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (hasCodeOfConduct()) {"/> ainsi que <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; (click)=&quot;onCodeOfConductClick($event)&quot; href='#'&gt;"/>le Code de Conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/> de <x id="INTERPOLATION_1" equiv-text="{{ instanceName() }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-terms.component.html</context>
           <context context-type="linenumber">21,27</context>
@@ -19330,7 +19330,7 @@
       </trans-unit>
       <trans-unit id="5448145793737546019" datatype="html" xml:space="preserve">
         <source>Do you really want to unblock {count, plural, =1 {this video?} other {these <x id="count"/> videos?}}</source>
-        <target state="translated">Voulez-vous réellement débloquer {count, plural, =1 {this video?} other {these <x id="count"/> videos?}}</target>
+        <target state="translated">Voulez-vous réellement débloquer {count, plural, =1 {this video ?} other {these <x id="count"/> videos ?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">176</context>
@@ -19374,7 +19374,7 @@
       </trans-unit>
       <trans-unit id="4506177846215251976" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this video?} other {<x id="count"/> videos?}}</source>
-        <target state="translated">Voulez-vous réellement supprimer {count, plural, =1 {this video?} other {<x id="count"/> videos?}}</target>
+        <target state="translated">Voulez-vous réellement supprimer {count, plural, =1 {this video ?} other {<x id="count"/> videos ?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">231</context>
@@ -21499,7 +21499,7 @@
       </trans-unit>
       <trans-unit id="3690226221168769707" datatype="html" xml:space="preserve">
         <source>Are you sure you want to cancel the ownership change request to "<x id="PH" equiv-text="this.pendingOwnershipRequest.nextOwnerAccount.name"/>"?</source>
-        <target state="translated">Voulez-vous réellement annuler la demande de changement de propriétaire "<x id="PH" equiv-text="this.pendingOwnershipRequest.nextOwnerAccount.name"/>"?</target>
+        <target state="translated">Voulez-vous réellement annuler la demande de changement de propriétaire "<x id="PH" equiv-text="this.pendingOwnershipRequest.nextOwnerAccount.name"/>" ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.ts</context>
           <context context-type="linenumber">237</context>
@@ -21923,7 +21923,7 @@
       </trans-unit>
       <trans-unit id="6643639902470840501" datatype="html" xml:space="preserve">
         <source>This email will be publicly exposed in podcast RSS feeds, allowing you to prove ownership of your feed. This is required to submit your podcast to Apple Podcast</source>
-        <target state="translated">Cette adresse e-mail sera rendue publique dans les flux RSS de votre podcast, ce qui vous permettra de prouver que vous êtes bien le propriétaire de ce flux. Cette étape est obligatoire pour soumettre votre podcast à Apple Podcasts.</target>
+        <target state="translated">Cette adresse e-mail sera rendue publique dans les flux RSS de votre podcast, ce qui vous permettra de prouver que vous êtes bien le propriétaire de ce flux. Cette étape est obligatoire pour soumettre votre podcast à Apple Podcasts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">102,103</context>
@@ -22365,7 +22365,7 @@
       </trans-unit>
       <trans-unit id="2413744864598710526" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> created <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>a channel synchronization<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>: <x id="INTERPOLATION_1" equiv-text="{{ a.channelSync.externalChannelUrl }}"/> </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a créé <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>la synchronisation de chaîne <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>: <x id="INTERPOLATION_1" equiv-text="{{ a.channelSync.externalChannelUrl }}"/> </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a créé <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-library/video-channel-syncs&quot;&gt;"/>la synchronisation de chaîne<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> : <x id="INTERPOLATION_1" equiv-text="{{ a.channelSync.externalChannelUrl }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-activity.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -22373,7 +22373,7 @@
       </trans-unit>
       <trans-unit id="2363442410883108132" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> imported video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;[ '/w', a.videoImport.uuid ]&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ a.videoImport.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>: <x id="INTERPOLATION_2" equiv-text="{{ a.videoImport.targetUrl }}"/> </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a importé la vidéo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;[ '/w', a.videoImport.uuid ]&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ a.videoImport.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>: <x id="INTERPOLATION_2" equiv-text="{{ a.videoImport.targetUrl }}"/> </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a importé la vidéo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;[ '/w', a.videoImport.uuid ]&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ a.videoImport.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> : <x id="INTERPOLATION_2" equiv-text="{{ a.videoImport.targetUrl }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-activity.component.html</context>
           <context context-type="linenumber">29,30</context>
@@ -27300,7 +27300,7 @@
       </trans-unit>
       <trans-unit id="368656696071815451" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this report?} other {<x id="count"/> reports?}}</source>
-        <target state="translated">Voulez-vous réellement supprimer {count, plural, =1 {this report?} other {<x id="count"/> reports?}}</target>
+        <target state="translated">Voulez-vous réellement supprimer {count, plural, =1 {ce rapport ?} other {<x id="count"/> rapports ?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">510</context>
@@ -27356,7 +27356,7 @@
       </trans-unit>
       <trans-unit id="108745724002877541" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this comment?} other {<x id="count"/> comments?}}</source>
-        <target state="translated">Voulez-vous réellement supprimer {count, plural, =1 {this comment?} other {<x id="count"/> comments?}}</target>
+        <target state="translated">Voulez-vous réellement supprimer {count, plural, =1 {ce commentaire ?} other {<x id="count"/> commentaires ?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">698</context>
@@ -29118,7 +29118,7 @@
       </trans-unit>
       <trans-unit id="8736159932649611942" datatype="html" xml:space="preserve">
         <source>You can help us to translate the platform by consulting <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>this guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="translated">Vous pouvez nous aider à traduire la plateforme en consultant <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>ce guide.<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Vous pouvez nous aider à traduire la plateforme en consultant <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>ce guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8,15</context>
