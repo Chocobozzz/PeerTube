@@ -18146,9 +18146,9 @@ color: red;
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1305357231288135414" datatype="html">
+      <trans-unit id="1305357231288135414" datatype="html" xml:space="preserve">
         <source>Homepage</source>
-        <target state="translated">Página Principal</target>
+        <target state="translated">Página principal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/admin-config.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -18166,17 +18166,17 @@ color: red;
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4550958265168690830" datatype="html">
+      <trans-unit id="4550958265168690830" datatype="html" xml:space="preserve">
         <source>Logo</source>
-        <target state="new">Logo</target>
+        <target state="translated">Logotipo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/admin-config.component.ts</context>
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3203902538239082422" datatype="html">
+      <trans-unit id="3203902538239082422" datatype="html" xml:space="preserve">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
-        <target state="translated">Ha habilitado el registro: habilitamos automáticamente la casilla de verificación 'Bloquear nuevos videos automáticamente' de la sección 'Videos' justo debajo.</target>
+        <target state="translated">Has habilitado el registro: habilitamos automáticamente la casilla de verificación 'Bloquear nuevos videos automáticamente' de la sección 'Videos' justo debajo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
           <context context-type="linenumber">641</context>
@@ -18302,27 +18302,25 @@ color: red;
           <context context-type="linenumber">39,40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1909009883731319373" datatype="html">
+      <trans-unit id="1909009883731319373" datatype="html" xml:space="preserve">
         <source>Report <x id="PH"/> </source>
-        <target state="translated">Informe
-          <x id="PH"/>
-        </target>
+        <target state="translated">Denunciar <x id="PH"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/account-report.component.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5065410539274460415" datatype="html">
+      <trans-unit id="5065410539274460415" datatype="html" xml:space="preserve">
         <source>Account reported.</source>
-        <target state="translated">Cuenta informada.</target>
+        <target state="translated">Se ha denunciado la cuenta..</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/account-report.component.ts</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6245265026120479954" datatype="html">
+      <trans-unit id="6245265026120479954" datatype="html" xml:space="preserve">
         <source>Comment reported.</source>
-        <target state="translated">Comentario informado.</target>
+        <target state="translated">Comentario denunciado.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/comment-report.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -18692,25 +18690,25 @@ color: red;
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3145156821099755377" datatype="html">
+      <trans-unit id="3145156821099755377" datatype="html" xml:space="preserve">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Aceptado {recuento, plural, =1 {<x id="followerName"/> solicitud de seguimiento} otro {<x id="count"/> solicitudes de seguimiento}}</target>
+        <target state="translated">Solicitud de seguimiento {count, plural, =1 {<x id="followerName"/> aceptada} other {<x id="count"/> aceptadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8823680466537853782" datatype="html">
+      <trans-unit id="8823680466537853782" datatype="html" xml:space="preserve">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">¿Realmente quieres rechazar {count, plural, =1 {<x id="followerName"/> solicitud de seguimiento?} otras {<x id="count"/>solicitudes de seguimiento?}}</target>
+        <target state="translated">¿Realmente quieres rechazar {count, plural, =1 {<x id="followerName"/> la solicitud de seguimiento?} other {<x id="count"/> las solicitudes de seguimiento?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7182104881582756649" datatype="html">
+      <trans-unit id="7182104881582756649" datatype="html" xml:space="preserve">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Rechazado {recuento, plural, =1 {<x id="followerName"/> solicitud de seguimiento} otro {<x id="count"/> solicitudes de seguimiento}}</target>
+        <target state="translated">Solicitud de seguimiento {recuento, plural, =1 {<x id="followerName"/> rechazada } other {<x id="count"/> rechazadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -18724,17 +18722,17 @@ color: red;
           <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4187075675930483010" datatype="html">
+      <trans-unit id="4187075675930483010" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">¿Realmente desea eliminar {count, plural, =1 {<x id="followerName"/> solicitud de seguimiento?} other {<x id="count"/>requestes de seguimiento?}}</target>
+        <target state="translated">¿Deseas realmente eliminar {count, plural, =1 {<x id="followerName"/> la solicitud de seguimiento?} other {<x id="count"/> las solicitudes de seguimiento?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="805843790553313750" datatype="html">
+      <trans-unit id="805843790553313750" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Se eliminó {recuento, plural, =1 {<x id="followerName"/> solicitud de seguimiento} otro {<x id="count"/>solicitudes de seguimiento}}</target>
+        <target state="translated">Se eliminó {recuento, plural, =1 {<x id="followerName"/> la solicitud de seguimiento} otro {<x id="count"/>las solicitudes de seguimiento}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -18777,9 +18775,9 @@ color: red;
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1289115499993408300" datatype="html">
+      <trans-unit id="1289115499993408300" datatype="html" xml:space="preserve">
         <source>You are not following {count, plural, =1 {<x id="entryName"/> anymore.} other {these <x id="count"/> entries anymore.}}</source>
-        <target state="translated">Ya no estás siguiendo {count, plural, =1 {<x id="entryName"/>.} otras {estas <x id="count"/> entradas nunca más.}}</target>
+        <target state="translated">Ya no estás siguiendo {count, plural, =1 {<x id="entryName"/>.} other {estas <x id="count"/> entradas.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -18793,17 +18791,17 @@ color: red;
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2593763089859685916">
+      <trans-unit id="2593763089859685916" xml:space="preserve">
         <source>enabled</source>
-        <target>habilitada</target>
+        <target state="translated">habilitado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8444272719785117681">
+      <trans-unit id="8444272719785117681" xml:space="preserve">
         <source>disabled</source>
-        <target>deshabilitada</target>
+        <target state="translated">deshabilitado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">24</context>
@@ -18849,9 +18847,9 @@ color: red;
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6537102123107780785" datatype="html">
+      <trans-unit id="6537102123107780785" datatype="html" xml:space="preserve">
         <source>Video redundancies removed!</source>
-        <target state="translated">Video redundancias eliminado!</target>
+        <target state="translated">Redundancias de vídeos eliminadas!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -18927,7 +18925,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7979398873614233600" datatype="html" xml:space="preserve">
         <source>Only <x id="INTERPOLATION" equiv-text="{{ getOwnerAccountDisplayName() }}"/>'s channels are listed </source>
-        <target state="translated">Solo los canales de <x id="INTERPOLATION" equiv-text="{{ getOwnerAccountDisplayName() }}"/>figuran en la lista </target>
+        <target state="translated">Solo los canales de <x id="INTERPOLATION" equiv-text="{{ getOwnerAccountDisplayName() }}"/> figuran en la lista </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-edit.component.html</context>
           <context context-type="linenumber">78</context>
@@ -19183,7 +19181,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7476104506257949513" datatype="html" xml:space="preserve">
         <source>Actions for {count, plural, =1 {the comment} other {the comments}}</source>
-        <target state="translated">Medidas para  {count, plural, =1 {el comentario} other {los comentarios}}</target>
+        <target state="translated">Medidas para {count, plural, =1 {el comentario} other {los comentarios}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">492</context>
@@ -19261,17 +19259,17 @@ color: red;
           <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8583413527299223090" datatype="html">
+      <trans-unit id="8583413527299223090" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Internal note updated} other {<x id="count"/> internal notes updated}}</source>
-        <target state="new">{count, plural, =1 {Internal note updated} other {<x id="count"/> internal notes updated}}</target>
+        <target state="translated">{count, plural, =1 {Nota interna actualizada} other {<x id="count"/> notas internas actualizadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4985871382843824389" datatype="html">
+      <trans-unit id="4985871382843824389" datatype="html" xml:space="preserve">
         <source>Actions for videos</source>
-        <target state="new">Actions for videos</target>
+        <target state="translated">Medidas para los vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -19309,9 +19307,9 @@ color: red;
           <context context-type="linenumber">627</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="82990740698454566" datatype="html">
+      <trans-unit id="82990740698454566" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Delete video} other {Delete videos}}</source>
-        <target state="new">{count, plural, =1 {Delete video} other {Delete videos}}</target>
+        <target state="translated">{count, plural, =1 {Eliminar vídeo} other {Eliminar vídeos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">131</context>
@@ -19329,17 +19327,17 @@ color: red;
           <context context-type="linenumber">315</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5448145793737546019" datatype="html">
+      <trans-unit id="5448145793737546019" datatype="html" xml:space="preserve">
         <source>Do you really want to unblock {count, plural, =1 {this video?} other {these <x id="count"/> videos?}}</source>
-        <target state="new">Do you really want to unblock {count, plural, =1 {this video?} other {these <x id="count"/> videos?}}</target>
+        <target state="translated">¿De verdad quieres desbloquear {count, plural, =1 {este vídeo?} other {estos <x id="count"/> vídeos?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3158039989618629879" datatype="html">
+      <trans-unit id="3158039989618629879" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video unblocked.} other {<x id="count"/> videos unblocked.}}</source>
-        <target state="new">{count, plural, =1 {Video unblocked.} other {<x id="count"/> videos unblocked.}}</target>
+        <target state="translated">{count, plural, =1 {Vídeo desbloqueado.} other {<x id="count"/> vídeos desbloqueados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">188</context>
@@ -19349,17 +19347,17 @@ color: red;
           <context context-type="linenumber">656</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1828494663226140635" datatype="html">
+      <trans-unit id="1828494663226140635" datatype="html" xml:space="preserve">
         <source>Switch {count, plural, =1 {this auto block to manual?} other {<x id="count"/> auto blocks to manual?}}</source>
-        <target state="new">Switch {count, plural, =1 {this auto block to manual?} other {<x id="count"/> auto blocks to manual?}}</target>
+        <target state="translated">Pasar {count, plural, =1 {este bloqueo automático a manual?} other {<x id="count"/> los bloqueos automáticos a manual?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5949969716502960330" datatype="html">
+      <trans-unit id="5949969716502960330" datatype="html" xml:space="preserve">
         <source>Switch</source>
-        <target state="new">Switch</target>
+        <target state="translated">Cambiar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">205</context>
