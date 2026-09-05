@@ -10781,7 +10781,7 @@
       </trans-unit>
       <trans-unit id="9645096038052385" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> suscripciones}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sin suscripciones} =1 {1 suscripción} otro {<x id="INTERPOLATION"/> suscripciones}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">15</context>
