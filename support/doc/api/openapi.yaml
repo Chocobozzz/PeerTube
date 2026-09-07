@@ -66,6 +66,126 @@ info:
 
     Here a 403 error could otherwise mean that the video is private or blocklisted.
 
+    #### max_file_size_reached
+
+    The uploaded file exceeds the instance-wide file size limit.
+
+    #### quota_reached
+
+    The uploaded file exceeds the user's storage quota.
+
+    #### does_not_respect_follow_constraints
+
+    The requested remote resource cannot be accessed because the instance does not follow its origin.
+
+    #### live_not_enabled
+
+    Live streaming is not enabled on the instance.
+
+    #### live_not_allowing_replay
+
+    The live stream does not allow replay.
+
+    #### live_conflicting_permanent_and_save_replay
+
+    Permanent live recording and replay saving cannot be enabled together.
+
+    #### max_instance_lives_limit_reached
+
+    The instance has reached its maximum number of simultaneous live streams.
+
+    #### max_user_lives_limit_reached
+
+    The user has reached the maximum number of simultaneous live streams.
+
+    #### incorrect_files_in_torrent
+
+    The torrent does not contain exactly one usable video file.
+
+    #### comment_not_associated_to_video
+
+    The comment is not associated with the requested video.
+
+    #### invalid_grant
+
+    The OAuth grant or refresh token is invalid.
+
+    #### invalid_client
+
+    Client authentication failed.
+
+    #### invalid_token
+
+    The access token is expired, revoked, malformed, or otherwise invalid.
+
+    #### missing_two_factor
+
+    The required two-factor authentication header is missing.
+
+    #### too_long_password
+
+    The password exceeds the maximum allowed length.
+
+    #### invalid_two_factor
+
+    The two-factor authentication code is invalid.
+
+    #### account_blocked
+
+    The account is blocked.
+
+    #### email_not_verified
+
+    The account email address has not been verified.
+
+    #### account_waiting_for_approval
+
+    The account is waiting for administrator approval.
+
+    #### account_approval_rejected
+
+    The account approval request was rejected.
+
+    #### runner_job_not_in_processing_state
+
+    The runner job is not in the processing state.
+
+    #### runner_job_not_in_pending_state
+
+    The runner job is not in the pending state.
+
+    #### unknown_runner_token
+
+    The runner token is unknown.
+
+    #### video_requires_password
+
+    A password is required to access the video.
+
+    #### incorrect_video_password
+
+    The password provided for the video is incorrect.
+
+    #### video_already_being_transcoded
+
+    The video is already being transcoded.
+
+    #### video_already_being_transcribed
+
+    The video is already being transcribed.
+
+    #### video_already_has_captions
+
+    The video already has captions.
+
+    #### max_user_video_quota_exceeded_for_user_export
+
+    The user's video quota was exceeded while creating an export.
+
+    #### current_password_is_invalid
+
+    The current password is invalid.
+
     ### Validation errors
 
     Each parameter is evaluated on its own against a set of rules before the route validator
@@ -10753,6 +10873,8 @@ components:
       properties:
         type:
           type: string
+          format: uri-reference
+          description: URI identifying the documentation for this error type.
           example: 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/video_requires_password'
         detail:
           type: string
