@@ -66,6 +66,8 @@ export async function processVideoImport (job: Job): Promise<VideoImportPreventE
       return { resultType: 'error' }
     }
 
+    // Reset error
+    videoImport.error = null
     videoImport.attempts += 1
     videoImport.state = VideoImportState.PROCESSING
     await videoImport.save()
