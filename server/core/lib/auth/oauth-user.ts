@@ -98,7 +98,6 @@ export async function getUserOrThrow (options: {
   checkUserNotBlockedOrThrow(user, req)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
-    // Keep this message sync with the client
     throw new EmailNotVerifiedError(req.t('User email is not verified.'))
   }
 
