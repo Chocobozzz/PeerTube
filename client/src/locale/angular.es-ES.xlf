@@ -26970,25 +26970,25 @@ color: red;
           <context context-type="linenumber">6,9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2091437057461184519" datatype="html">
+      <trans-unit id="2091437057461184519" datatype="html" xml:space="preserve">
         <source>Muted by your platform</source>
-        <target state="new">Muted by your platform</target>
+        <target state="translated">Silenciado por tu plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7397658297443401496" datatype="html">
+      <trans-unit id="7397658297443401496" datatype="html" xml:space="preserve">
         <source>Platform muted by your platform</source>
-        <target state="new">Platform muted by your platform</target>
+        <target state="translated">Plataforma silenciada por tu plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="448706002751214202" datatype="html">
+      <trans-unit id="448706002751214202" datatype="html" xml:space="preserve">
         <source>Muted by subscription "<x id="PH" equiv-text="subscriptionName"/>"</source>
-        <target state="new">Muted by subscription "<x id="PH" equiv-text="subscriptionName"/>"</target>
+        <target state="translated">Silenciado por la suscripción "<x id="PH" equiv-text="subscriptionName"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -27038,17 +27038,17 @@ color: red;
           <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3779435129809850171" datatype="html">
+      <trans-unit id="3779435129809850171" datatype="html" xml:space="preserve">
         <source>Sort by this column</source>
-        <target state="new">Sort by this column</target>
+        <target state="translated">Filtrar por esta columna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context>
           <context context-type="linenumber">200</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4750857371950301240" datatype="html">
+      <trans-unit id="4750857371950301240" datatype="html" xml:space="preserve">
         <source>Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</source>
-        <target state="new">Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</target>
+        <target state="translated">Mostrando desde<x id="PH" equiv-text="start"/> hasta <x id="PH_1" equiv-text="end"/> de elementos<x id="PH_2" equiv-text="this.totalRecords"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context>
           <context context-type="linenumber">540</context>
@@ -27106,65 +27106,65 @@ color: red;
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7292902857194439444" datatype="html">
+      <trans-unit id="7292902857194439444" datatype="html" xml:space="preserve">
         <source>Device</source>
-        <target state="new">Device</target>
+        <target state="translated">Dispositivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">5,6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3176435734033906593" datatype="html">
+      <trans-unit id="3176435734033906593" datatype="html" xml:space="preserve">
         <source>Last Active</source>
-        <target state="new">Last Active</target>
+        <target state="translated">Última actividad</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6834395686870336612" datatype="html">
+      <trans-unit id="6834395686870336612" datatype="html" xml:space="preserve">
         <source>No active sessions</source>
-        <target state="new">No active sessions</target>
+        <target state="translated">No hay sesiones activas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4972213921522701981" datatype="html">
+      <trans-unit id="4972213921522701981" datatype="html" xml:space="preserve">
         <source>Current Session</source>
-        <target state="new">Current Session</target>
+        <target state="translated">Sesión actual</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="135077277733987408" datatype="html">
+      <trans-unit id="135077277733987408" datatype="html" xml:space="preserve">
         <source>Revoke</source>
-        <target state="new">Revoke</target>
+        <target state="translated">Revocar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="790075089238274258" datatype="html">
+      <trans-unit id="790075089238274258" datatype="html" xml:space="preserve">
         <source>Are you sure you want to revoke this token session? The device will be logged out and will need to log in again.</source>
-        <target state="new">Are you sure you want to revoke this token session? The device will be logged out and will need to log in again.</target>
+        <target state="translated">¿Estás seguro de que quieres revocar este token de sesión? El dispositivo se desconectará y tendrás que volver a iniciar sesión.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4438282535930517827" datatype="html">
+      <trans-unit id="4438282535930517827" datatype="html" xml:space="preserve">
         <source>Revoke token session</source>
-        <target state="new">Revoke token session</target>
+        <target state="translated">Revocar el token de sesión</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8298209587281904720" datatype="html">
+      <trans-unit id="8298209587281904720" datatype="html" xml:space="preserve">
         <source>Token session revoked</source>
-        <target state="new">Token session revoked</target>
+        <target state="translated">Token de sesión revocado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.ts</context>
           <context context-type="linenumber">41</context>
