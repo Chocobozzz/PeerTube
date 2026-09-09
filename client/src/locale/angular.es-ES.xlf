@@ -20468,9 +20468,9 @@ color: red;
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8537094305418766438" datatype="html">
+      <trans-unit id="8537094305418766438" datatype="html" xml:space="preserve">
         <source>users per page</source>
-        <target state="new">users per page</target>
+        <target state="translated">usuarios por página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -20500,9 +20500,9 @@ color: red;
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1525334987774465166" datatype="html">
+      <trans-unit id="1525334987774465166" datatype="html" xml:space="preserve">
         <source>Create a user</source>
-        <target state="translated">Crea un usuario</target>
+        <target state="translated">Crear un usuario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/overview.routes.ts</context>
           <context context-type="linenumber">91</context>
