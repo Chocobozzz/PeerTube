@@ -20692,9 +20692,9 @@ color: red;
           <context context-type="linenumber">427</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4451482225013335720">
+      <trans-unit id="4451482225013335720" xml:space="preserve">
         <source>Unban</source>
-        <target>Dejar sin efecto la expulsión</target>
+        <target state="translated">Desactivar la expulsión</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">156</context>
@@ -20792,9 +20792,9 @@ color: red;
           <context context-type="linenumber">123</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3403978719736970622">
+      <trans-unit id="3403978719736970622" xml:space="preserve">
         <source>You cannot ban root.</source>
-        <target>No puede expulsar al root.</target>
+        <target state="translated">No puedes expulsar a root.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">202</context>
@@ -20804,25 +20804,25 @@ color: red;
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7634059432691079352" datatype="html">
+      <trans-unit id="7634059432691079352" datatype="html" xml:space="preserve">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="translated">¿De verdad quieres etirar el veto a {count, plural, =1 {un usuario} other {<x id="count"/> usuarios}}?</target>
+        <target state="translated">¿Quieres realmente desactivar la expulsión de {count, plural, =1 {un usuario} other {<x id="count"/> usuarios}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="738031253894929036" datatype="html">
+      <trans-unit id="738031253894929036" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user unbanned.} other {<x id="count"/> users unbanned.}}</source>
-        <target state="translated">{count, plural, =1 {Levantado el veto aun usuario.} other {Veto levantado a <x id="count"/> usuarios.}}</target>
+        <target state="translated">{count, plural, =1 {expulsión desactivada para 1 usuario} other {expulsión desactivada para <x id="count"/> usuarios.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5325873477837320044">
+      <trans-unit id="5325873477837320044" xml:space="preserve">
         <source>You cannot delete root.</source>
-        <target>No puedes eliminar al root.</target>
+        <target state="translated">No puedes eliminar a root.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">243</context>
