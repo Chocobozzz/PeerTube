@@ -35,7 +35,13 @@ export async function retryTransactionWrapper<T> (
       logger.debug('Maybe retrying the transaction function.', { willRetry, err, tags: [ 'sql', 'retry' ] })
 
       if (!willRetry) {
-        logger.warn(`Cannot execute function with many retries.`, { err, attempts, stack: err?.stack })
+        // The error is rethrown so the caller logs it at the level it deems appropriate.
+        // Only warn if we actually burned our retries, since in that case the caller has no way to know
+        const level = attempts > 1
+          ? 'warn'
+          : 'debug'
+
+        logger.log(level, `Cannot execute function with many retries.`, { err, attempts, stack: err?.stack })
 
         throw err
       }

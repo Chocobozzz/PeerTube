@@ -8,7 +8,7 @@ import { getAPId } from '../activity.js'
 import { refreshVideoIfNeeded, scheduleVideoRefreshIfNeeded } from './refresh.js'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared/index.js'
 
-const logger = createLogger()
+const logger = createLogger('ap', 'video')
 
 type GetVideoResult<T> = Promise<{
   video: T
@@ -45,6 +45,19 @@ export function getOrCreateAPVideo (
 export async function getOrCreateAPVideo (
   options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
 ): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoWithBlacklist | MVideoImmutable> {
+  return getOrCreateAPVideoInternal(options, { alreadyRetried: false })
+}
+
+// Concurrent calls for the same remote video are expected: View/Download activities are processed in parallel
+// while Create/Announce for the same video are processed sequentially
+type GetVideoContext = {
+  alreadyRetried: boolean
+}
+
+async function getOrCreateAPVideoInternal (
+  options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther,
+  context: GetVideoContext
+): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoWithBlacklist | MVideoImmutable> {
   // Default params
   const syncParam = options.syncParam || { rates: true, shares: true, comments: true, refreshVideo: false }
   const fetchType = options.fetchType || 'full'
@@ -79,7 +92,7 @@ export async function getOrCreateAPVideo (
     if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
     // videoUrl is just an alias/redirection, so process object id instead
-    if (videoObject.id !== videoUrl) return getOrCreateAPVideo({ ...options, fetchType: 'full', videoObject })
+    if (videoObject.id !== videoUrl) return getOrCreateAPVideoInternal({ ...options, fetchType: 'full', videoObject }, context)
 
     try {
       const creator = new APVideoCreator(videoObject)
@@ -89,13 +102,19 @@ export async function getOrCreateAPVideo (
 
       return { video: videoCreated, created: true, autoBlacklistStatus }
     } catch (err) {
-      // Maybe a concurrent getOrCreateAPVideo call created this video
-      if (err.name === 'SequelizeUniqueConstraintError') {
-        const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
-        if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false }
+      if (err.name !== 'SequelizeUniqueConstraintError') throw err
 
-        logger.error('Cannot create video %s because of SequelizeUniqueConstraintError error, but cannot find it in database.', videoUrl)
+      // Maybe a concurrent getOrCreateAPVideo call created this video
+      const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
+      if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false }
+
+      if (context.alreadyRetried !== true) {
+        logger.debug('Cannot create video %s because of a concurrent creation, retrying.', videoUrl, { err })
+
+        return getOrCreateAPVideoInternal(options, { ...context, alreadyRetried: true })
       }
+
+      logger.error('Cannot create video %s because of SequelizeUniqueConstraintError error, but cannot find it in database.', videoUrl)
 
       throw err
     }

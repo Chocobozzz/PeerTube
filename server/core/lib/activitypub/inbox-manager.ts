@@ -6,7 +6,7 @@ import { Activity, ActivityType } from '@peertube/peertube-models'
 import { StatsManager } from '../stat-manager.js'
 import { processActivities } from './process/index.js'
 
-const logger = createLogger()
+const logger = createLogger('ap')
 
 export class InboxManager {
   private static instance: InboxManager
