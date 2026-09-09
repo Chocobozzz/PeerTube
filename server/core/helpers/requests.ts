@@ -26,6 +26,9 @@ const logger = createLogger('request')
 export interface PeerTubeRequestError extends Error {
   statusCode?: number
 
+  // Network/TLS error code of the underlying got error (ENOTFOUND, CERT_HAS_EXPIRED...)
+  code?: string
+
   responseBody?: any
   responseHeaders?: any
 
@@ -249,6 +252,7 @@ export function buildRequestError (error: RequestError) {
   const newError: PeerTubeRequestError = new Error(error.message)
   newError.name = error.name
   newError.stack = error.stack
+  newError.code = error.code
 
   if (error.response) {
     newError.responseBody = error.response.body

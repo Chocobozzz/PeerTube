@@ -1,5 +1,6 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { MVideoPlaylist, MVideoPlaylistOwnerDefault } from '@server/types/models/index.js'
@@ -52,7 +53,7 @@ export async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylis
         return undefined
       }
 
-      logger.warn('Cannot refresh video playlist %s.', videoPlaylist.url, { err })
+      logger.log(getRemoteErrorLogLevel(err), 'Cannot refresh video playlist %s.', videoPlaylist.url, { err })
 
       await videoPlaylist.setAsRefreshed()
       return videoPlaylist

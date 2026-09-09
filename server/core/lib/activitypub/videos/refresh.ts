@@ -1,5 +1,6 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { VideoLoadByUrlType } from '@server/lib/model-loaders/index.js'
@@ -66,7 +67,7 @@ export async function refreshVideoIfNeeded (options: {
         return undefined
       }
 
-      logger.warn('Cannot refresh video %s.', options.video.url, { err })
+      logger.log(getRemoteErrorLogLevel(err), 'Cannot refresh video %s.', options.video.url, { err })
 
       ActorFollowHealthCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
 

@@ -1,6 +1,7 @@
 import { Activity, ActivityType } from '@peertube/peertube-models'
 import { StatsManager } from '@server/lib/stat-manager.js'
 import { createLogger } from '../../../helpers/logger.js'
+import { getRemoteErrorLogLevel } from '../../../helpers/remote-errors.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorDefault, MActorSignature } from '../../../types/models/index.js'
 import { getAPId } from '../activity.js'
@@ -21,7 +22,7 @@ import { processUpdateActivity } from './process-update.js'
 import { processViewActivity } from './process-view.js'
 import { processDownloadActivity } from './process-download.js'
 
-const logger = createLogger()
+const logger = createLogger('ap')
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,
@@ -86,7 +87,7 @@ export async function processActivities (
       byActor = signatureActor || actorsCache[actorUrl] || await getOrCreateAPActor(actorUrl)
       actorsCache[actorUrl] = byActor
     } catch (err) {
-      logger.warn('Cannot get the actor of activity %s, skipping.', activity.id, { err })
+      logger.log(getRemoteErrorLogLevel(err), 'Cannot get the actor of activity %s, skipping.', activity.id, { err })
       continue
     }
 
@@ -101,7 +102,7 @@ export async function processActivities (
 
       StatsManager.Instance.addInboxProcessedSuccess(activity.type)
     } catch (err) {
-      logger.warn('Cannot process activity %s.', activity.type, { err })
+      logger.log(getRemoteErrorLogLevel(err), 'Cannot process activity %s.', activity.type, { err })
 
       StatsManager.Instance.addInboxProcessedError(activity.type)
     }

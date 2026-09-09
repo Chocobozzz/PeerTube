@@ -1,6 +1,7 @@
 import { ActivityPubOrderedCollection, ActivitypubHttpFetcherPayload, VideoObject } from '@peertube/peertube-models'
 import { runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
+import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoShareModel } from '@server/models/video/video-share.js'
@@ -84,7 +85,7 @@ function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) 
   const cleaner = crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate)
 
   return crawlCollectionPage<string>(uri, handler, cleaner)
-    .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: uri }))
+    .catch(err => logger.log(getRemoteErrorLogLevel(err), 'Cannot add shares of video %s.', video.uuid, { err, rootUrl: uri }))
 }
 
 function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {
@@ -99,7 +100,7 @@ function syncComments (video: MVideo, fetchedVideo: VideoObject, isSync: boolean
   const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
 
   return crawlCollectionPage<string>(uri, handler, cleaner)
-    .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: uri }))
+    .catch(err => logger.log(getRemoteErrorLogLevel(err), 'Cannot add comments of video %s.', video.uuid, { err, rootUrl: uri }))
 }
 
 function createJob (payload: ActivitypubHttpFetcherPayload) {
