@@ -20292,25 +20292,25 @@ color: red;
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2583091767247736198" datatype="html">
+      <trans-unit id="2583091767247736198" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining accounts have been created.</source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email explaining accounts have been created. </target>
+        <target state="translated">En esta instancia no está habilitado el envío de correos electrónicos, por lo que PeerTube no podrá enviar un correo electrónico para informar de que se han creado las cuentas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="616706496397696409" datatype="html">
+      <trans-unit id="616706496397696409" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> An email will be sent to each user explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> An email will be sent to each user explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>sido <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>denegada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> junto con la respuesta de moderación que escribirás a continuación. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Se enviará un correo electrónico a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>explicando que su solicitud de registro ha sido <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>denegada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> junto con la respuesta de moderación que escribirás a continuación. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2941249138625577938" datatype="html">
+      <trans-unit id="2941249138625577938" datatype="html" xml:space="preserve">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining registration requests have been rejected.</source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email explaining registration requests have been rejected. </target>
+        <target state="translated">En esta instancia no está habilitado el envío de correos electrónicos, por lo que PeerTube no podrá enviar un correo electrónico explicando que se han rechazado las solicitudes de registro.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">71</context>
@@ -20332,49 +20332,49 @@ color: red;
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1508051499475223445" datatype="html">
+      <trans-unit id="1508051499475223445" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Accept registration} other {Accept registrations}}</source>
-        <target state="new">{count, plural, =1 {Accept registration} other {Accept registrations}}</target>
+        <target state="translated">{count, plural, =1 {Aceptar la inscripción} other {Aceptar las inscripciónes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6146369807737651886" datatype="html">
+      <trans-unit id="6146369807737651886" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reject registration} other {Reject registrations}}</source>
-        <target state="new">{count, plural, =1 {Reject registration} other {Reject registrations}}</target>
+        <target state="translated">{count, plural, =1 {Denegar el registro} other {Denegar los registros}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5541059572301014238" datatype="html">
+      <trans-unit id="5541059572301014238" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Accept registration} other {Accept <x id="count"/> registrations}}</source>
-        <target state="new">{count, plural, =1 {Accept registration} other {Accept <x id="count"/> registrations}}</target>
+        <target state="translated">{count, plural, =1 {Aceptar el registro} other {Aceptar las <x id="count"/> registraciones}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4247834072883397130" datatype="html">
+      <trans-unit id="4247834072883397130" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reject registration} other {Reject <x id="count"/> registrations}}</source>
-        <target state="new">{count, plural, =1 {Reject registration} other {Reject <x id="count"/> registrations}}</target>
+        <target state="translated">{count, plural, =1 {Denegar registro} other {Denegar <x id="count"/> registros}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1072149050517623514" datatype="html">
+      <trans-unit id="1072149050517623514" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {<x id="username"/> account created} other {<x id="count"/> accounts created}}</source>
-        <target state="new">{count, plural, =1 {<x id="username"/> account created} other {<x id="count"/> accounts created}}</target>
+        <target state="translated">cuenta {count, plural, =1 {<x id="username"/> creada} other {<x id="count"/>  creadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6376954178222267147" datatype="html">
+      <trans-unit id="6376954178222267147" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {<x id="username"/> registration rejected} other {<x id="count"/> registrations rejected}}</source>
-        <target state="new">{count, plural, =1 {<x id="username"/> registration rejected} other {<x id="count"/> registrations rejected}}</target>
+        <target state="translated">registro de {count, plural, =1 {<x id="username"/> rechazado} other {<x id="count"/> registros rechazados}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">176</context>
@@ -20396,25 +20396,25 @@ color: red;
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3326945092799111194" datatype="html">
+      <trans-unit id="3326945092799111194" datatype="html" xml:space="preserve">
         <source>Moderation response cannot be more than 3000 characters long.</source>
-        <target state="translated">La respuesta de moderación no puede tener más de 3000 caracteres.</target>
+        <target state="translated">La respuesta de la moderación no puede tener más de 3000 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="176106920593910856" datatype="html">
+      <trans-unit id="176106920593910856" datatype="html" xml:space="preserve">
         <source>registrations per page</source>
-        <target state="new">registrations per page</target>
+        <target state="translated">registros por página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7051393941308395687" datatype="html">
+      <trans-unit id="7051393941308395687" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No registration} =1 {1 registration} other {<x id="INTERPOLATION"/> registrations}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No registration} =1 {1 registration} other {<x id="INTERPOLATION"/> registrations}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sin registro} =1 {1 registro} other {<x id="INTERPOLATION"/> registros}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.html</context>
           <context context-type="linenumber">14</context>
