@@ -385,7 +385,7 @@
       </trans-unit>
       <trans-unit id="1081216658260150122" datatype="html" xml:space="preserve">
         <source>A new <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>video abuse<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been created on video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/></source>
-        <target state="translated">Se ha creado un nuevo<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuso de video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> para este video<x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/></target>
+        <target state="translated">Se ha creado un nuevo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuso de video<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> para este video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">33</context>
@@ -15347,9 +15347,9 @@ color: red;
           <context context-type="linenumber">79</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7105588718549441747" datatype="html">
+      <trans-unit id="7105588718549441747" datatype="html" xml:space="preserve">
         <source>https://example.com/.../video.mp4</source>
-        <target state="new">https://example.com/.../video.mp4</target>
+        <target state="translated">https://ejemplo.com/.../video.mp4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -20832,33 +20832,33 @@ color: red;
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5945924096465496818" datatype="html">
+      <trans-unit id="5945924096465496818" datatype="html" xml:space="preserve">
         <source>&lt;p&gt;You can't create users or channels with a username that already used by a deleted user/channel.&lt;/p&gt;</source>
-        <target state="translated">&lt;p&gt;No puede crear usuarios o canales con un nombre de usuario que ya utilizó un usuario/canal eliminado.&lt;/p&gt;</target>
+        <target state="translated">&lt;p&gt;No puedes crear usuarios o canales con un nombre de usuario que ya utilizó un usuario/canal eliminado.&lt;/p&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5643060985393782358" datatype="html">
+      <trans-unit id="5643060985393782358" datatype="html" xml:space="preserve">
         <source>It means the following usernames will be permanently deleted and cannot be recovered:</source>
-        <target state="translated">Significa que los siguientes nombres de usuario se eliminarán de forma permanente y no se podrán recuperar:</target>
+        <target state="translated">Significa que los siguientes nombres de usuario se eliminarán de forma permanente y no podrán recuperarse:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1301767781765127363" datatype="html">
+      <trans-unit id="1301767781765127363" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user deleted.} other {<x id="count"/> users deleted.}}</source>
-        <target state="translated">{count, plural, =1 {un usuario elimivado.} other {<x id="count"/>usuarios elimisnados.}}</target>
+        <target state="translated">{count, plural, =1 {1 usuario eliminado.} other {<x id="count"/> usuarios eliminados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3104427236147521673" datatype="html">
+      <trans-unit id="3104427236147521673" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 user email set as verified.} other {<x id="count"/> user emails set as verified.}}</source>
-        <target state="translated">{count, plural, =1 {un correo electrónico de usuario verificado.} other {<x id="count"/> correos de usuarios verificados.}}</target>
+        <target state="translated">{count, plural, =1 {1 correo electrónico de usuario verificado.} other {<x id="count"/> correos de usuarios verificados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">277</context>
@@ -20934,7 +20934,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2868988866941935812" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No server} =1 {1 server} other {<x id="INTERPOLATION"/> servers}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No servidor} =1 {1 servidor} other {<x id="INTERPOLATION"/> servidores}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No hay servidor} =1 {1 servidor} other {<x id="INTERPOLATION"/> servidores}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.html</context>
           <context context-type="linenumber">13</context>
@@ -21000,9 +21000,9 @@ color: red;
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="853586874765134886">
+      <trans-unit id="853586874765134886" xml:space="preserve">
         <source>You current password is invalid.</source>
-        <target>Su contraseña actual es invalida.</target>
+        <target state="translated">Tu contraseña actual es invalida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -21164,9 +21164,9 @@ color: red;
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3809414664640924954">
+      <trans-unit id="3809414664640924954" xml:space="preserve">
         <source>Video import finished</source>
-        <target>Importación de vídeo terminada</target>
+        <target state="translated">Importación de vídeo terminada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -27170,25 +27170,25 @@ color: red;
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3577095634541271860" datatype="html">
+      <trans-unit id="3577095634541271860" datatype="html" xml:space="preserve">
         <source>comments per page</source>
-        <target state="new">comments per page</target>
+        <target state="translated">comentarios por página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">7,8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7702673391746650814" datatype="html">
+      <trans-unit id="7702673391746650814" datatype="html" xml:space="preserve">
         <source>Filter by this account</source>
-        <target state="new">Filter by this account</target>
+        <target state="translated">Filtrar por esta cuenta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="929597387091598826" datatype="html">
+      <trans-unit id="929597387091598826" datatype="html" xml:space="preserve">
         <source>Auto tags</source>
-        <target state="new">Auto tags</target>
+        <target state="translated">Etiquetas automáticas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">232</context>
@@ -27198,9 +27198,9 @@ color: red;
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4081209700623120257" datatype="html">
+      <trans-unit id="4081209700623120257" datatype="html" xml:space="preserve">
         <source>Update...</source>
-        <target state="new">Update...</target>
+        <target state="translated">Actualizar...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">239</context>
@@ -27210,9 +27210,9 @@ color: red;
           <context context-type="linenumber">320</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1966943649898653173" datatype="html">
+      <trans-unit id="1966943649898653173" datatype="html" xml:space="preserve">
         <source>Block...</source>
-        <target state="new">Block...</target>
+        <target state="translated">Bloquear...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">251</context>
@@ -27302,73 +27302,73 @@ color: red;
           <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="368656696071815451" datatype="html">
+      <trans-unit id="368656696071815451" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this report?} other {<x id="count"/> reports?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {this report?} other {<x id="count"/> reports?}}</target>
+        <target state="translated">¿De verdad quieres borrar {count, plural, =1 {este reporte?} other {<x id="count"/> reportes?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">510</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7400236202912485768" datatype="html">
+      <trans-unit id="7400236202912485768" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Abuse deleted.} other {<x id="count"/> abuses deleted.}}</source>
-        <target state="new">{count, plural, =1 {Abuse deleted.} other {<x id="count"/> abuses deleted.}}</target>
+        <target state="translated">{count, plural, =1 {Contenido ofensivo eliminado.} other {<x id="count"/> contenidos ofensivos eliminados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">522</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4991784943314587973" datatype="html">
+      <trans-unit id="4991784943314587973" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Flagged account muted.} other {<x id="count"/> flagged accounts muted.}}</source>
-        <target state="new">{count, plural, =1 {Flagged account muted.} other {<x id="count"/> flagged accounts muted.}}</target>
+        <target state="translated">{count, plural, =1 {Cuenta señalada silenciada.} other {<x id="count"/> cuentas señaladas silenciadas.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">553</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1092730482477962724" datatype="html">
+      <trans-unit id="1092730482477962724" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Flagged account server muted.} other {<x id="count"/> flagged account servers muted.}}</source>
-        <target state="new">{count, plural, =1 {Flagged account server muted.} other {<x id="count"/> flagged account servers muted.}}</target>
+        <target state="translated">{count, plural, =1 {Servidor de cuenta señalada silenciado.} other {<x id="count"/> servidores de cuentas señaladas silenciados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">573</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7883629715645527621" datatype="html">
+      <trans-unit id="7883629715645527621" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reporter muted.} other {<x id="count"/> reporters muted.}}</source>
-        <target state="new">{count, plural, =1 {Reporter muted.} other {<x id="count"/> reporters muted.}}</target>
+        <target state="translated">{count, plural, =1 {Denunciante silenciado.} other {<x id="count"/> denunciantes silenciados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">593</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6178299862221951759" datatype="html">
+      <trans-unit id="6178299862221951759" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Reporter server muted.} other {<x id="count"/> reporter servers muted.}}</source>
-        <target state="new">{count, plural, =1 {Reporter server muted.} other {<x id="count"/> reporter servers muted.}}</target>
+        <target state="translated">{count, plural, =1 {Servidor del denunciante silenciado.} other {<x id="count"/> servidores de denunciantes silenciados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">615</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5440091471769708291" datatype="html">
+      <trans-unit id="5440091471769708291" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video blocked.} other {<x id="count"/> videos blocked.}}</source>
-        <target state="new">{count, plural, =1 {Video blocked.} other {<x id="count"/> videos blocked.}}</target>
+        <target state="translated">{count, plural, =1 {Vídeo bloqueado.} other {<x id="count"/> vídeos bloqueados..}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">636</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="108745724002877541" datatype="html">
+      <trans-unit id="108745724002877541" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this comment?} other {<x id="count"/> comments?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {this comment?} other {<x id="count"/> comments?}}</target>
+        <target state="translated">¿De verdad quieres borrar {count, plural, =1 {este comentario?} other {<x id="count"/> comentarios?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">698</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3036032783101046738" datatype="html">
+      <trans-unit id="3036032783101046738" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="new">{count, plural, =1 {Comment deleted.} other {<x id="count"/> comments deleted.}}</target>
+        <target state="translated">{count, plural, =1 {Comentario eliminado.} other {<x id="count"/> comentarios eliminados.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">715</context>
@@ -27382,25 +27382,25 @@ color: red;
           <context context-type="linenumber">307</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8622134676231789456" datatype="html">
+      <trans-unit id="8622134676231789456" datatype="html" xml:space="preserve">
         <source>The deletion will be sent to remote platforms so they can reflect the change.</source>
-        <target state="new"> The deletion will be sent to remote platforms so they can reflect the change.</target>
+        <target state="translated">La eliminación se enviará a las plataformas remotas para que puedan aplicar el cambio.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">310</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7794689773907080825" datatype="html">
+      <trans-unit id="7794689773907080825" datatype="html" xml:space="preserve">
         <source>It is a remote comment, so the deletion will only be effective on your platform.</source>
-        <target state="new"> It is a remote comment, so the deletion will only be effective on your platform.</target>
+        <target state="translated">Se trata de un comentario remoto, por lo que la eliminación solo se aplicará en tu plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
           <context context-type="linenumber">312</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6099744911889532030" datatype="html">
+      <trans-unit id="6099744911889532030" datatype="html" xml:space="preserve">
         <source>Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</source>
-        <target state="new">Account <x id="PH" equiv-text="account.nameWithHost"/> muted by your platform.</target>
+        <target state="translated">Cuenta <x id="PH" equiv-text="account.nameWithHost"/> silenciada por tu platforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">205</context>
@@ -27434,97 +27434,97 @@ color: red;
           <context context-type="linenumber">163</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4332428159510983797" datatype="html">
+      <trans-unit id="4332428159510983797" datatype="html" xml:space="preserve">
         <source>Expires on</source>
-        <target state="new">Expires on</target>
+        <target state="translated">Vence el</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8931356925707804915" datatype="html">
+      <trans-unit id="8931356925707804915" datatype="html" xml:space="preserve">
         <source>Download your archive</source>
-        <target state="new">Download your archive</target>
+        <target state="translated">Descarga tu archivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3427300811638138150" datatype="html">
+      <trans-unit id="3427300811638138150" datatype="html" xml:space="preserve">
         <source>Request a new archive</source>
-        <target state="new">Request a new archive</target>
+        <target state="translated">Solicitar un nuevo archivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3628699893924130182" datatype="html">
+      <trans-unit id="3628699893924130182" datatype="html" xml:space="preserve">
         <source>User export is not enabled by your administrator.</source>
-        <target state="new">User export is not enabled by your administrator.</target>
+        <target state="translated">El administrador no ha habilitado la exportación de usuarios.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3775513643932382075" datatype="html">
+      <trans-unit id="3775513643932382075" datatype="html" xml:space="preserve">
         <source>Archive settings</source>
-        <target state="new">Archive settings</target>
+        <target state="translated">Configuración del archivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1215687357804737187" datatype="html">
+      <trans-unit id="1215687357804737187" datatype="html" xml:space="preserve">
         <source>You already have an active archive. Requesting a new export archive will remove the current one.</source>
-        <target state="new"> You already have an active archive. Requesting a new export archive will remove the current one. </target>
+        <target state="translated">Ya tienes un archivo activo. Si solicitas un nuevo archivo de exportación, se eliminará el actual.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1865500141682414508" datatype="html">
+      <trans-unit id="1865500141682414508" datatype="html" xml:space="preserve">
         <source>Include video files in archive file</source>
-        <target state="new">Include video files in archive file</target>
+        <target state="translated">Incluir archivos de vídeo en el archivo comprimido</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8386580266736130510" datatype="html">
+      <trans-unit id="8386580266736130510" datatype="html" xml:space="preserve">
         <source>Including video files is required if you want to re-import your videos on another PeerTube website</source>
-        <target state="new">Including video files is required if you want to re-import your videos on another PeerTube website</target>
+        <target state="translated">Debes incluir los archivos de vídeo si quieres volver a importar tus vídeos a otra página de PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1795389819769599474" datatype="html">
+      <trans-unit id="1795389819769599474" datatype="html" xml:space="preserve">
         <source>If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">If you include video files, the archive file will weigh <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Si incluyes archivos de vídeo, el archivo comprimido ocupará <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>approximately <x id="INTERPOLATION" equiv-text="{{ archiveWeightEstimation | bytes }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1662178629537553910" datatype="html">
+      <trans-unit id="1662178629537553910" datatype="html" xml:space="preserve">
         <source>Request an archive</source>
-        <target state="new">Request an archive</target>
+        <target state="translated">Solicitar un archivo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6258670465000264011" datatype="html">
+      <trans-unit id="6258670465000264011" datatype="html" xml:space="preserve">
         <source>Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</source>
-        <target state="new">Video files cannot be included in the export because you have exceeded the maximum video quota allowed by your administrator to export this archive.</target>
+        <target state="translated">No se pueden incluir archivos de vídeo en la exportación porque has superado el límite máximo de vídeo permitido por tu administrador para exportar este archivo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.ts</context>
           <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1930863079234861089" datatype="html">
+      <trans-unit id="1930863079234861089" datatype="html" xml:space="preserve">
         <source>Import/Export</source>
-        <target state="new">Import/Export</target>
+        <target state="translated">Importar/Exportar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -27534,33 +27534,33 @@ color: red;
           <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2611126741793124345" datatype="html">
+      <trans-unit id="2611126741793124345" datatype="html" xml:space="preserve">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">IMPORTAR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4737947753130898543" datatype="html">
+      <trans-unit id="4737947753130898543" datatype="html" xml:space="preserve">
         <source>You can import an archive created by another PeerTube website.</source>
-        <target state="new">You can import an archive created by another PeerTube website.</target>
+        <target state="translated">Puedes importar un archivo creado por otra página de PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7544701838241243416" datatype="html">
+      <trans-unit id="7544701838241243416" datatype="html" xml:space="preserve">
         <source>This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </source>
-        <target state="new"> This is an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>import<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tool and not a migration tool. It's the reason why data (like channels or videos) is duplicated and not moved from your previous PeerTube website. </target>
+        <target state="translated">Esto es una <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>herramienta de importación<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> y no es una herramienta de migración. Esa es la razón por la cual los datos (como los canales o los vídeos) se duplican y no se transfieren desde tu página PeerTube anterior. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2367276729368583390" datatype="html">
+      <trans-unit id="2367276729368583390" datatype="html" xml:space="preserve">
         <source>The import process will automatically:</source>
-        <target state="new">The import process will automatically:</target>
+        <target state="translated">El proceso de importación realizará automáticamente lo siguiente:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">17</context>
