@@ -4,5 +4,8 @@
     "outDir": "./dist",
     "rootDir": "src",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
-  }
+  },
+  "references": [
+    { "path": "../core-utils" }
+  ]
 }

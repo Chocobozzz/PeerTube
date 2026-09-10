@@ -1,5 +1,4 @@
-import { buildSUUID } from '@peertube/peertube-node-utils'
-import { mapToJSON } from '@server/helpers/core-utils.js'
+import { buildSUUID, mapToJSON } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { LRU_CACHE } from '@server/initializers/constants.js'
 import { MStreamingPlaylistVideo } from '@server/types/models/index.js'

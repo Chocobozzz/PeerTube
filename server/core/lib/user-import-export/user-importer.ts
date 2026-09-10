@@ -1,6 +1,5 @@
 import { UserImportResultSummary, UserImportState } from '@peertube/peertube-models'
-import { getFilenameWithoutExt, getFileSize } from '@peertube/peertube-node-utils'
-import { parseBytes } from '@server/helpers/core-utils.js'
+import { getFilenameWithoutExt, getFileSize, parseBytes } from '@peertube/peertube-node-utils'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { unzip } from '@server/helpers/unzip.js'

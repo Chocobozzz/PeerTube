@@ -1,5 +1,5 @@
 import { promisify0 } from '@peertube/peertube-core-utils'
-import { parseSemVersion } from '../helpers/core-utils.js'
+import { parseSemVersion } from '@peertube/peertube-node-utils'
 import { createLogger } from '../helpers/logger.js'
 import { getConfigModule } from './config.js'
 
