@@ -1,5 +1,4 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { USER_REGISTRATION_STATES } from '@server/initializers/constants.js'
 import {
   HttpStatusCode,
   UserRegister,
@@ -8,6 +7,7 @@ import {
   UserRegistrationUpdateState,
   UserRight
 } from '@peertube/peertube-models'
+import { USER_REGISTRATION_STATES } from '@server/initializers/constants.js'
 import { Emailer } from '@server/lib/emailer.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
@@ -48,9 +48,11 @@ const auditLogger = auditLoggerFactory('users')
 
 const registrationRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.SIGNUP.ENABLED,
+  name: 'signup',
   windowMs: CONFIG.RATES_LIMIT.SIGNUP.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.SIGNUP.MAX,
-  skipFailedRequests: true
+  skipFailedRequests: true,
+  failOnUnavailableRedis: true
 })
 
 const registrationsRouter = express.Router()

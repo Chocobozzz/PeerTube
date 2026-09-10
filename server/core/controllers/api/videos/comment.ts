@@ -50,6 +50,7 @@ const videoCommentRouter = express.Router()
 // So also limit comment creation per user
 const createCommentRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.CREATE_COMMENT.ENABLED,
+  name: 'create-comment',
   windowMs: CONFIG.RATES_LIMIT.CREATE_COMMENT.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.CREATE_COMMENT.MAX,
   perUserKey: true
