@@ -49,20 +49,20 @@ import {
   VideoState,
   VideoStateType
 } from '@peertube/peertube-models'
-import { isDevInstance, isTestInstance, isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
+import { isDevInstance, isTestInstance, isTestOrDevInstance, parseDurationToMs, root, sanitizeUrl } from '@peertube/peertube-node-utils'
 import { RepeatOptions } from 'bullmq'
-import { Encoding, randomBytes } from 'crypto'
+import { randomBytes } from 'crypto'
 import { readJsonSync } from 'fs-extra/esm'
 import invert from 'lodash-es/invert.js'
 import { join } from 'path'
 // Do not use barrels, remain constants as independent as possible
 import { cpus } from 'os'
-import { parseDurationToMs, sanitizeHost, sanitizeUrl } from '../helpers/core-utils.js'
 import { CONFIG, registerConfigChangedHandler } from './config.js'
+import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from './config/shared-config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1125
+export const LAST_MIGRATION_VERSION = 1135
 
 // ---------------------------------------------------------------------------
 
@@ -222,8 +222,8 @@ export const FOLLOW_STATES: { [id: string]: FollowState } = {
 }
 
 export const REMOTE_SCHEME = {
-  HTTP: 'https',
-  WS: 'wss'
+  HTTP: buildRemoteHttpScheme(),
+  WS: buildRemoteWsScheme()
 }
 
 // ---------------------------------------------------------------------------
@@ -613,8 +613,6 @@ export const VIEW_LIFETIME = {
   VIEWER_COUNTER: 60000 * 2, // 2 minutes
   VIEWER_STATS: 60000 * 60 // 1 hour
 }
-export let VIEWER_SYNC_REDIS = 30000 // Sync viewer into redis
-
 export const MAX_REMOTE_VIEWERS_COUNTER = 1_000_000
 
 export const STATS_LIFETIME = {
@@ -990,15 +988,6 @@ export let PRIVATE_RSA_KEY_SIZE = 2048
 // Password encryption
 export const BCRYPT_SALT_SIZE = 10
 
-export const ENCRYPTION = {
-  ALGORITHM: 'aes-256-gcm',
-  IV: 12, // 96-bit IV, the NIST-recommended size for GCM
-  SALT: 16, // random salt length
-  AUTH_TAG: 16,
-  KEY_LENGTH: 32,
-  ENCODING: 'hex' as Encoding
-}
-
 export const ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH = 20
 export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 export const USER_PASSWORD_CREATE_LIFETIME = 60000 * 60 * 24 * 7 // 7 days
@@ -1164,7 +1153,8 @@ export const FILES_CACHE = {
 
 export const LRU_CACHE = {
   USER_TOKENS: {
-    MAX_SIZE: 1000
+    MAX_SIZE: 1000,
+    TTL: parseDurationToMs('10 minutes')
   },
   FILENAME_TO_PATH_PERMANENT_FILE_CACHE: {
     MAX_SIZE: 5000
@@ -1365,9 +1355,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
   if (isTestOrDevInstance()) {
     PRIVATE_RSA_KEY_SIZE = 1024
 
-    REMOTE_SCHEME.HTTP = 'http'
-    REMOTE_SCHEME.WS = 'ws'
-
     STATIC_MAX_AGE.SERVER = '0'
 
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
@@ -1400,8 +1387,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
 
     JOB_REMOVAL_OPTIONS.SUCCESS['videos-stats'] = 10000
-
-    VIEWER_SYNC_REDIS = 1000
   }
 
   if (isDevInstance()) {
@@ -1634,7 +1619,7 @@ function buildVideoMimetypeExt () {
 
 function updateWebserverUrls () {
   WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
-  WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+  WEBSERVER.HOST = buildInstanceHost({ hostname: CONFIG.WEBSERVER.HOSTNAME, port: CONFIG.WEBSERVER.PORT })
   WEBSERVER.WS = CONFIG.WEBSERVER.WS
 
   WEBSERVER.SCHEME = CONFIG.WEBSERVER.SCHEME
