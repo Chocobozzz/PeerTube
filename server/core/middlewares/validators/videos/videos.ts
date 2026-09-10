@@ -8,7 +8,7 @@ import {
 } from '@peertube/peertube-models'
 import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
-import { Redis } from '@server/lib/redis.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
 import { ChangeOwnershipModel } from '@server/models/video/change-ownership.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
