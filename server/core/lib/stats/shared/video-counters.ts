@@ -8,11 +8,15 @@ import { getCachedVideoDuration } from '@server/lib/video.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
-import { Redis } from '../../redis.js'
+import { Redis } from '../../redis/index.js'
 
 const logger = createLogger('views')
 
-export class VideoStats {
+export class VideoCounters {
+  /**
+   * Keep a local cache of views and downloads in front of Redis for better performance
+   */
+
   private readonly viewsCache = new LRUCache<string, boolean>({
     max: 10_000,
     ttl: VIEW_LIFETIME.VIEW
@@ -90,10 +94,10 @@ export class VideoStats {
     const promises: Promise<any>[] = []
 
     if (video.isLocal()) {
-      promises.push(Redis.Instance.addLocalVideoStat('views', video.id))
+      promises.push(Redis.Instance.incrementLocalVideoStatCounter('views', video.id))
     }
 
-    promises.push(Redis.Instance.addVideoStat('views', video.id))
+    promises.push(Redis.Instance.incrementVideoStatCounter('views', video.id))
 
     await Promise.all(promises)
   }
@@ -179,10 +183,10 @@ export class VideoStats {
     const promises: Promise<any>[] = []
 
     if (video.isLocal()) {
-      promises.push(Redis.Instance.addLocalVideoStat('downloads', video.id))
+      promises.push(Redis.Instance.incrementLocalVideoStatCounter('downloads', video.id))
     }
 
-    promises.push(Redis.Instance.addVideoStat('downloads', video.id))
+    promises.push(Redis.Instance.incrementVideoStatCounter('downloads', video.id))
 
     await Promise.all(promises)
   }
