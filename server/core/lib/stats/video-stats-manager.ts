@@ -3,7 +3,7 @@ import { sha256 } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
-import { VideoScope, VideoStats, VideoViewerCounters, VideoViewerStats, ViewerScope } from './shared/index.js'
+import { VideoCounters, VideoScope, VideoViewerCounters, VideoViewerStats, ViewerScope } from './shared/index.js'
 
 const logger = createLogger('stats')
 
@@ -29,15 +29,20 @@ export class VideoStatsManager {
 
   private videoViewerStats: VideoViewerStats
   private videoViewerCounters: VideoViewerCounters
-  private videoStats: VideoStats
+  private videoCounters: VideoCounters
 
   private constructor () {
   }
 
-  init () {
-    this.videoViewerStats = new VideoViewerStats()
-    this.videoViewerCounters = new VideoViewerCounters()
-    this.videoStats = new VideoStats()
+  init (options: {
+    // Whether this process is responsible for flushing viewer stats to database
+    enableDatabaseFlush?: boolean
+  } = {}) {
+    const { enableDatabaseFlush = true } = options
+
+    this.videoViewerStats = new VideoViewerStats({ enableDatabaseFlush })
+    this.videoViewerCounters = new VideoViewerCounters({ enableDatabaseFlush })
+    this.videoCounters = new VideoCounters()
   }
 
   async processLocalView (options: {
@@ -54,19 +59,25 @@ export class VideoStatsManager {
 
     let sessionId = options.sessionId
     if (!sessionId || CONFIG.VIEWS.VIDEOS.TRUST_VIEWER_SESSION_ID !== true) {
-      sessionId = sha256(CONFIG.SECRETS + '-' + ip)
+      sessionId = sha256(CONFIG.SECRETS.PEERTUBE + '-' + ip)
     }
 
     logger.debug(`Processing local view for ${video.url}, ip ${ip} and session id ${sessionId}.`)
 
-    await this.videoViewerStats.addLocalViewer({ video, ip, sessionId, viewEvent, currentTime, client, operatingSystem, device })
+    const watchTime = await this.videoViewerStats.addLocalViewer({
+      video,
+      ip,
+      sessionId,
+      viewEvent,
+      currentTime,
+      client,
+      operatingSystem,
+      device
+    })
 
     const successViewer = await this.videoViewerCounters.addLocalViewer({ video, sessionId })
 
-    // Do it after added local viewer to fetch updated information
-    const watchTime = await this.videoViewerStats.getWatchTime(video.id, sessionId)
-
-    const successView = await this.videoStats.addLocalView({ video, watchTime, sessionId })
+    const successView = await this.videoCounters.addLocalView({ video, watchTime, sessionId })
 
     return { successView, successViewer }
   }
@@ -92,7 +103,7 @@ export class VideoStatsManager {
     }
 
     // Just a view
-    return this.videoStats.addRemoteView({ video, viewerId })
+    return this.videoCounters.addRemoteView({ video, viewerId })
   }
 
   // ---------------------------------------------------------------------------
@@ -104,7 +115,7 @@ export class VideoStatsManager {
 
     logger.debug('Processing local download for %s.', video.url)
 
-    await this.videoStats.addLocalDownload({ video })
+    await this.videoCounters.addLocalDownload({ video })
   }
 
   async processRemoteDownload (options: {
@@ -116,7 +127,7 @@ export class VideoStatsManager {
 
     logger.debug('Processing remote download for %s.', video.url)
 
-    await this.videoStats.addRemoteDownload({ video, downloadId, byActorUrl })
+    await this.videoCounters.addRemoteDownload({ video, downloadId, byActorUrl })
   }
 
   // ---------------------------------------------------------------------------
