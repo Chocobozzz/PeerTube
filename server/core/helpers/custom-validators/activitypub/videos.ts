@@ -9,11 +9,12 @@ import {
   VideoObject,
   VideoState
 } from '@peertube/peertube-models'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { spdxToPeertubeLicence } from '@server/helpers/video.js'
+import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
 import validator from 'validator'
-import { CONSTRAINTS_FIELDS, ACTIVITY_PUB, MIMETYPES } from '../../../initializers/constants.js'
-import { peertubeTruncate } from '../../core-utils.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
@@ -32,7 +33,6 @@ import {
   setValidAttributedTo,
   setValidRemoteIcon
 } from './misc.js'
-import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
 
 const logger = createLogger()
 

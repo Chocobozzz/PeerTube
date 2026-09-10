@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { generateRSAKeyPairPromise } from '../../helpers/core-utils.js'
+import { generateRSAKeyPairPromise } from '@peertube/peertube-node-utils'
 import { PRIVATE_RSA_KEY_SIZE } from '../constants.js'
 
 async function up (utils: {

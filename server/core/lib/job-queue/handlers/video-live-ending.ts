@@ -1,6 +1,6 @@
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream, VideoLiveEndingPayload, VideoState } from '@peertube/peertube-models'
-import { peertubeTruncate } from '@server/helpers/core-utils.js'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'

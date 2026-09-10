@@ -5,7 +5,7 @@ import {
   PeertubePluginLatestVersionResponse,
   ResultList
 } from '@peertube/peertube-models'
-import { sanitizeUrl } from '@server/helpers/core-utils.js'
+import { sanitizeUrl } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'

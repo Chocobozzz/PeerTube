@@ -1,4 +1,4 @@
-import { execPromise, execPromise2 } from './core-utils.js'
+import { execPromise, execPromise2 } from '@peertube/peertube-node-utils'
 import { createLogger } from './logger.js'
 
 const logger = createLogger()

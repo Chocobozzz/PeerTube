@@ -1,7 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
+import { buildAbsoluteFixturePath, execPromise, root } from '@peertube/peertube-node-utils'
 import { processImage, processSVG } from '@peertube/peertube-server/core/helpers/image-utils.js'
 import { expect } from 'chai'
 import { ensureDir, remove } from 'fs-extra/esm'

@@ -22,7 +22,7 @@ import {
   type VideoPrivacyType,
   type VideoStateType
 } from '@peertube/peertube-models'
-import { uuidToShort } from '@peertube/peertube-node-utils'
+import { peertubeTruncate, uuidToShort } from '@peertube/peertube-node-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { Memoize } from '@server/helpers/memoize.js'
 import { getPrivaciesForFederation } from '@server/helpers/video.js'
@@ -69,7 +69,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { peertubeTruncate } from '../../helpers/core-utils.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc.js'
 import {

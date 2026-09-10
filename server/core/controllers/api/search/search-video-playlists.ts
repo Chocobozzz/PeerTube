@@ -1,5 +1,5 @@
 import express from 'express'
-import { sanitizeUrl } from '@server/helpers/core-utils.js'
+import { sanitizeUrl } from '@peertube/peertube-node-utils'
 import { isUserAbleToSearchRemoteURI } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { pickSearchPlaylistQuery } from '@server/helpers/query.js'
