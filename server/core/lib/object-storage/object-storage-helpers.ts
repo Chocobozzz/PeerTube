@@ -1,4 +1,4 @@
-import { pipelinePromise } from '@server/helpers/core-utils.js'
+import { pipelinePromise } from '@peertube/peertube-node-utils'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
 import Bluebird from 'bluebird'

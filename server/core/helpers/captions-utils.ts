@@ -2,7 +2,7 @@ import { createReadStream, createWriteStream } from 'fs'
 import { move, remove } from 'fs-extra/esm'
 import { Transform } from 'stream'
 import { MVideoCaption } from '@server/types/models/index.js'
-import { pipelinePromise } from './core-utils.js'
+import { pipelinePromise } from '@peertube/peertube-node-utils'
 
 export async function moveAndProcessCaptionFile (physicalFile: { filename?: string, path: string }, videoCaption: MVideoCaption) {
   const destination = videoCaption.getFSFilePath()

@@ -17,7 +17,7 @@ import http from 'http'
 import https from 'https'
 import { HttpProxyAgent, HttpsProxyAgent } from '../helpers/hpagent.js'
 import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants.js'
-import { pipelinePromise } from './core-utils.js'
+import { pipelinePromise } from '@peertube/peertube-node-utils'
 import { createLogger } from './logger.js'
 import { getProxy, isProxyEnabled } from './proxy.js'
 

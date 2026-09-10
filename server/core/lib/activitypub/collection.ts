@@ -1,6 +1,6 @@
 import Bluebird from 'bluebird'
 import validator from 'validator'
-import { pageToStartAndCount } from '@server/helpers/core-utils.js'
+import { pageToStartAndCount } from '@peertube/peertube-node-utils'
 import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { ResultList } from '@peertube/peertube-models'
 import { forceNumber } from '@peertube/peertube-core-utils'

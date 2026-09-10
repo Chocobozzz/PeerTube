@@ -1,5 +1,5 @@
 import { HttpStatusCode, ResultList, Video, VideosSearchQueryAfterSanitize } from '@peertube/peertube-models'
-import { sanitizeUrl } from '@server/helpers/core-utils.js'
+import { sanitizeUrl } from '@peertube/peertube-node-utils'
 import { pickSearchVideoQuery } from '@server/helpers/query.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'

@@ -1,6 +1,5 @@
 import { maskSecret, pick } from '@peertube/peertube-core-utils'
-import { sha1 } from '@peertube/peertube-node-utils'
-import { randomBytesPromise } from '@server/helpers/core-utils.js'
+import { randomBytesPromise, sha1 } from '@peertube/peertube-node-utils'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { MOAuthClient } from '@server/types/models/index.js'
 import { MUser } from '@server/types/models/user/user.js'
