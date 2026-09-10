@@ -1,6 +1,7 @@
 import { createCommand } from '@commander-js/extra-typings'
 import { uniqify, wait } from '@peertube/peertube-core-utils'
 import { FileStorage } from '@peertube/peertube-models'
+import { readdirNonHidden } from '@server/helpers/fs.js'
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX, USER_IMPORT_FILE_PREFIX } from '@server/initializers/constants.js'
 import { BucketInfo, listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
@@ -12,7 +13,7 @@ import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
-import { readdir, stat } from 'fs/promises'
+import { stat } from 'fs/promises'
 import { basename, dirname, join } from 'path'
 import { getUUIDFromFilename } from '../core/helpers/utils.js'
 import { CONFIG } from '../core/initializers/config.js'
@@ -258,7 +259,8 @@ class FSPruner {
 
   private async findFilesToDeleteInDir (directory: string, existFun: (file: string) => Promise<boolean> | boolean) {
     const pathsToDelete: string[] = []
-    const files = await readdir(directory)
+    // Hidden files are metadata PeerTube or the filesystem put there (the storage owner marker, .nfs* handles...)
+    const files = await readdirNonHidden(directory)
 
     await Bluebird.map(files, async file => {
       const filePath = join(directory, file)
