@@ -5,6 +5,7 @@ import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 import { sendView } from '@server/lib/activitypub/send/send-view.js'
 import { canVideoBeFederated } from '@server/lib/activitypub/videos/federate.js'
 import { PeerTubeSocket } from '@server/lib/peertube-socket.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
@@ -23,14 +24,27 @@ type Viewer = {
   lastFederation?: number
 }
 
+/**
+ * Viewer counters live in Redis so that every PeerTube process sees the same "currently watching" count
+ *
+ * `getTotalViewersOf()` is called synchronously by the video formatter for every video of a list response so it cannot await Redis
+ * So each process keeps a local snapshot of the aggregated counts: fully recomputed from Redis by the periodic loop
+ * And bumped for new viewers this process registers so a freshly started process does not report 0 until the first loop pass
+ */
 export class VideoViewerCounters {
-  // expires is new Date().getTime()
-  private readonly viewersPerVideo = new Map<number, Viewer[]>()
-  private readonly idToViewer = new Map<string, Viewer>()
+  // Aggregated snapshots for synchronous reads
+  // Redis is the source of truth
+  private readonly totalViewersPerVideo = new Map<number, number>()
+  private readonly totalViewersPerScope = new Map<string, number>()
 
   private processingViewerCounters = false
 
-  constructor () {
+  // Expiring viewers, notifying clients and federating counts must be done by a single process
+  private readonly enableDatabaseFlush: boolean
+
+  constructor (options: { enableDatabaseFlush?: boolean } = {}) {
+    this.enableDatabaseFlush = options.enableDatabaseFlush !== false
+
     setInterval(() => this.updateVideoViewersCount(), VIEW_LIFETIME.VIEWER_COUNTER)
   }
 
@@ -45,22 +59,24 @@ export class VideoViewerCounters {
     logger.debug('Adding local viewer to video viewers counter %s.', video.uuid)
 
     const viewerId = sessionId + '-' + video.uuid
-    const viewer = this.idToViewer.get(viewerId)
 
-    if (viewer) {
-      viewer.expires = this.buildViewerExpireTime()
-      await this.federateViewerIfNeeded(video, viewer)
+    const { isNew, mustFederate } = await this.addViewerToVideo({
+      viewerId,
+      video,
+      viewerScope: 'local',
+      viewerCount: 1,
+      // Federate the viewer of a remote video if it's been a "long" time we did not
+      federateIfNeeded: video.remote === true
+    })
 
-      return false
+    if (mustFederate) {
+      await sendView({ byActor: await getServerActor(), video, viewersCount: 1, viewerIdentifier: viewerId })
     }
 
-    const newViewer = this.addViewerToVideo({ viewerId, video, viewerScope: 'local', viewerCount: 1 })
-    await this.federateViewerIfNeeded(video, newViewer)
-
-    return true
+    return isNew
   }
 
-  addRemoteViewerOnLocalVideo (options: {
+  async addRemoteViewerOnLocalVideo (options: {
     video: MVideo
     viewerId: string
     viewerExpires: Date
@@ -69,19 +85,12 @@ export class VideoViewerCounters {
 
     logger.debug('Adding remote viewer to local video %s.', video.uuid, { viewerId, viewerExpires })
 
-    const viewer = this.idToViewer.get(viewerId)
-    if (viewer) {
-      viewer.expires = viewerExpires.getTime()
+    const { isNew } = await this.addViewerToVideo({ video, viewerExpires, viewerId, viewerScope: 'remote', viewerCount: 1 })
 
-      return false
-    }
-
-    this.addViewerToVideo({ video, viewerExpires, viewerId, viewerScope: 'remote', viewerCount: 1 })
-
-    return true
+    return isNew
   }
 
-  addRemoteViewerOnRemoteVideo (options: {
+  async addRemoteViewerOnRemoteVideo (options: {
     video: MVideo
     viewerId: string
     viewerExpires: Date
@@ -91,7 +100,7 @@ export class VideoViewerCounters {
 
     logger.debug('Adding remote viewer to remote video %s.', video.uuid, { viewerId, viewerResultCounter, viewerExpires })
 
-    this.addViewerToVideo({
+    await this.addViewerToVideo({
       video,
       viewerExpires,
       viewerId,
@@ -110,20 +119,11 @@ export class VideoViewerCounters {
     viewerScope: ViewerScope
     videoScope: VideoScope
   }) {
-    let total = 0
-
-    for (const viewers of this.viewersPerVideo.values()) {
-      total += viewers.filter(v => v.viewerScope === options.viewerScope && v.videoScope === options.videoScope)
-        .reduce((p, c) => p + c.viewerCount, 0)
-    }
-
-    return total
+    return this.totalViewersPerScope.get(this.buildScopeKey(options.viewerScope, options.videoScope)) || 0
   }
 
   getTotalViewersOf (video: MVideoImmutable) {
-    const viewers = this.viewersPerVideo.get(video.id)
-
-    return viewers?.reduce((p, c) => p + c.viewerCount, 0) || 0
+    return this.totalViewersPerVideo.get(video.id) || 0
   }
 
   buildViewerExpireTime () {
@@ -132,43 +132,49 @@ export class VideoViewerCounters {
 
   // ---------------------------------------------------------------------------
 
-  private addViewerToVideo (options: {
+  /**
+   * Adds the viewer, or pushes back the expiration of the one already known
+   * Return the result to know if this process is the one that has to federate it
+   */
+  private async addViewerToVideo (options: {
     video: MVideoImmutable
     viewerId: string
     viewerScope: ViewerScope
     viewerCount: number
     replaceCurrentViewers?: boolean
     viewerExpires?: Date
+    federateIfNeeded?: boolean
   }) {
-    const { video, viewerExpires, viewerId, viewerScope, viewerCount, replaceCurrentViewers } = options
+    const { video, viewerExpires, viewerId, viewerScope, viewerCount, replaceCurrentViewers, federateIfNeeded } = options
 
-    let watchers = this.viewersPerVideo.get(video.id)
+    const now = new Date().getTime()
 
-    if (!watchers || replaceCurrentViewers) {
-      for (const watcher of watchers || []) {
-        this.idToViewer.delete(watcher.id)
-      }
+    const result = await Redis.Instance.addVideoViewerCounter({
+      videoId: video.id,
+      viewerId,
 
-      watchers = []
-      this.viewersPerVideo.set(video.id, watchers)
-    }
+      expires: viewerExpires
+        ? viewerExpires.getTime()
+        : this.buildViewerExpireTime(),
 
-    const expires = viewerExpires
-      ? viewerExpires.getTime()
-      : this.buildViewerExpireTime()
+      viewerScope,
+      videoScope: video.remote ? 'remote' : 'local',
+      viewerCount,
+      now,
 
-    const videoScope: VideoScope = video.remote
-      ? 'remote'
-      : 'local'
+      federateBefore: federateIfNeeded
+        ? now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
+        : 0,
 
-    const viewer = { id: viewerId, expires, videoScope, viewerScope, viewerCount }
-    watchers.push(viewer)
+      replaceCurrentViewers
+    })
 
-    this.idToViewer.set(viewerId, viewer)
+    this.setVideoSnapshot(video.id, result.totalViewers)
 
-    this.notifyClients(video)
+    // A viewer refreshing its expiration does not change the count, so there is nothing to send
+    if (result.isNew) this.notifyClients(video)
 
-    return viewer
+    return result
   }
 
   private async updateVideoViewersCount () {
@@ -180,37 +186,27 @@ export class VideoViewerCounters {
     }
 
     try {
-      for (const videoId of this.viewersPerVideo.keys()) {
-        const notBefore = new Date().getTime()
+      const staleVideoIds = new Set(this.totalViewersPerVideo.keys())
 
-        const viewers = this.viewersPerVideo.get(videoId)
+      const videoIds = await Redis.Instance.listVideoIdsWithViewers()
 
-        // Only keep not expired viewers
-        const newViewers: Viewer[] = []
+      const totalViewersPerScope = new Map<string, number>()
 
-        // Filter new viewers
-        for (const viewer of viewers) {
-          if (viewer.expires > notBefore) {
-            newViewers.push(viewer)
-          } else {
-            this.idToViewer.delete(viewer.id)
-          }
-        }
+      for (const videoId of videoIds) {
+        staleVideoIds.delete(videoId)
 
-        if (newViewers.length === 0) this.viewersPerVideo.delete(videoId)
-        else this.viewersPerVideo.set(videoId, newViewers)
-
-        const video = await VideoModel.loadWithBlacklist(videoId)
-
-        if (video) {
-          this.notifyClients(video)
-
-          // Let total viewers expire on remote instances if there are no more viewers
-          if (newViewers.length !== 0 && video.isLocal() && canVideoBeFederated(video)) {
-            await this.federateTotalViewers(video)
-          }
+        try {
+          await this.updateVideoViewerCount(videoId, totalViewersPerScope)
+        } catch (err) {
+          logger.error('Cannot update the viewer counter of video %d.', videoId, { err })
         }
       }
+
+      for (const videoId of staleVideoIds) {
+        this.totalViewersPerVideo.delete(videoId)
+      }
+
+      this.replaceScopeSnapshot(totalViewersPerScope)
     } catch (err) {
       logger.error('Error in video viewer counters scheduler.', { err })
     }
@@ -218,29 +214,74 @@ export class VideoViewerCounters {
     this.processingViewerCounters = false
   }
 
+  private async updateVideoViewerCount (videoId: number, totalViewersPerScope: Map<string, number>) {
+    const expiredIfBefore = new Date().getTime()
+
+    const viewers = await Redis.Instance.listVideoViewerCounters<Viewer>(videoId)
+
+    const expiredIds: string[] = []
+    let total = 0
+
+    for (const [ viewerId, viewer ] of Object.entries(viewers)) {
+      // Not expired
+      if (viewer.expires > expiredIfBefore) {
+        total += viewer.viewerCount
+
+        const scopeKey = this.buildScopeKey(viewer.viewerScope, viewer.videoScope)
+        totalViewersPerScope.set(scopeKey, (totalViewersPerScope.get(scopeKey) || 0) + viewer.viewerCount)
+      } else {
+        expiredIds.push(viewerId)
+      }
+    }
+
+    // Only the scheduler owner mutates Redis, but every process refreshes its own read snapshot
+    if (this.enableDatabaseFlush) {
+      // Drop the key when the hash is empty, so the video id does not leak in the set
+      if (total === 0) {
+        await Redis.Instance.deleteAllVideoViewerCounters(videoId)
+      } else if (expiredIds.length !== 0) {
+        await Redis.Instance.deleteVideoViewerCounters(videoId, expiredIds, total)
+      }
+    }
+
+    this.setVideoSnapshot(videoId, total)
+
+    // Notify clients and federate the total viewers if needed for the scheduler owner
+    if (!this.enableDatabaseFlush) return
+
+    const video = await VideoModel.loadWithBlacklist(videoId)
+    if (!video) return
+
+    this.notifyClients(video)
+
+    // Let total viewers expire on remote instances if there are no more viewers
+    if (total !== 0 && video.isLocal() && canVideoBeFederated(video)) {
+      await this.federateTotalViewers(video)
+    }
+  }
+
+  private setVideoSnapshot (videoId: number, total: number) {
+    if (total === 0) this.totalViewersPerVideo.delete(videoId)
+    else this.totalViewersPerVideo.set(videoId, total)
+  }
+
+  private replaceScopeSnapshot (scopeTotals: Map<string, number>) {
+    this.totalViewersPerScope.clear()
+
+    for (const [ key, value ] of scopeTotals) {
+      this.totalViewersPerScope.set(key, value)
+    }
+  }
+
+  private buildScopeKey (viewerScope: ViewerScope, videoScope: VideoScope) {
+    return viewerScope + '-' + videoScope
+  }
+
   private notifyClients (video: MVideoImmutable) {
     const totalViewers = this.getTotalViewersOf(video)
     PeerTubeSocket.Instance.sendVideoViewsUpdate(video, totalViewers)
 
     logger.debug('Video viewers update for %s is %d.', video.url, totalViewers)
-  }
-
-  private async federateViewerIfNeeded (video: MVideoImmutable, viewer: Viewer) {
-    // Federate the viewer if it's been a "long" time we did not
-    const now = new Date().getTime()
-    const federationLimit = now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
-
-    if (viewer.lastFederation && viewer.lastFederation > federationLimit) return
-    if (video.remote === false) return
-
-    await sendView({
-      byActor: await getServerActor(),
-      video,
-      viewersCount: 1,
-      viewerIdentifier: viewer.id
-    })
-
-    viewer.lastFederation = now
   }
 
   private async federateTotalViewers (video: MVideoImmutable) {

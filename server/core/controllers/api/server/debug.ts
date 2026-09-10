@@ -12,12 +12,12 @@ import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager.js'
 import { Emailer } from '@server/lib/emailer.js'
+import { LocalVideoStatsBufferScheduler } from '@server/lib/schedulers/local-video-stats-buffer-scheduler.js'
 import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
 import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
 import { RemoveOldStatsScheduler } from '@server/lib/schedulers/remove-old-stats-scheduler.js'
 import { UpdateVideosScheduler } from '@server/lib/schedulers/update-videos-scheduler.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
-import { VideoStatsBufferScheduler } from '@server/lib/schedulers/video-stats-buffer-scheduler.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import express from 'express'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares/index.js'
@@ -61,7 +61,7 @@ async function runCommand (req: express.Request, res: express.Response) {
   const processors: { [id in SendDebugCommand['command']]: () => Promise<any> } = {
     'remove-dandling-resumable-uploads': () => RemoveDanglingResumableUploadsScheduler.Instance.execute(),
     'remove-expired-user-exports': () => RemoveExpiredUserExportsScheduler.Instance.execute(),
-    'process-video-stats-buffer': () => VideoStatsBufferScheduler.Instance.execute(),
+    'process-video-stats-buffer': () => LocalVideoStatsBufferScheduler.Instance.execute(),
     'process-video-viewers': () => VideoStatsManager.Instance.processViewerStats(),
     'process-update-videos-scheduler': () => UpdateVideosScheduler.Instance.execute(),
     'process-video-channel-sync-latest': () => VideoChannelSyncLatestScheduler.Instance.execute(),
