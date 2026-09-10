@@ -1,4 +1,3 @@
-import { getNodeABIVersion } from '@server/helpers/version.js'
 import { CONFIG } from '@server/initializers/config.js'
 import memoizee from 'memoizee'
 import { AllowNull, Column, DataType, Default, DefaultScope, HasOne, IsInt, Table } from 'sequelize-typescript'
@@ -54,14 +53,6 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
   @Column
   declare latestPeerTubeVersion: string
 
-  @AllowNull(false)
-  @Column
-  declare nodeVersion: string
-
-  @AllowNull(false)
-  @Column
-  declare nodeABIVersion: string
-
   @AllowNull(true)
   @Column(DataType.JSONB)
   declare configPart: ConfigPart
@@ -80,7 +71,6 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
   declare Account: Awaited<AccountModel>
 
   private static lastRunConfigPart: ConfigPart
-  private static lastRunNodeABIVersion: string
 
   static countTotal () {
     return ApplicationModel.count()
@@ -88,14 +78,6 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
 
   static load () {
     return ApplicationModel.findOne()
-  }
-
-  static async nodeABIChanged () {
-    const application = await this.load()
-
-    const nodeABIVersion = this.lastRunNodeABIVersion || application.nodeABIVersion
-
-    return nodeABIVersion !== getNodeABIVersion()
   }
 
   static async streamingPlaylistBaseUrlChanged () {
@@ -119,14 +101,10 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     await application.save()
   }
 
-  static async updateNodeVersionsOrConfig () {
+  static async updateConfigPart () {
     const application = await this.load()
 
-    this.lastRunNodeABIVersion = application.nodeABIVersion
     this.lastRunConfigPart = application.configPart
-
-    application.nodeABIVersion = getNodeABIVersion()
-    application.nodeVersion = process.version
 
     application.configPart = {
       OBJECT_STORAGE: {

@@ -1,6 +1,7 @@
 import { isStableOrUnstableVersionValid } from '@server/helpers/custom-validators/misc.js'
+import { getNodeABIVersion } from '@server/helpers/version.js'
 import { execa } from 'execa'
-import { outputJSON, pathExists, remove } from 'fs-extra/esm'
+import { outputJSON, pathExists, readJSON, remove } from 'fs-extra/esm'
 import { readFile, rename, writeFile } from 'fs/promises'
 import { join } from 'path'
 import { isNpmPluginNameValid } from '../../helpers/custom-validators/plugins.js'
@@ -9,6 +10,10 @@ import { CONFIG } from '../../initializers/config.js'
 import { getLatestPluginVersion } from './plugin-index.js'
 
 const logger = createLogger()
+
+// Node ABI the native modules of a plugin directory were built for
+// In the directory so it's per process
+const NODE_ABI_FILE_NAME = '.peertube-node-abi'
 
 export async function installNpmPlugin (npmName: string, versionArg?: string) {
   // Security check
@@ -37,6 +42,35 @@ export async function removeNpmPlugin (name: string) {
 
 export async function rebuildNativePlugins () {
   await execPNPM([ 'rebuild' ])
+}
+
+export async function listInstalledNpmPlugins () {
+  const packageJSONPath = join(CONFIG.STORAGE.PLUGINS_DIR, 'package.json')
+
+  const packageJSON = await readJSON(packageJSONPath)
+    .catch(() => ({})) as { dependencies?: { [name: string]: string } }
+
+  return Object.keys(packageJSON.dependencies || {})
+}
+
+export async function rebuildNativePluginsIfABIChanged () {
+  const abiPath = join(CONFIG.STORAGE.PLUGINS_DIR, NODE_ABI_FILE_NAME)
+  const currentABI = getNodeABIVersion()
+
+  const storedABI = await readFile(abiPath, 'utf-8')
+    .then(content => content.trim())
+    .catch(() => undefined as string)
+
+  if (storedABI === currentABI) return
+
+  // No marker yet: pnpm built the native modules of this directory when it installed them, so there is nothing to redo
+  if (storedABI) {
+    logger.info('Node ABI changed from %s to %s, rebuilding native plugins.', storedABI, currentABI)
+
+    await rebuildNativePlugins()
+  }
+
+  await writeFile(abiPath, currentABI, 'utf-8')
 }
 
 // ---------------------------------------------------------------------------

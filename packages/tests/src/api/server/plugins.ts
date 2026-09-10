@@ -1,8 +1,5 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import { pathExists, remove } from 'fs-extra/esm'
-import { join } from 'path'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, PluginType } from '@peertube/peertube-models'
 import {
@@ -14,8 +11,12 @@ import {
   PluginsCommand,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { SQLCommand } from '@tests/shared/sql-command.js'
 import { testHelloWorldRegisteredSettings } from '@tests/shared/plugins.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
+import { pathExists, remove } from 'fs-extra/esm'
+import { writeFile } from 'fs/promises'
+import { join } from 'path'
 
 describe('Test plugins', function () {
   let server: PeerTubeServer
@@ -376,8 +377,7 @@ describe('Test plugins', function () {
       expectedStatus: HttpStatusCode.NO_CONTENT_204
     })
 
-    const query = `UPDATE "application" SET "nodeABIVersion" = 1`
-    await sqlCommand.updateQuery(query)
+    await writeFile(server.servers.buildDirectory(join('plugins', '.peertube-node-abi')), '1', 'utf-8')
 
     const baseNativeModule = server.servers.buildDirectory(join('plugins', 'node_modules', 'a-native-example'))
 
