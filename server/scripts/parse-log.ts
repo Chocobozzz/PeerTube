@@ -1,8 +1,8 @@
 import { createCommand } from '@commander-js/extra-typings'
+import { readdirNonHidden } from '@server/helpers/fs.js'
 import { buildSearchTags, labelFormatter, mtimeSortFilesDesc } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { createReadStream } from 'fs'
-import { readdir } from 'fs/promises'
 import { join } from 'path'
 import { stdin } from 'process'
 import { createInterface } from 'readline'
@@ -137,7 +137,8 @@ async function getNewestFile (files: string[], basePath: string) {
 async function getFiles () {
   if (options.files) return options.files
 
-  const logFiles = await readdir(CONFIG.STORAGE.LOG_DIR)
+  // Hidden files are not logs: PeerTube marks the directories it owns with one
+  const logFiles = await readdirNonHidden(CONFIG.STORAGE.LOG_DIR)
 
   const filename = await getNewestFile(logFiles, CONFIG.STORAGE.LOG_DIR)
   return [ join(CONFIG.STORAGE.LOG_DIR, filename) ]

@@ -31,6 +31,7 @@ import {
 } from '@peertube/peertube-models'
 import { allJobStates } from '@server/helpers/custom-validators/jobs.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
+import { isSecondaryProcess } from '@server/initializers/process-role.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
 import {
   FlowJob,
@@ -47,7 +48,7 @@ import {
 import { createLogger } from '../../helpers/logger.js'
 import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
 import { Hooks } from '../plugins/hooks.js'
-import { Redis } from '../redis.js'
+import { Redis } from '../redis/index.js'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner.js'
 import { processActivityPubFollow } from './handlers/activitypub-follow.js'
 import {
@@ -197,6 +198,17 @@ const jobTypes: JobType[] = [
   'video-transcoding'
 ]
 
+/**
+ * Job types a secondary process may consume.
+ *
+ * They do not touch state owned by a single process (live sessions, transcoding files on local storage)
+ */
+const SECONDARY_PROCESS_JOB_TYPES = new Set<JobType>([
+  'activitypub-http-broadcast-parallel',
+  'activitypub-http-broadcast',
+  'activitypub-http-unicast'
+])
+
 const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcription', 'video-studio-edition', 'generate-video-storyboard' ]
 
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
@@ -223,8 +235,19 @@ class JobQueue {
 
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
 
+    // A secondary process still has to *enqueue* every job type so all the queues are built
+    // Only the workers are restricted to the job types the process is allowed to consume.
+    const consumedJobTypes = isSecondaryProcess()
+      ? SECONDARY_PROCESS_JOB_TYPES
+      : new Set(Object.keys(handlers))
+
+    if (isSecondaryProcess()) {
+      logger.info('Job queue restricted to %d job types.', consumedJobTypes.size, { jobTypes: Array.from(consumedJobTypes) })
+    }
+
     for (const handlerName of Object.keys(handlers)) {
-      this.buildWorker(handlerName)
+      if (consumedJobTypes.has(handlerName)) this.buildWorker(handlerName)
+
       this.buildQueue(handlerName)
       this.buildQueueEvent(handlerName)
     }
@@ -237,10 +260,14 @@ class JobQueue {
       logger.error('Error in flow producer', { err })
     })
 
-    this.addRepeatableJobs()
+    // Only the primary enqueues repeatable jobs, so they are not duplicated by multiple processes
+    if (!isSecondaryProcess()) this.addRepeatableJobs()
 
     registerConfigChangedHandler(() => {
       for (const handlerName of Object.keys(handlers)) {
+        // Not every job type has a worker in this process
+        if (!this.workers[handlerName]) continue
+
         this.workers[handlerName].concurrency = this.getJobConcurrency(handlerName)
       }
     })
@@ -336,30 +363,38 @@ class JobQueue {
 
   // Use force: true to not wait for active jobs to complete (they will be retried when detected as stalled)
   async terminate (options: { force: boolean }) {
-    const promises = Object.keys(this.workers)
+    // Every job type has a queue and a queue event
+    // But a secondary process only has a worker for a subset of the job types
+    const promises = Object.keys(this.queues)
       .map(handlerName => {
         const worker: Worker = this.workers[handlerName]
         const queue: Queue = this.queues[handlerName]
         const queueEvent: QueueEvents = this.queueEvents[handlerName]
 
         return Promise.all([
-          worker.close(options.force),
+          worker
+            ? worker.close(options.force)
+            : undefined,
           queue.close(),
           queueEvent.close()
         ])
       })
 
-    return Promise.all(promises)
+    await Promise.all(promises)
+
+    await this.flowProducer?.close()
   }
 
   start () {
-    const promises = Object.keys(this.workers)
+    const promises = Object.keys(this.queueEvents)
       .map(handlerName => {
         const worker: Worker = this.workers[handlerName]
         const queueEvent: QueueEvents = this.queueEvents[handlerName]
 
         return Promise.all([
-          worker.run(),
+          worker
+            ? worker.run()
+            : undefined,
           queueEvent.run()
         ])
       })

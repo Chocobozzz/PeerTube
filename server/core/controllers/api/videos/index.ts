@@ -85,31 +85,7 @@ videosRouter.use('/', videoSourceRouter)
 videosRouter.use('/', videoChaptersRouter)
 videosRouter.use('/', videoEmbedPrivacyRouter)
 
-videosRouter.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
-videosRouter.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
-videosRouter.get('/languages', openapiOperationDoc({ operationId: 'getLanguages' }), videoLanguagesScopeValidator, listVideoLanguages)
-videosRouter.get('/privacies', openapiOperationDoc({ operationId: 'getPrivacies' }), listVideoPrivacies)
-
-videosRouter.get(
-  '/',
-  openapiOperationDoc({ operationId: 'getVideos' }),
-  paginationValidator,
-  videosSortValidator,
-  setDefaultVideosSort,
-  setDefaultPagination,
-  optionalAuthenticate,
-  commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(listVideos)
-)
-
-videosRouter.get(
-  '/:id',
-  openapiOperationDoc({ operationId: 'getVideo' }),
-  optionalAuthenticate,
-  asyncMiddleware(videoGetValidatorFactory('for-api')),
-  asyncMiddleware(checkVideoFollowConstraints),
-  asyncMiddleware(getVideo)
-)
+registerVideoReadRoutes(videosRouter)
 
 videosRouter.delete(
   '/:id',
@@ -121,8 +97,51 @@ videosRouter.delete(
 
 // ---------------------------------------------------------------------------
 
+// Video endpoints a secondary process can serve: they only need PostgreSQL, Redis and object storage,
+// so they can run on a host that does not have access to the primary local storage
+const secondaryVideosRouter = express.Router()
+
+secondaryVideosRouter.use(apiRateLimiter)
+secondaryVideosRouter.use('/', viewRouter)
+
+registerVideoReadRoutes(secondaryVideosRouter)
+
+// ---------------------------------------------------------------------------
+
 export {
+  secondaryVideosRouter,
   videosRouter
+}
+
+// ---------------------------------------------------------------------------
+
+// Must be registered after the sub routers so that /categories is not caught by /:id
+function registerVideoReadRoutes (router: express.Router) {
+  router.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
+  router.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
+  router.get('/languages', openapiOperationDoc({ operationId: 'getLanguages' }), videoLanguagesScopeValidator, listVideoLanguages)
+  router.get('/privacies', openapiOperationDoc({ operationId: 'getPrivacies' }), listVideoPrivacies)
+
+  router.get(
+    '/',
+    openapiOperationDoc({ operationId: 'getVideos' }),
+    paginationValidator,
+    videosSortValidator,
+    setDefaultVideosSort,
+    setDefaultPagination,
+    optionalAuthenticate,
+    commonVideosFiltersValidatorFactory(),
+    asyncMiddleware(listVideos)
+  )
+
+  router.get(
+    '/:id',
+    openapiOperationDoc({ operationId: 'getVideo' }),
+    optionalAuthenticate,
+    asyncMiddleware(videoGetValidatorFactory('for-api')),
+    asyncMiddleware(checkVideoFollowConstraints),
+    asyncMiddleware(getVideo)
+  )
 }
 
 // ---------------------------------------------------------------------------

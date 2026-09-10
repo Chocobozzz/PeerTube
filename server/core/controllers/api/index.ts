@@ -23,17 +23,19 @@ import { usersRouter } from './users/index.js'
 import { videoChannelSyncRouter } from './video-channel-sync.js'
 import { videoChannelRouter } from './video-channels/index.js'
 import { videoPlaylistRouter } from './video-playlist.js'
-import { videosRouter } from './videos/index.js'
+import { secondaryVideosRouter, videosRouter } from './videos/index.js'
 import { watchedWordsRouter } from './watched-words.js'
 
 const logger = createLogger()
 
-const apiRouter = express.Router()
-
-apiRouter.use(cors({
+const corsMiddleware = cors({
   origin: '*',
   exposedHeaders: 'Retry-After'
-}))
+})
+
+const apiRouter = express.Router()
+
+apiRouter.use(corsMiddleware)
 
 apiRouter.use('/server', serverRouter)
 apiRouter.use('/abuses', abuseRouter)
@@ -64,7 +66,20 @@ apiRouter.use('/*', badRequest)
 
 // ---------------------------------------------------------------------------
 
-export { apiRouter }
+// API subset served by secondary processes
+// Requests for any other endpoint must be routed to the primary by the reverse proxy or it will fail with a visible 400 error
+const secondaryApiRouter = express.Router()
+
+secondaryApiRouter.use(corsMiddleware)
+
+secondaryApiRouter.use('/videos', secondaryVideosRouter)
+
+secondaryApiRouter.use('/ping', pong)
+secondaryApiRouter.use('/*', badRequest)
+
+// ---------------------------------------------------------------------------
+
+export { apiRouter, secondaryApiRouter }
 
 // ---------------------------------------------------------------------------
 
