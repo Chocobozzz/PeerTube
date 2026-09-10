@@ -1,0 +1,36 @@
+; Template unit to run PeerTube secondary processes, which serve a subset of the API alongside the primary process.
+; See https://docs.joinpeertube.org/maintain/horizontal-scalability for more information.
+;
+; Enable one instance of a secondary process: `systemctl enable --now peertube-secondary@1`.
+
+[Unit]
+Description=PeerTube secondary daemon %i
+After=network.target postgresql.service redis-server.service
+; Remove these two lines if this secondary runs on a server that does not host the primary process.
+After=peertube.service
+Wants=peertube.service
+
+[Service]
+Type=simple
+Environment=NODE_ENV=production
+Environment=NODE_CONFIG_DIR=/var/www/peertube/config
+Environment=NODE_APP_INSTANCE=secondary-%i
+User=peertube
+Group=peertube
+ExecStart=/usr/bin/node dist/server --role=secondary
+WorkingDirectory=/var/www/peertube/peertube-latest
+SyslogIdentifier=peertube-secondary-%i
+Restart=always
+; A secondary exits if the primary has never published its configuration to Redis
+; Nack off instead of spinning while the primary is still starting
+RestartSec=5
+
+; See primary systemd template for more information about these security directives.
+ProtectSystem=full
+PrivateDevices=false
+NoNewPrivileges=true
+ProtectHome=true
+CapabilityBoundingSet=~CAP_SYS_ADMIN
+
+[Install]
+WantedBy=multi-user.target
