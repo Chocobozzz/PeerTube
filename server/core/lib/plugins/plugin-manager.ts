@@ -11,13 +11,13 @@ import {
   ServerHookName
 } from '@peertube/peertube-models'
 import { decachePlugin } from '@server/helpers/decache.js'
-import { ApplicationModel } from '@server/models/application/application.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import express from 'express'
-import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
+import { ensureDir, outputFile, pathExists, readJSON } from 'fs-extra/esm'
 import { appendFile, readFile } from 'fs/promises'
 import { Server } from 'http'
 import { createRequire } from 'module'
+import PQueue from 'p-queue'
 import { basename, join } from 'path'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins.js'
 import { createLogger } from '../../helpers/logger.js'
@@ -31,7 +31,15 @@ import {
   RegisterServerOptions
 } from '../../types/plugins/index.js'
 import { ClientHtml } from '../html/client-html.js'
-import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './package-manager.js'
+import { Redis } from '../redis/index.js'
+import { PluginChangePayload } from '../redis/plugin-changes.js'
+import {
+  installNpmPlugin,
+  installNpmPluginFromDisk,
+  listInstalledNpmPlugins,
+  rebuildNativePluginsIfABIChanged,
+  removeNpmPlugin
+} from './package-manager.js'
 import { RegisterHelpers } from './register-helpers.js'
 
 const logger = createLogger()
@@ -87,6 +95,8 @@ export class PluginManager implements ServerHook {
   private registrationDone = false
 
   private server: Server
+
+  private readonly pluginSyncQueue = new PQueue({ concurrency: 1 })
 
   private constructor () {
   }
@@ -420,6 +430,7 @@ export class PluginManager implements ServerHook {
         version: packageJSON.version,
         enabled: true,
         uninstalled: false,
+        diskPath: fromDisk ? toInstall : null,
         peertubeEngine: packageJSON.engine.peertube
       }, { returning: true })
 
@@ -428,6 +439,8 @@ export class PluginManager implements ServerHook {
       if (register) {
         await this.registerPluginOrTheme(plugin)
       }
+
+      this.notifyOtherProcesses({ type: 'installed-plugins-changed' })
     } catch (rootErr) {
       logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
 
@@ -498,15 +511,154 @@ export class PluginManager implements ServerHook {
 
     await removeNpmPlugin(npmName)
 
+    this.notifyOtherProcesses({ type: 'installed-plugins-changed' })
+
     logger.info('Plugin %s uninstalled.', npmName)
   }
 
-  async rebuildNativePluginsIfNeeded () {
-    if (!await ApplicationModel.nodeABIChanged()) return
+  rebuildNativePluginsIfNeeded () {
+    return rebuildNativePluginsIfABIChanged()
+  }
 
-    logger.info('Node ABI has changed, rebuilding native plugins')
+  // ###################### Synchronization ######################
 
-    return rebuildNativePlugins()
+  syncPlugins (options: {
+    register: boolean
+  }) {
+    const { register } = options
+
+    return this.pluginSyncQueue.add(async () => {
+      const dbPlugins = await PluginModel.listEnabledPluginsAndThemes()
+      const dbNpmNames = new Set(dbPlugins.map(p => PluginModel.buildNpmName(p.name, p.type)))
+
+      await this.installMissingPlugins(dbPlugins)
+      const removed = await this.removeStalePlugins(dbNpmNames)
+
+      if (!register) return
+
+      let registered = false
+
+      for (const plugin of dbPlugins) {
+        const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+
+        const alreadyRegistered = this.getRegisteredPluginOrTheme(npmName)
+        if (alreadyRegistered?.version === plugin.version) continue
+
+        try {
+          if (alreadyRegistered) await this.unregister(npmName)
+
+          await this.registerPluginOrTheme(plugin)
+          registered = true
+        } catch (err) {
+          logger.error('Cannot register plugin %s after syncing it.', npmName, { err })
+        }
+      }
+
+      if (registered) this.sortHooksByPriority()
+      if (registered || removed) await this.regeneratePluginGlobalCSS()
+    })
+  }
+
+  async listenForPluginChanges () {
+    await Redis.Instance.subscribeToPluginChanges((payload: PluginChangePayload) => {
+      if (payload?.type === 'installed-plugins-changed') {
+        this.syncPlugins({ register: true })
+          .catch(err => logger.error('Cannot sync plugins after a change made by another process.', { err }))
+
+        return
+      }
+
+      if (payload?.type === 'plugin-settings-changed') {
+        this.runOnSettingsChangedFromDatabase(payload.npmName)
+          .catch(err => logger.error('Cannot run the settings change callbacks of %s.', payload.npmName, { err }))
+      }
+    })
+  }
+
+  // ###################### Private synchronization ######################
+
+  private async installMissingPlugins (dbPlugins: PluginModel[]) {
+    for (const plugin of dbPlugins) {
+      const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+
+      const installedVersion = await this.getInstalledVersion(plugin.name, plugin.type)
+      if (installedVersion === plugin.version) continue
+
+      try {
+        logger.info(
+          'Installing plugin %s@%s to match the database (currently %s).',
+          npmName,
+          plugin.version,
+          installedVersion || 'not installed'
+        )
+
+        if (plugin.diskPath) {
+          if (!await pathExists(plugin.diskPath)) {
+            throw new Error(
+              `it was installed from "${plugin.diskPath}", which this process cannot reach. ` +
+                'Make that path available here, or publish the plugin to npm.'
+            )
+          }
+
+          await installNpmPluginFromDisk(plugin.diskPath)
+        } else {
+          await installNpmPlugin(npmName, plugin.version)
+        }
+
+        logger.info('Installed plugin %s@%s to match the database.', npmName, plugin.version)
+      } catch (err) {
+        logger.error('Cannot install plugin %s@%s: %s', npmName, plugin.version, (err as Error).message, { err })
+      }
+    }
+  }
+
+  private async removeStalePlugins (dbNpmNames: Set<string>) {
+    let removed = false
+
+    for (const npmName of await listInstalledNpmPlugins()) {
+      if (dbNpmNames.has(npmName)) continue
+
+      logger.info('Removing plugin %s: the database does not list it anymore.', npmName)
+
+      try {
+        if (this.getRegisteredPluginOrTheme(npmName)) await this.unregister(npmName)
+
+        await removeNpmPlugin(npmName)
+        removed = true
+
+        logger.info('Removed plugin %s to match the database.', npmName)
+      } catch (err) {
+        logger.error('Cannot remove plugin %s.', npmName, { err })
+      }
+    }
+
+    return removed
+  }
+
+  private async getInstalledVersion (pluginName: string, pluginType: PluginType_Type) {
+    try {
+      const packageJSON = await this.getPackageJSON(pluginName, pluginType)
+
+      return packageJSON.version
+    } catch {
+      return undefined
+    }
+  }
+
+  private async runOnSettingsChangedFromDatabase (npmName: string) {
+    // Read the settings rather than trusting the payload: they never travel through Redis
+    const plugin = await PluginModel.loadByNpmName(npmName)
+    if (!plugin) return
+
+    await this.onSettingsChanged(plugin.name, plugin.settings)
+  }
+
+  private notifyOtherProcesses (payload: PluginChangePayload) {
+    // `npm run plugin:install` and its siblings run without Redis: they only write the state the others converge to
+    if (!Redis.Instance.isInitialized()) return
+
+    Redis.Instance.publishPluginChange(payload)
+      .catch(err => logger.error('Cannot notify the other processes of a plugin change.', { err }))
   }
 
   // ###################### Private register ######################
