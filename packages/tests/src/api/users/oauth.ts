@@ -16,16 +16,24 @@ describe('Test oauth', function () {
   let server: PeerTubeServer
   let sqlCommand: SQLCommand
 
+  // The login rate limit counter is now shared through Redis and is not reset when the server restarts
+  // It must be re-applied on every run and be high enough to cover every login of this test file
+  const configOverride = {
+    rates_limit: {
+      login: {
+        max: 100
+      }
+    }
+  }
+
+  async function runServer (options: object = {}) {
+    await server.run({ ...configOverride, ...options })
+  }
+
   before(async function () {
     this.timeout(30000)
 
-    server = await createSingleServer(1, {
-      rates_limit: {
-        login: {
-          max: 30
-        }
-      }
-    })
+    server = await createSingleServer(1, configOverride)
 
     await setAccessTokensToServers([ server ])
 
@@ -153,7 +161,7 @@ describe('Test oauth', function () {
       await sqlCommand.setTokenField(server.accessToken, 'refreshTokenExpiresAt', new Date().toISOString())
 
       await killallServers([ server ])
-      await server.run()
+      await runServer()
 
       await server.users.getMyInfo({ expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -169,7 +177,7 @@ describe('Test oauth', function () {
       await sqlCommand.setTokenField(server.accessToken, 'refreshTokenExpiresAt', futureDate)
 
       await killallServers([ server ])
-      await server.run()
+      await runServer()
 
       const res = await server.login.refreshToken({ refreshToken: server.refreshToken })
       server.accessToken = res.body.access_token
@@ -360,7 +368,7 @@ describe('Test oauth', function () {
       this.timeout(60000)
 
       await server.kill()
-      await server.run()
+      await runServer()
 
       {
         const { data } = await server.login.listSessions({ userId: user10.id, token: user10Token, sort: 'createdAt' })
@@ -410,7 +418,7 @@ describe('Test oauth', function () {
 
     it('Should get root tokens when root auth is enabled', async function () {
       await server.kill()
-      await server.run({ user: { disable_root_auth: false } })
+      await runServer({ user: { disable_root_auth: false } })
 
       const res = await server.login.login({ expectedStatus: HttpStatusCode.OK_200 })
 
@@ -422,7 +430,7 @@ describe('Test oauth', function () {
 
     it('Should not allow root password login when root auth is disabled', async function () {
       await server.kill()
-      await server.run({ user: { disable_root_auth: true } })
+      await runServer({ user: { disable_root_auth: true } })
 
       const body = await server.login.login({ expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
@@ -444,7 +452,7 @@ describe('Test oauth', function () {
       this.timeout(120_000)
 
       await server.kill()
-      await server.run({
+      await runServer({
         oauth2: {
           token_lifetime: {
             access_token: '2 seconds',

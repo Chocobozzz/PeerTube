@@ -1,11 +1,11 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
 import { homedir } from 'os'
 import { join } from 'path'
-import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { PeerTubeRunnerProcess } from './peertube-runner-process.js'
 
 export async function checkTmpIsEmpty (server: PeerTubeServer) {
@@ -27,7 +27,8 @@ export async function checkDirectoryIsEmpty (server: PeerTubeServer, directory: 
   expect(directoryExists).to.be.true
 
   const files = await readdir(directoryPath)
-  const filtered = files.filter(f => exceptions.includes(f) === false)
+  // Hidden files are metadata
+  const filtered = files.filter(f => f.startsWith('.') === false && exceptions.includes(f) === false)
 
   expect(filtered).to.have.lengthOf(0)
 }
