@@ -47,7 +47,7 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
 
     plugin: buildPluginRelatedHelpers(pluginModel, npmName),
 
-    socket: buildSocketHelpers(),
+    socket: buildSocketHelpers(npmName),
 
     user: buildUserHelpers(),
 
@@ -293,9 +293,19 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
   }
 }
 
-function buildSocketHelpers () {
+function buildSocketHelpers (npmName: string) {
   return {
     sendNotification: (userId: number, notification: UserNotificationModelForApi) => {
+      if (typeof notification?.toFormattedJSON !== 'function') {
+        logger.error(
+          'Plugin %s tried to send a notification that is not a user notification model, ignoring it.',
+          npmName,
+          { userId }
+        )
+
+        return
+      }
+
       PeerTubeSocket.Instance.sendNotification(userId, notification)
     },
     sendVideoLiveNewState: (video: MVideo) => {

@@ -135,6 +135,7 @@ restart.
 More detailed documentation is available:
   * [Server code/architecture](https://docs.joinpeertube.org/contribute/architecture#server)
   * [Server development (adding a new feature...)](/support/doc/development/server.md)
+  * [Horizontal scalability (running multiple processes for one instance)](https://docs.joinpeertube.org/maintain/horizontal-scalability)
 
 ### Embed only
 

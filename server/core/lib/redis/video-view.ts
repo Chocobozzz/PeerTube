@@ -9,7 +9,7 @@ export function doesVideoSessionIdViewExist (sessionId: string, videoUUID: strin
   return keyExists(generateSessionIdViewKey(sessionId, videoUUID))
 }
 
-// Exported: also used as an in-memory LRU cache key by lib/stats/shared/video-stats.ts
+// Exported: also used as an in-memory LRU cache key by lib/stats/shared/video-counters.ts
 export function generateSessionIdViewKey (sessionId: string, videoUUID: string) {
   return `views-${videoUUID}-${sessionId}`
 }

@@ -91,9 +91,11 @@ class PeerTubeSocket {
 
     logger.debug('Sending user notification to user %d.', userId)
 
+    const notificationMessage = notification.toFormattedJSON()
+
     this.userNotificationsNamespace
       .in(this.buildUserRoom(userId))
-      .emit('new-notification', notification.toFormattedJSON())
+      .emit('new-notification', notificationMessage)
   }
 
   // ---------------------------------------------------------------------------

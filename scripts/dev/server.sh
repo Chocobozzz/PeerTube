@@ -19,11 +19,6 @@ mkdir -p "./dist/core/lib"
 npm run tsc -- -b -v --incremental server/tsconfig.json
 npm run tsc-alias:server
 
-cp -r "./server/core/static" "./server/core/assets" ./dist/core
-cp -r "./server/locales" ./dist
+bash ./scripts/build/server-assets.sh
 
-# Lua scripts are plain assets the TypeScript build ignores; copy them next to their compiled module
-mkdir -p ./dist/core/lib/redis
-cp -r "./server/core/lib/redis/lua" ./dist/core/lib/redis/
-
-./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run tsc-alias:server && NODE_ENV=dev node --inspect --enable-source-maps dist/server"' server/tsconfig.json
+./node_modules/.bin/tsc-watch --build --preserveWatchOutput --verbose --onSuccess 'sh -c "npm run tsc-alias:server && bash ./scripts/build/server-assets.sh && NODE_ENV=dev node --inspect --enable-source-maps dist/server"' server/tsconfig.json
