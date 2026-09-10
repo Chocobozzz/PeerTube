@@ -1,5 +1,5 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { Redis } from '@server/lib/redis.js'
+import { Redis } from '@server/lib/redis/index.js'
 import express from 'express'
 import { CONFIG } from '../../../initializers/config.js'
 import { sendVerifyRegistrationEmail, sendVerifyRegistrationRequestEmail, sendVerifyUserChangeEmail } from '../../../lib/user.js'
@@ -13,8 +13,10 @@ import {
 
 const askSendEmailLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.ENABLED,
+  name: 'ask-send-email',
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
+  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX,
+  failOnUnavailableRedis: true
 })
 
 const emailVerificationRouter = express.Router()

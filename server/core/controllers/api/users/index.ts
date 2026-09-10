@@ -13,7 +13,7 @@ import { createLogger } from '../../../helpers/logger.js'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { Emailer } from '../../../lib/emailer.js'
-import { Redis } from '../../../lib/redis.js'
+import { Redis } from '../../../lib/redis/index.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../../../lib/user.js'
 import {
   adminUsersSortValidator,
@@ -59,8 +59,10 @@ const auditLogger = auditLoggerFactory('users')
 
 const askResetPasswordRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.ENABLED,
+  name: 'ask-reset-password',
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
+  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX,
+  failOnUnavailableRedis: true
 })
 
 const usersRouter = express.Router()

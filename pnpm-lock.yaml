@@ -122,6 +122,9 @@ importers:
       '@smithy/node-http-handler':
         specifier: ^4.9.13
         version: 4.9.13
+      '@socket.io/redis-adapter':
+        specifier: ^8.3.0
+        version: 8.3.0(socket.io-adapter@2.5.8(bufferutil@4.1.0)(utf-8-validate@6.0.6))
       '@types/parse-torrent':
         specifier: ^11.0.1
         version: 11.0.1
@@ -308,6 +311,9 @@ importers:
       pug:
         specifier: ^3.0.4
         version: 3.0.4
+      rate-limit-redis:
+        specifier: ^6.0.1
+        version: 6.0.1(express-rate-limit@8.6.2(express@4.22.2))
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
@@ -4100,6 +4106,12 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
+  '@socket.io/redis-adapter@8.3.0':
+    resolution: {integrity: sha512-ly0cra+48hDmChxmIpnESKrc94LjRL80TEmZVscuQ/WWkRP81nNj8W8cCGMqbI4L6NCuAaPRSzZF1a9GlAxxnA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      socket.io-adapter: ^2.5.4
+
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
@@ -6173,6 +6185,15 @@ packages:
 
   debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
+  debug@4.3.7:
+    resolution: {integrity: sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==}
+    engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
     peerDependenciesMeta:
@@ -8971,6 +8992,9 @@ packages:
   nostics@1.2.0:
     resolution: {integrity: sha512-FGqEfhQjrvo1lL8KFifdTQiNwwQHJxC1jtYE1Rc54qF/jxONUNL+kC9gS1krX8Q65PgrQ5fCqH/I4NhWBvdSqg==}
 
+  notepack.io@3.0.1:
+    resolution: {integrity: sha512-TKC/8zH5pXIAMVQio2TvVDTtPRX+DJPHDqjRbxogtFiByHyzKmy96RA0JtCQJ+WouyyL4A10xomQzgbUT+1jCg==}
+
   npm-package-arg@14.0.0:
     resolution: {integrity: sha512-69XQh3k+dtGa1p+7RaR57IuG3rCko96xr/nUfN4yDYBXbTYICiWcOpsFKLN2GtGE9cyIljE+f1exnaYt9MvM+Q==}
     engines: {node: ^22.22.2 || ^24.15.0 || >=26.0.0}
@@ -9769,6 +9793,12 @@ packages:
   range-parser@1.3.0:
     resolution: {integrity: sha512-hek2mFQpPuI4E1BBKrSto+BU3e3x4xuarsbiwr3+lf7p44juvFMV0XFWQAP3xUyqXA4RrXLIoaSUGbSt056ZMw==}
     engines: {node: '>= 0.6'}
+
+  rate-limit-redis@6.0.1:
+    resolution: {integrity: sha512-qys7ulbh5X4Bohfjm6BXFWBiyzK6r5eGdFghPWZfJwggnDFTDwCIRq1u7tmN50vLTp4Kbe1h/ZAuBOn/hVpjtQ==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      express-rate-limit: '>= 8.6.0'
 
   raw-body@2.5.3:
     resolution: {integrity: sha512-s4VSOf6yN0rvbRZGxs8Om5CWj6seneMwK3oDb4lWDH0UPhWcxwOWw5+qk24bxq87szX1ydrwylIOp2uG1ojUpA==}
@@ -11172,6 +11202,10 @@ packages:
   uid-safe@2.1.5:
     resolution: {integrity: sha512-KPHm4VL5dDXKz01UuEd88Df+KzynaohSL9fBh096KWAxSKZQDI2uBrVqtvRM4rwrIrRRKsdLNML/lnaaVSRioA==}
     engines: {node: '>= 0.8'}
+
+  uid2@1.0.0:
+    resolution: {integrity: sha512-+I6aJUv63YAcY9n4mQreLUt0d4lvwkkopDNmpomkAUz0fAkEMV9pRWxN0EjhW1YfRhcuyHg2v3mwddCDW1+LFQ==}
+    engines: {node: '>= 4.0.0'}
 
   uint8-util@2.3.2:
     resolution: {integrity: sha512-u1c0/eiT1IW+c5+ogbmE2Fu2hmtJQPkuzDmXD/4crMU4FPMjkTkFnjJ2NN/9AsZ9YWcc7yE869uc3WB8wIZEEA==}
@@ -12689,7 +12723,7 @@ snapshots:
       devframe: 0.8.2(cac@7.0.0)(srvx@0.12.5)
       nostics: 1.2.0
     optionalDependencies:
-      vite: 8.2.1(@types/node@20.19.43)(@vitejs/devtools@0.4.12)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.101.0)(tsx@4.23.12)(yaml@2.9.0)
+      vite: 8.2.1(@types/node@26.2.0)(@vitejs/devtools@0.4.12)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.101.0)(tsx@4.23.12)(yaml@2.9.0)
 
   '@devframes/plugin-terminals@0.8.2(devframe@0.8.2(cac@7.0.0)(srvx@0.12.5))(vite@8.2.1)':
     dependencies:
@@ -12698,7 +12732,7 @@ snapshots:
       nostics: 1.2.0
       zigpty: 0.2.1
     optionalDependencies:
-      vite: 8.2.1(@types/node@20.19.43)(@vitejs/devtools@0.4.12)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.101.0)(tsx@4.23.12)(yaml@2.9.0)
+      vite: 8.2.1(@types/node@26.2.0)(@vitejs/devtools@0.4.12)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.101.0)(tsx@4.23.12)(yaml@2.9.0)
 
   '@digitalbazaar/http-client@4.4.0':
     dependencies:
@@ -14729,6 +14763,15 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
+  '@socket.io/redis-adapter@8.3.0(socket.io-adapter@2.5.8(bufferutil@4.1.0)(utf-8-validate@6.0.6))':
+    dependencies:
+      debug: 4.3.7
+      notepack.io: 3.0.1
+      socket.io-adapter: 2.5.8(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+      uid2: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
+
   '@standard-schema/spec@1.1.0': {}
 
   '@stylistic/eslint-plugin@5.10.0(eslint@10.8.1(jiti@2.7.0))':
@@ -15389,7 +15432,7 @@ snapshots:
       mlly: 1.8.2
       nostics: 1.2.0
       nypm: 0.6.9
-      vite: 8.2.1(@types/node@20.19.43)(@vitejs/devtools@0.4.12)(esbuild@0.28.1)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.101.0)(tsx@4.23.12)(yaml@2.9.0)
+      vite: 8.2.1(@types/node@26.2.0)(@vitejs/devtools@0.4.12)(esbuild@0.28.2)(jiti@2.7.0)(sass-embedded@1.100.0)(sass@1.101.0)(tsx@4.23.12)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@modelcontextprotocol/client'
       - '@modelcontextprotocol/server'
@@ -17234,6 +17277,10 @@ snapshots:
       ms: 2.0.0
 
   debug@3.2.7:
+    dependencies:
+      ms: 2.1.3
+
+  debug@4.3.7:
     dependencies:
       ms: 2.1.3
 
@@ -20624,6 +20671,8 @@ snapshots:
 
   nostics@1.2.0: {}
 
+  notepack.io@3.0.1: {}
+
   npm-package-arg@14.0.0:
     dependencies:
       hosted-git-info: 10.1.1
@@ -21584,6 +21633,10 @@ snapshots:
   range-parser@1.2.1: {}
 
   range-parser@1.3.0: {}
+
+  rate-limit-redis@6.0.1(express-rate-limit@8.6.2(express@4.22.2)):
+    dependencies:
+      express-rate-limit: 8.6.2(express@4.22.2)
 
   raw-body@2.5.3:
     dependencies:
@@ -23318,6 +23371,8 @@ snapshots:
     dependencies:
       random-bytes: 1.0.0
 
+  uid2@1.0.0: {}
+
   uint8-util@2.3.2: {}
 
   uint8array-extras@1.5.0: {}
@@ -23589,7 +23644,6 @@ snapshots:
       sass-embedded: 1.100.0
       tsx: 4.23.12
       yaml: 2.9.0
-    optional: true
 
   vm-browserify@1.1.2: {}
 

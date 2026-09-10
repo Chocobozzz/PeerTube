@@ -19,6 +19,7 @@ const clientsRouter = express.Router()
 
 const clientsRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.CLIENT.ENABLED,
+  name: 'client',
   windowMs: CONFIG.RATES_LIMIT.CLIENT.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.CLIENT.MAX
 })

@@ -1,23 +1,27 @@
-import { Server as HTTPServer } from 'http'
-import { Namespace, Server as SocketServer, Socket } from 'socket.io'
+import { LiveVideoEventPayload, LiveVideoEventType } from '@peertube/peertube-models'
+import { isDevInstance } from '@peertube/peertube-node-utils'
 import { isIdValid } from '@server/helpers/custom-validators/misc.js'
 import { Debounce } from '@server/helpers/debounce.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
 import { MRunner } from '@server/types/models/runners/index.js'
 import { UserNotificationModelForApi } from '@server/types/models/user/index.js'
-import { LiveVideoEventPayload, LiveVideoEventType } from '@peertube/peertube-models'
+import { createAdapter } from '@socket.io/redis-adapter'
+import { Server as HTTPServer } from 'http'
+import { Namespace, Server as SocketServer } from 'socket.io'
 import { createLogger } from '../helpers/logger.js'
 import { authenticateRunnerSocket, authenticateSocket } from '../middlewares/index.js'
-import { isDevInstance } from '@peertube/peertube-node-utils'
 
 const logger = createLogger()
+
+const RUNNERS_ROOM = 'runners'
 
 class PeerTubeSocket {
   private static instance: PeerTubeSocket
 
-  private userNotificationSockets: { [userId: number]: Socket[] } = {}
+  private userNotificationsNamespace: Namespace
   private liveVideosNamespace: Namespace
-  private readonly runnerSockets = new Set<Socket>()
+  private runnersNamespace: Namespace
 
   private constructor () {}
 
@@ -28,28 +32,24 @@ class PeerTubeSocket {
         : undefined
     })
 
-    io.of('/user-notifications')
+    // Broadcast to all socket.io instances if spawning multiple PeerTube processes
+    // Both are closed with the main Redis client when PeerTube shuts down
+    const pubClient = Redis.Instance.duplicateClient('socket.io pub')
+    const subClient = Redis.Instance.duplicateClient('socket.io sub')
+
+    io.adapter(createAdapter(pubClient, subClient, { key: Redis.Instance.getPrefix() + 'socket.io' }))
+
+    this.userNotificationsNamespace = io.of('/user-notifications')
       .use(authenticateSocket)
       .on('connection', socket => {
         const userId = socket.handshake.auth.user.id
 
         logger.debug('User %d connected to the notification system.', userId)
 
-        if (!this.userNotificationSockets[userId]) this.userNotificationSockets[userId] = []
-
-        this.userNotificationSockets[userId].push(socket)
+        void socket.join(this.buildUserRoom(userId))
 
         socket.on('disconnect', () => {
           logger.debug('User %d disconnected from SocketIO notifications.', userId)
-
-          const remaining = this.userNotificationSockets[userId]?.filter(s => s !== socket)
-
-          // Don't keep an empty array around forever: it would leak one entry per user that ever connected
-          if (!remaining || remaining.length === 0) {
-            delete this.userNotificationSockets[userId]
-          } else {
-            this.userNotificationSockets[userId] = remaining
-          }
         })
       })
 
@@ -70,33 +70,30 @@ class PeerTubeSocket {
         })
       })
 
-    io.of('/runners')
+    this.runnersNamespace = io.of('/runners')
       .use(authenticateRunnerSocket)
       .on('connection', socket => {
         const runner: MRunner = socket.handshake.auth.runner
 
         logger.debug(`New runner "${runner.name}" connected to the notification system.`)
 
-        this.runnerSockets.add(socket)
+        void socket.join(RUNNERS_ROOM)
 
         socket.on('disconnect', () => {
           logger.debug(`Runner "${runner.name}" disconnected from the notification system.`)
-
-          this.runnerSockets.delete(socket)
         })
       })
   }
 
   sendNotification (userId: number, notification: UserNotificationModelForApi) {
-    const sockets = this.userNotificationSockets[userId]
-    if (!sockets) return
+    // The socket server may never be started in this process
+    if (!this.userNotificationsNamespace) return
 
     logger.debug('Sending user notification to user %d.', userId)
 
-    const notificationMessage = notification.toFormattedJSON()
-    for (const socket of sockets) {
-      socket.emit('new-notification', notificationMessage)
-    }
+    this.userNotificationsNamespace
+      .in(this.buildUserRoom(userId))
+      .emit('new-notification', notification.toFormattedJSON())
   }
 
   // ---------------------------------------------------------------------------
@@ -137,11 +134,18 @@ class PeerTubeSocket {
 
   @Debounce({ timeoutMS: 1000 })
   sendAvailableJobsPingToRunners () {
-    logger.debug(`Sending available-jobs notification to ${this.runnerSockets.size} runner sockets`)
+    // The socket server may never be started in this process (a job-only or secondary process)
+    if (!this.runnersNamespace) return
 
-    for (const runners of this.runnerSockets) {
-      runners.emit('available-jobs')
-    }
+    logger.debug('Sending available-jobs notification to runner sockets')
+
+    this.runnersNamespace
+      .in(RUNNERS_ROOM)
+      .emit('available-jobs')
+  }
+
+  private buildUserRoom (userId: number) {
+    return 'user-' + userId
   }
 
   static get Instance () {

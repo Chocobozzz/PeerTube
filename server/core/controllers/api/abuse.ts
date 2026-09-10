@@ -43,6 +43,7 @@ abuseRouter.use(apiRateLimiter)
 // So also limit reports per user
 const reportAbuseRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.REPORT_ABUSE.ENABLED,
+  name: 'report-abuse',
   windowMs: CONFIG.RATES_LIMIT.REPORT_ABUSE.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.REPORT_ABUSE.MAX,
   perUserKey: true
