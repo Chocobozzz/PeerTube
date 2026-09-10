@@ -14,6 +14,7 @@ const logger = createLogger()
 
 const createClientLogRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.RECEIVE_CLIENT_LOG.ENABLED,
+  name: 'receive-client-log',
   windowMs: CONFIG.RATES_LIMIT.RECEIVE_CLIENT_LOG.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.RECEIVE_CLIENT_LOG.MAX
 })

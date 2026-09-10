@@ -23,6 +23,7 @@ const pluginsRouter = express.Router()
 
 const pluginsRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.PLUGINS.ENABLED,
+  name: 'plugins',
   windowMs: CONFIG.RATES_LIMIT.PLUGINS.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.PLUGINS.MAX
 })
