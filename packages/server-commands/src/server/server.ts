@@ -84,6 +84,17 @@ export class PeerTubeServer {
 
   parallel?: boolean
   internalServerNumber: number
+
+  // Used to choose the appropriate configuration file based on the instance of the server
+  // Default to `internalServerNumber` but can be overridden to test secondary servers
+  nodeAppInstance?: string
+
+  storage = {
+    logsDirectory: 'logs'
+  }
+
+  // Config this process was run with, so another process of the same instance can reuse it
+  configOverride?: any
   adminEmail: string
 
   serverNumber?: number
@@ -176,6 +187,8 @@ export class PeerTubeServer {
 
   channelCollaborators?: ChannelCollaboratorsCommand
 
+  private secondary = false
+
   constructor (options: { serverNumber: number } | { url: string }) {
     if ((options as any).url) {
       this.setUrl((options as any).url)
@@ -204,6 +217,7 @@ export class PeerTubeServer {
     this.parallel = parallelTests()
 
     this.internalServerNumber = this.parallel ? this.randomServer() : this.serverNumber
+    this.nodeAppInstance = this.internalServerNumber.toString()
     this.rtmpPort = this.parallel ? this.randomRTMP() : 1936
     this.rtmpsPort = this.parallel ? this.randomRTMP() : 1937
     this.port = 9000 + this.internalServerNumber
@@ -226,6 +240,29 @@ export class PeerTubeServer {
     const testDirectory = 'test' + this.internalServerNumber
 
     return join(root(), testDirectory, directoryName)
+  }
+
+  setSecondary (primary: PeerTubeServer) {
+    this.serverNumber = primary.serverNumber
+    this.internalServerNumber = primary.internalServerNumber
+    this.parallel = primary.parallel
+
+    this.rtmpPort = primary.rtmpPort
+    this.rtmpsPort = primary.rtmpsPort
+
+    // Reuse the credentials of the primary: it is the same instance
+    this.store = primary.store
+    this.accessToken = primary.accessToken
+    this.refreshToken = primary.refreshToken
+
+    this.secondary = true
+
+    // Use a dedicated config file
+    this.nodeAppInstance = this.internalServerNumber + '-secondary'
+  }
+
+  isSecondaryServer () {
+    return this.secondary
   }
 
   async flushAndRun (configOverride?: object, options: RunServerOptions = {}) {
@@ -257,10 +294,12 @@ export class PeerTubeServer {
       configOverride = merge(configOverride, configOverrideArg)
     }
 
+    this.configOverride = configOverride
+
     // Share the environment
     const env = { ...process.env }
     env['NODE_ENV'] = 'test'
-    env['NODE_APP_INSTANCE'] = this.internalServerNumber.toString()
+    env['NODE_APP_INSTANCE'] = this.nodeAppInstance
     env['NODE_CONFIG'] = JSON.stringify(configOverride)
 
     if (options.env) {
@@ -295,7 +334,13 @@ export class PeerTubeServer {
         } catch { /* empty */ }
       }
 
+      // A process that dies during its bootstrap reports on stderr
+      const onStderr = (data: any) => {
+        aggregatedLogs += data.toString()
+      }
+
       this.app.on('exit', onPeerTubeExit)
+      this.app.stderr.on('data', onStderr)
       process.on('exit', onParentExit)
 
       this.app.stdout.on('data', function onStdout (data) {
@@ -330,6 +375,7 @@ export class PeerTubeServer {
         } else {
           process.removeListener('exit', onParentExit)
           self.app.stdout.removeListener('data', onStdout)
+          self.app.stderr.removeListener('data', onStderr)
           self.app.removeListener('exit', onPeerTubeExit)
         }
 
@@ -382,11 +428,11 @@ export class PeerTubeServer {
   }
 
   private async assignCustomConfigFile () {
-    if (this.internalServerNumber === this.serverNumber) return
+    if (this.nodeAppInstance === this.serverNumber.toString()) return
 
     const basePath = join(root(), 'config')
 
-    const tmpConfigFile = join(basePath, `test-${this.internalServerNumber}.yaml`)
+    const tmpConfigFile = join(basePath, `test-${this.nodeAppInstance}.yaml`)
     await copy(join(basePath, `test-${this.serverNumber}.yaml`), tmpConfigFile)
 
     this.customConfigFile = tmpConfigFile
@@ -429,7 +475,8 @@ export class PeerTubeServer {
         cache: this.getDirectoryPath('cache') + '/',
         plugins: this.getDirectoryPath('plugins') + '/',
         uploads: this.getDirectoryPath('uploads') + '/',
-        well_known: this.getDirectoryPath('well-known') + '/'
+        well_known: this.getDirectoryPath('well-known') + '/',
+        client_overrides: this.getDirectoryPath('client-overrides') + '/'
       },
       admin: {
         email: this.buildEmail()

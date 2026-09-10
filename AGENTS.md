@@ -388,6 +388,8 @@ Export to Jaeger (tracing) or Prometheus (metrics) is configurable in
 
 - [support/doc/development/server.md](support/doc/development/server.md)
   — Server code conventions and new-feature walkthrough
+- [Horizontal scalability](https://docs.joinpeertube.org/maintain/horizontal-scalability)
+  — Running several processes (`--role=secondary`) for one instance
 - [support/doc/development/tests.md](support/doc/development/tests.md)
   — Test setup and execution guide
 - [support/doc/plugins/guide.md](support/doc/plugins/guide.md)

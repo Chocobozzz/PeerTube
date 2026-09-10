@@ -103,8 +103,9 @@ elif [ "$1" = "api-2" ]; then
     # plugins test needs an HTML file
     serverFiles=$(findTestFiles ./packages/tests/dist/api/server plugins.js)
     usersFiles=$(findTestFiles ./packages/tests/dist/api/users)
+    horizontalScalabilityFiles=$(findTestFiles ./packages/tests/dist/api/horizontal-scalability)
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $liveFiles $serverFiles $usersFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $liveFiles $serverFiles $usersFiles $horizontalScalabilityFiles
 elif [ "$1" = "api-3" ]; then
     npm run build:server
     npm run build:tests
