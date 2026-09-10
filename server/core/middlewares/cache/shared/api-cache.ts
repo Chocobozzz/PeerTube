@@ -2,10 +2,9 @@
 // We duplicated the library because it is unmaintened and prevent us to upgrade to recent NodeJS versions
 
 import { HttpStatusCodeType } from '@peertube/peertube-models'
-import { isTestInstance } from '@peertube/peertube-node-utils'
-import { parseDurationToMs } from '@server/helpers/core-utils.js'
+import { isTestInstance, parseDurationToMs } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
-import { Redis } from '@server/lib/redis.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { asyncMiddleware } from '@server/middlewares/index.js'
 import express from 'express'
 import { OutgoingHttpHeaders } from 'http'

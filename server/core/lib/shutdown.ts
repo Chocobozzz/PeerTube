@@ -4,7 +4,7 @@ import { SHUTDOWN_TIMEOUTS } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { LiveManager } from './live/live-manager.js'
-import { Redis } from './redis.js'
+import { Redis } from './redis/index.js'
 import { AbstractScheduler } from './schedulers/abstract-scheduler.js'
 
 const logger = createLogger()

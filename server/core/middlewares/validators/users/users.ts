@@ -34,7 +34,7 @@ import { isVideoChannelUsernameValid } from '../../../helpers/custom-validators/
 import { createLogger } from '../../../helpers/logger.js'
 import { isSecretEqual } from '../../../helpers/peertube-crypto.js'
 import { isThemeRegistered } from '../../../lib/plugins/theme-utils.js'
-import { Redis } from '../../../lib/redis.js'
+import { Redis } from '../../../lib/redis/index.js'
 import {
   areValidationErrors,
   checkEmailDoesNotAlreadyExist,

@@ -26,11 +26,13 @@ export function buildRedisClientOptions (options: {
   const connectionName = [ 'PeerTube', name ].join('')
   // Could be slow since node use sync calls to compile and load PeerTube modules
   const connectTimeout = 20000
+  const keepAlive = 30000 // Probe idle connections so dead sockets are detected instead of hanging until ETIMEDOUT
 
   if (get<boolean>('redis.sentinel.enabled', false) === true) {
     return {
       connectionName,
       connectTimeout,
+      keepAlive,
       enableTLSForSentinelMode: get<boolean>('redis.sentinel.enable_tls', false),
       sentinelTLS: buildTLS(config, 'redis.sentinel.enable_tls', 'redis.sentinel.tls_settings'),
       sentinelPassword: get<string>('redis.sentinel.password', null),
@@ -45,6 +47,7 @@ export function buildRedisClientOptions (options: {
   return {
     connectionName,
     connectTimeout,
+    keepAlive,
     password: get<string>('redis.auth', null),
     db: get<number>('redis.db', null),
     host: get<string>('redis.hostname', null),
