@@ -28778,41 +28778,41 @@ color: red;
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3115242563270499472" datatype="html">
+      <trans-unit id="3115242563270499472" datatype="html" xml:space="preserve">
         <source>Transcoding in progress</source>
-        <target state="new">Transcoding in progress</target>
+        <target state="translated">Transcodificación en curso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9094272343501770717" datatype="html">
+      <trans-unit id="9094272343501770717" datatype="html" xml:space="preserve">
         <source>Import in progress</source>
-        <target state="new">Import in progress</target>
+        <target state="translated">Importación en curso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8473873393873007257" datatype="html">
+      <trans-unit id="8473873393873007257" datatype="html" xml:space="preserve">
         <source>Your remote video is being imported.</source>
-        <target state="new">Your remote video is being imported.</target>
+        <target state="translated">Se está importando tu vídeo a distancia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="762981882514577877" datatype="html">
+      <trans-unit id="762981882514577877" datatype="html" xml:space="preserve">
         <source>The remote video is being imported, it will be available when the import is complete.</source>
-        <target state="new">The remote video is being imported, it will be available when the import is complete.</target>
+        <target state="translated">Se está importando el vídeo a distancia; estará disponible cuando finalice la importación.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1538274871636465412" datatype="html">
+      <trans-unit id="1538274871636465412" datatype="html" xml:space="preserve">
         <source>Review your import</source>
-        <target state="new">Review your import</target>
+        <target state="translated">Revisa tu importación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">83</context>
@@ -28822,25 +28822,25 @@ color: red;
           <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7751099270026389911" datatype="html">
+      <trans-unit id="7751099270026389911" datatype="html" xml:space="preserve">
         <source>The remote video failed to import, it will not be available.</source>
-        <target state="new">The remote video failed to import, it will not be available.</target>
+        <target state="translated">No se ha podido importar el vídeo a distancia, por lo que no estará disponible.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3974568873959756135" datatype="html">
+      <trans-unit id="3974568873959756135" datatype="html" xml:space="preserve">
         <source>Your remote video failed to import.</source>
-        <target state="new">Your remote video failed to import.</target>
+        <target state="translated">No se ha podido importar tu vídeo a distancia.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6132063630865598642" datatype="html">
+      <trans-unit id="6132063630865598642" datatype="html" xml:space="preserve">
         <source>Moving video files</source>
-        <target state="new">Moving video files</target>
+        <target state="translated">Trasladando archivos de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">108</context>
@@ -28850,25 +28850,25 @@ color: red;
           <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8780054161177843365" datatype="html">
+      <trans-unit id="8780054161177843365" datatype="html" xml:space="preserve">
         <source>The video is being moved to the file system.</source>
-        <target state="new">The video is being moved to the file system.</target>
+        <target state="translated">El vídeo se está trasladando al sistema de archivos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6414709216834299238" datatype="html">
+      <trans-unit id="6414709216834299238" datatype="html" xml:space="preserve">
         <source>Failed to move video files to the platform file system.</source>
-        <target state="new">Failed to move video files to the platform file system.</target>
+        <target state="translated">No se ha podido trasladar los archivos de vídeo al sistema de archivos de la plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6106629040656502843" datatype="html">
+      <trans-unit id="6106629040656502843" datatype="html" xml:space="preserve">
         <source>Failed to move video files</source>
-        <target state="new">Failed to move video files</target>
+        <target state="translated">No se ha podido trasladar los archivos de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">119</context>
@@ -28878,49 +28878,49 @@ color: red;
           <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5947879152561825850" datatype="html">
+      <trans-unit id="5947879152561825850" datatype="html" xml:space="preserve">
         <source>The video is being moved to an external storage.</source>
-        <target state="new">The video is being moved to an external storage.</target>
+        <target state="translated">El vídeo se está trasladando a un dispositivo de almacenamiento externo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">133</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="542526490067261846" datatype="html">
+      <trans-unit id="542526490067261846" datatype="html" xml:space="preserve">
         <source>Failed to move video files to an external storage.</source>
-        <target state="new">Failed to move video files to an external storage.</target>
+        <target state="translated">No se ha podido mover los archivos de vídeo a un dispositivo de almacenamiento externo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5910852061199012281" datatype="html">
+      <trans-unit id="5910852061199012281" datatype="html" xml:space="preserve">
         <source>Studio edition in progress</source>
-        <target state="new">Studio edition in progress</target>
+        <target state="translated">Edición de estudio en curso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7170696328218243679" datatype="html">
+      <trans-unit id="7170696328218243679" datatype="html" xml:space="preserve">
         <source>Failure during transcoding of your video files</source>
-        <target state="new">Failure during transcoding of your video files</target>
+        <target state="translated">Hubo un error durante la transcodificación de tus archivos de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1507480217203985673" datatype="html">
+      <trans-unit id="1507480217203985673" datatype="html" xml:space="preserve">
         <source>Blocked video</source>
-        <target state="new">Blocked video</target>
+        <target state="translated">Vídeo bloqueado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6754324355763488765" datatype="html">
+      <trans-unit id="6754324355763488765" datatype="html" xml:space="preserve">
         <source>Your video has been blocked by the platform</source>
-        <target state="new">Your video has been blocked by the platform</target>
+        <target state="translated">Tu vídeo ha sido bloqueado por la plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">199</context>
@@ -28942,17 +28942,17 @@ color: red;
           <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="830640179985537714" datatype="html">
+      <trans-unit id="830640179985537714" datatype="html" xml:space="preserve">
         <source>You watched <x id="PH" equiv-text="progressPercent"/>% of this video</source>
-        <target state="new">You watched <x id="PH" equiv-text="progressPercent"/>% of this video</target>
+        <target state="translated">Has visto el <x id="PH" equiv-text="progressPercent"/>% de este vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="33149636091572968" datatype="html">
+      <trans-unit id="33149636091572968" datatype="html" xml:space="preserve">
         <source>Load more</source>
-        <target state="new">Load more</target>
+        <target state="translated">Cargar más</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
           <context context-type="linenumber">86</context>
@@ -29006,9 +29006,9 @@ color: red;
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4103450444995968891" datatype="html">
+      <trans-unit id="4103450444995968891" datatype="html" xml:space="preserve">
         <source>Cannot load more videos. Please try again later.</source>
-        <target state="new">Cannot load more videos. Please try again later.</target>
+        <target state="translated">No se pueden cargar más vídeos. Inténtalo de nuevo más tarde.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
           <context context-type="linenumber">369</context>
@@ -29018,9 +29018,9 @@ color: red;
           <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9122805855378198286" datatype="html">
+      <trans-unit id="9122805855378198286" datatype="html" xml:space="preserve">
         <source>Update videos in playlists</source>
-        <target state="new">Update videos in playlists</target>
+        <target state="translated">Actualizar vídeos en las listas de reproducción</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-playlist/bulk-update-videos-in-playlist-modal.component.html</context>
           <context context-type="linenumber">3,5</context>
@@ -29112,17 +29112,17 @@ color: red;
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8657461348142878243" datatype="html">
+      <trans-unit id="8657461348142878243" datatype="html" xml:space="preserve">
         <source>Preferred language for the web interface and for emails</source>
-        <target state="new">Preferred language for the web interface and for emails</target>
+        <target state="translated">Idioma preferido para la interfaz web y para los correos electrónicos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">5,7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8736159932649611942" datatype="html">
+      <trans-unit id="8736159932649611942" datatype="html" xml:space="preserve">
         <source>You can help us to translate the platform by consulting <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>this guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new"> You can help us to translate the platform by consulting <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>this guide<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Puedes ayudarnos a traducir la plataforma al consultar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a           class=&quot;link-primary&quot;           target=&quot;_blank&quot;           rel=&quot;noreferrer noopener&quot;           href=&quot;https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/translation.md#how-to&quot;         &gt;"/>esta guía<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-interface-settings.component.html</context>
           <context context-type="linenumber">8,15</context>
@@ -29152,17 +29152,17 @@ color: red;
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1687829864887445073" datatype="html">
+      <trans-unit id="1687829864887445073" datatype="html" xml:space="preserve">
         <source>SCHEDULED LIVE</source>
-        <target state="new">SCHEDULED LIVE</target>
+        <target state="translated">DIRECTO PROGRAMADO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="704703576647033533" datatype="html">
+      <trans-unit id="704703576647033533" datatype="html" xml:space="preserve">
         <source>WAIT LIVE</source>
-        <target state="new">WAIT LIVE</target>
+        <target state="translated">DIRECTO EN ESPERA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.html</context>
           <context context-type="linenumber">74</context>
@@ -29264,9 +29264,9 @@ color: red;
           <context context-type="linenumber">574</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3796514789644247978" datatype="html">
+      <trans-unit id="3796514789644247978" datatype="html" xml:space="preserve">
         <source>Public domain mark</source>
-        <target state="new">Public domain mark</target>
+        <target state="translated">Símbolo de dominio público</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">576</context>
