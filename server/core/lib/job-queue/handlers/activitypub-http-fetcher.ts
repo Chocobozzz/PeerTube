@@ -25,6 +25,8 @@ async function processActivityPubHttpFetcher (job: Job) {
   let account: MAccountDefault
   if (payload.accountId) account = await AccountModel.load(payload.accountId)
 
+  const context = [ video?.url, video?.uuid, account?.Actor.url ].filter(Boolean)
+
   const fetcherType: { [id in FetchType]: (items: any[]) => Promise<any> } = {
     'activity': items => processActivities(items, { outboxUrl: payload.uri, fromFetch: true }),
     'video-shares': items => logger.withContext([ video.uuid ], () => addVideoShares(items, video)),
@@ -37,7 +39,9 @@ async function processActivityPubHttpFetcher (job: Job) {
     'video-comments': crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
   }
 
-  return crawlCollectionPage(payload.uri, fetcherType[payload.type], cleanerType[payload.type], payload.abortSignal)
+  return logger.withContext(context, () => {
+    return crawlCollectionPage(payload.uri, fetcherType[payload.type], cleanerType[payload.type], payload.abortSignal)
+  })
 }
 
 // ---------------------------------------------------------------------------

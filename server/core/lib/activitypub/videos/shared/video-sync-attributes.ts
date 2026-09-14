@@ -20,19 +20,21 @@ export type SyncParam = {
   refreshVideo?: boolean
 }
 
-export async function syncVideoExternalAttributes (
+export function syncVideoExternalAttributes (
   video: MVideo,
   fetchedVideo: VideoObject,
   syncParam: Pick<SyncParam, 'rates' | 'shares' | 'comments'>
 ) {
-  logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
+  return logger.withContext([ video.uuid, video.url ], async () => {
+    logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
-  const ratePromise = updateVideoRates(video, fetchedVideo)
-  if (syncParam.rates) await ratePromise
+    const ratePromise = updateVideoRates(video, fetchedVideo)
+    if (syncParam.rates) await ratePromise
 
-  await syncShares(video, fetchedVideo, syncParam.shares)
+    await syncShares(video, fetchedVideo, syncParam.shares)
 
-  await syncComments(video, fetchedVideo, syncParam.comments)
+    await syncComments(video, fetchedVideo, syncParam.comments)
+  })
 }
 
 export async function updateVideoRates (video: MVideo, fetchedVideo: VideoObject) {
