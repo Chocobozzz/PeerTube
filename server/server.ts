@@ -169,7 +169,8 @@ import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
-import { ApplicationModel } from '@server/models/application/application.js'
+import { ApplicationModel, clearServerActorCache } from '@server/models/application/application.js'
+import { ModelCache } from '@server/models/shared/model-cache.js'
 import {
   activityPubRouter,
   apiRouter,
@@ -196,6 +197,7 @@ import { installPrimary, installSecondary } from './core/initializers/installer.
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
 import { Emailer } from './core/lib/emailer.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
+import { ClientHtml } from './core/lib/html/client-html.js'
 import { JobQueue } from './core/lib/job-queue/index.js'
 import { LiveManager } from './core/lib/live/index.js'
 import { PeerTubeSocket } from './core/lib/peertube-socket.js'
@@ -408,6 +410,15 @@ async function startApplication () {
 
   // Propagating token revocations to evict them from the LRU cache
   await TokensCache.Instance.listenForInvalidations()
+
+  // Keep model cache in sync with the changes handled by the other ones
+  await ModelCache.Instance.listenForInvalidations()
+
+  ModelCache.Instance.registerCacheTypeClearedHandler('server-account', () => {
+    clearServerActorCache()
+
+    ClientHtml.invalidateCache()
+  })
 
   JobQueue.Instance.init()
 
