@@ -24,6 +24,7 @@ import {
 } from '@peertube/peertube-models'
 import { peertubeTruncate, uuidToShort } from '@peertube/peertube-node-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { Memoize } from '@server/helpers/memoize.js'
 import { getPrivaciesForFederation } from '@server/helpers/video.js'
 import { MVideoToFederate, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
@@ -859,7 +860,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       const video = await this.loadAP(instance.id, options.transaction)
 
       this.stopLiveIfNeeded(video)
-      this.invalidateCache(video)
+
+      afterCommitIfTransaction(options.transaction, () => this.invalidateCache(video))
 
       await this.sendDelete(video, options.transaction)
       await this.saveEssentialDataToAbuses(video, options.transaction)

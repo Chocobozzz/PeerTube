@@ -6,6 +6,8 @@ import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
+import * as modelCacheInvalidation from './model-cache-invalidation.js'
+import { ModelCacheInvalidationPayload } from './model-cache-invalidation.js'
 import * as pluginChanges from './plugin-changes.js'
 import { PluginChangePayload } from './plugin-changes.js'
 import {
@@ -248,6 +250,14 @@ export class Redis {
 
   subscribeToPluginChanges (handler: (payload: PluginChangePayload) => void) {
     return pluginChanges.subscribeToPluginChanges(handler)
+  }
+
+  publishModelCacheInvalidation (payload: ModelCacheInvalidationPayload) {
+    return modelCacheInvalidation.publishModelCacheInvalidation(payload)
+  }
+
+  subscribeToModelCacheInvalidation (handler: (payload: ModelCacheInvalidationPayload) => void) {
+    return modelCacheInvalidation.subscribeToModelCacheInvalidation(handler)
   }
 
   /* ************ Video viewer counters ************ */

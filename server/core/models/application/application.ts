@@ -24,6 +24,11 @@ export const getServerActor = memoizee(async function () {
   return actor
 }, { promise: true })
 
+// The instance actor images can be changed by an administrator on another process of this platform
+export function clearServerActorCache () {
+  getServerActor.clear()
+}
+
 export function getServerAccount () {
   return getServerActor().then(actor => actor.Account)
 }

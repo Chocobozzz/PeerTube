@@ -1175,6 +1175,10 @@ export const LRU_CACHE = {
   },
   TRACKER_IPS: {
     MAX_SIZE: 100_000
+  },
+  MODEL_CACHE: {
+    MAX_SIZE: 10_000,
+    TTL: parseDurationToMs('1 hour') // If the process misses an invalidation
   }
 }
 
