@@ -11,6 +11,7 @@ import {
   ServerHookName
 } from '@peertube/peertube-models'
 import { decachePlugin } from '@server/helpers/decache.js'
+import { isSecondaryProcess } from '@server/initializers/process-role.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import express from 'express'
 import { ensureDir, outputFile, pathExists, readJSON } from 'fs-extra/esm'
@@ -351,6 +352,8 @@ export class PluginManager implements ServerHook {
     this.sortHooksByPriority()
 
     this.registrationDone = true
+
+    await this.publishRegisteredPlugins()
   }
 
   async removeUnsecurePluginsIfNeededBeforeRegistration () {
@@ -440,6 +443,7 @@ export class PluginManager implements ServerHook {
         await this.registerPluginOrTheme(plugin)
       }
 
+      await this.publishRegisteredPlugins()
       this.notifyOtherProcesses({ type: 'installed-plugins-changed' })
     } catch (rootErr) {
       logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
@@ -511,6 +515,7 @@ export class PluginManager implements ServerHook {
 
     await removeNpmPlugin(npmName)
 
+    await this.publishRegisteredPlugins()
     this.notifyOtherProcesses({ type: 'installed-plugins-changed' })
 
     logger.info('Plugin %s uninstalled.', npmName)
@@ -522,47 +527,45 @@ export class PluginManager implements ServerHook {
 
   // ###################### Synchronization ######################
 
-  syncPlugins (options: {
+  // Returns the npm names of the enabled plugins and themes this sync read from the database
+  async syncPlugins (options: {
     register: boolean
-  }) {
-    const { register } = options
 
-    return this.pluginSyncQueue.add(async () => {
+    // Called when this process failed to register a plugin the primary process runs
+    onDivergedFromPrimary?: (npmNames: string[]) => void
+  }): Promise<Set<string>> {
+    const { register, onDivergedFromPrimary } = options
+
+    let dbNpmNames = new Set<string>()
+
+    await this.pluginSyncQueue.add(async () => {
       const dbPlugins = await PluginModel.listEnabledPluginsAndThemes()
-      const dbNpmNames = new Set(dbPlugins.map(p => PluginModel.buildNpmName(p.name, p.type)))
+      dbNpmNames = new Set(dbPlugins.map(p => PluginModel.buildNpmName(p.name, p.type)))
 
       await this.installMissingPlugins(dbPlugins)
       const removed = await this.removeStalePlugins(dbNpmNames)
 
       if (!register) return
 
-      let registered = false
+      await this.registerSyncedPlugins(dbPlugins, removed)
 
-      for (const plugin of dbPlugins) {
-        const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
-
-        const alreadyRegistered = this.getRegisteredPluginOrTheme(npmName)
-        if (alreadyRegistered?.version === plugin.version) continue
-
-        try {
-          if (alreadyRegistered) await this.unregister(npmName)
-
-          await this.registerPluginOrTheme(plugin)
-          registered = true
-        } catch (err) {
-          logger.error('Cannot register plugin %s after syncing it.', npmName, { err })
-        }
+      // Inside the queue, so a sync still waiting for its turn cannot make its plugins look like failures
+      if (onDivergedFromPrimary) {
+        const npmNames = await this.listPluginsOnlyRegisteredByPrimary(dbNpmNames)
+        if (npmNames.length !== 0) onDivergedFromPrimary(npmNames)
       }
-
-      if (registered) this.sortHooksByPriority()
-      if (registered || removed) await this.regeneratePluginGlobalCSS()
     })
+
+    return dbNpmNames
   }
 
-  async listenForPluginChanges () {
+  async listenForPluginChanges (options: {
+    // Called when this process failed to register a plugin the primary process runs
+    onDivergedFromPrimary: (npmNames: string[]) => void
+  }) {
     await Redis.Instance.subscribeToPluginChanges((payload: PluginChangePayload) => {
       if (payload?.type === 'installed-plugins-changed') {
-        this.syncPlugins({ register: true })
+        this.syncPlugins({ register: true, onDivergedFromPrimary: options.onDivergedFromPrimary })
           .catch(err => logger.error('Cannot sync plugins after a change made by another process.', { err }))
 
         return
@@ -573,9 +576,56 @@ export class PluginManager implements ServerHook {
           .catch(err => logger.error('Cannot run the settings change callbacks of %s.', payload.npmName, { err }))
       }
     })
+
+    // Catch up with the changes notified before the subscription, while this process was booting
+    await this.syncPlugins({ register: true, onDivergedFromPrimary: options.onDivergedFromPrimary })
+  }
+
+  // The plugins and themes the primary process runs, but this process failed to register
+  // Only the plugins a sync installed are compared
+  async listPluginsOnlyRegisteredByPrimary (syncedNpmNames: Set<string>) {
+    try {
+      const primaryNpmNames = await Redis.Instance.getPrimaryRegisteredPlugins()
+      if (!primaryNpmNames) return []
+
+      // The list of the primary can be older than the database, while it restarts for example: only consider enabled plugins
+      const enabled = await PluginModel.listEnabledPluginsAndThemes()
+      const enabledNpmNames = new Set(enabled.map(p => PluginModel.buildNpmName(p.name, p.type)))
+
+      return primaryNpmNames.filter(npmName => {
+        return syncedNpmNames.has(npmName) && enabledNpmNames.has(npmName) && !this.isRegistered(npmName)
+      })
+    } catch (err) {
+      logger.error('Cannot compare the registered plugins with the ones of the primary process.', { err })
+
+      return []
+    }
   }
 
   // ###################### Private synchronization ######################
+
+  private async registerSyncedPlugins (dbPlugins: PluginModel[], removed: boolean) {
+    let registered = false
+
+    for (const plugin of dbPlugins) {
+      const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+
+      const alreadyRegistered = this.getRegisteredPluginOrTheme(npmName)
+      if (alreadyRegistered?.version === plugin.version) continue
+
+      try {
+        if (alreadyRegistered) await this.unregister(npmName)
+
+        await this.registerPluginOrTheme(plugin)
+        registered = true
+      } catch (err) {
+        logger.error('Cannot register plugin %s after syncing it.', npmName, { err })
+      }
+    }
+
+    if (registered) this.sortHooksByPriority()
+    if (registered || removed) await this.regeneratePluginGlobalCSS()
+  }
 
   private async installMissingPlugins (dbPlugins: PluginModel[]) {
     for (const plugin of dbPlugins) {
@@ -651,6 +701,17 @@ export class PluginManager implements ServerHook {
     if (!plugin) return
 
     await this.onSettingsChanged(plugin.name, plugin.settings)
+  }
+
+  // Lets a secondary process detect that it failed to register a plugin the primary runs
+  private async publishRegisteredPlugins () {
+    if (isSecondaryProcess() || !Redis.Instance.isInitialized()) return
+
+    try {
+      await Redis.Instance.setPrimaryRegisteredPlugins(Object.keys(this.registeredPlugins))
+    } catch (err) {
+      logger.error('Cannot publish the registered plugins to the other processes.', { err })
+    }
   }
 
   private notifyOtherProcesses (payload: PluginChangePayload) {

@@ -221,7 +221,7 @@ import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-sched
 import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
 import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watched-words-subscriptions-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
-import { registerGracefulShutdown } from './core/lib/shutdown.js'
+import { registerGracefulShutdown, shutdownAndExit } from './core/lib/shutdown.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
 
@@ -483,9 +483,11 @@ async function startApplication () {
     // The primary owns which plugins are installed and the secondary keeps in sync from the primary in its own plugin directory
     if (cliOptions.plugins) {
       try {
+        let syncedNpmNames: Set<string>
+
         if (secondary) {
           // Registered below, after the native plugins rebuild
-          await PluginManager.Instance.syncPlugins({ register: false })
+          syncedNpmNames = await PluginManager.Instance.syncPlugins({ register: false })
         } else {
           await PluginManager.Instance.removeUnsecurePluginsIfNeededBeforeRegistration()
         }
@@ -494,11 +496,21 @@ async function startApplication () {
 
         await PluginManager.Instance.registerPluginsAndThemes()
 
-        // Only after the initial registration, so a notification cannot race it
-        if (secondary) await PluginManager.Instance.listenForPluginChanges()
+        if (secondary) {
+          // Registration reads the database again, so it can see plugins the primary installed after the sync
+          const notRegistered = await PluginManager.Instance.listPluginsOnlyRegisteredByPrimary(syncedNpmNames)
+          if (notRegistered.length !== 0) return exitOnPluginDivergence(notRegistered)
+
+          // Only after the initial registration, so a notification cannot race it
+          await PluginManager.Instance.listenForPluginChanges({ onDivergedFromPrimary: exitOnPluginDivergence })
+        }
       } catch (err) {
         logger.error('Cannot register plugins and themes.', { err })
       }
+    } else if (!secondary) {
+      // The secondaries would otherwise compare their plugins with the ones of a previous run
+      Redis.Instance.deletePrimaryRegisteredPlugins()
+        .catch(err => logger.error('Cannot clear the plugins registered by a previous run.', { err }))
     }
 
     if (!secondary) {
@@ -519,4 +531,15 @@ async function startApplication () {
 
     if (cliOptions.benchmarkStartup) process.exit(0)
   })
+}
+
+// A secondary that failed to register a plugin the primary runs would not serve the same platform
+// We must exit the program
+function exitOnPluginDivergence (npmNames: string[]) {
+  logger.error(
+    `This process failed to register ${npmNames.join(', ')}, which the primary process runs. ` +
+      'Exiting so it is restarted and retries, see the plugin errors above.'
+  )
+
+  shutdownAndExit(1)
 }

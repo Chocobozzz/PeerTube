@@ -11,6 +11,7 @@ import { AbstractScheduler } from './schedulers/abstract-scheduler.js'
 const logger = createLogger()
 
 let shuttingDown = false
+let registeredServer: HTTPServer
 
 /**
  * A signal that has no listener keeps its default disposition, and the kernel never delivers such a signal to the init process
@@ -18,6 +19,8 @@ let shuttingDown = false
  * the container is SIGKILLed after the runtime grace period. So always listen to the signals we want to handle.
  */
 export function registerGracefulShutdown (server: HTTPServer) {
+  registeredServer = server
+
   for (const signal of [ 'SIGINT', 'SIGTERM' ] as const) {
     process.on(signal, () => {
       if (shuttingDown === true) {
@@ -36,15 +39,25 @@ export function registerGracefulShutdown (server: HTTPServer) {
   }
 }
 
+// Stop the process like a signal does, but with an exit code telling the service manager it did not stop on request
+export function shutdownAndExit (exitCode: number) {
+  if (shuttingDown === true) return
+  shuttingDown = true
+
+  shutdown(registeredServer, exitCode)
+    .catch(err => logger.error('Error in graceful shutdown.', { err }))
+    .finally(() => process.exit(exitCode))
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
 
-async function shutdown (server: HTTPServer) {
+async function shutdown (server: HTTPServer, exitCode = 0) {
   const timeout = setTimeout(() => {
     logger.warn(`Graceful shutdown did not complete in ${SHUTDOWN_TIMEOUTS.GLOBAL}ms, exiting now.`)
 
-    process.exit(0)
+    process.exit(exitCode)
   }, SHUTDOWN_TIMEOUTS.GLOBAL)
   timeout.unref()
 
