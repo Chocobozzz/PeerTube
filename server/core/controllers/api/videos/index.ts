@@ -37,9 +37,9 @@ import {
 import { guessAdditionalAttributesFromQuery } from '../../../models/video/formatter/index.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { blacklistRouter } from './blacklist.js'
-import { videoCaptionsRouter } from './captions.js'
-import { videoChaptersRouter } from './chapters.js'
-import { videoCommentRouter } from './comment.js'
+import { registerVideoCaptionSharedRoutes, videoCaptionsRouter } from './captions.js'
+import { registerVideoChapterSharedRoutes, videoChaptersRouter } from './chapters.js'
+import { registerVideoCommentSharedRoutes, videoCommentRouter } from './comment.js'
 import { videoEmbedPrivacyRouter } from './embed-privacy.js'
 import { filesRouter } from './files.js'
 import { videoImportsRouter } from './import.js'
@@ -85,7 +85,7 @@ videosRouter.use('/', videoSourceRouter)
 videosRouter.use('/', videoChaptersRouter)
 videosRouter.use('/', videoEmbedPrivacyRouter)
 
-registerVideoReadRoutes(videosRouter)
+registerVideoSharedRoutes(videosRouter)
 
 videosRouter.delete(
   '/:id',
@@ -102,9 +102,17 @@ videosRouter.delete(
 const secondaryVideosRouter = express.Router()
 
 secondaryVideosRouter.use(apiRateLimiter)
-secondaryVideosRouter.use('/', viewRouter)
 
-registerVideoReadRoutes(secondaryVideosRouter)
+secondaryVideosRouter.use('/', viewRouter)
+// Video file tokens live in Redis, so any process can generate one and any process accepts it
+secondaryVideosRouter.use('/', tokenRouter)
+secondaryVideosRouter.use('/', storyboardRouter)
+
+registerVideoCaptionSharedRoutes(secondaryVideosRouter)
+registerVideoChapterSharedRoutes(secondaryVideosRouter)
+registerVideoCommentSharedRoutes(secondaryVideosRouter)
+
+registerVideoSharedRoutes(secondaryVideosRouter)
 
 // ---------------------------------------------------------------------------
 
@@ -116,7 +124,7 @@ export {
 // ---------------------------------------------------------------------------
 
 // Must be registered after the sub routers so that /categories is not caught by /:id
-function registerVideoReadRoutes (router: express.Router) {
+function registerVideoSharedRoutes (router: express.Router) {
   router.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
   router.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
   router.get('/languages', openapiOperationDoc({ operationId: 'getLanguages' }), videoLanguagesScopeValidator, listVideoLanguages)

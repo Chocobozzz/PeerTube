@@ -33,7 +33,7 @@ videoCaptionsRouter.post(
   asyncMiddleware(createGenerateVideoCaption)
 )
 
-videoCaptionsRouter.get('/:videoId/captions', asyncMiddleware(listVideoCaptionsValidator), asyncMiddleware(listVideoCaptions))
+registerVideoCaptionSharedRoutes(videoCaptionsRouter)
 
 videoCaptionsRouter.put(
   '/:videoId/captions/:captionLanguage',
@@ -52,11 +52,16 @@ videoCaptionsRouter.delete(
 
 // ---------------------------------------------------------------------------
 
-export {
-  videoCaptionsRouter
+function registerVideoCaptionSharedRoutes (router: express.Router) {
+  router.get('/:videoId/captions', asyncMiddleware(listVideoCaptionsValidator), asyncMiddleware(listVideoCaptions))
 }
 
 // ---------------------------------------------------------------------------
+
+export {
+  registerVideoCaptionSharedRoutes, // Will be used by parent router
+  videoCaptionsRouter
+}
 
 function createGenerateVideoCaption (req: express.Request, res: express.Response) {
   const video = res.locals.videoWithRights

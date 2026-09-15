@@ -1,12 +1,21 @@
 /**
  * A PeerTube instance can be served by several Node.js processes sharing the same PostgreSQL and Redis
  *
- *  - `primary` behaves like a regular PeerTube: it runs the migrations, all the schedulers, the live
- *    server, the tracker and every job worker. It also sends its configuration to secondary servers
- *  - `secondary` only serves a subset of the API (listing videos, getting a video and tracking views) and
- *    consumes an allow list of job types. It never runs migrations nor the schedulers that flush data to
- *    PostgreSQL, so that exactly one process owns them. It fetches a small subset of the configuration
- *    from a YAML file, and the complete configuration from the primary
+ *  - `primary` behaves like a regular PeerTube:
+ *    - runs the migrations
+ *    - runs all the schedulers
+ *    - handle the live server
+ *    - runs the tracker
+ *    - runs every job worker
+ *    - sends its configuration to secondary servers
+ *  - `secondary` is an "help" process for the primary:
+ *    - serves a subset of the API and can tracks views; every endpoint it does not serve answers a visible 400 error
+ *    - consumes an allow list of job types
+ *    - never runs migrations
+ *    - never runs schedulers that flush data to PostgreSQL
+ *    - fetches a small subset of the configuration from a YAML file, and the complete configuration from the primary
+ *
+ * Every process owns its storage directories.
  *
  * The role is read from `--role` on the command line, or from the `PEERTUBE_PROCESS_ROLE`
  * It is parsed manually rather than commander because of ESM hoisting and configuration importation
@@ -172,7 +181,9 @@ import {
   miscRouter,
   objectStorageProxyRouter,
   pluginsRouter,
+  secondaryActivityPubRouter,
   secondaryApiRouter,
+  secondaryPluginsRouter,
   servicesRouter,
   sitemapRouter,
   staticRouter,
@@ -275,41 +286,61 @@ OpenTelemetryMetrics.Instance.init(app)
 
 const cliOptions = getServerCLIOptions()
 
-if (isSecondaryProcess()) {
-  // A secondary process only answers the endpoints it can serve safely
-  // Everything else must be routed to the primary by the reverse proxy
-  app.use('/api/' + API_VERSION, secondaryApiRouter)
-} else {
-  app.use('/api/' + API_VERSION, apiRouter)
+// A secondary process only answers the endpoints it can serve safely
+// Everything else must be routed to the primary by the reverse proxy
+const secondary = isSecondaryProcess()
 
-  // Services (oembed...)
-  app.use('/services', servicesRouter)
+app.use(
+  '/api/' + API_VERSION,
+  secondary
+    ? secondaryApiRouter
+    : apiRouter
+)
 
-  if (CONFIG.FEDERATION.ENABLED) {
-    app.use('/', activityPubRouter)
-  }
+// Services (oembed...)
+app.use('/services', servicesRouter)
 
-  app.use('/', feedsRouter)
-  app.use('/', trackerRouter)
-  app.use('/', sitemapRouter)
+if (CONFIG.FEDERATION.ENABLED) {
+  app.use(
+    '/',
+    secondary
+      ? secondaryActivityPubRouter
+      : activityPubRouter
+  )
+}
 
-  // Static files
-  app.use('/', staticRouter)
-  app.use('/', wellKnownRouter)
-  app.use('/', miscRouter)
+app.use('/', feedsRouter)
+app.use('/', sitemapRouter)
+
+// The tracker keeps the peers of a swarm in the memory of the process that runs it
+if (!secondary) app.use('/', trackerRouter)
+
+// Static files
+// The storage directories belong to the primary process, a secondary one cannot serve the files they hold
+if (!secondary) app.use('/', staticRouter)
+app.use('/', wellKnownRouter)
+app.use('/', miscRouter)
+
+if (!secondary) {
   app.use('/', downloadRouter)
   app.use('/', lazyStaticRouter)
-  app.use('/', objectStorageProxyRouter)
-
-  // Cookies for plugins and HTML
-  app.use(cookieParser())
-
-  // Plugins & themes
-  app.use('/', pluginsRouter)
-
-  // Client files, last valid routes!
-  if (cliOptions.client) app.use('/', clientsRouter)
 }
+
+app.use('/', objectStorageProxyRouter)
+
+// Cookies for plugins and HTML
+app.use(cookieParser())
+
+// Plugins & themes
+app.use(
+  '/',
+  secondary
+    ? secondaryPluginsRouter
+    : pluginsRouter
+)
+
+// Client files, last valid routes!
+if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 
@@ -352,7 +383,6 @@ registerGracefulShutdown(server)
 async function startApplication () {
   const port = CONFIG.LISTEN.PORT
   const hostname = CONFIG.LISTEN.HOSTNAME
-  const secondary = isSecondaryProcess()
 
   if (!secondary) {
     await installPrimary()
@@ -376,12 +406,12 @@ async function startApplication () {
   // Secondary already fetched it while the module graph was loading
   await ConfigDistribution.Instance.init()
 
-  // Propagating token revocations  to evict them from the LRU cache
+  // Propagating token revocations to evict them from the LRU cache
   await TokensCache.Instance.listenForInvalidations()
 
   JobQueue.Instance.init()
 
-  // A secondary serves no endpoint that sends an email
+  // A secondary only pushes emails to the job queue, the primary is the process that sends them
   if (!secondary) Emailer.Instance.init()
 
   await Promise.all([

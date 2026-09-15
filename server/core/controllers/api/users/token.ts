@@ -37,21 +37,7 @@ const loginRateLimiter = buildRateLimiter({
   failOnUnavailableRedis: true
 })
 
-tokensRouter.post(
-  '/token',
-  loginRateLimiter,
-  openapiOperationDoc({ operationId: 'getOAuthToken' }),
-  asyncMiddleware(handleToken)
-)
-
-tokensRouter.post(
-  '/revoke-token',
-  openapiOperationDoc({ operationId: 'revokeOAuthToken' }),
-  authenticate,
-  // Ensure cookies are available for auth plugins `onLogout`
-  cookieParser(),
-  asyncMiddleware(handleTokenRevocation)
-)
+registerTokenSharedRoutes(tokensRouter)
 
 // ---------------------------------------------------------------------------
 
@@ -92,9 +78,31 @@ tokensRouter.post(
 
 // ---------------------------------------------------------------------------
 
+function registerTokenSharedRoutes (router: express.Router) {
+  router.post(
+    '/token',
+    loginRateLimiter,
+    openapiOperationDoc({ operationId: 'getOAuthToken' }),
+    asyncMiddleware(handleToken)
+  )
+
+  router.post(
+    '/revoke-token',
+    openapiOperationDoc({ operationId: 'revokeOAuthToken' }),
+    authenticate,
+    // Ensure cookies are available for auth plugins `onLogout`
+    cookieParser(),
+    asyncMiddleware(handleTokenRevocation)
+  )
+}
+
+// ---------------------------------------------------------------------------
+
 export {
+  registerTokenSharedRoutes, // Will be used by parent router
   tokensRouter
 }
+
 // ---------------------------------------------------------------------------
 
 async function handleToken (req: express.Request, res: express.Response, next: express.NextFunction) {

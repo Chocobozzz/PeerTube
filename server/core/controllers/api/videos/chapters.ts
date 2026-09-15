@@ -14,11 +14,7 @@ const logger = createLogger('api', 'chapter')
 
 const videoChaptersRouter = express.Router()
 
-videoChaptersRouter.get(
-  '/:id/chapters',
-  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
-  asyncMiddleware(listVideoChapters)
-)
+registerVideoChapterSharedRoutes(videoChaptersRouter)
 
 videoChaptersRouter.put(
   '/:videoId/chapters',
@@ -29,11 +25,20 @@ videoChaptersRouter.put(
 
 // ---------------------------------------------------------------------------
 
-export {
-  videoChaptersRouter
+function registerVideoChapterSharedRoutes (router: express.Router) {
+  router.get(
+    '/:id/chapters',
+    asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
+    asyncMiddleware(listVideoChapters)
+  )
 }
 
 // ---------------------------------------------------------------------------
+
+export {
+  registerVideoChapterSharedRoutes, // Will be used by parent router
+  videoChaptersRouter
+}
 
 async function listVideoChapters (req: express.Request, res: express.Response) {
   const chapters = await VideoChapterModel.listChaptersOfVideo(res.locals.videoWithBlacklist.id)

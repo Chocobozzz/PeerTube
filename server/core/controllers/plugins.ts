@@ -1,5 +1,3 @@
-import express from 'express'
-import { join } from 'path'
 import { getCompleteLocale, is18nLocale } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, PluginType } from '@peertube/peertube-models'
 import { isProdInstance } from '@peertube/peertube-node-utils'
@@ -7,6 +5,8 @@ import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { optionalAuthenticate } from '@server/middlewares/auth.js'
 import { buildRateLimiter } from '@server/middlewares/index.js'
+import express from 'express'
+import { join } from 'path'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants.js'
 import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager.js'
 import { getExternalAuthValidator, getPluginValidator, pluginStaticDirectoryValidator } from '../middlewares/validators/plugins.js'
@@ -28,75 +28,104 @@ const pluginsRateLimiter = buildRateLimiter({
   max: CONFIG.RATES_LIMIT.PLUGINS.MAX
 })
 
-pluginsRouter.get('/plugins/global.css',
-  pluginsRateLimiter,
-  servePluginGlobalCSS
-)
+registerPluginStaticSharedRoutes(pluginsRouter)
 
-pluginsRouter.get('/plugins/translations/:locale.json',
-  pluginsRateLimiter,
-  getPluginTranslations
-)
-
-pluginsRouter.get('/plugins/:pluginName/:pluginVersion/auth/:authName',
+pluginsRouter.get(
+  '/plugins/:pluginName/:pluginVersion/auth/:authName',
   pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   getExternalAuthValidator,
   handleAuthInPlugin
 )
 
-pluginsRouter.get('/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
-  pluginsRateLimiter,
-  getPluginValidator(PluginType.PLUGIN),
-  pluginStaticDirectoryValidator,
-  servePluginStaticDirectory
-)
-
-pluginsRouter.get('/plugins/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
-  pluginsRateLimiter,
-  getPluginValidator(PluginType.PLUGIN),
-  pluginStaticDirectoryValidator,
-  servePluginClientScripts
-)
-
-pluginsRouter.use('/plugins/:pluginName/router',
+pluginsRouter.use(
+  '/plugins/:pluginName/router',
   pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN, false),
   optionalAuthenticate,
   servePluginCustomRoutes
 )
 
-pluginsRouter.use('/plugins/:pluginName/:pluginVersion/router',
+pluginsRouter.use(
+  '/plugins/:pluginName/:pluginVersion/router',
   pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   optionalAuthenticate,
   servePluginCustomRoutes
 )
 
-pluginsRouter.get('/themes/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
-  pluginsRateLimiter,
-  getPluginValidator(PluginType.THEME),
-  pluginStaticDirectoryValidator,
-  servePluginStaticDirectory
-)
+// ---------------------------------------------------------------------------
 
-pluginsRouter.get('/themes/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
-  pluginsRateLimiter,
-  getPluginValidator(PluginType.THEME),
-  pluginStaticDirectoryValidator,
-  servePluginClientScripts
-)
+/**
+ * Router for secondary process
+ *
+ * The files of the plugins and themes are served by every process
+ * The plugin authentication and custom routes stay on the primary (they can store state in the memory of the process)
+ */
+const secondaryPluginsRouter = express.Router()
 
-pluginsRouter.get('/themes/:themeName/:themeVersion/css/:staticEndpoint(*)',
-  pluginsRateLimiter,
-  serveThemeCSSValidator,
-  serveThemeCSSDirectory
-)
+registerPluginStaticSharedRoutes(secondaryPluginsRouter)
 
 // ---------------------------------------------------------------------------
 
 export {
-  pluginsRouter
+  pluginsRouter,
+  secondaryPluginsRouter
+}
+
+// ---------------------------------------------------------------------------
+
+function registerPluginStaticSharedRoutes (router: express.Router) {
+  router.get(
+    '/plugins/global.css',
+    pluginsRateLimiter,
+    servePluginGlobalCSS
+  )
+
+  router.get(
+    '/plugins/translations/:locale.json',
+    pluginsRateLimiter,
+    getPluginTranslations
+  )
+
+  router.get(
+    '/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
+    pluginsRateLimiter,
+    getPluginValidator(PluginType.PLUGIN),
+    pluginStaticDirectoryValidator,
+    servePluginStaticDirectory
+  )
+
+  router.get(
+    '/plugins/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
+    pluginsRateLimiter,
+    getPluginValidator(PluginType.PLUGIN),
+    pluginStaticDirectoryValidator,
+    servePluginClientScripts
+  )
+
+  router.get(
+    '/themes/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
+    pluginsRateLimiter,
+    getPluginValidator(PluginType.THEME),
+    pluginStaticDirectoryValidator,
+    servePluginStaticDirectory
+  )
+
+  router.get(
+    '/themes/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
+    pluginsRateLimiter,
+    getPluginValidator(PluginType.THEME),
+    pluginStaticDirectoryValidator,
+    servePluginClientScripts
+  )
+
+  router.get(
+    '/themes/:themeName/:themeVersion/css/:staticEndpoint(*)',
+    pluginsRateLimiter,
+    serveThemeCSSValidator,
+    serveThemeCSSDirectory
+  )
 }
 
 // ---------------------------------------------------------------------------

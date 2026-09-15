@@ -21,12 +21,7 @@ const playerSettingsRouter = express.Router()
 
 playerSettingsRouter.use(apiRateLimiter)
 
-playerSettingsRouter.get(
-  '/videos/:videoId',
-  optionalAuthenticate,
-  asyncMiddleware(getVideoPlayerSettingsValidator),
-  asyncMiddleware(getVideoPlayerSettings)
-)
+registerPlayerSettingSharedRoutes(playerSettingsRouter)
 
 playerSettingsRouter.put(
   '/videos/:videoId',
@@ -34,14 +29,6 @@ playerSettingsRouter.put(
   asyncMiddleware(updateVideoPlayerSettingsValidator),
   updatePlayerSettingsValidatorFactory('video'),
   asyncMiddleware(updateVideoPlayerSettings)
-)
-
-playerSettingsRouter.get(
-  '/video-channels/:handle',
-  optionalAuthenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-  asyncMiddleware(getChannelPlayerSettingsValidator),
-  asyncMiddleware(getChannelPlayerSettings)
 )
 
 playerSettingsRouter.put(
@@ -53,9 +40,39 @@ playerSettingsRouter.put(
 )
 
 // ---------------------------------------------------------------------------
+// Router for secondary process
+// ---------------------------------------------------------------------------
+
+const secondaryPlayerSettingsRouter = express.Router()
+
+secondaryPlayerSettingsRouter.use(apiRateLimiter)
+
+registerPlayerSettingSharedRoutes(secondaryPlayerSettingsRouter)
+
+// ---------------------------------------------------------------------------
 
 export {
-  playerSettingsRouter
+  playerSettingsRouter,
+  secondaryPlayerSettingsRouter
+}
+
+// ---------------------------------------------------------------------------
+
+function registerPlayerSettingSharedRoutes (router: express.Router) {
+  router.get(
+    '/videos/:videoId',
+    optionalAuthenticate,
+    asyncMiddleware(getVideoPlayerSettingsValidator),
+    asyncMiddleware(getVideoPlayerSettings)
+  )
+
+  router.get(
+    '/video-channels/:handle',
+    optionalAuthenticate,
+    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+    asyncMiddleware(getChannelPlayerSettingsValidator),
+    asyncMiddleware(getChannelPlayerSettings)
+  )
 }
 
 // ---------------------------------------------------------------------------
