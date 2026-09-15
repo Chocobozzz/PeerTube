@@ -29,8 +29,8 @@ upstream backend {
 #
 # Leave this section untouched if you run a single PeerTube process.
 #
-# If you want to enable horizontal scalability, add one `server` line per secondary to both pools below
-# and keep `${PEERTUBE_HOST}` as a `backup` so reads survive every secondary going down.
+# If you want to enable horizontal scalability, add one `server` line per secondary to the pools below.
+# In `secondary_pool`, keep `${PEERTUBE_HOST}` as a `backup` so reads survive every secondary going down.
 # For example:
 #
 #   upstream secondary_pool {
@@ -39,8 +39,16 @@ upstream backend {
 #     server ${PEERTUBE_HOST} backup;
 #   }
 #
+# The two other pools use `hash`, which does not support `backup`: keep `${PEERTUBE_HOST}` as a regular `server` line
+# if you want the primary to take its share of the traffic and to keep serving when every secondary is down.
+#
 # `secondary_views_pool` handles view/watch-time tracking only. It's optional since the heartbeat can be spread to any process,
 # but it's faster to stick a heartbeat to a single process (because of local process caching).
+#
+# `secondary_socket_io_pool` handles socket.io connections (notifications, live events and runners).
+# Any process can hold a socket.io connection: messages are broadcasted to every process through Redis.
+# The pool must be sticky, because a socket.io client first connects with HTTP long-polling requests that must reach the same process.
+#
 # If a CDN or another load balancer sits in front, set `set_real_ip_from` / `real_ip_header` accordingly,
 # otherwise every viewer hashes to the same secondary and PeerTube counts every view against the proxy IP.
 ##
@@ -55,7 +63,13 @@ upstream secondary_views_pool {
   server ${PEERTUBE_HOST};
 }
 
-# Secondary servers only support a subset of API endpoints
+upstream secondary_socket_io_pool {
+  hash $remote_addr consistent;
+
+  server ${PEERTUBE_HOST};
+}
+
+# Secondary servers only support a subset of the endpoints
 # Leave this section untouched, even if you don't use horizontal scalability
 #
 # Regexes are evaluated top to bottom, first match wins
@@ -63,12 +77,43 @@ upstream secondary_views_pool {
 map $request_method$uri $peertube_pool {
   default                                                                       backend;
 
-  # Read-only video endpoints served by `--role=secondary` processes
+  "~^(GET|HEAD)/(w|a|c|@[^/]+|videos/watch|videos/embed|video-playlists/embed|accounts|video-channels)(/|$)" secondary_pool;
+  "~^(GET|HEAD)/manifest\.webmanifest$"                                         secondary_pool;
+
+  "~^(GET|HEAD)/object-storage-proxy/"                                          secondary_pool;
+  "~^(GET|HEAD)/feeds/"                                                         secondary_pool;
+  "~^(GET|HEAD)/\.well-known/(webfinger|nodeinfo|host-meta)$"                   secondary_pool;
+
+  # Must be listed before the plugin files line below, which would also match /plugins/<name>/router/static/...
+  "~^(GET|HEAD)/plugins/[^/]+(/[^/]+)?/router(/|$)"                             backend;
+  "~^(GET|HEAD)/(plugins|themes)/[^/]+/[^/]+/(static|client-scripts|css)/"      secondary_pool;
+  "~^(GET|HEAD)/plugins/(global\.css|translations/)"                            secondary_pool;
+
+  "~^(GET|HEAD)/api/v1/(config|config/about)$"                                  secondary_pool;
+  "~^(GET|HEAD)/api/v1/(accounts|search|overviews|player-settings)(/|$)"        secondary_pool;
+
+  # Authenticated channel collections: must be listed before the /api/v1/video-channels/<handle> lines below
+  "~^(GET|HEAD)/api/v1/video-channels/ownership(/|$)"                           backend;
+  "~^(GET|HEAD)/api/v1/video-channels/?$"                                       secondary_pool;
+  "~^(GET|HEAD)/api/v1/video-channels/[^/]+/(video-playlists|videos)$"          secondary_pool;
+  "~^(GET|HEAD)/api/v1/video-channels/[^/]+/?$"                                 secondary_pool;
+
+  # Collections that live under /api/v1/videos/ but are not a video id: must be listed before the /api/v1/videos/<id> lines below
+  "~^(GET|HEAD)/api/v1/videos/(blacklist|comments|imports|ownership|live)(/|$)" backend;
   "~^(GET|HEAD)/api/v1/videos/?$"                                               secondary_pool;
   "~^(GET|HEAD)/api/v1/videos/(categories|licences|languages|privacies)$"       secondary_pool;
-  # Collections that live under /api/v1/videos/ but are not a video id: must be listed before the /api/v1/videos/<id> line below
-  "~^(GET|HEAD)/api/v1/videos/(blacklist|comments|imports|ownership|live)(/|$)" backend;
+  "~^(GET|HEAD)/api/v1/videos/[^/]+/(captions|chapters|storyboards|comment-threads)(/|$)" secondary_pool;
+  "~^(GET|HEAD)/api/v1/videos/[^/]+/comments/[^/]+/replies$"                    secondary_pool;
   "~^(GET|HEAD)/api/v1/videos/[^/]+/?$"                                         secondary_pool;
+  "~^POST/api/v1/videos/[^/]+/token$"                                           secondary_pool;
+
+  "~^POST/api/v1/users/(token|revoke-token|register)$"                          secondary_pool;
+  "~^POST/api/v1/users/(ask-send-verify-email|registrations/ask-send-verify-email)$" secondary_pool;
+  "~^POST/api/v1/users/([^/]+/verify-email|registrations/[^/]+/verify-email)$"  secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/me/?$"                                             secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/me/(video-quota-used|notifications|history/videos)$" secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/me/(videos|subscriptions)(/|$)"                     secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/me/video-playlists/videos-exist$"                   secondary_pool;
 
   # View/watch-time tracking: sticky to one process per viewer
   "~^(PUT|POST)/api/v1/videos/[^/]+/(views|watching)$"                          secondary_views_pool;
@@ -223,8 +268,20 @@ server {
     proxy_pass http://backend;
   }
 
+  # Same as @api_websocket, but socket.io connections can be served by `--role=secondary` processes
+  location @api_socket_io {
+    proxy_http_version 1.1;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   Host            $host; # Use $http_host if you use a non standard HTTP port
+    proxy_set_header   X-Real-IP       $remote_addr;
+    proxy_set_header   Upgrade         $http_upgrade;
+    proxy_set_header   Connection      "upgrade";
+
+    proxy_pass http://secondary_socket_io_pool;
+  }
+
   location /socket.io {
-    try_files /dev/null @api_websocket;
+    try_files /dev/null @api_socket_io;
   }
 
   location /tracker/socket {
