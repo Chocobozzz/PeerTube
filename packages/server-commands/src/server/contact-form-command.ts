@@ -2,7 +2,6 @@ import { ContactForm, HttpStatusCode } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class ContactFormCommand extends AbstractCommand {
-
   send (options: OverrideCommandOptions & {
     fromEmail: string
     fromName: string
