@@ -342,7 +342,7 @@ function register (...) {
     },
 
     // Optional function called by PeerTube when the access token or refresh token are generated/refreshed
-    hookTokenValidity: ({ token, type }) => {
+    hookTokenValidity: ({ token, type, user }) => {
       if (type === 'access') return { valid: true }
       if (type === 'refresh') return { valid: false }
     },
@@ -555,6 +555,69 @@ async function register ({
 
 During live transcode input options are applied once for each target resolution.
 Plugins are responsible for detecting such situation and applying input options only once if necessary.
+
+#### Add automatic tags to videos and comments
+
+**PeerTube >= 8.3**
+
+PeerTube can automatically tags videos and comments (using watched words lists, or the core `external-link` tag).
+Admins and video owners are able to use these tags to automatically block videos or to hold comments for review.
+
+Your plugin can add its own automatic tags using `registerVideoAutoTagger` and `registerCommentAutoTagger`:
+
+```js
+async function register ({
+  registerVideoAutoTagger,
+  registerCommentAutoTagger,
+  peertubeHelpers
+}) {
+  registerCommentAutoTagger({
+    // Tags this auto tagger can assign
+    autoTagNames: [ 'spam' ],
+
+    // Only comment.text is provided
+    handler: async ({ comment }) => {
+      if (await isSpam(comment.text)) return { tags: [ 'spam' ] }
+
+      return { tags: [] }
+    }
+  })
+
+  registerVideoAutoTagger({
+    autoTagNames: [ 'short-video' ],
+
+    // Only video.id, video.name and video.description are provided
+    handler: async ({ video }) => {
+      const files = await peertubeHelpers.videos.getFiles(video.id)
+      const file = [ ...(files?.webVideo?.videoFiles || []), ...(files?.hls?.videoFiles || []) ][0]
+
+      // A live video has no file yet
+      if (!file) return { tags: [] }
+
+      // Download the file if it is stored in object storage
+      const duration = await peertubeHelpers.videos.withFile({ videoId: video.id, videoFileId: file.id }, async path => {
+        const probe = await peertubeHelpers.videos.ffprobe(path)
+
+        return probe.format.duration
+      })
+
+      return { tags: duration < 10 ? [ 'short-video' ] : [] }
+    }
+  })
+}
+```
+
+How auto taggers work:
+ * Names declared in `autoTagNames` are shown in the automatic tag policy settings, so admins (videos and comments) and video owners (comments) can select them
+ * The handler can only assign tags declared in `autoTagNames`. PeerTube ignores any other tag the handler returns
+ * Video tags are assigned to the instance. Comment tags are assigned to both the instance and the video owner
+ * Auto taggers run in a job, outside of any database transaction, so they can take time to return (for example to analyze video files or call an external service)
+ * Video auto taggers run when a local or remote video is created or updated, imported, or when its source file is replaced. A live video has no file yet when its auto taggers run
+ * Comment auto taggers run when a local or remote comment is created
+
+To remove an auto tagger, pass the same options object (the `handler` reference is used for comparison) to `unregisterVideoAutoTagger` or `unregisterCommentAutoTagger`.
+
+You can read the automatic tags of an object using `peertubeHelpers.automaticTags.getServerVideoAutomaticTags({ videoId })`, `peertubeHelpers.automaticTags.getServerCommentAutomaticTags({ commentId })` or `peertubeHelpers.automaticTags.getAccountCommentAutomaticTags({ commentId, accountId })`.
 
 #### Server helpers
 
