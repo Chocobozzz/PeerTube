@@ -4,6 +4,7 @@
 import { HttpStatusCodeType } from '@peertube/peertube-models'
 import { isTestInstance, parseDurationToMs } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
+import { PEERTUBE_VERSION } from '@server/initializers/constants.js'
 import { Redis } from '@server/lib/redis/index.js'
 import { asyncMiddleware } from '@server/middlewares/index.js'
 import express from 'express'
@@ -26,21 +27,8 @@ interface CacheObject {
 
 export class ApiCache {
   private readonly options: APICacheOptions
-  private readonly timers: { [id: string]: NodeJS.Timeout } = {}
-
-  private readonly index = {
-    groups: [] as string[],
-    all: [] as string[]
-  }
-
-  // Cache keys per group
-  private groups: { [groupIndex: string]: string[] } = {}
-
-  private readonly seed: number
 
   constructor (options: APICacheOptions) {
-    this.seed = new Date().getTime()
-
     this.options = {
       headerBlacklist: [],
       excludeStatus: [],
@@ -73,27 +61,37 @@ export class ApiCache {
     )
   }
 
+  // Cached responses and the groups they belong to are shared by every process of the platform
   clearGroupSafe (group: string) {
     const run = async () => {
-      const cacheKeys = this.groups[group]
-      if (!cacheKeys) return
+      if (!Redis.Instance.isConnected()) return
 
-      for (const key of cacheKeys) {
-        try {
-          await this.clear(key)
-        } catch (err) {
-          logger.error('Cannot clear ' + key, { err })
-        }
-      }
+      const redis = Redis.Instance.getClient()
+      const groupKey = this.getGroupKey(group)
 
-      delete this.groups[group]
+      const cacheKeys = await redis.smembers(groupKey)
+
+      if (cacheKeys.length !== 0) await redis.del(...cacheKeys)
+
+      await redis.del(groupKey)
     }
 
-    void run()
+    run()
+      .catch(err => logger.error('Cannot clear API cache group %s.', group, { err }))
   }
 
+  // Every process of the platform must build the same key so they share their cached responses
+  // The version changes the entries of the previous PeerTube release, which may have serialized them differently
   private getCacheKey (req: express.Request) {
-    return Redis.Instance.getPrefix() + 'api-cache-' + this.seed + '-' + req.originalUrl
+    return this.getKeyPrefix() + 'response-' + req.originalUrl
+  }
+
+  private getGroupKey (group: string) {
+    return this.getKeyPrefix() + 'group-' + group
+  }
+
+  private getKeyPrefix () {
+    return Redis.Instance.getPrefix() + 'api-cache-' + PEERTUBE_VERSION + '-'
   }
 
   private shouldCacheResponse (response: express.Response) {
@@ -103,15 +101,18 @@ export class ApiCache {
     return true
   }
 
-  private addIndexEntries (key: string, res: express.Response) {
-    this.index.all.unshift(key)
+  private async addGroupEntries (key: string, res: express.Response, duration: number) {
+    const groups: string[] = res.locals.apicacheGroups || []
+    if (groups.length === 0) return
 
-    const groups = res.locals.apicacheGroups || []
+    const redis = Redis.Instance.getClient()
 
     for (const group of groups) {
-      if (!this.groups[group]) this.groups[group] = []
+      const groupKey = this.getGroupKey(group)
 
-      this.groups[group].push(key)
+      await redis.sadd(groupKey, key)
+      // The group index must outlive the entries it references
+      await redis.expire(groupKey, Math.ceil(duration / 1000) + 1)
     }
   }
 
@@ -138,21 +139,15 @@ export class ApiCache {
   }
 
   private async cacheResponse (key: string, value: object, duration: number) {
+    if (!Redis.Instance.isConnected()) return
+
     const redis = Redis.Instance.getClient()
 
-    if (Redis.Instance.isConnected()) {
-      await Promise.all([
-        redis.hset(key, 'response', JSON.stringify(value)),
-        redis.hset(key, 'duration', duration + ''),
-        redis.expire(key, duration / 1000)
-      ])
-    }
-
-    // add automatic cache clearing from duration, includes max limit on setTimeout
-    this.timers[key] = setTimeout(() => {
-      this.clear(key)
-        .catch(err => logger.error('Cannot clear Redis key %s.', key, { err }))
-    }, Math.min(duration, 2147483647))
+    await Promise.all([
+      redis.hset(key, 'response', JSON.stringify(value)),
+      redis.hset(key, 'duration', duration + ''),
+      redis.expire(key, duration / 1000)
+    ])
   }
 
   private accumulateContent (res: express.Response, content: any) {
@@ -219,8 +214,6 @@ export class ApiCache {
         self.accumulateContent(res, content)
 
         if (res.locals.apicache.cacheable && res.locals.apicache.content) {
-          self.addIndexEntries(key, res)
-
           const headers = res.locals.apicache.headers || res.getHeaders()
           const cacheObject = self.createCacheObject(
             res.statusCode,
@@ -229,6 +222,7 @@ export class ApiCache {
             encoding
           )
           self.cacheResponse(key, cacheObject, duration)
+            .then(() => self.addGroupEntries(key, res, duration))
             .catch(err => logger.error('Cannot cache response', { err }))
         }
       }
@@ -280,37 +274,5 @@ export class ApiCache {
     response.writeHead(cacheObject.status || 200, headers)
 
     return response.end(data, cacheObject.encoding)
-  }
-
-  private async clear (target: string) {
-    const redis = Redis.Instance.getClient()
-
-    if (target) {
-      clearTimeout(this.timers[target])
-      delete this.timers[target]
-
-      try {
-        await redis.del(target)
-      } catch (err) {
-        logger.error('Cannot delete %s in redis cache.', target, { err })
-      }
-
-      this.index.all = this.index.all.filter(key => key !== target)
-    } else {
-      for (const key of this.index.all) {
-        clearTimeout(this.timers[key])
-        delete this.timers[key]
-
-        try {
-          await redis.del(key)
-        } catch (err) {
-          logger.error('Cannot delete %s in redis cache.', key, { err })
-        }
-      }
-
-      this.index.all = []
-    }
-
-    return this.index
   }
 }
