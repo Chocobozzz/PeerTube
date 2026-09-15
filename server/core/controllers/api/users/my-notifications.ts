@@ -29,16 +29,7 @@ meRouter.put(
   asyncRetryTransactionMiddleware(updateNotificationSettings)
 )
 
-myNotificationsRouter.get(
-  '/me/notifications',
-  authenticate,
-  paginationValidator,
-  userNotificationsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  listUserNotificationsValidator,
-  asyncMiddleware(listUserNotifications)
-)
+registerMyNotificationsSharedRoutes(myNotificationsRouter)
 
 myNotificationsRouter.post(
   '/me/notifications/read',
@@ -49,8 +40,27 @@ myNotificationsRouter.post(
 
 myNotificationsRouter.post('/me/notifications/read-all', authenticate, asyncMiddleware(markAsReadAllUserNotifications))
 
+// ---------------------------------------------------------------------------
+
+function registerMyNotificationsSharedRoutes (router: express.Router) {
+  router.get(
+    '/me/notifications',
+    authenticate,
+    paginationValidator,
+    userNotificationsSortValidator,
+    setDefaultSort,
+    setDefaultPagination,
+    listUserNotificationsValidator,
+    asyncMiddleware(listUserNotifications)
+  )
+}
+
+// ---------------------------------------------------------------------------
+
 export {
-  myNotificationsRouter
+  myNotificationsRouter,
+  // Will be used by parent router
+  registerMyNotificationsSharedRoutes
 }
 
 // ---------------------------------------------------------------------------

@@ -56,32 +56,7 @@ const createCommentRateLimiter = buildRateLimiter({
   perUserKey: true
 })
 
-videoCommentRouter.get(
-  '/:videoId/comment-threads',
-  paginationValidator,
-  videoCommentThreadsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  asyncMiddleware(listVideoCommentThreadsValidator),
-  optionalAuthenticate,
-  asyncMiddleware(listVideoThreads)
-)
-videoCommentRouter.get(
-  '/:videoId/comment-threads/:threadId',
-  asyncMiddleware(listVideoThreadCommentsValidator),
-  optionalAuthenticate,
-  asyncMiddleware(listVideoThreadComments)
-)
-videoCommentRouter.get(
-  '/:videoId/comments/:commentId/replies',
-  paginationValidator,
-  videoCommentsValidator,
-  setDefaultCommentRepliesSort,
-  setDefaultPagination,
-  optionalAuthenticate,
-  asyncMiddleware(listVideoCommentRepliesValidator),
-  asyncMiddleware(listVideoCommentReplies)
-)
+registerVideoCommentSharedRoutes(videoCommentRouter)
 
 videoCommentRouter.post(
   '/:videoId/comment-threads',
@@ -125,7 +100,41 @@ videoCommentRouter.get(
 
 // ---------------------------------------------------------------------------
 
+function registerVideoCommentSharedRoutes (router: express.Router) {
+  router.get(
+    '/:videoId/comment-threads',
+    paginationValidator,
+    videoCommentThreadsSortValidator,
+    setDefaultSort,
+    setDefaultPagination,
+    asyncMiddleware(listVideoCommentThreadsValidator),
+    optionalAuthenticate,
+    asyncMiddleware(listVideoThreads)
+  )
+
+  router.get(
+    '/:videoId/comment-threads/:threadId',
+    asyncMiddleware(listVideoThreadCommentsValidator),
+    optionalAuthenticate,
+    asyncMiddleware(listVideoThreadComments)
+  )
+
+  router.get(
+    '/:videoId/comments/:commentId/replies',
+    paginationValidator,
+    videoCommentsValidator,
+    setDefaultCommentRepliesSort,
+    setDefaultPagination,
+    optionalAuthenticate,
+    asyncMiddleware(listVideoCommentRepliesValidator),
+    asyncMiddleware(listVideoCommentReplies)
+  )
+}
+
+// ---------------------------------------------------------------------------
+
 export {
+  registerVideoCommentSharedRoutes, // Will be used by parent router
   videoCommentRouter
 }
 

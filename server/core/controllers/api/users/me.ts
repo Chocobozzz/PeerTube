@@ -10,8 +10,10 @@ import {
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { UserAuditView, auditLoggerFactory, getAuditIdFromRes } from '@server/helpers/audit-logger.js'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-api-format.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import express from 'express'
@@ -39,20 +41,18 @@ import { updateAvatarValidator } from '../../../middlewares/validators/actor-ima
 import {
   commonVideosFiltersValidatorFactory,
   deleteMeValidator,
-  listMyVideoImportsValidator,
   listCommentsOnUserVideosValidator,
+  listMyVideoImportsValidator,
   listMyVideosValidator,
+  usersNewFeatureInfoReadValidator,
   videoImportsSortValidator,
-  videosSortValidator,
-  usersNewFeatureInfoReadValidator
+  videosSortValidator
 } from '../../../middlewares/validators/index.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { AccountModel } from '../../../models/account/account.js'
 import { UserModel } from '../../../models/user/user.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -60,51 +60,9 @@ const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_
 
 const meRouter = express.Router()
 
-meRouter.get('/me', authenticate, asyncMiddleware(getMyInformation))
+registerMeSharedRoutes(meRouter)
+
 meRouter.delete('/me', authenticate, deleteMeValidator, asyncMiddleware(deleteMe))
-
-meRouter.get('/me/video-quota-used', authenticate, asyncMiddleware(getMyVideoQuotaUsed))
-
-meRouter.get(
-  '/me/videos/imports',
-  authenticate,
-  paginationValidator,
-  videoImportsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  listMyVideoImportsValidator,
-  asyncMiddleware(listMyVideoImports)
-)
-
-meRouter.get(
-  '/me/videos/comments',
-  authenticate,
-  paginationValidator,
-  videosSortValidator,
-  setDefaultVideosSort,
-  setDefaultPagination,
-  asyncMiddleware(listCommentsOnUserVideosValidator),
-  asyncMiddleware(listCommentsOnUserVideos)
-)
-
-meRouter.get(
-  '/me/videos',
-  authenticate,
-  paginationValidator,
-  videosSortValidator,
-  setDefaultVideosSort,
-  setDefaultPagination,
-  commonVideosFiltersValidatorFactory({ allowPrivacyFilterForAllUsers: true }),
-  asyncMiddleware(listMyVideosValidator),
-  asyncMiddleware(listMyVideos)
-)
-
-meRouter.get(
-  '/me/videos/:videoId/rating',
-  authenticate,
-  asyncMiddleware(usersVideoRatingValidator),
-  asyncMiddleware(getMyVideoRating)
-)
 
 meRouter.put(
   '/me',
@@ -136,8 +94,59 @@ meRouter.post(
 
 // ---------------------------------------------------------------------------
 
+function registerMeSharedRoutes (router: express.Router) {
+  router.get('/me', authenticate, asyncMiddleware(getMyInformation))
+
+  router.get('/me/video-quota-used', authenticate, asyncMiddleware(getMyVideoQuotaUsed))
+
+  router.get(
+    '/me/videos/imports',
+    authenticate,
+    paginationValidator,
+    videoImportsSortValidator,
+    setDefaultSort,
+    setDefaultPagination,
+    listMyVideoImportsValidator,
+    asyncMiddleware(listMyVideoImports)
+  )
+
+  router.get(
+    '/me/videos/comments',
+    authenticate,
+    paginationValidator,
+    videosSortValidator,
+    setDefaultVideosSort,
+    setDefaultPagination,
+    asyncMiddleware(listCommentsOnUserVideosValidator),
+    asyncMiddleware(listCommentsOnUserVideos)
+  )
+
+  router.get(
+    '/me/videos',
+    authenticate,
+    paginationValidator,
+    videosSortValidator,
+    setDefaultVideosSort,
+    setDefaultPagination,
+    commonVideosFiltersValidatorFactory({ allowPrivacyFilterForAllUsers: true }),
+    asyncMiddleware(listMyVideosValidator),
+    asyncMiddleware(listMyVideos)
+  )
+
+  router.get(
+    '/me/videos/:videoId/rating',
+    authenticate,
+    asyncMiddleware(usersVideoRatingValidator),
+    asyncMiddleware(getMyVideoRating)
+  )
+}
+
+// ---------------------------------------------------------------------------
+
 export {
-  meRouter
+  meRouter,
+  // Will be used by parent router
+  registerMeSharedRoutes
 }
 
 // ---------------------------------------------------------------------------
@@ -223,7 +232,18 @@ async function listMyVideoImports (req: express.Request, res: express.Response) 
       ? user.Account.id
       : undefined,
 
-    ...pick(req.query, [ 'id', 'videoId', 'targetUrl', 'start', 'count', 'sort', 'search', 'videoChannelSyncId', 'includeCollaborations', 'stateOneOf' ])
+    ...pick(req.query, [
+      'id',
+      'videoId',
+      'targetUrl',
+      'start',
+      'count',
+      'sort',
+      'search',
+      'videoChannelSyncId',
+      'includeCollaborations',
+      'stateOneOf'
+    ])
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

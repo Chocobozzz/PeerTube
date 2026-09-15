@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -8,8 +8,10 @@ import {
   createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
+  makeHTMLRequest,
   makePostBodyRequest,
   makePutBodyRequest,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
@@ -22,6 +24,8 @@ describe('Test a secondary server process', function () {
   let videoUUID: string
   let videoId: number
   let videoShortUUID: string
+  let privateVideoUUID: string
+  let privateFileUrl: string
 
   before(async function () {
     this.timeout(120000)
@@ -46,6 +50,14 @@ describe('Test a secondary server process', function () {
 
     await primary.videos.quickUpload({ name: 'nsfw video', nsfw: true })
 
+    {
+      const { uuid } = await primary.videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })
+      privateVideoUUID = uuid
+
+      const video = await primary.videos.getWithToken({ id: uuid })
+      privateFileUrl = video.files[0].fileUrl
+    }
+
     secondary = await createSecondaryServer(primary)
   })
 
@@ -56,8 +68,19 @@ describe('Test a secondary server process', function () {
 
     it('Should serve every endpoint of the secondary subset', async function () {
       const paths = [
+        '/api/v1/config',
+        '/api/v1/config/about',
+        '/api/v1/accounts',
+        '/api/v1/video-channels',
+        '/api/v1/search/videos',
+        '/api/v1/overviews/videos',
         '/api/v1/videos',
         '/api/v1/videos/' + videoUUID,
+        '/api/v1/videos/' + videoUUID + '/captions',
+        '/api/v1/videos/' + videoUUID + '/chapters',
+        '/api/v1/videos/' + videoUUID + '/storyboards',
+        '/api/v1/videos/' + videoUUID + '/comment-threads',
+        '/api/v1/player-settings/videos/' + videoUUID,
         '/api/v1/videos/categories',
         '/api/v1/videos/licences',
         '/api/v1/videos/languages',
@@ -70,8 +93,51 @@ describe('Test a secondary server process', function () {
       }
     })
 
+    it('Should serve the authenticated endpoints of the secondary subset', async function () {
+      const paths = [
+        '/api/v1/users/me',
+        '/api/v1/users/me/video-quota-used',
+        '/api/v1/users/me/videos',
+        '/api/v1/users/me/subscriptions',
+        '/api/v1/users/me/notifications',
+        '/api/v1/users/me/history/videos'
+      ]
+
+      for (const path of paths) {
+        await makeGetRequest({ url: secondary.url, path, token: primary.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      }
+    })
+
+    it('Should serve the read only pages of the platform', async function () {
+      for (const path of [ '/', '/w/' + videoUUID, '/videos/embed/' + videoUUID, '/a/root', '/c/root_channel' ]) {
+        const res = await makeHTMLRequest(secondary.url, path)
+
+        expect(res.text, path).to.contain('<html')
+      }
+    })
+
+    it('Should serve the read only files of the platform', async function () {
+      await makeGetRequest({
+        url: secondary.url,
+        path: '/feeds/videos.xml',
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await makeGetRequest({ url: secondary.url, path: '/.well-known/nodeinfo', expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({ url: secondary.url, path: '/plugins/global.css', expectedStatus: HttpStatusCode.OK_200 })
+    })
+
     it('Should not serve the endpoints the primary owns', async function () {
-      for (const path of [ '/api/v1/users', '/api/v1/config', '/api/v1/jobs', '/api/v1/search/videos' ]) {
+      const paths = [
+        '/api/v1/users',
+        '/api/v1/jobs',
+        '/api/v1/abuses',
+        '/api/v1/video-playlists',
+        '/api/v1/users/me/abuses'
+      ]
+
+      for (const path of paths) {
         await makeGetRequest({ url: secondary.url, path, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
       }
     })
@@ -210,6 +276,26 @@ describe('Test a secondary server process', function () {
     })
   })
 
+  describe('Watch page endpoints', function () {
+    it('Should serve the same watch page data as the primary', async function () {
+      for (const path of [ '/captions', '/chapters', '/storyboards', '/comment-threads' ]) {
+        const fullPath = '/api/v1/videos/' + videoUUID + path
+
+        const fromPrimary = await makeGetRequest({ url: primary.url, path: fullPath, expectedStatus: HttpStatusCode.OK_200 })
+        const fromSecondary = await makeGetRequest({ url: secondary.url, path: fullPath, expectedStatus: HttpStatusCode.OK_200 })
+
+        expect(fromSecondary.body, path).to.deep.equal(fromPrimary.body)
+      }
+    })
+
+    it('Should generate a video file token on the secondary that the primary accepts', async function () {
+      const token = await secondary.videoToken.getVideoFileToken({ videoId: privateVideoUUID, token: primary.accessToken })
+      expect(token).to.not.be.empty
+
+      await makeRawRequest({ url: privateFileUrl, query: { videoFileToken: token }, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
   describe('Runtime configuration changes', function () {
     it('Should apply on the secondary a configuration change made on the primary', async function () {
       this.timeout(60000)
@@ -229,6 +315,47 @@ describe('Test a secondary server process', function () {
         const { data } = await secondary.videos.list({ token: null })
         expect(data.map(v => v.name)).to.not.contain('nsfw video')
       }
+    })
+  })
+
+  describe('Authentication endpoints', function () {
+    const username = 'user_on_secondary'
+    const password = 'super_password'
+
+    it('Should register a user on the secondary', async function () {
+      this.timeout(60000)
+
+      await primary.config.updateExistingConfig({ newConfig: { signup: { enabled: true, requiresApproval: false } } })
+      await secondary.servers.waitUntilLog('Applying the configuration change published by the primary process.', 2)
+
+      await secondary.registrations.register({ username, password })
+
+      const { data } = await primary.users.list()
+      expect(data.map(u => u.username)).to.contain(username)
+    })
+
+    it('Should log in on the secondary and use the token on the primary', async function () {
+      const token = await secondary.login.getAccessToken({ username, password })
+
+      const { username: fromPrimary } = await primary.users.getMyInfo({ token })
+      expect(fromPrimary).to.equal(username)
+    })
+
+    it('Should log in on the primary and use the token on the secondary', async function () {
+      const token = await primary.login.getAccessToken({ username, password })
+
+      const { username: fromSecondary } = await secondary.users.getMyInfo({ token })
+      expect(fromSecondary).to.equal(username)
+    })
+
+    it('Should evict on the secondary a token revoked on the primary', async function () {
+      const token = await secondary.login.getAccessToken({ username, password })
+
+      await secondary.users.getMyInfo({ token })
+
+      await primary.login.logout({ token })
+
+      await secondary.users.getMyInfo({ token, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
   })
 

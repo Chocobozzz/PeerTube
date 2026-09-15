@@ -1,7 +1,7 @@
 import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, LogoType, UserRight } from '@peertube/peertube-models'
 import { createReqFiles } from '@server/helpers/express-utils.js'
-import { MIMETYPES } from '@server/initializers/constants.js'
 import { ConfigDistribution } from '@server/initializers/config/config-distribution.js'
+import { MIMETYPES } from '@server/initializers/constants.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { deleteUploadImages, logoTypeToUploadImageEnum, replaceUploadImage } from '@server/lib/upload-image.js'
@@ -11,8 +11,8 @@ import { ModelCache } from '@server/models/shared/model-cache.js'
 import express from 'express'
 import { remove, writeJSON } from 'fs-extra/esm'
 import { CustomConfigAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../helpers/audit-logger.js'
-import { convertCustomConfigBody } from '../../initializers/config/custom-config.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
+import { convertCustomConfigBody } from '../../initializers/config/custom-config.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
 import {
   apiRateLimiter,
@@ -36,9 +36,7 @@ configRouter.use(apiRateLimiter)
 
 const auditLogger = auditLoggerFactory('config')
 
-configRouter.get('/', openapiOperationDoc({ operationId: 'getConfig' }), asyncMiddleware(getConfig))
-
-configRouter.get('/about', openapiOperationDoc({ operationId: 'getAbout' }), asyncMiddleware(getAbout))
+registerConfigSharedRoutes(configRouter)
 
 configRouter.get(
   '/custom',
@@ -291,9 +289,28 @@ async function deleteInstanceLogo (req: express.Request, res: express.Response) 
 }
 
 // ---------------------------------------------------------------------------
+// Router for secondary process
+// ---------------------------------------------------------------------------
+
+const secondaryConfigRouter = express.Router()
+
+secondaryConfigRouter.use(apiRateLimiter)
+
+registerConfigSharedRoutes(secondaryConfigRouter)
+
+// ---------------------------------------------------------------------------
 
 export {
-  configRouter
+  configRouter,
+  secondaryConfigRouter
+}
+
+// ---------------------------------------------------------------------------
+
+function registerConfigSharedRoutes (router: express.Router) {
+  router.get('/', openapiOperationDoc({ operationId: 'getConfig' }), asyncMiddleware(getConfig))
+
+  router.get('/about', openapiOperationDoc({ operationId: 'getAbout' }), asyncMiddleware(getAbout))
 }
 
 // ---------------------------------------------------------------------------

@@ -8,20 +8,20 @@ import { automaticTagRouter } from './automatic-tags.js'
 import { blocklistRouter } from './blocklist.js'
 import { bulkRouter } from './bulk.js'
 import { clientConfigRouter } from './client-config.js'
-import { configRouter } from './config.js'
+import { configRouter, secondaryConfigRouter } from './config.js'
 import { customPageRouter } from './custom-page.js'
 import { jobsRouter } from './jobs.js'
 import { metricsRouter } from './metrics.js'
 import { oauthClientsRouter } from './oauth-clients.js'
 import { overviewsRouter } from './overviews.js'
-import { playerSettingsRouter } from './player-settings.js'
+import { playerSettingsRouter, secondaryPlayerSettingsRouter } from './player-settings.js'
 import { pluginRouter } from './plugins.js'
 import { runnersRouter } from './runners/index.js'
 import { searchRouter } from './search/index.js'
 import { serverRouter } from './server/index.js'
-import { usersRouter } from './users/index.js'
+import { secondaryUsersRouter, usersRouter } from './users/index.js'
 import { videoChannelSyncRouter } from './video-channel-sync.js'
-import { videoChannelRouter } from './video-channels/index.js'
+import { secondaryVideoChannelRouter, videoChannelRouter } from './video-channels/index.js'
 import { videoPlaylistRouter } from './video-playlist.js'
 import { secondaryVideosRouter, videosRouter } from './videos/index.js'
 import { watchedWordsRouter } from './watched-words.js'
@@ -72,7 +72,15 @@ const secondaryApiRouter = express.Router()
 
 secondaryApiRouter.use(corsMiddleware)
 
+secondaryApiRouter.use('/config', secondaryConfigRouter)
+secondaryApiRouter.use('/client-config', clientConfigRouter)
+secondaryApiRouter.use('/users', secondaryUsersRouter)
+secondaryApiRouter.use('/accounts', accountsRouter)
+secondaryApiRouter.use('/video-channels', secondaryVideoChannelRouter)
 secondaryApiRouter.use('/videos', secondaryVideosRouter)
+secondaryApiRouter.use('/player-settings', secondaryPlayerSettingsRouter)
+secondaryApiRouter.use('/search', searchRouter)
+secondaryApiRouter.use('/overviews', overviewsRouter)
 
 secondaryApiRouter.use('/ping', pong)
 secondaryApiRouter.use('/*', badRequest)

@@ -1,6 +1,6 @@
-import express from 'express'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import express from 'express'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import {
@@ -17,21 +17,17 @@ import { UserVideoHistoryModel } from '../../../models/user/user-video-history.j
 
 const myVideosHistoryRouter = express.Router()
 
-myVideosHistoryRouter.get('/me/history/videos',
-  authenticate,
-  paginationValidator,
-  setDefaultPagination,
-  userHistoryListValidator,
-  asyncMiddleware(listMyVideosHistory)
-)
+registerMyHistorySharedRoutes(myVideosHistoryRouter)
 
-myVideosHistoryRouter.delete('/me/history/videos/:videoId',
+myVideosHistoryRouter.delete(
+  '/me/history/videos/:videoId',
   authenticate,
   userHistoryRemoveElementValidator,
   asyncMiddleware(removeUserHistoryElement)
 )
 
-myVideosHistoryRouter.post('/me/history/videos/remove',
+myVideosHistoryRouter.post(
+  '/me/history/videos/remove',
   authenticate,
   userHistoryRemoveAllValidator,
   asyncRetryTransactionMiddleware(removeAllUserHistory)
@@ -39,8 +35,23 @@ myVideosHistoryRouter.post('/me/history/videos/remove',
 
 // ---------------------------------------------------------------------------
 
+function registerMyHistorySharedRoutes (router: express.Router) {
+  router.get(
+    '/me/history/videos',
+    authenticate,
+    paginationValidator,
+    setDefaultPagination,
+    userHistoryListValidator,
+    asyncMiddleware(listMyVideosHistory)
+  )
+}
+
+// ---------------------------------------------------------------------------
+
 export {
-  myVideosHistoryRouter
+  myVideosHistoryRouter,
+  // Will be used by parent router
+  registerMyHistorySharedRoutes
 }
 
 // ---------------------------------------------------------------------------
@@ -70,6 +81,6 @@ async function removeAllUserHistory (req: express.Request, res: express.Response
   })
 
   return res.type('json')
-            .status(HttpStatusCode.NO_CONTENT_204)
-            .end()
+    .status(HttpStatusCode.NO_CONTENT_204)
+    .end()
 }

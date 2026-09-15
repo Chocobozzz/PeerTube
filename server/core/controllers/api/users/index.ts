@@ -1,6 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserCreate, UserRight, UserUpdate } from '@peertube/peertube-models'
-import { tokensRouter } from '@server/controllers/api/users/token.js'
+import { registerTokenSharedRoutes, tokensRouter } from '@server/controllers/api/users/token.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getResetPasswordUrl } from '@server/lib/client-urls.js'
@@ -41,14 +41,14 @@ import {
 } from '../../../middlewares/validators/index.js'
 import { UserModel } from '../../../models/user/user.js'
 import { emailVerificationRouter } from './email-verification.js'
-import { meRouter } from './me.js'
+import { meRouter, registerMeSharedRoutes } from './me.js'
 import { myAbusesRouter } from './my-abuses.js'
 import { myBlocklistRouter } from './my-blocklist.js'
-import { myVideosHistoryRouter } from './my-history.js'
-import { myNotificationsRouter } from './my-notifications.js'
-import { mySubscriptionsRouter } from './my-subscriptions.js'
+import { myVideosHistoryRouter, registerMyHistorySharedRoutes } from './my-history.js'
+import { myNotificationsRouter, registerMyNotificationsSharedRoutes } from './my-notifications.js'
+import { mySubscriptionsRouter, registerMySubscriptionsSharedRoutes } from './my-subscriptions.js'
 import { myVideoPlaylistsRouter } from './my-video-playlists.js'
-import { registrationsRouter } from './registrations.js'
+import { registerRegistrationSharedRoutes, registrationsRouter } from './registrations.js'
 import { twoFactorRouter } from './two-factor.js'
 import { userExportsRouter } from './user-exports.js'
 import { userImportRouter } from './user-imports.js'
@@ -159,8 +159,27 @@ usersRouter.post(
 )
 
 // ---------------------------------------------------------------------------
+// Router for secondary process
+// ---------------------------------------------------------------------------
+
+const secondaryUsersRouter = express.Router()
+
+secondaryUsersRouter.use(apiRateLimiter)
+
+secondaryUsersRouter.use('/', emailVerificationRouter)
+secondaryUsersRouter.use('/', myVideoPlaylistsRouter)
+
+registerTokenSharedRoutes(secondaryUsersRouter)
+registerRegistrationSharedRoutes(secondaryUsersRouter)
+registerMeSharedRoutes(secondaryUsersRouter)
+registerMySubscriptionsSharedRoutes(secondaryUsersRouter)
+registerMyNotificationsSharedRoutes(secondaryUsersRouter)
+registerMyHistorySharedRoutes(secondaryUsersRouter)
+
+// ---------------------------------------------------------------------------
 
 export {
+  secondaryUsersRouter,
   usersRouter
 }
 

@@ -101,19 +101,27 @@ registrationsRouter.get(
   asyncMiddleware(listRegistrations)
 )
 
-registrationsRouter.post(
-  '/register',
-  registrationRateLimiter,
-  asyncMiddleware(determineSignupMode),
-  asyncMiddleware(ensureUserRegistrationAllowedFactory()),
-  ensureUserRegistrationAllowedForIP,
-  usersRegistrationValidator,
-  asyncRetryTransactionMiddleware(registerUser)
-)
+registerRegistrationSharedRoutes(registrationsRouter)
+
+// ---------------------------------------------------------------------------
+
+function registerRegistrationSharedRoutes (router: express.Router) {
+  // Creating a user is CPU bound (password hashing, actor key generation), so let every process of the platform do it
+  router.post(
+    '/register',
+    registrationRateLimiter,
+    asyncMiddleware(determineSignupMode),
+    asyncMiddleware(ensureUserRegistrationAllowedFactory()),
+    ensureUserRegistrationAllowedForIP,
+    usersRegistrationValidator,
+    asyncRetryTransactionMiddleware(registerUser)
+  )
+}
 
 // ---------------------------------------------------------------------------
 
 export {
+  registerRegistrationSharedRoutes, // Will be used by parent router
   registrationsRouter
 }
 
