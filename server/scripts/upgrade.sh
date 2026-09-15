@@ -40,8 +40,16 @@ if [ -x "$(command -v pg_dump)" ]; then
 
   echo "Backing up PostgreSQL database in $SQL_BACKUP_PATH"
 
-read DB_HOST DB_SUFFIX DB_NAME DB_USER DB_PASS DB_PORT <<EOF
-  $(node -e "
+  # One value per line: read them separately so empty values don't shift the others
+  {
+    IFS= read -r DB_HOST
+    IFS= read -r DB_SUFFIX
+    IFS= read -r DB_NAME
+    IFS= read -r DB_USER
+    IFS= read -r DB_PASS
+    IFS= read -r DB_PORT
+  } <<EOF
+$(node -e "
     const config = require('js-yaml').load(require('fs').readFileSync(process.argv[1], 'utf8'))['database'];
     console.log([
       config.hostname || '',
