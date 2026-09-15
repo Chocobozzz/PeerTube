@@ -4,6 +4,7 @@ import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
+  createSecondaryServer,
   createSingleServer,
   makeRawRequest,
   PeerTubeServer,
@@ -17,19 +18,23 @@ const oauthServerPort = 8082
 
 describe('Official plugin auth-openid-connect', function () {
   let server: PeerTubeServer
+  let secondary: PeerTubeServer
   let openIdLoginUrl: string
 
   async function getTokensFromKeycloak (options: {
     peertubeUsername: string
     keycloakUsername: string
+    loginServer?: PeerTubeServer
   }) {
+    const { peertubeUsername, keycloakUsername, loginServer = server } = options
+
     const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
-    const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: options.keycloakUsername })
-    const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: options.peertubeUsername, success: true })
+    const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes), username: keycloakUsername })
+    const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, username: peertubeUsername, success: true })
 
     const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
 
-    const { body } = await server.login.loginUsingExternalToken({ username: options.peertubeUsername, externalAuthToken })
+    const { body } = await loginServer.login.loginUsingExternalToken({ username: peertubeUsername, externalAuthToken })
 
     return { accessToken: body.access_token, refreshToken: body.refresh_token }
   }
@@ -219,8 +224,72 @@ describe('Official plugin auth-openid-connect', function () {
     expect(redirectUrl).to.equal('/login?externalAuthError=true')
   })
 
+  describe('Secondary server process', function () {
+    before(async function () {
+      this.timeout(60000)
+
+      // Re-init plugin settings
+      await updatePluginSettings(server)
+
+      secondary = await createSecondaryServer(server)
+    })
+
+    it('Should exchange on the secondary a token whose auth request and callback ran on the primary', async function () {
+      const { accessToken } = await getTokensFromKeycloak({
+        peertubeUsername: 'myuser_example.com',
+        keycloakUsername: 'myuser',
+        loginServer: secondary
+      })
+
+      const { username } = await server.users.getMyInfo({ token: accessToken })
+      expect(username).to.equal('myuser_example.com')
+    })
+
+    it('Should not replay on the primary a token consumed by the secondary', async function () {
+      const peertubeRes = await getOpenIdUrl(openIdLoginUrl)
+      const kcRes = await loginOnKeycloak({ loginPageUrl: extractLocation(peertubeRes) })
+      const ptBypassPath = await sendBackKeycloakCode({ peertubeRes, kcRes, success: true })
+      const externalAuthToken = new URL(ptBypassPath, server.url).searchParams.get('externalAuthToken')
+
+      await secondary.login.loginUsingExternalToken({ username: 'myuser_example.com', externalAuthToken })
+
+      await server.login.loginUsingExternalToken({
+        username: 'myuser_example.com',
+        externalAuthToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should revalidate against the identity provider a token refreshed on the secondary', async function () {
+      await updatePluginSettings(server, { 'revalidate-refresh-with-idp': true })
+
+      const { refreshToken } = await getTokensFromKeycloak({
+        peertubeUsername: 'myuser_example.com',
+        keycloakUsername: 'myuser',
+        loginServer: secondary
+      })
+
+      const { body: refreshed } = await secondary.login.refreshToken({ refreshToken })
+
+      const { username } = await server.users.getMyInfo({ token: refreshed.access_token })
+      expect(username).to.equal('myuser_example.com')
+    })
+
+    it('Should build a logout redirect on the secondary although only the primary served the login', async function () {
+      const { accessToken } = await getTokensFromKeycloak({
+        peertubeUsername: 'myuser_example.com',
+        keycloakUsername: 'myuser',
+        loginServer: secondary
+      })
+
+      const { redirectUrl } = await secondary.login.logout({ token: accessToken })
+
+      expect(redirectUrl).to.include(`http://${oauthServerHost}:${oauthServerPort}/realms/myrealm/protocol/openid-connect/logout`)
+    })
+  })
+
   after(async function () {
-    await cleanupTests([ server ])
+    await cleanupTests([ secondary, server ])
   })
 })
 
