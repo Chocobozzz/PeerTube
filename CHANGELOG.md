@@ -1,6 +1,6 @@
 # Changelog
 
-## v8.3.0-rc.1
+## v8.3.0
 
 ### IMPORTANT NOTES
 
@@ -17,6 +17,7 @@
 
 ### SECURITY
 
+ * Prevent a moderator to change user role. Thanks to Infinit3i for reporting it
  * Security hardening:
     * Time safe comparison when checking email verification strings
     * Prevent replaying an email check request
@@ -129,7 +130,7 @@
  * Add all user attributes to audit logs on create/update [#7695](https://github.com/Chocobozzz/PeerTube/pull/7695)
  * Correctly hide the mobile message if disabled by the admin
  * Fix missing sourcemap asset requests [#7696](https://github.com/Chocobozzz/PeerTube/pull/7696)
-
+ * Improve Redis connection resilience for BullMQ job queue [#7775](https://github.com/Chocobozzz/PeerTube/pull/7775)
 
 
 ## v8.2.4
