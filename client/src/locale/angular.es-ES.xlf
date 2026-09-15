@@ -24536,9 +24536,9 @@ color: red;
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7572002493627985078" datatype="html">
+      <trans-unit id="7572002493627985078" datatype="html" xml:space="preserve">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels and receive notifications of new videos</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Subscribe<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to channels and receive notifications of new videos</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Suscríbete<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a los canales y recibe notificaciones de nuevos vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">26</context>
@@ -24684,9 +24684,9 @@ color: red;
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1417693714872528491" datatype="html">
+      <trans-unit id="1417693714872528491" datatype="html" xml:space="preserve">
         <source>This field is required.</source>
-        <target state="new">This field is required.</target>
+        <target state="translated">Este campo es obligatorio.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">11</context>
@@ -24696,25 +24696,25 @@ color: red;
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5590037753298590410" datatype="html">
+      <trans-unit id="5590037753298590410" datatype="html" xml:space="preserve">
         <source>This field must be a URL</source>
-        <target state="new">This field must be a URL</target>
+        <target state="translated">Este campo debe ser una URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3824663103894000237" datatype="html">
+      <trans-unit id="3824663103894000237" datatype="html" xml:space="preserve">
         <source>This field must be a valid 6-digit hexadecimal color code.</source>
-        <target state="new">This field must be a valid 6-digit hexadecimal color code.</target>
+        <target state="translated">Este campo debe contener un código de color hexadecimal válido de 6 dígitos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/common-validators.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3743508579385077788" datatype="html">
+      <trans-unit id="3743508579385077788" datatype="html" xml:space="preserve">
         <source>Platform name is required.</source>
-        <target state="new">Platform name is required.</target>
+        <target state="translated">Es obligatorio indicar el nombre de la plataforma.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">7</context>
@@ -24744,17 +24744,17 @@ color: red;
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3317581690509286296" datatype="html">
+      <trans-unit id="3317581690509286296" datatype="html" xml:space="preserve">
         <source>Internal note must be at least 2 characters long.</source>
-        <target state="new">Internal note must be at least 2 characters long.</target>
+        <target state="translated">La nota interna debe tener una longitud mínima de 2 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3906109803242939451" datatype="html">
+      <trans-unit id="3906109803242939451" datatype="html" xml:space="preserve">
         <source>Internal note cannot be more than 300 characters long.</source>
-        <target state="new">Internal note cannot be more than 300 characters long.</target>
+        <target state="translated">La nota interna no puede tener más de 300 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -24872,33 +24872,33 @@ color: red;
           <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1653315912561885898" datatype="html">
+      <trans-unit id="1653315912561885898" datatype="html" xml:space="preserve">
         <source>A chapter title is required.</source>
-        <target state="new">A chapter title is required.</target>
+        <target state="translated">Es obligatorio incluir un título para el capítulo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4021088770925947810" datatype="html">
+      <trans-unit id="4021088770925947810" datatype="html" xml:space="preserve">
         <source>A chapter title should be more than 2 characters long.</source>
-        <target state="new">A chapter title should be more than 2 characters long.</target>
+        <target state="translated">El título de un capítulo debe tener más de 2 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5999631145853755676" datatype="html">
+      <trans-unit id="5999631145853755676" datatype="html" xml:space="preserve">
         <source>A chapter title should be less than 100 characters long.</source>
-        <target state="new">A chapter title should be less than 100 characters long.</target>
+        <target state="translated">El título de un capítulo debe tener menos de 100 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3038146146697752093" datatype="html">
+      <trans-unit id="3038146146697752093" datatype="html" xml:space="preserve">
         <source>Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></source>
-        <target state="new">Multiple chapters have the same timecode <x id="PH" equiv-text="chapter.timecode"/></target>
+        <target state="translated">Varios capítulos tienen el mismo código de tiempo <x id="PH" equiv-text="chapter.timecode"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-chapter-validators.ts</context>
           <context context-type="linenumber">26</context>
@@ -25040,33 +25040,33 @@ color: red;
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3649698008903201987" datatype="html">
+      <trans-unit id="3649698008903201987" datatype="html" xml:space="preserve">
         <source>Enable DVR</source>
-        <target state="new">Enable DVR</target>
+        <target state="translated">Activar el DVR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9111762185226509379" datatype="html">
+      <trans-unit id="9111762185226509379" datatype="html" xml:space="preserve">
         <source>Allows viewers to pause, rewind, and jump back to live during the stream</source>
-        <target state="new">Allows viewers to pause, rewind, and jump back to live during the stream</target>
+        <target state="translated">Permite a los espectadores darle pausa, rebobinar y volver a la retransmisión en directo durante la emisión</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">97,98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5217869465602782408" datatype="html">
+      <trans-unit id="5217869465602782408" datatype="html" xml:space="preserve">
         <source>DVR window</source>
-        <target state="new">DVR window</target>
+        <target state="translated">ventana DVR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">104,105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4948126596693803585" datatype="html">
+      <trans-unit id="4948126596693803585" datatype="html" xml:space="preserve">
         <source>Maximum is <x id="INTERPOLATION" equiv-text="{{ getMaxDvrWindowMinutes() }}"/> minutes</source>
-        <target state="new">Maximum is <x id="INTERPOLATION" equiv-text="{{ getMaxDvrWindowMinutes() }}"/> minutes</target>
+        <target state="translated">El máximo son <x id="INTERPOLATION" equiv-text="{{ getMaxDvrWindowMinutes() }}"/> minutos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">105,107</context>
@@ -25136,25 +25136,25 @@ color: red;
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2340164151654372915" datatype="html">
+      <trans-unit id="2340164151654372915" datatype="html" xml:space="preserve">
         <source>A password should be at least 2 characters long.</source>
-        <target state="new">A password should be at least 2 characters long.</target>
+        <target state="translated">Una contraseña debe tener al menos 2 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7699381877503388166" datatype="html">
+      <trans-unit id="7699381877503388166" datatype="html" xml:space="preserve">
         <source>A password should be shorter than 100 characters long.</source>
-        <target state="new">A password should be shorter than 100 characters long.</target>
+        <target state="translated">Una contraseña debe tener menos de 100 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3116180442048363146" datatype="html">
+      <trans-unit id="3116180442048363146" datatype="html" xml:space="preserve">
         <source>A password is required for password protected video.</source>
-        <target state="new">A password is required for password protected video.</target>
+        <target state="translated">Se requiere una contraseña para acceder al vídeo protegido con contraseña.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">27</context>
@@ -25220,25 +25220,25 @@ color: red;
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6232983318137956416" datatype="html">
+      <trans-unit id="6232983318137956416" datatype="html" xml:space="preserve">
         <source>Support must be at least 3 characters long.</source>
-        <target state="new">Support must be at least 3 characters long.</target>
+        <target state="translated">El texto de ayuda debe tener al menos 3 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6391397232981399226" datatype="html">
+      <trans-unit id="6391397232981399226" datatype="html" xml:space="preserve">
         <source>Support cannot be more than 1000 characters long.</source>
-        <target state="new">Support cannot be more than 1000 characters long.</target>
+        <target state="translated">El texto de ayuda no puede superar los 1000 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3982872570618397592" datatype="html">
+      <trans-unit id="3982872570618397592" datatype="html" xml:space="preserve">
         <source>Video support cannot be more than 250 characters long.</source>
-        <target state="new">Video support cannot be more than 250 characters long.</target>
+        <target state="translated">El texto de ayuda del vídeo no puede superar los 250 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-validators.ts</context>
           <context context-type="linenumber">91</context>
@@ -25252,65 +25252,65 @@ color: red;
           <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4708973013815646385" datatype="html">
+      <trans-unit id="4708973013815646385" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</source>
-        <target state="new"><x id="PH" equiv-text="word"/> is not valid (min 1 character/max 100 characters)</target>
+        <target state="translated"><x id="PH" equiv-text="word"/> no es válido (mínimo 1 carácter, máximo 100 caracteres)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1715587073952235112" datatype="html">
+      <trans-unit id="1715587073952235112" datatype="html" xml:space="preserve">
         <source>There are too much words in the list (max 500 words)</source>
-        <target state="new">There are too much words in the list (max 500 words)</target>
+        <target state="translated">Hay demasiadas palabras en la lista (máximo 500 palabras)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1391063124784029164" datatype="html">
+      <trans-unit id="1391063124784029164" datatype="html" xml:space="preserve">
         <source>List name is required.</source>
-        <target state="new">List name is required.</target>
+        <target state="translated">Es obligatorio introducir el nombre de la lista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4341509997126306236" datatype="html">
+      <trans-unit id="4341509997126306236" datatype="html" xml:space="preserve">
         <source>List name must be at least 1 character long.</source>
-        <target state="new">List name must be at least 1 character long.</target>
+        <target state="translated">El nombre de la lista debe tener al menos 1 carácter.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="55815482589008245" datatype="html">
+      <trans-unit id="55815482589008245" datatype="html" xml:space="preserve">
         <source>List name cannot be more than 100 characters long.</source>
-        <target state="new">List name cannot be more than 100 characters long.</target>
+        <target state="translated">El nombre de la lista no puede tener más de 100 caracteres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1312213389883835455" datatype="html">
+      <trans-unit id="1312213389883835455" datatype="html" xml:space="preserve">
         <source>Words are required.</source>
-        <target state="new">Words are required.</target>
+        <target state="translated">Es obligatorio introducir palabras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6677020266490766837" datatype="html">
+      <trans-unit id="6677020266490766837" datatype="html" xml:space="preserve">
         <source>Words entered contain duplicates.</source>
-        <target state="new">Words entered contain duplicates.</target>
+        <target state="translated">Las palabras introducidas contienen duplicados.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1048926006551468313" datatype="html">
+      <trans-unit id="1048926006551468313" datatype="html" xml:space="preserve">
         <source>A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</source>
-        <target state="new">A word must be between 1 and 100 characters and the total number of words must not exceed 500 items</target>
+        <target state="translated">Cada palabra debe tener entre 1 y 100 caracteres, y el número total de palabras no debe superar las 500.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/watched-words-list-validators.ts</context>
           <context context-type="linenumber">49</context>
@@ -25324,9 +25324,9 @@ color: red;
           <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4842097586181992270" datatype="html">
+      <trans-unit id="4842097586181992270" datatype="html" xml:space="preserve">
         <source>This input cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</source>
-        <target state="new">This input cannot handle this kind of file. Accepted extensions are <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
+        <target state="translated">Esta interfaz no admite este tipo de archivo. Las extensiones admitidas son <x id="PH" equiv-text="this.allowedExtensionsMessage"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/reactive-file.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -25340,9 +25340,9 @@ color: red;
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4682186700066917562" datatype="html">
+      <trans-unit id="4682186700066917562" datatype="html" xml:space="preserve">
         <source>{1} categories selected</source>
-        <target state="new">{1} categories selected</target>
+        <target state="translated">{1} categorías seleccionadas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-categories.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -25805,17 +25805,17 @@ color: red;
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3444025441306717183" datatype="html">
+      <trans-unit id="3444025441306717183" datatype="html" xml:space="preserve">
         <source>There are errors in your video settings.</source>
-        <target state="new">There are errors in your video settings.</target>
+        <target state="translated">Hay errores en la configuración de tu vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/manage-errors.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2271545768110890370" datatype="html">
+      <trans-unit id="2271545768110890370" datatype="html" xml:space="preserve">
         <source><x id="INTERPOLATION" equiv-text="{{ errorRoot.page }}"/> page</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ errorRoot.page }}"/> page</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ errorRoot.page }}"/> página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">74</context>
@@ -25825,57 +25825,57 @@ color: red;
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2689998308942961784" datatype="html">
+      <trans-unit id="2689998308942961784" datatype="html" xml:space="preserve">
         <source>Create channel</source>
-        <target state="new">Create channel</target>
+        <target state="translated">Crear canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2046341807280119595" datatype="html">
+      <trans-unit id="2046341807280119595" datatype="html" xml:space="preserve">
         <source>Manage my channel</source>
-        <target state="new">Manage my channel</target>
+        <target state="translated">Gestionar mi canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1212827186952717848" datatype="html">
+      <trans-unit id="1212827186952717848" datatype="html" xml:space="preserve">
         <source>General channel configuration</source>
-        <target state="new">General channel configuration</target>
+        <target state="translated">Configuración general de canales</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="287668130427730182" datatype="html">
+      <trans-unit id="287668130427730182" datatype="html" xml:space="preserve">
         <source>Channel podcast configuration</source>
-        <target state="new">Channel podcast configuration</target>
+        <target state="translated">Configuración del podcast del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3756117891382518335" datatype="html">
+      <trans-unit id="3756117891382518335" datatype="html" xml:space="preserve">
         <source>Channel editors</source>
-        <target state="new">Channel editors</target>
+        <target state="translated">Editores de canales</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2832599058735033473" datatype="html">
+      <trans-unit id="2832599058735033473" datatype="html" xml:space="preserve">
         <source>Channel activities</source>
-        <target state="new">Channel activities</target>
+        <target state="translated">Actividades del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3242444609132964678" datatype="html">
+      <trans-unit id="3242444609132964678" datatype="html" xml:space="preserve">
         <source>Search a channel</source>
-        <target state="new">Search a channel</target>
+        <target state="translated">Buscar un canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">8</context>
@@ -25889,9 +25889,9 @@ color: red;
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8413618684534157435" datatype="html">
+      <trans-unit id="8413618684534157435" datatype="html" xml:space="preserve">
         <source>{1} languages selected</source>
-        <target state="new">{1} languages selected</target>
+        <target state="translated">{1} idiomas seleccionados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-languages.component.ts</context>
           <context context-type="linenumber">20</context>
@@ -25905,17 +25905,17 @@ color: red;
           <context context-type="linenumber">68</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1652024247924208981" datatype="html">
+      <trans-unit id="1652024247924208981" datatype="html" xml:space="preserve">
         <source>Warn users</source>
-        <target state="new">Warn users</target>
+        <target state="translated">Advertir a los usuarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3624586880997617732" datatype="html">
+      <trans-unit id="3624586880997617732" datatype="html" xml:space="preserve">
         <source>Warn users and blur thumbnail</source>
-        <target state="new">Warn users and blur thumbnail</target>
+        <target state="translated">Avisar a los usuarios y difuminar la miniatura</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -25961,17 +25961,17 @@ color: red;
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7401094473118142911" datatype="html">
+      <trans-unit id="7401094473118142911" datatype="html" xml:space="preserve">
         <source>Your community cannot import or synchronize content from remote platforms</source>
-        <target state="new">Your community cannot import or synchronize content from remote platforms</target>
+        <target state="translated">Tu comunidad no puede importar ni sincronizar contenido desde plataformas remotas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2807800733729323332" datatype="html">
+      <trans-unit id="2807800733729323332" datatype="html" xml:space="preserve">
         <source>Yes</source>
-        <target state="new">Yes</target>
+        <target state="translated">Si</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -25993,9 +25993,9 @@ color: red;
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3757873457081573953" datatype="html">
+      <trans-unit id="3757873457081573953" datatype="html" xml:space="preserve">
         <source>Your community can live stream on the platform (this requires extra moderation work)</source>
-        <target state="new">Your community can live stream on the platform (this requires extra moderation work)</target>
+        <target state="translated">Tu comunidad puede retransmitir en directo en la plataforma (esto requiere un trabajo adicional de moderación)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">84</context>
