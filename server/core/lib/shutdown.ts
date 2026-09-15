@@ -4,6 +4,7 @@ import { SHUTDOWN_TIMEOUTS } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { LiveManager } from './live/live-manager.js'
+import { PeerTubeSocket } from './peertube-socket.js'
 import { Redis } from './redis/index.js'
 import { AbstractScheduler } from './schedulers/abstract-scheduler.js'
 
@@ -50,6 +51,9 @@ async function shutdown (server: HTTPServer) {
   // Stop scheduling new work first, so nothing can grab a database connection we are about to close
   AbstractScheduler.disableAll()
   LiveManager.Instance.stop()
+
+  // Before closing the HTTP server, that would otherwise wait for the socket.io websockets
+  PeerTubeSocket.Instance.close()
 
   await Promise.all([
     closeHTTPServer(server),

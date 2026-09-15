@@ -19,6 +19,8 @@ const RUNNERS_ROOM = 'runners'
 class PeerTubeSocket {
   private static instance: PeerTubeSocket
 
+  private io: SocketServer
+
   private userNotificationsNamespace: Namespace
   private liveVideosNamespace: Namespace
   private runnersNamespace: Namespace
@@ -31,8 +33,10 @@ class PeerTubeSocket {
         ? { origin: 'http://localhost:5173', methods: [ 'GET', 'POST' ] }
         : undefined
     })
+    this.io = io
 
     // Broadcast to all socket.io instances if spawning multiple PeerTube processes
+    // So a client can be connected to any process (primary or secondary) and still receive every message
     // Both are closed with the main Redis client when PeerTube shuts down
     const pubClient = Redis.Instance.duplicateClient('socket.io pub')
     const subClient = Redis.Instance.duplicateClient('socket.io sub')
@@ -84,6 +88,20 @@ class PeerTubeSocket {
         })
       })
   }
+
+  // Upgraded websocket connections are not tracked by the HTTP server, so closing it would wait for them forever
+  // Only close the connections of this process: clients reconnect to another one
+  // Don't use `io.close()` that also closes the HTTP server
+  // Or `io.disconnectSockets()` where the signal is broadcasted to every process
+  close () {
+    if (!this.io) return
+
+    logger.info('Closing socket.io connections.')
+
+    this.io.engine.close()
+  }
+
+  // ---------------------------------------------------------------------------
 
   sendNotification (userId: number, notification: UserNotificationModelForApi) {
     // The socket server may never be started in this process
