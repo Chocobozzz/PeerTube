@@ -33,6 +33,8 @@ export class TokensCache {
 
   private readonly userHavingToken = new Map<number, Set<string>>()
 
+  private readonly userTokensDeletedHandlers: ((userId: number) => void)[] = []
+
   private constructor () {}
 
   static get Instance () {
@@ -65,6 +67,11 @@ export class TokensCache {
     this.broadcastInvalidation({ token })
   }
 
+  // The handler runs on every process when the tokens of a user are invalidated, for example when the user is updated or deleted
+  registerUserTokensDeletedHandler (handler: (userId: number) => void) {
+    this.userTokensDeletedHandlers.push(handler)
+  }
+
   deleteUserTokens (userId: number, tokenException?: string) {
     this.deleteUserTokensLocally(userId, tokenException)
 
@@ -80,6 +87,10 @@ export class TokensCache {
   }
 
   private deleteUserTokensLocally (userId: number, tokenException?: string) {
+    for (const handler of this.userTokensDeletedHandlers) {
+      handler(userId)
+    }
+
     if (!this.userHavingToken.has(userId)) return
 
     const tokens = [ ...this.userHavingToken.get(userId) ]
