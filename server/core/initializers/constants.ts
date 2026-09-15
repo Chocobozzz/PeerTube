@@ -1156,6 +1156,9 @@ export const LRU_CACHE = {
     MAX_SIZE: 1000,
     TTL: parseDurationToMs('10 minutes')
   },
+  VIDEO_TOKENS: {
+    MAX_SIZE: 10_000
+  },
   FILENAME_TO_PATH_PERMANENT_FILE_CACHE: {
     MAX_SIZE: 5000
   },
@@ -1165,10 +1168,6 @@ export const LRU_CACHE = {
   STATIC_VIDEO_FILES_RIGHTS_CHECK: {
     MAX_SIZE: 5000,
     TTL: parseDurationToMs('10 seconds')
-  },
-  VIDEO_TOKENS: {
-    MAX_SIZE: 100_000,
-    TTL: parseDurationToMs('8 hours')
   },
   WATCHED_WORDS_REGEX: {
     MAX_SIZE: 100,
@@ -1200,6 +1199,8 @@ export const DIRECTORIES = {
 
   UPLOAD_IMAGES: join(CONFIG.STORAGE.UPLOADS_DIR, 'images')
 }
+
+export const VIDEO_FILE_TOKEN_LIFETIME = parseDurationToMs('8 hours')
 
 export const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
 

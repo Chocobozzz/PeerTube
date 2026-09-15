@@ -24,6 +24,8 @@ import { TokenInvalidationPayload } from './token-invalidation.js'
 import * as twoFactorRequest from './two-factor-request.js'
 import * as uploadSession from './upload-session.js'
 import * as videoStatCounters from './video-stat-counters.js'
+import * as videoTokens from './video-tokens.js'
+import { VideoTokenPayload } from './video-tokens.js'
 import * as videoView from './video-view.js'
 import * as videoViewerCounters from './video-viewer-counters.js'
 import { AddVideoViewerCounterOptions } from './video-viewer-counters.js'
@@ -281,6 +283,16 @@ export class Redis {
 
   deleteUploadSession (uploadId: string) {
     return uploadSession.deleteUploadSession(uploadId)
+  }
+
+  /* ************ Video file tokens ************ */
+
+  setVideoToken (token: string, payload: VideoTokenPayload) {
+    return videoTokens.setVideoToken(token, payload)
+  }
+
+  getVideoToken (token: string) {
+    return videoTokens.getVideoToken(token)
   }
 
   /* ************ AP resource unavailability ************ */

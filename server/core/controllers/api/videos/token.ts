@@ -11,7 +11,7 @@ tokenRouter.post(
   optionalAuthenticate,
   asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   videoFileTokenValidator,
-  generateToken
+  asyncMiddleware(generateToken)
 )
 
 // ---------------------------------------------------------------------------
@@ -22,12 +22,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function generateToken (req: express.Request, res: express.Response) {
+async function generateToken (req: express.Request, res: express.Response) {
   const video = res.locals.videoWithBlacklist
 
   return res.json(
     {
-      files: VideoTokensManager.Instance.create({ videoUUID: video.uuid, user: getAuthUser(res) })
+      files: await VideoTokensManager.Instance.create({ videoUUID: video.uuid, user: getAuthUser(res) })
     } satisfies VideoToken
   )
 }
