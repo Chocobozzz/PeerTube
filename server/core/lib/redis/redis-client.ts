@@ -173,6 +173,11 @@ export function removeValue (key: string) {
   return client.del(prefix + key)
 }
 
+// Read and delete in one atomic command, so only one process can consume the value
+export function getAndDeleteValue (key: string) {
+  return client.getdel(prefix + key)
+}
+
 export function getSet (key: string) {
   return client.smembers(prefix + key)
 }

@@ -2,6 +2,7 @@ import { RedisOptions } from 'ioredis'
 import * as apUnavailability from './ap-unavailability.js'
 import * as contactForm from './contact-form.js'
 import * as emailVerification from './email-verification.js'
+import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
@@ -283,6 +284,16 @@ export class Redis {
 
   deleteUploadSession (uploadId: string) {
     return uploadSession.deleteUploadSession(uploadId)
+  }
+
+  /* ************ External auth tokens ************ */
+
+  setExternalAuthToken (token: string, payload: object) {
+    return externalAuthTokens.setExternalAuthToken(token, payload)
+  }
+
+  consumeExternalAuthToken<T> (token: string) {
+    return externalAuthTokens.consumeExternalAuthToken<T>(token)
   }
 
   /* ************ Video file tokens ************ */
