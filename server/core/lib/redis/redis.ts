@@ -252,6 +252,18 @@ export class Redis {
     return pluginChanges.subscribeToPluginChanges(handler)
   }
 
+  setPrimaryRegisteredPlugins (npmNames: string[]) {
+    return pluginChanges.setPrimaryRegisteredPlugins(npmNames)
+  }
+
+  getPrimaryRegisteredPlugins () {
+    return pluginChanges.getPrimaryRegisteredPlugins()
+  }
+
+  deletePrimaryRegisteredPlugins () {
+    return pluginChanges.deletePrimaryRegisteredPlugins()
+  }
+
   publishModelCacheInvalidation (payload: ModelCacheInvalidationPayload) {
     return modelCacheInvalidation.publishModelCacheInvalidation(payload)
   }

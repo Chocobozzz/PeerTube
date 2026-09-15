@@ -1,9 +1,12 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
+import { wait } from '@peertube/peertube-core-utils'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
+  makeGetRequest,
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers,
@@ -128,6 +131,60 @@ describe('Test plugins of a secondary server process', function () {
 
       const { name } = await secondary.videos.get({ id: videoUUID })
       expect(name).to.not.contain('<4')
+    })
+  })
+
+  // Must stay last: it stops the secondary of the previous tests
+  describe('Divergence from the primary', function () {
+    const failingNpmName = 'peertube-plugin-test-secondary-failure'
+
+    async function waitUntilStopped (server: PeerTubeServer) {
+      while (true) {
+        try {
+          await makeGetRequest({ url: server.url, path: '/api/v1/ping', expectedStatus: null })
+        } catch {
+          return
+        }
+
+        await wait(500)
+      }
+    }
+
+    it('Should stop a running secondary that cannot register a plugin the primary installed', async function () {
+      this.timeout(120000)
+
+      await primary.plugins.install({ path: PluginsCommand.getPluginTestPath('-secondary-failure') })
+
+      await secondary.servers.waitUntilLog(`failed to register ${failingNpmName}, which the primary process runs`)
+      await waitUntilStopped(secondary)
+    })
+
+    it('Should refuse to boot a secondary that cannot register a plugin the primary runs', async function () {
+      this.timeout(120000)
+
+      let started: PeerTubeServer
+      let error: Error
+
+      try {
+        started = await createSecondaryServer(primary)
+      } catch (err) {
+        error = err as Error
+      }
+
+      if (started) await started.kill()
+
+      expect(error, 'the secondary process should not have started').to.exist
+      expect(error.message).to.contain(`failed to register ${failingNpmName}, which the primary process runs`)
+    })
+
+    it('Should boot a secondary once the primary does not run that plugin anymore', async function () {
+      this.timeout(120000)
+
+      await primary.plugins.uninstall({ npmName: failingNpmName })
+
+      secondary = await createSecondaryServer(primary)
+
+      await makeGetRequest({ url: secondary.url, path: '/api/v1/ping', expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
