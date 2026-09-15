@@ -5,6 +5,7 @@ import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
+  makeGetRequest,
   makePutBodyRequest,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -65,6 +66,61 @@ describe('Test the caches shared by the processes of a platform', function () {
         const config = await secondary.config.getConfig()
         expect(config.instance.avatars).to.not.have.lengthOf(0)
       }
+    })
+  })
+
+  describe('API cache', function () {
+    const feedPath = '/feeds/videos.xml'
+
+    it('Should serve on the secondary a response the primary cached', async function () {
+      {
+        const res = await makeGetRequest({
+          url: primary.url,
+          path: feedPath,
+          accept: 'application/xml',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        expect(res.headers['x-api-cache-cached']).to.not.exist
+      }
+
+      {
+        const res = await makeGetRequest({
+          url: secondary.url,
+          path: feedPath,
+          accept: 'application/xml',
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        expect(res.headers['x-api-cache-cached']).to.equal('true')
+      }
+    })
+
+    it('Should invalidate on the secondary a group the primary cleared', async function () {
+      const { uuid } = await primary.videos.quickUpload({ name: 'video in the podcast feed' })
+
+      const podcastPath = '/feeds/podcast/videos.xml?videoChannelId=' + primary.store.channel.id
+
+      // Cache the podcast feed on the secondary
+      await makeGetRequest({
+        url: secondary.url,
+        path: podcastPath,
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      // The primary owns the deletion, so it is the process that clears the group
+      await primary.videos.remove({ id: uuid })
+
+      const res = await makeGetRequest({
+        url: secondary.url,
+        path: podcastPath,
+        accept: 'application/xml',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(res.headers['x-api-cache-cached']).to.not.exist
+      expect(res.text).to.not.contain(uuid)
     })
   })
 
