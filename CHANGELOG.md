@@ -14,6 +14,9 @@
     * Each node in the returned tree now has a `totalChildren` field: compare it against `children.length` to know if replies were cut off
     * To fetch the rest, call the new endpoint: `GET /api/v1/videos/{id}/comments/{commentId}/replies`
     * If you're a plugin author: `filter:api.video-thread-comments.list.result` now sees only the truncated tree. Two new hooks, `filter:api.video-comment-replies.list.params` / `.result`, cover the new replies endpoint
+  * v8.3.0-rc.1 introduced a bug in the upgrade script: the database backup step fails, which stops the upgrade. To upgrade from v8.3.0-rc.1 (classic installation):
+    * Replace the upgrade script with the fixed one: `cd /var/www/peertube/peertube-latest && sudo -H -u peertube curl -fsSL -o dist/scripts/upgrade.sh https://raw.githubusercontent.com/Chocobozzz/PeerTube/13c16ec0e80a16f3d98b6d0e2c2942c1c22513dc/server/scripts/upgrade.sh` and then run the upgrade script as usual
+    * Or upgrade manually: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#upgrade
 
 ### SECURITY
 
