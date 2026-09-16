@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7.0
+
+ * Optimize file watcher
+ * Fix juddery video with variable fps input
+
 ## v0.6.0
 
  * Requires NodeJS >= 22
