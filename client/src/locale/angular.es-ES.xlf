@@ -26025,33 +26025,33 @@ color: red;
           <context context-type="linenumber">215</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2137796204126498003" datatype="html">
+      <trans-unit id="2137796204126498003" datatype="html" xml:space="preserve">
         <source>Your community is not permitted to run live streams on the platform</source>
-        <target state="new">Your community is not permitted to run live streams on the platform</target>
+        <target state="translated">Tu comunidad no tiene permiso para realizar retransmisiones en directo en la plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3203530711190558690" datatype="html">
+      <trans-unit id="3203530711190558690" datatype="html" xml:space="preserve">
         <source>Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</source>
-        <target state="new">Use https://sepiasearch.org as default search engine to search for content across all known PeerTube platforms</target>
+        <target state="translated">Usa https://sepiasearch.org como motor de búsqueda por defecto para buscar contenido en todas las plataformas conocidas de PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3246080307662107611" datatype="html">
+      <trans-unit id="3246080307662107611" datatype="html" xml:space="preserve">
         <source>Disable global search</source>
-        <target state="new">Disable global search</target>
+        <target state="translated">Desactivar la búsqueda global</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6733232584668337124" datatype="html">
+      <trans-unit id="6733232584668337124" datatype="html" xml:space="preserve">
         <source>Use your platform search engine which only displays local content</source>
-        <target state="new">Use your platform search engine which only displays local content</target>
+        <target state="translated">Utiliza el motor de búsqueda de tu plataforma, que solo muestra contenido local</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -26065,9 +26065,9 @@ color: red;
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6263183216314915807" datatype="html">
+      <trans-unit id="6263183216314915807" datatype="html" xml:space="preserve">
         <source>Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</source>
-        <target state="new">Requires approval by moderators (~ <x id="PH" equiv-text="responseTime"/>)</target>
+        <target state="translated">Requiere la aprobación de los moderadores (~ <x id="PH" equiv-text="responseTime"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -26140,17 +26140,17 @@ color: red;
           <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8641661446906422260" datatype="html">
+      <trans-unit id="8641661446906422260" datatype="html" xml:space="preserve">
         <source>Follow state</source>
-        <target state="new">Follow state</target>
+        <target state="translated">Seguir el estado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1479450344012607518" datatype="html">
+      <trans-unit id="1479450344012607518" datatype="html" xml:space="preserve">
         <source>All follows</source>
-        <target state="new">All follows</target>
+        <target state="translated">Todos los seguidores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">139</context>
@@ -26270,41 +26270,41 @@ color: red;
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3359543209047840437" datatype="html">
+      <trans-unit id="3359543209047840437" datatype="html" xml:space="preserve">
         <source>Supported markdown formats:</source>
-        <target state="new">Supported markdown formats:</target>
+        <target state="translated">Formatos Markdown compatibles:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1650769414409383224" datatype="html">
+      <trans-unit id="1650769414409383224" datatype="html" xml:space="preserve">
         <source>Mastodon verification link</source>
-        <target state="new">Mastodon verification link</target>
+        <target state="translated">Enlace de verificación de Mastodon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.html</context>
           <context context-type="linenumber">10,11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="734181343721986643" datatype="html">
+      <trans-unit id="734181343721986643" datatype="html" xml:space="preserve">
         <source>Learn more about Markdown</source>
-        <target state="new">Learn more about Markdown</target>
+        <target state="translated">Más información sobre Markdown</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.html</context>
           <context context-type="linenumber">14,15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1250852024988288728" datatype="html">
+      <trans-unit id="1250852024988288728" datatype="html" xml:space="preserve">
         <source>Emphasis: *text*</source>
-        <target state="new">Emphasis: *text*</target>
+        <target state="translated">Énfasis: *texto*</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7631247820708444092" datatype="html">
+      <trans-unit id="7631247820708444092" datatype="html" xml:space="preserve">
         <source>Links: [title](https://example.com)</source>
-        <target state="new">Links: [title](https://example.com)</target>
+        <target state="translated">Enlaces: [title](https://example.com)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.ts</context>
           <context context-type="linenumber">42</context>
