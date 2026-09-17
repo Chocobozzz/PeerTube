@@ -61,8 +61,8 @@ describe('Remote errors helpers', function () {
   })
 
   it('Should build the appropriate log level', function () {
-    expect(getRemoteErrorLogLevel(buildRequestError({ statusCode: HttpStatusCode.UNAUTHORIZED_401 }))).to.equal('debug')
-    expect(getRemoteErrorLogLevel(buildRequestError({ code: 'CERT_HAS_EXPIRED' }))).to.equal('debug')
+    expect(getRemoteErrorLogLevel(buildRequestError({ statusCode: HttpStatusCode.UNAUTHORIZED_401 }))).to.equal('info')
+    expect(getRemoteErrorLogLevel(buildRequestError({ code: 'CERT_HAS_EXPIRED' }))).to.equal('info')
 
     expect(getRemoteErrorLogLevel(new TypeError('local bug'))).to.equal('warn')
     expect(getRemoteErrorLogLevel(new TypeError('local bug'), 'error')).to.equal('error')

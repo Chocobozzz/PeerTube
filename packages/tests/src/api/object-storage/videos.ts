@@ -329,7 +329,9 @@ describe('Object storage for videos', function () {
       secret_access_key: 'aJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
     }
 
-    it('Should fail with same bucket names without prefix', function (done) {
+    it('Should start but warn with same bucket names without prefix', async function () {
+      this.timeout(60000)
+
       const config = merge({}, baseConfig, {
         object_storage: {
           streaming_playlists: {
@@ -342,9 +344,13 @@ describe('Object storage for videos', function () {
         }
       })
 
-      createSingleServer(1, config)
-        .then(() => done(new Error('Did not throw')))
-        .catch(() => done())
+      server = await createSingleServer(1, config)
+
+      await server.servers.waitUntilLog(
+        'object_storage.web_videos and object_storage.streaming_playlists use the same bucket aaa without prefix'
+      )
+
+      await killallServers([ server ])
     })
 
     it('Should fail with bad credentials', async function () {
