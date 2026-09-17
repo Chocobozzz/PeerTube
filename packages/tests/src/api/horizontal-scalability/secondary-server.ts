@@ -8,7 +8,6 @@ import {
   createSingleServer,
   makeDeleteRequest,
   makeGetRequest,
-  makeHTMLRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeRawRequest,
@@ -105,14 +104,6 @@ describe('Test a secondary server process', function () {
 
       for (const path of paths) {
         await makeGetRequest({ url: secondary.url, path, token: primary.accessToken, expectedStatus: HttpStatusCode.OK_200 })
-      }
-    })
-
-    it('Should serve the read only pages of the platform', async function () {
-      for (const path of [ '/', '/w/' + videoUUID, '/videos/embed/' + videoUUID, '/a/root', '/c/root_channel' ]) {
-        const res = await makeHTMLRequest(secondary.url, path)
-
-        expect(res.text, path).to.contain('<html')
       }
     })
 

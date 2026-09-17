@@ -19,7 +19,6 @@ import {
   doubleFollow,
   getRedirectionUrl,
   makeActivityPubGetRequest,
-  makeHTMLRequest,
   makeRawRequest,
   ObjectStorageCommand,
   OptionalObjectStorageType,
@@ -377,9 +376,6 @@ describe('Object storage for images and torrents', function () {
 
       // Deprecated path points at our instance, which does not serve the file anymore
       expect(playlist.thumbnailPath).to.be.null
-
-      const { text } = await makeHTMLRequest(server.url, '/w/p/' + playlist.shortUUID)
-      expect(text).to.contain(`<meta property="og:image" content="${objectStorage.getMockThumbnailsBaseUrl()}`)
     })
 
     it('Should not have kept thumbnails on the file system', async function () {

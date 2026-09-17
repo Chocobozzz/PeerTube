@@ -741,19 +741,11 @@ export const CONFIG = buildConfig({
       ENABLED: dynamicKey<boolean>('video_file.update.enabled')
     },
     LIFECYCLE: {
-      get ENABLED () {
-        return config.get<boolean>('video_file.lifecycle.enabled')
-      },
-      CHECK_INTERVAL: parseDurationToMs(config.get<string>('video_file.lifecycle.check_interval')),
-      get DRY_RUN () {
-        return config.get<boolean>('video_file.lifecycle.dry_run')
-      },
-      get MAX_VIDEOS_PER_RUN () {
-        return config.get<number>('video_file.lifecycle.max_videos_per_run')
-      },
-      get POLICIES () {
-        return buildVideoFileLifecyclePolicies(config.get<any[]>('video_file.lifecycle.policies'))
-      }
+      ENABLED: dynamicKey<boolean>('video_file.lifecycle.enabled'),
+      CHECK_INTERVAL: staticKey('video_file.lifecycle.check_interval', { transform: parseDurationToMs }),
+      DRY_RUN: dynamicKey<boolean>('video_file.lifecycle.dry_run'),
+      MAX_VIDEOS_PER_RUN: dynamicKey<number>('video_file.lifecycle.max_videos_per_run'),
+      POLICIES: dynamicKey<VideoLifecyclePolicy[]>('video_file.lifecycle.policies', { transform: buildVideoFileLifecyclePolicies })
     }
   },
   VIDEO_TRANSCRIPTION: {
