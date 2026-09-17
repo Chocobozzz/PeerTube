@@ -117,8 +117,9 @@ export async function onHLSVideoFileTranscoding (options: {
       await video.save()
     }
 
-    const { infoHash, torrentFilename } = await createTorrentForFile(playlist, newVideoFile)
+    const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(playlist, newVideoFile)
     newVideoFile.torrentFilename = torrentFilename
+    newVideoFile.torrentStorage = torrentStorage
 
     const oldFile = await VideoFileModel.loadHLSFile({
       playlistId: playlist.id,

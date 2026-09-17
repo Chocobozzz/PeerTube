@@ -101,6 +101,17 @@ export class SQLCommand {
     )
   }
 
+  async setImageStorageOf (table: 'actorImage' | 'thumbnail' | 'storyboard' | 'uploadImage', filename: string, storage: FileStorageType) {
+    await this.updateQuery(`UPDATE "${table}" SET storage = :storage WHERE filename = :filename`, { storage, filename })
+  }
+
+  async setTorrentStorageOf (torrentFilename: string, storage: FileStorageType) {
+    await this.updateQuery(
+      `UPDATE "videoFile" SET "torrentStorage" = :storage WHERE "torrentFilename" = :torrentFilename`,
+      { storage, torrentFilename }
+    )
+  }
+
   // ---------------------------------------------------------------------------
 
   async setUserEmail (username: string, email: string) {

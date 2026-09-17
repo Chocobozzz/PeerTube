@@ -16,10 +16,10 @@ import {
   buildObjectStorageHLSPrivateFileUrl,
   buildObjectStoragePublicFileUrl,
   buildObjectStorageWebVideoPrivateFileUrl,
-  generateHLSObjectStorageKey,
-  generateWebVideoObjectStorageKey
+  generateCommonFileObjectStorageKey,
+  generateHLSObjectStorageKey
 } from '@server/lib/object-storage/index.js'
-import { getFSTorrentFilePath } from '@server/lib/paths.js'
+import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost, isStreamingPlaylist } from '@server/types/models/index.js'
@@ -208,6 +208,12 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   @Column
   declare torrentFilename: string
 
+  // object_storage.torrents can be enabled independently of the storage of the video file itself
+  // null when there is no torrent file (live files)
+  @AllowNull(true)
+  @Column
+  declare torrentStorage: FileStorageType
+
   @ForeignKey(() => VideoModel)
   @Column
   declare videoId: number
@@ -251,14 +257,25 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     return !!videoFile
   }
 
-  static async doesOwnedTorrentFileExist (filename: string) {
+  static async doesOwnedTorrentFileExist (filename: string, storage: FileStorageType) {
     const query = 'SELECT 1 FROM "videoFile" ' +
       'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
       'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
       'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
-      'WHERE "torrentFilename" = $filename AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) LIMIT 1'
+      'WHERE "torrentFilename" = $filename AND "torrentStorage" = $storage ' +
+      'AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) LIMIT 1'
 
-    return doesExist({ sequelize: this.sequelize, query, bind: { filename } })
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
+  }
+
+  // Don't update a torrent that has been replaced or moved in the meantime
+  static async updateTorrentStorageIfUnchanged (filename: string, from: FileStorageType, to: FileStorageType) {
+    const [ affectedCount ] = await VideoFileModel.update(
+      { torrentStorage: to },
+      { where: { torrentFilename: filename, torrentStorage: from } }
+    )
+
+    return affectedCount !== 0
   }
 
   static async doesOwnedWebVideoFileExist (filename: string, storage: FileStorageType) {
@@ -528,7 +545,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
     return buildObjectStoragePublicFileUrl({
       bucket: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
-      key: generateWebVideoObjectStorageKey(this.filename)
+      key: generateCommonFileObjectStorageKey('web_videos', this.filename)
     })
   }
 
@@ -589,10 +606,15 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     return this.torrentUrl
   }
 
-  // We proxify torrent requests so use a local URL
   getTorrentUrl () {
     if (!this.torrentFilename) return null
 
+    // Only local torrents can be stored in our object storage
+    if (this.torrentStorage === FileStorage.OBJECT_STORAGE) {
+      return buildCommonFileObjectStorageUrl('torrents', this.torrentFilename)
+    }
+
+    // We proxify remote torrent requests so use a local URL
     return WEBSERVER.URL + join(LAZY_STATIC_PATHS.TORRENTS, this.torrentFilename)
   }
 
@@ -605,7 +627,16 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   removeTorrent () {
     if (!this.torrentFilename) return null
 
-    const torrentPath = getFSTorrentFilePath(this)
+    return VideoFileModel.removeTorrentFile(this.torrentFilename, this.torrentStorage)
+  }
+
+  static removeTorrentFile (filename: string, storage: FileStorageType) {
+    if (storage === FileStorage.OBJECT_STORAGE) {
+      return removeCommonFileObjectStorage('torrents', filename)
+        .catch(err => logger.warn('Cannot delete torrent %s in object storage.', filename, { err }))
+    }
+
+    const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, filename)
     return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }

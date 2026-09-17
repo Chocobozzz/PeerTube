@@ -10687,12 +10687,14 @@ components:
           minLength: 3
           maxLength: 120
         thumbnailPath:
-          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         previewPath:
-          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         thumbnails:
           description: "**PeerTube >= 8.1** Array of thumbnails for the video"
@@ -11136,8 +11138,9 @@ components:
             blacklisted:
               type: boolean
             thumbnailPath:
-              description: Deprecated in PeerTube v8.1, use thumbnails instead
+              description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
               deprecated: true
+              nullable: true
               type: string
             thumbnails:
               description: "**PeerTube >= 8.1** Array of thumbnails for the video"
@@ -11264,8 +11267,9 @@ components:
           type: integer
           minimum: 0
         thumbnailPath:
-          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         thumbnails:
           description: "**PeerTube >= 8.1** Array of thumbnails for the playlist"
@@ -11375,8 +11379,9 @@ components:
     Storyboard:
       properties:
         storyboardPath:
-          description: Deprecated in PeerTube v8.0, use fileUrl instead
+          description: "Deprecated in PeerTube v8.0, use fileUrl instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         fileUrl:
           description: "**PeerTube >= 7.1**"
@@ -11401,7 +11406,8 @@ components:
         captionPath:
           type: string
           deprecated: true
-          description: Deprecated in PeerTube v8.0, use fileUrl instead
+          nullable: true
+          description: "Deprecated in PeerTube v8.0, use fileUrl instead. Null if the file is stored in object storage: use the non-deprecated field instead."
         fileUrl:
           description: "**PeerTube >= 7.1**"
           type: string
@@ -11450,8 +11456,9 @@ components:
     ActorImage:
       properties:
         path:
-          description: Deprecated in PeerTube v8.0, use fileUrl instead
+          description: "Deprecated in PeerTube v8.0, use fileUrl instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         fileUrl:
           description: "**PeerTube >= 7.1**"

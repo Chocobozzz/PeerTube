@@ -1,4 +1,4 @@
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { FileStorage, FileStorageType, HttpStatusCode } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CachePromise } from '@server/helpers/promise-cache.js'
 import { doRequestAndSaveToFile, PeerTubeRequestError } from '@server/helpers/requests.js'
@@ -13,8 +13,10 @@ export type FileModel = {
   fileUrl: string
   filename: string
   cached: boolean
+  storage: FileStorageType
 
   isLocal(): boolean
+  getLocalFileUrl(): string
 
   save(): Promise<Model>
 }
@@ -37,11 +39,28 @@ export abstract class AbstractFileCache<M extends FileModel> {
     const { filename, res, next } = options
 
     if (this.filenameToPathCache.has(filename)) {
-      return res.sendFile(this.filenameToPathCache.get(filename), { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
+      return res.sendFile(this.filenameToPathCache.get(filename), { maxAge: STATIC_MAX_AGE.LAZY_SERVER }, (err: any) => {
+        if (!err || this.isClientAbortError(err)) return
+
+        // The file may have been moved to object storage since we cached its path: serve it again without the cache
+        if (err.status === HttpStatusCode.NOT_FOUND_404 && !res.headersSent) {
+          this.filenameToPathCache.delete(filename)
+
+          return this.lazyServe({ filename, res, next })
+            .catch(err => next(err))
+        }
+
+        return next(err)
+      })
     }
 
     const file = await this.lazyLoadIfNeeded(filename)
     if (!file) return res.status(HttpStatusCode.NOT_FOUND_404).end()
+
+    // Keep compatibility for URLs published before they were moved
+    if (file.isLocal() && file.storage === FileStorage.OBJECT_STORAGE) {
+      return res.redirect(HttpStatusCode.FOUND_302, file.getLocalFileUrl())
+    }
 
     const path = file.isLocal()
       ? this.getFSFilePath(file)
@@ -50,7 +69,7 @@ export abstract class AbstractFileCache<M extends FileModel> {
     this.filenameToPathCache.set(filename, path)
 
     return res.sendFile(path, { maxAge: STATIC_MAX_AGE.LAZY_SERVER }, (err: any) => {
-      if (!err) return
+      if (!err || this.isClientAbortError(err)) return
 
       this.onServeError({ err, file, next, filename })
     })
@@ -122,5 +141,10 @@ export abstract class AbstractFileCache<M extends FileModel> {
     }
 
     return next(err)
+  }
+
+  // Express ignores these errors when sendFile has no callback: the client went away, there is nothing to answer
+  private isClientAbortError (err: any) {
+    return err.code === 'ECONNABORTED' || err.syscall === 'write'
   }
 }

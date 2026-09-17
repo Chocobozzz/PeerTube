@@ -3,7 +3,13 @@ import { uniqify, wait } from '@peertube/peertube-core-utils'
 import { FileStorage } from '@peertube/peertube-models'
 import { readdirNonHidden } from '@server/helpers/fs.js'
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX, USER_IMPORT_FILE_PREFIX } from '@server/initializers/constants.js'
+import {
+  getObjectStorageLocationConflicts,
+  getPrunableObjectStorageSections,
+  ObjectStorageSectionType
+} from '@server/lib/object-storage/config.js'
 import { BucketInfo, listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
+import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { UserImportModel } from '@server/models/user/user-import.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
@@ -57,6 +63,15 @@ class ObjectStoragePruner {
   async prune () {
     if (!CONFIG.OBJECT_STORAGE.ENABLED) return
 
+    const conflicts = getObjectStorageLocationConflicts()
+    if (conflicts.length !== 0) {
+      throw new Error(
+        'Cannot prune object storage because some sections would delete the files of each other:\n' +
+          conflicts.map(c => ` - ${c}`).join('\n') +
+          '\nSet different bucket prefixes for these sections.'
+      )
+    }
+
     console.log('Pruning object storage.')
 
     const pathsToDeletePass1 = await this.buildKeysToDelete()
@@ -92,17 +107,26 @@ class ObjectStoragePruner {
   }
 
   private async buildKeysToDelete () {
-    return [
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.WEB_VIDEOS, this.doesWebVideoFileExistFactory())),
+    const existFactories: { [name in ObjectStorageSectionType]: () => (key: string) => Promise<boolean> | boolean } = {
+      web_videos: () => this.doesWebVideoFileExistFactory(),
+      streaming_playlists: () => this.doesStreamingPlaylistFileExistFactory(),
+      original_video_files: () => this.doesOriginalFileExistFactory(),
+      user_exports: () => this.doesUserExportFileExistFactory(),
+      captions: () => this.doesCaptionFileExistFactory(),
+      avatars: () => this.doesActorImageFileExistFactory(),
+      thumbnails: () => this.doesThumbnailFileExistFactory(),
+      storyboards: () => this.doesStoryboardFileExistFactory(),
+      torrents: () => this.doesTorrentObjectExistFactory(),
+      uploads: () => this.doesUploadImageFileExistFactory()
+    }
 
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS, this.doesStreamingPlaylistFileExistFactory())),
+    const keysToDelete: { bucket: string, key: string }[] = []
 
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES, this.doesOriginalFileExistFactory())),
+    for (const { name, bucketInfo } of getPrunableObjectStorageSections()) {
+      keysToDelete.push(...await this.findKeysToDeleteInBucket(bucketInfo, existFactories[name]()))
+    }
 
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.USER_EXPORTS, this.doesUserExportFileExistFactory())),
-
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.CAPTIONS, this.doesCaptionFileExistFactory()))
-    ]
+    return keysToDelete
   }
 
   private async findKeysToDeleteInBucket (
@@ -170,6 +194,46 @@ class ObjectStoragePruner {
       const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.CAPTIONS)
 
       return VideoCaptionModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesActorImageFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.ACTOR_IMAGES)
+
+      return ActorImageModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesThumbnailFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.THUMBNAILS)
+
+      return ThumbnailModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesStoryboardFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.STORYBOARDS)
+
+      return StoryboardModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesTorrentObjectExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.TORRENTS)
+
+      return VideoFileModel.doesOwnedTorrentFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesUploadImageFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.UPLOADS)
+
+      return UploadImageModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
     }
   }
 
@@ -245,7 +309,9 @@ class FSPruner {
 
       ...(await this.findFilesToDeleteInDir(CONFIG.STORAGE.STORYBOARDS_DIR, this.doesStoryboardExistFactory())),
 
-      ...(await this.findFilesToDeleteInDir(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.doesActorImageExistFactory()))
+      ...(await this.findFilesToDeleteInDir(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.doesActorImageExistFactory())),
+
+      ...(await this.findFilesToDeleteInDir(DIRECTORIES.UPLOAD_IMAGES, this.doesUploadImageExistFactory()))
     ]
 
     if (options.offline === true) {
@@ -298,7 +364,7 @@ class FSPruner {
   }
 
   private doesTorrentFileExistFactory () {
-    return (filePath: string) => VideoFileModel.doesOwnedTorrentFileExist(basename(filePath))
+    return (filePath: string) => VideoFileModel.doesOwnedTorrentFileExist(basename(filePath), FileStorage.FILE_SYSTEM)
   }
 
   private doesThumbnailExistFactory () {
@@ -306,6 +372,7 @@ class FSPruner {
       const thumbnail = await ThumbnailModel.loadByFilename(basename(filePath))
       if (!thumbnail) return false
       if (thumbnail.isLocal() === false) return false
+      if (thumbnail.storage !== FileStorage.FILE_SYSTEM) return false
 
       return true
     }
@@ -316,6 +383,7 @@ class FSPruner {
       const image = await ActorImageModel.loadByFilename(basename(filePath))
       if (!image) return false
       if (image.isLocal() === false) return false
+      if (image.storage !== FileStorage.FILE_SYSTEM) return false
 
       return true
     }
@@ -326,6 +394,7 @@ class FSPruner {
       const storyboard = await StoryboardModel.loadByFilename(basename(filePath))
       if (!storyboard) return false
       if (storyboard.isLocal() === false) return false
+      if (storyboard.storage !== FileStorage.FILE_SYSTEM) return false
 
       return true
     }
@@ -336,8 +405,20 @@ class FSPruner {
       const caption = await VideoCaptionModel.loadByFilename(basename(filePath))
       if (!caption) return false
       if (caption.isLocal() === false) return false
+      if (caption.storage !== FileStorage.FILE_SYSTEM) return false
 
-      return !!caption
+      return true
+    }
+  }
+
+  private doesUploadImageExistFactory () {
+    return async (filePath: string) => {
+      const image = await UploadImageModel.loadByFilename(basename(filePath))
+      if (!image) return false
+      if (image.isLocal() === false) return false
+      if (image.storage !== FileStorage.FILE_SYSTEM) return false
+
+      return true
     }
   }
 

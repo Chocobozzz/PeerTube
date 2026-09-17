@@ -5,7 +5,7 @@ import {
   VideoTranscodeOptions,
   getVideoStreamDuration
 } from '@peertube/peertube-ffmpeg'
-import { VideoFileStream } from '@peertube/peertube-models'
+import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
@@ -17,9 +17,10 @@ import { MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
 import { move } from 'fs-extra/esm'
 import { copyFile } from 'fs/promises'
-import { basename, join } from 'path'
+import { join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
+import { makeCommonFileAvailableIn } from '../object-storage/common-files.js'
 import { generateWebVideoFilename } from '../paths.js'
 import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
@@ -160,9 +161,14 @@ export async function mergeAudioVideofile (options: {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
       // If the user updates the video thumbnails during transcoding
-      const thumbnailPath = video.getBestThumbnail('16:9').getFSPath()
-      const tmpThumbnailPath = join(CONFIG.STORAGE.TMP_DIR, basename(thumbnailPath))
-      await copyFile(thumbnailPath, tmpThumbnailPath)
+      const thumbnail = video.getBestThumbnail('16:9')
+      const tmpThumbnailPath = join(CONFIG.STORAGE.TMP_DIR, thumbnail.filename)
+
+      if (thumbnail.storage === FileStorage.OBJECT_STORAGE) {
+        await makeCommonFileAvailableIn('thumbnails', thumbnail.filename, tmpThumbnailPath)
+      } else {
+        await copyFile(thumbnail.getFSPath(), tmpThumbnailPath)
+      }
 
       const transcodeOptions: MergeAudioTranscodeOptions = {
         type: 'merge-audio',
@@ -228,8 +234,9 @@ export async function onWebVideoFileTranscoding (options: {
 
     await move(videoOutputPath, outputPath, { overwrite: true })
 
-    const { infoHash, torrentFilename } = await createTorrentForFile(video, videoFile)
+    const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(video, videoFile)
     videoFile.torrentFilename = torrentFilename
+    videoFile.torrentStorage = torrentStorage
 
     if (deleteWebInputVideoFile) {
       await saveNewOriginalFileIfNeeded(video, deleteWebInputVideoFile)

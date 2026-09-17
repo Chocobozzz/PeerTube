@@ -2025,6 +2025,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return maxBy(this.filterThumbnails(ratio, maxWidth), 'width')
   }
 
+  // Deprecated, use getBestThumbnailUrl instead
   getBestThumbnailStaticPath (
     this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getBestThumbnail'>,
     ratio: ThumbnailAspectRatio,
@@ -2042,6 +2043,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return minBy(this.filterThumbnails(ratio), 'width')
   }
 
+  // Deprecated, use getSmallestThumbnailUrl instead
   getSmallestThumbnailStaticPath (
     this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getSmallestThumbnail'>,
     ratio: ThumbnailAspectRatio
@@ -2050,6 +2052,27 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     if (!thumbnail) return null
 
     return thumbnail.getFileStaticPath()
+  }
+
+  getBestThumbnailUrl (
+    this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getBestThumbnail'>,
+    ratio: ThumbnailAspectRatio,
+    maxWidth?: number
+  ) {
+    const thumbnail = this.getBestThumbnail(ratio, maxWidth)
+    if (!thumbnail) return null
+
+    return thumbnail.getLocalFileUrl()
+  }
+
+  getSmallestThumbnailUrl (
+    this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getSmallestThumbnail'>,
+    ratio: ThumbnailAspectRatio
+  ) {
+    const thumbnail = this.getSmallestThumbnail(ratio)
+    if (!thumbnail) return null
+
+    return thumbnail.getLocalFileUrl()
   }
 
   filterThumbnails (this: Pick<MVideoThumbnails, 'Thumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {

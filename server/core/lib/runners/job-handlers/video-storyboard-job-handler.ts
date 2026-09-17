@@ -90,7 +90,11 @@ export class VideoStoryboardJobHandler extends AbstractJobHandler<CreateOptions,
 
     await logger.withContext([ video.uuid ], async () => {
       const destinationFilename = generateImageFilename()
-      const destinationPath = join(CONFIG.STORAGE.STORYBOARDS_DIR, destinationFilename)
+      // Move to tmp when the final destination is object storage
+      const destinationPath = join(
+        CONFIG.OBJECT_STORAGE.STORYBOARDS.ENABLED ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.STORYBOARDS_DIR,
+        destinationFilename
+      )
 
       await move(resultPayload.storyboardFile as string, destinationPath)
 

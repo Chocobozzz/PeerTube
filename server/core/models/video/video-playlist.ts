@@ -5,6 +5,7 @@ import {
   VideoPlaylist,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
+  type FileStorageType,
   type VideoPlaylistPrivacyType,
   type VideoPlaylistType_Type
 } from '@peertube/peertube-models'
@@ -13,8 +14,7 @@ import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { activityPubCollectionPagination } from '@server/lib/activitypub/collection.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountId, MChannelId, MVideoPlaylistElement } from '@server/types/models/index.js'
-import { join } from 'path'
-import { FindOptions, Op, Transaction, literal } from 'sequelize'
+import { FindOptions, Op, QueryTypes, Transaction, literal } from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -42,11 +42,9 @@ import {
 import {
   ACTIVITY_PUB,
   CONSTRAINTS_FIELDS,
-  LAZY_STATIC_PATHS,
   USER_EXPORT_MAX_ITEMS,
   VIDEO_PLAYLIST_PRIVACIES,
-  VIDEO_PLAYLIST_TYPES,
-  WEBSERVER
+  VIDEO_PLAYLIST_TYPES
 } from '../../initializers/constants.js'
 import { MThumbnail } from '../../types/models/video/thumbnail.js'
 import {
@@ -443,6 +441,21 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
+  // Local playlists that own at least one thumbnail that is not on the target storage yet
+  static async listLocalIdsToMove (targetStorage: FileStorageType) {
+    const query = 'SELECT DISTINCT "videoPlaylist"."id" FROM "videoPlaylist" ' +
+      'INNER JOIN "actor" ON "actor"."accountId" = "videoPlaylist"."ownerAccountId" AND "actor"."serverId" IS NULL ' +
+      'INNER JOIN "thumbnail" ON "thumbnail"."videoPlaylistId" = "videoPlaylist"."id" ' +
+      'WHERE "thumbnail"."fileUrl" IS NULL AND "thumbnail"."storage" != $targetStorage'
+
+    const rows = await this.sequelize.query<{ id: number }>(query, {
+      type: QueryTypes.SELECT,
+      bind: { targetStorage }
+    })
+
+    return rows.map(r => r.id)
+  }
+
   static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction): Promise<MVideoPlaylistFullSummary> {
     const where = buildWhereIdOrUUID(id)
 
@@ -673,17 +686,19 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   // ---------------------------------------------------------------------------
 
   getThumbnailUrl () {
-    const staticPath = this.getThumbnailStaticPath()
-    if (!staticPath) return null
+    const thumbnail = this.getBestThumbnail('16:9', 300)
+    if (!thumbnail) return null
 
-    return WEBSERVER.URL + staticPath
+    return thumbnail.getLocalFileUrl()
   }
 
+  // Deprecated, use `getThumbnailUrl` instead
+  // Returns null if the file is in object storage: it is not served by our instance
   getThumbnailStaticPath () {
     const thumbnail = this.getBestThumbnail('16:9', 300)
     if (!thumbnail) return null
 
-    return join(LAZY_STATIC_PATHS.THUMBNAILS, thumbnail.filename)
+    return thumbnail.getFileStaticPath()
   }
 
   // ---------------------------------------------------------------------------

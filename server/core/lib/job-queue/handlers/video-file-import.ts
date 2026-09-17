@@ -71,8 +71,9 @@ async function updateVideoFile (video: MVideoFull, inputFilePath: string) {
   const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newVideoFile)
   await copy(inputFilePath, outputPath)
 
-  const { infoHash, torrentFilename } = await createTorrentForFile(video, newVideoFile)
+  const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(video, newVideoFile)
   newVideoFile.torrentFilename = torrentFilename
+  newVideoFile.torrentStorage = torrentStorage
   await newVideoFile.save()
 
   const infohashModel = await VideoInfohashModel.replaceFileInfohash(newVideoFile.id, infoHash)

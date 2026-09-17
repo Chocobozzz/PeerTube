@@ -29,7 +29,16 @@ type Use<K extends keyof UserNotificationModel, M> = PickWith<UserNotificationMo
 export namespace UserNotificationIncludes {
   export type ActorImageInclude = Pick<
     ActorImageModel,
-    'createdAt' | 'filename' | 'type' | 'getStaticPath' | 'getLocalFileUrl' | 'width' | 'updatedAt'
+    | 'createdAt'
+    | 'filename'
+    | 'type'
+    | 'getStaticPath'
+    | 'getLocalFileUrl'
+    | 'width'
+    | 'updatedAt'
+    | 'storage'
+    | 'fileUrl'
+    | 'isLocal'
   >
 
   export type VideoInclude = Pick<VideoModel, 'id' | 'uuid' | 'name' | 'state'>

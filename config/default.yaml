@@ -250,6 +250,8 @@ object_storage:
   max_request_attempts: 3
 
   streaming_playlists:
+    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
+
     # Bucket name created on your object storage provider
     # PeerTube will access it via {bucket_name}.example.com
     bucket_name: 'peertube'
@@ -268,25 +270,64 @@ object_storage:
     store_live_streams: false
 
   web_videos:
+    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'web-videos/'
     base_url: ''
 
   user_exports:
+    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'user-exports/'
     base_url: ''
 
   # Same settings but for original video files
   original_video_files:
+    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'original-video-files/'
     base_url: ''
 
   # Video captions
   captions:
+    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'captions/'
+    base_url: ''
+
+  # Avatars and banners of local accounts and channels
+  avatars:
+    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
+    bucket_name: 'peertube'
+    prefix: 'avatars/'
+    base_url: ''
+
+  # Video and playlist thumbnails
+  thumbnails:
+    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
+    bucket_name: 'peertube'
+    prefix: 'thumbnails/'
+    base_url: ''
+
+  # Video storyboards
+  storyboards:
+    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
+    bucket_name: 'peertube'
+    prefix: 'storyboards/'
+    base_url: ''
+
+  # Video torrent files
+  torrents:
+    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
+    bucket_name: 'peertube'
+    prefix: 'torrents/'
+    base_url: ''
+
+  # Various admin/user uploads that are not suitable for the sections above (instance logos...)
+  uploads:
+    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
+    bucket_name: 'peertube'
+    prefix: 'uploads/'
     base_url: ''
 
 log:

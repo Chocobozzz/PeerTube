@@ -16,6 +16,7 @@ import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/vi
 import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
 import downloadImage from './image-downloader.js'
+import { withLocalCommonFile } from './object-storage/common-files.js'
 import { createLocalPlaylistThumbnailsFromImage } from './thumbnail.js'
 
 const logger = createLogger()
@@ -77,7 +78,7 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
   const tmpImagePath = join(CONFIG.STORAGE.TMP_DIR, tmpImageName)
 
   if (video.isLocal() === true) {
-    await copy(videoThumbnail.getFSPath(), tmpImagePath)
+    await withLocalCommonFile('thumbnails', videoThumbnail, path => copy(path, tmpImagePath))
   } else {
     await downloadImage({
       url: videoThumbnail.fileUrl,

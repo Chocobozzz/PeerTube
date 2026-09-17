@@ -1108,7 +1108,8 @@ describe('Test config', function () {
       const icon = body.icons.find(f => f.sizes === '48x48')
       expect(icon).to.exist
 
-      await testImage({ url: server.url + icon.src, name: `avatar-resized-48x48.png` })
+      // src is absolute when the avatar is in object storage, relative otherwise
+      await testImage({ url: new URL(icon.src, server.url).href, name: `avatar-resized-48x48.png` })
     })
   })
 

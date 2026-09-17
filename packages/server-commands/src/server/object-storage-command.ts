@@ -2,6 +2,10 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { randomInt } from 'crypto'
 import { makePostBodyRequest } from '../requests/index.js'
 
+export type OptionalObjectStorageType = 'avatars' | 'thumbnails' | 'storyboards' | 'torrents' | 'uploads'
+
+export type AlwaysOnObjectStorageType = 'captions' | 'original_video_files' | 'web_videos' | 'streaming_playlists' | 'user_exports'
+
 export class ObjectStorageCommand {
   static readonly DEFAULT_SCALEWAY_BUCKET = 'peertube-ci-test'
 
@@ -32,8 +36,26 @@ export class ObjectStorageCommand {
   getDefaultMockConfig (options: {
     storeLiveStreams?: boolean // default true
     proxifyPrivateFiles?: boolean // default true
+
+    // Avatars/thumbnails/storyboards/torrents/uploads are opt-in so existing suites keep using the file system
+    enabledOptionalTypes?: OptionalObjectStorageType[] // default []
+
+    // Captions/original video files/web videos/streaming playlists/user exports are on by default: opt out individually
+    disabledTypes?: AlwaysOnObjectStorageType[] // default []
   } = {}) {
-    const { storeLiveStreams = true, proxifyPrivateFiles = true } = options
+    const { storeLiveStreams = true, proxifyPrivateFiles = true, enabledOptionalTypes = [], disabledTypes = [] } = options
+
+    const optional = (type: OptionalObjectStorageType, bucketName: string) => ({
+      enabled: enabledOptionalTypes.includes(type),
+      bucket_name: bucketName,
+      prefix: ''
+    })
+
+    const alwaysOn = (type: AlwaysOnObjectStorageType, bucketName: string) => ({
+      enabled: !disabledTypes.includes(type),
+      bucket_name: bucketName,
+      prefix: ''
+    })
 
     return {
       object_storage: {
@@ -44,31 +66,24 @@ export class ObjectStorageCommand {
         credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
         streaming_playlists: {
-          bucket_name: this.getMockStreamingPlaylistsBucketName(),
-          prefix: '',
+          ...alwaysOn('streaming_playlists', this.getMockStreamingPlaylistsBucketName()),
 
           store_live_streams: storeLiveStreams
         },
 
-        web_videos: {
-          bucket_name: this.getMockWebVideosBucketName(),
-          prefix: ''
-        },
+        web_videos: alwaysOn('web_videos', this.getMockWebVideosBucketName()),
 
-        user_exports: {
-          bucket_name: this.getMockUserExportBucketName(),
-          prefix: ''
-        },
+        user_exports: alwaysOn('user_exports', this.getMockUserExportBucketName()),
 
-        original_video_files: {
-          bucket_name: this.getMockOriginalFileBucketName(),
-          prefix: ''
-        },
+        original_video_files: alwaysOn('original_video_files', this.getMockOriginalFileBucketName()),
 
-        captions: {
-          bucket_name: this.getMockCaptionsBucketName(),
-          prefix: ''
-        },
+        captions: alwaysOn('captions', this.getMockCaptionsBucketName()),
+
+        avatars: optional('avatars', this.getMockActorImagesBucketName()),
+        thumbnails: optional('thumbnails', this.getMockThumbnailsBucketName()),
+        storyboards: optional('storyboards', this.getMockStoryboardsBucketName()),
+        torrents: optional('torrents', this.getMockTorrentsBucketName()),
+        uploads: optional('uploads', this.getMockUploadsBucketName()),
 
         proxy: {
           proxify_private_files: proxifyPrivateFiles
@@ -117,6 +132,26 @@ export class ObjectStorageCommand {
     return this.getMockFileBaseUrl({ bucketName: this.getMockCaptionsBucketName(), pathStyle })
   }
 
+  getMockActorImagesBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockActorImagesBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockThumbnailsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockThumbnailsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockStoryboardsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockStoryboardsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockTorrentsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockTorrentsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockUploadsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockUploadsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
   private getMockFileBaseUrl (options: {
     bucketName: string
     pathStyle: boolean
@@ -138,6 +173,11 @@ export class ObjectStorageCommand {
     await this.createMockBucket(this.getMockOriginalFileBucketName())
     await this.createMockBucket(this.getMockUserExportBucketName())
     await this.createMockBucket(this.getMockCaptionsBucketName())
+    await this.createMockBucket(this.getMockActorImagesBucketName())
+    await this.createMockBucket(this.getMockThumbnailsBucketName())
+    await this.createMockBucket(this.getMockStoryboardsBucketName())
+    await this.createMockBucket(this.getMockTorrentsBucketName())
+    await this.createMockBucket(this.getMockUploadsBucketName())
   }
 
   async createMockBucket (name: string) {
@@ -181,6 +221,26 @@ export class ObjectStorageCommand {
   }
 
   getMockCaptionsBucketName (name = 'captions') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockActorImagesBucketName (name = 'avatars') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockThumbnailsBucketName (name = 'thumbnails') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockStoryboardsBucketName (name = 'storyboards') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockTorrentsBucketName (name = 'torrents') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockUploadsBucketName (name = 'uploads') {
     return this.getMockBucketName(name)
   }
 

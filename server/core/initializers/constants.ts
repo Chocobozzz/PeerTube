@@ -62,7 +62,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1135
+export const LAST_MIGRATION_VERSION = 1140
 
 // ---------------------------------------------------------------------------
 
@@ -1060,7 +1060,7 @@ export const OBJECT_STORAGE_PROXY_PATHS = {
 // Cache control
 export const STATIC_MAX_AGE = {
   SERVER: '2h',
-  LAZY_SERVER: '1y',
+  LAZY_SERVER: '1 year',
   CLIENT: '30d'
 }
 

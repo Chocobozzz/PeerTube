@@ -1,13 +1,16 @@
 import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
+import { FileStorage } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { createLogger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { STORYBOARD } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
 import { scheduleVideoFederation } from './activitypub/videos/federate.js'
-import { deleteFileAndCatch } from '@server/helpers/fs.js'
+import { removeCommonFileObjectStorage, storeCommonFile } from './object-storage/common-files.js'
 
 const logger = createLogger()
 
@@ -66,32 +69,59 @@ export async function insertStoryboardInDatabase (options: {
 }) {
   const { videoUUID, imageSize, spriteHeight, spriteWidth, spriteDuration, destination, filename, federate } = options
 
-  await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
-      const video = await VideoModel.loadFull(videoUUID, transaction)
-      if (!video) {
-        logger.info(`Video ${videoUUID} does not exist anymore, skipping storyboard generation.`)
-        deleteFileAndCatch(destination)
-        return
-      }
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.STORYBOARDS.ENABLED
 
-      const existing = await StoryboardModel.loadByVideo(video.id, transaction)
-      if (existing) await existing.destroy({ transaction })
+  const storage = onObjectStorage
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
 
-      await StoryboardModel.create({
-        filename,
-        totalHeight: imageSize.height,
-        totalWidth: imageSize.width,
-        spriteHeight,
-        spriteWidth,
-        spriteDuration,
-        videoId: video.id,
-        cached: false
-      }, { transaction })
+  let uploaded = false
+  let inserted = false
 
-      if (federate) {
-        scheduleVideoFederation({ video, transaction })
-      }
+  try {
+    // Upload before opening the transaction: retryTransactionWrapper must not re-upload
+    if (onObjectStorage) {
+      await storeCommonFile('storyboards', destination, filename)
+      uploaded = true
+    }
+
+    inserted = await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async transaction => {
+        const video = await VideoModel.loadFull(videoUUID, transaction)
+        if (!video) {
+          logger.info(`Video ${videoUUID} does not exist anymore, skipping storyboard generation.`)
+          return false
+        }
+
+        const existing = await StoryboardModel.loadByVideo(video.id, transaction)
+        if (existing) await existing.destroy({ transaction })
+
+        await StoryboardModel.create({
+          filename,
+          totalHeight: imageSize.height,
+          totalWidth: imageSize.width,
+          spriteHeight,
+          spriteWidth,
+          spriteDuration,
+          videoId: video.id,
+          cached: false,
+          storage
+        }, { transaction })
+
+        if (federate) {
+          scheduleVideoFederation({ video, transaction })
+        }
+
+        return true
+      })
     })
-  })
+  } finally {
+    // The tmp file is useless once uploaded
+    if (onObjectStorage || !inserted) deleteFileAndCatch(destination)
+
+    if (uploaded && !inserted) {
+      removeCommonFileObjectStorage('storyboards', filename)
+        .catch(err => logger.error(`Cannot remove orphan storyboard ${filename} from object storage`, { err }))
+    }
+  }
 }

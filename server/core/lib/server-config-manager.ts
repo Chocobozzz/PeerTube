@@ -568,7 +568,7 @@ class ServerConfigManager {
     const customLogo = this.getLogo(serverActor, width)
 
     if (customLogo) {
-      return WEBSERVER.URL + customLogo.getStaticPath()
+      return customLogo.getLocalFileUrl()
     }
 
     return `${WEBSERVER.URL}/client/assets/images/icons/icon-${width}x${width}.png`

@@ -41,6 +41,7 @@
     "concurrently": "concurrently",
     "create-generate-storyboard-job": "node ./dist/scripts/create-generate-storyboard-job.js",
     "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
+    "create-move-file-storage-job": "node ./dist/scripts/create-move-file-storage-job.js",
     "create-move-video-storage-job": "node ./dist/scripts/create-move-video-storage-job.js",
     "dev:client": "bash ./scripts/dev/client.sh",
     "dev:embed": "bash ./scripts/dev/embed.sh",

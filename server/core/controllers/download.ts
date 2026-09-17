@@ -9,6 +9,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import {
   generateHLSFilePresignedUrl,
   generateOriginalFilePresignedUrl,
+  generateTorrentPresignedUrl,
   generateUserExportPresignedUrl,
   generateWebVideoPresignedUrl
 } from '@server/lib/object-storage/index.js'
@@ -113,7 +114,8 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   const video = await VideoModel.loadFull(file.getVideo().id)
   if (!video) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  const path = video.isLocal()
+  // No local path when the torrent is not on our file system (remote video or object storage)
+  const path = video.isLocal() && file.torrentStorage === FileStorage.FILE_SYSTEM
     ? join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename)
     : undefined
 
@@ -137,6 +139,10 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
   if (video.isLocal()) {
+    if (file.torrentStorage === FileStorage.OBJECT_STORAGE) {
+      return redirectTorrentToObjectStorage({ res, file, downloadFilename })
+    }
+
     return res.download(path, downloadFilename)
   }
 
@@ -568,6 +574,20 @@ async function redirectOriginalFileToObjectStorage (options: {
   const url = await generateOriginalFilePresignedUrl({ videoSource, downloadFilename })
 
   logger.debug('Generating pre-signed URL %s for original video file %s', url, videoSource.keptOriginalFilename)
+
+  return res.redirect(url)
+}
+
+async function redirectTorrentToObjectStorage (options: {
+  res: express.Response
+  downloadFilename: string
+  file: MVideoFile
+}) {
+  const { res, downloadFilename, file } = options
+
+  const url = await generateTorrentPresignedUrl({ file, downloadFilename })
+
+  logger.debug('Generating pre-signed URL %s for torrent %s', url, file.torrentFilename)
 
   return res.redirect(url)
 }

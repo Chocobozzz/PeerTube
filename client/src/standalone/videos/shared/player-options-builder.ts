@@ -492,7 +492,7 @@ export class PlayerOptionsBuilder {
       title,
       description,
       avatarUrl: title && avatar
-        ? avatar.path
+        ? avatar.fileUrl
         : undefined
     }
   }

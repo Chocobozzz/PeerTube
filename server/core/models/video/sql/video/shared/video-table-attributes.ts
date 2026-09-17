@@ -80,6 +80,7 @@ export class VideoTableAttributes {
       'filename',
       'fileUrl',
       'torrentFilename',
+      'torrentStorage',
       'torrentUrl',
       'fps',
       'metadataUrl',
@@ -235,6 +236,7 @@ export class VideoTableAttributes {
       'spriteDuration',
       'fileUrl',
       'cached',
+      'storage',
       'videoId',
       'createdAt',
       'updatedAt'
@@ -278,6 +280,7 @@ export class VideoTableAttributes {
       'type',
       'fileUrl',
       'cached',
+      'storage',
       'createdAt',
       'updatedAt'
     ]

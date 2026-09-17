@@ -70,7 +70,7 @@ export function getCommonVideoFeedAttributes (video: VideoModel) {
       : undefined,
 
     thumbnails: thumbnails.map(t => ({
-      url: WEBSERVER.URL + t.getFileStaticPath(),
+      url: t.getLocalFileUrl(),
       width: t.width,
       height: t.height
     }))

@@ -53,14 +53,15 @@ async function storeObject (options: {
   bucketInfo: BucketInfo
   isPrivate: boolean
   contentType: string
+  contentDisposition?: string
 }): Promise<void> {
-  const { inputPath, objectStorageKey, bucketInfo, isPrivate, contentType } = options
+  const { inputPath, objectStorageKey, bucketInfo, isPrivate, contentType, contentDisposition } = options
 
   logger.debug('Uploading file %s to %s%s in bucket %s', inputPath, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME)
 
   const fileStream = createReadStream(inputPath)
 
-  return uploadToStorage({ objectStorageKey, content: fileStream, bucketInfo, isPrivate, contentType })
+  return uploadToStorage({ objectStorageKey, content: fileStream, bucketInfo, isPrivate, contentType, contentDisposition })
 }
 
 async function storeContent (options: {
@@ -69,12 +70,13 @@ async function storeContent (options: {
   bucketInfo: BucketInfo
   isPrivate: boolean
   contentType: string
+  contentDisposition?: string
 }): Promise<void> {
-  const { content, objectStorageKey, bucketInfo, isPrivate, contentType } = options
+  const { content, objectStorageKey, bucketInfo, isPrivate, contentType, contentDisposition } = options
 
   logger.debug('Uploading %s content to %s%s in bucket %s', content, bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME)
 
-  return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate, contentType })
+  return uploadToStorage({ objectStorageKey, content, bucketInfo, isPrivate, contentType, contentDisposition })
 }
 
 async function storeStream (options: {
@@ -83,12 +85,13 @@ async function storeStream (options: {
   bucketInfo: BucketInfo
   isPrivate: boolean
   contentType: string
+  contentDisposition?: string
 }): Promise<void> {
-  const { stream, objectStorageKey, bucketInfo, isPrivate, contentType } = options
+  const { stream, objectStorageKey, bucketInfo, isPrivate, contentType, contentDisposition } = options
 
   logger.debug('Streaming file to %s%s in bucket %s', bucketInfo.PREFIX, objectStorageKey, bucketInfo.BUCKET_NAME)
 
-  return uploadToStorage({ objectStorageKey, content: stream, bucketInfo, isPrivate, contentType })
+  return uploadToStorage({ objectStorageKey, content: stream, bucketInfo, isPrivate, contentType, contentDisposition })
 }
 
 // ---------------------------------------------------------------------------
@@ -285,10 +288,17 @@ async function getObjectStorageFileSize (options: {
 
 // ---------------------------------------------------------------------------
 
+function isObjectNotFoundError (err: any) {
+  return err?.name === 'NoSuchKey'
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   buildKey,
   createObjectReadStream,
   getObjectStorageFileSize,
+  isObjectNotFoundError,
   listKeysOfPrefix,
   makeAvailable,
   removeObject,
@@ -311,14 +321,16 @@ async function uploadToStorage (options: {
   isPrivate: boolean
 
   contentType?: string
+  contentDisposition?: string
 }) {
-  const { content, objectStorageKey, bucketInfo, isPrivate, contentType } = options
+  const { content, objectStorageKey, bucketInfo, isPrivate, contentType, contentDisposition } = options
 
   const input: PutObjectCommandInput = {
     Body: content,
     Bucket: bucketInfo.BUCKET_NAME,
     Key: buildKey(objectStorageKey, bucketInfo),
-    ContentType: contentType
+    ContentType: contentType,
+    ContentDisposition: contentDisposition
   }
 
   const acl = getACL(isPrivate)

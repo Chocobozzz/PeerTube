@@ -1,6 +1,6 @@
 import { ActorImageType } from '@peertube/peertube-models'
+import { buildLocalCommonFileReadStream } from '@server/lib/object-storage/common-files.js'
 import { MActor, MActorDefaultBanner, MActorImage } from '@server/types/models/index.js'
-import { createReadStream } from 'fs'
 import { extname, join } from 'path'
 import { AbstractUserExporter, ExportResult } from './abstract-user-exporter.js'
 
@@ -58,7 +58,7 @@ export abstract class ActorExporter<T> extends AbstractUserExporter<T> {
 
       staticFiles.push({
         archivePath: archivePathBuilder(image.filename),
-        readStreamFactory: () => Promise.resolve(createReadStream(image.getFSPath()))
+        readStreamFactory: () => buildLocalCommonFileReadStream('avatars', image)
       })
 
       const relativePath = join(this.relativeStaticDirPath, archivePathBuilder(image.filename))

@@ -114,7 +114,7 @@ export class VideoHtml {
       embedIndexation: isEmbed,
 
       image: thumbnail
-        ? { url: WEBSERVER.URL + thumbnail.getFileStaticPath(), width: thumbnail.width, height: thumbnail.height }
+        ? { url: thumbnail.getLocalFileUrl(), width: thumbnail.width, height: thumbnail.height }
         : undefined,
 
       videoOrPlaylist: {

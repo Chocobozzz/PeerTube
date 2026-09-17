@@ -163,7 +163,7 @@ function buildOEmbed (options: {
   }
 
   if (thumbnail && (!maxHeight || thumbnail.height < maxHeight) && (!maxWidth || thumbnail.width < maxWidth)) {
-    json.thumbnail_url = webserverUrl + thumbnail.getFileStaticPath()
+    json.thumbnail_url = thumbnail.getLocalFileUrl()
     json.thumbnail_width = thumbnail.width
     json.thumbnail_height = thumbnail.height
   }

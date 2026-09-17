@@ -861,6 +861,11 @@
         "streaming_playlists": {
           "type": "object",
           "properties": {
+            "enabled": {
+              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
+              "type": "boolean",
+              "default": true
+            },
             "bucket_name": {
               "description": "Bucket name created on your object storage provider PeerTube will access it via {bucket_name}.example.com",
               "type": "string",
@@ -887,6 +892,11 @@
         "web_videos": {
           "type": "object",
           "properties": {
+            "enabled": {
+              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
+              "type": "boolean",
+              "default": true
+            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -905,6 +915,11 @@
         "user_exports": {
           "type": "object",
           "properties": {
+            "enabled": {
+              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
+              "type": "boolean",
+              "default": true
+            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -924,6 +939,11 @@
           "description": "Same settings but for original video files",
           "type": "object",
           "properties": {
+            "enabled": {
+              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
+              "type": "boolean",
+              "default": true
+            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -943,6 +963,11 @@
           "description": "Video captions",
           "type": "object",
           "properties": {
+            "enabled": {
+              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
+              "type": "boolean",
+              "default": true
+            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -950,6 +975,126 @@
             "prefix": {
               "type": "string",
               "default": "captions/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "avatars": {
+          "description": "Avatars and banners of local accounts and channels",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
+              "type": "boolean",
+              "default": false
+            },
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "avatars/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "thumbnails": {
+          "description": "Video and playlist thumbnails",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
+              "type": "boolean",
+              "default": false
+            },
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "thumbnails/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "storyboards": {
+          "description": "Video storyboards",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
+              "type": "boolean",
+              "default": false
+            },
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "storyboards/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "torrents": {
+          "description": "Video torrent files",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
+              "type": "boolean",
+              "default": false
+            },
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "torrents/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "uploads": {
+          "description": "Various admin/user uploads that are not suitable for the sections above (instance logos...)",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
+              "type": "boolean",
+              "default": false
+            },
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "uploads/"
             },
             "base_url": {
               "type": "string",
