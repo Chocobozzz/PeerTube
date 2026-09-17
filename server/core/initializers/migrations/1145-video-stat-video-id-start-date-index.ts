@@ -7,10 +7,9 @@ async function up (utils: {
 }): Promise<void> {
   const { transaction } = utils
 
-  await utils.sequelize.query(
-    `DROP INDEX IF EXISTS "video_stat_video_id"`,
-    { transaction }
-  )
+  await utils.sequelize.query(`DROP INDEX IF EXISTS "video_stat_video_id"`, { transaction })
+  await utils.sequelize.query(`DROP INDEX IF EXISTS "video_view_start_date"`, { transaction })
+  await utils.sequelize.query(`DROP INDEX IF EXISTS "video_view_video_id"`, { transaction })
 }
 
 function down () {
