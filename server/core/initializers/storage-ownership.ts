@@ -117,7 +117,7 @@ function exitOnConflict (property: string, directory: string, existing: StorageO
       'Every process of the same PeerTube instance needs storage directories of its own. ' +
       `Set ${settingName} to a directory this process does not share with the others.\n` +
       `If you moved that directory from one process to another on purpose, delete its ` +
-      `${STORAGE_OWNER_FILE_NAME} file and start PeerTube again.`
+      `${join(directory, STORAGE_OWNER_FILE_NAME)} file and start PeerTube again.`
   )
 
   process.exit(-1)
