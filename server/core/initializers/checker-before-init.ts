@@ -91,6 +91,7 @@ export function checkMissedConfig () {
     'signup.filters.cidr.blacklist',
     'redundancy.videos.strategies',
     'redundancy.videos.check_interval',
+    'redundancy.videos.timeout',
     'transcoding.enabled',
     'transcoding.original_file.keep',
     'transcoding.threads',

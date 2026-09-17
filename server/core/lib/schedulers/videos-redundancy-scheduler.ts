@@ -12,7 +12,7 @@ import {
 import { join } from 'path'
 import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
-import { DIRECTORIES, REDUNDANCY, VIDEO_IMPORT_TIMEOUT } from '../../initializers/constants.js'
+import { DIRECTORIES, REDUNDANCY, VIDEO_REDUNDANCY_TIMEOUT } from '../../initializers/constants.js'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send/index.js'
 import { getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url.js'
@@ -223,7 +223,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     const maxSizeKB = this.getTotalFileSizes([ playlist ]) / 1000
     const toleranceKB = maxSizeKB + ((5 * maxSizeKB) / 100) // 5% more tolerance
-    await downloadPlaylistSegments(masterPlaylistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT, toleranceKB)
+    await downloadPlaylistSegments(masterPlaylistUrl, destDirectory, VIDEO_REDUNDANCY_TIMEOUT, toleranceKB)
 
     const createdModel: MVideoRedundancyStreamingPlaylistVideo = await VideoRedundancyModel.create({
       expiresOn,

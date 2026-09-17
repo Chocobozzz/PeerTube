@@ -309,7 +309,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'actor-keys': 60000 * 20, // 20 minutes
   'videos-stats': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
-  'video-redundancy': 1000 * 3600 * 3, // 3 hours
+  'video-redundancy': CONFIG.REDUNDANCY.VIDEOS.TIMEOUT,
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'generate-video-storyboard': 1000 * 3600 * 6, // 6 hours
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
@@ -358,6 +358,7 @@ export const JOB_REMOVAL_OPTIONS = {
 }
 
 export const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
+export const VIDEO_REDUNDANCY_TIMEOUT = Math.floor(JOB_TTL['video-redundancy'] * 0.9)
 
 export const RUNNER_JOBS = {
   MAX_FAILURES: 5,

@@ -1143,6 +1143,11 @@
               "type": "string",
               "default": "1 hour"
             },
+            "timeout": {
+              "description": "Maximum duration of a video mirror, mainly useful for big videos on slow connections",
+              "type": "string",
+              "default": "3 hours"
+            },
             "strategies": {
               "description": "Just uncomment strategies you want",
               "type": [

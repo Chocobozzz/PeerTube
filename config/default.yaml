@@ -358,6 +358,7 @@ trending:
 redundancy:
   videos:
     check_interval: '1 hour' # How often you want to check new videos to cache
+    timeout: '3 hours' # Maximum duration of a video mirror, mainly useful for big videos on slow connections
     strategies: # Just uncomment strategies you want
 #      -
 #        size: '10GB'
