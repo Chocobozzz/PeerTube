@@ -8,13 +8,14 @@ import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.serv
 import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-textarea.component'
 import { HelpComponent } from '@app/shared/shared-main/buttons/help.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-selector.directive'
 
 @Component({
   selector: 'my-account-profile',
   templateUrl: './my-account-profile.component.html',
   styleUrls: [ './my-account-profile.component.scss' ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ FormsModule, ReactiveFormsModule, NgClass, AlertComponent, HelpComponent, MarkdownTextareaComponent ]
+  imports: [ FormsModule, ReactiveFormsModule, NgClass, AlertComponent, HelpComponent, MarkdownTextareaComponent, PluginSelectorDirective ]
 })
 export class MyAccountProfileComponent extends FormReactive implements OnInit {
   protected formReactiveService = inject(FormReactiveService)
