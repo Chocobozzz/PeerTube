@@ -5,9 +5,15 @@ import { isProdInstance, parseBytes, parseSemVersion } from '@peertube/peertube-
 import { readFileSync, writeFileSync } from 'fs'
 import { basename } from 'path'
 import { URL } from 'url'
+import { getBrowseVideosDefaultScopeError, getBrowseVideosDefaultSortError } from '../helpers/custom-validators/browse-videos.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
-import { getBrowseVideosDefaultSortError, getBrowseVideosDefaultScopeError } from '../helpers/custom-validators/browse-videos.js'
 import { createLogger } from '../helpers/logger.js'
+import {
+  getObjectStorageFileConfig,
+  getObjectStorageLocationConflicts,
+  isObjectStorageEnabledFor,
+  objectStorageSectionTypes
+} from '../lib/object-storage/config.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
@@ -312,59 +318,25 @@ function checkLiveConfig () {
 function checkObjectStorageConfig () {
   if (CONFIG.OBJECT_STORAGE.ENABLED !== true) return
 
-  if (!CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME) {
-    throw new Error('videos_bucket should be set when object storage support is enabled.')
+  const sections = objectStorageSectionTypes
+    .map(type => ({
+      name: type,
+      config: getObjectStorageFileConfig(type),
+      used: type === 'original_video_files'
+        ? isObjectStorageEnabledFor(type) && CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
+        : isObjectStorageEnabledFor(type)
+    }))
+    .filter(s => s.used)
+
+  for (const { name, config } of sections) {
+    if (!config.BUCKET_NAME) {
+      throw new Error(`object_storage.${name}.bucket_name should be set when object storage support is enabled.`)
+    }
   }
 
-  if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
-    throw new Error('streaming_playlists_bucket should be set when object storage support is enabled.')
-  }
-
-  // Check web videos and hls videos are not in the same bucket or directory
-  if (
-    CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
-    CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
-  ) {
-    if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
-      throw new Error('Bucket prefixes should be set when the same bucket is used for both types of video.')
-    }
-
-    throw new Error(
-      'Bucket prefixes should be set to different values when the same bucket is used for both types of video.'
-    )
-  }
-
-  if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
-    if (!CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME) {
-      throw new Error('original_video_files_bucket should be set when object storage support is enabled.')
-    }
-
-    // Check web videos/hls videos are not in the same bucket or directory as original video files
-    if (
-      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
-      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
-    ) {
-      if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
-        throw new Error('Bucket prefixes should be set when the same bucket is used for both original and web video files.')
-      }
-
-      throw new Error(
-        'Bucket prefixes should be set to different values when the same bucket is used for both original and web video files.'
-      )
-    }
-
-    if (
-      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
-      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
-    ) {
-      if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === '') {
-        throw new Error('Bucket prefixes should be set when the same bucket is used for both original and hls files.')
-      }
-
-      throw new Error(
-        'Bucket prefixes should be set to different values when the same bucket is used for both original and hls files.'
-      )
-    }
+  // Only prune-storage is affected by these conflicts, and it refuses to run: don't prevent the instance from starting
+  for (const conflict of getObjectStorageLocationConflicts()) {
+    logger.warn(`${conflict}. Set different bucket prefixes, otherwise the prune-storage script cannot be used.`)
   }
 
   if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {

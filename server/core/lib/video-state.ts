@@ -1,8 +1,9 @@
-import { VideoState, VideoStateType } from '@peertube/peertube-models'
+import { FileStorage, FileStorageType, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { isVideoFilesObjectStorageEnabled } from '@server/lib/object-storage/config.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
@@ -31,7 +32,7 @@ export function buildNextVideoState (currentState?: VideoStateType) {
   if (
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
     currentState !== VideoState.TO_MOVE_TO_FILE_SYSTEM &&
-    CONFIG.OBJECT_STORAGE.ENABLED
+    isVideoFilesObjectStorageEnabled()
   ) {
     return VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
   }
@@ -69,7 +70,7 @@ export function moveToNextState (options: {
       }
 
       if (newState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-        await moveToExternalStorageState({ video: videoDatabase, transaction: t })
+        await moveToStorageAndUpdateState({ video: videoDatabase, targetStorage: FileStorage.OBJECT_STORAGE, transaction: t })
         return true
       }
 
@@ -90,24 +91,35 @@ export function moveToNextState (options: {
 
 // ---------------------------------------------------------------------------
 
-export async function moveToExternalStorageState (options: {
+export async function moveToStorageAndUpdateState (options: {
   video: MVideoFull
+  targetStorage: FileStorageType
   transaction: Transaction
 }) {
-  const { video, transaction } = options
+  const { video, targetStorage, transaction } = options
+
+  const targetState = targetStorage === FileStorage.OBJECT_STORAGE
+    ? VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
+    : VideoState.TO_MOVE_TO_FILE_SYSTEM
 
   const previousVideoState = video.state
 
-  if (video.state !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
-    await video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_EXTERNAL_STORAGE, transaction })
+  if (video.state !== targetState) {
+    await video.setNewStateAndPublishedAt({ newState: targetState, transaction })
   }
 
-  logger.info('Creating external storage move job for video %s.', video.uuid)
+  if (targetState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+    logger.info('Creating external storage move job for video %s.', video.uuid)
+  } else {
+    logger.info('Creating move to file system job for video %s.', video.uuid)
+  }
 
   try {
     await JobQueue.Instance.createJob(
       await buildMoveVideoJob({
-        type: 'move-to-object-storage',
+        type: targetStorage === FileStorage.OBJECT_STORAGE
+          ? 'move-to-object-storage'
+          : 'move-to-file-system',
         video,
         moveVideoState: { previousVideoState }
       })
@@ -115,38 +127,11 @@ export async function moveToExternalStorageState (options: {
 
     return true
   } catch (err) {
-    logger.error('Cannot add move to object storage job', { err })
-
-    return false
-  }
-}
-
-export async function moveToFileSystemState (options: {
-  video: MVideoFull
-  transaction: Transaction
-}) {
-  const { video, transaction } = options
-
-  const previousVideoState = video.state
-
-  if (video.state !== VideoState.TO_MOVE_TO_FILE_SYSTEM) {
-    await video.setNewStateAndPublishedAt({ newState: VideoState.TO_MOVE_TO_FILE_SYSTEM, transaction })
-  }
-
-  logger.info('Creating move to file system job for video %s.', video.uuid)
-
-  try {
-    await JobQueue.Instance.createJob(
-      await buildMoveVideoJob({
-        type: 'move-to-file-system',
-        video,
-        moveVideoState: { previousVideoState }
-      })
-    )
-
-    return true
-  } catch (err) {
-    logger.error('Cannot add move to file system job', { err })
+    if (targetState === VideoState.TO_MOVE_TO_EXTERNAL_STORAGE) {
+      logger.error('Cannot add move to object storage job', { err })
+    } else {
+      logger.error('Cannot add move to file system job', { err })
+    }
 
     return false
   }

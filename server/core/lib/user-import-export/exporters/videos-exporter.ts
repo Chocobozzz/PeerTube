@@ -36,6 +36,7 @@ import { MPlayerSetting } from '@server/types/models/video/player-setting.js'
 import { MEmbedPrivacyDomain } from '@server/types/models/video/video-embed-privacy-domain.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
 import Bluebird from 'bluebird'
+import { buildLocalCommonFileReadStream } from '@server/lib/object-storage/common-files.js'
 import { createReadStream } from 'fs'
 import { extname, join } from 'path'
 import { PassThrough, Readable } from 'stream'
@@ -424,7 +425,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
     if (thumbnail) {
       staticFiles.push({
         archivePath: this.getArchiveThumbnailFilePath(video, thumbnail),
-        readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getFSPath()))
+        readStreamFactory: () => buildLocalCommonFileReadStream('thumbnails', thumbnail)
       })
 
       relativePathsFromJSON.thumbnail = join(this.relativeStaticDirPath, this.getArchiveThumbnailFilePath(video, thumbnail))

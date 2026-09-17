@@ -1,3 +1,4 @@
+import { FileStorage, HttpStatusCode } from '@peertube/peertube-models'
 import { injectQueryToPlaylistUrls } from '@server/lib/hls.js'
 import {
   asyncMiddleware,
@@ -8,11 +9,12 @@ import {
   optionalAuthenticate,
   privateM3U8PlaylistValidator
 } from '@server/middlewares/index.js'
+import { UploadImageModel } from '@server/models/application/upload-image.js'
 import cors from 'cors'
 import express from 'express'
 import { readJSON } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { CONFIG } from '../initializers/config.js'
 import { DIRECTORIES, STATIC_PATHS } from '../initializers/constants.js'
 import { buildReinjectVideoFileTokenQuery, doReinjectVideoFileToken } from './shared/m3u8-playlist.js'
@@ -106,7 +108,8 @@ staticRouter.use(
 staticRouter.use(
   STATIC_PATHS.UPLOAD_IMAGES,
   express.static(DIRECTORIES.UPLOAD_IMAGES, {
-    fallthrough: false,
+    // Files not on the file system may have been moved to object storage
+    fallthrough: true,
     setHeaders: (res, filePath) => {
       // Force a download instead of inline rendering to prevent XSS if the svg is opened directly
       if (filePath.endsWith('.svg')) {
@@ -114,6 +117,7 @@ staticRouter.use(
       }
     }
   }),
+  asyncMiddleware(redirectUploadImageToObjectStorage),
   handleStaticError
 )
 
@@ -122,6 +126,18 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+// Our instance doesn't serve upload images stored in object storage,
+// but URLs published before they were moved there must keep working
+async function redirectUploadImageToObjectStorage (req: express.Request, res: express.Response) {
+  const image = await UploadImageModel.loadByFilename(basename(req.path))
+
+  if (!image?.isLocal() || image.storage !== FileStorage.OBJECT_STORAGE) {
+    return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+  }
+
+  return res.redirect(HttpStatusCode.FOUND_302, image.getLocalFileUrl())
+}
 
 function servePrivateHLSFile (req: express.Request, res: express.Response) {
   const path = join(DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE, req.params.videoUUID, req.params.filename)

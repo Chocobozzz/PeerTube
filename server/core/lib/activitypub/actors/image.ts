@@ -1,4 +1,4 @@
-import { ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
+import { ActorImageType, ActorImageType_Type, FileStorage, type FileStorageType } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { MActorImage, MActorImages } from '@server/types/models/index.js'
@@ -12,6 +12,9 @@ type ImageInfo = {
   height: number
   width: number
   cached?: boolean
+
+  // Only meaningful for local images
+  storage?: FileStorageType
 }
 
 async function updateActorImages (actor: MActorImages, type: ActorImageType_Type, imagesInfo: ImageInfo[], t: Transaction) {
@@ -49,6 +52,7 @@ async function updateActorImages (actor: MActorImages, type: ActorImageType_Type
     const imageModel = await ActorImageModel.create({
       filename: imageInfo.name,
       cached: imageInfo.cached ?? false,
+      storage: imageInfo.storage ?? FileStorage.FILE_SYSTEM,
       fileUrl: imageInfo.fileUrl,
       height: imageInfo.height,
       width: imageInfo.width,
@@ -92,9 +96,9 @@ async function safeDeleteActorImage (actor: MActorImages, toDelete: MActorImage,
 // ---------------------------------------------------------------------------
 
 export {
-  type ImageInfo,
+  deleteActorImages,
   updateActorImages,
-  deleteActorImages
+  type ImageInfo
 }
 
 // ---------------------------------------------------------------------------

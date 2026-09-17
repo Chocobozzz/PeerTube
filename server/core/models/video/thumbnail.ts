@@ -1,7 +1,8 @@
-import { ActivityIconObject, Thumbnail, type ThumbnailAspectRatio } from '@peertube/peertube-models'
+import { ActivityIconObject, FileStorage, type FileStorageType, Thumbnail, type ThumbnailAspectRatio } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MThumbnail } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
@@ -20,6 +21,7 @@ import {
 } from 'sequelize-typescript'
 import { createLogger } from '../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, FILES_CACHE, LAZY_STATIC_PATHS, MIMETYPES, WEBSERVER } from '../../initializers/constants.js'
+import { doesExist } from '../shared/query.js'
 import { SequelizeModel } from '../shared/sequelize-type.js'
 import { buildSQLAttributes } from '../shared/table.js'
 import { VideoPlaylistModel } from './video-playlist.js'
@@ -42,6 +44,8 @@ function pickOwner (owner: ThumbnailOwner): ThumbnailOwner {
 export const thumbnailAPIAttributes = [
   'filename',
   'fileUrl',
+  // Needed by getLocalFileUrl() to know if the file is in object storage
+  'storage',
   'width',
   'height',
   'aspectRatio'
@@ -100,6 +104,11 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   @Default(null)
   @Column
   declare aspectRatio: ThumbnailAspectRatio
+
+  @AllowNull(false)
+  @Default(FileStorage.FILE_SYSTEM)
+  @Column
+  declare storage: FileStorageType
 
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
@@ -182,6 +191,23 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     })
   }
 
+  static doesOwnedFileExist (filename: string, storage: FileStorageType) {
+    const query = 'SELECT 1 FROM "thumbnail" ' +
+      `WHERE "filename" = $filename AND "storage" = $storage AND "fileUrl" IS NULL LIMIT 1`
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
+  }
+
+  // Don't update a thumbnail that has been replaced or moved in the meantime
+  static async updateStorageIfUnchanged (filename: string, from: FileStorageType, to: FileStorageType) {
+    const [ affectedCount ] = await ThumbnailModel.update(
+      { storage: to },
+      { where: { filename, storage: from, fileUrl: null } }
+    )
+
+    return affectedCount !== 0
+  }
+
   // ---------------------------------------------------------------------------
 
   static listOf (options: ThumbnailOwner & { transaction?: Transaction }) {
@@ -242,6 +268,12 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   }
 
   removeFile () {
+    if (!this.cached && this.storage === FileStorage.OBJECT_STORAGE) {
+      logger.info('Removing thumbnail file %s from object storage', this.filename)
+
+      return removeCommonFileObjectStorage('thumbnails', this.filename)
+    }
+
     const path = this.cached
       ? this.getFSCachedPath()
       : this.getFSPath()
@@ -252,11 +284,18 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
   }
 
   getLocalFileUrl () {
+    if (this.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) {
+      return buildCommonFileObjectStorageUrl('thumbnails', this.filename)
+    }
+
     // Remote files are cached by our instance
     return WEBSERVER.URL + this.getFileStaticPath()
   }
 
+  // Returns null if the file is in object storage: it is not served by our instance
   getFileStaticPath () {
+    if (this.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) return null
+
     return LAZY_STATIC_PATHS.THUMBNAILS + this.filename
   }
 

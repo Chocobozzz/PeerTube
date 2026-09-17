@@ -19,6 +19,7 @@ import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants.js'
+import { isObjectStorageEnabledFor } from '@server/lib/object-storage/config.js'
 import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFileFromPath } from '@server/lib/object-storage/index.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
@@ -696,7 +697,7 @@ class MuxingSession extends TypedEventEmitter<MuxingSessionEvents> {
     playlist.p2pMediaLoaderPeerVersion = P2P_MEDIA_LOADER_PEER_VERSION
     playlist.type = VideoStreamingPlaylistType.HLS
 
-    playlist.storage = CONFIG.OBJECT_STORAGE.ENABLED && CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.STORE_LIVE_STREAMS
+    playlist.storage = isObjectStorageEnabledFor('streaming_playlists') && CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.STORE_LIVE_STREAMS
       ? FileStorage.OBJECT_STORAGE
       : FileStorage.FILE_SYSTEM
 

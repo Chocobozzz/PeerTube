@@ -110,11 +110,12 @@ export async function onVideoStudioEnded (options: {
 
     await safeCleanupStudioTMPFiles(tasks)
 
-    const { infoHash, torrentFilename } = await createTorrentForFileFromPath(video, newFile, outputPath)
+    const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newFile, outputPath)
     await removeAllFiles(video, newFile)
 
     await sequelizeTypescript.transaction(async t => {
       newFile.torrentFilename = torrentFilename
+      newFile.torrentStorage = torrentStorage
       await newFile.save({ transaction: t })
 
       await VideoInfohashModel.replaceFileInfohash(newFile.id, infoHash, t)

@@ -58,7 +58,11 @@ export async function processGenerateStoryboard (job: Job, abortSignal?: AbortSi
           })
 
           const filename = generateImageFilename()
-          const destination = join(CONFIG.STORAGE.STORYBOARDS_DIR, filename)
+          // Generate in tmp when the final destination is object storage
+          const destination = join(
+            CONFIG.OBJECT_STORAGE.STORYBOARDS.ENABLED ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.STORYBOARDS_DIR,
+            filename
+          )
 
           logger.debug(
             `Generating storyboard from video of ${video.uuid} to ${destination}`,

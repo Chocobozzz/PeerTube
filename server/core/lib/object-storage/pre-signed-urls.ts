@@ -1,12 +1,7 @@
 import { CONFIG } from '@server/initializers/config.js'
 import { MStreamingPlaylistVideo, MUserExport, MVideoFile } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
-import {
-  generateHLSObjectStorageKey,
-  generateOriginalVideoObjectStorageKey,
-  generateUserExportObjectStorageKey,
-  generateWebVideoObjectStorageKey
-} from './keys.js'
+import { generateCommonFileObjectStorageKey, generateHLSObjectStorageKey } from './keys.js'
 import { buildKey, getClient } from './shared/index.js'
 
 export async function generateWebVideoPresignedUrl (options: {
@@ -17,7 +12,7 @@ export async function generateWebVideoPresignedUrl (options: {
 
   const url = await generatePresignedUrl({
     bucket: CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME,
-    key: buildKey(generateWebVideoObjectStorageKey(file.filename), CONFIG.OBJECT_STORAGE.WEB_VIDEOS),
+    key: buildKey(generateCommonFileObjectStorageKey('web_videos', file.filename), CONFIG.OBJECT_STORAGE.WEB_VIDEOS),
     downloadFilename
   })
 
@@ -48,7 +43,7 @@ export async function generateUserExportPresignedUrl (options: {
 
   const url = await generatePresignedUrl({
     bucket: CONFIG.OBJECT_STORAGE.USER_EXPORTS.BUCKET_NAME,
-    key: buildKey(generateUserExportObjectStorageKey(userExport.filename), CONFIG.OBJECT_STORAGE.USER_EXPORTS),
+    key: buildKey(generateCommonFileObjectStorageKey('user_exports', userExport.filename), CONFIG.OBJECT_STORAGE.USER_EXPORTS),
     downloadFilename
   })
 
@@ -63,11 +58,29 @@ export async function generateOriginalFilePresignedUrl (options: {
 
   const url = await generatePresignedUrl({
     bucket: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME,
-    key: buildKey(generateOriginalVideoObjectStorageKey(videoSource.keptOriginalFilename), CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES),
+    key: buildKey(
+      generateCommonFileObjectStorageKey('original_video_files', videoSource.keptOriginalFilename),
+      CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES
+    ),
     downloadFilename
   })
 
   return replaceByBaseUrl(url, CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES)
+}
+
+export async function generateTorrentPresignedUrl (options: {
+  file: MVideoFile
+  downloadFilename: string
+}) {
+  const { file, downloadFilename } = options
+
+  const url = await generatePresignedUrl({
+    bucket: CONFIG.OBJECT_STORAGE.TORRENTS.BUCKET_NAME,
+    key: buildKey(generateCommonFileObjectStorageKey('torrents', file.torrentFilename), CONFIG.OBJECT_STORAGE.TORRENTS),
+    downloadFilename
+  })
+
+  return replaceByBaseUrl(url, CONFIG.OBJECT_STORAGE.TORRENTS)
 }
 
 // ---------------------------------------------------------------------------

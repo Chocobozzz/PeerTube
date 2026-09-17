@@ -404,6 +404,25 @@ describe('Object storage for videos', function () {
       expectStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl({ pathStyle: false }))
     })
 
+    it('Should keep web video files on the file system if object_storage.web_videos.enabled is false', async function () {
+      this.timeout(60000)
+
+      await killallServers([ server ])
+      await objectStorage.prepareDefaultMockBuckets()
+
+      const config = objectStorage.getDefaultMockConfig({ disabledTypes: [ 'web_videos' ] })
+
+      server = await createSingleServer(1, config)
+      await setAccessTokensToServers([ server ])
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video' })
+
+      await waitJobs([ server ], { skipDelayed: true })
+      const video = await server.videos.get({ id: uuid })
+
+      expectStartWith(video.files[0].fileUrl, server.url)
+    })
+
     after(async function () {
       await objectStorage.cleanupMock()
 

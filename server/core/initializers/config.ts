@@ -299,32 +299,19 @@ export const CONFIG = buildConfig({
     PROXY: {
       PROXIFY_PRIVATE_FILES: staticKey<boolean>('object_storage.proxy.proxify_private_files')
     },
-    WEB_VIDEOS: {
-      BUCKET_NAME: staticKey<string>('object_storage.web_videos.bucket_name'),
-      PREFIX: staticKey<string>('object_storage.web_videos.prefix'),
-      BASE_URL: staticKey<string>('object_storage.web_videos.base_url')
-    },
+    WEB_VIDEOS: buildObjectStorageSection('web_videos'),
     STREAMING_PLAYLISTS: {
-      BUCKET_NAME: staticKey<string>('object_storage.streaming_playlists.bucket_name'),
-      PREFIX: staticKey<string>('object_storage.streaming_playlists.prefix'),
-      BASE_URL: staticKey<string>('object_storage.streaming_playlists.base_url'),
+      ...buildObjectStorageSection('streaming_playlists'),
       STORE_LIVE_STREAMS: staticKey<string>('object_storage.streaming_playlists.store_live_streams')
     },
-    USER_EXPORTS: {
-      BUCKET_NAME: staticKey<string>('object_storage.user_exports.bucket_name'),
-      PREFIX: staticKey<string>('object_storage.user_exports.prefix'),
-      BASE_URL: staticKey<string>('object_storage.user_exports.base_url')
-    },
-    ORIGINAL_VIDEO_FILES: {
-      BUCKET_NAME: staticKey<string>('object_storage.original_video_files.bucket_name'),
-      PREFIX: staticKey<string>('object_storage.original_video_files.prefix'),
-      BASE_URL: staticKey<string>('object_storage.original_video_files.base_url')
-    },
-    CAPTIONS: {
-      BUCKET_NAME: staticKey<string>('object_storage.captions.bucket_name'),
-      PREFIX: staticKey<string>('object_storage.captions.prefix'),
-      BASE_URL: staticKey<string>('object_storage.captions.base_url')
-    }
+    USER_EXPORTS: buildObjectStorageSection('user_exports'),
+    ORIGINAL_VIDEO_FILES: buildObjectStorageSection('original_video_files'),
+    CAPTIONS: buildObjectStorageSection('captions'),
+    ACTOR_IMAGES: buildObjectStorageSection('avatars'),
+    THUMBNAILS: buildObjectStorageSection('thumbnails'),
+    STORYBOARDS: buildObjectStorageSection('storyboards'),
+    TORRENTS: buildObjectStorageSection('torrents'),
+    UPLOADS: buildObjectStorageSection('uploads')
   },
   WEBSERVER: {
     SCHEME: staticComputed([ 'webserver.https' ], () => config.get<boolean>('webserver.https') === true ? 'https' : 'http'),
@@ -968,6 +955,22 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
       minViews: obj.min_views
     })
   })
+}
+
+// Every object storage section can be individually enabled
+// ENABLED folds in the global object_storage.enabled flag so call sites cannot forget it
+function buildObjectStorageSection (name: string) {
+  return {
+    ENABLED: staticComputed(
+      [ 'object_storage.enabled', `object_storage.${name}.enabled` ],
+      () =>
+        config.get<boolean>('object_storage.enabled') === true &&
+        config.get<boolean>(`object_storage.${name}.enabled`) === true
+    ),
+    BUCKET_NAME: staticKey<string>(`object_storage.${name}.bucket_name`),
+    PREFIX: staticKey<string>(`object_storage.${name}.prefix`),
+    BASE_URL: staticKey<string>(`object_storage.${name}.base_url`)
+  }
 }
 
 // ---------------------------------------------------------------------------

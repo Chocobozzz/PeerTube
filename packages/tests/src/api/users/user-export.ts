@@ -99,7 +99,15 @@ function runTest (withObjectStorage: boolean) {
       noahToken,
       server,
       remoteServer
-    } = await prepareImportExportTests({ emails, objectStorage, withBlockedServer: false }))
+    } = await prepareImportExportTests({
+      emails,
+      objectStorage,
+      // Also export avatars, banners and thumbnails from object storage
+      enabledOptionalObjectStorageTypes: withObjectStorage
+        ? [ 'avatars', 'thumbnails', 'storyboards', 'torrents', 'uploads' ]
+        : [],
+      withBlockedServer: false
+    }))
 
     // Create collaboration to ensure we don't export them
     const userToken = await server.users.generateUserAndToken('user')

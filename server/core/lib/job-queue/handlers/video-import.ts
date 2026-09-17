@@ -219,19 +219,20 @@ async function processFile (options: {
 
       const thumbnails = await generateThumbnails({ videoImportWithFiles, videoFile, ffprobe })
 
-      const { infoHash, torrentFilename } = await createTorrentForFile(videoImportWithFiles.Video, videoFile)
+      const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(videoImportWithFiles.Video, videoFile)
 
       const { videoImportUpdated, video } = await retryTransactionWrapper(() => {
         return sequelizeTypescript.transaction(async t => {
           // Refresh video
           const video = await VideoModel.load(videoImportWithFiles.videoId, t)
           if (!video) {
-            await videoFile.removeTorrent()
+            await VideoFileModel.removeTorrentFile(torrentFilename, torrentStorage)
 
             throw new Error('Video linked to import ' + videoImportWithFiles.videoId + ' does not exist anymore.')
           }
 
           videoFile.torrentFilename = torrentFilename
+          videoFile.torrentStorage = torrentStorage
           await videoFile.save({ transaction: t })
 
           await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHash, t)

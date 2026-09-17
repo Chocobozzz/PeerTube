@@ -11,6 +11,7 @@ import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-util
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
+import { isObjectStorageEnabledFor } from '@server/lib/object-storage/config.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
@@ -235,7 +236,7 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
 
   const sourcePath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
 
-  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+  if (isObjectStorageEnabledFor('original_video_files')) {
     await storeOriginalVideoFile(sourcePath, videoSource.keptOriginalFilename)
     await remove(sourcePath)
 

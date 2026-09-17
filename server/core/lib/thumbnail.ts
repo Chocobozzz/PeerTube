@@ -1,5 +1,5 @@
 import { sortBy } from '@peertube/peertube-core-utils'
-import { ThumbnailAspectRatio, VideoFileStream } from '@peertube/peertube-models'
+import { FileStorage, ThumbnailAspectRatio, VideoFileStream } from '@peertube/peertube-models'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
 import { createLogger } from '@server/helpers/logger.js'
 import Bluebird from 'bluebird'
@@ -14,11 +14,13 @@ import { MVideoFile, MVideoThumbnails, MVideoUUID, MVideoWithAllFiles } from '..
 import { MThumbnail } from '../types/models/video/thumbnail.js'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import downloadImage from './image-downloader.js'
+import { removeCommonFileObjectStorage, storeCommonFile } from './object-storage/common-files.js'
 import { VideoPathManager } from './video-path-manager.js'
 
 const logger = createLogger('thumbnail')
 
 type ImageSize = { height: number, width: number, aspectRatio: ThumbnailAspectRatio }
+type ThumbnailMetadata = ReturnType<typeof buildMetadataFromVideo>
 
 export function createLocalPlaylistThumbnailsFromImage (options: {
   inputPath: string
@@ -28,34 +30,32 @@ export function createLocalPlaylistThumbnailsFromImage (options: {
 }) {
   const { inputPath, playlist, automaticallyGenerated, keepOriginal = false } = options
 
-  return Promise.all(
-    CONFIG.THUMBNAILS.SIZES.map((size, i) => {
+  const extension = getImageExtension(inputPath)
+  const metadata = CONFIG.THUMBNAILS.SIZES.map(size => buildMetadataFromPlaylist({ playlist, size, extension }))
+
+  return createThumbnailBatch({
+    metadata,
+    create: (metadata, i) => {
       return _createLocalPlaylistThumbnailFromImage({
         inputPath,
-        playlist,
+        metadata,
         automaticallyGenerated,
-        size,
         // Keep original image until the last thumbnail is generated
         keepOriginal: keepOriginal || i !== CONFIG.THUMBNAILS.SIZES.length - 1
       })
-    })
-  )
+    }
+  })
 }
 
 function _createLocalPlaylistThumbnailFromImage (options: {
   inputPath: string
-  playlist: MVideoPlaylistThumbnail
+  metadata: ThumbnailMetadata
   automaticallyGenerated: boolean
-  size: ImageSize
   keepOriginal: boolean
 }) {
-  const { inputPath, playlist, automaticallyGenerated, size, keepOriginal } = options
+  const { inputPath, metadata, automaticallyGenerated, keepOriginal } = options
 
-  const { filename, outputPath, height, width, aspectRatio } = buildMetadataFromPlaylist({
-    playlist,
-    size,
-    extension: getImageExtension(inputPath)
-  })
+  const { filename, outputPath, height, width, aspectRatio } = metadata
 
   const thumbnailCreator = () => {
     return processImage({ path: inputPath, destination: outputPath, newSize: { width, height }, keepOriginal })
@@ -64,6 +64,7 @@ function _createLocalPlaylistThumbnailFromImage (options: {
   return createThumbnailFromFunction({
     thumbnailCreator,
     filename,
+    outputPath,
     height,
     width,
     aspectRatio,
@@ -125,12 +126,14 @@ export async function createLocalVideoThumbnailsFromImage (options: {
 }) {
   const { inputPath, automaticallyGenerated, video, keepOriginal = false } = options
 
-  const thumbnails = await Promise.all(
-    CONFIG.THUMBNAILS.SIZES.map(size =>
-      // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
-      _createLocalVideoThumbnailFromImage({ inputPath, video, automaticallyGenerated, size, keepOriginal: true })
-    )
-  )
+  const extension = getImageExtension(inputPath)
+  const metadata = CONFIG.THUMBNAILS.SIZES.map(size => buildMetadataFromVideo({ video, size, extension }))
+
+  const thumbnails = await createThumbnailBatch({
+    metadata,
+    // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
+    create: metadata => _createLocalVideoThumbnailFromImage({ inputPath, metadata, automaticallyGenerated, keepOriginal: true })
+  })
 
   if (!keepOriginal) {
     try {
@@ -145,18 +148,13 @@ export async function createLocalVideoThumbnailsFromImage (options: {
 
 function _createLocalVideoThumbnailFromImage (options: {
   inputPath: string
-  video: MVideoThumbnails
+  metadata: ThumbnailMetadata
   automaticallyGenerated: boolean
-  size: ImageSize
   keepOriginal: boolean
 }) {
-  const { inputPath, video, automaticallyGenerated, size, keepOriginal } = options
+  const { inputPath, metadata, automaticallyGenerated, keepOriginal } = options
 
-  const { filename, outputPath, height, width, aspectRatio } = buildMetadataFromVideo({
-    video,
-    size,
-    extension: getImageExtension(inputPath)
-  })
+  const { filename, outputPath, height, width, aspectRatio } = metadata
 
   const thumbnailCreator = () => {
     return processImage({ path: inputPath, destination: outputPath, newSize: { width, height }, keepOriginal })
@@ -165,6 +163,7 @@ function _createLocalVideoThumbnailFromImage (options: {
   return createThumbnailFromFunction({
     thumbnailCreator,
     filename,
+    outputPath,
     height,
     width,
     aspectRatio,
@@ -188,52 +187,59 @@ export function createLocalVideoThumbnailsFromVideo (options: {
 
     let biggestImagePath: string
 
-    // Get bigger images to generate first
-    return Bluebird.mapSeries(sortBy(metadata, 'width').reverse(), metadata => {
-      const { filename, basePath, height, width, aspectRatio, outputPath } = metadata
+    return createThumbnailBatch({
+      // Get bigger images to generate first
+      metadata: sortBy(metadata, 'width').reverse(),
+      // Smaller images are generated from the biggest one
+      sequential: true,
 
-      let thumbnailCreator: () => Promise<any>
+      create: metadata => {
+        const { filename, basePath, height, width, aspectRatio, outputPath } = metadata
 
-      if (videoFile.isAudio()) {
-        thumbnailCreator = () =>
-          processImage({
-            path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
-            destination: outputPath,
-            newSize: { width, height },
-            keepOriginal: true
-          })
-      } else if (biggestImagePath) {
-        thumbnailCreator = () =>
-          processImage({
-            path: biggestImagePath,
-            destination: outputPath,
-            newSize: { width, height },
-            keepOriginal: true
-          })
-      } else {
-        thumbnailCreator = () =>
-          generateImageFromVideoFile({
-            fromPath: input,
-            folder: basePath,
-            imageName: filename,
-            size: { height, width },
-            ffprobe
-          })
+        let thumbnailCreator: () => Promise<any>
+
+        if (videoFile.isAudio()) {
+          thumbnailCreator = () =>
+            processImage({
+              path: ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND,
+              destination: outputPath,
+              newSize: { width, height },
+              keepOriginal: true
+            })
+        } else if (biggestImagePath) {
+          thumbnailCreator = () =>
+            processImage({
+              path: biggestImagePath,
+              destination: outputPath,
+              newSize: { width, height },
+              keepOriginal: true
+            })
+        } else {
+          thumbnailCreator = () =>
+            generateImageFromVideoFile({
+              fromPath: input,
+              folder: basePath,
+              imageName: filename,
+              size: { height, width },
+              ffprobe
+            })
+        }
+
+        if (!biggestImagePath && aspectRatio === '16:9') {
+          biggestImagePath = outputPath
+        }
+
+        return createThumbnailFromFunction({
+          thumbnailCreator,
+          filename,
+          outputPath,
+          height,
+          width,
+          aspectRatio,
+          automaticallyGenerated: true,
+          cached: false
+        })
       }
-
-      if (!biggestImagePath && aspectRatio === '16:9') {
-        biggestImagePath = outputPath
-      }
-
-      return createThumbnailFromFunction({
-        thumbnailCreator,
-        filename,
-        height,
-        width,
-        aspectRatio,
-        automaticallyGenerated: true,
-        cached: false
-      })
     })
   })
 }
@@ -246,26 +252,28 @@ export function createLocalVideoThumbnailsFromUrl (options: {
 }) {
   const { downloadUrl, video } = options
 
-  return Promise.all(
-    CONFIG.THUMBNAILS.SIZES.map(size => _createLocalVideoThumbnailFromUrl({ downloadUrl, video, size }))
-  )
+  const extension = getImageExtension(downloadUrl)
+  const metadata = CONFIG.THUMBNAILS.SIZES.map(size => buildMetadataFromVideo({ video, size, extension }))
+
+  return createThumbnailBatch({
+    metadata,
+    create: metadata => _createLocalVideoThumbnailFromUrl({ downloadUrl, metadata })
+  })
 }
 
 function _createLocalVideoThumbnailFromUrl (options: {
   downloadUrl: string
-  video: MVideoThumbnails
-  size: ImageSize
+  metadata: ThumbnailMetadata
 }) {
-  const { downloadUrl, video, size } = options
+  const { downloadUrl, metadata } = options
 
-  const extension = getImageExtension(downloadUrl)
-  const { filename, basePath, height, width, aspectRatio } = buildMetadataFromVideo({ video, size, extension })
+  const { filename, basePath, outputPath, height, width, aspectRatio } = metadata
 
   const thumbnailCreator = () => {
     return downloadImage({ url: downloadUrl, destDir: basePath, destName: filename, size: { width, height } })
   }
 
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, aspectRatio, cached: false })
+  return createThumbnailFromFunction({ thumbnailCreator, filename, outputPath, height, width, aspectRatio, cached: false })
 }
 
 // ---------------------------------------------------------------------------
@@ -358,14 +366,15 @@ function buildMetadataFromPlaylist (options: {
   const { playlist, extension, size } = options
 
   const filename = playlist.generateThumbnailName(extension)
+  const basePath = buildThumbnailBasePath()
 
   return {
     filename,
-    basePath: CONFIG.STORAGE.THUMBNAILS_DIR,
+    basePath,
     existingThumbnail: Array.isArray(playlist.Thumbnails)
       ? playlist.Thumbnails.find(t => t.height === size.height && t.width === size.width)
       : undefined,
-    outputPath: join(CONFIG.STORAGE.THUMBNAILS_DIR, filename),
+    outputPath: join(basePath, filename),
     height: size.height,
     width: size.width,
     aspectRatio: size.aspectRatio
@@ -384,12 +393,13 @@ function buildMetadataFromVideo (options: {
     : undefined
 
   const filename = generateImageFilename(extension)
+  const basePath = buildThumbnailBasePath()
 
   return {
     filename,
-    basePath: CONFIG.STORAGE.THUMBNAILS_DIR,
+    basePath,
     existingThumbnail,
-    outputPath: join(CONFIG.STORAGE.THUMBNAILS_DIR, filename),
+    outputPath: join(basePath, filename),
     height: size.height,
     width: size.width,
     aspectRatio: size.aspectRatio
@@ -399,6 +409,7 @@ function buildMetadataFromVideo (options: {
 async function createThumbnailFromFunction (parameters: {
   thumbnailCreator: () => Promise<any>
   filename: string
+  outputPath: string
   height: number
   width: number
   aspectRatio: ThumbnailAspectRatio
@@ -409,6 +420,7 @@ async function createThumbnailFromFunction (parameters: {
   const {
     thumbnailCreator,
     filename,
+    outputPath,
     width,
     height,
     aspectRatio,
@@ -426,10 +438,77 @@ async function createThumbnailFromFunction (parameters: {
   thumbnail.automaticallyGenerated = automaticallyGenerated
   thumbnail.cached = cached
   thumbnail.aspectRatio = aspectRatio
+  thumbnail.storage = FileStorage.FILE_SYSTEM
 
   await thumbnailCreator()
 
+  if (CONFIG.OBJECT_STORAGE.THUMBNAILS.ENABLED) {
+    await storeCommonFile('thumbnails', outputPath, filename)
+    thumbnail.storage = FileStorage.OBJECT_STORAGE
+  }
+
   return thumbnail
+}
+
+// Generated thumbnails are written to tmp when they belong to object storage, so that we can still downscale one thumbnail from another
+function buildThumbnailBasePath () {
+  return CONFIG.OBJECT_STORAGE.THUMBNAILS.ENABLED
+    ? CONFIG.STORAGE.TMP_DIR
+    : CONFIG.STORAGE.THUMBNAILS_DIR
+}
+
+async function createThumbnailBatch (options: {
+  metadata: ThumbnailMetadata[]
+  sequential?: boolean // default to false
+  create: (metadata: ThumbnailMetadata, index: number) => Promise<MThumbnail>
+}) {
+  const { metadata, sequential = false, create } = options
+
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.THUMBNAILS.ENABLED
+
+  // When one thumbnail of a batch fails, don't leave the files and objects of the other ones behind
+  // On success, the tmp files of thumbnails uploaded to object storage are not needed anymore
+  try {
+    const thumbnails = sequential
+      ? await Bluebird.mapSeries(metadata, create)
+      : await createAllOrThrow(metadata.map(create))
+
+    if (onObjectStorage) await removeThumbnailFiles(metadata)
+
+    return thumbnails
+  } catch (err) {
+    await removeThumbnailFiles(metadata)
+
+    if (onObjectStorage) {
+      for (const { filename } of metadata) {
+        await removeCommonFileObjectStorage('thumbnails', filename)
+          .catch(err => logger.error('Cannot remove thumbnail %s from object storage.', filename, { err }))
+      }
+    }
+
+    throw err
+  }
+}
+
+async function createAllOrThrow (promises: Promise<MThumbnail>[]) {
+  // Wait for every thumbnail before throwing, so none of them is still being generated when the batch is cleaned up
+  const results = await Promise.allSettled(promises)
+
+  for (const result of results) {
+    if (result.status === 'rejected') throw result.reason as Error
+  }
+
+  return results.map(r => (r as PromiseFulfilledResult<MThumbnail>).value)
+}
+
+async function removeThumbnailFiles (metadata: ThumbnailMetadata[]) {
+  for (const { outputPath } of metadata) {
+    try {
+      await remove(outputPath)
+    } catch (err) {
+      logger.error('Cannot remove thumbnail file ' + outputPath, { err })
+    }
+  }
 }
 
 async function generateImageFromVideoFile (options: {

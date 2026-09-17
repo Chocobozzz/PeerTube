@@ -1,28 +1,28 @@
 import { CONFIG } from '@server/initializers/config.js'
-import { MIMETYPES } from '@server/initializers/constants.js'
 import { MVideo, MVideoCaption, MVideoFile, MVideoPrivacy, MVideoUUID } from '@server/types/models/index.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
-import { basename, extname, join } from 'path'
+import { basename, join } from 'path'
 import { getHLSDirectory } from '../paths.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import {
-  generateCaptionObjectStorageKey,
-  generateHLSObjectBaseStorageKey,
-  generateHLSObjectStorageKey,
-  generateOriginalVideoObjectStorageKey,
-  generateWebVideoObjectStorageKey
-} from './keys.js'
+  getCommonFileReadStreamWithRes,
+  makeCommonFileAvailableIn,
+  removeCommonFileObjectStorage,
+  storeCommonFile,
+  updateCommonFileACL
+} from './common-files.js'
+import { getObjectStorageContentType } from './content-type.js'
+import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey } from './keys.js'
 import {
   createObjectReadStream,
   listKeysOfPrefix,
-  makeAvailable,
   objectStorageLogger as logger,
+  makeAvailable,
   removeObject,
   removeObjectByFullKey,
   removePrefix,
   storeContent,
   storeObject,
-  updateObjectACL,
   updatePrefixACL
 } from './shared/index.js'
 
@@ -75,47 +75,30 @@ export function storeHLSFileFromContent (options: {
 // ---------------------------------------------------------------------------
 
 export function storeWebVideoFile (video: MVideo, file: MVideoFile) {
-  return storeObject({
-    inputPath: VideoPathManager.Instance.getFSVideoFileOutputPath(video, file),
-    objectStorageKey: generateWebVideoObjectStorageKey(file.filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
-    isPrivate: video.hasPrivateStaticPath(),
-    contentType: getObjectStorageContentType(file.filename)
-  })
+  return storeCommonFile(
+    'web_videos',
+    VideoPathManager.Instance.getFSVideoFileOutputPath(video, file),
+    file.filename,
+    { isPrivate: video.hasPrivateStaticPath() }
+  )
 }
 
 // ---------------------------------------------------------------------------
 
 export function storeVideoCaption (inputPath: string, filename: string) {
-  return storeObject({
-    inputPath,
-    objectStorageKey: generateCaptionObjectStorageKey(filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.CAPTIONS,
-    isPrivate: false,
-    contentType: getObjectStorageContentType(filename)
-  })
+  return storeCommonFile('captions', inputPath, filename)
 }
 
 // ---------------------------------------------------------------------------
 
 export function storeOriginalVideoFile (inputPath: string, filename: string) {
-  return storeObject({
-    inputPath,
-    objectStorageKey: generateOriginalVideoObjectStorageKey(filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES,
-    isPrivate: true,
-    contentType: getObjectStorageContentType(filename)
-  })
+  return storeCommonFile('original_video_files', inputPath, filename, { isPrivate: true })
 }
 
 // ---------------------------------------------------------------------------
 
-export async function updateWebVideoFileACL (video: MVideo, file: MVideoFile) {
-  await updateObjectACL({
-    objectStorageKey: generateWebVideoObjectStorageKey(file.filename),
-    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
-    isPrivate: video.hasPrivateStaticPath()
-  })
+export function updateWebVideoFileACL (video: MVideo, file: MVideoFile) {
+  return updateCommonFileACL('web_videos', file.filename, video.hasPrivateStaticPath())
 }
 
 export async function updateHLSFilesACL (video: MVideoPrivacy) {
@@ -147,19 +130,19 @@ export function removeHLSFileObjectStorageByFullKey (key: string) {
 // ---------------------------------------------------------------------------
 
 export function removeWebVideoObjectStorage (videoFile: MVideoFile) {
-  return removeObject(generateWebVideoObjectStorageKey(videoFile.filename), CONFIG.OBJECT_STORAGE.WEB_VIDEOS)
+  return removeCommonFileObjectStorage('web_videos', videoFile.filename)
 }
 
 // ---------------------------------------------------------------------------
 
 export function removeOriginalFileObjectStorage (videoSource: MVideoSource) {
-  return removeObject(generateOriginalVideoObjectStorageKey(videoSource.keptOriginalFilename), CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES)
+  return removeCommonFileObjectStorage('original_video_files', videoSource.keptOriginalFilename)
 }
 
 // ---------------------------------------------------------------------------
 
 export function removeCaptionObjectStorage (videoCaption: MVideoCaption) {
-  return removeObject(generateCaptionObjectStorageKey(videoCaption.filename), CONFIG.OBJECT_STORAGE.CAPTIONS)
+  return removeCommonFileObjectStorage('captions', videoCaption.filename)
 }
 
 // ---------------------------------------------------------------------------
@@ -180,44 +163,22 @@ export async function makeHLSFileAvailable (video: MVideoUUID, filename: string,
   return destination
 }
 
+// The 3 functions below return `destination`: some callers (e.g. VideoPathManager's MakeAvailableCreateMethod) rely on it
+
 export async function makeWebVideoFileAvailable (filename: string, destination: string) {
-  const key = generateWebVideoObjectStorageKey(filename)
-
-  logger.info('Fetching Web Video file %s from object storage to %s.', key, destination)
-
-  await makeAvailable({
-    key,
-    destination,
-    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS
-  })
+  await makeCommonFileAvailableIn('web_videos', filename, destination)
 
   return destination
 }
 
 export async function makeOriginalFileAvailable (keptOriginalFilename: string, destination: string) {
-  const key = generateOriginalVideoObjectStorageKey(keptOriginalFilename)
-
-  logger.info('Fetching Original Video file %s from object storage to %s.', key, destination)
-
-  await makeAvailable({
-    key,
-    destination,
-    bucketInfo: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES
-  })
+  await makeCommonFileAvailableIn('original_video_files', keptOriginalFilename, destination)
 
   return destination
 }
 
 export async function makeCaptionFileAvailable (filename: string, destination: string) {
-  const key = generateCaptionObjectStorageKey(filename)
-
-  logger.info('Fetching Caption file %s from object storage to %s.', key, destination)
-
-  await makeAvailable({
-    key,
-    destination,
-    bucketInfo: CONFIG.OBJECT_STORAGE.CAPTIONS
-  })
+  await makeCommonFileAvailableIn('captions', filename, destination)
 
   return destination
 }
@@ -230,13 +191,7 @@ export function getWebVideoFileReadStream (options: {
 }) {
   const { filename, rangeHeader } = options
 
-  const key = generateWebVideoObjectStorageKey(filename)
-
-  return createObjectReadStream({
-    key,
-    bucketInfo: CONFIG.OBJECT_STORAGE.WEB_VIDEOS,
-    rangeHeader
-  })
+  return getCommonFileReadStreamWithRes('web_videos', filename, rangeHeader)
 }
 
 export function getHLSFileReadStream (options: {
@@ -261,13 +216,7 @@ export function getOriginalFileReadStream (options: {
 }) {
   const { keptOriginalFilename, rangeHeader } = options
 
-  const key = generateOriginalVideoObjectStorageKey(keptOriginalFilename)
-
-  return createObjectReadStream({
-    key,
-    bucketInfo: CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES,
-    rangeHeader
-  })
+  return getCommonFileReadStreamWithRes('original_video_files', keptOriginalFilename, rangeHeader)
 }
 
 export function getCaptionReadStream (options: {
@@ -276,33 +225,5 @@ export function getCaptionReadStream (options: {
 }) {
   const { filename, rangeHeader } = options
 
-  const key = generateCaptionObjectStorageKey(filename)
-
-  return createObjectReadStream({
-    key,
-    bucketInfo: CONFIG.OBJECT_STORAGE.CAPTIONS,
-    rangeHeader
-  })
-}
-
-// ---------------------------------------------------------------------------
-// Private
-// ---------------------------------------------------------------------------
-
-function getObjectStorageContentType (filename: string) {
-  if (filename.endsWith('.m3u8')) {
-    return 'application/x-mpegURL; charset=utf-8'
-  }
-
-  if (filename.endsWith('.json')) {
-    return 'application/json; charset=utf-8'
-  }
-
-  if (filename.endsWith('.vtt')) {
-    return 'text/vtt; charset=utf-8'
-  }
-
-  const ext = extname(filename).toLowerCase()
-
-  return MIMETYPES.VIDEO.EXT_MIMETYPE[ext] || MIMETYPES.AUDIO.EXT_MIMETYPE[ext]
+  return getCommonFileReadStreamWithRes('captions', filename, rangeHeader)
 }

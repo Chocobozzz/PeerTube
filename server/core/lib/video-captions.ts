@@ -8,6 +8,7 @@ import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { isObjectStorageEnabledFor } from '@server/lib/object-storage/config.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
@@ -57,7 +58,7 @@ export async function createLocalCaption (options: {
   const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
 
   // If object storage is enabled, the move to object storage job will upload the playlist on the fly
-  videoCaption.m3u8Filename = hls && !CONFIG.OBJECT_STORAGE.ENABLED
+  videoCaption.m3u8Filename = hls && !isObjectStorageEnabledFor('captions')
     ? await upsertCaptionPlaylistOnFS(videoCaption, video)
     : null
 
@@ -67,7 +68,7 @@ export async function createLocalCaption (options: {
     })
   })
 
-  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+  if (isObjectStorageEnabledFor('captions')) {
     await JobQueue.Instance.createJob({ type: 'move-to-object-storage', payload: { captionId: videoCaption.id } })
   }
 
@@ -84,7 +85,7 @@ export async function createAllCaptionPlaylistsOnFSIfNeeded (video: MVideo) {
   for (const caption of captions) {
     if (caption.m3u8Filename) continue
     // If object storage is enabled, the move to object storage job will upload the playlist on the fly
-    if (CONFIG.OBJECT_STORAGE.ENABLED) continue
+    if (isObjectStorageEnabledFor('captions')) continue
 
     try {
       caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, video)

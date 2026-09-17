@@ -16,6 +16,7 @@ import {
   makeHLSFileAvailable,
   makeWebVideoFileAvailable
 } from './object-storage/videos.js'
+import { makeCommonFileAvailableIn } from './object-storage/common-files.js'
 import { VideoPathManager } from './video-path-manager.js'
 
 const logger = createLogger('video-download')
@@ -284,7 +285,18 @@ export class VideoDownload {
   private async buildCoverInput () {
     const thumbnail = this.video.getBestThumbnail('16:9')
 
-    if (this.video.isLocal()) return { coverPath: thumbnail?.getFSPath() }
+    if (this.video.isLocal()) {
+      if (!thumbnail) return { coverPath: undefined }
+
+      if (thumbnail.storage === FileStorage.OBJECT_STORAGE) {
+        const destination = VideoPathManager.Instance.buildTMPDestination(thumbnail.filename)
+        await makeCommonFileAvailableIn('thumbnails', thumbnail.filename, destination)
+
+        return { coverPath: destination, isTmpDestination: true }
+      }
+
+      return { coverPath: thumbnail.getFSPath() }
+    }
 
     if (thumbnail?.fileUrl) {
       const destination = VideoPathManager.Instance.buildTMPDestination(thumbnail.filename)

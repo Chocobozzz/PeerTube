@@ -207,7 +207,12 @@ export interface ActorKeysPayload {
 
 // ---------------------------------------------------------------------------
 
-export type MoveStoragePayload = MoveVideoStoragePayload | MoveCaptionPayload
+export type MoveStoragePayload =
+  | MoveVideoStoragePayload
+  | MoveCaptionPayload
+  | MoveActorImagesPayload
+  | MoveUploadImagePayload
+  | MoveVideoPlaylistPayload
 
 export interface MoveVideoStoragePayload {
   videoUUID: string
@@ -221,12 +226,37 @@ export interface MoveCaptionPayload {
   captionId: number
 }
 
+// All the avatars and banners of an actor, so the actor is federated only once
+export interface MoveActorImagesPayload {
+  actorId: number
+}
+
+export interface MoveUploadImagePayload {
+  uploadImageId: number
+}
+
+export interface MoveVideoPlaylistPayload {
+  videoPlaylistId: number
+}
+
 export function isMoveVideoStoragePayload (payload: any): payload is MoveVideoStoragePayload {
   return 'videoUUID' in payload
 }
 
 export function isMoveCaptionPayload (payload: any): payload is MoveCaptionPayload {
   return 'captionId' in payload
+}
+
+export function isMoveActorImagesPayload (payload: any): payload is MoveActorImagesPayload {
+  return 'actorId' in payload
+}
+
+export function isMoveUploadImagePayload (payload: any): payload is MoveUploadImagePayload {
+  return 'uploadImageId' in payload
+}
+
+export function isMoveVideoPlaylistPayload (payload: any): payload is MoveVideoPlaylistPayload {
+  return 'videoPlaylistId' in payload
 }
 
 // ---------------------------------------------------------------------------

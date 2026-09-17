@@ -5,6 +5,7 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live/index.js'
+import { withLocalCommonFile } from '@server/lib/object-storage/common-files.js'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
@@ -243,12 +244,13 @@ async function copyOrRegenerateThumbnails (options: {
   const bestThumbnail = liveVideo.getBestThumbnail('16:9')
 
   if (bestThumbnail.automaticallyGenerated === false) {
-    thumbnails = await createLocalVideoThumbnailsFromImage({
-      inputPath: bestThumbnail.getFSPath(),
-      video: replayVideo,
-      automaticallyGenerated: false,
-      keepOriginal: true
-    })
+    thumbnails = await withLocalCommonFile('thumbnails', bestThumbnail, inputPath =>
+      createLocalVideoThumbnailsFromImage({
+        inputPath,
+        video: replayVideo,
+        automaticallyGenerated: false,
+        keepOriginal: true
+      }))
   } else {
     thumbnails = await createLocalVideoThumbnailsFromVideo({
       video: replayVideo,

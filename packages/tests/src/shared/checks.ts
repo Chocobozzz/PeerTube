@@ -135,6 +135,69 @@ export async function testImage (options: {
   }
 }
 
+export async function downloadFile (url: string) {
+  const { body } = await makeRawRequest({ url, responseType: 'arraybuffer', expectedStatus: HttpStatusCode.OK_200 })
+
+  return Buffer.from(body)
+}
+
+export async function expectNotFound (urls: string[]) {
+  for (const url of urls) {
+    await makeRawRequest({ url, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+  }
+}
+
+export function expectAllReplaced (previous: string[], current: string[]) {
+  expect(previous).to.have.length.above(0)
+  expect(current).to.have.length.above(0)
+
+  for (const url of previous) {
+    expect(current, url).to.not.include(url)
+  }
+}
+
+// Unlike testImage(), compares two live URLs by pixel content instead of a URL against a fixture on disk
+export async function expectSimilarImage (remoteUrl: string, originUrl: string) {
+  const sharp = (await import('sharp')).default
+  const pixelmatch = (await import('pixelmatch')).default
+
+  const remoteImage = sharp(await downloadFile(remoteUrl))
+  const originImage = sharp(await downloadFile(originUrl))
+
+  const { width, height } = await remoteImage.metadata()
+  const originMetadata = await originImage.metadata()
+  expect({ width, height }, remoteUrl).to.deep.equal({ width: originMetadata.width, height: originMetadata.height })
+
+  const differentPixels = pixelmatch(
+    await remoteImage.ensureAlpha().raw().toBuffer(),
+    await originImage.ensureAlpha().raw().toBuffer(),
+    null,
+    width,
+    height,
+    { threshold: 0.1 }
+  )
+
+  expect(differentPixels / (width * height), `${remoteUrl} is not the same image as ${originUrl}`).to.be.below(0.01)
+}
+
+// Matches remote/origin images by dimensions, then compares each matched pair with expectSimilarImage()
+export async function expectSameImages (
+  remoteImages: { fileUrl: string, width: number, height: number }[],
+  originImages: { fileUrl: string, width: number, height: number }[]
+) {
+  let compared = 0
+
+  for (const remoteImage of remoteImages) {
+    const originImage = originImages.find(i => i.width === remoteImage.width && i.height === remoteImage.height)
+    if (!originImage) continue
+
+    await expectSimilarImage(remoteImage.fileUrl, originImage.fileUrl)
+    compared++
+  }
+
+  expect(compared).to.be.above(0)
+}
+
 export async function testFileExistsOnFSOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {
   const base = server.servers.buildDirectory(directory)
 

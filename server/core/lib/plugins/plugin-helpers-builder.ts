@@ -181,7 +181,7 @@ function buildVideosHelpers (npmName: string) {
         width: t.width,
         height: t.height,
         url: t.getLocalFileUrl(),
-        path: t.isLocal()
+        path: t.isLocal() && t.storage === FileStorage.FILE_SYSTEM
           ? t.getFSPath()
           : null
       }))

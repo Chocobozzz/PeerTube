@@ -1,7 +1,7 @@
 import { removeVTTExt } from '@peertube/peertube-core-utils'
 import { FileStorage, type FileStorageType, VideoCaption, VideoCaptionObject } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { generateCaptionObjectStorageKey, generateHLSObjectStorageKey } from '@server/lib/object-storage/keys.js'
+import { generateCommonFileObjectStorageKey, generateHLSObjectStorageKey } from '@server/lib/object-storage/keys.js'
 import { buildObjectStoragePublicFileUrl } from '@server/lib/object-storage/urls.js'
 import { removeCaptionObjectStorage, removeHLSFileObjectStorageByFilename } from '@server/lib/object-storage/videos.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -393,7 +393,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     if (this.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) {
       return buildObjectStoragePublicFileUrl({
         bucket: CONFIG.OBJECT_STORAGE.CAPTIONS,
-        key: generateCaptionObjectStorageKey(this.filename)
+        key: generateCommonFileObjectStorageKey('captions', this.filename)
       })
     }
 
