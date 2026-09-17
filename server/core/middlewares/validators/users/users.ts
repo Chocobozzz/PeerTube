@@ -2,6 +2,7 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { isExternalUserPasswordValid } from '@server/lib/auth/external-auth.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUser } from '@server/types/models/user/user.js'
@@ -320,7 +321,7 @@ export const usersUpdateMeValidator = [
       if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
-          message: req.t('currentPassword is invalid.'),
+          message: req.t('Current password is incorrect.'),
           type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }
@@ -471,10 +472,22 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
         })
       }
 
+      if (user.pluginAuth) {
+        if (await isExternalUserPasswordValid({ user, password: req.body.currentPassword }) !== true) {
+          return res.fail({
+            status: HttpStatusCode.FORBIDDEN_403,
+            message: req.t('Current password is incorrect.'),
+            type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
+          })
+        }
+
+        return next()
+      }
+
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          message: 'currentPassword is invalid.',
+          message: req.t('Current password is incorrect.'),
           type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }

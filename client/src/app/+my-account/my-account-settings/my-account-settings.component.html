@@ -65,16 +65,14 @@
   </div>
 }
 
-@if (user.pluginAuth === null) {
-  <div class="pt-two-cols mt-5"> <!-- two factor auth grid -->
-    <div class="title-col">
-      <h2 i18n>TWO-FACTOR AUTHENTICATION</h2>
-    </div>
-    <div class="content-col">
-      <my-account-two-factor-button [user]="user"></my-account-two-factor-button>
-    </div>
+<div class="pt-two-cols mt-5"> <!-- two factor auth grid -->
+  <div class="title-col">
+    <h2 i18n>TWO-FACTOR AUTHENTICATION</h2>
   </div>
-}
+  <div class="content-col">
+    <my-account-two-factor-button [user]="user"></my-account-two-factor-button>
+  </div>
+</div>
 
 <div class="pt-two-cols mt-5">
   <div class="title-col">

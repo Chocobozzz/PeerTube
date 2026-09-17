@@ -15,6 +15,7 @@ import { generateRandomString } from '@server/helpers/utils.js'
 import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
+import { MUser } from '@server/types/models/user/user.js'
 import {
   RegisterServerAuthenticatedResult,
   RegisterServerAuthPassOptions,
@@ -174,6 +175,26 @@ async function getBypassFromPasswordGrant (username: string, password: string): 
   return undefined
 }
 
+export async function isExternalUserPasswordValid (options: { user: MUser, password: string }) {
+  const { user, password } = options
+
+  const plugin = PluginManager.Instance.getIdAndPassAuths().find(p => p.npmName === user.pluginAuth)
+  if (!plugin) return false
+
+  for (const auth of plugin.idAndPassAuths) {
+    try {
+      const result = await auth.login({ id: user.email, password })
+      if (!result || !isAuthResultValid(plugin.npmName, auth.authName, result)) continue
+
+      if (doesExternalAuthResultMatchUser(user, result)) return true
+    } catch (err) {
+      logger.warn('Cannot reauthenticate user %s with auth method %s of plugin %s.', user.id, auth.authName, plugin.npmName, { err })
+    }
+  }
+
+  return false
+}
+
 function consumeBypassFromExternalAuth (username: string, externalAuthToken: string): BypassLogin {
   const obj = authBypassTokens.get(externalAuthToken)
   if (!obj) throw new Error('Cannot authenticate user with unknown bypass token')
@@ -269,6 +290,12 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
 
     externalId: pluginResult.externalId || undefined
   }
+}
+
+function doesExternalAuthResultMatchUser (user: MUser, result: RegisterServerAuthenticatedResult) {
+  if (user.pluginAuthExternalId) return result.externalId === user.pluginAuthExternalId
+
+  return result.email.toLowerCase() === user.email.toLowerCase()
 }
 
 // ---------------------------------------------------------------------------
