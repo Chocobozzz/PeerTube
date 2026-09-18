@@ -34,9 +34,33 @@ import { VideoModel } from '../../../models/video/video.js'
 
 const mySubscriptionsRouter = express.Router()
 
-registerMySubscriptionsSharedRoutes(mySubscriptionsRouter)
+mySubscriptionsRouter.get(
+  '/me/subscriptions/videos',
+  authenticate,
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  commonVideosFiltersValidatorFactory(),
+  asyncMiddleware(getUserSubscriptionVideos)
+)
+
+mySubscriptionsRouter.get('/me/subscriptions/exist', authenticate, areSubscriptionsExistValidator, asyncMiddleware(areSubscriptionsExist))
+
+mySubscriptionsRouter.get(
+  '/me/subscriptions',
+  authenticate,
+  paginationValidator,
+  userSubscriptionsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  userSubscriptionListValidator,
+  asyncMiddleware(listUserSubscriptions)
+)
 
 mySubscriptionsRouter.post('/me/subscriptions', authenticate, userSubscriptionAddValidator, addUserSubscription)
+
+mySubscriptionsRouter.get('/me/subscriptions/:uri', authenticate, userSubscriptionGetValidator, asyncMiddleware(getUserSubscription))
 
 mySubscriptionsRouter.delete(
   '/me/subscriptions/:uri',
@@ -47,41 +71,8 @@ mySubscriptionsRouter.delete(
 
 // ---------------------------------------------------------------------------
 
-function registerMySubscriptionsSharedRoutes (router: express.Router) {
-  router.get(
-    '/me/subscriptions/videos',
-    authenticate,
-    paginationValidator,
-    videosSortValidator,
-    setDefaultVideosSort,
-    setDefaultPagination,
-    commonVideosFiltersValidatorFactory(),
-    asyncMiddleware(getUserSubscriptionVideos)
-  )
-
-  router.get('/me/subscriptions/exist', authenticate, areSubscriptionsExistValidator, asyncMiddleware(areSubscriptionsExist))
-
-  router.get(
-    '/me/subscriptions',
-    authenticate,
-    paginationValidator,
-    userSubscriptionsSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    userSubscriptionListValidator,
-    asyncMiddleware(listUserSubscriptions)
-  )
-
-  // Must be registered after /me/subscriptions/exist so it is not caught by the :uri param
-  router.get('/me/subscriptions/:uri', authenticate, userSubscriptionGetValidator, asyncMiddleware(getUserSubscription))
-}
-
-// ---------------------------------------------------------------------------
-
 export {
-  mySubscriptionsRouter,
-  // Will be used by parent router
-  registerMySubscriptionsSharedRoutes
+  mySubscriptionsRouter
 }
 
 // ---------------------------------------------------------------------------

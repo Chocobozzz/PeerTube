@@ -75,26 +75,11 @@ const runnerJobUpdateVideoFiles = createReqFiles(
 
 const runnerJobsRouter = express.Router()
 
+registerRunnerJobSharedRoutes(runnerJobsRouter)
+
 // ---------------------------------------------------------------------------
 // Controllers for runners
 // ---------------------------------------------------------------------------
-
-runnerJobsRouter.post(
-  '/jobs/request',
-  apiRateLimiter,
-  requestRunnerJobValidator,
-  asyncMiddleware(getRunnerFromTokenValidator),
-  asyncMiddleware(requestRunnerJob)
-)
-
-runnerJobsRouter.post(
-  '/jobs/:jobUUID/accept',
-  apiRateLimiter,
-  asyncMiddleware(runnerJobGetValidator),
-  acceptRunnerJobValidator,
-  asyncMiddleware(getRunnerFromTokenValidator),
-  asyncMiddleware(acceptRunnerJob)
-)
 
 runnerJobsRouter.post(
   '/jobs/:jobUUID/abort',
@@ -142,18 +127,6 @@ runnerJobsRouter.post(
   asyncMiddleware(cancelRunnerJob)
 )
 
-runnerJobsRouter.get(
-  '/jobs',
-  authenticate,
-  ensureUserHasRight(UserRight.MANAGE_RUNNERS),
-  paginationValidator,
-  runnerJobsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  listRunnerJobsValidator,
-  asyncMiddleware(listRunnerJobs)
-)
-
 runnerJobsRouter.delete(
   '/jobs/:jobUUID',
   authenticate,
@@ -164,7 +137,41 @@ runnerJobsRouter.delete(
 
 // ---------------------------------------------------------------------------
 
+function registerRunnerJobSharedRoutes (router: express.Router) {
+  router.post(
+    '/jobs/request',
+    apiRateLimiter,
+    requestRunnerJobValidator,
+    asyncMiddleware(getRunnerFromTokenValidator),
+    asyncMiddleware(requestRunnerJob)
+  )
+
+  router.post(
+    '/jobs/:jobUUID/accept',
+    apiRateLimiter,
+    asyncMiddleware(runnerJobGetValidator),
+    acceptRunnerJobValidator,
+    asyncMiddleware(getRunnerFromTokenValidator),
+    asyncMiddleware(acceptRunnerJob)
+  )
+
+  router.get(
+    '/jobs',
+    authenticate,
+    ensureUserHasRight(UserRight.MANAGE_RUNNERS),
+    paginationValidator,
+    runnerJobsSortValidator,
+    setDefaultSort,
+    setDefaultPagination,
+    listRunnerJobsValidator,
+    asyncMiddleware(listRunnerJobs)
+  )
+}
+
+// ---------------------------------------------------------------------------
+
 export {
+  registerRunnerJobSharedRoutes, // Will be used by parent router
   runnerJobsRouter
 }
 

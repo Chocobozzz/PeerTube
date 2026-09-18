@@ -171,6 +171,7 @@ import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { ApplicationModel, clearServerActorCache } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
+import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import {
   activityPubRouter,
   apiRouter,
@@ -414,6 +415,8 @@ async function startApplication () {
 
   // Keep model cache in sync with the changes handled by the other ones
   await ModelCache.Instance.listenForInvalidations()
+  await WatchedWordsListModel.listenForRegexCacheInvalidations()
+  await ServerConfigManager.Instance.listenForHomepageChanges()
 
   ModelCache.Instance.registerCacheTypeClearedHandler('server-account', () => {
     clearServerActorCache()
@@ -476,6 +479,7 @@ async function startApplication () {
       .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
     LiveManager.Instance.init()
+    await LiveManager.Instance.listenForSessionStopRequests()
     if (CONFIG.LIVE.ENABLED) await LiveManager.Instance.run()
   }
 

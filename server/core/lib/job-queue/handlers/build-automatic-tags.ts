@@ -4,6 +4,7 @@ import { buildAndSaveCommentAutomaticTags, buildAndSaveVideoAutomaticTags } from
 import { getServerAccount } from '@server/models/application/application.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
+import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import { Job } from 'bullmq'
 
 const logger = createLogger('job-queue')
@@ -17,6 +18,10 @@ export async function processBuildAutomaticTags (job: Job): Promise<void> {
 
   const serverAccount = await getServerAccount()
   const accountId = payload.accountId
+
+  // Ensure watched words cache is up to date (race condition with updates on other processes)
+  // An admin can update the watched words on a secondary and this task is executed on the primary
+  WatchedWordsListModel.clearLocalRegexCache(accountId)
 
   let totalRebuiltComments = 0
   let totalRebuiltVideos = 0

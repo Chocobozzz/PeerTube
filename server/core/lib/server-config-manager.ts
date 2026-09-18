@@ -8,6 +8,7 @@ import {
   ServerConfig,
   VideoResolutionType
 } from '@peertube/peertube-models'
+import { createLogger } from '@server/helpers/logger.js'
 import { getServerCommit } from '@server/helpers/version.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
@@ -19,8 +20,11 @@ import { MActorImage, MActorUploadImages, MUploadImage } from '@server/types/mod
 import { Hooks } from './plugins/hooks.js'
 import { PluginManager } from './plugins/plugin-manager.js'
 import { getThemeOrDefault } from './plugins/theme-utils.js'
+import { Redis } from './redis/index.js'
 import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles.js'
 import { logoTypeToUploadImageEnum } from './upload-image.js'
+
+const logger = createLogger()
 
 /**
  * Used to send the server config to clients (using REST/API or plugins API)
@@ -37,17 +41,34 @@ class ServerConfigManager {
   private constructor () {}
 
   async init () {
-    const instanceHomepage = await ActorCustomPageModel.loadInstanceHomepage()
+    await this.reloadHomepageState()
+  }
 
-    this.updateHomepageState(instanceHomepage?.content)
+  // The homepage can be updated by any process of the platform
+  async listenForHomepageChanges () {
+    await Redis.Instance.subscribeToHomepageChanges(() => {
+      this.reloadHomepageState()
+        .catch(err => logger.error('Cannot reload the homepage state.', { err }))
+    })
   }
 
   updateHomepageState (content: string) {
     this.homepageEnabled = !!content
+
+    if (!Redis.Instance.isInitialized()) return
+
+    Redis.Instance.publishHomepageChanged()
+      .catch(err => logger.error('Cannot broadcast the homepage change.', { err }))
   }
 
   isHomepageEnabled () {
     return this.homepageEnabled
+  }
+
+  private async reloadHomepageState () {
+    const instanceHomepage = await ActorCustomPageModel.loadInstanceHomepage()
+
+    this.homepageEnabled = !!instanceHomepage?.content
   }
 
   async getHTMLServerConfig (): Promise<HTMLServerConfig> {
