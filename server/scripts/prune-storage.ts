@@ -325,7 +325,7 @@ class FSPruner {
 
   private async findFilesToDeleteInDir (directory: string, existFun: (file: string) => Promise<boolean> | boolean) {
     const pathsToDelete: string[] = []
-    // Hidden files are metadata PeerTube or the filesystem put there (the storage owner marker, .nfs* handles...)
+    // Hidden files are metadata the filesystem put there (.nfs* handles...), not files PeerTube manages
     const files = await readdirNonHidden(directory)
 
     await Bluebird.map(files, async file => {

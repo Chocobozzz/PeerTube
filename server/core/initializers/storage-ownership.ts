@@ -1,26 +1,31 @@
-import { sha256 } from '@peertube/peertube-node-utils'
-import { ensureDir } from 'fs-extra/esm'
-import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
-import { createLogger } from '../helpers/logger.js'
-import { CONFIG, getConfigModule } from './config.js'
-import { getProcessRole } from './process-role.js'
-
-const logger = createLogger()
+import { CONFIG } from './config.js'
+import { getSharedPrimaryStorage } from './config/shared-config.js'
 
 /**
- * Two PeerTube processes of the same platform must never share a storage directory because of potential conflicts.
+ * Two PeerTube processes must never share a working directory (tmp, plugins...) because of potential conflicts.
+ * The directories of the files referenced by the database (video files, etc.) can only be shared by the processes of the same platform,
+ * so secondary processes can manage these files too.
  *
- * A process marks each directory it owns to throw an error on duplicate ownership.
+ * A secondary process on the same host as the primary adopts the primary's shareable directories at boot.
+ * It refuses to start if any of the directories it keeps for itself (tmp, plugins...) collides with one of the primary's directories.
  */
 
-// Content must not be private, some reverse proxy are configured to serve hidden files too
-export const STORAGE_OWNER_FILE_NAME = '.peertube-storage-owner'
+// Directories of the files referenced by the database, that a secondary process on the same host as the primary can share
+export const SHAREABLE_STORAGE_DIRECTORIES = [
+  'ACTOR_IMAGES_DIR',
+  'WEB_VIDEOS_DIR',
+  'STREAMING_PLAYLISTS_DIR',
+  'ORIGINAL_VIDEO_FILES_DIR',
+  'THUMBNAILS_DIR',
+  'STORYBOARDS_DIR',
+  'PREVIEWS_DIR',
+  'CAPTIONS_DIR',
+  'TORRENTS_DIR',
+  'UPLOADS_DIR',
+  'TMP_PERSISTENT_DIR'
+] as const satisfies (keyof typeof CONFIG.STORAGE)[]
 
-type StorageOwner = {
-  owner: string
-  claimedAt: string
-}
+export type ShareableStorageDirectory = typeof SHAREABLE_STORAGE_DIRECTORIES[number]
 
 // To name the setting an administrator has to change
 const SETTING_NAMES: { [property in keyof typeof CONFIG.STORAGE]: string } = {
@@ -45,80 +50,25 @@ const SETTING_NAMES: { [property in keyof typeof CONFIG.STORAGE]: string } = {
   UPLOADS_DIR: 'uploads'
 }
 
-let processStorageId: string
-
-export function getProcessStorageId () {
-  if (processStorageId) return processStorageId
-
-  const configDir = getConfigModule().util.getEnv('CONFIG_DIR') || ''
-  const appInstance = process.env.NODE_APP_INSTANCE || ''
-  const role = getProcessRole()
-
-  processStorageId = sha256([ role, configDir, appInstance ].join('|'))
-    .slice(0, 16) // Keep a short id
-
-  return processStorageId
+export function getStorageDirectorySettingName (property: keyof typeof CONFIG.STORAGE) {
+  return 'storage.' + getStorageDirectorySubSettingName(property)
 }
 
-export async function claimStorageDirectories () {
-  const id = getProcessStorageId()
-
-  for (const [ property, directory ] of Object.entries(CONFIG.STORAGE)) {
-    await ensureDir(directory)
-
-    const ownerPath = join(directory, STORAGE_OWNER_FILE_NAME)
-    const owner: StorageOwner = { owner: id, claimedAt: new Date().toISOString() }
-
-    try {
-      await writeFile(ownerPath, JSON.stringify(owner), { encoding: 'utf-8', flag: 'wx' })
-      continue
-    } catch (err) {
-      if (err?.code !== 'EEXIST') throw err
-    }
-
-    const existing = await readStorageOwner(ownerPath)
-
-    // A file we cannot read (left by a version that wrote something else there): rewrite it
-    if (!existing) {
-      await writeFile(ownerPath, JSON.stringify(owner), 'utf-8')
-      continue
-    }
-
-    if (existing.owner !== id) exitOnConflict(property, directory, existing)
-  }
-
-  logger.debug('Storage directories claimed by this process (id %s).', id)
+export function getStorageDirectorySubSettingName (property: keyof typeof CONFIG.STORAGE) {
+  return SETTING_NAMES[property] || property.toLowerCase()
 }
 
-// ---------------------------------------------------------------------------
-// Private
-// ---------------------------------------------------------------------------
+export function getNotSharedStorageDirectories (
+  directories: readonly ShareableStorageDirectory[] = SHAREABLE_STORAGE_DIRECTORIES
+): ShareableStorageDirectory[] {
+  const primaryStorage = getSharedPrimaryStorage()
 
-async function readStorageOwner (ownerPath: string): Promise<StorageOwner> {
-  try {
-    const content = await readFile(ownerPath, 'utf-8')
-    const parsed = JSON.parse(content) as StorageOwner
+  // Not on the same host as the primary: none of them are shared
+  if (!primaryStorage) return [ ...directories ]
 
-    return parsed?.owner
-      ? parsed
-      : undefined
-  } catch {
-    // Not claimed yet, or a file we did not write: claim it
-    return undefined
-  }
-}
+  return directories.filter(property => {
+    const settingName = SETTING_NAMES[property] || property.toLowerCase()
 
-function exitOnConflict (property: string, directory: string, existing: StorageOwner): never {
-  const settingName = 'storage.' + (SETTING_NAMES[property] || property.toLowerCase())
-
-  logger.error(
-    `Cannot start PeerTube: "${directory}" (${settingName}) already belongs to another PeerTube process, ` +
-      `which claimed it on ${existing.claimedAt}.\n` +
-      'Every process of the same PeerTube instance needs storage directories of its own. ' +
-      `Set ${settingName} to a directory this process does not share with the others.\n` +
-      `If you moved that directory from one process to another on purpose, delete its ` +
-      `${join(directory, STORAGE_OWNER_FILE_NAME)} file and start PeerTube again.`
-  )
-
-  process.exit(-1)
+    return primaryStorage[settingName] !== CONFIG.STORAGE[property]
+  })
 }

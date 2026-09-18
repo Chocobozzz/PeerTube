@@ -1,6 +1,20 @@
 export interface Debug {
   ip: string
   activityPubMessagesWaiting: number
+
+  // Are all the local files of each kind in object storage?
+  // Secondary processes that don't share the storage directories of the primary can manage files only if they are
+  sharedFiles: {
+    // Keyed by object storage section (thumbnails, web_videos...)
+    sections: {
+      [section: string]: {
+        inObjectStorage: boolean
+
+        // Why they are not
+        reasons: string[]
+      }
+    }
+  }
 }
 
 export type SendDebugCommand = {

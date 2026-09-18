@@ -16,6 +16,8 @@ export type StatKind = 'views' | 'downloads'
 export type IoRedisWithScripts = IoRedis & {
   mergeLocalVideoViewer: (...args: (string | number)[]) => Promise<[number, number]>
   addVideoViewerCounter: (...args: (string | number)[]) => Promise<[number, number, number]>
+  releaseLock: (...args: (string | number)[]) => Promise<number>
+  extendLock: (...args: (string | number)[]) => Promise<number>
 }
 
 // ---------------------------------------------------------------------------
@@ -55,6 +57,8 @@ export function initRedisClient () {
 
   client.defineCommand('mergeLocalVideoViewer', { numberOfKeys: 2, lua: readLuaScript('merge-local-video-viewer') })
   client.defineCommand('addVideoViewerCounter', { numberOfKeys: 2, lua: readLuaScript('add-video-viewer-counter') })
+  client.defineCommand('releaseLock', { numberOfKeys: 1, lua: readLuaScript('release-lock') })
+  client.defineCommand('extendLock', { numberOfKeys: 1, lua: readLuaScript('extend-lock') })
 
   client.on('error', err => logger.error('Redis failed to connect', { err }))
   client.on('connect', () => {
@@ -268,6 +272,33 @@ export function runMergeLocalVideoViewer (options: {
   args: (string | number)[]
 }) {
   return getScriptedRedisClient().mergeLocalVideoViewer(prefix + options.viewerKey, prefix + options.setKey, ...options.args)
+}
+
+export function runReleaseLock (options: {
+  lockKey: string
+  token: string
+}) {
+  return getScriptedRedisClient().releaseLock(prefix + options.lockKey, options.token)
+}
+
+export function runExtendLock (options: {
+  lockKey: string
+  token: string
+  ttlMs: number
+}) {
+  return getScriptedRedisClient().extendLock(prefix + options.lockKey, options.token, options.ttlMs)
+}
+
+// ---------------------------------------------------------------------------
+// Locks
+// ---------------------------------------------------------------------------
+
+// Returns true if the lock was free and is now held with value
+export async function setValueIfNotExists (key: string, value: string, expirationMilliseconds: number) {
+  // NX: only set the key if it does not already exist
+  const result = await client.set(prefix + key, value, 'PX', expirationMilliseconds, 'NX')
+
+  return result === 'OK'
 }
 
 // ---------------------------------------------------------------------------

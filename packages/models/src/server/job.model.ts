@@ -194,7 +194,13 @@ export type VideoTranscodingPayload =
   | MergeAudioTranscodingPayload
 
 export interface VideoLiveEndingPayload {
-  videoId: number
+  // Deprecated: use `videoUUID` instead
+  // Remove in PeerTube v9.2
+  videoId?: number
+
+  // Not set by the jobs created by previous versions
+  videoUUID?: string
+
   publishedAt: string
   liveSessionId: number
   streamingPlaylistId: number

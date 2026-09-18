@@ -2,7 +2,7 @@ import { LIVE_PLAYLIST_EXTENSION, LIVE_SEGMENT_EXTENSION, wait } from '@peertube
 import { FileStorage, LiveVideoLatencyMode, LiveVideoLatencyModeType, VideoState } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { VIDEO_LIVE } from '@server/initializers/constants.js'
+import { DIRECTORIES, VIDEO_LIVE } from '@server/initializers/constants.js'
 import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/types/models/index.js'
 import Bluebird from 'bluebird'
 import { pathExists, remove } from 'fs-extra/esm'
@@ -17,6 +17,18 @@ export function buildConcatenatedName (segmentOrPlaylistPath: string) {
   const num = basename(segmentOrPlaylistPath).match(/^(\d+)(-|\.)/)
 
   return 'concat-' + num[1] + '.ts'
+}
+
+// The video may have been deleted by a secondary process: it cannot reach the live files, stored on the file system of the primary
+export async function removeLiveDirectoriesOfDeletedVideo (videoUUID: string) {
+  for (const directory of [ DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, DIRECTORIES.HLS_STREAMING_PLAYLIST.PRIVATE ]) {
+    const liveDirectory = join(directory, videoUUID)
+    if (!await pathExists(liveDirectory)) continue
+
+    logger.info('Removing live directory %s of deleted video %s.', liveDirectory, videoUUID)
+
+    await remove(liveDirectory)
+  }
 }
 
 export async function cleanupAndDestroyPermanentLive (video: MVideo, streamingPlaylist: MStreamingPlaylist) {

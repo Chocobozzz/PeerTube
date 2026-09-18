@@ -41,7 +41,7 @@ import {
 } from '../../../middlewares/validators/index.js'
 import { UserModel } from '../../../models/user/user.js'
 import { emailVerificationRouter } from './email-verification.js'
-import { meRouter, registerMeSharedRoutes } from './me.js'
+import { meRouter } from './me.js'
 import { myAbusesRouter } from './my-abuses.js'
 import { myBlocklistRouter } from './my-blocklist.js'
 import { myVideosHistoryRouter } from './my-history.js'
@@ -70,7 +70,9 @@ const usersRouter = express.Router()
 usersRouter.use(apiRateLimiter)
 
 usersRouter.use('/', emailVerificationRouter)
+// Not registered by secondaries
 usersRouter.use('/', userExportsRouter)
+// Not registered by secondaries
 usersRouter.use('/', userImportRouter)
 usersRouter.use('/', registrationsRouter)
 usersRouter.use('/', twoFactorRouter)
@@ -84,14 +86,6 @@ usersRouter.use('/', myAbusesRouter)
 usersRouter.use('/', meRouter)
 
 registerUserSharedRoutes(usersRouter)
-
-usersRouter.delete(
-  '/:id',
-  authenticate,
-  ensureUserHasRight(UserRight.MANAGE_USERS),
-  asyncMiddleware(usersRemoveValidator),
-  asyncMiddleware(removeUser)
-)
 
 // ---------------------------------------------------------------------------
 // Router for secondary process
@@ -111,8 +105,8 @@ secondaryUsersRouter.use('/', myBlocklistRouter)
 secondaryUsersRouter.use('/', myVideosHistoryRouter)
 secondaryUsersRouter.use('/', myVideoPlaylistsRouter)
 secondaryUsersRouter.use('/', myAbusesRouter)
+secondaryUsersRouter.use('/', meRouter)
 
-registerMeSharedRoutes(secondaryUsersRouter)
 registerUserSharedRoutes(secondaryUsersRouter)
 
 // ---------------------------------------------------------------------------
@@ -191,6 +185,14 @@ function registerUserSharedRoutes (router: express.Router) {
     confirmTokenRateLimiter,
     asyncMiddleware(usersResetPasswordValidator),
     asyncMiddleware(resetUserPassword)
+  )
+
+  router.delete(
+    '/:id',
+    authenticate,
+    ensureUserHasRight(UserRight.MANAGE_USERS),
+    asyncMiddleware(usersRemoveValidator),
+    asyncMiddleware(removeUser)
   )
 }
 

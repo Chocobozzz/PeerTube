@@ -6,7 +6,14 @@ import {
   hasVideoStream,
   isAudioFile
 } from '@peertube/peertube-ffmpeg'
-import { FileStorage, VideoFileFormatFlag, VideoFileMetadata, VideoFileStream, VideoResolution } from '@peertube/peertube-models'
+import {
+  FileStorage,
+  FileStorageType,
+  VideoFileFormatFlag,
+  VideoFileMetadata,
+  VideoFileStream,
+  VideoResolution
+} from '@peertube/peertube-models'
 import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -16,8 +23,8 @@ import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
-import { move, remove } from 'fs-extra/esm'
-import { storeOriginalVideoFile } from './object-storage/videos.js'
+import { copy, move, remove } from 'fs-extra/esm'
+import { removeWebVideoObjectStorage, storeOriginalVideoFile, storeWebVideoFile } from './object-storage/videos.js'
 import { generateHLSVideoFilename, generateWebVideoFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
 
@@ -223,7 +230,11 @@ export async function createVideoSource (options: {
   return videoSource.save()
 }
 
-export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVideoFile) {
+export async function saveNewOriginalFileIfNeeded (
+  video: MVideo,
+  videoFile: MVideoFile,
+  localInputPath?: string // local copy of the `videoFile`, if the caller already has one
+) {
   if (!CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) return
 
   const videoSource = await VideoSourceModel.loadLatest(video.id)
@@ -234,18 +245,23 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
 
   logger.info(`Storing original video file ${videoSource.keptOriginalFilename} of video ${video.name}`)
 
-  const sourcePath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
-
-  if (isObjectStorageEnabledFor('original_video_files')) {
-    await storeOriginalVideoFile(sourcePath, videoSource.keptOriginalFilename)
-    await remove(sourcePath)
-
-    videoSource.storage = FileStorage.OBJECT_STORAGE
+  if (videoFile.storage === FileStorage.FILE_SYSTEM) {
+    // The web video file is deleted afterwards, so we can move it
+    videoSource.storage = await storeOriginalFile({
+      inputPath: VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile),
+      filename: videoSource.keptOriginalFilename,
+      keepInput: false
+    })
+  } else if (localInputPath) {
+    videoSource.storage = await storeOriginalFile({
+      inputPath: localInputPath,
+      filename: videoSource.keptOriginalFilename,
+      keepInput: true
+    })
   } else {
-    const destinationPath = VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename)
-    await move(sourcePath, destinationPath)
-
-    videoSource.storage = FileStorage.FILE_SYSTEM
+    videoSource.storage = await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), inputPath => {
+      return storeOriginalFile({ inputPath, filename: videoSource.keptOriginalFilename, keepInput: true })
+    })
   }
 
   await videoSource.save()
@@ -261,5 +277,96 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
     } catch (err) {
       logger.error('Cannot delete old original file ' + oldSource.keptOriginalFilename, { err })
     }
+  }
+}
+
+async function storeOriginalFile (options: {
+  inputPath: string
+  filename: string
+  keepInput: boolean
+}): Promise<FileStorageType> {
+  const { inputPath, filename, keepInput } = options
+
+  if (isObjectStorageEnabledFor('original_video_files')) {
+    await storeOriginalVideoFile(inputPath, filename)
+    if (!keepInput) await remove(inputPath)
+
+    return FileStorage.OBJECT_STORAGE
+  }
+
+  const destinationPath = VideoPathManager.Instance.getFSOriginalVideoFilePath(filename)
+
+  if (keepInput) await copy(inputPath, destinationPath)
+  else await move(inputPath, destinationPath)
+
+  return FileStorage.FILE_SYSTEM
+}
+
+// ---------------------------------------------------------------------------
+// Storage of new local files
+// ---------------------------------------------------------------------------
+
+export function getNewWebVideoFileStorage (): FileStorageType {
+  return isObjectStorageEnabledFor('web_videos')
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
+}
+
+export function getNewHLSPlaylistStorage (): FileStorageType {
+  return isObjectStorageEnabledFor('streaming_playlists')
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
+}
+
+// Store a new web video file generated in `inputPath`, and set its storage
+// Returns a local path of the file, available until `cleanup` is called
+// The caller must hold the video files lock: the file location/ACL depends on the video privacy
+export async function storeNewWebVideoFile (options: {
+  video: MVideo
+  videoFile: MVideoFile
+  inputPath: string
+  keepInput?: boolean // default false
+}) {
+  const { video, videoFile, inputPath, keepInput = false } = options
+
+  videoFile.storage = getNewWebVideoFileStorage()
+
+  if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
+    try {
+      await storeWebVideoFile(video, videoFile, inputPath)
+    } catch (err) {
+      // The caller doesn't get the cleanup/rollback functions
+      if (!keepInput) await remove(inputPath)
+
+      throw err
+    }
+
+    return {
+      localPath: inputPath,
+
+      // Only removes the local temporary copy: the caller successfully saved the file in database
+      cleanup: async () => {
+        if (!keepInput) await remove(inputPath)
+      },
+
+      // The caller could not save the file in database: also remove the object we just uploaded, so it is not left orphaned
+      rollback: async () => {
+        await removeWebVideoObjectStorage(videoFile)
+          .catch(err => logger.error('Cannot remove object storage file %s after a rollback.', videoFile.filename, { err }))
+
+        if (!keepInput) await remove(inputPath)
+      }
+    }
+  }
+
+  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
+
+  if (keepInput) await copy(inputPath, outputPath)
+  else await move(inputPath, outputPath, { overwrite: true })
+
+  return {
+    localPath: outputPath,
+    cleanup: () => Promise.resolve(),
+    rollback: () => remove(outputPath)
   }
 }

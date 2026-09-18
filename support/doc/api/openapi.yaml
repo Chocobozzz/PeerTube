@@ -7419,6 +7419,25 @@ paths:
                     type: string
                   activityPubMessagesWaiting:
                     type: integer
+                  sharedFiles:
+                    type: object
+                    description: >
+                      Whether all the local files of each kind are in object storage.
+                      Secondary processes that don't share the storage directories of the primary can manage files only if they are
+                    properties:
+                      sections:
+                        type: object
+                        description: Keyed by object storage section (`thumbnails`, `web_videos`...)
+                        additionalProperties:
+                          type: object
+                          properties:
+                            inObjectStorage:
+                              type: boolean
+                              description: Every local file of this kind is in object storage, so secondaries can manage them without sharing a directory
+                            reasons:
+                              type: array
+                              items:
+                                type: string
 
   /api/v1/server/debug/run-command:
     post:

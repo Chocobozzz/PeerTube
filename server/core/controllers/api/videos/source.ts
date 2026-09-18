@@ -9,7 +9,7 @@ import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from '@server/lib/thu
 import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
-import { buildNewFile, createVideoSource } from '@server/lib/video-file.js'
+import { buildNewFile, createVideoSource, storeNewWebVideoFile } from '@server/lib/video-file.js'
 import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded, buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
@@ -18,7 +18,6 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
-import { move } from 'fs-extra/esm'
 import { createLogger } from '../../../helpers/logger.js'
 import {
   asyncMiddleware,
@@ -109,9 +108,16 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
 
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(res.locals.videoFull.uuid)
 
+  let rollbackLocalFile: () => Promise<void>
+
   try {
-    const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(res.locals.videoFull, videoFile)
-    await move(videoPhysicalFile.path, destination)
+    const { localPath: destination, cleanup, rollback } = await storeNewWebVideoFile({
+      video: res.locals.videoFull,
+      videoFile,
+      inputPath: videoPhysicalFile.path
+    })
+    // If a later step fails, remove the file we just stored instead of leaving it orphaned
+    rollbackLocalFile = rollback
 
     let oldWebVideoFiles: MVideoFile[] = []
     let oldStreamingPlaylists: MStreamingPlaylistFiles[] = []
@@ -175,7 +181,7 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
       createdAt: inputFileUpdatedAt
     })
 
-    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(video, res.locals.ffprobe)
+    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(video, res.locals.ffprobe, destination)
     await video.VideoChannel.setAsUpdated()
 
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
@@ -184,7 +190,12 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
 
     Hooks.runAction('action:api.video.file-updated', { video, req, res })
 
+    await cleanup()
+
     return res.json(source.toFormattedJSON())
+  } catch (err) {
+    await rollbackLocalFile?.()
+    throw err
   } finally {
     videoFileMutexReleaser()
   }

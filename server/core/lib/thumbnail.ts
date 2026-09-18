@@ -179,10 +179,13 @@ export function createLocalVideoThumbnailsFromVideo (options: {
   video: MVideoThumbnails
   videoFile: MVideoFile
   ffprobe: FfprobeData
-}): Promise<MThumbnail[]> {
-  const { video, videoFile, ffprobe } = options
 
-  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), input => {
+  // Local copy of the video file, if the caller has one: it is not downloaded from object storage
+  videoFilePath?: string
+}): Promise<MThumbnail[]> {
+  const { video, videoFile, ffprobe, videoFilePath } = options
+
+  const create = (input: string) => {
     const metadata = CONFIG.THUMBNAILS.SIZES.map(size => buildMetadataFromVideo({ video, size, extension: '.jpg' }))
 
     let biggestImagePath: string
@@ -241,7 +244,11 @@ export function createLocalVideoThumbnailsFromVideo (options: {
         })
       }
     })
-  })
+  }
+
+  if (videoFilePath) return create(videoFilePath)
+
+  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), create)
 }
 
 // ---------------------------------------------------------------------------
@@ -317,7 +324,11 @@ export function updateRemoteVideoThumbnail (options: {
 
 // ---------------------------------------------------------------------------
 
-export async function regenerateLocalVideoThumbnailsFromVideoIfNeeded (video: MVideoWithAllFiles, ffprobe: FfprobeData) {
+export async function regenerateLocalVideoThumbnailsFromVideoIfNeeded (
+  video: MVideoWithAllFiles,
+  ffprobe: FfprobeData,
+  videoFilePath?: string // local copy of the max quality file of the video, if the caller has one
+) {
   if (video.Thumbnails.some(t => t.automaticallyGenerated === false)) return
 
   logger.info('Re-generate thumbnails for video ' + video.url)
@@ -325,6 +336,7 @@ export async function regenerateLocalVideoThumbnailsFromVideoIfNeeded (video: MV
   const thumbnails = await createLocalVideoThumbnailsFromVideo({
     video,
     videoFile: video.getMaxQualityFile(VideoFileStream.VIDEO) || video.getMaxQualityFile(VideoFileStream.AUDIO),
+    videoFilePath,
     ffprobe
   })
 

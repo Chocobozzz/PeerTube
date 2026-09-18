@@ -4,7 +4,14 @@ import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
-import { MStreamingPlaylist, MStreamingPlaylistFilesVideo, MVideo, MVideoCaption } from '@server/types/models/index.js'
+import {
+  MStreamingPlaylist,
+  MStreamingPlaylistFilesVideo,
+  MVideo,
+  MVideoCaption,
+  MVideoFileStreamingPlaylistVideo
+} from '@server/types/models/index.js'
+import { FfprobeData } from 'fluent-ffmpeg'
 import { ensureDir, move, outputJSON, remove } from 'fs-extra/esm'
 import { open, readFile, stat, writeFile } from 'fs/promises'
 import flatten from 'lodash-es/flatten.js'
@@ -60,10 +67,18 @@ export async function updateStreamingPlaylistsInfohashesIfNeeded () {
   }
 }
 
-export async function updateM3U8AndShaPlaylist (video: MVideo, playlist: MStreamingPlaylist) {
+// Local copies of some files of the playlist, keyed by video filename, to not re-download them from object storage
+export type LocalHLSFiles = {
+  [videoFilename: string]: {
+    videoPath: string
+    resolutionPlaylistPath: string
+  }
+}
+
+export async function updateM3U8AndShaPlaylist (video: MVideo, playlist: MStreamingPlaylist, localFiles: LocalHLSFiles = {}) {
   try {
-    let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist)
-    playlistWithFiles = await updateSha256VODSegments(video, playlist)
+    let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist, localFiles)
+    playlistWithFiles = await updateSha256VODSegments(video, playlist, localFiles)
 
     // Refresh playlist, operations can take some time
     playlistWithFiles = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlist.id)
@@ -81,7 +96,11 @@ export async function updateM3U8AndShaPlaylist (video: MVideo, playlist: MStream
 // Avoid concurrency issues when updating streaming playlist files
 const playlistFilesQueue = new PQueue({ concurrency: 1 })
 
-function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
+function updateMasterHLSPlaylist (
+  video: MVideo,
+  playlistArg: MStreamingPlaylist,
+  localFiles: LocalHLSFiles
+): Promise<MStreamingPlaylistFilesVideo> {
   return playlistFilesQueue.add(async () => {
     const playlist = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlistArg.id)
     const captions = await VideoCaptionModel.listVideoCaptions(video.id)
@@ -107,9 +126,7 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
     for (const file of sortBy(playlist.VideoFiles, 'resolution')) {
       const playlistFilename = getHLSResolutionPlaylistFilename(file.filename)
 
-      await VideoPathManager.Instance.makeAvailableVideoFile(file.withVideoOrPlaylist(playlist), async videoFilePath => {
-        const probe = await ffprobePromise(videoFilePath)
-
+      await withVideoFileProbe({ file: file.withVideoOrPlaylist(playlist), localFiles }, async ({ videoFilePath, probe }) => {
         if (splitAudioAndVideo && file.resolution === VideoResolution.H_NOVIDEO) {
           separatedAudioCodec = await getAudioStreamCodec(videoFilePath, probe)
         }
@@ -178,33 +195,40 @@ function updateMasterHLSPlaylist (video: MVideo, playlistArg: MStreamingPlaylist
 
 // ---------------------------------------------------------------------------
 
-function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist): Promise<MStreamingPlaylistFilesVideo> {
+function updateSha256VODSegments (
+  video: MVideo,
+  playlistArg: MStreamingPlaylist,
+  localFiles: LocalHLSFiles
+): Promise<MStreamingPlaylistFilesVideo> {
   return playlistFilesQueue.add(async () => {
-    const json: { [filename: string]: { [range: string]: string } } = {}
+    const json: SegmentsSha256 = {}
 
     const playlist = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlistArg.id)
 
+    // A video file never changes once generated (a new file has a new filename)
+    // So reuse the hashes of the previous JSON file, instead of downloading every file from object storage to hash it again
+    const previousJSON = await readPreviousSha256Segments(playlist)
+
     // For all the resolutions available for this video
     for (const file of playlist.VideoFiles) {
-      const rangeHashes: { [range: string]: string } = {}
+      const videoFilename = file.filename
+
+      const local = localFiles[videoFilename]
+      if (local) {
+        json[videoFilename] = await hashSegments(local.videoPath, local.resolutionPlaylistPath)
+        continue
+      }
+
+      if (previousJSON[videoFilename]) {
+        json[videoFilename] = previousJSON[videoFilename]
+        continue
+      }
+
       const fileWithPlaylist = file.withVideoOrPlaylist(playlist)
 
       await VideoPathManager.Instance.makeAvailableVideoFile(fileWithPlaylist, videoPath => {
         return VideoPathManager.Instance.makeAvailableResolutionPlaylistFile(fileWithPlaylist, async resolutionPlaylistPath => {
-          const playlistContent = await readFile(resolutionPlaylistPath)
-          const ranges = getRangesFromPlaylist(playlistContent.toString())
-
-          const fd = await open(videoPath, 'r')
-          for (const range of ranges) {
-            const buf = Buffer.alloc(range.length)
-            await fd.read(buf, 0, range.length, range.offset)
-
-            rangeHashes[`${range.offset}-${range.offset + range.length - 1}`] = sha256(buf)
-          }
-          await fd.close()
-
-          const videoFilename = file.filename
-          json[videoFilename] = rangeHashes
+          json[videoFilename] = await hashSegments(videoPath, resolutionPlaylistPath)
         })
       })
     }
@@ -226,6 +250,66 @@ function updateSha256VODSegments (video: MVideo, playlistArg: MStreamingPlaylist
     }
 
     return playlist.save()
+  })
+}
+
+type SegmentsSha256 = { [filename: string]: { [range: string]: string } }
+
+async function readPreviousSha256Segments (playlist: MStreamingPlaylistFilesVideo): Promise<SegmentsSha256> {
+  if (!playlist.segmentsSha256Filename) return {}
+
+  try {
+    return await VideoPathManager.Instance.makeAvailablePlaylistFile(playlist, playlist.segmentsSha256Filename, async path => {
+      return JSON.parse(await readFile(path, 'utf8'))
+    })
+  } catch (err) {
+    logger.debug(`Cannot read previous segments sha256 file of video ${playlist.Video.uuid}, hashing all segments.`, { err })
+
+    return {}
+  }
+}
+
+async function hashSegments (videoPath: string, resolutionPlaylistPath: string) {
+  const rangeHashes: { [range: string]: string } = {}
+
+  const playlistContent = await readFile(resolutionPlaylistPath)
+  const ranges = getRangesFromPlaylist(playlistContent.toString())
+
+  const fd = await open(videoPath, 'r')
+
+  try {
+    for (const range of ranges) {
+      const buf = Buffer.alloc(range.length)
+      await fd.read(buf, 0, range.length, range.offset)
+
+      rangeHashes[`${range.offset}-${range.offset + range.length - 1}`] = sha256(buf)
+    }
+  } finally {
+    await fd.close()
+  }
+
+  return rangeHashes
+}
+
+// The ffprobe output of a video file is saved in database: use it instead of downloading the file from object storage
+async function withVideoFileProbe (
+  options: {
+    file: MVideoFileStreamingPlaylistVideo
+    localFiles: LocalHLSFiles
+  },
+  cb: (options: { videoFilePath: string, probe: FfprobeData }) => Promise<void>
+) {
+  const { file, localFiles } = options
+
+  const localPath = localFiles[file.filename]?.videoPath
+  if (localPath) return cb({ videoFilePath: localPath, probe: await ffprobePromise(localPath) })
+
+  if (file.metadata?.streams && file.metadata.format) {
+    return cb({ videoFilePath: file.filename, probe: file.metadata as FfprobeData })
+  }
+
+  return VideoPathManager.Instance.makeAvailableVideoFile(file, async videoFilePath => {
+    return cb({ videoFilePath, probe: await ffprobePromise(videoFilePath) })
   })
 }
 

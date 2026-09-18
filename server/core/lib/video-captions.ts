@@ -22,6 +22,7 @@ import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { buildCaptionM3U8Content, updateM3U8AndShaPlaylist } from './hls.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
+import { storeHLSFileFromContent, storeVideoCaption } from './object-storage/videos.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
 
@@ -55,11 +56,18 @@ export async function createLocalCaption (options: {
     throw new Error(`Invalid VTT file`)
   }
 
+  // Store it in object storage right away, so it never stays on the file system of this process, that other processes cannot reach
+  if (isObjectStorageEnabledFor('captions')) {
+    await storeVideoCaption(captionDest, videoCaption.filename)
+    await remove(captionDest)
+
+    videoCaption.storage = FileStorage.OBJECT_STORAGE
+  }
+
   const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
 
-  // If object storage is enabled, the move to object storage job will upload the playlist on the fly
-  videoCaption.m3u8Filename = hls && !isObjectStorageEnabledFor('captions')
-    ? await upsertCaptionPlaylistOnFS(videoCaption, video)
+  videoCaption.m3u8Filename = hls
+    ? await upsertCaptionPlaylist(videoCaption, video)
     : null
 
   await retryTransactionWrapper(() => {
@@ -68,10 +76,6 @@ export async function createLocalCaption (options: {
     })
   })
 
-  if (isObjectStorageEnabledFor('captions')) {
-    await JobQueue.Instance.createJob({ type: 'move-to-object-storage', payload: { captionId: videoCaption.id } })
-  }
-
   logger.info(`Created/replaced caption ${videoCaption.filename} of ${language} of video ${video.uuid}`)
 
   return Object.assign(videoCaption, { Video: video })
@@ -79,16 +83,14 @@ export async function createLocalCaption (options: {
 
 // ---------------------------------------------------------------------------
 
-export async function createAllCaptionPlaylistsOnFSIfNeeded (video: MVideo) {
+export async function createAllCaptionPlaylistsIfNeeded (video: MVideo) {
   const captions = await VideoCaptionModel.listVideoCaptions(video.id)
 
   for (const caption of captions) {
     if (caption.m3u8Filename) continue
-    // If object storage is enabled, the move to object storage job will upload the playlist on the fly
-    if (isObjectStorageEnabledFor('captions')) continue
 
     try {
-      caption.m3u8Filename = await upsertCaptionPlaylistOnFS(caption, video)
+      caption.m3u8Filename = await upsertCaptionPlaylist(caption, video)
       await caption.save()
     } catch (err) {
       logger.error(`Cannot create caption playlist ${caption.filename} (${caption.language}) of video ${video.uuid}`, { err })
@@ -275,6 +277,18 @@ export async function onTranscriptionEnded (options: {
   scheduleVideoFederation({ video })
 
   logger.info(`Transcription ended for ${video.uuid}`)
+}
+
+export async function upsertCaptionPlaylist (caption: MVideoCaption, video: MVideo) {
+  if (caption.storage === FileStorage.FILE_SYSTEM) return upsertCaptionPlaylistOnFS(caption, video)
+
+  const m3u8Filename = VideoCaptionModel.generateM3U8Filename(caption.filename)
+
+  logger.debug(`Uploading caption playlist ${m3u8Filename} of video ${video.uuid} in object storage`)
+
+  await storeHLSFileFromContent({ video, pathOrFilename: m3u8Filename, content: buildCaptionM3U8Content({ video, caption }) })
+
+  return m3u8Filename
 }
 
 export async function upsertCaptionPlaylistOnFS (caption: MVideoCaption, video: MVideo) {

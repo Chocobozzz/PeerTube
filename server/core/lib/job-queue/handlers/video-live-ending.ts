@@ -4,7 +4,12 @@ import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
-import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live/index.js'
+import {
+  cleanupAndDestroyPermanentLive,
+  cleanupTMPLiveFiles,
+  cleanupUnsavedNormalLive,
+  removeLiveDirectoriesOfDeletedVideo
+} from '@server/lib/live/index.js'
 import { withLocalCommonFile } from '@server/lib/object-storage/common-files.js'
 import {
   generateHLSMasterPlaylistFilename,
@@ -19,6 +24,7 @@ import {
 } from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
 import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
+import { getNewHLSPlaylistStorage } from '@server/lib/video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
@@ -52,19 +58,29 @@ const logger = createLogger('live', 'job')
 
 export async function processVideoLiveEnding (job: Job) {
   const payload = job.data as VideoLiveEndingPayload
+  const videoId = payload.videoUUID ?? payload.videoId
 
-  await logger.withContext([ payload.videoId ], async () => {
-    logger.info('Processing video live ending for %s.', payload.videoId, { payload })
+  await logger.withContext([ videoId ], async () => {
+    logger.info('Processing video live ending for %s.', videoId, { payload })
 
     function logError () {
-      logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId)
+      logger.warn('Video live %s does not exist anymore. Cannot process live ending.', videoId)
     }
 
-    const video = await VideoModel.loadWithThumbnails(payload.videoId)
-    const live = await VideoLiveModel.loadByVideoId(payload.videoId)
+    const video = await VideoModel.loadWithThumbnails(videoId)
+    if (!video) {
+      logError()
+
+      // Deleted during the live, possibly by a secondary process before the end of the live was processed
+      if (payload.videoUUID) await removeLiveDirectoriesOfDeletedVideo(payload.videoUUID)
+
+      return
+    }
+
+    const live = await VideoLiveModel.loadByVideoId(video.id)
     const liveSession = await VideoLiveSessionModel.load(payload.liveSessionId)
 
-    if (!video || !live || !liveSession) {
+    if (!live || !liveSession) {
       logError()
       return
     }
@@ -308,6 +324,7 @@ async function replaceLiveByReplay (options: {
   hlsPlaylist.VideoFiles = []
   hlsPlaylist.playlistFilename = generateHLSMasterPlaylistFilename()
   hlsPlaylist.segmentsSha256Filename = generateHlsSha256SegmentsFilename()
+  hlsPlaylist.storage = getNewHLSPlaylistStorage()
   await hlsPlaylist.save()
 
   await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })

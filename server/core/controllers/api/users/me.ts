@@ -60,8 +60,6 @@ const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_
 
 const meRouter = express.Router()
 
-registerMeSharedRoutes(meRouter)
-
 meRouter.delete('/me', authenticate, deleteMeValidator, asyncMiddleware(deleteMe))
 
 meRouter.post(
@@ -78,75 +76,71 @@ meRouter.delete(
   asyncRetryTransactionMiddleware(deleteMyAvatar)
 )
 
+meRouter.get('/me', authenticate, asyncMiddleware(getMyInformation))
+
+meRouter.put(
+  '/me',
+  authenticate,
+  asyncMiddleware(usersUpdateMeValidator),
+  asyncRetryTransactionMiddleware(updateMe)
+)
+
+meRouter.post(
+  '/me/new-feature-info/read',
+  authenticate,
+  usersNewFeatureInfoReadValidator,
+  asyncMiddleware(usersNewFeatureInfoRead)
+)
+
+meRouter.get('/me/video-quota-used', authenticate, asyncMiddleware(getMyVideoQuotaUsed))
+
+meRouter.get(
+  '/me/videos/imports',
+  authenticate,
+  paginationValidator,
+  videoImportsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  listMyVideoImportsValidator,
+  asyncMiddleware(listMyVideoImports)
+)
+
+meRouter.get(
+  '/me/videos/comments',
+  authenticate,
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  asyncMiddleware(listCommentsOnUserVideosValidator),
+  asyncMiddleware(listCommentsOnUserVideos)
+)
+
+meRouter.get(
+  '/me/videos',
+  authenticate,
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  commonVideosFiltersValidatorFactory({ allowPrivacyFilterForAllUsers: true }),
+  asyncMiddleware(listMyVideosValidator),
+  asyncMiddleware(listMyVideos)
+)
+
+meRouter.get(
+  '/me/videos/:videoId/rating',
+  authenticate,
+  asyncMiddleware(usersVideoRatingValidator),
+  asyncMiddleware(getMyVideoRating)
+)
+
 // ---------------------------------------------------------------------------
-
-function registerMeSharedRoutes (router: express.Router) {
-  router.get('/me', authenticate, asyncMiddleware(getMyInformation))
-
-  router.put(
-    '/me',
-    authenticate,
-    asyncMiddleware(usersUpdateMeValidator),
-    asyncRetryTransactionMiddleware(updateMe)
-  )
-
-  router.post(
-    '/me/new-feature-info/read',
-    authenticate,
-    usersNewFeatureInfoReadValidator,
-    asyncMiddleware(usersNewFeatureInfoRead)
-  )
-
-  router.get('/me/video-quota-used', authenticate, asyncMiddleware(getMyVideoQuotaUsed))
-
-  router.get(
-    '/me/videos/imports',
-    authenticate,
-    paginationValidator,
-    videoImportsSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    listMyVideoImportsValidator,
-    asyncMiddleware(listMyVideoImports)
-  )
-
-  router.get(
-    '/me/videos/comments',
-    authenticate,
-    paginationValidator,
-    videosSortValidator,
-    setDefaultVideosSort,
-    setDefaultPagination,
-    asyncMiddleware(listCommentsOnUserVideosValidator),
-    asyncMiddleware(listCommentsOnUserVideos)
-  )
-
-  router.get(
-    '/me/videos',
-    authenticate,
-    paginationValidator,
-    videosSortValidator,
-    setDefaultVideosSort,
-    setDefaultPagination,
-    commonVideosFiltersValidatorFactory({ allowPrivacyFilterForAllUsers: true }),
-    asyncMiddleware(listMyVideosValidator),
-    asyncMiddleware(listMyVideos)
-  )
-
-  router.get(
-    '/me/videos/:videoId/rating',
-    authenticate,
-    asyncMiddleware(usersVideoRatingValidator),
-    asyncMiddleware(getMyVideoRating)
-  )
-}
 
 // ---------------------------------------------------------------------------
 
 export {
-  meRouter,
-  // Will be used by parent router
-  registerMeSharedRoutes
+  meRouter
 }
 
 // ---------------------------------------------------------------------------

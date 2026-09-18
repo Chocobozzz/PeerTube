@@ -1,5 +1,4 @@
 class LiveQuotaStore {
-
   private static instance: LiveQuotaStore
 
   private readonly livesPerUser = new Map<number, { sessionId: string, size: number }[]>()

@@ -22,19 +22,19 @@ import { isUserQuotaValid } from '@server/lib/user.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
 import { replaceChaptersIfNotExist } from '@server/lib/video-chapters.js'
-import { buildNewFile } from '@server/lib/video-file.js'
+import { buildNewFile, storeNewWebVideoFile } from '@server/lib/video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded, buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
-import { createTorrentForFile, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
+import { createTorrentForFileFromPath, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
-import { MUser, MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
+import { MThumbnail, MUser, MUserId, MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import.js'
 import { Job } from 'bullmq'
 import { FfprobeData } from 'fluent-ffmpeg'
-import { move, remove } from 'fs-extra/esm'
+import { remove } from 'fs-extra/esm'
 import { stat } from 'fs/promises'
 import { createLogger } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, JOB_TTL } from '../../../initializers/constants.js'
@@ -158,6 +158,7 @@ async function processFile (options: {
 
   let tmpVideoPath: string
   let videoFile: MVideoFile
+  let rollbackNewVideoFile: () => Promise<void>
 
   try {
     // Download video
@@ -213,15 +214,28 @@ async function processFile (options: {
     try {
       const videoImportWithFiles = await refreshVideoImportFromDB(videoImport, videoFile)
 
-      // Move file
-      const videoDestFile = VideoPathManager.Instance.getFSVideoFileOutputPath(videoImportWithFiles.Video, videoFile)
-      await move(tmpVideoPath, videoDestFile)
+      const { localPath, cleanup, rollback } = await storeNewWebVideoFile({
+        video: videoImportWithFiles.Video,
+        videoFile,
+        inputPath: tmpVideoPath
+      })
+      // If a later step fails, remove the file we just stored instead of leaving it orphaned
+      rollbackNewVideoFile = rollback
 
       tmpVideoPath = null // This path is not used anymore
 
-      const thumbnails = await generateThumbnails({ videoImportWithFiles, videoFile, ffprobe })
+      let thumbnails: MThumbnail[]
+      let torrentResult: Awaited<ReturnType<typeof createTorrentForFileFromPath>>
 
-      const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(videoImportWithFiles.Video, videoFile)
+      try {
+        thumbnails = await generateThumbnails({ videoImportWithFiles, videoFile, videoFilePath: localPath, ffprobe })
+
+        torrentResult = await createTorrentForFileFromPath(videoImportWithFiles.Video, videoFile, localPath)
+      } finally {
+        await cleanup()
+      }
+
+      const { infoHash, torrentFilename, torrentStorage } = torrentResult
 
       const { videoImportUpdated, video } = await retryTransactionWrapper(() => {
         return sequelizeTypescript.transaction(async t => {
@@ -275,6 +289,7 @@ async function processFile (options: {
       videoFileLockReleaser()
     }
   } catch (err) {
+    await rollbackNewVideoFile?.()
     await onImportError(err, tmpVideoPath, videoImport)
 
     throw err
@@ -292,13 +307,14 @@ async function refreshVideoImportFromDB (videoImport: MVideoImportDefault, video
 async function generateThumbnails (options: {
   videoImportWithFiles: MVideoImportDefaultFiles
   videoFile: MVideoFile
+  videoFilePath: string
   ffprobe: FfprobeData
 }) {
-  const { ffprobe, videoFile, videoImportWithFiles } = options
+  const { ffprobe, videoFile, videoFilePath, videoImportWithFiles } = options
 
   if (videoImportWithFiles.Video.Thumbnails.length !== 0) return []
 
-  return createLocalVideoThumbnailsFromVideo({ video: videoImportWithFiles.Video, videoFile, ffprobe })
+  return createLocalVideoThumbnailsFromVideo({ video: videoImportWithFiles.Video, videoFile, videoFilePath, ffprobe })
 }
 
 async function afterImportSuccess (options: {

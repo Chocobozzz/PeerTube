@@ -367,12 +367,15 @@ describe('Object storage for videos', function () {
       server = await createSingleServer(1, config)
       await setAccessTokensToServers([ server ])
 
-      const { uuid } = await server.videos.quickUpload({ name: 'video' })
+      await server.videos.upload({
+        attributes: { name: 'video' },
+        expectedStatus: HttpStatusCode.INTERNAL_SERVER_ERROR_500
+      })
 
-      await waitJobs([ server ], { skipDelayed: true })
-      const video = await server.videos.get({ id: uuid })
+      const { total } = await server.videos.list()
+      expect(total).to.equal(0)
 
-      expectStartWith(video.files[0].fileUrl, server.url)
+      await checkTmpIsEmpty(server)
 
       await killallServers([ server ])
     })

@@ -1,5 +1,7 @@
+import { buildPath } from '@peertube/peertube-node-utils'
 import { Load, Util, type ConfigSource } from 'config/lib/util.js'
-import { basename } from 'path'
+import { hostname } from 'os'
+import { basename, resolve } from 'path'
 import { isSecondaryProcess } from '../process-role.js'
 import { buildRedisClientOptions } from './redis-options.js'
 import {
@@ -7,12 +9,13 @@ import {
   decodePublishedConfig,
   getPublishedConfig,
   setPublishedConfig,
+  setSharedPrimaryStorage,
   SHARED_CONFIG_REDIS_KEY
 } from './shared-config.js'
 
 /**
- * Build manually configuration using `config` module helper
- * So we can easily invalidate configuration ourselves (instead of clearing module cache)
+ * Build manually configuration using `config` module helper,
+ * so we can easily invalidate configuration ourselves (instead of clearing module cache)
  * Logger is unavailable at this point, so we fall back to console methods
  */
 
@@ -63,7 +66,7 @@ function buildConfigInstance (options: {
   load.setEnv('CONFIG_DIR', load.options.configDir)
 
   // A secondary process runs with the configuration of the primary
-  // It overrides the local files, but allows `$NODE_CONFIG` and `--NODE_CONFIG` to override primary config
+  // It overrides the local files, but allows `$NODE_CONFIG` and `--NODE_CONFIG` to override primary config (useful for testing)
   const publishedConfig = getPublishedConfig()
   if (publishedConfig) {
     additional.push({ name: 'primary process', config: publishedConfig })
@@ -190,7 +193,13 @@ async function injectPublishedConfig () {
 
   const raw = await readPublishedConfig(localConfig, key, instanceHost)
 
-  const { instance: publishedInstance, config } = await decodePublishedConfig(raw, secret)
+  const {
+    instance: publishedInstance,
+    config,
+    hostname: primaryHostname,
+    shareableStorage,
+    nonShareableStorage
+  } = await decodePublishedConfig(raw, secret)
     .catch(() =>
       exitWithError(
         `The configuration published by the primary process of "${instanceHost}" cannot be decrypted.\n` +
@@ -205,7 +214,34 @@ async function injectPublishedConfig () {
     )
   }
 
-  setPublishedConfig(config)
+  // On the same host, this process shares the disk of the primary: adopt its storage directories instead of its own
+  const sameHost = hostname() === primaryHostname
+  if (sameHost) checkNoStorageDirectoryConflict(localConfig, nonShareableStorage)
+
+  setSharedPrimaryStorage(sameHost ? shareableStorage : undefined)
+
+  setPublishedConfig(config, sameHost ? shareableStorage : undefined)
+}
+
+// Every process of a PeerTube instance needs its own tmp/plugins/cache/... directories
+// A collision here means an admin copied the primary's configuration without changing these settings
+function checkNoStorageDirectoryConflict (localConfig: ConfigInstance, primaryStorage: Record<string, string>) {
+  for (const [ settingName, primaryPath ] of Object.entries(primaryStorage)) {
+    const key = 'storage.' + settingName
+
+    if (!localConfig.has(key)) continue
+
+    const localPath = resolve(buildPath(localConfig.get<string>(key)))
+
+    if (localPath !== resolve(primaryPath)) continue
+
+    exitWithError(
+      `"${key}" is set to "${localPath}", which the primary process of this instance also uses on the same host.\n` +
+        'Every process needs storage directories of its own, except for the ones storing files referenced by the database, ' +
+        'which can be shared.\n' +
+        `Set ${key} to a directory this process does not share with the primary.`
+    )
+  }
 }
 
 async function readPublishedConfig (localConfig: ConfigInstance, key: string, instanceHost: string) {

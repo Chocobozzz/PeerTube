@@ -1,9 +1,11 @@
+import { hostname } from 'os'
 import { createLogger } from '../../helpers/logger.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
 import { Redis } from '../../lib/redis/index.js'
 import { CONFIG, getConfigModule, reloadConfig } from '../config.js'
 import { WEBSERVER } from '../constants.js'
 import { isSecondaryProcess } from '../process-role.js'
+import { getStorageDirectorySubSettingName, SHAREABLE_STORAGE_DIRECTORIES } from '../storage-ownership.js'
 import { buildPublishableConfig, decodePublishedConfig, encodePublishedConfig, setPublishedConfig } from './shared-config.js'
 
 const logger = createLogger('config')
@@ -50,7 +52,14 @@ export class ConfigDistribution {
       instance: WEBSERVER.HOST,
 
       // The whole merged configuration, files and environment included
-      config: buildPublishableConfig(getConfigModule().toObject())
+      config: buildPublishableConfig(getConfigModule().toObject()),
+
+      // A secondary process on the same host adopts these instead of its own storage settings
+      hostname: hostname(),
+      shareableStorage: buildShareableStoragePayload(),
+
+      // Published so a secondary on the same host can detect collisions
+      nonShareableStorage: buildNonShareableStoragePayload()
     }
 
     await Redis.Instance.setSharedConfig(await encodePublishedConfig(payload, CONFIG.SECRETS.PEERTUBE))
@@ -101,4 +110,35 @@ export class ConfigDistribution {
   static get Instance () {
     return this.instance || (this.instance = new this())
   }
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function buildShareableStoragePayload () {
+  const result: Record<string, string> = {}
+
+  for (const property of SHAREABLE_STORAGE_DIRECTORIES) {
+    const settingName = getStorageDirectorySubSettingName(property)
+
+    result[settingName] = CONFIG.STORAGE[property]
+  }
+
+  return result
+}
+
+function buildNonShareableStoragePayload () {
+  const result: Record<string, string> = {}
+  const shareable: readonly string[] = SHAREABLE_STORAGE_DIRECTORIES
+
+  for (const property of Object.keys(CONFIG.STORAGE)) {
+    if (shareable.includes(property)) continue
+
+    const settingName = getStorageDirectorySubSettingName(property)
+
+    result[settingName] = CONFIG.STORAGE[property]
+  }
+
+  return result
 }
