@@ -22,7 +22,6 @@ describe('Test the write endpoints of a secondary server process', function () {
   let videoUUID: string
   let videoId: number
 
-  let userId: number
   let userToken: string
 
   before(async function () {
@@ -34,9 +33,7 @@ describe('Test the write endpoints of a secondary server process', function () {
     await setDefaultVideoChannel([ primary ])
     ;({ uuid: videoUUID, id: videoId } = await primary.videos.quickUpload({ name: 'video written by the secondary' }))
 
-    const user = await primary.users.generate('user_1')
-    userId = user.userId
-    userToken = user.token
+    userToken = await primary.users.generateUserAndToken('user_1')
 
     secondary = await createSecondaryServer(primary)
   })
@@ -331,14 +328,13 @@ describe('Test the write endpoints of a secondary server process', function () {
   })
 
   describe('Endpoints owned by the primary', function () {
-    it('Should not serve the endpoints writing files or process state', async function () {
-      const token = primary.accessToken
-      const expectedStatus = HttpStatusCode.BAD_REQUEST_400
-
-      await makeDeleteRequest({ url: secondary.url, path: '/api/v1/videos/' + videoUUID, token, expectedStatus })
-      await makeDeleteRequest({ url: secondary.url, path: '/api/v1/users/' + userId, token, expectedStatus })
-      await makeDeleteRequest({ url: secondary.url, path: '/api/v1/video-channels/channel_on_secondary', token, expectedStatus })
-      await makeDeleteRequest({ url: secondary.url, path: '/api/v1/server/following/' + primary.host, token, expectedStatus })
+    it('Should not serve the endpoints writing process state', async function () {
+      await makeDeleteRequest({
+        url: secondary.url,
+        path: '/api/v1/server/following/' + primary.host,
+        token: primary.accessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
   })
 

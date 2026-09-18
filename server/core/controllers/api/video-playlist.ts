@@ -65,7 +65,28 @@ const videoPlaylistRouter = express.Router()
 
 videoPlaylistRouter.use(apiRateLimiter)
 
-registerVideoPlaylistSharedRoutes(videoPlaylistRouter)
+videoPlaylistRouter.get('/privacies', listVideoPlaylistPrivacies)
+
+videoPlaylistRouter.get(
+  '/',
+  paginationValidator,
+  videoPlaylistsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  commonVideoPlaylistFiltersValidator,
+  asyncMiddleware(listVideoPlaylists)
+)
+
+videoPlaylistRouter.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
+
+videoPlaylistRouter.get(
+  '/:playlistId/videos',
+  asyncMiddleware(videoPlaylistsGetValidator('summary')),
+  paginationValidator,
+  setDefaultPagination,
+  optionalAuthenticate,
+  asyncMiddleware(listVideosOfPlaylist)
+)
 
 videoPlaylistRouter.post(
   '/',
@@ -123,48 +144,12 @@ videoPlaylistRouter.delete(
 )
 
 // ---------------------------------------------------------------------------
-// Router for secondary process
-// ---------------------------------------------------------------------------
-
-const secondaryVideoPlaylistRouter = express.Router()
-
-secondaryVideoPlaylistRouter.use(apiRateLimiter)
-
-registerVideoPlaylistSharedRoutes(secondaryVideoPlaylistRouter)
-
-// ---------------------------------------------------------------------------
 
 export {
-  secondaryVideoPlaylistRouter,
   videoPlaylistRouter
 }
 
 // ---------------------------------------------------------------------------
-
-function registerVideoPlaylistSharedRoutes (router: express.Router) {
-  router.get('/privacies', listVideoPlaylistPrivacies)
-
-  router.get(
-    '/',
-    paginationValidator,
-    videoPlaylistsSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    commonVideoPlaylistFiltersValidator,
-    asyncMiddleware(listVideoPlaylists)
-  )
-
-  router.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
-
-  router.get(
-    '/:playlistId/videos',
-    asyncMiddleware(videoPlaylistsGetValidator('summary')),
-    paginationValidator,
-    setDefaultPagination,
-    optionalAuthenticate,
-    asyncMiddleware(listVideosOfPlaylist)
-  )
-}
 
 // ---------------------------------------------------------------------------
 

@@ -223,6 +223,7 @@ import { VideoFilesLifecycleScheduler } from './core/lib/schedulers/video-files-
 import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
 import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watched-words-subscriptions-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
+import { SharedFilesManager } from './core/lib/shared-files/index.js'
 import { registerGracefulShutdown, shutdownAndExit } from './core/lib/shutdown.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
@@ -409,6 +410,9 @@ async function startApplication () {
   // The primary publishes its configuration here, a secondary subscribes to the changes
   // Secondary already fetched it while the module graph was loading
   await ConfigDistribution.Instance.init()
+
+  // Secondary that cannot reach the files of the primary refuses to start
+  await SharedFilesManager.Instance.init()
 
   // Propagating token revocations to evict them from the LRU cache
   await TokensCache.Instance.listenForInvalidations()

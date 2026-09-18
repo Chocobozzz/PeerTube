@@ -2,15 +2,14 @@ import { getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { VideoFileImportPayload } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
-import { buildNewFile } from '@server/lib/video-file.js'
+import { buildNewFile, storeNewWebVideoFile } from '@server/lib/video-file.js'
 import { buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { createTorrentForFile } from '@server/lib/webtorrent.js'
+import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
-import { copy } from 'fs-extra/esm'
 import { createLogger } from '../../../helpers/logger.js'
 import { JobQueue } from '../job-queue.js'
 
@@ -53,30 +52,48 @@ export async function processVideoFileImport (job: Job) {
 // ---------------------------------------------------------------------------
 
 async function updateVideoFile (video: MVideoFull, inputFilePath: string) {
-  const { resolution } = await getVideoStreamDimensionsInfo(inputFilePath)
-  const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === resolution)
+  const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  if (currentVideoFile) {
-    // Remove old file and old torrent
-    await video.removeWebVideoFile(currentVideoFile)
-    // Remove the old video file from the array
-    video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
+  try {
+    const { resolution } = await getVideoStreamDimensionsInfo(inputFilePath)
+    const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === resolution)
 
-    await currentVideoFile.destroy()
+    if (currentVideoFile) {
+      // Remove old file and old torrent
+      await video.removeWebVideoFile(currentVideoFile)
+      // Remove the old video file from the array
+      video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
+
+      await currentVideoFile.destroy()
+    }
+
+    const newVideoFile = await buildNewFile({ mode: 'web-video', path: inputFilePath })
+    newVideoFile.videoId = video.id
+
+    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({
+      video,
+      videoFile: newVideoFile,
+      inputPath: inputFilePath,
+      keepInput: true
+    })
+
+    try {
+      const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newVideoFile, localPath)
+      newVideoFile.torrentFilename = torrentFilename
+      newVideoFile.torrentStorage = torrentStorage
+      await newVideoFile.save()
+
+      const infohashModel = await VideoInfohashModel.replaceFileInfohash(newVideoFile.id, infoHash)
+
+      video.VideoFiles.push(Object.assign(newVideoFile, { InfoHash: infohashModel }))
+
+      await cleanup()
+    } catch (err) {
+      // The file was not saved in database: also remove it from its storage, so it is not left orphaned
+      await rollback()
+      throw err
+    }
+  } finally {
+    mutexReleaser()
   }
-
-  const newVideoFile = await buildNewFile({ mode: 'web-video', path: inputFilePath })
-  newVideoFile.videoId = video.id
-
-  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newVideoFile)
-  await copy(inputFilePath, outputPath)
-
-  const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(video, newVideoFile)
-  newVideoFile.torrentFilename = torrentFilename
-  newVideoFile.torrentStorage = torrentStorage
-  await newVideoFile.save()
-
-  const infohashModel = await VideoInfohashModel.replaceFileInfohash(newVideoFile.id, infoHash)
-
-  video.VideoFiles.push(Object.assign(newVideoFile, { InfoHash: infohashModel }))
 }

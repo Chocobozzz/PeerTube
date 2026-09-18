@@ -87,18 +87,8 @@ videosRouter.use('/', videoEmbedPrivacyRouter)
 
 registerVideoSharedRoutes(videosRouter)
 
-videosRouter.delete(
-  '/:id',
-  openapiOperationDoc({ operationId: 'delVideo' }),
-  authenticate,
-  asyncMiddleware(videosRemoveValidator),
-  asyncRetryTransactionMiddleware(removeVideo)
-)
-
 // ---------------------------------------------------------------------------
 
-// Video endpoints a secondary process can serve: they only need PostgreSQL, Redis and object storage,
-// so they can run on a host that does not have access to the primary local storage
 const secondaryVideosRouter = express.Router()
 
 secondaryVideosRouter.use(apiRateLimiter)
@@ -113,6 +103,7 @@ secondaryVideosRouter.use('/', videoPasswordRouter)
 secondaryVideosRouter.use('/', storyboardRouter)
 secondaryVideosRouter.use('/', videoChaptersRouter)
 secondaryVideosRouter.use('/', videoEmbedPrivacyRouter)
+secondaryVideosRouter.use('/', updateRouter)
 
 registerVideoCaptionSharedRoutes(secondaryVideosRouter)
 
@@ -153,6 +144,14 @@ function registerVideoSharedRoutes (router: express.Router) {
     asyncMiddleware(videoGetValidatorFactory('for-api')),
     asyncMiddleware(checkVideoFollowConstraints),
     asyncMiddleware(getVideo)
+  )
+
+  router.delete(
+    '/:id',
+    openapiOperationDoc({ operationId: 'delVideo' }),
+    authenticate,
+    asyncMiddleware(videosRemoveValidator),
+    asyncRetryTransactionMiddleware(removeVideo)
   )
 }
 

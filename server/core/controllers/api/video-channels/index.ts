@@ -74,7 +74,6 @@ videoChannelRouter.use(channelCollaborators)
 videoChannelRouter.use(videoChannelLogosRouter)
 videoChannelRouter.use(ownershipChannelRouter)
 
-// Deleting a channel also deletes its videos, and so their files
 videoChannelRouter.delete(
   '/:handle',
   authenticate,
@@ -83,123 +82,106 @@ videoChannelRouter.delete(
   asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
-registerVideoChannelSharedRoutes(videoChannelRouter)
+videoChannelRouter.post(
+  '/',
+  authenticate,
+  asyncMiddleware(videoChannelsAddValidator),
+  asyncRetryTransactionMiddleware(createVideoChannel)
+)
 
-// ---------------------------------------------------------------------------
-// Router for secondary process
-// ---------------------------------------------------------------------------
+videoChannelRouter.put(
+  '/:handle',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
+  videoChannelsUpdateValidator,
+  asyncRetryTransactionMiddleware(updateVideoChannel)
+)
 
-const secondaryVideoChannelRouter = express.Router()
+videoChannelRouter.post(
+  '/:handle/video-playlists/reorder',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
+  asyncMiddleware(videoPlaylistsReorderInChannelValidator),
+  asyncRetryTransactionMiddleware(reorderPlaylistsInChannel)
+)
 
-secondaryVideoChannelRouter.use(apiRateLimiter)
-secondaryVideoChannelRouter.use(channelCollaborators)
-secondaryVideoChannelRouter.use(ownershipChannelRouter)
+videoChannelRouter.get(
+  '/:handle/followers',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: true, checkIsOwner: false })),
+  paginationValidator,
+  videoChannelFollowersSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listVideoChannelFollowers)
+)
 
-registerVideoChannelSharedRoutes(secondaryVideoChannelRouter)
+videoChannelRouter.get(
+  '/:handle/activities',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
+  paginationValidator,
+  videoChannelActivitiesSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listVideoChannelActivities)
+)
+
+videoChannelRouter.post(
+  '/:handle/import-videos',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
+  asyncMiddleware(videoChannelImportVideosValidator),
+  asyncMiddleware(importVideosInChannel)
+)
+
+videoChannelRouter.get(
+  '/',
+  paginationValidator,
+  videoChannelsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  videoChannelsListValidator,
+  asyncMiddleware(listVideoChannels)
+)
+
+videoChannelRouter.get(
+  '/:handle',
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  asyncMiddleware(getVideoChannel)
+)
+
+videoChannelRouter.get(
+  '/:handle/video-playlists',
+  optionalAuthenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  paginationValidator,
+  videoPlaylistsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  commonVideoPlaylistFiltersValidator,
+  asyncMiddleware(listVideoChannelPlaylists)
+)
+
+videoChannelRouter.get(
+  '/:handle/videos',
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  optionalAuthenticate,
+  commonVideosFiltersValidatorFactory(),
+  asyncMiddleware(listVideoChannelVideos)
+)
 
 // ---------------------------------------------------------------------------
 
 export {
-  secondaryVideoChannelRouter,
   videoChannelRouter
 }
 
 // ---------------------------------------------------------------------------
-
-function registerVideoChannelSharedRoutes (router: express.Router) {
-  router.post(
-    '/',
-    authenticate,
-    asyncMiddleware(videoChannelsAddValidator),
-    asyncRetryTransactionMiddleware(createVideoChannel)
-  )
-
-  router.put(
-    '/:handle',
-    authenticate,
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
-    videoChannelsUpdateValidator,
-    asyncRetryTransactionMiddleware(updateVideoChannel)
-  )
-
-  router.post(
-    '/:handle/video-playlists/reorder',
-    authenticate,
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
-    asyncMiddleware(videoPlaylistsReorderInChannelValidator),
-    asyncRetryTransactionMiddleware(reorderPlaylistsInChannel)
-  )
-
-  router.get(
-    '/:handle/followers',
-    authenticate,
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: true, checkIsOwner: false })),
-    paginationValidator,
-    videoChannelFollowersSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    asyncMiddleware(listVideoChannelFollowers)
-  )
-
-  router.get(
-    '/:handle/activities',
-    authenticate,
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
-    paginationValidator,
-    videoChannelActivitiesSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    asyncMiddleware(listVideoChannelActivities)
-  )
-
-  router.post(
-    '/:handle/import-videos',
-    authenticate,
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
-    asyncMiddleware(videoChannelImportVideosValidator),
-    asyncMiddleware(importVideosInChannel)
-  )
-
-  router.get(
-    '/',
-    paginationValidator,
-    videoChannelsSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    videoChannelsListValidator,
-    asyncMiddleware(listVideoChannels)
-  )
-
-  router.get(
-    '/:handle',
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-    asyncMiddleware(getVideoChannel)
-  )
-
-  router.get(
-    '/:handle/video-playlists',
-    optionalAuthenticate,
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-    paginationValidator,
-    videoPlaylistsSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    commonVideoPlaylistFiltersValidator,
-    asyncMiddleware(listVideoChannelPlaylists)
-  )
-
-  router.get(
-    '/:handle/videos',
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-    paginationValidator,
-    videosSortValidator,
-    setDefaultVideosSort,
-    setDefaultPagination,
-    optionalAuthenticate,
-    commonVideosFiltersValidatorFactory(),
-    asyncMiddleware(listVideoChannelVideos)
-  )
-}
 
 // ---------------------------------------------------------------------------
 

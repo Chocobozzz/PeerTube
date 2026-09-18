@@ -6,6 +6,7 @@ import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
 import * as homepageChanges from './homepage-changes.js'
 import * as liveSessionStop from './live-session-stop.js'
+import * as locks from './locks.js'
 import { LiveSessionStopPayload } from './live-session-stop.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
@@ -24,6 +25,8 @@ import {
   quitRedisClient,
   StatKind
 } from './redis-client.js'
+import * as sharedFiles from './shared-files.js'
+import { SharedFilesChange } from './shared-files.js'
 import * as sharedInstanceConfig from './shared-instance-config.js'
 import * as tokenInvalidation from './token-invalidation.js'
 import { TokenInvalidationPayload } from './token-invalidation.js'
@@ -239,6 +242,16 @@ export class Redis {
     return sharedInstanceConfig.subscribeToConfigChanges(handler)
   }
 
+  /* ************ Files managed by secondary processes ************ */
+
+  publishSharedFilesChanged (change: SharedFilesChange) {
+    return sharedFiles.publishSharedFilesChanged(change)
+  }
+
+  subscribeToSharedFilesChanges (handler: (change: SharedFilesChange) => void) {
+    return sharedFiles.subscribeToSharedFilesChanges(handler)
+  }
+
   /* ************ Cross process invalidation ************ */
 
   publishTokenInvalidation (payload: TokenInvalidationPayload) {
@@ -355,6 +368,20 @@ export class Redis {
 
   getVideoToken (token: string) {
     return videoTokens.getVideoToken(token)
+  }
+
+  /* ************ Locks shared by the processes ************ */
+
+  tryAcquireLock (lockKey: string, token: string, ttlMs: number) {
+    return locks.tryAcquireLock(lockKey, token, ttlMs)
+  }
+
+  extendLock (lockKey: string, token: string, ttlMs: number) {
+    return locks.extendLock(lockKey, token, ttlMs)
+  }
+
+  releaseLock (lockKey: string, token: string) {
+    return locks.releaseLock(lockKey, token)
   }
 
   /* ************ AP resource unavailability ************ */

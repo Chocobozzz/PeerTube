@@ -3,10 +3,8 @@ import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { generateRunnerRegistrationToken } from '@server/helpers/token-generator.js'
 import { initPNPM } from '@server/lib/plugins/package-manager.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
-import { ensureDir, pathExists, remove } from 'fs-extra/esm'
+import { ensureDir, remove } from 'fs-extra/esm'
 import { generatePassword } from 'password-generator'
-import { join } from 'path'
-import { readdirNonHidden } from '../helpers/fs.js'
 import { createLogger } from '../helpers/logger.js'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user.js'
 import { ApplicationModel } from '../models/application/application.js'
@@ -15,7 +13,6 @@ import { applicationExist, clientsExist, usersExist } from './checker-after-init
 import { CONFIG } from './config.js'
 import { ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH, DIRECTORIES, FILES_CACHE, LAST_MIGRATION_VERSION } from './constants.js'
 import { sequelizeTypescript } from './database.js'
-import { claimStorageDirectories } from './storage-ownership.js'
 
 const logger = createLogger()
 
@@ -37,7 +34,6 @@ export async function installPrimary () {
 
       removeTmpDirectory()
         .then(() => createDirectoriesIfNotExist())
-        .then(() => claimStorageDirectories())
     ])
   } catch (err) {
     logger.error('Cannot install application.', { err })
@@ -49,9 +45,6 @@ export async function installSecondary () {
   await removeTmpDirectory()
 
   await createDirectoriesIfNotExist()
-
-  // Before pnpm runs in the plugin directory, so a directory shared with another process fails first
-  await claimStorageDirectories()
 
   // A secondary installs plugins in its own directory
   await initPNPM()
@@ -88,15 +81,8 @@ function createDirectoriesIfNotExist () {
 
 // ---------------------------------------------------------------------------
 
-// Empties the tmp directory instead of removing it to keep its hidden files (the marker naming the process that owns it)
 async function removeTmpDirectory () {
-  const dir = CONFIG.STORAGE.TMP_DIR
-
-  if (!await pathExists(dir)) return
-
-  for (const file of await readdirNonHidden(dir)) {
-    await remove(join(dir, file))
-  }
+  await remove(CONFIG.STORAGE.TMP_DIR)
 }
 
 async function createOAuthClientIfNotExist () {

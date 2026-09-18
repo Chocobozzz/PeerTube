@@ -1,11 +1,12 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { canCopyForHLS, getVideoStreamDuration, HLSFromTSTranscodeOptions, HLSTranscodeOptions } from '@peertube/peertube-ffmpeg'
+import { FileStorage } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { createTorrentForFile } from '@server/lib/webtorrent.js'
+import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
-import { MVideo, MVideoFile } from '@server/types/models/index.js'
+import { MStreamingPlaylist, MVideo, MVideoFile } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { Job } from 'bullmq'
 import { ensureDir, move } from 'fs-extra/esm'
@@ -14,8 +15,9 @@ import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist.js'
 import { renameVideoFileInPlaylist, updateM3U8AndShaPlaylist } from '../hls.js'
+import { storeHLSFileFromPath } from '../object-storage/videos.js'
 import { generateHLSVideoFilename, getHLSResolutionPlaylistFilename } from '../paths.js'
-import { createAllCaptionPlaylistsOnFSIfNeeded } from '../video-captions.js'
+import { createAllCaptionPlaylistsIfNeeded } from '../video-captions.js'
 import { buildNewFile } from '../video-file.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
@@ -71,6 +73,7 @@ export function generateHlsPlaylistResolution (options: {
   })
 }
 
+// Consumes videoOutputPath and m3u8OutputPath: they are moved or deleted
 export async function onHLSVideoFileTranscoding (options: {
   video: MVideo
   videoOutputPath: string
@@ -95,29 +98,27 @@ export async function onHLSVideoFileTranscoding (options: {
 
   try {
     await video.reload()
+    // A move job may have changed its storage while we were waiting for the lock
+    await playlist.reload()
+    playlist.Video = video
 
-    const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist, newVideoFile)
-    await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video))
+    newVideoFile.storage = playlist.storage
 
-    // Move playlist file
-    const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(
+    const { videoPath, resolutionPlaylistPath } = await storeNewHLSFiles({
       video,
-      getHLSResolutionPlaylistFilename(newVideoFile.filename)
-    )
-    await move(m3u8OutputPath, resolutionPlaylistPath, { overwrite: true })
-
-    // Move video file
-    await move(videoOutputPath, videoFilePath, { overwrite: true })
-
-    await renameVideoFileInPlaylist(resolutionPlaylistPath, newVideoFile.filename)
+      playlist,
+      videoFile: newVideoFile,
+      videoOutputPath,
+      m3u8OutputPath
+    })
 
     // Update video duration if it was not set (in case of a live for example)
     if (!video.duration) {
-      video.duration = await getVideoStreamDuration(videoFilePath)
+      video.duration = await getVideoStreamDuration(videoPath)
       await video.save()
     }
 
-    const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(playlist, newVideoFile)
+    const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(playlist, newVideoFile, videoPath)
     newVideoFile.torrentFilename = torrentFilename
     newVideoFile.torrentStorage = torrentStorage
 
@@ -143,20 +144,61 @@ export async function onHLSVideoFileTranscoding (options: {
     })
 
     if (playlistGenerated) {
-      await createAllCaptionPlaylistsOnFSIfNeeded(video)
+      await createAllCaptionPlaylistsIfNeeded(video)
     }
 
-    await updateM3U8AndShaPlaylist(video, playlist)
+    // The new file is still available locally: don't download it again to compute its segments hashes
+    await updateM3U8AndShaPlaylist(video, playlist, {
+      [newVideoFile.filename]: { videoPath, resolutionPlaylistPath }
+    })
 
-    return { resolutionPlaylistPath, videoFile: savedVideoFile }
+    return { videoFile: savedVideoFile }
   } finally {
     if (mutexReleaser) mutexReleaser()
+
+    // Only remains when the files were uploaded in object storage
+    deleteFileAndCatch(videoOutputPath)
+    deleteFileAndCatch(m3u8OutputPath)
   }
 }
 
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+// Returns local paths of the stored files, available until the end of onHLSVideoFileTranscoding
+async function storeNewHLSFiles (options: {
+  video: MVideo
+  playlist: MStreamingPlaylist
+  videoFile: MVideoFile
+  videoOutputPath: string
+  m3u8OutputPath: string
+}) {
+  const { video, playlist, videoFile, videoOutputPath, m3u8OutputPath } = options
+
+  const resolutionPlaylistFilename = getHLSResolutionPlaylistFilename(videoFile.filename)
+
+  if (playlist.storage === FileStorage.OBJECT_STORAGE) {
+    await renameVideoFileInPlaylist(m3u8OutputPath, videoFile.filename)
+
+    await storeHLSFileFromPath(video, m3u8OutputPath, resolutionPlaylistFilename)
+    await storeHLSFileFromPath(video, videoOutputPath, videoFile.filename)
+
+    return { videoPath: videoOutputPath, resolutionPlaylistPath: m3u8OutputPath }
+  }
+
+  const videoFilePath = VideoPathManager.Instance.getFSVideoFileOutputPath(playlist.withVideo(video), videoFile)
+  await ensureDir(VideoPathManager.Instance.getFSHLSOutputPath(video))
+
+  const resolutionPlaylistPath = VideoPathManager.Instance.getFSHLSOutputPath(video, resolutionPlaylistFilename)
+
+  await move(m3u8OutputPath, resolutionPlaylistPath, { overwrite: true })
+  await move(videoOutputPath, videoFilePath, { overwrite: true })
+
+  await renameVideoFileInPlaylist(resolutionPlaylistPath, videoFile.filename)
+
+  return { videoPath: videoFilePath, resolutionPlaylistPath }
+}
 
 async function generateHlsPlaylistCommon (options: {
   type: 'hls' | 'hls-from-ts'

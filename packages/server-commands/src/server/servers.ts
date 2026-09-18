@@ -26,11 +26,12 @@ const secondaryCounts = new WeakMap<PeerTubeServer, number>()
 // Spawn an additional process with `--role=secondary`
 export async function createSecondaryServer (
   primary: PeerTubeServer,
-  configOverride?: object,
+  configOverride?: any,
   options: RunServerOptions = {}
 ) {
   // Primary ports live in [9001, 19000[ (see PeerTubeServer.setServerNumber), so this cannot collide
-  const port = primary.port + 20000
+  // Another port can be set to run several secondaries of the same primary at the same time
+  const port: number = configOverride?.listen?.port ?? primary.port + 20000
 
   const index = secondaryCounts.get(primary) ?? 0
   secondaryCounts.set(primary, index + 1)
@@ -54,27 +55,30 @@ export async function createSecondaryServer (
 
   const getPathOf = (name: string) => primary.getDirectoryPath(name + suffix) + '/'
 
+  // A secondary manages files too, so it shares the storage directories of these files with the primary
+  const getPrimaryPathOf = (name: string) => primary.getDirectoryPath(name) + '/'
+
   const ownStorage = {
     storage: {
       tmp: getPathOf('tmp'),
-      tmp_persistent: getPathOf('tmp-persistent'),
+      tmp_persistent: getPrimaryPathOf('tmp-persistent'),
       bin: getPathOf('bin'),
-      avatars: getPathOf('avatars'),
-      web_videos: getPathOf('web-videos'),
-      streaming_playlists: getPathOf('streaming-playlists'),
-      original_video_files: getPathOf('original-video-files'),
+      avatars: getPrimaryPathOf('avatars'),
+      web_videos: getPrimaryPathOf('web-videos'),
+      streaming_playlists: getPrimaryPathOf('streaming-playlists'),
+      original_video_files: getPrimaryPathOf('original-video-files'),
       redundancy: getPathOf('redundancy'),
       logs: getPathOf('logs'),
-      previews: getPathOf('previews'),
-      thumbnails: getPathOf('thumbnails'),
-      storyboards: getPathOf('storyboards'),
-      torrents: getPathOf('torrents'),
-      captions: getPathOf('captions'),
+      previews: getPrimaryPathOf('previews'),
+      thumbnails: getPrimaryPathOf('thumbnails'),
+      storyboards: getPrimaryPathOf('storyboards'),
+      torrents: getPrimaryPathOf('torrents'),
+      captions: getPrimaryPathOf('captions'),
       cache: getPathOf('cache'),
       plugins: getPathOf('plugins'),
       client_overrides: getPathOf('client-overrides'),
       well_known: getPathOf('well-known'),
-      uploads: getPathOf('uploads')
+      uploads: getPrimaryPathOf('uploads')
     }
   }
 

@@ -2,8 +2,10 @@ import { HttpStatusCode, VideoCaptionGenerate, VideoChannelActivityAction } from
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { createLocalCaption, createTranscriptionTaskIfNeeded, updateHLSMasterOnCaptionChangeIfNeeded } from '@server/lib/video-captions.js'
+import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
+import { MVideoCaption } from '@server/types/models/index.js'
 import express from 'express'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
@@ -35,31 +37,32 @@ videoCaptionsRouter.post(
 
 registerVideoCaptionSharedRoutes(videoCaptionsRouter)
 
-videoCaptionsRouter.put(
-  '/:videoId/captions/:captionLanguage',
-  authenticate,
-  reqVideoCaptionAdd,
-  asyncMiddleware(addVideoCaptionValidator),
-  asyncMiddleware(createVideoCaption)
-)
-
-videoCaptionsRouter.delete(
-  '/:videoId/captions/:captionLanguage',
-  authenticate,
-  asyncMiddleware(deleteVideoCaptionValidator),
-  asyncRetryTransactionMiddleware(deleteVideoCaption)
-)
-
 // ---------------------------------------------------------------------------
 
 function registerVideoCaptionSharedRoutes (router: express.Router) {
   router.get('/:videoId/captions', asyncMiddleware(listVideoCaptionsValidator), asyncMiddleware(listVideoCaptions))
+
+  router.put(
+    '/:videoId/captions/:captionLanguage',
+    authenticate,
+    reqVideoCaptionAdd,
+    asyncMiddleware(addVideoCaptionValidator),
+    asyncMiddleware(createVideoCaption)
+  )
+
+  router.delete(
+    '/:videoId/captions/:captionLanguage',
+    authenticate,
+    asyncMiddleware(deleteVideoCaptionValidator),
+    asyncRetryTransactionMiddleware(deleteVideoCaption)
+  )
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  registerVideoCaptionSharedRoutes, // Will be used by parent router
+  // Will be used by parent router
+  registerVideoCaptionSharedRoutes,
   videoCaptionsRouter
 }
 
@@ -92,15 +95,24 @@ function createVideoCaption (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const captionLanguage = req.params.captionLanguage
 
-    const videoCaption = await createLocalCaption({
-      video,
-      language: captionLanguage,
-      path: captionPath,
-      automaticallyGenerated: false
-    })
+    // The HLS playlist files of the video are updated
+    const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-    if (videoCaption.m3u8Filename) {
-      await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    let videoCaption: MVideoCaption
+
+    try {
+      videoCaption = await createLocalCaption({
+        video,
+        language: captionLanguage,
+        path: captionPath,
+        automaticallyGenerated: false
+      })
+
+      if (videoCaption.m3u8Filename) {
+        await updateHLSMasterOnCaptionChangeIfNeeded(video)
+      }
+    } finally {
+      videoFileMutexReleaser()
     }
 
     await retryTransactionWrapper(() => {
@@ -130,12 +142,19 @@ async function deleteVideoCaption (req: express.Request, res: express.Response) 
   return logger.withContext([ video.uuid ], async () => {
     const hasM3U8 = !!videoCaption.m3u8Filename
 
-    await sequelizeTypescript.transaction(async t => {
-      await videoCaption.destroy({ transaction: t })
-    })
+    // The HLS playlist files of the video are updated
+    const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-    if (hasM3U8) {
-      await updateHLSMasterOnCaptionChangeIfNeeded(video)
+    try {
+      await sequelizeTypescript.transaction(async t => {
+        await videoCaption.destroy({ transaction: t })
+      })
+
+      if (hasM3U8) {
+        await updateHLSMasterOnCaptionChangeIfNeeded(video)
+      }
+    } finally {
+      videoFileMutexReleaser()
     }
 
     await retryTransactionWrapper(() => {

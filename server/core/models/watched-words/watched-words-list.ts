@@ -73,6 +73,9 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     ttl: LRU_CACHE.WATCHED_WORDS_REGEX.TTL
   })
 
+  // Bumped on each invalidation, so a regex build that overlapped one doesn't cache rows loaded before the change
+  private static regexCacheInvalidations = 0
+
   // Keep in sync with the changes made by the other processes of this platform
   static async listenForRegexCacheInvalidations () {
     await Redis.Instance.subscribeToWatchedWordsInvalidation(payload => {
@@ -81,6 +84,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
   }
 
   static clearLocalRegexCache (accountId: number) {
+    WatchedWordsListModel.regexCacheInvalidations++
     WatchedWordsListModel.regexCache.delete(accountId)
   }
 
@@ -205,15 +209,19 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
       return WatchedWordsListModel.regexCache.get(accountId)
     }
 
+    const invalidationsBefore = WatchedWordsListModel.regexCacheInvalidations
+
     const models = await WatchedWordsListModel.findAll<MWatchedWordsList>({
       where: { accountId }
     })
 
     const result = models.map(m => ({ listName: m.listName, regex: wordsToRegExp(m.words) }))
 
-    WatchedWordsListModel.regexCache.set(accountId, result)
+    if (invalidationsBefore === WatchedWordsListModel.regexCacheInvalidations) {
+      WatchedWordsListModel.regexCache.set(accountId, result)
 
-    logger.debug('Will cache watched words regex', { accountId, listNames: result.map(r => r.listName), tags: [ 'watched-words' ] })
+      logger.debug('Will cache watched words regex', { accountId, listNames: result.map(r => r.listName), tags: [ 'watched-words' ] })
+    }
 
     return result
   }

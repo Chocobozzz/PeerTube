@@ -27,7 +27,6 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
-import { move } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { createVideoAutomaticTagsJob } from './automatic-tags/automatic-tags.js'
@@ -35,9 +34,8 @@ import { Hooks } from './plugins/hooks.js'
 import { createLocalVideoThumbnailsFromImage, createLocalVideoThumbnailsFromVideo } from './thumbnail.js'
 import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
-import { buildNewFile, createVideoSource } from './video-file.js'
+import { buildNewFile, createVideoSource, storeNewWebVideoFile } from './video-file.js'
 import { addVideoJobsAfterCreation } from './video-jobs.js'
-import { VideoPathManager } from './video-path-manager.js'
 import { setVideoTags } from './video.js'
 
 const logger = createLogger('video')
@@ -93,6 +91,8 @@ export class LocalVideoCreator {
   private video: MVideoFull
   private videoFile: MVideoFileInfoHash
   private videoPath: string
+  private cleanupLocalVideoFile: () => Promise<void>
+  private rollbackLocalVideoFile: () => Promise<void>
 
   constructor (
     private readonly options: {
@@ -132,7 +132,17 @@ export class LocalVideoCreator {
       await Hooks.wrapObject(this.buildVideo(this.videoAttributes, this.channel), this.videoAttributeResultHook)
     )
 
-    return logger.withContext([ this.video.uuid ], () => this.runCreate())
+    return logger.withContext([ this.video.uuid ], async () => {
+      try {
+        const result = await this.runCreate()
+        await this.cleanupLocalVideoFile?.()
+
+        return result
+      } catch (err) {
+        await this.rollbackLocalVideoFile?.()
+        throw err
+      }
+    })
   }
 
   private async runCreate () {
@@ -146,8 +156,15 @@ export class LocalVideoCreator {
         ffprobe: this.videoFileProbe
       }) as MVideoFileInfoHash
 
-      this.videoPath = VideoPathManager.Instance.getFSVideoFileOutputPath(this.video, this.videoFile)
-      await move(this.videoFilePath, this.videoPath)
+      // Keep a local copy of the file until the end of the creation, even if it is stored in object storage
+      const { localPath, cleanup, rollback } = await storeNewWebVideoFile({
+        video: this.video,
+        videoFile: this.videoFile,
+        inputPath: this.videoFilePath
+      })
+      this.videoPath = localPath
+      this.cleanupLocalVideoFile = cleanup
+      this.rollbackLocalVideoFile = rollback
 
       this.video.aspectRatio = buildAspectRatio({ width: this.videoFile.width, height: this.videoFile.height })
     }
@@ -306,6 +323,7 @@ export class LocalVideoCreator {
     return createLocalVideoThumbnailsFromVideo({
       video: this.video,
       videoFile: this.videoFile,
+      videoFilePath: this.videoPath,
       ffprobe: this.videoFileProbe
     })
   }

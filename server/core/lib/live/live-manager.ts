@@ -41,7 +41,7 @@ import type { LiveSessionStopPayload } from '../redis/index.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
 import { isUserQuotaValid } from '../user.js'
 import { LiveQuotaStore } from './live-quota-store.js'
-import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
+import { cleanupAndDestroyPermanentLive, getLiveSegmentTime, removeLiveDirectoriesOfDeletedVideo } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
 
 const logger = createLogger('live')
@@ -644,7 +644,10 @@ class LiveManager {
 
     try {
       const fullVideo = await VideoModel.loadFull(videoUUID)
-      if (!fullVideo) return
+      if (!fullVideo) {
+        await removeLiveDirectoriesOfDeletedVideo(videoUUID)
+        return
+      }
 
       const live = await VideoLiveModel.loadByVideoId(fullVideo.id)
 
@@ -663,6 +666,7 @@ class LiveManager {
         type: 'video-live-ending',
         payload: {
           videoId: fullVideo.id,
+          videoUUID: fullVideo.uuid,
 
           replayDirectory: live.saveReplay
             ? await this.findReplayDirectory(fullVideo)

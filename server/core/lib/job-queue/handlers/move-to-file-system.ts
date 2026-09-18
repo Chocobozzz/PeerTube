@@ -12,11 +12,21 @@ import { moveCaptionToFS, moveVideoToFS, onMoveVideoToFSFailure } from '@server/
 import { moveActorImagesToStorage } from '@server/lib/move-storage/shared/move-actor-image.js'
 import { moveUploadImageToStorage } from '@server/lib/move-storage/shared/move-upload-image.js'
 import { moveVideoPlaylistToStorage } from '@server/lib/move-storage/shared/move-video-playlist.js'
+import { SharedFilesManager } from '@server/lib/shared-files/index.js'
 import { Job } from 'bullmq'
 
 const logger = createLogger('move-file-system')
 
 export async function processMoveToFileSystem (job: Job) {
+  try {
+    return await moveToFileSystem(job)
+  } finally {
+    // Secondary processes may not be able to manage these files anymore
+    SharedFilesManager.Instance.notifyFilesMoved('moved-to-file-system')
+  }
+}
+
+async function moveToFileSystem (job: Job) {
   const payload = job.data as MoveStoragePayload
 
   if (isMoveVideoStoragePayload(payload)) { // Move all video related files

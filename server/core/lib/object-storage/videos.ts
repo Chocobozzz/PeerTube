@@ -42,9 +42,8 @@ export function storeHLSFileFromFilename (video: MVideoPrivacy, filename: string
   })
 }
 
-export function storeHLSFileFromPath (video: MVideoPrivacy, path: string) {
-  const filename = basename(path)
-
+// filename is the name of the object, when the local file has another name (a temporary one for example)
+export function storeHLSFileFromPath (video: MVideoPrivacy, path: string, filename = basename(path)) {
   return storeObject({
     inputPath: path,
     objectStorageKey: generateHLSObjectStorageKey(video, filename),
@@ -74,10 +73,14 @@ export function storeHLSFileFromContent (options: {
 
 // ---------------------------------------------------------------------------
 
-export function storeWebVideoFile (video: MVideo, file: MVideoFile) {
+export function storeWebVideoFile (
+  video: MVideo,
+  file: MVideoFile,
+  inputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, file)
+) {
   return storeCommonFile(
     'web_videos',
-    VideoPathManager.Instance.getFSVideoFileOutputPath(video, file),
+    inputPath,
     file.filename,
     { isPrivate: video.hasPrivateStaticPath() }
   )

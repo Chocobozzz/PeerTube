@@ -9,13 +9,13 @@ import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MUser, MVideoFile, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
-import { move, remove } from 'fs-extra/esm'
+import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { JobQueue } from './job-queue/index.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
-import { buildNewFile, removeHLSPlaylist, removeWebVideoFile } from './video-file.js'
+import { buildNewFile, removeHLSPlaylist, removeWebVideoFile, storeNewWebVideoFile } from './video-file.js'
 import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
 
@@ -104,24 +104,34 @@ export async function onVideoStudioEnded (options: {
     const video = await VideoModel.loadFull(options.video.uuid)
     newFile.videoId = video.id
 
-    const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
-    await move(editionResultPath, outputPath)
+    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({ video, videoFile: newFile, inputPath: editionResultPath })
     videoFileMutexReleaser()
 
-    await safeCleanupStudioTMPFiles(tasks)
+    let duration: number
 
-    const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newFile, outputPath)
-    await removeAllFiles(video, newFile)
+    try {
+      await safeCleanupStudioTMPFiles(tasks)
 
-    await sequelizeTypescript.transaction(async t => {
-      newFile.torrentFilename = torrentFilename
-      newFile.torrentStorage = torrentStorage
-      await newFile.save({ transaction: t })
+      const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newFile, localPath)
+      await removeAllFiles(video, newFile)
 
-      await VideoInfohashModel.replaceFileInfohash(newFile.id, infoHash, t)
-    })
+      await sequelizeTypescript.transaction(async t => {
+        newFile.torrentFilename = torrentFilename
+        newFile.torrentStorage = torrentStorage
+        await newFile.save({ transaction: t })
 
-    video.duration = await getVideoStreamDuration(outputPath)
+        await VideoInfohashModel.replaceFileInfohash(newFile.id, infoHash, t)
+      })
+
+      duration = await getVideoStreamDuration(localPath)
+      await cleanup()
+    } catch (err) {
+      // The file was not saved in database: also remove it from its storage, so it is not left orphaned
+      await rollback()
+      throw err
+    }
+
+    video.duration = duration
     video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
     await video.save()
 

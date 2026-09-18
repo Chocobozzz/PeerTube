@@ -155,6 +155,21 @@ map $request_method$uri $peertube_pool {
 
   # View/watch-time tracking: sticky to one process per viewer
   "~^(PUT|POST)/api/v1/videos/[^/]+/(views|watching)$"                          secondary_views_pool;
+
+  "~^(PUT|DELETE)/api/v1/videos/[^/]+/?$"                                       secondary_pool;
+  "~^(PUT|DELETE)/api/v1/videos/[^/]+/captions/[^/]+$"                          secondary_pool;
+  "~^DELETE/api/v1/users/[^/]+/?$"                                              secondary_pool;
+  "~^POST/api/v1/users/me/avatar/pick$"                                         secondary_pool;
+  "~^DELETE/api/v1/users/me/avatar$"                                            secondary_pool;
+  "~^DELETE/api/v1/video-channels/[^/]+/?$"                                     secondary_pool;
+  "~^POST/api/v1/video-channels/[^/]+/(avatar|banner)/pick$"                    secondary_pool;
+  "~^DELETE/api/v1/video-channels/[^/]+/(avatar|banner)$"                       secondary_pool;
+  "~^POST/api/v1/config/(instance-avatar|instance-banner|instance-logo/[^/]+)/pick$" secondary_pool;
+  "~^DELETE/api/v1/config/(instance-avatar|instance-banner|instance-logo/[^/]+)$" secondary_pool;
+  "~^POST/api/v1/video-playlists/?$"                                            secondary_pool;
+  "~^(PUT|DELETE)/api/v1/video-playlists/[^/]+/?$"                              secondary_pool;
+  "~^POST/api/v1/video-playlists/[^/]+/videos(/reorder)?$"                      secondary_pool;
+  "~^(PUT|DELETE)/api/v1/video-playlists/[^/]+/videos/[^/]+$"                   secondary_pool;
 }
 
 server {

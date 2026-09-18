@@ -21,8 +21,8 @@ import { searchRouter } from './search/index.js'
 import { secondaryServerRouter, serverRouter } from './server/index.js'
 import { secondaryUsersRouter, usersRouter } from './users/index.js'
 import { videoChannelSyncRouter } from './video-channel-sync.js'
-import { secondaryVideoChannelRouter, videoChannelRouter } from './video-channels/index.js'
-import { secondaryVideoPlaylistRouter, videoPlaylistRouter } from './video-playlist.js'
+import { videoChannelRouter } from './video-channels/index.js'
+import { videoPlaylistRouter } from './video-playlist.js'
 import { secondaryVideosRouter, videosRouter } from './videos/index.js'
 import { watchedWordsRouter } from './watched-words.js'
 
@@ -79,9 +79,9 @@ secondaryApiRouter.use('/oauth-clients', oauthClientsRouter)
 secondaryApiRouter.use('/config', secondaryConfigRouter)
 secondaryApiRouter.use('/users', secondaryUsersRouter)
 secondaryApiRouter.use('/accounts', accountsRouter)
-secondaryApiRouter.use('/video-channels', secondaryVideoChannelRouter)
+secondaryApiRouter.use('/video-channels', videoChannelRouter)
 secondaryApiRouter.use('/video-channel-syncs', videoChannelSyncRouter)
-secondaryApiRouter.use('/video-playlists', secondaryVideoPlaylistRouter)
+secondaryApiRouter.use('/video-playlists', videoPlaylistRouter)
 secondaryApiRouter.use('/videos', secondaryVideosRouter)
 secondaryApiRouter.use('/search', searchRouter)
 secondaryApiRouter.use('/overviews', overviewsRouter)

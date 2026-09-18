@@ -315,16 +315,6 @@ describe('Test a secondary server process', function () {
         fromPrimary.data.map(e => [ e.id, e.position, e.video.uuid ])
       )
     })
-
-    it('Should not create a playlist on the secondary', async function () {
-      await makePostBodyRequest({
-        url: secondary.url,
-        path: '/api/v1/video-playlists',
-        token: primary.accessToken,
-        fields: { displayName: 'playlist created on the secondary' },
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
-      })
-    })
   })
 
   describe('Runtime configuration changes', function () {
@@ -435,11 +425,10 @@ describe('Test a secondary server process', function () {
       if (started) await started.kill()
 
       expect(error, 'the secondary process should not have started').to.exist
-      expect(error.message).to.contain('already belongs to another PeerTube process')
+      expect(error.message).to.contain('also uses on the same host')
       expect(error.message, 'the error should name the setting to change').to.contain('storage.plugins')
     })
 
-    // The tmp directory is emptied at every boot, so its owner marker is the one that could be wiped by mistake
     it('Should still refuse to boot on a shared tmp directory, which is cleaned at every boot', async function () {
       this.timeout(60000)
 
@@ -458,7 +447,7 @@ describe('Test a secondary server process', function () {
       if (started) await started.kill()
 
       expect(error, 'the secondary process should not have started').to.exist
-      expect(error.message).to.contain('already belongs to another PeerTube process')
+      expect(error.message).to.contain('also uses on the same host')
       expect(error.message, 'the error should name the setting to change').to.contain('storage.tmp')
     })
   })
