@@ -29502,9 +29502,9 @@ color: red;
           <context context-type="linenumber">1048</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6111432337975865048" datatype="html">
+      <trans-unit id="6111432337975865048" datatype="html" xml:space="preserve">
         <source>Remove segment <x id="PH" equiv-text="i"/> – <x id="PH_1" equiv-text="secondsToTime(parts.start)"/> to <x id="PH_2" equiv-text="secondsToTime(parts.end)"/></source>
-        <target state="new">Remove segment <x id="PH" equiv-text="i"/> – <x id="PH_1" equiv-text="secondsToTime(parts.start)"/> to <x id="PH_2" equiv-text="secondsToTime(parts.end)"/></target>
+        <target state="translated">Eliminar el segmento <x id="PH" equiv-text="i"/> – <x id="PH_1" equiv-text="secondsToTime(parts.start)"/> to <x id="PH_2" equiv-text="secondsToTime(parts.end)"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
           <context context-type="linenumber">1054</context>
@@ -29590,41 +29590,41 @@ color: red;
           <context context-type="linenumber">641</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="785960720847076177" datatype="html">
+      <trans-unit id="785960720847076177" datatype="html" xml:space="preserve">
         <source>This video contains sensitive content. Are you sure you want to display the video page?</source>
-        <target state="new">This video contains sensitive content. Are you sure you want to display the video page?</target>
+        <target state="translated">Este vídeo contiene contenido sensible. ¿Estás seguro de querer abrir la página del vídeo?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">649</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3000101082394601351" datatype="html">
+      <trans-unit id="3000101082394601351" datatype="html" xml:space="preserve">
         <source>Sensitive video</source>
-        <target state="new">Sensitive video</target>
+        <target state="translated">Vídeo sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">650</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3982297826462365916" datatype="html">
+      <trans-unit id="3982297826462365916" datatype="html" xml:space="preserve">
         <source>Display the page</source>
-        <target state="new">Display the page</target>
+        <target state="translated">Mostrar la página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">652</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3393221397715061387" datatype="html">
+      <trans-unit id="3393221397715061387" datatype="html" xml:space="preserve">
         <source>Quit that page</source>
-        <target state="new">Quit that page</target>
+        <target state="translated">Salir de la página</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">653</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="819996403327805209" datatype="html">
+      <trans-unit id="819996403327805209" datatype="html" xml:space="preserve">
         <source>Learn more</source>
-        <target state="new">Learn more</target>
+        <target state="translated">Más información</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">656</context>
@@ -29854,9 +29854,9 @@ color: red;
           <context context-type="linenumber">1171</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1887788831759691756" datatype="html">
+      <trans-unit id="1887788831759691756" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Videos feed</source>
-        <target state="new"><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Videos feed</target>
+        <target state="translated"><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Galería de vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1201</context>
@@ -29866,33 +29866,33 @@ color: red;
           <context context-type="linenumber">1217</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="513070917830516194" datatype="html">
+      <trans-unit id="513070917830516194" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.playlist.displayName"/> - Podcast feed</source>
-        <target state="new"><x id="PH" equiv-text="this.playlist.displayName"/> - Podcast feed</target>
+        <target state="translated"><x id="PH" equiv-text="this.playlist.displayName"/> - Galería de podcasts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1202</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="744434188649519534" datatype="html">
+      <trans-unit id="744434188649519534" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.playlist.displayName"/> - Apple Podcast audio feed</source>
-        <target state="new"><x id="PH" equiv-text="this.playlist.displayName"/> - Apple Podcast audio feed</target>
+        <target state="translated"><x id="PH" equiv-text="this.playlist.displayName"/> - Galería de Apple Podcast audio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1203</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6373039497266755686" datatype="html">
+      <trans-unit id="6373039497266755686" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="this.playlist.displayName"/> - Apple Podcast video feed</source>
-        <target state="new"><x id="PH" equiv-text="this.playlist.displayName"/> - Apple Podcast video feed</target>
+        <target state="translated"><x id="PH" equiv-text="this.playlist.displayName"/> - Galería de Apple Podcast video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1204</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5232693393816852420" datatype="html">
+      <trans-unit id="5232693393816852420" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="video.name"/> - Comments feed</source>
-        <target state="new"><x id="PH" equiv-text="video.name"/> - Comments feed</target>
+        <target state="translated"><x id="PH" equiv-text="video.name"/> - Galería de comentarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1218</context>
