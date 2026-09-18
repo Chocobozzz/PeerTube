@@ -91,29 +91,67 @@ map $request_method$uri $peertube_pool {
 
   "~^(GET|HEAD)/api/v1/(config|config/about)$"                                  secondary_pool;
   "~^(GET|HEAD)/api/v1/(accounts|search|overviews|player-settings)(/|$)"        secondary_pool;
+  "~^(GET|HEAD|PUT)/api/v1/custom-pages/homepage/instance$"                     secondary_pool;
+  "~^(GET|HEAD)/api/v1/video-playlists(/|$)"                                    secondary_pool;
 
-  # Authenticated channel collections: must be listed before the /api/v1/video-channels/<handle> lines below
-  "~^(GET|HEAD)/api/v1/video-channels/ownership(/|$)"                           backend;
-  "~^(GET|HEAD)/api/v1/video-channels/?$"                                       secondary_pool;
-  "~^(GET|HEAD)/api/v1/video-channels/[^/]+/(video-playlists|videos)$"          secondary_pool;
-  "~^(GET|HEAD)/api/v1/video-channels/[^/]+/?$"                                 secondary_pool;
+  # Every endpoint of these resources
+  "~^[A-Z]+/api/v1/(abuses|bulk|oauth-clients|blocklist|watched-words|automatic-tags|video-channel-syncs)(/|$)" secondary_pool;
+
+  "~^(GET|HEAD)/api/v1/server/(following|followers|blocklist/public-log)$"      secondary_pool;
+  "~^POST/api/v1/server/(following|contact)$"                                   secondary_pool;
+  "~^(POST|DELETE)/api/v1/server/followers/[^/]+(/accept|/reject)?$"            secondary_pool;
+  "~^(GET|HEAD|POST)/api/v1/server/blocklist/(accounts|servers|subscriptions)$" secondary_pool;
+  "~^DELETE/api/v1/server/blocklist/(accounts|servers|subscriptions)/[^/]+$"    secondary_pool;
+
+  "~^(GET|HEAD)/api/v1/runners/?$"                                              secondary_pool;
+  "~^POST/api/v1/runners/(register|unregister)$"                                secondary_pool;
+  "~^DELETE/api/v1/runners/[^/]+$"                                              secondary_pool;
+  "~^(GET|HEAD)/api/v1/runners/(jobs|registration-tokens)$"                     secondary_pool;
+  "~^POST/api/v1/runners/(jobs/request|jobs/[^/]+/accept|registration-tokens/generate)$" secondary_pool;
+  "~^DELETE/api/v1/runners/registration-tokens/[^/]+$"                          secondary_pool;
+
+  "~^(GET|HEAD|POST)/api/v1/video-channels/?$"                                  secondary_pool;
+  "~^(GET|HEAD|PUT)/api/v1/video-channels/[^/]+/?$"                             secondary_pool;
+  "~^(GET|HEAD)/api/v1/video-channels/[^/]+/(video-playlists|videos|followers|activities|ownership|collaborators)$" secondary_pool;
+  "~^POST/api/v1/video-channels/[^/]+/(video-playlists/reorder|import-videos|give-ownership|collaborators/invite)$" secondary_pool;
+  "~^POST/api/v1/video-channels/[^/]+/collaborators/[^/]+/(accept|reject)$"     secondary_pool;
+  "~^DELETE/api/v1/video-channels/[^/]+/collaborators/[^/]+$"                   secondary_pool;
+  "~^POST/api/v1/video-channels/ownership/[^/]+/(accept|refuse)$"               secondary_pool;
+  "~^DELETE/api/v1/video-channels/ownership/[^/]+$"                             secondary_pool;
 
   # Collections that live under /api/v1/videos/ but are not a video id: must be listed before the /api/v1/videos/<id> lines below
-  "~^(GET|HEAD)/api/v1/videos/(blacklist|comments|imports|ownership|live)(/|$)" backend;
+  "~^(GET|HEAD)/api/v1/videos/(imports|live)(/|$)"                              backend;
   "~^(GET|HEAD)/api/v1/videos/?$"                                               secondary_pool;
   "~^(GET|HEAD)/api/v1/videos/(categories|licences|languages|privacies)$"       secondary_pool;
-  "~^(GET|HEAD)/api/v1/videos/[^/]+/(captions|chapters|storyboards|comment-threads)(/|$)" secondary_pool;
+  "~^(GET|HEAD)/api/v1/videos/[^/]+/(captions|chapters|storyboards|comment-threads|ownership|passwords|embed-privacy)(/|$)" secondary_pool;
   "~^(GET|HEAD)/api/v1/videos/[^/]+/comments/[^/]+/replies$"                    secondary_pool;
   "~^(GET|HEAD)/api/v1/videos/[^/]+/?$"                                         secondary_pool;
-  "~^POST/api/v1/videos/[^/]+/token$"                                           secondary_pool;
+  "~^POST/api/v1/videos/[^/]+/(token|comment-threads|give-ownership|passwords)$" secondary_pool;
+  "~^POST/api/v1/videos/[^/]+/comments/[^/]+(/approve)?$"                       secondary_pool;
+  "~^DELETE/api/v1/videos/[^/]+/(comments|passwords)/[^/]+$"                    secondary_pool;
+  "~^PUT/api/v1/videos/[^/]+/(rate|chapters|passwords|embed-privacy)$"          secondary_pool;
+  "~^(POST|PUT|DELETE)/api/v1/videos/[^/]+/blacklist$"                          secondary_pool;
+  "~^POST/api/v1/videos/ownership/[^/]+/(accept|refuse)$"                       secondary_pool;
+  "~^DELETE/api/v1/videos/ownership/[^/]+$"                                     secondary_pool;
 
-  "~^POST/api/v1/users/(token|revoke-token|register)$"                          secondary_pool;
+  "~^POST/api/v1/users/(token|revoke-token|register|ask-reset-password)$"       secondary_pool;
   "~^POST/api/v1/users/(ask-send-verify-email|registrations/ask-send-verify-email)$" secondary_pool;
   "~^POST/api/v1/users/([^/]+/verify-email|registrations/[^/]+/verify-email)$"  secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/me/?$"                                             secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/me/(video-quota-used|notifications|history/videos)$" secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/me/(videos|subscriptions)(/|$)"                     secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/me/video-playlists/videos-exist$"                   secondary_pool;
+  "~^(GET|HEAD|POST)/api/v1/users/?$"                                           secondary_pool;
+  "~^(GET|HEAD|PUT)/api/v1/users/[^/]+/?$"                                      secondary_pool;
+  "~^POST/api/v1/users/(scoped-tokens|registrations/request)$"                  secondary_pool;
+  "~^POST/api/v1/users/[^/]+/(block|unblock|reset-password|two-factor/request|two-factor/confirm-request|two-factor/disable)$" secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/[^/]+/token-sessions$"                             secondary_pool;
+  "~^POST/api/v1/users/[^/]+/token-sessions/[^/]+/revoke$"                      secondary_pool;
+  "~^POST/api/v1/users/registrations/[^/]+/(accept|reject)$"                    secondary_pool;
+  "~^DELETE/api/v1/users/registrations/[^/]+$"                                  secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/me/(video-quota-used|notifications|history/videos|abuses)$" secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/me/(videos|subscriptions)(/|$)"                    secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/me/video-playlists/videos-exist$"                  secondary_pool;
+  "~^(GET|HEAD|POST)/api/v1/users/me/blocklist/(accounts|servers)$"             secondary_pool;
+  "~^DELETE/api/v1/users/me/(blocklist/accounts|blocklist/servers|subscriptions|history/videos)/[^/]+$" secondary_pool;
+  "~^POST/api/v1/users/me/(subscriptions|notifications/read|notifications/read-all|history/videos/remove|new-feature-info/read)$" secondary_pool;
+  "~^PUT/api/v1/users/me/notification-settings$"                                secondary_pool;
 
   # View/watch-time tracking: sticky to one process per viewer
   "~^(PUT|POST)/api/v1/videos/[^/]+/(views|watching)$"                          secondary_views_pool;

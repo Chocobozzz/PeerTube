@@ -4,6 +4,9 @@ import * as contactForm from './contact-form.js'
 import * as emailVerification from './email-verification.js'
 import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
+import * as homepageChanges from './homepage-changes.js'
+import * as liveSessionStop from './live-session-stop.js'
+import { LiveSessionStopPayload } from './live-session-stop.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
 import * as modelCacheInvalidation from './model-cache-invalidation.js'
@@ -34,6 +37,8 @@ import * as videoViewerCounters from './video-viewer-counters.js'
 import { AddVideoViewerCounterOptions } from './video-viewer-counters.js'
 import * as videoViewerStats from './video-viewer-stats.js'
 import { LocalVideoViewer, MergeLocalVideoViewerOptions } from './video-viewer-stats.js'
+import * as watchedWordsInvalidation from './watched-words-invalidation.js'
+import { WatchedWordsInvalidationPayload } from './watched-words-invalidation.js'
 
 // Facade over the per-theme Redis modules in this directory
 export class Redis {
@@ -270,6 +275,30 @@ export class Redis {
 
   subscribeToModelCacheInvalidation (handler: (payload: ModelCacheInvalidationPayload) => void) {
     return modelCacheInvalidation.subscribeToModelCacheInvalidation(handler)
+  }
+
+  publishHomepageChanged () {
+    return homepageChanges.publishHomepageChanged()
+  }
+
+  subscribeToHomepageChanges (handler: () => void) {
+    return homepageChanges.subscribeToHomepageChanges(handler)
+  }
+
+  publishLiveSessionStop (payload: LiveSessionStopPayload) {
+    return liveSessionStop.publishLiveSessionStop(payload)
+  }
+
+  subscribeToLiveSessionStop (handler: (payload: LiveSessionStopPayload) => void) {
+    return liveSessionStop.subscribeToLiveSessionStop(handler)
+  }
+
+  publishWatchedWordsInvalidation (payload: WatchedWordsInvalidationPayload) {
+    return watchedWordsInvalidation.publishWatchedWordsInvalidation(payload)
+  }
+
+  subscribeToWatchedWordsInvalidation (handler: (payload: WatchedWordsInvalidationPayload) => void) {
+    return watchedWordsInvalidation.subscribeToWatchedWordsInvalidation(handler)
   }
 
   /* ************ Video viewer counters ************ */

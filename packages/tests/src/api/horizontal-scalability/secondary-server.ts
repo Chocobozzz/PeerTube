@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -121,11 +121,9 @@ describe('Test a secondary server process', function () {
 
     it('Should not serve the endpoints the primary owns', async function () {
       const paths = [
-        '/api/v1/users',
         '/api/v1/jobs',
-        '/api/v1/abuses',
-        '/api/v1/video-playlists',
-        '/api/v1/users/me/abuses'
+        '/api/v1/server/stats',
+        '/api/v1/plugins'
       ]
 
       for (const path of paths) {
@@ -284,6 +282,48 @@ describe('Test a secondary server process', function () {
       expect(token).to.not.be.empty
 
       await makeRawRequest({ url: privateFileUrl, query: { videoFileToken: token }, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
+  describe('Video playlist endpoints', function () {
+    it('Should serve the same playlists as the primary', async function () {
+      const { uuid: playlistUUID } = await primary.playlists.create({
+        attributes: {
+          displayName: 'playlist served by both processes',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: primary.store.channel.id
+        }
+      })
+
+      await primary.playlists.addElement({ playlistId: playlistUUID, attributes: { videoId: videoUUID } })
+
+      for (const path of [ '', '/privacies', '/' + playlistUUID ]) {
+        const fullPath = '/api/v1/video-playlists' + path
+
+        const fromPrimary = await makeGetRequest({ url: primary.url, path: fullPath, expectedStatus: HttpStatusCode.OK_200 })
+        const fromSecondary = await makeGetRequest({ url: secondary.url, path: fullPath, expectedStatus: HttpStatusCode.OK_200 })
+
+        expect(fromSecondary.body, fullPath).to.deep.equal(fromPrimary.body)
+      }
+
+      // Don't compare the whole videos: their viewer counters are refreshed independently by each process
+      const fromPrimary = await primary.playlists.listVideos({ playlistId: playlistUUID })
+      const fromSecondary = await secondary.playlists.listVideos({ playlistId: playlistUUID })
+
+      expect(fromSecondary.total).to.equal(1)
+      expect(fromSecondary.data.map(e => [ e.id, e.position, e.video.uuid ])).to.deep.equal(
+        fromPrimary.data.map(e => [ e.id, e.position, e.video.uuid ])
+      )
+    })
+
+    it('Should not create a playlist on the secondary', async function () {
+      await makePostBodyRequest({
+        url: secondary.url,
+        path: '/api/v1/video-playlists',
+        token: primary.accessToken,
+        fields: { displayName: 'playlist created on the secondary' },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
   })
 

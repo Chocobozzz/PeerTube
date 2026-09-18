@@ -38,8 +38,8 @@ import { guessAdditionalAttributesFromQuery } from '../../../models/video/format
 import { VideoModel } from '../../../models/video/video.js'
 import { blacklistRouter } from './blacklist.js'
 import { registerVideoCaptionSharedRoutes, videoCaptionsRouter } from './captions.js'
-import { registerVideoChapterSharedRoutes, videoChaptersRouter } from './chapters.js'
-import { registerVideoCommentSharedRoutes, videoCommentRouter } from './comment.js'
+import { videoChaptersRouter } from './chapters.js'
+import { videoCommentRouter } from './comment.js'
 import { videoEmbedPrivacyRouter } from './embed-privacy.js'
 import { filesRouter } from './files.js'
 import { videoImportsRouter } from './import.js'
@@ -103,14 +103,18 @@ const secondaryVideosRouter = express.Router()
 
 secondaryVideosRouter.use(apiRateLimiter)
 
+secondaryVideosRouter.use('/', blacklistRouter)
+secondaryVideosRouter.use('/', rateVideoRouter)
+secondaryVideosRouter.use('/', videoCommentRouter)
+secondaryVideosRouter.use('/', ownershipVideoRouter)
 secondaryVideosRouter.use('/', viewRouter)
-// Video file tokens live in Redis, so any process can generate one and any process accepts it
 secondaryVideosRouter.use('/', tokenRouter)
+secondaryVideosRouter.use('/', videoPasswordRouter)
 secondaryVideosRouter.use('/', storyboardRouter)
+secondaryVideosRouter.use('/', videoChaptersRouter)
+secondaryVideosRouter.use('/', videoEmbedPrivacyRouter)
 
 registerVideoCaptionSharedRoutes(secondaryVideosRouter)
-registerVideoChapterSharedRoutes(secondaryVideosRouter)
-registerVideoCommentSharedRoutes(secondaryVideosRouter)
 
 registerVideoSharedRoutes(secondaryVideosRouter)
 

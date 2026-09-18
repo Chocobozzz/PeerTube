@@ -17,7 +17,14 @@ import { UserVideoHistoryModel } from '../../../models/user/user-video-history.j
 
 const myVideosHistoryRouter = express.Router()
 
-registerMyHistorySharedRoutes(myVideosHistoryRouter)
+myVideosHistoryRouter.get(
+  '/me/history/videos',
+  authenticate,
+  paginationValidator,
+  setDefaultPagination,
+  userHistoryListValidator,
+  asyncMiddleware(listMyVideosHistory)
+)
 
 myVideosHistoryRouter.delete(
   '/me/history/videos/:videoId',
@@ -35,23 +42,8 @@ myVideosHistoryRouter.post(
 
 // ---------------------------------------------------------------------------
 
-function registerMyHistorySharedRoutes (router: express.Router) {
-  router.get(
-    '/me/history/videos',
-    authenticate,
-    paginationValidator,
-    setDefaultPagination,
-    userHistoryListValidator,
-    asyncMiddleware(listMyVideosHistory)
-  )
-}
-
-// ---------------------------------------------------------------------------
-
 export {
-  myVideosHistoryRouter,
-  // Will be used by parent router
-  registerMyHistorySharedRoutes
+  myVideosHistoryRouter
 }
 
 // ---------------------------------------------------------------------------

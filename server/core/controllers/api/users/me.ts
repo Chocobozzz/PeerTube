@@ -64,13 +64,6 @@ registerMeSharedRoutes(meRouter)
 
 meRouter.delete('/me', authenticate, deleteMeValidator, asyncMiddleware(deleteMe))
 
-meRouter.put(
-  '/me',
-  authenticate,
-  asyncMiddleware(usersUpdateMeValidator),
-  asyncRetryTransactionMiddleware(updateMe)
-)
-
 meRouter.post(
   '/me/avatar/pick',
   authenticate,
@@ -85,17 +78,24 @@ meRouter.delete(
   asyncRetryTransactionMiddleware(deleteMyAvatar)
 )
 
-meRouter.post(
-  '/me/new-feature-info/read',
-  authenticate,
-  usersNewFeatureInfoReadValidator,
-  asyncMiddleware(usersNewFeatureInfoRead)
-)
-
 // ---------------------------------------------------------------------------
 
 function registerMeSharedRoutes (router: express.Router) {
   router.get('/me', authenticate, asyncMiddleware(getMyInformation))
+
+  router.put(
+    '/me',
+    authenticate,
+    asyncMiddleware(usersUpdateMeValidator),
+    asyncRetryTransactionMiddleware(updateMe)
+  )
+
+  router.post(
+    '/me/new-feature-info/read',
+    authenticate,
+    usersNewFeatureInfoReadValidator,
+    asyncMiddleware(usersNewFeatureInfoRead)
+  )
 
   router.get('/me/video-quota-used', authenticate, asyncMiddleware(getMyVideoQuotaUsed))
 

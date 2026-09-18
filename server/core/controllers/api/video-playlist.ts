@@ -65,19 +65,7 @@ const videoPlaylistRouter = express.Router()
 
 videoPlaylistRouter.use(apiRateLimiter)
 
-videoPlaylistRouter.get('/privacies', listVideoPlaylistPrivacies)
-
-videoPlaylistRouter.get(
-  '/',
-  paginationValidator,
-  videoPlaylistsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  commonVideoPlaylistFiltersValidator,
-  asyncMiddleware(listVideoPlaylists)
-)
-
-videoPlaylistRouter.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
+registerVideoPlaylistSharedRoutes(videoPlaylistRouter)
 
 videoPlaylistRouter.post(
   '/',
@@ -105,15 +93,6 @@ videoPlaylistRouter.delete(
 // ---------------------------------------------------------------------------
 // Playlist elements
 // ---------------------------------------------------------------------------
-
-videoPlaylistRouter.get(
-  '/:playlistId/videos',
-  asyncMiddleware(videoPlaylistsGetValidator('summary')),
-  paginationValidator,
-  setDefaultPagination,
-  optionalAuthenticate,
-  asyncMiddleware(listVideosOfPlaylist)
-)
 
 videoPlaylistRouter.post(
   '/:playlistId/videos',
@@ -144,9 +123,47 @@ videoPlaylistRouter.delete(
 )
 
 // ---------------------------------------------------------------------------
+// Router for secondary process
+// ---------------------------------------------------------------------------
+
+const secondaryVideoPlaylistRouter = express.Router()
+
+secondaryVideoPlaylistRouter.use(apiRateLimiter)
+
+registerVideoPlaylistSharedRoutes(secondaryVideoPlaylistRouter)
+
+// ---------------------------------------------------------------------------
 
 export {
+  secondaryVideoPlaylistRouter,
   videoPlaylistRouter
+}
+
+// ---------------------------------------------------------------------------
+
+function registerVideoPlaylistSharedRoutes (router: express.Router) {
+  router.get('/privacies', listVideoPlaylistPrivacies)
+
+  router.get(
+    '/',
+    paginationValidator,
+    videoPlaylistsSortValidator,
+    setDefaultSort,
+    setDefaultPagination,
+    commonVideoPlaylistFiltersValidator,
+    asyncMiddleware(listVideoPlaylists)
+  )
+
+  router.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
+
+  router.get(
+    '/:playlistId/videos',
+    asyncMiddleware(videoPlaylistsGetValidator('summary')),
+    paginationValidator,
+    setDefaultPagination,
+    optionalAuthenticate,
+    asyncMiddleware(listVideosOfPlaylist)
+  )
 }
 
 // ---------------------------------------------------------------------------

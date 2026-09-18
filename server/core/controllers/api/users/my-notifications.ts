@@ -18,18 +18,26 @@ import {
   updateNotificationSettingsValidator
 } from '../../../middlewares/validators/users/user-notifications.js'
 import { UserNotificationSettingModel } from '../../../models/user/user-notification-setting.js'
-import { meRouter } from './me.js'
 
 const myNotificationsRouter = express.Router()
 
-meRouter.put(
+myNotificationsRouter.put(
   '/me/notification-settings',
   authenticate,
   updateNotificationSettingsValidator,
   asyncRetryTransactionMiddleware(updateNotificationSettings)
 )
 
-registerMyNotificationsSharedRoutes(myNotificationsRouter)
+myNotificationsRouter.get(
+  '/me/notifications',
+  authenticate,
+  paginationValidator,
+  userNotificationsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  listUserNotificationsValidator,
+  asyncMiddleware(listUserNotifications)
+)
 
 myNotificationsRouter.post(
   '/me/notifications/read',
@@ -40,27 +48,8 @@ myNotificationsRouter.post(
 
 myNotificationsRouter.post('/me/notifications/read-all', authenticate, asyncMiddleware(markAsReadAllUserNotifications))
 
-// ---------------------------------------------------------------------------
-
-function registerMyNotificationsSharedRoutes (router: express.Router) {
-  router.get(
-    '/me/notifications',
-    authenticate,
-    paginationValidator,
-    userNotificationsSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    listUserNotificationsValidator,
-    asyncMiddleware(listUserNotifications)
-  )
-}
-
-// ---------------------------------------------------------------------------
-
 export {
-  myNotificationsRouter,
-  // Will be used by parent router
-  registerMyNotificationsSharedRoutes
+  myNotificationsRouter
 }
 
 // ---------------------------------------------------------------------------
