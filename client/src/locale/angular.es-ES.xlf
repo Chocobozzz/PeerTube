@@ -12685,7 +12685,7 @@
       </trans-unit>
       <trans-unit id="6098767935728651255" datatype="html" xml:space="preserve">
         <source>Enable video storyboards</source>
-        <target state="needs-translation">Habilitar video-guión</target>
+        <target state="translated">Habilitar guiones gráficos de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">454</context>
@@ -18114,9 +18114,9 @@ color: red;
           <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7266430450289997463" datatype="html">
+      <trans-unit id="7266430450289997463" datatype="html" xml:space="preserve">
         <source>LOGO</source>
-        <target state="new">LOGO</target>
+        <target state="translated">LOGO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">6,7</context>
@@ -19397,7 +19397,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5841439724861780893" datatype="html" xml:space="preserve">
         <source>Video name/description and comments that contain any of the watched words are automatically tagged with the name of the list.</source>
-        <target state="needs-translation">El nombre/descripción del vídeo y los comentarios que contengan cualquiera de las palabras seguidas son automáticamente etiquetadas con el nombre de la lista.</target>
+        <target state="translated">El nombre/descripción del vídeo y los comentarios que contengan cualquiera de las palabras vigiladas son automáticamente etiquetados con el nombre de la lista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-list/watched-words-list-admin.component.html</context>
           <context context-type="linenumber">2</context>
@@ -19413,7 +19413,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2154846172321052217" datatype="html" xml:space="preserve">
         <source>Subscribe to a remote watched words lists to automatically keep them synchronized for moderation.</source>
-        <target state="needs-translation">Suscríbete a una lista de palabras seguidas de forma remota para mantenerlas sincronizadas automáticamente con fines de moderación.</target>
+        <target state="translated">Suscríbete a una lista remota de palabras vigiladas para mantenerlas sincronizadas automáticamente con fines de moderación.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/watched-words-subscriptions/watched-words-subscriptions.component.html</context>
           <context context-type="linenumber">2,5</context>
@@ -20160,9 +20160,9 @@ color: red;
           <context context-type="linenumber">152</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="512712988274106243" datatype="html">
+      <trans-unit id="512712988274106243" datatype="html" xml:space="preserve">
         <source>IP</source>
-        <target state="new">IP</target>
+        <target state="translated">IP</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
           <context context-type="linenumber">33</context>
@@ -21788,9 +21788,9 @@ color: red;
           <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2605658322936929408" datatype="html">
+      <trans-unit id="2605658322936929408" datatype="html" xml:space="preserve">
         <source>Podcast</source>
-        <target state="new">Podcast</target>
+        <target state="translated">Podcast</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">4</context>
@@ -21840,9 +21840,9 @@ color: red;
           <context context-type="linenumber">30,31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3553943539005020318" datatype="html">
+      <trans-unit id="3553943539005020318" datatype="html" xml:space="preserve">
         <source>APPLE PODCAST</source>
-        <target state="new">APPLE PODCAST</target>
+        <target state="translated">APPLE PODCAST</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">38,39</context>
@@ -21856,9 +21856,9 @@ color: red;
           <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6902305305260322146" datatype="html">
+      <trans-unit id="6902305305260322146" datatype="html" xml:space="preserve">
         <source>Apple Podcast - Audio</source>
-        <target state="new">Apple Podcast - Audio</target>
+        <target state="translated">Apple Podcast - Audio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -22508,7 +22508,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8856675054894640089" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (a.video) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sent an ownership change request to <x id="INTERPOLATION_1" equiv-text="{{ a.targetAccount.displayName }}"/> for video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;[ '/w', a.video.shortUUID ]&quot;&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ a.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (a.channel) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sent an ownership change request to <x id="INTERPOLATION_1" equiv-text="{{ a.targetAccount.displayName }}"/> for this channel <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/></source>
-        <target state="needs-translation"><x id="START_BLOCK_IF" equiv-text="@if (a.video) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> envió una solicitud de cambio de titularidad a <x id="INTERPOLATION_1" equiv-text="{{ a.targetAccount.displayName }}"/> para el vídeo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;[ '/w', a.video.shortUUID ]&quot;&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ a.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (a.channel) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> envió una solicitud de cambio de titularidad a <x id="INTERPOLATION_1" equiv-text="{{ a.targetAccount.displayName }}"/> para este canal<x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (a.video) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sent an ownership change request to <x id="INTERPOLATION_1" equiv-text="{{ a.targetAccount.displayName }}"/> para el vídeo <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [routerLink]=&quot;[ '/w', a.video.shortUUID ]&quot;&gt;"/><x id="INTERPOLATION_2" equiv-text="{{ a.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE_IF" equiv-text="@else if (a.channel) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ account }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> envió una solicitud de cambio de titularidad a <x id="INTERPOLATION_1" equiv-text="{{ a.targetAccount.displayName }}"/> para este canal <x id="CLOSE_BLOCK_ELSE_IF" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-activity.component.html</context>
           <context context-type="linenumber">182,187</context>
@@ -24034,7 +24034,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4718923616998868965" datatype="html" xml:space="preserve">
         <source>Max lives must be greater or equal to -1.</source>
-        <target state="needs-translation">El número máximo de directos debe ser mayor o igual a -1.</target>
+        <target state="translated">El número máximo de directos debe ser mayor o igual a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">79</context>
@@ -24050,7 +24050,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6094685877052448543" datatype="html" xml:space="preserve">
         <source>Max user lives must be greater or equal to -1.</source>
-        <target state="needs-translation">El número máximo de usuarios por directo debe ser mayor o igual a -1.</target>
+        <target state="translated">El número máximo de usuarios por directo debe ser mayor o igual a -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/custom-config-validators.ts</context>
           <context context-type="linenumber">87</context>
@@ -26001,9 +26001,9 @@ color: red;
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3542042671420335679" datatype="html">
+      <trans-unit id="3542042671420335679" datatype="html" xml:space="preserve">
         <source>No</source>
-        <target state="new">No</target>
+        <target state="translated">No</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -28326,9 +28326,9 @@ color: red;
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3039940756451018621" datatype="html">
+      <trans-unit id="3039940756451018621" datatype="html" xml:space="preserve">
         <source>Token</source>
-        <target state="new">Token</target>
+        <target state="translated">Token</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -29216,49 +29216,49 @@ color: red;
           <context context-type="linenumber">550</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8976313793734636314" datatype="html">
+      <trans-unit id="8976313793734636314" datatype="html" xml:space="preserve">
         <source>CC-BY</source>
-        <target state="new">CC-BY</target>
+        <target state="translated">CC-BY</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">569</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1256008580886882898" datatype="html">
+      <trans-unit id="1256008580886882898" datatype="html" xml:space="preserve">
         <source>CC-BY-SA</source>
-        <target state="new">CC-BY-SA</target>
+        <target state="translated">CC-BY-SA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">570</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8077240690934035882" datatype="html">
+      <trans-unit id="8077240690934035882" datatype="html" xml:space="preserve">
         <source>CC-BY-ND</source>
-        <target state="new">CC-BY-ND</target>
+        <target state="translated">CC-BY-ND</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">571</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5730960273819949495" datatype="html">
+      <trans-unit id="5730960273819949495" datatype="html" xml:space="preserve">
         <source>CC-BY-NC</source>
-        <target state="new">CC-BY-NC</target>
+        <target state="translated">CC-BY-NC</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">572</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="893990935328461810" datatype="html">
+      <trans-unit id="893990935328461810" datatype="html" xml:space="preserve">
         <source>CC-BY-NC-SA</source>
-        <target state="new">CC-BY-NC-SA</target>
+        <target state="translated">CC-BY-NC-SA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">573</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5533720746883435346" datatype="html">
+      <trans-unit id="5533720746883435346" datatype="html" xml:space="preserve">
         <source>CC-BY-NC-ND</source>
-        <target state="new">CC-BY-NC-ND</target>
+        <target state="translated">CC-BY-NC-ND</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">574</context>
@@ -30014,25 +30014,25 @@ color: red;
           <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4494338391339570965" datatype="html">
+      <trans-unit id="4494338391339570965" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =1 {Select a channel to receive the video} other {Select a channel to receive the videos}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Select a channel to receive the video} other {Select a channel to receive the videos}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Selecciona un canal para ver el vídeo} other {Selecciona un canal para ver los vídeos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/accept-change-video-ownership.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7931401118797342443" datatype="html">
+      <trans-unit id="7931401118797342443" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video <x id="videoName"/> accepted} other {<x id="count"/> videos accepted}}</source>
-        <target state="new">{count, plural, =1 {Video <x id="videoName"/> accepted} other {<x id="count"/> videos accepted}}</target>
+        <target state="translated">{count, plural, =1 {Vídeo <x id="videoName"/> aceptado} other {<x id="count"/> vídeos aceptados}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/accept-change-video-ownership.component.ts</context>
           <context context-type="linenumber">77</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2385526063760185547" datatype="html">
+      <trans-unit id="2385526063760185547" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Accept video} other {Accept <x id="count"/> videos}}</source>
-        <target state="new">{count, plural, =1 {Accept video} other {Accept <x id="count"/> videos}}</target>
+        <target state="translated">{count, plural, =1 {Aceptar vídeo} other {Aceptar <x id="count"/> vídeos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/accept-change-video-ownership.component.ts</context>
           <context context-type="linenumber">94</context>
