@@ -10032,9 +10032,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7292311893283564173" datatype="html">
+      <trans-unit id="7292311893283564173" datatype="html" xml:space="preserve">
         <source>Enabled strategies stats</source>
-        <target state="new">Enabled strategies stats</target>
+        <target state="translated">Ενεργά στατιστικά στρατηγικών</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">71</context>
@@ -10496,9 +10496,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8157426058291793346" datatype="html">
+      <trans-unit id="8157426058291793346" datatype="html" xml:space="preserve">
         <source>Auto-block by auto-tag policy</source>
-        <target state="new">Auto-block by auto-tag policy</target>
+        <target state="translated">Αυτόματος αποκλεισμός βάσει πολιτικής αυτόματης ετικέτας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -10628,9 +10628,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3109314382334906782" datatype="html">
+      <trans-unit id="3109314382334906782" datatype="html" xml:space="preserve">
         <source>Reportee</source>
-        <target state="new">Reportee</target>
+        <target state="translated">Αναφερόμενος</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-details.component.html</context>
           <context context-type="linenumber">31</context>
@@ -10688,9 +10688,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5271592370839377640" datatype="html">
+      <trans-unit id="5271592370839377640" datatype="html" xml:space="preserve">
         <source>Playlists reordered</source>
-        <target state="new">Playlists reordered</target>
+        <target state="translated">Αναδιατάχθηκαν λιστές αναπαραγωγής</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
           <context context-type="linenumber">196</context>
@@ -10740,9 +10740,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3223753904455402496" datatype="html">
+      <trans-unit id="3223753904455402496" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> unmuted.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> unmuted.</target>
+        <target state="translated">Άρθηκε η σίγαση σε <x id="PH" equiv-text="host"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -10752,25 +10752,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8024366868273320899" datatype="html">
+      <trans-unit id="8024366868273320899" datatype="html" xml:space="preserve">
         <source><x id="PH" equiv-text="host"/> unmuted by your platform.</source>
-        <target state="new"><x id="PH" equiv-text="host"/> unmuted by your platform.</target>
+        <target state="translated">Άρθηκε η σίγαση σε <x id="PH" equiv-text="host"/> από την πλατφόρμα σας.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9025984970788474055" datatype="html">
+      <trans-unit id="9025984970788474055" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted.</source>
-        <target state="new">Platform <x id="PH" equiv-text="domain"/> muted.</target>
+        <target state="translated">Η πλατφόρμα <x id="PH" equiv-text="domain"/> έχει τεθεί σίγαση.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.ts</context>
           <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6750929335415365131" datatype="html">
+      <trans-unit id="6750929335415365131" datatype="html" xml:space="preserve">
         <source>Platform <x id="PH" equiv-text="domain"/> muted by your platform.</source>
-        <target state="new">Platform <x id="PH" equiv-text="domain"/> muted by your platform.</target>
+        <target state="translated">Η πλατφόρμα <x id="PH" equiv-text="domain"/> τέθηκε σε σίγαση απ' τη πλατφόρμα σας.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-server-blocklist.component.ts</context>
           <context context-type="linenumber">104</context>
@@ -11132,9 +11132,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5902504074840207881" datatype="html">
+      <trans-unit id="5902504074840207881" datatype="html" xml:space="preserve">
         <source>Local jobs</source>
-        <target state="new">Local jobs</target>
+        <target state="translated">Τοπικές εργασίες</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">144</context>
@@ -11196,17 +11196,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">174</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="801645841650679815" datatype="html">
+      <trans-unit id="801645841650679815" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Mute platform} other {Mute platforms}}</source>
-        <target state="new">{count, plural, =1 {Mute platform} other {Mute platforms}}</target>
+        <target state="translated">{count, plural, =1 {Σίγαση πλατφόρμας} other {Σίγαση πλατφορμών}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4348940379154678550" datatype="html">
+      <trans-unit id="4348940379154678550" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Unmute platform} other {Unmute platforms}}</source>
-        <target state="new">{count, plural, =1 {Unmute platform} other {Unmute platforms}}</target>
+        <target state="translated">{count, plural, =1 {Άρση σίγασης πλατφόρμας} other {Άρση σίγασης πλατφορμών}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">206</context>
@@ -11220,17 +11220,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">241</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1722554034307231103" datatype="html">
+      <trans-unit id="1722554034307231103" datatype="html" xml:space="preserve">
         <source>Exclude comments from muted accounts</source>
-        <target state="new">Exclude comments from muted accounts</target>
+        <target state="translated">Εξαίρεση σχολίων από λογαριασμούς σε σίγαση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">256</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2490133524262953633" datatype="html">
+      <trans-unit id="2490133524262953633" datatype="html" xml:space="preserve">
         <source>Commented video scope</source>
-        <target state="new">Commented video scope</target>
+        <target state="translated">Εύρος σχολιασμένου βίντεο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">261</context>
@@ -11244,9 +11244,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">397</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2712688659924558571" datatype="html">
+      <trans-unit id="2712688659924558571" datatype="html" xml:space="preserve">
         <source>Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</source>
-        <target state="new">Do you really want to delete all comments of <x id="PH" equiv-text="comment.by"/>? Comments are deleted after a few minutes.</target>
+        <target state="translated">Θέλετε πραγματικά να διαγράψετε όλα τα σχόλια του <x id="PH" equiv-text="comment.by"/>; Τα σχόλια διαγράφονται μετά από λίγα λεπτά.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">410</context>
@@ -11368,9 +11368,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">169</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6417143148487697946" datatype="html">
+      <trans-unit id="6417143148487697946" datatype="html" xml:space="preserve">
         <source>Are you sure you want to cancel job <x id="PH" equiv-text="job.id"/>?</source>
-        <target state="new">Are you sure you want to cancel job <x id="PH" equiv-text="job.id"/>?</target>
+        <target state="translated">Σίγουρα θέλετε να ακυρώσετε την εργασία <x id="PH" equiv-text="job.id"/>;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">179</context>
@@ -11396,17 +11396,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7072706922467312188" datatype="html">
+      <trans-unit id="7072706922467312188" datatype="html" xml:space="preserve">
         <source>Job <x id="PH" equiv-text="job.id"/> cancellation requested</source>
-        <target state="new">Job <x id="PH" equiv-text="job.id"/> cancellation requested</target>
+        <target state="translated">Ζητήθηκε ακύρωση της εργασίας <x id="PH" equiv-text="job.id"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6971048580938828360" datatype="html">
+      <trans-unit id="6971048580938828360" datatype="html" xml:space="preserve">
         <source>Cannot cancel job <x id="PH" equiv-text="job.id"/></source>
-        <target state="new">Cannot cancel job <x id="PH" equiv-text="job.id"/></target>
+        <target state="translated">Δεν είναι δυνατή η ακύρωση της εργασίας <x id="PH" equiv-text="job.id"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
           <context context-type="linenumber">192</context>
@@ -11488,25 +11488,25 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2308490727635384266" datatype="html">
+      <trans-unit id="2308490727635384266" datatype="html" xml:space="preserve">
         <source>Logs copied</source>
-        <target state="new">Logs copied</target>
+        <target state="translated">Αντιγράφηκαν αρχεία καταγραφής</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2064122482972455058" datatype="html">
+      <trans-unit id="2064122482972455058" datatype="html" xml:space="preserve">
         <source>Copy logs</source>
-        <target state="new">Copy logs</target>
+        <target state="translated">Αντιγραφή αρχείων καταγραφής</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1570003374195931619" datatype="html">
+      <trans-unit id="1570003374195931619" datatype="html" xml:space="preserve">
         <source>No log.</source>
-        <target state="new">No log.</target>
+        <target state="translated">Δεν υπάρχει αρχείο καταγραφής.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">66</context>
@@ -11552,9 +11552,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1702458049569424041" datatype="html">
+      <trans-unit id="1702458049569424041" datatype="html" xml:space="preserve">
         <source>Banner is displayed in the about, login and registration pages and be used on your custom homepage.</source>
-        <target state="new">Banner is displayed in the about, login and registration pages and be used on your custom homepage.</target>
+        <target state="translated">Το μπάνερ εμφανίζεται στις σελίδες «Σχετικά», «Σύνδεση» και «Εγγραφή» και μπορεί να χρησιμοποιηθεί στην εξατομικευμένη αρχική σας σελίδα.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">27</context>
@@ -11576,9 +11576,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8619617334320611526" datatype="html">
+      <trans-unit id="8619617334320611526" datatype="html" xml:space="preserve">
         <source>Favicon is the icon displayed in web browser tab.</source>
-        <target state="new">Favicon is the icon displayed in web browser tab. </target>
+        <target state="translated">Το favicon είναι το εικονίδιο που εμφανίζεται στην καρτέλα του προγράμματος περιήγησης.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-logo.component.html</context>
           <context context-type="linenumber">42</context>
