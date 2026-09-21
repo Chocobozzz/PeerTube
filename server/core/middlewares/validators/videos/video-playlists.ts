@@ -98,7 +98,7 @@ export const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().c
       !await checkCanManagePlaylist({
         user: res.locals.oauth.token.User,
         videoPlaylist,
-        right: UserRight.REMOVE_ANY_VIDEO_PLAYLIST,
+        right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
         req,
         res
       })
