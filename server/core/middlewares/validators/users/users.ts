@@ -4,7 +4,6 @@ import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { MUser } from '@server/types/models/user/user.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { exists, isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
@@ -37,6 +36,7 @@ import { isThemeRegistered } from '../../../lib/plugins/theme-utils.js'
 import { Redis } from '../../../lib/redis.js'
 import {
   areValidationErrors,
+  checkCanModerate,
   checkEmailDoesNotAlreadyExist,
   checkUserEmailExistPermissive,
   checkUserIdExist,
@@ -131,7 +131,7 @@ export const usersRemoveValidator = [
       return res.fail({ message: 'Cannot remove the root user' })
     }
 
-    if (!checkCanModerate(user, res)) return
+    if (!checkCanModerate({ authUser: res.locals.oauth.token.User, onUser: user, req, res })) return
 
     return next()
   }
@@ -153,7 +153,7 @@ export const usersBlockToggleValidator = [
       return res.fail({ message: 'Cannot block the root user' })
     }
 
-    if (!checkCanModerate(user, res)) return
+    if (!checkCanModerate({ authUser: res.locals.oauth.token.User, onUser: user, req, res })) return
 
     return next()
   }
@@ -208,7 +208,7 @@ export const usersUpdateValidator = [
       return res.fail({ message: 'Cannot change root role.' })
     }
 
-    if (!checkCanModerate(user, res)) return
+    if (!checkCanModerate({ authUser: res.locals.oauth.token.User, onUser: user, req, res })) return
     if (req.body.role !== undefined && !checkCanSetRole(req.body.role, res)) return
 
     if (
@@ -504,20 +504,6 @@ export const usersNewFeatureInfoReadValidator = [
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
-
-function checkCanModerate (onUser: MUser, res: express.Response) {
-  const authUser = res.locals.oauth.token.User
-
-  if (authUser.role === UserRole.ADMINISTRATOR) return true
-  if (authUser.role === UserRole.MODERATOR && onUser.role === UserRole.USER) return true
-
-  res.fail({
-    status: HttpStatusCode.FORBIDDEN_403,
-    message: 'Users can only be managed by moderators or admins.'
-  })
-
-  return false
-}
 
 function checkCanSetRole (role: UserRoleType, res: express.Response) {
   const authUser = res.locals.oauth.token.User

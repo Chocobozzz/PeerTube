@@ -17,12 +17,9 @@ import { MVideoPlaylistFullSummary } from '@server/types/models/index.js'
 import {
   HttpStatusCode,
   ResultList,
-  UserRight,
   VideoPlaylist,
-  VideoPlaylistPrivacy,
   VideoPlaylistsSearchQueryAfterSanitize
 } from '@peertube/peertube-models'
-import { authenticateOrFail } from '../../../middlewares/auth.js'
 import {
   asyncMiddleware,
   openapiOperationDoc,
@@ -33,7 +30,7 @@ import {
   videoPlaylistsListSearchValidator,
   videoPlaylistsSearchSortValidator
 } from '../../../middlewares/index.js'
-import { checkCanManagePlaylist } from '../../../middlewares/validators/videos/video-playlists.js'
+import { checkCanSeePlaylist } from '../../../middlewares/validators/videos/video-playlists.js'
 import { searchLocalUrl } from './shared/index.js'
 
 const logger = createLogger()
@@ -129,21 +126,7 @@ async function searchVideoPlaylistsURI (search: string, req: express.Request, re
   }
 
   // The resolved playlist may still be private
-  if (videoPlaylist?.privacy === VideoPlaylistPrivacy.PRIVATE) {
-    if (!await authenticateOrFail({ req, res })) return
-
-    if (
-      !await checkCanManagePlaylist({
-        user: res.locals.oauth.token.User,
-        videoPlaylist,
-        right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
-        req,
-        res
-      })
-    ) {
-      return
-    }
-  }
+  if (videoPlaylist && !await checkCanSeePlaylist({ req, res, videoPlaylist })) return
 
   return res.json({
     total: videoPlaylist ? 1 : 0,

@@ -28,7 +28,9 @@ const userRoleRights: { [id in UserRoleType]: UserRightType[] } = {
     UserRight.SEE_ALL_COMMENTS,
     UserRight.MANAGE_REGISTRATIONS,
     UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
-    UserRight.MANAGE_INSTANCE_AUTO_TAGS
+    UserRight.MANAGE_INSTANCE_AUTO_TAGS,
+    UserRight.CHANGE_VIDEO_OWNERSHIP,
+    UserRight.CHANGE_CHANNEL_OWNERSHIP
   ],
 
   [UserRole.USER]: []

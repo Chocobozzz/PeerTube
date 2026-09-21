@@ -1,9 +1,9 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserRightType } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRole, UserRightType } from '@peertube/peertube-models'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { getByEmailPermissive } from '@server/lib/user.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MAccountId, MUserAccountId, MUserDefault } from '@server/types/models/index.js'
+import { MAccountId, MUser, MUserAccountId, MUserDefault } from '@server/types/models/index.js'
 import express from 'express'
 
 export function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
@@ -123,6 +123,37 @@ export function checkCanManageAccount (options: {
   res?.fail({
     status: HttpStatusCode.FORBIDDEN_403,
     message: req.t('Only a user with sufficient right can manage this account resource.')
+  })
+
+  return false
+}
+
+// Moderators must not manage administrator or other moderator accounts, only admins can manage everyone
+export function canModerate (options: {
+  authUser: MUser
+  onUser: MUser
+}) {
+  const { authUser, onUser } = options
+
+  if (authUser.role === UserRole.ADMINISTRATOR) return true
+  if (authUser.role === UserRole.MODERATOR && onUser.role === UserRole.USER) return true
+
+  return false
+}
+
+export function checkCanModerate (options: {
+  authUser: MUser
+  onUser: MUser
+  req: express.Request
+  res: express.Response
+}) {
+  const { authUser, onUser, req, res } = options
+
+  if (canModerate({ authUser, onUser })) return true
+
+  res.fail({
+    status: HttpStatusCode.FORBIDDEN_403,
+    message: req.t('Moderators cannot manage administrators or other moderators')
   })
 
   return false

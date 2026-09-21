@@ -197,25 +197,32 @@ export const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) =>
         })
       }
 
-      if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-        if (!await authenticateOrFail({ req, res })) return
-
-        if (
-          !await checkCanManagePlaylist({
-            user: res.locals.oauth.token.User,
-            videoPlaylist,
-            right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
-            req,
-            res
-          })
-        ) {
-          return
-        }
-      }
+      if (!await checkCanSeePlaylist({ req, res, videoPlaylist })) return
 
       return next()
     }
   ]
+}
+
+// A private playlist can only be seen by users allowed to manage it (owner, moderator/admin)
+export async function checkCanSeePlaylist (options: {
+  req: express.Request
+  res: express.Response
+  videoPlaylist: MVideoPlaylistFullSummary
+}) {
+  const { req, res, videoPlaylist } = options
+
+  if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PRIVATE) return true
+
+  if (!await authenticateOrFail({ req, res })) return false
+
+  return checkCanManagePlaylist({
+    user: res.locals.oauth.token.User,
+    videoPlaylist,
+    right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
+    req,
+    res
+  })
 }
 
 export const videoPlaylistsSearchValidator = [
@@ -512,12 +519,12 @@ export async function checkCanManagePlaylist (options: {
   videoPlaylist: MVideoPlaylistFullSummary
   right: UserRightType
   req: express.Request
-  res: express.Response | null
+  res: express.Response
 }) {
   const { user, videoPlaylist, right, res, req } = options
 
   if (videoPlaylist.isLocal() === false) {
-    res?.fail({
+    res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: req.t('Cannot manage video playlist of another server.')
     })
@@ -544,7 +551,7 @@ export async function checkCanManagePlaylist (options: {
     }
   }
 
-  res?.fail({
+  res.fail({
     status: HttpStatusCode.FORBIDDEN_403,
     message: req.t('Cannot manage video playlist of another user')
   })

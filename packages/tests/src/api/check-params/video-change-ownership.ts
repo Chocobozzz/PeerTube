@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { ChangeOwnershipState, HttpStatusCode, VideoCreateResult } from '@peertube/peertube-models'
+import { ChangeOwnershipState, HttpStatusCode, UserRole, VideoCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
@@ -10,6 +10,7 @@ describe('Test video change ownership API validator', function () {
   let anotherUserToken: string
   let rootEditorToken: string
   let userEditorToken: string
+  let moderatorToken: string
   let ownershipChangeId: number
 
   let userVideo: VideoCreateResult
@@ -29,6 +30,7 @@ describe('Test video change ownership API validator', function () {
     anotherUserToken = await server.users.generateUserAndToken('another_user')
     rootEditorToken = await server.channelCollaborators.createEditor('root_editor', 'root_channel')
     userEditorToken = await server.channelCollaborators.createEditor('user_editor', 'user_channel')
+    moderatorToken = await server.users.generateUserAndToken('moderator', UserRole.MODERATOR)
 
     rootVideo = await server.videos.quickUpload({ name: 'root video' })
     rootVideo2 = await server.videos.quickUpload({ name: 'root video 2' })
@@ -258,6 +260,18 @@ describe('Test video change ownership API validator', function () {
       })
     })
 
+    it('Should fail with a target channel that does not belong to the next owner, even if accepted by a moderator', async function () {
+      const me = await server.users.getMyInfo({ token: moderatorToken })
+      const moderatorChannelId = me.videoChannels[0].id
+
+      await server.changeOwnership.acceptVideo({
+        ownershipId: ownershipChangeId,
+        token: moderatorToken,
+        channelId: moderatorChannelId,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
     it('Should succeed with valid params', async function () {
       await server.changeOwnership.acceptVideo({
         ownershipId: ownershipChangeId,
@@ -273,6 +287,77 @@ describe('Test video change ownership API validator', function () {
         channelId: targetChannelId,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
+    })
+  })
+
+  describe('Accept ownership change request on behalf of the next owner', function () {
+    let moderator2Token: string
+    let quotaLimitedToken: string
+
+    let videoForRegularUser: VideoCreateResult
+    let videoForQuotaLimitedUser: VideoCreateResult
+    let videoForModerator2: VideoCreateResult
+
+    before(async function () {
+      this.timeout(120000)
+
+      moderator2Token = await server.users.generateUserAndToken('moderator2', UserRole.MODERATOR)
+
+      await server.users.create({ username: 'quota_limited_video_target', videoQuota: 0 })
+      quotaLimitedToken = await server.login.getAccessToken({ username: 'quota_limited_video_target', password: 'password' })
+
+      videoForRegularUser = await server.videos.quickUpload({ name: 'root video for moderator accept' })
+      await server.changeOwnership.createVideo({ videoId: videoForRegularUser.id, username: 'user' })
+
+      videoForQuotaLimitedUser = await server.videos.quickUpload({ name: 'root video for quota limited target' })
+      await server.changeOwnership.createVideo({ videoId: videoForQuotaLimitedUser.id, username: 'quota_limited_video_target' })
+
+      videoForModerator2 = await server.videos.quickUpload({ name: 'root video for moderator2 target' })
+      await server.changeOwnership.createVideo({ videoId: videoForModerator2.id, username: 'moderator2' })
+    })
+
+    it('Should fail to accept, on behalf of another moderator, a pending video ownership change, with a moderator', async function () {
+      const { data } = await server.changeOwnership.listOfVideo({ videoId: videoForModerator2.id })
+      const ownershipId = data[0].id
+
+      const me = await server.users.getMyInfo({ token: moderator2Token })
+
+      await server.changeOwnership.acceptVideo({
+        ownershipId,
+        token: moderatorToken,
+        channelId: me.videoChannels[0].id,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail to accept, on behalf of a user whose quota is exceeded, a pending video ownership change, with a moderator', async function () {
+      const { data } = await server.changeOwnership.listOfVideo({ videoId: videoForQuotaLimitedUser.id })
+      const ownershipId = data[0].id
+
+      const me = await server.users.getMyInfo({ token: quotaLimitedToken })
+
+      await server.changeOwnership.acceptVideo({
+        ownershipId,
+        token: moderatorToken,
+        channelId: me.videoChannels[0].id,
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
+    })
+
+    it('Should succeed to accept, on behalf of a regular user, a pending video ownership change, with a moderator', async function () {
+      const { data } = await server.changeOwnership.listOfVideo({ videoId: videoForRegularUser.id })
+      const ownershipId = data[0].id
+
+      const me = await server.users.getMyInfo({ token: userToken })
+
+      await server.changeOwnership.acceptVideo({
+        ownershipId,
+        token: moderatorToken,
+        channelId: me.videoChannels[0].id
+      })
+
+      const video = await server.videos.get({ id: videoForRegularUser.id })
+      expect(video.account.name).to.equal('user')
     })
   })
 
