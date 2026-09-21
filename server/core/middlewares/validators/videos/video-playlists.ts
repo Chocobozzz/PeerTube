@@ -507,17 +507,17 @@ function getCommonPlaylistEditAttributes () {
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
-async function checkCanManagePlaylist (options: {
+export async function checkCanManagePlaylist (options: {
   user: MUserAccountId
   videoPlaylist: MVideoPlaylistFullSummary
   right: UserRightType
   req: express.Request
-  res: express.Response
+  res: express.Response | null
 }) {
   const { user, videoPlaylist, right, res, req } = options
 
   if (videoPlaylist.isLocal() === false) {
-    res.fail({
+    res?.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: req.t('Cannot manage video playlist of another server.')
     })
@@ -544,7 +544,7 @@ async function checkCanManagePlaylist (options: {
     }
   }
 
-  res.fail({
+  res?.fail({
     status: HttpStatusCode.FORBIDDEN_403,
     message: req.t('Cannot manage video playlist of another user')
   })

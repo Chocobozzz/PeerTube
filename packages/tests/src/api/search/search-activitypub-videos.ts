@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
-import { VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -188,6 +188,23 @@ describe('Test ActivityPub videos search', function () {
     const body = await command.searchVideos({ search, token: servers[0].accessToken })
     expect(body.total).to.equal(0)
     expect(body.data).to.have.lengthOf(0)
+  })
+
+  it('Should not leak a private video via URI search', async function () {
+    const userToken = await servers[0].users.generateUserAndToken('user_private_search')
+
+    const { uuid } = await servers[0].videos.upload({ attributes: { name: 'private video', privacy: VideoPrivacy.PRIVATE } })
+    const search = servers[0].url + '/videos/watch/' + uuid
+
+    // Force path where we load the video from local database
+    await servers[0].config.updateExistingConfig({ newConfig: { search: { remoteUri: { users: false, anonymous: false } } } })
+
+    await command.searchVideos({ search, token: undefined, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    await command.searchVideos({ search, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+    const body = await command.searchVideos({ search, token: servers[0].accessToken })
+    expect(body.total).to.equal(1)
+    expect(body.data[0].uuid).to.equal(uuid)
   })
 
   after(async function () {

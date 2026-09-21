@@ -14,7 +14,15 @@ import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@ser
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylistFullSummary } from '@server/types/models/index.js'
-import { HttpStatusCode, ResultList, VideoPlaylist, VideoPlaylistsSearchQueryAfterSanitize } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  ResultList,
+  UserRight,
+  VideoPlaylist,
+  VideoPlaylistPrivacy,
+  VideoPlaylistsSearchQueryAfterSanitize
+} from '@peertube/peertube-models'
+import { authenticateOrFail } from '../../../middlewares/auth.js'
 import {
   asyncMiddleware,
   openapiOperationDoc,
@@ -25,13 +33,15 @@ import {
   videoPlaylistsListSearchValidator,
   videoPlaylistsSearchSortValidator
 } from '../../../middlewares/index.js'
+import { checkCanManagePlaylist } from '../../../middlewares/validators/videos/video-playlists.js'
 import { searchLocalUrl } from './shared/index.js'
 
 const logger = createLogger()
 
 const searchPlaylistsRouter = express.Router()
 
-searchPlaylistsRouter.get('/video-playlists',
+searchPlaylistsRouter.get(
+  '/video-playlists',
   openapiOperationDoc({ operationId: 'searchPlaylists' }),
   paginationValidator,
   setDefaultPagination,
@@ -52,7 +62,7 @@ function searchVideoPlaylists (req: express.Request, res: express.Response) {
   const query = pickSearchPlaylistQuery(req.query)
   const search = query.search
 
-  if (isURISearch(search)) return searchVideoPlaylistsURI(search, res)
+  if (isURISearch(search)) return searchVideoPlaylistsURI(search, req, res)
 
   if (isSearchIndexSearch(query)) {
     return searchVideoPlaylistsIndex(query, res)
@@ -103,7 +113,7 @@ async function searchVideoPlaylistsDB (query: VideoPlaylistsSearchQueryAfterSani
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function searchVideoPlaylistsURI (search: string, res: express.Response) {
+async function searchVideoPlaylistsURI (search: string, req: express.Request, res: express.Response) {
   let videoPlaylist: MVideoPlaylistFullSummary
 
   if (isUserAbleToSearchRemoteURI(res)) {
@@ -118,6 +128,23 @@ async function searchVideoPlaylistsURI (search: string, res: express.Response) {
     videoPlaylist = await searchLocalUrl(sanitizeLocalUrl(search), url => VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(url))
   }
 
+  // The resolved playlist may still be private
+  if (videoPlaylist?.privacy === VideoPlaylistPrivacy.PRIVATE) {
+    if (!await authenticateOrFail({ req, res })) return
+
+    if (
+      !await checkCanManagePlaylist({
+        user: res.locals.oauth.token.User,
+        videoPlaylist,
+        right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
+        req,
+        res
+      })
+    ) {
+      return
+    }
+  }
+
   return res.json({
     total: videoPlaylist ? 1 : 0,
     data: videoPlaylist ? [ videoPlaylist.toFormattedJSON() ] : []
@@ -129,5 +156,5 @@ function sanitizeLocalUrl (url: string) {
 
   // Handle alternative channel URLs
   return url.replace(new RegExp('^' + WEBSERVER.URL + '/videos/watch/playlist/'), WEBSERVER.URL + '/video-playlists/')
-            .replace(new RegExp('^' + WEBSERVER.URL + '/w/p/'), WEBSERVER.URL + '/video-playlists/')
+    .replace(new RegExp('^' + WEBSERVER.URL + '/w/p/'), WEBSERVER.URL + '/video-playlists/')
 }
