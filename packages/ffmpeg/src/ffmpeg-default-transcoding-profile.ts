@@ -147,6 +147,8 @@ export async function canDoQuickVideoTranscode (path: string, maxFPS: number, pr
   if (videoStream['pix_fmt'] !== 'yuv420p') return false
   if (fps < 2 || fps > maxFPS) return false
   if (bitRate > getMaxTheoreticalBitrate({ ...resolutionData, fps })) return false
+  // Force a re-encode when the input has a Display Matrix rotation to apply into the pixels
+  if (resolutionData.hasRotation) return false
 
   return true
 }

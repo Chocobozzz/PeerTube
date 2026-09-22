@@ -149,7 +149,8 @@ export async function getVideoStreamDimensionsInfo (path: string, existingProbe?
     height: videoStream.height,
     ratio: buildAspectRatio({ width: videoStream.width, height: videoStream.height }),
     resolution: Math.min(videoStream.height, videoStream.width),
-    isPortraitMode: videoStream.height > videoStream.width
+    isPortraitMode: videoStream.height > videoStream.width,
+    hasRotation: rotation !== undefined && rotation !== '0'
   }
 }
 
