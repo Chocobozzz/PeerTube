@@ -91,7 +91,7 @@ describe('Test ActivityPub video channels search', function () {
     ]
 
     for (const search of searches) {
-      const body = await command.searchChannels({ search })
+      const body = await command.searchChannels({ search, token: servers[0].accessToken })
 
       expect(body.total).to.equal(1)
       expect(body.data).to.be.an('array')

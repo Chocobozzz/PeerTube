@@ -200,7 +200,6 @@
     "ua-parser-js": "^2.0.10",
     "uuid": "^14.0.2",
     "validator": "^13.15.35",
-    "webfinger.js": "3.0.4",
     "winston": "3.19.0",
     "ws": "^8.21.3",
     "yauzl": "^3.4.0"

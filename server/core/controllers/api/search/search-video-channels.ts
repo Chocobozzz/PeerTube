@@ -117,7 +117,12 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
   let videoChannel: MChannelAccountDefault
   let uri = search
 
+  const canSearchRemoteURI = isUserAbleToSearchRemoteURI(res)
+
   if (!isURISearch(search)) {
+    // Resolving a "name@host" handle requires an outbound webfinger lookup
+    if (!canSearchRemoteURI) return res.json({ total: 0, data: [] })
+
     try {
       uri = await loadActorUrlOrGetFromWebfinger(search)
     } catch (err) {
@@ -127,7 +132,7 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
     }
   }
 
-  if (isUserAbleToSearchRemoteURI(res)) {
+  if (canSearchRemoteURI) {
     try {
       const latestUri = await findLatestAPRedirection(uri)
 

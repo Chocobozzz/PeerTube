@@ -374,7 +374,11 @@ async function processYoutubeSubtitles (options: {
 }
 
 async function hasUnicastURLsOnly (youtubeDLInfo: YoutubeDLInfo) {
-  const hosts = youtubeDLInfo.urls.map(u => new URL(u).hostname)
+  const urls = youtubeDLInfo.webpageUrl
+    ? [ ...youtubeDLInfo.urls, youtubeDLInfo.webpageUrl ]
+    : youtubeDLInfo.urls
+
+  const hosts = urls.map(u => new URL(u).hostname)
   const uniqHosts = new Set(hosts)
 
   for (const h of uniqHosts) {

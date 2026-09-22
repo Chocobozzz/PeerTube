@@ -347,9 +347,6 @@ importers:
       validator:
         specifier: ^13.15.35
         version: 13.15.35
-      webfinger.js:
-        specifier: 3.0.4
-        version: 3.0.4
       winston:
         specifier: 3.19.0
         version: 3.19.0
@@ -11254,9 +11251,6 @@ packages:
     peerDependenciesMeta:
       puppeteer-core:
         optional: true
-
-  webfinger.js@3.0.4:
-    resolution: {integrity: sha512-5c15N1n4qCm/jGJjUt32mBdPVlSugLbAztIDNBpuDfukGz2E9NhmXPfLikayn2p3kcgEZsI/UOdOwVpxOr8qJA==}
 
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -23132,8 +23126,6 @@ snapshots:
       - react-native-b4a
       - supports-color
       - utf-8-validate
-
-  webfinger.js@3.0.4: {}
 
   webidl-conversions@7.0.0: {}
 
