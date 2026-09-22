@@ -84,10 +84,15 @@ services:
     restart: "always"
 
   postgres:
+    # Bumping the major version on an existing data directory requires a proper PostgreSQL upgrade
+    # See https://docs.joinpeertube.org/install/docker#upgrade-postgresql-container
     image: postgres:17-alpine
     env_file:
       - .env
     volumes:
+      # With PostgreSQL >= 18, witch the mount target to /var/lib/postgresql instead
+      # (data dir is nested under a subfolder, for example /var/lib/postgresql/18/docker)
+      # See https://hub.docker.com/_/postgres for more information
       - ./docker-volume/db:/var/lib/postgresql/data
     restart: "always"
 
