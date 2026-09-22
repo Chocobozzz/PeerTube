@@ -228,6 +228,36 @@ describe('Test ActivityPub security', function () {
       expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
     })
 
+    it('Should reject a Collection with too many activities', async function () {
+      const items = []
+
+      for (let i = 0; i <= ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST; i++) {
+        items.push({
+          id: `${servers[1].url}/activities/${i}`,
+          type: 'Like',
+          actor: servers[1].url + '/accounts/peertube',
+          object: servers[1].url + '/accounts/peertube'
+        })
+      }
+
+      const body = await activityPubContextify({
+        type: 'OrderedCollection',
+        // Matches the HTTP-signature actor so the forwarded (JSON-LD signature) codepath is not triggered
+        actor: servers[1].url + '/accounts/peertube',
+        totalItems: items.length,
+        orderedItems: items
+      }, 'Collection', fakeFilter())
+
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
+
+      try {
+        await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
+        expect(true, 'Did not throw').to.be.false
+      } catch (err) {
+        expect(err.statusCode).to.equal(HttpStatusCode.BAD_REQUEST_400)
+      }
+    })
+
     it('Should refresh the actor keys', async function () {
       this.timeout(20000)
 
@@ -485,6 +515,28 @@ describe('Test ActivityPub security', function () {
         const { fail } = await postActivity(activity)
         expect(fail).to.be.false
       }
+    })
+
+    it('Should fail with a body bigger than the JSON-LD signature check limit', async function () {
+      const activity: any = {
+        '@context': 'https://www.w3.org/ns/activitystreams',
+        'id': 'https://alice.example/notes/43/activity',
+        'type': 'Create',
+        'actor': servers[2].url + '/accounts/peertube',
+        'cc': 'https://www.w3.org/ns/activitystreams#Public',
+        'object': {
+          id: 'https://alice.example/notes/43',
+          type: 'Note',
+          attributedTo: 'https://alice.example/actors/1',
+          cc: 'https://www.w3.org/ns/activitystreams#Public',
+          // Stay under the express.json() 500kb body limit, but above the JSON-LD signature check limit
+          content: 'a'.repeat(300 * 1024)
+        }
+      }
+
+      const { fail, statusCode } = await postActivity(activity)
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should refresh the actor keys', async function () {

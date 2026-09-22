@@ -1,5 +1,6 @@
 import { Activity, ActivityType } from '@peertube/peertube-models'
 import { StatsManager } from '@server/lib/stat-manager.js'
+import { ACTIVITY_PUB } from '../../../initializers/constants.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorDefault, MActorSignature } from '../../../types/models/index.js'
@@ -51,6 +52,12 @@ export async function processActivities (
   } = {}
 ) {
   const { outboxUrl, signatureActor, inboxActor, fromFetch = false } = options
+
+  if (activities.length > ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST) {
+    logger.warn('Truncating %d activities to process to %d.', activities.length, ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST)
+
+    activities = activities.slice(0, ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST)
+  }
 
   const actorsCache: { [ url: string ]: MActorSignature } = {}
 

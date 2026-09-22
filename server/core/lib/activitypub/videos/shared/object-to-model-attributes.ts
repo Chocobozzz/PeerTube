@@ -7,6 +7,7 @@ import {
   ActivitySensitiveTagObject,
   ActivityTagObject,
   ActivityUrlObject,
+  ActivityVideoFileMetadataUrlObject,
   ActivityVideoUrlObject,
   NSFWFlag,
   stringToNSFWFlag,
@@ -61,16 +62,14 @@ export function getFileAttributesFromUrl (
   const fileUrlObjects = urls.filter(u => isAPVideoUrlObject(u))
   if (fileUrlObjects.length === 0) return []
 
+  const metadataIndex = buildMetadataIndex(urls)
+  const magnetIndex = buildMagnetIndex(urls)
+
   const result: { file: FilteredModelAttributes<VideoFileModel>, infoHash: string }[] = []
 
   for (const fileUrlObject of fileUrlObjects) {
     // Fetch associated metadata url, if any
-    const metadata = urls.filter(isAPVideoFileUrlMetadataObject)
-      .find(u => {
-        return u.height === fileUrlObject.height &&
-          u.fps === fileUrlObject.fps &&
-          u.rel.includes(fileUrlObject.mediaType)
-      })
+    const metadata = findMetadata(metadataIndex, fileUrlObject)
 
     const extname = getExtFromMimetype(MIMETYPES.VIDEO.MIMETYPE_EXT, fileUrlObject.mediaType)
     const resolution = Math.min(fileUrlObject.height ?? Infinity, fileUrlObject.width ?? Infinity)
@@ -81,7 +80,7 @@ export function getFileAttributesFromUrl (
 
     const fileUrl = fileUrlObject.href
     const existingFile = oldFiles.find(f => f.fileUrl === fileUrl)
-    const { torrentFilename, infoHash, torrentUrl } = getTorrentRelatedInfo({ videoOrPlaylist, urls, fileUrlObject, existingFile })
+    const { torrentFilename, infoHash, torrentUrl } = getTorrentRelatedInfo({ videoOrPlaylist, magnetIndex, fileUrlObject, existingFile })
 
     const attribute: Partial<AttributesOnly<MVideoFile>> = {
       extname,
@@ -340,6 +339,45 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
 // Private
 // ---------------------------------------------------------------------------
 
+// Pre-built indexes so getFileAttributesFromUrl stays O(n) in the number of attacker-controlled url entries
+function buildMetadataIndex (urls: (ActivityTagObject | ActivityUrlObject)[]) {
+  const index = new Map<string, ActivityVideoFileMetadataUrlObject[]>()
+
+  for (const url of urls) {
+    if (!isAPVideoFileUrlMetadataObject(url)) continue
+
+    const key = `${url.height}-${url.fps}`
+
+    const existing = index.get(key)
+    if (existing) existing.push(url)
+    else index.set(key, [ url ])
+  }
+
+  return index
+}
+
+function findMetadata (
+  metadataIndex: Map<string, ActivityVideoFileMetadataUrlObject[]>,
+  fileUrlObject: ActivityVideoUrlObject
+) {
+  const candidates = metadataIndex.get(`${fileUrlObject.height}-${fileUrlObject.fps}`)
+  if (!candidates) return undefined
+
+  return candidates.find(u => u.rel.includes(fileUrlObject.mediaType))
+}
+
+function buildMagnetIndex (urls: (ActivityTagObject | ActivityUrlObject)[]) {
+  const index = new Map<number, ActivityMagnetUrlObject>()
+
+  for (const url of urls) {
+    if (!isAPMagnetUrlObject(url)) continue
+
+    if (!index.has(url.height)) index.set(url.height, url)
+  }
+
+  return index
+}
+
 function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
   return !!MIMETYPES.AP_VIDEO.MIMETYPE_EXT[url.mediaType]
 }
@@ -366,15 +404,14 @@ function isAPSensitiveTagObject (tag: any): tag is ActivitySensitiveTagObject {
 
 function getTorrentRelatedInfo (options: {
   videoOrPlaylist: MVideo | MStreamingPlaylistVideo
-  urls: (ActivityTagObject | ActivityUrlObject)[]
+  magnetIndex: Map<number, ActivityMagnetUrlObject>
   fileUrlObject: ActivityVideoUrlObject
   existingFile?: MVideoFile
 }) {
-  const { urls, fileUrlObject, videoOrPlaylist, existingFile } = options
+  const { magnetIndex, fileUrlObject, videoOrPlaylist, existingFile } = options
 
   // Fetch associated magnet uri
-  const magnet = urls.filter(isAPMagnetUrlObject)
-    .find(u => u.height === fileUrlObject.height)
+  const magnet = magnetIndex.get(fileUrlObject.height)
 
   if (!magnet) {
     return {

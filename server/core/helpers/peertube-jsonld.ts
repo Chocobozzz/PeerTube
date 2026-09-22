@@ -2,6 +2,7 @@ import { omit } from '@peertube/peertube-core-utils'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { createSign, createVerify } from 'crypto'
 import cloneDeep from 'lodash-es/cloneDeep.js'
+import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { MActor } from '../types/models/index.js'
 import { getAllContext } from './activity-pub-utils.js'
 import { jsonld } from './custom-jsonld-signature.js'
@@ -13,32 +14,58 @@ const logger = createLogger()
 
 type ExpressRequest = { body: any }
 
-export function compactJSONLDAndCheckSignature (fromActor: MActor, req: ExpressRequest): Promise<boolean> {
+export async function compactJSONLDAndCheckSignature (fromActor: MActor, req: ExpressRequest): Promise<boolean> {
   if (req.body.signature.type === 'RsaSignature2017') {
+    // URDNA2015 canonicalization of the whole body is ~O(n²) in the number of blank nodes
+    // It runs before the signature is verified, so bound the input size before canonicalizing
+    const bodySize = Buffer.byteLength(JSON.stringify(req.body))
+    if (bodySize > ACTIVITY_PUB.CHECK_JSON_LD_SIGNATURE.MAX_BODY_SIZE) {
+      logger.warn(
+        'Refusing to check JSON-LD signature of a %d bytes body sent by %s (max: %d).',
+        bodySize,
+        fromActor.url,
+        ACTIVITY_PUB.CHECK_JSON_LD_SIGNATURE.MAX_BODY_SIZE
+      )
+
+      return false
+    }
+
     return compactJSONLDAndCheckRSA2017Signature(fromActor, req)
   }
 
   logger.warn('Unknown JSON LD signature %s.', req.body.signature.type, req.body)
 
-  return Promise.resolve(false)
+  return false
 }
 
 // Backward compatibility with "other" implementations
 export async function compactJSONLDAndCheckRSA2017Signature (fromActor: MActor, req: ExpressRequest) {
-  const compacted = await jsonldCompact(omit(req.body, [ 'signature' ]))
+  const { verified, body } = await checkRSA2017Signature(fromActor.publicKey, req.body)
 
-  fixCompacted(req.body, compacted)
+  req.body = body
 
-  req.body = { ...compacted, signature: req.body.signature }
+  return verified
+}
+
+// Core signature verification logic (canonicalization + RSA check)
+async function checkRSA2017Signature (publicKey: string, originalBody: any): Promise<{
+  verified: boolean
+  body: any
+}> {
+  const compacted = await jsonldCompact(omit(originalBody, [ 'signature' ]))
+
+  fixCompacted(originalBody, compacted)
+
+  const body = { ...compacted, signature: originalBody.signature }
 
   if (containInvalidJsonldKeys(compacted)) {
     logger.warn('JSON-LD @included, @graph or @reverse are not supported')
-    return false
+    return { verified: false, body }
   }
 
   const [ documentHash, optionsHash ] = await Promise.all([
     hashObject(compacted),
-    createSignatureHash(req.body.signature)
+    createSignatureHash(body.signature)
   ])
 
   const toVerify = optionsHash + documentHash
@@ -46,7 +73,9 @@ export async function compactJSONLDAndCheckRSA2017Signature (fromActor: MActor, 
   const verify = createVerify('RSA-SHA256')
   verify.update(toVerify, 'utf8')
 
-  return verify.verify(fromActor.publicKey, req.body.signature.signatureValue, 'base64')
+  const verified = verify.verify(publicKey, body.signature.signatureValue, 'base64')
+
+  return { verified, body }
 }
 
 function fixCompacted (original: any, compacted: any, depth = 1) {
@@ -130,8 +159,14 @@ function jsonldCompact (obj: any) {
 function jsonldNormalize (obj: any) {
   return (jsonld as any).promises.normalize(obj, {
     safe: true,
-    algorithm: 'URDNA2015',
-    format: 'application/n-quads'
+    format: 'application/n-quads',
+    canonizeOptions: {
+      algorithm: 'URDNA2015',
+      // Explicitly bound the work rdf-canonize does on indistinguishable blank nodes
+      maxWorkFactor: 1,
+      // Also bound canonicalization by wall-clock time, in case maxWorkFactor is not enough
+      signal: AbortSignal.timeout(ACTIVITY_PUB.CHECK_JSON_LD_SIGNATURE.CANONIZE_TIMEOUT)
+    }
   })
 }
 
