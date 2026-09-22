@@ -10,7 +10,8 @@ import {
   VideoPlaylistElementUpdate,
   VideoPlaylistPrivacy,
   VideoPlaylistReorder,
-  VideoPlaylistType
+  VideoPlaylistType,
+  VideoPrivacy
 } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -45,6 +46,7 @@ describe('Test video playlists API validator', function () {
 
   let watchLaterPlaylistId: number
   let videoId: number
+  let privateVideoId: number
   let elementId: number
 
   let command: PlaylistsCommand
@@ -70,6 +72,7 @@ describe('Test video playlists API validator', function () {
     moderatorToken = await server.users.generateUserAndToken('moderator', UserRole.MODERATOR)
 
     videoId = (await server.videos.quickUpload({ name: 'video 1' })).id
+    privateVideoId = (await server.videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })).id
 
     command = server.playlists
 
@@ -527,6 +530,14 @@ describe('Test video playlists API validator', function () {
 
     it('Should fail with an unknown or incorrect video id', async function () {
       const params = getBase({ videoId: 42 }, { expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await command.addElement(params)
+    })
+
+    it('Should fail to add a video the user cannot see to their own playlist', async function () {
+      const params = getBase(
+        { videoId: privateVideoId },
+        { playlistId: userPlaylist.id, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
+      )
       await command.addElement(params)
     })
 

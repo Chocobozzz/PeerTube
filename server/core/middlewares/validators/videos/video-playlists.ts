@@ -45,6 +45,7 @@ import {
   areValidationErrors,
   checkCanManageAccount,
   checkCanManageChannel,
+  checkCanSeeVideo,
   doesChannelIdExist,
   doesVideoExist,
   doesVideoPlaylistExist,
@@ -286,6 +287,8 @@ export const videoPlaylistsAddVideoValidator = [
     ) {
       return
     }
+
+    if (!await checkCanSeeVideo({ req, res, video: res.locals.videoThumbnails, paramId: req.body.videoId })) return
 
     return next()
   }

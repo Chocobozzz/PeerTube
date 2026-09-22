@@ -4,6 +4,7 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import {
   ActivityPubActor,
   HttpStatusCode,
+  PlaylistElementObject,
   VideoComment,
   VideoCreateResult,
   VideoObject,
@@ -34,6 +35,7 @@ describe('Test ActivityPub', function () {
 
   let playlist: VideoPlaylistCreateResult
   let privatePlaylist: VideoPlaylistCreateResult
+  let privateVideoPlaylistElementId: number
 
   let comment: VideoComment
 
@@ -162,6 +164,12 @@ describe('Test ActivityPub', function () {
           videoChannelId: servers[0].store.channel.id
         }
       })
+
+      const { id } = await servers[0].playlists.addElement({
+        playlistId: playlist.id,
+        attributes: { videoId: privateVideo.id }
+      })
+      privateVideoPlaylistElementId = id
     }
 
     comment = await servers[0].comments.createThread({ text: 'thread', videoId: video.id })
@@ -241,6 +249,15 @@ describe('Test ActivityPub', function () {
   it('Should not return private video or private playlist', async function () {
     await makeActivityPubGetRequest(servers[0].url, '/videos/watch/' + privateVideo.uuid, HttpStatusCode.UNAUTHORIZED_401)
     await makeActivityPubGetRequest(servers[0].url, '/video-playlists/' + privatePlaylist.uuid, HttpStatusCode.UNAUTHORIZED_401)
+  })
+
+  it('Should not leak the URL of a private video that is a member of a public playlist', async function () {
+    const path = '/video-playlists/' + playlist.uuid + '/videos/' + privateVideoPlaylistElementId
+
+    const res = await makeActivityPubGetRequest(servers[0].url, path)
+    const object: PlaylistElementObject = res.body
+
+    expect(object.url).to.be.null
   })
 
   after(async function () {
