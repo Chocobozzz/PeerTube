@@ -42,7 +42,7 @@ import {
   MVideoUUID
 } from '@server/types/models/index.js'
 import { decode as magnetUriDecode } from 'magnet-uri'
-import { basename, extname } from 'path'
+import { basename } from 'path'
 import { getDurationFromActivityStream } from '../../activity.js'
 
 export function getTagsFromObject (videoObject: VideoObject) {
@@ -252,9 +252,11 @@ export function getStoryboardAttributeFromObject (video: MVideoId, videoObject: 
   if (!storyboard) return undefined
 
   const url = arrayify(storyboard.url).find(u => MIMETYPES.IMAGE.MIMETYPE_EXT[u.mediaType])
+  if (!url) return undefined
 
   return {
-    filename: generateImageFilename(extname(url.href)),
+    // Derive the extension from the validated mediaType, not the remote URL
+    filename: generateImageFilename(getExtFromMimetype(MIMETYPES.IMAGE.MIMETYPE_EXT, url.mediaType)),
     totalHeight: url.height,
     totalWidth: url.width,
     spriteHeight: url.tileHeight,
