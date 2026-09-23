@@ -401,7 +401,7 @@
       </trans-unit>
       <trans-unit id="5910794384138018825" datatype="html" xml:space="preserve">
         <source>A new <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>account abuse<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been created on account <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/></source>
-        <target state="translated">Se ha creado un nuevo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuso de cuenta<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> en su cuenta<x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/></target>
+        <target state="translated">Un nuevo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuso de cuenta<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ha sido creado para la cuenta <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">37</context>
@@ -2649,9 +2649,9 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5178138591256693636" datatype="html">
+      <trans-unit id="5178138591256693636" datatype="html" xml:space="preserve">
         <source>videos</source>
-        <target state="translated">videos</target>
+        <target state="translated">vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">21</context>
