@@ -51,6 +51,7 @@ ownershipVideoRouter.get(
   authenticate,
   paginationValidator,
   setDefaultPagination,
+  changeOwnershipSortValidator,
   asyncRetryTransactionMiddleware(listAccountVideoOwnershipChanges)
 )
 

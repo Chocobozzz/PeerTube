@@ -2,6 +2,7 @@
 
 import { ChangeOwnershipState, HttpStatusCode, UserRole, VideoCreateResult } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 
 describe('Test video change ownership API validator', function () {
@@ -100,6 +101,12 @@ describe('Test video change ownership API validator', function () {
   })
 
   describe('List ownership change requests', function () {
+    it('Should fail with bad pagination/sort params', async function () {
+      await checkBadStartPagination(server.url, '/api/v1/videos/ownership', server.accessToken)
+      await checkBadCountPagination(server.url, '/api/v1/videos/ownership', server.accessToken)
+      await checkBadSort(server.url, '/api/v1/videos/ownership', server.accessToken)
+    })
+
     it('Should fail if not authenticated', async function () {
       await server.changeOwnership.listVideos({ token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
     })
@@ -111,6 +118,14 @@ describe('Test video change ownership API validator', function () {
   })
 
   describe('List video ownership changes', function () {
+    it('Should fail with bad pagination/sort params', async function () {
+      const path = '/api/v1/videos/' + rootVideo.uuid + '/ownership'
+
+      await checkBadStartPagination(server.url, path, server.accessToken)
+      await checkBadCountPagination(server.url, path, server.accessToken)
+      await checkBadSort(server.url, path, server.accessToken)
+    })
+
     it('Should fail if not authenticated', async function () {
       await server.changeOwnership.listOfVideo({
         videoId: rootVideo.id,

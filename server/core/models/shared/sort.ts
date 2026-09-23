@@ -113,7 +113,7 @@ export function getChannelSyncSort (value: string): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
   if (field.toLowerCase() === 'videochannel') {
     return [
-      [ literal('"VideoChannel.name"'), direction ]
+      [ 'VideoChannel.name', direction ]
     ]
   }
   return [ [ field, direction ] ]
@@ -146,7 +146,7 @@ export function buildSortDirectionAndField (value: string) {
 }
 
 export function throwOnInvalidSortColumnName (columnName: string) {
-  if (columnName.match(/^[a-zA-Z."]+$/) === null) {
+  if (columnName.match(/^[a-zA-Z.]+$/) === null) {
     throw new Error('Invalid sort column ' + columnName)
   }
 }
