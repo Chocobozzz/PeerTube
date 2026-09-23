@@ -42,10 +42,10 @@ export class PlayerHTML {
     errorBlock.style.display = 'flex'
 
     const errorTitle = document.getElementById('error-title')
-    errorTitle.innerHTML = peertubeTranslate('Sorry', translations)
+    errorTitle.textContent = peertubeTranslate('Sorry', translations)
 
     const errorText = document.getElementById('error-content')
-    errorText.innerHTML = translatedText
+    errorText.textContent = translatedText
 
     document.getElementById('error-details').style.display = 'none'
 

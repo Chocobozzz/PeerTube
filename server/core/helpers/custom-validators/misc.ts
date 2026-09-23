@@ -120,7 +120,7 @@ export function isFileValid (options: {
 }
 
 export function checkMimetypeRegex (fileMimeType: string, mimeTypeRegex: string) {
-  return new RegExp(`^${mimeTypeRegex}$`, 'i').test(fileMimeType)
+  return new RegExp(`^(?:${mimeTypeRegex})$`, 'i').test(fileMimeType)
 }
 
 // ---------------------------------------------------------------------------
