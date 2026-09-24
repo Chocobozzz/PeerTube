@@ -1,4 +1,5 @@
 import { FileStorage, type FileStorageType, type UploadImageType_Type } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MActorId, MUploadImage } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
@@ -86,12 +87,15 @@ export class UploadImageModel extends SequelizeModel<UploadImageModel> {
   declare Actor: Awaited<ActorModel>
 
   @AfterDestroy
-  static removeFile (instance: UploadImageModel) {
-    logger.info('Removing upload image file %s.', instance.filename)
+  static removeFile (instance: UploadImageModel, options: { transaction?: Transaction }) {
+    // Keep the file if the transaction is rolled back
+    afterCommitIfTransaction(options.transaction, () => {
+      logger.info('Removing upload image file %s.', instance.filename)
 
-    // Don't block the transaction
-    instance.removeImage()
-      .catch(err => logger.error('Cannot remove upload image file %s.', instance.filename, { err }))
+      // Don't block the caller
+      instance.removeImage()
+        .catch(err => logger.error('Cannot remove upload image file %s.', instance.filename, { err }))
+    })
   }
 
   static listByActor (actor: MActorId, transaction: Transaction) {

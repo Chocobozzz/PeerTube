@@ -9,7 +9,13 @@ import {
 import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { Redis } from '@server/lib/redis/index.js'
-import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
+import {
+  buildVideoUploadXFile,
+  makeUploadXFileAvailableForHookIfNeeded,
+  safeUploadXCleanup,
+  stageResumableUploadImagesIfNeeded,
+  videoUploadx
+} from '@server/lib/uploadx.js'
 import { ChangeOwnershipModel } from '@server/models/video/change-ownership.js'
 import { ExpressPromiseHandler } from '@server/types/express-handler.js'
 import { MVideoFull } from '@server/types/models/index.js'
@@ -55,6 +61,7 @@ import { getVideoWithAttributes } from '../../../helpers/video.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants.js'
 import { VideoModel } from '../../../models/video/video.js'
+import { checkUploadSessionCanStart } from '../resumable-upload.js'
 import {
   areValidationErrors,
   checkCanAccessVideoStaticFiles,
@@ -104,13 +111,13 @@ export const videosAddLegacyValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 
-    const videoFile: express.VideoLegacyUploadFile = req.files['videofile'][0]
+    const uploadFile: express.VideoLegacyUploadFile = req.files['videofile'][0]
 
     if (
-      !await commonVideoChecks({ req, res, videoFileSize: videoFile.size, files: req.files }) ||
+      !await commonVideoChecks({ req, res, videoFileSize: uploadFile.size, files: req.files }) ||
       !isValidPasswordProtectedPrivacy(req, res) ||
-      !await addDurationToVideoFileIfNeeded({ videoFile, res, middlewareName: 'videosAddLegacyValidator' }) ||
-      !await isVideoFileAccepted({ req, res, videoBody: req.body, videoFile, hook: 'filter:api.video.upload.accept.result' })
+      !await addDurationToVideoFileIfNeeded({ uploadFile, res, middlewareName: 'videosAddLegacyValidator' }) ||
+      !await isVideoFileAccepted({ req, res, videoBody: req.body, uploadFile, hook: 'filter:api.video.upload.accept.result' })
     ) {
       return cleanUpReqFiles(req)
     }
@@ -124,27 +131,15 @@ export const videosAddLegacyValidator = [
  */
 export const videosAddResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const file = buildUploadXFile(req.body as express.CustomUploadXFile<express.UploadNewVideoXFileMetadata>)
+    if (!await checkUploadSessionCanStart(req, res)) return
+
+    const file = await buildVideoUploadXFile(req.body as express.CustomUploadXFile<express.UploadNewVideoXFileMetadata>)
     const cleanup = () => {
-      safeUploadXCleanup(file)
+      safeUploadXCleanup(file, videoUploadx)
 
       Redis.Instance.deleteUploadSession(req.query.upload_id)
         .catch(err => logger.error('Cannot delete upload session', { err }))
     }
-
-    const uploadId = req.query.upload_id
-    const sessionExists = await Redis.Instance.doesUploadSessionExist(uploadId)
-
-    if (sessionExists) {
-      res.setHeader('Retry-After', 300) // ask to retry after 5 min, knowing the upload_id is kept for up to 15 min after completion
-
-      return res.fail({
-        status: HttpStatusCode.SERVICE_UNAVAILABLE_503,
-        message: req.t('The upload is already being processed')
-      })
-    }
-
-    await Redis.Instance.setUploadSession(uploadId)
 
     if (
       !await doesChannelIdExist({ id: file.metadata.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: false })
@@ -152,13 +147,20 @@ export const videosAddResumableValidator = [
       return cleanup()
     }
 
-    if (!await addDurationToVideoFileIfNeeded({ videoFile: file, res, middlewareName: 'videosAddResumableValidator' })) return cleanup()
+    try {
+      await makeUploadXFileAvailableForHookIfNeeded(file, 'filter:api.video.upload.accept.result')
+    } catch (err) {
+      cleanup()
+      throw err
+    }
+
+    if (!await addDurationToVideoFileIfNeeded({ uploadFile: file, res, middlewareName: 'videosAddResumableValidator' })) return cleanup()
 
     if (
       !await isVideoFileAccepted({
         req,
         res,
-        videoFile: file,
+        uploadFile: file,
         videoBody: file.metadata,
         hook: 'filter:api.video.upload.accept.result'
       })
@@ -201,12 +203,16 @@ export const videosAddResumableInitValidator = [
 
     if (!isValidPasswordProtectedPrivacy(req, res)) return cleanup()
 
-    // Multer required unsetting the Content-Type, now we can set it for node-uploadx
-    req.headers['content-type'] = 'application/json; charset=utf-8'
-
     // Place thumbnail/previewfile in metadata so that uploadx saves it in .META
-    if (req.files?.['previewfile']) req.body.previewfile = req.files['previewfile']
-    if (req.files?.['thumbnailfile']) req.body.thumbnailfile = req.files['thumbnailfile']
+    // The client cannot set them: they are not kept by resumable upload metadata middleware
+    try {
+      for (const field of [ 'previewfile', 'thumbnailfile' ] as const) {
+        if (req.files?.[field]) req.body[field] = await stageResumableUploadImagesIfNeeded(req.files[field])
+      }
+    } catch (err) {
+      cleanup()
+      throw err
+    }
 
     return next()
   }

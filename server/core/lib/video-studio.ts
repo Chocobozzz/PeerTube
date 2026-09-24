@@ -8,14 +8,14 @@ import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/vide
 import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MUser, MVideoFile, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
+import { MUser, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { JobQueue } from './job-queue/index.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
-import { buildNewFile, removeHLSPlaylist, removeWebVideoFile, storeNewWebVideoFile } from './video-file.js'
+import { buildNewFile, removeAllWebVideoFilesUnderLock, removeHLSPlaylistUnderLock, storeNewWebVideoFile } from './video-file.js'
 import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded } from './video-jobs.js'
 import { VideoPathManager } from './video-path-manager.js'
 
@@ -96,16 +96,18 @@ export async function onVideoStudioEnded (options: {
 }) {
   const { tasks, editionResultPath } = options
 
-  const newFile = await buildNewFile({ path: editionResultPath, mode: 'web-video' })
+  const newFile = await buildNewFile({ input: { path: editionResultPath }, mode: 'web-video' })
 
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
 
+  let video: MVideoFull
+
+  // Keep the lock until the new file is saved in database, so other jobs don't see (or update) the old files of the video
   try {
-    const video = await VideoModel.loadFull(options.video.uuid)
+    video = await VideoModel.loadFull(options.video.uuid)
     newFile.videoId = video.id
 
-    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({ video, videoFile: newFile, inputPath: editionResultPath })
-    videoFileMutexReleaser()
+    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({ video, videoFile: newFile, input: { path: editionResultPath } })
 
     let duration: number
 
@@ -113,7 +115,7 @@ export async function onVideoStudioEnded (options: {
       await safeCleanupStudioTMPFiles(tasks)
 
       const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newFile, localPath)
-      await removeAllFiles(video, newFile)
+      await removeAllFilesUnderLock(video)
 
       await sequelizeTypescript.transaction(async t => {
         newFile.torrentFilename = torrentFilename
@@ -134,36 +136,33 @@ export async function onVideoStudioEnded (options: {
     video.duration = duration
     video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
     await video.save()
-
-    await JobQueue.Instance.createSequentialJobFlow(
-      await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
-      buildNonDuplicatedFederateVideoJob({ video }),
-      {
-        type: 'transcoding-job-builder' as 'transcoding-job-builder',
-        payload: {
-          videoUUID: video.uuid,
-          optimizeJob: {}
-        }
-      }
-    )
-
-    await addRemoteStoryboardJobIfNeeded(video)
-    await regenerateTranscriptionTaskIfNeeded(video)
   } finally {
     videoFileMutexReleaser()
   }
+
+  await JobQueue.Instance.createSequentialJobFlow(
+    await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
+    buildNonDuplicatedFederateVideoJob({ video }),
+    {
+      type: 'transcoding-job-builder' as 'transcoding-job-builder',
+      payload: {
+        videoUUID: video.uuid,
+        optimizeJob: {}
+      }
+    }
+  )
+
+  await addRemoteStoryboardJobIfNeeded(video)
+  await regenerateTranscriptionTaskIfNeeded(video)
 }
 
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
 
-async function removeAllFiles (video: MVideoWithAllFiles, webVideoFileException: MVideoFile) {
-  await removeHLSPlaylist(video)
+async function removeAllFilesUnderLock (video: MVideoWithAllFiles) {
+  await removeHLSPlaylistUnderLock(video)
 
-  for (const file of video.VideoFiles) {
-    if (file.id === webVideoFileException.id) continue
-
-    await removeWebVideoFile(video, file.id)
-  }
+  // The new file is not saved in database yet, so it is not removed
+  await removeAllWebVideoFilesUnderLock(video)
 }

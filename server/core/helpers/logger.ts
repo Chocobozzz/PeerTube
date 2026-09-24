@@ -363,6 +363,7 @@ export type StaticLoggerTag =
   | 'schedulers'
   | 'share'
   | 'shared-files'
+  | 'staging'
   | 'stats'
   | 'storyboard'
   | 'studio'

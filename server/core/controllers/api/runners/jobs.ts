@@ -26,7 +26,7 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { cleanUpReqFiles, createReqFiles } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { generateRunnerJobToken } from '@server/helpers/token-generator.js'
-import { MIMETYPES } from '@server/initializers/constants.js'
+import { MIMETYPES, RUNNER_JOBS } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getRunnerJobHandlerClass, runnerJobCanBeCancelled, updateLastRunnerContact } from '@server/lib/runners/index.js'
 import {
@@ -430,7 +430,17 @@ async function postRunnerJobSuccess (req: express.Request, res: express.Response
   return logger.withContext([ runner.name, runnerJob.uuid, runnerJob.type ], async () => {
     const body: RunnerJobSuccessBody = req.body
 
+    // Built before set processing state so it's retried if this throws
     const resultPayload = jobSuccessPayloadBuilders[runnerJob.type](body.payload, req.files)
+
+    if (await RunnerJobModel.setAsCompletingIfProcessing(runnerJob) !== true) {
+      cleanUpReqFiles(req)
+
+      return res.fail({
+        status: HttpStatusCode.CONFLICT_409,
+        message: 'This job is not in processing state anymore'
+      })
+    }
 
     logger.info(
       'Remote runner %s is sending success result for job %s (%s)',
@@ -440,8 +450,27 @@ async function postRunnerJobSuccess (req: express.Request, res: express.Response
       { resultPayload }
     )
 
+    // Completing a big result exceed request timeout, so the runner would retry it
+    // Result files are on this process's disk: the completion must stay in this process. If it dies, the watchdog errors the job
     const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
-    await new RunnerJobHandler().complete({ runnerJob, resultPayload })
+    const completion = new RunnerJobHandler().complete({ runnerJob, resultPayload })
+      .then(() => true)
+      .catch(err => {
+        logger.error('Cannot complete runner job %s', runnerJob.uuid, { err })
+        return true
+      })
+
+    let timer: NodeJS.Timeout
+    const timeout = new Promise<boolean>(resolve => {
+      timer = setTimeout(() => resolve(false), RUNNER_JOBS.SUCCESS_REQUEST_MAX_COMPLETION_WAIT)
+    })
+
+    const completed = await Promise.race([ completion, timeout ])
+    clearTimeout(timer)
+
+    if (!completed) {
+      logger.info('Completion of runner job %s (%s) continues in the background', runnerJob.uuid, runnerJob.type)
+    }
 
     updateLastRunnerContact(req, runnerJob.Runner)
 

@@ -9,6 +9,7 @@ import {
   ObjectStorageSectionType
 } from '@server/lib/object-storage/config.js'
 import { BucketInfo, listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
+import { isStagingObject } from '@server/lib/object-storage/staging.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { UserImportModel } from '@server/models/user/user-import.js'
@@ -139,6 +140,9 @@ class ObjectStoragePruner {
       const keys = await listKeysOfPrefix('', config)
 
       await Bluebird.map(keys, async key => {
+        // The staging bucket can be shared with this section, and its files are not in the database
+        if (isStagingObject({ bucketName: config.BUCKET_NAME, fullKey: key })) return
+
         if (await existFun(key) !== true) {
           keysToDelete.push({ bucket: config.BUCKET_NAME, key })
         }

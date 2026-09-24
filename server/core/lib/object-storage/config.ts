@@ -1,4 +1,5 @@
 import { CONFIG } from '@server/initializers/config.js'
+import { OBJECT_STORAGE_STAGING } from '@server/initializers/constants.js'
 import { BucketInfo } from './shared/index.js'
 
 // Every kind of file that can live in object storage, named after its `object_storage.<name>` config key
@@ -78,6 +79,44 @@ export function isVideoFilesObjectStorageEnabled () {
     isObjectStorageEnabledFor('streaming_playlists') ||
     isObjectStorageEnabledFor('original_video_files') ||
     isObjectStorageEnabledFor('captions')
+}
+
+// ---------------------------------------------------------------------------
+
+export function isStagingEnabled () {
+  return CONFIG.OBJECT_STORAGE.STAGING.ENABLED === true
+}
+
+export function getStagingBucketInfo (): BucketInfo {
+  return {
+    BUCKET_NAME: CONFIG.OBJECT_STORAGE.STAGING.BUCKET_NAME,
+    PREFIX: CONFIG.OBJECT_STORAGE.STAGING.PREFIX,
+    BASE_URL: '' // Not public, so BASE_URL is not set
+  }
+}
+
+export function isVideoUploadObjectStorageEnabled () {
+  return isStagingEnabled() && isObjectStorageEnabledFor('web_videos')
+}
+
+export function isUserImportUploadObjectStorageEnabled () {
+  return isStagingEnabled()
+}
+
+export function isAllObjectStorageEnabled () {
+  return isStagingEnabled() && objectStorageSectionTypes.every(type => isObjectStorageEnabledFor(type))
+}
+
+// Each resumable upload chunk becomes an object storage multipart part, which can't be smaller than OBJECT_STORAGE_STAGING.MIN_PART_SIZE
+// Use the chunk size chosen by the admin if any
+// The actual min size of a chunk also depends on the file size
+export function getResumableUploadMinChunkSize (options: { objectStorage: boolean }) {
+  if (!options.objectStorage) return 0
+
+  const maxChunkSize = CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
+  if (!maxChunkSize) return OBJECT_STORAGE_STAGING.STREAM_PART_SIZE
+
+  return Math.max(OBJECT_STORAGE_STAGING.MIN_PART_SIZE, maxChunkSize)
 }
 
 // ---------------------------------------------------------------------------

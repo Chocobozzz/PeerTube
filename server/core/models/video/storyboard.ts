@@ -1,4 +1,5 @@
 import { FileStorage, type FileStorageType, Storyboard } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MStoryboard, MStoryboardVideo, MVideo } from '@server/types/models/index.js'
@@ -94,10 +95,13 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
   declare updatedAt: Date
 
   @AfterDestroy
-  static removeInstanceFile (instance: StoryboardModel) {
-    // Don't block the transaction
-    instance.removeFile()
-      .catch(err => logger.error('Cannot remove storyboard file %s.', instance.filename, { err }))
+  static removeInstanceFile (instance: StoryboardModel, options: { transaction?: Transaction }) {
+    // Keep the file if the transaction is rolled back
+    afterCommitIfTransaction(options.transaction, () => {
+      // Don't block the caller
+      instance.removeFile()
+        .catch(err => logger.error('Cannot remove storyboard file %s.', instance.filename, { err }))
+    })
   }
 
   static loadByVideo (videoId: number, transaction?: Transaction): Promise<MStoryboard> {

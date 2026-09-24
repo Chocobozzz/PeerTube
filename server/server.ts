@@ -78,7 +78,12 @@ try {
   process.exit(-1)
 }
 
-import { checkActivityPubUrls, checkConfig, checkFFmpegVersion } from './core/initializers/checker-after-init.js'
+import {
+  checkActivityPubUrls,
+  checkConfig,
+  checkFFmpegVersion,
+  checkStagingBucketConnectivity
+} from './core/initializers/checker-after-init.js'
 
 try {
   checkConfig()
@@ -169,6 +174,7 @@ import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
+import { initUploadxStorages } from '@server/lib/uploadx.js'
 import { ApplicationModel, clearServerActorCache } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
@@ -214,6 +220,7 @@ import { ManualMigrationScriptsScheduler } from './core/lib/schedulers/manual-mi
 import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
 import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
+import { RemoveDanglingStagingFilesScheduler } from './core/lib/schedulers/remove-dangling-staging-files-scheduler.js'
 import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
 import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
 import { RemoveOldUserLoginDevicesScheduler } from './core/lib/schedulers/remove-old-user-login-devices-scheduler.js'
@@ -405,6 +412,11 @@ async function startApplication () {
   checkFFmpegVersion()
     .catch(err => logger.error('Cannot check ffmpeg version', { err }))
 
+  checkStagingBucketConnectivity()
+    .catch(err => logger.error('Cannot check object storage staging bucket connectivity', { err }))
+
+  await initUploadxStorages()
+
   Redis.Instance.init()
 
   // The primary publishes its configuration here, a secondary subscribes to the changes
@@ -454,6 +466,7 @@ async function startApplication () {
     BlocklistSubscriptionsScheduler.Instance.enable()
     WatchedWordsSubscriptionsScheduler.Instance.enable()
     RemoveDanglingResumableUploadsScheduler.Instance.enable()
+    RemoveDanglingStagingFilesScheduler.Instance.enable()
     VideoChannelSyncLatestScheduler.Instance.enable()
     LocalVideoStatsBufferScheduler.Instance.enable()
     RunnerJobWatchDogScheduler.Instance.enable()

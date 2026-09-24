@@ -1,6 +1,13 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { getAudioStream, getVideoStream, getVideoStreamFPS, hasAudioStream, hasVideoStream } from '@peertube/peertube-ffmpeg'
+import {
+  ffprobePromise,
+  getAudioStream,
+  getVideoStream,
+  getVideoStreamFPS,
+  hasAudioStream,
+  hasVideoStream
+} from '@peertube/peertube-ffmpeg'
 import { VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -65,6 +72,11 @@ function updateConf (server: PeerTubeServer, vodProfile: string, liveProfile: st
   })
 }
 
+// The HLS playlists of the instance are not in the formats allowed for remote inputs
+function probeHLSPlaylist (playlistUrl: string) {
+  return ffprobePromise(playlistUrl, { disableRemoteFormatWhitelist: true })
+}
+
 describe('Test transcoding plugins', function () {
   let server: PeerTubeServer
 
@@ -102,7 +114,7 @@ describe('Test transcoding plugins', function () {
 
       for (const playlistName of [ '0.m3u8', '1.m3u8' ]) {
         const playlistUrl = `${server.url}/static/streaming-playlists/hls/${uuid}/${playlistName}`
-        const videoFPS = await getVideoStreamFPS(playlistUrl)
+        const videoFPS = await getVideoStreamFPS(playlistUrl, await probeHLSPlaylist(playlistUrl))
 
         if (!detectedAudio && videoFPS === 0) {
           detectedAudio = true
@@ -280,11 +292,13 @@ describe('Test transcoding plugins', function () {
       for (const playlistName of [ '0.m3u8', '1.m3u8' ]) {
         const playlistUrl = `${server.url}/static/streaming-playlists/hls/${liveVideoId}/${playlistName}`
 
-        if (await hasAudioStream(playlistUrl)) {
-          const audioProbe = await getAudioStream(playlistUrl)
+        const probe = await probeHLSPlaylist(playlistUrl)
+
+        if (await hasAudioStream(playlistUrl, probe)) {
+          const audioProbe = await getAudioStream(playlistUrl, probe)
           expect(audioProbe.audioStream.codec_name).to.equal('opus')
-        } else if (await hasVideoStream(playlistUrl)) {
-          const videoProbe = await getVideoStream(playlistUrl)
+        } else if (await hasVideoStream(playlistUrl, probe)) {
+          const videoProbe = await getVideoStream(playlistUrl, probe)
           expect(videoProbe.codec_name).to.equal('h264')
         }
       }

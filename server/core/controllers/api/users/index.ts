@@ -5,6 +5,7 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getResetPasswordUrl } from '@server/lib/client-urls.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { userImportsUploadx } from '@server/lib/uploadx.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { MUserAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
@@ -51,7 +52,7 @@ import { myVideoPlaylistsRouter } from './my-video-playlists.js'
 import { registrationsRouter } from './registrations.js'
 import { twoFactorRouter } from './two-factor.js'
 import { userExportsRouter } from './user-exports.js'
-import { userImportRouter } from './user-imports.js'
+import { registerUserImportResumableSharedRoutes, registerUserImportSharedRoutes, userImportRouter } from './user-imports.js'
 
 const logger = createLogger('api', 'users')
 
@@ -72,7 +73,6 @@ usersRouter.use(apiRateLimiter)
 usersRouter.use('/', emailVerificationRouter)
 // Not registered by secondaries
 usersRouter.use('/', userExportsRouter)
-// Not registered by secondaries
 usersRouter.use('/', userImportRouter)
 usersRouter.use('/', registrationsRouter)
 usersRouter.use('/', twoFactorRouter)
@@ -96,6 +96,14 @@ const secondaryUsersRouter = express.Router()
 secondaryUsersRouter.use(apiRateLimiter)
 
 secondaryUsersRouter.use('/', emailVerificationRouter)
+
+registerUserImportSharedRoutes(secondaryUsersRouter)
+
+// Chunks of a resumable upload can only be received by several processes if staging object storage is enabled
+if (userImportsUploadx.isObjectStorageEnabled()) {
+  registerUserImportResumableSharedRoutes(secondaryUsersRouter)
+}
+
 secondaryUsersRouter.use('/', registrationsRouter)
 secondaryUsersRouter.use('/', twoFactorRouter)
 secondaryUsersRouter.use('/', tokensRouter)

@@ -305,6 +305,14 @@ export class PluginManager implements ServerHook {
 
   // ###################### Hooks ######################
 
+  hasHook (hookName: ServerHookName) {
+    return this.hooks[hookName]?.length > 0
+  }
+
+  getPluginNamesOfHook (hookName: ServerHookName) {
+    return [ ...new Set((this.hooks[hookName] || []).map(h => h.npmName)) ]
+  }
+
   async runHook<T> (hookName: ServerHookName, result?: T, params?: any): Promise<T> {
     if (!this.hooks[hookName]) return Promise.resolve(result)
 

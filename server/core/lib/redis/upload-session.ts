@@ -1,12 +1,10 @@
 import { RESUMABLE_UPLOAD_SESSION_LIFETIME } from '../../initializers/constants.js'
-import { deleteKey, keyExists, setValue } from './redis-client.js'
+import { deleteKey, setValueIfNotExists } from './redis-client.js'
 
-export function setUploadSession (uploadId: string) {
-  return setValue('resumable-upload-' + uploadId, '', RESUMABLE_UPLOAD_SESSION_LIFETIME)
-}
-
-export function doesUploadSessionExist (uploadId: string) {
-  return keyExists('resumable-upload-' + uploadId)
+// Atomic, so only one request (of any process) can process a completed upload
+// Returns false if the upload is already being processed
+export function startUploadSession (uploadId: string) {
+  return setValueIfNotExists('resumable-upload-' + uploadId, '', RESUMABLE_UPLOAD_SESSION_LIFETIME)
 }
 
 export function deleteUploadSession (uploadId: string) {

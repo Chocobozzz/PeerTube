@@ -338,12 +338,8 @@ export class Redis {
 
   /* ************ Resumable uploads final responses ************ */
 
-  setUploadSession (uploadId: string) {
-    return uploadSession.setUploadSession(uploadId)
-  }
-
-  doesUploadSessionExist (uploadId: string) {
-    return uploadSession.doesUploadSessionExist(uploadId)
+  startUploadSession (uploadId: string) {
+    return uploadSession.startUploadSession(uploadId)
   }
 
   deleteUploadSession (uploadId: string) {

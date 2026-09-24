@@ -21,8 +21,7 @@ type SharedFilesSection = {
 
 export type SharedFilesSectionType = ObjectStorageSectionType
 
-const localVideoJoin = (table: string, alias = 'video') =>
-  `INNER JOIN "video" "${alias}" ON "${alias}"."id" = "${table}"."videoId" AND "${alias}"."remote" IS FALSE`
+const localVideoJoin = (table: string) => `INNER JOIN "video" "video" ON "video"."id" = "${table}"."videoId" AND "video"."remote" IS FALSE`
 
 export const sharedFilesSections: { [id in SharedFilesSectionType]: SharedFilesSection } = {
   avatars: {

@@ -467,9 +467,10 @@ describe('Object storage for images and torrents', function () {
       const logo = config.instance.logo.find(l => l.type === 'header-square')
 
       expectStartWith(logo.fileUrl, objectStorage.getMockUploadsBaseUrl())
-      await makeRawRequest({ url: logo.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+      const res = await makeRawRequest({ url: logo.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-      // PeerTube uploads SVG with `Content-Disposition: attachment` to prevent XSS, but s3-ninja mock drops the header
+      // PeerTube uploads SVG with `Content-Disposition: attachment` to prevent XSS
+      expect(res.headers['content-disposition']).to.equal('attachment')
     })
   })
 
@@ -790,6 +791,8 @@ describe('Object storage for images and torrents', function () {
     it('Should upload new thumbnails, storyboard and torrents after replacing the video source file', async function () {
       this.timeout(240000)
 
+      // Resumable uploads stream to object storage staging when it's enabled for web_videos (see uploadx.ts): S3
+      // rejects a multipart part smaller than 5MB, except the very last one, hence the bigger chunk size here
       await server.videos.replaceSourceFile({ videoId: videoUUID, fixture: 'video_short_360p.mp4' })
       await waitJobs(servers)
 

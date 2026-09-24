@@ -3,10 +3,12 @@ import { getFilenameWithoutExt, getFileSize, parseBytes } from '@peertube/peertu
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { unzip } from '@server/helpers/unzip.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { UserModel } from '@server/models/user/user.js'
 import { MUserDefault, MUserImport } from '@server/types/models/index.js'
-import { remove } from 'fs-extra/esm'
+import { pathExists, remove } from 'fs-extra/esm'
 import { dirname, join } from 'path'
+import { downloadStagingObject, removeStagingObject } from '../object-storage/staging.js'
 import { getFSUserImportFilePath } from '../paths.js'
 import { BlocklistImporter } from './importers/account-blocklist-importer.js'
 import { AccountImporter } from './importers/account-importer.js'
@@ -24,9 +26,14 @@ import { WatchedWordsListsImporter } from './importers/watched-words-lists-impor
 const logger = createLogger('user-import')
 
 export class UserImporter {
+  private inputZip: string
   private extractedDirectory: string
 
-  async import (importModel: MUserImport) {
+  async import (importModel: MUserImport, options: {
+    stagingKey?: string // The archive is in object storage staging
+  } = {}) {
+    const { stagingKey } = options
+
     const resultSummary: UserImportResultSummary = {
       stats: {
         blocklist: this.buildSummary(),
@@ -44,12 +51,27 @@ export class UserImporter {
       }
     }
 
+    // Set before anything can fail, so the archive is always removed
+    this.inputZip = stagingKey
+      ? join(CONFIG.STORAGE.TMP_DIR, importModel.filename)
+      : getFSUserImportFilePath(importModel)
+
     try {
       importModel.state = UserImportState.PROCESSING
       await saveInTransactionWithRetries(importModel)
 
-      const inputZip = getFSUserImportFilePath(importModel)
+      const inputZip = this.inputZip
+
       this.extractedDirectory = join(dirname(inputZip), getFilenameWithoutExt(inputZip))
+
+      if (stagingKey) {
+        await downloadStagingObject({ key: stagingKey, destination: inputZip })
+      } else if (!await pathExists(inputZip)) {
+        throw new Error(
+          `Archive ${inputZip} of user import ${importModel.id} does not exist on this host. ` +
+            'It was probably uploaded before object storage staging was enabled, and is processed by a secondary process of another host.'
+        )
+      }
 
       await unzip({
         source: inputZip,
@@ -95,12 +117,19 @@ export class UserImporter {
 
       throw err
     } finally {
-      try {
-        await remove(getFSUserImportFilePath(importModel))
-        await remove(this.extractedDirectory)
-      } catch (innerErr) {
-        logger.error('Cannot remove import archive and directory after failure', { err: innerErr })
-      }
+      await this.safeRemove(this.inputZip, () => remove(this.inputZip))
+
+      if (this.extractedDirectory) await this.safeRemove(this.extractedDirectory, () => remove(this.extractedDirectory))
+      if (stagingKey) await this.safeRemove(stagingKey, () => removeStagingObject(stagingKey))
+    }
+  }
+
+  // A failed removal must not prevent the other ones
+  private async safeRemove (name: string, remover: () => Promise<any>) {
+    try {
+      await remover()
+    } catch (err) {
+      logger.error(`Cannot remove ${name} after the user import`, { err })
     }
   }
 

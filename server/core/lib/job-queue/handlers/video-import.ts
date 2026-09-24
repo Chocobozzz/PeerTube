@@ -177,12 +177,12 @@ async function processFile (options: {
     const duration = await getVideoStreamDuration(tmpVideoPath, ffprobe)
 
     const containerChapters = await getChaptersFromContainer({
-      path: tmpVideoPath,
+      ffmpegInput: tmpVideoPath,
       maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max,
       ffprobe
     })
 
-    videoFile = await buildNewFile({ mode: 'web-video', ffprobe, path: tmpVideoPath })
+    videoFile = await buildNewFile({ mode: 'web-video', ffprobe, input: { path: tmpVideoPath } })
     videoFile.videoId = videoImport.videoId
 
     const hookName = type === 'youtube-dl'
@@ -217,7 +217,7 @@ async function processFile (options: {
       const { localPath, cleanup, rollback } = await storeNewWebVideoFile({
         video: videoImportWithFiles.Video,
         videoFile,
-        inputPath: tmpVideoPath
+        input: { path: tmpVideoPath }
       })
       // If a later step fails, remove the file we just stored instead of leaving it orphaned
       rollbackNewVideoFile = rollback
@@ -228,7 +228,7 @@ async function processFile (options: {
       let torrentResult: Awaited<ReturnType<typeof createTorrentForFileFromPath>>
 
       try {
-        thumbnails = await generateThumbnails({ videoImportWithFiles, videoFile, videoFilePath: localPath, ffprobe })
+        thumbnails = await generateThumbnails({ videoImportWithFiles, videoFile, videoFileInput: localPath, ffprobe })
 
         torrentResult = await createTorrentForFileFromPath(videoImportWithFiles.Video, videoFile, localPath)
       } finally {
@@ -307,14 +307,14 @@ async function refreshVideoImportFromDB (videoImport: MVideoImportDefault, video
 async function generateThumbnails (options: {
   videoImportWithFiles: MVideoImportDefaultFiles
   videoFile: MVideoFile
-  videoFilePath: string
+  videoFileInput: string
   ffprobe: FfprobeData
 }) {
-  const { ffprobe, videoFile, videoFilePath, videoImportWithFiles } = options
+  const { ffprobe, videoFile, videoFileInput, videoImportWithFiles } = options
 
   if (videoImportWithFiles.Video.Thumbnails.length !== 0) return []
 
-  return createLocalVideoThumbnailsFromVideo({ video: videoImportWithFiles.Video, videoFile, videoFilePath, ffprobe })
+  return createLocalVideoThumbnailsFromVideo({ video: videoImportWithFiles.Video, videoFile, fileInput: videoFileInput, ffprobe })
 }
 
 async function afterImportSuccess (options: {

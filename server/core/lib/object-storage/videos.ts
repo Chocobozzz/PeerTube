@@ -5,14 +5,16 @@ import { basename, join } from 'path'
 import { getHLSDirectory } from '../paths.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import {
+  copyObjectToCommonFile,
   getCommonFileReadStreamWithRes,
   makeCommonFileAvailableIn,
   removeCommonFileObjectStorage,
   storeCommonFile,
   updateCommonFileACL
 } from './common-files.js'
+import { getObjectStorageFileConfig, getStagingBucketInfo } from './config.js'
 import { getObjectStorageContentType } from './content-type.js'
-import { generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey } from './keys.js'
+import { generateCommonFileObjectStorageKey, generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey } from './keys.js'
 import {
   createObjectReadStream,
   listKeysOfPrefix,
@@ -86,6 +88,17 @@ export function storeWebVideoFile (
   )
 }
 
+export function copyStagingObjectToWebVideoFile (video: MVideo, file: MVideoFile, stagingKey: string) {
+  return copyObjectToCommonFile({
+    sourceKey: stagingKey,
+    sourceBucketInfo: getStagingBucketInfo(),
+    sourceSize: file.size,
+    type: 'web_videos',
+    filename: file.filename,
+    isPrivate: video.hasPrivateStaticPath()
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export function storeVideoCaption (inputPath: string, filename: string) {
@@ -96,6 +109,17 @@ export function storeVideoCaption (inputPath: string, filename: string) {
 
 export function storeOriginalVideoFile (inputPath: string, filename: string) {
   return storeCommonFile('original_video_files', inputPath, filename, { isPrivate: true })
+}
+
+export function copyWebVideoFileToOriginalVideoFile (webVideoFile: MVideoFile, filename: string) {
+  return copyObjectToCommonFile({
+    sourceKey: generateCommonFileObjectStorageKey('web_videos', webVideoFile.filename),
+    sourceBucketInfo: getObjectStorageFileConfig('web_videos'),
+    sourceSize: webVideoFile.size,
+    type: 'original_video_files',
+    filename,
+    isPrivate: true
+  })
 }
 
 // ---------------------------------------------------------------------------

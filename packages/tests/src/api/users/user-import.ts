@@ -124,7 +124,10 @@ function runTest (withObjectStorage: boolean) {
     it('Should import an archive with video files', async function () {
       this.timeout(240000)
 
-      const { userImport } = await remoteServer.userImports.importArchive({ fixture: archivePath, userId: remoteNoahId })
+      const { userImport } = await remoteServer.userImports.importArchive({
+        fixture: archivePath,
+        userId: remoteNoahId
+      })
       latestImportId = userImport.id
 
       await waitJobs([ server, remoteServer ])
@@ -136,6 +139,16 @@ function runTest (withObjectStorage: boolean) {
       expect(userImport.id).to.equal(latestImportId)
       expect(userImport.state.id).to.equal(UserImportState.COMPLETED)
       expect(userImport.state.label).to.equal('Completed')
+    })
+
+    it('Should have removed the staged archive', async function () {
+      if (!objectStorage) return
+
+      const bucket = objectStorage.getMockStagingBucketName()
+      const stagingPrefix = 'staging/user-imports/'
+
+      expect(await objectStorage.listMockObjectKeys(bucket, stagingPrefix)).to.have.lengthOf(0)
+      expect(await objectStorage.listMockMultipartUploadKeys(bucket, stagingPrefix)).to.have.lengthOf(0)
     })
   })
 
@@ -545,7 +558,10 @@ function runTest (withObjectStorage: boolean) {
     it('Should re-import the same file', async function () {
       this.timeout(240000)
 
-      const { userImport } = await remoteServer.userImports.importArchive({ fixture: archivePath, userId: remoteNoahId })
+      const { userImport } = await remoteServer.userImports.importArchive({
+        fixture: archivePath,
+        userId: remoteNoahId
+      })
       await waitJobs([ remoteServer ])
       latestImportId = userImport.id
     })

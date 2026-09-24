@@ -328,6 +328,19 @@ object_storage:
     prefix: 'uploads/'
     base_url: ''
 
+  # Where resumable uploads are temporarily stored, before being processed:
+  #  - video uploads, only if web_videos is stored in object storage
+  #  - user archive imports, until their import job processes them: any process can then run it
+  # It lets processes on different hosts receive the chunks of the same upload (see horizontal scalability)
+  # It also avoids sending the whole file to object storage in the last upload request, which may time out for big files
+  # They are removed once processed, or by a cleaner if something went wrong
+  # These files must never be public: we recommend a dedicated bucket that blocks public access
+  # If you share a bucket with other sections, make sure its policy doesn't make this prefix public
+  staging:
+    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
+    bucket_name: 'peertube'
+    prefix: 'staging/'
+
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
 

@@ -6,6 +6,7 @@ import {
   LiveVideoCreate,
   LiveVideoLatencyMode,
   NSFWFlag,
+  UserRole,
   VideoCommentPolicy,
   VideoCreateResult,
   VideoPrivacy
@@ -707,6 +708,13 @@ describe('Test video lives API validator', function () {
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       }
+    })
+
+    it('Should succeed with the token of a moderator', async function () {
+      // Moderators can update any video, so any live too
+      const moderatorToken = await server.users.generateUserAndToken('live_update_moderator', UserRole.MODERATOR)
+
+      await command.update({ token: moderatorToken, videoId: video.id, fields: { saveReplay: false } })
     })
 
     it('Should succeed with the correct params', async function () {
