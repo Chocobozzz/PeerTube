@@ -890,43 +890,57 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   static async removeFiles (instance: MVideoWithAllFiles, transaction: Transaction) {
-    const tasks: Promise<any>[] = []
+    if (!instance.isLocal()) return undefined
 
-    logger.info('Removing files of video ' + instance.url)
-
-    if (instance.isLocal()) {
-      if (!Array.isArray(instance.VideoFiles)) {
-        instance.VideoFiles = await instance.$get('VideoFiles', { transaction })
-      }
-
-      // Remove physical files and torrents
-      instance.VideoFiles.forEach(file => {
-        tasks.push(instance.removeWebVideoFile(file))
-      })
-
-      // Remove playlists file
-      if (!Array.isArray(instance.VideoStreamingPlaylists)) {
-        instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists', { transaction })
-      }
-
-      for (const p of instance.VideoStreamingPlaylists) {
-        // Captions will be automatically deleted
-        tasks.push(instance.removeAllStreamingPlaylistFiles({ playlist: p, deleteCaptionPlaylists: false }))
-      }
-
-      // Remove source files
-      const promiseRemoveSources = VideoSourceModel.listAll(instance.id, transaction)
-        .then(sources => Promise.all(sources.map(s => instance.removeOriginalFile(s))))
-
-      tasks.push(promiseRemoveSources)
+    // Load them now, they will not exist anymore after the commit
+    if (!Array.isArray(instance.VideoFiles)) {
+      instance.VideoFiles = await instance.$get('VideoFiles', { transaction })
     }
 
-    // Do not wait video deletion because we could be in a transaction
-    Promise.all(tasks)
-      .then(() => logger.info('Removed files of video %s.', instance.url))
-      .catch(err => logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err }))
+    if (!Array.isArray(instance.VideoStreamingPlaylists)) {
+      instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists', { transaction })
+    }
+
+    for (const playlist of instance.VideoStreamingPlaylists as MStreamingPlaylistFilesVideo[]) {
+      if (!Array.isArray(playlist.VideoFiles)) {
+        playlist.VideoFiles = await playlist.$get('VideoFiles', { transaction })
+      }
+    }
+
+    const sources = await VideoSourceModel.listAll(instance.id, transaction)
+
+    afterCommitIfTransaction(transaction, () => {
+      this.removeFilesOfDeletedVideo(instance, sources)
+        .then(() => logger.info('Removed files of video %s.', instance.url))
+        .catch(err => logger.error('Some errors when removing files of deleted video %s.', instance.uuid, { err }))
+    })
 
     return undefined
+  }
+
+  private static async removeFilesOfDeletedVideo (instance: MVideoWithAllFiles, sources: MVideoSource[]) {
+    // A job of another process may be writing files of this video: wait for it before removing them
+    const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(instance.uuid)
+
+    try {
+      logger.info('Removing files of video ' + instance.url)
+
+      await Promise.all([
+        // Remove physical files and torrents
+        ...instance.VideoFiles.map(file => instance.removeWebVideoFile(file)),
+
+        // Remove playlists file (captions will be automatically deleted)
+        // The whole HLS directory is removed, including files added by a job while we were waiting for the lock
+        ...instance.VideoStreamingPlaylists.map(p =>
+          instance.removeAllStreamingPlaylistFiles({ playlist: p, deleteCaptionPlaylists: false })
+        ),
+
+        // Remove source files
+        ...sources.map(s => instance.removeOriginalFile(s))
+      ])
+    } finally {
+      videoFileMutexReleaser()
+    }
   }
 
   static async saveEssentialDataToAbuses (instance: MVideoFormattableDetails, transaction: Transaction) {

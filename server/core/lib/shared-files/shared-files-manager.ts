@@ -1,7 +1,12 @@
 import { createLogger } from '@server/helpers/logger.js'
 import { registerConfigChangedHandler } from '@server/initializers/config.js'
-import { isStorageSharedWithPrimary } from '@server/initializers/config/shared-config.js'
 import { isSecondaryProcess } from '@server/initializers/process-role.js'
+import {
+  getNotSharedStorageDirectories,
+  getStorageDirectorySettingName,
+  SHAREABLE_STORAGE_DIRECTORIES,
+  ShareableStorageDirectory
+} from '@server/initializers/storage-ownership.js'
 import { Redis } from '../redis/index.js'
 import { SharedFilesChange } from '../redis/shared-files.js'
 import {
@@ -69,8 +74,8 @@ export class SharedFilesManager {
   // ---------------------------------------------------------------------------
 
   private async initSecondary () {
-    // Adopted the storage directories of the primary at boot: every file is reachable, nothing to check
-    if (isStorageSharedWithPrimary()) {
+    // Adopted every shareable storage directory of the primary at boot: every file is reachable, nothing to check
+    if (getNotSharedStorageDirectories(SHAREABLE_STORAGE_DIRECTORIES).length === 0) {
       logger.info('This secondary process shares the storage directories of the primary process.')
 
       return
@@ -132,15 +137,19 @@ export class SharedFilesManager {
     }
   }
 
-  // This process is on another host than the primary: every kind of file must be fully in object storage
+  // For each kind of file whose storage directories are not all shared with the primary, every local file must be in object storage
   private async findProblems () {
     const problems: string[] = []
 
     for (const type of sharedFilesSectionTypes) {
+      const notShared = getNotSharedStorageDirectories(sharedFilesSections[type].shareableStorageDirectories)
+      // Every storage directory this kind of file needs is shared with the primary: its files are reachable, nothing to check
+      if (notShared.length === 0) continue
+
       const sectionStatus = await computeSharedFilesSectionStatus(type)
       if (sectionStatus.inObjectStorage) continue
 
-      problems.push(buildSectionProblem(type, sectionStatus))
+      problems.push(buildSectionProblem(type, sectionStatus, notShared))
     }
 
     return problems
@@ -155,8 +164,14 @@ export class SharedFilesManager {
 // Private
 // ---------------------------------------------------------------------------
 
-function buildSectionProblem (type: SharedFilesSectionType, sectionStatus: SharedFilesSectionStatus) {
+function buildSectionProblem (
+  type: SharedFilesSectionType,
+  sectionStatus: SharedFilesSectionStatus,
+  notShared: ShareableStorageDirectory[]
+) {
   const { label } = sharedFilesSections[type]
 
-  return ` - ${label}: ${sectionStatus.reasons.join(', ')}; and this process is not on the same host as the primary process`
+  const settingNames = notShared.map(getStorageDirectorySettingName).join(', ')
+
+  return ` - ${label}: ${sectionStatus.reasons.join(', ')}; and ${settingNames} is not shared with the primary process`
 }

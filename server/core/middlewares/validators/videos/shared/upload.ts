@@ -1,19 +1,19 @@
-import express from 'express'
-import { createLogger } from '@server/helpers/logger.js'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { createLogger } from '@server/helpers/logger.js'
+import express, { VideoUploadMetadata } from 'express'
 
 const logger = createLogger()
 
 export async function addDurationToVideoFileIfNeeded (options: {
   res: express.Response
-  videoFile: { path: string, duration?: number }
+  uploadFile: VideoUploadMetadata
   middlewareName: string
 }) {
-  const { res, middlewareName, videoFile } = options
+  const { res, middlewareName, uploadFile } = options
 
   try {
-    if (!videoFile.duration) await addDurationToVideo(res, videoFile)
+    if (!uploadFile.duration) await addDurationToVideo(res, uploadFile)
   } catch (err) {
     logger.error('Invalid input file in ' + middlewareName, { err })
 
@@ -31,14 +31,17 @@ export async function addDurationToVideoFileIfNeeded (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function addDurationToVideo (res: express.Response, videoFile: { path: string, duration?: number }) {
-  const probe = await ffprobePromise(videoFile.path)
+async function addDurationToVideo (res: express.Response, uploadFile: VideoUploadMetadata) {
+  // Fallback to `path` for legacy upload
+  const input = uploadFile.ffmpegInput ?? uploadFile.path
+
+  const probe = await ffprobePromise(input)
   res.locals.ffprobe = probe
 
-  const duration = await getVideoStreamDuration(videoFile.path, probe)
+  const duration = await getVideoStreamDuration(input, probe)
 
   // FFmpeg may not be able to guess video duration
   // For example with m2v files: https://trac.ffmpeg.org/ticket/9726#comment:2
-  if (isNaN(duration)) videoFile.duration = 0
-  else videoFile.duration = duration
+  if (isNaN(duration)) uploadFile.duration = 0
+  else uploadFile.duration = duration
 }

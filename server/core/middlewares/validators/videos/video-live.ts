@@ -241,7 +241,7 @@ export const videoLiveUpdateValidator = [
       !await checkCanManageVideo({
         user,
         video: res.locals.videoFull,
-        right: UserRight.GET_ANY_LIVE,
+        right: UserRight.UPDATE_ANY_VIDEO,
         req,
         res,
         checkIsLocal: true,

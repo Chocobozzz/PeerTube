@@ -1,10 +1,13 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
+import { Redis } from '@server/lib/redis/index.js'
+import { buildVideoUploadXFile, makeUploadXFileAvailableForHookIfNeeded, safeUploadXCleanup, videoUploadx } from '@server/lib/uploadx.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { Metadata as UploadXMetadata } from '@uploadx/core'
 import express from 'express'
 import { param } from 'express-validator'
+import { checkUploadSessionCanStart } from '../resumable-upload.js'
 import {
   areValidationErrors,
   checkCanAccessVideoSourceFile,
@@ -13,6 +16,8 @@ import {
   isValidVideoIdParam
 } from '../shared/index.js'
 import { addDurationToVideoFileIfNeeded, checkVideoFileCanBeEdited, commonVideoFileChecks, isVideoFileAccepted } from './shared/index.js'
+
+const logger = createLogger()
 
 export const videoSourceGetLatestValidator = [
   isValidVideoIdParam('id'),
@@ -43,14 +48,28 @@ export const videoSourceGetLatestValidator = [
 
 export const replaceVideoSourceResumableValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const file = buildUploadXFile(req.body as express.CustomUploadXFile<UploadXMetadata>)
-    const cleanup = () => safeUploadXCleanup(file)
+    if (!await checkUploadSessionCanStart(req, res)) return
+
+    const file = await buildVideoUploadXFile(req.body as express.CustomUploadXFile<UploadXMetadata>)
+    const cleanup = () => {
+      safeUploadXCleanup(file, videoUploadx)
+
+      Redis.Instance.deleteUploadSession(req.query.upload_id)
+        .catch(err => logger.error('Cannot delete upload session', { err }))
+    }
 
     if (!await checkCanUpdateVideoFile({ req, res })) {
       return cleanup()
     }
 
-    if (!await addDurationToVideoFileIfNeeded({ videoFile: file, res, middlewareName: 'updateVideoFileResumableValidator' })) {
+    try {
+      await makeUploadXFileAvailableForHookIfNeeded(file, 'filter:api.video.update-file.accept.result')
+    } catch (err) {
+      cleanup()
+      throw err
+    }
+
+    if (!await addDurationToVideoFileIfNeeded({ uploadFile: file, res, middlewareName: 'updateVideoFileResumableValidator' })) {
       return cleanup()
     }
 
@@ -58,7 +77,7 @@ export const replaceVideoSourceResumableValidator = [
       !await isVideoFileAccepted({
         req,
         res,
-        videoFile: file,
+        uploadFile: file,
         videoBody: file.metadata,
         hook: 'filter:api.video.update-file.accept.result'
       })

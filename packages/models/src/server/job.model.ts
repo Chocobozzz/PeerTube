@@ -400,6 +400,9 @@ export interface CreateUserExportPayload {
 
 export interface ImportUserArchivePayload {
   userImportId: number
+
+  // The archive is in object storage staging instead of the persistent temporary directory
+  stagingKey?: string
 }
 
 // ---------------------------------------------------------------------------

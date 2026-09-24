@@ -218,8 +218,8 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     const thumbnailPath = this.getSafeArchivePathOrThrow(videoImportData.archiveFiles.thumbnail)
 
     const localVideoCreator = new LocalVideoCreator({
-      videoFile: videoFilePath
-        ? { path: videoFilePath, probe: ffprobe }
+      fileInput: videoFilePath
+        ? { input: { path: videoFilePath }, probe: ffprobe }
         : undefined,
 
       user: this.user,

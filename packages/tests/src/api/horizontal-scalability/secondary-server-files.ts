@@ -1,8 +1,15 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { ActorImageType, HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
-import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
+import {
+  ActorImageType,
+  HttpStatusCode,
+  UserImportState,
+  UserImportStateType,
+  VideoPlaylistPrivacy,
+  VideoPrivacy
+} from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled, buildAbsoluteFixturePath, sha1 } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
@@ -17,10 +24,11 @@ import {
   waitJobs,
   waitUntilLivePublishedOnAllServers
 } from '@peertube/peertube-server-commands'
-import { expectStartWith } from '@tests/shared/checks.js'
+import { expectStartWith, testImage } from '@tests/shared/checks.js'
+import { generateHighBitrateVideo } from '@tests/shared/generate.js'
 import { expect } from 'chai'
 import { pathExists } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
+import { chmod, readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 
 // Storage directories of the files referenced by the database, that a secondary can share with the primary
@@ -74,6 +82,20 @@ async function waitUntilPathIsRemoved (path: string) {
   }
 
   expect(await pathExists(path), `${path} should have been removed`).to.be.false
+}
+
+// When the primary is stopped, waitJobs() would also wait for the jobs only the primary consumes
+async function waitUntilImportEnds (server: PeerTubeServer, options: { userId: number, token: string }) {
+  let state: UserImportStateType
+
+  for (let i = 0; i < 120; i++) {
+    state = (await server.userImports.getLatestImport(options)).state.id
+    if (state === UserImportState.COMPLETED || state === UserImportState.ERRORED) return state
+
+    await wait(500)
+  }
+
+  return state
 }
 
 describe('Test file management by a secondary server process', function () {
@@ -310,6 +332,22 @@ describe('Test file management by a secondary server process', function () {
       await waitUntilPathIsRemoved(primary.getDirectoryPath(join('tmp-persistent', archives[0])))
     })
 
+    it('Should import a user archive while the secondary also processes import jobs', async function () {
+      this.timeout(120000)
+
+      const { userId, token } = await primary.users.generate('user_import_shared')
+
+      // Without object storage staging, the archive can only be uploaded to the primary
+      // Then the job may run on the secondary, that shares its persistent temporary directory
+      await primary.userImports.importArchive({ userId, token, fixture: 'export-without-videos.zip' })
+      await waitJobs([ primary ])
+
+      const userImport = await primary.userImports.getLatestImport({ userId, token })
+      expect(userImport.state.id).to.equal(UserImportState.COMPLETED)
+
+      await primary.channels.get({ channelName: 'noah_super_channel' })
+    })
+
     it('Should refuse to start a secondary process that does not share a storage directory', async function () {
       this.timeout(60000)
 
@@ -391,7 +429,10 @@ describe('Test file management by a secondary server process', function () {
       primary = await createSingleServer(1, {
         ...buildObjectStorageConfig({ storeLiveStreams: false }),
 
-        live: { enabled: true }
+        live: { enabled: true },
+
+        // Several resumable upload chunks with a small fixture
+        client: { videos: { resumable_upload: { max_chunk_size: '5MB' } } }
       })
 
       await setAccessTokensToServers([ primary ])
@@ -457,6 +498,205 @@ describe('Test file management by a secondary server process', function () {
       await waitJobs([ primary ])
 
       await makeRawRequest({ url: video.files[0].fileUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should receive the chunks of a resumable upload on the primary and the secondary', async function () {
+      this.timeout(120000)
+
+      const path = '/api/v1/videos/upload-resumable'
+      const fixture = await generateHighBitrateVideo() // ~13MB: 3 chunks
+      const chunkSize = 5 * 1024 * 1024
+      const content = await readFile(fixture)
+
+      await primary.config.keepSourceFile()
+
+      const res = await primary.videos.prepareVideoResumableUpload({
+        path,
+        fixture,
+        fields: { name: 'video uploaded to several processes', channelId: primary.store.channel.id, privacy: VideoPrivacy.PUBLIC },
+        size: content.length,
+        mimetype: 'video/mp4'
+      })
+      const uploadId = res.header['location'].split('?')[1]
+
+      // Each process must resume from the chunks received by the other one
+      const processes = [ primary, secondary, primary ]
+      let lastResponse: Response
+
+      for (let i = 0; i < processes.length; i++) {
+        const start = i * chunkSize
+        const chunk = Buffer.from(content.subarray(start, Math.min(start + chunkSize, content.length)))
+        const isLast = start + chunk.length === content.length
+
+        lastResponse = await fetch(processes[i].url + path + '?' + uploadId, {
+          method: 'PUT',
+          // 308 is the "resume incomplete" status of resumable uploads, not a redirection
+          redirect: 'manual',
+          headers: {
+            'Authorization': 'Bearer ' + primary.accessToken,
+            'Content-Type': 'application/octet-stream',
+            'Content-Range': `bytes ${start}-${start + chunk.length - 1}/${content.length}`,
+            'Content-Length': chunk.length + ''
+          },
+          body: chunk
+        })
+
+        expect(lastResponse.status, `chunk ${i}`).to.equal(isLast ? HttpStatusCode.OK_200 : HttpStatusCode.PERMANENT_REDIRECT_308)
+      }
+
+      const { video } = await lastResponse.json()
+      await waitJobs([ primary ])
+
+      // The kept original file is the uploaded one
+      const source = await primary.videos.getSource({ id: video.uuid })
+      const { body } = await makeRawRequest({
+        url: source.fileDownloadUrl,
+        token: primary.accessToken,
+        redirects: 1,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      expect(body).to.have.lengthOf(content.length)
+      expect(sha1(body)).to.equal(sha1(content))
+
+      await primary.config.updateExistingConfig({ newConfig: { transcoding: { originalFile: { keep: false } } } })
+      await primary.videos.remove({ id: video.uuid })
+    })
+
+    it('Should use the thumbnail sent to the primary when the secondary receives the last chunk', async function () {
+      this.timeout(120000)
+
+      const path = '/api/v1/videos/upload-resumable'
+      const fixture = 'video_short.mp4'
+      const content = await readFile(buildAbsoluteFixturePath(fixture))
+
+      // The thumbnail is written on the disk of the primary, that receives the upload init request
+      const res = await primary.videos.prepareVideoResumableUpload({
+        path,
+        fixture,
+        attaches: { thumbnailfile: buildAbsoluteFixturePath('custom-thumbnail-input.jpg') },
+        fields: {
+          name: 'video with a thumbnail uploaded to several processes',
+          channelId: primary.store.channel.id,
+          privacy: VideoPrivacy.PUBLIC
+        },
+        size: content.length,
+        mimetype: 'video/mp4'
+      })
+      const uploadId = res.header['location'].split('?')[1]
+
+      // The whole file in a single (last) chunk, received by the secondary
+      const lastResponse = await fetch(secondary.url + path + '?' + uploadId, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + primary.accessToken,
+          'Content-Type': 'application/octet-stream',
+          'Content-Range': `bytes 0-${content.length - 1}/${content.length}`,
+          'Content-Length': content.length + ''
+        },
+        body: Buffer.from(content)
+      })
+      expect(lastResponse.status).to.equal(HttpStatusCode.OK_200)
+
+      const { video } = await lastResponse.json()
+      await waitJobs([ primary ])
+
+      const { thumbnails } = await primary.videos.get({ id: video.uuid })
+      const thumbnail = thumbnails.find(t => t.width === 280 && t.height === 157)
+      await testImage({ name: 'custom-thumbnail-280x157.jpg', url: thumbnail.fileUrl })
+
+      const bucket = objectStorage.getMockStagingBucketName()
+      expect(await objectStorage.listMockObjectKeys(bucket, 'staging/resumable-uploads/images/')).to.have.lengthOf(0)
+
+      await primary.videos.remove({ id: video.uuid })
+    })
+
+    it('Should use the thumbnail sent to the secondary when the primary receives the last chunk', async function () {
+      this.timeout(120000)
+
+      const path = '/api/v1/videos/upload-resumable'
+      const fixture = 'video_short.mp4'
+      const content = await readFile(buildAbsoluteFixturePath(fixture))
+
+      // The thumbnail is written in the tmp directory of the secondary, that the primary must not use
+      const res = await secondary.videos.prepareVideoResumableUpload({
+        path,
+        token: primary.accessToken,
+        fixture,
+        attaches: { thumbnailfile: buildAbsoluteFixturePath('custom-thumbnail-input.jpg') },
+        fields: {
+          name: 'video with a thumbnail sent to the secondary',
+          channelId: primary.store.channel.id,
+          privacy: VideoPrivacy.PUBLIC
+        },
+        size: content.length,
+        mimetype: 'video/mp4'
+      })
+      const uploadId = res.header['location'].split('?')[1]
+
+      // Like a secondary on another host: the primary cannot write in the tmp directory of the secondary
+      const secondaryTmpDirectory = primary.getDirectoryPath('tmp-secondary')
+      await chmod(secondaryTmpDirectory, 0o555)
+
+      let lastResponse: Response
+
+      try {
+        lastResponse = await fetch(primary.url + path + '?' + uploadId, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + primary.accessToken,
+            'Content-Type': 'application/octet-stream',
+            'Content-Range': `bytes 0-${content.length - 1}/${content.length}`,
+            'Content-Length': content.length + ''
+          },
+          body: Buffer.from(content)
+        })
+      } finally {
+        await chmod(secondaryTmpDirectory, 0o755)
+      }
+
+      expect(lastResponse.status).to.equal(HttpStatusCode.OK_200)
+
+      const { video } = await lastResponse.json()
+      await waitJobs([ primary ])
+
+      const { thumbnails } = await primary.videos.get({ id: video.uuid })
+      const thumbnail = thumbnails.find(t => t.width === 280 && t.height === 157)
+      await testImage({ name: 'custom-thumbnail-280x157.jpg', url: thumbnail.fileUrl })
+
+      const bucket = objectStorage.getMockStagingBucketName()
+      expect(await objectStorage.listMockObjectKeys(bucket, 'staging/resumable-uploads/images/')).to.have.lengthOf(0)
+
+      await primary.videos.remove({ id: video.uuid })
+    })
+
+    it('Should import on the secondary a user archive staged in object storage', async function () {
+      this.timeout(120000)
+
+      const { userId, token } = await primary.users.generate('user_import_staged')
+
+      // Only the secondary can process the import job
+      await primary.kill()
+
+      try {
+        await secondary.userImports.importArchive({
+          userId,
+          token,
+          fixture: 'export-without-videos.zip'
+        })
+
+        expect(await waitUntilImportEnds(secondary, { userId, token })).to.equal(UserImportState.COMPLETED)
+
+        await secondary.channels.get({ channelName: 'noah_super_channel' })
+
+        const bucket = objectStorage.getMockStagingBucketName()
+        const stagingPrefix = 'staging/user-imports/'
+
+        expect(await objectStorage.listMockObjectKeys(bucket, stagingPrefix)).to.have.lengthOf(0)
+        expect(await objectStorage.listMockMultipartUploadKeys(bucket, stagingPrefix)).to.have.lengthOf(0)
+      } finally {
+        await primary.run(primary.configOverride)
+      }
     })
 
     it('Should delete on the secondary a live kept on the file system of the primary', async function () {

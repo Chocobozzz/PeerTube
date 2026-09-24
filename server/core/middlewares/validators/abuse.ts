@@ -194,7 +194,7 @@ const checkAbuseValidForMessagesValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const abuse = res.locals.abuse
     if (abuse.ReporterAccount.isLocal() === false) {
-      return res.fail({ message: 'This abuse was created by a user of your instance.' })
+      return res.fail({ message: 'This abuse was not created by a user of your instance.' })
     }
 
     return next()

@@ -4,7 +4,9 @@ import {
   buildAspectRatio,
   getAverageTheoreticalBitrate,
   getMaxTheoreticalBitrate,
+  getResumableUploadChunkSize,
   parseChapters,
+  redactSignedUrls,
   timeToInt
 } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
@@ -342,5 +344,54 @@ describe('Extract chapters', function () {
       { timecode: 90, title: 'cha' },
       { timecode: 95, title: 'cha' }
     ])
+  })
+})
+
+describe('Redact signed URLs', function () {
+  it('Should redact the secrets of a pre-signed URL', function () {
+    const url = 'https://s3.example.com/bucket/staging/key.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256' +
+      '&X-Amz-Credential=AKIA%2F20260924%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260924T000000Z' +
+      '&X-Amz-Expires=3600&X-Amz-Security-Token=token&X-Amz-Signature=abcdef0123&X-Amz-SignedHeaders=host'
+
+    const redacted = redactSignedUrls(`ffprobe -show_chapters -i '${url}'`)
+
+    expect(redacted).to.not.contain('AKIA')
+    expect(redacted).to.not.contain('abcdef0123')
+    expect(redacted).to.not.contain('=token')
+
+    expect(redacted).to.contain('X-Amz-Credential=REDACTED&')
+    expect(redacted).to.contain('X-Amz-Signature=REDACTED&')
+    expect(redacted).to.contain('X-Amz-Security-Token=REDACTED&')
+    expect(redacted).to.contain('X-Amz-Date=20260924T000000Z')
+    expect(redacted).to.contain('/bucket/staging/key.mp4?')
+
+    expect(redactSignedUrls(`'https://a.b/c?X-Amz-Signature=abc' -f mp4`)).to.equal(`'https://a.b/c?X-Amz-Signature=REDACTED' -f mp4`)
+  })
+
+  it('Should not change a text without signed URLs', function () {
+    expect(redactSignedUrls('/var/www/peertube/storage/tmp/video.mp4')).to.equal('/var/www/peertube/storage/tmp/video.mp4')
+    expect(redactSignedUrls(undefined)).to.be.undefined
+  })
+})
+
+describe('Resumable upload chunk size', function () {
+  const MiB = 1024 * 1024
+
+  it('Should not require a chunk size without a min chunk size', function () {
+    expect(getResumableUploadChunkSize({ minChunkSize: 0, fileSize: 100 * 1024 * MiB })).to.equal(0)
+  })
+
+  it('Should use the min chunk size for a small file', function () {
+    expect(getResumableUploadChunkSize({ minChunkSize: 16 * MiB, fileSize: 10 * MiB })).to.equal(16 * MiB)
+    expect(getResumableUploadChunkSize({ minChunkSize: 16 * MiB, fileSize: 100 * 1024 * MiB })).to.equal(16 * MiB)
+  })
+
+  it('Should use bigger chunks for a big file, to not exceed 10,000 parts', function () {
+    for (const fileSize of [ 200 * 1024 * MiB, 1024 * 1024 * MiB + 1 ]) {
+      const chunkSize = getResumableUploadChunkSize({ minChunkSize: 16 * MiB, fileSize })
+
+      expect(chunkSize).to.be.above(16 * MiB)
+      expect(Math.ceil(fileSize / chunkSize)).to.be.at.most(10_000)
+    }
   })
 })

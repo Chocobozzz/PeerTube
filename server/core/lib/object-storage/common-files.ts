@@ -5,7 +5,17 @@ import { getObjectStorageFileConfig, ObjectStorageFileType } from './config.js'
 import { getObjectStorageContentType } from './content-type.js'
 import { generateCommonFileObjectStorageKey } from './keys.js'
 import { makeAvailableInTmp } from './make-available.js'
-import { createObjectReadStream, makeAvailable, removeObject, storeObject, updateObjectACL } from './shared/index.js'
+import {
+  BucketInfo,
+  copyObject,
+  createObjectReadStream,
+  isNotImplementedError,
+  objectStorageLogger as logger,
+  makeAvailable,
+  removeObject,
+  storeObject,
+  updateObjectACL
+} from './shared/index.js'
 import { buildObjectStoragePublicFileUrl } from './urls.js'
 
 // Common helpers for object storage entities (avatars, thumbnails, storyboards, etc.) that use a flat filename as their object storage key
@@ -42,6 +52,50 @@ export function storeCommonFile (
       ? 'attachment'
       : undefined
   })
+}
+
+// Server side copy of an object of the same object storage (another section, staging...): the file doesn't go through this instance
+// Falls back to a download and an upload for providers that don't support it (big files need UploadPartCopy)
+// Other errors (missing object, access denied...) are thrown: the fallback would fail the same way, only slower
+export async function copyObjectToCommonFile (options: {
+  sourceKey: string
+  sourceBucketInfo: BucketInfo
+  sourceSize?: number
+
+  type: ObjectStorageFileType
+  filename: string
+  isPrivate: boolean
+}) {
+  const { sourceKey, sourceBucketInfo, sourceSize, type, filename, isPrivate } = options
+
+  const bucketInfo = getObjectStorageFileConfig(type)
+  const objectStorageKey = generateCommonFileObjectStorageKey(type, filename)
+  const contentType = getObjectStorageContentType(filename)
+
+  try {
+    await copyObject({
+      sourceKey,
+      sourceBucketInfo,
+      sourceSize,
+      destinationKey: objectStorageKey,
+      destinationBucketInfo: bucketInfo,
+      isPrivate,
+      contentType
+    })
+  } catch (err) {
+    if (!isNotImplementedError(err)) throw err
+
+    logger.warn('Server side copy of object %s to %s is not supported, fallback to a download and an upload', sourceKey, objectStorageKey, {
+      err
+    })
+
+    await makeAvailableInTmp({
+      key: sourceKey,
+      bucketInfo: sourceBucketInfo,
+      filename,
+      cb: inputPath => storeObject({ inputPath, objectStorageKey, bucketInfo, isPrivate, contentType })
+    })
+  }
 }
 
 export function removeCommonFileObjectStorage (type: ObjectStorageFileType, filename: string) {

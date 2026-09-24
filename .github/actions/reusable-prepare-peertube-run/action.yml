@@ -9,7 +9,9 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install postgresql-client-common redis-tools parallel libimage-exiftool-perl
+        # nscd: this static FFmpeg build links glibc statically and crashes (SIGSEGV) when resolving a host name
+        # With nscd running, it asks the daemon instead
+        sudo apt-get install postgresql-client-common redis-tools parallel libimage-exiftool-perl nscd
         wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
         tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
         mkdir -p $HOME/bin

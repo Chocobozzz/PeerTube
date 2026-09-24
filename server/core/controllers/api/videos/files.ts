@@ -1,8 +1,7 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
-import { updateM3U8AndShaPlaylist } from '@server/lib/hls.js'
-import { removeAllWebVideoFiles, removeHLSFile, removeHLSPlaylist, removeWebVideoFile } from '@server/lib/video-file.js'
+import { removeAllWebVideoFiles, removeHLSFiles, removeHLSPlaylist, removeWebVideoFile } from '@server/lib/video-file.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import express from 'express'
 import validator from 'validator'
@@ -95,8 +94,7 @@ async function removeHLSFileController (req: express.Request, res: express.Respo
   return logger.withContext([ video.uuid ], async () => {
     logger.info('Deleting HLS file %d of %s.', videoFileId, video.url)
 
-    const playlist = await removeHLSFile(video, videoFileId)
-    if (playlist) await updateM3U8AndShaPlaylist(video, playlist)
+    await removeHLSFiles(video, [ videoFileId ])
 
     scheduleVideoFederation({ video })
 

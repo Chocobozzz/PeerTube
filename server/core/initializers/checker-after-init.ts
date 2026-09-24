@@ -11,7 +11,9 @@ import { createLogger } from '../helpers/logger.js'
 import {
   getObjectStorageFileConfig,
   getObjectStorageLocationConflicts,
+  getStagingBucketInfo,
   isObjectStorageEnabledFor,
+  isStagingEnabled,
   objectStorageSectionTypes
 } from '../lib/object-storage/config.js'
 import { checkVideoFilesLifecycleConfig } from '../lib/video-files-lifecycle/video-files-lifecycle-config.js'
@@ -19,7 +21,7 @@ import { ApplicationModel, getServerActor } from '../models/application/applicat
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getConfigModule, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
-import { WEBSERVER } from './constants.js'
+import { OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
 
 const logger = createLogger()
 
@@ -89,6 +91,27 @@ async function applicationExist () {
   return totalApplication !== 0
 }
 
+// Network check, so it's run separately from the synchronous checkConfig() and doesn't block startup
+async function checkStagingBucketConnectivity () {
+  if (!isStagingEnabled()) return
+
+  const { HeadBucketCommand } = await import('@aws-sdk/client-s3')
+  const { getClient } = await import('../lib/object-storage/shared/client.js')
+
+  const bucketInfo = getStagingBucketInfo()
+
+  try {
+    const client = await getClient()
+    await client.send(new HeadBucketCommand({ Bucket: bucketInfo.BUCKET_NAME }))
+  } catch (err) {
+    logger.error(
+      'Cannot reach the object_storage.staging bucket %s. Resumable video uploads and user imports relying on it will fail.',
+      bucketInfo.BUCKET_NAME,
+      { err }
+    )
+  }
+}
+
 async function checkFFmpegVersion () {
   const version = await getFFmpegVersion()
   const semvar = parseSemVersion(version)
@@ -116,6 +139,7 @@ export {
   checkActivityPubUrls,
   checkConfig,
   checkFFmpegVersion,
+  checkStagingBucketConnectivity,
   clientsExist,
   usersExist
 }
@@ -333,6 +357,34 @@ function checkObjectStorageConfig () {
   for (const { name, config } of sections) {
     if (!config.BUCKET_NAME) {
       throw new Error(`object_storage.${name}.bucket_name should be set when object storage support is enabled.`)
+    }
+  }
+
+  if (isStagingEnabled()) {
+    const stagingBucket = getStagingBucketInfo().BUCKET_NAME
+
+    if (!stagingBucket) {
+      throw new Error(
+        'object_storage.staging.bucket_name should be set to use object storage staging.'
+      )
+    }
+  }
+
+  if (isObjectStorageEnabledFor('web_videos') && !isStagingEnabled()) {
+    logger.warn(
+      'object_storage.web_videos is enabled without object_storage.staging: uploaded videos are sent to object storage ' +
+        'during the upload request, which may time out for big files. Consider enabling object_storage.staging.'
+    )
+  }
+
+  if (isStagingEnabled()) {
+    const maxChunkSize = CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
+
+    if (maxChunkSize && maxChunkSize < OBJECT_STORAGE_STAGING.MIN_PART_SIZE) {
+      logger.warn(
+        `client.videos.resumable_upload.max_chunk_size is lower than ${OBJECT_STORAGE_STAGING.MIN_PART_SIZE} bytes, the minimum object ` +
+          'storage part size: resumable uploads streamed to object storage will use bigger chunks anyway.'
+      )
     }
   }
 

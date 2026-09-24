@@ -19,6 +19,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 
 describe('Test runner common actions', function () {
@@ -700,6 +701,70 @@ describe('Test runner common actions', function () {
 
         expect(refreshedJob1.state.id).to.equal(RunnerJobState.PROCESSING)
         expect(refreshedStalledJob.state.id).to.equal(RunnerJobState.PENDING)
+      })
+    })
+
+    describe('Completing jobs', function () {
+      let sqlCommand: SQLCommand
+
+      before(function () {
+        sqlCommand = new SQLCommand(server)
+      })
+
+      it('Should complete a job only once with concurrent success requests', async function () {
+        this.timeout(60000)
+
+        await server.videos.quickUpload({ name: 'video' })
+        await waitJobs([ server ])
+
+        const { job } = await server.runnerJobs.autoAccept({ runnerToken, type: 'vod-web-video-transcoding' })
+
+        const responses = await Promise.all([ 1, 2 ].map(() => {
+          return server.runnerJobs.success({
+            runnerToken,
+            jobUUID: job.uuid,
+            jobToken: job.jobToken,
+            payload: { videoFile: 'video_short.mp4' },
+            expectedStatus: null
+          })
+        }))
+
+        const statuses = responses.map(r => r.status).sort((a, b) => a - b)
+
+        // The second request is refused by the validator if the job already left the processing state, or else by the conditional update
+        expect(statuses[0]).to.equal(HttpStatusCode.NO_CONTENT_204)
+        expect([ HttpStatusCode.BAD_REQUEST_400, HttpStatusCode.CONFLICT_409 ]).to.include(statuses[1])
+
+        const refreshed = await server.runnerJobs.getJob({ uuid: job.uuid })
+        expect(refreshed.state.id).to.equal(RunnerJobState.COMPLETED)
+
+        await waitJobs([ server ])
+      })
+
+      it('Should error a job stalled in completing state', async function () {
+        this.timeout(60000)
+
+        await server.videos.quickUpload({ name: 'video' })
+        await waitJobs([ server ])
+
+        const { job } = await server.runnerJobs.autoAccept({ runnerToken, type: 'vod-web-video-transcoding' })
+
+        // As if the process that was completing it died a long time ago
+        await sqlCommand.updateQuery(
+          `UPDATE "runnerJob" SET "state" = :state, "updatedAt" = NOW() - INTERVAL '7 hours' WHERE "uuid" = :uuid`,
+          { state: RunnerJobState.COMPLETING, uuid: job.uuid }
+        )
+
+        // The watchdog runs every 5 seconds in this test suite
+        await wait(12000)
+
+        const refreshed = await server.runnerJobs.getJob({ uuid: job.uuid })
+        expect(refreshed.state.id).to.equal(RunnerJobState.PENDING)
+        expect(refreshed.failures).to.equal(1)
+      })
+
+      after(async function () {
+        await sqlCommand.cleanup()
       })
     })
 

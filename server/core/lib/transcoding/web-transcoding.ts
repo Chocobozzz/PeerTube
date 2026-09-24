@@ -21,7 +21,7 @@ import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
 import { makeCommonFileAvailableIn } from '../object-storage/common-files.js'
 import { generateWebVideoFilename } from '../paths.js'
-import { buildNewFile, saveNewOriginalFileIfNeeded, storeNewWebVideoFile } from '../video-file.js'
+import { buildNewFile, moveAndSaveNewOriginalFileIfNeeded, storeNewWebVideoFile } from '../video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
@@ -73,8 +73,8 @@ export async function optimizeOriginalVideofile (options: {
         const { videoFile } = await onWebVideoFileTranscoding({
           video,
           videoOutputPath,
-          deleteWebInputVideoFile: inputVideoFile,
-          deleteWebInputVideoFilePath: videoInputPath
+          webInputFile: inputVideoFile,
+          webInputFilePath: videoInputPath
         })
 
         return { transcodeType, videoFile }
@@ -194,8 +194,8 @@ export async function mergeAudioVideofile (options: {
         await onWebVideoFileTranscoding({
           video,
           videoOutputPath,
-          deleteWebInputVideoFile: inputVideoFile,
-          deleteWebInputVideoFilePath: audioInputPath,
+          webInputFile: inputVideoFile,
+          webInputFilePath: audioInputPath,
           wasAudioFile: true
         })
       } finally {
@@ -215,15 +215,18 @@ export async function onWebVideoFileTranscoding (options: {
   video: MVideoFull
   videoOutputPath: string
   wasAudioFile?: boolean // default false
-  deleteWebInputVideoFile?: MVideoFile
-  // Local copy of `deleteWebInputVideoFile`, if the caller has one
-  deleteWebInputVideoFilePath?: string
+
+  // Safe to delete
+  webInputFile?: MVideoFile
+
+  // Local copy of `webInputFile`, if the caller has one
+  webInputFilePath?: string
 }) {
-  const { video, videoOutputPath, wasAudioFile, deleteWebInputVideoFile, deleteWebInputVideoFilePath } = options
+  const { video, videoOutputPath, wasAudioFile, webInputFile, webInputFilePath } = options
 
   const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  let videoFile = await buildNewFile({ mode: 'web-video', path: videoOutputPath })
+  let videoFile = await buildNewFile({ mode: 'web-video', input: { path: videoOutputPath } })
   videoFile.videoId = video.id
 
   let infoHashOfFile: string
@@ -240,7 +243,7 @@ export async function onWebVideoFileTranscoding (options: {
       await video.save()
     }
 
-    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({ video, videoFile, inputPath: videoOutputPath })
+    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({ video, videoFile, input: { path: videoOutputPath } })
     // If a later step fails, remove the file we just stored instead of leaving it orphaned
     rollbackNewVideoFile = rollback
 
@@ -253,11 +256,11 @@ export async function onWebVideoFileTranscoding (options: {
       await cleanup()
     }
 
-    if (deleteWebInputVideoFile) {
-      await saveNewOriginalFileIfNeeded(video, deleteWebInputVideoFile, deleteWebInputVideoFilePath)
+    if (webInputFile) {
+      await moveAndSaveNewOriginalFileIfNeeded({ video, webInputFile, webInputFilePath })
 
       // Reload the file: another job may have updated it (its torrent filename for example) while we were transcoding
-      const inputFileToDelete = await VideoFileModel.load(deleteWebInputVideoFile.id)
+      const inputFileToDelete = await VideoFileModel.load(webInputFile.id)
 
       if (inputFileToDelete) {
         await video.removeWebVideoFile(inputFileToDelete)

@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
-import { pick } from '@peertube/peertube-core-utils'
+import { getResumableUploadChunkSize, pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath, getFileSize } from '@peertube/peertube-node-utils'
 import { expect } from 'chai'
@@ -359,6 +359,9 @@ export abstract class AbstractCommand {
       contentLength?: number
       contentRangeBuilder?: (start: number, chunk: any) => string
       digestBuilder?: (chunk: any) => string
+
+      // Default to the chunk size required by the server (when it streams resumable uploads to object storage), or 8KB
+      resumableChunkSize?: number
     }
   ) {
     const {
@@ -372,11 +375,13 @@ export abstract class AbstractCommand {
       expectedStatus = HttpStatusCode.OK_200
     } = options
 
+    const resumableChunkSize = options.resumableChunkSize ?? await this.getDefaultResumableChunkSize({ path, fileSize: size })
+
     let start = 0
 
     const token = this.buildCommonRequestToken({ ...options, implicitToken: true })
 
-    const readable = createReadStream(videoFilePath, { highWaterMark: 8 * 1024 })
+    const readable = createReadStream(videoFilePath, { highWaterMark: resumableChunkSize })
     const server = this.server
     return new Promise<GotResponse<T>>((resolve, reject) => {
       readable.on('data', async function onData (chunk) {
@@ -433,6 +438,17 @@ export abstract class AbstractCommand {
         }
       })
     })
+  }
+
+  private async getDefaultResumableChunkSize (options: { path: string, fileSize: number }) {
+    const { path, fileSize } = options
+
+    const config = await this.server.config.getConfig()
+    const minChunkSize = /\/users\/[^/]+\/imports\//.test(path)
+      ? config.import.users.resumableUpload.minChunkSize
+      : config.client.videos.resumableUpload.minChunkSize
+
+    return getResumableUploadChunkSize({ minChunkSize, fileSize }) || 8 * 1024
   }
 
   protected endResumableUpload (

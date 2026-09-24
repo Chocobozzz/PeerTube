@@ -75,7 +75,7 @@ export type LocalHLSFiles = {
   }
 }
 
-export async function updateM3U8AndShaPlaylist (video: MVideo, playlist: MStreamingPlaylist, localFiles: LocalHLSFiles = {}) {
+export async function updateM3U8AndShaPlaylistUnderLock (video: MVideo, playlist: MStreamingPlaylist, localFiles: LocalHLSFiles = {}) {
   try {
     let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist, localFiles)
     playlistWithFiles = await updateSha256VODSegments(video, playlist, localFiles)
@@ -127,11 +127,14 @@ function updateMasterHLSPlaylist (
       const playlistFilename = getHLSResolutionPlaylistFilename(file.filename)
 
       await withVideoFileProbe({ file: file.withVideoOrPlaylist(playlist), localFiles }, async ({ videoFilePath, probe }) => {
+        // Every helper below is given `probe`, so it never actually reads this path: safe to fall back to a name that does not resolve
+        const path = videoFilePath ?? file.filename
+
         if (splitAudioAndVideo && file.resolution === VideoResolution.H_NOVIDEO) {
-          separatedAudioCodec = await getAudioStreamCodec(videoFilePath, probe)
+          separatedAudioCodec = await getAudioStreamCodec(path, probe)
         }
 
-        const size = await getVideoStreamDimensionsInfo(videoFilePath, probe)
+        const size = await getVideoStreamDimensionsInfo(path, probe)
 
         const bandwidth = 'BANDWIDTH=' + video.getBandwidthBits(file)
         const resolution = file.resolution === VideoResolution.H_NOVIDEO
@@ -142,8 +145,8 @@ function updateMasterHLSPlaylist (
         if (file.fps) line += ',FRAME-RATE=' + file.fps
 
         const codecs = await Promise.all([
-          getVideoStreamCodec(videoFilePath, probe),
-          separatedAudioCodec || getAudioStreamCodec(videoFilePath, probe)
+          getVideoStreamCodec(path, probe),
+          separatedAudioCodec || getAudioStreamCodec(path, probe)
         ])
 
         line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
@@ -297,7 +300,7 @@ async function withVideoFileProbe (
     file: MVideoFileStreamingPlaylistVideo
     localFiles: LocalHLSFiles
   },
-  cb: (options: { videoFilePath: string, probe: FfprobeData }) => Promise<void>
+  cb: (options: { videoFilePath?: string, probe: FfprobeData }) => Promise<void>
 ) {
   const { file, localFiles } = options
 
@@ -305,7 +308,7 @@ async function withVideoFileProbe (
   if (localPath) return cb({ videoFilePath: localPath, probe: await ffprobePromise(localPath) })
 
   if (file.metadata?.streams && file.metadata.format) {
-    return cb({ videoFilePath: file.filename, probe: file.metadata as FfprobeData })
+    return cb({ probe: file.metadata as FfprobeData })
   }
 
   return VideoPathManager.Instance.makeAvailableVideoFile(file, async videoFilePath => {

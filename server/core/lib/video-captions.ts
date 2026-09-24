@@ -19,7 +19,7 @@ import { ensureDir, remove } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
 import { dirname, join } from 'path'
 import { scheduleVideoFederation } from './activitypub/videos/federate.js'
-import { buildCaptionM3U8Content, updateM3U8AndShaPlaylist } from './hls.js'
+import { buildCaptionM3U8Content, updateM3U8AndShaPlaylistUnderLock } from './hls.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
 import { storeHLSFileFromContent, storeVideoCaption } from './object-storage/videos.js'
@@ -108,7 +108,7 @@ export async function updateHLSMasterOnCaptionChangeIfNeeded (video: MVideo) {
 export async function updateHLSMasterOnCaptionChange (video: MVideo, hls: MStreamingPlaylist) {
   logger.debug(`Updating HLS master playlist of video ${video.uuid} after caption change`)
 
-  await updateM3U8AndShaPlaylist(video, hls)
+  await updateM3U8AndShaPlaylistUnderLock(video, hls)
 }
 
 // ---------------------------------------------------------------------------

@@ -350,7 +350,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
       })
   }
 
-  static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Transaction) {
+  static listByStreamingPlaylist (streamingPlaylistId: number, transaction?: Transaction) {
     const query = {
       include: [
         {

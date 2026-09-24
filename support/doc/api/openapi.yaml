@@ -2108,6 +2108,15 @@ paths:
               schema:
                 type: number
                 example: 0
+        '400':
+          description: chunk is smaller than `import.users.resumableUpload.minChunkSize` of the server config or 1/10,000 of the file size (and is not the last one)
+        '503':
+          description: upload is already being processed
+          headers:
+            'Retry-After':
+              schema:
+                type: number
+                example: 300
     delete:
       summary: Cancel the resumable user import
       description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the resumable user import"
@@ -3978,6 +3987,8 @@ paths:
               schema:
                 type: number
                 example: 0
+        '400':
+          description: chunk is smaller than `client.videos.resumableUpload.minChunkSize` of the server config or 1/10,000 of the file size (and is not the last one)
         '403':
           description: video didn't pass upload filter
         '404':
@@ -4411,6 +4422,8 @@ paths:
               schema:
                 type: number
                 example: 0
+        '400':
+          description: chunk is smaller than `client.videos.resumableUpload.minChunkSize` of the server config or 1/10,000 of the file size (and is not the last one)
         '403':
           description: video didn't pass file replacement filter
         '404':
@@ -9992,6 +10005,11 @@ components:
 
         For example, a value of `bytes 0-262143/1000000` shows that the request is sending the first
         262144 bytes (256 x 1024) in a 2,469,036 byte file.
+
+        When the server config `client.videos.resumableUpload.minChunkSize` (video uploads) or
+        `import.users.resumableUpload.minChunkSize` (user archive imports) is not `0`,
+        every chunk except the last one must be at least that big. It must also be at least 1/10,000 of the file size
+        (the maximum number of object storage multipart upload parts).
     resumableUploadChunkContentLengthHeader:
       name: Content-Length
       in: header
@@ -11837,6 +11855,12 @@ components:
               properties:
                 enabled:
                   type: boolean
+                resumableUpload:
+                  type: object
+                  properties:
+                    minChunkSize:
+                      type: number
+                      description: In bytes. Minimum size of a user archive import chunk (except the last one), `0` if there is no minimum
         export:
           type: object
           properties:

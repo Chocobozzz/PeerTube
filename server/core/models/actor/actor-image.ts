@@ -7,6 +7,7 @@ import {
   type FileStorageType
 } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MActorId, MActorImage, MActorImageFormattable, MActorImagePath } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
@@ -85,12 +86,15 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
   declare Actor: Awaited<ActorModel> // TODO: Remove awaited: https://github.com/sequelize/sequelize-typescript/issues/825
 
   @AfterDestroy
-  static removeFile (instance: ActorImageModel) {
-    logger.info('Removing actor image file %s.', instance.filename)
+  static removeFile (instance: ActorImageModel, options: { transaction?: Transaction }) {
+    // Keep the file if the transaction is rolled back
+    afterCommitIfTransaction(options.transaction, () => {
+      logger.info('Removing actor image file %s.', instance.filename)
 
-    // Don't block the transaction
-    instance.removeFile()
-      .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, { err }))
+      // Don't block the caller
+      instance.removeFile()
+        .catch(err => logger.error('Cannot remove actor image file %s.', instance.filename, { err }))
+    })
   }
 
   // ---------------------------------------------------------------------------

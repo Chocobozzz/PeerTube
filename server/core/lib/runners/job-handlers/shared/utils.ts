@@ -21,11 +21,11 @@ export async function onVODWebVideoOrAudioMergeTranscodingJob (options: {
 }) {
   const { video, videoFilePath, privatePayload, wasAudioFile } = options
 
-  const deleteWebInputVideoFile = privatePayload.deleteInputFileId
+  const webInputFile = privatePayload.deleteInputFileId
     ? video.VideoFiles.find(f => f.id === privatePayload.deleteInputFileId)
     : undefined
 
-  await onWebVideoFileTranscoding({ video, videoOutputPath: videoFilePath, deleteWebInputVideoFile, wasAudioFile })
+  await onWebVideoFileTranscoding({ video, videoOutputPath: videoFilePath, webInputFile, wasAudioFile })
 
   await onTranscodingEnded({ moveVideoToNextState: privatePayload.canMoveVideoState, video })
 }

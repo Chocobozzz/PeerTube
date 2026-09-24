@@ -1,13 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@app/core'
-import { buildHTTPErrorResponse, genericUploadErrorHandler, getUploadXRetryConfig } from '@app/helpers'
+import { buildHTTPErrorResponse, genericUploadErrorHandler, getUploadXRetryConfig, PeerTubeUploaderX } from '@app/helpers'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { HttpStatusCode, UserImport, UserImportState } from '@peertube/peertube-models'
-import { UploadState, UploaderX, UploadxService } from 'ngx-uploadx'
+import { UploadState, UploadxService } from 'ngx-uploadx'
 import { Subscription } from 'rxjs'
 import { UploadProgressComponent } from '../../shared/shared-upload/upload-progress.component'
 import { UserImportExportService } from './user-import-export.service'
@@ -150,15 +150,24 @@ export class MyAccountImportComponent implements OnInit, OnDestroy, CanComponent
   }
 
   private uploadFile (file: File) {
+    const config = this.server.getHTMLConfig()
+    const maxChunkSize = config.client.videos.resumableUpload.maxChunkSize
+    const minChunkSize = config.import.users.resumableUpload.minChunkSize
+
     this.resumableUploadService.handleFiles(file, {
       endpoint: `${UserImportExportService.BASE_USER_IMPORTS_URL}${this.authService.getUser().id}/imports/import-resumable`,
       multiple: false,
 
-      maxChunkSize: this.server.getHTMLConfig().client.videos.resumableUpload.maxChunkSize,
+      maxChunkSize,
+
+      // The server requires a minimum chunk size when the archive is streamed to object storage
+      chunkSize: minChunkSize > 0
+        ? minChunkSize
+        : undefined,
 
       token: this.authService.getAccessToken(),
 
-      uploaderClass: UploaderX,
+      uploaderClass: PeerTubeUploaderX,
 
       retryConfig: getUploadXRetryConfig(),
 

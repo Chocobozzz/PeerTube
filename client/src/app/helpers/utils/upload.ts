@@ -1,7 +1,16 @@
 import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 import { Notifier } from '@app/core'
+import { getResumableUploadChunkSize } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { UploadState } from 'ngx-uploadx'
+import { UploaderX, UploadState } from 'ngx-uploadx'
+
+export class PeerTubeUploaderX extends UploaderX {
+  getChunk (offset?: number, size?: number) {
+    const chunkSize = getResumableUploadChunkSize({ minChunkSize: this.options.chunkSize, fileSize: this.size })
+
+    return super.getChunk(offset, size ?? (chunkSize || undefined))
+  }
+}
 
 export function genericUploadErrorHandler (options: {
   err: Pick<HttpErrorResponse, 'message' | 'status' | 'headers'>

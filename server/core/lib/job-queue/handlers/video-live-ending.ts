@@ -268,10 +268,10 @@ async function copyOrRegenerateThumbnails (options: {
         keepOriginal: true
       }))
   } else {
-    thumbnails = await createLocalVideoThumbnailsFromVideo({
-      video: replayVideo,
-      videoFile: replayVideo.getMaxQualityFile(VideoFileStream.VIDEO) || replayVideo.getMaxQualityFile(VideoFileStream.AUDIO),
-      ffprobe: undefined
+    const videoFile = replayVideo.getMaxQualityFile(VideoFileStream.VIDEO) || replayVideo.getMaxQualityFile(VideoFileStream.AUDIO)
+
+    thumbnails = await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(replayVideo), fileInput => {
+      return createLocalVideoThumbnailsFromVideo({ video: replayVideo, videoFile, fileInput, ffprobe: undefined })
     })
   }
 
@@ -344,7 +344,14 @@ async function replaceLiveByReplay (options: {
 
   // Regenerate the thumbnail & preview?
   try {
-    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, undefined)
+    // Don't fetch the replay file from the video storage if we keep the existing thumbnails
+    if (videoWithFiles.Thumbnails.every(t => t.automaticallyGenerated !== false)) {
+      const videoFile = videoWithFiles.getMaxQualityFile(VideoFileStream.VIDEO) || videoWithFiles.getMaxQualityFile(VideoFileStream.AUDIO)
+
+      await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoWithFiles), videoFileInput => {
+        return regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, undefined, videoFileInput)
+      })
+    }
   } catch (err) {
     logger.error(`Cannot regenerate thumbnails of ended live ${videoWithFiles.uuid}`)
   }

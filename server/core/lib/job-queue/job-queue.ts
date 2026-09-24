@@ -33,6 +33,7 @@ import {
 import { allJobStates } from '@server/helpers/custom-validators/jobs.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { isSecondaryProcess } from '@server/initializers/process-role.js'
+import { getNotSharedStorageDirectories } from '@server/initializers/storage-ownership.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
 import {
   FlowJob,
@@ -49,6 +50,7 @@ import {
 import { RedisOptions } from 'ioredis'
 import { createLogger } from '../../helpers/logger.js'
 import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
+import { isAllObjectStorageEnabled } from '../object-storage/config.js'
 import { Hooks } from '../plugins/hooks.js'
 import { Redis } from '../redis/index.js'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner.js'
@@ -209,11 +211,20 @@ const jobTypes: JobType[] = [
  *
  * They do not touch state owned by a single process (live sessions, transcoding files on local storage)
  */
-const SECONDARY_PROCESS_JOB_TYPES = new Set<JobType>([
-  'activitypub-http-broadcast-parallel',
-  'activitypub-http-broadcast',
-  'activitypub-http-unicast'
-])
+function getSecondaryProcessJobTypes () {
+  const jobTypes = new Set<JobType>([
+    'activitypub-http-broadcast-parallel',
+    'activitypub-http-broadcast',
+    'activitypub-http-unicast'
+  ])
+
+  // The import reads the archive and creates videos, avatars, etc.: everything must be reachable from any process
+  if (isAllObjectStorageEnabled() || getNotSharedStorageDirectories().length === 0) {
+    jobTypes.add('import-user-archive')
+  }
+
+  return jobTypes
+}
 
 const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcription', 'video-studio-edition', 'generate-video-storyboard' ]
 
@@ -248,7 +259,7 @@ class JobQueue {
     // A secondary process still has to *enqueue* every job type so all the queues are built
     // Only the workers are restricted to the job types the process is allowed to consume.
     const consumedJobTypes = isSecondaryProcess()
-      ? SECONDARY_PROCESS_JOB_TYPES
+      ? getSecondaryProcessJobTypes()
       : new Set(Object.keys(handlers))
 
     if (isSecondaryProcess()) {

@@ -68,7 +68,7 @@ describe('Test video caption playlist', function () {
         // TODO: remove condition when ffmpeg static is not used anymore.
         // See https://stackoverflow.com/questions/60528501/ffmpeg-segmentation-fault-with-network-stream-source
         if (!objectStorageBaseUrl) {
-          const { streams } = await ffprobePromise(caption.m3u8Url)
+          const { streams } = await ffprobePromise(caption.m3u8Url, { disableRemoteFormatWhitelist: true })
           expect(streams.find(s => s.codec_name === 'webvtt')).to.exist
         }
       }

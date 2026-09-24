@@ -17,7 +17,22 @@ type BucketInfo = {
   PREFIX?: string
 }
 
-async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo, continuationToken?: string) {
+// A single CopyObject is limited to 5GB by most object storage providers
+const MULTIPART_COPY_THRESHOLD = 5 * 1024 * 1024 * 1024
+const MULTIPART_COPY_PART_SIZE = 512 * 1024 * 1024 // 512 MB
+const MULTIPART_COPY_CONCURRENCY = 4
+
+async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo) {
+  const objects = await listObjectsOfPrefix(prefix, bucketInfo)
+
+  return objects.map(o => o.key)
+}
+
+async function listObjectsOfPrefix (
+  prefix: string,
+  bucketInfo: BucketInfo,
+  continuationToken?: string
+): Promise<{ key: string, lastModified: Date }[]> {
   const s3Client = await getClient()
 
   const { ListObjectsV2Command } = await import('@aws-sdk/client-s3')
@@ -36,13 +51,73 @@ async function listKeysOfPrefix (prefix: string, bucketInfo: BucketInfo, continu
 
   if (isArray(listedObjects.Contents) !== true) return []
 
-  let keys = listedObjects.Contents.map(c => c.Key)
+  let objects = listedObjects.Contents.map(c => ({ key: c.Key, lastModified: c.LastModified }))
 
   if (listedObjects.IsTruncated) {
-    keys = keys.concat(await listKeysOfPrefix(prefix, bucketInfo, listedObjects.NextContinuationToken))
+    objects = objects.concat(await listObjectsOfPrefix(prefix, bucketInfo, listedObjects.NextContinuationToken))
   }
 
-  return keys
+  return objects
+}
+
+// Multipart uploads that were neither completed nor aborted: their parts are still stored
+async function listMultipartUploadsOfPrefix (
+  prefix: string,
+  bucketInfo: BucketInfo,
+  markers: { keyMarker?: string, uploadIdMarker?: string } = {}
+): Promise<{ fullKey: string, uploadId: string, initiated: Date }[]> {
+  const s3Client = await getClient()
+
+  const { ListMultipartUploadsCommand } = await import('@aws-sdk/client-s3')
+
+  const command = new ListMultipartUploadsCommand({
+    Bucket: bucketInfo.BUCKET_NAME,
+    Prefix: buildKey(prefix, bucketInfo),
+    KeyMarker: markers.keyMarker,
+    UploadIdMarker: markers.uploadIdMarker
+  })
+
+  const listed = await s3Client.send(command)
+    .catch(err => {
+      throw parseS3Error(err)
+    })
+
+  if (isArray(listed.Uploads) !== true) return []
+
+  let uploads = listed.Uploads.map(u => ({ fullKey: u.Key, uploadId: u.UploadId, initiated: u.Initiated }))
+
+  if (listed.IsTruncated) {
+    uploads = uploads.concat(
+      await listMultipartUploadsOfPrefix(prefix, bucketInfo, { keyMarker: listed.NextKeyMarker, uploadIdMarker: listed.NextUploadIdMarker })
+    )
+  }
+
+  return uploads
+}
+
+async function abortMultipartUpload (options: {
+  fullKey: string
+  uploadId: string
+  bucketInfo: Pick<BucketInfo, 'BUCKET_NAME'>
+}) {
+  const { fullKey, uploadId, bucketInfo } = options
+
+  logger.debug('Aborting multipart upload %s of %s in bucket %s', uploadId, fullKey, bucketInfo.BUCKET_NAME)
+
+  const { AbortMultipartUploadCommand } = await import('@aws-sdk/client-s3')
+
+  const command = new AbortMultipartUploadCommand({
+    Bucket: bucketInfo.BUCKET_NAME,
+    Key: fullKey,
+    UploadId: uploadId
+  })
+
+  const client = await getClient()
+
+  await client.send(command)
+    .catch(err => {
+      throw parseS3Error(err)
+    })
 }
 
 // ---------------------------------------------------------------------------
@@ -288,18 +363,184 @@ async function getObjectStorageFileSize (options: {
 
 // ---------------------------------------------------------------------------
 
+// Most object storage providers refuse a single CopyObject above 5GB
+// Bigger files are copied with a multipart upload of UploadPartCopy parts
+async function copyObject (options: {
+  sourceKey: string
+  sourceBucketInfo: BucketInfo
+
+  destinationKey: string
+  destinationBucketInfo: BucketInfo
+
+  isPrivate: boolean
+  contentType?: string
+
+  // Skip a HEAD when the caller already knows it
+  sourceSize?: number
+}) {
+  const { sourceKey, sourceBucketInfo, destinationKey, destinationBucketInfo, isPrivate, contentType } = options
+
+  const source = buildKey(sourceKey, sourceBucketInfo)
+  const destination = buildKey(destinationKey, destinationBucketInfo)
+  // Some providers don't support ACLs (null in config)
+  const acl = getACL(isPrivate) || undefined
+
+  const size = options.sourceSize ?? await getObjectStorageFileSize({ key: sourceKey, bucketInfo: sourceBucketInfo })
+
+  logger.debug(
+    'Copying object %s in bucket %s to %s in bucket %s',
+    source,
+    sourceBucketInfo.BUCKET_NAME,
+    destination,
+    destinationBucketInfo.BUCKET_NAME
+  )
+
+  if (size > MULTIPART_COPY_THRESHOLD) {
+    return multipartCopyObject({
+      sourceBucketName: sourceBucketInfo.BUCKET_NAME,
+      source,
+      destination,
+      destinationBucketInfo,
+      acl,
+      contentType,
+      size
+    })
+  }
+
+  const { CopyObjectCommand } = await import('@aws-sdk/client-s3')
+
+  const client = await getClient()
+  await client.send(
+    new CopyObjectCommand({
+      Bucket: destinationBucketInfo.BUCKET_NAME,
+      Key: destination,
+      CopySource: buildCopySource(sourceBucketInfo.BUCKET_NAME, source),
+      ACL: acl,
+      ContentType: contentType,
+      MetadataDirective: contentType ? 'REPLACE' : 'COPY'
+    })
+  ).catch(err => {
+    throw parseS3Error(err)
+  })
+}
+
+async function multipartCopyObject (options: {
+  sourceBucketName: string
+  source: string
+
+  destination: string
+  destinationBucketInfo: BucketInfo
+
+  acl: ObjectCannedACL
+  contentType?: string
+  size: number
+}) {
+  const { sourceBucketName, source, destination, destinationBucketInfo, acl, contentType, size } = options
+
+  const {
+    AbortMultipartUploadCommand,
+    CompleteMultipartUploadCommand,
+    CreateMultipartUploadCommand,
+    UploadPartCopyCommand
+  } = await import('@aws-sdk/client-s3')
+
+  const client = await getClient()
+
+  const { UploadId } = await client.send(
+    new CreateMultipartUploadCommand({
+      Bucket: destinationBucketInfo.BUCKET_NAME,
+      Key: destination,
+      ACL: acl,
+      ContentType: contentType
+    })
+  ).catch(err => {
+    throw parseS3Error(err)
+  })
+
+  try {
+    // Start at 1
+    const partNumbers: number[] = []
+
+    for (let i = 0; i * MULTIPART_COPY_PART_SIZE < size; i++) {
+      partNumbers.push(i + 1)
+    }
+
+    const parts = await Bluebird.map(partNumbers, async partNumber => {
+      const start = (partNumber - 1) * MULTIPART_COPY_PART_SIZE
+      const end = Math.min(start + MULTIPART_COPY_PART_SIZE, size) - 1
+
+      const { CopyPartResult } = await client.send(
+        new UploadPartCopyCommand({
+          Bucket: destinationBucketInfo.BUCKET_NAME,
+          Key: destination,
+          UploadId,
+          PartNumber: partNumber,
+          CopySource: buildCopySource(sourceBucketName, source),
+          CopySourceRange: `bytes=${start}-${end}`
+        })
+      )
+
+      return { PartNumber: partNumber, ETag: CopyPartResult.ETag }
+    }, { concurrency: MULTIPART_COPY_CONCURRENCY })
+
+    await client.send(
+      new CompleteMultipartUploadCommand({
+        Bucket: destinationBucketInfo.BUCKET_NAME,
+        Key: destination,
+        UploadId,
+        MultipartUpload: { Parts: parts }
+      })
+    )
+  } catch (err) {
+    await client.send(new AbortMultipartUploadCommand({ Bucket: destinationBucketInfo.BUCKET_NAME, Key: destination, UploadId }))
+      .catch(abortErr => logger.error('Cannot abort multipart copy of %s', destination, { err: abortErr }))
+
+    throw parseS3Error(err)
+  }
+}
+
+// S3 expects a URL encoded `bucket/key` copy source: encodeURI() would leave characters like `+`, `?` or `#` of the key as is
+function buildCopySource (bucketName: string, key: string) {
+  return [ bucketName, ...key.split('/') ].map(s => encodeURIComponent(s)).join('/')
+}
+
+// ---------------------------------------------------------------------------
+
+// Some providers don't implement server side copy (CopyObject, UploadPartCopy)
+function isNotImplementedError (err: any) {
+  return err?.name === 'NotImplemented' || err?.Code === 'NotImplemented' || err?.$metadata?.httpStatusCode === 501
+}
+
 function isObjectNotFoundError (err: any) {
-  return err?.name === 'NoSuchKey'
+  // A missing bucket is a configuration error, not a missing object
+  if (err?.name === 'NoSuchBucket' || err?.Code === 'NoSuchBucket') return false
+
+  return err?.name === 'NoSuchKey' || err?.name === 'NotFound' || err?.$metadata?.httpStatusCode === 404
+}
+
+// ---------------------------------------------------------------------------
+
+function getACL (isPrivate: boolean) {
+  return isPrivate
+    ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE as ObjectCannedACL
+    : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC as ObjectCannedACL
 }
 
 // ---------------------------------------------------------------------------
 
 export {
+  abortMultipartUpload,
+  buildCopySource,
   buildKey,
+  copyObject,
   createObjectReadStream,
+  getACL,
   getObjectStorageFileSize,
+  isNotImplementedError,
   isObjectNotFoundError,
   listKeysOfPrefix,
+  listMultipartUploadsOfPrefix,
+  listObjectsOfPrefix,
   makeAvailable,
   removeObject,
   removeObjectByFullKey,
@@ -419,12 +660,6 @@ async function applyOnPrefix (options: {
   if (listedObjects.IsTruncated) {
     await applyOnPrefix({ ...options, continuationToken: listedObjects.NextContinuationToken })
   }
-}
-
-function getACL (isPrivate: boolean) {
-  return isPrivate
-    ? CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PRIVATE as ObjectCannedACL
-    : CONFIG.OBJECT_STORAGE.UPLOAD_ACL.PUBLIC as ObjectCannedACL
 }
 
 // Prevent logging too much information, in particular the body request

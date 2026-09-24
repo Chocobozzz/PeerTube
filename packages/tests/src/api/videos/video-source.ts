@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 import { getAllFiles } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoInclude, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   ObjectStorageCommand,
@@ -323,8 +323,11 @@ describe('Test video source management', function () {
             await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
             await makeRawRequest({ url: file.torrentUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-            const metadata = await server.videos.getFileMetadata({ url: file.metadataUrl })
-            expect(previousUrls).to.not.include(JSON.stringify(metadata))
+            // Both fixtures have the same audio track, copied as is in audio only files: they have the same metadata
+            if (file.resolution.id !== VideoResolution.H_NOVIDEO) {
+              const metadata = await server.videos.getFileMetadata({ url: file.metadataUrl })
+              expect(previousUrls).to.not.include(JSON.stringify(metadata))
+            }
           }
 
           const { storyboards } = await server.storyboard.list({ id: uuid })
@@ -406,6 +409,8 @@ describe('Test video source management', function () {
       })
 
       it('Should replace the video with an audio only file', async function () {
+        this.timeout(120000)
+
         await servers[0].config.save()
 
         await servers[0].config.enableTranscoding({ webVideo: true, hls: true, resolutions: [ 480, 360, 240, 144 ] })

@@ -1,6 +1,5 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { HttpStatusCode, HttpStatusCodeType, VideoPrivacy } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
@@ -13,9 +12,10 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expectStartWith } from '@tests/shared/checks.js'
 import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
-import { expectStartWith, expectNotStartWith } from '@tests/shared/checks.js'
 import { MockProxy } from '@tests/shared/mock-servers/mock-proxy.js'
+import { expect } from 'chai'
 
 describe('Test proxy', function () {
   let servers: PeerTubeServer[] = []
@@ -173,12 +173,7 @@ describe('Test proxy', function () {
       await servers[0].kill()
       await servers[0].run(objectStorage.getDefaultMockConfig(), { env: badEnv })
 
-      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
-      await waitJobs(servers, { skipDelayed: true })
-
-      const video = await servers[0].videos.get({ id: uuid })
-
-      expectNotStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl())
+      await servers[0].videos.quickUpload({ name: 'video', expectedStatus: HttpStatusCode.INTERNAL_SERVER_ERROR_500 })
     })
 
     after(async function () {

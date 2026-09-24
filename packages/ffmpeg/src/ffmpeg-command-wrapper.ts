@@ -1,4 +1,4 @@
-import { arrayify, exists, pick, promisify0 } from '@peertube/peertube-core-utils'
+import { arrayify, exists, pick, promisify0, redactSignedUrls } from '@peertube/peertube-core-utils'
 import {
   AvailableEncoders,
   EncoderOptionsBuilder,
@@ -9,6 +9,7 @@ import {
 import { MutexInterface } from 'async-mutex'
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { Readable } from 'node:stream'
+import { buildRemoteInputOptions } from './ffmpeg-utils.js'
 
 export interface FFmpegCommandWrapperOptions {
   availableEncoders?: AvailableEncoders
@@ -114,6 +115,7 @@ export class FFmpegCommandWrapper {
 
     for (const input of arrayify(inputs)) {
       this.command.input(input)
+        .inputOptions(buildRemoteInputOptions(input))
     }
 
     if (this.threads > 0) {
@@ -138,15 +140,26 @@ export class FFmpegCommandWrapper {
     return new Promise<void>((res, rej) => {
       let shellCommand: string
 
+      // The input can be a pre-signed URL: don't leak it in logs
       this.command.on('start', cmdline => {
-        shellCommand = cmdline
+        shellCommand = redactSignedUrls(cmdline)
       })
 
       this.command.on('error', (err: Error & { stdout?: string, stderr?: string }, stdout, stderr) => {
-        if (silent !== true) this.logger.error('Error in ffmpeg.', { err, stdout, stderr, shellCommand, ...this.lTags })
+        err.message = redactSignedUrls(err.message)
 
-        err.stdout = stdout
-        err.stderr = stderr
+        if (silent !== true) {
+          this.logger.error('Error in ffmpeg.', {
+            err,
+            stdout: redactSignedUrls(stdout),
+            stderr: redactSignedUrls(stderr),
+            shellCommand,
+            ...this.lTags
+          })
+        }
+
+        err.stdout = redactSignedUrls(stdout)
+        err.stderr = redactSignedUrls(stderr)
 
         if (this.onError) this.onError(err)
 
@@ -154,7 +167,12 @@ export class FFmpegCommandWrapper {
       })
 
       this.command.on('end', (stdout, stderr) => {
-        this.logger.debug('FFmpeg command ended.', { stdout, stderr, shellCommand, ...this.lTags })
+        this.logger.debug('FFmpeg command ended.', {
+          stdout: redactSignedUrls(stdout),
+          stderr: redactSignedUrls(stderr),
+          shellCommand,
+          ...this.lTags
+        })
 
         if (this.onEnd) this.onEnd()
 

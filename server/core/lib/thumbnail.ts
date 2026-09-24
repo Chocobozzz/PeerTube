@@ -1,4 +1,4 @@
-import { sortBy } from '@peertube/peertube-core-utils'
+import { redactSignedUrls, sortBy } from '@peertube/peertube-core-utils'
 import { FileStorage, ThumbnailAspectRatio, VideoFileStream } from '@peertube/peertube-models'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -15,7 +15,6 @@ import { MThumbnail } from '../types/models/video/thumbnail.js'
 import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist.js'
 import downloadImage from './image-downloader.js'
 import { removeCommonFileObjectStorage, storeCommonFile } from './object-storage/common-files.js'
-import { VideoPathManager } from './video-path-manager.js'
 
 const logger = createLogger('thumbnail')
 
@@ -180,10 +179,10 @@ export function createLocalVideoThumbnailsFromVideo (options: {
   videoFile: MVideoFile
   ffprobe: FfprobeData
 
-  // Local copy of the video file, if the caller has one: it is not downloaded from object storage
-  videoFilePath?: string
+  // Local path or URL (staging) of the video file
+  fileInput: string
 }): Promise<MThumbnail[]> {
-  const { video, videoFile, ffprobe, videoFilePath } = options
+  const { video, videoFile, ffprobe, fileInput } = options
 
   const create = (input: string) => {
     const metadata = CONFIG.THUMBNAILS.SIZES.map(size => buildMetadataFromVideo({ video, size, extension: '.jpg' }))
@@ -220,7 +219,7 @@ export function createLocalVideoThumbnailsFromVideo (options: {
         } else {
           thumbnailCreator = () =>
             generateImageFromVideoFile({
-              fromPath: input,
+              fromInput: input,
               folder: basePath,
               imageName: filename,
               size: { height, width },
@@ -246,9 +245,7 @@ export function createLocalVideoThumbnailsFromVideo (options: {
     })
   }
 
-  if (videoFilePath) return create(videoFilePath)
-
-  return VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(video), create)
+  return create(fileInput)
 }
 
 // ---------------------------------------------------------------------------
@@ -327,7 +324,7 @@ export function updateRemoteVideoThumbnail (options: {
 export async function regenerateLocalVideoThumbnailsFromVideoIfNeeded (
   video: MVideoWithAllFiles,
   ffprobe: FfprobeData,
-  videoFilePath?: string // local copy of the max quality file of the video, if the caller has one
+  fileInput: string // local path or URL of the max quality file of the video
 ) {
   if (video.Thumbnails.some(t => t.automaticallyGenerated === false)) return
 
@@ -336,7 +333,7 @@ export async function regenerateLocalVideoThumbnailsFromVideoIfNeeded (
   const thumbnails = await createLocalVideoThumbnailsFromVideo({
     video,
     videoFile: video.getMaxQualityFile(VideoFileStream.VIDEO) || video.getMaxQualityFile(VideoFileStream.AUDIO),
-    videoFilePath,
+    fileInput,
     ffprobe
   })
 
@@ -524,27 +521,27 @@ async function removeThumbnailFiles (metadata: ThumbnailMetadata[]) {
 }
 
 async function generateImageFromVideoFile (options: {
-  fromPath: string
+  fromInput: string // Path or URL
   folder: string
   imageName: string
   size: { width: number, height: number }
   ffprobe?: FfprobeData
 }) {
-  const { fromPath, folder, imageName, size, ffprobe } = options
+  const { fromInput, folder, imageName, size, ffprobe } = options
 
   const pendingImageName = 'pending-' + imageName
   const pendingImagePath = join(folder, pendingImageName)
 
   try {
     const framesToAnalyze = CONFIG.THUMBNAILS.GENERATION_FROM_VIDEO.FRAMES_TO_ANALYZE
-    await generateThumbnailFromVideo({ fromPath, output: pendingImagePath, framesToAnalyze, ffprobe, scale: size })
+    await generateThumbnailFromVideo({ fromInput, output: pendingImagePath, framesToAnalyze, ffprobe, scale: size })
 
     const destination = join(folder, imageName)
     await processImage({ path: pendingImagePath, destination, newSize: size })
 
     return destination
   } catch (err) {
-    logger.error('Cannot generate image from video %s.', fromPath, { err })
+    logger.error('Cannot generate image from video %s.', redactSignedUrls(fromInput), { err })
 
     try {
       await remove(pendingImagePath)

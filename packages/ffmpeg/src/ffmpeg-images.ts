@@ -13,7 +13,7 @@ export class FFmpegImage {
   // ---------------------------------------------------------------------------
 
   async generateThumbnailFromVideo (options: {
-    fromPath: string
+    fromInput: string // Path or URL
     output: string
     framesToAnalyze: number
     scale?: {
@@ -22,9 +22,9 @@ export class FFmpegImage {
     }
     ffprobe?: FfprobeData
   }) {
-    const { fromPath, ffprobe } = options
+    const { fromInput, ffprobe } = options
 
-    let duration = await getVideoStreamDuration(fromPath, ffprobe)
+    let duration = await getVideoStreamDuration(fromInput, ffprobe)
     if (isNaN(duration)) duration = 0
 
     this.buildGenerateThumbnailFromVideo(options)
@@ -44,7 +44,7 @@ export class FFmpegImage {
   }
 
   private buildGenerateThumbnailFromVideo (options: {
-    fromPath: string
+    fromInput: string
     output: string
     framesToAnalyze: number
     scale?: {
@@ -52,9 +52,9 @@ export class FFmpegImage {
       height: number
     }
   }) {
-    const { fromPath, output, framesToAnalyze, scale } = options
+    const { fromInput, output, framesToAnalyze, scale } = options
 
-    const command = this.commandWrapper.buildCommand(fromPath)
+    const command = this.commandWrapper.buildCommand(fromInput)
       .videoFilter('thumbnail=' + framesToAnalyze)
       .outputOption('-frames:v 1')
       .outputOption('-q:v 5')

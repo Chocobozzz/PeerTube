@@ -327,7 +327,7 @@ export class RunnerJobsCommand extends AbstractCommand {
       await this.customUpload(customUpload)
     }
 
-    await this.postUploadRequest({
+    return this.postUploadRequest({
       ...omit(options, [ 'customUploads' ]),
 
       implicitToken: false,

@@ -5,7 +5,13 @@ import { getResumableUploadPath } from '@server/helpers/upload.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Redis } from '@server/lib/redis/index.js'
-import { setupUploadResumableRoutes, uploadx } from '@server/lib/uploadx.js'
+import {
+  getUploadXFileInput,
+  makeResumableUploadImagesAvailable,
+  safeUploadXCleanup,
+  setupUploadResumableRoutes,
+  videoUploadx
+} from '@server/lib/uploadx.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import express from 'express'
@@ -33,6 +39,30 @@ const reqVideoFileAdd = createReqFiles(
   { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.IMAGE.MIMETYPE_EXT }
 )
 
+// thumbnailfile/previewfile are set by the server from the uploaded images, never from the client body
+const resumableInitMetadataFields: Record<Exclude<keyof VideoCreate, 'thumbnailfile' | 'previewfile'> | 'pluginData', true> = {
+  name: true,
+  channelId: true,
+  privacy: true,
+  category: true,
+  licence: true,
+  language: true,
+  description: true,
+  support: true,
+  tags: true,
+  commentsPolicy: true,
+  downloadEnabled: true,
+  nsfw: true,
+  nsfwSummary: true,
+  nsfwFlags: true,
+  waitTranscoding: true,
+  scheduleUpdate: true,
+  originallyPublishedAt: true,
+  videoPasswords: true,
+  generateTranscription: true,
+  pluginData: true
+}
+
 const reqVideoFileAddResumable = createReqFiles(
   [ 'thumbnailfile', 'previewfile' ],
   MIMETYPES.IMAGE.MIMETYPE_EXT,
@@ -48,73 +78,89 @@ uploadRouter.post(
   asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
-setupUploadResumableRoutes({
-  routePath: '/upload-resumable',
-  router: uploadRouter,
+registerVideoUploadResumableSharedRoutes(uploadRouter)
 
-  uploadInitBeforeMiddlewares: [
-    openapiOperationDoc({ operationId: 'uploadResumableInit' }),
-    reqVideoFileAddResumable
-  ],
+// ---------------------------------------------------------------------------
 
-  uploadInitAfterMiddlewares: [ asyncMiddleware(videosAddResumableInitValidator) ],
+function registerVideoUploadResumableSharedRoutes (router: express.Router) {
+  setupUploadResumableRoutes({
+    routePath: '/upload-resumable',
+    router,
 
-  uploadDeleteMiddlewares: [ asyncMiddleware(deleteUploadResumableCache) ],
+    initMetadataFields: Object.keys(resumableInitMetadataFields),
 
-  uploadedMiddlewares: [
-    openapiOperationDoc({ operationId: 'uploadResumable' }),
-    asyncMiddleware(videosAddResumableValidator)
-  ],
-  uploadedController: asyncMiddleware(addVideoResumable)
-})
+    uploadInitBeforeMiddlewares: [
+      openapiOperationDoc({ operationId: 'uploadResumableInit' }),
+      reqVideoFileAddResumable
+    ],
+
+    uploadInitAfterMiddlewares: [ asyncMiddleware(videosAddResumableInitValidator) ],
+
+    uploadDeleteMiddlewares: [ asyncMiddleware(deleteUploadResumableCache) ],
+
+    uploadedMiddlewares: [
+      openapiOperationDoc({ operationId: 'uploadResumable' }),
+      asyncMiddleware(videosAddResumableValidator)
+    ],
+    uploadedController: asyncMiddleware(addVideoResumable)
+  })
+}
 
 // ---------------------------------------------------------------------------
 
 export {
+  // Will be used by parent router
+  registerVideoUploadResumableSharedRoutes,
   uploadRouter
 }
 
 // ---------------------------------------------------------------------------
 
 async function addVideoLegacy (req: express.Request, res: express.Response) {
-  const videoPhysicalFile = req.files['videofile'][0]
+  const uploadFile = req.files['videofile'][0]
   const videoInfo: VideoCreate = req.body
   const files = req.files
 
-  const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
+  const response = await addVideo({ req, res, uploadFile, videoInfo, files })
 
   return res.json(response)
 }
 
 async function addVideoResumable (req: express.Request, res: express.Response) {
-  const videoPhysicalFile = res.locals.uploadVideoFileResumable
-  const videoInfo = videoPhysicalFile.metadata
+  const uploadFile = res.locals.uploadVideoFileResumable
+  const videoInfo = uploadFile.metadata
   const files = { previewfile: videoInfo.previewfile, thumbnailfile: videoInfo.thumbnailfile }
 
   try {
-    const response = await addVideo({ req, res, videoPhysicalFile, videoInfo, files })
+    // The upload may have been initialized by another process
+    await makeResumableUploadImagesAvailable(videoInfo)
+
+    const response = await addVideo({ req, res, uploadFile, videoInfo, files })
 
     return res.json(response)
   } finally {
     await Redis.Instance.deleteUploadSession(req.query.upload_id)
-    await uploadx.storage.delete(res.locals.uploadVideoFileResumable)
+    // The response may already be sent: don't throw
+    safeUploadXCleanup(res.locals.uploadVideoFileResumable, videoUploadx)
   }
 }
 
 function addVideo (options: {
   req: express.Request
   res: express.Response
-  videoPhysicalFile: express.VideoLegacyUploadFile
+  uploadFile: express.VideoLegacyUploadFile
   videoInfo: VideoCreate
   files: express.UploadFiles
 }) {
-  const { req, res, videoPhysicalFile, videoInfo, files } = options
+  const { req, res, uploadFile, videoInfo, files } = options
 
   return logger.inContext(async () => {
-    const ffprobe = await ffprobePromise(videoPhysicalFile.path)
+    // uploadFile.path fallback for legacy uploads
+    const ffmpegInput = uploadFile.ffmpegInput ?? uploadFile.path
+    const ffprobe = res.locals.ffprobe ?? await ffprobePromise(ffmpegInput)
 
     const containerChapters = await getChaptersFromContainer({
-      path: videoPhysicalFile.path,
+      ffmpegInput,
       maxTitleLength: CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max,
       ffprobe
     })
@@ -123,9 +169,9 @@ function addVideo (options: {
     const thumbnailfile = getVideoThumbnailFile(files)
 
     const localVideoCreator = new LocalVideoCreator({
-      videoFile: {
-        path: videoPhysicalFile.path,
-        probe: res.locals.ffprobe
+      fileInput: {
+        input: getUploadXFileInput(uploadFile),
+        probe: ffprobe
       },
 
       user: res.locals.oauth.token.User,
@@ -140,8 +186,8 @@ function addVideo (options: {
       videoAttributes: {
         ...videoInfo,
 
-        duration: videoPhysicalFile.duration,
-        inputFilename: videoPhysicalFile.originalname,
+        duration: uploadFile.duration,
+        inputFilename: uploadFile.originalname,
         state: buildNextVideoState(),
         isLive: false
       },

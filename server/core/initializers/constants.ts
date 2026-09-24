@@ -364,7 +364,10 @@ export const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
 
 export const RUNNER_JOBS = {
   MAX_FAILURES: 5,
-  LAST_CONTACT_UPDATE_INTERVAL: 30000
+  LAST_CONTACT_UPDATE_INTERVAL: 30000,
+  SUCCESS_REQUEST_MAX_COMPLETION_WAIT: 30000,
+  // A job still in COMPLETING after that is considered lost and is errored
+  STALLED_COMPLETING_JOB_MS: 1000 * 3600 * 6 // 6 hours
 }
 
 // ---------------------------------------------------------------------------
@@ -410,6 +413,7 @@ export const SCHEDULER_INTERVALS_MS = {
   REMOVE_EXPIRED_USER_EXPORTS: 1000 * 3600, // 1 hour
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
+  REMOVE_DANGLING_STAGING_FILES: 60000 * 60, // 1 hour
   CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL,
   BLOCKLIST_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
   WATCHED_WORDS_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
@@ -1210,6 +1214,33 @@ export const DIRECTORIES = {
 export const VIDEO_FILE_TOKEN_LIFETIME = parseDurationToMs('8 hours')
 
 export const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
+
+export const OBJECT_STORAGE_STAGING = {
+  // The size of a streamed file is unknown: each part is buffered in memory, so keep them small
+  // Must be at least `MIN_PART_SIZE`
+  STREAM_PART_SIZE: 16 * 1024 * 1024, // 16MB
+
+  // Object storage rejects a multipart part smaller than this, except the last one
+  MIN_PART_SIZE: 5 * 1024 * 1024, // 5MB
+
+  // Used by FFmpeg (probe, thumbnail generation)
+  PRESIGNED_URL_EXPIRATION_SECONDS: 3600,
+
+  // Objects and incomplete multipart uploads older than `maxAgeMs` are removed by the cleaner
+  SUB_PREFIXES: {
+    RESUMABLE_UPLOADS: {
+      prefix: 'resumable-uploads/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    },
+
+    // Resumable user archive imports (see uploadx.ts): the completed archive stays there until its import job processed it,
+    // so any process can run the job. Removed by the job, this is only a safety net for lost jobs
+    USER_IMPORTS: {
+      prefix: 'user-imports/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    }
+  }
+}
 
 export const VIDEO_LIVE = {
   EXTENSION: LIVE_SEGMENT_EXTENSION,

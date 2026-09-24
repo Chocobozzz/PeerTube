@@ -14,7 +14,7 @@ import { join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist.js'
-import { renameVideoFileInPlaylist, updateM3U8AndShaPlaylist } from '../hls.js'
+import { renameVideoFileInPlaylist, updateM3U8AndShaPlaylistUnderLock } from '../hls.js'
 import { storeHLSFileFromPath } from '../object-storage/videos.js'
 import { generateHLSVideoFilename, getHLSResolutionPlaylistFilename } from '../paths.js'
 import { createAllCaptionPlaylistsIfNeeded } from '../video-captions.js'
@@ -89,7 +89,7 @@ export async function onHLSVideoFileTranscoding (options: {
     })
   })
 
-  const newVideoFile = await buildNewFile({ mode: 'hls', path: videoOutputPath })
+  const newVideoFile = await buildNewFile({ mode: 'hls', input: { path: videoOutputPath } })
   newVideoFile.videoStreamingPlaylistId = playlist.id
 
   const mutexReleaser = preventInputFileLocking === true
@@ -148,7 +148,7 @@ export async function onHLSVideoFileTranscoding (options: {
     }
 
     // The new file is still available locally: don't download it again to compute its segments hashes
-    await updateM3U8AndShaPlaylist(video, playlist, {
+    await updateM3U8AndShaPlaylistUnderLock(video, playlist, {
       [newVideoFile.filename]: { videoPath, resolutionPlaylistPath }
     })
 

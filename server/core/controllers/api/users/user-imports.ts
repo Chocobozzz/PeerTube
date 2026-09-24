@@ -1,49 +1,73 @@
-import express from 'express'
-import { asyncMiddleware, authenticate } from '../../../middlewares/index.js'
-import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
+import { HttpStatusCode, UserImportState } from '@peertube/peertube-models'
+import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { createLogger } from '@server/helpers/logger.js'
+import { JobQueue } from '@server/lib/job-queue/job-queue.js'
+import { getFSUserImportFilePath } from '@server/lib/paths.js'
+import { Redis } from '@server/lib/redis/index.js'
+import { setupUploadResumableRoutes, userImportsUploadx } from '@server/lib/uploadx.js'
 import {
   getLatestImportStatusValidator,
   userImportRequestResumableInitValidator,
   userImportRequestResumableValidator
 } from '@server/middlewares/validators/users/user-import.js'
-import { HttpStatusCode, UserImportState } from '@peertube/peertube-models'
-import { createLogger } from '@server/helpers/logger.js'
 import { UserImportModel } from '@server/models/user/user-import.js'
-import { getFSUserImportFilePath } from '@server/lib/paths.js'
+import express from 'express'
 import { move } from 'fs-extra/esm'
-import { JobQueue } from '@server/lib/job-queue/job-queue.js'
-import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { asyncMiddleware, authenticate } from '../../../middlewares/index.js'
 
 const logger = createLogger()
 
 const userImportRouter = express.Router()
 
-userImportRouter.get(
-  '/:userId/imports/latest',
-  authenticate,
-  asyncMiddleware(getLatestImportStatusValidator),
-  asyncMiddleware(getLatestImport)
-)
+registerUserImportSharedRoutes(userImportRouter)
+registerUserImportResumableSharedRoutes(userImportRouter)
 
-setupUploadResumableRoutes({
-  routePath: '/:userId/imports/import-resumable',
-  router: userImportRouter,
+// ---------------------------------------------------------------------------
 
-  uploadInitAfterMiddlewares: [ asyncMiddleware(userImportRequestResumableInitValidator) ],
+function registerUserImportSharedRoutes (router: express.Router) {
+  router.get(
+    '/:userId/imports/latest',
+    authenticate,
+    asyncMiddleware(getLatestImportStatusValidator),
+    asyncMiddleware(getLatestImport)
+  )
+}
 
-  uploadedMiddlewares: [ asyncMiddleware(userImportRequestResumableValidator) ],
-  uploadedController: asyncMiddleware(addUserImportResumable)
-})
+function registerUserImportResumableSharedRoutes (router: express.Router) {
+  setupUploadResumableRoutes({
+    routePath: '/:userId/imports/import-resumable',
+    router,
+    uploadxInstance: userImportsUploadx,
+
+    initMetadataFields: [],
+
+    uploadInitAfterMiddlewares: [ asyncMiddleware(userImportRequestResumableInitValidator) ],
+
+    uploadedMiddlewares: [ asyncMiddleware(userImportRequestResumableValidator) ],
+    uploadedController: asyncMiddleware(addUserImportResumable)
+  })
+}
 
 // ---------------------------------------------------------------------------
 
 export {
+  // Will be used by parent router
+  registerUserImportResumableSharedRoutes,
+  registerUserImportSharedRoutes,
   userImportRouter
 }
 
 // ---------------------------------------------------------------------------
 
 async function addUserImportResumable (req: express.Request, res: express.Response) {
+  try {
+    await doAddUserImportResumable(req, res)
+  } finally {
+    await Redis.Instance.deleteUploadSession(req.query.upload_id)
+  }
+}
+
+async function doAddUserImportResumable (req: express.Request, res: express.Response) {
   const file = res.locals.importUserFileResumable
   const user = res.locals.user
 
@@ -55,12 +79,17 @@ async function addUserImportResumable (req: express.Request, res: express.Respon
   })
   userImport.generateAndSetFilename()
 
-  await move(file.path, getFSUserImportFilePath(userImport))
+  if (!file.stagingKey) {
+    await move(file.path, getFSUserImportFilePath(userImport))
+  }
 
   await saveInTransactionWithRetries(userImport)
 
   // Create job
-  await JobQueue.Instance.createJob({ type: 'import-user-archive', payload: { userImportId: userImport.id } })
+  await JobQueue.Instance.createJob({
+    type: 'import-user-archive',
+    payload: { userImportId: userImport.id, stagingKey: file.stagingKey }
+  })
 
   logger.info('User import request job created for user ' + user.username)
 

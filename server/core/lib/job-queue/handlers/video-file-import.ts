@@ -67,13 +67,13 @@ async function updateVideoFile (video: MVideoFull, inputFilePath: string) {
       await currentVideoFile.destroy()
     }
 
-    const newVideoFile = await buildNewFile({ mode: 'web-video', path: inputFilePath })
+    const newVideoFile = await buildNewFile({ mode: 'web-video', input: { path: inputFilePath } })
     newVideoFile.videoId = video.id
 
     const { localPath, cleanup, rollback } = await storeNewWebVideoFile({
       video,
       videoFile: newVideoFile,
-      inputPath: inputFilePath,
+      input: { path: inputFilePath },
       keepInput: true
     })
 

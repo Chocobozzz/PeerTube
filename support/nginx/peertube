@@ -119,6 +119,14 @@ map $request_method$uri $peertube_pool {
   "~^POST/api/v1/video-channels/ownership/[^/]+/(accept|refuse)$"               secondary_pool;
   "~^DELETE/api/v1/video-channels/ownership/[^/]+$"                             secondary_pool;
 
+  # Resumable uploads stream to the primary's local disk by default, so every request of an upload session must reach the primary.
+  # Must be listed before the /api/v1/videos/<id> lines below, which would also match PUT|DELETE /api/v1/videos/upload-resumable
+  # With object_storage.staging and object_storage.web_videos both enabled, video uploads stream directly to object storage:
+  # you can then replace `backend` by `secondary_pool` on the first line
+  "~^(POST|PUT|DELETE)/api/v1/videos/(upload-resumable|[^/]+/source/replace-resumable)$" backend;
+  # User archive imports only need object_storage.staging to be routed to `secondary_pool`
+  "~^(POST|PUT|DELETE)/api/v1/users/[^/]+/imports/import-resumable$"            backend;
+
   # Collections that live under /api/v1/videos/ but are not a video id: must be listed before the /api/v1/videos/<id> lines below
   "~^(GET|HEAD)/api/v1/videos/(imports|live)(/|$)"                              backend;
   "~^(GET|HEAD)/api/v1/videos/?$"                                               secondary_pool;
@@ -142,6 +150,7 @@ map $request_method$uri $peertube_pool {
   "~^POST/api/v1/users/(scoped-tokens|registrations/request)$"                  secondary_pool;
   "~^POST/api/v1/users/[^/]+/(block|unblock|reset-password|two-factor/request|two-factor/confirm-request|two-factor/disable)$" secondary_pool;
   "~^(GET|HEAD)/api/v1/users/[^/]+/token-sessions$"                             secondary_pool;
+  "~^(GET|HEAD)/api/v1/users/[^/]+/imports/latest$"                             secondary_pool;
   "~^POST/api/v1/users/[^/]+/token-sessions/[^/]+/revoke$"                      secondary_pool;
   "~^POST/api/v1/users/registrations/[^/]+/(accept|reject)$"                    secondary_pool;
   "~^DELETE/api/v1/users/registrations/[^/]+$"                                  secondary_pool;
@@ -234,7 +243,7 @@ server {
   }
 
   # Same as @api, but streams the request body go directly to PeerTube instead of being written to /var/lib/nginx first
-  # Used by the upload endpoints, which are always served by the primary
+  # Used by the upload endpoints
   location @api_unbuffered {
     # Required for `proxy_request_buffering off`
     proxy_http_version 1.1;
@@ -253,13 +262,14 @@ server {
     # A body with a Content-Length is checked against the `client_max_body_size` of the location that matched the URI, before we get here
     client_max_body_size    0;
 
-    proxy_pass http://backend;
+    proxy_pass http://$peertube_pool;
   }
 
   location / {
     try_files /dev/null @api;
   }
 
+  # See the `$peertube_pool` map above to route these to `secondary_pool`
   location ~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$ {
     client_max_body_size 0;
 

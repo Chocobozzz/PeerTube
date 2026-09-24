@@ -1,8 +1,7 @@
 import { VideoFileStream, VideoLifecycleDeleteResolutionsAction } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
-import { updateM3U8AndShaPlaylist } from '@server/lib/hls.js'
-import { removeHLSFile, removeWebVideoFile } from '@server/lib/video-file.js'
+import { removeHLSFiles, removeWebVideoFile } from '@server/lib/video-file.js'
 import { MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { LifecycleActionHandler } from './action.model.js'
 
@@ -65,19 +64,12 @@ export const deleteResolutionsAction: LifecycleActionHandler<VideoLifecycleDelet
     }
 
     if (hlsFiles.length !== 0) {
-      let playlist = video.getHLSPlaylist()
-
       for (const file of hlsFiles) {
         logger.info(`Deleting HLS file ${file.id} (${file.resolution}p) of video ${video.uuid} in files lifecycle.`)
-
-        playlist = await removeHLSFile(video, file.id)
-        deleted.push(file)
-
-        // The whole playlist has been removed, there is nothing left to delete or to update
-        if (!playlist) break
       }
 
-      if (playlist) await updateM3U8AndShaPlaylist(video, playlist)
+      await removeHLSFiles(video, hlsFiles.map(f => f.id))
+      deleted.push(...hlsFiles)
     }
 
     if (deleted.length !== 0) scheduleVideoFederation({ video })

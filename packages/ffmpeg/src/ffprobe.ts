@@ -1,15 +1,29 @@
-import { buildAspectRatio, forceNumber } from '@peertube/peertube-core-utils'
+import { buildAspectRatio, forceNumber, redactSignedUrls } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
 import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
+import { buildRemoteInputOptions } from './ffmpeg-utils.js'
 
 /**
  * Helpers to run ffprobe and extract data from the JSON output
  */
 
-export function ffprobePromise (path: string) {
+export function ffprobePromise (
+  input: string,
+  options: {
+    // Only for tests that probe HLS playlists of the instance: remote inputs are restricted to some formats otherwise
+    disableRemoteFormatWhitelist?: boolean
+  } = {}
+) {
   return new Promise<FfprobeData>((res, rej) => {
-    ffmpeg.ffprobe(path, [ '-show_chapters' ], (err, data) => {
-      if (err) return rej(err)
+    const remoteInputOptions = buildRemoteInputOptions(input, { disableFormatWhitelist: options.disableRemoteFormatWhitelist })
+
+    ffmpeg.ffprobe(input, [ '-show_chapters', ...remoteInputOptions ], (err, data) => {
+      if (err) {
+        // The input can be a pre-signed URL: don't leak it in logs
+        err.message = redactSignedUrls(err.message)
+
+        return rej(err)
+      }
 
       return res(data)
     })
@@ -209,13 +223,13 @@ export async function hasVideoStream (path: string, existingProbe?: FfprobeData)
 // ---------------------------------------------------------------------------
 
 export async function getChaptersFromContainer (options: {
-  path: string
+  ffmpegInput: string
   maxTitleLength: number
   ffprobe?: FfprobeData
 }) {
-  const { path, maxTitleLength, ffprobe } = options
+  const { ffmpegInput, maxTitleLength, ffprobe } = options
 
-  const metadata = ffprobe || await ffprobePromise(path)
+  const metadata = ffprobe || await ffprobePromise(ffmpegInput)
 
   if (!Array.isArray(metadata?.chapters)) return []
 

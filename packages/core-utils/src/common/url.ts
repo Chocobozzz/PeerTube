@@ -19,6 +19,13 @@ function removeQueryParams (url: string, baseUrl?: string) {
   return objUrl.toString()
 }
 
+// Hide the secrets of object storage pre-signed URLs (S3 signature v4) in a text (logs...)
+function redactSignedUrls (text: string) {
+  if (!text) return text
+
+  return text.replace(/(X-Amz-(?:Signature|Credential|Security-Token)=)[^&\s'"]+/gi, '$1REDACTED')
+}
+
 function queryParamsToObject (entries: URLSearchParams) {
   const result: { [ id: string ]: string | number | boolean } = {}
 
@@ -159,6 +166,7 @@ export {
   addQueryParams,
   removeQueryParams,
   queryParamsToObject,
+  redactSignedUrls,
 
   buildDownloadFilesUrl,
 

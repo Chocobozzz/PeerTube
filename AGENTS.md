@@ -266,7 +266,10 @@ npm run mocha -- --timeout 30000 --exit --bail \
 Some tests require these containers:
 
 ```bash
-docker run -p 9444:9000 chocobozzz/s3-ninja
+docker run -p 9444:8000 -e S3BACKEND=mem -e REMOTE_MANAGEMENT_DISABLE=1 \
+  -e SCALITY_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE \
+  -e SCALITY_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \
+  ghcr.io/scality/cloudserver:9.3.20
 docker run -p 10389:10389 chocobozzz/docker-test-openldap
 docker run -p 8082:8080 \
   -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
