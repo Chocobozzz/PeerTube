@@ -30,7 +30,7 @@ let subscriberClient: IoRedis
 // Every connection derived from the main client, so `quitRedisClient()` can close them all
 const duplicatedClients: IoRedis[] = []
 
-const subscribedHandlers = new Map<string, (message: string) => void>()
+const subscribedHandlers = new Map<string, Set<(message: string) => void>>()
 
 let prefix: string
 
@@ -244,14 +244,19 @@ export async function subscribeToRedis (channel: string, handler: (message: stri
     subscriberClient.on('error', err => logger.error('Error in Redis subscriber client', { err }))
 
     subscriberClient.on('message', (incomingChannel, message) => {
-      const channelHandler = subscribedHandlers.get(incomingChannel)
-      if (channelHandler) channelHandler(message)
+      for (const channelHandler of subscribedHandlers.get(incomingChannel) || []) {
+        channelHandler(message)
+      }
     })
   }
 
-  subscribedHandlers.set(prefix + channel, handler)
+  const key = prefix + channel
 
-  await subscriberClient.subscribe(prefix + channel)
+  // Several handlers can listen to the same channel: subscribing twice runs the handler twice
+  if (!subscribedHandlers.has(key)) subscribedHandlers.set(key, new Set())
+  subscribedHandlers.get(key).add(handler)
+
+  await subscriberClient.subscribe(key)
 }
 
 // ---------------------------------------------------------------------------

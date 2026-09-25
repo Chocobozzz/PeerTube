@@ -7,8 +7,7 @@ import {
   SHAREABLE_STORAGE_DIRECTORIES,
   ShareableStorageDirectory
 } from '@server/initializers/storage-ownership.js'
-import { Redis } from '../redis/index.js'
-import { SharedFilesChange } from '../redis/shared-files.js'
+import { RedisChannels, SharedFilesChange } from '../redis/index.js'
 import {
   computeSharedFilesSectionStatus,
   sharedFilesSections,
@@ -54,9 +53,8 @@ export class SharedFilesManager {
   }
 
   // Primary process: files have been moved from a storage to another
-  notifyFilesMoved (change: Extract<SharedFilesChange, 'moved-to-object-storage' | 'moved-to-file-system'>) {
-    Redis.Instance.publishSharedFilesChanged(change)
-      .catch(err => logger.error('Cannot notify secondary processes that files have been moved.', { err }))
+  notifyFilesMoved (change: SharedFilesChange) {
+    RedisChannels.sharedFilesChanged.broadcast(change)
   }
 
   async getSectionsStatus () {
@@ -90,7 +88,7 @@ export class SharedFilesManager {
       )
     }
 
-    await Redis.Instance.subscribeToSharedFilesChanges(change => {
+    await RedisChannels.sharedFilesChanged.subscribe(change => {
       // Only check the changes that can update the result
       if (change === 'moved-to-object-storage' && this.problems.length === 0) return
       if (change === 'moved-to-file-system' && this.problems.length !== 0) return

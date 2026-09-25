@@ -438,7 +438,7 @@ export class PeerTubeServer {
     this.customConfigFile = tmpConfigFile
   }
 
-  private buildConfigOverride (options: RunServerOptions) {
+  buildConfigOverride (options: RunServerOptions) {
     const base = options.autoEnableImportProxy !== false && process.env.YOUTUBE_DL_PROXY
       ? { import: { videos: { http: { proxies: [ process.env.YOUTUBE_DL_PROXY ] } } } }
       : {}

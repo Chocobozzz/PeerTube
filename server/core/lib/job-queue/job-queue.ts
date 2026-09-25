@@ -54,7 +54,7 @@ import { createLogger } from '../../helpers/logger.js'
 import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
 import { isAllObjectStorageEnabled } from '../object-storage/config.js'
 import { Hooks } from '../plugins/hooks.js'
-import { Redis } from '../redis/index.js'
+import { Redis, RedisChannels } from '../redis/index.js'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner.js'
 import { processActivityPubFollow } from './handlers/activitypub-follow.js'
 import {
@@ -442,7 +442,7 @@ class JobQueue {
   async pause (options: { processRoles?: ProcessRole[] } = {}) {
     const { processRoles = PROCESS_ROLES } = options
 
-    await Redis.Instance.publishJobQueueState({ action: 'pause', processRoles, senderId: this.processId })
+    await RedisChannels.jobQueueState.publish({ action: 'pause', processRoles, senderId: this.processId })
 
     if (processRoles.includes(getProcessRole())) await this.pauseWorkers()
   }
@@ -450,14 +450,14 @@ class JobQueue {
   async resume (options: { processRoles?: ProcessRole[] } = {}) {
     const { processRoles = PROCESS_ROLES } = options
 
-    await Redis.Instance.publishJobQueueState({ action: 'resume', processRoles, senderId: this.processId })
+    await RedisChannels.jobQueueState.publish({ action: 'resume', processRoles, senderId: this.processId })
 
     if (processRoles.includes(getProcessRole())) await this.resumeWorkers()
   }
 
   // The job queue can be paused/resumed by any process of the platform
   async listenForStateChanges () {
-    await Redis.Instance.subscribeToJobQueueState(({ action, processRoles, senderId }) => {
+    await RedisChannels.jobQueueState.subscribe(({ action, processRoles, senderId }) => {
       if (senderId === this.processId) return
       if (!processRoles.includes(getProcessRole())) return
 
@@ -465,7 +465,7 @@ class JobQueue {
         ? this.pauseWorkers()
         : this.resumeWorkers()
 
-      promise.catch(err => logger.error(`Cannot ${action} job queue.`, { err }))
+      return promise.catch(err => logger.error(`Cannot ${action} job queue requested by another process.`, { err }))
     })
   }
 

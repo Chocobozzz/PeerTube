@@ -2,7 +2,7 @@ import { WatchedWordsList } from '@peertube/peertube-models'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { wordsToRegExp } from '@server/helpers/regexp.js'
-import { Redis } from '@server/lib/redis/index.js'
+import { RedisChannels } from '@server/lib/redis/index.js'
 import { MAccountId, MWatchedWordsList } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
 import { Transaction } from 'sequelize'
@@ -78,7 +78,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
 
   // Keep in sync with the changes made by the other processes of this platform
   static async listenForRegexCacheInvalidations () {
-    await Redis.Instance.subscribeToWatchedWordsInvalidation(payload => {
+    await RedisChannels.watchedWordsInvalidation.subscribe(payload => {
       if (payload?.accountId) WatchedWordsListModel.clearLocalRegexCache(payload.accountId)
     })
   }
@@ -268,10 +268,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     afterCommitIfTransaction(transaction, () => {
       WatchedWordsListModel.clearLocalRegexCache(accountId)
 
-      if (!Redis.Instance.isInitialized()) return
-
-      Redis.Instance.publishWatchedWordsInvalidation({ accountId })
-        .catch(err => logger.error('Cannot broadcast watched words invalidation.', { err }))
+      RedisChannels.watchedWordsInvalidation.broadcast({ accountId })
     })
   }
 
