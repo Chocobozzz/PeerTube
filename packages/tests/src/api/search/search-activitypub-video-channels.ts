@@ -90,14 +90,17 @@ describe('Test ActivityPub video channels search', function () {
       'channel1_server1@' + servers[0].host
     ]
 
-    for (const search of searches) {
-      const body = await command.searchChannels({ search, token: servers[0].accessToken })
+    // Local handles are resolved from the database, so anonymous users can search them too
+    for (const token of [ undefined, servers[0].accessToken ]) {
+      for (const search of searches) {
+        const body = await command.searchChannels({ search, token })
 
-      expect(body.total).to.equal(1)
-      expect(body.data).to.be.an('array')
-      expect(body.data).to.have.lengthOf(1)
-      expect(body.data[0].name).to.equal('channel1_server1')
-      expect(body.data[0].displayName).to.equal('Channel 1 server 1')
+        expect(body.total).to.equal(1)
+        expect(body.data).to.be.an('array')
+        expect(body.data).to.have.lengthOf(1)
+        expect(body.data[0].name).to.equal('channel1_server1')
+        expect(body.data[0].displayName).to.equal('Channel 1 server 1')
+      }
     }
   })
 

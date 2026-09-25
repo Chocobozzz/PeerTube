@@ -63,7 +63,8 @@ export class VideoFetcher {
     const params = new URLSearchParams()
     params.append('domain', new URL(document.referrer).host)
 
-    return this.http.fetch(this.getVideoUrl(video.uuid) + '/embed-privacy/allowed?' + params.toString(), { optionalAuth: false })
+    // Send auth so the owner can embed their private/internal video
+    return this.http.fetch(this.getVideoUrl(video.uuid) + '/embed-privacy/allowed?' + params.toString(), { optionalAuth: true })
       .then(res => res.json() as Promise<VideoEmbedPrivacyAllowed>)
       .then(({ domainAllowed }) => domainAllowed)
   }

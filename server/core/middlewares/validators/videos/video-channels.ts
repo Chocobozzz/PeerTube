@@ -128,7 +128,8 @@ export const listAccountChannelsValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.withStats === true) {
+    // Stats and collaborations of an account are private
+    if (req.query.withStats === true || req.query.includeCollaborations === true) {
       const user = res.locals.oauth?.token.User
 
       if (!checkCanManageAccount({ account: res.locals.account, user, specialRight: UserRight.MANAGE_USERS, req, res })) return

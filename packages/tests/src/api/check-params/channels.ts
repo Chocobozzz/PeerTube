@@ -128,6 +128,33 @@ describe('Test video channels API validator', function () {
       })
     })
 
+    it('Should fail to list collaborations without being authenticated', async function () {
+      await server.channels.listByAccount({
+        accountName: 'fake',
+        includeCollaborations: true,
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
+    it('Should fail to list collaborations of another account', async function () {
+      await server.channels.listByAccount({
+        accountName: 'root',
+        includeCollaborations: true,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed to list collaborations of its own account', async function () {
+      await server.channels.listByAccount({
+        accountName: 'fake',
+        includeCollaborations: true,
+        token: userInfo.accessToken,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+
     it('Should fail with an invalid statsDays value', async function () {
       await server.channels.listByAccount({
         accountName: 'fake',

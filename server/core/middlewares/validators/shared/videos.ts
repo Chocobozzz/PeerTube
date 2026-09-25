@@ -18,7 +18,7 @@ import {
   MVideoFull,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnails,
+  MVideoThumbnailsBlacklist,
   MVideoUUID,
   MVideoWithBlacklist,
   MVideoWithRights
@@ -66,8 +66,8 @@ export async function doesVideoExist (id: number | string, res: Response, fetchT
       res.locals.videoWithBlacklist = video as MVideoWithBlacklist
       break
 
-    case 'with-thumbnails':
-      res.locals.videoThumbnails = video as MVideoThumbnails
+    case 'with-thumbnails-blacklist':
+      res.locals.videoThumbnailsBlacklist = video as MVideoThumbnailsBlacklist
       break
 
     case 'with-rights':
@@ -148,15 +148,16 @@ async function checkCanSeeUserAuthVideo (options: {
 
   const privacy = videoWithRights.privacy
 
-  if (privacy === VideoPrivacy.INTERNAL) {
-    // We know we have a user
-    return true
-  }
-
+  // Check the blacklist first: it applies to any privacy
   if (videoWithRights.isBlacklisted()) {
     if (await canUserManageProtectedVideo({ user, req, video: videoWithRights, right: UserRight.MANAGE_VIDEO_BLACKLIST })) return true
 
     return fail()
+  }
+
+  if (privacy === VideoPrivacy.INTERNAL) {
+    // We know we have a user
+    return true
   }
 
   if (privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.UNLISTED) {

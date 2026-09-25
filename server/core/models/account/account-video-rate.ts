@@ -13,6 +13,7 @@ import { CONSTRAINTS_FIELDS, USER_EXPORT_MAX_ITEMS, VIDEO_RATE_TYPES } from '../
 import { ActorModel } from '../actor/actor.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
 import { VideoChannelModel, ScopeNames as VideoChannelScopeNames } from '../video/video-channel.js'
+import { VideoBlacklistModel } from '../video/video-blacklist.js'
 import { VideoModel } from '../video/video.js'
 import { AccountModel } from './account.js'
 
@@ -143,7 +144,13 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
         },
         {
           model: VideoModel.unscoped(),
-          required: true
+          required: true,
+          include: [
+            {
+              model: VideoBlacklistModel.unscoped(),
+              required: false
+            }
+          ]
         }
       ]
     }

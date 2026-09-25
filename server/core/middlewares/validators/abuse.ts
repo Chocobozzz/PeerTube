@@ -1,7 +1,7 @@
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { AbuseCreate, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { AbuseCreate, HttpStatusCode, UserRight, VideoPrivacy } from '@peertube/peertube-models'
 import {
   areAbusePredefinedReasonsValid,
   isAbuseFilterValid,
@@ -14,12 +14,19 @@ import {
   isAbuseTimestampValid,
   isAbuseVideoIsValid
 } from '@server/helpers/custom-validators/abuses.js'
-import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID, toIntOrNull } from '@server/helpers/custom-validators/misc.js'
+import { exists, isIdOrUUIDValid, isIdValid, isUUIDValid, toCompleteUUID, toIntOrNull } from '@server/helpers/custom-validators/misc.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { MUserAccountId, MVideoFull } from '@server/types/models/index.js'
-import { areValidationErrors, doesAbuseExist, doesAccountIdExist, doesCommentIdExist, doesVideoExist } from './shared/index.js'
+import {
+  areValidationErrors,
+  checkCanSeeVideo,
+  doesAbuseExist,
+  doesAccountIdExist,
+  doesCommentIdExist,
+  doesVideoExist
+} from './shared/index.js'
 
 const logger = createLogger()
 
@@ -69,7 +76,12 @@ const abuseReportValidator = [
       return
     }
 
-    if (body.video?.id && !await checkUserCanReportVideo({ user: res.locals.oauth.token.User, video: res.locals.videoFull, req, res })) return
+    if (body.video?.id) {
+      const video = res.locals.videoFull
+
+      if (!await checkUserCanSeeReportedVideo({ video, paramId: body.video.id + '', req, res })) return
+      if (!await checkUserCanReportVideo({ user: res.locals.oauth.token.User, video, req, res })) return
+    }
 
     return next()
   }
@@ -246,6 +258,29 @@ const deleteAbuseMessageValidator = [
 ]
 
 // ---------------------------------------------------------------------------
+
+// The reporter gets the video name/UUID back in its abuse list: check it can see the video
+async function checkUserCanSeeReportedVideo (options: {
+  video: MVideoFull
+  paramId: string
+  req: express.Request
+  res: express.Response
+}) {
+  const { video, paramId, req, res } = options
+
+  // Don't require the password to report a password protected video, but the reporter must know its UUID
+  if (video.privacy === VideoPrivacy.PASSWORD_PROTECTED && !video.isBlacklisted()) {
+    if (isUUIDValid(paramId)) return true
+
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('Cannot report this video')
+    })
+    return false
+  }
+
+  return checkCanSeeVideo({ req, res, video, paramId })
+}
 
 async function checkUserCanReportVideo (options: {
   user: MUserAccountId

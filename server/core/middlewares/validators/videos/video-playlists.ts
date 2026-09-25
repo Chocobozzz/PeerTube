@@ -272,7 +272,7 @@ export const videoPlaylistsAddVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist({ id: req.params.playlistId, req, res, fetchType: 'all' })) return
-    if (!await doesVideoExist(req.body.videoId, res, 'with-thumbnails')) return
+    if (!await doesVideoExist(req.body.videoId, res, 'with-thumbnails-blacklist')) return
 
     const videoPlaylist = getPlaylist(res)
 
@@ -288,7 +288,7 @@ export const videoPlaylistsAddVideoValidator = [
       return
     }
 
-    if (!await checkCanSeeVideo({ req, res, video: res.locals.videoThumbnails, paramId: req.body.videoId })) return
+    if (!await checkCanSeeVideo({ req, res, video: res.locals.videoThumbnailsBlacklist, paramId: req.body.videoId })) return
 
     return next()
   }
@@ -366,6 +366,14 @@ export const videoPlaylistElementAPGetValidator = [
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: req.t('Cannot get this private video playlist.')
+      })
+    }
+
+    // Unlisted playlist elements can only be fetched using the playlist UUID (the element URL contains it)
+    if (videoPlaylistElement.VideoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED && !isUUIDValid(playlistId)) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: req.t('Video playlist element not found')
       })
     }
 

@@ -63,10 +63,19 @@ async function checkRSA2017Signature (publicKey: string, originalBody: any): Pro
     return { verified: false, body }
   }
 
-  const [ documentHash, optionsHash ] = await Promise.all([
-    hashObject(compacted),
-    createSignatureHash(body.signature)
-  ])
+  let documentHash: string
+  let optionsHash: string
+
+  try {
+    ;[ documentHash, optionsHash ] = await Promise.all([
+      hashObject(compacted),
+      createSignatureHash(body.signature)
+    ])
+  } catch (err) {
+    // Canonicalization is aborted if it exceeds its work factor or timeout: the signature cannot be verified
+    logger.warn('Cannot canonicalize JSON-LD object to check its signature: %s.', err.message)
+    return { verified: false, body }
+  }
 
   const toVerify = optionsHash + documentHash
 

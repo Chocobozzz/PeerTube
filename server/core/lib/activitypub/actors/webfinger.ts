@@ -1,4 +1,5 @@
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
 import { REMOTE_SCHEME, REQUEST_TIMEOUTS, WEBSERVER } from '@server/initializers/constants.js'
 import { ActorModel } from '@server/models/actor/actor.js'
@@ -9,10 +10,15 @@ type WebFingerJRD = {
 }
 
 export async function loadActorUrlOrGetFromWebfinger (uriArg: string) {
-  // Handle strings like @toto@example.com
-  const uri = uriArg.startsWith('@') ? uriArg.slice(1) : uriArg
+  const actorUrl = await loadActorUrlFromDB(uriArg)
+  if (actorUrl) return actorUrl
 
-  const [ name, host ] = uri.split('@')
+  return getUrlFromWebfinger(removeHandlePrefix(uriArg))
+}
+
+// Resolve the handle without any outbound request
+export async function loadActorUrlFromDB (uriArg: string) {
+  const [ name, host ] = removeHandlePrefix(uriArg).split('@')
   let actor: MActorFull
 
   if (!host || host === WEBSERVER.HOST) {
@@ -21,14 +27,14 @@ export async function loadActorUrlOrGetFromWebfinger (uriArg: string) {
     actor = await ActorModel.loadByNameAndHost(name, host)
   }
 
-  if (actor) return actor.url
-
-  return getUrlFromWebfinger(uri)
+  return actor?.url
 }
 
 export async function getUrlFromWebfinger (uri: string) {
-  const [ name, host ] = uri.split('@')
-  if (!name || !host) throw new Error(`Invalid webfinger address "${uri}"`)
+  const parts = uri.split('@')
+  const [ name, host ] = parts
+
+  if (parts.length !== 2 || !name || !isWebfingerHostValid(host)) throw new Error(`Invalid webfinger address "${uri}"`)
 
   const url = `${REMOTE_SCHEME.HTTP}://${host}/.well-known/webfinger?resource=${encodeURIComponent('acct:' + uri)}`
 
@@ -45,4 +51,18 @@ export async function getUrlFromWebfinger (uri: string) {
   }
 
   return selfLink.href
+}
+
+// ---------------------------------------------------------------------------
+
+function removeHandlePrefix (uri: string) {
+  // Handle strings like @toto@example.com
+  return uri.startsWith('@')
+    ? uri.slice(1)
+    : uri
+}
+
+function isWebfingerHostValid (host: string) {
+  // isHostValid accepts a path/query/fragment, but the host must not change the request path
+  return isHostValid(host) && /[/?#\\\s]/.test(host) === false
 }

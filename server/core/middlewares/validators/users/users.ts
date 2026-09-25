@@ -412,10 +412,9 @@ export const usersAskResetPasswordValidator = [
     }
 
     if (res.locals.user.pluginAuth) {
-      return res.fail({
-        status: HttpStatusCode.CONFLICT_409,
-        message: 'Cannot recover password of a user that uses a plugin authentication.'
-      })
+      logger.debug('User with email %s uses a plugin authentication, cannot recover its password.', email)
+      // Do not leak our emails
+      return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }
 
     return next()
