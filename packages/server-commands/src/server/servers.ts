@@ -30,8 +30,9 @@ export async function createSecondaryServer (
   options: RunServerOptions = {}
 ) {
   // Primary ports live in [9001, 19000[ (see PeerTubeServer.setServerNumber), so this cannot collide
+  // Stay below the ephemeral port range (32768 on Linux), where random ports of outgoing connections could already use it
   // Another port can be set to run several secondaries of the same primary at the same time
-  const port: number = configOverride?.listen?.port ?? primary.port + 20000
+  const port: number = configOverride?.listen?.port ?? primary.port + 10000
 
   const index = secondaryCounts.get(primary) ?? 0
   secondaryCounts.set(primary, index + 1)

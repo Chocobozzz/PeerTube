@@ -441,6 +441,7 @@ async function startApplication () {
   })
 
   JobQueue.Instance.init()
+  await JobQueue.Instance.listenForStateChanges()
 
   // A secondary only pushes emails to the job queue, the primary is the process that sends them
   if (!secondary) Emailer.Instance.init()

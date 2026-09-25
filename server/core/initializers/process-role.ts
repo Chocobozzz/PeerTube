@@ -1,4 +1,6 @@
-export type ProcessRole = 'primary' | 'secondary'
+import { ProcessRole } from '@peertube/peertube-models'
+
+export const PROCESS_ROLES: ProcessRole[] = [ 'primary', 'secondary' ]
 
 let processRole: ProcessRole
 

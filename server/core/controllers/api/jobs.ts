@@ -15,7 +15,7 @@ import {
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares/index.js'
-import { listJobsValidator } from '../../middlewares/validators/jobs.js'
+import { jobQueueStateValidator, listJobsValidator } from '../../middlewares/validators/jobs.js'
 
 const jobsRouter = express.Router()
 
@@ -25,6 +25,7 @@ jobsRouter.post(
   '/pause',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
+  jobQueueStateValidator,
   asyncMiddleware(pauseJobQueue)
 )
 
@@ -32,6 +33,7 @@ jobsRouter.post(
   '/resume',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
+  jobQueueStateValidator,
   asyncMiddleware(resumeJobQueue)
 )
 
@@ -66,13 +68,13 @@ export {
 // ---------------------------------------------------------------------------
 
 async function pauseJobQueue (req: express.Request, res: express.Response) {
-  await JobQueue.Instance.pause()
+  await JobQueue.Instance.pause({ processRoles: req.body.processRoles })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function resumeJobQueue (req: express.Request, res: express.Response) {
-  await JobQueue.Instance.resume()
+  await JobQueue.Instance.resume({ processRoles: req.body.processRoles })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

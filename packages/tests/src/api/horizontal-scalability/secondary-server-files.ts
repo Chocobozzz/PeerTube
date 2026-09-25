@@ -84,7 +84,7 @@ async function waitUntilPathIsRemoved (path: string) {
   expect(await pathExists(path), `${path} should have been removed`).to.be.false
 }
 
-// When the primary is stopped, waitJobs() would also wait for the jobs only the primary consumes
+// When the job queue of the primary is paused, waitJobs() would also wait for the jobs only the primary consumes
 async function waitUntilImportEnds (server: PeerTubeServer, options: { userId: number, token: string }) {
   let state: UserImportStateType
 
@@ -332,20 +332,50 @@ describe('Test file management by a secondary server process', function () {
       await waitUntilPathIsRemoved(primary.getDirectoryPath(join('tmp-persistent', archives[0])))
     })
 
-    it('Should import a user archive while the secondary also processes import jobs', async function () {
+    it('Should import on the secondary a user archive uploaded to the primary', async function () {
       this.timeout(120000)
 
       const { userId, token } = await primary.users.generate('user_import_shared')
 
-      // Without object storage staging, the archive can only be uploaded to the primary
-      // Then the job may run on the secondary, that shares its persistent temporary directory
-      await primary.userImports.importArchive({ userId, token, fixture: 'export-without-videos.zip' })
+      // Only the secondary can process the import job
+      await primary.jobs.pauseJobQueue({ processRoles: [ 'primary' ] })
+
+      try {
+        // Without object storage staging, the archive can only be uploaded to the primary
+        // Then the job runs on the secondary, that shares its persistent temporary directory
+        await primary.userImports.importArchive({ userId, token, fixture: 'export-without-videos.zip' })
+
+        expect(await waitUntilImportEnds(primary, { userId, token })).to.equal(UserImportState.COMPLETED)
+      } finally {
+        await primary.jobs.resumeJobQueue()
+      }
+
+      await waitJobs([ primary ])
+
+      await primary.channels.get({ channelName: 'noah_super_channel' })
+    })
+
+    it('Should pause and resume the job queue of all the processes by default', async function () {
+      this.timeout(120000)
+
+      const { userId, token } = await primary.users.generate('user_import_paused')
+
+      await primary.jobs.pauseJobQueue()
+
+      try {
+        await primary.userImports.importArchive({ userId, token, fixture: 'export-without-videos.zip' })
+        await wait(3000)
+
+        const userImport = await primary.userImports.getLatestImport({ userId, token })
+        expect(userImport.state.id).to.equal(UserImportState.PENDING)
+      } finally {
+        await primary.jobs.resumeJobQueue()
+      }
+
       await waitJobs([ primary ])
 
       const userImport = await primary.userImports.getLatestImport({ userId, token })
       expect(userImport.state.id).to.equal(UserImportState.COMPLETED)
-
-      await primary.channels.get({ channelName: 'noah_super_channel' })
     })
 
     it('Should refuse to start a secondary process that does not share a storage directory', async function () {
@@ -354,7 +384,7 @@ describe('Test file management by a secondary server process', function () {
       const message = await expectSecondaryToRefuseToStart(
         primary,
         buildNotSharedStorageConfig(primary, [ 'thumbnails' ]),
-        primary.port + 20010
+        primary.port + 10010
       )
 
       expect(message).to.contain('cannot reach the files of the primary process')
@@ -382,7 +412,7 @@ describe('Test file management by a secondary server process', function () {
     it('Should refuse to start a secondary process that cannot reach the files', async function () {
       this.timeout(60000)
 
-      const message = await expectSecondaryToRefuseToStart(primary, buildNotSharedStorageConfig(primary), primary.port + 20020)
+      const message = await expectSecondaryToRefuseToStart(primary, buildNotSharedStorageConfig(primary), primary.port + 10020)
 
       expect(message).to.contain('cannot reach the files of the primary process')
 
@@ -676,7 +706,7 @@ describe('Test file management by a secondary server process', function () {
       const { userId, token } = await primary.users.generate('user_import_staged')
 
       // Only the secondary can process the import job
-      await primary.kill()
+      await primary.jobs.pauseJobQueue({ processRoles: [ 'primary' ] })
 
       try {
         await secondary.userImports.importArchive({
@@ -695,8 +725,10 @@ describe('Test file management by a secondary server process', function () {
         expect(await objectStorage.listMockObjectKeys(bucket, stagingPrefix)).to.have.lengthOf(0)
         expect(await objectStorage.listMockMultipartUploadKeys(bucket, stagingPrefix)).to.have.lengthOf(0)
       } finally {
-        await primary.run(primary.configOverride)
+        await primary.jobs.resumeJobQueue()
       }
+
+      await waitJobs([ primary ])
     })
 
     it('Should delete on the secondary a live kept on the file system of the primary', async function () {
@@ -759,7 +791,7 @@ describe('Test file management by a secondary server process', function () {
           expect(sharedFiles.sections[section].reasons.join(' '), section).to.contain('still on the file system')
         }
 
-        const message = await expectSecondaryToRefuseToStart(primary, buildNotSharedStorageConfig(primary), primary.port + 20030)
+        const message = await expectSecondaryToRefuseToStart(primary, buildNotSharedStorageConfig(primary), primary.port + 10030)
         expect(message).to.contain('create-move-file-storage-job')
       }
 

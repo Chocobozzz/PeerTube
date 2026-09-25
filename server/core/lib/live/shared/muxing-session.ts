@@ -518,7 +518,9 @@ class MuxingSession extends TypedEventEmitter<MuxingSessionEvents> {
     }
 
     // Master playlist and segment JSON file are created, live is ready
-    if (this.masterPlaylistCreated && !this.liveReady) {
+    // Unless the session is already ending (segments processed by the cleanup)
+    // Or publishing the live would race with the after cleanup handler, and could overwrite the ended state of the live
+    if (this.masterPlaylistCreated && !this.liveReady && !this.aborted && !this.cleanupScheduled) {
       this.liveReady = true
 
       this.emit('live-ready', { videoUUID: this.videoUUID })
