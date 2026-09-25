@@ -282,6 +282,23 @@ export class Video implements VideoServerModel {
     )
   }
 
+  canBypassDisabledDownload (user: AuthUser) {
+    return user && this.isLocal === true && (
+      user.isOwnerOfChannel(this.channel) ||
+      user.isEditorOfChannel(this.channel) ||
+      user.hasRight(UserRight.SEE_ALL_VIDEOS)
+    )
+  }
+
+  // The source metadata endpoint requires UPDATE_ANY_VIDEO and the source file endpoint SEE_ALL_VIDEOS
+  canGetOriginalFile (user: AuthUser) {
+    return user && this.isLocal === true && (
+      user.isOwnerOfChannel(this.channel) ||
+      user.isEditorOfChannel(this.channel) ||
+      (user.hasRight(UserRight.UPDATE_ANY_VIDEO) && user.hasRight(UserRight.SEE_ALL_VIDEOS))
+    )
+  }
+
   canBypassPassword (user: AuthUser) {
     return this.privacy.id === VideoPrivacy.PASSWORD_PROTECTED &&
       user &&

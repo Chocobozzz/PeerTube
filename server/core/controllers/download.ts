@@ -417,7 +417,8 @@ async function commonDownloadAllowed (object: {
 }): Promise<AllowedResult> {
   const { req, res, video } = object
 
-  const user = getAuthUser(res)
+  // Download links are opened by the browser without authorization header: fallback to video file token user
+  const user = getAuthUser(res) || res.locals.videoFileToken?.user
 
   if (video.downloadEnabled === true) {
     return { allowed: true }
