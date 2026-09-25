@@ -1,6 +1,6 @@
 import { createLogger } from '@server/helpers/logger.js'
 import { LRU_CACHE } from '@server/initializers/constants.js'
-import { Redis } from '@server/lib/redis/index.js'
+import { ModelCacheInvalidationPayload, RedisChannels } from '@server/lib/redis/index.js'
 import { LRUCache } from 'lru-cache'
 import { Model } from 'sequelize-typescript'
 
@@ -59,7 +59,7 @@ class ModelCache {
 
   // Keep in sync with the other processes of this platform
   async listenForInvalidations () {
-    await Redis.Instance.subscribeToModelCacheInvalidation(payload => {
+    await RedisChannels.modelCacheInvalidation.subscribe(payload => {
       if (payload?.type === 'delete-key') {
         this.invalidateCacheLocally(payload.deleteKey as DeleteKey, payload.modelId)
       } else if (payload?.type === 'cache-type') {
@@ -151,11 +151,8 @@ class ModelCache {
     }
   }
 
-  private broadcastInvalidation (payload: Parameters<typeof Redis.Instance.publishModelCacheInvalidation>[0]) {
-    if (!Redis.Instance.isInitialized()) return
-
-    Redis.Instance.publishModelCacheInvalidation(payload)
-      .catch(err => logger.error('Cannot broadcast model cache invalidation.', { err }))
+  private broadcastInvalidation (payload: ModelCacheInvalidationPayload) {
+    RedisChannels.modelCacheInvalidation.broadcast(payload)
   }
 }
 

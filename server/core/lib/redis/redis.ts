@@ -4,18 +4,10 @@ import * as contactForm from './contact-form.js'
 import * as emailVerification from './email-verification.js'
 import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
-import * as homepageChanges from './homepage-changes.js'
-import * as jobQueueState from './job-queue-state.js'
-import { JobQueueStatePayload } from './job-queue-state.js'
-import * as liveSessionStop from './live-session-stop.js'
 import * as locks from './locks.js'
-import { LiveSessionStopPayload } from './live-session-stop.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
-import * as modelCacheInvalidation from './model-cache-invalidation.js'
-import { ModelCacheInvalidationPayload } from './model-cache-invalidation.js'
-import * as pluginChanges from './plugin-changes.js'
-import { PluginChangePayload } from './plugin-changes.js'
+import * as primaryRegisteredPlugins from './primary-registered-plugins.js'
 import {
   buildLoggedRedisClientOptions,
   duplicateRedisClient,
@@ -27,11 +19,7 @@ import {
   quitRedisClient,
   StatKind
 } from './redis-client.js'
-import * as sharedFiles from './shared-files.js'
-import { SharedFilesChange } from './shared-files.js'
 import * as sharedInstanceConfig from './shared-instance-config.js'
-import * as tokenInvalidation from './token-invalidation.js'
-import { TokenInvalidationPayload } from './token-invalidation.js'
 import * as twoFactorRequest from './two-factor-request.js'
 import * as uploadSession from './upload-session.js'
 import * as videoStatCounters from './video-stat-counters.js'
@@ -42,8 +30,6 @@ import * as videoViewerCounters from './video-viewer-counters.js'
 import { AddVideoViewerCounterOptions } from './video-viewer-counters.js'
 import * as videoViewerStats from './video-viewer-stats.js'
 import { LocalVideoViewer, MergeLocalVideoViewerOptions } from './video-viewer-stats.js'
-import * as watchedWordsInvalidation from './watched-words-invalidation.js'
-import { WatchedWordsInvalidationPayload } from './watched-words-invalidation.js'
 
 // Facade over the per-theme Redis modules in this directory
 export class Redis {
@@ -236,92 +222,18 @@ export class Redis {
     return sharedInstanceConfig.setSharedConfig(value)
   }
 
-  publishConfigChanged () {
-    return sharedInstanceConfig.publishConfigChanged()
-  }
-
-  subscribeToConfigChanges (handler: () => void) {
-    return sharedInstanceConfig.subscribeToConfigChanges(handler)
-  }
-
-  /* ************ Files managed by secondary processes ************ */
-
-  publishSharedFilesChanged (change: SharedFilesChange) {
-    return sharedFiles.publishSharedFilesChanged(change)
-  }
-
-  subscribeToSharedFilesChanges (handler: (change: SharedFilesChange) => void) {
-    return sharedFiles.subscribeToSharedFilesChanges(handler)
-  }
-
-  /* ************ Cross process invalidation ************ */
-
-  publishTokenInvalidation (payload: TokenInvalidationPayload) {
-    return tokenInvalidation.publishTokenInvalidation(payload)
-  }
-
-  subscribeToTokenInvalidation (handler: (payload: TokenInvalidationPayload) => void) {
-    return tokenInvalidation.subscribeToTokenInvalidation(handler)
-  }
-
-  publishPluginChange (payload: PluginChangePayload) {
-    return pluginChanges.publishPluginChange(payload)
-  }
-
-  subscribeToPluginChanges (handler: (payload: PluginChangePayload) => void) {
-    return pluginChanges.subscribeToPluginChanges(handler)
-  }
+  /* ************ Plugins registered by the primary process ************ */
 
   setPrimaryRegisteredPlugins (npmNames: string[]) {
-    return pluginChanges.setPrimaryRegisteredPlugins(npmNames)
+    return primaryRegisteredPlugins.setPrimaryRegisteredPlugins(npmNames)
   }
 
   getPrimaryRegisteredPlugins () {
-    return pluginChanges.getPrimaryRegisteredPlugins()
+    return primaryRegisteredPlugins.getPrimaryRegisteredPlugins()
   }
 
   deletePrimaryRegisteredPlugins () {
-    return pluginChanges.deletePrimaryRegisteredPlugins()
-  }
-
-  publishModelCacheInvalidation (payload: ModelCacheInvalidationPayload) {
-    return modelCacheInvalidation.publishModelCacheInvalidation(payload)
-  }
-
-  subscribeToModelCacheInvalidation (handler: (payload: ModelCacheInvalidationPayload) => void) {
-    return modelCacheInvalidation.subscribeToModelCacheInvalidation(handler)
-  }
-
-  publishHomepageChanged () {
-    return homepageChanges.publishHomepageChanged()
-  }
-
-  subscribeToHomepageChanges (handler: () => void) {
-    return homepageChanges.subscribeToHomepageChanges(handler)
-  }
-
-  publishLiveSessionStop (payload: LiveSessionStopPayload) {
-    return liveSessionStop.publishLiveSessionStop(payload)
-  }
-
-  subscribeToLiveSessionStop (handler: (payload: LiveSessionStopPayload) => void) {
-    return liveSessionStop.subscribeToLiveSessionStop(handler)
-  }
-
-  publishJobQueueState (payload: JobQueueStatePayload) {
-    return jobQueueState.publishJobQueueState(payload)
-  }
-
-  subscribeToJobQueueState (handler: (payload: JobQueueStatePayload) => void) {
-    return jobQueueState.subscribeToJobQueueState(handler)
-  }
-
-  publishWatchedWordsInvalidation (payload: WatchedWordsInvalidationPayload) {
-    return watchedWordsInvalidation.publishWatchedWordsInvalidation(payload)
-  }
-
-  subscribeToWatchedWordsInvalidation (handler: (payload: WatchedWordsInvalidationPayload) => void) {
-    return watchedWordsInvalidation.subscribeToWatchedWordsInvalidation(handler)
+    return primaryRegisteredPlugins.deletePrimaryRegisteredPlugins()
   }
 
   /* ************ Video viewer counters ************ */

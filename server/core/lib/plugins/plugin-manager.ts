@@ -32,8 +32,7 @@ import {
   RegisterServerOptions
 } from '../../types/plugins/index.js'
 import { ClientHtml } from '../html/client-html.js'
-import { Redis } from '../redis/index.js'
-import { PluginChangePayload } from '../redis/plugin-changes.js'
+import { PluginChangePayload, Redis, RedisChannels } from '../redis/index.js'
 import {
   installNpmPlugin,
   installNpmPluginFromDisk,
@@ -571,7 +570,7 @@ export class PluginManager implements ServerHook {
     // Called when this process failed to register a plugin the primary process runs
     onDivergedFromPrimary: (npmNames: string[]) => void
   }) {
-    await Redis.Instance.subscribeToPluginChanges((payload: PluginChangePayload) => {
+    await RedisChannels.pluginChanges.subscribe(payload => {
       if (payload?.type === 'installed-plugins-changed') {
         this.syncPlugins({ register: true, onDivergedFromPrimary: options.onDivergedFromPrimary })
           .catch(err => logger.error('Cannot sync plugins after a change made by another process.', { err }))
@@ -723,11 +722,8 @@ export class PluginManager implements ServerHook {
   }
 
   private notifyOtherProcesses (payload: PluginChangePayload) {
-    // `npm run plugin:install` and its siblings run without Redis: they only write the state the others converge to
-    if (!Redis.Instance.isInitialized()) return
-
-    Redis.Instance.publishPluginChange(payload)
-      .catch(err => logger.error('Cannot notify the other processes of a plugin change.', { err }))
+    // `npm run plugin:install` and its siblings run without Redis: `broadcast` skips it, they only write the state the others converge to
+    RedisChannels.pluginChanges.broadcast(payload)
   }
 
   // ###################### Private register ######################

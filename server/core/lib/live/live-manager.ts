@@ -36,7 +36,7 @@ import { Notifier } from '../notifier/notifier.js'
 import { getLiveReplayBaseDirectory } from '../paths.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
-import { Redis } from '../redis/index.js'
+import { RedisChannels } from '../redis/index.js'
 import type { LiveSessionStopPayload } from '../redis/index.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
 import { isUserQuotaValid } from '../user.js'
@@ -202,10 +202,10 @@ class LiveManager {
   // Live sessions only exist in the primary process, the one running the RTMP server
   // The other processes of the platform ask it to stop a session through Redis
   async listenForSessionStopRequests () {
-    await Redis.Instance.subscribeToLiveSessionStop(payload => {
+    await RedisChannels.liveSessionStop.subscribe(payload => {
       if (!payload?.videoUUID) return
 
-      this.stopLocalSessionOfVideo(payload)
+      return this.stopLocalSessionOfVideo(payload)
         .catch(err => logger.error('Cannot stop session of video %s requested by another process.', payload.videoUUID, { err }))
     })
   }
@@ -214,7 +214,7 @@ class LiveManager {
     if (isSecondaryProcess()) {
       logger.debug('Asking the primary process to stop the live session of video %s', options.videoUUID, { error: options.error })
 
-      await Redis.Instance.publishLiveSessionStop(pick(options, [ 'videoUUID', 'error', 'expectedSessionId', 'errorOnReplay' ]))
+      await RedisChannels.liveSessionStop.publish(pick(options, [ 'videoUUID', 'error', 'expectedSessionId', 'errorOnReplay' ]))
       return
     }
 

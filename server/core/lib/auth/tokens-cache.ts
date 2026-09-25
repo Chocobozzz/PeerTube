@@ -1,10 +1,7 @@
 import { MOAuthTokenUser } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
-import { createLogger } from '../../helpers/logger.js'
 import { LRU_CACHE } from '../../initializers/constants.js'
-import { Redis, TokenInvalidationPayload } from '../redis/index.js'
-
-const logger = createLogger()
+import { RedisChannels, TokenInvalidationPayload } from '../redis/index.js'
 
 export class TokensCache {
   private static instance: TokensCache
@@ -43,7 +40,7 @@ export class TokensCache {
 
   // If we have multiple processes, we need to listen to invalidation events from Redis to keep the cache in sync
   async listenForInvalidations () {
-    await Redis.Instance.subscribeToTokenInvalidation(payload => {
+    await RedisChannels.tokenInvalidation.subscribe(payload => {
       if (payload?.token) this.deleteTokenLocally(payload.token)
       else if (payload?.userId) this.deleteUserTokensLocally(payload.userId, payload.tokenException)
     })
@@ -103,9 +100,6 @@ export class TokensCache {
   }
 
   private broadcastInvalidation (payload: TokenInvalidationPayload) {
-    if (!Redis.Instance.isInitialized()) return
-
-    Redis.Instance.publishTokenInvalidation(payload)
-      .catch(err => logger.error('Cannot broadcast token invalidation.', { err }))
+    RedisChannels.tokenInvalidation.broadcast(payload)
   }
 }

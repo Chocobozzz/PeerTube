@@ -1,7 +1,7 @@
 import { hostname } from 'os'
 import { createLogger } from '../../helpers/logger.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
-import { Redis } from '../../lib/redis/index.js'
+import { Redis, RedisChannels } from '../../lib/redis/index.js'
 import { CONFIG, getConfigModule, reloadConfig } from '../config.js'
 import { WEBSERVER } from '../constants.js'
 import { isSecondaryProcess } from '../process-role.js'
@@ -21,10 +21,7 @@ export class ConfigDistribution {
 
   async init () {
     if (isSecondaryProcess()) {
-      await Redis.Instance.subscribeToConfigChanges(() => {
-        this.applyPublishedConfig()
-          .catch(err => logger.error('Cannot apply the configuration change.', { err }))
-      })
+      await RedisChannels.configChanged.subscribe(() => this.applyPublishedConfig())
 
       logger.info(`Using the configuration published by the primary process of ${WEBSERVER.HOST}.`)
 
@@ -63,7 +60,7 @@ export class ConfigDistribution {
     }
 
     await Redis.Instance.setSharedConfig(await encodePublishedConfig(payload, CONFIG.SECRETS.PEERTUBE))
-    await Redis.Instance.publishConfigChanged()
+    await RedisChannels.configChanged.publish()
   }
 
   private async applyPublishedConfig () {

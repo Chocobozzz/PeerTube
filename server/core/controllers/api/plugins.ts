@@ -11,7 +11,7 @@ import { createLogger } from '@server/helpers/logger.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
-import { Redis } from '@server/lib/redis/index.js'
+import { RedisChannels } from '@server/lib/redis/index.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -220,7 +220,7 @@ async function updatePluginSettings (req: express.Request, res: express.Response
   await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
 
   try {
-    await Redis.Instance.publishPluginChange({ type: 'plugin-settings-changed', npmName: req.params.npmName })
+    await RedisChannels.pluginChanges.publish({ type: 'plugin-settings-changed', npmName: req.params.npmName })
   } catch (err) {
     logger.error('Failed to publish plugin settings change for %s.', req.params.npmName, { err })
   }
