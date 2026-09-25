@@ -1189,6 +1189,24 @@ paths:
           - admin
       tags:
         - Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processRoles:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum:
+                      - primary
+                      - secondary
+                  description: >-
+                    Roles of the PeerTube processes that must pause their job queue.
+                    Defaults to all the roles.
+                    Other processes are notified asynchronously.
       responses:
         '204':
           description: successful operation
@@ -1201,6 +1219,24 @@ paths:
           - admin
       tags:
         - Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processRoles:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum:
+                      - primary
+                      - secondary
+                  description: >-
+                    Roles of the PeerTube processes that must resume their job queue.
+                    Defaults to all the roles.
+                    Other processes are notified asynchronously.
       responses:
         '204':
           description: successful operation

@@ -106,14 +106,38 @@ describe('Test jobs API validators', function () {
       }
     })
 
-    it('Should succeed with the correct params', async function () {
+    it('Should fail with invalid process roles', async function () {
       for (const command of commands) {
-        await makePostBodyRequest({
-          url: server.url,
-          path: '/api/v1/jobs/' + command,
-          token: server.accessToken,
-          expectedStatus: HttpStatusCode.NO_CONTENT_204
-        })
+        for (const processRoles of [ 'primary', [], [ 'toto' ], [ 'primary', 'toto' ] ]) {
+          await makePostBodyRequest({
+            url: server.url,
+            path: '/api/v1/jobs/' + command,
+            token: server.accessToken,
+            fields: { processRoles },
+            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+          })
+        }
+      }
+    })
+
+    it('Should succeed with the correct params', async function () {
+      const fieldsList = [
+        {},
+        { processRoles: [ 'primary' ] },
+        { processRoles: [ 'secondary' ] },
+        { processRoles: [ 'primary', 'secondary' ] }
+      ]
+
+      for (const command of commands) {
+        for (const fields of fieldsList) {
+          await makePostBodyRequest({
+            url: server.url,
+            path: '/api/v1/jobs/' + command,
+            token: server.accessToken,
+            fields,
+            expectedStatus: HttpStatusCode.NO_CONTENT_204
+          })
+        }
       }
     })
   })

@@ -391,7 +391,7 @@ describe('Test a secondary server process', function () {
         started = await createSecondaryServer(primary, {
           secrets: { peertube: 'not the secret of the primary' },
           // Another port, so a process that wrongly boots does not merely fail to bind the one of `secondary`
-          listen: { port: primary.port + 20001 }
+          listen: { port: primary.port + 10001 }
         })
       } catch (err) {
         error = err as Error
@@ -416,7 +416,7 @@ describe('Test a secondary server process', function () {
           // Already claimed by the primary
           storage: { plugins: primary.getDirectoryPath('plugins') + '/' },
           // Another port, so a process that wrongly boots does not merely fail to bind the one of `secondary`
-          listen: { port: primary.port + 20002 }
+          listen: { port: primary.port + 10002 }
         })
       } catch (err) {
         error = err as Error
@@ -438,7 +438,7 @@ describe('Test a secondary server process', function () {
       try {
         started = await createSecondaryServer(primary, {
           storage: { tmp: primary.getDirectoryPath('tmp') + '/' },
-          listen: { port: primary.port + 20003 }
+          listen: { port: primary.port + 10003 }
         })
       } catch (err) {
         error = err as Error

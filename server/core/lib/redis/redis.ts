@@ -5,6 +5,8 @@ import * as emailVerification from './email-verification.js'
 import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
 import * as homepageChanges from './homepage-changes.js'
+import * as jobQueueState from './job-queue-state.js'
+import { JobQueueStatePayload } from './job-queue-state.js'
 import * as liveSessionStop from './live-session-stop.js'
 import * as locks from './locks.js'
 import { LiveSessionStopPayload } from './live-session-stop.js'
@@ -304,6 +306,14 @@ export class Redis {
 
   subscribeToLiveSessionStop (handler: (payload: LiveSessionStopPayload) => void) {
     return liveSessionStop.subscribeToLiveSessionStop(handler)
+  }
+
+  publishJobQueueState (payload: JobQueueStatePayload) {
+    return jobQueueState.publishJobQueueState(payload)
+  }
+
+  subscribeToJobQueueState (handler: (payload: JobQueueStatePayload) => void) {
+    return jobQueueState.subscribeToJobQueueState(handler)
   }
 
   publishWatchedWordsInvalidation (payload: WatchedWordsInvalidationPayload) {

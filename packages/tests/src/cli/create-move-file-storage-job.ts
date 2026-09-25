@@ -97,7 +97,7 @@ async function checkVideoFiles (options: {
     for (const caption of captions) {
       expectStartWith(caption.fileUrl, start)
 
-      await makeRawRequest({ url: caption.fileUrl, token: origin.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: caption.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
     }
 
     await completeCheckHlsPlaylist({

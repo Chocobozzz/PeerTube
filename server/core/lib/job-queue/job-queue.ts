@@ -18,6 +18,7 @@ import {
   ManageVideoTorrentPayload,
   MoveStoragePayload,
   NotifyPayload,
+  ProcessRole,
   RefreshPayload,
   TranscodingJobBuilderPayload,
   VideoChannelImportPayload,
@@ -30,9 +31,10 @@ import {
   VideoTranscodingPayload,
   VideoTranscriptionPayload
 } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { allJobStates } from '@server/helpers/custom-validators/jobs.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
-import { isSecondaryProcess } from '@server/initializers/process-role.js'
+import { getProcessRole, isSecondaryProcess, PROCESS_ROLES } from '@server/initializers/process-role.js'
 import { getNotSharedStorageDirectories } from '@server/initializers/storage-ownership.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
 import {
@@ -244,6 +246,12 @@ class JobQueue {
   private flowProducer: FlowProducer
 
   private initialized = false
+  private started = false
+  // Requested before the start of the workers
+  private pausedBeforeStart = false
+
+  // Ignore the job queue state changes this process published itself
+  private readonly processId = buildUUID()
   private jobRedisPrefix: string
 
   private constructor () {
@@ -420,10 +428,53 @@ class JobQueue {
         ])
       })
 
+    this.started = true
+
+    if (this.pausedBeforeStart) {
+      this.pauseWorkers()
+        .catch(err => logger.error('Cannot pause job queue.', { err }))
+    }
+
     return Promise.all(promises)
   }
 
-  async pause () {
+  // Other processes are notified asynchronously: they may still pick up a job just after this call
+  async pause (options: { processRoles?: ProcessRole[] } = {}) {
+    const { processRoles = PROCESS_ROLES } = options
+
+    await Redis.Instance.publishJobQueueState({ action: 'pause', processRoles, senderId: this.processId })
+
+    if (processRoles.includes(getProcessRole())) await this.pauseWorkers()
+  }
+
+  async resume (options: { processRoles?: ProcessRole[] } = {}) {
+    const { processRoles = PROCESS_ROLES } = options
+
+    await Redis.Instance.publishJobQueueState({ action: 'resume', processRoles, senderId: this.processId })
+
+    if (processRoles.includes(getProcessRole())) await this.resumeWorkers()
+  }
+
+  // The job queue can be paused/resumed by any process of the platform
+  async listenForStateChanges () {
+    await Redis.Instance.subscribeToJobQueueState(({ action, processRoles, senderId }) => {
+      if (senderId === this.processId) return
+      if (!processRoles.includes(getProcessRole())) return
+
+      const promise = action === 'pause'
+        ? this.pauseWorkers()
+        : this.resumeWorkers()
+
+      promise.catch(err => logger.error(`Cannot ${action} job queue.`, { err }))
+    })
+  }
+
+  private async pauseWorkers () {
+    if (!this.started) {
+      this.pausedBeforeStart = true
+      return
+    }
+
     for (const handlerName of Object.keys(this.workers)) {
       const worker: Worker = this.workers[handlerName]
 
@@ -431,7 +482,13 @@ class JobQueue {
     }
   }
 
-  async resume () {
+  private async resumeWorkers () {
+    // Resuming a worker that is not running would start it
+    if (!this.started) {
+      this.pausedBeforeStart = false
+      return
+    }
+
     for (const handlerName of Object.keys(this.workers)) {
       const worker: Worker = this.workers[handlerName]
 

@@ -411,16 +411,22 @@ describe('Test prune storage CLI', function () {
     let rootId: number
     let captionVideoId: number
 
+    // Private files are not proxified: make them readable anonymously so the tests can fetch their direct object storage URLs
+    function buildConfig (disabledTypes: AlwaysOnObjectStorageType[] = []) {
+      return objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false, privateACL: 'public-read', disabledTypes })
+    }
+
     async function execPruneStorage (disabledTypes: AlwaysOnObjectStorageType[] = []) {
-      const env = servers[0].cli.getEnv(objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false, disabledTypes }))
+      const env = servers[0].cli.getEnv(buildConfig(disabledTypes))
 
       await servers[0].cli.execWithEnv(`${env} npm run prune-storage -- -y`)
     }
 
     async function checkVideosFiles (uuids: string[], expectedStatus: HttpStatusCodeType) {
       for (const uuid of uuids) {
+        // Direct object storage URLs: the mock refuses requests with a PeerTube token
         for (const url of videoFileUrls[uuid]) {
-          await makeRawRequest({ url, token: servers[0].accessToken, expectedStatus })
+          await makeRawRequest({ url, expectedStatus })
         }
 
         await makeRawRequest({ url: sourceFileUrls[uuid], redirects: 1, token: servers[0].accessToken, expectedStatus })
@@ -430,7 +436,7 @@ describe('Test prune storage CLI', function () {
     async function checkCaptionFiles (uuids: string[], languages: string[], expectedStatus: HttpStatusCodeType) {
       for (const uuid of uuids) {
         for (const language of languages) {
-          await makeRawRequest({ url: captionFileUrls[uuid][language], token: servers[0].accessToken, expectedStatus })
+          await makeRawRequest({ url: captionFileUrls[uuid][language], expectedStatus })
         }
       }
     }
@@ -450,7 +456,7 @@ describe('Test prune storage CLI', function () {
       await objectStorage.prepareDefaultMockBuckets()
 
       await servers[0].kill()
-      await servers[0].run(objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false }))
+      await servers[0].run(buildConfig())
 
       {
         const { uuid } = await servers[0].videos.quickUpload({ name: 's3 video 1', privacy: VideoPrivacy.PUBLIC })
