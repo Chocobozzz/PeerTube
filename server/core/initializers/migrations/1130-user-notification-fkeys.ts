@@ -24,30 +24,33 @@ async function up (utils: {
     )
   }
 
+  // Constraint names depend on the version the instance was installed with
   {
     await utils.sequelize.query(
-      'ALTER TABLE "userNotification" DROP CONSTRAINT "userNotification_pluginId_fkey", ' +
+      'ALTER TABLE "userNotification" DROP CONSTRAINT IF EXISTS "userNotification_pluginId_fkey", ' +
         'ADD CONSTRAINT "userNotification_pluginId_fkey" ' +
         'FOREIGN KEY ("pluginId") REFERENCES "plugin" ("id") ON DELETE CASCADE ON UPDATE CASCADE',
       { transaction }
     )
 
     await utils.sequelize.query(
-      'ALTER TABLE "userNotification" DROP CONSTRAINT "userNotification_applicationId_fkey", ' +
+      'ALTER TABLE "userNotification" DROP CONSTRAINT IF EXISTS "userNotification_applicationId_fkey", ' +
         'ADD CONSTRAINT "userNotification_applicationId_fkey" ' +
         'FOREIGN KEY ("applicationId") REFERENCES "application" ("id") ON DELETE CASCADE ON UPDATE CASCADE',
       { transaction }
     )
 
     await utils.sequelize.query(
-      'ALTER TABLE "userNotification" DROP CONSTRAINT "userNotification_videoAbuseId_fkey", ' +
+      'ALTER TABLE "userNotification" DROP CONSTRAINT IF EXISTS "userNotification_videoAbuseId_fkey", ' +
+        'DROP CONSTRAINT IF EXISTS "userNotification_abuseId_fkey", ' +
         'ADD CONSTRAINT "userNotification_abuseId_fkey" ' +
         'FOREIGN KEY ("abuseId") REFERENCES "abuse" ("id") ON DELETE CASCADE ON UPDATE CASCADE',
       { transaction }
     )
 
     await utils.sequelize.query(
-      'ALTER TABLE "userNotification" DROP CONSTRAINT "userNotification_videoOwnershipId_fkey", ' +
+      'ALTER TABLE "userNotification" DROP CONSTRAINT IF EXISTS "userNotification_videoOwnershipId_fkey", ' +
+        'DROP CONSTRAINT IF EXISTS "userNotification_changeOwnershipId_fkey", ' +
         'ADD CONSTRAINT "userNotification_changeOwnershipId_fkey" ' +
         'FOREIGN KEY ("changeOwnershipId") REFERENCES "changeOwnership" ("id") ON DELETE CASCADE ON UPDATE CASCADE',
       { transaction }
@@ -63,3 +66,4 @@ export {
   up,
   down
 }
+
