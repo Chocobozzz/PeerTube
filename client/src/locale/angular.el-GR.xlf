@@ -12008,17 +12008,17 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">22,24</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4327201605045115208" datatype="html">
+      <trans-unit id="4327201605045115208" datatype="html" xml:space="preserve">
         <source>Other platforms can subscribe to it to automatically mute the same accounts and servers.</source>
-        <target state="new"> Other platforms can subscribe to it to automatically mute the same accounts and servers. </target>
+        <target state="translated">Άλλες πλατφόρμες μπορούν να εγγραφούν σε αυτήν, ώστε να απενεργοποιούν αυτόματα τον ήχο των ίδιων λογαριασμών και διακομιστών.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-moderation.component.html</context>
           <context context-type="linenumber">27,28</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3076079242537393946" datatype="html">
+      <trans-unit id="3076079242537393946" datatype="html" xml:space="preserve">
         <source>Moderation information</source>
-        <target state="new">Moderation information</target>
+        <target state="translated">Πληροφορίες συντονισμού</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-moderation.component.html</context>
           <context context-type="linenumber">4</context>
@@ -12032,65 +12032,65 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3968335261686887328" datatype="html">
+      <trans-unit id="3968335261686887328" datatype="html" xml:space="preserve">
         <source>Who is behind the instance?</source>
-        <target state="new">Who is behind the instance?</target>
+        <target state="translated">Ποιος είναι πίσω από αυτήν την οντότητα;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7323194786468446482" datatype="html">
+      <trans-unit id="7323194786468446482" datatype="html" xml:space="preserve">
         <source>A single person? A non-profit? A company?</source>
-        <target state="new">A single person? A non-profit? A company?</target>
+        <target state="translated">Ένα φυσικό πρόσωπο; Ένας μη κερδοσκοπικός οργανισμός; Μια εταιρεία;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">297</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5480243297215266596" datatype="html">
+      <trans-unit id="5480243297215266596" datatype="html" xml:space="preserve">
         <source>Why did you create this instance?</source>
-        <target state="new">Why did you create this instance?</target>
+        <target state="translated">Γιατί δημιουργήσατε αυτήν την οντότητα;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">306</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6995481962115300007" datatype="html">
+      <trans-unit id="6995481962115300007" datatype="html" xml:space="preserve">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="new">To share your personal videos? To open registrations and allow people to upload what they want?</target>
+        <target state="translated">Για να μοιραστείτε τα προσωπικά σας βίντεο; Για να ανοίξετε τις εγγραφές και να επιτρέψετε στους χρήστες να ανεβάζουν ό,τι θέλουν;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">307</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3667968987954856844" datatype="html">
+      <trans-unit id="3667968987954856844" datatype="html" xml:space="preserve">
         <source>How long do you plan to maintain this instance?</source>
-        <target state="new">How long do you plan to maintain this instance?</target>
+        <target state="translated">Για πόσο καιρό σκοπεύετε να διατηρήσετε αυτήν την οντότητα;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">316</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6722472563287778070" datatype="html">
+      <trans-unit id="6722472563287778070" datatype="html" xml:space="preserve">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="new">It's important to know for users who want to register on your instance</target>
+        <target state="translated">Είναι σημαντικό να το γνωρίζουν οι χρήστες που επιθυμούν να εγγραφούν στην οντότητα σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8362291348781958428" datatype="html">
+      <trans-unit id="8362291348781958428" datatype="html" xml:space="preserve">
         <source>How will you finance the PeerTube server?</source>
-        <target state="new">How will you finance the PeerTube server?</target>
+        <target state="translated">Πώς θα χρηματοδοτήσετε τον διακομιστή PeerTube;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">326</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2441006645448216398" datatype="html">
+      <trans-unit id="2441006645448216398" datatype="html" xml:space="preserve">
         <source>With your own funds? With user donations? Advertising?</source>
-        <target state="new">With your own funds? With user donations? Advertising?</target>
+        <target state="translated">Με δικά σας κεφάλαια; Με δωρεές των χρηστών; Με διαφημίσεις;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">327</context>
@@ -12104,9 +12104,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">340</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3447208665089679283" datatype="html">
+      <trans-unit id="3447208665089679283" datatype="html" xml:space="preserve">
         <source>What server/hardware does the instance run on?</source>
-        <target state="new">What server/hardware does the instance run on?</target>
+        <target state="translated">Σε ποιον διακομιστή/υλικό εκτελείται η οντότητα;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">346</context>
