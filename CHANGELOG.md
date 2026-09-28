@@ -1,5 +1,21 @@
 # Changelog
 
+## v8.3.1
+
+### SECURITY
+
+ * This release addresses vulnerabilities ranging from medium to critical severity affecting PeerTube. In a few weeks, this changelog will be updated to disclose the vulnerabilities.
+
+### Bug fixes
+
+ * Force video encoding if there are rotation info
+ * Fix broken studio on only intro/outro/cut task
+ * Fix broken sorts/invalid sort checkers for channel syncs and ownership changes
+ * Fix downloading a download-protected video for admins
+ * Fix broken email title in some emails
+ * Fix broken notification window if the list contains a broken change ownership notification
+
+
 ## v8.3.0
 
 ### IMPORTANT NOTES
