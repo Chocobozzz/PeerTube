@@ -186,6 +186,7 @@ async function register ({
       await peertubeHelpers.email.createJob({
         to: { email: req.body.to, language: 'en' },
         subject: req.body.subject,
+        title: req.body.title,
         text: req.body.text
       })
 
