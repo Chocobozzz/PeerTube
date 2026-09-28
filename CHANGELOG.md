@@ -4,7 +4,7 @@
 
 ### SECURITY
 
- * This release addresses vulnerabilities ranging from medium to critical severity affecting PeerTube. In a few weeks, this changelog will be updated to disclose the vulnerabilities.
+ * This release addresses vulnerabilities ranging from medium to critical severity affecting PeerTube. In a week, this changelog will be updated to disclose the vulnerabilities.
 
 ### Bug fixes
 
