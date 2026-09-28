@@ -14,6 +14,8 @@
  * Fix downloading a download-protected video for admins
  * Fix broken email title in some emails
  * Fix broken notification window if the list contains a broken change ownership notification
+ * Fix table pagination after a search
+ * Include muted muted videos when admins/moderators display all videos of an account/channel
 
 
 ## v8.3.0
