@@ -2,11 +2,13 @@
 
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, HttpStatusCodeType, UserRole } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
   makeRawRequest,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
@@ -17,6 +19,10 @@ const oauthServerHost = '127.0.0.1'
 const oauthServerPort = 8082
 
 describe('Official plugin auth-openid-connect', function () {
+  // Secondary processes require object storage
+  const withSecondary = !areMockObjectStorageTestsDisabled()
+  const objectStorage = new ObjectStorageCommand()
+
   let server: PeerTubeServer
   let secondary: PeerTubeServer
   let openIdLoginUrl: string
@@ -42,7 +48,9 @@ describe('Official plugin auth-openid-connect', function () {
   before(async function () {
     this.timeout(60000)
 
-    server = await createSingleServer(1)
+    if (withSecondary) await objectStorage.prepareDefaultMockBuckets()
+
+    server = await createSingleServer(1, withSecondary ? objectStorage.getDefaultMockConfig() : {})
     await setAccessTokensToServers([ server ])
 
     await server.plugins.install({
@@ -225,6 +233,8 @@ describe('Official plugin auth-openid-connect', function () {
   })
 
   describe('Secondary server process', function () {
+    if (!withSecondary) return
+
     before(async function () {
       this.timeout(60000)
 
@@ -289,6 +299,8 @@ describe('Official plugin auth-openid-connect', function () {
   })
 
   after(async function () {
+    if (withSecondary) await objectStorage.cleanupMock()
+
     await cleanupTests([ secondary, server ])
   })
 })

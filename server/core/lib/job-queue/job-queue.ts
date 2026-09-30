@@ -31,11 +31,9 @@ import {
   VideoTranscodingPayload,
   VideoTranscriptionPayload
 } from '@peertube/peertube-models'
-import { buildUUID } from '@peertube/peertube-node-utils'
 import { allJobStates } from '@server/helpers/custom-validators/jobs.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { getProcessRole, isSecondaryProcess, PROCESS_ROLES } from '@server/initializers/process-role.js'
-import { getNotSharedStorageDirectories } from '@server/initializers/storage-ownership.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
 import {
   FlowJob,
@@ -52,9 +50,8 @@ import {
 import { RedisOptions } from 'ioredis'
 import { createLogger } from '../../helpers/logger.js'
 import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
-import { isAllObjectStorageEnabled } from '../object-storage/config.js'
 import { Hooks } from '../plugins/hooks.js'
-import { Redis, RedisChannels } from '../redis/index.js'
+import { currentProcessId, Redis, RedisChannels } from '../redis/index.js'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner.js'
 import { processActivityPubFollow } from './handlers/activitypub-follow.js'
 import {
@@ -213,20 +210,14 @@ const jobTypes: JobType[] = [
  *
  * They do not touch state owned by a single process (live sessions, transcoding files on local storage)
  */
-function getSecondaryProcessJobTypes () {
-  const jobTypes = new Set<JobType>([
-    'activitypub-http-broadcast-parallel',
-    'activitypub-http-broadcast',
-    'activitypub-http-unicast'
-  ])
+const secondaryProcessJobTypes = new Set<JobType>([
+  'activitypub-http-broadcast-parallel',
+  'activitypub-http-broadcast',
+  'activitypub-http-unicast',
 
-  // The import reads the archive and creates videos, avatars, etc.: everything must be reachable from any process
-  if (isAllObjectStorageEnabled() || getNotSharedStorageDirectories().length === 0) {
-    jobTypes.add('import-user-archive')
-  }
-
-  return jobTypes
-}
+  // The import reads the staged archive and creates videos, avatars, etc. in object storage
+  'import-user-archive'
+])
 
 const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcription', 'video-studio-edition', 'generate-video-storyboard' ]
 
@@ -250,8 +241,6 @@ class JobQueue {
   // Requested before the start of the workers
   private pausedBeforeStart = false
 
-  // Ignore the job queue state changes this process published itself
-  private readonly processId = buildUUID()
   private jobRedisPrefix: string
 
   private constructor () {
@@ -267,7 +256,7 @@ class JobQueue {
     // A secondary process still has to *enqueue* every job type so all the queues are built
     // Only the workers are restricted to the job types the process is allowed to consume.
     const consumedJobTypes = isSecondaryProcess()
-      ? getSecondaryProcessJobTypes()
+      ? secondaryProcessJobTypes
       : new Set(Object.keys(handlers))
 
     if (isSecondaryProcess()) {
@@ -442,7 +431,7 @@ class JobQueue {
   async pause (options: { processRoles?: ProcessRole[] } = {}) {
     const { processRoles = PROCESS_ROLES } = options
 
-    await RedisChannels.jobQueueState.publish({ action: 'pause', processRoles, senderId: this.processId })
+    await RedisChannels.jobQueueState.publish({ action: 'pause', processRoles, senderId: currentProcessId })
 
     if (processRoles.includes(getProcessRole())) await this.pauseWorkers()
   }
@@ -450,7 +439,7 @@ class JobQueue {
   async resume (options: { processRoles?: ProcessRole[] } = {}) {
     const { processRoles = PROCESS_ROLES } = options
 
-    await RedisChannels.jobQueueState.publish({ action: 'resume', processRoles, senderId: this.processId })
+    await RedisChannels.jobQueueState.publish({ action: 'resume', processRoles, senderId: currentProcessId })
 
     if (processRoles.includes(getProcessRole())) await this.resumeWorkers()
   }
@@ -458,14 +447,16 @@ class JobQueue {
   // The job queue can be paused/resumed by any process of the platform
   async listenForStateChanges () {
     await RedisChannels.jobQueueState.subscribe(({ action, processRoles, senderId }) => {
-      if (senderId === this.processId) return
+      if (senderId === currentProcessId) return
       if (!processRoles.includes(getProcessRole())) return
 
       const promise = action === 'pause'
         ? this.pauseWorkers()
         : this.resumeWorkers()
 
-      return promise.catch(err => logger.error(`Cannot ${action} job queue requested by another process.`, { err }))
+      return promise
+        .then(() => logger.info(`Job queue ${action === 'pause' ? 'paused' : 'resumed'} as requested by another process.`))
+        .catch(err => logger.error(`Cannot ${action} job queue requested by another process.`, { err }))
     })
   }
 
@@ -661,13 +652,32 @@ class JobQueue {
     return isActive
   }
 
-  cancelJob (jobType: JobType, job: Job) {
+  // The job may be processed by another process: ask every process to cancel it
+  async cancelJob (jobType: JobType, job: Job) {
     logger.info('Cancelling job %s in queue %s.', job.id, job.queueName)
 
-    const worker = this.workers[jobType]
-    if (!worker) throw new Error(`Unknown queue ${jobType}`)
+    // First, so the job is cancelled if this process runs it, even if Redis fails
+    this.cancelLocalJob(jobType, job.id)
 
-    return worker.cancelJob(job.id, 'Job cancelled by admin')
+    await RedisChannels.jobCancel.publish({ jobType, jobId: job.id, senderId: currentProcessId })
+  }
+
+  async listenForJobCancels () {
+    await RedisChannels.jobCancel.subscribe(({ jobType, jobId, senderId }) => {
+      if (senderId === currentProcessId) return
+
+      this.cancelLocalJob(jobType, jobId)
+    })
+  }
+
+  private cancelLocalJob (jobType: JobType, jobId: string) {
+    // This process does not run this kind of job
+    const worker = this.workers[jobType]
+    if (!worker) return
+
+    if (worker.cancelJob(jobId, 'Job cancelled by admin')) {
+      logger.info('Job %s in queue %s cancelled.', jobId, jobType)
+    }
   }
 
   private buildStateFilter (state?: JobState) {

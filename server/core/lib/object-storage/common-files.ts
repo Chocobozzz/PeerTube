@@ -1,7 +1,7 @@
 import { FileStorage, FileStorageType } from '@peertube/peertube-models'
 import { createReadStream } from 'fs'
 import { Readable } from 'stream'
-import { getObjectStorageFileConfig, ObjectStorageFileType } from './config.js'
+import { CommonObjectStorageType, getObjectStorageFileConfig } from './config.js'
 import { getObjectStorageContentType } from './content-type.js'
 import { generateCommonFileObjectStorageKey } from './keys.js'
 import { makeAvailableInTmp } from './make-available.js'
@@ -29,7 +29,7 @@ export type LocalCommonFile = {
 }
 
 export function storeCommonFile (
-  type: ObjectStorageFileType,
+  type: CommonObjectStorageType,
   inputPath: string,
   filename: string,
   options: { isPrivate?: boolean } = {}
@@ -62,7 +62,7 @@ export async function copyObjectToCommonFile (options: {
   sourceBucketInfo: BucketInfo
   sourceSize?: number
 
-  type: ObjectStorageFileType
+  type: CommonObjectStorageType
   filename: string
   isPrivate: boolean
 }) {
@@ -98,11 +98,11 @@ export async function copyObjectToCommonFile (options: {
   }
 }
 
-export function removeCommonFileObjectStorage (type: ObjectStorageFileType, filename: string) {
+export function removeCommonFileObjectStorage (type: CommonObjectStorageType, filename: string) {
   return removeObject(generateCommonFileObjectStorageKey(type, filename), getObjectStorageFileConfig(type))
 }
 
-export function updateCommonFileACL (type: ObjectStorageFileType, filename: string, isPrivate: boolean) {
+export function updateCommonFileACL (type: CommonObjectStorageType, filename: string, isPrivate: boolean) {
   return updateObjectACL({
     objectStorageKey: generateCommonFileObjectStorageKey(type, filename),
     bucketInfo: getObjectStorageFileConfig(type),
@@ -110,7 +110,7 @@ export function updateCommonFileACL (type: ObjectStorageFileType, filename: stri
   })
 }
 
-export function makeCommonFileAvailable<T> (type: ObjectStorageFileType, filename: string, cb: (path: string) => Promise<T>) {
+export function makeCommonFileAvailable<T> (type: CommonObjectStorageType, filename: string, cb: (path: string) => Promise<T>) {
   return makeAvailableInTmp({
     key: generateCommonFileObjectStorageKey(type, filename),
     bucketInfo: getObjectStorageFileConfig(type),
@@ -119,7 +119,7 @@ export function makeCommonFileAvailable<T> (type: ObjectStorageFileType, filenam
   })
 }
 
-export function makeCommonFileAvailableIn (type: ObjectStorageFileType, filename: string, destination: string) {
+export function makeCommonFileAvailableIn (type: CommonObjectStorageType, filename: string, destination: string) {
   return makeAvailable({
     key: generateCommonFileObjectStorageKey(type, filename),
     destination,
@@ -128,7 +128,7 @@ export function makeCommonFileAvailableIn (type: ObjectStorageFileType, filename
 }
 
 // Full S3 response + stream: needed by callers that proxy HTTP range requests (web videos, captions, original files)
-export function getCommonFileReadStreamWithRes (type: ObjectStorageFileType, filename: string, rangeHeader: string) {
+export function getCommonFileReadStreamWithRes (type: CommonObjectStorageType, filename: string, rangeHeader: string) {
   return createObjectReadStream({
     key: generateCommonFileObjectStorageKey(type, filename),
     bucketInfo: getObjectStorageFileConfig(type),
@@ -136,13 +136,13 @@ export function getCommonFileReadStreamWithRes (type: ObjectStorageFileType, fil
   })
 }
 
-export async function getCommonFileReadStream (type: ObjectStorageFileType, filename: string) {
+export async function getCommonFileReadStream (type: CommonObjectStorageType, filename: string) {
   const { stream } = await getCommonFileReadStreamWithRes(type, filename, undefined)
 
   return stream
 }
 
-export function buildCommonFileObjectStorageUrl (type: ObjectStorageFileType, filename: string) {
+export function buildCommonFileObjectStorageUrl (type: CommonObjectStorageType, filename: string) {
   return buildObjectStoragePublicFileUrl({
     bucket: getObjectStorageFileConfig(type),
     key: generateCommonFileObjectStorageKey(type, filename)
@@ -152,7 +152,7 @@ export function buildCommonFileObjectStorageUrl (type: ObjectStorageFileType, fi
 // ---------------------------------------------------------------------------
 
 // Build a read stream of a local file, wherever it is stored on filesystem or object storage
-export function buildLocalCommonFileReadStream (type: ObjectStorageFileType, file: LocalCommonFile): Promise<Readable> {
+export function buildLocalCommonFileReadStream (type: CommonObjectStorageType, file: LocalCommonFile): Promise<Readable> {
   checkIsLocalOrThrow(type, file)
 
   if (file.storage === FileStorage.OBJECT_STORAGE) {
@@ -163,7 +163,7 @@ export function buildLocalCommonFileReadStream (type: ObjectStorageFileType, fil
 }
 
 // Run `cb` on a physical path of a local file, downloading it from object storage if needed
-export function withLocalCommonFile<T> (type: ObjectStorageFileType, file: LocalCommonFile, cb: (path: string) => Promise<T>) {
+export function withLocalCommonFile<T> (type: CommonObjectStorageType, file: LocalCommonFile, cb: (path: string) => Promise<T>) {
   checkIsLocalOrThrow(type, file)
 
   if (file.storage === FileStorage.OBJECT_STORAGE) {
@@ -177,6 +177,6 @@ export function withLocalCommonFile<T> (type: ObjectStorageFileType, file: Local
 // Private
 // ---------------------------------------------------------------------------
 
-function checkIsLocalOrThrow (type: ObjectStorageFileType, file: LocalCommonFile) {
+function checkIsLocalOrThrow (type: CommonObjectStorageType, file: LocalCommonFile) {
   if (!file.isLocal()) throw new Error(`Cannot read remote file ${file.filename} (${type})`)
 }

@@ -13,6 +13,7 @@ import {
   authenticate,
   ensureUserHasRight,
   paginationValidator,
+  primaryOnly,
   setBodyHostsPort,
   setDefaultPagination,
   setDefaultSort
@@ -33,79 +34,73 @@ const logger = createLogger()
 
 const serverFollowsRouter = express.Router()
 
-registerServerFollowsSharedRoutes(serverFollowsRouter)
+serverFollowsRouter.get(
+  '/following',
+  listFollowsValidator,
+  paginationValidator,
+  instanceFollowingSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listFollowing)
+)
+
+serverFollowsRouter.post(
+  '/following',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  followValidator,
+  setBodyHostsPort,
+  asyncMiddleware(addFollow)
+)
 
 serverFollowsRouter.delete(
   '/following/:hostOrHandle',
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(removeFollowingValidator),
   asyncMiddleware(removeFollowing)
 )
 
-// ---------------------------------------------------------------------------
+serverFollowsRouter.get(
+  '/followers',
+  listFollowsValidator,
+  paginationValidator,
+  instanceFollowersSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listFollowers)
+)
 
-function registerServerFollowsSharedRoutes (router: express.Router) {
-  router.get(
-    '/following',
-    listFollowsValidator,
-    paginationValidator,
-    instanceFollowingSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    asyncMiddleware(listFollowing)
-  )
+serverFollowsRouter.delete(
+  '/followers/:handle',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  asyncMiddleware(getFollowerValidator),
+  asyncMiddleware(removeFollower)
+)
 
-  router.post(
-    '/following',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
-    followValidator,
-    setBodyHostsPort,
-    asyncMiddleware(addFollow)
-  )
+serverFollowsRouter.post(
+  '/followers/:handle/reject',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  asyncMiddleware(getFollowerValidator),
+  rejectFollowerValidator,
+  asyncMiddleware(rejectFollower)
+)
 
-  router.get(
-    '/followers',
-    listFollowsValidator,
-    paginationValidator,
-    instanceFollowersSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    asyncMiddleware(listFollowers)
-  )
-
-  router.delete(
-    '/followers/:handle',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
-    asyncMiddleware(getFollowerValidator),
-    asyncMiddleware(removeFollower)
-  )
-
-  router.post(
-    '/followers/:handle/reject',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
-    asyncMiddleware(getFollowerValidator),
-    rejectFollowerValidator,
-    asyncMiddleware(rejectFollower)
-  )
-
-  router.post(
-    '/followers/:handle/accept',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
-    asyncMiddleware(getFollowerValidator),
-    acceptFollowerValidator,
-    asyncMiddleware(acceptFollower)
-  )
-}
+serverFollowsRouter.post(
+  '/followers/:handle/accept',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  asyncMiddleware(getFollowerValidator),
+  acceptFollowerValidator,
+  asyncMiddleware(acceptFollower)
+)
 
 // ---------------------------------------------------------------------------
 
 export {
-  registerServerFollowsSharedRoutes, // Will be used by parent router
   serverFollowsRouter
 }
 

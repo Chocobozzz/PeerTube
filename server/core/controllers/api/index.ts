@@ -8,34 +8,32 @@ import { automaticTagRouter } from './automatic-tags.js'
 import { blocklistRouter } from './blocklist.js'
 import { bulkRouter } from './bulk.js'
 import { clientConfigRouter } from './client-config.js'
-import { configRouter, secondaryConfigRouter } from './config.js'
+import { configRouter } from './config.js'
 import { customPageRouter } from './custom-page.js'
 import { jobsRouter } from './jobs.js'
 import { metricsRouter } from './metrics.js'
 import { oauthClientsRouter } from './oauth-clients.js'
 import { overviewsRouter } from './overviews.js'
-import { playerSettingsRouter, secondaryPlayerSettingsRouter } from './player-settings.js'
+import { playerSettingsRouter } from './player-settings.js'
 import { pluginRouter } from './plugins.js'
-import { runnersRouter, secondaryRunnersRouter } from './runners/index.js'
+import { runnersRouter } from './runners/index.js'
 import { searchRouter } from './search/index.js'
-import { secondaryServerRouter, serverRouter } from './server/index.js'
-import { secondaryUsersRouter, usersRouter } from './users/index.js'
+import { serverRouter } from './server/index.js'
+import { usersRouter } from './users/index.js'
 import { videoChannelSyncRouter } from './video-channel-sync.js'
 import { videoChannelRouter } from './video-channels/index.js'
 import { videoPlaylistRouter } from './video-playlist.js'
-import { secondaryVideosRouter, videosRouter } from './videos/index.js'
+import { videosRouter } from './videos/index.js'
 import { watchedWordsRouter } from './watched-words.js'
 
 const logger = createLogger()
 
-const corsMiddleware = cors({
-  origin: '*',
-  exposedHeaders: 'Retry-After'
-})
-
 const apiRouter = express.Router()
 
-apiRouter.use(corsMiddleware)
+apiRouter.use(cors({
+  origin: '*',
+  exposedHeaders: 'Retry-After'
+}))
 
 apiRouter.use('/server', serverRouter)
 apiRouter.use('/abuses', abuseRouter)
@@ -66,39 +64,7 @@ apiRouter.use('/*', badRequest)
 
 // ---------------------------------------------------------------------------
 
-// API subset served by secondary processes
-// Requests for any other endpoint must be routed to the primary by the reverse proxy or it will fail with a visible 400 error
-const secondaryApiRouter = express.Router()
-
-secondaryApiRouter.use(corsMiddleware)
-
-secondaryApiRouter.use('/server', secondaryServerRouter)
-secondaryApiRouter.use('/abuses', abuseRouter)
-secondaryApiRouter.use('/bulk', bulkRouter)
-secondaryApiRouter.use('/oauth-clients', oauthClientsRouter)
-secondaryApiRouter.use('/config', secondaryConfigRouter)
-secondaryApiRouter.use('/users', secondaryUsersRouter)
-secondaryApiRouter.use('/accounts', accountsRouter)
-secondaryApiRouter.use('/video-channels', videoChannelRouter)
-secondaryApiRouter.use('/video-channel-syncs', videoChannelSyncRouter)
-secondaryApiRouter.use('/video-playlists', videoPlaylistRouter)
-secondaryApiRouter.use('/videos', secondaryVideosRouter)
-secondaryApiRouter.use('/search', searchRouter)
-secondaryApiRouter.use('/overviews', overviewsRouter)
-secondaryApiRouter.use('/player-settings', secondaryPlayerSettingsRouter)
-secondaryApiRouter.use('/custom-pages', customPageRouter)
-secondaryApiRouter.use('/blocklist', blocklistRouter)
-secondaryApiRouter.use('/runners', secondaryRunnersRouter)
-secondaryApiRouter.use('/watched-words', watchedWordsRouter)
-secondaryApiRouter.use('/automatic-tags', automaticTagRouter)
-secondaryApiRouter.use('/client-config', clientConfigRouter)
-
-secondaryApiRouter.use('/ping', pong)
-secondaryApiRouter.use('/*', badRequest)
-
-// ---------------------------------------------------------------------------
-
-export { apiRouter, secondaryApiRouter }
+export { apiRouter }
 
 // ---------------------------------------------------------------------------
 

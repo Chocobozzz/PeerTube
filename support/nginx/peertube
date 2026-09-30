@@ -24,13 +24,15 @@ upstream backend {
 # Horizontal scalability
 # ---------------------------------------------------------------------------
 #
-# Horizontal scalability allows to offload some API paths to `--role=secondary` processes.
+# Horizontal scalability allows to offload most of the requests to `--role=secondary` processes.
 # See https://docs.joinpeertube.org/maintain/horizontal-scalability for more information.
 #
 # Leave this section untouched if you run a single PeerTube process.
 #
+# Secondary processes require object storage (`object_storage.enabled`): they never use the files of the primary on the file system.
+#
 # If you want to enable horizontal scalability, add one `server` line per secondary to the pools below.
-# In `secondary_pool`, keep `${PEERTUBE_HOST}` as a `backup` so reads survive every secondary going down.
+# In `secondary_pool`, keep `${PEERTUBE_HOST}` as a `backup` so requests survive every secondary going down.
 # For example:
 #
 #   upstream secondary_pool {
@@ -69,116 +71,29 @@ upstream secondary_socket_io_pool {
   server ${PEERTUBE_HOST};
 }
 
-# Secondary servers only support a subset of the endpoints
+# Every request is routed to `secondary_pool`, except the ones listed below.
 # Leave this section untouched, even if you don't use horizontal scalability
+#
+# A secondary answers `421 Misdirected Request` to the endpoints only the primary can serve, and `@api` replays these requests on the primary.
+# So this list is not exhaustive: it only avoids this round trip for the frequent primary-only requests,
+# and routes the requests that cannot be replayed because nginx streams their body (`@api_unbuffered`)
 #
 # Regexes are evaluated top to bottom, first match wins
 # method + path -> pool
 map $request_method$uri $peertube_pool {
-  default                                                                       backend;
+  default                                                  secondary_pool;
 
-  "~^(GET|HEAD)/(w|a|c|@[^/]+|videos/watch|videos/embed|video-playlists/embed|accounts|video-channels)(/|$)" secondary_pool;
-  "~^(GET|HEAD)/manifest\.webmanifest$"                                         secondary_pool;
+  # Frequent requests only served by the primary
+  "~^POST/((accounts|video-channels)/[^/]+/)?inbox$"       backend;
+  "~^[A-Z]+/(static|tracker)/"                             backend;
+  "~^[A-Z]+/plugins/[^/]+(/[^/]+)?/(router|auth)(/|$)"     backend;
+  "~^POST/api/v1/server/logs/client$"                      backend;
 
-  "~^(GET|HEAD)/object-storage-proxy/"                                          secondary_pool;
-  "~^(GET|HEAD)/feeds/"                                                         secondary_pool;
-  "~^(GET|HEAD)/\.well-known/(webfinger|nodeinfo|host-meta)$"                   secondary_pool;
-
-  # Must be listed before the plugin files line below, which would also match /plugins/<name>/router/static/...
-  "~^(GET|HEAD)/plugins/[^/]+(/[^/]+)?/router(/|$)"                             backend;
-  "~^(GET|HEAD)/(plugins|themes)/[^/]+/[^/]+/(static|client-scripts|css)/"      secondary_pool;
-  "~^(GET|HEAD)/plugins/(global\.css|translations/)"                            secondary_pool;
-
-  "~^(GET|HEAD)/api/v1/(config|config/about)$"                                  secondary_pool;
-  "~^(GET|HEAD)/api/v1/(accounts|search|overviews|player-settings)(/|$)"        secondary_pool;
-  "~^(GET|HEAD|PUT)/api/v1/custom-pages/homepage/instance$"                     secondary_pool;
-  "~^(GET|HEAD)/api/v1/video-playlists(/|$)"                                    secondary_pool;
-
-  # Every endpoint of these resources
-  "~^[A-Z]+/api/v1/(abuses|bulk|oauth-clients|blocklist|watched-words|automatic-tags|video-channel-syncs)(/|$)" secondary_pool;
-
-  "~^(GET|HEAD)/api/v1/server/(following|followers|blocklist/public-log)$"      secondary_pool;
-  "~^POST/api/v1/server/(following|contact)$"                                   secondary_pool;
-  "~^(POST|DELETE)/api/v1/server/followers/[^/]+(/accept|/reject)?$"            secondary_pool;
-  "~^(GET|HEAD|POST)/api/v1/server/blocklist/(accounts|servers|subscriptions)$" secondary_pool;
-  "~^DELETE/api/v1/server/blocklist/(accounts|servers|subscriptions)/[^/]+$"    secondary_pool;
-
-  "~^(GET|HEAD)/api/v1/runners/?$"                                              secondary_pool;
-  "~^POST/api/v1/runners/(register|unregister)$"                                secondary_pool;
-  "~^DELETE/api/v1/runners/[^/]+$"                                              secondary_pool;
-  "~^(GET|HEAD)/api/v1/runners/(jobs|registration-tokens)$"                     secondary_pool;
-  "~^POST/api/v1/runners/(jobs/request|jobs/[^/]+/accept|registration-tokens/generate)$" secondary_pool;
-  "~^DELETE/api/v1/runners/registration-tokens/[^/]+$"                          secondary_pool;
-
-  "~^(GET|HEAD|POST)/api/v1/video-channels/?$"                                  secondary_pool;
-  "~^(GET|HEAD|PUT)/api/v1/video-channels/[^/]+/?$"                             secondary_pool;
-  "~^(GET|HEAD)/api/v1/video-channels/[^/]+/(video-playlists|videos|followers|activities|ownership|collaborators)$" secondary_pool;
-  "~^POST/api/v1/video-channels/[^/]+/(video-playlists/reorder|import-videos|give-ownership|collaborators/invite)$" secondary_pool;
-  "~^POST/api/v1/video-channels/[^/]+/collaborators/[^/]+/(accept|reject)$"     secondary_pool;
-  "~^DELETE/api/v1/video-channels/[^/]+/collaborators/[^/]+$"                   secondary_pool;
-  "~^POST/api/v1/video-channels/ownership/[^/]+/(accept|refuse)$"               secondary_pool;
-  "~^DELETE/api/v1/video-channels/ownership/[^/]+$"                             secondary_pool;
-
-  # Resumable uploads stream to the primary's local disk by default, so every request of an upload session must reach the primary.
-  # Must be listed before the /api/v1/videos/<id> lines below, which would also match PUT|DELETE /api/v1/videos/upload-resumable
-  # With object_storage.staging and object_storage.web_videos both enabled, video uploads stream directly to object storage:
-  # you can then replace `backend` by `secondary_pool` on the first line
-  "~^(POST|PUT|DELETE)/api/v1/videos/(upload-resumable|[^/]+/source/replace-resumable)$" backend;
-  # User archive imports only need object_storage.staging to be routed to `secondary_pool`
-  "~^(POST|PUT|DELETE)/api/v1/users/[^/]+/imports/import-resumable$"            backend;
-
-  # Collections that live under /api/v1/videos/ but are not a video id: must be listed before the /api/v1/videos/<id> lines below
-  "~^(GET|HEAD)/api/v1/videos/(imports|live)(/|$)"                              backend;
-  "~^(GET|HEAD)/api/v1/videos/?$"                                               secondary_pool;
-  "~^(GET|HEAD)/api/v1/videos/(categories|licences|languages|privacies)$"       secondary_pool;
-  "~^(GET|HEAD)/api/v1/videos/[^/]+/(captions|chapters|storyboards|comment-threads|ownership|passwords|embed-privacy)(/|$)" secondary_pool;
-  "~^(GET|HEAD)/api/v1/videos/[^/]+/comments/[^/]+/replies$"                    secondary_pool;
-  "~^(GET|HEAD)/api/v1/videos/[^/]+/?$"                                         secondary_pool;
-  "~^POST/api/v1/videos/[^/]+/(token|comment-threads|give-ownership|passwords)$" secondary_pool;
-  "~^POST/api/v1/videos/[^/]+/comments/[^/]+(/approve)?$"                       secondary_pool;
-  "~^DELETE/api/v1/videos/[^/]+/(comments|passwords)/[^/]+$"                    secondary_pool;
-  "~^PUT/api/v1/videos/[^/]+/(rate|chapters|passwords|embed-privacy)$"          secondary_pool;
-  "~^(POST|PUT|DELETE)/api/v1/videos/[^/]+/blacklist$"                          secondary_pool;
-  "~^POST/api/v1/videos/ownership/[^/]+/(accept|refuse)$"                       secondary_pool;
-  "~^DELETE/api/v1/videos/ownership/[^/]+$"                                     secondary_pool;
-
-  "~^POST/api/v1/users/(token|revoke-token|register|ask-reset-password)$"       secondary_pool;
-  "~^POST/api/v1/users/(ask-send-verify-email|registrations/ask-send-verify-email)$" secondary_pool;
-  "~^POST/api/v1/users/([^/]+/verify-email|registrations/[^/]+/verify-email)$"  secondary_pool;
-  "~^(GET|HEAD|POST)/api/v1/users/?$"                                           secondary_pool;
-  "~^(GET|HEAD|PUT)/api/v1/users/[^/]+/?$"                                      secondary_pool;
-  "~^POST/api/v1/users/(scoped-tokens|registrations/request)$"                  secondary_pool;
-  "~^POST/api/v1/users/[^/]+/(block|unblock|reset-password|two-factor/request|two-factor/confirm-request|two-factor/disable)$" secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/[^/]+/token-sessions$"                             secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/[^/]+/imports/latest$"                             secondary_pool;
-  "~^POST/api/v1/users/[^/]+/token-sessions/[^/]+/revoke$"                      secondary_pool;
-  "~^POST/api/v1/users/registrations/[^/]+/(accept|reject)$"                    secondary_pool;
-  "~^DELETE/api/v1/users/registrations/[^/]+$"                                  secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/me/(video-quota-used|notifications|history/videos|abuses)$" secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/me/(videos|subscriptions)(/|$)"                    secondary_pool;
-  "~^(GET|HEAD)/api/v1/users/me/video-playlists/videos-exist$"                  secondary_pool;
-  "~^(GET|HEAD|POST)/api/v1/users/me/blocklist/(accounts|servers)$"             secondary_pool;
-  "~^DELETE/api/v1/users/me/(blocklist/accounts|blocklist/servers|subscriptions|history/videos)/[^/]+$" secondary_pool;
-  "~^POST/api/v1/users/me/(subscriptions|notifications/read|notifications/read-all|history/videos/remove|new-feature-info/read)$" secondary_pool;
-  "~^PUT/api/v1/users/me/notification-settings$"                                secondary_pool;
+  # Unbuffered request only served by the primary: cannot be replayed
+  "~^POST/api/v1/runners/jobs/[^/]+/update$"               backend;
 
   # View/watch-time tracking: sticky to one process per viewer
-  "~^(PUT|POST)/api/v1/videos/[^/]+/(views|watching)$"                          secondary_views_pool;
-
-  "~^(PUT|DELETE)/api/v1/videos/[^/]+/?$"                                       secondary_pool;
-  "~^(PUT|DELETE)/api/v1/videos/[^/]+/captions/[^/]+$"                          secondary_pool;
-  "~^DELETE/api/v1/users/[^/]+/?$"                                              secondary_pool;
-  "~^POST/api/v1/users/me/avatar/pick$"                                         secondary_pool;
-  "~^DELETE/api/v1/users/me/avatar$"                                            secondary_pool;
-  "~^DELETE/api/v1/video-channels/[^/]+/?$"                                     secondary_pool;
-  "~^POST/api/v1/video-channels/[^/]+/(avatar|banner)/pick$"                    secondary_pool;
-  "~^DELETE/api/v1/video-channels/[^/]+/(avatar|banner)$"                       secondary_pool;
-  "~^POST/api/v1/config/(instance-avatar|instance-banner|instance-logo/[^/]+)/pick$" secondary_pool;
-  "~^DELETE/api/v1/config/(instance-avatar|instance-banner|instance-logo/[^/]+)$" secondary_pool;
-  "~^POST/api/v1/video-playlists/?$"                                            secondary_pool;
-  "~^(PUT|DELETE)/api/v1/video-playlists/[^/]+/?$"                              secondary_pool;
-  "~^POST/api/v1/video-playlists/[^/]+/videos(/reorder)?$"                      secondary_pool;
-  "~^(PUT|DELETE)/api/v1/video-playlists/[^/]+/videos/[^/]+$"                   secondary_pool;
+  "~^(PUT|POST)/api/v1/videos/[^/]+/(views|watching)$"     secondary_views_pool;
 }
 
 server {
@@ -229,33 +144,41 @@ server {
   #   * `proxy_*` directives and `add_header` on a proxied response are read from the final configuration, i.e. from the `@named` block
   ##
 
-  location @api {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
-    proxy_set_header X-Real-IP       $remote_addr;
+  # Inherited by the locations below that don't set their own `proxy_set_header` / `proxy_*_timeout`
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
+  proxy_set_header X-Real-IP       $remote_addr;
 
-    proxy_connect_timeout 10m;
-    proxy_send_timeout    10m;
-    proxy_read_timeout    10m;
-    send_timeout          10m;
+  proxy_connect_timeout 10m;
+  proxy_send_timeout    10m;
+  proxy_read_timeout    10m;
+
+  location @api {
+    send_timeout 10m;
 
     proxy_pass http://$peertube_pool;
+
+    # A secondary answers 421 to the endpoints only the primary can serve: replay the request on the primary
+    # Only intercepts the status codes that have an `error_page`
+    proxy_intercept_errors on;
+    error_page 421 = @api_primary;
+  }
+
+  # Same as @api, on the primary
+  location @api_primary {
+    send_timeout 10m;
+
+    proxy_pass http://backend;
   }
 
   # Same as @api, but streams the request body go directly to PeerTube instead of being written to /var/lib/nginx first
   # Used by the upload endpoints
+  # The body is not kept, so a 421 of a secondary cannot be replayed on the primary: route these endpoints in the `$peertube_pool` map
   location @api_unbuffered {
     # Required for `proxy_request_buffering off`
     proxy_http_version 1.1;
 
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
-    proxy_set_header X-Real-IP       $remote_addr;
-
-    proxy_connect_timeout 10m;
-    proxy_send_timeout    10m;
-    proxy_read_timeout    10m;
-    send_timeout          10m;
+    send_timeout 10m;
 
     proxy_request_buffering off;
     # Only applies to chunked request bodies
@@ -269,7 +192,6 @@ server {
     try_files /dev/null @api;
   }
 
-  # See the `$peertube_pool` map above to route these to `secondary_pool`
   location ~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$ {
     client_max_body_size 0;
 
@@ -422,15 +344,16 @@ server {
   location ~ ^(/static/(webseed|web-videos|streaming-playlists/hls)/private/)|^/download {
     # We can't rate limit a try_files directive, so we need to duplicate @api
 
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
-    proxy_set_header X-Real-IP       $remote_addr;
-
     # Prevent too much proxying, which results in high disk write IO
     proxy_max_temp_file_size 50M;
     proxy_limit_rate 5M;
 
-    proxy_pass http://backend;
+    # Private static files are only served by the primary, downloads by any process
+    proxy_pass http://$peertube_pool;
+
+    # Same as @api: replay on the primary the requests a secondary answers with 421
+    proxy_intercept_errors on;
+    error_page 421 = @api_primary;
   }
 
   # Bypass PeerTube for performance reasons. Optional.

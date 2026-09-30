@@ -28,6 +28,7 @@ import { VideoTokenPayload } from './video-tokens.js'
 import * as videoView from './video-view.js'
 import * as videoViewerCounters from './video-viewer-counters.js'
 import { AddVideoViewerCounterOptions } from './video-viewer-counters.js'
+import * as youtubeDLCookies from './youtube-dl-cookies.js'
 import * as videoViewerStats from './video-viewer-stats.js'
 import { LocalVideoViewer, MergeLocalVideoViewerOptions } from './video-viewer-stats.js'
 
@@ -234,6 +235,20 @@ export class Redis {
 
   deletePrimaryRegisteredPlugins () {
     return primaryRegisteredPlugins.deletePrimaryRegisteredPlugins()
+  }
+
+  /* ************ yt-dlp cookies of the primary process ************ */
+
+  setYoutubeDLCookies (encrypted: string) {
+    return youtubeDLCookies.setYoutubeDLCookies(encrypted)
+  }
+
+  getYoutubeDLCookies () {
+    return youtubeDLCookies.getYoutubeDLCookies()
+  }
+
+  deleteYoutubeDLCookies () {
+    return youtubeDLCookies.deleteYoutubeDLCookies()
   }
 
   /* ************ Video viewer counters ************ */

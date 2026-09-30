@@ -20,6 +20,7 @@ import {
   authenticate,
   ensureUserHasRight,
   openapiOperationDoc,
+  primaryOnly,
   updateAvatarValidator,
   updateBannerValidator
 } from '../../middlewares/index.js'
@@ -36,7 +37,9 @@ configRouter.use(apiRateLimiter)
 
 const auditLogger = auditLoggerFactory('config')
 
-registerConfigSharedRoutes(configRouter)
+configRouter.get('/', openapiOperationDoc({ operationId: 'getConfig' }), asyncMiddleware(getConfig))
+
+configRouter.get('/about', openapiOperationDoc({ operationId: 'getAbout' }), asyncMiddleware(getAbout))
 
 configRouter.get(
   '/custom',
@@ -46,9 +49,14 @@ configRouter.get(
   getCustomConfig
 )
 
+// ---------------------------------------------------------------------------
+// The primary writes the custom configuration file and publishes it to the secondaries
+// ---------------------------------------------------------------------------
+
 configRouter.put(
   '/custom',
   openapiOperationDoc({ operationId: 'putCustomConfig' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   ensureConfigIsEditable,
@@ -59,6 +67,7 @@ configRouter.put(
 configRouter.delete(
   '/custom',
   openapiOperationDoc({ operationId: 'delCustomConfig' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   ensureConfigIsEditable,
@@ -66,6 +75,60 @@ configRouter.delete(
 )
 
 // ---------------------------------------------------------------------------
+
+configRouter.post(
+  '/instance-banner/pick',
+  authenticate,
+  createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateBannerValidator,
+  asyncMiddleware(updateInstanceImageFactory(ActorImageType.BANNER))
+)
+
+configRouter.delete(
+  '/instance-banner',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(deleteInstanceImageFactory(ActorImageType.BANNER))
+)
+
+// ---------------------------------------------------------------------------
+
+configRouter.post(
+  '/instance-avatar/pick',
+  authenticate,
+  createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateAvatarValidator,
+  asyncMiddleware(updateInstanceImageFactory(ActorImageType.AVATAR))
+)
+
+configRouter.delete(
+  '/instance-avatar',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  asyncMiddleware(deleteInstanceImageFactory(ActorImageType.AVATAR))
+)
+
+// ---------------------------------------------------------------------------
+
+configRouter.post(
+  '/instance-logo/:logoType/pick',
+  authenticate,
+  createReqFiles([ 'logofile' ], MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT),
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateOrDeleteLogoValidator,
+  updateInstanceLogoValidator,
+  asyncMiddleware(updateInstanceLogo)
+)
+
+configRouter.delete(
+  '/instance-logo/:logoType',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
+  updateOrDeleteLogoValidator,
+  asyncMiddleware(deleteInstanceLogo)
+)
 
 // ---------------------------------------------------------------------------
 
@@ -235,82 +298,9 @@ async function deleteInstanceLogo (req: express.Request, res: express.Response) 
 }
 
 // ---------------------------------------------------------------------------
-// Router for secondary process
-// ---------------------------------------------------------------------------
-
-const secondaryConfigRouter = express.Router()
-
-secondaryConfigRouter.use(apiRateLimiter)
-
-registerConfigSharedRoutes(secondaryConfigRouter)
-
-// ---------------------------------------------------------------------------
 
 export {
-  configRouter,
-  secondaryConfigRouter
-}
-
-// ---------------------------------------------------------------------------
-
-function registerConfigSharedRoutes (router: express.Router) {
-  router.get('/', openapiOperationDoc({ operationId: 'getConfig' }), asyncMiddleware(getConfig))
-
-  router.get('/about', openapiOperationDoc({ operationId: 'getAbout' }), asyncMiddleware(getAbout))
-
-  router.post(
-    '/instance-banner/pick',
-    authenticate,
-    createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
-    ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-    updateBannerValidator,
-    asyncMiddleware(updateInstanceImageFactory(ActorImageType.BANNER))
-  )
-
-  router.delete(
-    '/instance-banner',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-    asyncMiddleware(deleteInstanceImageFactory(ActorImageType.BANNER))
-  )
-
-  // ---------------------------------------------------------------------------
-
-  router.post(
-    '/instance-avatar/pick',
-    authenticate,
-    createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT),
-    ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-    updateAvatarValidator,
-    asyncMiddleware(updateInstanceImageFactory(ActorImageType.AVATAR))
-  )
-
-  router.delete(
-    '/instance-avatar',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-    asyncMiddleware(deleteInstanceImageFactory(ActorImageType.AVATAR))
-  )
-
-  // ---------------------------------------------------------------------------
-
-  router.post(
-    '/instance-logo/:logoType/pick',
-    authenticate,
-    createReqFiles([ 'logofile' ], MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT),
-    ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-    updateOrDeleteLogoValidator,
-    updateInstanceLogoValidator,
-    asyncMiddleware(updateInstanceLogo)
-  )
-
-  router.delete(
-    '/instance-logo/:logoType',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-    updateOrDeleteLogoValidator,
-    asyncMiddleware(deleteInstanceLogo)
-  )
+  configRouter
 }
 
 // ---------------------------------------------------------------------------

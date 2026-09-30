@@ -2,6 +2,7 @@ import { ActivityIconObject, FileStorage, type FileStorageType, Thumbnail, type 
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { removeCachedFile } from '@server/lib/object-storage/cache.js'
 import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MThumbnail } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
@@ -267,16 +268,22 @@ export class ThumbnailModel extends SequelizeModel<ThumbnailModel> {
     return join(FILES_CACHE.THUMBNAILS.DIRECTORY, this.filename)
   }
 
-  removeFile () {
-    if (!this.cached && this.storage === FileStorage.OBJECT_STORAGE) {
+  async removeFile () {
+    if (!this.isLocal()) {
+      if (!this.cached) return
+
+      logger.info('Removing cached thumbnail file %s', this.filename)
+
+      return removeCachedFile({ type: 'THUMBNAILS', filename: this.filename, storage: this.storage, fsPath: this.getFSCachedPath() })
+    }
+
+    if (this.storage === FileStorage.OBJECT_STORAGE) {
       logger.info('Removing thumbnail file %s from object storage', this.filename)
 
       return removeCommonFileObjectStorage('thumbnails', this.filename)
     }
 
-    const path = this.cached
-      ? this.getFSCachedPath()
-      : this.getFSPath()
+    const path = this.getFSPath()
 
     logger.info('Removing thumbnail file ' + path)
 

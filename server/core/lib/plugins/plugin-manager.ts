@@ -32,7 +32,7 @@ import {
   RegisterServerOptions
 } from '../../types/plugins/index.js'
 import { ClientHtml } from '../html/client-html.js'
-import { PluginChangePayload, Redis, RedisChannels } from '../redis/index.js'
+import { currentProcessId, PluginChangePayload, Redis, RedisChannels } from '../redis/index.js'
 import {
   installNpmPlugin,
   installNpmPluginFromDisk,
@@ -578,14 +578,24 @@ export class PluginManager implements ServerHook {
         return
       }
 
-      if (payload?.type === 'plugin-settings-changed') {
-        this.runOnSettingsChangedFromDatabase(payload.npmName)
-          .catch(err => logger.error('Cannot run the settings change callbacks of %s.', payload.npmName, { err }))
-      }
+      this.onPluginSettingsChangeMessage(payload)
     })
 
     // Catch up with the changes notified before the subscription, while this process was booting
     await this.syncPlugins({ register: true, onDivergedFromPrimary: options.onDivergedFromPrimary })
+  }
+
+  // The primary installs the plugins itself, but their settings can be updated by a secondary
+  async listenForPluginSettingsChanges () {
+    await RedisChannels.pluginChanges.subscribe(payload => this.onPluginSettingsChangeMessage(payload))
+  }
+
+  private onPluginSettingsChangeMessage (payload: PluginChangePayload) {
+    if (payload?.type !== 'plugin-settings-changed') return
+    if (payload.senderId === currentProcessId) return
+
+    this.runOnSettingsChangedFromDatabase(payload.npmName)
+      .catch(err => logger.error('Cannot run the settings change callbacks of %s.', payload.npmName, { err }))
   }
 
   // The plugins and themes the primary process runs, but this process failed to register

@@ -22,7 +22,7 @@ export async function replaceUploadImage (options: {
   const processedImages = await generateImageSizesAndUploadIfNeeded(imagePhysicalFile.path, type)
   await remove(imagePhysicalFile.path)
 
-  const storage = CONFIG.OBJECT_STORAGE.UPLOADS.ENABLED
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED
     ? FileStorage.OBJECT_STORAGE
     : FileStorage.FILE_SYSTEM
 
@@ -89,13 +89,13 @@ async function generateImageSize (options: {
 
 // Generate in tmp when the final destination is object storage
 function buildUploadImageDestination (imageName: string) {
-  if (CONFIG.OBJECT_STORAGE.UPLOADS.ENABLED) return join(CONFIG.STORAGE.TMP_DIR, imageName)
+  if (CONFIG.OBJECT_STORAGE.ENABLED) return join(CONFIG.STORAGE.TMP_DIR, imageName)
 
   return UploadImageModel.getFSPathOf(imageName)
 }
 
 async function storeUploadImageIfNeeded (destination: string, imageName: string) {
-  if (!CONFIG.OBJECT_STORAGE.UPLOADS.ENABLED) return
+  if (!CONFIG.OBJECT_STORAGE.ENABLED) return
 
   await storeCommonFile('uploads', destination, imageName)
   await remove(destination)

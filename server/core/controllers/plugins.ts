@@ -4,7 +4,7 @@ import { isProdInstance } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { optionalAuthenticate } from '@server/middlewares/auth.js'
-import { buildRateLimiter } from '@server/middlewares/index.js'
+import { buildRateLimiter, primaryOnly } from '@server/middlewares/index.js'
 import express from 'express'
 import { join } from 'path'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants.js'
@@ -28,10 +28,61 @@ const pluginsRateLimiter = buildRateLimiter({
   max: CONFIG.RATES_LIMIT.PLUGINS.MAX
 })
 
-registerPluginStaticSharedRoutes(pluginsRouter)
+pluginsRouter.get(
+  '/plugins/global.css',
+  pluginsRateLimiter,
+  servePluginGlobalCSS
+)
 
 pluginsRouter.get(
+  '/plugins/translations/:locale.json',
+  pluginsRateLimiter,
+  getPluginTranslations
+)
+
+pluginsRouter.get(
+  '/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
+  pluginsRateLimiter,
+  getPluginValidator(PluginType.PLUGIN),
+  pluginStaticDirectoryValidator,
+  servePluginStaticDirectory
+)
+
+pluginsRouter.get(
+  '/plugins/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
+  pluginsRateLimiter,
+  getPluginValidator(PluginType.PLUGIN),
+  pluginStaticDirectoryValidator,
+  servePluginClientScripts
+)
+
+pluginsRouter.get(
+  '/themes/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
+  pluginsRateLimiter,
+  getPluginValidator(PluginType.THEME),
+  pluginStaticDirectoryValidator,
+  servePluginStaticDirectory
+)
+
+pluginsRouter.get(
+  '/themes/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
+  pluginsRateLimiter,
+  getPluginValidator(PluginType.THEME),
+  pluginStaticDirectoryValidator,
+  servePluginClientScripts
+)
+
+pluginsRouter.get(
+  '/themes/:themeName/:themeVersion/css/:staticEndpoint(*)',
+  pluginsRateLimiter,
+  serveThemeCSSValidator,
+  serveThemeCSSDirectory
+)
+
+// Plugin authentication and custom routes can store state in the memory of the process
+pluginsRouter.get(
   '/plugins/:pluginName/:pluginVersion/auth/:authName',
+  primaryOnly,
   pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   getExternalAuthValidator,
@@ -40,6 +91,7 @@ pluginsRouter.get(
 
 pluginsRouter.use(
   '/plugins/:pluginName/router',
+  primaryOnly,
   pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN, false),
   optionalAuthenticate,
@@ -48,6 +100,7 @@ pluginsRouter.use(
 
 pluginsRouter.use(
   '/plugins/:pluginName/:pluginVersion/router',
+  primaryOnly,
   pluginsRateLimiter,
   getPluginValidator(PluginType.PLUGIN),
   optionalAuthenticate,
@@ -56,76 +109,8 @@ pluginsRouter.use(
 
 // ---------------------------------------------------------------------------
 
-/**
- * Router for secondary process
- *
- * The files of the plugins and themes are served by every process
- * The plugin authentication and custom routes stay on the primary (they can store state in the memory of the process)
- */
-const secondaryPluginsRouter = express.Router()
-
-registerPluginStaticSharedRoutes(secondaryPluginsRouter)
-
-// ---------------------------------------------------------------------------
-
 export {
-  pluginsRouter,
-  secondaryPluginsRouter
-}
-
-// ---------------------------------------------------------------------------
-
-function registerPluginStaticSharedRoutes (router: express.Router) {
-  router.get(
-    '/plugins/global.css',
-    pluginsRateLimiter,
-    servePluginGlobalCSS
-  )
-
-  router.get(
-    '/plugins/translations/:locale.json',
-    pluginsRateLimiter,
-    getPluginTranslations
-  )
-
-  router.get(
-    '/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
-    pluginsRateLimiter,
-    getPluginValidator(PluginType.PLUGIN),
-    pluginStaticDirectoryValidator,
-    servePluginStaticDirectory
-  )
-
-  router.get(
-    '/plugins/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
-    pluginsRateLimiter,
-    getPluginValidator(PluginType.PLUGIN),
-    pluginStaticDirectoryValidator,
-    servePluginClientScripts
-  )
-
-  router.get(
-    '/themes/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
-    pluginsRateLimiter,
-    getPluginValidator(PluginType.THEME),
-    pluginStaticDirectoryValidator,
-    servePluginStaticDirectory
-  )
-
-  router.get(
-    '/themes/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
-    pluginsRateLimiter,
-    getPluginValidator(PluginType.THEME),
-    pluginStaticDirectoryValidator,
-    servePluginClientScripts
-  )
-
-  router.get(
-    '/themes/:themeName/:themeVersion/css/:staticEndpoint(*)',
-    pluginsRateLimiter,
-    serveThemeCSSValidator,
-    serveThemeCSSDirectory
-  )
+  pluginsRouter
 }
 
 // ---------------------------------------------------------------------------

@@ -21,6 +21,7 @@ const jobsRouter = express.Router()
 
 jobsRouter.use(apiRateLimiter)
 
+// Pause/resume/cancel requests are broadcasted to every process of the platform
 jobsRouter.post(
   '/pause',
   authenticate,
@@ -56,7 +57,7 @@ jobsRouter.post(
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
   cancelJobValidator,
-  cancelJob
+  asyncMiddleware(cancelJob)
 )
 
 // ---------------------------------------------------------------------------
@@ -79,10 +80,10 @@ async function resumeJobQueue (req: express.Request, res: express.Response) {
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-function cancelJob (req: express.Request, res: express.Response) {
+async function cancelJob (req: express.Request, res: express.Response) {
   const job = res.locals.job
 
-  JobQueue.Instance.cancelJob(job.queueName as JobType, job)
+  await JobQueue.Instance.cancelJob(job.queueName as JobType, job)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

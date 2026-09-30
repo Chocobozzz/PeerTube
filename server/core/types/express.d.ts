@@ -195,6 +195,15 @@ declare module 'express' {
 
       videoImport?: MVideoImportDefault
 
+      // Torrent file of a new video import, parsed and handed over to the process that will run the import job
+      videoImportTorrentFile?: {
+        name: string
+        torrentName: string
+
+        torrentPath: string | null
+        torrentStagingKey?: string
+      }
+
       videoBlacklist?: MVideoBlacklist
 
       videoCaption?: MVideoCaptionVideo

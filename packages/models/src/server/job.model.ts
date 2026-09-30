@@ -121,7 +121,10 @@ export interface VideoImportYoutubeDLPayload extends VideoImportAbstractPayload 
 
 export interface VideoImportTorrentPayload extends VideoImportAbstractPayload {
   type: VideoImportTorrentPayloadType
-  torrentPath: string | null // null if magnet URI
+
+  // Both null if magnet URI
+  torrentPath: string | null
+  torrentStagingKey?: string // The torrent file is in object storage staging instead of `torrentPath`
 }
 
 export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
@@ -327,6 +330,9 @@ export type VideoStudioTaskPayload =
 export interface VideoStudioEditionPayload {
   videoUUID: string
   tasks: VideoStudioTaskPayload[]
+
+  // Task files are staged in object storage: their `file` option is a staging key instead of a local path
+  taskFilesStaged?: boolean
 }
 
 // ---------------------------------------------------------------------------

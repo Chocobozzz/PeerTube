@@ -1,13 +1,15 @@
-import express from 'express'
-import { StatsManager } from '@server/lib/stat-manager.js'
-import { ROUTE_CACHE_LIFETIME } from '../../../initializers/constants.js'
-import { asyncMiddleware } from '../../../middlewares/index.js'
-import { cacheRoute } from '../../../middlewares/cache/cache.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { StatsManager } from '@server/lib/stat-manager.js'
+import express from 'express'
+import { ROUTE_CACHE_LIFETIME } from '../../../initializers/constants.js'
+import { cacheRoute } from '../../../middlewares/cache/cache.js'
+import { asyncMiddleware, primaryOnly } from '../../../middlewares/index.js'
 
 const statsRouter = express.Router()
 
-statsRouter.get('/stats',
+statsRouter.get(
+  '/stats',
+  primaryOnly, // ActivityPub inbox stats are kept in the memory of the primary, that processes the inbox
   cacheRoute(ROUTE_CACHE_LIFETIME.STATS),
   asyncMiddleware(getStats)
 )

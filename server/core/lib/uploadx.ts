@@ -6,11 +6,7 @@ import { buildVideoUploadFileExtension, getResumableUploadPath } from '@server/h
 import { generateRandomString } from '@server/helpers/utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import {
-  getResumableUploadMinChunkSize,
-  isUserImportUploadObjectStorageEnabled,
-  isVideoUploadObjectStorageEnabled
-} from '@server/lib/object-storage/config.js'
+import { getResumableUploadMinChunkSize } from '@server/lib/object-storage/config.js'
 import {
   buildStagingKey,
   downloadStagingObject,
@@ -38,7 +34,6 @@ logtapeInstall(logger)
 // Uploadx handler that knows where its uploads are stored (local disk or object storage staging)
 export class PeerTubeUploadx extends Uploadx<UploadxCoreFile> {
   constructor (private readonly peertubeOptions: {
-    isObjectStorageEnabled: () => boolean
     stagingSubPrefix: StagingSubPrefix
 
     // Extension of the local file (on disk or downloaded from staging), FFmpeg picks some demuxers from it
@@ -65,7 +60,7 @@ export class PeerTubeUploadx extends Uploadx<UploadxCoreFile> {
   }
 
   isObjectStorageEnabled () {
-    return this.peertubeOptions.isObjectStorageEnabled()
+    return CONFIG.OBJECT_STORAGE.ENABLED === true
   }
 
   getStagingSubPrefix () {
@@ -73,7 +68,7 @@ export class PeerTubeUploadx extends Uploadx<UploadxCoreFile> {
   }
 
   getMinChunkSize () {
-    return getResumableUploadMinChunkSize({ objectStorage: this.isObjectStorageEnabled() })
+    return getResumableUploadMinChunkSize()
   }
 
   // Build the file passed to the controller, from the completed upload
@@ -107,13 +102,11 @@ export class PeerTubeUploadx extends Uploadx<UploadxCoreFile> {
 }
 
 export const videoUploadx = new PeerTubeUploadx({
-  isObjectStorageEnabled: isVideoUploadObjectStorageEnabled,
   stagingSubPrefix: 'RESUMABLE_UPLOADS',
   buildFileExtension: buildVideoUploadFileExtension
 })
 
 export const userImportsUploadx = new PeerTubeUploadx({
-  isObjectStorageEnabled: isUserImportUploadObjectStorageEnabled,
   stagingSubPrefix: 'USER_IMPORTS',
 
   // The init validator only accepts .zip files
@@ -198,7 +191,7 @@ export async function makeUploadXFileAvailableForHookIfNeeded (file: VideoUpload
 // ---------------------------------------------------------------------------
 
 // Images sent with the init request of a video upload (thumbnail, preview) are written on the disk of the process receiving it
-// With staging, another process may receive the last chunk: store them in staging too
+// With object storage, another process may receive the last chunk: store them in staging too
 export async function stageResumableUploadImagesIfNeeded (files: Express.Multer.File[]): Promise<ResumableUploadImageFile[]> {
   if (!videoUploadx.isObjectStorageEnabled()) return files
 

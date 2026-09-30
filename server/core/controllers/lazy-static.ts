@@ -85,7 +85,7 @@ function getActorImage (req: express.Request, res: express.Response, next: expre
 
 const videoThumbnailImageFileCache = new VideoThumbnailsImageFileCache()
 
-async function getThumbnail (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getThumbnail (req: express.Request, res: express.Response, next: express.NextFunction) {
   const filename = req.params.filename
 
   return videoThumbnailImageFileCache.lazyServe({ filename, res, next })
@@ -95,7 +95,7 @@ async function getThumbnail (req: express.Request, res: express.Response, next: 
 
 const videoStoryboardsImageFileCache = new VideoStoryboardsImageFileCache()
 
-async function getStoryboard (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getStoryboard (req: express.Request, res: express.Response, next: express.NextFunction) {
   const filename = req.params.filename
 
   return videoStoryboardsImageFileCache.lazyServe({ filename, res, next })
@@ -105,7 +105,7 @@ async function getStoryboard (req: express.Request, res: express.Response, next:
 
 const videoCaptionFileCache = new VideoCaptionsFileCache()
 
-async function getVideoCaption (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getVideoCaption (req: express.Request, res: express.Response, next: express.NextFunction) {
   const filename = req.params.filename
 
   return videoCaptionFileCache.lazyServe({ filename, res, next })

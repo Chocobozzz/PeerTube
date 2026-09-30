@@ -17,14 +17,14 @@ type ProcessOptions = Pick<ExecaNodeOptions, 'cwd' | 'maxBuffer'>
 const youtubeDLBinaryPath = join(CONFIG.STORAGE.BIN_DIR, CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.NAME)
 
 export class YoutubeDLCLI {
-  static async safeGet () {
+  static async safeGet (options: { cookiesPath?: string } = {}) {
     if (!await pathExists(youtubeDLBinaryPath)) {
       await ensureDir(dirname(youtubeDLBinaryPath))
 
       await this.updateYoutubeDLBinary()
     }
 
-    return new YoutubeDLCLI()
+    return new YoutubeDLCLI(options.cookiesPath)
   }
 
   static async updateYoutubeDLBinary () {
@@ -110,7 +110,7 @@ export class YoutubeDLCLI {
     ]).join('/')
   }
 
-  private constructor () {
+  private constructor (private readonly cookiesPath?: string) {
   }
 
   download (options: {
@@ -216,7 +216,7 @@ export class YoutubeDLCLI {
 
     let completeArgs = this.wrapWithJSRuntimeOptions(args)
     completeArgs = this.wrapWithProxyOptions(completeArgs)
-    completeArgs = await this.wrapWithCookiesOptions(completeArgs)
+    completeArgs = this.wrapWithCookiesOptions(completeArgs)
     completeArgs = this.wrapWithIPOptions(completeArgs)
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
@@ -274,25 +274,12 @@ export class YoutubeDLCLI {
     return args
   }
 
-  private async wrapWithCookiesOptions (args: string[]) {
-    if (!CONFIG.IMPORT.VIDEOS.HTTP.COOKIES.ENABLED) {
-      return args
-    }
+  private wrapWithCookiesOptions (args: string[]) {
+    if (!this.cookiesPath) return args
 
-    const cookiesPath = join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, 'youtube-cookies.txt')
+    logger.debug('Using cookies file %s for YoutubeDL', this.cookiesPath)
 
-    if (!await pathExists(cookiesPath)) {
-      logger.error(
-        'yt-dlp cookies are enabled but the cookies file %s does not exist. Continuing without cookies.',
-        cookiesPath
-      )
-
-      return args
-    }
-
-    logger.debug('Using cookies file %s for YoutubeDL', cookiesPath)
-
-    return [ '--cookies', cookiesPath ].concat(args)
+    return [ '--cookies', this.cookiesPath ].concat(args)
   }
 
   private wrapWithFFmpegOptions (args: string[]) {

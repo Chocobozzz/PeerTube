@@ -8,6 +8,8 @@ import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 const logger = createLogger('lazy-load', 'avatar-image')
 
 export class AvatarImageFileCache extends AbstractImageFileCache<MActorImage> {
+  protected readonly cacheType = 'AVATARS'
+
   protected loadModel (filename: string) {
     return ActorImageModel.loadByFilename(filename)
   }

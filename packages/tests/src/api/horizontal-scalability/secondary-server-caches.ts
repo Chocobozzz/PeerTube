@@ -1,12 +1,15 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
+import { wait } from '@peertube/peertube-core-utils'
 import { ActorImageType, HttpStatusCode } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
   makeGetRequest,
   makePutBodyRequest,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
@@ -14,13 +17,19 @@ import {
 import { expect } from 'chai'
 
 describe('Test the caches shared by the processes of a platform', function () {
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
+
   let primary: PeerTubeServer
   let secondary: PeerTubeServer
 
   before(async function () {
     this.timeout(120000)
 
-    primary = await createSingleServer(1)
+    await objectStorage.prepareDefaultMockBuckets()
+
+    primary = await createSingleServer(1, objectStorage.getDefaultMockConfig())
 
     await setAccessTokensToServers([ primary ])
     await setDefaultVideoChannel([ primary ])
@@ -44,12 +53,17 @@ describe('Test the caches shared by the processes of a platform', function () {
 
       await primary.videos.remove({ id: uuid })
 
-      await makePutBodyRequest({
-        url: secondary.url,
-        path: viewPath,
-        fields: { currentTime: 1 },
-        expectedStatus: HttpStatusCode.NOT_FOUND_404
-      })
+      // The invalidation reaches the secondary asynchronously, but much sooner than the expiration of the model cache
+      let status: number
+
+      for (let i = 0; i < 20 && status !== HttpStatusCode.NOT_FOUND_404; i++) {
+        if (i !== 0) await wait(250)
+
+        const res = await makePutBodyRequest({ url: secondary.url, path: viewPath, fields: { currentTime: 1 }, expectedStatus: null })
+        status = res.status
+      }
+
+      expect(status).to.equal(HttpStatusCode.NOT_FOUND_404)
     })
 
     it('Should serve the new instance avatar after the primary changed it', async function () {
@@ -125,6 +139,8 @@ describe('Test the caches shared by the processes of a platform', function () {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ secondary, primary ])
   })
 })

@@ -8,6 +8,7 @@ import {
 } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
+import { removeCachedFile } from '@server/lib/object-storage/cache.js'
 import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MActorId, MActorImage, MActorImageFormattable, MActorImagePath } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
@@ -251,16 +252,22 @@ export class ActorImageModel extends SequelizeModel<ActorImageModel> {
     return join(FILES_CACHE.AVATARS.DIRECTORY, this.filename)
   }
 
-  removeFile (this: MActorImage) {
-    if (!this.cached && this.storage === FileStorage.OBJECT_STORAGE) {
+  async removeFile (this: MActorImage) {
+    if (!this.isLocal()) {
+      if (!this.cached) return
+
+      logger.info('Removing cached actor image file %s', this.filename)
+
+      return removeCachedFile({ type: 'AVATARS', filename: this.filename, storage: this.storage, fsPath: this.getFSCachedPath() })
+    }
+
+    if (this.storage === FileStorage.OBJECT_STORAGE) {
       logger.info('Removing actor image file %s from object storage', this.filename)
 
       return removeCommonFileObjectStorage('avatars', this.filename)
     }
 
-    const path = this.cached
-      ? this.getFSCachedPath()
-      : this.getFSPath()
+    const path = this.getFSPath()
 
     logger.info('Removing actor image file ' + path)
 

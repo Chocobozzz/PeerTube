@@ -18,7 +18,6 @@ import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
 import {
   ConfigCommand,
   ObjectStorageCommand,
-  OptionalObjectStorageType,
   PeerTubeServer,
   createSingleServer,
   doubleFollow,
@@ -141,17 +140,16 @@ export async function checkExportFileExists (options: {
 
 export async function prepareImportExportTests (options: {
   objectStorage: ObjectStorageCommand
-  enabledOptionalObjectStorageTypes?: OptionalObjectStorageType[] // default []
   emails: object[]
   withBlockedServer: boolean
 }) {
-  const { emails, objectStorage, enabledOptionalObjectStorageTypes = [], withBlockedServer } = options
+  const { emails, objectStorage, withBlockedServer } = options
 
   let objectStorageConfig: any = {}
   if (objectStorage) {
     await objectStorage.prepareDefaultMockBuckets()
 
-    objectStorageConfig = objectStorage.getDefaultMockConfig({ enabledOptionalTypes: enabledOptionalObjectStorageTypes })
+    objectStorageConfig = objectStorage.getDefaultMockConfig()
   }
 
   const emailPort = await MockSmtpServer.Instance.collectEmails(emails)

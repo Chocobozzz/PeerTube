@@ -102,10 +102,6 @@ function runTest (withObjectStorage: boolean) {
     } = await prepareImportExportTests({
       emails,
       objectStorage,
-      // Also export avatars, banners and thumbnails from object storage
-      enabledOptionalObjectStorageTypes: withObjectStorage
-        ? [ 'avatars', 'thumbnails', 'storyboards', 'torrents', 'uploads' ]
-        : [],
       withBlockedServer: false
     }))
 

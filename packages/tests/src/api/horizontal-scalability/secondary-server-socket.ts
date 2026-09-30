@@ -2,10 +2,12 @@
 
 import { wait } from '@peertube/peertube-core-utils'
 import { LiveVideoEventPayload, UserNotification, UserNotificationType } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -24,6 +26,10 @@ async function waitUntil (condition: () => boolean, timeoutMS = 20000) {
 }
 
 describe('Test socket.io served by a secondary server process', function () {
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
+
   let primary: PeerTubeServer
   let secondary: PeerTubeServer
   let userToken: string
@@ -32,7 +38,9 @@ describe('Test socket.io served by a secondary server process', function () {
   before(async function () {
     this.timeout(120000)
 
-    primary = await createSingleServer(1)
+    await objectStorage.prepareDefaultMockBuckets()
+
+    primary = await createSingleServer(1, objectStorage.getDefaultMockConfig())
 
     await setAccessTokensToServers([ primary ])
     await setDefaultVideoChannel([ primary ])
@@ -47,7 +55,6 @@ describe('Test socket.io served by a secondary server process', function () {
   })
 
   describe('User notifications', function () {
-
     it('Should reject an invalid access token on the secondary', function (done) {
       const socket = secondary.socketIO.getUserNotificationSocket({ token: 'invalid' })
 
@@ -93,7 +100,6 @@ describe('Test socket.io served by a secondary server process', function () {
   })
 
   describe('Live videos', function () {
-
     it('Should deliver viewer updates emitted by the primary to a socket connected to the secondary', async function () {
       this.timeout(60000)
 
@@ -118,7 +124,6 @@ describe('Test socket.io served by a secondary server process', function () {
   })
 
   describe('Runners', function () {
-
     it('Should ping a runner connected to the secondary when the primary creates a job', async function () {
       this.timeout(60000)
 
@@ -141,7 +146,6 @@ describe('Test socket.io served by a secondary server process', function () {
   })
 
   describe('Shutdown', function () {
-
     it('Should close the socket.io connections and not wait for them to stop the secondary', async function () {
       this.timeout(60000)
 
@@ -164,6 +168,8 @@ describe('Test socket.io served by a secondary server process', function () {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ primary, secondary ])
   })
 })

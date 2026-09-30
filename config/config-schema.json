@@ -788,6 +788,7 @@
       "type": "object",
       "properties": {
         "enabled": {
+          "description": "Store every kind of local file (videos, captions, user exports, images, torrents...) in object storage Resumable uploads also go through the staging bucket (see below) Existing files stay where they are: move them using the create-move-file-storage-job script PeerTube exits at startup if the bucket of a section below does not exist",
           "type": "boolean",
           "default": false
         },
@@ -861,11 +862,6 @@
         "streaming_playlists": {
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
-              "type": "boolean",
-              "default": true
-            },
             "bucket_name": {
               "description": "Bucket name created on your object storage provider PeerTube will access it via {bucket_name}.example.com",
               "type": "string",
@@ -892,11 +888,6 @@
         "web_videos": {
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
-              "type": "boolean",
-              "default": true
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -915,11 +906,6 @@
         "user_exports": {
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
-              "type": "boolean",
-              "default": true
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -939,11 +925,6 @@
           "description": "Same settings but for original video files",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
-              "type": "boolean",
-              "default": true
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -963,11 +944,6 @@
           "description": "Video captions",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to false to keep these files on the file system even if object_storage.enabled is true",
-              "type": "boolean",
-              "default": true
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -987,11 +963,6 @@
           "description": "Avatars and banners of local accounts and channels",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
-              "type": "boolean",
-              "default": false
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -1011,11 +982,6 @@
           "description": "Video and playlist thumbnails",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
-              "type": "boolean",
-              "default": false
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -1035,11 +1001,6 @@
           "description": "Video storyboards",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
-              "type": "boolean",
-              "default": false
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -1059,11 +1020,6 @@
           "description": "Video torrent files",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
-              "type": "boolean",
-              "default": false
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -1083,11 +1039,6 @@
           "description": "Various admin/user uploads that are not suitable for the sections above (instance logos...)",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
-              "type": "boolean",
-              "default": false
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -1104,14 +1055,9 @@
           "additionalProperties": false
         },
         "staging": {
-          "description": "Where resumable uploads are temporarily stored, before being processed: - video uploads, only if web_videos is stored in object storage - user archive imports, until their import job processes them: any process can then run it It lets processes on different hosts receive the chunks of the same upload (see horizontal scalability) It also avoids sending the whole file to object storage in the last upload request, which may time out for big files They are removed once processed, or by a cleaner if something went wrong These files must never be public: we recommend a dedicated bucket that blocks public access If you share a bucket with other sections, make sure its policy doesn't make this prefix public",
+          "description": "Where resumable uploads are temporarily stored, before being processed: - video uploads - user archive imports, until their import job processes them: any process can then run it It lets processes on different hosts receive the chunks of the same upload (see horizontal scalability) It also avoids sending the whole file to object storage in the last upload request, which may time out for big files They are removed once processed, or by a cleaner if something went wrong These files must never be public: we recommend a dedicated bucket that blocks public access If you share a bucket with other sections, make sure its policy doesn't make this prefix public",
           "type": "object",
           "properties": {
-            "enabled": {
-              "description": "Set to true to store these files in object storage (requires object_storage.enabled)",
-              "type": "boolean",
-              "default": false
-            },
             "bucket_name": {
               "type": "string",
               "default": "peertube"
@@ -1119,6 +1065,25 @@
             "prefix": {
               "type": "string",
               "default": "staging/"
+            }
+          },
+          "additionalProperties": false
+        },
+        "cache": {
+          "description": "Copies of remote files (avatars, thumbnails, storyboards and captions of other instances) that PeerTube caches when they are requested PeerTube redirects users to these public objects, so the bucket must allow cross-origin requests (CORS) like the other sections Don't remove these objects outside PeerTube (lifecycle rules...): a process that already served one keeps redirecting to it until it restarts",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "cache/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
             }
           },
           "additionalProperties": false
@@ -2571,7 +2536,7 @@
                   "type": "object",
                   "properties": {
                     "enabled": {
-                      "description": "Enable this to pass cookies to yt-dlp. This can help when imports need a real browser session or when your server IP is limited Only enable this if you trust users allowed to trigger imports because PeerTube will import using the account from which these cookies were exported That account may be rate limited or temporarily blocked PeerTube expects a Netscape-format file at storage/tmp-persistent/youtube-cookies.txt See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp for cookie export instructions See https://docs.joinpeertube.org/maintain/configuration#cookies-for-youtube-imports for PeerTube-specific setup",
+                      "description": "Enable this to pass cookies to yt-dlp. This can help when imports need a real browser session or when your server IP is limited Only enable this if you trust users allowed to trigger imports because PeerTube will import using the account from which these cookies were exported That account may be rate limited or temporarily blocked PeerTube expects a Netscape-format file at storage/tmp-persistent/youtube-cookies.txt With secondary processes, only put it in the storage of the primary process: it publishes the file to the other processes See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp for cookie export instructions See https://docs.joinpeertube.org/maintain/configuration#cookies-for-youtube-imports for PeerTube-specific setup",
                       "type": "boolean",
                       "default": false
                     }

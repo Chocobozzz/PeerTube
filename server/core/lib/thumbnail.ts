@@ -451,7 +451,7 @@ async function createThumbnailFromFunction (parameters: {
 
   await thumbnailCreator()
 
-  if (CONFIG.OBJECT_STORAGE.THUMBNAILS.ENABLED) {
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
     await storeCommonFile('thumbnails', outputPath, filename)
     thumbnail.storage = FileStorage.OBJECT_STORAGE
   }
@@ -461,7 +461,7 @@ async function createThumbnailFromFunction (parameters: {
 
 // Generated thumbnails are written to tmp when they belong to object storage, so that we can still downscale one thumbnail from another
 function buildThumbnailBasePath () {
-  return CONFIG.OBJECT_STORAGE.THUMBNAILS.ENABLED
+  return CONFIG.OBJECT_STORAGE.ENABLED
     ? CONFIG.STORAGE.TMP_DIR
     : CONFIG.STORAGE.THUMBNAILS_DIR
 }
@@ -473,7 +473,7 @@ async function createThumbnailBatch (options: {
 }) {
   const { metadata, sequential = false, create } = options
 
-  const onObjectStorage = CONFIG.OBJECT_STORAGE.THUMBNAILS.ENABLED
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.ENABLED
 
   // When one thumbnail of a batch fails, don't leave the files and objects of the other ones behind
   // On success, the tmp files of thumbnails uploaded to object storage are not needed anymore

@@ -5,7 +5,6 @@ import { CONFIG } from '@server/initializers/config.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { checkVideoResourcesToBeMoved } from '@server/lib/move-storage/shared/move-video.js'
-import { isObjectStorageEnabledFor, ObjectStorageSectionType } from '@server/lib/object-storage/config.js'
 import { buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { moveToStorageAndUpdateState } from '@server/lib/video-state.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
@@ -30,9 +29,9 @@ const program = createCommand()
 const options = program.opts()
 
 const moveVideos = !!(options.video || options.allVideos || options.all)
-let movePlaylists = !!(options.allPlaylists || options.all)
-let moveActorImages = !!(options.allActorImages || options.all)
-let moveUploads = !!(options.allUploads || options.all)
+const movePlaylists = !!(options.allPlaylists || options.all)
+const moveActorImages = !!(options.allActorImages || options.all)
+const moveUploads = !!(options.allUploads || options.all)
 
 const targetStorage = options.toObjectStorage
   ? FileStorage.OBJECT_STORAGE
@@ -52,24 +51,9 @@ if (!moveVideos && !movePlaylists && !moveActorImages && !moveUploads) {
   process.exit(-1)
 }
 
-if (options.toObjectStorage) {
-  if (!CONFIG.OBJECT_STORAGE.ENABLED) {
-    console.error('Object storage is not enabled on this instance.')
-    process.exit(-1)
-  }
-
-  // Playlist thumbnails, avatars and uploads have no other file type to fall back on
-  if (movePlaylists) {
-    movePlaylists = canMoveToObjectStorage({ type: 'thumbnails', label: 'playlist thumbnails', explicit: !!options.allPlaylists })
-  }
-
-  if (moveActorImages) {
-    moveActorImages = canMoveToObjectStorage({ type: 'avatars', label: 'actor images', explicit: !!options.allActorImages })
-  }
-
-  if (moveUploads) {
-    moveUploads = canMoveToObjectStorage({ type: 'uploads', label: 'uploads', explicit: !!options.allUploads })
-  }
+if (options.toObjectStorage && !CONFIG.OBJECT_STORAGE.ENABLED) {
+  console.error('Object storage is not enabled on this instance.')
+  process.exit(-1)
 }
 
 run()
@@ -78,28 +62,6 @@ run()
     console.error(err)
     process.exit(-1)
   })
-
-// Explicitly requested files must be enabled in object storage, but --all skips the ones that are not
-function canMoveToObjectStorage (options: {
-  type: ObjectStorageSectionType
-  label: string
-  explicit: boolean
-}) {
-  const { type, label, explicit } = options
-
-  if (isObjectStorageEnabledFor(type)) return true
-
-  const message = `object_storage.${type}.enabled is false, cannot move ${label} to object storage.`
-
-  if (explicit) {
-    console.error(message)
-    process.exit(-1)
-  }
-
-  console.warn(`${message} Skipping them.`)
-
-  return false
-}
 
 async function run () {
   await initDatabaseModels(true)

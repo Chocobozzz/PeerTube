@@ -1,31 +1,12 @@
+import { hostname } from 'os'
+import { resolve } from 'path'
 import { CONFIG } from './config.js'
-import { getSharedPrimaryStorage } from './config/shared-config.js'
+import { getPrimaryProcessStorage } from './config/shared-config.js'
 
 /**
- * Two PeerTube processes must never share a working directory (tmp, plugins...) because of potential conflicts.
- * The directories of the files referenced by the database (video files, etc.) can only be shared by the processes of the same platform,
- * so secondary processes can manage these files too.
- *
- * A secondary process on the same host as the primary adopts the primary's shareable directories at boot.
- * It refuses to start if any of the directories it keeps for itself (tmp, plugins...) collides with one of the primary's directories.
+ * Two PeerTube processes must never share a storage directory because of potential conflicts (tmp is cleaned at every boot...)
+ * Secondary processes never use the files of the primary process on the file system: they must be in object storage
  */
-
-// Directories of the files referenced by the database, that a secondary process on the same host as the primary can share
-export const SHAREABLE_STORAGE_DIRECTORIES = [
-  'ACTOR_IMAGES_DIR',
-  'WEB_VIDEOS_DIR',
-  'STREAMING_PLAYLISTS_DIR',
-  'ORIGINAL_VIDEO_FILES_DIR',
-  'THUMBNAILS_DIR',
-  'STORYBOARDS_DIR',
-  'PREVIEWS_DIR',
-  'CAPTIONS_DIR',
-  'TORRENTS_DIR',
-  'UPLOADS_DIR',
-  'TMP_PERSISTENT_DIR'
-] as const satisfies (keyof typeof CONFIG.STORAGE)[]
-
-export type ShareableStorageDirectory = typeof SHAREABLE_STORAGE_DIRECTORIES[number]
 
 // To name the setting an administrator has to change
 const SETTING_NAMES: { [property in keyof typeof CONFIG.STORAGE]: string } = {
@@ -50,25 +31,24 @@ const SETTING_NAMES: { [property in keyof typeof CONFIG.STORAGE]: string } = {
   UPLOADS_DIR: 'uploads'
 }
 
-export function getStorageDirectorySettingName (property: keyof typeof CONFIG.STORAGE) {
-  return 'storage.' + getStorageDirectorySubSettingName(property)
+// Resolved storage directories of this process, keyed by setting name without the "storage." prefix (tmp, avatars, web_videos...)
+export function buildStorageDirectoriesPayload () {
+  const result: Record<string, string> = {}
+
+  for (const property of Object.keys(SETTING_NAMES)) {
+    result[SETTING_NAMES[property]] = resolve(CONFIG.STORAGE[property])
+  }
+
+  return result
 }
 
-export function getStorageDirectorySubSettingName (property: keyof typeof CONFIG.STORAGE) {
-  return SETTING_NAMES[property] || property.toLowerCase()
-}
+export function findStorageDirectoriesConflictsWithPrimary () {
+  const primary = getPrimaryProcessStorage()
+  if (!primary?.storage || primary.hostname !== hostname()) return []
 
-export function getNotSharedStorageDirectories (
-  directories: readonly ShareableStorageDirectory[] = SHAREABLE_STORAGE_DIRECTORIES
-): ShareableStorageDirectory[] {
-  const primaryStorage = getSharedPrimaryStorage()
+  const local = buildStorageDirectoriesPayload()
 
-  // Not on the same host as the primary: none of them are shared
-  if (!primaryStorage) return [ ...directories ]
-
-  return directories.filter(property => {
-    const settingName = SETTING_NAMES[property] || property.toLowerCase()
-
-    return primaryStorage[settingName] !== CONFIG.STORAGE[property]
-  })
+  return Object.entries(local)
+    .filter(([ settingName, path ]) => primary.storage[settingName] === path)
+    .map(([ settingName ]) => 'storage.' + settingName)
 }

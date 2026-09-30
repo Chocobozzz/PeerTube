@@ -1,8 +1,9 @@
 import { OBJECT_STORAGE_STAGING } from '@server/initializers/constants.js'
-import { getStagingBucketInfo } from './config.js'
+import { getObjectStorageFileConfig } from './config.js'
 import {
   abortMultipartUpload,
   buildKey,
+  createObjectReadStream,
   listMultipartUploadsOfPrefix,
   listObjectsOfPrefix,
   makeAvailable,
@@ -24,11 +25,11 @@ export function buildStagingKey (subPrefix: StagingSubPrefix, key: string) {
 
 // Staging keys are relative to the staging prefix, but some tools (uploadx S3 storage) only deal with full object keys
 export function toStagingFullKey (key: string) {
-  return buildKey(key, getStagingBucketInfo())
+  return buildKey(key, getObjectStorageFileConfig('staging'))
 }
 
 export function fromStagingFullKey (fullKey: string) {
-  const prefix = getStagingBucketInfo().PREFIX
+  const prefix = getObjectStorageFileConfig('staging').PREFIX
 
   if (!fullKey.startsWith(prefix)) throw new Error(`Object key ${fullKey} is not in staging prefix ${prefix}`)
 
@@ -40,7 +41,7 @@ export function isStagingObject (options: {
   bucketName: string
   fullKey: string
 }) {
-  const bucketInfo = getStagingBucketInfo()
+  const bucketInfo = getObjectStorageFileConfig('staging')
   if (options.bucketName !== bucketInfo.BUCKET_NAME) return false
 
   return Object.values(OBJECT_STORAGE_STAGING.SUB_PREFIXES)
@@ -50,7 +51,13 @@ export function isStagingObject (options: {
 // ---------------------------------------------------------------------------
 
 export function downloadStagingObject (options: { key: string, destination: string }) {
-  return makeAvailable({ key: options.key, destination: options.destination, bucketInfo: getStagingBucketInfo() })
+  return makeAvailable({ key: options.key, destination: options.destination, bucketInfo: getObjectStorageFileConfig('staging') })
+}
+
+export async function getStagingObjectReadStream (key: string) {
+  const { stream } = await createObjectReadStream({ key, bucketInfo: getObjectStorageFileConfig('staging'), rangeHeader: undefined })
+
+  return stream
 }
 
 export function storeStagingObject (options: {
@@ -61,19 +68,19 @@ export function storeStagingObject (options: {
   return storeObject({
     inputPath: options.inputPath,
     objectStorageKey: options.key,
-    bucketInfo: getStagingBucketInfo(),
+    bucketInfo: getObjectStorageFileConfig('staging'),
     isPrivate: true,
     contentType: options.contentType
   })
 }
 
 export async function removeStagingObject (key: string) {
-  await removeObject(key, getStagingBucketInfo())
+  await removeObject(key, getObjectStorageFileConfig('staging'))
 }
 
 // Lets FFmpeg read only the parts of the file it needs (headers, a frame...) with range requests, instead of downloading it
 export async function generateStagingObjectPresignedUrl (key: string) {
-  const bucketInfo = getStagingBucketInfo()
+  const bucketInfo = getObjectStorageFileConfig('staging')
 
   const { GetObjectCommand } = await import('@aws-sdk/client-s3')
   const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner')
@@ -95,7 +102,7 @@ export async function generateStagingObjectPresignedUrl (key: string) {
 
 // Remove what was left behind: files that were never processed (crash, lost job...) and uploads that never completed
 export async function removeExpiredStagingFiles () {
-  const bucketInfo = getStagingBucketInfo()
+  const bucketInfo = getObjectStorageFileConfig('staging')
   const now = Date.now()
 
   for (const { prefix, maxAgeMs } of Object.values(OBJECT_STORAGE_STAGING.SUB_PREFIXES)) {

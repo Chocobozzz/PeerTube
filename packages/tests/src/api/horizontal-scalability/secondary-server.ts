@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
 import { HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
-import { buildUUID } from '@peertube/peertube-node-utils'
+import { areMockObjectStorageTestsDisabled, buildUUID } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
@@ -11,13 +11,19 @@ import {
   makePostBodyRequest,
   makePutBodyRequest,
   makeRawRequest,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
+import WebSocket from 'ws'
 
 describe('Test a secondary server process', function () {
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
+
   let primary: PeerTubeServer
   let secondary: PeerTubeServer
   let videoUUID: string
@@ -29,7 +35,11 @@ describe('Test a secondary server process', function () {
   before(async function () {
     this.timeout(120000)
 
+    await objectStorage.prepareDefaultMockBuckets()
+
     primary = await createSingleServer(1, {
+      ...objectStorage.getDefaultMockConfig(),
+
       // Large enough for the requests of this suite, small enough for the shared counter test below to exhaust it quickly
       rates_limit: {
         api: {
@@ -119,16 +129,82 @@ describe('Test a secondary server process', function () {
       await makeGetRequest({ url: secondary.url, path: '/plugins/global.css', expectedStatus: HttpStatusCode.OK_200 })
     })
 
-    it('Should not serve the endpoints the primary owns', async function () {
-      const paths = [
-        '/api/v1/jobs',
+    it('Should answer 421 to the endpoints the primary owns, so the reverse proxy replays them on the primary', async function () {
+      const expectedStatus = HttpStatusCode.MISDIRECTED_REQUEST_421
+      const token = primary.accessToken
+
+      const getPaths = [
         '/api/v1/server/stats',
-        '/api/v1/plugins'
+        '/api/v1/server/logs',
+        '/api/v1/server/audit-logs',
+        '/api/v1/server/debug',
+        '/static/web-videos/' + buildUUID() + '.mp4',
+        '/tracker/announce',
+        '/plugins/hello-world/router/ping',
+        '/plugins/hello-world/0.0.1/auth/fake-auth'
       ]
 
-      for (const path of paths) {
-        await makeGetRequest({ url: secondary.url, path, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      for (const path of getPaths) {
+        await makeGetRequest({ url: secondary.url, path, token, expectedStatus })
       }
+
+      const postPaths = [
+        '/inbox',
+        '/accounts/root/inbox',
+        '/api/v1/server/logs/client',
+        '/api/v1/server/debug/run-command',
+        '/api/v1/plugins/install',
+        '/api/v1/plugins/update',
+        '/api/v1/plugins/uninstall',
+        '/api/v1/runners/jobs/' + buildUUID() + '/update'
+      ]
+
+      for (const path of postPaths) {
+        await makePostBodyRequest({ url: secondary.url, path, token, fields: {}, expectedStatus })
+      }
+
+      await makePutBodyRequest({ url: secondary.url, path: '/api/v1/config/custom', token, fields: {}, expectedStatus })
+      await makePutBodyRequest({ url: secondary.url, path: '/api/v1/server/redundancy/' + primary.host, token, fields: {}, expectedStatus })
+
+      await makeDeleteRequest({ url: secondary.url, path: '/api/v1/config/custom', token, expectedStatus })
+      await makeDeleteRequest({ url: secondary.url, path: '/api/v1/server/redundancy/videos/1', token, expectedStatus })
+
+      // WebSocket tracker
+      const statusCode = await new Promise<number>((res, rej) => {
+        const ws = new WebSocket('ws://' + secondary.host + '/tracker/socket')
+
+        ws.on('open', () => {
+          ws.close()
+          rej(new Error('The secondary accepted the tracker websocket'))
+        })
+        ws.on('unexpected-response', (_req, response) => res(response.statusCode))
+        ws.on('error', err => rej(err))
+      })
+
+      expect(statusCode).to.equal(expectedStatus)
+    })
+
+    it('Should serve lazy static files', async function () {
+      // Cached remote files are in object storage, so the secondary looks for the file instead of answering 421
+      await makeGetRequest({
+        url: secondary.url,
+        path: '/lazy-static/avatars/' + buildUUID() + '.png',
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+    })
+
+    it('Should serve these endpoints on the primary', async function () {
+      await makeGetRequest({ url: primary.url, path: '/api/v1/server/stats', expectedStatus: HttpStatusCode.OK_200 })
+      await makeGetRequest({
+        url: primary.url,
+        path: '/api/v1/config/custom',
+        token: primary.accessToken,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+
+    it('Should still answer 400 to an unknown API endpoint', async function () {
+      await makeGetRequest({ url: secondary.url, path: '/api/v1/unknown-endpoint', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
 
     it('Should still answer the ping of the secondary', async function () {
@@ -405,50 +481,35 @@ describe('Test a secondary server process', function () {
   })
 
   describe('Storage directories', function () {
-    it('Should refuse to boot a process that shares a storage directory with another one', async function () {
+    it('Should warn on storage directories also used by the primary process', async function () {
       this.timeout(60000)
 
-      let started: PeerTubeServer
-      let error: Error
+      const started = await createSecondaryServer(primary, {
+        // Already used by the primary
+        storage: {
+          well_known: primary.getDirectoryPath('well-known') + '/',
+          client_overrides: primary.getDirectoryPath('client-overrides') + '/'
+        },
+        // Another port, so it does not collide with the one of `secondary`
+        listen: { port: primary.port + 10002 }
+      })
 
       try {
-        started = await createSecondaryServer(primary, {
-          // Already claimed by the primary
-          storage: { plugins: primary.getDirectoryPath('plugins') + '/' },
-          // Another port, so a process that wrongly boots does not merely fail to bind the one of `secondary`
-          listen: { port: primary.port + 10002 }
-        })
-      } catch (err) {
-        error = err as Error
+        await started.servers.waitUntilLog('also used by the primary process on this host')
+
+        const logs = (await started.servers.getLogContent()).toString()
+        expect(logs).to.contain('storage.well_known')
+        expect(logs).to.contain('storage.client_overrides')
+        expect(logs).to.not.contain('storage.tmp')
+      } finally {
+        await started.kill()
       }
-
-      if (started) await started.kill()
-
-      expect(error, 'the secondary process should not have started').to.exist
-      expect(error.message).to.contain('also uses on the same host')
-      expect(error.message, 'the error should name the setting to change').to.contain('storage.plugins')
     })
 
-    it('Should still refuse to boot on a shared tmp directory, which is cleaned at every boot', async function () {
-      this.timeout(60000)
+    it('Should not warn with storage directories of its own', async function () {
+      const logs = await secondary.servers.getLogContent()
 
-      let started: PeerTubeServer
-      let error: Error
-
-      try {
-        started = await createSecondaryServer(primary, {
-          storage: { tmp: primary.getDirectoryPath('tmp') + '/' },
-          listen: { port: primary.port + 10003 }
-        })
-      } catch (err) {
-        error = err as Error
-      }
-
-      if (started) await started.kill()
-
-      expect(error, 'the secondary process should not have started').to.exist
-      expect(error.message).to.contain('also uses on the same host')
-      expect(error.message, 'the error should name the setting to change').to.contain('storage.tmp')
+      expect(logs.toString()).to.not.contain('also used by the primary process on this host')
     })
   })
 
@@ -478,6 +539,8 @@ describe('Test a secondary server process', function () {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ secondary, primary ])
   })
 })

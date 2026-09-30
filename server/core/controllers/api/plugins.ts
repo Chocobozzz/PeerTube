@@ -11,7 +11,7 @@ import { createLogger } from '@server/helpers/logger.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
-import { RedisChannels } from '@server/lib/redis/index.js'
+import { currentProcessId, RedisChannels } from '@server/lib/redis/index.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -21,6 +21,7 @@ import {
   openapiOperationDoc,
   paginationValidator,
   pluginsSortValidator,
+  primaryOnly,
   setDefaultPagination,
   setDefaultSort
 } from '@server/middlewares/index.js'
@@ -94,9 +95,12 @@ pluginRouter.get(
   getPlugin
 )
 
+// Plugins are installed in the plugin directory of the primary, that the secondaries sync from
+
 pluginRouter.post(
   '/install',
   openapiOperationDoc({ operationId: 'addPlugin' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
@@ -106,6 +110,7 @@ pluginRouter.post(
 pluginRouter.post(
   '/update',
   openapiOperationDoc({ operationId: 'updatePlugin' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
@@ -115,6 +120,7 @@ pluginRouter.post(
 pluginRouter.post(
   '/uninstall',
   openapiOperationDoc({ operationId: 'uninstallPlugin' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   uninstallPluginValidator,
@@ -220,7 +226,7 @@ async function updatePluginSettings (req: express.Request, res: express.Response
   await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
 
   try {
-    await RedisChannels.pluginChanges.publish({ type: 'plugin-settings-changed', npmName: req.params.npmName })
+    await RedisChannels.pluginChanges.publish({ type: 'plugin-settings-changed', npmName: req.params.npmName, senderId: currentProcessId })
   } catch (err) {
     logger.error('Failed to publish plugin settings change for %s.', req.params.npmName, { err })
   }

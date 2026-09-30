@@ -10,11 +10,8 @@ import { isArray } from '../helpers/custom-validators/misc.js'
 import { createLogger } from '../helpers/logger.js'
 import {
   getObjectStorageFileConfig,
-  getObjectStorageLocationConflicts,
-  getStagingBucketInfo,
-  isObjectStorageEnabledFor,
-  isStagingEnabled,
-  objectStorageSectionTypes
+  getPrunableObjectStorageLocationConflicts,
+  objectStorageSections
 } from '../lib/object-storage/config.js'
 import { checkVideoFilesLifecycleConfig } from '../lib/video-files-lifecycle/video-files-lifecycle-config.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
@@ -91,25 +88,59 @@ async function applicationExist () {
   return totalApplication !== 0
 }
 
-// Network check, so it's run separately from the synchronous checkConfig() and doesn't block startup
-async function checkStagingBucketConnectivity () {
-  if (!isStagingEnabled()) return
+const BUCKET_CHECK_TIMEOUT_MS = 10000
+
+// Throws if a bucket does not exist, only logs other errors (network, permissions, timeout...) that may be transient
+async function checkObjectStorageBucketsConnectivity () {
+  if (CONFIG.OBJECT_STORAGE.ENABLED !== true) return
 
   const { HeadBucketCommand } = await import('@aws-sdk/client-s3')
   const { getClient } = await import('../lib/object-storage/shared/client.js')
 
-  const bucketInfo = getStagingBucketInfo()
+  // Bucket name -> sections using it
+  const buckets = new Map<string, string[]>()
 
-  try {
-    const client = await getClient()
-    await client.send(new HeadBucketCommand({ Bucket: bucketInfo.BUCKET_NAME }))
-  } catch (err) {
-    logger.error(
-      'Cannot reach the object_storage.staging bucket %s. Resumable video uploads and user imports relying on it will fail.',
-      bucketInfo.BUCKET_NAME,
-      { err }
+  for (const name of getUsedObjectStorageSectionTypes()) {
+    const bucketName = getObjectStorageFileConfig(name).BUCKET_NAME
+
+    buckets.set(bucketName, [ ...(buckets.get(bucketName) ?? []), name ])
+  }
+
+  const client = await getClient()
+  const missingBuckets: string[] = []
+
+  await Promise.all([ ...buckets ].map(async ([ bucketName, sectionNames ]) => {
+    const settingNames = sectionNames.map(name => `object_storage.${name}.bucket_name`).join(', ')
+
+    try {
+      // The S3 client has no request timeout: an unreachable endpoint must not block the startup
+      await client.send(new HeadBucketCommand({ Bucket: bucketName }), { abortSignal: AbortSignal.timeout(BUCKET_CHECK_TIMEOUT_MS) })
+    } catch (err) {
+      if (isBucketNotFoundError(err)) {
+        missingBuckets.push(` - ${bucketName}, used by ${settingNames}`)
+        return
+      }
+
+      logger.error(
+        'Cannot reach object storage bucket %s: storing files in it will fail. Check the %s setting.',
+        bucketName,
+        settingNames,
+        { err }
+      )
+    }
+  }))
+
+  if (missingBuckets.length !== 0) {
+    throw new Error(
+      'These object storage buckets do not exist:\n' + missingBuckets.join('\n') + '\n' +
+        'Create them on your object storage provider, or set these settings to existing buckets. ' +
+        'Every kind of local file is stored in object storage when object_storage.enabled is true.'
     )
   }
+}
+
+function isBucketNotFoundError (err: any) {
+  return err?.name === 'NoSuchBucket' || err?.name === 'NotFound' || err?.$metadata?.httpStatusCode === 404
 }
 
 async function checkFFmpegVersion () {
@@ -139,7 +170,7 @@ export {
   checkActivityPubUrls,
   checkConfig,
   checkFFmpegVersion,
-  checkStagingBucketConnectivity,
+  checkObjectStorageBucketsConnectivity,
   clientsExist,
   usersExist
 }
@@ -341,60 +372,35 @@ function checkLiveConfig () {
   }
 }
 
+// Original video files are only stored if the admin keeps them
+function getUsedObjectStorageSectionTypes () {
+  return objectStorageSections
+    .filter(type => type !== 'original_video_files' || CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP)
+}
+
 function checkObjectStorageConfig () {
   if (CONFIG.OBJECT_STORAGE.ENABLED !== true) return
 
-  const sections = objectStorageSectionTypes
-    .map(type => ({
-      name: type,
-      config: getObjectStorageFileConfig(type),
-      used: type === 'original_video_files'
-        ? isObjectStorageEnabledFor(type) && CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP
-        : isObjectStorageEnabledFor(type)
-    }))
-    .filter(s => s.used)
-
-  for (const { name, config } of sections) {
-    if (!config.BUCKET_NAME) {
+  for (const name of getUsedObjectStorageSectionTypes()) {
+    if (!getObjectStorageFileConfig(name).BUCKET_NAME) {
       throw new Error(`object_storage.${name}.bucket_name should be set when object storage support is enabled.`)
     }
   }
 
-  if (isStagingEnabled()) {
-    const stagingBucket = getStagingBucketInfo().BUCKET_NAME
+  const maxChunkSize = CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
 
-    if (!stagingBucket) {
-      throw new Error(
-        'object_storage.staging.bucket_name should be set to use object storage staging.'
-      )
-    }
-  }
-
-  if (isObjectStorageEnabledFor('web_videos') && !isStagingEnabled()) {
+  if (maxChunkSize && maxChunkSize < OBJECT_STORAGE_STAGING.MIN_PART_SIZE) {
     logger.warn(
-      'object_storage.web_videos is enabled without object_storage.staging: uploaded videos are sent to object storage ' +
-        'during the upload request, which may time out for big files. Consider enabling object_storage.staging.'
+      `client.videos.resumable_upload.max_chunk_size is lower than ${OBJECT_STORAGE_STAGING.MIN_PART_SIZE} bytes, the minimum object ` +
+        'storage part size: resumable uploads streamed to object storage will use bigger chunks anyway.'
     )
   }
 
-  if (isStagingEnabled()) {
-    const maxChunkSize = CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
-
-    if (maxChunkSize && maxChunkSize < OBJECT_STORAGE_STAGING.MIN_PART_SIZE) {
-      logger.warn(
-        `client.videos.resumable_upload.max_chunk_size is lower than ${OBJECT_STORAGE_STAGING.MIN_PART_SIZE} bytes, the minimum object ` +
-          'storage part size: resumable uploads streamed to object storage will use bigger chunks anyway.'
-      )
-    }
-  }
-
-  // Only prune-storage is affected by these conflicts, and it refuses to run: don't prevent the instance from starting
-  for (const conflict of getObjectStorageLocationConflicts()) {
+  for (const conflict of getPrunableObjectStorageLocationConflicts()) {
     logger.warn(`${conflict}. Set different bucket prefixes, otherwise the prune-storage script cannot be used.`)
   }
 
   if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {
-    // oxlint-disable-next-line max-len
     logger.warn(
       `Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). ` +
         `Consider using a lower one (like 100MB).`

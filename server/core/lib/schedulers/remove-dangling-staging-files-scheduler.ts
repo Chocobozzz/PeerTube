@@ -1,6 +1,6 @@
 import { createLogger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
-import { isStagingEnabled } from '../object-storage/config.js'
 import { removeExpiredStagingFiles } from '../object-storage/staging.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
@@ -16,7 +16,7 @@ export class RemoveDanglingStagingFilesScheduler extends AbstractScheduler {
   }
 
   protected async internalExecute () {
-    if (!isStagingEnabled()) return
+    if (!CONFIG.OBJECT_STORAGE.ENABLED) return
 
     logger.info('Removing dangling object storage staging files')
 

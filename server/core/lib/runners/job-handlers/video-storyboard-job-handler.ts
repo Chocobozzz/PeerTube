@@ -92,7 +92,7 @@ export class VideoStoryboardJobHandler extends AbstractJobHandler<CreateOptions,
       const destinationFilename = generateImageFilename()
       // Move to tmp when the final destination is object storage
       const destinationPath = join(
-        CONFIG.OBJECT_STORAGE.STORYBOARDS.ENABLED ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.STORYBOARDS_DIR,
+        CONFIG.OBJECT_STORAGE.ENABLED ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.STORYBOARDS_DIR,
         destinationFilename
       )
 

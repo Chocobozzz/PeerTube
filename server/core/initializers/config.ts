@@ -313,7 +313,8 @@ export const CONFIG = buildConfig({
     STORYBOARDS: buildObjectStorageSectionWithBaseUrl('storyboards'),
     TORRENTS: buildObjectStorageSectionWithBaseUrl('torrents'),
     UPLOADS: buildObjectStorageSectionWithBaseUrl('uploads'),
-    STAGING: buildObjectStorageSection('staging')
+    STAGING: buildObjectStorageSection('staging'),
+    CACHE: buildObjectStorageSectionWithBaseUrl('cache')
   },
   WEBSERVER: {
     SCHEME: staticComputed([ 'webserver.https' ], () => config.get<boolean>('webserver.https') === true ? 'https' : 'http'),
@@ -982,16 +983,8 @@ function buildObjectStorageSectionWithBaseUrl (name: string) {
   }
 }
 
-// Every object storage section can be individually enabled
-// ENABLED folds in the global object_storage.enabled flag so call sites cannot forget it
 function buildObjectStorageSection (name: string) {
   return {
-    ENABLED: staticComputed(
-      [ 'object_storage.enabled', `object_storage.${name}.enabled` ],
-      () =>
-        config.get<boolean>('object_storage.enabled') === true &&
-        config.get<boolean>(`object_storage.${name}.enabled`) === true
-    ),
     BUCKET_NAME: staticKey<string>(`object_storage.${name}.bucket_name`),
     PREFIX: staticKey<string>(`object_storage.${name}.prefix`)
   }

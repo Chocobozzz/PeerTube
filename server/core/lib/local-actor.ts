@@ -40,7 +40,7 @@ export async function updateLocalActorImageFiles (options: {
 }) {
   const { accountOrChannel, imagePhysicalFile, type, sendActorUpdate } = options
 
-  const onObjectStorage = CONFIG.OBJECT_STORAGE.ACTOR_IMAGES.ENABLED
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.ENABLED
 
   const processImageSize = async (imageSize: { width: number, height: number }) => {
     const extension = getLowercaseExtension(imagePhysicalFile.path)

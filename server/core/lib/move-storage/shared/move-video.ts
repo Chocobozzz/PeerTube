@@ -2,7 +2,6 @@ import { FileStorage, FileStorageType, VideoStateType } from '@peertube/peertube
 import { createLogger } from '@server/helpers/logger.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION } from '@server/initializers/constants.js'
 import { buildCaptionM3U8Content } from '@server/lib/hls.js'
-import { isObjectStorageEnabledFor, ObjectStorageSectionType } from '@server/lib/object-storage/config.js'
 import {
   makeCaptionFileAvailable,
   makeHLSFileAvailable,
@@ -148,38 +147,29 @@ export async function filterVideoResourcesToBeMoved (videoArg: MVideo, targetSto
 
   const allFiles = [ ...video.VideoFiles, ...(hls?.VideoFiles || []) ]
 
-  // Only move a file type the admin opted into, but always allow moving it back to the file system
   return {
-    source: canMoveTo('original_video_files', targetStorage) && source?.keptOriginalFilename && source.storage !== targetStorage
+    source: source?.keptOriginalFilename && source.storage !== targetStorage
       ? source
       : undefined,
 
-    hls: canMoveTo('streaming_playlists', targetStorage) && moveHLS
+    hls: moveHLS
       ? hls
       : undefined,
 
-    webFiles: canMoveTo('web_videos', targetStorage)
-      ? video.VideoFiles.filter(f => f.storage !== targetStorage)
-      : [],
+    webFiles: video.VideoFiles.filter(f => f.storage !== targetStorage),
 
-    captions: canMoveTo('captions', targetStorage)
-      ? captions.filter(c => {
-        if (c.storage !== targetStorage) return true
-        if (hls && !c.m3u8Filename) return true
+    captions: captions.filter(c => {
+      if (c.storage !== targetStorage) return true
+      if (hls && !c.m3u8Filename) return true
 
-        return false
-      })
-      : [],
+      return false
+    }),
 
-    torrents: canMoveTo('torrents', targetStorage)
-      ? allFiles.filter(f => f.torrentFilename && f.torrentStorage !== targetStorage)
-      : [],
+    torrents: allFiles.filter(f => f.torrentFilename && f.torrentStorage !== targetStorage),
 
-    thumbnails: canMoveTo('thumbnails', targetStorage)
-      ? (video.Thumbnails || []).filter(t => t.isLocal() && t.storage !== targetStorage)
-      : [],
+    thumbnails: (video.Thumbnails || []).filter(t => t.isLocal() && t.storage !== targetStorage),
 
-    storyboard: canMoveTo('storyboards', targetStorage) && storyboard?.isLocal() && storyboard.storage !== targetStorage
+    storyboard: storyboard?.isLocal() && storyboard.storage !== targetStorage
       ? storyboard
       : undefined
   }
@@ -412,10 +402,4 @@ export async function moveCaptionFiles (captions: MVideoCaption[], hls: MStreami
 function listTorrentFilesOf (video: MVideoWithAllFiles) {
   return [ ...video.VideoFiles, ...video.VideoStreamingPlaylists.flatMap(p => p.VideoFiles || []) ]
     .filter(f => !!f.torrentFilename)
-}
-
-function canMoveTo (type: ObjectStorageSectionType, targetStorage: FileStorageType) {
-  if (targetStorage === FileStorage.FILE_SYSTEM) return true
-
-  return isObjectStorageEnabledFor(type)
 }

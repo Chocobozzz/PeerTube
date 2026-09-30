@@ -23,6 +23,7 @@ import { testLiveVideoResolutions } from '@tests/shared/live.js'
 import { MockObjectStorageProxy } from '@tests/shared/mock-servers/mock-object-storage.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
+import merge from 'lodash-es/merge.js'
 
 async function createLive (server: PeerTubeServer, permanent: boolean) {
   const attributes: LiveVideoCreate = {
@@ -261,14 +262,8 @@ describe('Object storage for lives', function () {
 
       await objectStorage.prepareDefaultMockBuckets()
 
-      const config = {
+      const config = merge(objectStorage.getDefaultMockConfig(), {
         object_storage: {
-          enabled: true,
-          endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
-          region: ObjectStorageCommand.getMockRegion(),
-
-          credentials: ObjectStorageCommand.getMockCredentialsConfig(),
-
           streaming_playlists: {
             bucket_name: bucketName,
             prefix: '',
@@ -276,7 +271,7 @@ describe('Object storage for lives', function () {
             store_live_streams: true
           }
         }
-      }
+      })
 
       await servers[0].kill()
       await servers[0].run(config)
@@ -318,13 +313,8 @@ describe('Object storage for lives', function () {
 
       await objectStorage.prepareDefaultMockBuckets()
 
-      const config = {
+      const config = merge(objectStorage.getDefaultMockConfig(), {
         object_storage: {
-          enabled: true,
-          endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
-          region: ObjectStorageCommand.getMockRegion(),
-
-          credentials: ObjectStorageCommand.getMockCredentialsConfig(),
           force_path_style: true,
 
           streaming_playlists: {
@@ -333,7 +323,7 @@ describe('Object storage for lives', function () {
             store_live_streams: true
           }
         }
-      }
+      })
 
       await servers[0].kill()
       await servers[0].run(config)

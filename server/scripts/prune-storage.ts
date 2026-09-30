@@ -3,10 +3,11 @@ import { uniqify, wait } from '@peertube/peertube-core-utils'
 import { FileStorage } from '@peertube/peertube-models'
 import { readdirNonHidden } from '@server/helpers/fs.js'
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX, USER_IMPORT_FILE_PREFIX } from '@server/initializers/constants.js'
+import { isCacheObject } from '@server/lib/object-storage/cache.js'
 import {
-  getObjectStorageLocationConflicts,
+  getPrunableObjectStorageLocationConflicts,
   getPrunableObjectStorageSections,
-  ObjectStorageSectionType
+  PrunableObjectStorageSection
 } from '@server/lib/object-storage/config.js'
 import { BucketInfo, listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
 import { isStagingObject } from '@server/lib/object-storage/staging.js'
@@ -64,7 +65,7 @@ class ObjectStoragePruner {
   async prune () {
     if (!CONFIG.OBJECT_STORAGE.ENABLED) return
 
-    const conflicts = getObjectStorageLocationConflicts()
+    const conflicts = getPrunableObjectStorageLocationConflicts()
     if (conflicts.length !== 0) {
       throw new Error(
         'Cannot prune object storage because some sections would delete the files of each other:\n' +
@@ -108,7 +109,7 @@ class ObjectStoragePruner {
   }
 
   private async buildKeysToDelete () {
-    const existFactories: { [name in ObjectStorageSectionType]: () => (key: string) => Promise<boolean> | boolean } = {
+    const existFactories: { [name in PrunableObjectStorageSection]: () => (key: string) => Promise<boolean> | boolean } = {
       web_videos: () => this.doesWebVideoFileExistFactory(),
       streaming_playlists: () => this.doesStreamingPlaylistFileExistFactory(),
       original_video_files: () => this.doesOriginalFileExistFactory(),
@@ -140,8 +141,9 @@ class ObjectStoragePruner {
       const keys = await listKeysOfPrefix('', config)
 
       await Bluebird.map(keys, async key => {
-        // The staging bucket can be shared with this section, and its files are not in the database
+        // The staging and cache buckets can be shared with this section, and their files are not local files
         if (isStagingObject({ bucketName: config.BUCKET_NAME, fullKey: key })) return
+        if (isCacheObject({ bucketName: config.BUCKET_NAME, fullKey: key })) return
 
         if (await existFun(key) !== true) {
           keysToDelete.push({ bucket: config.BUCKET_NAME, key })

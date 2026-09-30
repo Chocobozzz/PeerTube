@@ -75,7 +75,7 @@ async function processThumbnails (options: {
   const bestImage = entity.getBestThumbnail('16:9')
   if (!bestImage) return
 
-  const onObjectStorage = CONFIG.OBJECT_STORAGE.THUMBNAILS.ENABLED
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.ENABLED
 
   if (bestImage.storage === FileStorage.FILE_SYSTEM && !await pathExists(bestImage.getFSPath())) {
     throw new Error(`Thumbnail ${bestImage.getFSPath()} does not exist on disk`)

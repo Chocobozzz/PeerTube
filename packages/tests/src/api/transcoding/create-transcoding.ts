@@ -59,6 +59,9 @@ function runTests (options: {
       ? objectStorage.getDefaultMockConfig()
       : {}
 
+    // The server refuses to start if its buckets don't exist
+    if (enableObjectStorage) await objectStorage.prepareDefaultMockBuckets()
+
     // Run server 2 to have transcoding enabled
     servers = await createMultipleServers(2, config)
     await setAccessTokensToServers(servers)
@@ -66,8 +69,6 @@ function runTests (options: {
     await servers[0].config.disableTranscoding()
 
     await doubleFollow(servers[0], servers[1])
-
-    if (enableObjectStorage) await objectStorage.prepareDefaultMockBuckets()
 
     const { shortUUID } = await servers[0].videos.quickUpload({ name: 'video' })
     videoUUID = shortUUID

@@ -208,6 +208,10 @@ static_files:
   private_files_require_auth: true
 
 object_storage:
+  # Store every kind of local file (videos, captions, user exports, images, torrents...) in object storage
+  # Resumable uploads also go through the staging bucket (see below)
+  # Existing files stay where they are: move them using the create-move-file-storage-job script
+  # PeerTube exits at startup if the bucket of a section below does not exist
   enabled: false
 
   # Without protocol, will default to HTTPS
@@ -250,8 +254,6 @@ object_storage:
   max_request_attempts: 3
 
   streaming_playlists:
-    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
-
     # Bucket name created on your object storage provider
     # PeerTube will access it via {bucket_name}.example.com
     bucket_name: 'peertube'
@@ -270,68 +272,59 @@ object_storage:
     store_live_streams: false
 
   web_videos:
-    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'web-videos/'
     base_url: ''
 
   user_exports:
-    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'user-exports/'
     base_url: ''
 
   # Same settings but for original video files
   original_video_files:
-    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'original-video-files/'
     base_url: ''
 
   # Video captions
   captions:
-    enabled: true # Set to false to keep these files on the file system even if object_storage.enabled is true
     bucket_name: 'peertube'
     prefix: 'captions/'
     base_url: ''
 
   # Avatars and banners of local accounts and channels
   avatars:
-    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
     bucket_name: 'peertube'
     prefix: 'avatars/'
     base_url: ''
 
   # Video and playlist thumbnails
   thumbnails:
-    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
     bucket_name: 'peertube'
     prefix: 'thumbnails/'
     base_url: ''
 
   # Video storyboards
   storyboards:
-    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
     bucket_name: 'peertube'
     prefix: 'storyboards/'
     base_url: ''
 
   # Video torrent files
   torrents:
-    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
     bucket_name: 'peertube'
     prefix: 'torrents/'
     base_url: ''
 
   # Various admin/user uploads that are not suitable for the sections above (instance logos...)
   uploads:
-    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
     bucket_name: 'peertube'
     prefix: 'uploads/'
     base_url: ''
 
   # Where resumable uploads are temporarily stored, before being processed:
-  #  - video uploads, only if web_videos is stored in object storage
+  #  - video uploads
   #  - user archive imports, until their import job processes them: any process can then run it
   # It lets processes on different hosts receive the chunks of the same upload (see horizontal scalability)
   # It also avoids sending the whole file to object storage in the last upload request, which may time out for big files
@@ -339,9 +332,16 @@ object_storage:
   # These files must never be public: we recommend a dedicated bucket that blocks public access
   # If you share a bucket with other sections, make sure its policy doesn't make this prefix public
   staging:
-    enabled: false # Set to true to store these files in object storage (requires object_storage.enabled)
     bucket_name: 'peertube'
     prefix: 'staging/'
+
+  # Copies of remote files (avatars, thumbnails, storyboards and captions of other instances) that PeerTube caches when they are requested
+  # PeerTube redirects users to these public objects, so the bucket must allow cross-origin requests (CORS) like the other sections
+  # Don't remove these objects outside PeerTube (lifecycle rules...): a process that already served one keeps redirecting to it until it restarts
+  cache:
+    bucket_name: 'peertube'
+    prefix: 'cache/'
+    base_url: ''
 
 log:
   level: 'info' # 'debug' | 'info' | 'warn' | 'error'
@@ -1047,6 +1047,7 @@ import:
         # Only enable this if you trust users allowed to trigger imports because PeerTube will import using the account from which these cookies were exported
         # That account may be rate limited or temporarily blocked
         # PeerTube expects a Netscape-format file at storage/tmp-persistent/youtube-cookies.txt
+        # With secondary processes, only put it in the storage of the primary process: it publishes the file to the other processes
         # See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp for cookie export instructions
         # See https://docs.joinpeertube.org/maintain/configuration#cookies-for-youtube-imports for PeerTube-specific setup
         enabled: false

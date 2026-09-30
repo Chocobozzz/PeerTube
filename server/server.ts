@@ -9,11 +9,13 @@
  *    - runs every job worker
  *    - sends its configuration to secondary servers
  *  - `secondary` is an "help" process for the primary:
- *    - serves a subset of the API and can tracks views; every endpoint it does not serve answers a visible 400 error
+ *    - serves the API, the ActivityPub endpoints and the files in object storage, and tracks views
+ *    - answers 421 to the endpoints only the primary can serve (see the `primaryOnly` middleware), so the reverse proxy replays them on it
  *    - consumes an allow list of job types
  *    - never runs migrations
  *    - never runs schedulers that flush data to PostgreSQL
  *    - fetches a small subset of the configuration from a YAML file, and the complete configuration from the primary
+ *    - requires object storage: it never uses the files of the primary on the file system
  *
  * Every process owns its storage directories.
  *
@@ -33,7 +35,7 @@ const options = createCommand()
   // Because it's used to alter the config, that is built early in the initialization process (ESM hoisting)
   .option(
     '--role <role>',
-    'Process role: "primary" (default) runs the whole instance, "secondary" only serves a subset of the API'
+    'Process role: "primary" (default) runs the whole instance, "secondary" helps the primary to serve the requests'
   )
   .parse(process.argv)
   .opts()
@@ -53,7 +55,7 @@ import { checkFFmpeg, checkMissedConfig, checkNodeVersion } from './core/initial
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { initI18n, useI18n } from '@server/helpers/i18n.js'
-import { createLogger } from './core/helpers/logger.js'
+import { createLogger, flushLogs } from './core/helpers/logger.js'
 import { CONFIG } from './core/initializers/config.js'
 import { API_VERSION, WEBSERVER, loadLanguages } from './core/initializers/constants.js'
 
@@ -82,7 +84,7 @@ import {
   checkActivityPubUrls,
   checkConfig,
   checkFFmpegVersion,
-  checkStagingBucketConnectivity
+  checkObjectStorageBucketsConnectivity
 } from './core/initializers/checker-after-init.js'
 
 try {
@@ -189,9 +191,6 @@ import {
   miscRouter,
   objectStorageProxyRouter,
   pluginsRouter,
-  secondaryActivityPubRouter,
-  secondaryApiRouter,
-  secondaryPluginsRouter,
   servicesRouter,
   sitemapRouter,
   staticRouter,
@@ -203,7 +202,9 @@ import { ConfigDistribution } from './core/initializers/config/config-distributi
 import { installPrimary, installSecondary } from './core/initializers/installer.js'
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
 import { Emailer } from './core/lib/emailer.js'
+import { resetFilesCacheOfOtherStorage } from './core/lib/files-cache/reset-files-cache.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
+import { HorizontalScalabilityStorage } from './core/lib/horizontal-scalability-storage.js'
 import { ClientHtml } from './core/lib/html/client-html.js'
 import { JobQueue } from './core/lib/job-queue/index.js'
 import { LiveManager } from './core/lib/live/index.js'
@@ -230,10 +231,11 @@ import { VideoFilesLifecycleScheduler } from './core/lib/schedulers/video-files-
 import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
 import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watched-words-subscriptions-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
-import { SharedFilesManager } from './core/lib/shared-files/index.js'
 import { registerGracefulShutdown, shutdownAndExit } from './core/lib/shutdown.js'
+import { watchYoutubeDLCookies } from './core/lib/youtube-dl-cookies.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
+import { primaryOnly } from './core/middlewares/primary-only.js'
 
 // ----------- App -----------
 
@@ -298,58 +300,36 @@ OpenTelemetryMetrics.Instance.init(app)
 
 const cliOptions = getServerCLIOptions()
 
-// A secondary process only answers the endpoints it can serve safely
-// Everything else must be routed to the primary by the reverse proxy
 const secondary = isSecondaryProcess()
 
-app.use(
-  '/api/' + API_VERSION,
-  secondary
-    ? secondaryApiRouter
-    : apiRouter
-)
+app.use([ '/tracker', '/static' ], primaryOnly)
+
+app.use('/api/' + API_VERSION, apiRouter)
 
 // Services (oembed...)
 app.use('/services', servicesRouter)
 
 if (CONFIG.FEDERATION.ENABLED) {
-  app.use(
-    '/',
-    secondary
-      ? secondaryActivityPubRouter
-      : activityPubRouter
-  )
+  app.use('/', activityPubRouter)
 }
 
 app.use('/', feedsRouter)
+app.use('/', trackerRouter)
 app.use('/', sitemapRouter)
 
-// The tracker keeps the peers of a swarm in the memory of the process that runs it
-if (!secondary) app.use('/', trackerRouter)
-
 // Static files
-// The storage directories belong to the primary process, a secondary one cannot serve the files they hold
-if (!secondary) app.use('/', staticRouter)
+app.use('/', staticRouter)
 app.use('/', wellKnownRouter)
 app.use('/', miscRouter)
-
-if (!secondary) {
-  app.use('/', downloadRouter)
-  app.use('/', lazyStaticRouter)
-}
-
+app.use('/', downloadRouter)
+app.use('/', lazyStaticRouter)
 app.use('/', objectStorageProxyRouter)
 
 // Cookies for plugins and HTML
 app.use(cookieParser())
 
 // Plugins & themes
-app.use(
-  '/',
-  secondary
-    ? secondaryPluginsRouter
-    : pluginsRouter
-)
+app.use('/', pluginsRouter)
 
 // Client files, last valid routes!
 if (cliOptions.client) app.use('/', clientsRouter)
@@ -412,8 +392,14 @@ async function startApplication () {
   checkFFmpegVersion()
     .catch(err => logger.error('Cannot check ffmpeg version', { err }))
 
-  checkStagingBucketConnectivity()
-    .catch(err => logger.error('Cannot check object storage staging bucket connectivity', { err }))
+  try {
+    await checkObjectStorageBucketsConnectivity()
+  } catch (err) {
+    logger.error('Cannot run with the current object storage configuration.', { err })
+
+    await flushLogs()
+    process.exit(1)
+  }
 
   await initUploadxStorages()
 
@@ -424,7 +410,7 @@ async function startApplication () {
   await ConfigDistribution.Instance.init()
 
   // Secondary that cannot reach the files of the primary refuses to start
-  await SharedFilesManager.Instance.init()
+  await HorizontalScalabilityStorage.Instance.init()
 
   // Propagating token revocations to evict them from the LRU cache
   await TokensCache.Instance.listenForInvalidations()
@@ -442,6 +428,7 @@ async function startApplication () {
 
   JobQueue.Instance.init()
   await JobQueue.Instance.listenForStateChanges()
+  await JobQueue.Instance.listenForJobCancels()
 
   // A secondary only pushes emails to the job queue, the primary is the process that sends them
   if (!secondary) Emailer.Instance.init()
@@ -457,7 +444,6 @@ async function startApplication () {
   if (!secondary) {
     ActorFollowScheduler.Instance.enable()
     UpdateVideosScheduler.Instance.enable()
-    YoutubeDlUpdateScheduler.Instance.enable()
     VideosRedundancyScheduler.Instance.enable()
     RemoveOldHistoryScheduler.Instance.enable()
     RemoveOldStatsScheduler.Instance.enable()
@@ -476,6 +462,7 @@ async function startApplication () {
 
   // These ones must also be run on the secondary
   GeoIPUpdateScheduler.Instance.enable()
+  YoutubeDlUpdateScheduler.Instance.enable() // Each process has its own binary, used by video imports
   UpdateTokenSessionScheduler.Instance.enable()
   RemoveOldUserLoginDevicesScheduler.Instance.enable()
   ManualMigrationScriptsScheduler.Instance.enable()
@@ -492,12 +479,22 @@ async function startApplication () {
   // The secondary ingests views but never owns the flush/federation loops (primary role)
   VideoStatsManager.Instance.init({ enableDatabaseFlush: !secondary })
 
+  // Primary only
   if (!secondary) {
+    // Before serving lazy static files
+    try {
+      await resetFilesCacheOfOtherStorage()
+    } catch (err) {
+      logger.error('Cannot reset the cache of remote files.', { err })
+    }
+
     updateStreamingPlaylistsInfohashesIfNeeded()
       .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
     LiveManager.Instance.init()
     await LiveManager.Instance.listenForSessionStopRequests()
+    watchYoutubeDLCookies()
+
     if (CONFIG.LIVE.ENABLED) await LiveManager.Instance.run()
   }
 
@@ -527,6 +524,8 @@ async function startApplication () {
 
           // Only after the initial registration, so a notification cannot race it
           await PluginManager.Instance.listenForPluginChanges({ onDivergedFromPrimary: exitOnPluginDivergence })
+        } else {
+          await PluginManager.Instance.listenForPluginSettingsChanges()
         }
       } catch (err) {
         logger.error('Cannot register plugins and themes.', { err })

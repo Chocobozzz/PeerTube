@@ -1,6 +1,18 @@
-import { LiveVideoErrorType, ProcessRole } from '@peertube/peertube-models'
+import { JobType, LiveVideoErrorType, ProcessRole } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { SHARED_CONFIG_REDIS_CHANNEL } from '../../initializers/config/shared-config.js'
 import { RedisChannel } from './redis-channel.js'
+
+// Identifies this process in the messages it publishes, so it can ignore them
+export const currentProcessId = buildUUID()
+
+export type JobCancelPayload = {
+  jobType: JobType
+  jobId: string
+
+  // The sender already tried to cancel the job
+  senderId: string
+}
 
 export type JobQueueStatePayload = {
   action: 'pause' | 'resume'
@@ -28,11 +40,12 @@ export type PluginChangePayload =
   // The primary installed, updated or uninstalled a plugin/theme
   | { type: 'installed-plugins-changed' }
   // An admin changed the settings of a plugin (`onSettingsChange` callbacks must run on every process)
-  | { type: 'plugin-settings-changed', npmName: string }
+  // The sender already ran its callbacks
+  | { type: 'plugin-settings-changed', npmName: string, senderId: string }
 
-// Secondary processes on another host than the primary check whether every file of a given kind is in object storage
+// Secondary processes check whether every local file is in object storage
 // The primary notifies them when files are moved, so they can check it again
-export type SharedFilesChange = 'moved-to-object-storage' | 'moved-to-file-system'
+export type LocalFilesMove = 'moved-to-object-storage' | 'moved-to-file-system'
 
 export type TokenInvalidationPayload = {
   token?: string
@@ -51,11 +64,13 @@ export const RedisChannels = {
   // No payload: processes reload the homepage from the database, so concurrent updates cannot be applied out of order
   homepageChanged: new RedisChannel('homepage-changes'),
 
+  // Only the process running a job can cancel it
+  jobCancel: new RedisChannel<JobCancelPayload>('job-cancel'),
   jobQueueState: new RedisChannel<JobQueueStatePayload>('job-queue-state'),
   liveSessionStop: new RedisChannel<LiveSessionStopPayload>('live-session-stop'),
   modelCacheInvalidation: new RedisChannel<ModelCacheInvalidationPayload>('model-cache-invalidation'),
   pluginChanges: new RedisChannel<PluginChangePayload>('plugin-changes'),
-  sharedFilesChanged: new RedisChannel<SharedFilesChange>('shared-files-changed'),
+  localFilesMoved: new RedisChannel<LocalFilesMove>('local-files-moved'),
   tokenInvalidation: new RedisChannel<TokenInvalidationPayload>('token-invalidation'),
   watchedWordsInvalidation: new RedisChannel<WatchedWordsInvalidationPayload>('watched-words-invalidation')
 }

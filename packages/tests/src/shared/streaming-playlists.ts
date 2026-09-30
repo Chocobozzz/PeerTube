@@ -16,7 +16,7 @@ import { generateP2PMediaLoaderHash, sha256 } from '@peertube/peertube-node-util
 import { makeRawRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { basename, dirname, join } from 'path'
-import { expectStartWith } from './checks.js'
+import { expectStartWith, getBucketBaseUrlFrom } from './checks.js'
 import { checkWebTorrentWorks } from './p2p.js'
 import { SQLCommand } from './sql-command.js'
 import { checkTrackerInfohash } from './tracker.js'
@@ -502,7 +502,11 @@ async function checkHLSResolution (options: {
 
   const nameReg = `${uuidRegex}-${file.resolution.id}`
 
-  expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}-hls.torrent`))
+  if (isOrigin && objectStorageBaseUrl) {
+    expect(file.torrentUrl).to.match(new RegExp(`^${getBucketBaseUrlFrom(objectStorageBaseUrl, 'torrents')}${nameReg}-hls.torrent$`))
+  } else {
+    expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}-hls.torrent`))
+  }
 
   if (objectStorageBaseUrl && requiresAuth) {
     expect(file.fileUrl).to.match(
@@ -526,7 +530,14 @@ async function checkHLSResolution (options: {
 
   if (video.downloadEnabled) {
     await Promise.all([
-      makeRawRequest({ url: file.torrentDownloadUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+      makeRawRequest({
+        url: file.torrentDownloadUrl,
+        token,
+        // Local torrents are stored in object storage
+        expectedStatus: isOrigin && objectStorageBaseUrl
+          ? HttpStatusCode.FOUND_302
+          : HttpStatusCode.OK_200
+      }),
       makeRawRequest({
         url: file.fileDownloadUrl,
         token,
