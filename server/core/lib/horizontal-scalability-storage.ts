@@ -19,7 +19,8 @@ type Section = {
 
 const localVideoJoin = (table: string) => `INNER JOIN "video" "video" ON "video"."id" = "${table}"."videoId" AND "video"."remote" IS FALSE`
 
-const sections: { [id in PrunableObjectStorageSection]: Section } = {
+// Exclude redundancy, the redundancy scheduler will remove invalid files if needed
+const sections: { [id in Exclude<PrunableObjectStorageSection, 'redundancy'>]: Section } = {
   avatars: {
     label: 'avatars and banners',
     query: 'SELECT 1 FROM "actorImage" WHERE "storage" = $storage AND "fileUrl" IS NULL LIMIT 1'

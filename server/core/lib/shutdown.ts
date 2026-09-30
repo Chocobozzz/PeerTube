@@ -2,6 +2,7 @@ import { Server as HTTPServer } from 'node:http'
 import { createLogger } from '../helpers/logger.js'
 import { SHUTDOWN_TIMEOUTS } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
+import { InboxManager } from './activitypub/inbox-manager.js'
 import { HorizontalScalabilityStorage } from './horizontal-scalability-storage.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { LiveManager } from './live/live-manager.js'
@@ -74,9 +75,17 @@ async function shutdown (server: HTTPServer, exitCode = 0) {
     closeHTTPServer(server),
 
     // Active jobs are not awaited: a transcoding job can run for hours. They are retried when detected as stalled
-    JobQueue.Instance.terminate({ force: true })
-      .catch(err => logger.error('Cannot terminate job queue.', { err }))
+    JobQueue.Instance.closeWorkers({ force: true })
+      .catch(err => logger.error('Cannot close job queue workers.', { err }))
   ])
+
+  // After closing the HTTP server, so no new activity is received
+  // Before closing the job queue, because processing activities creates jobs
+  await InboxManager.drain(SHUTDOWN_TIMEOUTS.INBOX_DRAIN)
+    .catch(err => logger.error('Cannot drain the inbox.', { err }))
+
+  await JobQueue.Instance.closeQueues()
+    .catch(err => logger.error('Cannot close job queues.', { err }))
 
   // After closing the HTTP server, so no new completion can start
   await abortAllPendingRunnerJobCompletions()

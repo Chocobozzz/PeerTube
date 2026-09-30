@@ -9,7 +9,6 @@ import {
   authenticate,
   ensureUserHasRight,
   paginationValidator,
-  primaryOnly,
   setDefaultPagination,
   setDefaultVideoRedundanciesSort,
   videoRedundanciesSortValidator
@@ -27,7 +26,6 @@ const serverRedundancyRouter = express.Router()
 
 serverRedundancyRouter.put(
   '/redundancy/:host',
-  primaryOnly, // Disabling redundancy of a server removes the files of its redundancies from the redundancy directory of the primary
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(updateServerRedundancyValidator),
@@ -56,7 +54,6 @@ serverRedundancyRouter.post(
 
 serverRedundancyRouter.delete(
   '/redundancy/videos/:redundancyId',
-  primaryOnly, // Removing a redundancy removes its files from the redundancy directory of the primary
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES),
   removeVideoRedundancyValidator,

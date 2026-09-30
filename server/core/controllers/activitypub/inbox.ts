@@ -8,7 +8,6 @@ import {
   activityPubRateLimiter,
   asyncMiddleware,
   checkSignature,
-  primaryOnly,
   signatureValidator,
   videoChannelsHandleValidatorFactory
 } from '../../middlewares/index.js'
@@ -18,13 +17,8 @@ const logger = createLogger()
 
 const inboxRouter = express.Router()
 
-// ---------------------------------------------------------------------------
-// Processing an incoming activity deduplicates views and downloads in the memory of the primary
-// ---------------------------------------------------------------------------
-
 inboxRouter.post(
   '/inbox',
-  primaryOnly,
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
@@ -34,7 +28,6 @@ inboxRouter.post(
 
 inboxRouter.post(
   '/accounts/:handle/inbox',
-  primaryOnly,
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),
@@ -45,7 +38,6 @@ inboxRouter.post(
 
 inboxRouter.post(
   '/video-channels/:handle/inbox',
-  primaryOnly,
   activityPubRateLimiter,
   signatureValidator,
   asyncMiddleware(checkSignature),

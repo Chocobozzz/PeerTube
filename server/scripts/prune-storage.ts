@@ -119,7 +119,8 @@ class ObjectStoragePruner {
       thumbnails: () => this.doesThumbnailFileExistFactory(),
       storyboards: () => this.doesStoryboardFileExistFactory(),
       torrents: () => this.doesTorrentObjectExistFactory(),
-      uploads: () => this.doesUploadImageFileExistFactory()
+      uploads: () => this.doesUploadImageFileExistFactory(),
+      redundancy: () => this.doesRedundancyObjectExistFactory()
     }
 
     const keysToDelete: { bucket: string, key: string }[] = []
@@ -240,6 +241,19 @@ class ObjectStoragePruner {
       const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.UPLOADS)
 
       return UploadImageModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesRedundancyObjectExistFactory () {
+    const videoUUIDsPromise = VideoRedundancyModel.listVideoUUIDOfDuplicated(FileStorage.OBJECT_STORAGE)
+
+    return async (key: string) => {
+      const sanitizedKey = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.REDUNDANCY)
+      const uuid = dirname(sanitizedKey).replace(/^hls\//, '')
+
+      const videoUUIDs = await videoUUIDsPromise
+
+      return videoUUIDs.has(uuid)
     }
   }
 
@@ -444,7 +458,7 @@ class FSPruner {
         if (!p) return false
 
         const redundancy = await VideoRedundancyModel.loadLocalByStreamingPlaylistId(p.id)
-        return !!redundancy
+        return redundancy?.storage === FileStorage.FILE_SYSTEM
       }
 
       // WebTorrent support redundancy has been removed from PeerTube

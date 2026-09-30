@@ -84,7 +84,6 @@ map $request_method$uri $peertube_pool {
   default                                                  secondary_pool;
 
   # Frequent requests only served by the primary
-  "~^POST/((accounts|video-channels)/[^/]+/)?inbox$"       backend;
   "~^[A-Z]+/(static|tracker)/"                             backend;
   "~^[A-Z]+/plugins/[^/]+(/[^/]+)?/(router|auth)(/|$)"     backend;
   "~^POST/api/v1/server/logs/client$"                      backend;

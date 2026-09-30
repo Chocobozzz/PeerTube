@@ -13,7 +13,6 @@ import {
   authenticate,
   ensureUserHasRight,
   paginationValidator,
-  primaryOnly,
   setBodyHostsPort,
   setDefaultPagination,
   setDefaultSort
@@ -55,7 +54,6 @@ serverFollowsRouter.post(
 
 serverFollowsRouter.delete(
   '/following/:hostOrHandle',
-  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(removeFollowingValidator),

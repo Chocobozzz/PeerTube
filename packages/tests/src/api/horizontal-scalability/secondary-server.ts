@@ -79,6 +79,7 @@ describe('Test a secondary server process', function () {
       const paths = [
         '/api/v1/config',
         '/api/v1/config/about',
+        '/api/v1/server/stats',
         '/api/v1/accounts',
         '/api/v1/video-channels',
         '/api/v1/search/videos',
@@ -134,7 +135,6 @@ describe('Test a secondary server process', function () {
       const token = primary.accessToken
 
       const getPaths = [
-        '/api/v1/server/stats',
         '/api/v1/server/logs',
         '/api/v1/server/audit-logs',
         '/api/v1/server/debug',
@@ -149,8 +149,6 @@ describe('Test a secondary server process', function () {
       }
 
       const postPaths = [
-        '/inbox',
-        '/accounts/root/inbox',
         '/api/v1/server/logs/client',
         '/api/v1/server/debug/run-command',
         '/api/v1/plugins/install',
@@ -164,10 +162,8 @@ describe('Test a secondary server process', function () {
       }
 
       await makePutBodyRequest({ url: secondary.url, path: '/api/v1/config/custom', token, fields: {}, expectedStatus })
-      await makePutBodyRequest({ url: secondary.url, path: '/api/v1/server/redundancy/' + primary.host, token, fields: {}, expectedStatus })
 
       await makeDeleteRequest({ url: secondary.url, path: '/api/v1/config/custom', token, expectedStatus })
-      await makeDeleteRequest({ url: secondary.url, path: '/api/v1/server/redundancy/videos/1', token, expectedStatus })
 
       // WebSocket tracker
       const statusCode = await new Promise<number>((res, rej) => {

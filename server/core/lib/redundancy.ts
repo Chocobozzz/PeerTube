@@ -1,4 +1,4 @@
-import { Activity } from '@peertube/peertube-models'
+import { Activity, FileStorage } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
@@ -39,6 +39,26 @@ async function removeRedundanciesOfServer (serverId: number) {
   }
 }
 
+// Object storage has been enabled or disabled: cleanup redundancies
+async function removeRedundanciesOfOtherStorage () {
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
+
+  const redundancies = await VideoRedundancyModel.listDuplicatedVideosNotInStorage(storage)
+  if (redundancies.length === 0) return
+
+  logger.info(
+    'Object storage has been %s: removing %d redundancies of the previous storage.',
+    CONFIG.OBJECT_STORAGE.ENABLED ? 'enabled' : 'disabled',
+    redundancies.length
+  )
+
+  for (const redundancy of redundancies) {
+    await removeVideoRedundancy(redundancy)
+  }
+}
+
 async function isRedundancyAccepted (activity: Activity, byActor: MActorSignature) {
   const configAcceptFrom = CONFIG.REMOTE_REDUNDANCY.VIDEOS.ACCEPT_FROM
   if (configAcceptFrom === 'nobody') {
@@ -67,6 +87,7 @@ async function isRedundancyAccepted (activity: Activity, byActor: MActorSignatur
 
 export {
   isRedundancyAccepted,
+  removeRedundanciesOfOtherStorage,
   removeRedundanciesOfServer,
   removeRedundanciesOfStreamingPlaylist,
   removeVideoRedundancy

@@ -88,6 +88,12 @@ export class ObjectStorageCommand {
           prefix: 'cache/'
         },
 
+        redundancy: {
+          bucket_name: this.getMockRedundancyBucketName(),
+          // Not empty, to check redundancy keys are always relative to it
+          prefix: 'redundancy/'
+        },
+
         proxy: {
           proxify_private_files: proxifyPrivateFiles
         }
@@ -109,6 +115,10 @@ export class ObjectStorageCommand {
     const { pathStyle = false } = options
 
     return this.getMockFileBaseUrl({ bucketName: this.getMockStreamingPlaylistsBucketName(), pathStyle })
+  }
+
+  getMockRedundancyBaseUrl () {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockRedundancyBucketName(), pathStyle: false }) + 'redundancy/'
   }
 
   getMockUserExportBaseUrl (options: {
@@ -190,6 +200,7 @@ export class ObjectStorageCommand {
     await this.createMockBucket(this.getMockStagingBucketName(), { makePublic: false })
 
     await this.createMockBucket(this.getMockCacheBucketName())
+    await this.createMockBucket(this.getMockRedundancyBucketName())
   }
 
   async createMockBucket (name: string, options: {
@@ -260,6 +271,10 @@ export class ObjectStorageCommand {
   }
 
   getMockCacheBucketName (name = 'cache') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockRedundancyBucketName (name = 'redundancy') {
     return this.getMockBucketName(name)
   }
 

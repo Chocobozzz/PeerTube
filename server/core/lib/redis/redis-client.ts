@@ -190,6 +190,37 @@ export function addToSet (key: string, value: string) {
   return client.sadd(prefix + key, value)
 }
 
+export function addValuesToSet (key: string, values: string[]) {
+  return client.sadd(prefix + key, ...values)
+}
+
+export async function areSetMembers (key: string, values: string[]) {
+  if (values.length === 0) return []
+
+  const results = await client.smismember(prefix + key, ...values)
+
+  return results.map(r => r === 1)
+}
+
+export async function replaceSet (key: string, values: string[]) {
+  const multi = client.multi().del(prefix + key)
+  if (values.length !== 0) multi.sadd(prefix + key, ...values)
+
+  throwIfMultiFailed(await multi.exec())
+}
+
+// Read and delete in one atomic command
+export async function popSetMembers (key: string) {
+  const results = await client.multi()
+    .smembers(prefix + key)
+    .del(prefix + key)
+    .exec()
+
+  throwIfMultiFailed(results)
+
+  return results[0][1] as string[]
+}
+
 export function deleteFromSet (key: string, value: string) {
   return client.srem(prefix + key, value)
 }
@@ -200,6 +231,18 @@ export function deleteKey (key: string) {
 
 export function increment (key: string) {
   return client.incr(prefix + key)
+}
+
+// The expiration is only set by the first increment, so the counter is reset at the end of a fixed window
+export async function incrementInWindow (key: string, windowMs: number) {
+  const results = await client.multi()
+    .set(prefix + key, 0, 'PX', windowMs, 'NX')
+    .incr(prefix + key)
+    .exec()
+
+  throwIfMultiFailed(results)
+
+  return results[1][1] as number
 }
 
 export function incrementHashField (key: string, field: string) {
@@ -309,6 +352,15 @@ export async function setValueIfNotExists (key: string, value: string, expiratio
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+function throwIfMultiFailed (results: [Error | null, unknown][] | null) {
+  // Null if the transaction was aborted
+  if (!results) throw new Error('Redis transaction was aborted.')
+
+  for (const [ err ] of results) {
+    if (err) throw err
+  }
+}
 
 function readLuaScript (name: string) {
   return readFileSync(new URL(`./lua/${name}.lua`, import.meta.url), 'utf-8')

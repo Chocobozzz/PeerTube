@@ -9,8 +9,12 @@ export function generateHLSObjectStorageKey (video: MVideoUUID, filename: string
   return join(generateHLSObjectBaseStorageKey(video), filename)
 }
 
-export function generateHLSObjectBaseStorageKey (video: MVideoUUID) {
-  return join('hls' satisfies VideoStreamingPlaylistTypeString, video.uuid)
+export function generateHLSObjectBaseStorageKey (video?: MVideoUUID) {
+  const base = 'hls' satisfies VideoStreamingPlaylistTypeString
+
+  if (video) return join(base, video.uuid)
+
+  return base + '/'
 }
 
 export function generateCommonFileObjectStorageKey (type: CommonObjectStorageType, filename: string) {

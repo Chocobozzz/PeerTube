@@ -314,7 +314,8 @@ export const CONFIG = buildConfig({
     TORRENTS: buildObjectStorageSectionWithBaseUrl('torrents'),
     UPLOADS: buildObjectStorageSectionWithBaseUrl('uploads'),
     STAGING: buildObjectStorageSection('staging'),
-    CACHE: buildObjectStorageSectionWithBaseUrl('cache')
+    CACHE: buildObjectStorageSectionWithBaseUrl('cache'),
+    REDUNDANCY: buildObjectStorageSectionWithBaseUrl('redundancy')
   },
   WEBSERVER: {
     SCHEME: staticComputed([ 'webserver.https' ], () => config.get<boolean>('webserver.https') === true ? 'https' : 'http'),

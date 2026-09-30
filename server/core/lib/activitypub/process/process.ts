@@ -97,14 +97,16 @@ export async function processActivities (
       continue
     }
 
+    let success = false
+
     try {
       await activityProcessor({ activity, byActor, inboxActor, fromFetch })
 
-      StatsManager.Instance.addInboxProcessedSuccess(activity.type)
+      success = true
     } catch (err) {
       logger.log(getRemoteErrorLogLevel(err), 'Cannot process activity %s.', activity.type, { err })
-
-      StatsManager.Instance.addInboxProcessedError(activity.type)
     }
+
+    await StatsManager.Instance.addInboxProcessed(activity.type, success)
   }
 }

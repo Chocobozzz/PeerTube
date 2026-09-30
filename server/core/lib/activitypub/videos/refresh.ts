@@ -53,7 +53,7 @@ export async function refreshVideoIfNeeded (options: {
 
       await syncVideoExternalAttributes(video, videoObject, options.syncParam)
 
-      ActorFollowHealthCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
+      await ActorFollowHealthCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
 
       return video
     } catch (err) {
@@ -69,7 +69,7 @@ export async function refreshVideoIfNeeded (options: {
 
       logger.log(getRemoteErrorLogLevel(err), 'Cannot refresh video %s.', options.video.url, { err })
 
-      ActorFollowHealthCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
+      await ActorFollowHealthCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
 
       // Don't refresh in loop
       await video.setAsRefreshed()

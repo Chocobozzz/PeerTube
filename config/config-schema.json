@@ -1055,7 +1055,7 @@
           "additionalProperties": false
         },
         "staging": {
-          "description": "Where resumable uploads are temporarily stored, before being processed: - video uploads - user archive imports, until their import job processes them: any process can then run it It lets processes on different hosts receive the chunks of the same upload (see horizontal scalability) It also avoids sending the whole file to object storage in the last upload request, which may time out for big files They are removed once processed, or by a cleaner if something went wrong These files must never be public: we recommend a dedicated bucket that blocks public access If you share a bucket with other sections, make sure its policy doesn't make this prefix public",
+          "description": "Resumable upload files (video uploads, user archive imports, etc.). They are automatically cleaned up These files must never be public: we recommend a dedicated bucket that blocks public access",
           "type": "object",
           "properties": {
             "bucket_name": {
@@ -1070,7 +1070,7 @@
           "additionalProperties": false
         },
         "cache": {
-          "description": "Copies of remote files (avatars, thumbnails, storyboards and captions of other instances) that PeerTube caches when they are requested PeerTube redirects users to these public objects, so the bucket must allow cross-origin requests (CORS) like the other sections Don't remove these objects outside PeerTube (lifecycle rules...): a process that already served one keeps redirecting to it until it restarts",
+          "description": "Copies of remote files (avatars, thumbnails, etc.) that your instance caches when they are requested PeerTube redirects users to these public objects",
           "type": "object",
           "properties": {
             "bucket_name": {
@@ -1080,6 +1080,25 @@
             "prefix": {
               "type": "string",
               "default": "cache/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "redundancy": {
+          "description": "Copies of remote videos if redundancy is enabled Other instances and web browsers download them directly from the bucket",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "redundancy/"
             },
             "base_url": {
               "type": "string",

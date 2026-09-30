@@ -1,49 +1,44 @@
-import Bluebird from 'bluebird'
+import { pick } from '@peertube/peertube-core-utils'
+import { ActivityType, ServerStats, VideoRedundancyStrategyWithManual } from '@peertube/peertube-models'
+import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
+import { AbuseModel } from '@server/models/abuse/abuse.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy.js'
+import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { UserModel } from '@server/models/user/user.js'
-import { VideoModel } from '@server/models/video/video.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
-import { ActivityType, ServerStats, VideoRedundancyStrategyWithManual } from '@peertube/peertube-models'
-import { UserRegistrationModel } from '@server/models/user/user-registration.js'
-import { AbuseModel } from '@server/models/abuse/abuse.js'
-import { pick } from '@peertube/peertube-core-utils'
+import { VideoModel } from '@server/models/video/video.js'
+import Bluebird from 'bluebird'
+import { Redis } from './redis/index.js'
+
+const logger = createLogger()
 
 class StatsManager {
-
   private static instance: StatsManager
 
   private readonly instanceStartDate = new Date()
 
-  private readonly inboxMessages = {
-    processed: 0,
-    errors: 0,
-    successes: 0,
-    waiting: 0,
-    errorsPerType: this.buildAPPerType(),
-    successesPerType: this.buildAPPerType()
-  }
-
   private constructor () {}
 
-  updateInboxWaiting (inboxMessagesWaiting: number) {
-    this.inboxMessages.waiting = inboxMessagesWaiting
+  async resetInboxStats () {
+    await Redis.Instance.resetInboxStats(this.instanceStartDate.getTime())
   }
 
-  addInboxProcessedSuccess (type: ActivityType) {
-    this.inboxMessages.processed++
-    this.inboxMessages.successes++
-    this.inboxMessages.successesPerType[type]++
+  async addInboxProcessed (type: ActivityType, success: boolean) {
+    try {
+      await Redis.Instance.addInboxProcessed(type, success)
+    } catch (err) {
+      logger.error('Cannot add inbox processed stat.', { err })
+    }
   }
 
-  addInboxProcessedError (type: ActivityType) {
-    this.inboxMessages.processed++
-    this.inboxMessages.errors++
-    this.inboxMessages.errorsPerType[type]++
+  getActivityPubMessagesWaiting () {
+    return Redis.Instance.getInboxWaiting(SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS * 3)
   }
 
   async getStats () {
@@ -107,25 +102,18 @@ class StatsManager {
       ...await this.buildAbuseStats(),
       ...await this.buildRegistrationRequestsStats(),
 
-      ...this.buildAPStats()
+      ...await this.buildAPStats()
     }
 
     return data
   }
 
-  private buildActivityPubMessagesProcessedPerSecond () {
-    const now = new Date()
-    const startedSeconds = (now.getTime() - this.instanceStartDate.getTime()) / 1000
-
-    return this.inboxMessages.processed / startedSeconds
-  }
-
   private buildRedundancyStats () {
     const strategies = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES
-                                               .map(r => ({
-                                                 strategy: r.strategy as VideoRedundancyStrategyWithManual,
-                                                 size: r.size
-                                               }))
+      .map(r => ({
+        strategy: r.strategy as VideoRedundancyStrategyWithManual,
+        size: r.size
+      }))
 
     strategies.push({ strategy: 'manual', size: null })
 
@@ -135,69 +123,62 @@ class StatsManager {
     })
   }
 
-  private buildAPPerType () {
-    return {
-      Create: 0,
-      Update: 0,
-      Delete: 0,
-      Follow: 0,
-      Accept: 0,
-      Reject: 0,
-      Announce: 0,
-      Undo: 0,
-      Like: 0,
-      Dislike: 0,
-      Flag: 0,
-      View: 0,
-      Download: 0,
-      ApproveReply: 0,
-      RejectReply: 0
-    }
-  }
+  private async buildAPStats () {
+    const [ { startedAt, successesPerType, errorsPerType }, waiting ] = await Promise.all([
+      Redis.Instance.getInboxStats(),
+      this.getActivityPubMessagesWaiting()
+    ])
 
-  private buildAPStats () {
-    return {
-      totalActivityPubMessagesProcessed: this.inboxMessages.processed,
+    const sum = (perType: { [id in ActivityType]?: number }) => Object.values(perType).reduce((acc, v) => acc + v, 0)
 
-      totalActivityPubMessagesSuccesses: this.inboxMessages.successes,
+    const successes = sum(successesPerType)
+    const errors = sum(errorsPerType)
+    const processed = successes + errors
+
+    const startedSeconds = (Date.now() - (startedAt ?? this.instanceStartDate.getTime())) / 1000
+
+    return {
+      totalActivityPubMessagesProcessed: processed,
+
+      totalActivityPubMessagesSuccesses: successes,
 
       // Dirty, but simpler and with type checking
-      totalActivityPubCreateMessagesSuccesses: this.inboxMessages.successesPerType.Create,
-      totalActivityPubUpdateMessagesSuccesses: this.inboxMessages.successesPerType.Update,
-      totalActivityPubDeleteMessagesSuccesses: this.inboxMessages.successesPerType.Delete,
-      totalActivityPubFollowMessagesSuccesses: this.inboxMessages.successesPerType.Follow,
-      totalActivityPubAcceptMessagesSuccesses: this.inboxMessages.successesPerType.Accept,
-      totalActivityPubRejectMessagesSuccesses: this.inboxMessages.successesPerType.Reject,
-      totalActivityPubAnnounceMessagesSuccesses: this.inboxMessages.successesPerType.Announce,
-      totalActivityPubUndoMessagesSuccesses: this.inboxMessages.successesPerType.Undo,
-      totalActivityPubLikeMessagesSuccesses: this.inboxMessages.successesPerType.Like,
-      totalActivityPubDislikeMessagesSuccesses: this.inboxMessages.successesPerType.Dislike,
-      totalActivityPubFlagMessagesSuccesses: this.inboxMessages.successesPerType.Flag,
-      totalActivityPubViewMessagesSuccesses: this.inboxMessages.successesPerType.View,
-      totalActivityPubDownloadMessagesSuccesses: this.inboxMessages.successesPerType.Download,
-      totalActivityPubApproveReplyMessagesSuccesses: this.inboxMessages.successesPerType.ApproveReply,
-      totalActivityPubRejectReplyMessagesSuccesses: this.inboxMessages.successesPerType.RejectReply,
+      totalActivityPubCreateMessagesSuccesses: successesPerType.Create ?? 0,
+      totalActivityPubUpdateMessagesSuccesses: successesPerType.Update ?? 0,
+      totalActivityPubDeleteMessagesSuccesses: successesPerType.Delete ?? 0,
+      totalActivityPubFollowMessagesSuccesses: successesPerType.Follow ?? 0,
+      totalActivityPubAcceptMessagesSuccesses: successesPerType.Accept ?? 0,
+      totalActivityPubRejectMessagesSuccesses: successesPerType.Reject ?? 0,
+      totalActivityPubAnnounceMessagesSuccesses: successesPerType.Announce ?? 0,
+      totalActivityPubUndoMessagesSuccesses: successesPerType.Undo ?? 0,
+      totalActivityPubLikeMessagesSuccesses: successesPerType.Like ?? 0,
+      totalActivityPubDislikeMessagesSuccesses: successesPerType.Dislike ?? 0,
+      totalActivityPubFlagMessagesSuccesses: successesPerType.Flag ?? 0,
+      totalActivityPubViewMessagesSuccesses: successesPerType.View ?? 0,
+      totalActivityPubDownloadMessagesSuccesses: successesPerType.Download ?? 0,
+      totalActivityPubApproveReplyMessagesSuccesses: successesPerType.ApproveReply ?? 0,
+      totalActivityPubRejectReplyMessagesSuccesses: successesPerType.RejectReply ?? 0,
 
-      totalActivityPubCreateMessagesErrors: this.inboxMessages.errorsPerType.Create,
-      totalActivityPubUpdateMessagesErrors: this.inboxMessages.errorsPerType.Update,
-      totalActivityPubDeleteMessagesErrors: this.inboxMessages.errorsPerType.Delete,
-      totalActivityPubFollowMessagesErrors: this.inboxMessages.errorsPerType.Follow,
-      totalActivityPubAcceptMessagesErrors: this.inboxMessages.errorsPerType.Accept,
-      totalActivityPubRejectMessagesErrors: this.inboxMessages.errorsPerType.Reject,
-      totalActivityPubAnnounceMessagesErrors: this.inboxMessages.errorsPerType.Announce,
-      totalActivityPubUndoMessagesErrors: this.inboxMessages.errorsPerType.Undo,
-      totalActivityPubLikeMessagesErrors: this.inboxMessages.errorsPerType.Like,
-      totalActivityPubDislikeMessagesErrors: this.inboxMessages.errorsPerType.Dislike,
-      totalActivityPubFlagMessagesErrors: this.inboxMessages.errorsPerType.Flag,
-      totalActivityPubViewMessagesErrors: this.inboxMessages.errorsPerType.View,
-      totalActivityPubDownloadMessagesErrors: this.inboxMessages.errorsPerType.Download,
-      totalActivityPubApproveReplyMessagesErrors: this.inboxMessages.errorsPerType.ApproveReply,
-      totalActivityPubRejectReplyMessagesErrors: this.inboxMessages.errorsPerType.RejectReply,
+      totalActivityPubCreateMessagesErrors: errorsPerType.Create ?? 0,
+      totalActivityPubUpdateMessagesErrors: errorsPerType.Update ?? 0,
+      totalActivityPubDeleteMessagesErrors: errorsPerType.Delete ?? 0,
+      totalActivityPubFollowMessagesErrors: errorsPerType.Follow ?? 0,
+      totalActivityPubAcceptMessagesErrors: errorsPerType.Accept ?? 0,
+      totalActivityPubRejectMessagesErrors: errorsPerType.Reject ?? 0,
+      totalActivityPubAnnounceMessagesErrors: errorsPerType.Announce ?? 0,
+      totalActivityPubUndoMessagesErrors: errorsPerType.Undo ?? 0,
+      totalActivityPubLikeMessagesErrors: errorsPerType.Like ?? 0,
+      totalActivityPubDislikeMessagesErrors: errorsPerType.Dislike ?? 0,
+      totalActivityPubFlagMessagesErrors: errorsPerType.Flag ?? 0,
+      totalActivityPubViewMessagesErrors: errorsPerType.View ?? 0,
+      totalActivityPubDownloadMessagesErrors: errorsPerType.Download ?? 0,
+      totalActivityPubApproveReplyMessagesErrors: errorsPerType.ApproveReply ?? 0,
+      totalActivityPubRejectReplyMessagesErrors: errorsPerType.RejectReply ?? 0,
 
-      totalActivityPubMessagesErrors: this.inboxMessages.errors,
+      totalActivityPubMessagesErrors: errors,
 
-      activityPubMessagesProcessedPerSecond: this.buildActivityPubMessagesProcessedPerSecond(),
-      totalActivityPubMessagesWaiting: this.inboxMessages.waiting
+      activityPubMessagesProcessedPerSecond: processed / startedSeconds,
+      totalActivityPubMessagesWaiting: waiting
     }
   }
 

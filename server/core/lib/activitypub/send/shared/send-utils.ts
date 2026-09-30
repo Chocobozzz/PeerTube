@@ -183,7 +183,7 @@ async function broadcastToActors (options: {
   })
 }
 
-function broadcastTo (options: {
+async function broadcastTo (options: {
   uris: string[]
   data: any
   byActor: MActorId
@@ -198,11 +198,13 @@ function broadcastTo (options: {
   const unicastUris: string[] = []
 
   // Bad URIs could be slow to respond, prefer to process them in a dedicated queue
-  for (const uri of uris) {
-    if (ActorFollowHealthCache.Instance.isLastBadInbox(uri)) {
-      unicastUris.push(uri)
+  const lastBadInboxes = await ActorFollowHealthCache.Instance.areLastBadInboxes(uris)
+
+  for (let i = 0; i < uris.length; i++) {
+    if (lastBadInboxes[i]) {
+      unicastUris.push(uris[i])
     } else {
-      broadcastUris.push(uri)
+      broadcastUris.push(uris[i])
     }
   }
 
