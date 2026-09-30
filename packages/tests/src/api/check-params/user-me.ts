@@ -264,6 +264,16 @@ describe('Test my user API validators', function () {
       }
     })
 
+    it('Should fail with invalid browse videos preferences', async function () {
+      for (const fields of [
+        { browseVideosCategories: [ 999 ] },
+        { browseVideosCategories: [ '13' ] },
+        { browseVideosLive: 'invalid' }
+      ]) {
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
+      }
+    })
+
     it('Should fail with an invalid language attribute', async function () {
       const fields = { language: 'toto' }
 

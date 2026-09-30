@@ -11,6 +11,10 @@ label {
   }
 }
 
+.pt-label-container label {
+  display: inline;
+}
+
 .peertube-radio-container {
   margin-bottom: 0.25rem;
 }

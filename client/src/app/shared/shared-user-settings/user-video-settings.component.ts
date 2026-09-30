@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, booleanAttribute, inject, input, ChangeDe
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
 import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
-import { NSFWFlag, NSFWFlagType, NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
+import { BooleanBothQuery, NSFWFlag, NSFWFlagType, NSFWPolicyType, UserUpdateMe } from '@peertube/peertube-models'
 import { pick } from 'lodash-es'
 import { Subject, Subscription } from 'rxjs'
 import { first } from 'rxjs/operators'
@@ -10,6 +10,7 @@ import { SelectOptionsItem } from '@pt-types'
 import { BuildFormArgument } from '../form-validators/form-validator.model'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
+import { SelectCategoriesChipsComponent } from '../shared-forms/select/select-categories-chips.component'
 import { SelectRadioComponent } from '../shared-forms/select/select-radio.component'
 import { HelpComponent } from '../shared-main/buttons/help.component'
 
@@ -24,6 +25,8 @@ type Form = {
   autoPlayVideo: FormControl<boolean>
   autoPlayNextVideo: FormControl<boolean>
   videoLanguages: FormControl<string[]>
+  browseVideosCategories: FormControl<number[]>
+  browseVideosLive: FormControl<BooleanBothQuery>
 }
 
 @Component({
@@ -36,6 +39,7 @@ type Form = {
     ReactiveFormsModule,
     HelpComponent,
     SelectLanguagesComponent,
+    SelectCategoriesChipsComponent,
     PeertubeCheckboxComponent,
     SelectRadioComponent
   ]
@@ -98,6 +102,21 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
     }
   ]
 
+  browseVideosLiveItems: SelectOptionsItem[] = [
+    {
+      id: 'both',
+      label: $localize`VOD & Live videos`
+    },
+    {
+      id: 'false',
+      label: $localize`VOD videos`
+    },
+    {
+      id: 'true',
+      label: $localize`Live videos`
+    }
+  ]
+
   formValuesWatcher: Subscription
 
   ngOnInit () {
@@ -120,7 +139,9 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
             p2pEnabled: this.user().p2pEnabled,
             autoPlayVideo: this.user().autoPlayVideo === true,
             autoPlayNextVideo: this.user().autoPlayNextVideo,
-            videoLanguages: this.user().videoLanguages
+            videoLanguages: this.user().videoLanguages,
+            browseVideosCategories: this.user().browseVideosCategories,
+            browseVideosLive: this.user().browseVideosLive || 'both'
           })
 
           if (this.reactiveUpdate()) this.handleReactiveUpdate()
@@ -141,7 +162,9 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
       p2pEnabled: null,
       autoPlayVideo: null,
       autoPlayNextVideo: null,
-      videoLanguages: null
+      videoLanguages: null,
+      browseVideosCategories: null,
+      browseVideosLive: null
     }
 
     const {
@@ -157,6 +180,7 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
 
   updateDetails (onlyKeys?: string[]) {
     const videoLanguages = this.form.value.videoLanguages
+    const browseVideosCategories = this.form.value.browseVideosCategories?.map(category => +category)
 
     if (Array.isArray(videoLanguages)) {
       if (videoLanguages.length > 20) {
@@ -178,7 +202,9 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
       nsfwFlagsWarned: this.buildNSFWUpdateFlag('warn'),
       nsfwFlagsBlurred: this.buildNSFWUpdateFlag('blur'),
 
-      videoLanguages
+      videoLanguages,
+      browseVideosCategories,
+      browseVideosLive: value.browseVideosLive
     }
 
     if (onlyKeys) {

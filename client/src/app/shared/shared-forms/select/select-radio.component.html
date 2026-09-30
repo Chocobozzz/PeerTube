@@ -1,6 +1,9 @@
 <div role="radiogroup">
   @if (label()) {
-    <label [for]="inputId()" [ngClass]="{ 'label-secondary': labelSecondary() }">{{ label() }}</label>
+    <div class="pt-label-container">
+      <label [for]="inputId()" [ngClass]="{ 'label-secondary': labelSecondary() }">{{ label() }}</label>
+      <ng-content select="my-help"></ng-content>
+    </div>
   }
 
   <ng-content></ng-content>

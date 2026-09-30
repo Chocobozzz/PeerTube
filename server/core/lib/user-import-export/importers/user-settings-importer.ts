@@ -7,6 +7,8 @@ import {
   isUserAutoPlayNextVideoPlaylistValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
+  isUserBrowseVideosCategories,
+  isUserBrowseVideosLive,
   isUserLanguage,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
@@ -30,6 +32,8 @@ type SanitizedObject = Pick<
   | 'p2pEnabled'
   | 'videosHistoryEnabled'
   | 'videoLanguages'
+  | 'browseVideosCategories'
+  | 'browseVideosLive'
   | 'language'
   | 'theme'
   | 'notificationSettings'
@@ -48,6 +52,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (!isUserP2PEnabledValid(o.p2pEnabled)) o.p2pEnabled = undefined
     if (!isUserVideosHistoryEnabledValid(o.videosHistoryEnabled)) o.videosHistoryEnabled = undefined
     if (!isUserVideoLanguages(o.videoLanguages)) o.videoLanguages = undefined
+    if (!isUserBrowseVideosCategories(o.browseVideosCategories)) o.browseVideosCategories = undefined
+    if (!isUserBrowseVideosLive(o.browseVideosLive)) o.browseVideosLive = undefined
     if (!isUserLanguage(o.language)) o.language = undefined
     if (!isThemeNameValid(o.theme) || !isThemeRegistered(o.theme)) o.theme = undefined
 
@@ -63,6 +69,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
       'p2pEnabled',
       'videosHistoryEnabled',
       'videoLanguages',
+      'browseVideosCategories',
+      'browseVideosLive',
       'language',
       'theme',
       'notificationSettings'
@@ -77,6 +85,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (exists(userImportData.p2pEnabled)) this.user.p2pEnabled = userImportData.p2pEnabled
     if (exists(userImportData.videosHistoryEnabled)) this.user.videosHistoryEnabled = userImportData.videosHistoryEnabled
     if (exists(userImportData.videoLanguages)) this.user.videoLanguages = userImportData.videoLanguages
+    if (exists(userImportData.browseVideosCategories)) this.user.browseVideosCategories = userImportData.browseVideosCategories
+    if (exists(userImportData.browseVideosLive)) this.user.browseVideosLive = userImportData.browseVideosLive
     if (exists(userImportData.language)) this.user.language = userImportData.language
     if (exists(userImportData.theme)) this.user.theme = userImportData.theme
 

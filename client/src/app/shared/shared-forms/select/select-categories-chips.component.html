@@ -1,0 +1,32 @@
+<div class="category-heading">
+  <button
+    type="button"
+    class="all-categories"
+    [class.selected]="isAllCategories()"
+    [disabled]="disabled"
+    (click)="selectAll()"
+    i18n
+  >
+    All categories
+  </button>
+
+  @if (!isAllCategories()) {
+    <button type="button" class="clear-categories" [disabled]="disabled" (click)="selectAll()" i18n>Clear categories</button>
+  }
+</div>
+
+<div class="category-chips" role="group" [attr.aria-labelledby]="inputId() + '-label'">
+  @for (category of availableCategories; track category.id) {
+    <label class="category-chip" [class.selected]="isSelected(category)" [class.disabled]="disabled">
+      <input
+        type="checkbox"
+        [id]="inputId() + '-' + category.id"
+        [checked]="isSelected(category)"
+        [disabled]="disabled"
+        (change)="onCategoryChange(category, $event)"
+      >
+
+      <span>{{ category.label }}</span>
+    </label>
+  }
+</div>
