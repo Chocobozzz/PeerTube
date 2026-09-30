@@ -21,7 +21,20 @@ const playerSettingsRouter = express.Router()
 
 playerSettingsRouter.use(apiRateLimiter)
 
-registerPlayerSettingSharedRoutes(playerSettingsRouter)
+playerSettingsRouter.get(
+  '/videos/:videoId',
+  optionalAuthenticate,
+  asyncMiddleware(getVideoPlayerSettingsValidator),
+  asyncMiddleware(getVideoPlayerSettings)
+)
+
+playerSettingsRouter.get(
+  '/video-channels/:handle',
+  optionalAuthenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  asyncMiddleware(getChannelPlayerSettingsValidator),
+  asyncMiddleware(getChannelPlayerSettings)
+)
 
 playerSettingsRouter.put(
   '/videos/:videoId',
@@ -40,39 +53,9 @@ playerSettingsRouter.put(
 )
 
 // ---------------------------------------------------------------------------
-// Router for secondary process
-// ---------------------------------------------------------------------------
-
-const secondaryPlayerSettingsRouter = express.Router()
-
-secondaryPlayerSettingsRouter.use(apiRateLimiter)
-
-registerPlayerSettingSharedRoutes(secondaryPlayerSettingsRouter)
-
-// ---------------------------------------------------------------------------
 
 export {
-  playerSettingsRouter,
-  secondaryPlayerSettingsRouter
-}
-
-// ---------------------------------------------------------------------------
-
-function registerPlayerSettingSharedRoutes (router: express.Router) {
-  router.get(
-    '/videos/:videoId',
-    optionalAuthenticate,
-    asyncMiddleware(getVideoPlayerSettingsValidator),
-    asyncMiddleware(getVideoPlayerSettings)
-  )
-
-  router.get(
-    '/video-channels/:handle',
-    optionalAuthenticate,
-    asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-    asyncMiddleware(getChannelPlayerSettingsValidator),
-    asyncMiddleware(getChannelPlayerSettings)
-  )
+  playerSettingsRouter
 }
 
 // ---------------------------------------------------------------------------

@@ -7,7 +7,14 @@ import { readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import { CONFIG } from '../../../initializers/config.js'
 import { AUDIT_LOG_FILENAME, LOG_FILENAME, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers/constants.js'
-import { asyncMiddleware, authenticate, buildRateLimiter, ensureUserHasRight, optionalAuthenticate } from '../../../middlewares/index.js'
+import {
+  asyncMiddleware,
+  authenticate,
+  buildRateLimiter,
+  ensureUserHasRight,
+  optionalAuthenticate,
+  primaryOnly
+} from '../../../middlewares/index.js'
 import { createClientLogValidator, getAuditLogsValidator, getLogsValidator } from '../../../middlewares/validators/logs.js'
 
 const logger = createLogger()
@@ -21,11 +28,34 @@ const createClientLogRateLimiter = buildRateLimiter({
 
 const logsRouter = express.Router()
 
-logsRouter.post('/logs/client', createClientLogRateLimiter, optionalAuthenticate, createClientLogValidator, createClientLog)
+// Log files are read from and written to the log directory of the primary, so set the primaryOnly middleware
 
-logsRouter.get('/logs', authenticate, ensureUserHasRight(UserRight.MANAGE_LOGS), getLogsValidator, asyncMiddleware(getLogs))
+logsRouter.post(
+  '/logs/client',
+  primaryOnly,
+  createClientLogRateLimiter,
+  optionalAuthenticate,
+  createClientLogValidator,
+  createClientLog
+)
 
-logsRouter.get('/audit-logs', authenticate, ensureUserHasRight(UserRight.MANAGE_LOGS), getAuditLogsValidator, asyncMiddleware(getAuditLogs))
+logsRouter.get(
+  '/logs',
+  primaryOnly,
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_LOGS),
+  getLogsValidator,
+  asyncMiddleware(getLogs)
+)
+
+logsRouter.get(
+  '/audit-logs',
+  primaryOnly,
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_LOGS),
+  getAuditLogsValidator,
+  asyncMiddleware(getAuditLogs)
+)
 
 // ---------------------------------------------------------------------------
 

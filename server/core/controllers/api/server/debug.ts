@@ -20,10 +20,9 @@ import { RemoveOldStatsScheduler } from '@server/lib/schedulers/remove-old-stats
 import { UpdateVideosScheduler } from '@server/lib/schedulers/update-videos-scheduler.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
 import { VideoFilesLifecycleScheduler } from '@server/lib/schedulers/video-files-lifecycle-scheduler.js'
-import { SharedFilesManager } from '@server/lib/shared-files/index.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import express from 'express'
-import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../../middlewares/index.js'
+import { asyncMiddleware, authenticate, ensureUserHasRight, primaryOnly } from '../../../middlewares/index.js'
 
 const logger = createLogger('debug-controller')
 
@@ -31,13 +30,15 @@ const debugRouter = express.Router()
 
 debugRouter.get(
   '/debug',
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_DEBUG),
-  asyncMiddleware(getDebug)
+  getDebug
 )
 
 debugRouter.post(
   '/debug/run-command',
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_DEBUG),
   asyncMiddleware(runCommand)
@@ -51,14 +52,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getDebug (req: express.Request, res: express.Response) {
+function getDebug (req: express.Request, res: express.Response) {
   return res.json(
     {
       ip: req.ip,
-      activityPubMessagesWaiting: InboxManager.Instance.getActivityPubMessagesWaiting(),
-      sharedFiles: {
-        sections: await SharedFilesManager.Instance.getSectionsStatus()
-      }
+      activityPubMessagesWaiting: InboxManager.Instance.getActivityPubMessagesWaiting()
     } satisfies Debug
   )
 }

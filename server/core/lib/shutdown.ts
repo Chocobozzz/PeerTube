@@ -2,10 +2,12 @@ import { Server as HTTPServer } from 'node:http'
 import { createLogger } from '../helpers/logger.js'
 import { SHUTDOWN_TIMEOUTS } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
+import { HorizontalScalabilityStorage } from './horizontal-scalability-storage.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { LiveManager } from './live/live-manager.js'
 import { PeerTubeSocket } from './peertube-socket.js'
 import { Redis } from './redis/index.js'
+import { abortAllPendingRunnerJobCompletions } from './runners/runner-job-completions.js'
 import { AbstractScheduler } from './schedulers/abstract-scheduler.js'
 
 const logger = createLogger()
@@ -61,9 +63,9 @@ async function shutdown (server: HTTPServer, exitCode = 0) {
   }, SHUTDOWN_TIMEOUTS.GLOBAL)
   timeout.unref()
 
-  // Stop scheduling new work first, so nothing can grab a database connection we are about to close
   AbstractScheduler.disableAll()
   LiveManager.Instance.stop()
+  HorizontalScalabilityStorage.Instance.stop()
 
   // Before closing the HTTP server, that would otherwise wait for the socket.io websockets
   PeerTubeSocket.Instance.close()
@@ -75,6 +77,9 @@ async function shutdown (server: HTTPServer, exitCode = 0) {
     JobQueue.Instance.terminate({ force: true })
       .catch(err => logger.error('Cannot terminate job queue.', { err }))
   ])
+
+  // After closing the HTTP server, so no new completion can start
+  await abortAllPendingRunnerJobCompletions()
 
   await Promise.all([
     sequelizeTypescript.close()

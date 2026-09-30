@@ -35,34 +35,26 @@ videoCaptionsRouter.post(
   asyncMiddleware(createGenerateVideoCaption)
 )
 
-registerVideoCaptionSharedRoutes(videoCaptionsRouter)
+videoCaptionsRouter.get('/:videoId/captions', asyncMiddleware(listVideoCaptionsValidator), asyncMiddleware(listVideoCaptions))
 
-// ---------------------------------------------------------------------------
+videoCaptionsRouter.put(
+  '/:videoId/captions/:captionLanguage',
+  authenticate,
+  reqVideoCaptionAdd,
+  asyncMiddleware(addVideoCaptionValidator),
+  asyncMiddleware(createVideoCaption)
+)
 
-function registerVideoCaptionSharedRoutes (router: express.Router) {
-  router.get('/:videoId/captions', asyncMiddleware(listVideoCaptionsValidator), asyncMiddleware(listVideoCaptions))
-
-  router.put(
-    '/:videoId/captions/:captionLanguage',
-    authenticate,
-    reqVideoCaptionAdd,
-    asyncMiddleware(addVideoCaptionValidator),
-    asyncMiddleware(createVideoCaption)
-  )
-
-  router.delete(
-    '/:videoId/captions/:captionLanguage',
-    authenticate,
-    asyncMiddleware(deleteVideoCaptionValidator),
-    asyncRetryTransactionMiddleware(deleteVideoCaption)
-  )
-}
+videoCaptionsRouter.delete(
+  '/:videoId/captions/:captionLanguage',
+  authenticate,
+  asyncMiddleware(deleteVideoCaptionValidator),
+  asyncRetryTransactionMiddleware(deleteVideoCaption)
+)
 
 // ---------------------------------------------------------------------------
 
 export {
-  // Will be used by parent router
-  registerVideoCaptionSharedRoutes,
   videoCaptionsRouter
 }
 

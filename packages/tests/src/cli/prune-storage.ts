@@ -9,12 +9,10 @@ import {
   VideoPlaylistPrivacy,
   VideoPrivacy
 } from '@peertube/peertube-models'
-import { areMockObjectStorageTestsDisabled, buildUUID } from '@peertube/peertube-node-utils'
+import { areMockObjectStorageTestsDisabled, buildAbsoluteFixturePath, buildUUID } from '@peertube/peertube-node-utils'
 import {
-  AlwaysOnObjectStorageType,
   CLICommand,
   ObjectStorageCommand,
-  OptionalObjectStorageType,
   PeerTubeServer,
   cleanupTests,
   createMultipleServers,
@@ -27,7 +25,7 @@ import {
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import { createFile, pathExists } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
+import { readdir, stat } from 'fs/promises'
 import { basename, join } from 'path'
 
 describe('Test prune storage CLI', function () {
@@ -412,12 +410,12 @@ describe('Test prune storage CLI', function () {
     let captionVideoId: number
 
     // Private files are not proxified: make them readable anonymously so the tests can fetch their direct object storage URLs
-    function buildConfig (disabledTypes: AlwaysOnObjectStorageType[] = []) {
-      return objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false, privateACL: 'public-read', disabledTypes })
+    function buildConfig () {
+      return objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false, privateACL: 'public-read' })
     }
 
-    async function execPruneStorage (disabledTypes: AlwaysOnObjectStorageType[] = []) {
-      const env = servers[0].cli.getEnv(buildConfig(disabledTypes))
+    async function execPruneStorage () {
+      const env = servers[0].cli.getEnv(buildConfig())
 
       await servers[0].cli.execWithEnv(`${env} npm run prune-storage -- -y`)
     }
@@ -540,14 +538,6 @@ describe('Test prune storage CLI', function () {
       await checkCaptionFiles([ videos[2] ], [ 'zh' ], HttpStatusCode.NOT_FOUND_404)
     })
 
-    it('Should not prune the captions bucket if object_storage.captions.enabled is false', async function () {
-      await sqlCommand.setCaptionStorageOf(captionVideoId, 'ar', FileStorage.FILE_SYSTEM)
-
-      await execPruneStorage([ 'captions' ])
-
-      await checkCaptionFiles([ videos[2] ], [ 'ar' ], HttpStatusCode.OK_200)
-    })
-
     after(async function () {
       await objectStorage.cleanupMock()
       await sqlCommand.cleanup()
@@ -558,7 +548,6 @@ describe('Test prune storage CLI', function () {
     if (areMockObjectStorageTestsDisabled()) return
 
     const objectStorage = new ObjectStorageCommand()
-    const allOptionalTypes: OptionalObjectStorageType[] = [ 'avatars', 'thumbnails', 'storyboards', 'torrents', 'uploads' ]
 
     let sqlCommand: SQLCommand
 
@@ -567,12 +556,12 @@ describe('Test prune storage CLI', function () {
     // Files of the same entities that must not be pruned
     const kept: string[] = []
 
-    function buildConfig (enabledOptionalTypes: OptionalObjectStorageType[]) {
-      return objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false, enabledOptionalTypes })
+    function buildConfig () {
+      return objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false })
     }
 
-    function execPruneStorage (enabledOptionalTypes: OptionalObjectStorageType[]) {
-      return servers[0].cli.execWithEnv(`npm run prune-storage -- -y`, buildConfig(enabledOptionalTypes))
+    function execPruneStorage () {
+      return servers[0].cli.execWithEnv(`npm run prune-storage -- -y`, buildConfig())
     }
 
     async function checkUrls (urls: string[], expectedStatus: HttpStatusCodeType) {
@@ -590,7 +579,7 @@ describe('Test prune storage CLI', function () {
       await objectStorage.prepareDefaultMockBuckets()
 
       await server.kill()
-      await server.run(buildConfig(allOptionalTypes))
+      await server.run(buildConfig())
 
       await server.users.updateMyAvatar({ fixture: 'avatar.png' })
       await server.config.updateInstanceLogo({ fixture: 'avatar.png', type: 'favicon' })
@@ -642,25 +631,13 @@ describe('Test prune storage CLI', function () {
       await checkUrls([ ...pruned.map(p => p.url), ...kept ], HttpStatusCode.OK_200)
     })
 
-    it('Should not prune the files of object storage types that are not enabled', async function () {
-      this.timeout(60000)
-
-      for (const { setStorage } of pruned) {
-        await setStorage(FileStorage.FILE_SYSTEM)
-      }
-
-      await execPruneStorage([])
-
-      await checkUrls([ ...pruned.map(p => p.url), ...kept ], HttpStatusCode.OK_200)
-    })
-
     it('Should start the instance but refuse to prune object storage sections sharing a location', async function () {
       this.timeout(120000)
 
       const server = servers[0]
 
       // Thumbnails in the avatars bucket, without prefix: pruning one of them would delete the files of the other
-      const config = buildConfig(allOptionalTypes)
+      const config = buildConfig()
       config.object_storage.thumbnails.bucket_name = objectStorage.getMockActorImagesBucketName()
 
       await server.kill()
@@ -677,7 +654,7 @@ describe('Test prune storage CLI', function () {
         expect(err.message).to.contain('object_storage.avatars and object_storage.thumbnails use the same bucket')
 
         // Avatars without prefix would also list the thumbnails stored under a prefix of the same bucket
-        const nestedConfig = buildConfig(allOptionalTypes)
+        const nestedConfig = buildConfig()
         nestedConfig.object_storage.thumbnails.bucket_name = objectStorage.getMockActorImagesBucketName()
         nestedConfig.object_storage.thumbnails.prefix = 'thumbnails/'
 
@@ -695,14 +672,18 @@ describe('Test prune storage CLI', function () {
         await checkUrls([ ...pruned.map(p => p.url), ...kept ], HttpStatusCode.OK_200)
       } finally {
         await server.kill()
-        await server.run(buildConfig(allOptionalTypes))
+        await server.run(buildConfig())
       }
     })
 
     it('Should prune unknown files', async function () {
       this.timeout(60000)
 
-      await execPruneStorage(allOptionalTypes)
+      for (const { setStorage } of pruned) {
+        await setStorage(FileStorage.FILE_SYSTEM)
+      }
+
+      await execPruneStorage()
 
       await checkUrls(pruned.map(p => p.url), HttpStatusCode.NOT_FOUND_404)
       await checkUrls(kept, HttpStatusCode.OK_200)
@@ -711,6 +692,137 @@ describe('Test prune storage CLI', function () {
     after(async function () {
       await objectStorage.cleanupMock()
       await sqlCommand.cleanup()
+    })
+  })
+
+  describe('On object storage with staging', function () {
+    if (areMockObjectStorageTestsDisabled()) return
+
+    const stagingPrefix = 'staging/'
+    const uploadsPrefix = stagingPrefix + 'resumable-uploads/'
+
+    async function runScenario (options: {
+      objectStorage: ObjectStorageCommand
+      sqlCommand: SQLCommand
+      // Same bucket as the web videos section, which has no prefix: it also lists the staging objects
+      stagingInWebVideosBucket: boolean
+    }) {
+      const { objectStorage, sqlCommand, stagingInWebVideosBucket } = options
+      const server = servers[0]
+
+      const stagingBucket = stagingInWebVideosBucket
+        ? objectStorage.getMockWebVideosBucketName()
+        : objectStorage.getMockStagingBucketName()
+
+      const config = objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false, privateACL: 'public-read' })
+      config.object_storage.staging.bucket_name = stagingBucket
+      config.object_storage.staging.prefix = stagingPrefix
+
+      await objectStorage.prepareDefaultMockBuckets()
+
+      await server.kill()
+      await server.run(config)
+
+      const uuids: string[] = []
+      const fileUrls: { [uuid: string]: string[] } = {}
+
+      for (const name of [ 'kept', 'pruned' ]) {
+        const { uuid } = await server.videos.quickUpload({ name, privacy: VideoPrivacy.PUBLIC })
+        await waitJobs([ server ])
+
+        const video = await server.videos.get({ id: uuid })
+        fileUrls[uuid] = getAllFiles(video).map(f => f.fileUrl)
+        uuids.push(uuid)
+      }
+
+      const checkVideos = async (toCheck: string[], expectedStatus: HttpStatusCodeType) => {
+        for (const uuid of toCheck) {
+          for (const url of fileUrls[uuid]) {
+            await makeRawRequest({ url, expectedStatus })
+          }
+        }
+      }
+
+      await checkVideos(uuids, HttpStatusCode.OK_200)
+
+      // Unknown objects for the pruner
+      await sqlCommand.setVideoFileStorageOf(uuids[1], FileStorage.FILE_SYSTEM)
+
+      // An upload the pruner must not delete the staging objects of
+      const fixture = 'video_short.mp4'
+      const size = (await stat(buildAbsoluteFixturePath(fixture))).size
+      const path = '/api/v1/videos/upload-resumable'
+
+      const res = await server.videos.prepareVideoResumableUpload({
+        path,
+        fixture,
+        size,
+        mimetype: 'video/mp4',
+        fields: { name: 'resumed', channelId: server.store.channel.id, privacy: VideoPrivacy.PUBLIC }
+      })
+      const uploadId = res.header['location'].split('?')[1]
+
+      const stagingKeys = await objectStorage.listMockObjectKeys(stagingBucket, uploadsPrefix)
+      expect(stagingKeys).to.not.have.lengthOf(0)
+
+      await server.cli.execWithEnv(`npm run prune-storage -- -y`, config)
+
+      await checkVideos([ uuids[1] ], HttpStatusCode.NOT_FOUND_404)
+      await checkVideos([ uuids[0] ], HttpStatusCode.OK_200)
+
+      expect(await objectStorage.listMockObjectKeys(stagingBucket, uploadsPrefix)).to.deep.equal(stagingKeys)
+
+      // The pruner didn't break the upload
+      const result = await server.videos.sendResumableVideoChunks({
+        path,
+        pathUploadId: uploadId,
+        videoFilePath: buildAbsoluteFixturePath(fixture),
+        size
+      })
+      await server.videos.endVideoResumableUpload({ path, pathUploadId: uploadId })
+
+      await waitJobs([ server ])
+      await server.videos.get({ id: result.body.video.uuid })
+    }
+
+    describe('With staging in its own bucket', function () {
+      const objectStorage = new ObjectStorageCommand()
+      let sqlCommand: SQLCommand
+
+      before(function () {
+        sqlCommand = new SQLCommand(servers[0])
+      })
+
+      it('Should prune unknown files without deleting staging files', async function () {
+        this.timeout(180000)
+
+        await runScenario({ objectStorage, sqlCommand, stagingInWebVideosBucket: false })
+      })
+
+      after(async function () {
+        await objectStorage.cleanupMock()
+        await sqlCommand.cleanup()
+      })
+    })
+
+    describe('With staging in a bucket shared with a section', function () {
+      const objectStorage = new ObjectStorageCommand()
+      let sqlCommand: SQLCommand
+
+      before(function () {
+        sqlCommand = new SQLCommand(servers[0])
+      })
+
+      it('Should prune unknown files without deleting staging files', async function () {
+        this.timeout(180000)
+
+        await runScenario({ objectStorage, sqlCommand, stagingInWebVideosBucket: true })
+      })
+
+      after(async function () {
+        await objectStorage.cleanupMock()
+        await sqlCommand.cleanup()
+      })
     })
   })
 

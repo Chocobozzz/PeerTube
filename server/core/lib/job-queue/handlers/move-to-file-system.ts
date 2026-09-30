@@ -8,11 +8,11 @@ import {
   MoveStoragePayload
 } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import { HorizontalScalabilityStorage } from '@server/lib/horizontal-scalability-storage.js'
 import { moveCaptionToFS, moveVideoToFS, onMoveVideoToFSFailure } from '@server/lib/move-storage/move-to-file-system.js'
 import { moveActorImagesToStorage } from '@server/lib/move-storage/shared/move-actor-image.js'
 import { moveUploadImageToStorage } from '@server/lib/move-storage/shared/move-upload-image.js'
 import { moveVideoPlaylistToStorage } from '@server/lib/move-storage/shared/move-video-playlist.js'
-import { SharedFilesManager } from '@server/lib/shared-files/index.js'
 import { Job } from 'bullmq'
 
 const logger = createLogger('move-file-system')
@@ -22,7 +22,7 @@ export async function processMoveToFileSystem (job: Job) {
     return await moveToFileSystem(job)
   } finally {
     // Secondary processes may not be able to manage these files anymore
-    SharedFilesManager.Instance.notifyFilesMoved('moved-to-file-system')
+    HorizontalScalabilityStorage.Instance.notifyFilesMoved('moved-to-file-system')
   }
 }
 

@@ -35,6 +35,7 @@ import {
   authenticate,
   ensureUserHasRight,
   paginationValidator,
+  primaryOnly,
   runnerJobsSortValidator,
   setDefaultPagination,
   setDefaultSort
@@ -75,7 +76,34 @@ const runnerJobUpdateVideoFiles = createReqFiles(
 
 const runnerJobsRouter = express.Router()
 
-registerRunnerJobSharedRoutes(runnerJobsRouter)
+runnerJobsRouter.post(
+  '/jobs/request',
+  apiRateLimiter,
+  requestRunnerJobValidator,
+  asyncMiddleware(getRunnerFromTokenValidator),
+  asyncMiddleware(requestRunnerJob)
+)
+
+runnerJobsRouter.post(
+  '/jobs/:jobUUID/accept',
+  apiRateLimiter,
+  asyncMiddleware(runnerJobGetValidator),
+  acceptRunnerJobValidator,
+  asyncMiddleware(getRunnerFromTokenValidator),
+  asyncMiddleware(acceptRunnerJob)
+)
+
+runnerJobsRouter.get(
+  '/jobs',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_RUNNERS),
+  paginationValidator,
+  runnerJobsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  listRunnerJobsValidator,
+  asyncMiddleware(listRunnerJobs)
+)
 
 // ---------------------------------------------------------------------------
 // Controllers for runners
@@ -91,6 +119,7 @@ runnerJobsRouter.post(
 
 runnerJobsRouter.post(
   '/jobs/:jobUUID/update',
+  primaryOnly, // Live updates move the segments into the live directory of the primary, watched by its live session
   runnerJobUpdateVideoFiles,
   apiRateLimiter, // Has to be after multer middleware to parse runner token
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING, RunnerJobState.COMPLETING, RunnerJobState.COMPLETED ])),
@@ -105,6 +134,7 @@ runnerJobsRouter.post(
   asyncMiddleware(errorRunnerJob)
 )
 
+// The process receiving the result files completes the job
 runnerJobsRouter.post(
   '/jobs/:jobUUID/success',
   postRunnerJobSuccessVideoFiles,
@@ -137,41 +167,7 @@ runnerJobsRouter.delete(
 
 // ---------------------------------------------------------------------------
 
-function registerRunnerJobSharedRoutes (router: express.Router) {
-  router.post(
-    '/jobs/request',
-    apiRateLimiter,
-    requestRunnerJobValidator,
-    asyncMiddleware(getRunnerFromTokenValidator),
-    asyncMiddleware(requestRunnerJob)
-  )
-
-  router.post(
-    '/jobs/:jobUUID/accept',
-    apiRateLimiter,
-    asyncMiddleware(runnerJobGetValidator),
-    acceptRunnerJobValidator,
-    asyncMiddleware(getRunnerFromTokenValidator),
-    asyncMiddleware(acceptRunnerJob)
-  )
-
-  router.get(
-    '/jobs',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_RUNNERS),
-    paginationValidator,
-    runnerJobsSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    listRunnerJobsValidator,
-    asyncMiddleware(listRunnerJobs)
-  )
-}
-
-// ---------------------------------------------------------------------------
-
 export {
-  registerRunnerJobSharedRoutes, // Will be used by parent router
   runnerJobsRouter
 }
 
@@ -451,7 +447,8 @@ async function postRunnerJobSuccess (req: express.Request, res: express.Response
     )
 
     // Completing a big result exceed request timeout, so the runner would retry it
-    // Result files are on this process's disk: the completion must stay in this process. If it dies, the watchdog errors the job
+    // Result files are on this process's disk: the completion must stay in this process
+    // It is aborted if this process shuts down, and errored by the watchdog if this process dies
     const RunnerJobHandler = getRunnerJobHandlerClass(runnerJob)
     const completion = new RunnerJobHandler().complete({ runnerJob, resultPayload })
       .then(() => true)

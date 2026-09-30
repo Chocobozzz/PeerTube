@@ -10,11 +10,14 @@ import {
   VideoImportYoutubeDLPayloadType,
   VideoState
 } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { createVideoAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import { isPostImportVideoAccepted } from '@server/lib/moderation.js'
+import { isObjectNotFoundError } from '@server/lib/object-storage/object-storage-helpers.js'
+import { downloadStagingObject, removeStagingObject } from '@server/lib/object-storage/staging.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job.js'
@@ -27,6 +30,7 @@ import { addLocalOrRemoteStoryboardJobIfNeeded, buildMoveVideoJob } from '@serve
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { createTorrentForFileFromPath, downloadWebTorrentVideo } from '@server/lib/webtorrent.js'
+import { getYoutubeDLCookiesPathIfEnabled } from '@server/lib/youtube-dl-cookies.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
@@ -36,8 +40,9 @@ import { Job } from 'bullmq'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { remove } from 'fs-extra/esm'
 import { stat } from 'fs/promises'
+import { join } from 'path'
 import { createLogger } from '../../../helpers/logger.js'
-import { CONSTRAINTS_FIELDS, JOB_TTL } from '../../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, JOB_TTL, OBJECT_STORAGE_STAGING } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoFileModel } from '../../../models/video/video-file.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
@@ -98,13 +103,48 @@ async function processTorrentImport (job: Job, videoImport: MVideoImportDefault,
   const user = await UserModel.loadByVideoId(videoImport.videoId)
   if (!user) throw new Error('Video does not exist anymore')
 
-  return processFile({
-    downloader: () => downloadWebTorrentVideo({ torrentPath: payload.torrentPath, uri: videoImport.magnetUri }, JOB_TTL['video-import']),
-    videoImport,
-    type: payload.type,
-    generateTranscription: payload.generateTranscription,
-    user
-  })
+  // The torrent file is in object storage
+  const torrentPath = payload.torrentStagingKey
+    ? join(CONFIG.STORAGE.TMP_DIR, buildUUID() + '.torrent')
+    : payload.torrentPath
+
+  try {
+    await processFile({
+      downloader: async () => {
+        // In the downloader, so a staging error marks the import as failed
+        if (payload.torrentStagingKey) await downloadStagedTorrent(payload.torrentStagingKey, torrentPath)
+
+        return downloadWebTorrentVideo({ torrentPath, uri: videoImport.magnetUri }, JOB_TTL['video-import'])
+      },
+      videoImport,
+      type: payload.type,
+      generateTranscription: payload.generateTranscription,
+      user
+    })
+  } finally {
+    if (payload.torrentStagingKey) await remove(torrentPath)
+  }
+
+  // Keep it on failure, the import can be retried
+  if (payload.torrentStagingKey) {
+    await removeStagingObject(payload.torrentStagingKey)
+      .catch(err => logger.error('Cannot remove staged torrent %s of video import.', payload.torrentStagingKey, { err }))
+  }
+}
+
+async function downloadStagedTorrent (key: string, destination: string) {
+  try {
+    await downloadStagingObject({ key, destination })
+  } catch (err) {
+    if (!isObjectNotFoundError(err)) throw err
+
+    const maxAgeDays = OBJECT_STORAGE_STAGING.SUB_PREFIXES.VIDEO_IMPORTS.maxAgeMs / (1000 * 3600 * 24)
+
+    throw new Error(
+      `The torrent file of this import has been removed from object storage staging (kept ${maxAgeDays} days): create a new import`,
+      { cause: err }
+    )
+  }
 }
 
 async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefault, payload: VideoImportYoutubeDLPayload) {
@@ -113,7 +153,8 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
   const youtubeDL = new YoutubeDLWrapper(
     videoImport.targetUrl,
     ServerConfigManager.Instance.getEnabledResolutions('vod'),
-    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+    await getYoutubeDLCookiesPathIfEnabled()
   )
 
   const user = await UserModel.loadByVideoId(videoImport.videoId)

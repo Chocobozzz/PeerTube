@@ -1,6 +1,6 @@
 import { createLogger } from '@server/helpers/logger.js'
 import { OBJECT_STORAGE_STAGING } from '@server/initializers/constants.js'
-import { getStagingBucketInfo } from '@server/lib/object-storage/config.js'
+import { getObjectStorageFileConfig } from '@server/lib/object-storage/config.js'
 import { getACL, listObjectsOfPrefix } from '@server/lib/object-storage/object-storage-helpers.js'
 import { buildS3ClientConfig } from '@server/lib/object-storage/shared/client.js'
 import { buildStagingKey, StagingSubPrefix, toStagingFullKey } from '@server/lib/object-storage/staging.js'
@@ -22,7 +22,7 @@ import { acquireDistributedLock } from './distributed-lock.js'
 
 const logger = createLogger('staging')
 
-// Resumable uploads (videos, user archive imports) are streamed to the object storage staging bucket when enabled
+// Resumable uploads (videos, user archive imports) are streamed to the object storage staging bucket when object storage is enabled
 // uploadx uses raw object keys: they include the staging prefix, so `file.name` is a full key
 export function buildResumableUploadsS3Storage (options: {
   storageOptions: Pick<S3StorageOptions, 'expiration' | 'maxMetadataSize' | 'baseUrl'>
@@ -33,7 +33,7 @@ export function buildResumableUploadsS3Storage (options: {
 }) {
   const { storageOptions, subPrefix, onMetadataDiscarded } = options
 
-  const bucketInfo = getStagingBucketInfo()
+  const bucketInfo = getObjectStorageFileConfig('staging')
   const clientConfig = buildS3ClientConfig({ NodeHttpHandlerClass: NodeHttpHandler })
 
   // Re-implement S3MetaStorage to store video name, description, thumbnails... as a regular object body instead
@@ -167,7 +167,7 @@ class PeerTubeS3Storage extends S3Storage {
 
   // The stock one runs once, in the constructor: if it fails (object storage unavailable...), the storage refuses every request
   // It also requires the s3:ListBucket permission
-  // The staging bucket connectivity is checked at startup by checkStagingBucketConnectivity(), and each request reports its own error
+  // The staging bucket connectivity is checked at startup by checkObjectStorageBucketsConnectivity(), and each request reports its own error
   accessCheck () {
     return Promise.resolve()
   }

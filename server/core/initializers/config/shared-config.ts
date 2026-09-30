@@ -68,12 +68,9 @@ export type PublishedConfigPayload = {
   // The os hostname of the primary process
   hostname: string
 
-  // Resolved paths of the storage directories it can share with the secondary processes on the same host
-  shareableStorage: Record<string, string>
-
-  // Resolved paths of the storage directories no process is meant to share (tmp, plugins, cache, logs...)
-  // A secondary process on the same host compares them against its own and refuses to start on a collision
-  nonShareableStorage: Record<string, string>
+  // Resolved paths of its storage directories, keyed by setting name without the "storage." prefix (tmp, avatars, web_videos...)
+  // A secondary process on the same host compares them against its own and warns on a collision
+  storage: Record<string, string>
 }
 
 // The payload is encrypted with `secrets.peertube`, which every process of the instance must share
@@ -102,13 +99,10 @@ export function buildPublishableConfig (fullConfig: object) {
 // In memory configuration published by the primary process
 let publishedConfig: object
 
-// shareableStorage overrides the storage settings this process shares with the primary, when both are on the same host
-export function setPublishedConfig (config: object, shareableStorage?: Record<string, string>) {
+export function setPublishedConfig (config: object) {
   for (const localKey of LOCAL_CONFIG_KEYS) {
     delete (config as any)[localKey]
   }
-
-  if (shareableStorage) (config as any).storage = shareableStorage
 
   publishedConfig = config
 }
@@ -119,13 +113,13 @@ export function getPublishedConfig () {
 
 // ---------------------------------------------------------------------------
 
-// Resolved storage directories the secondary can adopt, keyed by setting name without the "storage." prefix (avatars, web_videos...)
-let sharedPrimaryStorage: Record<string, string> | undefined
+// Storage directories of the primary process, published with its configuration
+let primaryProcessStorage: Pick<PublishedConfigPayload, 'hostname' | 'storage'>
 
-export function setSharedPrimaryStorage (value: Record<string, string> | undefined) {
-  sharedPrimaryStorage = value
+export function setPrimaryProcessStorage (value: Pick<PublishedConfigPayload, 'hostname' | 'storage'>) {
+  primaryProcessStorage = value
 }
 
-export function getSharedPrimaryStorage () {
-  return sharedPrimaryStorage
+export function getPrimaryProcessStorage () {
+  return primaryProcessStorage
 }

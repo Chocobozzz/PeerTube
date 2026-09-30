@@ -78,39 +78,31 @@ uploadRouter.post(
   asyncRetryTransactionMiddleware(addVideoLegacy)
 )
 
-registerVideoUploadResumableSharedRoutes(uploadRouter)
+setupUploadResumableRoutes({
+  routePath: '/upload-resumable',
+  router: uploadRouter,
 
-// ---------------------------------------------------------------------------
+  initMetadataFields: Object.keys(resumableInitMetadataFields),
 
-function registerVideoUploadResumableSharedRoutes (router: express.Router) {
-  setupUploadResumableRoutes({
-    routePath: '/upload-resumable',
-    router,
+  uploadInitBeforeMiddlewares: [
+    openapiOperationDoc({ operationId: 'uploadResumableInit' }),
+    reqVideoFileAddResumable
+  ],
 
-    initMetadataFields: Object.keys(resumableInitMetadataFields),
+  uploadInitAfterMiddlewares: [ asyncMiddleware(videosAddResumableInitValidator) ],
 
-    uploadInitBeforeMiddlewares: [
-      openapiOperationDoc({ operationId: 'uploadResumableInit' }),
-      reqVideoFileAddResumable
-    ],
+  uploadDeleteMiddlewares: [ asyncMiddleware(deleteUploadResumableCache) ],
 
-    uploadInitAfterMiddlewares: [ asyncMiddleware(videosAddResumableInitValidator) ],
-
-    uploadDeleteMiddlewares: [ asyncMiddleware(deleteUploadResumableCache) ],
-
-    uploadedMiddlewares: [
-      openapiOperationDoc({ operationId: 'uploadResumable' }),
-      asyncMiddleware(videosAddResumableValidator)
-    ],
-    uploadedController: asyncMiddleware(addVideoResumable)
-  })
-}
+  uploadedMiddlewares: [
+    openapiOperationDoc({ operationId: 'uploadResumable' }),
+    asyncMiddleware(videosAddResumableValidator)
+  ],
+  uploadedController: asyncMiddleware(addVideoResumable)
+})
 
 // ---------------------------------------------------------------------------
 
 export {
-  // Will be used by parent router
-  registerVideoUploadResumableSharedRoutes,
   uploadRouter
 }
 

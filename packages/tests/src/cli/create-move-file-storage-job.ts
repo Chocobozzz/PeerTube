@@ -19,7 +19,7 @@ import {
   getRedirectionUrl,
   makeRawRequest,
   ObjectStorageCommand,
-  OptionalObjectStorageType,
+  CommonFileObjectStorageType,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -29,6 +29,7 @@ import {
 import { expectStartWith } from '@tests/shared/checks.js'
 import { checkDirectoryIsEmpty } from '@tests/shared/directories.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
+import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import { move, pathExists } from 'fs-extra/esm'
 import { basename, join } from 'path'
@@ -295,8 +296,6 @@ describe('Test create move file storage job CLI', function () {
     const uuids: string[] = []
     let playlistUUID: string
 
-    const allOptionalTypes: OptionalObjectStorageType[] = [ 'avatars', 'thumbnails', 'storyboards', 'torrents', 'uploads' ]
-
     // Where each file is expected to be
     const state = {
       videos: {} as { [uuid: string]: { thumbnails: FileStorageType, storyboards: FileStorageType, torrents: FileStorageType } },
@@ -312,8 +311,8 @@ describe('Test create move file storage job CLI', function () {
       state.videos[uuid] = { thumbnails: storage, storyboards: storage, torrents: storage }
     }
 
-    function buildConfig (enabledOptionalTypes: OptionalObjectStorageType[] = allOptionalTypes) {
-      return objectStorage.getDefaultMockConfig({ enabledOptionalTypes })
+    function buildConfig () {
+      return objectStorage.getDefaultMockConfig()
     }
 
     async function restartWith (config: object) {
@@ -328,7 +327,7 @@ describe('Test create move file storage job CLI', function () {
       return stdout
     }
 
-    function getStorageInfo (type: OptionalObjectStorageType) {
+    function getStorageInfo (type: CommonFileObjectStorageType) {
       switch (type) {
         case 'avatars':
           return { directory: 'avatars', bucketBaseUrl: objectStorage.getMockActorImagesBaseUrl() }
@@ -343,7 +342,7 @@ describe('Test create move file storage job CLI', function () {
       }
     }
 
-    async function checkFiles (type: OptionalObjectStorageType, urls: string[], storage: FileStorageType) {
+    async function checkFiles (type: CommonFileObjectStorageType, urls: string[], storage: FileStorageType) {
       expect(urls, type).to.have.length.above(0)
 
       const { directory, bucketBaseUrl } = getStorageInfo(type)
@@ -490,28 +489,6 @@ describe('Test create move file storage job CLI', function () {
         await checkState()
       })
 
-      it('Should refuse to move files to object storage if it is not enabled for their type', async function () {
-        this.timeout(120000)
-
-        const cases: { args: string, type: OptionalObjectStorageType }[] = [
-          { args: '--all-actor-images', type: 'avatars' },
-          { args: '--all-playlists', type: 'thumbnails' },
-          { args: '--all-uploads', type: 'uploads' }
-        ]
-
-        for (const { args, type } of cases) {
-          const config = buildConfig(allOptionalTypes.filter(t => t !== type))
-
-          const err = await server.cli.execWithEnv(`npm run create-move-file-storage-job -- --to-object-storage ${args}`, config)
-            .then(() => undefined, err => err as Error)
-
-          expect(err, args).to.exist
-          expect(err.message).to.contain(`object_storage.${type}.enabled is false`)
-        }
-
-        await checkState()
-      })
-
       it('Should move the files of a single video to object storage', async function () {
         this.timeout(120000)
 
@@ -521,56 +498,53 @@ describe('Test create move file storage job CLI', function () {
         await checkState()
       })
 
-      it('Should only move the video files of the types enabled in object storage', async function () {
+      it('Should keep the video published while moving only its thumbnails, storyboard and torrents, with a missing torrent', async function () {
         this.timeout(120000)
 
-        const config = buildConfig([ 'thumbnails' ])
-        await restartWith(config)
-
-        await runMove(`--to-object-storage -v ${uuids[1]}`, config)
-
-        state.videos[uuids[1]].thumbnails = OS
-        await checkState()
-
-        await restartWith(buildConfig())
-      })
-
-      it('Should keep the video published while moving only its storyboard and torrents, with a missing torrent', async function () {
-        this.timeout(120000)
-
-        // The video files and thumbnails of this video are already in object storage
-        const video = await server.videos.get({ id: uuids[1] })
-        const torrentPath = join(server.servers.buildDirectory('torrents'), basename(video.files[0].torrentUrl))
-
-        await move(torrentPath, torrentPath + '.bak')
+        // Simulate an instance that stored video files in object storage before thumbnails, storyboards and torrents could be:
+        // only the video files of this video are in object storage
+        const sqlCommand = new SQLCommand(server)
+        await sqlCommand.setVideoFileStorageOf(uuids[1], OS)
 
         try {
-          await server.jobs.pauseJobQueue()
+          const video = await server.videos.get({ id: uuids[1] })
+          const torrentPath = join(server.servers.buildDirectory('torrents'), basename(video.files[0].torrentUrl))
 
-          const command = `npm run create-move-file-storage-job -- --to-object-storage -v ${uuids[1]}`
-          const { stdout } = await server.cli.execWithEnv(command, buildConfig())
-          expect(stdout).to.include('thumbnails, torrents and storyboard')
+          await move(torrentPath, torrentPath + '.bak')
 
-          // The job is pending, but the video has not been taken out of its published state
+          try {
+            await server.jobs.pauseJobQueue()
+
+            const command = `npm run create-move-file-storage-job -- --to-object-storage -v ${uuids[1]}`
+            const { stdout } = await server.cli.execWithEnv(command, buildConfig())
+            expect(stdout).to.include('thumbnails, torrents and storyboard')
+
+            // The job is pending, but the video has not been taken out of its published state
+            expect((await server.videos.get({ id: uuids[1] })).state.id).to.equal(VideoState.PUBLISHED)
+          } finally {
+            await server.jobs.resumeJobQueue()
+          }
+
+          await waitJobs([ server, remoteServer ])
+
+          // The missing torrent has been skipped, without failing the move of the other files
           expect((await server.videos.get({ id: uuids[1] })).state.id).to.equal(VideoState.PUBLISHED)
+
+          await move(torrentPath + '.bak', torrentPath)
+
+          state.videos[uuids[1]].thumbnails = OS
+          state.videos[uuids[1]].storyboards = OS
+          await checkState()
+
+          await runMove(`--to-object-storage -v ${uuids[1]}`)
+
+          state.videos[uuids[1]].torrents = OS
+          await checkState()
         } finally {
-          await server.jobs.resumeJobQueue()
+          // The video files never left the file system
+          await sqlCommand.setVideoFileStorageOf(uuids[1], FS)
+          await sqlCommand.cleanup()
         }
-
-        await waitJobs([ server, remoteServer ])
-
-        // The missing torrent has been skipped, without failing the move of the other files
-        expect((await server.videos.get({ id: uuids[1] })).state.id).to.equal(VideoState.PUBLISHED)
-
-        await move(torrentPath + '.bak', torrentPath)
-
-        state.videos[uuids[1]].storyboards = OS
-        await checkState()
-
-        await runMove(`--to-object-storage -v ${uuids[1]}`)
-
-        state.videos[uuids[1]].torrents = OS
-        await checkState()
       })
 
       it('Should move actor images to object storage', async function () {
@@ -608,8 +582,13 @@ describe('Test create move file storage job CLI', function () {
         await checkState()
       })
 
-      describe('Back to the file system, with object storage disabled for these files', function () {
-        const config = () => buildConfig([])
+      describe('Back to the file system, with object storage disabled', function () {
+        const config = () => {
+          const disabledConfig = buildConfig()
+          disabledConfig.object_storage.enabled = false
+
+          return disabledConfig
+        }
 
         before(async function () {
           this.timeout(120000)
@@ -666,30 +645,6 @@ describe('Test create move file storage job CLI', function () {
     describe('Move everything', function () {
       before(async function () {
         this.timeout(120000)
-
-        await restartWith(buildConfig())
-      })
-
-      it('Should skip the files that are not enabled in object storage when moving everything', async function () {
-        this.timeout(240000)
-
-        const config = buildConfig(allOptionalTypes.filter(t => t !== 'avatars'))
-        await restartWith(config)
-
-        const { stderr } = await server.cli.execWithEnv('npm run create-move-file-storage-job -- --to-object-storage --all', config)
-        await waitJobs([ server, remoteServer ])
-
-        expect(stderr).to.contain('object_storage.avatars.enabled is false, cannot move actor images to object storage. Skipping them.')
-
-        for (const uuid of uuids) {
-          setVideoState(uuid, OS)
-        }
-
-        state.playlistThumbnails = OS
-        state.uploads = OS
-
-        // Actor images stay on the file system
-        await checkState()
 
         await restartWith(buildConfig())
       })

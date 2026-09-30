@@ -56,30 +56,28 @@ export async function createSecondaryServer (
 
   const getPathOf = (name: string) => primary.getDirectoryPath(name + suffix) + '/'
 
-  // A secondary manages files too, so it shares the storage directories of these files with the primary
-  const getPrimaryPathOf = (name: string) => primary.getDirectoryPath(name) + '/'
-
+  // Every process has storage directories of its own: secondaries require object storage for the files of the primary
   const ownStorage = {
     storage: {
       tmp: getPathOf('tmp'),
-      tmp_persistent: getPrimaryPathOf('tmp-persistent'),
+      tmp_persistent: getPathOf('tmp-persistent'),
       bin: getPathOf('bin'),
-      avatars: getPrimaryPathOf('avatars'),
-      web_videos: getPrimaryPathOf('web-videos'),
-      streaming_playlists: getPrimaryPathOf('streaming-playlists'),
-      original_video_files: getPrimaryPathOf('original-video-files'),
+      avatars: getPathOf('avatars'),
+      web_videos: getPathOf('web-videos'),
+      streaming_playlists: getPathOf('streaming-playlists'),
+      original_video_files: getPathOf('original-video-files'),
       redundancy: getPathOf('redundancy'),
       logs: getPathOf('logs'),
-      previews: getPrimaryPathOf('previews'),
-      thumbnails: getPrimaryPathOf('thumbnails'),
-      storyboards: getPrimaryPathOf('storyboards'),
-      torrents: getPrimaryPathOf('torrents'),
-      captions: getPrimaryPathOf('captions'),
+      previews: getPathOf('previews'),
+      thumbnails: getPathOf('thumbnails'),
+      storyboards: getPathOf('storyboards'),
+      torrents: getPathOf('torrents'),
+      captions: getPathOf('captions'),
       cache: getPathOf('cache'),
       plugins: getPathOf('plugins'),
       client_overrides: getPathOf('client-overrides'),
       well_known: getPathOf('well-known'),
-      uploads: getPrimaryPathOf('uploads')
+      uploads: getPathOf('uploads')
     }
   }
 

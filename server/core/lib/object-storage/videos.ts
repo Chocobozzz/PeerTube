@@ -12,7 +12,7 @@ import {
   storeCommonFile,
   updateCommonFileACL
 } from './common-files.js'
-import { getObjectStorageFileConfig, getStagingBucketInfo } from './config.js'
+import { getObjectStorageFileConfig } from './config.js'
 import { getObjectStorageContentType } from './content-type.js'
 import { generateCommonFileObjectStorageKey, generateHLSObjectBaseStorageKey, generateHLSObjectStorageKey } from './keys.js'
 import {
@@ -91,7 +91,7 @@ export function storeWebVideoFile (
 export function copyStagingObjectToWebVideoFile (video: MVideo, file: MVideoFile, stagingKey: string) {
   return copyObjectToCommonFile({
     sourceKey: stagingKey,
-    sourceBucketInfo: getStagingBucketInfo(),
+    sourceBucketInfo: getObjectStorageFileConfig('staging'),
     sourceSize: file.size,
     type: 'web_videos',
     filename: file.filename,

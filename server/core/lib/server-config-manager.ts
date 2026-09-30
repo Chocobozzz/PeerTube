@@ -11,11 +11,7 @@ import {
 import { getServerCommit } from '@server/helpers/version.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
-import {
-  getResumableUploadMinChunkSize,
-  isUserImportUploadObjectStorageEnabled,
-  isVideoUploadObjectStorageEnabled
-} from '@server/lib/object-storage/config.js'
+import { getResumableUploadMinChunkSize } from '@server/lib/object-storage/config.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -88,7 +84,7 @@ class ServerConfigManager {
             maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE,
 
             // S3 rejects a smaller multipart part on S3 streaming upload
-            minChunkSize: getResumableUploadMinChunkSize({ objectStorage: isVideoUploadObjectStorageEnabled() })
+            minChunkSize: getResumableUploadMinChunkSize()
           }
         },
         browseVideos: {
@@ -307,7 +303,7 @@ class ServerConfigManager {
           enabled: CONFIG.IMPORT.USERS.ENABLED,
 
           resumableUpload: {
-            minChunkSize: getResumableUploadMinChunkSize({ objectStorage: isUserImportUploadObjectStorageEnabled() })
+            minChunkSize: getResumableUploadMinChunkSize()
           }
         }
       },

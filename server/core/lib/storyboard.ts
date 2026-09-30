@@ -69,7 +69,7 @@ export async function insertStoryboardInDatabase (options: {
 }) {
   const { videoUUID, imageSize, spriteHeight, spriteWidth, spriteDuration, destination, filename, federate } = options
 
-  const onObjectStorage = CONFIG.OBJECT_STORAGE.STORYBOARDS.ENABLED
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.ENABLED
 
   const storage = onObjectStorage
     ? FileStorage.OBJECT_STORAGE

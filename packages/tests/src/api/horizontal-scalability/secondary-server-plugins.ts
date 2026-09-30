@@ -2,11 +2,13 @@
 
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
   makeGetRequest,
+  ObjectStorageCommand,
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers,
@@ -17,6 +19,10 @@ import { pathExists, readJSON } from 'fs-extra/esm'
 import { join } from 'path'
 
 describe('Test plugins of a secondary server process', function () {
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
+
   let primary: PeerTubeServer
   let secondary: PeerTubeServer
   let videoUUID: string
@@ -32,7 +38,9 @@ describe('Test plugins of a secondary server process', function () {
   before(async function () {
     this.timeout(120000)
 
-    primary = await createSingleServer(1)
+    await objectStorage.prepareDefaultMockBuckets()
+
+    primary = await createSingleServer(1, objectStorage.getDefaultMockConfig())
 
     await setAccessTokensToServers([ primary ])
     await setDefaultVideoChannel([ primary ])
@@ -95,6 +103,46 @@ describe('Test plugins of a secondary server process', function () {
       expect(name.endsWith(' <4'), 'the secondary should use the new setting').to.be.true
     })
 
+    it('Should serve the plugin read endpoints', async function () {
+      {
+        const fromPrimary = await primary.plugins.list({})
+        const fromSecondary = await secondary.plugins.list({})
+
+        expect(fromSecondary.total).to.equal(fromPrimary.total)
+        expect(fromSecondary.data.map(p => p.name)).to.have.members(fromPrimary.data.map(p => p.name))
+      }
+
+      {
+        const plugin = await secondary.plugins.get({ npmName })
+        expect(plugin.name).to.equal('test-secondary')
+      }
+
+      {
+        const { registeredSettings } = await secondary.plugins.getRegisteredSettings({ npmName })
+        expect(registeredSettings.map(s => s.name)).to.deep.equal([ 'suffix' ])
+      }
+
+      {
+        const { publicSettings } = await secondary.plugins.getPublicSettings({ npmName })
+        expect(publicSettings.suffix).to.equal('<4')
+      }
+    })
+
+    it('Should update the plugin settings on the secondary', async function () {
+      this.timeout(60000)
+
+      await secondary.plugins.updateSettings({ npmName, settings: { suffix: '<5' } })
+
+      // The primary runs its callbacks too
+      await primary.servers.waitUntilLog('Secondary test plugin settings changed, suffix is now <5')
+
+      const { name } = await primary.videos.get({ id: videoUUID })
+      expect(name.endsWith(' <5'), 'the primary should use the new setting').to.be.true
+
+      // The secondary ignores its own notification, received by the primary above
+      await secondary.servers.waitUntilLog('Secondary test plugin settings changed, suffix is now <5', 1)
+    })
+
     it('Should upgrade on the secondary a plugin the primary upgraded', async function () {
       this.timeout(120000)
 
@@ -130,7 +178,7 @@ describe('Test plugins of a secondary server process', function () {
       await secondary.servers.waitUntilLog('Removed plugin ' + npmName)
 
       const { name } = await secondary.videos.get({ id: videoUUID })
-      expect(name).to.not.contain('<4')
+      expect(name).to.not.contain('<5')
     })
   })
 
@@ -189,6 +237,8 @@ describe('Test plugins of a secondary server process', function () {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ secondary, primary ])
   })
 })

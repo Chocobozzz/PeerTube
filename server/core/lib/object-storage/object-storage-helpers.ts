@@ -361,6 +361,21 @@ async function getObjectStorageFileSize (options: {
   return response.ContentLength
 }
 
+async function objectExists (options: {
+  key: string
+  bucketInfo: BucketInfo
+}) {
+  try {
+    await getObjectStorageFileSize(options)
+
+    return true
+  } catch (err) {
+    if (isObjectNotFoundError(err)) return false
+
+    throw err
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 // Most object storage providers refuse a single CopyObject above 5GB
@@ -542,6 +557,7 @@ export {
   listMultipartUploadsOfPrefix,
   listObjectsOfPrefix,
   makeAvailable,
+  objectExists,
   removeObject,
   removeObjectByFullKey,
   removePrefix,

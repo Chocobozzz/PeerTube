@@ -1,6 +1,7 @@
 import { removeVTTExt } from '@peertube/peertube-core-utils'
 import { FileStorage, type FileStorageType, VideoCaption, VideoCaptionObject } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { removeCachedFile } from '@server/lib/object-storage/cache.js'
 import { generateCommonFileObjectStorageKey, generateHLSObjectStorageKey } from '@server/lib/object-storage/keys.js'
 import { buildObjectStoragePublicFileUrl } from '@server/lib/object-storage/urls.js'
 import { removeCaptionObjectStorage, removeHLSFileObjectStorageByFilename } from '@server/lib/object-storage/videos.js'
@@ -361,8 +362,10 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
   }
 
   async removeCaptionFile (this: MVideoCaption) {
-    if (this.cached) {
-      await remove(this.getFSFileCachedPath())
+    if (!this.isLocal()) {
+      if (!this.cached) return
+
+      await removeCachedFile({ type: 'VIDEO_CAPTIONS', filename: this.filename, storage: this.storage, fsPath: this.getFSFileCachedPath() })
     } else if (this.storage === FileStorage.OBJECT_STORAGE) {
       await removeCaptionObjectStorage(this)
     } else {
@@ -378,7 +381,7 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
 
     // M3U8 is proxified by our our instance, not cached
 
-    if (this.storage === FileStorage.OBJECT_STORAGE) {
+    if (this.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) {
       await removeHLSFileObjectStorageByFilename(hls.Video, this.m3u8Filename)
     } else {
       await remove(this.getFSM3U8Path(this.Video))

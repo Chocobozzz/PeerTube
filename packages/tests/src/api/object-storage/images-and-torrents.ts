@@ -21,7 +21,7 @@ import {
   makeActivityPubGetRequest,
   makeRawRequest,
   ObjectStorageCommand,
-  OptionalObjectStorageType,
+  CommonFileObjectStorageType,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -47,19 +47,18 @@ describe('Object storage for images and torrents', function () {
   if (areMockObjectStorageTestsDisabled()) return
 
   // Server 1 stores avatars, thumbnails, storyboards, torrents and uploads in object storage
-  // Server 2 enables object storage for videos, but not for these files
-  // Server 3 enables these files in object storage, but object storage is disabled
+  // Server 2 has object storage buckets configured, but object storage is disabled
   let servers: PeerTubeServer[]
   let server: PeerTubeServer
 
   let uuid: string
   let playlistUUID: string
 
-  // Video of servers 2 and 3, by server index
-  const fsVideoUUIDs: { [index: number]: string } = {}
+  // Video of server 2
+  let fsVideoUUID: string
 
   const objectStorage = new ObjectStorageCommand()
-  const allOptionalTypes: OptionalObjectStorageType[] = [ 'avatars', 'thumbnails', 'storyboards', 'torrents', 'uploads' ]
+  const allCommonFileTypes: CommonFileObjectStorageType[] = [ 'avatars', 'thumbnails', 'storyboards', 'torrents', 'uploads' ]
 
   async function getFileUrls (server: PeerTubeServer, videoUUID: string) {
     const me = await server.users.getMyInfo()
@@ -80,7 +79,7 @@ describe('Object storage for images and torrents', function () {
     }
   }
 
-  function getBucketBaseUrl (type: OptionalObjectStorageType) {
+  function getBucketBaseUrl (type: CommonFileObjectStorageType) {
     switch (type) {
       case 'avatars':
         return objectStorage.getMockActorImagesBaseUrl()
@@ -257,13 +256,12 @@ describe('Object storage for images and torrents', function () {
 
     await objectStorage.prepareDefaultMockBuckets()
 
-    const disabledObjectStorageConfig = objectStorage.getDefaultMockConfig({ enabledOptionalTypes: allOptionalTypes })
+    const disabledObjectStorageConfig = objectStorage.getDefaultMockConfig()
     disabledObjectStorageConfig.object_storage.enabled = false
 
     servers = [
-      await createSingleServer(1, objectStorage.getDefaultMockConfig({ enabledOptionalTypes: allOptionalTypes })),
-      await createSingleServer(2, objectStorage.getDefaultMockConfig()),
-      await createSingleServer(3, disabledObjectStorageConfig)
+      await createSingleServer(1, objectStorage.getDefaultMockConfig()),
+      await createSingleServer(2, disabledObjectStorageConfig)
     ]
     server = servers[0]
 
@@ -475,94 +473,85 @@ describe('Object storage for images and torrents', function () {
   })
 
   describe('Disabled object storage', function () {
-    for (
-      const { index, title } of [
-        { index: 1, title: 'When object storage is not enabled for these files' },
-        { index: 2, title: 'When these files are enabled but object storage is disabled' }
-      ]
-    ) {
-      describe(title, function () {
-        let urls: Awaited<ReturnType<typeof getFileUrls>>
+    let urls: Awaited<ReturnType<typeof getFileUrls>>
 
-        before(async function () {
-          this.timeout(120000)
+    before(async function () {
+      this.timeout(120000)
 
-          const s = servers[index]
+      const s = servers[1]
 
-          await s.channels.updateImage({ channelName: s.store.channel.name, fixture: 'banner.jpg', type: 'banner' })
+      await s.channels.updateImage({ channelName: s.store.channel.name, fixture: 'banner.jpg', type: 'banner' })
 
-          await s.playlists.create({
-            attributes: {
-              displayName: 'playlist',
-              privacy: VideoPlaylistPrivacy.PUBLIC,
-              videoChannelId: s.store.channel.id,
-              thumbnailfile: 'custom-thumbnail-280x157.jpg'
-            }
-          })
-
-          await s.config.updateInstanceLogo({ fixture: 'avatar.png', type: 'favicon' })
-
-          const { uuid } = await s.videos.quickUpload({ name: 'video on file system' })
-          fsVideoUUIDs[index] = uuid
-
-          await waitJobs(servers)
-
-          urls = await getFileUrls(s, uuid)
-        })
-
-        it('Should serve the files from the instance', async function () {
-          const s = servers[index]
-
-          for (const type of allOptionalTypes) {
-            expect(urls[type], type).to.have.length.above(0)
-
-            for (const url of urls[type]) {
-              expectStartWith(url, s.url)
-              await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
-            }
-          }
-
-          const me = await s.users.getMyInfo()
-          for (const avatar of me.account.avatars) {
-            expect(avatar.path).to.not.be.null
-          }
-
-          // Not redirected to object storage
-          const video = await s.videos.get({ id: fsVideoUUIDs[index] })
-          for (const file of video.files) {
-            await makeRawRequest({ url: file.torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
-          }
-        })
-
-        it('Should have kept the files on the file system', async function () {
-          const s = servers[index]
-
-          const directories: { [type in OptionalObjectStorageType]: string } = {
-            avatars: 'avatars',
-            thumbnails: 'thumbnails',
-            storyboards: 'storyboards',
-            torrents: 'torrents',
-            uploads: join('uploads', 'images')
-          }
-
-          for (const type of allOptionalTypes) {
-            for (const url of urls[type]) {
-              const path = join(s.servers.buildDirectory(directories[type]), basename(url))
-
-              expect(await pathExists(path), path).to.be.true
-            }
-          }
-        })
-
-        it('Should not have uploaded the files to object storage', async function () {
-          for (const type of allOptionalTypes) {
-            for (const url of urls[type]) {
-              await makeRawRequest({ url: getBucketBaseUrl(type) + basename(url), expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-            }
-          }
-        })
+      await s.playlists.create({
+        attributes: {
+          displayName: 'playlist',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: s.store.channel.id,
+          thumbnailfile: 'custom-thumbnail-280x157.jpg'
+        }
       })
-    }
+
+      await s.config.updateInstanceLogo({ fixture: 'avatar.png', type: 'favicon' })
+
+      const { uuid } = await s.videos.quickUpload({ name: 'video on file system' })
+      fsVideoUUID = uuid
+
+      await waitJobs(servers)
+
+      urls = await getFileUrls(s, uuid)
+    })
+
+    it('Should serve the files from the instance', async function () {
+      const s = servers[1]
+
+      for (const type of allCommonFileTypes) {
+        expect(urls[type], type).to.have.length.above(0)
+
+        for (const url of urls[type]) {
+          expectStartWith(url, s.url)
+          await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+        }
+      }
+
+      const me = await s.users.getMyInfo()
+      for (const avatar of me.account.avatars) {
+        expect(avatar.path).to.not.be.null
+      }
+
+      // Not redirected to object storage
+      const video = await s.videos.get({ id: fsVideoUUID })
+      for (const file of video.files) {
+        await makeRawRequest({ url: file.torrentDownloadUrl, expectedStatus: HttpStatusCode.OK_200 })
+      }
+    })
+
+    it('Should have kept the files on the file system', async function () {
+      const s = servers[1]
+
+      const directories: { [type in CommonFileObjectStorageType]: string } = {
+        avatars: 'avatars',
+        thumbnails: 'thumbnails',
+        storyboards: 'storyboards',
+        torrents: 'torrents',
+        uploads: join('uploads', 'images')
+      }
+
+      for (const type of allCommonFileTypes) {
+        for (const url of urls[type]) {
+          const path = join(s.servers.buildDirectory(directories[type]), basename(url))
+
+          expect(await pathExists(path), path).to.be.true
+        }
+      }
+    })
+
+    it('Should not have uploaded the files to object storage', async function () {
+      for (const type of allCommonFileTypes) {
+        for (const url of urls[type]) {
+          await makeRawRequest({ url: getBucketBaseUrl(type) + basename(url), expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+        }
+      }
+    })
   })
 
   describe('Legacy URLs', function () {
@@ -595,7 +584,7 @@ describe('Object storage for images and torrents', function () {
       const remote = servers[1]
       const sqlCommand = new SQLCommand(remote)
 
-      const video = await remote.videos.get({ id: fsVideoUUIDs[1] })
+      const video = await remote.videos.get({ id: fsVideoUUID })
       const filename = basename(video.files[0].torrentUrl)
       const legacyUrl = remote.url + '/lazy-static/torrents/' + filename
 
@@ -710,36 +699,53 @@ describe('Object storage for images and torrents', function () {
       }
     })
 
-    it('Should cache remote files on the file system and not in object storage', async function () {
+    it('Should cache remote files in the object storage cache bucket', async function () {
       this.timeout(60000)
 
-      const remoteVideoUUID = fsVideoUUIDs[1]
+      const remoteVideoUUID = fsVideoUUID
 
       const account = await server.accounts.get({ accountName: 'root@' + servers[1].host })
       const video = await server.videos.get({ id: remoteVideoUUID })
       const { storyboards } = await server.storyboard.list({ id: remoteVideoUUID })
 
-      const urlsByType: { [type in OptionalObjectStorageType]?: string[] } = {
+      const urlsByType: { [type in CommonFileObjectStorageType]?: string[] } = {
         avatars: account.avatars.map(a => a.fileUrl),
         thumbnails: video.thumbnails.map(t => t.fileUrl),
         storyboards: storyboards.map(s => s.fileUrl),
         torrents: video.files.map(f => f.torrentUrl)
       }
 
-      for (const type of Object.keys(urlsByType) as OptionalObjectStorageType[]) {
+      for (const type of Object.keys(urlsByType) as CommonFileObjectStorageType[]) {
         expect(urlsByType[type], type).to.have.length.above(0)
 
         for (const url of urlsByType[type]) {
           expectStartWith(url, server.url)
-          await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+
+          // Torrents are proxified, not cached
+          if (type === 'torrents') {
+            await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+          } else {
+            const location = await getRedirectionUrl(url)
+            expect(location).to.equal(objectStorage.getMockCacheBaseUrl() + 'cache/' + type + '/' + basename(url))
+
+            await makeRawRequest({ url: location, expectedStatus: HttpStatusCode.OK_200 })
+          }
 
           await makeRawRequest({ url: getBucketBaseUrl(type) + basename(url), expectedStatus: HttpStatusCode.NOT_FOUND_404 })
         }
       }
 
-      expect(await server.servers.countFiles(join('cache', 'avatars'))).to.be.above(0)
-      expect(await server.servers.countFiles(join('cache', 'thumbnails'))).to.be.above(0)
-      expect(await server.servers.countFiles(join('cache', 'storyboards'))).to.be.above(0)
+      const cacheBucket = objectStorage.getMockCacheBucketName()
+
+      for (const directory of [ 'avatars', 'thumbnails', 'storyboards' ]) {
+        const keys = await objectStorage.listMockObjectKeys(cacheBucket, 'cache/' + directory + '/')
+        expect(keys, directory).to.have.length.above(0)
+
+        expect(await server.servers.countFiles(join('cache', directory)), directory).to.equal(0)
+      }
+
+      // Torrents are proxified, not cached
+      expect(await objectStorage.listMockObjectKeys(cacheBucket, 'cache/torrents/')).to.have.lengthOf(0)
 
       // Remote files are not considered as local files
       await checkDirectoryIsEmpty(server, 'avatars')

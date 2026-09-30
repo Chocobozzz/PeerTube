@@ -1,7 +1,7 @@
-import express from 'express'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy.js'
+import express from 'express'
 import { createLogger } from '../../../helpers/logger.js'
 import { removeRedundanciesOfServer, removeVideoRedundancy } from '../../../lib/redundancy.js'
 import {
@@ -9,6 +9,7 @@ import {
   authenticate,
   ensureUserHasRight,
   paginationValidator,
+  primaryOnly,
   setDefaultPagination,
   setDefaultVideoRedundanciesSort,
   videoRedundanciesSortValidator
@@ -26,6 +27,7 @@ const serverRedundancyRouter = express.Router()
 
 serverRedundancyRouter.put(
   '/redundancy/:host',
+  primaryOnly, // Disabling redundancy of a server removes the files of its redundancies from the redundancy directory of the primary
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(updateServerRedundancyValidator),
@@ -54,6 +56,7 @@ serverRedundancyRouter.post(
 
 serverRedundancyRouter.delete(
   '/redundancy/videos/:redundancyId',
+  primaryOnly, // Removing a redundancy removes its files from the redundancy directory of the primary
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES),
   removeVideoRedundancyValidator,

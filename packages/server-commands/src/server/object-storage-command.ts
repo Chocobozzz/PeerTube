@@ -1,9 +1,7 @@
 import type { S3Client } from '@aws-sdk/client-s3'
 import { randomInt } from 'crypto'
 
-export type OptionalObjectStorageType = 'avatars' | 'thumbnails' | 'storyboards' | 'torrents' | 'uploads'
-
-export type AlwaysOnObjectStorageType = 'captions' | 'original_video_files' | 'web_videos' | 'streaming_playlists' | 'user_exports'
+export type CommonFileObjectStorageType = 'avatars' | 'thumbnails' | 'storyboards' | 'torrents' | 'uploads'
 
 export class ObjectStorageCommand {
   private static mockClient: S3Client
@@ -36,32 +34,14 @@ export class ObjectStorageCommand {
     storeLiveStreams?: boolean // default true
     proxifyPrivateFiles?: boolean // default true
     privateACL?: 'private' | 'public-read' // default 'private'
-
-    // Avatars/thumbnails/storyboards/torrents/uploads are opt-in so existing suites keep using the file system
-    enabledOptionalTypes?: OptionalObjectStorageType[] // default []
-
-    // Captions/original video files/web videos/streaming playlists/user exports are on by default: opt out individually
-    disabledTypes?: AlwaysOnObjectStorageType[] // default []
   } = {}) {
     const {
       storeLiveStreams = true,
       proxifyPrivateFiles = true,
-      privateACL = 'private',
-      enabledOptionalTypes = [],
-      disabledTypes = []
+      privateACL = 'private'
     } = options
 
-    const optional = (type: OptionalObjectStorageType, bucketName: string) => ({
-      enabled: enabledOptionalTypes.includes(type),
-      bucket_name: bucketName,
-      prefix: ''
-    })
-
-    const alwaysOn = (type: AlwaysOnObjectStorageType, bucketName: string) => ({
-      enabled: !disabledTypes.includes(type),
-      bucket_name: bucketName,
-      prefix: ''
-    })
+    const section = (bucketName: string) => ({ bucket_name: bucketName, prefix: '' })
 
     return {
       object_storage: {
@@ -77,30 +57,35 @@ export class ObjectStorageCommand {
         },
 
         streaming_playlists: {
-          ...alwaysOn('streaming_playlists', this.getMockStreamingPlaylistsBucketName()),
+          ...section(this.getMockStreamingPlaylistsBucketName()),
 
           store_live_streams: storeLiveStreams
         },
 
-        web_videos: alwaysOn('web_videos', this.getMockWebVideosBucketName()),
+        web_videos: section(this.getMockWebVideosBucketName()),
 
-        user_exports: alwaysOn('user_exports', this.getMockUserExportBucketName()),
+        user_exports: section(this.getMockUserExportBucketName()),
 
-        original_video_files: alwaysOn('original_video_files', this.getMockOriginalFileBucketName()),
+        original_video_files: section(this.getMockOriginalFileBucketName()),
 
-        captions: alwaysOn('captions', this.getMockCaptionsBucketName()),
+        captions: section(this.getMockCaptionsBucketName()),
 
-        avatars: optional('avatars', this.getMockActorImagesBucketName()),
-        thumbnails: optional('thumbnails', this.getMockThumbnailsBucketName()),
-        storyboards: optional('storyboards', this.getMockStoryboardsBucketName()),
-        torrents: optional('torrents', this.getMockTorrentsBucketName()),
-        uploads: optional('uploads', this.getMockUploadsBucketName()),
+        avatars: section(this.getMockActorImagesBucketName()),
+        thumbnails: section(this.getMockThumbnailsBucketName()),
+        storyboards: section(this.getMockStoryboardsBucketName()),
+        torrents: section(this.getMockTorrentsBucketName()),
+        uploads: section(this.getMockUploadsBucketName()),
 
         staging: {
-          enabled: true,
           bucket_name: this.getMockStagingBucketName(),
           // Not empty, to check staging keys are always relative to it
           prefix: 'staging/'
+        },
+
+        cache: {
+          bucket_name: this.getMockCacheBucketName(),
+          // Not empty, to check cache keys are always relative to it
+          prefix: 'cache/'
         },
 
         proxy: {
@@ -166,6 +151,10 @@ export class ObjectStorageCommand {
     return this.getMockFileBaseUrl({ bucketName: this.getMockTorrentsBucketName(), pathStyle: options.pathStyle ?? false })
   }
 
+  getMockCacheBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockCacheBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
   getMockUploadsBaseUrl (options: { pathStyle?: boolean } = {}) {
     return this.getMockFileBaseUrl({ bucketName: this.getMockUploadsBucketName(), pathStyle: options.pathStyle ?? false })
   }
@@ -199,6 +188,8 @@ export class ObjectStorageCommand {
 
     // Staging files must never be public
     await this.createMockBucket(this.getMockStagingBucketName(), { makePublic: false })
+
+    await this.createMockBucket(this.getMockCacheBucketName())
   }
 
   async createMockBucket (name: string, options: {
@@ -268,6 +259,10 @@ export class ObjectStorageCommand {
     return this.getMockBucketName(name)
   }
 
+  getMockCacheBucketName (name = 'cache') {
+    return this.getMockBucketName(name)
+  }
+
   getMockBucketName (name: string) {
     return `${this.seed}-${name}`
   }
@@ -300,6 +295,13 @@ export class ObjectStorageCommand {
     const { Body } = await client.send(new GetObjectCommand({ Bucket: bucketName, Key: key }))
 
     return Body.transformToString()
+  }
+
+  async removeMockObject (bucketName: string, key: string) {
+    const { DeleteObjectCommand } = await import('@aws-sdk/client-s3')
+    const client = await ObjectStorageCommand.getMockClient()
+
+    await client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: key }))
   }
 
   // Multipart uploads that were neither completed nor aborted

@@ -734,30 +734,6 @@ describe('Test resumable upload', function () {
       })
     })
 
-    describe('With web videos on the file system', function () {
-      before(async function () {
-        this.timeout(120000)
-
-        // Staging is still enabled for user imports
-        await server.kill()
-        await server.run(objectStorage.getDefaultMockConfig({ disabledTypes: [ 'web_videos' ] }))
-      })
-
-      it('Should only advertise a min chunk size for user imports', async function () {
-        const config = await server.config.getConfig()
-
-        expect(config.client.videos.resumableUpload.minChunkSize).to.equal(0)
-        expect(config.import.users.resumableUpload.minChunkSize).to.equal(16 * 1024 * 1024)
-      })
-
-      it('Should upload a video in small chunks', async function () {
-        this.timeout(60000)
-
-        const uploadId = await prepareUpload()
-        await sendChunks({ pathUploadId: uploadId, resumableChunkSize: 8 * 1024, expectedStatus: HttpStatusCode.OK_200 })
-      })
-    })
-
     describe('With several chunks', function () {
       // ~13MB: 3 chunks
       const chunkSize = 5 * 1024 * 1024

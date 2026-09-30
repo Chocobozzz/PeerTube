@@ -1,10 +1,15 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
-import { cleanupTests, createSecondaryServer, PeerTubeServer } from '@peertube/peertube-server-commands'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
+import { cleanupTests, createSecondaryServer, ObjectStorageCommand, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { prepareViewsServers, prepareViewsVideos, processViewersStats, processViewsBuffer } from '@tests/shared/views.js'
 import { expect } from 'chai'
 
 describe('Test video views tracked by a secondary server process', function () {
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
+
   let primary: PeerTubeServer
   let secondary: PeerTubeServer
   let vodVideoId: string
@@ -12,7 +17,9 @@ describe('Test video views tracked by a secondary server process', function () {
   before(async function () {
     this.timeout(120000)
 
-    const servers = await prepareViewsServers({ singleServer: true })
+    await objectStorage.prepareDefaultMockBuckets()
+
+    const servers = await prepareViewsServers({ singleServer: true, configOverride: objectStorage.getDefaultMockConfig() })
     primary = servers[0]
 
     const { vodVideoId: uuid } = await prepareViewsVideos({ servers, vod: true, live: false })
@@ -83,6 +90,8 @@ describe('Test video views tracked by a secondary server process', function () {
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ secondary, primary ])
   })
 })

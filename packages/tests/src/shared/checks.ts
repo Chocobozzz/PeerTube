@@ -16,6 +16,10 @@ export function dateIsValid (dateString: string | Date, interval = 300000) {
   return Math.abs(now.getTime() - dateToCheck.getTime()) <= interval
 }
 
+export function getBucketBaseUrlFrom (objectStorageBaseUrl: string, bucket: 'torrents' | 'thumbnails') {
+  return objectStorageBaseUrl.replace(/(\d+)-[a-z-]+([./])/, `$1-${bucket}$2`)
+}
+
 export function expectStartWith (str: string, start: string) {
   expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.true
 }
@@ -48,17 +52,17 @@ export async function testAvatarSize (options: {
   avatar: {
     width: number
     path: string
+    fileUrl: string
   }
 }) {
   const { url, imageName, avatar } = options
 
-  const { body } = await makeGetRequest({
-    url,
-    path: avatar.path,
-    expectedStatus: HttpStatusCode.OK_200
-  })
+  // Avatars stored in object storage don't have a local path
+  const { body } = avatar.path
+    ? await makeGetRequest({ url, path: avatar.path, expectedStatus: HttpStatusCode.OK_200 })
+    : await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-  const extension = parse(avatar.path).ext
+  const extension = parse(avatar.path || new URL(avatar.fileUrl).pathname).ext
   // We don't test big GIF avatars
   if (extension === '.gif' && avatar.width > 150) return
 

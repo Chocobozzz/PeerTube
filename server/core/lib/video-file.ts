@@ -19,7 +19,6 @@ import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-util
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
-import { isObjectStorageEnabledFor } from '@server/lib/object-storage/config.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
@@ -301,7 +300,7 @@ export async function moveAndSaveNewOriginalFileIfNeeded (options: {
     })
   } else { // Input file on object storage
     // oxlint-disable-next-line no-lonely-if
-    if (isObjectStorageEnabledFor('original_video_files')) { // We can store original file on object storage
+    if (CONFIG.OBJECT_STORAGE.ENABLED) { // We can store original file on object storage
       await copyWebVideoFileToOriginalVideoFile(webInputFile, videoSource.keptOriginalFilename)
       videoSource.storage = FileStorage.OBJECT_STORAGE
     } else if (webInputFilePath) { // We must store original file on disk, but we have a local copy
@@ -343,7 +342,7 @@ async function storeOriginalFileFromDisk (options: {
 }): Promise<FileStorageType> {
   const { inputPath, filename, keepInput } = options
 
-  if (isObjectStorageEnabledFor('original_video_files')) {
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
     await storeOriginalVideoFile(inputPath, filename)
     if (!keepInput) await remove(inputPath)
 
@@ -361,13 +360,13 @@ async function storeOriginalFileFromDisk (options: {
 // ---------------------------------------------------------------------------
 
 export function getNewWebVideoFileStorage (): FileStorageType {
-  return isObjectStorageEnabledFor('web_videos')
+  return CONFIG.OBJECT_STORAGE.ENABLED
     ? FileStorage.OBJECT_STORAGE
     : FileStorage.FILE_SYSTEM
 }
 
 export function getNewHLSPlaylistStorage (): FileStorageType {
-  return isObjectStorageEnabledFor('streaming_playlists')
+  return CONFIG.OBJECT_STORAGE.ENABLED
     ? FileStorage.OBJECT_STORAGE
     : FileStorage.FILE_SYSTEM
 }

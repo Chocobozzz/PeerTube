@@ -1,21 +1,42 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { AbuseState, HttpStatusCode, LiveVideoError, VideoEmbedPrivacyPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  AbuseState,
+  CustomConfig,
+  HttpStatusCode,
+  Job,
+  LiveVideoError,
+  RunnerJobState,
+  UserExportState,
+  VideoEmbedPrivacyPolicy,
+  VideoImportState,
+  VideoPrivacy,
+  VideoState
+} from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
   makeDeleteRequest,
+  ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testFfmpegStreamError,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { FIXTURE_URLS } from '@tests/shared/fixture-urls.js'
+import { generateHighBitrateVideo } from '@tests/shared/generate.js'
+import { uploadForTranscription } from '@tests/shared/transcription.js'
 import { expect } from 'chai'
 
 describe('Test the write endpoints of a secondary server process', function () {
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
+
   let primary: PeerTubeServer
   let secondary: PeerTubeServer
 
@@ -27,7 +48,9 @@ describe('Test the write endpoints of a secondary server process', function () {
   before(async function () {
     this.timeout(120000)
 
-    primary = await createSingleServer(1)
+    await objectStorage.prepareDefaultMockBuckets()
+
+    primary = await createSingleServer(1, objectStorage.getDefaultMockConfig())
 
     await setAccessTokensToServers([ primary ])
     await setDefaultVideoChannel([ primary ])
@@ -37,6 +60,17 @@ describe('Test the write endpoints of a secondary server process', function () {
 
     secondary = await createSecondaryServer(primary)
   })
+
+  // The secondary applies the configuration published by the primary asynchronously
+  async function waitUntilSecondaryConfig (check: (config: CustomConfig) => boolean) {
+    for (let i = 0; i < 100; i++) {
+      if (check(await secondary.config.getCustomConfig())) return
+
+      await wait(100)
+    }
+
+    throw new Error('The secondary did not apply the configuration published by the primary')
+  }
 
   describe('Video interactions', function () {
     it('Should rate a video on the secondary', async function () {
@@ -136,6 +170,228 @@ describe('Test the write endpoints of a secondary server process', function () {
       {
         const { total } = await primary.blacklist.list()
         expect(total).to.equal(0)
+      }
+    })
+  })
+
+  describe('Video management', function () {
+    it('Should update the player settings of a video and a channel on the secondary', async function () {
+      await secondary.playerSettings.updateForVideo({ videoId: videoUUID, theme: 'galaxy' })
+      await secondary.playerSettings.updateForChannel({ channelHandle: primary.store.channel.name, theme: 'lucide' })
+
+      {
+        const { theme } = await primary.playerSettings.getForVideo({ videoId: videoUUID, raw: true, token: primary.accessToken })
+        expect(theme).to.equal('galaxy')
+      }
+
+      {
+        const { theme } = await primary.playerSettings.getForChannel({
+          channelHandle: primary.store.channel.name,
+          raw: true,
+          token: primary.accessToken
+        })
+        expect(theme).to.equal('lucide')
+      }
+    })
+
+    it('Should get the stats of a video on the secondary', async function () {
+      await primary.views.simulateView({ id: videoUUID })
+      await waitJobs([ primary ])
+
+      expect(await secondary.videoStats.getOverallStats({ videoId: videoUUID }))
+        .to.deep.equal(await primary.videoStats.getOverallStats({ videoId: videoUUID }))
+
+      expect(await secondary.videoStats.getUserAgentStats({ videoId: videoUUID }))
+        .to.deep.equal(await primary.videoStats.getUserAgentStats({ videoId: videoUUID }))
+
+      expect(await secondary.videoStats.getRetentionStats({ videoId: videoUUID }))
+        .to.deep.equal(await primary.videoStats.getRetentionStats({ videoId: videoUUID }))
+
+      expect(await secondary.videoStats.getTimeserieStats({ videoId: videoUUID, metric: 'viewers' }))
+        .to.deep.equal(await primary.videoStats.getTimeserieStats({ videoId: videoUUID, metric: 'viewers' }))
+    })
+
+    it('Should get the source of a video on the secondary', async function () {
+      const source = await secondary.videos.getSource({ id: videoUUID })
+
+      expect(source.inputFilename).to.exist
+      expect(source).to.deep.equal(await primary.videos.getSource({ id: videoUUID }))
+    })
+
+    it('Should run a transcoding job requested on the secondary', async function () {
+      this.timeout(120000)
+
+      await primary.config.enableMinimumTranscoding()
+      await waitUntilSecondaryConfig(c => c.transcoding.enabled === true)
+
+      await secondary.videos.runTranscoding({ videoId: videoUUID, transcodingType: 'hls', forceTranscoding: true })
+
+      const { state } = await primary.videos.get({ id: videoUUID })
+      expect(state.id).to.equal(VideoState.TO_TRANSCODE)
+
+      await waitJobs([ primary ])
+
+      const video = await primary.videos.get({ id: videoUUID })
+      expect(video.state.id).to.equal(VideoState.PUBLISHED)
+      expect(video.streamingPlaylists).to.have.lengthOf(1)
+    })
+
+    it('Should create a transcription task requested on the secondary', async function () {
+      this.timeout(120000)
+
+      const uuid = await uploadForTranscription(primary)
+      await waitJobs([ primary ])
+
+      await primary.config.enableTranscription({ remote: true })
+      await waitUntilSecondaryConfig(c => c.videoTranscription.enabled === true)
+
+      try {
+        await secondary.captions.runGenerate({ videoId: uuid })
+
+        const { data } = await primary.runnerJobs.list({ typeOneOf: [ 'video-transcription' ] })
+        const videoUUIDs = data.map(j => j.privatePayload.videoUUID)
+
+        expect(videoUUIDs).to.include(uuid)
+      } finally {
+        await primary.config.disableTranscription()
+      }
+    })
+  })
+
+  describe('Video imports', function () {
+    it('Should cancel, retry and delete a video import on the secondary', async function () {
+      this.timeout(120000)
+
+      await primary.config.enableVideoImports()
+
+      // Paused from the secondary: the import must not be processed by the primary
+      await secondary.jobs.pauseJobQueue()
+      await primary.servers.waitUntilLog('Job queue paused as requested by another process.')
+
+      try {
+        const { id: importId } = await primary.videoImports.importVideo({
+          attributes: { name: 'import managed by the secondary', magnetUri: FIXTURE_URLS.magnet, privacy: VideoPrivacy.PUBLIC }
+        })
+
+        {
+          const { data } = await secondary.jobs.list({ state: 'waiting', jobType: 'video-import' })
+          expect(data.some(j => j.data.videoImportId === importId)).to.be.true
+        }
+
+        const getState = async () => {
+          const { data } = await primary.videoImports.listMyVideoImports({ id: importId })
+          return data[0]?.state.id
+        }
+
+        await secondary.videoImports.cancel({ importId })
+        expect(await getState()).to.equal(VideoImportState.CANCELLED)
+
+        await secondary.videoImports.retry({ importId })
+        expect(await getState()).to.equal(VideoImportState.PENDING)
+
+        await secondary.videoImports.cancel({ importId })
+        await secondary.videoImports.delete({ importId })
+        expect(await getState()).to.be.undefined
+      } finally {
+        await secondary.jobs.resumeJobQueue()
+        await primary.servers.waitUntilLog('Job queue resumed as requested by another process.')
+      }
+
+      await waitJobs([ primary ])
+    })
+  })
+
+  describe('User exports', function () {
+    it('Should request, list and delete a user export on the secondary', async function () {
+      this.timeout(120000)
+
+      await primary.config.enableUserExport()
+      await waitUntilSecondaryConfig(c => c.export.users.enabled === true)
+
+      const { id: userId } = await primary.users.getMyInfo({ token: userToken })
+
+      await secondary.userExports.request({ userId, withVideoFiles: false, token: userToken })
+      await primary.userExports.waitForCreation({ userId, token: userToken })
+
+      const { data } = await secondary.userExports.list({ userId, token: userToken })
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].state.id).to.equal(UserExportState.COMPLETED)
+
+      await secondary.userExports.delete({ userId, exportId: data[0].id, token: userToken })
+
+      {
+        const { total } = await primary.userExports.list({ userId, token: userToken })
+        expect(total).to.equal(0)
+      }
+    })
+  })
+
+  describe('Administration', function () {
+    it('Should get the custom configuration published by the primary on the secondary', async function () {
+      await primary.config.updateExistingConfig({ newConfig: { instance: { name: 'name set on the primary' } } })
+      await waitUntilSecondaryConfig(c => c.instance.name === 'name set on the primary')
+
+      expect(await secondary.config.getCustomConfig()).to.deep.equal(await primary.config.getCustomConfig())
+    })
+
+    it('Should list video redundancies on the secondary', async function () {
+      const { total } = await secondary.redundancy.listVideos({ target: 'remote-videos' })
+      expect(total).to.equal(0)
+
+      // The endpoint is served: the video is refused because it is local
+      const res = await secondary.redundancy.addVideo({ videoId, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      expect(res.body.detail).to.equal('Cannot create a redundancy on a local video')
+    })
+
+    it('Should receive playback metrics on the secondary', async function () {
+      // Observed by the OpenTelemetry exporter of the secondary
+      await secondary.metrics.addPlaybackMetric({
+        metrics: {
+          playerMode: 'web-video',
+          p2pEnabled: false,
+          resolutionChanges: 0,
+          errors: 0,
+          bufferStalled: 0,
+          downloadedBytesP2P: 0,
+          downloadedBytesHTTP: 0,
+          uploadedBytesP2P: 0,
+          videoId
+        }
+      })
+    })
+
+    it('Should cancel on the secondary a job run by the primary', async function () {
+      this.timeout(120000)
+
+      await primary.config.enableTranscoding({ resolutions: 'max', hls: true, webVideo: true })
+
+      try {
+        const { uuid } = await primary.videos.upload({
+          attributes: { name: 'transcoding cancelled on the secondary', fixture: await generateHighBitrateVideo() },
+          waitTorrentGeneration: false
+        })
+
+        const findActiveJob = async () => {
+          const { data } = await secondary.jobs.list({ state: 'active', jobType: 'video-transcoding' })
+
+          return data.find(j => j.data?.videoUUID === uuid)
+        }
+
+        let job: Job
+        while (!(job = await findActiveJob())) {
+          await wait(300)
+        }
+
+        await secondary.jobs.cancel({ jobType: 'video-transcoding', jobId: job.id })
+
+        // Only the primary runs transcoding jobs
+        await primary.servers.waitUntilLog(`Job ${job.id} in queue video-transcoding cancelled`)
+
+        while (await findActiveJob()) {
+          await wait(300)
+        }
+      } finally {
+        await primary.config.disableTranscoding()
       }
     })
   })
@@ -300,6 +556,49 @@ describe('Test the write endpoints of a secondary server process', function () {
       const { availableJobs } = await secondary.runnerJobs.request({ runnerToken })
       expect(availableJobs).to.be.an('array')
     })
+
+    it('Should abort, error, cancel and delete a runner job on the secondary', async function () {
+      this.timeout(120000)
+
+      await primary.config.enableTranscoding({ resolutions: [ 240 ], hls: false, webVideo: true })
+      await primary.config.enableRemoteTranscoding()
+      const runnerToken = await primary.runners.autoRegisterRunner()
+
+      try {
+        const { uuid } = await primary.videos.quickUpload({ name: 'video of runner jobs managed by the secondary' })
+        await waitJobs([ primary ])
+
+        const { availableJobs } = await secondary.runnerJobs.requestVOD({ runnerToken })
+        const jobUUID = availableJobs.find(j => JSON.stringify(j.payload).includes(uuid)).uuid
+
+        {
+          const { job } = await secondary.runnerJobs.accept({ runnerToken, jobUUID })
+          await secondary.runnerJobs.abort({ runnerToken, jobUUID, jobToken: job.jobToken, reason: 'aborted on the secondary' })
+
+          const aborted = await primary.runnerJobs.getJob({ uuid: jobUUID })
+          expect(aborted.state.id).to.equal(RunnerJobState.PENDING)
+        }
+
+        {
+          const { job } = await secondary.runnerJobs.accept({ runnerToken, jobUUID })
+          await secondary.runnerJobs.error({ runnerToken, jobUUID, jobToken: job.jobToken, message: 'error on the secondary' })
+
+          const errored = await primary.runnerJobs.getJob({ uuid: jobUUID })
+          expect(errored.state.id).to.equal(RunnerJobState.PENDING)
+          expect(errored.failures).to.equal(1)
+        }
+
+        await secondary.runnerJobs.cancelByAdmin({ jobUUID })
+        expect((await primary.runnerJobs.getJob({ uuid: jobUUID })).state.id).to.equal(RunnerJobState.CANCELLED)
+
+        await secondary.runnerJobs.deleteByAdmin({ jobUUID })
+        expect(await primary.runnerJobs.getJob({ uuid: jobUUID })).to.not.exist
+      } finally {
+        await primary.runnerJobs.cancelAllJobs()
+        await primary.config.updateExistingConfig({ newConfig: { transcoding: { remoteRunners: { enabled: false } } } })
+        await primary.config.disableTranscoding()
+      }
+    })
   })
 
   describe('Lives', function () {
@@ -325,6 +624,21 @@ describe('Test the write endpoints of a secondary server process', function () {
       expect(session.endDate).to.exist
       expect(session.error).to.equal(LiveVideoError.BLACKLISTED)
     })
+
+    it('Should create, update and get a live on the secondary', async function () {
+      const { uuid } = await secondary.live.create({
+        fields: { name: 'live created on the secondary', channelId: primary.store.channel.id, privacy: VideoPrivacy.PUBLIC }
+      })
+
+      await secondary.live.update({ videoId: uuid, fields: { permanentLive: true } })
+
+      const live = await secondary.live.get({ videoId: uuid })
+      expect(live.permanentLive).to.be.true
+      expect(live).to.deep.equal(await primary.live.get({ videoId: uuid }))
+
+      const { total } = await secondary.live.listSessions({ videoId: uuid })
+      expect(total).to.equal(0)
+    })
   })
 
   describe('Endpoints owned by the primary', function () {
@@ -333,12 +647,14 @@ describe('Test the write endpoints of a secondary server process', function () {
         url: secondary.url,
         path: '/api/v1/server/following/' + primary.host,
         token: primary.accessToken,
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        expectedStatus: HttpStatusCode.MISDIRECTED_REQUEST_421
       })
     })
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ secondary, primary ])
   })
 })

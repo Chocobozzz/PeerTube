@@ -1,6 +1,6 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
+import { hasVideoStudioTaskFile, VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -9,9 +9,10 @@ import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MUser, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
-import { remove } from 'fs-extra/esm'
-import { join } from 'path'
+import { move, remove } from 'fs-extra/esm'
+import { basename, join } from 'path'
 import { JobQueue } from './job-queue/index.js'
+import { buildStagingKey, downloadStagingObject, removeStagingObject, storeStagingObject } from './object-storage/staging.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
 import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
@@ -33,19 +34,84 @@ export function getStudioTaskFilePath (filename: string) {
   return join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, filename)
 }
 
-export async function safeCleanupStudioTMPFiles (tasks: VideoStudioTaskPayload[]) {
-  logger.info('Removing TMP studio task files', { tasks })
+// ---------------------------------------------------------------------------
 
-  for (const task of tasks) {
-    try {
-      if (task.name === 'add-intro' || task.name === 'add-outro') {
-        await remove(task.options.file)
-      } else if (task.name === 'add-watermark') {
-        await remove(task.options.file)
+type StudioTaskFiles = Pick<VideoStudioEditionPayload, 'tasks' | 'taskFilesStaged'>
+
+// Task files are staged in object storage, or kept in the persistent temporary directory without object storage
+export async function handleStudioTaskFile (options: {
+  file: Express.Multer.File
+  staged: boolean
+}) {
+  const { file, staged } = options
+  const filename = basename(file.path)
+
+  if (staged) {
+    const key = buildStagingKey('VIDEO_STUDIO', filename)
+
+    await storeStagingObject({ key, inputPath: file.path, contentType: file.mimetype })
+    await remove(file.path)
+
+    return key
+  }
+
+  const destination = getStudioTaskFilePath(filename)
+  await move(file.path, destination)
+
+  return destination
+}
+
+// Run `cb` with tasks whose files are on the local disk, downloading them from object storage staging if needed
+export async function makeStudioTaskFilesAvailable<T> (payload: StudioTaskFiles, cb: (tasks: VideoStudioTaskPayload[]) => Promise<T>) {
+  if (!payload.taskFilesStaged) return cb(payload.tasks)
+
+  const localPaths: string[] = []
+
+  try {
+    const tasks: VideoStudioTaskPayload[] = []
+
+    for (const task of payload.tasks) {
+      if (!hasVideoStudioTaskFile(task)) {
+        tasks.push(task)
+        continue
       }
-    } catch (err) {
-      logger.error('Cannot remove studio file', { err })
+
+      const destination = join(CONFIG.STORAGE.TMP_DIR, basename(task.options.file))
+      localPaths.push(destination)
+
+      await downloadStagingObject({ key: task.options.file, destination })
+
+      tasks.push({ ...task, options: { ...task.options, file: destination } } as VideoStudioTaskPayload)
     }
+
+    return await cb(tasks)
+  } finally {
+    for (const path of localPaths) {
+      await remove(path)
+        .catch(err => logger.error('Cannot remove local copy %s of a staged studio task file', path, { err }))
+    }
+  }
+}
+
+export async function safeCleanupStudioTMPFiles (payload: StudioTaskFiles) {
+  const files = payload.tasks.filter(hasVideoStudioTaskFile).map(t => t.options.file)
+  if (files.length === 0) return
+
+  logger.info('Removing studio task files', { files, staged: payload.taskFilesStaged === true })
+
+  if (payload.taskFilesStaged) {
+    for (const file of files) {
+      await removeStagingObject(file)
+        .catch(err => logger.error('Cannot remove staged studio task file %s', file, { err }))
+    }
+
+    return
+  }
+
+  // Runner jobs created before object storage was enabled fail if a secondary process completes them
+  for (const file of files) {
+    await remove(file)
+      .catch(err => logger.error('Cannot remove studio task file %s', file, { err }))
   }
 }
 
@@ -82,7 +148,7 @@ export async function createVideoStudioJob (options: {
   const priority = await getTranscodingJobPriority({ user, type: 'studio' })
 
   if (CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED) {
-    await new VideoStudioTranscodingJobHandler().create({ video, tasks: payload.tasks, priority })
+    await new VideoStudioTranscodingJobHandler().create({ video, tasks: payload.tasks, taskFilesStaged: payload.taskFilesStaged, priority })
     return
   }
 
@@ -91,10 +157,13 @@ export async function createVideoStudioJob (options: {
 
 export async function onVideoStudioEnded (options: {
   editionResultPath: string
-  tasks: VideoStudioTaskPayload[]
+  taskFiles: StudioTaskFiles
   video: MVideoFull
+
+  // Can throw to cancel the end of the edition
+  beforeIrreversibleChanges?: () => void
 }) {
-  const { tasks, editionResultPath } = options
+  const { taskFiles, editionResultPath, beforeIrreversibleChanges } = options
 
   const newFile = await buildNewFile({ input: { path: editionResultPath }, mode: 'web-video' })
 
@@ -112,7 +181,9 @@ export async function onVideoStudioEnded (options: {
     let duration: number
 
     try {
-      await safeCleanupStudioTMPFiles(tasks)
+      beforeIrreversibleChanges?.()
+
+      await safeCleanupStudioTMPFiles(taskFiles)
 
       const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newFile, localPath)
       await removeAllFilesUnderLock(video)

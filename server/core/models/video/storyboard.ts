@@ -1,6 +1,7 @@
 import { FileStorage, type FileStorageType, Storyboard } from '@peertube/peertube-models'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { removeCachedFile } from '@server/lib/object-storage/cache.js'
 import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MStoryboard, MStoryboardVideo, MVideo } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
@@ -197,16 +198,22 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
     return !this.fileUrl
   }
 
-  removeFile () {
-    if (!this.cached && this.storage === FileStorage.OBJECT_STORAGE) {
+  async removeFile () {
+    if (!this.isLocal()) {
+      if (!this.cached) return
+
+      logger.info('Removing cached storyboard file %s', this.filename)
+
+      return removeCachedFile({ type: 'STORYBOARDS', filename: this.filename, storage: this.storage, fsPath: this.getFSCachedPath() })
+    }
+
+    if (this.storage === FileStorage.OBJECT_STORAGE) {
       logger.info('Removing storyboard file %s from object storage', this.filename)
 
       return removeCommonFileObjectStorage('storyboards', this.filename)
     }
 
-    const path = this.cached
-      ? this.getFSCachedPath()
-      : this.getFSPath()
+    const path = this.getFSPath()
 
     logger.info('Removing storyboard file ' + path)
 

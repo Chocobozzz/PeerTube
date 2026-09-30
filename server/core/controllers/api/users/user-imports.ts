@@ -19,41 +19,29 @@ const logger = createLogger()
 
 const userImportRouter = express.Router()
 
-registerUserImportSharedRoutes(userImportRouter)
-registerUserImportResumableSharedRoutes(userImportRouter)
+userImportRouter.get(
+  '/:userId/imports/latest',
+  authenticate,
+  asyncMiddleware(getLatestImportStatusValidator),
+  asyncMiddleware(getLatestImport)
+)
 
-// ---------------------------------------------------------------------------
+setupUploadResumableRoutes({
+  routePath: '/:userId/imports/import-resumable',
+  router: userImportRouter,
+  uploadxInstance: userImportsUploadx,
 
-function registerUserImportSharedRoutes (router: express.Router) {
-  router.get(
-    '/:userId/imports/latest',
-    authenticate,
-    asyncMiddleware(getLatestImportStatusValidator),
-    asyncMiddleware(getLatestImport)
-  )
-}
+  initMetadataFields: [],
 
-function registerUserImportResumableSharedRoutes (router: express.Router) {
-  setupUploadResumableRoutes({
-    routePath: '/:userId/imports/import-resumable',
-    router,
-    uploadxInstance: userImportsUploadx,
+  uploadInitAfterMiddlewares: [ asyncMiddleware(userImportRequestResumableInitValidator) ],
 
-    initMetadataFields: [],
-
-    uploadInitAfterMiddlewares: [ asyncMiddleware(userImportRequestResumableInitValidator) ],
-
-    uploadedMiddlewares: [ asyncMiddleware(userImportRequestResumableValidator) ],
-    uploadedController: asyncMiddleware(addUserImportResumable)
-  })
-}
+  uploadedMiddlewares: [ asyncMiddleware(userImportRequestResumableValidator) ],
+  uploadedController: asyncMiddleware(addUserImportResumable)
+})
 
 // ---------------------------------------------------------------------------
 
 export {
-  // Will be used by parent router
-  registerUserImportResumableSharedRoutes,
-  registerUserImportSharedRoutes,
   userImportRouter
 }
 

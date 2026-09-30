@@ -184,7 +184,7 @@ describe('Test regenerate thumbnails CLI', function () {
     let playlistOnObjectStorage: VideoPlaylist
 
     function buildConfig () {
-      return objectStorage.getDefaultMockConfig({ enabledOptionalTypes: [ 'thumbnails' ] })
+      return objectStorage.getDefaultMockConfig()
     }
 
     async function getLocalThumbnails () {

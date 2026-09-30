@@ -11,7 +11,6 @@ import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { isObjectStorageEnabledFor } from '@server/lib/object-storage/config.js'
 import {
   buildObjectStorageHLSPrivateFileUrl,
   buildObjectStoragePublicFileUrl,
@@ -258,7 +257,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       playlist = new VideoStreamingPlaylistModel({
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
-        storage: isObjectStorageEnabledFor('streaming_playlists')
+        storage: CONFIG.OBJECT_STORAGE.ENABLED
           ? FileStorage.OBJECT_STORAGE
           : FileStorage.FILE_SYSTEM,
         playlistFilename: generateHLSMasterPlaylistFilename(video.isLive),

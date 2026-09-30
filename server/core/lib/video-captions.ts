@@ -8,7 +8,6 @@ import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { isObjectStorageEnabledFor } from '@server/lib/object-storage/config.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
@@ -57,7 +56,7 @@ export async function createLocalCaption (options: {
   }
 
   // Store it in object storage right away, so it never stays on the file system of this process, that other processes cannot reach
-  if (isObjectStorageEnabledFor('captions')) {
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
     await storeVideoCaption(captionDest, videoCaption.filename)
     await remove(captionDest)
 

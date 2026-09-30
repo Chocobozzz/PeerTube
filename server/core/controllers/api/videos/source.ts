@@ -48,28 +48,20 @@ videoSourceRouter.delete(
   asyncMiddleware(deleteVideoLatestSourceFile)
 )
 
-registerVideoSourceReplaceResumableSharedRoutes(videoSourceRouter)
+setupUploadResumableRoutes({
+  routePath: '/:id/source/replace-resumable',
+  router: videoSourceRouter,
 
-// ---------------------------------------------------------------------------
+  initMetadataFields: [],
 
-function registerVideoSourceReplaceResumableSharedRoutes (router: express.Router) {
-  setupUploadResumableRoutes({
-    routePath: '/:id/source/replace-resumable',
-    router,
-
-    initMetadataFields: [],
-
-    uploadInitAfterMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableInitValidator) ],
-    uploadedMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableValidator) ],
-    uploadedController: asyncMiddleware(replaceVideoSourceResumable)
-  })
-}
+  uploadInitAfterMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableInitValidator) ],
+  uploadedMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableValidator) ],
+  uploadedController: asyncMiddleware(replaceVideoSourceResumable)
+})
 
 // ---------------------------------------------------------------------------
 
 export {
-  // Will be used by parent router
-  registerVideoSourceReplaceResumableSharedRoutes,
   videoSourceRouter
 }
 

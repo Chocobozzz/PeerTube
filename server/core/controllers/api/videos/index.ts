@@ -17,7 +17,6 @@ import {
   VIDEO_TEXT_LANGUAGES
 } from '../../../initializers/constants.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
-import { videoUploadx } from '@server/lib/uploadx.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import {
   apiRateLimiter,
@@ -38,7 +37,7 @@ import {
 import { guessAdditionalAttributesFromQuery } from '../../../models/video/formatter/index.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { blacklistRouter } from './blacklist.js'
-import { registerVideoCaptionSharedRoutes, videoCaptionsRouter } from './captions.js'
+import { videoCaptionsRouter } from './captions.js'
 import { videoChaptersRouter } from './chapters.js'
 import { videoCommentRouter } from './comment.js'
 import { videoEmbedPrivacyRouter } from './embed-privacy.js'
@@ -48,14 +47,14 @@ import { liveRouter } from './live.js'
 import { ownershipVideoRouter } from './ownership.js'
 import { videoPasswordRouter } from './passwords.js'
 import { rateVideoRouter } from './rate.js'
-import { registerVideoSourceReplaceResumableSharedRoutes, videoSourceRouter } from './source.js'
+import { videoSourceRouter } from './source.js'
 import { statsRouter } from './stats.js'
 import { storyboardRouter } from './storyboard.js'
 import { studioRouter } from './studio.js'
 import { tokenRouter } from './token.js'
 import { transcodingRouter } from './transcoding.js'
 import { updateRouter } from './update.js'
-import { registerVideoUploadResumableSharedRoutes, uploadRouter } from './upload.js'
+import { uploadRouter } from './upload.js'
 import { viewRouter } from './view.js'
 
 const logger = createLogger()
@@ -86,82 +85,44 @@ videosRouter.use('/', videoSourceRouter)
 videosRouter.use('/', videoChaptersRouter)
 videosRouter.use('/', videoEmbedPrivacyRouter)
 
-registerVideoSharedRoutes(videosRouter)
+videosRouter.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
+videosRouter.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
+videosRouter.get('/languages', openapiOperationDoc({ operationId: 'getLanguages' }), videoLanguagesScopeValidator, listVideoLanguages)
+videosRouter.get('/privacies', openapiOperationDoc({ operationId: 'getPrivacies' }), listVideoPrivacies)
 
-// ---------------------------------------------------------------------------
+videosRouter.get(
+  '/',
+  openapiOperationDoc({ operationId: 'getVideos' }),
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  optionalAuthenticate,
+  commonVideosFiltersValidatorFactory(),
+  asyncMiddleware(listVideos)
+)
 
-const secondaryVideosRouter = express.Router()
+videosRouter.get(
+  '/:id',
+  openapiOperationDoc({ operationId: 'getVideo' }),
+  optionalAuthenticate,
+  asyncMiddleware(videoGetValidatorFactory('for-api')),
+  asyncMiddleware(checkVideoFollowConstraints),
+  asyncMiddleware(getVideo)
+)
 
-secondaryVideosRouter.use(apiRateLimiter)
-
-secondaryVideosRouter.use('/', blacklistRouter)
-secondaryVideosRouter.use('/', rateVideoRouter)
-secondaryVideosRouter.use('/', videoCommentRouter)
-secondaryVideosRouter.use('/', ownershipVideoRouter)
-secondaryVideosRouter.use('/', viewRouter)
-secondaryVideosRouter.use('/', tokenRouter)
-secondaryVideosRouter.use('/', videoPasswordRouter)
-secondaryVideosRouter.use('/', storyboardRouter)
-secondaryVideosRouter.use('/', videoChaptersRouter)
-secondaryVideosRouter.use('/', videoEmbedPrivacyRouter)
-
-// Chunks of a resumable upload can only be received by several processes if staging object storage is enabled
-// Must be registered before updateRouter so that PUT /upload-resumable is not caught by PUT /:id
-if (videoUploadx.isObjectStorageEnabled()) {
-  registerVideoUploadResumableSharedRoutes(secondaryVideosRouter)
-  registerVideoSourceReplaceResumableSharedRoutes(secondaryVideosRouter)
-}
-
-secondaryVideosRouter.use('/', updateRouter)
-
-registerVideoCaptionSharedRoutes(secondaryVideosRouter)
-
-registerVideoSharedRoutes(secondaryVideosRouter)
+videosRouter.delete(
+  '/:id',
+  openapiOperationDoc({ operationId: 'delVideo' }),
+  authenticate,
+  asyncMiddleware(videosRemoveValidator),
+  asyncRetryTransactionMiddleware(removeVideo)
+)
 
 // ---------------------------------------------------------------------------
 
 export {
-  secondaryVideosRouter,
   videosRouter
-}
-
-// ---------------------------------------------------------------------------
-
-// Must be registered after the sub routers so that /categories is not caught by /:id
-function registerVideoSharedRoutes (router: express.Router) {
-  router.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
-  router.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
-  router.get('/languages', openapiOperationDoc({ operationId: 'getLanguages' }), videoLanguagesScopeValidator, listVideoLanguages)
-  router.get('/privacies', openapiOperationDoc({ operationId: 'getPrivacies' }), listVideoPrivacies)
-
-  router.get(
-    '/',
-    openapiOperationDoc({ operationId: 'getVideos' }),
-    paginationValidator,
-    videosSortValidator,
-    setDefaultVideosSort,
-    setDefaultPagination,
-    optionalAuthenticate,
-    commonVideosFiltersValidatorFactory(),
-    asyncMiddleware(listVideos)
-  )
-
-  router.get(
-    '/:id',
-    openapiOperationDoc({ operationId: 'getVideo' }),
-    optionalAuthenticate,
-    asyncMiddleware(videoGetValidatorFactory('for-api')),
-    asyncMiddleware(checkVideoFollowConstraints),
-    asyncMiddleware(getVideo)
-  )
-
-  router.delete(
-    '/:id',
-    openapiOperationDoc({ operationId: 'delVideo' }),
-    authenticate,
-    asyncMiddleware(videosRemoveValidator),
-    asyncRetryTransactionMiddleware(removeVideo)
-  )
 }
 
 // ---------------------------------------------------------------------------

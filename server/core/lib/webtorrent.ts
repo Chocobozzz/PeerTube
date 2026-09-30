@@ -141,7 +141,7 @@ export async function createTorrentForFileFromPath (
     urlList: buildUrlList(video, videoFile)
   })
 
-  const onObjectStorage = CONFIG.OBJECT_STORAGE.TORRENTS.ENABLED
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.ENABLED
 
   const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
   // Write in tmp when the final destination is object storage

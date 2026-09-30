@@ -9,9 +9,9 @@ import {
 } from '../../../middlewares/index.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
-import { isObjectStorageEnabledFor } from '@server/lib/object-storage/config.js'
 
 const userExportsRouter = express.Router()
 
@@ -46,7 +46,7 @@ async function requestExport (req: express.Request, res: express.Response) {
     state: UserExportState.PENDING,
     withVideoFiles: body.withVideoFiles,
 
-    storage: isObjectStorageEnabledFor('user_exports')
+    storage: CONFIG.OBJECT_STORAGE.ENABLED
       ? FileStorage.OBJECT_STORAGE
       : FileStorage.FILE_SYSTEM,
 

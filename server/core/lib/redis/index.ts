@@ -1,12 +1,13 @@
 export * from './redis.js'
 
-export { RedisChannels } from './redis-channels.js'
+export { currentProcessId, RedisChannels } from './redis-channels.js'
 export type {
+  JobCancelPayload,
   JobQueueStatePayload,
   LiveSessionStopPayload,
+  LocalFilesMove,
   ModelCacheInvalidationPayload,
   PluginChangePayload,
-  SharedFilesChange,
   TokenInvalidationPayload,
   WatchedWordsInvalidationPayload
 } from './redis-channels.js'

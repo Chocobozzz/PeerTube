@@ -1,10 +1,12 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
 import { HttpStatusCode, UserRole } from '@peertube/peertube-models'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
+  ObjectStorageCommand,
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers
@@ -13,6 +15,10 @@ import { fetchExternalToken } from '@tests/shared/plugins.js'
 import { expect } from 'chai'
 
 describe('Test external auth plugins with a secondary server process', function () {
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
+
   let primary: PeerTubeServer
   let secondary: PeerTubeServer
 
@@ -26,7 +32,11 @@ describe('Test external auth plugins with a secondary server process', function 
   before(async function () {
     this.timeout(120000)
 
+    await objectStorage.prepareDefaultMockBuckets()
+
     primary = await createSingleServer(1, {
+      ...objectStorage.getDefaultMockConfig(),
+
       rates_limit: {
         login: {
           max: 30
@@ -115,6 +125,8 @@ describe('Test external auth plugins with a secondary server process', function 
   })
 
   after(async function () {
+    await objectStorage.cleanupMock()
+
     await cleanupTests([ secondary, primary ])
   })
 })

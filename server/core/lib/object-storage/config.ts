@@ -2,25 +2,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { OBJECT_STORAGE_STAGING } from '@server/initializers/constants.js'
 import { BucketInfo } from './shared/index.js'
 
-// Every kind of file that can live in object storage, named after its `object_storage.<name>` config key
-// Each one can be individually enabled/disabled (on top of the global object_storage.enabled flag)
-export type ObjectStorageSectionType =
-  | 'avatars'
-  | 'thumbnails'
-  | 'storyboards'
-  | 'torrents'
-  | 'uploads'
-  | 'captions'
-  | 'original_video_files'
-  | 'web_videos'
-  | 'streaming_playlists'
-  | 'user_exports'
-
-// The subset whose files are addressed by a flat filename, so their low-level storage helpers can be shared
-// Only HLS uses a different, per-video prefixed key and prefix-wide operations
-export type ObjectStorageFileType = Exclude<ObjectStorageSectionType, 'streaming_playlists'>
-
-export const objectStorageSectionTypes: ObjectStorageSectionType[] = [
+export const objectStorageSections = [
   'web_videos',
   'streaming_playlists',
   'original_video_files',
@@ -30,10 +12,21 @@ export const objectStorageSectionTypes: ObjectStorageSectionType[] = [
   'thumbnails',
   'storyboards',
   'torrents',
-  'uploads'
-]
+  'uploads',
+  'staging',
+  'cache'
+] as const
+export type ObjectStorageSection = (typeof objectStorageSections)[number]
 
-export function getObjectStorageFileConfig (type: ObjectStorageSectionType): BucketInfo & { ENABLED: boolean } {
+// It skips staging and cache objects: they have their own cleanup
+const prunableObjectStorageSections = objectStorageSections.filter(k => k !== 'staging' && k !== 'cache')
+export type PrunableObjectStorageSection = (typeof prunableObjectStorageSections)[number]
+
+// Common object storage type for sections that use flat filenames
+// Streaming playlists, cache and staging use custom helpers
+export type CommonObjectStorageType = Exclude<PrunableObjectStorageSection, 'streaming_playlists' | 'cache' | 'staging'>
+
+export function getObjectStorageFileConfig (type: ObjectStorageSection): BucketInfo {
   switch (type) {
     case 'avatars':
       return CONFIG.OBJECT_STORAGE.ACTOR_IMAGES
@@ -64,54 +57,24 @@ export function getObjectStorageFileConfig (type: ObjectStorageSectionType): Buc
 
     case 'user_exports':
       return CONFIG.OBJECT_STORAGE.USER_EXPORTS
+
+    case 'staging':
+      return {
+        ...CONFIG.OBJECT_STORAGE.STAGING,
+
+        BASE_URL: '' // Not public, so BASE_URL is not set
+      }
+
+    case 'cache':
+      return CONFIG.OBJECT_STORAGE.CACHE
   }
-}
-
-// The global object_storage.enabled flag is already folded into ENABLED by the config builder
-export function isObjectStorageEnabledFor (type: ObjectStorageSectionType) {
-  return getObjectStorageFileConfig(type).ENABLED === true
-}
-
-// Web videos, HLS, the original file and captions need the video to go through the "moving" state so its files are not served half-moved
-// Thumbnails, storyboards and torrents don't: they can be moved by a job while the video stays published
-export function isVideoFilesObjectStorageEnabled () {
-  return isObjectStorageEnabledFor('web_videos') ||
-    isObjectStorageEnabledFor('streaming_playlists') ||
-    isObjectStorageEnabledFor('original_video_files') ||
-    isObjectStorageEnabledFor('captions')
-}
-
-// ---------------------------------------------------------------------------
-
-export function isStagingEnabled () {
-  return CONFIG.OBJECT_STORAGE.STAGING.ENABLED === true
-}
-
-export function getStagingBucketInfo (): BucketInfo {
-  return {
-    BUCKET_NAME: CONFIG.OBJECT_STORAGE.STAGING.BUCKET_NAME,
-    PREFIX: CONFIG.OBJECT_STORAGE.STAGING.PREFIX,
-    BASE_URL: '' // Not public, so BASE_URL is not set
-  }
-}
-
-export function isVideoUploadObjectStorageEnabled () {
-  return isStagingEnabled() && isObjectStorageEnabledFor('web_videos')
-}
-
-export function isUserImportUploadObjectStorageEnabled () {
-  return isStagingEnabled()
-}
-
-export function isAllObjectStorageEnabled () {
-  return isStagingEnabled() && objectStorageSectionTypes.every(type => isObjectStorageEnabledFor(type))
 }
 
 // Each resumable upload chunk becomes an object storage multipart part, which can't be smaller than OBJECT_STORAGE_STAGING.MIN_PART_SIZE
 // Use the chunk size chosen by the admin if any
 // The actual min size of a chunk also depends on the file size
-export function getResumableUploadMinChunkSize (options: { objectStorage: boolean }) {
-  if (!options.objectStorage) return 0
+export function getResumableUploadMinChunkSize () {
+  if (CONFIG.OBJECT_STORAGE.ENABLED !== true) return 0
 
   const maxChunkSize = CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
   if (!maxChunkSize) return OBJECT_STORAGE_STAGING.STREAM_PART_SIZE
@@ -122,21 +85,17 @@ export function getResumableUploadMinChunkSize (options: { objectStorage: boolea
 // ---------------------------------------------------------------------------
 
 // Object storage sections listed by the prune-storage script
-export function getPrunableObjectStorageSections (): { name: ObjectStorageSectionType, bucketInfo: BucketInfo }[] {
-  return objectStorageSectionTypes
-    .filter(type => isObjectStorageEnabledFor(type))
+export function getPrunableObjectStorageSections (): { name: PrunableObjectStorageSection, bucketInfo: BucketInfo }[] {
+  return prunableObjectStorageSections
     .map(type => ({ name: type, bucketInfo: getObjectStorageFileConfig(type) }))
 }
 
-// prune-storage deletes the objects it doesn't know in each section
-// So two sections sharing the same bucket and prefix would delete each other's files
-// Checked against every configured section, not just the currently enabled ones
-// A section that was disabled after being used still has its files in the bucket, and an overlapping enabled section would prune them
-export function getObjectStorageLocationConflicts () {
+// Two sections sharing the same bucket and prefix would break prune storage script
+export function getPrunableObjectStorageLocationConflicts () {
   const conflicts: string[] = []
-  const visited: { name: ObjectStorageSectionType, bucket: string, prefix: string }[] = []
+  const visited: { name: PrunableObjectStorageSection, bucket: string, prefix: string }[] = []
 
-  const configuredSections = objectStorageSectionTypes
+  const configuredSections = prunableObjectStorageSections
     .map(type => ({ name: type, bucketInfo: getObjectStorageFileConfig(type) }))
     .filter(s => !!s.bucketInfo.BUCKET_NAME)
 
@@ -163,8 +122,8 @@ export function getObjectStorageLocationConflicts () {
 
 function buildConflictMessage (options: {
   bucket: string
-  first: { name: ObjectStorageSectionType, prefix: string }
-  second: { name: ObjectStorageSectionType, prefix: string }
+  first: { name: PrunableObjectStorageSection, prefix: string }
+  second: { name: PrunableObjectStorageSection, prefix: string }
 }) {
   const { bucket, first, second } = options
 

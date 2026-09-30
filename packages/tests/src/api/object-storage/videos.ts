@@ -24,7 +24,8 @@ import { SQLCommand } from '@tests/shared/sql-command.js'
 import { checkPlaylistInfohash } from '@tests/shared/streaming-playlists.js'
 import bytes from 'bytes'
 import { expect } from 'chai'
-import { stat } from 'fs/promises'
+import { readFile, stat } from 'fs/promises'
+import { join } from 'path'
 import merge from 'lodash-es/merge.js'
 
 function buildBaseUrl (options: {
@@ -158,15 +159,10 @@ function runTestSuite (options: {
   let deletedUrls: string[] = []
 
   function getConfig () {
-    return {
+    // The default config stores the other kinds of files in their own buckets
+    return merge(objectStorage.getDefaultMockConfig(), {
       object_storage: {
-        enabled: true,
-        endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
-        region: ObjectStorageCommand.getMockRegion(),
-
         force_path_style: pathStyle,
-
-        credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
         max_upload_part: options.maxUploadPart || '5MB',
 
@@ -186,7 +182,7 @@ function runTestSuite (options: {
             : undefined
         }
       }
-    }
+    })
   }
 
   before(async function () {
@@ -197,6 +193,7 @@ function runTestSuite (options: {
       ? `http://127.0.0.1:${port}`
       : undefined
 
+    await objectStorage.prepareDefaultMockBuckets()
     await objectStorage.createMockBucket(options.playlistBucket)
     await objectStorage.createMockBucket(options.webVideoBucket)
 
@@ -329,17 +326,63 @@ describe('Object storage for videos', function () {
       secret_access_key: 'aJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
     }
 
+    it('Should exit at startup with a bucket that does not exist', async function () {
+      this.timeout(60000)
+
+      await objectStorage.prepareDefaultMockBuckets()
+
+      const missingBucket = objectStorage.getMockBucketName('missing')
+
+      const config = merge({}, baseConfig, {
+        object_storage: {
+          avatars: { bucket_name: missingBucket },
+          thumbnails: { bucket_name: missingBucket }
+        }
+      })
+
+      const failing = new PeerTubeServer({ serverNumber: 1 })
+      let startError: Error
+
+      try {
+        await failing.flushAndRun(config)
+      } catch (err) {
+        startError = err as Error
+      }
+
+      // The check doesn't delay the startup: the process may exit after listening
+      if (startError) {
+        expect(startError.message).to.contain('Process exited')
+      } else {
+        const app = failing.app
+
+        if (app.exitCode === null && app.signalCode === null) {
+          await new Promise(res => app.once('exit', res))
+        }
+
+        expect(app.exitCode).to.equal(1)
+      }
+
+      const logs = await readFile(failing.servers.buildDirectory(join('logs', 'peertube.log')), 'utf8')
+      expect(logs).to.contain('object storage buckets do not exist')
+      expect(logs).to.contain(`${missingBucket}, used by object_storage.avatars.bucket_name, object_storage.thumbnails.bucket_name`)
+    })
+
     it('Should start but warn with same bucket names without prefix', async function () {
       this.timeout(60000)
+
+      await objectStorage.prepareDefaultMockBuckets()
+
+      const sharedBucket = objectStorage.getMockBucketName('shared')
+      await objectStorage.createMockBucket(sharedBucket)
 
       const config = merge({}, baseConfig, {
         object_storage: {
           streaming_playlists: {
-            bucket_name: 'aaa'
+            bucket_name: sharedBucket
           },
 
           web_videos: {
-            bucket_name: 'aaa'
+            bucket_name: sharedBucket
           }
         }
       })
@@ -347,7 +390,7 @@ describe('Object storage for videos', function () {
       server = await createSingleServer(1, config)
 
       await server.servers.waitUntilLog(
-        'object_storage.web_videos and object_storage.streaming_playlists use the same bucket aaa without prefix'
+        `object_storage.web_videos and object_storage.streaming_playlists use the same bucket ${sharedBucket} without prefix`
       )
 
       await killallServers([ server ])
@@ -411,25 +454,6 @@ describe('Object storage for videos', function () {
       const video = await server.videos.get({ id: uuid })
 
       expectStartWith(video.files[0].fileUrl, objectStorage.getMockWebVideosBaseUrl({ pathStyle: false }))
-    })
-
-    it('Should keep web video files on the file system if object_storage.web_videos.enabled is false', async function () {
-      this.timeout(60000)
-
-      await killallServers([ server ])
-      await objectStorage.prepareDefaultMockBuckets()
-
-      const config = objectStorage.getDefaultMockConfig({ disabledTypes: [ 'web_videos' ] })
-
-      server = await createSingleServer(1, config)
-      await setAccessTokensToServers([ server ])
-
-      const { uuid } = await server.videos.quickUpload({ name: 'video' })
-
-      await waitJobs([ server ], { skipDelayed: true })
-      const video = await server.videos.get({ id: uuid })
-
-      expectStartWith(video.files[0].fileUrl, server.url)
     })
 
     after(async function () {

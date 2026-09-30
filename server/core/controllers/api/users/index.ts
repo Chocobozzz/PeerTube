@@ -5,7 +5,6 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getResetPasswordUrl } from '@server/lib/client-urls.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { userImportsUploadx } from '@server/lib/uploadx.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { MUserAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
@@ -52,7 +51,7 @@ import { myVideoPlaylistsRouter } from './my-video-playlists.js'
 import { registrationsRouter } from './registrations.js'
 import { twoFactorRouter } from './two-factor.js'
 import { userExportsRouter } from './user-exports.js'
-import { registerUserImportResumableSharedRoutes, registerUserImportSharedRoutes, userImportRouter } from './user-imports.js'
+import { userImportRouter } from './user-imports.js'
 
 const logger = createLogger('api', 'users')
 
@@ -71,7 +70,6 @@ const usersRouter = express.Router()
 usersRouter.use(apiRateLimiter)
 
 usersRouter.use('/', emailVerificationRouter)
-// Not registered by secondaries
 usersRouter.use('/', userExportsRouter)
 usersRouter.use('/', userImportRouter)
 usersRouter.use('/', registrationsRouter)
@@ -85,123 +83,85 @@ usersRouter.use('/', myVideoPlaylistsRouter)
 usersRouter.use('/', myAbusesRouter)
 usersRouter.use('/', meRouter)
 
-registerUserSharedRoutes(usersRouter)
+usersRouter.get('/autocomplete', userAutocompleteValidator, asyncMiddleware(autocompleteUsers))
 
-// ---------------------------------------------------------------------------
-// Router for secondary process
-// ---------------------------------------------------------------------------
+usersRouter.get(
+  '/',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  paginationValidator,
+  adminUsersSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  usersListValidator,
+  asyncMiddleware(listUsers)
+)
 
-const secondaryUsersRouter = express.Router()
+usersRouter.post(
+  '/:id/block',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockToggleValidator),
+  asyncMiddleware(blockUser)
+)
+usersRouter.post(
+  '/:id/unblock',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersBlockToggleValidator),
+  asyncMiddleware(unblockUser)
+)
 
-secondaryUsersRouter.use(apiRateLimiter)
+usersRouter.get(
+  '/:id',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersGetValidator),
+  getUser
+)
 
-secondaryUsersRouter.use('/', emailVerificationRouter)
+usersRouter.post(
+  '/',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersAddValidator),
+  asyncRetryTransactionMiddleware(createUser)
+)
 
-registerUserImportSharedRoutes(secondaryUsersRouter)
+usersRouter.put(
+  '/:id',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersUpdateValidator),
+  asyncMiddleware(updateUser)
+)
 
-// Chunks of a resumable upload can only be received by several processes if staging object storage is enabled
-if (userImportsUploadx.isObjectStorageEnabled()) {
-  registerUserImportResumableSharedRoutes(secondaryUsersRouter)
-}
+usersRouter.delete(
+  '/:id',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
+  asyncMiddleware(usersRemoveValidator),
+  asyncMiddleware(removeUser)
+)
 
-secondaryUsersRouter.use('/', registrationsRouter)
-secondaryUsersRouter.use('/', twoFactorRouter)
-secondaryUsersRouter.use('/', tokensRouter)
-secondaryUsersRouter.use('/', myNotificationsRouter)
-secondaryUsersRouter.use('/', mySubscriptionsRouter)
-secondaryUsersRouter.use('/', myBlocklistRouter)
-secondaryUsersRouter.use('/', myVideosHistoryRouter)
-secondaryUsersRouter.use('/', myVideoPlaylistsRouter)
-secondaryUsersRouter.use('/', myAbusesRouter)
-secondaryUsersRouter.use('/', meRouter)
+usersRouter.post(
+  '/ask-reset-password',
+  askResetPasswordRateLimiter,
+  asyncMiddleware(usersAskResetPasswordValidator),
+  asyncMiddleware(askResetUserPassword)
+)
 
-registerUserSharedRoutes(secondaryUsersRouter)
+usersRouter.post(
+  '/:id/reset-password',
+  confirmTokenRateLimiter,
+  asyncMiddleware(usersResetPasswordValidator),
+  asyncMiddleware(resetUserPassword)
+)
 
 // ---------------------------------------------------------------------------
 
 export {
-  secondaryUsersRouter,
   usersRouter
-}
-
-// ---------------------------------------------------------------------------
-
-// Must be registered after the sub routers so that /me is not caught by /:id
-function registerUserSharedRoutes (router: express.Router) {
-  router.get('/autocomplete', userAutocompleteValidator, asyncMiddleware(autocompleteUsers))
-
-  router.get(
-    '/',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_USERS),
-    paginationValidator,
-    adminUsersSortValidator,
-    setDefaultSort,
-    setDefaultPagination,
-    usersListValidator,
-    asyncMiddleware(listUsers)
-  )
-
-  router.post(
-    '/:id/block',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_USERS),
-    asyncMiddleware(usersBlockToggleValidator),
-    asyncMiddleware(blockUser)
-  )
-  router.post(
-    '/:id/unblock',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_USERS),
-    asyncMiddleware(usersBlockToggleValidator),
-    asyncMiddleware(unblockUser)
-  )
-
-  router.get(
-    '/:id',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_USERS),
-    asyncMiddleware(usersGetValidator),
-    getUser
-  )
-
-  router.post(
-    '/',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_USERS),
-    asyncMiddleware(usersAddValidator),
-    asyncRetryTransactionMiddleware(createUser)
-  )
-
-  router.put(
-    '/:id',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_USERS),
-    asyncMiddleware(usersUpdateValidator),
-    asyncMiddleware(updateUser)
-  )
-
-  router.post(
-    '/ask-reset-password',
-    askResetPasswordRateLimiter,
-    asyncMiddleware(usersAskResetPasswordValidator),
-    asyncMiddleware(askResetUserPassword)
-  )
-
-  router.post(
-    '/:id/reset-password',
-    confirmTokenRateLimiter,
-    asyncMiddleware(usersResetPasswordValidator),
-    asyncMiddleware(resetUserPassword)
-  )
-
-  router.delete(
-    '/:id',
-    authenticate,
-    ensureUserHasRight(UserRight.MANAGE_USERS),
-    asyncMiddleware(usersRemoveValidator),
-    asyncMiddleware(removeUser)
-  )
 }
 
 // ---------------------------------------------------------------------------

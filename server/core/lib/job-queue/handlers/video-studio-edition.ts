@@ -18,7 +18,12 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
-import { approximateIntroOutroAdditionalSize, onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
+import {
+  approximateIntroOutroAdditionalSize,
+  makeStudioTaskFilesAvailable,
+  onVideoStudioEnded,
+  safeCleanupStudioTMPFiles
+} from '@server/lib/video-studio.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFull } from '@server/types/models/index.js'
@@ -36,6 +41,8 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
 
   const payload = job.data as VideoStudioEditionPayload
 
+  const taskFiles = pick(payload, [ 'tasks', 'taskFilesStaged' ])
+
   // Inner functions (processTask, buildFFmpegEdition...) inherit these tags without having to inject them
   const run = () =>
     logger.withContext([ payload.videoUUID ], async () => {
@@ -50,56 +57,58 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
         if (!video) {
           logger.info('Can\'t process job %d, video does not exist.', job.id)
 
-          await safeCleanupStudioTMPFiles(payload.tasks)
+          await safeCleanupStudioTMPFiles(taskFiles)
           return undefined
         }
 
-        await checkUserQuotaOrThrow(video, payload)
+        const editionResultPath = await makeStudioTaskFilesAvailable(taskFiles, async tasks => {
+          await checkUserQuotaOrThrow(video, tasks)
 
-        await video.reload()
+          await video.reload()
 
-        const editionResultPath = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({
-          videoPath: originalVideoFilePath,
-          separatedAudioPath
-        }) => {
-          let tmpInputFilePath: string
-          let outputPath: string
+          return VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({
+            videoPath: originalVideoFilePath,
+            separatedAudioPath
+          }) => {
+            let tmpInputFilePath: string
+            let outputPath: string
 
-          for (const task of payload.tasks) {
-            const outputFilename = buildUUID() + extname(originalVideoFilePath)
-            outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
+            for (const task of tasks) {
+              const outputFilename = buildUUID() + extname(originalVideoFilePath)
+              outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
 
-            await processTask({
-              videoInputPath: tmpInputFilePath ?? originalVideoFilePath,
+              await processTask({
+                videoInputPath: tmpInputFilePath ?? originalVideoFilePath,
 
-              separatedAudioInputPath: tmpInputFilePath
-                ? undefined
-                : separatedAudioPath,
+                separatedAudioInputPath: tmpInputFilePath
+                  ? undefined
+                  : separatedAudioPath,
 
-              inputFileMutexReleaser,
+                inputFileMutexReleaser,
 
-              video,
-              outputPath,
-              task,
+                video,
+                outputPath,
+                task,
 
-              abortSignal
-            })
+                abortSignal
+              })
 
-            if (tmpInputFilePath) await remove(tmpInputFilePath)
+              if (tmpInputFilePath) await remove(tmpInputFilePath)
 
-            // For the next iteration
-            tmpInputFilePath = outputPath
-            inputFileMutexReleaser = undefined
-          }
+              // For the next iteration
+              tmpInputFilePath = outputPath
+              inputFileMutexReleaser = undefined
+            }
 
-          return outputPath
+            return outputPath
+          })
         })
 
         logger.info('Video edition ended for video %s.', video.uuid)
 
-        await onVideoStudioEnded({ video, editionResultPath, tasks: payload.tasks })
+        await onVideoStudioEnded({ video, editionResultPath, taskFiles })
       } catch (err) {
-        await safeCleanupStudioTMPFiles(payload.tasks)
+        await safeCleanupStudioTMPFiles(taskFiles)
 
         try {
           await sequelizeTypescript.transaction(async transaction => {
@@ -221,12 +230,12 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
 
 // ---------------------------------------------------------------------------
 
-async function checkUserQuotaOrThrow (video: MVideoFull, payload: VideoStudioEditionPayload) {
+async function checkUserQuotaOrThrow (video: MVideoFull, tasks: VideoStudioTaskPayload[]) {
   const user = await UserModel.loadByVideoId(video.id)
 
-  const filePathFinder = (i: number) => (payload.tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
+  const filePathFinder = (i: number) => (tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
 
-  const additionalBytes = await approximateIntroOutroAdditionalSize(video, payload.tasks, filePathFinder)
+  const additionalBytes = await approximateIntroOutroAdditionalSize(video, tasks, filePathFinder)
   if (await isUserQuotaValid({ channelUserId: user.id, uploadSize: additionalBytes }) === false) {
     throw new Error('Quota exceeded for this user to edit the video')
   }

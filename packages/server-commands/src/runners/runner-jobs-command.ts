@@ -364,6 +364,8 @@ export class RunnerJobsCommand extends AbstractCommand {
       path: pathname,
 
       fields: pick(options, [ 'jobToken', 'runnerToken' ]),
+      // Object storage proxy responses have no content type
+      responseType: 'arraybuffer',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

@@ -3,7 +3,6 @@ import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { isVideoFilesObjectStorageEnabled } from '@server/lib/object-storage/config.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
@@ -32,7 +31,7 @@ export function buildNextVideoState (currentState?: VideoStateType) {
   if (
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
     currentState !== VideoState.TO_MOVE_TO_FILE_SYSTEM &&
-    isVideoFilesObjectStorageEnabled()
+    CONFIG.OBJECT_STORAGE.ENABLED
   ) {
     return VideoState.TO_MOVE_TO_EXTERNAL_STORAGE
   }

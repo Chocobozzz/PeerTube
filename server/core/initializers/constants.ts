@@ -403,6 +403,7 @@ export const SCHEDULER_INTERVALS_MS = {
   UPDATE_VIDEOS: 60000, // 1 minute
   UPDATE_TOKEN_SESSION: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
+  YOUTUBE_DL_COOKIES_WATCH: 60000, // 1 minute
   GEO_IP_UPDATE: 60000 * 60 * 24, // 1 day
   VIDEO_STATS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
   CHECK_PLUGINS: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
@@ -1068,6 +1069,8 @@ export const OBJECT_STORAGE_PROXY_PATHS = {
 export const STATIC_MAX_AGE = {
   SERVER: '2h',
   LAZY_SERVER: '1 year',
+  // Redirections to the object storage cache: short, so clients don't keep them if the objects are removed (object storage disabled...)
+  LAZY_SERVER_REDIRECT: '1 day',
   CLIENT: '30d'
 }
 
@@ -1139,22 +1142,23 @@ export const EMBED_SIZE = {
 }
 
 // Sub folders of cache directory
+// Remote files are cached in DIRECTORY, or in the object storage cache bucket under OBJECT_STORAGE_PREFIX (relative to its prefix)
 export const FILES_CACHE = {
   AVATARS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'avatars'),
-    MAX_AGE: 1000 * 3600 * 24 * 7 // 7 days
+    OBJECT_STORAGE_PREFIX: 'avatars/'
   },
   THUMBNAILS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'thumbnails'),
-    MAX_AGE: 1000 * 3600 * 3 // 3 hours
+    OBJECT_STORAGE_PREFIX: 'thumbnails/'
   },
   STORYBOARDS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'storyboards'),
-    MAX_AGE: 1000 * 3600 * 24 // 24 hours
+    OBJECT_STORAGE_PREFIX: 'storyboards/'
   },
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
-    MAX_AGE: 1000 * 3600 * 3 // 3 hours
+    OBJECT_STORAGE_PREFIX: 'video-captions/'
   }
 }
 
@@ -1233,10 +1237,18 @@ export const OBJECT_STORAGE_STAGING = {
       maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
     },
 
-    // Resumable user archive imports (see uploadx.ts): the completed archive stays there until its import job processed it,
-    // so any process can run the job. Removed by the job, this is only a safety net for lost jobs
     USER_IMPORTS: {
       prefix: 'user-imports/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    },
+
+    VIDEO_IMPORTS: {
+      prefix: 'video-imports/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    },
+
+    VIDEO_STUDIO: {
+      prefix: 'video-studio/',
       maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
     }
   }
@@ -1416,7 +1428,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
 
     JOB_ATTEMPTS['email'] = 1
 
-    FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
     MEMOIZE_TTL.OVERVIEWS_SAMPLE = 3000
     MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD = 3000
     MEMOIZE_TTL.EMBED_HTML = 1
@@ -1455,6 +1466,8 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.WATCHED_WORDS_SUBSCRIPTIONS_SYNC = 5000
 
     RUNNER_JOBS.LAST_CONTACT_UPDATE_INTERVAL = 2000
+
+    SCHEDULER_INTERVALS_MS.YOUTUBE_DL_COOKIES_WATCH = 2000
 
     JWT_TOKEN_USER_EXPORT_FILE_LIFETIME = '2 seconds'
   }
