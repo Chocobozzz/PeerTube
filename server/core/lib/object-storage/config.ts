@@ -14,7 +14,8 @@ export const objectStorageSections = [
   'torrents',
   'uploads',
   'staging',
-  'cache'
+  'cache',
+  'redundancy'
 ] as const
 export type ObjectStorageSection = (typeof objectStorageSections)[number]
 
@@ -23,8 +24,8 @@ const prunableObjectStorageSections = objectStorageSections.filter(k => k !== 's
 export type PrunableObjectStorageSection = (typeof prunableObjectStorageSections)[number]
 
 // Common object storage type for sections that use flat filenames
-// Streaming playlists, cache and staging use custom helpers
-export type CommonObjectStorageType = Exclude<PrunableObjectStorageSection, 'streaming_playlists' | 'cache' | 'staging'>
+// Streaming playlists, redundancy, cache and staging use custom helpers
+export type CommonObjectStorageType = Exclude<PrunableObjectStorageSection, 'streaming_playlists' | 'redundancy' | 'cache' | 'staging'>
 
 export function getObjectStorageFileConfig (type: ObjectStorageSection): BucketInfo {
   switch (type) {
@@ -67,6 +68,9 @@ export function getObjectStorageFileConfig (type: ObjectStorageSection): BucketI
 
     case 'cache':
       return CONFIG.OBJECT_STORAGE.CACHE
+
+    case 'redundancy':
+      return CONFIG.OBJECT_STORAGE.REDUNDANCY
   }
 }
 

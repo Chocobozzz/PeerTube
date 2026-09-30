@@ -22,6 +22,7 @@ export class VideoCounters {
     ttl: VIEW_LIFETIME.VIEW
   })
 
+  // Only contains views and downloads already known by Redis, as the inbox of another process may have received them
   private readonly remoteViewsCache = new LRUCache<string, boolean>({
     max: 50_000,
     ttl: REMOTE_VIEWS.DEDUPLICATION_LIFETIME
@@ -31,11 +32,6 @@ export class VideoCounters {
   private readonly remoteDownloadsCache = new LRUCache<string, boolean>({
     max: 50_000,
     ttl: REMOTE_DOWNLOADS.DEDUPLICATION_LIFETIME
-  })
-
-  private readonly remoteDownloadsPerHostCache = new LRUCache<string, number>({
-    max: 10_000,
-    ttl: REMOTE_DOWNLOADS.RATE_LIMIT_LIFETIME
   })
 
   // ---------------------------------------------------------------------------
@@ -74,13 +70,14 @@ export class VideoCounters {
     logger.debug('Adding remote view to video %s.', video.uuid, { viewerId })
 
     if (viewerId) {
-      if (this.remoteViewsCache.has(viewerId)) {
+      const isNew = !this.remoteViewsCache.has(viewerId) && await Redis.Instance.markRemoteViewAsProcessed(viewerId)
+      this.remoteViewsCache.set(viewerId, true)
+
+      if (!isNew) {
         logger.debug('Ignoring already processed remote view %s.', viewerId)
 
         return false
       }
-
-      this.remoteViewsCache.set(viewerId, true)
     }
 
     await this.addView(video)
@@ -154,17 +151,20 @@ export class VideoCounters {
 
     logger.debug('Adding remote download to video %s.', video.uuid, { downloadId })
 
-    if (this.remoteDownloadsCache.has(downloadId)) {
+    const isNew = !this.remoteDownloadsCache.has(downloadId) && await Redis.Instance.markRemoteDownloadAsProcessed(downloadId)
+    this.remoteDownloadsCache.set(downloadId, true)
+
+    if (!isNew) {
       logger.debug('Ignoring already processed remote download %s.', downloadId)
 
       return false
     }
-    this.remoteDownloadsCache.set(downloadId, true)
 
     // We can't check a remote instance really downloaded the video, so at least limit how much it can inflate our counter
-    const rateLimitKey = new URL(byActorUrl).host.toLowerCase() + '-' + video.id
-    const hostDownloads = (this.remoteDownloadsPerHostCache.get(rateLimitKey) || 0) + 1
-    this.remoteDownloadsPerHostCache.set(rateLimitKey, hostDownloads, { noUpdateTTL: true })
+    const hostDownloads = await Redis.Instance.incrementRemoteDownloadsOfHost({
+      host: new URL(byActorUrl).host.toLowerCase(),
+      videoId: video.id
+    })
 
     if (hostDownloads > REMOTE_DOWNLOADS.MAX_PER_HOST_PER_VIDEO) {
       logger.warn('Too many remote downloads of video %s sent by %s, ignoring.', video.uuid, byActorUrl)

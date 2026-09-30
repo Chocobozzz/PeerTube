@@ -62,7 +62,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1145
+export const LAST_MIGRATION_VERSION = 1150
 
 // ---------------------------------------------------------------------------
 
@@ -340,7 +340,9 @@ export const JOB_PRIORITY = {
   REQUIRED_TRANSCODING: 100,
   OPTIONAL_TRANSCODING: 10000,
   VIDEO_STUDIO: 150,
-  TRANSCRIPTION: 200
+  TRANSCRIPTION: 200,
+  // After the torrent creation of new videos, that have no priority
+  TORRENT_TRACKERS_UPDATE: 1000
 }
 
 export const JOB_REMOVAL_OPTIONS = {
@@ -373,6 +375,15 @@ export const RUNNER_JOBS = {
 // ---------------------------------------------------------------------------
 
 export const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
+
+export const INBOX_CONCURRENCY = {
+  VIEWS_AND_DOWNLOADS: 10,
+  // Most of the time is spent fetching remote objects, but keep it low not to use all the database connections (5 by default)
+  OTHERS: 5
+}
+
+export const INBOX_WAITING_SYNC_THROTTLE_MS = 1000
+
 export const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
 
 export const AP_CLEANER = {
@@ -392,6 +403,8 @@ export const REQUEST_TIMEOUTS = {
 export const SHUTDOWN_TIMEOUTS = {
   // Time we let in flight HTTP requests complete before destroying their sockets
   HTTP_CONNECTIONS: 2000, // 2 seconds
+  // Time we let the inbox process the activities it already received on server shutdown
+  INBOX_DRAIN: 4000, // 4 seconds
   // Time we let the whole graceful shutdown complete before exiting anyway
   GLOBAL: 8000 // 8 seconds
 }
@@ -628,14 +641,14 @@ export const STATS_LIFETIME = {
 }
 
 export const REMOTE_DOWNLOADS = {
-  DEDUPLICATION_LIFETIME: 60000 * 60 * 24, // 24 hours
+  DEDUPLICATION_LIFETIME: 60000 * 60, // 1 hour
   RATE_LIMIT_LIFETIME: 60000 * 60, // 1 hour
   // Max downloads of a specific video we accept from a specific instance in RATE_LIMIT_LIFETIME
   MAX_PER_HOST_PER_VIDEO: 500
 }
 
 export const REMOTE_VIEWS = {
-  DEDUPLICATION_LIFETIME: 60000 * 60 * 24 // 24 hours
+  DEDUPLICATION_LIFETIME: 60000 * 60 // 1 hour
 }
 
 export const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100

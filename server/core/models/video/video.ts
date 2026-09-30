@@ -37,7 +37,7 @@ import {
   removeWebVideoObjectStorage
 } from '@server/lib/object-storage/index.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
-import { getHLSDirectory, getHLSRedundancyDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
@@ -704,7 +704,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       name: 'videoId',
       allowNull: false
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true // To destroy files too
   })
   declare VideoStreamingPlaylists: Awaited<VideoStreamingPlaylistModel>[]
 
@@ -2247,13 +2248,10 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   async removeAllStreamingPlaylistFiles (options: {
     playlist: MStreamingPlaylist
     deleteCaptionPlaylists?: boolean // default true
-    isRedundancy?: boolean // default false
   }) {
-    const { playlist, deleteCaptionPlaylists = true, isRedundancy = false } = options
+    const { playlist, deleteCaptionPlaylists = true } = options
 
-    const directoryPath = isRedundancy
-      ? getHLSRedundancyDirectory(this)
-      : getHLSDirectory(this)
+    const directoryPath = getHLSDirectory(this)
 
     const removeDirectory = async () => {
       try {
@@ -2272,46 +2270,42 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
     }
 
-    if (isRedundancy) {
-      await removeDirectory()
-    } else {
-      if (deleteCaptionPlaylists) {
-        const captions = await VideoCaptionModel.listVideoCaptions(playlist.videoId)
+    if (deleteCaptionPlaylists) {
+      const captions = await VideoCaptionModel.listVideoCaptions(playlist.videoId)
 
-        // Remove playlist files associated to captions
-        for (const caption of captions) {
-          try {
-            await caption.removeCaptionPlaylist()
-            await caption.save()
-          } catch (err) {
-            logger.error(
-              `Cannot remove caption ${caption.filename} (${caption.language}) playlist files associated to video ${this.name}`,
-              { video: this }
-            )
-          }
+      // Remove playlist files associated to captions
+      for (const caption of captions) {
+        try {
+          await caption.removeCaptionPlaylist()
+          await caption.save()
+        } catch (err) {
+          logger.error(
+            `Cannot remove caption ${caption.filename} (${caption.language}) playlist files associated to video ${this.name}`,
+            { video: this }
+          )
         }
-      }
-
-      await removeDirectory()
-
-      const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
-      playlistWithFiles.Video = this
-
-      if (!Array.isArray(playlistWithFiles.VideoFiles)) {
-        playlistWithFiles.VideoFiles = await playlistWithFiles.$get('VideoFiles')
-      }
-
-      // Remove physical files and torrents
-      await Promise.all(
-        playlistWithFiles.VideoFiles.map(file => file.removeTorrent())
-      )
-
-      if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-        await removeHLSObjectStorage(this)
       }
     }
 
-    logger.debug(`Removing files associated to streaming playlist of video ${this.url}`, { playlist, isRedundancy })
+    await removeDirectory()
+
+    const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
+    playlistWithFiles.Video = this
+
+    if (!Array.isArray(playlistWithFiles.VideoFiles)) {
+      playlistWithFiles.VideoFiles = await playlistWithFiles.$get('VideoFiles')
+    }
+
+    // Remove physical files and torrents
+    await Promise.all(
+      playlistWithFiles.VideoFiles.map(file => file.removeTorrent())
+    )
+
+    if (playlist.storage === FileStorage.OBJECT_STORAGE) {
+      await removeHLSObjectStorage(this)
+    }
+
+    logger.debug(`Removing files associated to streaming playlist of video ${this.url}`, { playlist })
   }
 
   async removeStreamingPlaylistVideoFile (streamingPlaylist: MStreamingPlaylist, videoFile: MVideoFile) {

@@ -216,7 +216,10 @@ const secondaryProcessJobTypes = new Set<JobType>([
   'activitypub-http-unicast',
 
   // The import reads the staged archive and creates videos, avatars, etc. in object storage
-  'import-user-archive'
+  'import-user-archive',
+
+  // Redundancy files are in object storage
+  'video-redundancy'
 ])
 
 const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcription', 'video-studio-edition', 'generate-video-storyboard' ]
@@ -379,20 +382,21 @@ class JobQueue {
 
   // ---------------------------------------------------------------------------
 
+  // Stop processing jobs, but this process can still create jobs
   // Use force: true to not wait for active jobs to complete (they will be retried when detected as stalled)
-  async terminate (options: { force: boolean }) {
+  async closeWorkers (options: { force: boolean }) {
+    await Promise.all(Object.values(this.workers).map(worker => worker.close(options.force)))
+  }
+
+  // Cannot create jobs anymore
+  async closeQueues () {
     // Every job type has a queue and a queue event
-    // But a secondary process only has a worker for a subset of the job types
     const promises = Object.keys(this.queues)
       .map(handlerName => {
-        const worker: Worker = this.workers[handlerName]
         const queue: Queue = this.queues[handlerName]
         const queueEvent: QueueEvents = this.queueEvents[handlerName]
 
         return Promise.all([
-          worker
-            ? worker.close(options.force)
-            : undefined,
           queue.close(),
           queueEvent.close()
         ])

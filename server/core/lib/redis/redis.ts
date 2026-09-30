@@ -1,9 +1,13 @@
+import { ActivityType } from '@peertube/peertube-models'
 import { RedisOptions } from 'ioredis'
+import * as actorFollowHealth from './actor-follow-health.js'
+import { ActorFollowHealthKind } from './actor-follow-health.js'
 import * as apUnavailability from './ap-unavailability.js'
 import * as contactForm from './contact-form.js'
 import * as emailVerification from './email-verification.js'
 import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
+import * as inboxStats from './inbox-stats.js'
 import * as locks from './locks.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
@@ -19,6 +23,7 @@ import {
   quitRedisClient,
   StatKind
 } from './redis-client.js'
+import * as remoteVideoStats from './remote-video-stats.js'
 import * as sharedInstanceConfig from './shared-instance-config.js'
 import * as twoFactorRequest from './two-factor-request.js'
 import * as uploadSession from './upload-session.js'
@@ -177,6 +182,20 @@ export class Redis {
     return videoStatCounters.deleteVideoStatCounters(videoId, hour)
   }
 
+  /* ************ Remote video stats de-duplication ************ */
+
+  markRemoteViewAsProcessed (viewId: string) {
+    return remoteVideoStats.markRemoteViewAsProcessed(viewId)
+  }
+
+  markRemoteDownloadAsProcessed (downloadId: string) {
+    return remoteVideoStats.markRemoteDownloadAsProcessed(downloadId)
+  }
+
+  incrementRemoteDownloadsOfHost (options: { host: string, videoId: number }) {
+    return remoteVideoStats.incrementRemoteDownloadsOfHost(options)
+  }
+
   /* ************ Local video stats buffer ************ */
 
   incrementLocalVideoStatCounter (kind: StatKind, videoId: number) {
@@ -317,10 +336,54 @@ export class Redis {
     return locks.releaseLock(lockKey, token)
   }
 
+  /* ************ Actor follow health ************ */
+
+  addActorFollowHealth (kind: ActorFollowHealthKind, values: string[]) {
+    return actorFollowHealth.addActorFollowHealth(kind, values)
+  }
+
+  popActorFollowHealth (kind: ActorFollowHealthKind) {
+    return actorFollowHealth.popActorFollowHealth(kind)
+  }
+
+  setLastBadInboxes (inboxes: string[]) {
+    return actorFollowHealth.setLastBadInboxes(inboxes)
+  }
+
+  areLastBadInboxes (inboxes: string[]) {
+    return actorFollowHealth.areLastBadInboxes(inboxes)
+  }
+
   /* ************ AP resource unavailability ************ */
 
   addAPUnavailability (url: string) {
     return apUnavailability.addAPUnavailability(url)
+  }
+
+  /* ************ ActivityPub inbox stats ************ */
+
+  resetInboxStats (startedAt: number) {
+    return inboxStats.resetInboxStats(startedAt)
+  }
+
+  addInboxProcessed (type: ActivityType, success: boolean) {
+    return inboxStats.addInboxProcessed(type, success)
+  }
+
+  getInboxStats () {
+    return inboxStats.getInboxStats()
+  }
+
+  setInboxWaiting (processId: string, waiting: number) {
+    return inboxStats.setInboxWaiting(processId, waiting)
+  }
+
+  removeInboxWaiting (processId: string) {
+    return inboxStats.removeInboxWaiting(processId)
+  }
+
+  getInboxWaiting (staleAfterMs: number) {
+    return inboxStats.getInboxWaiting(staleAfterMs)
   }
 
   /* ************ Keys generation ************ */

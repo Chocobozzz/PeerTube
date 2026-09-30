@@ -61,7 +61,7 @@ async function getOrCreateAPActor (
     }
 
     const creator = new APActorCreator(actorObject, ownerActor)
-    actor = await retryTransactionWrapper(() => creator.create())
+    actor = await retryTransactionWrapper(() => creator.create(), { retryUniqueConstraintViolation: true })
     created = true
     accountPlaylistsUrl = actorObject.playlists
   }

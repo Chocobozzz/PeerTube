@@ -1,4 +1,5 @@
-import { VideosRedundancyStrategy } from '@peertube/peertube-models'
+import { FileStorage, type FileStorageType, VideosRedundancyStrategy } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import {
@@ -7,8 +8,11 @@ import {
   MVideoFile,
   MVideoRedundancyStreamingPlaylistVideo,
   MVideoRedundancyVideo,
+  MVideoUUID,
   MVideoWithAllFiles
 } from '@server/types/models/index.js'
+import { pathExists, remove } from 'fs-extra/esm'
+import { readdir, stat } from 'fs/promises'
 import { join } from 'path'
 import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -17,7 +21,15 @@ import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.j
 import { sendCreateCacheFile, sendUpdateCacheFile } from '../activitypub/send/index.js'
 import { getLocalVideoCacheStreamingPlaylistActivityPubUrl } from '../activitypub/url.js'
 import { getOrCreateAPVideo } from '../activitypub/videos/index.js'
+import { acquireDistributedLock } from '../distributed-lock.js'
 import { downloadPlaylistSegments } from '../hls.js'
+import {
+  buildRedundancyObjectBaseUrl,
+  listRedundancyObjectVideos,
+  removeRedundancyObjects,
+  storeRedundancyDirectory
+} from '../object-storage/redundancy.js'
+import { getHLSRedundancyDirectory } from '../paths.js'
 import { removeVideoRedundancy } from '../redundancy.js'
 import { generateHLSRedundancyUrl } from '../video-urls.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
@@ -88,6 +100,8 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     await this.extendsLocalExpiration()
 
     await this.purgeRemoteExpired()
+
+    await this.removeOrphanFiles()
   }
 
   static get Instance () {
@@ -178,6 +192,53 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     }
   }
 
+  private async removeOrphanFiles () {
+    try {
+      if (CONFIG.OBJECT_STORAGE.ENABLED) await this.removeOrphanFromObjectStorage()
+      else await this.removeOrphanFromFS()
+    } catch (err) {
+      logger.error('Cannot remove orphan redundancy files.', { err })
+    }
+  }
+
+  private async removeOrphanFromFS () {
+    if (!await pathExists(DIRECTORIES.HLS_REDUNDANCY)) return
+
+    const duplicatedUUIDs = await VideoRedundancyModel.listVideoUUIDOfDuplicated(FileStorage.FILE_SYSTEM)
+
+    for (const videoUUID of await readdir(DIRECTORIES.HLS_REDUNDANCY)) {
+      if (duplicatedUUIDs.has(videoUUID)) continue
+
+      const directory = join(DIRECTORIES.HLS_REDUNDANCY, videoUUID)
+
+      // The redundancy may be in creation: its files are downloaded before the creation of its model
+      const { mtimeMs } = await stat(directory)
+      if (Date.now() - mtimeMs < VIDEO_IMPORT_TIMEOUT) continue
+
+      logger.info('Removing orphan redundancy directory %s.', directory)
+
+      await remove(directory)
+    }
+  }
+
+  private async removeOrphanFromObjectStorage () {
+    const objectVideos = await listRedundancyObjectVideos()
+    if (objectVideos.size === 0) return
+
+    const duplicatedUUIDs = await VideoRedundancyModel.listVideoUUIDOfDuplicated(FileStorage.OBJECT_STORAGE)
+
+    for (const [ videoUUID, lastModified ] of objectVideos) {
+      if (duplicatedUUIDs.has(videoUUID)) continue
+
+      // Pending redundancy creation, skip it
+      if (Date.now() - lastModified.getTime() < VIDEO_IMPORT_TIMEOUT) continue
+
+      logger.info('Removing orphan redundancy objects of video %s.', videoUUID)
+
+      await removeRedundancyObjects({ uuid: videoUUID })
+    }
+  }
+
   private async createVideoRedundancies (data: CandidateToDuplicate) {
     const video = await this.loadAndRefreshVideo(data.video.url)
 
@@ -187,16 +248,22 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
       return
     }
 
-    // Only HLS player supports redundancy, so do not duplicate web videos
-    for (const streamingPlaylist of data.streamingPlaylists) {
-      const existingRedundancy = await VideoRedundancyModel.loadLocalByStreamingPlaylistId(streamingPlaylist.id)
-      if (existingRedundancy) {
-        await this.extendsRedundancy(existingRedundancy)
+    const releaseLock = await acquireDistributedLock('video-redundancy-' + video.uuid)
 
-        continue
+    try {
+      // Only HLS player supports redundancy, so do not duplicate web videos
+      for (const streamingPlaylist of data.streamingPlaylists) {
+        const existingRedundancy = await VideoRedundancyModel.loadLocalByStreamingPlaylistId(streamingPlaylist.id)
+        if (existingRedundancy) {
+          await this.extendsRedundancy(existingRedundancy)
+
+          continue
+        }
+
+        await this.createStreamingPlaylistRedundancy(data.redundancy, video, streamingPlaylist)
       }
-
-      await this.createStreamingPlaylistRedundancy(data.redundancy, video, streamingPlaylist)
+    } finally {
+      await releaseLock()
     }
   }
 
@@ -218,27 +285,87 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
 
     logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, strategy)
 
-    const destDirectory = join(DIRECTORIES.HLS_REDUNDANCY, video.uuid)
     const masterPlaylistUrl = playlist.getMasterPlaylistUrl(video)
 
     const maxSizeKB = this.getTotalFileSizes([ playlist ]) / 1000
     const toleranceKB = maxSizeKB + ((5 * maxSizeKB) / 100) // 5% more tolerance
-    await downloadPlaylistSegments(masterPlaylistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT, toleranceKB)
 
-    const createdModel: MVideoRedundancyStreamingPlaylistVideo = await VideoRedundancyModel.create({
-      expiresOn,
-      url: getLocalVideoCacheStreamingPlaylistActivityPubUrl(video, playlist),
-      fileUrl: generateHLSRedundancyUrl(video, playlistArg),
-      strategy,
-      videoStreamingPlaylistId: playlist.id,
-      actorId: serverActor.id
-    })
+    const { storage, fileUrl } = CONFIG.OBJECT_STORAGE.ENABLED
+      ? await this.duplicateInObjectStorage({ video, masterPlaylistUrl, toleranceKB })
+      : await this.duplicateInFileSystem({ video, playlist, masterPlaylistUrl, toleranceKB })
+
+    let createdModel: MVideoRedundancyStreamingPlaylistVideo
+
+    try {
+      createdModel = await VideoRedundancyModel.create({
+        expiresOn,
+        url: getLocalVideoCacheStreamingPlaylistActivityPubUrl(video, playlist),
+        fileUrl,
+        storage,
+        strategy,
+        videoStreamingPlaylistId: playlist.id,
+        actorId: serverActor.id
+      })
+    } catch (err) {
+      await this.removeDuplicatedFiles(video, storage)
+
+      throw err
+    }
 
     createdModel.VideoStreamingPlaylist = playlist
 
     await sendCreateCacheFile(serverActor, video, createdModel)
 
     logger.info('Duplicated playlist %s -> %s.', masterPlaylistUrl, createdModel.url)
+  }
+
+  private async duplicateInFileSystem (options: {
+    video: MVideoAccountLight
+    playlist: MStreamingPlaylistFiles
+    masterPlaylistUrl: string
+    toleranceKB: number
+  }) {
+    const { video, playlist, masterPlaylistUrl, toleranceKB } = options
+
+    await downloadPlaylistSegments(masterPlaylistUrl, getHLSRedundancyDirectory(video), VIDEO_IMPORT_TIMEOUT, toleranceKB)
+
+    return { storage: FileStorage.FILE_SYSTEM, fileUrl: generateHLSRedundancyUrl(video, playlist) }
+  }
+
+  private async duplicateInObjectStorage (options: {
+    video: MVideoAccountLight
+    masterPlaylistUrl: string
+    toleranceKB: number
+  }) {
+    const { video, masterPlaylistUrl, toleranceKB } = options
+
+    const tmpDirectory = join(CONFIG.STORAGE.TMP_DIR, 'redundancy-' + buildUUID())
+
+    try {
+      await downloadPlaylistSegments(masterPlaylistUrl, tmpDirectory, VIDEO_IMPORT_TIMEOUT, toleranceKB)
+
+      try {
+        await storeRedundancyDirectory(video, tmpDirectory)
+      } catch (err) {
+        // Some files may have been uploaded
+        await this.removeDuplicatedFiles(video, FileStorage.OBJECT_STORAGE)
+
+        throw err
+      }
+    } finally {
+      await remove(tmpDirectory)
+    }
+
+    return { storage: FileStorage.OBJECT_STORAGE, fileUrl: buildRedundancyObjectBaseUrl(video) }
+  }
+
+  private async removeDuplicatedFiles (video: MVideoUUID, storage: FileStorageType) {
+    try {
+      if (storage === FileStorage.OBJECT_STORAGE) await removeRedundancyObjects(video)
+      else await remove(getHLSRedundancyDirectory(video))
+    } catch (err) {
+      logger.error('Cannot remove files of failed redundancy of video %s.', video.uuid, { err })
+    }
   }
 
   private async extendsExpirationOf (redundancy: MVideoRedundancyVideo, expiresAfterMs: number) {

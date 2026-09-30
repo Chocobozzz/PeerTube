@@ -9,7 +9,7 @@
  *    - runs every job worker
  *    - sends its configuration to secondary servers
  *  - `secondary` is an "help" process for the primary:
- *    - serves the API, the ActivityPub endpoints and the files in object storage, and tracks views
+ *    - serves the API, the ActivityPub endpoints (including the inbox) and the files in object storage, and tracks views
  *    - answers 421 to the endpoints only the primary can serve (see the `primaryOnly` middleware), so the reverse proxy replays them on it
  *    - consumes an allow list of job types
  *    - never runs migrations
@@ -175,6 +175,7 @@ import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove
 import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { StatsManager } from '@server/lib/stat-manager.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { initUploadxStorages } from '@server/lib/uploadx.js'
 import { ApplicationModel, clearServerActorCache } from '@server/models/application/application.js'
@@ -203,6 +204,7 @@ import { installPrimary, installSecondary } from './core/initializers/installer.
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
 import { Emailer } from './core/lib/emailer.js'
 import { resetFilesCacheOfOtherStorage } from './core/lib/files-cache/reset-files-cache.js'
+import { removeRedundanciesOfOtherStorage } from './core/lib/redundancy.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
 import { HorizontalScalabilityStorage } from './core/lib/horizontal-scalability-storage.js'
 import { ClientHtml } from './core/lib/html/client-html.js'
@@ -481,6 +483,9 @@ async function startApplication () {
 
   // Primary only
   if (!secondary) {
+    // The inbox stats of every process are counted since the start of the primary
+    await StatsManager.Instance.resetInboxStats()
+
     // Before serving lazy static files
     try {
       await resetFilesCacheOfOtherStorage()
@@ -490,6 +495,9 @@ async function startApplication () {
 
     updateStreamingPlaylistsInfohashesIfNeeded()
       .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
+
+    removeRedundanciesOfOtherStorage()
+      .catch(err => logger.error('Cannot remove redundancies of the previous storage.', { err }))
 
     LiveManager.Instance.init()
     await LiveManager.Instance.listenForSessionStopRequests()
