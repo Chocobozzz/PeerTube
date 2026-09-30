@@ -303,6 +303,8 @@ async function updateMe (req: express.Request, res: express.Response) {
     'autoPlayNextVideoPlaylist',
     'videosHistoryEnabled',
     'videoLanguages',
+    'browseVideosCategories',
+    'browseVideosLive',
     'language',
     'theme',
     'noInstanceConfigWarningModal',

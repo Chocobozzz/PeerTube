@@ -20,7 +20,9 @@ export const UserLocalStorageKeys = {
   THEME: 'theme',
   LAST_ACTIVE_THEME: 'last_active_theme',
 
-  VIDEO_LANGUAGES: 'video_languages'
+  VIDEO_LANGUAGES: 'video_languages',
+  BROWSE_VIDEOS_CATEGORIES: 'browse_videos_categories',
+  BROWSE_VIDEOS_LIVE: 'browse_videos_live'
 }
 
 export const UserTokenLocalStorageKeys = {

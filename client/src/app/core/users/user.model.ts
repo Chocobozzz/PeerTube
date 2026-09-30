@@ -37,6 +37,8 @@ export class User implements UserServerModel {
 
   videosHistoryEnabled: boolean
   videoLanguages: string[]
+  browseVideosCategories: number[]
+  browseVideosLive: 'true' | 'false' | 'both'
 
   role: {
     id: UserRoleType
