@@ -12,3 +12,9 @@ my-select-languages {
   width: 340px;
   max-width: 100%;
 }
+
+.pt-label-container .group-label {
+  display: inline;
+
+  @include margin-right(0.25rem);
+}
