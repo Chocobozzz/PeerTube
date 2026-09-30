@@ -9,6 +9,7 @@ import {
   UserRole,
   VideoChannelCollaboratorState,
   VideoPlaylistType,
+  type BooleanBothQuery,
   type NSFWPolicyType,
   type UserAdminFlagType,
   type UserNewFeatureInfoType,
@@ -57,6 +58,8 @@ import {
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
+  isUserBrowseVideosCategories,
+  isUserBrowseVideosLive,
   isUserEmailVerifiedValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
@@ -356,6 +359,18 @@ export class UserModel extends SequelizeModel<UserModel> {
   @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
   @Column(DataType.ARRAY(DataType.STRING))
   declare videoLanguages: string[]
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserBrowseVideosCategories', value => throwIfNotValid(value, isUserBrowseVideosCategories, 'browse videos categories'))
+  @Column(DataType.ARRAY(DataType.INTEGER))
+  declare browseVideosCategories: number[]
+
+  @AllowNull(false)
+  @Default('both')
+  @Is('UserBrowseVideosLive', value => throwIfNotValid(value, isUserBrowseVideosLive, 'browse videos live'))
+  @Column(DataType.STRING)
+  declare browseVideosLive: BooleanBothQuery
 
   @AllowNull(false)
   @Default(UserAdminFlag.NONE)
@@ -1102,6 +1117,8 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideo: this.autoPlayNextVideo,
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
+      browseVideosCategories: this.browseVideosCategories,
+      browseVideosLive: this.browseVideosLive,
 
       language: this.language,
 

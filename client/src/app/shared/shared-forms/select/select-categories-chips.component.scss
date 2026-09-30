@@ -1,0 +1,109 @@
+@use "_variables" as *;
+
+.category-heading {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 560px;
+}
+
+.category-chip {
+  cursor: pointer;
+  margin: 0;
+
+  input {
+    height: 1px;
+    opacity: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  span {
+    background: pvar(--input-bg);
+    border: 1px solid pvar(--input-border-color);
+    border-radius: 999px;
+    color: pvar(--input-fg);
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    padding: 0.45rem 0.75rem;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  }
+
+  &:hover:not(.disabled) span {
+    background: pvar(--bg-secondary-400);
+    border-color: pvar(--fg-300);
+  }
+
+  &.selected span {
+    background: pvar(--input-check-active-bg);
+    border-color: pvar(--input-check-active-bg);
+    color: pvar(--input-check-active-fg);
+  }
+
+  input:focus-visible + span {
+    box-shadow: $focus-box-shadow-form;
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.all-categories {
+  background: pvar(--input-bg);
+  border: 1px solid pvar(--input-border-color);
+  border-radius: 999px;
+  color: pvar(--input-fg);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  padding: 0.45rem 0.75rem;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+
+  &:hover:not(:disabled) {
+    background: pvar(--bg-secondary-400);
+    border-color: pvar(--fg-300);
+  }
+
+  &:focus-visible {
+    box-shadow: $focus-box-shadow-form;
+    outline: 0;
+  }
+
+  &.selected {
+    background: pvar(--input-check-active-bg);
+    border-color: pvar(--input-check-active-bg);
+    color: pvar(--input-check-active-fg);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.clear-categories {
+  background: transparent;
+  border: 0;
+  color: pvar(--primary);
+  cursor: pointer;
+  font: inherit;
+  padding: 0.4rem 0;
+  text-decoration: underline;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+}

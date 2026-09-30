@@ -72,6 +72,7 @@ export class VideosListComponent implements OnInit {
   readonly hideScopeFilter = input(false, { transform: booleanAttribute })
 
   readonly loadUserVideoPreferences = input(false, { transform: booleanAttribute })
+  readonly loadUserBrowseVideosPreferences = input(false, { transform: booleanAttribute })
 
   readonly displayAsRow = input(false, { transform: booleanAttribute })
   readonly displayVideoActions = input(true, { transform: booleanAttribute })
@@ -285,6 +286,11 @@ export class VideosListComponent implements OnInit {
     this.filters.setNSFWPolicy(user)
 
     this.filters.setDefaultLanguages(user.videoLanguages)
+
+    if (this.loadUserBrowseVideosPreferences()) {
+      this.filters.setDefaultCategories(user.browseVideosCategories)
+      this.filters.setDefaultLive(user.browseVideosLive)
+    }
   }
 
   private reloadSyndicationItems () {

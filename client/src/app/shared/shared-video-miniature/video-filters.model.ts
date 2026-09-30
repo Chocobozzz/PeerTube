@@ -116,6 +116,14 @@ export class VideoFilters {
     this.defaultValues.set('languageOneOf', languages)
   }
 
+  setDefaultCategories (categories: number[]) {
+    this.defaultValues.set('categoryOneOf', categories)
+  }
+
+  setDefaultLive (live: BooleanBothQuery) {
+    this.defaultValues.set('live', live)
+  }
+
   setNSFWPolicy (user: Pick<User, 'nsfwPolicy' | 'nsfwFlagsDisplayed' | 'nsfwFlagsHidden' | 'nsfwFlagsWarned' | 'nsfwFlagsBlurred'>) {
     this.nsfwPolicy = user.nsfwPolicy
     this.nsfwFlagsDisplayed = user.nsfwFlagsDisplayed
@@ -177,6 +185,8 @@ export class VideoFilters {
     const cloned = new VideoFilters(this.defaultValues.get('sort'), this.defaultValues.get('scope'), this.hiddenFields)
 
     cloned.setDefaultLanguages(this.defaultValues.get('languageOneOf'))
+    cloned.setDefaultCategories(this.defaultValues.get('categoryOneOf'))
+    cloned.setDefaultLive(this.defaultValues.get('live'))
 
     cloned.setNSFWPolicy({
       nsfwPolicy: this.nsfwPolicy,

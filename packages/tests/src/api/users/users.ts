@@ -362,13 +362,17 @@ describe('Test users', function () {
       await server.users.updateMe({
         token: userToken,
         language: 'fr',
-        videoLanguages: [ 'fr', 'en' ]
+        videoLanguages: [ 'fr', 'en' ],
+        browseVideosCategories: [ 13, 15 ],
+        browseVideosLive: 'false'
       })
 
       {
         const user = await server.users.getMyInfo({ token: userToken })
         expect(user.language).to.equal('fr')
         expect(user.videoLanguages).to.deep.equal([ 'fr', 'en' ])
+        expect(user.browseVideosCategories).to.deep.equal([ 13, 15 ])
+        expect(user.browseVideosLive).to.equal('false')
       }
     })
   })

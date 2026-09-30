@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
+import { BooleanBothQuery, NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
 import { getBoolOrDefault, getNumberOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
 import { OAuthUserTokens, UserLocalStorageKeys } from '@root-helpers/users'
@@ -91,6 +91,7 @@ export class UserLocalStorageService {
 
   getUserInfo () {
     let videoLanguages: string[]
+    let browseVideosCategories: number[]
 
     try {
       const languagesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
@@ -100,6 +101,16 @@ export class UserLocalStorageService {
     } catch (err) {
       videoLanguages = null
       logger.error('Cannot parse desired video languages from localStorage.', err)
+    }
+
+    try {
+      const categoriesString = this.localStorageService.getItem(UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES)
+      browseVideosCategories = categoriesString && categoriesString !== 'undefined'
+        ? JSON.parse(categoriesString)
+        : null
+    } catch (err) {
+      browseVideosCategories = null
+      logger.error('Cannot parse desired browse videos categories from localStorage.', err)
     }
 
     const htmlConfig = this.server.getHTMLConfig()
@@ -118,6 +129,8 @@ export class UserLocalStorageService {
       p2pEnabled: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.P2P_ENABLED), defaultP2PEnabled),
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,
+      browseVideosCategories,
+      browseVideosLive: this.localStorageService.getItem<BooleanBothQuery>(UserLocalStorageKeys.BROWSE_VIDEOS_LIVE) || 'both',
 
       autoPlayVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO), defaultAutoPlay),
       autoPlayNextVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO), false),
@@ -137,10 +150,12 @@ export class UserLocalStorageService {
       autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
       autoPlayNextVideoPlaylist: UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       theme: UserLocalStorageKeys.THEME,
-      videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
+      videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES,
+      browseVideosCategories: UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES,
+      browseVideosLive: UserLocalStorageKeys.BROWSE_VIDEOS_LIVE
     }
 
-    const obj: [string, string | boolean | number | string[]][] = objectKeysTyped(localStorageKeys)
+    const obj: [string, string | boolean | number | string[] | number[]][] = objectKeysTyped(localStorageKeys)
       .filter(key => key in profile)
       .map(key => [ localStorageKeys[key], profile[key] ])
 
@@ -173,6 +188,8 @@ export class UserLocalStorageService {
     this.localStorageService.removeItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST)
     this.localStorageService.removeItem(UserLocalStorageKeys.THEME)
     this.localStorageService.removeItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
+    this.localStorageService.removeItem(UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES)
+    this.localStorageService.removeItem(UserLocalStorageKeys.BROWSE_VIDEOS_LIVE)
   }
 
   listenUserInfoChange () {
@@ -187,7 +204,9 @@ export class UserLocalStorageService {
       UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       UserLocalStorageKeys.THEME,
-      UserLocalStorageKeys.VIDEO_LANGUAGES
+      UserLocalStorageKeys.VIDEO_LANGUAGES,
+      UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES,
+      UserLocalStorageKeys.BROWSE_VIDEOS_LIVE
     ]).pipe(
       throttleTime(200),
       filter(() => this.authService.isLoggedIn() !== true)
