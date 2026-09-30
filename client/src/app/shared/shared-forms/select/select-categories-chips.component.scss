@@ -4,8 +4,8 @@
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem;
-  margin-bottom: .65rem;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
 }
 
 .category-chips {
@@ -66,9 +66,9 @@
   color: pvar(--input-fg);
   cursor: pointer;
   font: inherit;
-  font-size: .875rem;
+  font-size: 0.875rem;
   line-height: 1.2;
-  padding: .45rem .75rem;
+  padding: 0.45rem 0.75rem;
   transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 
   &:hover:not(:disabled) {
@@ -89,7 +89,7 @@
 
   &:disabled {
     cursor: not-allowed;
-    opacity: .6;
+    opacity: 0.6;
   }
 }
 
@@ -99,11 +99,11 @@
   color: pvar(--primary);
   cursor: pointer;
   font: inherit;
-  padding: .4rem 0;
+  padding: 0.4rem 0;
   text-decoration: underline;
 
   &:disabled {
     cursor: default;
-    opacity: .6;
+    opacity: 0.6;
   }
 }
