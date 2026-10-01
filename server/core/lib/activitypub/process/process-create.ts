@@ -22,6 +22,7 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model.j
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../types/models/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { createOrUpdateCacheFile } from '../cache-file.js'
 import { createOrUpdateLocalVideoViewer } from '../local-video-viewer.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
@@ -49,8 +50,10 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
     // Comments will be fetched from videos
     if (options.fromFetch) return
 
-    return retryTransactionWrapper(() => {
-      return processCreateVideoComment(activity as ActivityCreate<VideoCommentObject | string>, activityObject, byActor, false)
+    return runWithAPObjectLock(activityObject.id, () => {
+      return retryTransactionWrapper(() => {
+        return processCreateVideoComment(activity as ActivityCreate<VideoCommentObject | string>, activityObject, byActor, false)
+      })
     })
   }
 
@@ -62,8 +65,10 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
   }
 
   if (activityType === 'CacheFile') {
-    return retryTransactionWrapper(() => {
-      return processCreateCacheFile(activity as ActivityCreate<CacheFileObject | string>, activityObject, byActor)
+    return runWithAPObjectLock(activityObject.id, () => {
+      return retryTransactionWrapper(() => {
+        return processCreateCacheFile(activity as ActivityCreate<CacheFileObject | string>, activityObject, byActor)
+      })
     })
   }
 

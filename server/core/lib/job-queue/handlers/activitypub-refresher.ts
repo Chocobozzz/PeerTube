@@ -1,7 +1,7 @@
 import { RefreshPayload } from '@peertube/peertube-models'
 import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlists/index.js'
 import { refreshVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
-import { loadVideoByUrl, VideoLoadByUrlType } from '@server/lib/model-loaders/index.js'
+import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import { Job } from 'bullmq'
 import { createLogger } from '../../../helpers/logger.js'
 import { ActorModel } from '../../../models/actor/actor.js'
@@ -29,27 +29,19 @@ export {
 // ---------------------------------------------------------------------------
 
 async function refreshVideo (videoUrl: string) {
-  const fetchType = 'full'
   const syncParam = { rates: true, shares: true, comments: true }
 
-  const videoFromDatabase = await loadVideoByUrl(videoUrl, fetchType)
+  const videoFromDatabase = await loadVideoByUrl(videoUrl, 'full')
   if (videoFromDatabase) {
-    const refreshOptions = {
-      video: videoFromDatabase,
-      fetchedType: fetchType as VideoLoadByUrlType,
-      syncParam
-    }
-
-    await refreshVideoIfNeeded(refreshOptions)
+    await refreshVideoIfNeeded({ video: videoFromDatabase, syncParam })
   }
 }
 
 async function refreshActor (actorUrl: string) {
-  const fetchType = 'all'
   const actor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorUrl)
 
   if (actor) {
-    await refreshActorIfNeeded({ actor, fetchedType: fetchType })
+    await refreshActorIfNeeded({ actor })
   }
 }
 

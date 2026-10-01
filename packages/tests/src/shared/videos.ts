@@ -522,16 +522,20 @@ export async function checkThumbnails (options: {
     await testImageGeneratedByFFmpeg({ name: thumbnail.filename, url: entityThumbnail.fileUrl })
   }
 
+  // Deprecated static paths are null when the file is stored in object storage
   // oxlint-disable-next-line @typescript-eslint/no-deprecated
-  await testImageGeneratedByFFmpeg({
-    name: thumbnails.find(t => t.width === 280 && t.height === 157).filename,
-    // oxlint-disable-next-line @typescript-eslint/no-deprecated
-    url: server.url + entity.thumbnailPath
-  })
+  if (entity.thumbnailPath) {
+    await testImageGeneratedByFFmpeg({
+      name: thumbnails.find(t => t.width === 280 && t.height === 157).filename,
+      // oxlint-disable-next-line @typescript-eslint/no-deprecated
+      url: server.url + entity.thumbnailPath
+    })
+  }
 
   const preview = thumbnails.find(t => t.width === 1920 && t.height === 1080)
 
-  if (video && preview) {
+  // oxlint-disable-next-line @typescript-eslint/no-deprecated
+  if (video?.previewPath && preview) {
     // oxlint-disable-next-line @typescript-eslint/no-deprecated
     await testImageGeneratedByFFmpeg({
       name: preview.filename,

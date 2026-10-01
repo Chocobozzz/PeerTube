@@ -38,14 +38,13 @@ import {
 } from '@server/lib/object-storage/index.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
 import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
-import { buildLocalTrackerUrls } from '@server/lib/tracker-urls.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { buildLocalTrackerUrls } from '@server/lib/tracker-urls.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
-import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
 import { FindOptions, Includeable, Op, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
@@ -131,6 +130,7 @@ import {
   buildSQLAttributes,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
+  bumpUpdatedAt,
   doesExist,
   getVideoSort,
   isOutdated,
@@ -601,6 +601,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @AllowNull(true)
   @Column
   declare inputFileUpdatedAt: Date
+
+  // To skip updates older than the stored state
+  @AllowNull(true)
+  @Column
+  declare remoteUpdatedAt: Date
 
   @CreatedAt
   declare createdAt: Date
@@ -1116,7 +1121,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       ]
     }
 
-    return Bluebird.all([
+    return Promise.all([
       VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findAll(query),
       VideoModel.sequelize.query<{ total: string }>(rawCountQuery, { type: QueryTypes.SELECT })
     ]).then(([ rows, totals ]) => {
@@ -2359,6 +2364,15 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   setAsRefreshed (transaction?: Transaction) {
     return setAsUpdated({ sequelize: this.sequelize, table: 'video', id: this.id, transaction })
+  }
+
+  async bumpUpdatedAt (transaction: Transaction) {
+    this.updatedAt = await bumpUpdatedAt({
+      sequelize: this.sequelize,
+      table: 'video',
+      id: this.id,
+      transaction
+    })
   }
 
   // ---------------------------------------------------------------------------

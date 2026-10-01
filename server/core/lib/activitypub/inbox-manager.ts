@@ -10,7 +10,6 @@ const logger = createLogger('ap')
 
 export class InboxManager {
   private static instance: InboxManager
-  // Activities about the same object can be processed at the same time, by this process or another one
   private readonly inboxQueue: PQueue
   private readonly viewsAndDownloadsInboxQueue: PQueue
 
@@ -19,6 +18,9 @@ export class InboxManager {
   // Throttled Redis updates of our waiting messages count, only one at a time
   private waitingSync: Promise<unknown>
   private waitingSyncTimer: NodeJS.Timeout
+  // Last count sent to Redis
+  private publishedWaiting = 0
+  private immediateSyncRequested = false
 
   private readonly waitingSyncInterval: NodeJS.Timeout
   private stopped = false
@@ -28,8 +30,8 @@ export class InboxManager {
     this.viewsAndDownloadsInboxQueue = new PQueue({ concurrency: INBOX_CONCURRENCY.VIEWS_AND_DOWNLOADS })
 
     for (const queue of this.getQueues()) {
-      queue.on('add', () => this.requestMessagesWaitingStatsSync())
-      queue.on('next', () => this.requestMessagesWaitingStatsSync())
+      queue.on('add', () => this.onQueueChange())
+      queue.on('next', () => this.onQueueChange())
     }
 
     // Other processes ignore our count if we don't refresh it
@@ -102,6 +104,15 @@ export class InboxManager {
     return [ this.inboxQueue, this.viewsAndDownloadsInboxQueue ]
   }
 
+  private onQueueChange () {
+    // Never report an idle process while it has messages (would break tests that wait for pending AP activities)
+    if (this.publishedWaiting === 0 && this.countMessagesWaiting() !== 0) {
+      return this.syncMessagesWaitingStats({ immediate: true })
+    }
+
+    this.requestMessagesWaitingStatsSync()
+  }
+
   private requestMessagesWaitingStatsSync () {
     if (this.stopped || this.waitingSyncTimer !== undefined) return
 
@@ -111,16 +122,32 @@ export class InboxManager {
     }, INBOX_WAITING_SYNC_THROTTLE_MS)
   }
 
-  private syncMessagesWaitingStats () {
+  private syncMessagesWaitingStats (options: {
+    immediate?: boolean
+  } = {}) {
     if (this.stopped) return
 
     // Don't let an older count overwrite a newer one
-    if (this.waitingSync !== undefined) return this.requestMessagesWaitingStatsSync()
+    if (this.waitingSync !== undefined) {
+      if (options.immediate) this.immediateSyncRequested = true
+      else this.requestMessagesWaitingStatsSync()
 
-    this.waitingSync = Redis.Instance.setInboxWaiting(currentProcessId, this.countMessagesWaiting())
+      return
+    }
+
+    const waiting = this.countMessagesWaiting()
+    this.publishedWaiting = waiting
+
+    this.waitingSync = Redis.Instance.setInboxWaiting(currentProcessId, waiting)
       .catch(err => logger.error('Cannot update the inbox messages waiting count.', { err }))
       .finally(() => {
         this.waitingSync = undefined
+
+        // A message arrived while we were writing an older count
+        if (this.immediateSyncRequested) {
+          this.immediateSyncRequested = false
+          this.syncMessagesWaitingStats()
+        }
       })
   }
 

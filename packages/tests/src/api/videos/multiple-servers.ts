@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { maxBy, wait } from '@peertube/peertube-core-utils'
+import { maxBy, promiseMap, wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCommentPolicy, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
@@ -18,7 +18,6 @@ import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
 import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
 import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
-import Bluebird from 'bluebird'
 import { expect } from 'chai'
 import request from 'supertest'
 
@@ -85,7 +84,7 @@ describe('Test multiple servers', function () {
       // All servers should have this video
       let publishedAt: string = null
 
-      await Bluebird.map(servers, async server => {
+      await promiseMap(servers, async server => {
         const { data } = await server.videos.list()
         expect(data).to.be.an('array')
         expect(data.length).to.equal(1)
@@ -175,7 +174,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       // All servers should have this video
-      await Bluebird.map(servers, async server => {
+      await promiseMap(servers, async server => {
         const checkAttributes = {
           name: 'my super name for server 2',
           category: 4,
@@ -273,7 +272,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       // All servers should have this video
-      await Bluebird.map(servers, async server => {
+      await promiseMap(servers, async server => {
         const { data } = await server.videos.list()
 
         expect(data).to.be.an('array')
@@ -661,7 +660,7 @@ describe('Test multiple servers', function () {
     it('Should have the video 3 updated on each server', async function () {
       this.timeout(30000)
 
-      await Bluebird.map(servers, async server => {
+      await promiseMap(servers, async server => {
         const { data } = await server.videos.list()
 
         const videoUpdated = data.find(video => video.name === 'my super video updated')
@@ -1079,7 +1078,7 @@ describe('Test multiple servers', function () {
 
       await waitJobs(servers)
 
-      await Bluebird.map(servers, async server => {
+      await promiseMap(servers, async server => {
         const { data } = await server.videos.list()
         const video = data.find(v => v.name === 'minimum parameters')
 

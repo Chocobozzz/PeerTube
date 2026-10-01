@@ -143,9 +143,6 @@ importers:
       bencode:
         specifier: ^4.0.1
         version: 4.0.1
-      bluebird:
-        specifier: ^3.7.2
-        version: 3.7.2
       bullmq:
         specifier: ^6.3.4
         version: 6.3.6(ioredis@6.0.0)(pg@8.23.0)
@@ -378,9 +375,6 @@ importers:
       '@types/bencode':
         specifier: ^4.0.0
         version: 4.0.0
-      '@types/bluebird':
-        specifier: ^3.5.42
-        version: 3.5.42
       '@types/body-parser':
         specifier: ^1.19.6
         version: 1.19.6
@@ -4085,9 +4079,6 @@ packages:
   '@types/bittorrent-protocol@3.1.7':
     resolution: {integrity: sha512-RGOjJndPEuMDP7563SE+s7Yu3ctibhPizVKcFaDYiv6hmckNgdSXMqhABhb48wn2XWIRnj9nF66ryLTb2VuKZQ==}
 
-  '@types/bluebird@3.5.42':
-    resolution: {integrity: sha512-Jhy+MWRlro6UjVi578V/4ZGNfeCOcNCp0YaFNIUGFKlImowqwb1O/22wDVk3FDGMLqxdpOV3qQHD5fPEH4hK6A==}
-
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
 
@@ -5302,9 +5293,6 @@ packages:
 
   block-iterator@1.1.2:
     resolution: {integrity: sha512-yAHUP44v2K25xLPdrgVTgwtuQctlullzjczu9CoUZom5AP3g4p1R1+aWHjS1GHG9JtcSUVUnbEPiuXiW5YZ24w==}
-
-  bluebird@3.7.2:
-    resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
 
   bn.js@4.12.5:
     resolution: {integrity: sha512-3aRg6/JxfffFD+OlOjOFR3Vo79l39ooBTFucxx+MT3dhCtzn3EmiUPQo+6/OZuI2jbXi3YKgmiTFBgChQMwIRQ==}
@@ -14691,8 +14679,6 @@ snapshots:
     dependencies:
       '@types/node': 22.14.1
 
-  '@types/bluebird@3.5.42': {}
-
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
@@ -16215,8 +16201,6 @@ snapshots:
     optional: true
 
   block-iterator@1.1.2: {}
-
-  bluebird@3.7.2: {}
 
   bn.js@4.12.5: {}
 

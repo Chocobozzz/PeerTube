@@ -3,9 +3,9 @@ import { createLogger } from '@server/helpers/logger.js'
 import { CachePromiseFactory } from '@server/helpers/promise-cache.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
-import { ActorLoadByUrlType } from '@server/lib/model-loaders/index.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { MActorFull, MActorOutdated, MActorUrl } from '@server/types/models/index.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { fetchRemoteActor } from './shared/index.js'
 import { APActorUpdater } from './updater.js'
 import { getUrlFromWebfinger } from './webfinger.js'
@@ -16,7 +16,6 @@ type RefreshResult<T> = Promise<{ actor: T | MActorFull, refreshed: boolean }>
 
 type RefreshOptions<T> = {
   actor: T
-  fetchedType: Extract<ActorLoadByUrlType, 'all'> | 'partial'
 }
 
 // ---------------------------------------------------------------------------
@@ -46,46 +45,50 @@ export function scheduleActorRefreshIfNeeded (actor: MActorOutdated & MActorUrl)
 // ---------------------------------------------------------------------------
 
 async function doRefresh<T extends MActorFull | MActorOutdated> (options: RefreshOptions<T>): RefreshResult<MActorFull> {
-  const { actor: actorArg, fetchedType } = options
+  const { actor: actorArg } = options
 
-  // We need more attributes
-  const actor = fetchedType === 'all'
-    ? actorArg as MActorFull
-    : await ActorModel.loadAndPopulateAccountAndChannel(actorArg.id)
+  return logger.withContext([ actorArg.url ], () => {
+    return runWithAPObjectLock(actorArg.url, () => refreshInLock(actorArg))
+  })
+}
 
-  return logger.withContext([ actor.url ], async () => {
-    logger.info('Refreshing actor %s.', actor.url)
+async function refreshInLock (actorArg: MActorFull | MActorOutdated): RefreshResult<MActorFull> {
+  // Refresh and fetch more attributes
+  const actor = await ActorModel.loadAndPopulateAccountAndChannel(actorArg.id)
+  if (!actor) return { actor: undefined, refreshed: false }
+  if (!actor.isOutdated()) return { actor, refreshed: false }
 
-    try {
-      const actorUrl = await getActorUrl(actor)
-      const { actorObject } = await fetchRemoteActor(actorUrl)
+  logger.info('Refreshing actor %s.', actor.url)
 
-      if (actorObject === undefined) {
-        logger.info('Cannot fetch remote actor %s in refresh actor.', actorUrl)
-        return { actor, refreshed: false }
-      }
+  try {
+    const actorUrl = await getActorUrl(actor)
+    const { actorObject } = await fetchRemoteActor(actorUrl)
 
-      const updater = new APActorUpdater(actorObject, actor)
-      await updater.update()
-
-      return { refreshed: true, actor }
-    } catch (err) {
-      const statusCode = (err as PeerTubeRequestError).statusCode
-
-      if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
-        logger.info('Deleting actor %s because there is a 404/410 in refresh actor.', actor.url)
-
-        actor.Account
-          ? await actor.Account.destroy()
-          : await actor.VideoChannel.destroy()
-
-        return { actor: undefined, refreshed: false }
-      }
-
-      logger.info('Cannot refresh actor %s.', actor.url, { err })
+    if (actorObject === undefined) {
+      logger.info('Cannot fetch remote actor %s in refresh actor.', actorUrl)
       return { actor, refreshed: false }
     }
-  })
+
+    const updater = new APActorUpdater(actorObject, actor)
+    await updater.update()
+
+    return { refreshed: true, actor }
+  } catch (err) {
+    const statusCode = (err as PeerTubeRequestError).statusCode
+
+    if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
+      logger.info('Deleting actor %s because there is a 404/410 in refresh actor.', actor.url)
+
+      actor.Account
+        ? await actor.Account.destroy()
+        : await actor.VideoChannel.destroy()
+
+      return { actor: undefined, refreshed: false }
+    }
+
+    logger.info('Cannot refresh actor %s.', actor.url, { err })
+    return { actor, refreshed: false }
+  }
 }
 
 function getActorUrl (actor: MActorFull) {

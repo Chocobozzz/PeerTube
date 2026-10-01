@@ -19,12 +19,21 @@ const MAX_RETRY_DELAY_MS = 250
  *
  * Returns a releaser that can safely be called multiple times, resolved when the lock is released
  */
-export async function acquireDistributedLock (lockKey: string): Promise<() => Promise<void>> {
+export async function acquireDistributedLock (lockKey: string, options: {
+  timeoutMs?: number
+} = {}): Promise<() => Promise<void>> {
   const token = buildUUID()
+  const deadline = options.timeoutMs !== undefined
+    ? Date.now() + options.timeoutMs
+    : undefined
 
   let retryDelay = MIN_RETRY_DELAY_MS
 
   while (!await Redis.Instance.tryAcquireLock(lockKey, token, LOCK_TTL_MS)) {
+    if (deadline !== undefined && Date.now() > deadline) {
+      throw new Error(`Cannot acquire distributed lock ${lockKey} in ${options.timeoutMs}ms: it may be a deadlock`)
+    }
+
     await wait(retryDelay)
 
     retryDelay = Math.min(retryDelay * 2, MAX_RETRY_DELAY_MS)

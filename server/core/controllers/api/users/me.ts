@@ -82,7 +82,7 @@ meRouter.put(
   '/me',
   authenticate,
   asyncMiddleware(usersUpdateMeValidator),
-  asyncRetryTransactionMiddleware(updateMe)
+  asyncMiddleware(updateMe)
 )
 
 meRouter.post(
@@ -338,26 +338,41 @@ async function updateMe (req: express.Request, res: express.Response) {
     }
   }
 
-  await sequelizeTypescript.transaction(async t => {
-    if (body.password !== undefined) {
-      await OAuthTokenModel.deleteUserToken({
-        userId: user.id,
-        accessTokenException: res.locals.oauth.token.accessToken,
-        transaction: t
+  const changedKeys = user.changed() || []
+
+  await retryTransactionWrapper(async () => {
+    try {
+      await sequelizeTypescript.transaction(async t => {
+        if (body.password !== undefined) {
+          await OAuthTokenModel.deleteUserToken({
+            userId: user.id,
+            accessTokenException: res.locals.oauth.token.accessToken,
+            transaction: t
+          })
+        }
+
+        await user.save({ transaction: t })
+
+        if (body.displayName === undefined && body.description === undefined) return
+
+        const userAccount = await AccountModel.load(user.Account.id, t)
+
+        if (body.displayName !== undefined) userAccount.name = body.displayName
+        if (body.description !== undefined) userAccount.description = body.description
+        await userAccount.save({ transaction: t })
+
+        await sendUpdateActor(userAccount, t)
       })
+    } catch (err) {
+      // The password has been hashed by the save hook, restore the clear one so it is hashed only once
+      if (body.password !== undefined) user.password = body.password
+
+      for (const key of changedKeys) {
+        user.changed(key as keyof UserModel, true)
+      }
+
+      throw err
     }
-
-    await user.save({ transaction: t })
-
-    if (body.displayName === undefined && body.description === undefined) return
-
-    const userAccount = await AccountModel.load(user.Account.id, t)
-
-    if (body.displayName !== undefined) userAccount.name = body.displayName
-    if (body.description !== undefined) userAccount.description = body.description
-    await userAccount.save({ transaction: t })
-
-    await sendUpdateActor(userAccount, t)
   })
 
   if (sendVerificationEmail === true) {

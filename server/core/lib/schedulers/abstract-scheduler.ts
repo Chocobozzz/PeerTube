@@ -1,4 +1,3 @@
-import Bluebird from 'bluebird'
 import { randomInt } from 'node:crypto'
 import { createLogger } from '../../helpers/logger.js'
 
@@ -79,5 +78,5 @@ export abstract class AbstractScheduler {
     }
   }
 
-  protected abstract internalExecute (): Promise<any> | Bluebird<any>
+  protected abstract internalExecute (): Promise<any>
 }

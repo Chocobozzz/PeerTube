@@ -19,7 +19,7 @@ import {
   cleanupTests,
   createSecondaryServer,
   createSingleServer,
-  makeDeleteRequest,
+  makeGetRequest,
   ObjectStorageCommand,
   PeerTubeServer,
   setAccessTokensToServers,
@@ -643,9 +643,9 @@ describe('Test the write endpoints of a secondary server process', function () {
 
   describe('Endpoints owned by the primary', function () {
     it('Should not serve the endpoints writing process state', async function () {
-      await makeDeleteRequest({
+      await makeGetRequest({
         url: secondary.url,
-        path: '/api/v1/server/following/' + primary.host,
+        path: '/api/v1/server/logs',
         token: primary.accessToken,
         expectedStatus: HttpStatusCode.MISDIRECTED_REQUEST_421
       })

@@ -1,5 +1,6 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { buildNonDuplicatedVideoAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
@@ -137,51 +138,55 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
 
     const inputFileUpdatedAt = new Date()
 
-    const video = await sequelizeTypescript.transaction(async transaction => {
-      const video = await VideoModel.loadFull(res.locals.videoFull.id, transaction)
+    const video = await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async transaction => {
+        const video = await VideoModel.loadFull(res.locals.videoFull.id, transaction)
 
-      oldWebVideoFiles = video.VideoFiles
-      oldStreamingPlaylists = video.VideoStreamingPlaylists
+        oldWebVideoFiles = video.VideoFiles
+        oldStreamingPlaylists = video.VideoStreamingPlaylists
 
-      for (const file of video.VideoFiles) {
-        await file.destroy({ transaction })
-      }
-      for (const playlist of oldStreamingPlaylists) {
-        await playlist.destroy({ transaction })
-      }
+        for (const file of video.VideoFiles) {
+          await file.destroy({ transaction })
+        }
+        for (const playlist of oldStreamingPlaylists) {
+          await playlist.destroy({ transaction })
+        }
 
-      videoFile.videoId = video.id
-      await videoFile.save({ transaction })
+        // The instance may have been saved by a rolled back attempt
+        videoFile.isNewRecord = true
+        videoFile.videoId = video.id
+        await videoFile.save({ transaction })
 
-      video.VideoFiles = [ videoFile ]
-      video.VideoStreamingPlaylists = []
+        video.VideoFiles = [ videoFile ]
+        video.VideoStreamingPlaylists = []
 
-      video.state = buildNextVideoState()
-      video.duration = uploadFile.duration
-      video.inputFileUpdatedAt = inputFileUpdatedAt
-      video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
-      await video.save({ transaction })
+        video.state = buildNextVideoState()
+        video.duration = uploadFile.duration
+        video.inputFileUpdatedAt = inputFileUpdatedAt
+        video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
+        await video.save({ transaction })
 
-      await autoBlacklistVideoIfNeeded({
-        video,
-        user,
-        // The name and the description of the video did not change, so its automatic tags are still up to date
-        holdIfAutoTagPolicy: false,
-        isRemote: false,
-        isNew: false,
-        isNewFile: true,
-        transaction
+        await autoBlacklistVideoIfNeeded({
+          video,
+          user,
+          // The name and the description of the video did not change, so its automatic tags are still up to date
+          holdIfAutoTagPolicy: false,
+          isRemote: false,
+          isNew: false,
+          isNewFile: true,
+          transaction
+        })
+
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
+          user,
+          channel: video.VideoChannel,
+          video,
+          transaction
+        })
+
+        return video
       })
-
-      await VideoChannelActivityModel.addVideoActivity({
-        action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
-        user,
-        channel: video.VideoChannel,
-        video,
-        transaction
-      })
-
-      return video
     })
 
     await removeOldFiles({ video, files: oldWebVideoFiles, playlists: oldStreamingPlaylists })

@@ -206,6 +206,10 @@ describe('Test video redundancy in object storage', function () {
       const [ baseUrl ] = await waitForRedundancyBaseUrls(server1, 1)
       expect(baseUrl).to.equal(server1.url + '/static/redundancy/hls/' + video.uuid)
 
+      // Ensure the redundancy is federated before the next test removes it, so the Undo can't overtake the Create
+      await waitJobs([ server1, server2 ])
+      await waitForRedundancyBaseUrls(server2, 1)
+
       expect(await pathExists(join(server1.getDirectoryPath('redundancy/hls'), video.uuid))).to.be.true
     })
 

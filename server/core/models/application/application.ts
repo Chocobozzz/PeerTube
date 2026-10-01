@@ -1,7 +1,7 @@
-import { hasSameMembers } from '@peertube/peertube-core-utils'
 import { CONFIG } from '@server/initializers/config.js'
-import { LOCAL_TRACKER_URLS_KEYWORD } from '@server/lib/tracker-urls.js'
+import { LOCAL_TRACKER_URLS_KEYWORD } from '@server/initializers/constants.js'
 import memoizee from 'memoizee'
+import { QueryTypes } from 'sequelize'
 import { AllowNull, Column, DataType, Default, DefaultScope, HasOne, IsInt, Table } from 'sequelize-typescript'
 import type { PickDeep } from 'type-fest'
 import { AccountModel } from '../account/account.js'
@@ -35,7 +35,9 @@ export function getServerAccount () {
   return getServerActor().then(actor => actor.Account)
 }
 
-type ConfigPart = PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS' | 'TRACKER.URLS'>
+type ConfigPart =
+  & PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS'>
+  & { TRACKER?: PickDeep<typeof CONFIG, 'TRACKER.URLS'>['TRACKER'] }
 
 @DefaultScope(() => ({
   include: [
@@ -96,11 +98,11 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
 
   static async trackerUrlsChanged () {
     const application = await this.load()
-    const configPart = this.lastRunConfigPart || application.configPart
 
-    const previousUrls = configPart?.TRACKER?.URLS ?? [ LOCAL_TRACKER_URLS_KEYWORD ]
+    const previousUrls = application.configPart?.TRACKER?.URLS ?? [ LOCAL_TRACKER_URLS_KEYWORD ]
 
-    return !hasSameMembers(previousUrls, CONFIG.TRACKER.URLS)
+    // The order is meaningful: the first URL of a kind is the one used as `announce` in torrent files
+    return previousUrls.join('\n') !== CONFIG.TRACKER.URLS.join('\n')
   }
 
   static async hasManualMigrationScriptRun (scriptName: string) {
@@ -122,15 +124,26 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
 
     this.lastRunConfigPart = application.configPart
 
-    application.configPart = {
+    // Tracker config is saved once the torrent files are updated
+    await this.mergeConfigPart({
       OBJECT_STORAGE: {
         STREAMING_PLAYLISTS: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
-      },
+      }
+    })
+  }
+
+  static async updateTrackerUrlsConfigPart () {
+    await this.mergeConfigPart({
       TRACKER: {
         URLS: CONFIG.TRACKER.URLS
       }
-    }
+    })
+  }
 
-    await application.save()
+  private static async mergeConfigPart (part: Partial<ConfigPart>) {
+    await ApplicationModel.sequelize.query(
+      `UPDATE "application" SET "configPart" = COALESCE("configPart", '{}'::jsonb) || CAST(:part AS jsonb)`,
+      { replacements: { part: JSON.stringify(part) }, type: QueryTypes.UPDATE }
+    )
   }
 }

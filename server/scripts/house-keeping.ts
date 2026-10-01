@@ -1,10 +1,10 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { createCommand } from '@commander-js/extra-typings'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { ActorImageModel } from '@server/models/actor/actor-image.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
-import Bluebird from 'bluebird'
 import { askConfirmation, displayPeerTubeMustBeStoppedWarning } from './shared/common.js'
 
 const program = createCommand()
@@ -68,7 +68,7 @@ async function deleteRemoteFiles () {
 
   console.log('Deleting remote thumbnails...')
 
-  await Bluebird.map(thumbnails, async thumbnail => {
+  await promiseMap(thumbnails, async thumbnail => {
     await thumbnail.removeFile()
 
     thumbnail.cached = false
@@ -79,7 +79,7 @@ async function deleteRemoteFiles () {
 
   console.log('Deleting remote avatars/banners...')
 
-  await Bluebird.map(actorImages, async actorImage => {
+  await promiseMap(actorImages, async actorImage => {
     await actorImage.removeFile()
 
     actorImage.cached = false
@@ -92,7 +92,7 @@ async function deleteRemoteFiles () {
 
   console.log('Deleting remote captions...')
 
-  await Bluebird.map(captions, async caption => {
+  await promiseMap(captions, async caption => {
     await caption.removeCaptionFile()
 
     caption.cached = false
@@ -105,7 +105,7 @@ async function deleteRemoteFiles () {
 
   console.log('Deleting remote storyboards...')
 
-  await Bluebird.map(storyboards, async storyboard => {
+  await promiseMap(storyboards, async storyboard => {
     await storyboard.removeFile()
 
     storyboard.cached = false

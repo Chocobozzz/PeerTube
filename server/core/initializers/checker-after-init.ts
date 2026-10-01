@@ -14,13 +14,12 @@ import {
   getPrunableObjectStorageLocationConflicts,
   objectStorageSections
 } from '../lib/object-storage/config.js'
-import { LOCAL_TRACKER_URLS_KEYWORD } from '../lib/tracker-urls.js'
 import { checkVideoFilesLifecycleConfig } from '../lib/video-files-lifecycle/video-files-lifecycle-config.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getConfigModule, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
-import { OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
+import { LOCAL_TRACKER_URLS_KEYWORD, OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
 
 const logger = createLogger()
 
@@ -448,7 +447,7 @@ function checkTrackerConfig () {
 
   // Web browsers block insecure websockets from an HTTPS page
   if (CONFIG.WEBSERVER.SCHEME === 'https') {
-    const insecureWS = urls.find(u => u.startsWith('ws://'))
+    const insecureWS = urls.find(u => /^ws:\/\//i.test(u))
 
     if (insecureWS) {
       throw new Error(

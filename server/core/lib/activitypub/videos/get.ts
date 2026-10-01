@@ -5,6 +5,7 @@ import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import { AutoBlacklistStatus } from '@server/lib/video-blacklist.js'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnails, MVideoWithBlacklist } from '@server/types/models/index.js'
 import { getAPId } from '../activity.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { refreshVideoIfNeeded, scheduleVideoRefreshIfNeeded } from './refresh.js'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared/index.js'
 
@@ -48,8 +49,6 @@ export async function getOrCreateAPVideo (
   return getOrCreateAPVideoInternal(options, { alreadyRetried: false })
 }
 
-// Concurrent calls for the same remote video are expected: View/Download activities are processed in parallel
-// while Create/Announce for the same video are processed sequentially
 type GetVideoContext = {
   alreadyRetried: boolean
 }
@@ -75,11 +74,7 @@ async function getOrCreateAPVideoInternal (
 
       if (allowRefresh === true && video.isOutdated()) {
         if (syncParam.refreshVideo === true) {
-          video = await refreshVideoIfNeeded({
-            video,
-            fetchedType: fetchType,
-            syncParam
-          })
+          video = await refreshVideoIfNeeded({ video, syncParam })
         } else {
           scheduleVideoRefreshIfNeeded(video)
         }
@@ -95,12 +90,23 @@ async function getOrCreateAPVideoInternal (
     if (videoObject.id !== videoUrl) return getOrCreateAPVideoInternal({ ...options, fetchType: 'full', videoObject }, context)
 
     try {
-      const creator = new APVideoCreator(videoObject)
-      const { autoBlacklistStatus, videoCreated } = await retryTransactionWrapper(() => creator.create())
+      const result = await runWithAPObjectLock(videoUrl, async () => {
+        // Created by another activity while we were waiting for the lock
+        const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
+        if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false as const }
 
-      await syncVideoExternalAttributes(videoCreated, videoObject, syncParam)
+        const creator = new APVideoCreator(videoObject)
+        const { autoBlacklistStatus, videoCreated } = await retryTransactionWrapper(() => creator.create())
 
-      return { video: videoCreated, created: true, autoBlacklistStatus }
+        return { video: videoCreated, created: true as const, autoBlacklistStatus }
+      })
+
+      if (result.created !== true) return result
+
+      // Outside the lock: crawling can take a long time
+      await syncVideoExternalAttributes(result.video, videoObject, syncParam)
+
+      return result
     } catch (err) {
       if (err.name !== 'SequelizeUniqueConstraintError') throw err
 

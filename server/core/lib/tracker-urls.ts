@@ -1,17 +1,14 @@
 import { uniqify } from '@peertube/peertube-core-utils'
 import { isWebSocketTrackerUrl } from '@server/helpers/custom-validators/urls.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { WEBSERVER } from '@server/initializers/constants.js'
-
-// Custom tracker config keyword to specify the local tracker built-in in PeerTube
-export const LOCAL_TRACKER_URLS_KEYWORD = 'local'
+import { LOCAL_TRACKER_URLS_KEYWORD, WEBSERVER } from '@server/initializers/constants.js'
 
 export function buildLocalTrackerUrls () {
   return uniqify(
     CONFIG.TRACKER.URLS.flatMap(url => {
       if (url === LOCAL_TRACKER_URLS_KEYWORD) return [ buildBuiltInTrackerHttpUrl(), buildBuiltInTrackerWebSocketUrl() ]
 
-      return [ url ]
+      return [ normalizeUrlScheme(url) ]
     })
   )
 }
@@ -27,6 +24,11 @@ export function buildLocalAnnounceList () {
 }
 
 // ---------------------------------------------------------------------------
+
+// Clients expect lower case schemes
+function normalizeUrlScheme (url: string) {
+  return url.replace(/^[a-z]+(?=:\/\/)/i, scheme => scheme.toLowerCase())
+}
 
 function buildBuiltInTrackerHttpUrl () {
   return WEBSERVER.URL + '/tracker/announce'

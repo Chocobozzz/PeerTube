@@ -19,7 +19,8 @@ import { VideoRedundancyModel } from '../../../models/redundancy/video-redundanc
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
-import { fetchAPObjectIfNeeded } from '../activity.js'
+import { fetchAPObjectIfNeeded, getAPId } from '../activity.js'
+import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { getOrCreateAPVideo, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
@@ -37,8 +38,10 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo<Act
     const objectToUndo = await fetchAPObjectIfNeeded<CacheFileObject>(activityToUndo.object)
 
     if (objectToUndo.type === 'CacheFile') {
-      return retryTransactionWrapper(() => {
-        return processUndoCacheFile(byActor, activity as ActivityUndo<ActivityCreate<CacheFileObject>>, objectToUndo)
+      return runWithAPObjectLock(objectToUndo.id, () => {
+        return retryTransactionWrapper(() => {
+          return processUndoCacheFile(byActor, activity as ActivityUndo<ActivityCreate<CacheFileObject>>, objectToUndo)
+        })
       })
     }
   }
@@ -48,7 +51,9 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo<Act
   }
 
   if (activityToUndo.type === 'Follow') {
-    return retryTransactionWrapper(() => processUndoFollow(byActor, activityToUndo))
+    return runWithAPObjectLock(buildAPFollowLockKey(byActor.url, getAPId(activityToUndo.object)), () => {
+      return retryTransactionWrapper(() => processUndoFollow(byActor, activityToUndo))
+    })
   }
 
   if (activityToUndo.type === 'Announce') {

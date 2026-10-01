@@ -40,11 +40,19 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.oldVideoChannel = this.video.VideoChannel
   }
 
-  async update (overrideTo?: string[]) {
-    return logger.withContext([ this.video.uuid, this.video.url ], () => this.runUpdate(overrideTo))
+  async update (options: {
+    overrideTo?: string[]
+    isLatestStateFromOrigin?: boolean
+  } = {}) {
+    return logger.withContext([ this.video.uuid, this.video.url ], () => this.runUpdate(options))
   }
 
-  private async runUpdate (overrideTo?: string[]) {
+  private async runUpdate (options: {
+    overrideTo?: string[]
+    isLatestStateFromOrigin?: boolean
+  }) {
+    const { overrideTo, isLatestStateFromOrigin = false } = options
+
     logger.debug(
       'Updating remote video "%s".',
       this.videoObject.uuid,
@@ -56,6 +64,18 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         videoObject: this.videoObject,
         contextUrl: this.contextUrl
       })
+      return undefined
+    }
+
+    // Use `<` date comparison because origin may send multiple activities with the same updated attribute
+    // PeerTube doesn't update the `updatedAt` video attribute on some updates (e.g., likes count)
+    if (!isLatestStateFromOrigin && this.video.remoteUpdatedAt && new Date(this.videoObject.updated) < this.video.remoteUpdatedAt) {
+      logger.info(
+        'Skip update of remote video %s with an object older than the stored one.',
+        this.videoObject.id,
+        { updated: this.videoObject.updated, remoteUpdatedAt: this.video.remoteUpdatedAt }
+      )
+
       return undefined
     }
 
@@ -164,6 +184,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.isLive = videoData.isLive
     this.video.aspectRatio = videoData.aspectRatio
     this.video.embedPrivacyPolicy = videoData.embedPrivacyPolicy
+    this.video.remoteUpdatedAt = videoData.remoteUpdatedAt
 
     // Ensures we update the updatedAt attribute, even if main attributes did not change
     this.video.changed('updatedAt', true)

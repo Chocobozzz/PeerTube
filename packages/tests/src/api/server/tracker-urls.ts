@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
-import { getAllFiles } from '@peertube/peertube-core-utils'
+import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -40,10 +40,12 @@ describe('Test tracker URLs', function () {
   }
 
   async function checkTorrents (expectedAnnounce: string[]) {
-    const files = await getFiles()
-    expect(files).to.have.length.above(1)
+    const video = await servers[0].videos.get({ id: videoUUID })
 
-    for (const file of files) {
+    expect(video.files).to.not.have.lengthOf(0)
+    expect(getHLS(video).files).to.not.have.lengthOf(0)
+
+    for (const file of getAllFiles(video)) {
       const torrent = await parseTorrentVideo(servers[0], file)
 
       expect(torrent.announce).to.deep.equal(expectedAnnounce)
@@ -146,6 +148,38 @@ describe('Test tracker URLs', function () {
       const video = await servers[1].videos.get({ id: videoUUID })
       expect(video.trackerUrls).to.include(externalWS)
       expect(video.trackerUrls).to.include(externalHttp)
+    })
+
+    it('Should update torrents when only the order of tracker URLs changes', async function () {
+      this.timeout(60000)
+
+      const { http, ws } = getBuiltInUrls()
+
+      await restart({ tracker: { urls: [ 'local', externalWS, externalHttp ] } })
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.trackerUrls).to.deep.equal([ http, ws, externalWS, externalHttp ])
+
+      await waitJobs(servers)
+
+      // The first websocket tracker is also the `announce` field of the torrent
+      await checkTorrents([ ws, externalWS, http, externalHttp ])
+    })
+
+    it('Should fallback on the built-in tracker of the origin if a remote video has no websocket tracker', async function () {
+      this.timeout(60000)
+
+      const { http, ws } = getBuiltInUrls()
+
+      await restart({ tracker: { urls: [ externalHttp ] } })
+      await waitJobs(servers)
+
+      await servers[0].videos.update({ id: videoUUID, attributes: { name: 'video updated 2' } })
+      await waitJobs(servers)
+
+      const video = await servers[1].videos.get({ id: videoUUID })
+      expect(video.trackerUrls).to.have.members([ ws, http ])
+      expect(video.trackerUrls).to.not.include(externalHttp)
     })
 
     it('Should only advertise the external tracker and keep the built-in one answering', async function () {
