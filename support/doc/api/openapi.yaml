@@ -10873,6 +10873,8 @@ components:
               description: Latest input file update. Null if the file has never been replaced since the original upload
             trackerUrls:
               type: array
+              description: |
+                WebTorrent (`ws://` or `wss://`) and BitTorrent (`http://` or `https://`) trackers of the video
               items:
                 type: string
                 format: url

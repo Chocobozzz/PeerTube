@@ -2,8 +2,8 @@ import { pick } from '@peertube/peertube-core-utils'
 import { VideoPlaylistPrivacy, VideoPlaylistType, VideoPlaylistsExportJSON } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { isActorPreferredUsernameValid } from '@server/helpers/custom-validators/activitypub/actor.js'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,

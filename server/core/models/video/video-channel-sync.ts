@@ -1,5 +1,5 @@
 import { StreamSyncState, VideoChannelSync, type StreamSyncStateType, type VideoPrivacyType } from '@peertube/peertube-models'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { isVideoChannelSyncStateValid } from '@server/helpers/custom-validators/video-channel-syncs.js'
 import { CONSTRAINTS_FIELDS, STREAM_SYNC_STATE } from '@server/initializers/constants.js'
 import { MChannelSync, MChannelSyncChannel, MChannelSyncFormattable } from '@server/types/models/index.js'

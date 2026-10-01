@@ -1,9 +1,9 @@
 import { FileStorage } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
-import { WEBSERVER } from '@server/initializers/constants.js'
 import { isObjectNotFoundError } from '@server/lib/object-storage/object-storage-helpers.js'
 import { makeCommonFileAvailable, storeCommonFile } from '@server/lib/object-storage/common-files.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
+import { buildLocalAnnounceList } from '@server/lib/tracker-urls.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { createTorrentFromWorker } from '@server/lib/worker/parent-process.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -137,7 +137,7 @@ export async function createTorrentForFileFromPath (
     // Keep the extname, it's used by the client to stream the file inside a web browser
     name: buildInfoName(video, videoFile),
     createdBy: 'PeerTube',
-    announceList: buildAnnounceList(),
+    announceList: buildLocalAnnounceList(),
     urlList: buildUrlList(video, videoFile)
   })
 
@@ -190,7 +190,7 @@ export async function updateTorrentForFileAndSave (videoOrPlaylist: MVideo | MSt
 
   const decoded = bencode.decode(torrentContent)
 
-  decoded['announce-list'] = buildAnnounceList()
+  decoded['announce-list'] = buildLocalAnnounceList()
   decoded.announce = decoded['announce-list'][0][0]
 
   decoded['url-list'] = buildUrlList(video, videoFile)
@@ -312,13 +312,6 @@ function deleteDownloadedFile (downloadedFile: { directoryPath: string, filepath
   logger.debug('Removing %s after webtorrent download.', toRemovePath)
   remove(toRemovePath)
     .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }))
-}
-
-function buildAnnounceList () {
-  return [
-    [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
-    [ WEBSERVER.URL + '/tracker/announce' ]
-  ]
 }
 
 function buildUrlList (video: MVideo, videoFile: MVideoFile) {

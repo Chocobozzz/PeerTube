@@ -377,9 +377,10 @@ export const RUNNER_JOBS = {
 export const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
 
 export const INBOX_CONCURRENCY = {
+  // Views and downloads are frequent and cheap
   VIEWS_AND_DOWNLOADS: 10,
-  // Most of the time is spent fetching remote objects, but keep it low not to use all the database connections (5 by default)
-  OTHERS: 5
+  // Most of the time is spent fetching remote objects, but keep it low because we can have many concurrent database access
+  OTHERS: 3
 }
 
 export const INBOX_WAITING_SYNC_THROTTLE_MS = 1000

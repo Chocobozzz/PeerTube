@@ -24,8 +24,8 @@ describe('Playlist thumbnail', function () {
   let withoutThumbnailE1: number
   let withoutThumbnailE2: number
 
-  let video1: number
-  let video2: number
+  let video1Server2: number
+  let video2Server2: number
 
   async function getPlaylistWithoutThumbnail (server: PeerTubeServer) {
     const body = await server.playlists.list({ start: 0, count: 10 })
@@ -55,10 +55,13 @@ describe('Playlist thumbnail', function () {
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])
 
-    video1 = (await servers[0].videos.quickUpload({ name: 'video 1' })).id
-    video2 = (await servers[0].videos.quickUpload({ name: 'video 2' })).id
+    const { uuid: uuid1 } = await servers[0].videos.quickUpload({ name: 'video 1' })
+    const { uuid: uuid2 } = await servers[0].videos.quickUpload({ name: 'video 2' })
 
     await waitJobs(servers)
+
+    video1Server2 = (await servers[1].videos.get({ id: uuid1 })).id
+    video2Server2 = (await servers[1].videos.get({ id: uuid2 })).id
   })
 
   it('Should automatically update the thumbnail when adding an element', async function () {
@@ -73,7 +76,7 @@ describe('Playlist thumbnail', function () {
 
     const added = await servers[1].playlists.addElement({
       playlistId: playlistWithoutThumbnailId,
-      attributes: { videoId: video1 }
+      attributes: { videoId: video1Server2 }
     })
     withoutThumbnailE1 = added.id
 
@@ -106,7 +109,7 @@ describe('Playlist thumbnail', function () {
 
     const added = await servers[1].playlists.addElement({
       playlistId: playlistWithThumbnailId,
-      attributes: { videoId: video1 }
+      attributes: { videoId: video1Server2 }
     })
     withThumbnailE1 = added.id
 
@@ -129,7 +132,7 @@ describe('Playlist thumbnail', function () {
 
     const added = await servers[1].playlists.addElement({
       playlistId: playlistWithoutThumbnailId,
-      attributes: { videoId: video2 }
+      attributes: { videoId: video2Server2 }
     })
     withoutThumbnailE2 = added.id
 
@@ -160,7 +163,7 @@ describe('Playlist thumbnail', function () {
 
     const added = await servers[1].playlists.addElement({
       playlistId: playlistWithThumbnailId,
-      attributes: { videoId: video2 }
+      attributes: { videoId: video2Server2 }
     })
     withThumbnailE2 = added.id
 

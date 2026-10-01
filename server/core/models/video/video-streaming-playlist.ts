@@ -377,10 +377,6 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     return 'unknown'
   }
 
-  getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
-    return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
-  }
-
   hasSameUniqueKeysThan (other: MStreamingPlaylist) {
     return this.type === other.type &&
       this.videoId === other.videoId

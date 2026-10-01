@@ -1,4 +1,6 @@
+import { hasSameMembers } from '@peertube/peertube-core-utils'
 import { CONFIG } from '@server/initializers/config.js'
+import { LOCAL_TRACKER_URLS_KEYWORD } from '@server/lib/tracker-urls.js'
 import memoizee from 'memoizee'
 import { AllowNull, Column, DataType, Default, DefaultScope, HasOne, IsInt, Table } from 'sequelize-typescript'
 import type { PickDeep } from 'type-fest'
@@ -33,7 +35,7 @@ export function getServerAccount () {
   return getServerActor().then(actor => actor.Account)
 }
 
-type ConfigPart = PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS'>
+type ConfigPart = PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS' | 'TRACKER.URLS'>
 
 @DefaultScope(() => ({
   include: [
@@ -92,6 +94,15 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     return configPart?.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL !== CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL
   }
 
+  static async trackerUrlsChanged () {
+    const application = await this.load()
+    const configPart = this.lastRunConfigPart || application.configPart
+
+    const previousUrls = configPart?.TRACKER?.URLS ?? [ LOCAL_TRACKER_URLS_KEYWORD ]
+
+    return !hasSameMembers(previousUrls, CONFIG.TRACKER.URLS)
+  }
+
   static async hasManualMigrationScriptRun (scriptName: string) {
     const application = await this.load()
 
@@ -114,6 +125,9 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     application.configPart = {
       OBJECT_STORAGE: {
         STREAMING_PLAYLISTS: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
+      },
+      TRACKER: {
+        URLS: CONFIG.TRACKER.URLS
       }
     }
 

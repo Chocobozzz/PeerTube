@@ -9,12 +9,14 @@ import {
   VideoObject,
   VideoState
 } from '@peertube/peertube-models'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { spdxToPeertubeLicence } from '@server/helpers/video.js'
+import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
-import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
+import { isTrackerUrlValid } from '../urls.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
   isVideoCommentsPolicyValid,
@@ -32,7 +34,6 @@ import {
   setValidAttributedTo,
   setValidRemoteIcon
 } from './misc.js'
-import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
 
 const logger = createLogger()
 
@@ -148,7 +149,7 @@ export function isAPVideoFileUrlMetadataObject (url: any): url is ActivityVideoF
 export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlObject {
   return isArray(url.rel) &&
     url.rel.includes('tracker') &&
-    isActivityPubUrlValid(url.href)
+    isTrackerUrlValid(url.href)
 }
 
 export function setAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {
