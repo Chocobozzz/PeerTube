@@ -12112,9 +12112,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">346</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4739907951373047958" datatype="html">
+      <trans-unit id="4739907951373047958" datatype="html" xml:space="preserve">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="new">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</target>
+        <target state="translated">πχ. 2vCore, RAM 2 GB, απευθείας σύνδεση με τον διακομιστή που νοικιάζετε κ.λπ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">347</context>
@@ -12136,9 +12136,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="589280645445401478" datatype="html">
+      <trans-unit id="589280645445401478" datatype="html" xml:space="preserve">
         <source>Default trending algorithm</source>
-        <target state="new">Default trending algorithm</target>
+        <target state="translated">Προεπιλεγμένος αλγόριθμος τάσεων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">92</context>
@@ -12152,9 +12152,9 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4046343890883004514" datatype="html">
+      <trans-unit id="4046343890883004514" datatype="html" xml:space="preserve">
         <source>Recent views</source>
-        <target state="new">Recent views</target>
+        <target state="translated">Πρόσφατες προβολές</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">97</context>
