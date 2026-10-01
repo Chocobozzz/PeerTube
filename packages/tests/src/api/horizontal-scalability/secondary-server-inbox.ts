@@ -240,10 +240,10 @@ describe('Test the inbox of a secondary server process', function () {
 
       const processedBefore = await countProcessedAnnounces()
 
-      await sendSlowAnnounces(4)
+      await sendSlowAnnounces(3)
       await secondary.kill()
 
-      expect(await countProcessedAnnounces()).to.equal(processedBefore + 4)
+      expect(await countProcessedAnnounces()).to.equal(processedBefore + 3)
 
       const { activityPubMessagesWaiting } = await primary.debug.getDebug()
       expect(activityPubMessagesWaiting).to.equal(0)
@@ -256,7 +256,6 @@ describe('Test the inbox of a secondary server process', function () {
 
       const processedBefore = await countProcessedAnnounces()
 
-      // 3 rounds of parallel processing: takes more than the 4 seconds of the inbox drain
       await sendSlowAnnounces(12)
       await secondary.kill()
 

@@ -26,7 +26,7 @@ export class AvatarImageFileCache extends AbstractImageFileCache<MActorImage> {
     try {
       const actor = await ActorModel.loadForOutdated(model.actorId)
 
-      await refreshActorIfNeeded({ actor, fetchedType: 'partial' })
+      await refreshActorIfNeeded({ actor })
     } catch (err) {
       logger.error('Error while refreshing actor for avatar image lazy fetch', { err })
     }

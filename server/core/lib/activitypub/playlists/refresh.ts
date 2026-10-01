@@ -4,6 +4,7 @@ import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { MVideoPlaylist, MVideoPlaylistOwnerDefault } from '@server/types/models/index.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { createOrUpdateVideoPlaylist } from './create-update.js'
 import { fetchRemoteVideoPlaylist } from './shared/index.js'
 
@@ -20,6 +21,7 @@ export function schedulePlaylistRefreshIfNeeded (playlist: MVideoPlaylist) {
 }
 
 export async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwnerDefault): Promise<MVideoPlaylistOwnerDefault> {
+  // Not run in the AP object lock: fetching the playlist elements and creating their videos can take a long time
   return logger.withContext([ videoPlaylist.uuid, videoPlaylist.url ], async () => {
     if (!videoPlaylist.isOutdated()) {
       logger.debug('Playlist ' + videoPlaylist.url + ' is not outdated, no need to refresh it.')
@@ -42,6 +44,8 @@ export async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylis
 
       await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: videoPlaylist.url })
 
+      await videoPlaylist.setAsRefreshed()
+
       return videoPlaylist
     } catch (err) {
       const statusCode = (err as PeerTubeRequestError).statusCode
@@ -49,7 +53,8 @@ export async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylis
       if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
         logger.info('Cannot refresh not existing playlist (404/410 error code) %s. Deleting it.', videoPlaylist.url)
 
-        await videoPlaylist.destroy()
+        // In the lock, like a Delete activity, so a concurrent update cannot recreate the playlist
+        await runWithAPObjectLock(videoPlaylist.url, () => videoPlaylist.destroy())
         return undefined
       }
 

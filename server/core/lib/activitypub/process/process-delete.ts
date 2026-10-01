@@ -19,6 +19,7 @@ import {
   MVideoAccountLightBlacklistAllFiles,
   MVideoPlaylistAccountThumbnail
 } from '../../../types/models/index.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 
 const logger = createLogger()
@@ -28,6 +29,18 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
 
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
 
+  return runWithAPObjectLock(objectUrl, () => processDelete(byActor, activity, objectUrl))
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  processDeleteActivity
+}
+
+// ---------------------------------------------------------------------------
+
+async function processDelete (byActor: MActorSignature, activity: ActivityDelete, objectUrl: string) {
   if (activity.actor === objectUrl) {
     // We need more attributes (all the account and channel)
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
@@ -76,14 +89,6 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
 
   return undefined
 }
-
-// ---------------------------------------------------------------------------
-
-export {
-  processDeleteActivity
-}
-
-// ---------------------------------------------------------------------------
 
 async function processDeleteVideo (actor: MActor, videoToDelete: MVideoAccountLightBlacklistAllFiles) {
   logger.debug('Removing remote video "%s".', videoToDelete.uuid)

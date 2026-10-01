@@ -104,7 +104,8 @@ export async function testImage (options: {
 }) {
   const { name, url } = options
 
-  const { body } = await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+  // Files may be redirected to the object storage cache
+  const { body } = await makeRawRequest({ url, redirects: 1, expectedStatus: HttpStatusCode.OK_200 })
   const fixturePath = buildAbsoluteFixturePath(name)
   const data = await readFile(fixturePath)
 

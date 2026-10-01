@@ -62,7 +62,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1150
+export const LAST_MIGRATION_VERSION = 1155
 
 // ---------------------------------------------------------------------------
 
@@ -113,6 +113,9 @@ export const WEBSERVER = {
   RTMP_BASE_LIVE_URL: '',
   RTMPS_BASE_LIVE_URL: ''
 }
+
+// Custom tracker config keyword to specify the local tracker built-in in PeerTube
+export const LOCAL_TRACKER_URLS_KEYWORD = 'local'
 
 // Sortable columns per schema
 export const SORTABLE_COLUMNS = {

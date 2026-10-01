@@ -1,3 +1,4 @@
+import { promiseMap, promiseMapSeries } from '@peertube/peertube-core-utils'
 import { FileStorage } from '@peertube/peertube-models'
 import { generateImageFilename, processImage } from '@server/helpers/image-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -10,7 +11,6 @@ import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoAP, MVideoPlaylistFull } from '@server/types/models/index.js'
-import Bluebird from 'bluebird'
 import { program } from 'commander'
 import { pathExists, remove } from 'fs-extra/esm'
 import { join } from 'path'
@@ -30,14 +30,14 @@ async function run () {
 
   const videoIds = await VideoModel.listLocalIds()
 
-  await Bluebird.map(videoIds, id => {
+  await promiseMap(videoIds, id => {
     return processVideo(id)
       .catch(err => console.error('Cannot process video %d.', id, err))
   }, { concurrency: 20 })
 
   const playlistIds = await VideoPlaylistModel.listLocalIds()
 
-  await Bluebird.map(playlistIds, id => {
+  await promiseMap(playlistIds, id => {
     return processPlaylist(id)
       .catch(err => console.error('Cannot process playlist %d.', id, err))
   }, { concurrency: 20 })
@@ -84,7 +84,7 @@ async function processThumbnails (options: {
   const oldThumbnails = [ ...entity.Thumbnails ]
 
   const generateThumbnails = (inputPath: string) => {
-    return Bluebird.mapSeries(CONFIG.THUMBNAILS.SIZES, async size => {
+    return promiseMapSeries(CONFIG.THUMBNAILS.SIZES, async size => {
       const thumbnail = new ThumbnailModel({
         filename: generateFilename(),
         height: size.height,

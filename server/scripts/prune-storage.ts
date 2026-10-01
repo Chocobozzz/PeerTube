@@ -1,5 +1,5 @@
 import { createCommand } from '@commander-js/extra-typings'
-import { uniqify, wait } from '@peertube/peertube-core-utils'
+import { promiseMap, uniqify, wait } from '@peertube/peertube-core-utils'
 import { FileStorage } from '@peertube/peertube-models'
 import { readdirNonHidden } from '@server/helpers/fs.js'
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX, USER_IMPORT_FILE_PREFIX } from '@server/initializers/constants.js'
@@ -19,7 +19,6 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
-import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
 import { stat } from 'fs/promises'
 import { basename, dirname, join } from 'path'
@@ -141,7 +140,7 @@ class ObjectStoragePruner {
     try {
       const keys = await listKeysOfPrefix('', config)
 
-      await Bluebird.map(keys, async key => {
+      await promiseMap(keys, async key => {
         // The staging and cache buckets can be shared with this section, and their files are not local files
         if (isStagingObject({ bucketName: config.BUCKET_NAME, fullKey: key })) return
         if (isCacheObject({ bucketName: config.BUCKET_NAME, fullKey: key })) return
@@ -348,7 +347,7 @@ class FSPruner {
     // Hidden files are metadata the filesystem put there (.nfs* handles...), not files PeerTube manages
     const files = await readdirNonHidden(directory)
 
-    await Bluebird.map(files, async file => {
+    await promiseMap(files, async file => {
       const filePath = join(directory, file)
 
       if (await existFun(filePath) !== true) {

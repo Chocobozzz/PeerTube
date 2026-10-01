@@ -37,5 +37,8 @@ export async function updateTorrentsTrackersIfNeeded () {
     lastId = files[files.length - 1].id
   }
 
+  // Only remember the new URLs once all jobs are created
+  await ApplicationModel.updateTrackerUrlsConfigPart()
+
   logger.info(`Created ${total} jobs to update the announce list of local torrent files.`)
 }

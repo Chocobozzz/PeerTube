@@ -149,8 +149,8 @@ router.get('/:id',
 Secondary processes (`--role=secondary`) serve every route. A route that needs a state only the primary
 process has (its file system, data kept in its memory, live sessions, the tracker...) must start with the
 `primaryOnly` middleware, before any side effect: a secondary answers `421` and nginx replays the request on
-the primary. Requests whose body nginx streams (`@api_unbuffered`) cannot be replayed: route them to
-`backend` in the `$peertube_pool` map of `support/nginx/peertube`.
+the primary. Requests whose body nginx streams (`proxy_request_buffering off` locations) cannot be replayed:
+route them to `backend` in the `$peertube_pool` map of `support/nginx/peertube`.
 
 ### Commit messages
 

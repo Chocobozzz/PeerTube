@@ -1,4 +1,4 @@
-import { pick } from '@peertube/peertube-core-utils'
+import { pick, promiseMapSeries } from '@peertube/peertube-core-utils'
 import { ActivityType, ServerStats, VideoRedundancyStrategyWithManual } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -13,7 +13,6 @@ import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import Bluebird from 'bluebird'
 import { Redis } from './redis/index.js'
 
 const logger = createLogger()
@@ -117,7 +116,7 @@ class StatsManager {
 
     strategies.push({ strategy: 'manual', size: null })
 
-    return Bluebird.mapSeries(strategies, r => {
+    return promiseMapSeries(strategies, r => {
       return VideoRedundancyModel.getStats(r.strategy)
         .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
     })

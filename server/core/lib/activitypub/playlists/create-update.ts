@@ -1,5 +1,5 @@
-import { guessAspectRatio } from '@peertube/peertube-core-utils'
-import { ActivityIconObject, HttpStatusCode, PlaylistObject } from '@peertube/peertube-models'
+import { guessAspectRatio, promiseMap } from '@peertube/peertube-core-utils'
+import { ActivityIconObject, HttpStatusCode, PlaylistElementObject, PlaylistObject } from '@peertube/peertube-models'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -9,11 +9,10 @@ import { sequelizeTypescript } from '@server/initializers/database.js'
 import { updateRemotePlaylistThumbnailFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
-import { FilteredModelAttributes } from '@server/types/index.js'
-import { MAccountHost, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
-import Bluebird from 'bluebird'
+import { MAccountHost, MVideoId, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
 import { getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/index.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { crawlCollectionPage } from '../crawl.js'
 import { checkUrlsSameHost, isLocalUrl } from '../url.js'
 import { getOrCreateAPVideo } from '../videos/index.js'
@@ -31,7 +30,7 @@ export async function createAccountPlaylists (playlistUrls: string[], account: M
     `Creating or updating ${playlistUrls.length} playlists for account ${account.Actor.preferredUsername}`
   )
 
-  await Bluebird.map(playlistUrls, async playlistUrl => {
+  await promiseMap(playlistUrls, async playlistUrl => {
     await logger.withContext([ playlistUrl ], async () => {
       if (!checkUrlsSameHost(playlistUrl, account.Actor.url)) {
         logger.warn(`Playlist ${playlistUrl} is not on the same host as owner account ${account.Actor.url}`)
@@ -74,32 +73,55 @@ export async function createOrUpdateVideoPlaylist (options: {
     throw new Error(`Playlist ${playlistObject.id} is not on the same host as context URL ${contextUrl}`)
   }
 
-  logger.debug(`Creating or updating playlist ${playlistObject.id}`)
+  // Don't fetch the elements of a stale object
+  const storedPlaylist = await loadPlaylistIfStaleObject(playlistObject)
+  if (storedPlaylist) return storedPlaylist
 
-  const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
-
+  // Outside the lock: fetching the elements and creating their videos can take a long time
   const channel = await getRemotePlaylistChannel(playlistObject)
-  playlistAttributes.videoChannelId = channel.id
-  playlistAttributes.ownerAccountId = channel.accountId
+  const elements = await fetchElements(playlistObject)
 
-  const [ upsertPlaylist ] = await VideoPlaylistModel.upsert<MVideoPlaylistVideosLength>(playlistAttributes, { returning: true })
+  return runWithAPObjectLock(playlistObject.id, async () => {
+    // Check again now we have the lock: a newer object may have been processed while we were fetching the elements
+    const storedPlaylist = await loadPlaylistIfStaleObject(playlistObject)
+    if (storedPlaylist) return storedPlaylist
 
-  const playlistElementUrls = await fetchElementUrls(playlistObject)
+    logger.debug(`Creating or updating playlist ${playlistObject.id}`)
 
-  // Refetch playlist from DB since elements fetching could be long in time
-  const playlist = await VideoPlaylistModel.loadWithAccountAndChannel(upsertPlaylist.id, null)
+    const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
+    playlistAttributes.videoChannelId = channel.id
+    playlistAttributes.ownerAccountId = channel.accountId
 
-  await updatePlaylistThumbnail(playlistObject, playlist)
+    const [ upsertPlaylist ] = await VideoPlaylistModel.upsert<MVideoPlaylistVideosLength>(playlistAttributes, { returning: true })
 
-  const elementsLength = await rebuildVideoPlaylistElements(playlistElementUrls, playlist)
-  playlist.setVideosLength(elementsLength)
+    // Load the associations
+    const playlist = await VideoPlaylistModel.loadWithAccountAndChannel(upsertPlaylist.id, null)
 
-  return playlist
+    await updatePlaylistThumbnail(playlistObject, playlist)
+
+    const elementsLength = await rebuildVideoPlaylistElements(elements, playlist)
+    playlist.setVideosLength(elementsLength)
+
+    return playlist
+  })
 }
 
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+async function loadPlaylistIfStaleObject (playlistObject: PlaylistObject) {
+  const existingPlaylist = await VideoPlaylistModel.loadByUrlAndPopulateAccount(playlistObject.id)
+  if (!existingPlaylist?.remoteUpdatedAt || new Date(playlistObject.updated) >= existingPlaylist.remoteUpdatedAt) return undefined
+
+  logger.info(
+    'Skip update of remote playlist %s with an object older than the stored one.',
+    playlistObject.id,
+    { updated: playlistObject.updated, remoteUpdatedAt: existingPlaylist.remoteUpdatedAt }
+  )
+
+  return VideoPlaylistModel.loadWithAccountAndChannel(existingPlaylist.id, null)
+}
 
 async function getRemotePlaylistChannel (playlistObject: PlaylistObject) {
   let channelUrl: string
@@ -167,8 +189,33 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
   }
 }
 
-async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MVideoPlaylist) {
-  const elementsToCreate = await buildElementsDBAttributes(elementUrls, playlist)
+type FetchedElement = { elementObject: PlaylistElementObject, video: MVideoId }
+
+async function fetchElements (playlistObject: PlaylistObject) {
+  const elementUrls = await fetchElementUrls(playlistObject)
+  const elements: FetchedElement[] = []
+
+  await promiseMap(elementUrls, async elementUrl => {
+    try {
+      const { elementObject } = await fetchRemotePlaylistElement(elementUrl)
+
+      const { video } = await getOrCreateAPVideo({ videoObject: { id: elementObject.url }, fetchType: 'with-blacklist' })
+
+      elements.push({ elementObject, video })
+    } catch (err) {
+      const logLevel = (err as PeerTubeRequestError).statusCode === HttpStatusCode.UNAUTHORIZED_401
+        ? 'debug'
+        : 'warn'
+
+      logger.log(logLevel, `Cannot add playlist element ${elementUrl}`, { err })
+    }
+  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
+
+  return elements
+}
+
+async function rebuildVideoPlaylistElements (elements: FetchedElement[], playlist: MVideoPlaylist) {
+  const elementsToCreate = elements.map(({ elementObject, video }) => playlistElementObjectToDBAttributes(elementObject, playlist, video))
 
   await retryTransactionWrapper(() =>
     sequelizeTypescript.transaction(async t => {
@@ -183,26 +230,4 @@ async function rebuildVideoPlaylistElements (elementUrls: string[], playlist: MV
   logger.info('Rebuilt playlist %s with %s elements.', playlist.url, elementsToCreate.length)
 
   return elementsToCreate.length
-}
-
-async function buildElementsDBAttributes (elementUrls: string[], playlist: MVideoPlaylist) {
-  const elementsToCreate: FilteredModelAttributes<VideoPlaylistElementModel>[] = []
-
-  await Bluebird.map(elementUrls, async elementUrl => {
-    try {
-      const { elementObject } = await fetchRemotePlaylistElement(elementUrl)
-
-      const { video } = await getOrCreateAPVideo({ videoObject: { id: elementObject.url }, fetchType: 'with-blacklist' })
-
-      elementsToCreate.push(playlistElementObjectToDBAttributes(elementObject, playlist, video))
-    } catch (err) {
-      const logLevel = (err as PeerTubeRequestError).statusCode === HttpStatusCode.UNAUTHORIZED_401
-        ? 'debug'
-        : 'warn'
-
-      logger.log(logLevel, `Cannot add playlist element ${elementUrl}`, { err })
-    }
-  }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
-
-  return elementsToCreate
 }

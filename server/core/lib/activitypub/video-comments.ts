@@ -1,6 +1,6 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
-import Bluebird from 'bluebird'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments.js'
 import { createLogger } from '../../helpers/logger.js'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
@@ -39,7 +39,7 @@ type ResolveThreadResult = Promise<{
 export async function addVideoComments (commentUrls: string[]) {
   if (CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS !== true) return
 
-  return Bluebird.map(commentUrls, async commentUrl => {
+  return promiseMap(commentUrls, async commentUrl => {
     await logger.withContext([ commentUrl ], async () => {
       try {
         await resolveThread({ url: commentUrl, isVideo: false })

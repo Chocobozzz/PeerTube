@@ -4,13 +4,14 @@ import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import validator from 'validator'
 
 export function isWebSocketTrackerUrl (url: string) {
-  return url.startsWith('ws://') || url.startsWith('wss://')
+  return /^wss?:\/\//i.test(url)
 }
 
 export function isTrackerUrlValid (url: string) {
   return isUrlWithProtocolsValid(url, [ 'ws', 'wss', 'http', 'https' ]) &&
-    validator.default.isLength('' + url, CONSTRAINTS_FIELDS.ACTORS.URL)
+    validator.default.isLength('' + url, CONSTRAINTS_FIELDS.COMMONS.URL)
 }
+
 export function isUrlValid (url: string) {
   return isUrlWithProtocolsValid(url, [ 'http', 'https' ])
 }

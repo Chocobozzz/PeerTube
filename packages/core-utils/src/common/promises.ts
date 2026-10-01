@@ -39,6 +39,50 @@ export function timeoutPromiseWithCleanup<T> (
   ]).finally(() => clearTimeout(timer))
 }
 
+// The results keep the order of items and the the returned promise rejects on the first error
+export async function promiseMap<T, R> (
+  items: Iterable<T>,
+  mapper: (item: T, index: number) => R | Promise<R>,
+  options: { concurrency?: number } = {}
+): Promise<R[]> {
+  const { concurrency = Infinity } = options
+
+  if (Number.isNaN(concurrency) || concurrency < 1) throw new Error(`Invalid promise map concurrency ${concurrency}`)
+
+  const list = Array.from(items)
+  const results: R[] = new Array(list.length)
+
+  let nextIndex = 0
+  let failed = false
+
+  const runMappers = async () => {
+    while (!failed && nextIndex < list.length) {
+      const index = nextIndex++
+
+      try {
+        results[index] = await mapper(list[index], index)
+      } catch (err) {
+        failed = true
+        throw err
+      }
+    }
+  }
+
+  const runners: Promise<void>[] = []
+  for (let i = 0; i < Math.min(concurrency, list.length); i++) {
+    runners.push(runMappers())
+  }
+
+  await Promise.all(runners)
+
+  return results
+}
+
+// Stops at the first error
+export function promiseMapSeries<T, R> (items: Iterable<T>, mapper: (item: T, index: number) => R | Promise<R>) {
+  return promiseMap(items, mapper, { concurrency: 1 })
+}
+
 export function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {

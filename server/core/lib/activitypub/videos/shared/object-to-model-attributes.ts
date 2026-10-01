@@ -327,6 +327,7 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
       : VideoEmbedPrivacyPolicy.REMOTE_RESTRICTIONS,
 
     updatedAt: new Date(videoObject.updated),
+    remoteUpdatedAt: new Date(videoObject.updated),
     views: videoObject.views,
     downloads: videoObject.downloads || 0,
     remote: true,

@@ -1,7 +1,7 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { pipelinePromise } from '@peertube/peertube-node-utils'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { CONFIG } from '@server/initializers/config.js'
-import Bluebird from 'bluebird'
 import { createReadStream, createWriteStream } from 'fs'
 import { ensureDir } from 'fs-extra/esm'
 import { dirname } from 'path'
@@ -480,7 +480,7 @@ async function multipartCopyObject (options: {
       partNumbers.push(i + 1)
     }
 
-    const parts = await Bluebird.map(partNumbers, async partNumber => {
+    const parts = await promiseMap(partNumbers, async partNumber => {
       const start = (partNumber - 1) * MULTIPART_COPY_PART_SIZE
       const end = Math.min(start + MULTIPART_COPY_PART_SIZE, size) - 1
 
@@ -663,7 +663,7 @@ async function applyOnPrefix (options: {
     throw new Error(message)
   }
 
-  await Bluebird.map(listedObjects.Contents, object => {
+  await promiseMap(listedObjects.Contents, object => {
     const command = commandBuilder(object)
 
     return s3Client.send(command)

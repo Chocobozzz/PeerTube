@@ -271,7 +271,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   static listOwnedWithTorrentBatch (options: {
     lastId: number
     batchSize: number
-  }): Promise<{ id: number, videoId: number, videoStreamingPlaylistId: number }[]> {
+  }): Promise<{ id: number, videoId: number | null, videoStreamingPlaylistId: number | null }[]> {
     const query = 'SELECT "videoFile"."id", "videoFile"."videoId", "videoFile"."videoStreamingPlaylistId" FROM "videoFile" ' +
       'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
       'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +

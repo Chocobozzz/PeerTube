@@ -64,6 +64,7 @@ import {
   buildSQLAttributes,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
+  bumpUpdatedAt,
   isOutdated,
   setAsUpdated,
   throwIfNotValid
@@ -157,6 +158,11 @@ function getVideoLengthSelect () {
   ]
 })
 export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
+  // To skip updates older than the stored state
+  @AllowNull(true)
+  @Column
+  declare remoteUpdatedAt: Date
+
   @CreatedAt
   declare createdAt: Date
 
@@ -740,6 +746,15 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
 
   setAsRefreshed () {
     return setAsUpdated({ sequelize: this.sequelize, table: 'videoPlaylist', id: this.id })
+  }
+
+  async bumpUpdatedAt (transaction: Transaction) {
+    this.updatedAt = await bumpUpdatedAt({
+      sequelize: this.sequelize,
+      table: 'videoPlaylist',
+      id: this.id,
+      transaction
+    })
   }
 
   setVideosLength (videosLength: number) {

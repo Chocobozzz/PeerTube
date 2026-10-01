@@ -1,4 +1,4 @@
-import { pick, sortBy } from '@peertube/peertube-core-utils'
+import { pick, promiseMap, sortBy } from '@peertube/peertube-core-utils'
 import { ActivityCreate, FileStorage, VideoExportJSON, VideoObject, VideoPrivacy } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { audiencify, getVideoAudience } from '@server/lib/activitypub/audience.js'
@@ -35,7 +35,6 @@ import {
 import { MPlayerSetting } from '@server/types/models/video/player-setting.js'
 import { MEmbedPrivacyDomain } from '@server/types/models/video/video-embed-privacy-domain.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
-import Bluebird from 'bluebird'
 import { buildLocalCommonFileReadStream } from '@server/lib/object-storage/common-files.js'
 import { createReadStream } from 'fs'
 import { extname, join } from 'path'
@@ -67,7 +66,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       videoIds = await VideoModel.getAllIdsByAccount({ account: this.user.Account, start, count: chunkSize })
       start += videoIds.length
 
-      await Bluebird.map(videoIds, async id => {
+      await promiseMap(videoIds, async id => {
         try {
           const exported = await this.exportVideo(id)
 

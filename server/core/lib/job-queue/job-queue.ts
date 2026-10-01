@@ -222,6 +222,11 @@ const secondaryProcessJobTypes = new Set<JobType>([
   'video-redundancy'
 ])
 
+// Their concurrency applies to all the processes, not to each worker
+const globalConcurrencyJobTypes = new Set<JobType>([
+  'activitypub-http-broadcast' // Required for activities ordering. Can be improved in the future using multiple queues + a sharding system
+])
+
 const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcription', 'video-studio-edition', 'generate-video-storyboard' ]
 
 const silentFailure = new Set<JobType>([ 'activitypub-http-unicast' ])
@@ -360,6 +365,12 @@ class JobQueue {
     })
 
     this.queues[handlerName] = queue
+
+    const globalConcurrencyPromise = globalConcurrencyJobTypes.has(handlerName)
+      ? queue.setGlobalConcurrency(this.getJobConcurrency(handlerName))
+      : queue.removeGlobalConcurrency()
+
+    globalConcurrencyPromise.catch(err => logger.error('Cannot update global concurrency of job queue ' + handlerName, { err }))
 
     queue.removeDeprecatedPriorityKey()
       .catch(err => logger.error('Cannot remove bullmq deprecated priority keys of ' + handlerName, { err }))

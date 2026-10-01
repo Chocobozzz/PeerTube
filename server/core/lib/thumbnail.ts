@@ -1,8 +1,7 @@
-import { redactSignedUrls, sortBy } from '@peertube/peertube-core-utils'
+import { promiseMapSeries, redactSignedUrls, sortBy } from '@peertube/peertube-core-utils'
 import { FileStorage, ThumbnailAspectRatio, VideoFileStream } from '@peertube/peertube-models'
 import { generateThumbnailFromVideo } from '@server/helpers/ffmpeg/ffmpeg-image.js'
 import { createLogger } from '@server/helpers/logger.js'
-import Bluebird from 'bluebird'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
@@ -479,7 +478,7 @@ async function createThumbnailBatch (options: {
   // On success, the tmp files of thumbnails uploaded to object storage are not needed anymore
   try {
     const thumbnails = sequential
-      ? await Bluebird.mapSeries(metadata, create)
+      ? await promiseMapSeries(metadata, create)
       : await createAllOrThrow(metadata.map(create))
 
     if (onObjectStorage) await removeThumbnailFiles(metadata)

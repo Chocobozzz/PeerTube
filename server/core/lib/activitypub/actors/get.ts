@@ -12,6 +12,7 @@ import {
   MActorFullActor
 } from '@server/types/models/index.js'
 import { fetchAPObjectIfNeeded, getAPId } from '../activity.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { checkUrlsSameHost } from '../url.js'
 import { refreshActorIfNeeded } from './refresh.js'
 import { APActorCreator, fetchRemoteActor } from './shared/index.js'
@@ -53,30 +54,32 @@ async function getOrCreateAPActor (
     // actorUrl is just an alias/redirection, so process object id instead
     if (actorObject.id !== actorUrl) return getOrCreateAPActor(actorObject, 'all', recurseIfNeeded, updateCollections)
 
-    // Create the attributed to actor
-    // In PeerTube a video channel is owned by an account
-    let ownerActor: MActorFullActor
-    if (recurseIfNeeded === true && actorObject.type === 'Group') {
-      ownerActor = await getOrCreateAPOwner(actorObject, actorUrl)
-    }
+    await runWithAPObjectLock(actorUrl, async () => {
+      // Created by another activity while we were fetching the actor or waiting for the lock
+      actor = await loadActorByUrl(actorUrl, fetchType)
+      if (actor) return
 
-    const creator = new APActorCreator(actorObject, ownerActor)
-    actor = await retryTransactionWrapper(() => creator.create(), { retryUniqueConstraintViolation: true })
-    created = true
-    accountPlaylistsUrl = actorObject.playlists
+      // Create the attributed to actor
+      // In PeerTube a video channel is owned by an account
+      let ownerActor: MActorFullActor
+      if (recurseIfNeeded === true && actorObject.type === 'Group') {
+        ownerActor = await getOrCreateAPOwner(actorObject, actorUrl)
+      }
+
+      const creator = new APActorCreator(actorObject, ownerActor)
+      actor = await retryTransactionWrapper(() => creator.create(), { retryUniqueConstraintViolation: true })
+      created = true
+      accountPlaylistsUrl = actorObject.playlists
+    })
   }
 
-  if (actor.Account) (actor as MActorAccountChannelIdActor).Account.Actor = actor
-  if (actor.VideoChannel) (actor as MActorAccountChannelIdActor).VideoChannel.Actor = actor
-
-  const { actor: actorRefreshed, refreshed } = await refreshActorIfNeeded({
-    actor,
-    fetchedType: fetchType === 'all'
-      ? 'all'
-      : 'partial'
-  })
+  const { actor: actorRefreshed, refreshed } = await refreshActorIfNeeded({ actor })
 
   if (!actorRefreshed) throw new Error(`Actor ${actor.url} does not exist anymore.`)
+
+  // After the refresh, that may have reloaded the actor
+  if (actorRefreshed.Account) (actorRefreshed as MActorAccountChannelIdActor).Account.Actor = actorRefreshed
+  if (actorRefreshed.VideoChannel) (actorRefreshed as MActorAccountChannelIdActor).VideoChannel.Actor = actorRefreshed
 
   await scheduleOutboxFetchIfNeeded(actor, created, refreshed, updateCollections)
   await schedulePlaylistFetchIfNeeded(actor, created, accountPlaylistsUrl)

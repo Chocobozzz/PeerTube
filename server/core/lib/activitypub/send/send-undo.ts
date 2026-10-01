@@ -1,5 +1,6 @@
 import { ActivityAudience, ActivityDislike, ActivityLike, ActivityUndo, ActivityUndoObject, ContextType } from '@peertube/peertube-models'
 import { Transaction } from 'sequelize'
+import { afterCommitIfTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
 import {
@@ -29,7 +30,7 @@ import {
 
 const logger = createLogger()
 
-function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
+function sendUndoFollow (actorFollow: Pick<MActorFollowActors, 'url' | 'ActorFollower' | 'ActorFollowing'>, t: Transaction | undefined) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
 
@@ -43,7 +44,7 @@ function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const followActivity = buildFollowActivity(actorFollow.url, me, following)
   const undoActivity = undoActivityData(undoUrl, me, followActivity)
 
-  t.afterCommit(() => {
+  afterCommitIfTransaction(t, () => {
     return unicastTo({
       data: undoActivity,
       byActor: me,
