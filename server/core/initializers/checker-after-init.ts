@@ -2,6 +2,7 @@ import { uniqify } from '@peertube/peertube-core-utils'
 import { getFFmpegVersion } from '@peertube/peertube-ffmpeg'
 import { VideoRedundancyConfigFilter } from '@peertube/peertube-models'
 import { isProdInstance, parseBytes, parseSemVersion } from '@peertube/peertube-node-utils'
+import { isTrackerUrlValid, isWebSocketTrackerUrl } from '@server/helpers/custom-validators/urls.js'
 import { readFileSync, writeFileSync } from 'fs'
 import { basename } from 'path'
 import { URL } from 'url'
@@ -13,6 +14,7 @@ import {
   getPrunableObjectStorageLocationConflicts,
   objectStorageSections
 } from '../lib/object-storage/config.js'
+import { LOCAL_TRACKER_URLS_KEYWORD } from '../lib/tracker-urls.js'
 import { checkVideoFilesLifecycleConfig } from '../lib/video-files-lifecycle/video-files-lifecycle-config.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
@@ -65,6 +67,7 @@ function checkConfig () {
   checkVideoFilesLifecycleConfig()
   checkThumbnailsConfig()
   checkBrowseVideosConfig()
+  checkTrackerConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -427,6 +430,35 @@ function checkThumbnailsConfig () {
   const sizes = CONFIG.THUMBNAILS.SIZES.map(s => `${s.width}x${s.height}`)
   if (new Set(sizes).size !== sizes.length) {
     throw new Error('thumbnails.sizes must not contain multiple sizes with the same width and height')
+  }
+}
+
+function checkTrackerConfig () {
+  const urls = CONFIG.TRACKER.URLS
+
+  if (!isArray(urls) || urls.length === 0) {
+    throw new Error('tracker.urls must contain at least one URL or \'local\'. Set tracker.enabled to false to disable P2P')
+  }
+
+  for (const url of urls) {
+    if (url === LOCAL_TRACKER_URLS_KEYWORD || isTrackerUrlValid(url)) continue
+
+    throw new Error(`tracker.urls contains an invalid value: ${url}. Use 'local' or a ws://, wss://, http:// or https:// URL`)
+  }
+
+  // Web browsers block insecure websockets from an HTTPS page
+  if (CONFIG.WEBSERVER.SCHEME === 'https') {
+    const insecureWS = urls.find(u => u.startsWith('ws://'))
+
+    if (insecureWS) {
+      throw new Error(
+        `tracker.urls contains ${insecureWS}: use wss:// instead, the web player cannot reach a ws:// tracker from an HTTPS instance`
+      )
+    }
+  }
+
+  if (!urls.some(u => u === LOCAL_TRACKER_URLS_KEYWORD || isWebSocketTrackerUrl(u))) {
+    logger.warn('tracker.urls has no websocket tracker (\'local\' or a ws:// or wss:// URL): the web player will not find P2P peers.')
   }
 }
 

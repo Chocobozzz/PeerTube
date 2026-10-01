@@ -16,6 +16,7 @@ import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.
 import validator from 'validator'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
+import { isTrackerUrlValid } from '../urls.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
   isVideoCommentsPolicyValid,
@@ -148,7 +149,7 @@ export function isAPVideoFileUrlMetadataObject (url: any): url is ActivityVideoF
 export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlObject {
   return isArray(url.rel) &&
     url.rel.includes('tracker') &&
-    isActivityPubUrlValid(url.href)
+    isTrackerUrlValid(url.href)
 }
 
 export function setAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {

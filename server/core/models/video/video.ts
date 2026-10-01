@@ -38,6 +38,7 @@ import {
 } from '@server/lib/object-storage/index.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
 import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { buildLocalTrackerUrls } from '@server/lib/tracker-urls.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
@@ -2418,12 +2419,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   getTrackerUrls () {
-    if (this.isLocal()) {
-      return [
-        WEBSERVER.URL + '/tracker/announce',
-        WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket'
-      ]
-    }
+    if (this.isLocal()) return buildLocalTrackerUrls()
 
     return this.Trackers.map(t => t.url)
   }

@@ -16,8 +16,8 @@ import {
 } from '@peertube/peertube-server-commands'
 import { dateIsValid, testImageGeneratedByFFmpeg } from '@tests/shared/checks.js'
 import { checkTmpIsEmpty } from '@tests/shared/directories.js'
-import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
 import { checkWebTorrentWorks } from '@tests/shared/p2p.js'
+import { checkVideoFilesWereRemoved, completeVideoCheck, saveVideoInServers } from '@tests/shared/videos.js'
 import Bluebird from 'bluebird'
 import { expect } from 'chai'
 import request from 'supertest'
@@ -749,10 +749,10 @@ describe('Test multiple servers', function () {
     it('Should remove the videos 3 and 3-2 by asking server 3 and correctly delete files', async function () {
       this.timeout(30000)
 
-      for (const id of [ toRemove[0].id, toRemove[1].id ]) {
-        await saveVideoInServers(servers, id)
+      for (const video of [ toRemove[0], toRemove[1] ]) {
+        await saveVideoInServers(servers, video.uuid)
 
-        await servers[2].videos.remove({ id })
+        await servers[2].videos.remove({ id: video.id })
 
         await waitJobs(servers)
 

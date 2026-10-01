@@ -460,9 +460,17 @@ tracker:
   # Only handle requests on your videos
   # If you set this to false it means you have a public tracker
   # Then, it is possible that clients overload your instance with external torrents
+  # Only applies to the built-in tracker: configure an info hash allow list on your external tracker if you use one
   private: true
   # Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)
   reject_too_many_announces: false
+
+  # Tracker URLs advertised for your local videos
+  # Replace the local tracker with an external WebTorrent tracker (aquatic_ws for example) if you need to handle many P2P viewers
+  # The web player needs at least one websocket (wss://) tracker
+  # Existing torrent files are updated in the background by the job queue when this list changes
+  urls:
+    - 'local' # Built-in tracker (its websocket and HTTP endpoints)
 
 history:
   videos:

@@ -1,8 +1,8 @@
 import { PluginPackageJSON, PluginType, PluginType_Type } from '@peertube/peertube-models'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants.js'
-import { isUrlValid } from './activitypub/misc.js'
 import { exists, isArray, isSafePath } from './misc.js'
+import { isUrlValid } from './urls.js'
 
 const PLUGINS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.PLUGINS
 

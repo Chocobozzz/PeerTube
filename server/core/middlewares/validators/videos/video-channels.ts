@@ -1,5 +1,5 @@
 import { HttpStatusCode, UserRight, VIDEO_CHANNEL_STATS_DAYS_OPTIONS, VideosImportInChannelCreate } from '@peertube/peertube-models'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { MChannelAccountDefault } from '@server/types/models/index.js'

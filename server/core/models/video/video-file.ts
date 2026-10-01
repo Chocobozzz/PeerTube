@@ -25,7 +25,7 @@ import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { MStreamingPlaylistVideo, MVideo, MVideoWithHost, isStreamingPlaylist } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
-import { FindOptions, Op, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -266,6 +266,21 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
       'AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) LIMIT 1'
 
     return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
+  }
+
+  static listOwnedWithTorrentBatch (options: {
+    lastId: number
+    batchSize: number
+  }): Promise<{ id: number, videoId: number, videoStreamingPlaylistId: number }[]> {
+    const query = 'SELECT "videoFile"."id", "videoFile"."videoId", "videoFile"."videoStreamingPlaylistId" FROM "videoFile" ' +
+      'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
+      'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
+      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
+      'WHERE "videoFile"."id" > $lastId AND "videoFile"."torrentFilename" IS NOT NULL ' +
+      'AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) ' +
+      'ORDER BY "videoFile"."id" ASC LIMIT $batchSize'
+
+    return this.sequelize.query(query, { bind: options, type: QueryTypes.SELECT })
   }
 
   // Don't update a torrent that has been replaced or moved in the meantime

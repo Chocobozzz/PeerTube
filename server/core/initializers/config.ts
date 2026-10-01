@@ -482,7 +482,8 @@ export const CONFIG = buildConfig({
   TRACKER: {
     ENABLED: staticKey<boolean>('tracker.enabled'),
     PRIVATE: staticKey<boolean>('tracker.private'),
-    REJECT_TOO_MANY_ANNOUNCES: staticKey<boolean>('tracker.reject_too_many_announces')
+    REJECT_TOO_MANY_ANNOUNCES: staticKey<boolean>('tracker.reject_too_many_announces'),
+    URLS: staticKey<string[]>('tracker.urls')
   },
   HISTORY: {
     VIDEOS: {

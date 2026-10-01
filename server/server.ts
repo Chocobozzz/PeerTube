@@ -234,6 +234,7 @@ import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundan
 import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watched-words-subscriptions-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
 import { registerGracefulShutdown, shutdownAndExit } from './core/lib/shutdown.js'
+import { updateTorrentsTrackersIfNeeded } from './core/lib/torrent-trackers.js'
 import { watchYoutubeDLCookies } from './core/lib/youtube-dl-cookies.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
@@ -495,6 +496,9 @@ async function startApplication () {
 
     updateStreamingPlaylistsInfohashesIfNeeded()
       .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
+
+    updateTorrentsTrackersIfNeeded()
+      .catch(err => logger.error('Cannot update the trackers of local torrent files.', { err }))
 
     removeRedundanciesOfOtherStorage()
       .catch(err => logger.error('Cannot remove redundancies of the previous storage.', { err }))

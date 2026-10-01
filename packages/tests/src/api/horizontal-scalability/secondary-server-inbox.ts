@@ -229,7 +229,7 @@ describe('Test the inbox of a secondary server process', function () {
 
     before(async function () {
       const app = express()
-      app.get('/*', (_req, res) => setTimeout(() => res.sendStatus(HttpStatusCode.NOT_FOUND_404), 500))
+      app.get('/*', (_req, res) => setTimeout(() => res.sendStatus(HttpStatusCode.NOT_FOUND_404), 3000))
 
       slowServer = await randomListen(app)
       slowServerUrl = 'http://127.0.0.1:' + getPort(slowServer)
@@ -256,7 +256,7 @@ describe('Test the inbox of a secondary server process', function () {
 
       const processedBefore = await countProcessedAnnounces()
 
-      // Takes more than the 4 seconds of the inbox drain
+      // 3 rounds of parallel processing: takes more than the 4 seconds of the inbox drain
       await sendSlowAnnounces(12)
       await secondary.kill()
 

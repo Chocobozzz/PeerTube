@@ -1,6 +1,6 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { CONFIG } from '@server/initializers/config.js'
 import express from 'express'
 import { body, query } from 'express-validator'
