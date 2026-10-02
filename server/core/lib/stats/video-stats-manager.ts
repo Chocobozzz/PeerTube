@@ -64,18 +64,20 @@ export class VideoStatsManager {
 
     logger.debug(`Processing local view for ${video.url}, ip ${ip} and session id ${sessionId}.`)
 
-    const watchTime = await this.videoViewerStats.addLocalViewer({
-      video,
-      ip,
-      sessionId,
-      viewEvent,
-      currentTime,
-      client,
-      operatingSystem,
-      device
-    })
+    const [ watchTime, successViewer ] = await Promise.all([
+      this.videoViewerStats.addLocalViewer({
+        video,
+        ip,
+        sessionId,
+        viewEvent,
+        currentTime,
+        client,
+        operatingSystem,
+        device
+      }),
 
-    const successViewer = await this.videoViewerCounters.addLocalViewer({ video, sessionId })
+      this.videoViewerCounters.addLocalViewer({ video, sessionId })
+    ])
 
     const successView = await this.videoCounters.addLocalView({ video, watchTime, sessionId })
 

@@ -12,6 +12,7 @@ import * as locks from './locks.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
 import * as primaryRegisteredPlugins from './primary-registered-plugins.js'
+import * as rateLimit from './rate-limit.js'
 import {
   buildLoggedRedisClientOptions,
   duplicateRedisClient,
@@ -20,6 +21,7 @@ import {
   initRedisClient,
   isRedisConnected,
   isRedisInitialized,
+  onRedisConnect,
   quitRedisClient,
   StatKind
 } from './redis-client.js'
@@ -76,6 +78,10 @@ export class Redis {
     return isRedisInitialized()
   }
 
+  onConnect (listener: () => void) {
+    onRedisConnect(listener)
+  }
+
   /* ************ Forgot password ************ */
 
   setResetPasswordVerificationString (userId: number) {
@@ -116,6 +122,20 @@ export class Redis {
 
   deleteLoginFailures (userId: number) {
     return loginFailures.deleteLoginFailures(userId)
+  }
+
+  /* ************ Rate limit ************ */
+
+  incrementRateLimit (options: { key: string, hits: number, windowMs: number }) {
+    return rateLimit.incrementRateLimit(options)
+  }
+
+  getRateLimit (key: string) {
+    return rateLimit.getRateLimit(key)
+  }
+
+  resetRateLimit (key: string) {
+    return rateLimit.resetRateLimit(key)
   }
 
   /* ************ Email verification ************ */

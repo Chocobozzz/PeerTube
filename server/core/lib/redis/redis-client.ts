@@ -15,9 +15,10 @@ export type StatKind = 'views' | 'downloads'
 
 export type IoRedisWithScripts = IoRedis & {
   mergeLocalVideoViewer: (...args: (string | number)[]) => Promise<[number, number]>
-  addVideoViewerCounter: (...args: (string | number)[]) => Promise<[number, number, number]>
+  addVideoViewerCounter: (...args: (string | number)[]) => Promise<[number, number, number, number]>
   releaseLock: (...args: (string | number)[]) => Promise<number>
   extendLock: (...args: (string | number)[]) => Promise<number>
+  incrementRateLimit: (...args: (string | number)[]) => Promise<[number, number]>
 }
 
 // ---------------------------------------------------------------------------
@@ -31,6 +32,8 @@ let subscriberClient: IoRedis
 const duplicatedClients: IoRedis[] = []
 
 const subscribedHandlers = new Map<string, Set<(message: string) => void>>()
+
+const connectListeners = new Set<() => void>()
 
 let prefix: string
 
@@ -59,12 +62,21 @@ export function initRedisClient () {
   client.defineCommand('addVideoViewerCounter', { numberOfKeys: 2, lua: readLuaScript('add-video-viewer-counter') })
   client.defineCommand('releaseLock', { numberOfKeys: 1, lua: readLuaScript('release-lock') })
   client.defineCommand('extendLock', { numberOfKeys: 1, lua: readLuaScript('extend-lock') })
+  client.defineCommand('incrementRateLimit', { numberOfKeys: 1, lua: readLuaScript('increment-rate-limit') })
 
   client.on('error', err => logger.error('Redis failed to connect', { err }))
   client.on('connect', () => {
     logger.info('Connected to redis.')
 
     connected = true
+
+    for (const listener of connectListeners) {
+      try {
+        listener()
+      } catch (err) {
+        logger.error('Error in redis connect listener.', { err })
+      }
+    }
   })
   client.on('reconnecting', ms => {
     logger.error(`Reconnecting to redis in ${ms}.`)
@@ -129,6 +141,11 @@ export function isRedisConnected () {
   return connected
 }
 
+// Called on every connection or reconnectin of the main client
+export function onRedisConnect (listener: () => void) {
+  connectListeners.add(listener)
+}
+
 // CLI scripts and tests load the models without ever connecting to Redis
 export function isRedisInitialized () {
   return initialized
@@ -171,6 +188,18 @@ export async function setValue (key: string, value: string, expirationMillisecon
     : await client.set(prefix + key, value)
 
   if (result !== 'OK') throw new Error('Redis set result is not OK.')
+}
+
+// Returns the value and the milliseconds before it expires
+export async function getValueAndExpiration (key: string) {
+  const results = await client.multi()
+    .get(prefix + key)
+    .pttl(prefix + key)
+    .exec()
+
+  throwIfMultiFailed(results)
+
+  return { value: results[0][1] as string, msBeforeExpiration: results[1][1] as number }
 }
 
 export function removeValue (key: string) {
@@ -335,6 +364,14 @@ export function runExtendLock (options: {
   ttlMs: number
 }) {
   return getScriptedRedisClient().extendLock(prefix + options.lockKey, options.token, options.ttlMs)
+}
+
+export function runIncrementRateLimit (options: {
+  key: string
+  hits: number
+  windowMs: number
+}) {
+  return getScriptedRedisClient().incrementRateLimit(prefix + options.key, options.hits, options.windowMs)
 }
 
 // ---------------------------------------------------------------------------

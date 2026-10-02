@@ -525,12 +525,16 @@ describe('Test a secondary server process', function () {
 
       expect(rateLimited, 'the primary should have been rate limited').to.be.true
 
-      // The secondary shares the counter
-      await makeGetRequest({
-        url: secondary.url,
-        path: '/api/v1/videos',
-        expectedStatus: HttpStatusCode.TOO_MANY_REQUESTS_429
-      })
+      // The secondary shares the counter, but syncs it with Redis in the background
+      let secondaryRateLimited = false
+
+      for (let i = 0; i < 5 && !secondaryRateLimited; i++) {
+        const { status } = await makeGetRequest({ url: secondary.url, path: '/api/v1/videos', expectedStatus: null })
+
+        secondaryRateLimited = status === HttpStatusCode.TOO_MANY_REQUESTS_429
+      }
+
+      expect(secondaryRateLimited, 'the secondary should have been rate limited').to.be.true
     })
   })
 

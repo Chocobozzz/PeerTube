@@ -17,7 +17,7 @@
 -- ARGV[8] the date before which the viewer must be federated again or 0 to never federate it
 -- ARGV[9] "1" to replace the viewers currently known
 --
--- Returns { is new viewer, must federate, total viewers of the video }
+-- Returns { is new viewer, must federate, total viewers of the video, last federation date or 0 }
 
 local viewersKey = KEYS[1]
 local videosKey = KEYS[2]
@@ -85,4 +85,4 @@ else
   total = tonumber(total)
 end
 
-return { isNew, mustFederate, total }
+return { isNew, mustFederate, total, viewer.lastFederation or 0 }

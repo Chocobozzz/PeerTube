@@ -9,8 +9,15 @@ import { Redis } from '@server/lib/redis/index.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
+import { LRUCache } from 'lru-cache'
 
 const logger = createLogger('views')
+
+// So the remote instance does not expire it
+const FEDERATE_VIEWER_AGAIN_RATIO = 0.75
+
+// How long we cache a local viewer in front of Redis, so its expiration in Redis is refreshed long before it expires
+const SKIP_LOCAL_VIEWER_REFRESH_RATIO = 0.2
 
 export type ViewerScope = 'local' | 'remote'
 export type VideoScope = 'local' | 'remote'
@@ -37,6 +44,12 @@ export class VideoViewerCounters {
   private readonly totalViewersPerVideo = new Map<number, number>()
   private readonly totalViewersPerScope = new Map<string, number>()
 
+  // Local cache in front of Redis, to avoid frequent Redis calls
+  private readonly recentlyRefreshedLocalViewers = new LRUCache<string, true>({
+    max: 50_000,
+    ttl: VIEW_LIFETIME.VIEWER_COUNTER * SKIP_LOCAL_VIEWER_REFRESH_RATIO
+  })
+
   private processingViewerCounters = false
 
   // Expiring viewers, notifying clients and federating counts must be done by a single process
@@ -60,7 +73,12 @@ export class VideoViewerCounters {
 
     const viewerId = sessionId + '-' + video.uuid
 
-    const { isNew, mustFederate } = await this.addViewerToVideo({
+    // Its expiration in Redis is still far enough, and it is too early to federate it again
+    if (this.recentlyRefreshedLocalViewers.has(viewerId)) return false
+
+    const now = new Date().getTime()
+
+    const { isNew, mustFederate, lastFederation } = await this.addViewerToVideo({
       viewerId,
       video,
       viewerScope: 'local',
@@ -68,6 +86,16 @@ export class VideoViewerCounters {
       // Federate the viewer of a remote video if it's been a "long" time we did not
       federateIfNeeded: video.remote === true
     })
+
+    // Skip the next Redis refreshes of this viewer for a while
+    // But never past its next federation date, otherwise the remote instance would expire the viewer
+    const skipRefreshUntil = video.remote === true
+      ? Math.min(now + this.getSkipLocalViewerRefreshDuration(), lastFederation + this.getFederateViewerAgainDuration())
+      : now + this.getSkipLocalViewerRefreshDuration()
+
+    if (skipRefreshUntil > now) {
+      this.recentlyRefreshedLocalViewers.set(viewerId, true, { ttl: skipRefreshUntil - now })
+    }
 
     if (mustFederate) {
       await sendView({ byActor: await getServerActor(), video, viewersCount: 1, viewerIdentifier: viewerId })
@@ -163,7 +191,7 @@ export class VideoViewerCounters {
       now,
 
       federateBefore: federateIfNeeded
-        ? now - (VIEW_LIFETIME.VIEWER_COUNTER * 0.75)
+        ? now - this.getFederateViewerAgainDuration()
         : 0,
 
       replaceCurrentViewers
@@ -175,6 +203,14 @@ export class VideoViewerCounters {
     if (result.isNew) this.notifyClients(video)
 
     return result
+  }
+
+  private getFederateViewerAgainDuration () {
+    return VIEW_LIFETIME.VIEWER_COUNTER * FEDERATE_VIEWER_AGAIN_RATIO
+  }
+
+  private getSkipLocalViewerRefreshDuration () {
+    return VIEW_LIFETIME.VIEWER_COUNTER * SKIP_LOCAL_VIEWER_REFRESH_RATIO
   }
 
   private async updateVideoViewersCount () {

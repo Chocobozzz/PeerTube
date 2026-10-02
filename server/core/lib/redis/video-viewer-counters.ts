@@ -52,13 +52,12 @@ export async function listVideoViewerCounters<T> (videoId: number) {
   return result
 }
 
-// See lua/add-video-viewer-counter.lua: the whole decision is made atomically in Redis
 export async function addVideoViewerCounter (options: AddVideoViewerCounterOptions) {
   const { videoId, viewerId, expires, viewerScope, videoScope, viewerCount, now, federateBefore } = options
 
   const { setKey, videoKey } = generateVideoViewerCounterKeys(videoId)
 
-  const [ isNew, mustFederate, totalViewers ] = await runAddVideoViewerCounter({
+  const [ isNew, mustFederate, totalViewers, lastFederation ] = await runAddVideoViewerCounter({
     videoKey,
     setKey,
     args: [
@@ -76,7 +75,13 @@ export async function addVideoViewerCounter (options: AddVideoViewerCounterOptio
     ]
   })
 
-  return { isNew: isNew === 1, mustFederate: mustFederate === 1, totalViewers }
+  return {
+    isNew: isNew === 1,
+    mustFederate: mustFederate === 1,
+    totalViewers,
+    // 0 if the viewer is not federated
+    lastFederation
+  }
 }
 
 export async function deleteVideoViewerCounters (videoId: number, viewerIds: string[], newTotal: number) {
