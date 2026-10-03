@@ -1,6 +1,6 @@
-import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
+import { FileStorage, RegisterServerTranscriber, RegisterServerTranscriberResult, VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
-import { AbstractTranscriber, transcriberFactory, TranscriptionModel, WhisperBuiltinModel } from '@peertube/peertube-transcription'
+import { AbstractTranscriber, TranscriptFile, transcriberFactory, TranscriptionModel, WhisperBuiltinModel } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
 import { isVideoCaptionLanguageValid, isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
@@ -21,6 +21,7 @@ import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { buildCaptionM3U8Content, updateM3U8AndShaPlaylist } from './hls.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
+import { Hooks } from './plugins/hooks.js'
 import { TranscriptionJobHandler } from './runners/index.js'
 import { VideoPathManager } from './video-path-manager.js'
 
@@ -156,30 +157,39 @@ export async function generateSubtitle (options: {
   try {
     await ensureDir(outputPath)
 
-    const binDirectory = join(DIRECTORIES.LOCAL_PIP_DIRECTORY, 'bin')
-
-    // Lazy load the transcriber
-    if (!transcriber) {
-      transcriber = transcriberFactory.createFromEngineName({
-        engineName: CONFIG.VIDEO_TRANSCRIPTION.ENGINE,
-        enginePath: CONFIG.VIDEO_TRANSCRIPTION.ENGINE_PATH,
-        logger,
-        binDirectory
-      })
-
-      if (!CONFIG.VIDEO_TRANSCRIPTION.ENGINE_PATH) {
-        logger.info(`Installing transcriber ${transcriber.engine.name} to generate subtitles`)
-        await transcriber.install(DIRECTORIES.LOCAL_PIP_DIRECTORY)
-      }
-    }
-
-    inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
-
     const video = await VideoModel.loadFull(options.video.uuid)
     if (!video) {
       logger.info('Do not process transcription, video does not exist anymore.')
       return undefined
     }
+
+    // A plugin can provide its own transcriber, for example to use an external or self-hosted ASR service
+    const pluginTranscriber = await Hooks.wrapObject<RegisterServerTranscriber | undefined, 'filter:transcription.get-transcriber.result'>(
+      undefined,
+      'filter:transcription.get-transcriber.result',
+      { videoUUID: video.uuid, videoName: video.name, language: video.language }
+    )
+
+    if (!pluginTranscriber) {
+      const binDirectory = join(DIRECTORIES.LOCAL_PIP_DIRECTORY, 'bin')
+
+      // Lazy load the transcriber
+      if (!transcriber) {
+        transcriber = transcriberFactory.createFromEngineName({
+          engineName: CONFIG.VIDEO_TRANSCRIPTION.ENGINE,
+          enginePath: CONFIG.VIDEO_TRANSCRIPTION.ENGINE_PATH,
+          logger,
+          binDirectory
+        })
+
+        if (!CONFIG.VIDEO_TRANSCRIPTION.ENGINE_PATH) {
+          logger.info(`Installing transcriber ${transcriber.engine.name} to generate subtitles`)
+          await transcriber.install(DIRECTORIES.LOCAL_PIP_DIRECTORY)
+        }
+      }
+    }
+
+    inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(options.video.uuid)
 
     const file = video.getMaxQualityFile(VideoFileStream.AUDIO)
 
@@ -195,19 +205,30 @@ export async function generateSubtitle (options: {
 
       logger.info(`Running transcription for ${video.uuid} in ${outputPath}`)
 
-      const transcriptFile = await transcriber.transcribe({
-        mediaFilePath: inputPath,
+      let transcriptFile: TranscriptFile
 
-        model: CONFIG.VIDEO_TRANSCRIPTION.MODEL_PATH
-          ? await TranscriptionModel.fromPath(CONFIG.VIDEO_TRANSCRIPTION.MODEL_PATH)
-          : new WhisperBuiltinModel(CONFIG.VIDEO_TRANSCRIPTION.MODEL),
+      if (pluginTranscriber) {
+        transcriptFile = await transcribeWithPluginTranscriber(pluginTranscriber, {
+          mediaFilePath: inputPath,
+          language: video.language,
+          transcriptDirectory: outputPath,
+          signal: options.signal
+        })
+      } else {
+        transcriptFile = await transcriber.transcribe({
+          mediaFilePath: inputPath,
 
-        transcriptDirectory: outputPath,
+          model: CONFIG.VIDEO_TRANSCRIPTION.MODEL_PATH
+            ? await TranscriptionModel.fromPath(CONFIG.VIDEO_TRANSCRIPTION.MODEL_PATH)
+            : new WhisperBuiltinModel(CONFIG.VIDEO_TRANSCRIPTION.MODEL),
 
-        format: 'vtt',
+          transcriptDirectory: outputPath,
 
-        signal: options.signal
-      })
+          format: 'vtt',
+
+          signal: options.signal
+        })
+      }
 
       const refreshedVideo = await VideoModel.loadFull(video.uuid)
       if (!refreshedVideo) {
@@ -224,6 +245,49 @@ export async function generateSubtitle (options: {
     VideoJobInfoModel.decrease(options.video.uuid, 'pendingTranscription')
       .catch(err => logger.error('Cannot decrease pendingTranscription job count', { err }))
   }
+}
+
+// ---------------------------------------------------------------------------
+// Plugin transcriber
+// ---------------------------------------------------------------------------
+
+async function transcribeWithPluginTranscriber (pluginTranscriber: RegisterServerTranscriber, options: {
+  mediaFilePath: string
+  language?: string
+  transcriptDirectory: string
+  signal?: AbortSignal
+}): Promise<TranscriptFile> {
+  const { mediaFilePath, language, transcriptDirectory, signal } = options
+  const name = pluginTranscriber.name || 'unknown'
+
+  logger.info(`Use the transcriber "${name}" provided by a plugin to generate subtitles`)
+
+  let result: RegisterServerTranscriberResult
+
+  try {
+    result = await pluginTranscriber.transcribe({ mediaFilePath, language, transcriptDirectory, signal })
+  } catch (err) {
+    logger.error(`The plugin transcriber "${name}" failed to generate subtitles`, { err })
+
+    throw err
+  }
+
+  if (!result?.language) {
+    throw new Error(`The plugin transcriber "${name}" did not return the language of the generated subtitles`)
+  }
+
+  if (result.path) {
+    return new TranscriptFile({ path: result.path, language: result.language, format: 'vtt' })
+  }
+
+  if (!result.content) {
+    throw new Error(`The plugin transcriber "${name}" did not return the path or the content of the generated subtitles`)
+  }
+
+  const path = join(transcriptDirectory, `${buildSUUID()}.vtt`)
+  await writeFile(path, result.content, 'utf8')
+
+  return new TranscriptFile({ path, language: result.language, format: 'vtt' })
 }
 
 export async function onTranscriptionEnded (options: {
