@@ -28,7 +28,7 @@ const TS_RANK_NAME_MATCH = 0.61
 // to_tsquery() parses its argument as a tsquery expression: `&`, `|`, `!`, `<->`, parentheses and `:` weight markers
 // So raw user input like "rock & roll", "hello!" or "12:30" makes it throw a syntax error
 // Returns '' when the search holds no lexeme at all
-function buildTSQueryTerms (search: string) {
+export function buildTSQueryTerms (search: string) {
   return search
     .replace(/[^\p{L}\p{N}_]/gu, ' ')
     .split(/\s+/)

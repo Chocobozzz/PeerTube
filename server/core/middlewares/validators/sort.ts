@@ -12,6 +12,7 @@ export const videoImportsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO
 export const videosSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEOS_SEARCH)
 export const videoChannelsSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CHANNELS_SEARCH)
 export const videoPlaylistsSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_PLAYLISTS_SEARCH)
+export const videoCaptionSegmentsSearchSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_CAPTION_SEGMENTS_SEARCH)
 export const videoCommentsValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_COMMENTS)
 export const videoCommentThreadsSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_COMMENT_THREADS)
 export const videoRatesSortValidator = checkSortFactory(SORTABLE_COLUMNS.VIDEO_RATES)

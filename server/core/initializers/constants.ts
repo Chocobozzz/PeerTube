@@ -62,7 +62,7 @@ import { CONFIG, registerConfigChangedHandler } from './config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1125
+export const LAST_MIGRATION_VERSION = 1130
 
 // ---------------------------------------------------------------------------
 
@@ -166,6 +166,7 @@ export const SORTABLE_COLUMNS = {
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match', 'hot' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
   VIDEO_PLAYLISTS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+  VIDEO_CAPTION_SEGMENTS_SEARCH: [ 'match' ],
 
   ABUSES: [ 'id', 'createdAt', 'state' ],
 
@@ -422,7 +423,8 @@ export const MANUAL_MIGRATION_SCRIPTS = [
   'peertube-7.2',
   'peertube-8.0',
   'peertube-8.1',
-  'peertube-8.3'
+  'peertube-8.3',
+  'peertube-8.4'
 ]
 
 // Devices not seen again after this delay are forgotten, so a login from that IP/user-agent pair will be treated as new again

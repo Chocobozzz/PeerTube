@@ -75,6 +75,7 @@ import { VideoLiveModel } from '../models/video/video-live.js'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '../models/video/video-playlist.js'
 import { VideoSearchModel } from '../models/video/video-search.js'
+import { VideoCaptionSegmentModel } from '../models/video/video-caption-segment.js'
 import { VideoShareModel } from '../models/video/video-share.js'
 import { VideoInfohashModel } from '../models/video/video-infohash.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
@@ -228,7 +229,8 @@ export async function initDatabaseModels (silent: boolean) {
     VideoChannelCollaboratorModel,
     ActorReservedModel,
     VideoEmbedPrivacyDomainModel,
-    VideoSearchModel
+    VideoSearchModel,
+    VideoCaptionSegmentModel
   ])
 
   // Check extensions exist in the database

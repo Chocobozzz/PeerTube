@@ -434,6 +434,9 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
         anonymous: true,
         users: true
       },
+      captionSearch: {
+        enabled: true
+      },
       searchIndex: {
         enabled: true,
         url: 'https://sepiasearch.org',

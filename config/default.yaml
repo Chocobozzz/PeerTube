@@ -1172,6 +1172,12 @@ broadcast_message:
   dismissable: false
 
 search:
+  # Index the text of the captions, so a search can return the passage of the video where the term was spoken
+  # with its timestamp, instead of returning the whole video. Disabled by default: enabling it stores the caption
+  # text in the database, which is a decision the instance admin has to make (captions can contain personal data)
+  caption_search:
+    enabled: false
+
   # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
   # If enabled, the associated group will be able to "escape" from the instance follows
   # That means they will be able to follow channels, watch videos, list videos of non followed instances

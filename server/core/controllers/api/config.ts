@@ -571,6 +571,9 @@ function customConfig (): CustomConfig {
         users: CONFIG.SEARCH.REMOTE_URI.USERS,
         anonymous: CONFIG.SEARCH.REMOTE_URI.ANONYMOUS
       },
+      captionSearch: {
+        enabled: CONFIG.SEARCH.CAPTION_SEARCH.ENABLED
+      },
       searchIndex: {
         enabled: CONFIG.SEARCH.SEARCH_INDEX.ENABLED,
         url: CONFIG.SEARCH.SEARCH_INDEX.URL,

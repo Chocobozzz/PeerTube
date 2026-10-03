@@ -2,6 +2,7 @@ import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import { AbstractTranscriber, transcriberFactory, TranscriptionModel, WhisperBuiltinModel } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
+import { indexVideoCaptionSegments } from './video-caption-segments.js'
 import { isVideoCaptionLanguageValid, isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -66,6 +67,9 @@ export async function createLocalCaption (options: {
       return VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
     })
   })
+
+  // Index the caption text so that it can be searched: a caption that cannot be indexed stays a valid caption
+  await indexVideoCaptionSegments(videoCaption)
 
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
     await JobQueue.Instance.createJob({ type: 'move-to-object-storage', payload: { captionId: videoCaption.id } })
