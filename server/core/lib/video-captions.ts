@@ -14,7 +14,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylist, MVideo, MVideoCaption, MVideoFull, MVideoId, MVideoUrl, MVideoUUID } from '@server/types/models/index.js'
 import { MutexInterface } from 'async-mutex'
 import { ensureDir, remove } from 'fs-extra/esm'
-import { writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { dirname, join } from 'path'
 import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { buildCaptionM3U8Content, updateM3U8AndShaPlaylistUnderLock } from './hls.js'
@@ -22,6 +22,7 @@ import { JobQueue } from './job-queue/job-queue.js'
 import { Notifier } from './notifier/notifier.js'
 import { storeHLSFileFromContent, storeVideoCaption } from './object-storage/videos.js'
 import { TranscriptionJobHandler } from './runners/index.js'
+import { indexVideoCaptionSegments } from './video-caption-segments.js'
 import { VideoPathManager } from './video-path-manager.js'
 
 const logger = createLogger('caption')
@@ -54,6 +55,14 @@ export async function createLocalCaption (options: {
     throw new Error(`Invalid VTT file`)
   }
 
+  // Read the text before it can be removed by the object storage upload below
+  const captionContent = CONFIG.SEARCH.CAPTION_SEARCH.ENABLED === true
+    ? await readFile(captionDest, 'utf8').catch(err => {
+      logger.warn('Cannot read caption file to index its text', { err })
+      return undefined
+    })
+    : undefined
+
   // Store it in object storage right away, so it never stays on the file system of this process, that other processes cannot reach
   if (CONFIG.OBJECT_STORAGE.ENABLED) {
     await storeVideoCaption(captionDest, videoCaption.filename)
@@ -73,6 +82,9 @@ export async function createLocalCaption (options: {
       return VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
     })
   })
+
+  // Index the caption text so that it can be searched: a caption that cannot be indexed stays a valid caption
+  await indexVideoCaptionSegments(videoCaption, captionContent)
 
   logger.info(`Created/replaced caption ${videoCaption.filename} of ${language} of video ${video.uuid}`)
 

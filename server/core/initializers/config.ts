@@ -922,6 +922,9 @@ export const CONFIG = buildConfig({
       URL: dynamicKey<string>('search.search_index.url'),
       DISABLE_LOCAL_SEARCH: dynamicKey<boolean>('search.search_index.disable_local_search'),
       IS_DEFAULT_SEARCH: dynamicKey<boolean>('search.search_index.is_default_search')
+    },
+    CAPTION_SEARCH: {
+      ENABLED: dynamicKey<boolean>('search.caption_search.enabled')
     }
   },
   STORYBOARDS: {
