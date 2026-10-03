@@ -137,6 +137,7 @@ export const customConfigUpdateValidator = [
 
   body('search.remoteUri.users').isBoolean(),
   body('search.remoteUri.anonymous').isBoolean(),
+  body('search.captionSearch.enabled').isBoolean(),
   body('search.searchIndex.enabled').isBoolean(),
   body('search.searchIndex.url').exists(),
   body('search.searchIndex.disableLocalSearch').isBoolean(),

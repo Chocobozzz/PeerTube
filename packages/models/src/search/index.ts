@@ -1,5 +1,7 @@
 export * from './boolean-both-query.model.js'
 export * from './search-target-query.model.js'
+export * from './video-caption-segment.model.js'
+export * from './video-caption-segments-search-query.model.js'
 export * from './videos-common-query.model.js'
 export * from './video-channels-search-query.model.js'
 export * from './video-playlists-search-query.model.js'

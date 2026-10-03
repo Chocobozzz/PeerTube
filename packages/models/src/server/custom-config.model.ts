@@ -332,6 +332,10 @@ export interface CustomConfig {
       anonymous: boolean
     }
 
+    captionSearch: {
+      enabled: boolean
+    }
+
     searchIndex: {
       enabled: boolean
       url: string

@@ -1347,6 +1347,11 @@ const CONFIG = {
       get IS_DEFAULT_SEARCH () {
         return config.get<boolean>('search.search_index.is_default_search')
       }
+    },
+    CAPTION_SEARCH: {
+      get ENABLED () {
+        return config.get<boolean>('search.caption_search.enabled')
+      }
     }
   },
   STORYBOARDS: {

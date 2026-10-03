@@ -6672,6 +6672,46 @@ paths:
         '500':
           description: search index unavailable
 
+  /api/v1/search/video-caption-segments:
+    get:
+      tags:
+        - Search
+        - Video
+      summary: Search inside video captions
+      description: >
+        Search inside the text of video captions, i.e. inside the subtitles themselves and not inside the video
+        metadata. Returns the matching caption cues with their language and their start/end timestamps, so that a
+        client can link to the exact passage of the video. Only captions of public, published and
+        non blacklisted videos are returned.
+      operationId: searchVideoCaptionSegments
+      parameters:
+        - name: search
+          in: query
+          required: true
+          allowEmptyValue: false
+          description: String to search inside the text of the captions
+          schema:
+            type: string
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: sort
+          in: query
+          description: Sort the returned caption segments
+          schema:
+            type: string
+            enum:
+              - match
+              - '-match'
+            default: '-match'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoCaptionSegmentListResponse'
+
   /api/v1/search/video-channels:
     get:
       tags:
@@ -11391,6 +11431,49 @@ components:
           type: integer
         spriteDuration:
           type: integer
+
+    VideoCaptionSegment:
+      properties:
+        videoUUID:
+          type: string
+          format: uuid
+          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+        videoName:
+          type: string
+          example: My video
+        language:
+          type: string
+          example: en
+        automaticallyGenerated:
+          type: boolean
+          example: false
+        startMs:
+          type: integer
+          example: 5000
+          description: Start of the caption cue, in milliseconds
+        endMs:
+          type: integer
+          example: 9000
+          description: End of the caption cue, in milliseconds
+        text:
+          type: string
+          example: It will perforate your stomach
+          description: Text of the caption cue the search matched
+        similarity:
+          type: number
+          example: 0.6
+          description: Relevance score, higher is better
+
+    VideoCaptionSegmentListResponse:
+      properties:
+        total:
+          type: integer
+          example: 1
+        data:
+          type: array
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/VideoCaptionSegment'
 
     VideoCaption:
       properties:
