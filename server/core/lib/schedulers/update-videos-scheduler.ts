@@ -51,7 +51,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
     let published = false
 
     let video = await VideoModel.loadFull(schedule.videoId)
-    if (video.state === VideoState.TO_TRANSCODE) return { video, published: false }
+    if (video.state === VideoState.TO_TRANSCODE || video.state === VideoState.TO_EDIT_AS_NEW_VIDEO) return { video, published: false }
 
     logger.info('Executing scheduled video update on ' + video.uuid)
 
