@@ -1,6 +1,8 @@
 import { WatchedWordsList } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { wordsToRegExp } from '@server/helpers/regexp.js'
+import { RedisChannels } from '@server/lib/redis/index.js'
 import { MAccountId, MWatchedWordsList } from '@server/types/models/index.js'
 import { LRUCache } from 'lru-cache'
 import { Transaction } from 'sequelize'
@@ -70,6 +72,21 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
     max: LRU_CACHE.WATCHED_WORDS_REGEX.MAX_SIZE,
     ttl: LRU_CACHE.WATCHED_WORDS_REGEX.TTL
   })
+
+  // Bumped on each invalidation, so a regex build that overlapped one doesn't cache rows loaded before the change
+  private static regexCacheInvalidations = 0
+
+  // Keep in sync with the changes made by the other processes of this platform
+  static async listenForRegexCacheInvalidations () {
+    await RedisChannels.watchedWordsInvalidation.subscribe(payload => {
+      if (payload?.accountId) WatchedWordsListModel.clearLocalRegexCache(payload.accountId)
+    })
+  }
+
+  static clearLocalRegexCache (accountId: number) {
+    WatchedWordsListModel.regexCacheInvalidations++
+    WatchedWordsListModel.regexCache.delete(accountId)
+  }
 
   static load (options: {
     id: number
@@ -192,15 +209,19 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
       return WatchedWordsListModel.regexCache.get(accountId)
     }
 
+    const invalidationsBefore = WatchedWordsListModel.regexCacheInvalidations
+
     const models = await WatchedWordsListModel.findAll<MWatchedWordsList>({
       where: { accountId }
     })
 
     const result = models.map(m => ({ listName: m.listName, regex: wordsToRegExp(m.words) }))
 
-    WatchedWordsListModel.regexCache.set(accountId, result)
+    if (invalidationsBefore === WatchedWordsListModel.regexCacheInvalidations) {
+      WatchedWordsListModel.regexCache.set(accountId, result)
 
-    logger.debug('Will cache watched words regex', { accountId, listNames: result.map(r => r.listName), tags: [ 'watched-words' ] })
+      logger.debug('Will cache watched words regex', { accountId, listNames: result.map(r => r.listName), tags: [ 'watched-words' ] })
+    }
 
     return result
   }
@@ -216,26 +237,38 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
   }) {
     const list = await super.create<MWatchedWordsList>(options, { transaction: options.transaction })
 
-    WatchedWordsListModel.regexCache.delete(options.accountId)
+    WatchedWordsListModel.invalidateRegexCache(options.accountId, options.transaction)
 
     return list
   }
 
-  static removeImportedBySubscription (options: {
+  static async removeImportedBySubscription (options: {
     accountId: number
     watchedWordsSubscriptionId: number
     transaction?: Transaction
   }) {
     const { accountId, watchedWordsSubscriptionId, transaction } = options
 
-    WatchedWordsListModel.regexCache.delete(accountId)
-
-    return WatchedWordsListModel.destroy({
+    const destroyed = await WatchedWordsListModel.destroy({
       where: {
         accountId,
         watchedWordsSubscriptionId
       },
       transaction
+    })
+
+    WatchedWordsListModel.invalidateRegexCache(accountId, transaction)
+
+    return destroyed
+  }
+
+  // The regex cache is local to the process, so the other processes of this platform must also drop the entry
+  // Once the transaction is committed, otherwise they could cache the old rows again
+  private static invalidateRegexCache (accountId: number, transaction: Transaction) {
+    afterCommitIfTransaction(transaction, () => {
+      WatchedWordsListModel.clearLocalRegexCache(accountId)
+
+      RedisChannels.watchedWordsInvalidation.broadcast({ accountId })
     })
   }
 
@@ -255,7 +288,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
 
     await this.save({ transaction })
 
-    WatchedWordsListModel.regexCache.delete(this.accountId)
+    WatchedWordsListModel.invalidateRegexCache(this.accountId, transaction)
   }
 
   async destroy (options: {
@@ -263,7 +296,7 @@ export class WatchedWordsListModel extends SequelizeModel<WatchedWordsListModel>
   } = {}) {
     await super.destroy(options)
 
-    WatchedWordsListModel.regexCache.delete(this.accountId)
+    WatchedWordsListModel.invalidateRegexCache(this.accountId, options.transaction)
   }
 
   toFormattedJSON (): WatchedWordsList {

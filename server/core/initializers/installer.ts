@@ -1,13 +1,10 @@
 import { UserRole } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { generateRunnerRegistrationToken } from '@server/helpers/token-generator.js'
-import { getNodeABIVersion } from '@server/helpers/version.js'
 import { initPNPM } from '@server/lib/plugins/package-manager.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
 import { ensureDir, remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
 import { generatePassword } from 'password-generator'
-import { join } from 'path'
 import { createLogger } from '../helpers/logger.js'
 import { buildUser, createApplicationActor, createUserAccountAndChannelAndPlaylist } from '../lib/user.js'
 import { ApplicationModel } from '../models/application/application.js'
@@ -19,7 +16,7 @@ import { sequelizeTypescript } from './database.js'
 
 const logger = createLogger()
 
-async function installApplication () {
+export async function installPrimary () {
   try {
     await Promise.all([
       // Database related
@@ -44,31 +41,16 @@ async function installApplication () {
   }
 }
 
-// ---------------------------------------------------------------------------
+export async function installSecondary () {
+  await removeTmpDirectory()
 
-export {
-  installApplication
+  await createDirectoriesIfNotExist()
+
+  // A secondary installs plugins in its own directory
+  await initPNPM()
 }
 
 // ---------------------------------------------------------------------------
-
-function removeTmpDirectory () {
-  return removeDirectoryOrContent(CONFIG.STORAGE.TMP_DIR)
-}
-
-async function removeDirectoryOrContent (dir: string) {
-  try {
-    await remove(dir)
-  } catch (err) {
-    logger.debug('Cannot remove directory %s. Removing content instead.', dir, { err })
-
-    const files = await readdir(dir)
-
-    for (const file of files) {
-      await remove(join(dir, file))
-    }
-  }
-}
 
 function createDirectoriesIfNotExist () {
   const storage = CONFIG.STORAGE
@@ -95,6 +77,12 @@ function createDirectoriesIfNotExist () {
   tasks.push(ensureDir(DIRECTORIES.HLS_REDUNDANCY))
 
   return Promise.all(tasks)
+}
+
+// ---------------------------------------------------------------------------
+
+async function removeTmpDirectory () {
+  await remove(CONFIG.STORAGE.TMP_DIR)
 }
 
 async function createOAuthClientIfNotExist () {
@@ -173,8 +161,6 @@ async function createApplicationIfNotExist () {
 
   const application = await ApplicationModel.create({
     migrationVersion: LAST_MIGRATION_VERSION,
-    nodeVersion: process.version,
-    nodeABIVersion: getNodeABIVersion(),
     // Scripts that existed before the manual migration tracking system was introduced: assume already run
     manualMigrationScriptsRun: [
       'peertube-4.0',

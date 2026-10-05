@@ -1,15 +1,17 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
+import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { buildNonDuplicatedVideoAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from '@server/lib/job-queue/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from '@server/lib/thumbnail.js'
-import { setupUploadResumableRoutes } from '@server/lib/uploadx.js'
+import { getUploadXFileInput, safeUploadXCleanup, setupUploadResumableRoutes, videoUploadx } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
-import { buildNewFile, createVideoSource } from '@server/lib/video-file.js'
+import { buildNewFile, createVideoSource, storeNewWebVideoFile } from '@server/lib/video-file.js'
 import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded, buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { buildNextVideoState } from '@server/lib/video-state.js'
@@ -18,7 +20,6 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoModel } from '@server/models/video/video.js'
 import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
-import { move } from 'fs-extra/esm'
 import { createLogger } from '../../../helpers/logger.js'
 import {
   asyncMiddleware,
@@ -51,6 +52,8 @@ videoSourceRouter.delete(
 setupUploadResumableRoutes({
   routePath: '/:id/source/replace-resumable',
   router: videoSourceRouter,
+
+  initMetadataFields: [],
 
   uploadInitAfterMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableInitValidator) ],
   uploadedMiddlewares: [ asyncMiddleware(replaceVideoSourceResumableValidator) ],
@@ -92,77 +95,98 @@ function getVideoLatestSource (req: express.Request, res: express.Response) {
 }
 
 function replaceVideoSourceResumable (req: express.Request, res: express.Response) {
-  return logger.withContext([ res.locals.videoFull.uuid ], () => doReplaceVideoSourceResumable(req, res))
+  return logger.withContext([ res.locals.videoFull.uuid ], async () => {
+    try {
+      await doReplaceVideoSourceResumable(req, res)
+    } finally {
+      await Redis.Instance.deleteUploadSession(req.query.upload_id)
+    }
+  })
 }
 
 async function doReplaceVideoSourceResumable (req: express.Request, res: express.Response) {
-  const videoPhysicalFile = res.locals.updateVideoFileResumable
+  const uploadFile = res.locals.updateVideoFileResumable
   const user = res.locals.oauth.token.User
 
-  const videoFile = await buildNewFile({
-    path: videoPhysicalFile.path,
-    mode: 'web-video',
-    ffprobe: res.locals.ffprobe
-  }) as MVideoFileInfoHash
+  const ffmpegInput = uploadFile.ffmpegInput
+  const originalFilename = uploadFile.originalname
 
-  const originalFilename = videoPhysicalFile.originalname
-
-  const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(res.locals.videoFull.uuid)
+  let videoFileMutexReleaser: () => void
+  let rollbackLocalFile: () => Promise<void>
 
   try {
-    const destination = VideoPathManager.Instance.getFSVideoFileOutputPath(res.locals.videoFull, videoFile)
-    await move(videoPhysicalFile.path, destination)
+    const videoFile = await buildNewFile({
+      input: getUploadXFileInput(uploadFile),
+      mode: 'web-video',
+      ffprobe: res.locals.ffprobe
+    }) as MVideoFileInfoHash
+
+    videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(res.locals.videoFull.uuid)
+
+    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({
+      video: res.locals.videoFull,
+      videoFile,
+      input: uploadFile.stagingKey
+        ? { stagingKey: uploadFile.stagingKey }
+        : { path: uploadFile.path }
+    })
+    // If a later step fails, remove the file we just stored instead of leaving it orphaned
+    rollbackLocalFile = rollback
 
     let oldWebVideoFiles: MVideoFile[] = []
     let oldStreamingPlaylists: MStreamingPlaylistFiles[] = []
 
     const inputFileUpdatedAt = new Date()
 
-    const video = await sequelizeTypescript.transaction(async transaction => {
-      const video = await VideoModel.loadFull(res.locals.videoFull.id, transaction)
+    const video = await retryTransactionWrapper(() => {
+      return sequelizeTypescript.transaction(async transaction => {
+        const video = await VideoModel.loadFull(res.locals.videoFull.id, transaction)
 
-      oldWebVideoFiles = video.VideoFiles
-      oldStreamingPlaylists = video.VideoStreamingPlaylists
+        oldWebVideoFiles = video.VideoFiles
+        oldStreamingPlaylists = video.VideoStreamingPlaylists
 
-      for (const file of video.VideoFiles) {
-        await file.destroy({ transaction })
-      }
-      for (const playlist of oldStreamingPlaylists) {
-        await playlist.destroy({ transaction })
-      }
+        for (const file of video.VideoFiles) {
+          await file.destroy({ transaction })
+        }
+        for (const playlist of oldStreamingPlaylists) {
+          await playlist.destroy({ transaction })
+        }
 
-      videoFile.videoId = video.id
-      await videoFile.save({ transaction })
+        // The instance may have been saved by a rolled back attempt
+        videoFile.isNewRecord = true
+        videoFile.videoId = video.id
+        await videoFile.save({ transaction })
 
-      video.VideoFiles = [ videoFile ]
-      video.VideoStreamingPlaylists = []
+        video.VideoFiles = [ videoFile ]
+        video.VideoStreamingPlaylists = []
 
-      video.state = buildNextVideoState()
-      video.duration = videoPhysicalFile.duration
-      video.inputFileUpdatedAt = inputFileUpdatedAt
-      video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
-      await video.save({ transaction })
+        video.state = buildNextVideoState()
+        video.duration = uploadFile.duration
+        video.inputFileUpdatedAt = inputFileUpdatedAt
+        video.aspectRatio = buildAspectRatio({ width: videoFile.width, height: videoFile.height })
+        await video.save({ transaction })
 
-      await autoBlacklistVideoIfNeeded({
-        video,
-        user,
-        // The name and the description of the video did not change, so its automatic tags are still up to date
-        holdIfAutoTagPolicy: false,
-        isRemote: false,
-        isNew: false,
-        isNewFile: true,
-        transaction
+        await autoBlacklistVideoIfNeeded({
+          video,
+          user,
+          // The name and the description of the video did not change, so its automatic tags are still up to date
+          holdIfAutoTagPolicy: false,
+          isRemote: false,
+          isNew: false,
+          isNewFile: true,
+          transaction
+        })
+
+        await VideoChannelActivityModel.addVideoActivity({
+          action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
+          user,
+          channel: video.VideoChannel,
+          video,
+          transaction
+        })
+
+        return video
       })
-
-      await VideoChannelActivityModel.addVideoActivity({
-        action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
-        user,
-        channel: video.VideoChannel,
-        video,
-        transaction
-      })
-
-      return video
     })
 
     await removeOldFiles({ video, files: oldWebVideoFiles, playlists: oldStreamingPlaylists })
@@ -170,12 +194,14 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
     const source = await createVideoSource({
       inputFilename: originalFilename,
       inputProbe: res.locals.ffprobe,
-      inputPath: destination,
+      inputFile: localPath
+        ? { path: localPath }
+        : { url: ffmpegInput, size: videoFile.size, extname: videoFile.extname },
       video,
       createdAt: inputFileUpdatedAt
     })
 
-    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(video, res.locals.ffprobe)
+    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(video, res.locals.ffprobe, localPath ?? ffmpegInput)
     await video.VideoChannel.setAsUpdated()
 
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
@@ -184,9 +210,17 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
 
     Hooks.runAction('action:api.video.file-updated', { video, req, res })
 
+    await cleanup()
+
     return res.json(source.toFormattedJSON())
+  } catch (err) {
+    await rollbackLocalFile?.()
+    throw err
   } finally {
-    videoFileMutexReleaser()
+    videoFileMutexReleaser?.()
+
+    // Also when the file could not be built: remove the staged object and its local copy
+    safeUploadXCleanup(uploadFile, videoUploadx)
   }
 }
 

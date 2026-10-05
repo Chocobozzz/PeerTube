@@ -18,6 +18,7 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
 import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
+import { commitPendingCompletion } from './shared/pending-completions.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
 const logger = createLogger('studio', 'transcoding')
@@ -26,6 +27,7 @@ type CreateOptions = {
   video: MVideoWithFile
   sourceVideo?: MVideoWithFile
   tasks: VideoStudioTaskPayload[]
+  taskFilesStaged: boolean
   priority: number
 }
 
@@ -34,7 +36,7 @@ export class VideoStudioTranscodingJobHandler
   extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
 {
   async create (options: CreateOptions) {
-    const { video, priority, tasks } = options
+    const { video, priority, tasks, taskFilesStaged } = options
     const inputVideo = options.sourceVideo ?? video
 
     const jobUUID = buildUUID()
@@ -82,7 +84,8 @@ export class VideoStudioTranscodingJobHandler
       const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
         videoUUID: video.uuid,
         sourceVideoUUID: options.sourceVideo?.uuid,
-        originalTasks: tasks
+        originalTasks: tasks,
+        taskFilesStaged
       }
 
       const job = await this.createRunnerJob({
@@ -100,6 +103,10 @@ export class VideoStudioTranscodingJobHandler
   // ---------------------------------------------------------------------------
 
   protected isAbortSupported () {
+    return true
+  }
+
+  protected isCompletionAbortable () {
     return true
   }
 
@@ -122,9 +129,11 @@ export class VideoStudioTranscodingJobHandler
     const { runnerJob, resultPayload } = options
     const privatePayload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
+    const taskFiles = { tasks: privatePayload.originalTasks, taskFilesStaged: privatePayload.taskFilesStaged }
+
     const video = await loadRunnerVideo(runnerJob)
     if (!video) {
-      await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
+      await safeCleanupStudioTMPFiles(taskFiles)
       return
     }
 
@@ -135,15 +144,19 @@ export class VideoStudioTranscodingJobHandler
         await onVideoStudioEnded({
           video,
           editionResultPath: videoFilePath,
-          tasks: privatePayload.originalTasks,
-          isNewVideo: !!privatePayload.sourceVideoUUID
+          taskFiles,
+          isNewVideo: !!privatePayload.sourceVideoUUID,
+
+          // A shutdown can give the job back to the runners until then
+          beforeIrreversibleChanges: () => commitPendingCompletion(runnerJob.uuid)
         })
       } catch (err) {
         // The runner job has errored: don't keep an incomplete new video
         if (privatePayload.sourceVideoUUID) {
           await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: true })
-          await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
         }
+
+        await safeCleanupStudioTMPFiles(taskFiles)
 
         throw err
       }
@@ -178,6 +191,8 @@ export class VideoStudioTranscodingJobHandler
 
     await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo: !!payload.sourceVideoUUID })
 
-    await logger.withContext([ payload.videoUUID ], () => safeCleanupStudioTMPFiles(payload.originalTasks))
+    await logger.withContext([ payload.videoUUID ], () => {
+      return safeCleanupStudioTMPFiles({ tasks: payload.originalTasks, taskFilesStaged: payload.taskFilesStaged })
+    })
   }
 }

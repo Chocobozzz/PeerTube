@@ -1,10 +1,10 @@
-import { Transaction } from 'sequelize'
+import { Activity, FileStorage } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MActorSignature, MVideoRedundancyVideo } from '@server/types/models/index.js'
-import { Activity } from '@peertube/peertube-models'
+import { Transaction } from 'sequelize'
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy.js'
 import { sendUndoCacheFile } from './activitypub/send/index.js'
 
@@ -19,8 +19,40 @@ async function removeVideoRedundancy (videoRedundancy: MVideoRedundancyVideo, t?
   await videoRedundancy.destroy({ transaction: t })
 }
 
+// The streaming playlist changed on the origin instance, so our cached copy is outdated
+// The redundancy scheduler will duplicate the video again later if it still matches one of its strategies
+async function removeRedundanciesOfStreamingPlaylist (videoStreamingPlaylistId: number, t?: Transaction) {
+  const redundancies = await VideoRedundancyModel.listLocalByStreamingPlaylistId(videoStreamingPlaylistId)
+
+  for (const redundancy of redundancies) {
+    logger.info('Removing outdated redundancy %s of streaming playlist %d.', redundancy.url, videoStreamingPlaylistId)
+
+    await removeVideoRedundancy(redundancy, t)
+  }
+}
+
 async function removeRedundanciesOfServer (serverId: number) {
   const redundancies = await VideoRedundancyModel.listLocalOfServer(serverId)
+
+  for (const redundancy of redundancies) {
+    await removeVideoRedundancy(redundancy)
+  }
+}
+
+// Object storage has been enabled or disabled: cleanup redundancies
+async function removeRedundanciesOfOtherStorage () {
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
+
+  const redundancies = await VideoRedundancyModel.listDuplicatedVideosNotInStorage(storage)
+  if (redundancies.length === 0) return
+
+  logger.info(
+    'Object storage has been %s: removing %d redundancies of the previous storage.',
+    CONFIG.OBJECT_STORAGE.ENABLED ? 'enabled' : 'disabled',
+    redundancies.length
+  )
 
   for (const redundancy of redundancies) {
     await removeVideoRedundancy(redundancy)
@@ -41,7 +73,8 @@ async function isRedundancyAccepted (activity: Activity, byActor: MActorSignatur
     if (allowed !== true) {
       logger.info(
         'Do not accept remote redundancy %s because actor %s is not followed by our instance.',
-        activity.id, byActor.url
+        activity.id,
+        byActor.url
       )
       return false
     }
@@ -54,6 +87,8 @@ async function isRedundancyAccepted (activity: Activity, byActor: MActorSignatur
 
 export {
   isRedundancyAccepted,
+  removeRedundanciesOfOtherStorage,
   removeRedundanciesOfServer,
+  removeRedundanciesOfStreamingPlaylist,
   removeVideoRedundancy
 }

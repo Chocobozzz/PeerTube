@@ -6,6 +6,8 @@ After=network.target postgresql.service redis-server.service
 Type=simple
 Environment=NODE_ENV=production
 Environment=NODE_CONFIG_DIR=/var/www/peertube/config
+; Password hashing and actor key generation run on the libuv thread pool, which defaults to 4 threads
+Environment=UV_THREADPOOL_SIZE=16
 User=peertube
 Group=peertube
 ExecStart=/usr/bin/node dist/server

@@ -1,11 +1,6 @@
-import {
-  PlaylistElementObject,
-  VideoPlaylistElement,
-  VideoPlaylistElementType,
-  VideoPrivacy,
-  VideoPrivacyType
-} from '@peertube/peertube-models'
+import { PlaylistElementObject, VideoPlaylistElement, VideoPlaylistElementType, VideoPrivacy } from '@peertube/peertube-models'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
+import { PROTECTED_VIDEO_PRIVACIES } from '@server/lib/video-privacy.js'
 import { MUserAccountId } from '@server/types/models/index.js'
 import {
   type MVideoPlaylistElement,
@@ -233,7 +228,7 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
           where: playlistWhere
         },
         {
-          attributes: [ 'url' ],
+          attributes: [ 'url', 'privacy' ],
           model: VideoModel.unscoped()
         }
       ],
@@ -399,8 +394,7 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
     if (video.privacy === VideoPrivacy.INTERNAL && accountId) return VideoPlaylistElementType.REGULAR
 
     // Private, internal and password protected videos cannot be read without appropriate access (ownership, internal)
-    const protectedPrivacy = new Set<VideoPrivacyType>([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL, VideoPrivacy.PASSWORD_PROTECTED ])
-    if (protectedPrivacy.has(video.privacy)) {
+    if (PROTECTED_VIDEO_PRIVACIES.has(video.privacy)) {
       return VideoPlaylistElementType.PRIVATE
     }
 
@@ -417,11 +411,14 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
   }
 
   toActivityPubObject (this: MVideoPlaylistElementAP): PlaylistElementObject {
+    // AP requests are anonymous: mask the URL of videos that cannot be publicly read
+    const canSeeVideoUrl = this.Video && !PROTECTED_VIDEO_PRIVACIES.has(this.Video.privacy)
+
     const base: PlaylistElementObject = {
       id: this.url,
       type: 'PlaylistElement',
 
-      url: this.Video?.url || null,
+      url: canSeeVideoUrl ? this.Video.url : null,
       position: this.position
     }
 

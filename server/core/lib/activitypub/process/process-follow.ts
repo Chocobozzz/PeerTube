@@ -8,6 +8,7 @@ import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
 import { getAPId } from '../../../lib/activitypub/activity.js'
+import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
@@ -24,7 +25,9 @@ async function processFollowActivity (options: APProcessorOptions<ActivityFollow
   const activityId = activity.id
   const objectId = getAPId(activity.object)
 
-  return retryTransactionWrapper(() => processFollow(byActor, activityId, objectId))
+  return runWithAPObjectLock(buildAPFollowLockKey(byActor.url, objectId), () => {
+    return retryTransactionWrapper(() => processFollow(byActor, activityId, objectId))
+  })
 }
 
 // ---------------------------------------------------------------------------

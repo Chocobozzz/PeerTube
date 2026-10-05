@@ -5,23 +5,23 @@ import {
   VideoTranscodeOptions,
   getVideoStreamDuration
 } from '@peertube/peertube-ffmpeg'
-import { VideoFileStream } from '@peertube/peertube-models'
+import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { createTorrentForFile } from '@server/lib/webtorrent.js'
+import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoFile, MVideoFull } from '@server/types/models/index.js'
 import { Job } from 'bullmq'
-import { move } from 'fs-extra/esm'
 import { copyFile } from 'fs/promises'
-import { basename, join } from 'path'
+import { join } from 'path'
 import { CONFIG } from '../../initializers/config.js'
 import { VideoFileModel } from '../../models/video/video-file.js'
+import { makeCommonFileAvailableIn } from '../object-storage/common-files.js'
 import { generateWebVideoFilename } from '../paths.js'
-import { buildNewFile, saveNewOriginalFileIfNeeded } from '../video-file.js'
+import { buildNewFile, moveAndSaveNewOriginalFileIfNeeded, storeNewWebVideoFile } from '../video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '../video-jobs.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
@@ -70,7 +70,12 @@ export async function optimizeOriginalVideofile (options: {
           fps
         })
 
-        const { videoFile } = await onWebVideoFileTranscoding({ video, videoOutputPath, deleteWebInputVideoFile: inputVideoFile })
+        const { videoFile } = await onWebVideoFileTranscoding({
+          video,
+          videoOutputPath,
+          webInputFile: inputVideoFile,
+          webInputFilePath: videoInputPath
+        })
 
         return { transcodeType, videoFile }
       } finally {
@@ -160,9 +165,14 @@ export async function mergeAudioVideofile (options: {
       const videoOutputPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
       // If the user updates the video thumbnails during transcoding
-      const thumbnailPath = video.getBestThumbnail('16:9').getFSPath()
-      const tmpThumbnailPath = join(CONFIG.STORAGE.TMP_DIR, basename(thumbnailPath))
-      await copyFile(thumbnailPath, tmpThumbnailPath)
+      const thumbnail = video.getBestThumbnail('16:9')
+      const tmpThumbnailPath = join(CONFIG.STORAGE.TMP_DIR, thumbnail.filename)
+
+      if (thumbnail.storage === FileStorage.OBJECT_STORAGE) {
+        await makeCommonFileAvailableIn('thumbnails', thumbnail.filename, tmpThumbnailPath)
+      } else {
+        await copyFile(thumbnail.getFSPath(), tmpThumbnailPath)
+      }
 
       const transcodeOptions: MergeAudioTranscodeOptions = {
         type: 'merge-audio',
@@ -184,7 +194,8 @@ export async function mergeAudioVideofile (options: {
         await onWebVideoFileTranscoding({
           video,
           videoOutputPath,
-          deleteWebInputVideoFile: inputVideoFile,
+          webInputFile: inputVideoFile,
+          webInputFilePath: audioInputPath,
           wasAudioFile: true
         })
       } finally {
@@ -204,14 +215,22 @@ export async function onWebVideoFileTranscoding (options: {
   video: MVideoFull
   videoOutputPath: string
   wasAudioFile?: boolean // default false
-  deleteWebInputVideoFile?: MVideoFile
+
+  // Safe to delete
+  webInputFile?: MVideoFile
+
+  // Local copy of `webInputFile`, if the caller has one
+  webInputFilePath?: string
 }) {
-  const { video, videoOutputPath, wasAudioFile, deleteWebInputVideoFile } = options
+  const { video, videoOutputPath, wasAudioFile, webInputFile, webInputFilePath } = options
 
   const mutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
-  let videoFile = await buildNewFile({ mode: 'web-video', path: videoOutputPath })
+  let videoFile = await buildNewFile({ mode: 'web-video', input: { path: videoOutputPath } })
   videoFile.videoId = video.id
+
+  let infoHashOfFile: string
+  let rollbackNewVideoFile: () => Promise<void>
 
   try {
     await video.reload()
@@ -224,18 +243,24 @@ export async function onWebVideoFileTranscoding (options: {
       await video.save()
     }
 
-    const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
+    const { localPath, cleanup, rollback } = await storeNewWebVideoFile({ video, videoFile, input: { path: videoOutputPath } })
+    // If a later step fails, remove the file we just stored instead of leaving it orphaned
+    rollbackNewVideoFile = rollback
 
-    await move(videoOutputPath, outputPath, { overwrite: true })
+    try {
+      const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, videoFile, localPath)
+      videoFile.torrentFilename = torrentFilename
+      videoFile.torrentStorage = torrentStorage
+      infoHashOfFile = infoHash
+    } finally {
+      await cleanup()
+    }
 
-    const { infoHash, torrentFilename } = await createTorrentForFile(video, videoFile)
-    videoFile.torrentFilename = torrentFilename
-
-    if (deleteWebInputVideoFile) {
-      await saveNewOriginalFileIfNeeded(video, deleteWebInputVideoFile)
+    if (webInputFile) {
+      await moveAndSaveNewOriginalFileIfNeeded({ video, webInputFile, webInputFilePath })
 
       // Reload the file: another job may have updated it (its torrent filename for example) while we were transcoding
-      const inputFileToDelete = await VideoFileModel.load(deleteWebInputVideoFile.id)
+      const inputFileToDelete = await VideoFileModel.load(webInputFile.id)
 
       if (inputFileToDelete) {
         await video.removeWebVideoFile(inputFileToDelete)
@@ -249,7 +274,7 @@ export async function onWebVideoFileTranscoding (options: {
     await retryTransactionWrapper(() => {
       return sequelizeTypescript.transaction(async t => {
         videoFile = await VideoFileModel.customUpsert(videoFile, 'video', t)
-        await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHash, t)
+        await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHashOfFile, t)
       })
     })
 
@@ -260,6 +285,9 @@ export async function onWebVideoFileTranscoding (options: {
     }
 
     return { videoFile }
+  } catch (err) {
+    await rollbackNewVideoFile?.()
+    throw err
   } finally {
     mutexReleaser()
   }

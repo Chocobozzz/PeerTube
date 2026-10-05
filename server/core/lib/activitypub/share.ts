@@ -1,6 +1,6 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
-import Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
 import { createLogger } from '../../helpers/logger.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
@@ -26,7 +26,7 @@ export async function changeVideoChannelShare (
 }
 
 export async function addVideoShares (shareUrls: string[], video: MVideoId) {
-  await Bluebird.map(shareUrls, async shareUrl => {
+  await promiseMap(shareUrls, async shareUrl => {
     try {
       await addVideoShare(shareUrl, video)
     } catch (err) {

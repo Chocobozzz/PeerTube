@@ -1,5 +1,5 @@
 import { promisify0 } from '@peertube/peertube-core-utils'
-import { parseSemVersion } from '../helpers/core-utils.js'
+import { parseSemVersion } from '@peertube/peertube-node-utils'
 import { createLogger } from '../helpers/logger.js'
 import { getConfigModule } from './config.js'
 
@@ -115,6 +115,11 @@ export function checkMissedConfig () {
     'video_studio.enabled',
     'video_studio.remote_runners.enabled',
     'video_file.update.enabled',
+    'video_file.lifecycle.enabled',
+    'video_file.lifecycle.check_interval',
+    'video_file.lifecycle.dry_run',
+    'video_file.lifecycle.max_videos_per_run',
+    'video_file.lifecycle.policies',
     'remote_runners.stalled_jobs.vod',
     'remote_runners.stalled_jobs.live',
     'thumbnails.generation_from_video.frames_to_analyze',
@@ -219,6 +224,29 @@ export function checkMissedConfig () {
     'object_storage.captions.bucket_name',
     'object_storage.captions.prefix',
     'object_storage.captions.base_url',
+    'object_storage.user_exports.bucket_name',
+    'object_storage.user_exports.prefix',
+    'object_storage.user_exports.base_url',
+    'object_storage.avatars.bucket_name',
+    'object_storage.avatars.prefix',
+    'object_storage.avatars.base_url',
+    'object_storage.thumbnails.bucket_name',
+    'object_storage.thumbnails.prefix',
+    'object_storage.thumbnails.base_url',
+    'object_storage.storyboards.bucket_name',
+    'object_storage.storyboards.prefix',
+    'object_storage.storyboards.base_url',
+    'object_storage.torrents.bucket_name',
+    'object_storage.torrents.prefix',
+    'object_storage.torrents.base_url',
+    'object_storage.uploads.bucket_name',
+    'object_storage.uploads.prefix',
+    'object_storage.uploads.base_url',
+    'object_storage.staging.bucket_name',
+    'object_storage.staging.prefix',
+    'object_storage.cache.bucket_name',
+    'object_storage.cache.prefix',
+    'object_storage.cache.base_url',
     'theme.default',
     'feeds.videos.count',
     'feeds.comments.count',
@@ -299,6 +327,16 @@ export function checkMissedConfig () {
     for (const r of redundancyVideos) {
       if (!r.size) miss.push('redundancy.videos.strategies.size')
       if (!r.min_lifetime) miss.push('redundancy.videos.strategies.min_lifetime')
+    }
+  }
+
+  const lifecyclePolicies = config.get<any>('video_file.lifecycle.policies')
+
+  if (Array.isArray(lifecyclePolicies)) {
+    for (const p of lifecyclePolicies) {
+      if (!p?.name) miss.push('video_file.lifecycle.policies.name')
+      if (!p?.criteria) miss.push('video_file.lifecycle.policies.criteria')
+      if (!p?.action) miss.push('video_file.lifecycle.policies.action')
     }
   }
 

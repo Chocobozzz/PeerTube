@@ -18,10 +18,12 @@ import {
   ManageVideoTorrentPayload,
   MoveStoragePayload,
   NotifyPayload,
+  ProcessRole,
   RefreshPayload,
   TranscodingJobBuilderPayload,
   VideoChannelImportPayload,
   VideoFileImportPayload,
+  VideoFilesLifecyclePayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
   VideoRedundancyPayload,
@@ -31,6 +33,7 @@ import {
 } from '@peertube/peertube-models'
 import { allJobStates } from '@server/helpers/custom-validators/jobs.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
+import { getProcessRole, isSecondaryProcess, PROCESS_ROLES } from '@server/initializers/process-role.js'
 import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy.js'
 import {
   FlowJob,
@@ -48,7 +51,7 @@ import { RedisOptions } from 'ioredis'
 import { createLogger } from '../../helpers/logger.js'
 import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
 import { Hooks } from '../plugins/hooks.js'
-import { Redis } from '../redis.js'
+import { currentProcessId, Redis, RedisChannels } from '../redis/index.js'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner.js'
 import { processActivityPubFollow } from './handlers/activitypub-follow.js'
 import {
@@ -74,6 +77,7 @@ import { processNotify } from './handlers/notify.js'
 import { processTranscodingJobBuilder } from './handlers/transcoding-job-builder.js'
 import { processVideoChannelImport } from './handlers/video-channel-import.js'
 import { processVideoFileImport } from './handlers/video-file-import.js'
+import { processVideoFilesLifecycle } from './handlers/video-files-lifecycle.js'
 import { processVideoImport } from './handlers/video-import.js'
 import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideosStats } from './handlers/video-stats.js'
@@ -93,6 +97,7 @@ export type CreateJobTypeAndPayload =
   | { type: 'activitypub-cleaner', payload: {} }
   | { type: 'activitypub-follow', payload: ActivitypubFollowPayload }
   | { type: 'video-file-import', payload: VideoFileImportPayload }
+  | { type: 'video-files-lifecycle', payload: VideoFilesLifecyclePayload }
   | { type: 'video-transcoding', payload: VideoTranscodingPayload }
   | { type: 'email', payload: EmailPayload }
   | { type: 'transcoding-job-builder', payload: TranscodingJobBuilderPayload }
@@ -148,6 +153,7 @@ const handlers: { [id in JobType]: (job: Job, signal?: AbortSignal) => Promise<a
   'notify': processNotify,
   'video-channel-import': processVideoChannelImport,
   'video-file-import': processVideoFileImport,
+  'video-files-lifecycle': processVideoFilesLifecycle,
   'video-import': processVideoImport,
   'video-live-ending': processVideoLiveEnding,
   'video-redundancy': processVideoRedundancy,
@@ -187,6 +193,7 @@ const jobTypes: JobType[] = [
   'transcoding-job-builder',
   'video-channel-import',
   'video-file-import',
+  'video-files-lifecycle',
   'video-import',
   'video-live-ending',
   'video-redundancy',
@@ -197,6 +204,28 @@ const jobTypes: JobType[] = [
   'import-user-archive',
   'video-transcoding'
 ]
+
+/**
+ * Job types a secondary process may consume.
+ *
+ * They do not touch state owned by a single process (live sessions, transcoding files on local storage)
+ */
+const secondaryProcessJobTypes = new Set<JobType>([
+  'activitypub-http-broadcast-parallel',
+  'activitypub-http-broadcast',
+  'activitypub-http-unicast',
+
+  // The import reads the staged archive and creates videos, avatars, etc. in object storage
+  'import-user-archive',
+
+  // Redundancy files are in object storage
+  'video-redundancy'
+])
+
+// Their concurrency applies to all the processes, not to each worker
+const globalConcurrencyJobTypes = new Set<JobType>([
+  'activitypub-http-broadcast' // Required for activities ordering. Can be improved in the future using multiple queues + a sharding system
+])
 
 const cancelableJobTypes: JobType[] = [ 'video-transcoding', 'video-transcription', 'video-studio-edition', 'generate-video-storyboard' ]
 
@@ -216,6 +245,10 @@ class JobQueue {
   private flowProducer: FlowProducer
 
   private initialized = false
+  private started = false
+  // Requested before the start of the workers
+  private pausedBeforeStart = false
+
   private jobRedisPrefix: string
 
   private constructor () {
@@ -228,8 +261,19 @@ class JobQueue {
 
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
 
+    // A secondary process still has to *enqueue* every job type so all the queues are built
+    // Only the workers are restricted to the job types the process is allowed to consume.
+    const consumedJobTypes = isSecondaryProcess()
+      ? secondaryProcessJobTypes
+      : new Set(Object.keys(handlers))
+
+    if (isSecondaryProcess()) {
+      logger.info('Job queue restricted to %d job types.', consumedJobTypes.size, { jobTypes: Array.from(consumedJobTypes) })
+    }
+
     for (const handlerName of Object.keys(handlers)) {
-      this.buildWorker(handlerName)
+      if (consumedJobTypes.has(handlerName)) this.buildWorker(handlerName)
+
       this.buildQueue(handlerName)
       this.buildQueueEvent(handlerName)
     }
@@ -242,10 +286,14 @@ class JobQueue {
       logger.error('Error in flow producer', { err })
     })
 
-    this.addRepeatableJobs()
+    // Only the primary enqueues repeatable jobs, so they are not duplicated by multiple processes
+    if (!isSecondaryProcess()) this.addRepeatableJobs()
 
     registerConfigChangedHandler(() => {
       for (const handlerName of Object.keys(handlers)) {
+        // Not every job type has a worker in this process
+        if (!this.workers[handlerName]) continue
+
         this.workers[handlerName].concurrency = this.getJobConcurrency(handlerName)
       }
     })
@@ -318,6 +366,12 @@ class JobQueue {
 
     this.queues[handlerName] = queue
 
+    const globalConcurrencyPromise = globalConcurrencyJobTypes.has(handlerName)
+      ? queue.setGlobalConcurrency(this.getJobConcurrency(handlerName))
+      : queue.removeGlobalConcurrency()
+
+    globalConcurrencyPromise.catch(err => logger.error('Cannot update global concurrency of job queue ' + handlerName, { err }))
+
     queue.removeDeprecatedPriorityKey()
       .catch(err => logger.error('Cannot remove bullmq deprecated priority keys of ' + handlerName, { err }))
   }
@@ -339,40 +393,94 @@ class JobQueue {
 
   // ---------------------------------------------------------------------------
 
+  // Stop processing jobs, but this process can still create jobs
   // Use force: true to not wait for active jobs to complete (they will be retried when detected as stalled)
-  async terminate (options: { force: boolean }) {
-    const promises = Object.keys(this.workers)
+  async closeWorkers (options: { force: boolean }) {
+    await Promise.all(Object.values(this.workers).map(worker => worker.close(options.force)))
+  }
+
+  // Cannot create jobs anymore
+  async closeQueues () {
+    // Every job type has a queue and a queue event
+    const promises = Object.keys(this.queues)
       .map(handlerName => {
-        const worker: Worker = this.workers[handlerName]
         const queue: Queue = this.queues[handlerName]
         const queueEvent: QueueEvents = this.queueEvents[handlerName]
 
         return Promise.all([
-          worker.close(options.force),
           queue.close(),
           queueEvent.close()
         ])
       })
 
-    return Promise.all(promises)
+    await Promise.all(promises)
+
+    await this.flowProducer?.close()
   }
 
   start () {
-    const promises = Object.keys(this.workers)
+    const promises = Object.keys(this.queueEvents)
       .map(handlerName => {
         const worker: Worker = this.workers[handlerName]
         const queueEvent: QueueEvents = this.queueEvents[handlerName]
 
         return Promise.all([
-          worker.run(),
+          worker
+            ? worker.run()
+            : undefined,
           queueEvent.run()
         ])
       })
 
+    this.started = true
+
+    if (this.pausedBeforeStart) {
+      this.pauseWorkers()
+        .catch(err => logger.error('Cannot pause job queue.', { err }))
+    }
+
     return Promise.all(promises)
   }
 
-  async pause () {
+  // Other processes are notified asynchronously: they may still pick up a job just after this call
+  async pause (options: { processRoles?: ProcessRole[] } = {}) {
+    const { processRoles = PROCESS_ROLES } = options
+
+    await RedisChannels.jobQueueState.publish({ action: 'pause', processRoles, senderId: currentProcessId })
+
+    if (processRoles.includes(getProcessRole())) await this.pauseWorkers()
+  }
+
+  async resume (options: { processRoles?: ProcessRole[] } = {}) {
+    const { processRoles = PROCESS_ROLES } = options
+
+    await RedisChannels.jobQueueState.publish({ action: 'resume', processRoles, senderId: currentProcessId })
+
+    if (processRoles.includes(getProcessRole())) await this.resumeWorkers()
+  }
+
+  // The job queue can be paused/resumed by any process of the platform
+  async listenForStateChanges () {
+    await RedisChannels.jobQueueState.subscribe(({ action, processRoles, senderId }) => {
+      if (senderId === currentProcessId) return
+      if (!processRoles.includes(getProcessRole())) return
+
+      const promise = action === 'pause'
+        ? this.pauseWorkers()
+        : this.resumeWorkers()
+
+      return promise
+        .then(() => logger.info(`Job queue ${action === 'pause' ? 'paused' : 'resumed'} as requested by another process.`))
+        .catch(err => logger.error(`Cannot ${action} job queue requested by another process.`, { err }))
+    })
+  }
+
+  private async pauseWorkers () {
+    if (!this.started) {
+      this.pausedBeforeStart = true
+      return
+    }
+
     for (const handlerName of Object.keys(this.workers)) {
       const worker: Worker = this.workers[handlerName]
 
@@ -380,7 +488,13 @@ class JobQueue {
     }
   }
 
-  async resume () {
+  private async resumeWorkers () {
+    // Resuming a worker that is not running would start it
+    if (!this.started) {
+      this.pausedBeforeStart = false
+      return
+    }
+
     for (const handlerName of Object.keys(this.workers)) {
       const worker: Worker = this.workers[handlerName]
 
@@ -553,13 +667,32 @@ class JobQueue {
     return isActive
   }
 
-  cancelJob (jobType: JobType, job: Job) {
+  // The job may be processed by another process: ask every process to cancel it
+  async cancelJob (jobType: JobType, job: Job) {
     logger.info('Cancelling job %s in queue %s.', job.id, job.queueName)
 
-    const worker = this.workers[jobType]
-    if (!worker) throw new Error(`Unknown queue ${jobType}`)
+    // First, so the job is cancelled if this process runs it, even if Redis fails
+    this.cancelLocalJob(jobType, job.id)
 
-    return worker.cancelJob(job.id, 'Job cancelled by admin')
+    await RedisChannels.jobCancel.publish({ jobType, jobId: job.id, senderId: currentProcessId })
+  }
+
+  async listenForJobCancels () {
+    await RedisChannels.jobCancel.subscribe(({ jobType, jobId, senderId }) => {
+      if (senderId === currentProcessId) return
+
+      this.cancelLocalJob(jobType, jobId)
+    })
+  }
+
+  private cancelLocalJob (jobType: JobType, jobId: string) {
+    // This process does not run this kind of job
+    const worker = this.workers[jobType]
+    if (!worker) return
+
+    if (worker.cancelJob(jobId, 'Job cancelled by admin')) {
+      logger.info('Job %s in queue %s cancelled.', jobId, jobType)
+    }
   }
 
   private buildStateFilter (state?: JobState) {

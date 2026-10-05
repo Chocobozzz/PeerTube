@@ -18,7 +18,8 @@ export async function buildRetryImportJob (videoImport: MVideoImport) {
 
     generateTranscription: videoImport.payload?.generateTranscription ?? CONFIG.VIDEO_TRANSCRIPTION.ENABLED,
     fileExt: (videoImport.payload as VideoImportYoutubeDLPayload)?.fileExt,
-    torrentPath: (videoImport.payload as VideoImportTorrentPayload)?.torrentPath
+    torrentPath: (videoImport.payload as VideoImportTorrentPayload)?.torrentPath,
+    torrentStagingKey: (videoImport.payload as VideoImportTorrentPayload)?.torrentStagingKey
   }
 
   videoImport.state = VideoImportState.PENDING

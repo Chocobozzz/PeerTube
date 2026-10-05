@@ -8,6 +8,8 @@ import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 const logger = createLogger('lazy-load', 'avatar-image')
 
 export class AvatarImageFileCache extends AbstractImageFileCache<MActorImage> {
+  protected readonly cacheType = 'AVATARS'
+
   protected loadModel (filename: string) {
     return ActorImageModel.loadByFilename(filename)
   }
@@ -24,7 +26,7 @@ export class AvatarImageFileCache extends AbstractImageFileCache<MActorImage> {
     try {
       const actor = await ActorModel.loadForOutdated(model.actorId)
 
-      await refreshActorIfNeeded({ actor, fetchedType: 'partial' })
+      await refreshActorIfNeeded({ actor })
     } catch (err) {
       logger.error('Error while refreshing actor for avatar image lazy fetch', { err })
     }

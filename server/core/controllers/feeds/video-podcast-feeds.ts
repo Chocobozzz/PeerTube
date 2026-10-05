@@ -282,7 +282,7 @@ async function generatePodcastItem (options: {
     href: account.getClientUrl(),
 
     img: account.Actor.hasImage(ActorImageType.AVATAR)
-      ? WEBSERVER.URL + account.Actor.getMaxQualityImage(ActorImageType.AVATAR).getStaticPath()
+      ? account.Actor.getMaxQualityImage(ActorImageType.AVATAR).getLocalFileUrl()
       : undefined
   }
 

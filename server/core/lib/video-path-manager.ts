@@ -14,9 +14,9 @@ import {
   MVideoPrivacy,
   MVideoWithFile
 } from '@server/types/models/index.js'
-import { Mutex } from 'async-mutex'
 import { remove } from 'fs-extra/esm'
 import { extname, join } from 'path'
+import { acquireDistributedLock } from './distributed-lock.js'
 import { makeHLSFileAvailable, makeWebVideoFileAvailable } from './object-storage/index.js'
 import { getHLSDirectory, getHLSResolutionPlaylistFilename } from './paths.js'
 import { isVideoInPrivateDirectory } from './video-privacy.js'
@@ -29,9 +29,6 @@ type MakeAvailableCreateMethod = { method: () => Awaitable<string>, clean: boole
 
 class VideoPathManager {
   private static instance: VideoPathManager
-
-  // Key is a video UUID
-  private readonly videoFileMutexStore = new Map<string, Mutex>()
 
   private constructor () {}
 
@@ -167,25 +164,16 @@ class VideoPathManager {
 
   // ---------------------------------------------------------------------------
 
-  async lockFiles (videoUUID: string) {
-    if (!this.videoFileMutexStore.has(videoUUID)) {
-      this.videoFileMutexStore.set(videoUUID, new Mutex())
-    }
-
-    const mutex = this.videoFileMutexStore.get(videoUUID)
-    const releaser = await mutex.acquire()
+  // Secondary processes may also manage video files: lock them for all the processes of the platform
+  async lockFiles (videoUUID: string): Promise<() => void> {
+    const release = await acquireDistributedLock('video-files-' + videoUUID)
 
     logger.debug('Locked files of %s.', videoUUID)
 
-    return releaser
-  }
-
-  unlockFiles (videoUUID: string) {
-    const mutex = this.videoFileMutexStore.get(videoUUID)
-
-    mutex.release()
-
-    logger.debug('Released lockfiles of %s.', videoUUID)
+    return () => {
+      release()
+        .catch(err => logger.error('Cannot release the files lock of %s.', videoUUID, { err }))
+    }
   }
 
   private async makeAvailableFactory<T> (options: {

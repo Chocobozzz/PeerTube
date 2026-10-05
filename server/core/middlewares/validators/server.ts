@@ -5,7 +5,7 @@ import { isHostValid, isValidContactBody } from '../../helpers/custom-validators
 import { isUserDisplayNameValid } from '../../helpers/custom-validators/users.js'
 import { createLogger } from '../../helpers/logger.js'
 import { CONFIG, isEmailEnabled } from '../../initializers/config.js'
-import { Redis } from '../../lib/redis.js'
+import { Redis } from '../../lib/redis/index.js'
 import { ServerModel } from '../../models/server/server.js'
 import { areValidationErrors } from './shared/index.js'
 

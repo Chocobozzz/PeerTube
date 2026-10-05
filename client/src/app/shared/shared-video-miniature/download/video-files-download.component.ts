@@ -6,7 +6,7 @@ import { NgbCollapse, NgbNavModule, NgbTooltip } from '@ng-bootstrap/ng-bootstra
 import { objectKeysTyped, pick } from '@peertube/peertube-core-utils'
 import { VideoFile, VideoFileMetadata, VideoSource } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { videoRequiresFileToken } from '@root-helpers/video'
+import { videoDownloadRequiresFileToken } from '@root-helpers/video'
 import { firstValueFrom } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { InputTextComponent } from '../../shared-forms/input-text.component'
@@ -147,7 +147,7 @@ export class VideoFilesDownloadComponent implements OnInit {
   // ---------------------------------------------------------------------------
 
   isConfidentialVideo () {
-    return this.activeResolutionId === 'original' || videoRequiresFileToken(this.video())
+    return this.activeResolutionId === 'original' || videoDownloadRequiresFileToken(this.video())
   }
 
   // ---------------------------------------------------------------------------

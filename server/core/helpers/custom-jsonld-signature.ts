@@ -1,6 +1,14 @@
 import jsonld from 'jsonld'
+import { ACTIVITY_STREAMS_CONTEXT } from './jsonld-contexts/activitystreams-context.js'
+import { createLogger } from './logger.js'
+import { doJSONRequest } from './requests.js'
+import { REQUEST_TIMEOUTS } from '../initializers/constants.js'
+
+const logger = createLogger()
 
 const STATIC_CACHE = {
+  'https://www.w3.org/ns/activitystreams': ACTIVITY_STREAMS_CONTEXT,
+
   'https://w3id.org/security/v1': {
     '@context': {
       id: '@id',
@@ -53,10 +61,8 @@ const STATIC_CACHE = {
   }
 }
 
-const localCache = new Map<string, any>()
-
-const nodeDocumentLoader = (jsonld as any).documentLoaders.node()
-
+const REMOTE_CONTEXT_CACHE_MAX_ENTRIES = 100
+const remoteContextCache = new Map<string, any>()
 ;(jsonld as any).documentLoader = async (url: string) => {
   if (url in STATIC_CACHE) {
     return {
@@ -66,12 +72,20 @@ const nodeDocumentLoader = (jsonld as any).documentLoaders.node()
     }
   }
 
-  if (localCache.has(url)) return localCache.get(url)
+  if (remoteContextCache.has(url)) return remoteContextCache.get(url)
 
-  const remoteDoc = await nodeDocumentLoader(url)
+  logger.debug('Fetching non-pinned JSON-LD context/document.', { url })
 
-  if (localCache.size < 100) {
-    localCache.set(url, remoteDoc)
+  const { body } = await doJSONRequest<any>(url, {
+    timeout: REQUEST_TIMEOUTS.DEFAULT,
+    bodyKBLimit: 1000,
+    headers: { accept: 'application/ld+json, application/json' }
+  })
+
+  const remoteDoc = { contextUrl: null, document: body, documentUrl: url }
+
+  if (remoteContextCache.size < REMOTE_CONTEXT_CACHE_MAX_ENTRIES) {
+    remoteContextCache.set(url, remoteDoc)
   }
 
   return remoteDoc

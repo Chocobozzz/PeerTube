@@ -94,7 +94,8 @@ export class YoutubeDLWrapper {
   constructor (
     private readonly url: string,
     private readonly enabledResolutions: VideoResolutionType[],
-    private readonly useBestFormat: boolean
+    private readonly useBestFormat: boolean,
+    private readonly cookiesPath?: string
   ) {
   }
 
@@ -106,7 +107,7 @@ export class YoutubeDLWrapper {
 
     await this.checkUnicastOrThrow(userLanguage)
 
-    const youtubeDL = await YoutubeDLCLI.safeGet()
+    const youtubeDL = await YoutubeDLCLI.safeGet({ cookiesPath: this.cookiesPath })
 
     try {
       const info = await youtubeDL.getInfo({
@@ -150,7 +151,7 @@ export class YoutubeDLWrapper {
 
     await this.checkUnicastOrThrow(userLanguage)
 
-    const youtubeDL = await YoutubeDLCLI.safeGet()
+    const youtubeDL = await YoutubeDLCLI.safeGet({ cookiesPath: this.cookiesPath })
 
     const list = await youtubeDL.getListInfo({
       url: this.url,
@@ -177,7 +178,7 @@ export class YoutubeDLWrapper {
 
     const cwd = CONFIG.STORAGE.TMP_DIR
 
-    const youtubeDL = await YoutubeDLCLI.safeGet()
+    const youtubeDL = await YoutubeDLCLI.safeGet({ cookiesPath: this.cookiesPath })
 
     const files = await youtubeDL.getSubs({ url: this.url, format: 'vtt', processOptions: { cwd } })
     if (!files) return []
@@ -215,7 +216,7 @@ export class YoutubeDLWrapper {
 
     logger.info('Importing youtubeDL video %s to %s', this.url, pathWithoutExtension)
 
-    const youtubeDL = await YoutubeDLCLI.safeGet()
+    const youtubeDL = await YoutubeDLCLI.safeGet({ cookiesPath: this.cookiesPath })
 
     try {
       await youtubeDL.download({

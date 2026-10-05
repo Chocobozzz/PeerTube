@@ -19,7 +19,7 @@ export async function processImportUserArchive (job: Job): Promise<void> {
   }
 
   const exporter = new UserImporter()
-  await exporter.import(importModel)
+  await exporter.import(importModel, { stagingKey: payload.stagingKey })
 
   try {
     await Emailer.Instance.addUserImportSuccessJob(importModel)

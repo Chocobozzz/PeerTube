@@ -1,19 +1,25 @@
 import { uniqify } from '@peertube/peertube-core-utils'
 import { getFFmpegVersion } from '@peertube/peertube-ffmpeg'
 import { VideoRedundancyConfigFilter } from '@peertube/peertube-models'
-import { isProdInstance } from '@peertube/peertube-node-utils'
+import { isProdInstance, parseBytes, parseSemVersion } from '@peertube/peertube-node-utils'
+import { isTrackerUrlValid, isWebSocketTrackerUrl } from '@server/helpers/custom-validators/urls.js'
 import { readFileSync, writeFileSync } from 'fs'
 import { basename } from 'path'
 import { URL } from 'url'
-import { parseBytes, parseSemVersion } from '../helpers/core-utils.js'
+import { getBrowseVideosDefaultScopeError, getBrowseVideosDefaultSortError } from '../helpers/custom-validators/browse-videos.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
-import { getBrowseVideosDefaultSortError, getBrowseVideosDefaultScopeError } from '../helpers/custom-validators/browse-videos.js'
 import { createLogger } from '../helpers/logger.js'
+import {
+  getObjectStorageFileConfig,
+  getPrunableObjectStorageLocationConflicts,
+  objectStorageSections
+} from '../lib/object-storage/config.js'
+import { checkVideoFilesLifecycleConfig } from '../lib/video-files-lifecycle/video-files-lifecycle-config.js'
 import { ApplicationModel, getServerActor } from '../models/application/application.js'
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getConfigModule, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
-import { WEBSERVER } from './constants.js'
+import { LOCAL_TRACKER_URLS_KEYWORD, OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
 
 const logger = createLogger()
 
@@ -57,8 +63,10 @@ function checkConfig () {
   checkLiveConfig()
   checkObjectStorageConfig()
   checkVideoStudioConfig()
+  checkVideoFilesLifecycleConfig()
   checkThumbnailsConfig()
   checkBrowseVideosConfig()
+  checkTrackerConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -80,6 +88,61 @@ async function applicationExist () {
   const totalApplication = await ApplicationModel.countTotal()
 
   return totalApplication !== 0
+}
+
+const BUCKET_CHECK_TIMEOUT_MS = 10000
+
+// Throws if a bucket does not exist, only logs other errors (network, permissions, timeout...) that may be transient
+async function checkObjectStorageBucketsConnectivity () {
+  if (CONFIG.OBJECT_STORAGE.ENABLED !== true) return
+
+  const { HeadBucketCommand } = await import('@aws-sdk/client-s3')
+  const { getClient } = await import('../lib/object-storage/shared/client.js')
+
+  // Bucket name -> sections using it
+  const buckets = new Map<string, string[]>()
+
+  for (const name of getUsedObjectStorageSectionTypes()) {
+    const bucketName = getObjectStorageFileConfig(name).BUCKET_NAME
+
+    buckets.set(bucketName, [ ...(buckets.get(bucketName) ?? []), name ])
+  }
+
+  const client = await getClient()
+  const missingBuckets: string[] = []
+
+  await Promise.all([ ...buckets ].map(async ([ bucketName, sectionNames ]) => {
+    const settingNames = sectionNames.map(name => `object_storage.${name}.bucket_name`).join(', ')
+
+    try {
+      // The S3 client has no request timeout: an unreachable endpoint must not block the startup
+      await client.send(new HeadBucketCommand({ Bucket: bucketName }), { abortSignal: AbortSignal.timeout(BUCKET_CHECK_TIMEOUT_MS) })
+    } catch (err) {
+      if (isBucketNotFoundError(err)) {
+        missingBuckets.push(` - ${bucketName}, used by ${settingNames}`)
+        return
+      }
+
+      logger.error(
+        'Cannot reach object storage bucket %s: storing files in it will fail. Check the %s setting.',
+        bucketName,
+        settingNames,
+        { err }
+      )
+    }
+  }))
+
+  if (missingBuckets.length !== 0) {
+    throw new Error(
+      'These object storage buckets do not exist:\n' + missingBuckets.join('\n') + '\n' +
+        'Create them on your object storage provider, or set these settings to existing buckets. ' +
+        'Every kind of local file is stored in object storage when object_storage.enabled is true.'
+    )
+  }
+}
+
+function isBucketNotFoundError (err: any) {
+  return err?.name === 'NoSuchBucket' || err?.name === 'NotFound' || err?.$metadata?.httpStatusCode === 404
 }
 
 async function checkFFmpegVersion () {
@@ -109,6 +172,7 @@ export {
   checkActivityPubUrls,
   checkConfig,
   checkFFmpegVersion,
+  checkObjectStorageBucketsConnectivity,
   clientsExist,
   usersExist
 }
@@ -310,66 +374,35 @@ function checkLiveConfig () {
   }
 }
 
+// Original video files are only stored if the admin keeps them
+function getUsedObjectStorageSectionTypes () {
+  return objectStorageSections
+    .filter(type => type !== 'original_video_files' || CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP)
+}
+
 function checkObjectStorageConfig () {
   if (CONFIG.OBJECT_STORAGE.ENABLED !== true) return
 
-  if (!CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME) {
-    throw new Error('videos_bucket should be set when object storage support is enabled.')
-  }
-
-  if (!CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME) {
-    throw new Error('streaming_playlists_bucket should be set when object storage support is enabled.')
-  }
-
-  // Check web videos and hls videos are not in the same bucket or directory
-  if (
-    CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME &&
-    CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX
-  ) {
-    if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
-      throw new Error('Bucket prefixes should be set when the same bucket is used for both types of video.')
+  for (const name of getUsedObjectStorageSectionTypes()) {
+    if (!getObjectStorageFileConfig(name).BUCKET_NAME) {
+      throw new Error(`object_storage.${name}.bucket_name should be set when object storage support is enabled.`)
     }
+  }
 
-    throw new Error(
-      'Bucket prefixes should be set to different values when the same bucket is used for both types of video.'
+  const maxChunkSize = CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
+
+  if (maxChunkSize && maxChunkSize < OBJECT_STORAGE_STAGING.MIN_PART_SIZE) {
+    logger.warn(
+      `client.videos.resumable_upload.max_chunk_size is lower than ${OBJECT_STORAGE_STAGING.MIN_PART_SIZE} bytes, the minimum object ` +
+        'storage part size: resumable uploads streamed to object storage will use bigger chunks anyway.'
     )
   }
 
-  if (CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) {
-    if (!CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME) {
-      throw new Error('original_video_files_bucket should be set when object storage support is enabled.')
-    }
-
-    // Check web videos/hls videos are not in the same bucket or directory as original video files
-    if (
-      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
-      CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
-    ) {
-      if (CONFIG.OBJECT_STORAGE.WEB_VIDEOS.PREFIX === '') {
-        throw new Error('Bucket prefixes should be set when the same bucket is used for both original and web video files.')
-      }
-
-      throw new Error(
-        'Bucket prefixes should be set to different values when the same bucket is used for both original and web video files.'
-      )
-    }
-
-    if (
-      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BUCKET_NAME === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.BUCKET_NAME &&
-      CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES.PREFIX
-    ) {
-      if (CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.PREFIX === '') {
-        throw new Error('Bucket prefixes should be set when the same bucket is used for both original and hls files.')
-      }
-
-      throw new Error(
-        'Bucket prefixes should be set to different values when the same bucket is used for both original and hls files.'
-      )
-    }
+  for (const conflict of getPrunableObjectStorageLocationConflicts()) {
+    logger.warn(`${conflict}. Set different bucket prefixes, otherwise the prune-storage script cannot be used.`)
   }
 
   if (CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART > parseBytes('250MB')) {
-    // oxlint-disable-next-line max-len
     logger.warn(
       `Object storage max upload part seems to have a big value (${CONFIG.OBJECT_STORAGE.MAX_UPLOAD_PART} bytes). ` +
         `Consider using a lower one (like 100MB).`
@@ -396,6 +429,35 @@ function checkThumbnailsConfig () {
   const sizes = CONFIG.THUMBNAILS.SIZES.map(s => `${s.width}x${s.height}`)
   if (new Set(sizes).size !== sizes.length) {
     throw new Error('thumbnails.sizes must not contain multiple sizes with the same width and height')
+  }
+}
+
+function checkTrackerConfig () {
+  const urls = CONFIG.TRACKER.URLS
+
+  if (!isArray(urls) || urls.length === 0) {
+    throw new Error('tracker.urls must contain at least one URL or \'local\'. Set tracker.enabled to false to disable P2P')
+  }
+
+  for (const url of urls) {
+    if (url === LOCAL_TRACKER_URLS_KEYWORD || isTrackerUrlValid(url)) continue
+
+    throw new Error(`tracker.urls contains an invalid value: ${url}. Use 'local' or a ws://, wss://, http:// or https:// URL`)
+  }
+
+  // Web browsers block insecure websockets from an HTTPS page
+  if (CONFIG.WEBSERVER.SCHEME === 'https') {
+    const insecureWS = urls.find(u => /^ws:\/\//i.test(u))
+
+    if (insecureWS) {
+      throw new Error(
+        `tracker.urls contains ${insecureWS}: use wss:// instead, the web player cannot reach a ws:// tracker from an HTTPS instance`
+      )
+    }
+  }
+
+  if (!urls.some(u => u === LOCAL_TRACKER_URLS_KEYWORD || isWebSocketTrackerUrl(u))) {
+    logger.warn('tracker.urls has no websocket tracker (\'local\' or a ws:// or wss:// URL): the web player will not find P2P peers.')
   }
 }
 

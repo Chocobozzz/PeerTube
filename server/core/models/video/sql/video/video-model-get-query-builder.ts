@@ -19,6 +19,7 @@ export type GetType =
   | 'account'
   | 'all-files'
   | 'thumbnails'
+  | 'thumbnails-blacklist'
   | 'blacklist'
   | 'id'
   | 'video'
@@ -45,6 +46,7 @@ const blacklistedInclude = new Set<GetType>([
   'account-blacklist',
   'account-blacklist-files',
   'blacklist',
+  'thumbnails-blacklist',
   'seo'
 ])
 
@@ -55,6 +57,7 @@ const thumbnailsInclude = new Set<GetType>([
   'account-blacklist-files',
   'all-files',
   'thumbnails',
+  'thumbnails-blacklist',
   'seo'
 ])
 

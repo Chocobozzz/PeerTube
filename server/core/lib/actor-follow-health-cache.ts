@@ -1,19 +1,13 @@
 import { createLogger } from '../helpers/logger.js'
+import { ActorFollowHealthKind } from './redis/actor-follow-health.js'
+import { Redis } from './redis/index.js'
 
 const logger = createLogger()
 
 // Cache follows scores, instead of writing them too often in database
-// Keep data in memory, we don't really need Redis here as we don't really care to loose some scores
+// Kept in Redis because every process sends activities, but only the primary applies the scores
 export class ActorFollowHealthCache {
   private static instance: ActorFollowHealthCache
-
-  private readonly pendingBadServer = new Set<number>()
-  private readonly pendingGoodServer = new Set<number>()
-
-  private readonly badInboxes = new Set<string>()
-  private readonly goodInboxes = new Set<string>()
-
-  private readonly lastBatchBadInboxes = new Set<string>()
 
   private constructor () {}
 
@@ -21,77 +15,75 @@ export class ActorFollowHealthCache {
     return this.instance || (this.instance = new this())
   }
 
-  updateActorFollowsHealth (goodInboxes: string[], badInboxes: string[]) {
-    this.lastBatchBadInboxes.clear()
+  async updateActorFollowsHealth (goodInboxes: string[], badInboxes: string[]) {
+    try {
+      await Redis.Instance.setLastBadInboxes(badInboxes)
 
-    if (goodInboxes.length === 0 && badInboxes.length === 0) return
+      if (goodInboxes.length === 0 && badInboxes.length === 0) return
 
-    logger.info(
-      'Updating %d good actor follows and %d bad actor follows.',
-      goodInboxes.length,
-      badInboxes.length,
-      { badInboxes }
-    )
+      logger.info(
+        'Updating %d good actor follows and %d bad actor follows.',
+        goodInboxes.length,
+        badInboxes.length,
+        { badInboxes }
+      )
 
-    for (const goodInbox of goodInboxes) {
-      this.goodInboxes.add(goodInbox)
+      await Promise.all([
+        Redis.Instance.addActorFollowHealth('good-inboxes', goodInboxes),
+        Redis.Instance.addActorFollowHealth('bad-inboxes', badInboxes)
+      ])
+    } catch (err) {
+      logger.error('Cannot update actor follows health.', { err })
     }
+  }
 
-    for (const badInbox of badInboxes) {
-      this.badInboxes.add(badInbox)
-      this.lastBatchBadInboxes.add(badInbox)
+  // Returns a boolean for each inbox URL
+  async areLastBadInboxes (inboxUrls: string[]) {
+    try {
+      return await Redis.Instance.areLastBadInboxes(inboxUrls)
+    } catch (err) {
+      logger.error('Cannot check if inboxes are last bad inboxes.', { err })
+
+      return inboxUrls.map(() => false)
     }
-  }
-
-  isLastBadInbox (inboxUrl: string) {
-    return this.lastBatchBadInboxes.has(inboxUrl)
-  }
-
-  // ---------------------------------------------------------------------------
-
-  getBadInboxes () {
-    return new Set(this.badInboxes)
-  }
-
-  clearBadInboxes () {
-    this.badInboxes.clear()
-  }
-
-  // ---------------------------------------------------------------------------
-
-  getGoodInboxes () {
-    return new Set(this.goodInboxes)
-  }
-
-  clearGoodInboxes () {
-    this.goodInboxes.clear()
   }
 
   // ---------------------------------------------------------------------------
 
   addBadServerId (serverId: number) {
-    this.pendingBadServer.add(serverId)
+    return this.addServerId('bad-server-ids', serverId)
   }
 
-  getBadFollowingServerIds () {
-    return new Set(this.pendingBadServer)
-  }
-
-  clearBadFollowingServerIds () {
-    this.pendingBadServer.clear()
+  addGoodServerId (serverId: number) {
+    return this.addServerId('good-server-ids', serverId)
   }
 
   // ---------------------------------------------------------------------------
 
-  addGoodServerId (serverId: number) {
-    this.pendingGoodServer.add(serverId)
+  // Returns the pending health data and removes it
+  async popPendingHealth () {
+    const [ goodInboxes, badInboxes, goodServerIds, badServerIds ] = await Promise.all([
+      Redis.Instance.popActorFollowHealth('good-inboxes'),
+      Redis.Instance.popActorFollowHealth('bad-inboxes'),
+      Redis.Instance.popActorFollowHealth('good-server-ids'),
+      Redis.Instance.popActorFollowHealth('bad-server-ids')
+    ])
+
+    return {
+      goodInboxes: new Set(goodInboxes),
+      badInboxes: new Set(badInboxes),
+      goodServerIds: new Set(goodServerIds.map(id => parseInt(id, 10))),
+      badServerIds: new Set(badServerIds.map(id => parseInt(id, 10)))
+    }
   }
 
-  getGoodFollowingServerIds () {
-    return new Set(this.pendingGoodServer)
-  }
+  // ---------------------------------------------------------------------------
 
-  clearGoodFollowingServerIds () {
-    this.pendingGoodServer.clear()
+  private async addServerId (kind: ActorFollowHealthKind, serverId: number) {
+    try {
+      await Redis.Instance.addActorFollowHealth(kind, [ serverId.toString() ])
+    } catch (err) {
+      logger.error('Cannot add server %d to actor follows health.', serverId, { err })
+    }
   }
 }

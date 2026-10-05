@@ -4,6 +4,7 @@ import {
   getLivePlaylistNameFromSegmentPath,
   isLivePlaylistPath,
   isLiveSegmentPath,
+  promiseMapSeries,
   wait
 } from '@peertube/peertube-core-utils'
 import {
@@ -23,7 +24,6 @@ import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFile
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models/index.js'
-import Bluebird from 'bluebird'
 import { FfprobeData } from 'fluent-ffmpeg'
 import { ensureDir } from 'fs-extra/esm'
 import { appendFile, readdir, readFile, stat } from 'fs/promises'
@@ -452,7 +452,7 @@ class MuxingSession extends TypedEventEmitter<MuxingSessionEvents> {
     return this.getSegmentProcessingQueue(playlistId)
       .add(() =>
         // Catch per segment: mapSeries would abandon the next ones, and the cleanup is the last chance to process them
-        Bluebird.mapSeries(segmentPaths, segmentPath => {
+        promiseMapSeries(segmentPaths, segmentPath => {
           return this.processSegment(segmentPath)
             .catch(err => {
               if (this.aborted) return
@@ -517,7 +517,9 @@ class MuxingSession extends TypedEventEmitter<MuxingSessionEvents> {
     }
 
     // Master playlist and segment JSON file are created, live is ready
-    if (this.masterPlaylistCreated && !this.liveReady) {
+    // Unless the session is already ending (segments processed by the cleanup)
+    // Or publishing the live would race with the after cleanup handler, and could overwrite the ended state of the live
+    if (this.masterPlaylistCreated && !this.liveReady && !this.aborted && !this.cleanupScheduled) {
       this.liveReady = true
 
       this.emit('live-ready', { videoUUID: this.videoUUID })

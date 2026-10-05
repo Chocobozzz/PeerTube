@@ -111,9 +111,8 @@ const oembedValidator = [
       }
 
       if (
-        video.privacy === VideoPrivacy.PUBLIC ||
-        (video.privacy === VideoPrivacy.UNLISTED && isUUIDValid(elementId) === true) ||
-        video.VideoBlacklist
+        !video.VideoBlacklist &&
+        (video.privacy === VideoPrivacy.PUBLIC || (video.privacy === VideoPrivacy.UNLISTED && isUUIDValid(elementId) === true))
       ) {
         res.locals.videoWithRights = video
         return next()

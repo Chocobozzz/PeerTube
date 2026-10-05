@@ -788,6 +788,7 @@
       "type": "object",
       "properties": {
         "enabled": {
+          "description": "Store every kind of local file (videos, captions, user exports, images, torrents...) in object storage Resumable uploads also go through the staging bucket (see below) Existing files stay where they are: move them using the create-move-file-storage-job script PeerTube exits at startup if the bucket of a section below does not exist",
           "type": "boolean",
           "default": false
         },
@@ -950,6 +951,154 @@
             "prefix": {
               "type": "string",
               "default": "captions/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "avatars": {
+          "description": "Avatars and banners of local accounts and channels",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "avatars/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "thumbnails": {
+          "description": "Video and playlist thumbnails",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "thumbnails/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "storyboards": {
+          "description": "Video storyboards",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "storyboards/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "torrents": {
+          "description": "Video torrent files",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "torrents/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "uploads": {
+          "description": "Various admin/user uploads that are not suitable for the sections above (instance logos...)",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "uploads/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "staging": {
+          "description": "Resumable upload files (video uploads, user archive imports, etc.). They are automatically cleaned up These files must never be public: we recommend a dedicated bucket that blocks public access",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "staging/"
+            }
+          },
+          "additionalProperties": false
+        },
+        "cache": {
+          "description": "Copies of remote files (avatars, thumbnails, etc.) that your instance caches when they are requested PeerTube redirects users to these public objects",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "cache/"
+            },
+            "base_url": {
+              "type": "string",
+              "default": ""
+            }
+          },
+          "additionalProperties": false
+        },
+        "redundancy": {
+          "description": "Copies of remote videos if redundancy is enabled Other instances and web browsers download them directly from the bucket",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "type": "string",
+              "default": "peertube"
+            },
+            "prefix": {
+              "type": "string",
+              "default": "redundancy/"
             },
             "base_url": {
               "type": "string",
@@ -1234,7 +1383,7 @@
           "default": true
         },
         "private": {
-          "description": "Only handle requests on your videos If you set this to false it means you have a public tracker Then, it is possible that clients overload your instance with external torrents",
+          "description": "Only handle requests on your videos If you set this to false it means you have a public tracker Then, it is possible that clients overload your instance with external torrents Only applies to the built-in tracker: configure an info hash allow list on your external tracker if you use one",
           "type": "boolean",
           "default": true
         },
@@ -1242,6 +1391,17 @@
           "description": "Reject peers that do a lot of announces (could improve privacy of TCP/UDP peers)",
           "type": "boolean",
           "default": false
+        },
+        "urls": {
+          "description": "Tracker URLs advertised for your local videos Replace the local tracker with an external WebTorrent tracker (aquatic_ws for example) if you need to handle many P2P viewers The web player needs at least one websocket (wss://) tracker Existing torrent files are updated in the background by the job queue when this list changes",
+          "type": "array",
+          "default": [
+            "local"
+          ],
+          "items": {
+            "type": "string",
+            "default": "local"
+          }
         }
       },
       "additionalProperties": false
@@ -2299,6 +2459,40 @@
             }
           },
           "additionalProperties": false
+        },
+        "lifecycle": {
+          "description": "Automatically prune video files to reduce your storage usage Policies are evaluated in order: the first policy matching a video is applied on it, the next ones are skipped",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "check_interval": {
+              "description": "How often PeerTube evaluates the policies below",
+              "type": "string",
+              "default": "1 day"
+            },
+            "dry_run": {
+              "description": "Log what PeerTube would do, without deleting any file",
+              "type": "boolean",
+              "default": false
+            },
+            "max_videos_per_run": {
+              "description": "Maximum number of videos processed in one run, so a misconfigured policy degrades your library gradually",
+              "type": "integer",
+              "default": 1000
+            },
+            "policies": {
+              "description": "Just uncomment the policies you want",
+              "type": [
+                "null",
+                "string"
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -2372,7 +2566,7 @@
                   "type": "object",
                   "properties": {
                     "enabled": {
-                      "description": "Enable this to pass cookies to yt-dlp. This can help when imports need a real browser session or when your server IP is limited Only enable this if you trust users allowed to trigger imports because PeerTube will import using the account from which these cookies were exported That account may be rate limited or temporarily blocked PeerTube expects a Netscape-format file at storage/tmp-persistent/youtube-cookies.txt See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp for cookie export instructions See https://docs.joinpeertube.org/maintain/configuration#cookies-for-youtube-imports for PeerTube-specific setup",
+                      "description": "Enable this to pass cookies to yt-dlp. This can help when imports need a real browser session or when your server IP is limited Only enable this if you trust users allowed to trigger imports because PeerTube will import using the account from which these cookies were exported That account may be rate limited or temporarily blocked PeerTube expects a Netscape-format file at storage/tmp-persistent/youtube-cookies.txt With secondary processes, only put it in the storage of the primary process: it publishes the file to the other processes See https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp for cookie export instructions See https://docs.joinpeertube.org/maintain/configuration#cookies-for-youtube-imports for PeerTube-specific setup",
                       "type": "boolean",
                       "default": false
                     }

@@ -101,6 +101,8 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       `"ActorFollow->ActorFollower->Avatars"."width" AS "ActorFollow.ActorFollower.Avatars.width"`,
       `"ActorFollow->ActorFollower->Avatars"."type" AS "ActorFollow.ActorFollower.Avatars.type"`,
       `"ActorFollow->ActorFollower->Avatars"."filename" AS "ActorFollow.ActorFollower.Avatars.filename"`,
+      `"ActorFollow->ActorFollower->Avatars"."storage" AS "ActorFollow.ActorFollower.Avatars.storage"`,
+      `"ActorFollow->ActorFollower->Avatars"."fileUrl" AS "ActorFollow.ActorFollower.Avatars.fileUrl"`,
       `"ActorFollow->ActorFollower->Server"."id" AS "ActorFollow.ActorFollower.Server.id"`,
       `"ActorFollow->ActorFollower->Server"."host" AS "ActorFollow.ActorFollower.Server.host"`,
       `"ActorFollow->ActorFollowing"."id" AS "ActorFollow.ActorFollowing.id"`,
@@ -231,6 +233,8 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
       `"${tableName}->Actor->Avatars"."width" AS "${alias}.Actor.Avatars.width"`,
       `"${tableName}->Actor->Avatars"."type" AS "${alias}.Actor.Avatars.type"`,
       `"${tableName}->Actor->Avatars"."filename" AS "${alias}.Actor.Avatars.filename"`,
+      `"${tableName}->Actor->Avatars"."storage" AS "${alias}.Actor.Avatars.storage"`,
+      `"${tableName}->Actor->Avatars"."fileUrl" AS "${alias}.Actor.Avatars.fileUrl"`,
       `"${tableName}->Actor->Server"."id" AS "${alias}.Actor.Server.id"`,
       `"${tableName}->Actor->Server"."host" AS "${alias}.Actor.Server.host"`
     ]

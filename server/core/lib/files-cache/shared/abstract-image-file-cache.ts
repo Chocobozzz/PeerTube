@@ -8,9 +8,7 @@ export interface ImageFileModel extends FileModel {
 }
 
 export abstract class AbstractImageFileCache<M extends ImageFileModel> extends AbstractFileCache<M> {
-  protected async downloadImpl (image: M) {
-    const destPath = this.getFSFileCachedPath(image)
-
+  protected async downloadImpl (image: M, destPath: string) {
     const downloaderOptions = {
       url: image.fileUrl,
       destDir: dirname(destPath),
@@ -18,7 +16,7 @@ export abstract class AbstractImageFileCache<M extends ImageFileModel> extends A
       size: this.getImageSize(image)
     }
 
-    return downloadImage(downloaderOptions)
+    await downloadImage(downloaderOptions)
   }
 
   private getImageSize (image: M): { width: number, height: number } {

@@ -1,4 +1,4 @@
-import { HttpStatusCode, VideoCreateResult, VideoEmbedPrivacyPolicy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCreateResult, VideoEmbedPrivacyPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -10,6 +10,9 @@ import {
 describe('Test video embed privacy validator', function () {
   let server: PeerTubeServer
   let video: VideoCreateResult
+  let privateVideo: VideoCreateResult
+  let unlistedVideo: VideoCreateResult
+  let passwordProtectedVideo: VideoCreateResult
 
   let ownerAccessToken: string
   let userAccessToken: string
@@ -32,6 +35,15 @@ describe('Test video embed privacy validator', function () {
     invitedEditorAccessToken = await server.channelCollaborators.createInvited('invited_editor', 'owner_channel')
 
     video = await server.videos.upload({ token: ownerAccessToken })
+
+    privateVideo = await server.videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE, token: ownerAccessToken })
+    unlistedVideo = await server.videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED, token: ownerAccessToken })
+    passwordProtectedVideo = await server.videos.quickUpload({
+      name: 'password protected',
+      privacy: VideoPrivacy.PASSWORD_PROTECTED,
+      videoPasswords: [ 'password' ],
+      token: ownerAccessToken
+    })
   })
 
   describe('When getting embed privacy', function () {
@@ -110,8 +122,47 @@ describe('Test video embed privacy validator', function () {
       })
     })
 
+    it('Should fail with a private video without the appropriate rights', async function () {
+      await server.videoEmbedPrivacy.isDomainAllowed({
+        videoId: privateVideo.uuid,
+        domain: 'example.com',
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+
+      await server.videoEmbedPrivacy.isDomainAllowed({
+        videoId: privateVideo.uuid,
+        domain: 'example.com',
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail with an unlisted video using its numeric id', async function () {
+      await server.videoEmbedPrivacy.isDomainAllowed({
+        videoId: unlistedVideo.id,
+        domain: 'example.com',
+        token: null,
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+
+      await server.videoEmbedPrivacy.isDomainAllowed({
+        videoId: unlistedVideo.id,
+        domain: 'example.com',
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
     it('Should succeed with correct params', async function () {
       await server.videoEmbedPrivacy.isDomainAllowed({ videoId: video.id, domain: 'example.com' })
+
+      for (const token of [ null, userAccessToken ]) {
+        await server.videoEmbedPrivacy.isDomainAllowed({ videoId: unlistedVideo.uuid, domain: 'example.com', token })
+        await server.videoEmbedPrivacy.isDomainAllowed({ videoId: passwordProtectedVideo.uuid, domain: 'example.com', token })
+      }
+
+      await server.videoEmbedPrivacy.isDomainAllowed({ videoId: privateVideo.uuid, domain: 'example.com', token: ownerAccessToken })
     })
   })
 

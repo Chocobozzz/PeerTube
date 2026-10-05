@@ -2,6 +2,7 @@ import { ParsedDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
 import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/peertube-crypto.js'
+import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
 import { NextFunction, Request, Response } from 'express'
@@ -9,7 +10,7 @@ import { createLogger } from '../helpers/logger.js'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../lib/activitypub/actors/index.js'
 
-const logger = createLogger()
+const logger = createLogger('ap')
 
 export async function checkSignature (req: Request, res: Response, next: NextFunction) {
   try {
@@ -34,7 +35,9 @@ export async function checkSignature (req: Request, res: Response, next: NextFun
       return res.status(HttpStatusCode.NO_CONTENT_204).end()
     }
 
-    logger.warn('Error in ActivityPub signature checker.', { err })
+    // Fetching the remote actor to check the signature can fail for reasons that are out of our control
+    logger.log(getRemoteErrorLogLevel(err), 'Error in ActivityPub signature checker.', { err })
+
     return res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: 'ActivityPub signature could not be checked'

@@ -3,12 +3,13 @@ import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActor } from '../../../types/models/index.js'
+import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 
 async function processRejectActivity (options: APProcessorOptions<ActivityReject>) {
   const { byActor: targetActor, inboxActor } = options
   if (inboxActor === undefined) throw new Error('Need to reject on explicit inbox.')
 
-  return processReject(inboxActor, targetActor)
+  return runWithAPObjectLock(buildAPFollowLockKey(inboxActor.url, targetActor.url), () => processReject(inboxActor, targetActor))
 }
 
 // ---------------------------------------------------------------------------

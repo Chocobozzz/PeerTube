@@ -20,6 +20,14 @@ export class ServersCommand extends AbstractCommand {
     })
   }
 
+  flushTestsIfNeeded () {
+    // Primary owns the database and redis, and primary will cleanup main test directory
+    // Secondary doesn't have a config file to clean up
+    if (this.server.isSecondaryServer()) return
+
+    return ServersCommand.flushTests(this.server.internalServerNumber)
+  }
+
   ping (options: OverrideCommandOptions = {}) {
     return this.getRequestBody({
       ...options,
@@ -38,8 +46,8 @@ export class ServersCommand extends AbstractCommand {
 
       await ensureDir('artifacts')
 
-      const origin = this.buildDirectory('logs/peertube.log')
-      const destname = `peertube-${this.server.internalServerNumber}.log`
+      const origin = this.buildDirectory(this.server.storage.logsDirectory + '/peertube.log')
+      const destname = `peertube-${this.server.nodeAppInstance || this.server.internalServerNumber}.log`
       console.log('Saving logs %s.', destname)
 
       await copy(origin, join('artifacts', destname))
@@ -47,6 +55,8 @@ export class ServersCommand extends AbstractCommand {
 
     const saveDBIfNeeded = async () => {
       if (!isGithubCI()) return
+      // Primary owns the database
+      if (this.server.isSecondaryServer()) return
 
       await ensureDir('artifacts')
       const destname = join('artifacts', `peertube-${this.server.internalServerNumber}.sql`)
@@ -58,7 +68,7 @@ export class ServersCommand extends AbstractCommand {
     if (this.server.parallel) {
       const promise = saveGithubLogsIfNeeded()
         .then(() => saveDBIfNeeded())
-        .then(() => ServersCommand.flushTests(this.server.internalServerNumber))
+        .then(() => this.flushTestsIfNeeded())
 
       promises.push(promise)
     }
@@ -71,7 +81,7 @@ export class ServersCommand extends AbstractCommand {
   }
 
   async waitUntilLog (str: string, count = 1, strictCount = true) {
-    const logfile = this.buildDirectory('logs/peertube.log')
+    const logfile = this.buildDirectory(this.server.storage.logsDirectory + '/peertube.log')
 
     while (true) {
       const buf = await readFile(logfile)
@@ -91,7 +101,8 @@ export class ServersCommand extends AbstractCommand {
   async countFiles (directory: string) {
     const files = await readdir(this.buildDirectory(directory))
 
-    return files.length
+    // Hidden files are metadata
+    return files.filter(file => file.startsWith('.') === false).length
   }
 
   // ---------------------------------------------------------------------------
@@ -107,6 +118,6 @@ export class ServersCommand extends AbstractCommand {
   // ---------------------------------------------------------------------------
 
   getLogContent () {
-    return readFile(this.buildDirectory('logs/peertube.log'))
+    return readFile(this.buildDirectory(this.server.storage.logsDirectory + '/peertube.log'))
   }
 }

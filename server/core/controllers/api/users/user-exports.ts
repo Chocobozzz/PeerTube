@@ -9,9 +9,9 @@ import {
 } from '../../../middlewares/index.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
-import { CONFIG } from '@server/initializers/config.js'
 
 const userExportsRouter = express.Router()
 

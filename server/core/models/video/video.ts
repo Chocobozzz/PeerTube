@@ -22,8 +22,9 @@ import {
   type VideoPrivacyType,
   type VideoStateType
 } from '@peertube/peertube-models'
-import { uuidToShort } from '@peertube/peertube-node-utils'
+import { peertubeTruncate, uuidToShort } from '@peertube/peertube-node-utils'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { Memoize } from '@server/helpers/memoize.js'
 import { getPrivaciesForFederation } from '@server/helpers/video.js'
 import { MVideoToFederate, isPrivacyForFederation } from '@server/lib/activitypub/videos/federate.js'
@@ -36,14 +37,14 @@ import {
   removeWebVideoObjectStorage
 } from '@server/lib/object-storage/index.js'
 import { tracer } from '@server/lib/opentelemetry/tracing.js'
-import { getHLSDirectory, getHLSRedundancyDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
+import { getHLSDirectory, getHLSResolutionPlaylistFilename } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { buildLocalTrackerUrls } from '@server/lib/tracker-urls.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPrivateDirectory } from '@server/lib/video-privacy.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { MVideoSource } from '@server/types/models/video/video-source.js'
-import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
 import { FindOptions, Includeable, Op, QueryTypes, Sequelize, Transaction } from 'sequelize'
 import {
@@ -69,7 +70,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { peertubeTruncate } from '../../helpers/core-utils.js'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc.js'
 import { isBooleanValid, isUUIDValid } from '../../helpers/custom-validators/misc.js'
 import {
@@ -108,6 +108,7 @@ import type {
   MVideoSeo,
   MVideoSummary,
   MVideoThumbnails,
+  MVideoThumbnailsBlacklist,
   MVideoWithAllFiles,
   MVideoWithBlacklist,
   MVideoWithFile,
@@ -129,6 +130,7 @@ import {
   buildSQLAttributes,
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
+  bumpUpdatedAt,
   doesExist,
   getVideoSort,
   isOutdated,
@@ -600,6 +602,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Column
   declare inputFileUpdatedAt: Date
 
+  // To skip updates older than the stored state
+  @AllowNull(true)
+  @Column
+  declare remoteUpdatedAt: Date
+
   @CreatedAt
   declare createdAt: Date
 
@@ -703,7 +710,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       name: 'videoId',
       allowNull: false
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true // To destroy files too
   })
   declare VideoStreamingPlaylists: Awaited<VideoStreamingPlaylistModel>[]
 
@@ -860,7 +868,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       const video = await this.loadAP(instance.id, options.transaction)
 
       this.stopLiveIfNeeded(video)
-      this.invalidateCache(video)
+
+      afterCommitIfTransaction(options.transaction, () => this.invalidateCache(video))
 
       await this.sendDelete(video, options.transaction)
       await this.saveEssentialDataToAbuses(video, options.transaction)
@@ -889,43 +898,57 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   static async removeFiles (instance: MVideoWithAllFiles, transaction: Transaction) {
-    const tasks: Promise<any>[] = []
+    if (!instance.isLocal()) return undefined
 
-    logger.info('Removing files of video ' + instance.url)
-
-    if (instance.isLocal()) {
-      if (!Array.isArray(instance.VideoFiles)) {
-        instance.VideoFiles = await instance.$get('VideoFiles', { transaction })
-      }
-
-      // Remove physical files and torrents
-      instance.VideoFiles.forEach(file => {
-        tasks.push(instance.removeWebVideoFile(file))
-      })
-
-      // Remove playlists file
-      if (!Array.isArray(instance.VideoStreamingPlaylists)) {
-        instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists', { transaction })
-      }
-
-      for (const p of instance.VideoStreamingPlaylists) {
-        // Captions will be automatically deleted
-        tasks.push(instance.removeAllStreamingPlaylistFiles({ playlist: p, deleteCaptionPlaylists: false }))
-      }
-
-      // Remove source files
-      const promiseRemoveSources = VideoSourceModel.listAll(instance.id, transaction)
-        .then(sources => Promise.all(sources.map(s => instance.removeOriginalFile(s))))
-
-      tasks.push(promiseRemoveSources)
+    // Load them now, they will not exist anymore after the commit
+    if (!Array.isArray(instance.VideoFiles)) {
+      instance.VideoFiles = await instance.$get('VideoFiles', { transaction })
     }
 
-    // Do not wait video deletion because we could be in a transaction
-    Promise.all(tasks)
-      .then(() => logger.info('Removed files of video %s.', instance.url))
-      .catch(err => logger.error('Some errors when removing files of video %s in before destroy hook.', instance.uuid, { err }))
+    if (!Array.isArray(instance.VideoStreamingPlaylists)) {
+      instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists', { transaction })
+    }
+
+    for (const playlist of instance.VideoStreamingPlaylists as MStreamingPlaylistFilesVideo[]) {
+      if (!Array.isArray(playlist.VideoFiles)) {
+        playlist.VideoFiles = await playlist.$get('VideoFiles', { transaction })
+      }
+    }
+
+    const sources = await VideoSourceModel.listAll(instance.id, transaction)
+
+    afterCommitIfTransaction(transaction, () => {
+      this.removeFilesOfDeletedVideo(instance, sources)
+        .then(() => logger.info('Removed files of video %s.', instance.url))
+        .catch(err => logger.error('Some errors when removing files of deleted video %s.', instance.uuid, { err }))
+    })
 
     return undefined
+  }
+
+  private static async removeFilesOfDeletedVideo (instance: MVideoWithAllFiles, sources: MVideoSource[]) {
+    // A job of another process may be writing files of this video: wait for it before removing them
+    const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(instance.uuid)
+
+    try {
+      logger.info('Removing files of video ' + instance.url)
+
+      await Promise.all([
+        // Remove physical files and torrents
+        ...instance.VideoFiles.map(file => instance.removeWebVideoFile(file)),
+
+        // Remove playlists file (captions will be automatically deleted)
+        // The whole HLS directory is removed, including files added by a job while we were waiting for the lock
+        ...instance.VideoStreamingPlaylists.map(p =>
+          instance.removeAllStreamingPlaylistFiles({ playlist: p, deleteCaptionPlaylists: false })
+        ),
+
+        // Remove source files
+        ...sources.map(s => instance.removeOriginalFile(s))
+      ])
+    } finally {
+      videoFileMutexReleaser()
+    }
   }
 
   static async saveEssentialDataToAbuses (instance: MVideoFormattableDetails, transaction: Transaction) {
@@ -1098,7 +1121,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       ]
     }
 
-    return Bluebird.all([
+    return Promise.all([
       VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findAll(query),
       VideoModel.sequelize.query<{ total: string }>(rawCountQuery, { type: QueryTypes.SELECT })
     ]).then(([ rows, totals ]) => {
@@ -1414,6 +1437,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails' })
+  }
+
+  static loadWithThumbnailsAndBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoThumbnailsBlacklist> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails-blacklist' })
   }
 
   static loadWithBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoWithBlacklist> {
@@ -2024,6 +2053,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return maxBy(this.filterThumbnails(ratio, maxWidth), 'width')
   }
 
+  // Deprecated, use getBestThumbnailUrl instead
   getBestThumbnailStaticPath (
     this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getBestThumbnail'>,
     ratio: ThumbnailAspectRatio,
@@ -2041,6 +2071,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return minBy(this.filterThumbnails(ratio), 'width')
   }
 
+  // Deprecated, use getSmallestThumbnailUrl instead
   getSmallestThumbnailStaticPath (
     this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getSmallestThumbnail'>,
     ratio: ThumbnailAspectRatio
@@ -2049,6 +2080,27 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     if (!thumbnail) return null
 
     return thumbnail.getFileStaticPath()
+  }
+
+  getBestThumbnailUrl (
+    this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getBestThumbnail'>,
+    ratio: ThumbnailAspectRatio,
+    maxWidth?: number
+  ) {
+    const thumbnail = this.getBestThumbnail(ratio, maxWidth)
+    if (!thumbnail) return null
+
+    return thumbnail.getLocalFileUrl()
+  }
+
+  getSmallestThumbnailUrl (
+    this: Pick<MVideoThumbnails, 'Thumbnails' | 'filterThumbnails' | 'getSmallestThumbnail'>,
+    ratio: ThumbnailAspectRatio
+  ) {
+    const thumbnail = this.getSmallestThumbnail(ratio)
+    if (!thumbnail) return null
+
+    return thumbnail.getLocalFileUrl()
   }
 
   filterThumbnails (this: Pick<MVideoThumbnails, 'Thumbnails'>, ratio: ThumbnailAspectRatio, maxWidth?: number) {
@@ -2202,13 +2254,10 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   async removeAllStreamingPlaylistFiles (options: {
     playlist: MStreamingPlaylist
     deleteCaptionPlaylists?: boolean // default true
-    isRedundancy?: boolean // default false
   }) {
-    const { playlist, deleteCaptionPlaylists = true, isRedundancy = false } = options
+    const { playlist, deleteCaptionPlaylists = true } = options
 
-    const directoryPath = isRedundancy
-      ? getHLSRedundancyDirectory(this)
-      : getHLSDirectory(this)
+    const directoryPath = getHLSDirectory(this)
 
     const removeDirectory = async () => {
       try {
@@ -2227,46 +2276,42 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       }
     }
 
-    if (isRedundancy) {
-      await removeDirectory()
-    } else {
-      if (deleteCaptionPlaylists) {
-        const captions = await VideoCaptionModel.listVideoCaptions(playlist.videoId)
+    if (deleteCaptionPlaylists) {
+      const captions = await VideoCaptionModel.listVideoCaptions(playlist.videoId)
 
-        // Remove playlist files associated to captions
-        for (const caption of captions) {
-          try {
-            await caption.removeCaptionPlaylist()
-            await caption.save()
-          } catch (err) {
-            logger.error(
-              `Cannot remove caption ${caption.filename} (${caption.language}) playlist files associated to video ${this.name}`,
-              { video: this }
-            )
-          }
+      // Remove playlist files associated to captions
+      for (const caption of captions) {
+        try {
+          await caption.removeCaptionPlaylist()
+          await caption.save()
+        } catch (err) {
+          logger.error(
+            `Cannot remove caption ${caption.filename} (${caption.language}) playlist files associated to video ${this.name}`,
+            { video: this }
+          )
         }
-      }
-
-      await removeDirectory()
-
-      const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
-      playlistWithFiles.Video = this
-
-      if (!Array.isArray(playlistWithFiles.VideoFiles)) {
-        playlistWithFiles.VideoFiles = await playlistWithFiles.$get('VideoFiles')
-      }
-
-      // Remove physical files and torrents
-      await Promise.all(
-        playlistWithFiles.VideoFiles.map(file => file.removeTorrent())
-      )
-
-      if (playlist.storage === FileStorage.OBJECT_STORAGE) {
-        await removeHLSObjectStorage(this)
       }
     }
 
-    logger.debug(`Removing files associated to streaming playlist of video ${this.url}`, { playlist, isRedundancy })
+    await removeDirectory()
+
+    const playlistWithFiles = playlist as MStreamingPlaylistFilesVideo
+    playlistWithFiles.Video = this
+
+    if (!Array.isArray(playlistWithFiles.VideoFiles)) {
+      playlistWithFiles.VideoFiles = await playlistWithFiles.$get('VideoFiles')
+    }
+
+    // Remove physical files and torrents
+    await Promise.all(
+      playlistWithFiles.VideoFiles.map(file => file.removeTorrent())
+    )
+
+    if (playlist.storage === FileStorage.OBJECT_STORAGE) {
+      await removeHLSObjectStorage(this)
+    }
+
+    logger.debug(`Removing files associated to streaming playlist of video ${this.url}`, { playlist })
   }
 
   async removeStreamingPlaylistVideoFile (streamingPlaylist: MStreamingPlaylist, videoFile: MVideoFile) {
@@ -2319,6 +2364,15 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
   setAsRefreshed (transaction?: Transaction) {
     return setAsUpdated({ sequelize: this.sequelize, table: 'video', id: this.id, transaction })
+  }
+
+  async bumpUpdatedAt (transaction: Transaction) {
+    this.updatedAt = await bumpUpdatedAt({
+      sequelize: this.sequelize,
+      table: 'video',
+      id: this.id,
+      transaction
+    })
   }
 
   // ---------------------------------------------------------------------------
@@ -2379,12 +2433,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   getTrackerUrls () {
-    if (this.isLocal()) {
-      return [
-        WEBSERVER.URL + '/tracker/announce',
-        WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket'
-      ]
-    }
+    if (this.isLocal()) return buildLocalTrackerUrls()
 
     return this.Trackers.map(t => t.url)
   }

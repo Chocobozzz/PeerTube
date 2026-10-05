@@ -689,7 +689,8 @@ describe('Test user notifications', function () {
       expect(notification.type).to.equal(UserNotificationType.VIDEO_OWNERSHIP_CHANGED_REJECTED)
       expect(notification.changeOwnership.id).to.exist
       expect(notification.changeOwnership.video.name).to.equal(videoName)
-      expect(notification.changeOwnership.initiatorAccount.name).to.equal('root') // root made the request on behalf of the nextOwner user
+      // root made the request on behalf of the nextOwner user, but the initiator is the current video owner
+      expect(notification.changeOwnership.initiatorAccount.name).to.equal(nextOwner)
       expect(notification.changeOwnership.nextOwnerAccount.name).to.equal(nextNextOwner)
     })
   })

@@ -1189,6 +1189,24 @@ paths:
           - admin
       tags:
         - Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processRoles:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum:
+                      - primary
+                      - secondary
+                  description: >-
+                    Roles of the PeerTube processes that must pause their job queue.
+                    Defaults to all the roles.
+                    Other processes are notified asynchronously.
       responses:
         '204':
           description: successful operation
@@ -1201,6 +1219,24 @@ paths:
           - admin
       tags:
         - Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processRoles:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum:
+                      - primary
+                      - secondary
+                  description: >-
+                    Roles of the PeerTube processes that must resume their job queue.
+                    Defaults to all the roles.
+                    Other processes are notified asynchronously.
       responses:
         '204':
           description: successful operation
@@ -2108,6 +2144,15 @@ paths:
               schema:
                 type: number
                 example: 0
+        '400':
+          description: chunk is smaller than `import.users.resumableUpload.minChunkSize` of the server config or 1/10,000 of the file size (and is not the last one)
+        '503':
+          description: upload is already being processed
+          headers:
+            'Retry-After':
+              schema:
+                type: number
+                example: 300
     delete:
       summary: Cancel the resumable user import
       description: "**PeerTube >= 6.1** Uses [a resumable protocol](https://github.com/kukhariev/node-uploadx/blob/master/proto.md) to cancel the resumable user import"
@@ -3996,6 +4041,8 @@ paths:
               schema:
                 type: number
                 example: 0
+        '400':
+          description: chunk is smaller than `client.videos.resumableUpload.minChunkSize` of the server config or 1/10,000 of the file size (and is not the last one)
         '403':
           description: video didn't pass upload filter
         '404':
@@ -4429,6 +4476,8 @@ paths:
               schema:
                 type: number
                 example: 0
+        '400':
+          description: chunk is smaller than `client.videos.resumableUpload.minChunkSize` of the server config or 1/10,000 of the file size (and is not the last one)
         '403':
           description: video didn't pass file replacement filter
         '404':
@@ -7466,6 +7515,7 @@ paths:
                         - process-update-videos-scheduler
                         - process-video-channel-sync-latest
                         - process-remove-old-stats
+                        - process-video-files-lifecycle
                   required:
                     - command
                 - type: object
@@ -9990,6 +10040,11 @@ components:
 
         For example, a value of `bytes 0-262143/1000000` shows that the request is sending the first
         262144 bytes (256 x 1024) in a 2,469,036 byte file.
+
+        When the server config `client.videos.resumableUpload.minChunkSize` (video uploads) or
+        `import.users.resumableUpload.minChunkSize` (user archive imports) is not `0`,
+        every chunk except the last one must be at least that big. It must also be at least 1/10,000 of the file size
+        (the maximum number of object storage multipart upload parts).
     resumableUploadChunkContentLengthHeader:
       name: Content-Length
       in: header
@@ -10707,12 +10762,14 @@ components:
           minLength: 3
           maxLength: 120
         thumbnailPath:
-          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         previewPath:
-          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         thumbnails:
           description: "**PeerTube >= 8.1** Array of thumbnails for the video"
@@ -10836,6 +10893,8 @@ components:
               description: Latest input file update. Null if the file has never been replaced since the original upload
             trackerUrls:
               type: array
+              description: |
+                WebTorrent (`ws://` or `wss://`) and BitTorrent (`http://` or `https://`) trackers of the video
               items:
                 type: string
                 format: url
@@ -11156,8 +11215,9 @@ components:
             blacklisted:
               type: boolean
             thumbnailPath:
-              description: Deprecated in PeerTube v8.1, use thumbnails instead
+              description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
               deprecated: true
+              nullable: true
               type: string
             thumbnails:
               description: "**PeerTube >= 8.1** Array of thumbnails for the video"
@@ -11284,8 +11344,9 @@ components:
           type: integer
           minimum: 0
         thumbnailPath:
-          description: Deprecated in PeerTube v8.1, use thumbnails instead
+          description: "Deprecated in PeerTube v8.1, use thumbnails instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         thumbnails:
           description: "**PeerTube >= 8.1** Array of thumbnails for the playlist"
@@ -11395,8 +11456,9 @@ components:
     Storyboard:
       properties:
         storyboardPath:
-          description: Deprecated in PeerTube v8.0, use fileUrl instead
+          description: "Deprecated in PeerTube v8.0, use fileUrl instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         fileUrl:
           description: "**PeerTube >= 7.1**"
@@ -11421,7 +11483,8 @@ components:
         captionPath:
           type: string
           deprecated: true
-          description: Deprecated in PeerTube v8.0, use fileUrl instead
+          nullable: true
+          description: "Deprecated in PeerTube v8.0, use fileUrl instead. Null if the file is stored in object storage: use the non-deprecated field instead."
         fileUrl:
           description: "**PeerTube >= 7.1**"
           type: string
@@ -11470,8 +11533,9 @@ components:
     ActorImage:
       properties:
         path:
-          description: Deprecated in PeerTube v8.0, use fileUrl instead
+          description: "Deprecated in PeerTube v8.0, use fileUrl instead. Null if the file is stored in object storage: use the non-deprecated field instead."
           deprecated: true
+          nullable: true
           type: string
         fileUrl:
           description: "**PeerTube >= 7.1**"
@@ -11830,6 +11894,12 @@ components:
               properties:
                 enabled:
                   type: boolean
+                resumableUpload:
+                  type: object
+                  properties:
+                    minChunkSize:
+                      type: number
+                      description: In bytes. Minimum size of a user archive import chunk (except the last one), `0` if there is no minimum
         export:
           type: object
           properties:
@@ -12499,6 +12569,7 @@ components:
         - transcoding-job-builder
         - video-channel-import
         - video-file-import
+        - video-files-lifecycle
         - video-import
         - video-live-ending
         - video-redundancy

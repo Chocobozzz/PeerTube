@@ -11,13 +11,14 @@ import {
   ServerHookName
 } from '@peertube/peertube-models'
 import { decachePlugin } from '@server/helpers/decache.js'
-import { ApplicationModel } from '@server/models/application/application.js'
+import { isSecondaryProcess } from '@server/initializers/process-role.js'
 import { MOAuthTokenUser, MUser } from '@server/types/models/index.js'
 import express from 'express'
-import { ensureDir, outputFile, readJSON } from 'fs-extra/esm'
+import { ensureDir, outputFile, pathExists, readJSON } from 'fs-extra/esm'
 import { appendFile, readFile } from 'fs/promises'
 import { Server } from 'http'
 import { createRequire } from 'module'
+import PQueue from 'p-queue'
 import { basename, join } from 'path'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins.js'
 import { createLogger } from '../../helpers/logger.js'
@@ -31,7 +32,14 @@ import {
   RegisterServerOptions
 } from '../../types/plugins/index.js'
 import { ClientHtml } from '../html/client-html.js'
-import { installNpmPlugin, installNpmPluginFromDisk, rebuildNativePlugins, removeNpmPlugin } from './package-manager.js'
+import { currentProcessId, PluginChangePayload, Redis, RedisChannels } from '../redis/index.js'
+import {
+  installNpmPlugin,
+  installNpmPluginFromDisk,
+  listInstalledNpmPlugins,
+  rebuildNativePluginsIfABIChanged,
+  removeNpmPlugin
+} from './package-manager.js'
 import { RegisterHelpers } from './register-helpers.js'
 
 const logger = createLogger()
@@ -87,6 +95,8 @@ export class PluginManager implements ServerHook {
   private registrationDone = false
 
   private server: Server
+
+  private readonly pluginSyncQueue = new PQueue({ concurrency: 1 })
 
   private constructor () {
   }
@@ -294,6 +304,14 @@ export class PluginManager implements ServerHook {
 
   // ###################### Hooks ######################
 
+  hasHook (hookName: ServerHookName) {
+    return this.hooks[hookName]?.length > 0
+  }
+
+  getPluginNamesOfHook (hookName: ServerHookName) {
+    return [ ...new Set((this.hooks[hookName] || []).map(h => h.npmName)) ]
+  }
+
   async runHook<T> (hookName: ServerHookName, result?: T, params?: any): Promise<T> {
     if (!this.hooks[hookName]) return Promise.resolve(result)
 
@@ -341,6 +359,8 @@ export class PluginManager implements ServerHook {
     this.sortHooksByPriority()
 
     this.registrationDone = true
+
+    await this.publishRegisteredPlugins()
   }
 
   async removeUnsecurePluginsIfNeededBeforeRegistration () {
@@ -420,6 +440,7 @@ export class PluginManager implements ServerHook {
         version: packageJSON.version,
         enabled: true,
         uninstalled: false,
+        diskPath: fromDisk ? toInstall : null,
         peertubeEngine: packageJSON.engine.peertube
       }, { returning: true })
 
@@ -428,6 +449,9 @@ export class PluginManager implements ServerHook {
       if (register) {
         await this.registerPluginOrTheme(plugin)
       }
+
+      await this.publishRegisteredPlugins()
+      this.notifyOtherProcesses({ type: 'installed-plugins-changed' })
     } catch (rootErr) {
       logger.error('Cannot install plugin %s, removing it...', toInstall, { err: rootErr })
 
@@ -498,15 +522,218 @@ export class PluginManager implements ServerHook {
 
     await removeNpmPlugin(npmName)
 
+    await this.publishRegisteredPlugins()
+    this.notifyOtherProcesses({ type: 'installed-plugins-changed' })
+
     logger.info('Plugin %s uninstalled.', npmName)
   }
 
-  async rebuildNativePluginsIfNeeded () {
-    if (!await ApplicationModel.nodeABIChanged()) return
+  rebuildNativePluginsIfNeeded () {
+    return rebuildNativePluginsIfABIChanged()
+  }
 
-    logger.info('Node ABI has changed, rebuilding native plugins')
+  // ###################### Synchronization ######################
 
-    return rebuildNativePlugins()
+  // Returns the npm names of the enabled plugins and themes this sync read from the database
+  async syncPlugins (options: {
+    register: boolean
+
+    // Called when this process failed to register a plugin the primary process runs
+    onDivergedFromPrimary?: (npmNames: string[]) => void
+  }): Promise<Set<string>> {
+    const { register, onDivergedFromPrimary } = options
+
+    let dbNpmNames = new Set<string>()
+
+    await this.pluginSyncQueue.add(async () => {
+      const dbPlugins = await PluginModel.listEnabledPluginsAndThemes()
+      dbNpmNames = new Set(dbPlugins.map(p => PluginModel.buildNpmName(p.name, p.type)))
+
+      await this.installMissingPlugins(dbPlugins)
+      const removed = await this.removeStalePlugins(dbNpmNames)
+
+      if (!register) return
+
+      await this.registerSyncedPlugins(dbPlugins, removed)
+
+      // Inside the queue, so a sync still waiting for its turn cannot make its plugins look like failures
+      if (onDivergedFromPrimary) {
+        const npmNames = await this.listPluginsOnlyRegisteredByPrimary(dbNpmNames)
+        if (npmNames.length !== 0) onDivergedFromPrimary(npmNames)
+      }
+    })
+
+    return dbNpmNames
+  }
+
+  async listenForPluginChanges (options: {
+    // Called when this process failed to register a plugin the primary process runs
+    onDivergedFromPrimary: (npmNames: string[]) => void
+  }) {
+    await RedisChannels.pluginChanges.subscribe(payload => {
+      if (payload?.type === 'installed-plugins-changed') {
+        this.syncPlugins({ register: true, onDivergedFromPrimary: options.onDivergedFromPrimary })
+          .catch(err => logger.error('Cannot sync plugins after a change made by another process.', { err }))
+
+        return
+      }
+
+      this.onPluginSettingsChangeMessage(payload)
+    })
+
+    // Catch up with the changes notified before the subscription, while this process was booting
+    await this.syncPlugins({ register: true, onDivergedFromPrimary: options.onDivergedFromPrimary })
+  }
+
+  // The primary installs the plugins itself, but their settings can be updated by a secondary
+  async listenForPluginSettingsChanges () {
+    await RedisChannels.pluginChanges.subscribe(payload => this.onPluginSettingsChangeMessage(payload))
+  }
+
+  private onPluginSettingsChangeMessage (payload: PluginChangePayload) {
+    if (payload?.type !== 'plugin-settings-changed') return
+    if (payload.senderId === currentProcessId) return
+
+    this.runOnSettingsChangedFromDatabase(payload.npmName)
+      .catch(err => logger.error('Cannot run the settings change callbacks of %s.', payload.npmName, { err }))
+  }
+
+  // The plugins and themes the primary process runs, but this process failed to register
+  // Only the plugins a sync installed are compared
+  async listPluginsOnlyRegisteredByPrimary (syncedNpmNames: Set<string>) {
+    try {
+      const primaryNpmNames = await Redis.Instance.getPrimaryRegisteredPlugins()
+      if (!primaryNpmNames) return []
+
+      // The list of the primary can be older than the database, while it restarts for example: only consider enabled plugins
+      const enabled = await PluginModel.listEnabledPluginsAndThemes()
+      const enabledNpmNames = new Set(enabled.map(p => PluginModel.buildNpmName(p.name, p.type)))
+
+      return primaryNpmNames.filter(npmName => {
+        return syncedNpmNames.has(npmName) && enabledNpmNames.has(npmName) && !this.isRegistered(npmName)
+      })
+    } catch (err) {
+      logger.error('Cannot compare the registered plugins with the ones of the primary process.', { err })
+
+      return []
+    }
+  }
+
+  // ###################### Private synchronization ######################
+
+  private async registerSyncedPlugins (dbPlugins: PluginModel[], removed: boolean) {
+    let registered = false
+
+    for (const plugin of dbPlugins) {
+      const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+
+      const alreadyRegistered = this.getRegisteredPluginOrTheme(npmName)
+      if (alreadyRegistered?.version === plugin.version) continue
+
+      try {
+        if (alreadyRegistered) await this.unregister(npmName)
+
+        await this.registerPluginOrTheme(plugin)
+        registered = true
+      } catch (err) {
+        logger.error('Cannot register plugin %s after syncing it.', npmName, { err })
+      }
+    }
+
+    if (registered) this.sortHooksByPriority()
+    if (registered || removed) await this.regeneratePluginGlobalCSS()
+  }
+
+  private async installMissingPlugins (dbPlugins: PluginModel[]) {
+    for (const plugin of dbPlugins) {
+      const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
+
+      const installedVersion = await this.getInstalledVersion(plugin.name, plugin.type)
+      if (installedVersion === plugin.version) continue
+
+      try {
+        logger.info(
+          'Installing plugin %s@%s to match the database (currently %s).',
+          npmName,
+          plugin.version,
+          installedVersion || 'not installed'
+        )
+
+        if (plugin.diskPath) {
+          if (!await pathExists(plugin.diskPath)) {
+            throw new Error(
+              `it was installed from "${plugin.diskPath}", which this process cannot reach. ` +
+                'Make that path available here, or publish the plugin to npm.'
+            )
+          }
+
+          await installNpmPluginFromDisk(plugin.diskPath)
+        } else {
+          await installNpmPlugin(npmName, plugin.version)
+        }
+
+        logger.info('Installed plugin %s@%s to match the database.', npmName, plugin.version)
+      } catch (err) {
+        logger.error('Cannot install plugin %s@%s: %s', npmName, plugin.version, (err as Error).message, { err })
+      }
+    }
+  }
+
+  private async removeStalePlugins (dbNpmNames: Set<string>) {
+    let removed = false
+
+    for (const npmName of await listInstalledNpmPlugins()) {
+      if (dbNpmNames.has(npmName)) continue
+
+      logger.info('Removing plugin %s: the database does not list it anymore.', npmName)
+
+      try {
+        if (this.getRegisteredPluginOrTheme(npmName)) await this.unregister(npmName)
+
+        await removeNpmPlugin(npmName)
+        removed = true
+
+        logger.info('Removed plugin %s to match the database.', npmName)
+      } catch (err) {
+        logger.error('Cannot remove plugin %s.', npmName, { err })
+      }
+    }
+
+    return removed
+  }
+
+  private async getInstalledVersion (pluginName: string, pluginType: PluginType_Type) {
+    try {
+      const packageJSON = await this.getPackageJSON(pluginName, pluginType)
+
+      return packageJSON.version
+    } catch {
+      return undefined
+    }
+  }
+
+  private async runOnSettingsChangedFromDatabase (npmName: string) {
+    // Read the settings rather than trusting the payload: they never travel through Redis
+    const plugin = await PluginModel.loadByNpmName(npmName)
+    if (!plugin) return
+
+    await this.onSettingsChanged(plugin.name, plugin.settings)
+  }
+
+  // Lets a secondary process detect that it failed to register a plugin the primary runs
+  private async publishRegisteredPlugins () {
+    if (isSecondaryProcess() || !Redis.Instance.isInitialized()) return
+
+    try {
+      await Redis.Instance.setPrimaryRegisteredPlugins(Object.keys(this.registeredPlugins))
+    } catch (err) {
+      logger.error('Cannot publish the registered plugins to the other processes.', { err })
+    }
+  }
+
+  private notifyOtherProcesses (payload: PluginChangePayload) {
+    // `npm run plugin:install` and its siblings run without Redis: `broadcast` skips it, they only write the state the others converge to
+    RedisChannels.pluginChanges.broadcast(payload)
   }
 
   // ###################### Private register ######################

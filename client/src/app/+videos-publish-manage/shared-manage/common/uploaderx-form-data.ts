@@ -1,5 +1,5 @@
-import { objectToFormData } from '@app/helpers'
-import { resolveUrl, UploaderX } from 'ngx-uploadx'
+import { objectToFormData, PeerTubeUploaderX } from '@app/helpers'
+import { resolveUrl } from 'ngx-uploadx'
 
 /**
  * multipart/form-data uploader extending the UploaderX implementation of Google Resumable
@@ -12,7 +12,7 @@ import { resolveUrl, UploaderX } from 'ngx-uploadx'
  *     uploaderClass: UploaderXFormData
  *   };
  */
-export class UploaderXFormData extends UploaderX {
+export class UploaderXFormData extends PeerTubeUploaderX {
   async getFileUrl (): Promise<string> {
     const headers = {
       'X-Upload-Content-Length': this.size.toString(),

@@ -1,6 +1,9 @@
+import { FileStorage } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
-import { WEBSERVER } from '@server/initializers/constants.js'
+import { isObjectNotFoundError } from '@server/lib/object-storage/object-storage-helpers.js'
+import { makeCommonFileAvailable, storeCommonFile } from '@server/lib/object-storage/common-files.js'
 import { generateTorrentFileName } from '@server/lib/paths.js'
+import { buildLocalAnnounceList } from '@server/lib/tracker-urls.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { createTorrentFromWorker } from '@server/lib/worker/parent-process.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -134,26 +137,37 @@ export async function createTorrentForFileFromPath (
     // Keep the extname, it's used by the client to stream the file inside a web browser
     name: buildInfoName(video, videoFile),
     createdBy: 'PeerTube',
-    announceList: buildAnnounceList(),
+    announceList: buildLocalAnnounceList(),
     urlList: buildUrlList(video, videoFile)
   })
 
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.ENABLED
+
   const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
-  const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
+  // Write in tmp when the final destination is object storage
+  const torrentPath = join(onObjectStorage ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
   logger.info('Creating torrent %s.', torrentPath)
 
   await writeFile(torrentPath, torrentContent)
 
+  if (onObjectStorage) {
+    await storeCommonFile('torrents', torrentPath, torrentFilename)
+    await remove(torrentPath)
+  }
+
   // Remove old torrent file if it existed
   if (videoFile.hasTorrent()) {
-    await remove(join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename))
+    await videoFile.removeTorrent()
   }
 
   const parsedTorrent = await parseTorrent(torrentContent)
 
   return {
     infoHash: parsedTorrent.infoHash,
-    torrentFilename: torrentFilename
+    torrentFilename,
+    torrentStorage: onObjectStorage
+      ? FileStorage.OBJECT_STORAGE
+      : FileStorage.FILE_SYSTEM
   }
 }
 
@@ -165,17 +179,18 @@ export async function updateTorrentForFileAndSave (videoOrPlaylist: MVideo | MSt
     return
   }
 
-  const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
+  const oldTorrentFilename = videoFile.torrentFilename
+  const storage = videoFile.torrentStorage
 
-  if (!await pathExists(oldTorrentPath)) {
-    logger.info('Do not update torrent metadata %s of video %s because the file does not exist anymore.', video.uuid, oldTorrentPath)
+  const torrentContent = await readTorrentContent(videoFile)
+  if (!torrentContent) {
+    logger.info('Do not update torrent metadata of video %s because the torrent does not exist anymore.', video.uuid)
     return
   }
 
-  const torrentContent = await readFile(oldTorrentPath)
   const decoded = bencode.decode(torrentContent)
 
-  decoded['announce-list'] = buildAnnounceList()
+  decoded['announce-list'] = buildLocalAnnounceList()
   decoded.announce = decoded['announce-list'][0][0]
 
   decoded['url-list'] = buildUrlList(video, videoFile)
@@ -184,26 +199,53 @@ export async function updateTorrentForFileAndSave (videoOrPlaylist: MVideo | MSt
   decoded['creation date'] = Math.ceil(Date.now() / 1000)
 
   const newTorrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
-  const newTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
+  const onObjectStorage = storage === FileStorage.OBJECT_STORAGE
 
-  logger.info('Updating torrent metadata %s -> %s.', oldTorrentPath, newTorrentPath)
+  logger.info('Updating torrent metadata %s -> %s.', oldTorrentFilename, newTorrentFilename)
 
+  const newTorrentPath = join(onObjectStorage ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
   await writeFile(newTorrentPath, bencode.encode(decoded))
-  await remove(oldTorrentPath)
 
-  // The video file may have been deleted in the meantime, so don't leave the new torrent on disk
-  if (!await VideoFileModel.load(videoFile.id)) {
-    logger.info('Do not save torrent metadata update %s because the video file does not exist anymore.', newTorrentPath)
-
+  if (onObjectStorage) {
+    await storeCommonFile('torrents', newTorrentPath, newTorrentFilename)
     await remove(newTorrentPath)
+  }
+
+  // The video file may have been deleted in the meantime, so don't leave the new torrent behind
+  if (!await VideoFileModel.load(videoFile.id)) {
+    logger.info('Do not save torrent metadata update %s because the video file does not exist anymore.', newTorrentFilename)
+
+    await VideoFileModel.removeTorrentFile(newTorrentFilename, storage)
     return
   }
 
   videoFile.torrentFilename = newTorrentFilename
+  videoFile.torrentStorage = storage
 
   await VideoInfohashModel.replaceFileInfohash(videoFile.id, sha1(bencode.encode(decoded.info)))
 
   await videoFile.save()
+
+  await VideoFileModel.removeTorrentFile(oldTorrentFilename, storage)
+}
+
+async function readTorrentContent (videoFile: MVideoFile) {
+  if (videoFile.torrentStorage === FileStorage.OBJECT_STORAGE) {
+    try {
+      return await makeCommonFileAvailable('torrents', videoFile.torrentFilename, path => readFile(path))
+    } catch (err) {
+      // Other errors may be temporary: throw them so the caller can retry instead of keeping an outdated torrent
+      if (!isObjectNotFoundError(err)) throw err
+
+      logger.info('Cannot find torrent %s in object storage.', videoFile.torrentFilename, { err })
+      return undefined
+    }
+  }
+
+  const oldTorrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, videoFile.torrentFilename)
+  if (!await pathExists(oldTorrentPath)) return undefined
+
+  return readFile(oldTorrentPath)
 }
 
 export function generateMagnetUri (
@@ -270,13 +312,6 @@ function deleteDownloadedFile (downloadedFile: { directoryPath: string, filepath
   logger.debug('Removing %s after webtorrent download.', toRemovePath)
   remove(toRemovePath)
     .catch(err => logger.error('Cannot remove torrent file %s in webtorrent download.', toRemovePath, { err }))
-}
-
-function buildAnnounceList () {
-  return [
-    [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
-    [ WEBSERVER.URL + '/tracker/announce' ]
-  ]
 }
 
 function buildUrlList (video: MVideo, videoFile: MVideoFile) {

@@ -104,7 +104,7 @@
         <target state="translated">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">350</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
@@ -112,7 +112,7 @@
         <target state="translated">»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">386</context>
+          <context context-type="linenumber">383</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
@@ -120,7 +120,7 @@
         <target state="translated">İlk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">408</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
@@ -128,7 +128,7 @@
         <target state="translated">Önceki</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">434</context>
+          <context context-type="linenumber">431</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
@@ -136,7 +136,7 @@
         <target state="translated">İleri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">463</context>
+          <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
@@ -144,7 +144,7 @@
         <target state="translated">Son</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">493</context>
+          <context context-type="linenumber">488</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html" xml:space="preserve">
@@ -157,7 +157,7 @@
         <target state="translated">SA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
@@ -173,7 +173,7 @@
         <target state="translated">DA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">312</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
@@ -181,7 +181,7 @@
         <target state="translated">Dakika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">351</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html">
@@ -189,7 +189,7 @@
         <target state="translated">Artış saatleri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">385</context>
+          <context context-type="linenumber">380</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html">
@@ -197,7 +197,7 @@
         <target state="translated">Azalma saatleri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">423</context>
+          <context context-type="linenumber">422</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html">
@@ -2889,49 +2889,34 @@
         <target state="translated">Bağlantı kesildi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5646229632737908639" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</source>
         <target state="translated"><x id="PH" equiv-text="name"/> dosya biçiminiz platformunuz tarafından desteklenmiyor.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">59</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">68</context></context-group></trans-unit>
       <trans-unit id="4591025453509397472" datatype="html" xml:space="preserve">
         <source>The server encountered an error.</source>
         <target state="translated">Sunucuda bir hata oluştu.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">72</context></context-group></trans-unit>
       <trans-unit id="3083362298006411773" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</source>
         <target state="translated"><x id="PH" equiv-text="name"/> dosyanız sunucu proxy zaman aşımından önce aktarılamadı.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">67</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">76</context></context-group></trans-unit>
       <trans-unit id="5514835993053540551" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large.</source>
         <target state="translated"><x id="PH" equiv-text="name"/> dosyanız çok büyüktü.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">72</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">81</context></context-group></trans-unit>
       <trans-unit id="8456000313168556766" datatype="html" xml:space="preserve">
         <source>Max size is <x id="PH" equiv-text="maxFileSize"/>.</source>
         <target state="translated">Maksimum boyut: <x id="PH" equiv-text="maxFileSize"/>.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
       <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
         <target state="translated">Bu web tarayıcısında kısayol tuşlarını etkinleştirin</target>
@@ -4234,19 +4219,10 @@ The link will expire within 1 hour.</source>
       <trans-unit id="2657043015926552641" datatype="html" xml:space="preserve">
         <source>Unknown error</source>
         <target state="translated">Bilinmeyen hata</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
-          <context context-type="linenumber">45</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context>
-          <context context-type="linenumber">96</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">36</context>
-        </context-group>
-      </trans-unit>
+        
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">45</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">96</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
         <target state="translated">Geçersiz giriş video akışı</target>
@@ -5003,7 +4979,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Yükleme başarısız</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5146398958364876914" datatype="html">
@@ -6840,15 +6816,9 @@ The link will expire within 1 hour.</source>
       <trans-unit id="5908006683848456416" datatype="html" xml:space="preserve">
         <source>However, the auto-tagging policies will not affect existing comments:</source>
         <target state="translated">Ancak otomatik etiketleme politikaları mevcut yorumları etkilemeyecektir:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
-          <context context-type="linenumber">16,18</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">84,86</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context><context context-type="linenumber">16</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">93</context></context-group></trans-unit>
       <trans-unit id="6879611118172119569" datatype="html" xml:space="preserve">
         <source>Only new comments can be blocked by a new word</source>
         <target state="translated">Yeni bir kelime tarafından yalnızca yeni yorumlar engellenebilir</target>
@@ -6913,38 +6883,50 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3212629476561103950" datatype="html">
+        <source>However, the auto-tagging policies will not affect existing videos:</source>
+        <target state="new">However, the auto-tagging policies will not affect existing videos:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
+          <context context-type="linenumber">80,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9069205412472719482" datatype="html">
+        <source>Only new videos can be blocked by a new word added to the list</source>
+        <target state="new">Only new videos can be blocked by a new word added to the list</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
+          <context context-type="linenumber">83,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7471441043625129428" datatype="html">
+        <source>If a word is removed from the list, any videos that are currently blacklisted will not be affected</source>
+        <target state="new">If a word is removed from the list, any videos that are currently blacklisted will not be affected</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
+          <context context-type="linenumber">84,85</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3536332983620084462" datatype="html" xml:space="preserve">
         <source>The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list.</source>
         <target state="translated">Uzak liste periyodik olarak senkronize edilecek ve mevcut yorumlardaki otomatik etiketler listedeki kelimelere göre güncellenecektir.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">80</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">89</context></context-group></trans-unit>
       <trans-unit id="2322571852303891260" datatype="html" xml:space="preserve">
         <source>Only new comments can be blocked by a new word added to the list</source>
         <target state="translated">Listeye eklenen yeni bir kelime tarafından yalnızca yeni yorumlar engellenebilir</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">87,88</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">96</context></context-group></trans-unit>
       <trans-unit id="1627379234330905470" datatype="html" xml:space="preserve">
         <source>If a word is removed from the list, any comments that are currently awaiting review will not be affected</source>
         <target state="translated">Bir kelime listeden çıkarılırsa, şu anda inceleme bekleyen yorumlar bundan etkilenmeyecektir</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">88,89</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">97</context></context-group></trans-unit>
       <trans-unit id="8886093131637035111" datatype="html" xml:space="preserve">
         <source>Watched words URL</source>
         <target state="translated">İzlenen kelimeler URL'si</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">95,96</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">104</context></context-group></trans-unit>
       <trans-unit id="2602880137044610698" datatype="html" xml:space="preserve">
         <source>Watched words URL is required.</source>
         <target state="translated">İzlenen kelimeler URL'si gereklidir.</target>
@@ -8156,7 +8138,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3946683396888479808" datatype="html" xml:space="preserve">
@@ -9075,7 +9057,7 @@ The link will expire within 1 hour.</source>
         <source>ID</source>
         <target state="translated">İD</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">104</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">105</context></context-group></trans-unit>
       <trans-unit id="5911214550882917183" datatype="html" xml:space="preserve">
         <source>State</source>
         <target state="translated">Durum</target>
@@ -9090,7 +9072,7 @@ The link will expire within 1 hour.</source>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">46</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">107</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">47</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">40</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">108</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">149</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">132</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">46</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">108</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">84</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">47</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">40</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">108</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">149</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">132</context></context-group></trans-unit>
       <trans-unit id="7227590042704998799" datatype="html">
         <source>Reliability</source>
         <target state="new">Reliability</target>
@@ -10024,7 +10006,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
@@ -11172,19 +11154,19 @@ The link will expire within 1 hour.</source>
         <target state="translated">Meslek türü</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">81</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">60</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">82</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">60</context></context-group></trans-unit>
       <trans-unit id="6170245880855918780" datatype="html" xml:space="preserve">
         <source>Job state</source>
         <target state="translated">Meslek durumu</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">93</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">94</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="8650499415827640724" datatype="html">
         <source>Type</source>
         <target state="translated">Tür</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
@@ -11200,7 +11182,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Priority</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">107</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
@@ -11212,7 +11194,7 @@ The link will expire within 1 hour.</source>
         <target state="new">(1 = highest priority)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3419681791450150574" datatype="html" xml:space="preserve">
@@ -11220,19 +11202,19 @@ The link will expire within 1 hour.</source>
         <target state="translated">İlerle</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">108</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">86</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">86</context></context-group></trans-unit>
       <trans-unit id="7242197455061561082" datatype="html" xml:space="preserve">
         <source>Processed/Finished</source>
         <target state="translated">İşlendi/Bitti</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">111</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit>
       <trans-unit id="5412611865788148550" datatype="html">
         <source>Filter by type: <x id="PH" equiv-text="type.toLocaleUpperCase()"/></source>
         <target state="new">Filter by type: <x id="PH" equiv-text="type.toLocaleUpperCase()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6417143148487697946" datatype="html">
@@ -11240,7 +11222,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Are you sure you want to cancel job <x id="PH" equiv-text="job.id"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5200752682405061561" datatype="html">
@@ -11248,11 +11230,11 @@ The link will expire within 1 hour.</source>
         <target state="new">Cancel job</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">180</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7060183792589771743" datatype="html">
@@ -11260,7 +11242,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Keep job</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7072706922467312188" datatype="html">
@@ -11268,7 +11250,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Job <x id="PH" equiv-text="job.id"/> cancellation requested</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6971048580938828360" datatype="html">
@@ -11276,7 +11258,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Cannot cancel job <x id="PH" equiv-text="job.id"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1653926345388884833" datatype="html" xml:space="preserve">
@@ -20528,7 +20510,7 @@ The link will expire within 1 hour.</source>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">88</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">88</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
       <trans-unit id="8140268298586972139" datatype="html" xml:space="preserve">
         <source>Daily quota</source>
         <target state="translated">Günlük kota</target>
@@ -26789,7 +26771,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
         <target state="new">Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context>
-          <context context-type="linenumber">540</context>
+          <context context-type="linenumber">535</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5927402622550505067" datatype="html" xml:space="preserve">
@@ -27459,11 +27441,8 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
       <trans-unit id="2956881256361598032" datatype="html" xml:space="preserve">
         <source>archive</source>
         <target state="translated">arşiv</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context>
-          <context context-type="linenumber">180</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context><context context-type="linenumber">189</context></context-group></trans-unit>
       <trans-unit id="7742520815129539114" datatype="html" xml:space="preserve">
         <source>Bitrate</source>
         <target state="translated">Bit hızı</target>
@@ -27537,7 +27516,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
         <target state="translated">Video ihbar edildi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.ts</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3099741642167775297" datatype="html">
@@ -27958,7 +27937,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
@@ -29498,7 +29477,7 @@ PeerTube'u (config/dizin), özellikle "web sunucusu" bölümünü doğru şekild
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5856931617181450881" datatype="html">

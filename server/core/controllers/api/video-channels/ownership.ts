@@ -87,7 +87,8 @@ export {
 
 async function createChangeOwnershipRequest (req: express.Request, res: express.Response) {
   const channel = res.locals.videoChannel
-  const initiatorAccountId = res.locals.oauth.token.User.Account.id
+  // The initiator is the current owner of the channel, not necessarily the user who made the request (for example a moderator)
+  const initiatorAccountId = channel.accountId
   const nextOwner = res.locals.changeOwnershipNextOwner
 
   const ownershipChange = await sequelizeTypescript.transaction(async t => {

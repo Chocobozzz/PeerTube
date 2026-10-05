@@ -49,20 +49,20 @@ import {
   VideoState,
   VideoStateType
 } from '@peertube/peertube-models'
-import { isDevInstance, isTestInstance, isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
+import { isDevInstance, isTestInstance, isTestOrDevInstance, parseDurationToMs, root, sanitizeUrl } from '@peertube/peertube-node-utils'
 import { RepeatOptions } from 'bullmq'
-import { Encoding, randomBytes } from 'crypto'
+import { randomBytes } from 'crypto'
 import { readJsonSync } from 'fs-extra/esm'
 import invert from 'lodash-es/invert.js'
 import { join } from 'path'
 // Do not use barrels, remain constants as independent as possible
 import { cpus } from 'os'
-import { parseDurationToMs, sanitizeHost, sanitizeUrl } from '../helpers/core-utils.js'
 import { CONFIG, registerConfigChangedHandler } from './config.js'
+import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from './config/shared-config.js'
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1125
+export const LAST_MIGRATION_VERSION = 1155
 
 // ---------------------------------------------------------------------------
 
@@ -113,6 +113,9 @@ export const WEBSERVER = {
   RTMP_BASE_LIVE_URL: '',
   RTMPS_BASE_LIVE_URL: ''
 }
+
+// Custom tracker config keyword to specify the local tracker built-in in PeerTube
+export const LOCAL_TRACKER_URLS_KEYWORD = 'local'
 
 // Sortable columns per schema
 export const SORTABLE_COLUMNS = {
@@ -222,8 +225,8 @@ export const FOLLOW_STATES: { [id: string]: FollowState } = {
 }
 
 export const REMOTE_SCHEME = {
-  HTTP: 'https',
-  WS: 'wss'
+  HTTP: buildRemoteHttpScheme(),
+  WS: buildRemoteWsScheme()
 }
 
 // ---------------------------------------------------------------------------
@@ -247,6 +250,7 @@ export const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-redundancy': 1,
   'video-live-ending': 1,
   'video-studio-edition': 1,
+  'video-files-lifecycle': 1,
   'manage-video-torrent': 1,
   'video-channel-import': 1,
   'after-video-channel-import': 1,
@@ -279,6 +283,7 @@ export const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'v
   'video-redundancy': 1,
   'video-live-ending': 10,
   'video-studio-edition': 1,
+  'video-files-lifecycle': 1, // Keep it to 1 so we don't delete/move many files at the same time
   'manage-video-torrent': 1, // Keep it to 1 to prevent concurrency issues
   'move-to-object-storage': 1,
   'move-to-file-system': 1,
@@ -304,6 +309,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-studio-edition': 1000 * 3600 * 10, // 10 hours
+  'video-files-lifecycle': 1000 * 3600, // 1 hour
   'video-import': CONFIG.IMPORT.VIDEOS.TIMEOUT,
   'email': 60000 * 10, // 10 minutes
   'actor-keys': 60000 * 20, // 20 minutes
@@ -337,7 +343,9 @@ export const JOB_PRIORITY = {
   REQUIRED_TRANSCODING: 100,
   OPTIONAL_TRANSCODING: 10000,
   VIDEO_STUDIO: 150,
-  TRANSCRIPTION: 200
+  TRANSCRIPTION: 200,
+  // After the torrent creation of new videos, that have no priority
+  TORRENT_TRACKERS_UPDATE: 1000
 }
 
 export const JOB_REMOVAL_OPTIONS = {
@@ -361,12 +369,25 @@ export const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
 
 export const RUNNER_JOBS = {
   MAX_FAILURES: 5,
-  LAST_CONTACT_UPDATE_INTERVAL: 30000
+  LAST_CONTACT_UPDATE_INTERVAL: 30000,
+  SUCCESS_REQUEST_MAX_COMPLETION_WAIT: 30000,
+  // A job still in COMPLETING after that is considered lost and is errored
+  STALLED_COMPLETING_JOB_MS: 1000 * 3600 * 6 // 6 hours
 }
 
 // ---------------------------------------------------------------------------
 
 export const BROADCAST_CONCURRENCY = 30 // How many requests in parallel we do in activitypub-http-broadcast job
+
+export const INBOX_CONCURRENCY = {
+  // Views and downloads are frequent and cheap
+  VIEWS_AND_DOWNLOADS: 10,
+  // Most of the time is spent fetching remote objects, but keep it low because we can have many concurrent database access
+  OTHERS: 3
+}
+
+export const INBOX_WAITING_SYNC_THROTTLE_MS = 1000
+
 export const CRAWL_REQUEST_CONCURRENCY = 1 // How many requests in parallel to fetch remote data (likes, shares...)
 
 export const AP_CLEANER = {
@@ -386,6 +407,8 @@ export const REQUEST_TIMEOUTS = {
 export const SHUTDOWN_TIMEOUTS = {
   // Time we let in flight HTTP requests complete before destroying their sockets
   HTTP_CONNECTIONS: 2000, // 2 seconds
+  // Time we let the inbox process the activities it already received on server shutdown
+  INBOX_DRAIN: 4000, // 4 seconds
   // Time we let the whole graceful shutdown complete before exiting anyway
   GLOBAL: 8000 // 8 seconds
 }
@@ -397,6 +420,7 @@ export const SCHEDULER_INTERVALS_MS = {
   UPDATE_VIDEOS: 60000, // 1 minute
   UPDATE_TOKEN_SESSION: 60000, // 1 minute
   YOUTUBE_DL_UPDATE: 60000 * 60 * 24, // 1 day
+  YOUTUBE_DL_COOKIES_WATCH: 60000, // 1 minute
   GEO_IP_UPDATE: 60000 * 60 * 24, // 1 day
   VIDEO_STATS_BUFFER_UPDATE: CONFIG.VIEWS.VIDEOS.LOCAL_BUFFER_UPDATE_INTERVAL,
   CHECK_PLUGINS: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
@@ -407,6 +431,7 @@ export const SCHEDULER_INTERVALS_MS = {
   REMOVE_EXPIRED_USER_EXPORTS: 1000 * 3600, // 1 hour
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
+  REMOVE_DANGLING_STAGING_FILES: 60000 * 60, // 1 hour
   CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL,
   BLOCKLIST_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
   WATCHED_WORDS_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
@@ -613,8 +638,6 @@ export const VIEW_LIFETIME = {
   VIEWER_COUNTER: 60000 * 2, // 2 minutes
   VIEWER_STATS: 60000 * 60 // 1 hour
 }
-export let VIEWER_SYNC_REDIS = 30000 // Sync viewer into redis
-
 export const MAX_REMOTE_VIEWERS_COUNTER = 1_000_000
 
 export const STATS_LIFETIME = {
@@ -622,14 +645,14 @@ export const STATS_LIFETIME = {
 }
 
 export const REMOTE_DOWNLOADS = {
-  DEDUPLICATION_LIFETIME: 60000 * 60 * 24, // 24 hours
+  DEDUPLICATION_LIFETIME: 60000 * 60, // 1 hour
   RATE_LIMIT_LIFETIME: 60000 * 60, // 1 hour
   // Max downloads of a specific video we accept from a specific instance in RATE_LIMIT_LIFETIME
   MAX_PER_HOST_PER_VIDEO: 500
 }
 
 export const REMOTE_VIEWS = {
-  DEDUPLICATION_LIFETIME: 60000 * 60 * 24 // 24 hours
+  DEDUPLICATION_LIFETIME: 60000 * 60 // 1 hour
 }
 
 export const MAX_LOCAL_VIEWER_WATCH_SECTIONS = 100
@@ -965,6 +988,15 @@ export const ACTIVITY_PUB = {
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 2000,
   MAX_RECURSION_COMMENTS: 100,
+  MAX_ACTIVITIES_PER_REQUEST: 100,
+  MAX_VIDEO_URLS: 100,
+  MAX_VIDEO_TAGS: 100,
+  MAX_PLAYLIST_ELEMENTS: 1000,
+  CHECK_JSON_LD_SIGNATURE: {
+    // Max body size (bytes) we accept to canonicalize for a LD signature check
+    MAX_BODY_SIZE: 256 * 1024,
+    CANONIZE_TIMEOUT: 1000 * 5 // 5 seconds
+  },
   ACTOR_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2, // 2 days
   VIDEO_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2, // 2 days
   VIDEO_PLAYLIST_REFRESH_INTERVAL: 3600 * 24 * 1000 * 2 // 2 days
@@ -990,15 +1022,6 @@ export let PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
 export const BCRYPT_SALT_SIZE = 10
-
-export const ENCRYPTION = {
-  ALGORITHM: 'aes-256-gcm',
-  IV: 12, // 96-bit IV, the NIST-recommended size for GCM
-  SALT: 16, // random salt length
-  AUTH_TAG: 16,
-  KEY_LENGTH: 32,
-  ENCODING: 'hex' as Encoding
-}
 
 export const ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH = 20
 export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
@@ -1072,7 +1095,9 @@ export const OBJECT_STORAGE_PROXY_PATHS = {
 // Cache control
 export const STATIC_MAX_AGE = {
   SERVER: '2h',
-  LAZY_SERVER: '1y',
+  LAZY_SERVER: '1 year',
+  // Redirections to the object storage cache: short, so clients don't keep them if the objects are removed (object storage disabled...)
+  LAZY_SERVER_REDIRECT: '1 day',
   CLIENT: '30d'
 }
 
@@ -1144,28 +1169,33 @@ export const EMBED_SIZE = {
 }
 
 // Sub folders of cache directory
+// Remote files are cached in DIRECTORY, or in the object storage cache bucket under OBJECT_STORAGE_PREFIX (relative to its prefix)
 export const FILES_CACHE = {
   AVATARS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'avatars'),
-    MAX_AGE: 1000 * 3600 * 24 * 7 // 7 days
+    OBJECT_STORAGE_PREFIX: 'avatars/'
   },
   THUMBNAILS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'thumbnails'),
-    MAX_AGE: 1000 * 3600 * 3 // 3 hours
+    OBJECT_STORAGE_PREFIX: 'thumbnails/'
   },
   STORYBOARDS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'storyboards'),
-    MAX_AGE: 1000 * 3600 * 24 // 24 hours
+    OBJECT_STORAGE_PREFIX: 'storyboards/'
   },
   VIDEO_CAPTIONS: {
     DIRECTORY: join(CONFIG.STORAGE.CACHE_DIR, 'video-captions'),
-    MAX_AGE: 1000 * 3600 * 3 // 3 hours
+    OBJECT_STORAGE_PREFIX: 'video-captions/'
   }
 }
 
 export const LRU_CACHE = {
   USER_TOKENS: {
-    MAX_SIZE: 1000
+    MAX_SIZE: 1000,
+    TTL: parseDurationToMs('10 minutes')
+  },
+  VIDEO_TOKENS: {
+    MAX_SIZE: 10_000
   },
   FILENAME_TO_PATH_PERMANENT_FILE_CACHE: {
     MAX_SIZE: 5000
@@ -1177,16 +1207,16 @@ export const LRU_CACHE = {
     MAX_SIZE: 5000,
     TTL: parseDurationToMs('10 seconds')
   },
-  VIDEO_TOKENS: {
-    MAX_SIZE: 100_000,
-    TTL: parseDurationToMs('8 hours')
-  },
   WATCHED_WORDS_REGEX: {
     MAX_SIZE: 100,
     TTL: parseDurationToMs('24 hours')
   },
   TRACKER_IPS: {
     MAX_SIZE: 100_000
+  },
+  MODEL_CACHE: {
+    MAX_SIZE: 10_000,
+    TTL: parseDurationToMs('1 hour') // If the process misses an invalidation
   }
 }
 
@@ -1212,7 +1242,44 @@ export const DIRECTORIES = {
   UPLOAD_IMAGES: join(CONFIG.STORAGE.UPLOADS_DIR, 'images')
 }
 
+export const VIDEO_FILE_TOKEN_LIFETIME = parseDurationToMs('8 hours')
+
 export const RESUMABLE_UPLOAD_SESSION_LIFETIME = SCHEDULER_INTERVALS_MS.REMOVE_DANGLING_RESUMABLE_UPLOADS
+
+export const OBJECT_STORAGE_STAGING = {
+  // The size of a streamed file is unknown: each part is buffered in memory, so keep them small
+  // Must be at least `MIN_PART_SIZE`
+  STREAM_PART_SIZE: 16 * 1024 * 1024, // 16MB
+
+  // Object storage rejects a multipart part smaller than this, except the last one
+  MIN_PART_SIZE: 5 * 1024 * 1024, // 5MB
+
+  // Used by FFmpeg (probe, thumbnail generation)
+  PRESIGNED_URL_EXPIRATION_SECONDS: 3600,
+
+  // Objects and incomplete multipart uploads older than `maxAgeMs` are removed by the cleaner
+  SUB_PREFIXES: {
+    RESUMABLE_UPLOADS: {
+      prefix: 'resumable-uploads/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    },
+
+    USER_IMPORTS: {
+      prefix: 'user-imports/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    },
+
+    VIDEO_IMPORTS: {
+      prefix: 'video-imports/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    },
+
+    VIDEO_STUDIO: {
+      prefix: 'video-studio/',
+      maxAgeMs: 1000 * 3600 * 24 * 30 // 30 days
+    }
+  }
+}
 
 export const VIDEO_LIVE = {
   EXTENSION: LIVE_SEGMENT_EXTENSION,
@@ -1366,9 +1433,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
   if (isTestOrDevInstance()) {
     PRIVATE_RSA_KEY_SIZE = 1024
 
-    REMOTE_SCHEME.HTTP = 'http'
-    REMOTE_SCHEME.WS = 'ws'
-
     STATIC_MAX_AGE.SERVER = '0'
 
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
@@ -1391,7 +1455,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
 
     JOB_ATTEMPTS['email'] = 1
 
-    FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
     MEMOIZE_TTL.OVERVIEWS_SAMPLE = 3000
     MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD = 3000
     MEMOIZE_TTL.EMBED_HTML = 1
@@ -1401,8 +1464,6 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME = 5000
 
     JOB_REMOVAL_OPTIONS.SUCCESS['videos-stats'] = 10000
-
-    VIEWER_SYNC_REDIS = 1000
   }
 
   if (isDevInstance()) {
@@ -1432,6 +1493,8 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.WATCHED_WORDS_SUBSCRIPTIONS_SYNC = 5000
 
     RUNNER_JOBS.LAST_CONTACT_UPDATE_INTERVAL = 2000
+
+    SCHEDULER_INTERVALS_MS.YOUTUBE_DL_COOKIES_WATCH = 2000
 
     JWT_TOKEN_USER_EXPORT_FILE_LIFETIME = '2 seconds'
   }
@@ -1635,7 +1698,7 @@ function buildVideoMimetypeExt () {
 
 function updateWebserverUrls () {
   WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
-  WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+  WEBSERVER.HOST = buildInstanceHost({ hostname: CONFIG.WEBSERVER.HOSTNAME, port: CONFIG.WEBSERVER.PORT })
   WEBSERVER.WS = CONFIG.WEBSERVER.WS
 
   WEBSERVER.SCHEME = CONFIG.WEBSERVER.SCHEME

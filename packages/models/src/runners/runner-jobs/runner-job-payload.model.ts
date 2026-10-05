@@ -6,16 +6,16 @@ export type RunnerJobCustomUpload = {
 }
 
 export type RunnerJobVODPayload =
-  RunnerJobVODWebVideoTranscodingPayload |
-  RunnerJobVODHLSTranscodingPayload |
-  RunnerJobVODAudioMergeTranscodingPayload
+  | RunnerJobVODWebVideoTranscodingPayload
+  | RunnerJobVODHLSTranscodingPayload
+  | RunnerJobVODAudioMergeTranscodingPayload
 
 export type RunnerJobPayload =
-  RunnerJobVODPayload |
-  RunnerJobLiveRTMPHLSTranscodingPayload |
-  RunnerJobStudioTranscodingPayload |
-  RunnerJobTranscriptionPayload |
-  RunnerJobGenerateStoryboardPayload
+  | RunnerJobVODPayload
+  | RunnerJobLiveRTMPHLSTranscodingPayload
+  | RunnerJobStudioTranscodingPayload
+  | RunnerJobTranscriptionPayload
+  | RunnerJobGenerateStoryboardPayload
 
 // ---------------------------------------------------------------------------
 

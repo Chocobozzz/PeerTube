@@ -20,7 +20,8 @@ export function playlistObjectToDBAttributes (playlistObject: PlaylistObject, to
     videoChannelId: null,
     ownerAccountId: null,
     createdAt: new Date(playlistObject.published),
-    updatedAt: new Date(playlistObject.updated)
+    updatedAt: new Date(playlistObject.updated),
+    remoteUpdatedAt: new Date(playlistObject.updated)
   } as AttributesOnly<VideoPlaylistModel>
 }
 

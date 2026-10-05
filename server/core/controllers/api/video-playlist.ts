@@ -79,6 +79,15 @@ videoPlaylistRouter.get(
 
 videoPlaylistRouter.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
 
+videoPlaylistRouter.get(
+  '/:playlistId/videos',
+  asyncMiddleware(videoPlaylistsGetValidator('summary')),
+  paginationValidator,
+  setDefaultPagination,
+  optionalAuthenticate,
+  asyncMiddleware(listVideosOfPlaylist)
+)
+
 videoPlaylistRouter.post(
   '/',
   authenticate,
@@ -105,15 +114,6 @@ videoPlaylistRouter.delete(
 // ---------------------------------------------------------------------------
 // Playlist elements
 // ---------------------------------------------------------------------------
-
-videoPlaylistRouter.get(
-  '/:playlistId/videos',
-  asyncMiddleware(videoPlaylistsGetValidator('summary')),
-  paginationValidator,
-  setDefaultPagination,
-  optionalAuthenticate,
-  asyncMiddleware(listVideosOfPlaylist)
-)
 
 videoPlaylistRouter.post(
   '/:playlistId/videos',
@@ -148,6 +148,8 @@ videoPlaylistRouter.delete(
 export {
   videoPlaylistRouter
 }
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 
@@ -428,7 +430,7 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
 async function addVideoInPlaylist (req: express.Request, res: express.Response) {
   const body: VideoPlaylistElementCreate = req.body
   const videoPlaylist = res.locals.videoPlaylistFull
-  const video = res.locals.videoThumbnails
+  const video = res.locals.videoThumbnailsBlacklist
 
   const playlistElement = await sequelizeTypescript.transaction(async t => {
     const position = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id, t)

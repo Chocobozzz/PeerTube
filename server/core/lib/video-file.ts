@@ -6,36 +6,62 @@ import {
   hasVideoStream,
   isAudioFile
 } from '@peertube/peertube-ffmpeg'
-import { FileStorage, VideoFileFormatFlag, VideoFileMetadata, VideoFileStream, VideoResolution } from '@peertube/peertube-models'
+import {
+  FileStorage,
+  FileStorageType,
+  VideoFileFormatFlag,
+  VideoFileMetadata,
+  VideoFileStream,
+  VideoResolution,
+  VideoStreamingPlaylistType
+} from '@peertube/peertube-models'
 import { getFileSize, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
-import { MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
+import { MStreamingPlaylistFiles, MVideo, MVideoFile, MVideoId, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { FfprobeData } from 'fluent-ffmpeg'
-import { move, remove } from 'fs-extra/esm'
-import { storeOriginalVideoFile } from './object-storage/videos.js'
+import { copy, move, remove } from 'fs-extra/esm'
+import { updateM3U8AndShaPlaylistUnderLock } from './hls.js'
+import { downloadStagingObject } from './object-storage/staging.js'
+import {
+  copyStagingObjectToWebVideoFile,
+  copyWebVideoFileToOriginalVideoFile,
+  removeWebVideoObjectStorage,
+  storeOriginalVideoFile,
+  storeWebVideoFile
+} from './object-storage/videos.js'
 import { generateHLSVideoFilename, generateWebVideoFilename } from './paths.js'
 import { VideoPathManager } from './video-path-manager.js'
 
 const logger = createLogger()
 
+// A local file, or a URL FFmpeg can read
+export type FFmpegInput = { path: string } | { url: string, size: number, extname: string }
+
+function getUrlOrPath (input: FFmpegInput) {
+  return 'path' in input ? input.path : input.url
+}
+
 export async function buildNewFile (options: {
-  path: string
+  input: FFmpegInput
   mode: 'web-video' | 'hls'
   ffprobe?: FfprobeData
 }): Promise<MVideoFile> {
-  const { path, mode, ffprobe: probeArg } = options
+  const { input, mode, ffprobe: probeArg } = options
 
-  const probe = probeArg ?? await ffprobePromise(path)
-  const size = await getFileSize(path)
+  const urlOrPath = getUrlOrPath(input)
+
+  const probe = probeArg ?? await ffprobePromise(urlOrPath)
+  const size = 'path' in input ? await getFileSize(input.path) : input.size
 
   const videoFile = new VideoFileModel({
-    extname: getLowercaseExtension(path),
+    extname: 'path' in input ? getLowercaseExtension(input.path) : input.extname,
     size,
-    metadata: await buildFileMetadata(path, probe),
+    metadata: await buildFileMetadata(urlOrPath, probe),
 
     streams: VideoFileStream.NONE,
 
@@ -44,22 +70,22 @@ export async function buildNewFile (options: {
       : VideoFileFormatFlag.FRAGMENTED
   })
 
-  if (await hasAudioStream(path, probe)) {
+  if (await hasAudioStream(urlOrPath, probe)) {
     videoFile.streams |= VideoFileStream.AUDIO
   }
 
-  if (await hasVideoStream(path, probe)) {
+  if (await hasVideoStream(urlOrPath, probe)) {
     videoFile.streams |= VideoFileStream.VIDEO
   }
 
-  if (await isAudioFile(path, probe)) {
+  if (await isAudioFile(urlOrPath, probe)) {
     videoFile.fps = 0
     videoFile.resolution = VideoResolution.H_NOVIDEO
     videoFile.width = 0
     videoFile.height = 0
   } else {
-    const dimensions = await getVideoStreamDimensionsInfo(path, probe)
-    videoFile.fps = await getVideoStreamFPS(path, probe)
+    const dimensions = await getVideoStreamDimensionsInfo(urlOrPath, probe)
+    videoFile.fps = await getVideoStreamFPS(urlOrPath, probe)
     videoFile.resolution = dimensions.resolution
     videoFile.width = dimensions.width
     videoFile.height = dimensions.height
@@ -74,44 +100,65 @@ export async function buildNewFile (options: {
 
 // ---------------------------------------------------------------------------
 
+// Lock the video
 export async function removeHLSPlaylist (video: MVideoWithAllFiles) {
-  const hls = video.getHLSPlaylist()
-  if (!hls) return
-
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
-    await video.removeAllStreamingPlaylistFiles({ playlist: hls })
-    await hls.destroy()
-
-    video.VideoStreamingPlaylists = video.VideoStreamingPlaylists.filter(p => p.id !== hls.id)
+    await removeHLSPlaylistUnderLock(video)
   } finally {
     videoFileMutexReleaser()
   }
 }
 
-export async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
-  const hls = video.getHLSPlaylist()
-  const files = hls.VideoFiles
+export async function removeHLSPlaylistUnderLock (video: MVideoWithAllFiles) {
+  // Reload the playlist: another process may have updated it while we were waiting for the lock
+  const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
 
-  if (files.length === 1) {
-    await removeHLSPlaylist(video)
-    return undefined
+  if (hls) {
+    await video.removeAllStreamingPlaylistFiles({ playlist: hls })
+    await hls.destroy()
   }
 
+  video.VideoStreamingPlaylists = (video.VideoStreamingPlaylists || []).filter(p => p.type !== VideoStreamingPlaylistType.HLS)
+}
+
+// ---------------------------------------------------------------------------
+
+// Also updates the HLS playlist files (master playlist, segments hashes...) that reference the removed files
+export async function removeHLSFiles (video: MVideoWithAllFiles, fileIdsToDelete: number[]) {
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
-    const toDelete = files.find(f => f.id === fileToDeleteId)
-    await video.removeStreamingPlaylistVideoFile(video.getHLSPlaylist(), toDelete)
-    await toDelete.destroy()
+    // Reload the files: another process may have updated them while we were waiting for the lock
+    const hls = await VideoStreamingPlaylistModel.loadHLSByVideo(video.id)
+    if (!hls) return
 
-    hls.VideoFiles = hls.VideoFiles.filter(f => f.id !== toDelete.id)
+    const files = await VideoFileModel.listByStreamingPlaylist(hls.id)
+
+    const toDelete = files.filter(f => fileIdsToDelete.includes(f.id))
+    if (toDelete.length === 0) return
+
+    if (toDelete.length === files.length) {
+      await removeHLSPlaylistUnderLock(video)
+      return
+    }
+
+    for (const file of toDelete) {
+      await video.removeStreamingPlaylistVideoFile(hls, file)
+      await file.destroy()
+    }
+
+    // Keep the video object consistent for the caller
+    const hlsWithFiles = hls as MStreamingPlaylistFiles
+    hlsWithFiles.VideoFiles = files.filter(f => !fileIdsToDelete.includes(f.id))
+    video.setHLSPlaylist(hlsWithFiles)
+
+    // Must be done under the lock, so a concurrent update of the playlist files by another process is not overwritten
+    await updateM3U8AndShaPlaylistUnderLock(video, hls)
   } finally {
     videoFileMutexReleaser()
   }
-
-  return hls
 }
 
 // ---------------------------------------------------------------------------
@@ -119,40 +166,43 @@ export async function removeHLSFile (video: MVideoWithAllFiles, fileToDeleteId: 
 export async function removeAllWebVideoFiles (video: MVideoWithAllFiles, options: {
   resolutionExceptions?: number[]
 } = {}) {
-  const { resolutionExceptions = [] } = options
-
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
 
   try {
-    // Reload the files: another job may have updated them (their torrent filename for example) while we were waiting for the mutex
-    const files = await video.$get('VideoFiles')
-    video.VideoFiles = files
-
-    for (const file of files) {
-      if (resolutionExceptions.includes(file.resolution)) continue
-
-      await video.removeWebVideoFile(file)
-      await file.destroy()
-
-      video.VideoFiles = video.VideoFiles.filter(f => f.id !== file.id)
-    }
+    return await removeAllWebVideoFilesUnderLock(video, options)
   } finally {
     videoFileMutexReleaser()
+  }
+}
+
+export async function removeAllWebVideoFilesUnderLock (video: MVideoWithAllFiles, options: {
+  resolutionExceptions?: number[]
+} = {}) {
+  const { resolutionExceptions = [] } = options
+
+  // Reload the files: another job may have updated them while we were waiting for the lock
+  const files = await video.$get('VideoFiles')
+  video.VideoFiles = files
+
+  for (const file of files) {
+    if (resolutionExceptions.includes(file.resolution)) continue
+
+    await video.removeWebVideoFile(file)
+    await file.destroy()
+
+    video.VideoFiles = video.VideoFiles.filter(f => f.id !== file.id)
   }
 
   return video
 }
 
+// ---------------------------------------------------------------------------
+
 export async function removeWebVideoFile (video: MVideoWithAllFiles, fileToDeleteId: number) {
-  const files = video.VideoFiles
-
-  if (files.length === 1) {
-    return removeAllWebVideoFiles(video)
-  }
-
   const videoFileMutexReleaser = await VideoPathManager.Instance.lockFiles(video.uuid)
+
   try {
-    // Reload the file: another job may have updated it (its torrent filename for example) while we were waiting for the mutex
+    // Reload the file: another job may have updated it while we were waiting for the lock
     const toDelete = await VideoFileModel.load(fileToDeleteId)
 
     if (toDelete) {
@@ -160,7 +210,7 @@ export async function removeWebVideoFile (video: MVideoWithAllFiles, fileToDelet
       await toDelete.destroy()
     }
 
-    video.VideoFiles = files.filter(f => f.id !== fileToDeleteId)
+    video.VideoFiles = video.VideoFiles.filter(f => f.id !== fileToDeleteId)
   } finally {
     videoFileMutexReleaser()
   }
@@ -186,12 +236,12 @@ export function getVideoFileMimeType (extname: string, isAudio: boolean) {
 
 export async function createVideoSource (options: {
   inputFilename: string
+  inputFile: FFmpegInput | undefined // undefined with a live
   inputProbe: FfprobeData
-  inputPath: string
   video: MVideoId
   createdAt?: Date
 }) {
-  const { inputFilename, inputPath, inputProbe, video, createdAt } = options
+  const { inputFilename, inputFile, inputProbe, video, createdAt } = options
 
   const videoSource = new VideoSourceModel({
     inputFilename,
@@ -199,7 +249,8 @@ export async function createVideoSource (options: {
     createdAt
   })
 
-  if (inputPath) {
+  if (inputFile) {
+    const inputPath = getUrlOrPath(inputFile)
     const probe = inputProbe ?? await ffprobePromise(inputPath)
 
     if (await isAudioFile(inputPath, probe)) {
@@ -216,35 +267,56 @@ export async function createVideoSource (options: {
     }
 
     videoSource.metadata = await buildFileMetadata(inputPath, probe)
-    videoSource.size = await getFileSize(inputPath)
+    videoSource.size = 'path' in inputFile
+      ? await getFileSize(inputFile.path)
+      : inputFile.size
   }
 
   return videoSource.save()
 }
 
-export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVideoFile) {
+export async function moveAndSaveNewOriginalFileIfNeeded (options: {
+  video: MVideo
+  webInputFile: MVideoFile
+  webInputFilePath?: string // Local copy of the `webInputFile`, if the caller already has one
+}) {
+  const { video, webInputFile, webInputFilePath } = options
+
   if (!CONFIG.TRANSCODING.ORIGINAL_FILE.KEEP) return
 
   const videoSource = await VideoSourceModel.loadLatest(video.id)
 
   // Already have saved an original file
   if (!videoSource || videoSource.keptOriginalFilename) return
-  videoSource.keptOriginalFilename = videoFile.filename
+  videoSource.keptOriginalFilename = webInputFile.filename
 
   logger.info(`Storing original video file ${videoSource.keptOriginalFilename} of video ${video.name}`)
 
-  const sourcePath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
-
-  if (CONFIG.OBJECT_STORAGE.ENABLED) {
-    await storeOriginalVideoFile(sourcePath, videoSource.keptOriginalFilename)
-    await remove(sourcePath)
-
-    videoSource.storage = FileStorage.OBJECT_STORAGE
-  } else {
-    const destinationPath = VideoPathManager.Instance.getFSOriginalVideoFilePath(videoSource.keptOriginalFilename)
-    await move(sourcePath, destinationPath)
-
-    videoSource.storage = FileStorage.FILE_SYSTEM
+  if (webInputFile.storage === FileStorage.FILE_SYSTEM) {
+    videoSource.storage = await storeOriginalFileFromDisk({
+      inputPath: VideoPathManager.Instance.getFSVideoFileOutputPath(video, webInputFile),
+      filename: videoSource.keptOriginalFilename,
+      keepInput: false
+    })
+  } else { // Input file on object storage
+    // oxlint-disable-next-line no-lonely-if
+    if (CONFIG.OBJECT_STORAGE.ENABLED) { // We can store original file on object storage
+      await copyWebVideoFileToOriginalVideoFile(webInputFile, videoSource.keptOriginalFilename)
+      videoSource.storage = FileStorage.OBJECT_STORAGE
+    } else if (webInputFilePath) { // We must store original file on disk, but we have a local copy
+      videoSource.storage = await storeOriginalFileFromDisk({
+        inputPath: webInputFilePath,
+        filename: videoSource.keptOriginalFilename,
+        keepInput: true
+      })
+    } else { // We must store original file on disk, and we don't have a local copy
+      videoSource.storage = await VideoPathManager.Instance.makeAvailableVideoFile(
+        webInputFile.withVideoOrPlaylist(video),
+        inputPath => {
+          return storeOriginalFileFromDisk({ inputPath, filename: videoSource.keptOriginalFilename, keepInput: true })
+        }
+      )
+    }
   }
 
   await videoSource.save()
@@ -260,5 +332,129 @@ export async function saveNewOriginalFileIfNeeded (video: MVideo, videoFile: MVi
     } catch (err) {
       logger.error('Cannot delete old original file ' + oldSource.keptOriginalFilename, { err })
     }
+  }
+}
+
+async function storeOriginalFileFromDisk (options: {
+  inputPath: string
+  filename: string
+  keepInput: boolean
+}): Promise<FileStorageType> {
+  const { inputPath, filename, keepInput } = options
+
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+    await storeOriginalVideoFile(inputPath, filename)
+    if (!keepInput) await remove(inputPath)
+
+    return FileStorage.OBJECT_STORAGE
+  }
+
+  const destinationPath = VideoPathManager.Instance.getFSOriginalVideoFilePath(filename)
+
+  if (keepInput) await copy(inputPath, destinationPath)
+  else await move(inputPath, destinationPath)
+
+  return FileStorage.FILE_SYSTEM
+}
+
+// ---------------------------------------------------------------------------
+
+export function getNewWebVideoFileStorage (): FileStorageType {
+  return CONFIG.OBJECT_STORAGE.ENABLED
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
+}
+
+export function getNewHLSPlaylistStorage (): FileStorageType {
+  return CONFIG.OBJECT_STORAGE.ENABLED
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
+}
+
+// Store a new web video file generated in `inputPath`, and set its storage
+// Returns a local path of the file, available until `cleanup` is called
+// The caller must hold the video files lock: the file location/ACL depends on the video privacy
+export async function storeNewWebVideoFile (options: {
+  video: MVideo
+  videoFile: MVideoFile
+  input: { path: string } | { stagingKey: string } // Local file, or a file in object storage staging
+  keepInput?: boolean // default false, only for a local file
+}) {
+  const { video, videoFile, input, keepInput = false } = options
+
+  videoFile.storage = getNewWebVideoFileStorage()
+
+  if ('stagingKey' in input) return storeNewStagedWebVideoFile({ video, videoFile, stagingKey: input.stagingKey })
+
+  const path = input.path
+
+  if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
+    try {
+      await storeWebVideoFile(video, videoFile, path)
+    } catch (err) {
+      if (!keepInput) await remove(path)
+
+      throw err
+    }
+
+    return {
+      localPath: path,
+
+      // DB success
+      cleanup: async () => {
+        if (!keepInput) await remove(path)
+      },
+
+      // DB rollback
+      rollback: async () => {
+        await removeWebVideoObjectStorage(videoFile)
+          .catch(err => logger.error('Cannot remove object storage file %s after a rollback.', videoFile.filename, { err }))
+
+        if (!keepInput) await remove(path)
+      }
+    }
+  }
+
+  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
+
+  if (keepInput) await copy(path, outputPath)
+  else await move(path, outputPath, { overwrite: true })
+
+  return {
+    localPath: outputPath,
+    cleanup: () => Promise.resolve(),
+    rollback: () => remove(outputPath)
+  }
+}
+
+// `localPath` is undefined if the file is stored on object storage
+async function storeNewStagedWebVideoFile (options: {
+  video: MVideo
+  videoFile: MVideoFile
+  stagingKey: string
+}): Promise<{ localPath: string | undefined, cleanup: () => Promise<void>, rollback: () => Promise<void> }> {
+  const { video, videoFile, stagingKey } = options
+
+  if (videoFile.storage === FileStorage.OBJECT_STORAGE) {
+    await copyStagingObjectToWebVideoFile(video, videoFile, stagingKey)
+
+    return {
+      localPath: undefined,
+      cleanup: () => Promise.resolve(),
+      rollback: async () => {
+        await removeWebVideoObjectStorage(videoFile)
+          .catch(err => logger.error('Cannot remove object storage file %s after a rollback.', videoFile.filename, { err }))
+      }
+    }
+  }
+
+  // web_videos moved back to the file system while the upload was staged
+  const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, videoFile)
+  await downloadStagingObject({ key: stagingKey, destination: outputPath })
+
+  return {
+    localPath: outputPath,
+    cleanup: () => Promise.resolve(),
+    rollback: () => remove(outputPath)
   }
 }

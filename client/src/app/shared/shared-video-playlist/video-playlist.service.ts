@@ -8,6 +8,7 @@ import {
   CachedVideoExistInPlaylist,
   CachedVideosExistInPlaylists,
   ResultList,
+  Video,
   VideoPlaylistElement as ServerVideoPlaylistElement,
   VideoChannelSummary,
   VideoExistInPlaylist,
@@ -34,6 +35,10 @@ import { VideoPlaylist } from './video-playlist.model'
 const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 
 export type CachedPlaylist = VideoPlaylist | { id: number, displayName: string, videoChannel?: VideoChannelSummary }
+
+export type PlaylistElementToAdd = Omit<VideoPlaylistElementCreate, 'videoId'> & {
+  video: Pick<Video, 'id' | 'uuid'>
+}
 
 @Injectable({ providedIn: 'root' })
 export class VideoPlaylistService {
@@ -227,14 +232,20 @@ export class VideoPlaylistService {
 
   // ---------------------------------------------------------------------------
 
-  addVideoInPlaylist (playlistId: number, bodyArg: VideoPlaylistElementCreate | VideoPlaylistElementCreate[]) {
+  addVideoInPlaylist (playlistId: number, elementsArg: PlaylistElementToAdd | PlaylistElementToAdd[]) {
     const url = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos'
 
-    return from(arrayify(bodyArg))
+    return from(arrayify(elementsArg))
       .pipe(
-        concatMap(body => this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body).pipe(map(res => ({ res, body })))),
-        tap(({ res, body }) => {
-          const existsResult = this.videoExistsCache[body.videoId]
+        concatMap(({ video, ...attributes }) => {
+          // Use the UUID: the server refuses the numeric id of an unlisted video we don't own
+          const body: VideoPlaylistElementCreate = { ...attributes, videoId: video.uuid }
+
+          return this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body)
+            .pipe(map(res => ({ res, videoId: video.id, body })))
+        }),
+        tap(({ res, videoId, body }) => {
+          const existsResult = this.videoExistsCache[videoId]
 
           if (existsResult) {
             existsResult.push({
@@ -245,7 +256,7 @@ export class VideoPlaylistService {
             })
           }
 
-          this.runVideoExistsInPlaylistCheck(body.videoId)
+          this.runVideoExistsInPlaylistCheck(videoId)
 
           if (this.myAccountPlaylistCache) {
             const playlist = this.myAccountPlaylistCache.data.find(p => p.id === playlistId)

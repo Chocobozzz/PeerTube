@@ -1,5 +1,6 @@
 import { About, ActorImageType, ActorImageType_Type, CustomConfig, HttpStatusCode, LogoType, UserRight } from '@peertube/peertube-models'
 import { createReqFiles } from '@server/helpers/express-utils.js'
+import { ConfigDistribution } from '@server/initializers/config/config-distribution.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
@@ -9,11 +10,9 @@ import { getServerActor } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import express from 'express'
 import { remove, writeJSON } from 'fs-extra/esm'
-import snakeCase from 'lodash-es/snakeCase.js'
-import validator from 'validator'
 import { CustomConfigAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../helpers/audit-logger.js'
-import { objectConverter } from '../../helpers/core-utils.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
+import { convertCustomConfigBody } from '../../initializers/config/custom-config.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
 import {
   apiRateLimiter,
@@ -21,6 +20,7 @@ import {
   authenticate,
   ensureUserHasRight,
   openapiOperationDoc,
+  primaryOnly,
   updateAvatarValidator,
   updateBannerValidator
 } from '../../middlewares/index.js'
@@ -49,9 +49,14 @@ configRouter.get(
   getCustomConfig
 )
 
+// ---------------------------------------------------------------------------
+// The primary writes the custom configuration file and publishes it to the secondaries
+// ---------------------------------------------------------------------------
+
 configRouter.put(
   '/custom',
   openapiOperationDoc({ operationId: 'putCustomConfig' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   ensureConfigIsEditable,
@@ -62,6 +67,7 @@ configRouter.put(
 configRouter.delete(
   '/custom',
   openapiOperationDoc({ operationId: 'delCustomConfig' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   ensureConfigIsEditable,
@@ -176,6 +182,9 @@ async function deleteCustomConfig (req: express.Request, res: express.Response) 
   await reloadConfig()
   ClientHtml.invalidateCache()
 
+  // Let the other processes drop their copy too
+  await ConfigDistribution.Instance.publish()
+
   const data = customConfig()
 
   return res.json(data)
@@ -191,6 +200,9 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
 
   await reloadConfig()
   ClientHtml.invalidateCache()
+
+  // Propagate to the other processes of the instance
+  await ConfigDistribution.Instance.publish()
 
   const data = customConfig()
 
@@ -622,23 +634,4 @@ function customConfig (): CustomConfig {
       acceptRemoteComments: CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS
     }
   }
-}
-
-function convertCustomConfigBody (body: CustomConfig) {
-  function keyConverter (k: string) {
-    // Transcoding resolutions exception
-    if (/^\d{3,4}p$/.exec(k)) return k
-    if (k === '0p') return k
-    if (k === 'p2p') return k
-
-    return snakeCase(k)
-  }
-
-  function valueConverter (v: any) {
-    if (validator.isNumeric(v + '')) return parseInt('' + v, 10)
-
-    return v
-  }
-
-  return objectConverter(body, keyConverter, valueConverter)
 }

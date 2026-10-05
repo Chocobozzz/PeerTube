@@ -18,7 +18,7 @@ import {
   MVideoFull,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnails,
+  MVideoThumbnailsBlacklist,
   MVideoUUID,
   MVideoWithBlacklist,
   MVideoWithRights
@@ -66,8 +66,8 @@ export async function doesVideoExist (id: number | string, res: Response, fetchT
       res.locals.videoWithBlacklist = video as MVideoWithBlacklist
       break
 
-    case 'with-thumbnails':
-      res.locals.videoThumbnails = video as MVideoThumbnails
+    case 'with-thumbnails-blacklist':
+      res.locals.videoThumbnailsBlacklist = video as MVideoThumbnailsBlacklist
       break
 
     case 'with-rights':
@@ -148,15 +148,16 @@ async function checkCanSeeUserAuthVideo (options: {
 
   const privacy = videoWithRights.privacy
 
-  if (privacy === VideoPrivacy.INTERNAL) {
-    // We know we have a user
-    return true
-  }
-
+  // Check the blacklist first: it applies to any privacy
   if (videoWithRights.isBlacklisted()) {
     if (await canUserManageProtectedVideo({ user, req, video: videoWithRights, right: UserRight.MANAGE_VIDEO_BLACKLIST })) return true
 
     return fail()
+  }
+
+  if (privacy === VideoPrivacy.INTERNAL) {
+    // We know we have a user
+    return true
   }
 
   if (privacy === VideoPrivacy.PRIVATE || privacy === VideoPrivacy.UNLISTED) {
@@ -252,7 +253,7 @@ export async function checkCanAccessVideoStaticFiles (options: {
 }): Promise<boolean> {
   const { video, req, res } = options
 
-  if (!checkVideoTokenIfNeeded(req, res, video)) return false
+  if (!await checkVideoTokenIfNeeded(req, res, video)) return false
 
   return checkCanSeeVideo({ ...options, videoFileToken: res.locals.videoFileToken })
 }
@@ -268,7 +269,7 @@ export async function checkCanAccessVideoSourceFile (options: {
 
   let user = res.locals.oauth?.token.User
   if (!user) {
-    if (!checkVideoTokenIfNeeded(req, res, video)) return false
+    if (!await checkVideoTokenIfNeeded(req, res, video)) return false
 
     user = res.locals.videoFileToken?.user
   }
@@ -286,23 +287,22 @@ export async function checkCanAccessVideoSourceFile (options: {
   return false
 }
 
-function checkVideoTokenIfNeeded (req: Request, res: Response, video: MVideoUUID) {
+async function checkVideoTokenIfNeeded (req: Request, res: Response, video: MVideoUUID) {
   const videoFileToken = req.query.videoFileToken
+  if (!videoFileToken) return true
 
-  if (videoFileToken) {
-    if (VideoTokensManager.Instance.hasToken({ token: videoFileToken, videoUUID: video.uuid })) {
-      const user = VideoTokensManager.Instance.getUserFromToken({ token: videoFileToken })
+  const { valid, user } = await VideoTokensManager.Instance.resolveToken({ token: videoFileToken, videoUUID: video.uuid })
 
-      res.locals.videoFileToken = { user }
-    } else {
-      res.fail({
-        message: req.t('Invalid video file token'),
-        status: HttpStatusCode.FORBIDDEN_403
-      })
+  if (!valid) {
+    res.fail({
+      message: req.t('Invalid video file token'),
+      status: HttpStatusCode.FORBIDDEN_403
+    })
 
-      return false
-    }
+    return false
   }
+
+  res.locals.videoFileToken = { user }
 
   return true
 }

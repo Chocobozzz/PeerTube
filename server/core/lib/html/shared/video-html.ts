@@ -32,7 +32,7 @@ export class VideoHtml {
     }
 
     // Let Angular application handle errors
-    if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) {
+    if (!this.canBuildVideoTags(video, videoId)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
@@ -57,7 +57,7 @@ export class VideoHtml {
 
     const [ html, video ] = await Promise.all([ PageHtml.getEmbedHTML(), videoPromise ])
 
-    if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) {
+    if (!this.canBuildVideoTags(video, videoId)) {
       return buildEmptyEmbedHTML({ html, video })
     }
 
@@ -78,6 +78,15 @@ export class VideoHtml {
   // ---------------------------------------------------------------------------
   // Private
   // ---------------------------------------------------------------------------
+
+  private static canBuildVideoTags (video: MVideoSeo, videoId: string) {
+    if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) return false
+
+    // Unlisted videos can only be fetched using their UUID
+    if (video.privacy === VideoPrivacy.UNLISTED && !validator.default.isUUID(videoId, 4)) return false
+
+    return true
+  }
 
   private static buildVideoHTML (options: {
     req: express.Request
@@ -114,7 +123,7 @@ export class VideoHtml {
       embedIndexation: isEmbed,
 
       image: thumbnail
-        ? { url: WEBSERVER.URL + thumbnail.getFileStaticPath(), width: thumbnail.width, height: thumbnail.height }
+        ? { url: thumbnail.getLocalFileUrl(), width: thumbnail.width, height: thumbnail.height }
         : undefined,
 
       videoOrPlaylist: {

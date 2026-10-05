@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { ChangeOwnershipState, HttpStatusCode } from '@peertube/peertube-models'
+import { ChangeOwnershipState, HttpStatusCode, UserRole } from '@peertube/peertube-models'
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { expect } from 'chai'
@@ -11,6 +11,7 @@ describe('Test channel change ownership API validator', function () {
   let anotherUserToken: string
   let rootEditorToken: string
   let userEditorToken: string
+  let moderatorToken: string
   let ownershipChangeId: number
 
   // ---------------------------------------------------------------
@@ -29,6 +30,7 @@ describe('Test channel change ownership API validator', function () {
     anotherUserToken = await server.users.generateUserAndToken('another_user')
     rootEditorToken = await server.channelCollaborators.createEditor('root_editor', 'root_channel_1')
     userEditorToken = await server.channelCollaborators.createEditor('user_editor', 'user_channel')
+    moderatorToken = await server.users.generateUserAndToken('moderator', UserRole.MODERATOR)
   })
 
   describe('Create channel ownership change request', function () {
@@ -50,6 +52,15 @@ describe('Test channel change ownership API validator', function () {
           expectedStatus: HttpStatusCode.FORBIDDEN_403
         })
       }
+    })
+
+    it('Should fail to create a request for a channel of an administrator with a moderator', async function () {
+      await server.changeOwnership.createChannel({
+        channelName: 'root_channel',
+        username: 'moderator',
+        token: moderatorToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
     })
 
     it('Should fail with a non existing target', async function () {
@@ -278,6 +289,55 @@ describe('Test channel change ownership API validator', function () {
         token: userToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
+    })
+  })
+
+  describe('Accept ownership change request on behalf of the next owner', function () {
+    before(async function () {
+      this.timeout(60000)
+
+      await server.channels.create({ attributes: { name: 'root_channel_3' } })
+      await server.channels.create({ attributes: { name: 'root_channel_4' } })
+      await server.channels.create({ attributes: { name: 'root_channel_5' } })
+
+      await server.users.generateUserAndToken('moderator2', UserRole.MODERATOR)
+      await server.users.create({ username: 'quota_limited_channel_target', videoQuota: 0 })
+
+      await server.changeOwnership.createChannel({ channelName: 'root_channel_3', username: 'user' })
+      await server.changeOwnership.createChannel({ channelName: 'root_channel_4', username: 'quota_limited_channel_target' })
+      await server.changeOwnership.createChannel({ channelName: 'root_channel_5', username: 'moderator2' })
+    })
+
+    it('Should fail to accept, on behalf of another moderator, a pending channel ownership change, with a moderator', async function () {
+      const { data } = await server.changeOwnership.listOfChannel({ channelName: 'root_channel_5' })
+      const ownershipId = data[0].id
+
+      await server.changeOwnership.acceptChannel({
+        ownershipId,
+        token: moderatorToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail to accept, on behalf of a user whose quota is exceeded, a pending channel ownership change, with a moderator', async function () {
+      const { data } = await server.changeOwnership.listOfChannel({ channelName: 'root_channel_4' })
+      const ownershipId = data[0].id
+
+      await server.changeOwnership.acceptChannel({
+        ownershipId,
+        token: moderatorToken,
+        expectedStatus: HttpStatusCode.PAYLOAD_TOO_LARGE_413
+      })
+    })
+
+    it('Should succeed to accept, on behalf of a regular user, a pending channel ownership change, with a moderator', async function () {
+      const { data } = await server.changeOwnership.listOfChannel({ channelName: 'root_channel_3' })
+      const ownershipId = data[0].id
+
+      await server.changeOwnership.acceptChannel({ ownershipId, token: moderatorToken })
+
+      const channel = await server.channels.get({ channelName: 'root_channel_3' })
+      expect(channel.ownerAccount.name).to.equal('user')
     })
   })
 

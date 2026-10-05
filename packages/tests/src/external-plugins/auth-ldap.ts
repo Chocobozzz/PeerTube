@@ -95,11 +95,11 @@ describe('Official plugin auth-ldap', function () {
   })
 
   it('Should not be able to ask password reset', async function () {
-    await server.users.askResetPassword({ email: 'fry@planetexpress.com', expectedStatus: HttpStatusCode.CONFLICT_409 })
+    await server.users.askResetPassword({ email: 'fry@planetexpress.com' })
   })
 
   it('Should not be able to ask email verification', async function () {
-    await server.users.askSendVerifyEmail({ email: 'fry@planetexpress.com', expectedStatus: HttpStatusCode.CONFLICT_409 })
+    await server.users.askSendVerifyEmail({ email: 'fry@planetexpress.com' })
   })
 
   it('Should set the correct roles', async function () {

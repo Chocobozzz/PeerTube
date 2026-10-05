@@ -83,7 +83,7 @@
         <target state="translated">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">350</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
@@ -91,7 +91,7 @@
         <target state="translated">»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">386</context>
+          <context context-type="linenumber">383</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
@@ -99,7 +99,7 @@
         <target state="translated">Primer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">409</context>
+          <context context-type="linenumber">408</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.previous-aria" datatype="html">
@@ -107,7 +107,7 @@
         <target state="translated">Anterior</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">434</context>
+          <context context-type="linenumber">431</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.next-aria" datatype="html">
@@ -115,7 +115,7 @@
         <target state="translated">Següent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">463</context>
+          <context context-type="linenumber">457</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.pagination.last-aria" datatype="html">
@@ -123,7 +123,7 @@
         <target state="translated">Últim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/pagination/pagination.ts</context>
-          <context context-type="linenumber">493</context>
+          <context context-type="linenumber">488</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html" xml:space="preserve">
@@ -136,7 +136,7 @@
         <target state="translated">HH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">256</context>
+          <context context-type="linenumber">252</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
@@ -152,7 +152,7 @@
         <target state="translated">MM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">312</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
@@ -160,19 +160,19 @@
         <target state="translated">Minuts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context>
-          <context context-type="linenumber">351</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html" xml:space="preserve">
         <source>Increment hours</source>
         <target state="translated">Augmentar les hores</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">385</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">380</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html" xml:space="preserve">
         <source>Decrement hours</source>
         <target state="translated">Reduir les hores</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">423</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.1.6_@angular+core@22.1.6_@angular+_1f2e0161be4876350e10a7c9757d6b88/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">422</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html" xml:space="preserve">
         <source>Increment minutes</source>
         <target state="translated">Augmentar els minuts</target>
@@ -2427,49 +2427,34 @@
         <target state="translated">La connexió ha estat interrompuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5646229632737908639" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file format is not supported by your platform.</source>
         <target state="translated">La vostra plataforma no admet el vostre format de fitxer <x id="PH" equiv-text="name"/>.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">59</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">68</context></context-group></trans-unit>
       <trans-unit id="4591025453509397472" datatype="html" xml:space="preserve">
         <source>The server encountered an error.</source>
         <target state="translated">El servidor ha trobat un error.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">72</context></context-group></trans-unit>
       <trans-unit id="3083362298006411773" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file couldn't be transferred before the server proxy timeout.</source>
         <target state="translated">El vostre fitxer <x id="PH" equiv-text="name"/> no s'ha pogut transferir abans del temps d'espera del proxy.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">67</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">76</context></context-group></trans-unit>
       <trans-unit id="5514835993053540551" datatype="html" xml:space="preserve">
         <source>Your <x id="PH" equiv-text="name"/> file was too large.</source>
         <target state="translated">El vostre fitxer <x id="PH" equiv-text="name"/> era massa gran.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">72</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">81</context></context-group></trans-unit>
       <trans-unit id="8456000313168556766" datatype="html" xml:space="preserve">
         <source>Max size is <x id="PH" equiv-text="maxFileSize"/>.</source>
         <target state="translated">La mida màxima és <x id="PH" equiv-text="maxFileSize"/>.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">74</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">83</context></context-group></trans-unit>
       <trans-unit id="4892001398723483418" datatype="html" xml:space="preserve">
         <source>Enable hotkeys in this web browser</source>
         <target state="translated">Habilitar les tecles de drecera en aquest navegador</target>
@@ -3589,7 +3574,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">45</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">96</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">36</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context><context context-type="linenumber">45</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/core/rest/rest-extractor.service.ts</context><context context-type="linenumber">96</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="1439766333173070230" datatype="html" xml:space="preserve">
         <source>Invalid input video stream</source>
         <target state="translated">Flux de vídeo d'entrada no vàlid</target>
@@ -4277,11 +4262,8 @@ L'enllaç caducarà al cap d'una hora.</target>
       <trans-unit id="8151924435547335490" datatype="html" xml:space="preserve">
         <source>Upload failed</source>
         <target state="translated">La pujada ha fallat</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/helpers/utils/upload.ts</context>
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/helpers/utils/upload.ts</context><context context-type="linenumber">22</context></context-group></trans-unit>
       <trans-unit id="5146398958364876914" xml:space="preserve">
         <source>Sort</source>
         <target state="translated">Ordenar</target>
@@ -5855,11 +5837,11 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">However, the auto-tagging policies will not affect existing comments:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
-          <context context-type="linenumber">16,18</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">84,86</context>
+          <context context-type="linenumber">93</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6879611118172119569" datatype="html">
@@ -5917,12 +5899,36 @@ L'enllaç caducarà al cap d'una hora.</target>
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3212629476561103950" datatype="html">
+        <source>However, the auto-tagging policies will not affect existing videos:</source>
+        <target state="new">However, the auto-tagging policies will not affect existing videos:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
+          <context context-type="linenumber">80,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9069205412472719482" datatype="html">
+        <source>Only new videos can be blocked by a new word added to the list</source>
+        <target state="new">Only new videos can be blocked by a new word added to the list</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
+          <context context-type="linenumber">83,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7471441043625129428" datatype="html">
+        <source>If a word is removed from the list, any videos that are currently blacklisted will not be affected</source>
+        <target state="new">If a word is removed from the list, any videos that are currently blacklisted will not be affected</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
+          <context context-type="linenumber">84,85</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3536332983620084462" datatype="html">
         <source> The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list. </source>
         <target state="new"> The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2322571852303891260" datatype="html">
@@ -5930,7 +5936,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">Only new comments can be blocked by a new word added to the list</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">87,88</context>
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1627379234330905470" datatype="html">
@@ -5938,7 +5944,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">If a word is removed from the list, any comments that are currently awaiting review will not be affected</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">88,89</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8886093131637035111" datatype="html">
@@ -5946,7 +5952,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">Watched words URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">95,96</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2602880137044610698" datatype="html">
@@ -6964,7 +6970,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">127</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3946683396888479808" datatype="html">
@@ -7767,7 +7773,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target>ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5911214550882917183">
@@ -7787,7 +7793,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">108</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
@@ -8514,7 +8520,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">112</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.html</context>
@@ -9402,18 +9408,18 @@ L'enllaç caducarà al cap d'una hora.</target>
         <source>Job type</source>
         <target state="translated">Tipus de tasca</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">81</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">60</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">82</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">60</context></context-group></trans-unit>
       <trans-unit id="6170245880855918780" datatype="html" xml:space="preserve">
         <source>Job state</source>
         <target state="translated">Estat de la tasca</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">93</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">94</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="8650499415827640724">
         <source>Type</source>
         <target>Tipus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
@@ -9429,30 +9435,30 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="translated">Prioritat</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">106</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">85</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">107</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">85</context></context-group></trans-unit>
       <trans-unit id="769258115649723950" datatype="html" xml:space="preserve">
         <source>(1 = highest priority)</source>
         <target state="translated">(1 = màxima prioritat)</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">106</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">107</context></context-group></trans-unit>
       <trans-unit id="3419681791450150574" datatype="html" xml:space="preserve">
         <source>Progress</source>
         <target state="translated">Progrés</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">108</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">86</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">86</context></context-group></trans-unit>
       <trans-unit id="7242197455061561082" datatype="html" xml:space="preserve">
         <source>Processed/Finished</source>
         <target state="translated">Processades/Completades</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">111</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">89</context></context-group></trans-unit>
       <trans-unit id="5412611865788148550" datatype="html">
         <source>Filter by type: <x id="PH" equiv-text="type.toLocaleUpperCase()"/></source>
         <target state="new">Filter by type: <x id="PH" equiv-text="type.toLocaleUpperCase()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">169</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6417143148487697946" datatype="html">
@@ -9460,7 +9466,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">Are you sure you want to cancel job <x id="PH" equiv-text="job.id"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">180</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5200752682405061561" datatype="html">
@@ -9468,11 +9474,11 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">Cancel job</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">180</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7060183792589771743" datatype="html">
@@ -9480,7 +9486,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">Keep job</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7072706922467312188" datatype="html">
@@ -9488,7 +9494,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">Job <x id="PH" equiv-text="job.id"/> cancellation requested</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">190</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6971048580938828360" datatype="html">
@@ -9496,7 +9502,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         <target state="new">Cannot cancel job <x id="PH" equiv-text="job.id"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1653926345388884833" datatype="html" xml:space="preserve">
@@ -16683,7 +16689,7 @@ L'enllaç caducarà al cap d'una hora.</target>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">88</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">88</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-registration-token-list/runner-registration-token-list.component.ts</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">48</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context><context context-type="linenumber">109</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">131</context></context-group></trans-unit>
       <trans-unit id="8140268298586972139" datatype="html" xml:space="preserve">
         <source>Daily quota</source>
         <target state="translated">Quota diària</target>
@@ -21585,7 +21591,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         <source>Showing <x id="PH" equiv-text="start"/> to <x id="PH_1" equiv-text="end"/> of <x id="PH_2" equiv-text="this.totalRecords"/> elements</source>
         <target state="translated">Mostrant <x id="PH" equiv-text="start"/> a <x id="PH_1" equiv-text="end"/> de <x id="PH_2" equiv-text="this.totalRecords"/> elements</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context><context context-type="linenumber">540</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-tables/table.component.ts</context><context context-type="linenumber">535</context></context-group></trans-unit>
       <trans-unit id="5927402622550505067" datatype="html" xml:space="preserve">
         <source>Subscribed to all current channels of <x id="PH"/>. You will be notified of all their new videos.</source>
         <target state="translated">Esteu subscrits a tots els canals actuals de <x id="PH"/>. Rebreu notificacions de tots llurs vídeos nous.</target>
@@ -22165,7 +22171,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         <source>archive</source>
         <target state="translated">arxiu</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context><context context-type="linenumber">180</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.ts</context><context context-type="linenumber">189</context></context-group></trans-unit>
       <trans-unit id="7742520815129539114" datatype="html" xml:space="preserve">
         <source>Bitrate</source>
         <target state="translated">Taxa de bits</target>
@@ -22238,7 +22244,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         <source>Video reported.</source>
         <target state="translated">Vídeo denunciat.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.ts</context><context context-type="linenumber">110</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.ts</context><context context-type="linenumber">111</context></context-group></trans-unit>
       <trans-unit id="3099741642167775297" datatype="html" xml:space="preserve">
         <source>Download</source>
         <target state="translated">Baixa</target>
@@ -22544,7 +22550,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
@@ -23591,7 +23597,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context><context context-type="linenumber">40</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context><context context-type="linenumber">104</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">107</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">75</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">102</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">129</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">170</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context><context context-type="linenumber">130</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context><context context-type="linenumber">9</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/accept-change-video-ownership.component.html</context><context context-type="linenumber">24</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">80</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-add-modal.component.html</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context><context context-type="linenumber">143</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context><context context-type="linenumber">9</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">72</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-change-ownership/send-change-ownership.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">65</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">65</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">99</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">58</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-download.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context><context context-type="linenumber">32</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/bulk-update-videos-in-playlist-modal.component.html</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context><context context-type="linenumber">102</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context><context context-type="linenumber">51</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">110</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/follow-modal.component.html</context><context context-type="linenumber">40</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context><context context-type="linenumber">104</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context><context context-type="linenumber">107</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">75</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">102</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">129</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">170</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context><context context-type="linenumber">130</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context><context context-type="linenumber">9</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/accept-change-video-ownership.component.html</context><context context-type="linenumber">24</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.html</context><context context-type="linenumber">80</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-add-modal.component.html</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-caption-edit-modal.component.html</context><context context-type="linenumber">143</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/thumbnail-manager.component.html</context><context context-type="linenumber">9</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/modal/confirm.component.ts</context><context context-type="linenumber">72</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-change-ownership/send-change-ownership.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/batch-domains-modal.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">65</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/report.component.html</context><context context-type="linenumber">65</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/report-modals/video-report.component.html</context><context context-type="linenumber">99</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.html</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">58</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/download/video-download.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.html</context><context context-type="linenumber">32</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-playlist/bulk-update-videos-in-playlist-modal.component.html</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context><context context-type="linenumber">102</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context><context context-type="linenumber">51</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">119</context></context-group></trans-unit>
       <trans-unit id="5856931617181450881" datatype="html" xml:space="preserve">
         <source>Enter/exit fullscreen</source>
         <target state="translated">Entrar/sortir de pantalla completa</target>

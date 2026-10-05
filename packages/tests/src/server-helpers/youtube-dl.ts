@@ -2,6 +2,7 @@
 
 import { YoutubeDLCLI } from '@peertube/peertube-server/core/helpers/youtube-dl/youtube-dl-cli.js'
 import { CONFIG } from '@peertube/peertube-server/core/initializers/config.js'
+import { getYoutubeDLCookiesPathIfEnabled } from '@peertube/peertube-server/core/lib/youtube-dl-cookies.js'
 import { expect } from 'chai'
 import { mkdtemp, rm, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
@@ -96,97 +97,102 @@ describe('YoutubeDLCLI', function () {
   })
 
   describe('wrapWithCookiesOptions', function () {
-    let cli: any
+    it('Should prepend the cookies file of the process', function () {
+      const cli: any = Object.create(YoutubeDLCLI.prototype, { cookiesPath: { value: '/tmp/youtube-cookies.txt' } })
 
-    before(function () {
-      cli = Object.create(YoutubeDLCLI.prototype)
+      const inputArgs = [ '--dump-json', '-f', 'best' ]
+      const result: string[] = cli.wrapWithCookiesOptions(inputArgs)
+
+      expect(result).to.deep.equal([ '--cookies', '/tmp/youtube-cookies.txt', ...inputArgs ])
     })
 
-    it('Should prepend cookies file when configured and the file exists', async function () {
-      const originalTmpPersistentDirDescriptor = Object.getOwnPropertyDescriptor(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR')
-      const originalCookiesEnabledDescriptor = Object.getOwnPropertyDescriptor(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED')
-      const tempDir = await mkdtemp(join(tmpdir(), 'peertube-cookies-'))
-      const cookiesFile = join(tempDir, 'youtube-cookies.txt')
+    it('Should not modify args without cookies file', function () {
+      const cli: any = Object.create(YoutubeDLCLI.prototype)
 
-      await writeFile(cookiesFile, '# Netscape HTTP Cookie File\n')
+      const inputArgs = [ '--dump-json', '-f', 'best' ]
+      const result: string[] = cli.wrapWithCookiesOptions(inputArgs)
 
-      Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', {
-        get: () => tempDir,
-        configurable: true
-      })
+      expect(result).to.deep.equal(inputArgs)
+    })
+  })
+})
 
-      Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', {
-        get: () => true,
-        configurable: true
-      })
+describe('getYoutubeDLCookiesPathIfEnabled', function () {
+  it('Should return the cookies file when configured and the file exists', async function () {
+    const originalTmpPersistentDirDescriptor = Object.getOwnPropertyDescriptor(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR')
+    const originalCookiesEnabledDescriptor = Object.getOwnPropertyDescriptor(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED')
+    const tempDir = await mkdtemp(join(tmpdir(), 'peertube-cookies-'))
+    const cookiesFile = join(tempDir, 'youtube-cookies.txt')
 
-      try {
-        const inputArgs = [ '--dump-json', '-f', 'best' ]
-        const result: string[] = await cli.wrapWithCookiesOptions(inputArgs)
+    await writeFile(cookiesFile, '# Netscape HTTP Cookie File\n')
 
-        expect(result).to.deep.equal([ '--cookies', cookiesFile, ...inputArgs ])
-      } finally {
-        Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', originalTmpPersistentDirDescriptor)
-        Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', originalCookiesEnabledDescriptor)
-        await rm(tempDir, { recursive: true, force: true })
-      }
+    Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', {
+      get: () => tempDir,
+      configurable: true
     })
 
-    it('Should log an error and continue when the cookies file is missing', async function () {
-      const originalTmpPersistentDirDescriptor = Object.getOwnPropertyDescriptor(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR')
-      const originalCookiesEnabledDescriptor = Object.getOwnPropertyDescriptor(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED')
-      const originalStdoutWrite = process.stdout.write.bind(process.stdout)
-      const tempDir = await mkdtemp(join(tmpdir(), 'peertube-cookies-'))
-      const cookiesFile = join(tempDir, 'youtube-cookies.txt')
-      let loggedOutput = ''
-
-      Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', {
-        get: () => tempDir,
-        configurable: true
-      })
-
-      Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', {
-        get: () => true,
-        configurable: true
-      })
-      // The logger writes to stdout, and its module-private logger instance can't be reached from here:
-      // capture the console transport output instead of trying to mock the logger
-      process.stdout.write = ((chunk: any, ...args: any[]) => {
-        loggedOutput += chunk.toString()
-
-        return originalStdoutWrite(chunk, ...args)
-      }) as typeof process.stdout.write
-
-      try {
-        const inputArgs = [ '--dump-json', '-f', 'best' ]
-        const result: string[] = await cli.wrapWithCookiesOptions(inputArgs)
-
-        expect(result).to.deep.equal(inputArgs)
-        expect(loggedOutput).to.contain('yt-dlp cookies are enabled but the cookies file ' + cookiesFile + ' does not exist')
-      } finally {
-        Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', originalTmpPersistentDirDescriptor)
-        Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', originalCookiesEnabledDescriptor)
-        process.stdout.write = originalStdoutWrite
-        await rm(tempDir, { recursive: true, force: true })
-      }
+    Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', {
+      get: () => true,
+      configurable: true
     })
 
-    it('Should not modify args when cookies are disabled', async function () {
-      const originalCookiesEnabledDescriptor = Object.getOwnPropertyDescriptor(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED')
+    try {
+      expect(await getYoutubeDLCookiesPathIfEnabled()).to.equal(cookiesFile)
+    } finally {
+      Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', originalTmpPersistentDirDescriptor)
+      Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', originalCookiesEnabledDescriptor)
+      await rm(tempDir, { recursive: true, force: true })
+    }
+  })
 
-      Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', {
-        get: () => false,
-        configurable: true
-      })
+  it('Should log an error and return no file when the cookies file is missing', async function () {
+    const originalTmpPersistentDirDescriptor = Object.getOwnPropertyDescriptor(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR')
+    const originalCookiesEnabledDescriptor = Object.getOwnPropertyDescriptor(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED')
+    const originalStdoutWrite = process.stdout.write.bind(process.stdout)
+    const tempDir = await mkdtemp(join(tmpdir(), 'peertube-cookies-'))
+    const cookiesFile = join(tempDir, 'youtube-cookies.txt')
+    let loggedOutput = ''
 
-      try {
-        const inputArgs = [ '--dump-json', '-f', 'best' ]
-        const result: string[] = await cli.wrapWithCookiesOptions(inputArgs)
-
-        expect(result).to.deep.equal(inputArgs)
-      } finally {
-        Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', originalCookiesEnabledDescriptor)
-      }
+    Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', {
+      get: () => tempDir,
+      configurable: true
     })
+
+    Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', {
+      get: () => true,
+      configurable: true
+    })
+    // The logger writes to stdout, and its module-private logger instance can't be reached from here:
+    // capture the console transport output instead of trying to mock the logger
+    process.stdout.write = ((chunk: any, ...args: any[]) => {
+      loggedOutput += chunk.toString()
+
+      return originalStdoutWrite(chunk, ...args)
+    }) as typeof process.stdout.write
+
+    try {
+      expect(await getYoutubeDLCookiesPathIfEnabled()).to.be.undefined
+      expect(loggedOutput).to.contain('yt-dlp cookies are enabled but the cookies file ' + cookiesFile + ' does not exist')
+    } finally {
+      Object.defineProperty(CONFIG.STORAGE, 'TMP_PERSISTENT_DIR', originalTmpPersistentDirDescriptor)
+      Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', originalCookiesEnabledDescriptor)
+      process.stdout.write = originalStdoutWrite
+      await rm(tempDir, { recursive: true, force: true })
+    }
+  })
+
+  it('Should return no file when cookies are disabled', async function () {
+    const originalCookiesEnabledDescriptor = Object.getOwnPropertyDescriptor(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED')
+
+    Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', {
+      get: () => false,
+      configurable: true
+    })
+
+    try {
+      expect(await getYoutubeDLCookiesPathIfEnabled()).to.be.undefined
+    } finally {
+      Object.defineProperty(CONFIG.IMPORT.VIDEOS.HTTP.COOKIES, 'ENABLED', originalCookiesEnabledDescriptor)
+    }
   })
 })

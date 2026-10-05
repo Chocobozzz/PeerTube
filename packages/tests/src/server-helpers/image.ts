@@ -1,7 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
-import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
+import { buildAbsoluteFixturePath, execPromise, root } from '@peertube/peertube-node-utils'
 import { processImage, processSVG } from '@peertube/peertube-server/core/helpers/image-utils.js'
 import { expect } from 'chai'
 import { ensureDir, remove } from 'fs-extra/esm'
@@ -116,6 +115,20 @@ describe('Image helpers', function () {
     const metadata = await sharpInstance.metadata()
 
     expect(metadata.pages).to.equal(1)
+  })
+
+  it('Should refuse to process a SVG file with processImage()', async function () {
+    const input = join(tmpdir(), 'not-really-an-image.svg')
+    await writeFile(input, '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>')
+
+    try {
+      await processImage({ path: input, destination: join(imageDestDir, 'out.svg'), keepOriginal: true })
+      expect.fail('Should not process a SVG file with processImage()')
+    } catch (err) {
+      expect(err.message).to.contain('processSVG')
+    } finally {
+      await remove(input)
+    }
   })
 
   after(async function () {

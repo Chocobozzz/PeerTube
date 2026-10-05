@@ -12,6 +12,7 @@ export type SendDebugCommand = {
     | 'process-update-videos-scheduler'
     | 'remove-expired-user-exports'
     | 'process-remove-old-stats'
+    | 'process-video-files-lifecycle'
 } | SendDebugTestEmails
 
 export type SendDebugTestEmails = {

@@ -146,6 +146,12 @@ router.get('/:id',
 )
 ```
 
+Secondary processes (`--role=secondary`) serve every route. A route that needs a state only the primary
+process has (its file system, data kept in its memory, live sessions, the tracker...) must start with the
+`primaryOnly` middleware, before any side effect: a secondary answers `421` and nginx replays the request on
+the primary. Requests whose body nginx streams (`proxy_request_buffering off` locations) cannot be replayed:
+route them to `backend` in the `$peertube_pool` map of `support/nginx/peertube`.
+
 ### Commit messages
 
 No formal commit-message template.
@@ -266,7 +272,10 @@ npm run mocha -- --timeout 30000 --exit --bail \
 Some tests require these containers:
 
 ```bash
-docker run -p 9444:9000 chocobozzz/s3-ninja
+docker run -p 9444:8000 -e S3BACKEND=mem -e REMOTE_MANAGEMENT_DISABLE=1 \
+  -e SCALITY_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE \
+  -e SCALITY_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \
+  ghcr.io/scality/cloudserver:9.3.20
 docker run -p 10389:10389 chocobozzz/docker-test-openldap
 docker run -p 8082:8080 \
   -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
@@ -388,6 +397,8 @@ Export to Jaeger (tracing) or Prometheus (metrics) is configurable in
 
 - [support/doc/development/server.md](support/doc/development/server.md)
   — Server code conventions and new-feature walkthrough
+- [Horizontal scalability](https://docs.joinpeertube.org/maintain/horizontal-scalability)
+  — Running several processes (`--role=secondary`) for one instance
 - [support/doc/development/tests.md](support/doc/development/tests.md)
   — Test setup and execution guide
 - [support/doc/plugins/guide.md](support/doc/plugins/guide.md)

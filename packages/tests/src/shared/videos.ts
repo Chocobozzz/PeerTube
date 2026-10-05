@@ -28,7 +28,7 @@ import { ensureDir, pathExists, remove } from 'fs-extra/esm'
 import { readdir, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import { basename, join } from 'path'
-import { dateIsValid, expectStartWith, testImageGeneratedByFFmpeg } from './checks.js'
+import { dateIsValid, expectStartWith, getBucketBaseUrlFrom, testImageGeneratedByFFmpeg } from './checks.js'
 import { checkWebTorrentWorks } from './p2p.js'
 import { completeCheckHlsPlaylist } from './streaming-playlists.js'
 
@@ -84,7 +84,12 @@ export async function completeWebVideoFilesCheck (options: {
       const nameReg = `${uuidRegex}-${file.resolution.id}`
 
       expect(file.torrentDownloadUrl).to.match(new RegExp(`${server.url}/download/torrents/${nameReg}.torrent`))
-      expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}.torrent`))
+
+      if (objectStorageBaseUrl && server.internalServerNumber === originServer.internalServerNumber) {
+        expect(file.torrentUrl).to.match(new RegExp(`^${getBucketBaseUrlFrom(objectStorageBaseUrl, 'torrents')}${nameReg}.torrent$`))
+      } else {
+        expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}.torrent`))
+      }
 
       if (objectStorageBaseUrl && requiresAuth) {
         const regexp = new RegExp(`${originServer.url}/object-storage-proxy/web-videos/${privatePath}${nameReg}${extension}`)
@@ -275,10 +280,15 @@ export async function completeVideoCheck (options: {
   expect(video.channel.createdAt).to.exist
   expect(dateIsValid(video.channel.updatedAt.toString())).to.be.true
 
+  // Thumbnails of local videos are stored in object storage
+  const thumbnailsBaseUrl = objectStorageBaseUrl && server.internalServerNumber === originServer.internalServerNumber
+    ? getBucketBaseUrlFrom(objectStorageBaseUrl, 'thumbnails')
+    : undefined
+
   if (attributes.thumbnails) {
-    await checkThumbnails({ video, thumbnails: attributes.thumbnails, server })
+    await checkThumbnails({ video, thumbnails: attributes.thumbnails, server, thumbnailsBaseUrl })
   } else {
-    await checkThumbnails({ video, thumbnails: [ attributes.fixture + '.jpg' ], server })
+    await checkThumbnails({ video, thumbnails: [ attributes.fixture + '.jpg' ], server, thumbnailsBaseUrl })
   }
 
   if (attributes.files) {
@@ -462,8 +472,9 @@ export async function checkThumbnails (options: {
   playlist?: VideoPlaylist
   remotePlaylist?: boolean
   thumbnails: string[]
+  thumbnailsBaseUrl?: string // default server URL
 }) {
-  const { server, video, playlist } = options
+  const { server, video, playlist, thumbnailsBaseUrl = server.url } = options
 
   const thumbnails = options.thumbnails.map(t => {
     const matched = t.match(/-(\d+)x(\d+)/)
@@ -506,21 +517,25 @@ export async function checkThumbnails (options: {
   for (const thumbnail of thumbnails) {
     const entityThumbnail = entity.thumbnails.find(t => t.width === thumbnail.width && t.height === thumbnail.height)
 
-    expectStartWith(entityThumbnail.fileUrl, server.url)
+    expectStartWith(entityThumbnail.fileUrl, thumbnailsBaseUrl)
 
     await testImageGeneratedByFFmpeg({ name: thumbnail.filename, url: entityThumbnail.fileUrl })
   }
 
+  // Deprecated static paths are null when the file is stored in object storage
   // oxlint-disable-next-line @typescript-eslint/no-deprecated
-  await testImageGeneratedByFFmpeg({
-    name: thumbnails.find(t => t.width === 280 && t.height === 157).filename,
-    // oxlint-disable-next-line @typescript-eslint/no-deprecated
-    url: server.url + entity.thumbnailPath
-  })
+  if (entity.thumbnailPath) {
+    await testImageGeneratedByFFmpeg({
+      name: thumbnails.find(t => t.width === 280 && t.height === 157).filename,
+      // oxlint-disable-next-line @typescript-eslint/no-deprecated
+      url: server.url + entity.thumbnailPath
+    })
+  }
 
   const preview = thumbnails.find(t => t.width === 1920 && t.height === 1080)
 
-  if (video && preview) {
+  // oxlint-disable-next-line @typescript-eslint/no-deprecated
+  if (video?.previewPath && preview) {
     // oxlint-disable-next-line @typescript-eslint/no-deprecated
     await testImageGeneratedByFFmpeg({
       name: preview.filename,

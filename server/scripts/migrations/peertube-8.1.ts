@@ -1,9 +1,9 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
+import { readdirNonHidden } from '@server/helpers/fs.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/database.js'
 import { ApplicationModel } from '@server/models/application/application.js'
-import Bluebird from 'bluebird'
 import { move } from 'fs-extra'
-import { readdir } from 'fs/promises'
 import { join } from 'path'
 
 const MIGRATION_NAME = 'peertube-8.1'
@@ -61,11 +61,11 @@ async function movePreviewsToThumbnails () {
   const thumbnailDir = CONFIG.STORAGE.THUMBNAILS_DIR
   const previewDir = CONFIG.STORAGE.PREVIEWS_DIR
 
-  const toMove = await readdir(previewDir)
+  const toMove = await readdirNonHidden(previewDir)
 
   console.log(`Moving ${toMove.length} files from ${previewDir} directory to ${thumbnailDir} directory...`)
 
-  await Bluebird.map(toMove, async previewFilename => {
+  await promiseMap(toMove, async previewFilename => {
     try {
       await move(join(previewDir, previewFilename), join(thumbnailDir, previewFilename), { overwrite: true })
     } catch (err) {

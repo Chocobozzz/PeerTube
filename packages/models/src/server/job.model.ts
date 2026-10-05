@@ -29,6 +29,7 @@ export type JobType =
   | 'transcoding-job-builder'
   | 'video-channel-import'
   | 'video-file-import'
+  | 'video-files-lifecycle'
   | 'video-import'
   | 'video-live-ending'
   | 'video-redundancy'
@@ -120,7 +121,10 @@ export interface VideoImportYoutubeDLPayload extends VideoImportAbstractPayload 
 
 export interface VideoImportTorrentPayload extends VideoImportAbstractPayload {
   type: VideoImportTorrentPayloadType
-  torrentPath: string | null // null if magnet URI
+
+  // Both null if magnet URI
+  torrentPath: string | null
+  torrentStagingKey?: string // The torrent file is in object storage staging instead of `torrentPath`
 }
 
 export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
@@ -193,7 +197,13 @@ export type VideoTranscodingPayload =
   | MergeAudioTranscodingPayload
 
 export interface VideoLiveEndingPayload {
-  videoId: number
+  // Deprecated: use `videoUUID` instead
+  // Remove in PeerTube v9.2
+  videoId?: number
+
+  // Not set by the jobs created by previous versions
+  videoUUID?: string
+
   publishedAt: string
   liveSessionId: number
   streamingPlaylistId: number
@@ -207,7 +217,12 @@ export interface ActorKeysPayload {
 
 // ---------------------------------------------------------------------------
 
-export type MoveStoragePayload = MoveVideoStoragePayload | MoveCaptionPayload
+export type MoveStoragePayload =
+  | MoveVideoStoragePayload
+  | MoveCaptionPayload
+  | MoveActorImagesPayload
+  | MoveUploadImagePayload
+  | MoveVideoPlaylistPayload
 
 export interface MoveVideoStoragePayload {
   videoUUID: string
@@ -221,12 +236,45 @@ export interface MoveCaptionPayload {
   captionId: number
 }
 
+// All the avatars and banners of an actor, so the actor is federated only once
+export interface MoveActorImagesPayload {
+  actorId: number
+}
+
+export interface MoveUploadImagePayload {
+  uploadImageId: number
+}
+
+export interface MoveVideoPlaylistPayload {
+  videoPlaylistId: number
+}
+
 export function isMoveVideoStoragePayload (payload: any): payload is MoveVideoStoragePayload {
   return 'videoUUID' in payload
 }
 
 export function isMoveCaptionPayload (payload: any): payload is MoveCaptionPayload {
   return 'captionId' in payload
+}
+
+export function isMoveActorImagesPayload (payload: any): payload is MoveActorImagesPayload {
+  return 'actorId' in payload
+}
+
+export function isMoveUploadImagePayload (payload: any): payload is MoveUploadImagePayload {
+  return 'uploadImageId' in payload
+}
+
+export function isMoveVideoPlaylistPayload (payload: any): payload is MoveVideoPlaylistPayload {
+  return 'videoPlaylistId' in payload
+}
+
+// ---------------------------------------------------------------------------
+
+export interface VideoFilesLifecyclePayload {
+  videoUUID: string
+
+  policyName: string
 }
 
 // ---------------------------------------------------------------------------
@@ -283,6 +331,9 @@ export interface VideoStudioEditionPayload {
   videoUUID: string
   sourceVideoUUID?: string
   tasks: VideoStudioTaskPayload[]
+
+  // Task files are staged in object storage: their `file` option is a staging key instead of a local path
+  taskFilesStaged?: boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -356,6 +407,9 @@ export interface CreateUserExportPayload {
 
 export interface ImportUserArchivePayload {
   userImportId: number
+
+  // The archive is in object storage staging instead of the persistent temporary directory
+  stagingKey?: string
 }
 
 // ---------------------------------------------------------------------------

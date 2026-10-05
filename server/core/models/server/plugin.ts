@@ -7,9 +7,10 @@ import {
   type PluginType_Type
 } from '@peertube/peertube-models'
 import { isStableOrUnstableVersionValid, isStableVersionValid } from '@server/helpers/custom-validators/misc.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { MPlugin, MPluginFormattable } from '@server/types/models/index.js'
 import { FindAndCountOptions, QueryTypes, json } from 'sequelize'
-import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, DataType, Default, DefaultScope, Is, Table, UpdatedAt } from 'sequelize-typescript'
 import {
   isPluginDescriptionValid,
   isPluginHomepage,
@@ -17,7 +18,6 @@ import {
   isPluginTypeValid
 } from '../../helpers/custom-validators/plugins.js'
 import { SequelizeModel, getSort, throwIfNotValid } from '../shared/index.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
 @DefaultScope(() => ({
   attributes: {
@@ -61,6 +61,13 @@ export class PluginModel extends SequelizeModel<PluginModel> {
   @AllowNull(false)
   @Column
   declare uninstalled: boolean
+
+  // Local path this plugin was installed from
+  // null when it comes from the npm registry
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.STRING(1000))
+  declare diskPath: string
 
   @AllowNull(false)
   @Column

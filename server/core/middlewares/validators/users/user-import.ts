@@ -1,20 +1,32 @@
 import express from 'express'
 import { param } from 'express-validator'
-import { buildUploadXFile, safeUploadXCleanup } from '@server/lib/uploadx.js'
+import { safeUploadXCleanup, userImportsUploadx } from '@server/lib/uploadx.js'
 import { Metadata as UploadXMetadata } from '@uploadx/core'
+import { checkUploadSessionCanStart } from '../resumable-upload.js'
 import { areValidationErrors, checkUserIdExist } from '../shared/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { HttpStatusCode, ServerErrorCode, UserImportState, UserRight } from '@peertube/peertube-models'
+import { createLogger } from '@server/helpers/logger.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { UserImportModel } from '@server/models/user/user-import.js'
+
+const logger = createLogger()
 
 export const userImportRequestResumableValidator = [
   param('userId')
     .isInt().not().isEmpty().withMessage('Should have a valid userId'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const file = buildUploadXFile(req.body as express.CustomUploadXFile<UploadXMetadata>)
-    const cleanup = () => safeUploadXCleanup(file)
+    if (!await checkUploadSessionCanStart(req, res)) return
+
+    const file = await userImportsUploadx.buildFile(req.body as express.CustomUploadXFile<UploadXMetadata>)
+    const cleanup = () => {
+      safeUploadXCleanup(file, userImportsUploadx)
+
+      Redis.Instance.deleteUploadSession(req.query.upload_id)
+        .catch(err => logger.error('Cannot delete upload session', { err }))
+    }
 
     if (!await checkUserIdRight(req.params.userId, res)) return cleanup()
 
@@ -26,6 +38,9 @@ export const userImportRequestResumableValidator = [
 
       return cleanup()
     }
+
+    // Another upload of this user may have completed since this one was initialized
+    if (!await checkNoImportIsProcessing(res.locals.user.id, res)) return cleanup()
 
     res.locals.importUserFileResumable = { ...file, originalname: file.filename }
 
@@ -66,13 +81,7 @@ export const userImportRequestResumableInitValidator = [
       })
     }
 
-    const userImport = await UserImportModel.loadLatestByUserId(user.id)
-    if (userImport && userImport.state !== UserImportState.ERRORED && userImport.state !== UserImportState.COMPLETED) {
-      return res.fail({
-        message: 'An import is already being processed',
-        status: HttpStatusCode.BAD_REQUEST_400
-      })
-    }
+    if (!await checkNoImportIsProcessing(user.id, res)) return
 
     return next()
   }
@@ -102,6 +111,20 @@ async function checkUserIdRight (userId: number | string, res: express.Response)
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: 'Cannot manage imports of another user'
+    })
+    return false
+  }
+
+  return true
+}
+
+async function checkNoImportIsProcessing (userId: number, res: express.Response) {
+  const userImport = await UserImportModel.loadLatestByUserId(userId)
+
+  if (userImport && userImport.state !== UserImportState.ERRORED && userImport.state !== UserImportState.COMPLETED) {
+    res.fail({
+      message: 'An import is already being processed',
+      status: HttpStatusCode.BAD_REQUEST_400
     })
     return false
   }

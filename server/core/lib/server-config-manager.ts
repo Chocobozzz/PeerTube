@@ -11,6 +11,7 @@ import {
 import { getServerCommit } from '@server/helpers/version.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
+import { getResumableUploadMinChunkSize } from '@server/lib/object-storage/config.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -19,6 +20,7 @@ import { MActorImage, MActorUploadImages, MUploadImage } from '@server/types/mod
 import { Hooks } from './plugins/hooks.js'
 import { PluginManager } from './plugins/plugin-manager.js'
 import { getThemeOrDefault } from './plugins/theme-utils.js'
+import { RedisChannels } from './redis/index.js'
 import { VideoTranscodingProfilesManager } from './transcoding/default-transcoding-profiles.js'
 import { logoTypeToUploadImageEnum } from './upload-image.js'
 
@@ -37,17 +39,28 @@ class ServerConfigManager {
   private constructor () {}
 
   async init () {
-    const instanceHomepage = await ActorCustomPageModel.loadInstanceHomepage()
+    await this.reloadHomepageState()
+  }
 
-    this.updateHomepageState(instanceHomepage?.content)
+  // The homepage can be updated by any process of the platform
+  async listenForHomepageChanges () {
+    await RedisChannels.homepageChanged.subscribe(() => this.reloadHomepageState())
   }
 
   updateHomepageState (content: string) {
     this.homepageEnabled = !!content
+
+    RedisChannels.homepageChanged.broadcast()
   }
 
   isHomepageEnabled () {
     return this.homepageEnabled
+  }
+
+  private async reloadHomepageState () {
+    const instanceHomepage = await ActorCustomPageModel.loadInstanceHomepage()
+
+    this.homepageEnabled = !!instanceHomepage?.content
   }
 
   async getHTMLServerConfig (): Promise<HTMLServerConfig> {
@@ -68,7 +81,10 @@ class ServerConfigManager {
             preferAuthorDisplayName: CONFIG.CLIENT.VIDEOS.MINIATURE.PREFER_AUTHOR_DISPLAY_NAME
           },
           resumableUpload: {
-            maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE
+            maxChunkSize: CONFIG.CLIENT.VIDEOS.RESUMABLE_UPLOAD.MAX_CHUNK_SIZE,
+
+            // S3 rejects a smaller multipart part on S3 streaming upload
+            minChunkSize: getResumableUploadMinChunkSize()
           }
         },
         browseVideos: {
@@ -284,7 +300,11 @@ class ServerConfigManager {
           enabled: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED
         },
         users: {
-          enabled: CONFIG.IMPORT.USERS.ENABLED
+          enabled: CONFIG.IMPORT.USERS.ENABLED,
+
+          resumableUpload: {
+            minChunkSize: getResumableUploadMinChunkSize()
+          }
         }
       },
       export: {
@@ -568,7 +588,7 @@ class ServerConfigManager {
     const customLogo = this.getLogo(serverActor, width)
 
     if (customLogo) {
-      return WEBSERVER.URL + customLogo.getStaticPath()
+      return customLogo.getLocalFileUrl()
     }
 
     return `${WEBSERVER.URL}/client/assets/images/icons/icon-${width}x${width}.png`

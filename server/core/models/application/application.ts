@@ -1,6 +1,7 @@
-import { getNodeABIVersion } from '@server/helpers/version.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { LOCAL_TRACKER_URLS_KEYWORD } from '@server/initializers/constants.js'
 import memoizee from 'memoizee'
+import { QueryTypes } from 'sequelize'
 import { AllowNull, Column, DataType, Default, DefaultScope, HasOne, IsInt, Table } from 'sequelize-typescript'
 import type { PickDeep } from 'type-fest'
 import { AccountModel } from '../account/account.js'
@@ -25,11 +26,18 @@ export const getServerActor = memoizee(async function () {
   return actor
 }, { promise: true })
 
+// The instance actor images can be changed by an administrator on another process of this platform
+export function clearServerActorCache () {
+  getServerActor.clear()
+}
+
 export function getServerAccount () {
   return getServerActor().then(actor => actor.Account)
 }
 
-type ConfigPart = PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS'>
+type ConfigPart =
+  & PickDeep<typeof CONFIG, 'OBJECT_STORAGE.STREAMING_PLAYLISTS'>
+  & { TRACKER?: PickDeep<typeof CONFIG, 'TRACKER.URLS'>['TRACKER'] }
 
 @DefaultScope(() => ({
   include: [
@@ -54,14 +62,6 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
   @Column
   declare latestPeerTubeVersion: string
 
-  @AllowNull(false)
-  @Column
-  declare nodeVersion: string
-
-  @AllowNull(false)
-  @Column
-  declare nodeABIVersion: string
-
   @AllowNull(true)
   @Column(DataType.JSONB)
   declare configPart: ConfigPart
@@ -80,7 +80,6 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
   declare Account: Awaited<AccountModel>
 
   private static lastRunConfigPart: ConfigPart
-  private static lastRunNodeABIVersion: string
 
   static countTotal () {
     return ApplicationModel.count()
@@ -90,19 +89,20 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     return ApplicationModel.findOne()
   }
 
-  static async nodeABIChanged () {
-    const application = await this.load()
-
-    const nodeABIVersion = this.lastRunNodeABIVersion || application.nodeABIVersion
-
-    return nodeABIVersion !== getNodeABIVersion()
-  }
-
   static async streamingPlaylistBaseUrlChanged () {
     const application = await this.load()
     const configPart = this.lastRunConfigPart || application.configPart
 
     return configPart?.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL !== CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS.BASE_URL
+  }
+
+  static async trackerUrlsChanged () {
+    const application = await this.load()
+
+    const previousUrls = application.configPart?.TRACKER?.URLS ?? [ LOCAL_TRACKER_URLS_KEYWORD ]
+
+    // The order is meaningful: the first URL of a kind is the one used as `announce` in torrent files
+    return previousUrls.join('\n') !== CONFIG.TRACKER.URLS.join('\n')
   }
 
   static async hasManualMigrationScriptRun (scriptName: string) {
@@ -119,21 +119,31 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     await application.save()
   }
 
-  static async updateNodeVersionsOrConfig () {
+  static async updateConfigPart () {
     const application = await this.load()
 
-    this.lastRunNodeABIVersion = application.nodeABIVersion
     this.lastRunConfigPart = application.configPart
 
-    application.nodeABIVersion = getNodeABIVersion()
-    application.nodeVersion = process.version
-
-    application.configPart = {
+    // Tracker config is saved once the torrent files are updated
+    await this.mergeConfigPart({
       OBJECT_STORAGE: {
         STREAMING_PLAYLISTS: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS
       }
-    }
+    })
+  }
 
-    await application.save()
+  static async updateTrackerUrlsConfigPart () {
+    await this.mergeConfigPart({
+      TRACKER: {
+        URLS: CONFIG.TRACKER.URLS
+      }
+    })
+  }
+
+  private static async mergeConfigPart (part: Partial<ConfigPart>) {
+    await ApplicationModel.sequelize.query(
+      `UPDATE "application" SET "configPart" = COALESCE("configPart", '{}'::jsonb) || CAST(:part AS jsonb)`,
+      { replacements: { part: JSON.stringify(part) }, type: QueryTypes.UPDATE }
+    )
   }
 }

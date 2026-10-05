@@ -13,6 +13,7 @@ import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
+import { isSecondaryProcess } from '@server/initializers/process-role.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
@@ -35,10 +36,12 @@ import { Notifier } from '../notifier/notifier.js'
 import { getLiveReplayBaseDirectory } from '../paths.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
+import { RedisChannels } from '../redis/index.js'
+import type { LiveSessionStopPayload } from '../redis/index.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
 import { isUserQuotaValid } from '../user.js'
 import { LiveQuotaStore } from './live-quota-store.js'
-import { cleanupAndDestroyPermanentLive, getLiveSegmentTime } from './live-utils.js'
+import { cleanupAndDestroyPermanentLive, getLiveSegmentTime, removeLiveDirectoriesOfDeletedVideo } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
 
 const logger = createLogger('live')
@@ -196,13 +199,29 @@ class LiveManager {
     return this.getContext().sessions.has(sessionId)
   }
 
-  async stopSessionOfVideo (options: {
-    videoUUID: string
-    error: LiveVideoErrorType | null
+  // Live sessions only exist in the primary process, the one running the RTMP server
+  // The other processes of the platform ask it to stop a session through Redis
+  async listenForSessionStopRequests () {
+    await RedisChannels.liveSessionStop.subscribe(payload => {
+      if (!payload?.videoUUID) return
 
-    expectedSessionId?: string // Prevent stopping another session of permanent live
-    errorOnReplay?: boolean
-  }) {
+      return this.stopLocalSessionOfVideo(payload)
+        .catch(err => logger.error('Cannot stop session of video %s requested by another process.', payload.videoUUID, { err }))
+    })
+  }
+
+  async stopSessionOfVideo (options: LiveSessionStopPayload) {
+    if (isSecondaryProcess()) {
+      logger.debug('Asking the primary process to stop the live session of video %s', options.videoUUID, { error: options.error })
+
+      await RedisChannels.liveSessionStop.publish(pick(options, [ 'videoUUID', 'error', 'expectedSessionId', 'errorOnReplay' ]))
+      return
+    }
+
+    return this.stopLocalSessionOfVideo(options)
+  }
+
+  private async stopLocalSessionOfVideo (options: LiveSessionStopPayload) {
     const { videoUUID, expectedSessionId, error } = options
 
     const sessionId = this.videoSessions.get(videoUUID)
@@ -625,7 +644,10 @@ class LiveManager {
 
     try {
       const fullVideo = await VideoModel.loadFull(videoUUID)
-      if (!fullVideo) return
+      if (!fullVideo) {
+        await removeLiveDirectoriesOfDeletedVideo(videoUUID)
+        return
+      }
 
       const live = await VideoLiveModel.loadByVideoId(fullVideo.id)
 
@@ -644,6 +666,7 @@ class LiveManager {
         type: 'video-live-ending',
         payload: {
           videoId: fullVideo.id,
+          videoUUID: fullVideo.uuid,
 
           replayDirectory: live.saveReplay
             ? await this.findReplayDirectory(fullVideo)

@@ -1,7 +1,7 @@
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../../initializers/constants.js'
-import { peertubeTruncate } from '../core-utils.js'
-import { isUrlValid } from '../custom-validators/activitypub/misc.js'
 import { isArray } from '../custom-validators/misc.js'
+import { isUrlValid } from '../custom-validators/urls.js'
 
 export type YoutubeDLInfo = {
   name?: string

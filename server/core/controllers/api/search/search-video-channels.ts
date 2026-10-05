@@ -1,5 +1,5 @@
 import express from 'express'
-import { sanitizeUrl } from '@server/helpers/core-utils.js'
+import { sanitizeUrl } from '@peertube/peertube-node-utils'
 import { pickSearchChannelQuery } from '@server/helpers/query.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -12,7 +12,7 @@ import { HttpStatusCode, ResultList, VideoChannel, VideoChannelsSearchQueryAfter
 import { isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../../../lib/activitypub/actors/index.js'
+import { getOrCreateAPActor, loadActorUrlFromDB, loadActorUrlOrGetFromWebfinger } from '../../../lib/activitypub/actors/index.js'
 import {
   asyncMiddleware,
   openapiOperationDoc,
@@ -117,17 +117,22 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
   let videoChannel: MChannelAccountDefault
   let uri = search
 
+  const canSearchRemoteURI = isUserAbleToSearchRemoteURI(res)
+
   if (!isURISearch(search)) {
     try {
-      uri = await loadActorUrlOrGetFromWebfinger(search)
+      // Only users able to search remote URIs can trigger an outbound webfinger lookup
+      uri = canSearchRemoteURI
+        ? await loadActorUrlOrGetFromWebfinger(search)
+        : await loadActorUrlFromDB(search)
     } catch (err) {
       logger.warn('Cannot load actor URL or get from webfinger.', { search, err })
-
-      return res.json({ total: 0, data: [] })
     }
+
+    if (!uri) return res.json({ total: 0, data: [] })
   }
 
-  if (isUserAbleToSearchRemoteURI(res)) {
+  if (canSearchRemoteURI) {
     try {
       const latestUri = await findLatestAPRedirection(uri)
 

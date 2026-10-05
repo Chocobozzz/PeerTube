@@ -257,7 +257,9 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       playlist = new VideoStreamingPlaylistModel({
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
-        storage: FileStorage.FILE_SYSTEM,
+        storage: CONFIG.OBJECT_STORAGE.ENABLED
+          ? FileStorage.OBJECT_STORAGE
+          : FileStorage.FILE_SYSTEM,
         playlistFilename: generateHLSMasterPlaylistFilename(video.isLive),
         segmentsSha256Filename: generateHlsSha256SegmentsFilename(video.isLive),
         videoId: video.id
@@ -373,10 +375,6 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     if (this.type === VideoStreamingPlaylistType.HLS) return 'hls'
 
     return 'unknown'
-  }
-
-  getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
-    return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
   }
 
   hasSameUniqueKeysThan (other: MStreamingPlaylist) {

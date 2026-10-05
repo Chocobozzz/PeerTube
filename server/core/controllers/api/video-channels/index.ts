@@ -74,14 +74,12 @@ videoChannelRouter.use(channelCollaborators)
 videoChannelRouter.use(videoChannelLogosRouter)
 videoChannelRouter.use(ownershipChannelRouter)
 
-videoChannelRouter.get(
-  '/',
-  paginationValidator,
-  videoChannelsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  videoChannelsListValidator,
-  asyncMiddleware(listVideoChannels)
+videoChannelRouter.delete(
+  '/:handle',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: true })),
+  asyncMiddleware(videoChannelsRemoveValidator),
+  asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
 videoChannelRouter.post(
@@ -99,54 +97,12 @@ videoChannelRouter.put(
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
-videoChannelRouter.delete(
-  '/:handle',
-  authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: true })),
-  asyncMiddleware(videoChannelsRemoveValidator),
-  asyncRetryTransactionMiddleware(removeVideoChannel)
-)
-
-videoChannelRouter.get(
-  '/:handle',
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-  asyncMiddleware(getVideoChannel)
-)
-
-// ---------------------------------------------------------------------------
-
-videoChannelRouter.get(
-  '/:handle/video-playlists',
-  optionalAuthenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-  paginationValidator,
-  videoPlaylistsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  commonVideoPlaylistFiltersValidator,
-  asyncMiddleware(listVideoChannelPlaylists)
-)
-
 videoChannelRouter.post(
   '/:handle/video-playlists/reorder',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   asyncMiddleware(videoPlaylistsReorderInChannelValidator),
   asyncRetryTransactionMiddleware(reorderPlaylistsInChannel)
-)
-
-// ---------------------------------------------------------------------------
-
-videoChannelRouter.get(
-  '/:handle/videos',
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-  paginationValidator,
-  videosSortValidator,
-  setDefaultVideosSort,
-  setDefaultPagination,
-  optionalAuthenticate,
-  commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(listVideoChannelVideos)
 )
 
 videoChannelRouter.get(
@@ -179,11 +135,53 @@ videoChannelRouter.post(
   asyncMiddleware(importVideosInChannel)
 )
 
+videoChannelRouter.get(
+  '/',
+  paginationValidator,
+  videoChannelsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  videoChannelsListValidator,
+  asyncMiddleware(listVideoChannels)
+)
+
+videoChannelRouter.get(
+  '/:handle',
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  asyncMiddleware(getVideoChannel)
+)
+
+videoChannelRouter.get(
+  '/:handle/video-playlists',
+  optionalAuthenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  paginationValidator,
+  videoPlaylistsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  commonVideoPlaylistFiltersValidator,
+  asyncMiddleware(listVideoChannelPlaylists)
+)
+
+videoChannelRouter.get(
+  '/:handle/videos',
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  optionalAuthenticate,
+  commonVideosFiltersValidatorFactory(),
+  asyncMiddleware(listVideoChannelVideos)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
   videoChannelRouter
 }
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 

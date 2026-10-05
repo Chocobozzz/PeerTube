@@ -9,6 +9,7 @@ import {
   VideoObject
 } from '@peertube/peertube-models'
 import { isActorTypeValid } from '@server/helpers/custom-validators/activitypub/actor.js'
+import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file.js'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos.js'
@@ -21,6 +22,7 @@ import { MActorFull, MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded, getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/get.js'
 import { APActorUpdater } from '../actors/updater.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { createOrUpdateCacheFile } from '../cache-file.js'
 import { upsertAPPlayerSettings } from '../player-settings.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
@@ -48,15 +50,22 @@ async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate
       return undefined
     }
 
-    // We need more attributes
-    const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
-    return retryTransactionWrapper(() => processUpdateActor(byActorFull, object as ActivityPubActor))
+    return runWithAPObjectLock(byActor.url, async () => {
+      // We need more attributes, loaded in the lock to update the latest state
+      const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
+      return retryTransactionWrapper(() => processUpdateActor(byActorFull, object as ActivityPubActor))
+    })
   }
 
   if (objectType === 'CacheFile') {
     // We need more attributes
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
-    return retryTransactionWrapper(() => processUpdateCacheFile(byActorFull, activity as ActivityUpdate<CacheFileObject | string>, object))
+
+    return runWithAPObjectLock(getAPId(object), () => {
+      return retryTransactionWrapper(() =>
+        processUpdateCacheFile(byActorFull, activity as ActivityUpdate<CacheFileObject | string>, object)
+      )
+    })
   }
 
   if (objectType === 'Playlist') {
@@ -97,16 +106,24 @@ async function processUpdateVideo (byActor: MActorSignature, activity: ActivityU
     return undefined
   }
 
-  const { video, created } = await getOrCreateAPVideo({
+  // Outside the lock: creating the video crawls its comments, shares and rates
+  // Only check the video exists: the full video is loaded in the lock
+  const { created } = await getOrCreateAPVideo({
     videoObject: videoObject.id,
     allowRefresh: false,
-    fetchType: 'full'
+    fetchType: 'unsafe-immutable-only'
   })
   // We did not have this video, it has been created so no need to update
   if (created) return
 
-  const updater = new APVideoUpdater(videoObject, video, byActor.url)
-  return updater.update(arrayify(activity.to))
+  return runWithAPObjectLock(videoObject.id, async () => {
+    // Reload the video in the lock, so we compare with and update its latest state
+    const video = await loadVideoByUrl(videoObject.id, 'full')
+    if (!video) return undefined
+
+    const updater = new APVideoUpdater(videoObject, video, byActor.url)
+    return updater.update({ overrideTo: arrayify(activity.to) })
+  })
 }
 
 async function processUpdateCacheFile (

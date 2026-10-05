@@ -19,6 +19,7 @@ const clientsRouter = express.Router()
 
 const clientsRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.CLIENT.ENABLED,
+  name: 'client',
   windowMs: CONFIG.RATES_LIMIT.CLIENT.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.CLIENT.MAX
 })
@@ -221,7 +222,7 @@ async function generateManifest (req: express.Request, res: express.Response) {
 
   const icons = Array.isArray(serverActor.Avatars) && serverActor.Avatars.length > 0
     ? serverActor.Avatars.map(avatar => ({
-      src: avatar.getStaticPath(),
+      src: avatar.getLocalFileUrl(),
       sizes: `${avatar.width}x${avatar.height}`,
       type: avatar.getMimeType()
     }))

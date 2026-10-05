@@ -76,8 +76,12 @@ export function isVideoStudioTaskWatermark (v: VideoStudioTask): v is VideoStudi
   return v.name === 'add-watermark'
 }
 
-export function hasVideoStudioTaskFile (v: VideoStudioTask): v is VideoStudioTaskIntro | VideoStudioTaskOutro | VideoStudioTaskWatermark {
-  return isVideoStudioTaskIntro(v) || isVideoStudioTaskOutro(v) || isVideoStudioTaskWatermark(v)
+type VideoStudioTaskWithFileName = 'add-intro' | 'add-outro' | 'add-watermark'
+
+export function hasVideoStudioTaskFile<T extends { name: VideoStudioTask['name'] }> (
+  v: T
+): v is Extract<T, { name: VideoStudioTaskWithFileName }> {
+  return v.name === 'add-intro' || v.name === 'add-outro' || v.name === 'add-watermark'
 }
 
 export function isVideoStudioTaskRemoveSegments (v: VideoStudioTask): v is VideoStudioTaskRemoveSegments {

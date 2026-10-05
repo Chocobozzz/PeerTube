@@ -1,5 +1,6 @@
 import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, HttpStatusCode, RootActivity } from '@peertube/peertube-models'
 import { InboxManager } from '@server/lib/activitypub/inbox-manager.js'
+import { ACTIVITY_PUB } from '../../initializers/constants.js'
 import express from 'express'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity.js'
 import { createLogger } from '../../helpers/logger.js'
@@ -64,6 +65,20 @@ function inboxController (req: express.Request, res: express.Response) {
     activities = (rootActivity as ActivityPubOrderedCollection<Activity>).orderedItems
   } else {
     activities = [ rootActivity as Activity ]
+  }
+
+  if (activities.length > ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST) {
+    logger.warn(
+      'Rejecting inbox request with %d activities by %s (max: %d). No compliant server sends that many activities in one request.',
+      activities.length,
+      res.locals.signature.actor.url,
+      ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST
+    )
+
+    return res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: `Too many activities in a single inbox request (max: ${ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST})`
+    })
   }
 
   // Only keep activities we are able to process

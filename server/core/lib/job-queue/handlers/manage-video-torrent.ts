@@ -44,7 +44,7 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
       await video.reload()
       await file.reload()
 
-      const { infoHash, torrentFilename } = await createTorrentForFile(video, file)
+      const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(video, file)
 
       const saved = await retryTransactionWrapper(() => {
         return sequelizeTypescript.transaction(async transaction => {
@@ -54,6 +54,7 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
           if (!refreshedFile) return false
 
           refreshedFile.torrentFilename = torrentFilename
+          refreshedFile.torrentStorage = torrentStorage
           await refreshedFile.save({ transaction })
 
           await VideoInfohashModel.replaceFileInfohash(refreshedFile.id, infoHash, transaction)
@@ -63,7 +64,7 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
       })
 
       // File does not exist anymore, remove the generated torrent
-      if (!saved) await file.removeTorrent()
+      if (!saved) await VideoFileModel.removeTorrentFile(torrentFilename, torrentStorage)
     } finally {
       fileMutexReleaser()
     }

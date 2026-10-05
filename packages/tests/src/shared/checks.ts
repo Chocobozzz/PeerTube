@@ -16,6 +16,10 @@ export function dateIsValid (dateString: string | Date, interval = 300000) {
   return Math.abs(now.getTime() - dateToCheck.getTime()) <= interval
 }
 
+export function getBucketBaseUrlFrom (objectStorageBaseUrl: string, bucket: 'torrents' | 'thumbnails') {
+  return objectStorageBaseUrl.replace(/(\d+)-[a-z-]+([./])/, `$1-${bucket}$2`)
+}
+
 export function expectStartWith (str: string, start: string) {
   expect(str.startsWith(start), `${str} does not start with ${start}`).to.be.true
 }
@@ -48,17 +52,17 @@ export async function testAvatarSize (options: {
   avatar: {
     width: number
     path: string
+    fileUrl: string
   }
 }) {
   const { url, imageName, avatar } = options
 
-  const { body } = await makeGetRequest({
-    url,
-    path: avatar.path,
-    expectedStatus: HttpStatusCode.OK_200
-  })
+  // Avatars stored in object storage don't have a local path
+  const { body } = avatar.path
+    ? await makeGetRequest({ url, path: avatar.path, expectedStatus: HttpStatusCode.OK_200 })
+    : await makeRawRequest({ url: avatar.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
 
-  const extension = parse(avatar.path).ext
+  const extension = parse(avatar.path || new URL(avatar.fileUrl).pathname).ext
   // We don't test big GIF avatars
   if (extension === '.gif' && avatar.width > 150) return
 
@@ -100,7 +104,8 @@ export async function testImage (options: {
 }) {
   const { name, url } = options
 
-  const { body } = await makeRawRequest({ url, expectedStatus: HttpStatusCode.OK_200 })
+  // Files may be redirected to the object storage cache
+  const { body } = await makeRawRequest({ url, redirects: 1, expectedStatus: HttpStatusCode.OK_200 })
   const fixturePath = buildAbsoluteFixturePath(name)
   const data = await readFile(fixturePath)
 
@@ -133,6 +138,69 @@ export async function testImage (options: {
     // oxlint-disable-next-line preserve-caught-error
     throw new Error(`${errorMsg}: ${err.message}`)
   }
+}
+
+export async function downloadFile (url: string) {
+  const { body } = await makeRawRequest({ url, responseType: 'arraybuffer', expectedStatus: HttpStatusCode.OK_200 })
+
+  return Buffer.from(body)
+}
+
+export async function expectNotFound (urls: string[]) {
+  for (const url of urls) {
+    await makeRawRequest({ url, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+  }
+}
+
+export function expectAllReplaced (previous: string[], current: string[]) {
+  expect(previous).to.have.length.above(0)
+  expect(current).to.have.length.above(0)
+
+  for (const url of previous) {
+    expect(current, url).to.not.include(url)
+  }
+}
+
+// Unlike testImage(), compares two live URLs by pixel content instead of a URL against a fixture on disk
+export async function expectSimilarImage (remoteUrl: string, originUrl: string) {
+  const sharp = (await import('sharp')).default
+  const pixelmatch = (await import('pixelmatch')).default
+
+  const remoteImage = sharp(await downloadFile(remoteUrl))
+  const originImage = sharp(await downloadFile(originUrl))
+
+  const { width, height } = await remoteImage.metadata()
+  const originMetadata = await originImage.metadata()
+  expect({ width, height }, remoteUrl).to.deep.equal({ width: originMetadata.width, height: originMetadata.height })
+
+  const differentPixels = pixelmatch(
+    await remoteImage.ensureAlpha().raw().toBuffer(),
+    await originImage.ensureAlpha().raw().toBuffer(),
+    null,
+    width,
+    height,
+    { threshold: 0.1 }
+  )
+
+  expect(differentPixels / (width * height), `${remoteUrl} is not the same image as ${originUrl}`).to.be.below(0.01)
+}
+
+// Matches remote/origin images by dimensions, then compares each matched pair with expectSimilarImage()
+export async function expectSameImages (
+  remoteImages: { fileUrl: string, width: number, height: number }[],
+  originImages: { fileUrl: string, width: number, height: number }[]
+) {
+  let compared = 0
+
+  for (const remoteImage of remoteImages) {
+    const originImage = originImages.find(i => i.width === remoteImage.width && i.height === remoteImage.height)
+    if (!originImage) continue
+
+    await expectSimilarImage(remoteImage.fileUrl, originImage.fileUrl)
+    compared++
+  }
+
+  expect(compared).to.be.above(0)
 }
 
 export async function testFileExistsOnFSOrNot (server: PeerTubeServer, directory: string, filePath: string, exist: boolean) {

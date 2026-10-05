@@ -49,15 +49,15 @@ export async function isVideoFileAccepted (options: {
   req: express.Request
   res: express.Response
   videoBody: Record<string, any>
-  videoFile: express.VideoLegacyUploadFile
+  uploadFile: express.VideoLegacyUploadFile
   hook: Extract<ServerFilterHookName, 'filter:api.video.upload.accept.result' | 'filter:api.video.update-file.accept.result'>
 }) {
-  const { req, res, videoBody, videoFile, hook } = options
+  const { req, res, videoBody, uploadFile, hook } = options
 
   // Check we accept this video
   const acceptParameters = {
     videoBody,
-    videoFile,
+    videoFile: uploadFile, // Keep `videoFile` name to not break plugin API
     user: res.locals.oauth.token.User
   }
   const acceptedResult = await Hooks.wrapFun(isLocalVideoFileAccepted, acceptParameters, hook)

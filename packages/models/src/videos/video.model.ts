@@ -98,7 +98,14 @@ export interface VideoAdditionalAttributes {
   blacklisted: boolean
   blacklistedReason: string
 
+  /**
+   * @deprecated in 8.2, use GET /api/v1/blocklist/status instead
+   */
   blockedOwner: boolean
+
+  /**
+   * @deprecated in 8.2, use GET /api/v1/blocklist/status instead
+   */
   blockedServer: boolean
 
   files: VideoFile[]

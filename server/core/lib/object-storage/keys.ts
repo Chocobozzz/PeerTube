@@ -1,6 +1,7 @@
 import { VideoStreamingPlaylistTypeString } from '@peertube/peertube-models'
 import { MVideoUUID } from '@server/types/models/index.js'
 import { join } from 'path'
+import type { CommonObjectStorageType } from './config.js'
 
 export function generateHLSObjectStorageKey (video: MVideoUUID, filename: string) {
   if (!isSafeKey(filename)) throw new Error('Invalid filename ' + filename + ' for HLS object storage key generation')
@@ -8,32 +9,24 @@ export function generateHLSObjectStorageKey (video: MVideoUUID, filename: string
   return join(generateHLSObjectBaseStorageKey(video), filename)
 }
 
-export function generateHLSObjectBaseStorageKey (video: MVideoUUID) {
-  return join('hls' satisfies VideoStreamingPlaylistTypeString, video.uuid)
+export function generateHLSObjectBaseStorageKey (video?: MVideoUUID) {
+  const base = 'hls' satisfies VideoStreamingPlaylistTypeString
+
+  if (video) return join(base, video.uuid)
+
+  return base + '/'
 }
 
-export function generateWebVideoObjectStorageKey (filename: string) {
-  if (!isSafeKey(filename)) throw new Error('Invalid filename ' + filename + ' for web video object storage key generation')
+export function generateCommonFileObjectStorageKey (type: CommonObjectStorageType, filename: string) {
+  if (!isSafeKey(filename)) throw new Error('Invalid filename ' + filename + ' for ' + type + ' object storage key generation')
 
   return filename
 }
 
-export function generateOriginalVideoObjectStorageKey (filename: string) {
-  if (!isSafeKey(filename)) throw new Error('Invalid filename ' + filename + ' for original video object storage key generation')
+export function generateCachedFileObjectStorageKey (subPrefix: string, filename: string) {
+  if (!isSafeKey(filename)) throw new Error('Invalid filename ' + filename + ' for cache object storage key generation')
 
-  return filename
-}
-
-export function generateCaptionObjectStorageKey (filename: string) {
-  if (!isSafeKey(filename)) throw new Error('Invalid filename ' + filename + ' for caption object storage key generation')
-
-  return filename
-}
-
-export function generateUserExportObjectStorageKey (filename: string) {
-  if (!isSafeKey(filename)) throw new Error('Invalid filename ' + filename + ' for user export object storage key generation')
-
-  return filename
+  return subPrefix + filename
 }
 
 // ---------------------------------------------------------------------------

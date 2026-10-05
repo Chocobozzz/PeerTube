@@ -119,6 +119,20 @@ export function buildWinstonLogger (options: {
 
 const rootWinstonLogger = buildWinstonLogger()
 
+// Flush the logger so the file transport finishes its writes
+export function flushLogs (options: { timeoutMs?: number } = {}) {
+  const { timeoutMs = 2000 } = options
+
+  const transportsFinished = rootWinstonLogger.transports.map(t => new Promise<void>(res => t.once('finish', () => res())))
+
+  rootWinstonLogger.end()
+
+  return Promise.race([
+    Promise.all(transportsFinished).then(() => undefined),
+    new Promise<void>(res => setTimeout(res, timeoutMs).unref())
+  ])
+}
+
 // ---------------------------------------------------------------------------
 // Logger tags
 // ---------------------------------------------------------------------------
@@ -332,8 +346,11 @@ export type StaticLoggerTag =
   | 'channel-synchronization'
   | 'chapter'
   | 'cleaner'
+  | 'config'
   | 'create'
+  | 'custom-config'
   | 'debug-controller'
+  | 'distributed-lock'
   | 'download'
   | 'embed-privacy'
   | 'ffmpeg'
@@ -343,6 +360,7 @@ export type StaticLoggerTag =
   | 'job'
   | 'lazy-load'
   | 'live'
+  | 'local-files'
   | 'move-file-system'
   | 'move-object-storage'
   | 'muxing'
@@ -359,6 +377,7 @@ export type StaticLoggerTag =
   | 'runner'
   | 'schedulers'
   | 'share'
+  | 'staging'
   | 'stats'
   | 'storyboard'
   | 'studio'
@@ -372,6 +391,7 @@ export type StaticLoggerTag =
   | 'user-import'
   | 'users'
   | 'video-download'
+  | 'video-files-lifecycle'
   | 'video-path-manager'
   | 'video-privacy'
   | 'video-state'

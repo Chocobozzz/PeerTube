@@ -9,6 +9,7 @@ import {
   UserRoleType
 } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import { createPrivateAndPublicKeys } from '@server/helpers/peertube-crypto.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { UserModel } from '@server/models/user/user.js'
 import { Transaction } from 'sequelize'
@@ -23,10 +24,9 @@ import { getLocalAccountActivityPubUrl } from './activitypub/url.js'
 import { Emailer } from './emailer.js'
 import { LiveQuotaStore } from './live/live-quota-store.js'
 import { buildActorInstance, findAvailableLocalActorName } from './local-actor.js'
-import { Redis } from './redis.js'
+import { Redis } from './redis/index.js'
 import { createLocalVideoChannelWithoutKeys } from './video-channel.js'
 import { createWatchLaterPlaylist } from './video-playlist.js'
-import { createPrivateAndPublicKeys } from '@server/helpers/peertube-crypto.js'
 
 const logger = createLogger()
 
@@ -100,8 +100,10 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
 }): Promise<{ user: MUserDefault, account: MAccountDefault, videoChannel: MChannelActor }> {
   const { userToCreate, userDisplayName, channelNames, validateUser = true } = parameters
 
-  const accountKeys = await createPrivateAndPublicKeys()
-  const channelKeys = await createPrivateAndPublicKeys()
+  const [ accountKeys, channelKeys ] = await Promise.all([
+    createPrivateAndPublicKeys(),
+    createPrivateAndPublicKeys()
+  ])
 
   return sequelizeTypescript.transaction(async t => {
     const userOptions = {

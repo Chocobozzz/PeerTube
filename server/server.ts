@@ -1,4 +1,51 @@
-import { registerOpentelemetryTracing } from '@server/lib/opentelemetry/tracing.js'
+/**
+ * A PeerTube instance can be served by several Node.js processes sharing the same PostgreSQL and Redis
+ *
+ *  - `primary` behaves like a regular PeerTube:
+ *    - runs the migrations
+ *    - runs all the schedulers
+ *    - handle the live server
+ *    - runs the tracker
+ *    - runs every job worker
+ *    - sends its configuration to secondary servers
+ *  - `secondary` is an "help" process for the primary:
+ *    - serves the API, the ActivityPub endpoints (including the inbox) and the files in object storage, and tracks views
+ *    - answers 421 to the endpoints only the primary can serve (see the `primaryOnly` middleware), so the reverse proxy replays them on it
+ *    - consumes an allow list of job types
+ *    - never runs migrations
+ *    - never runs schedulers that flush data to PostgreSQL
+ *    - fetches a small subset of the configuration from a YAML file, and the complete configuration from the primary
+ *    - requires object storage: it never uses the files of the primary on the file system
+ *
+ * Every process owns its storage directories.
+ *
+ * The role is read from `--role` on the command line, or from the `PEERTUBE_PROCESS_ROLE`
+ * It is parsed manually rather than commander because of ESM hoisting and configuration importation
+ */
+
+import { createCommand } from '@commander-js/extra-typings'
+import { getServerCLIOptions, setServerCLIOptions } from './core/initializers/cli-options.js'
+import { registerOpentelemetryTracing } from './core/lib/opentelemetry/tracing.js'
+
+const options = createCommand()
+  .option('--no-client', 'Start PeerTube without client interface')
+  .option('--no-plugins', 'Start PeerTube without plugins/themes enabled')
+  .option('--benchmark-startup', 'Automatically stop server when initialized')
+  // Declared so commander does not reject it, but we read it directly from `process.argv`
+  // Because it's used to alter the config, that is built early in the initialization process (ESM hoisting)
+  .option(
+    '--role <role>',
+    'Process role: "primary" (default) runs the whole instance, "secondary" helps the primary to serve the requests'
+  )
+  .parse(process.argv)
+  .opts()
+
+setServerCLIOptions({
+  client: options.client,
+  plugins: options.plugins,
+  benchmarkStartup: options.benchmarkStartup === true
+})
+
 await registerOpentelemetryTracing()
 
 process.title = 'peertube'
@@ -8,7 +55,7 @@ import { checkFFmpeg, checkMissedConfig, checkNodeVersion } from './core/initial
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { initI18n, useI18n } from '@server/helpers/i18n.js'
-import { createLogger } from './core/helpers/logger.js'
+import { createLogger, flushLogs } from './core/helpers/logger.js'
 import { CONFIG } from './core/initializers/config.js'
 import { API_VERSION, WEBSERVER, loadLanguages } from './core/initializers/constants.js'
 
@@ -33,7 +80,12 @@ try {
   process.exit(-1)
 }
 
-import { checkActivityPubUrls, checkConfig, checkFFmpegVersion } from './core/initializers/checker-after-init.js'
+import {
+  checkActivityPubUrls,
+  checkConfig,
+  checkFFmpegVersion,
+  checkObjectStorageBucketsConnectivity
+} from './core/initializers/checker-after-init.js'
 
 try {
   checkConfig()
@@ -49,7 +101,14 @@ import { checkDatabaseConnectionOrDie, initDatabaseModels } from './core/initial
 checkDatabaseConnectionOrDie()
 
 import { migrate } from './core/initializers/migrator.js'
-migrate()
+import { getProcessRole, isSecondaryProcess } from './core/initializers/process-role.js'
+
+// Only the primary process migrates: two processes booting at the same time would race on the schema
+const migrated = isSecondaryProcess()
+  ? Promise.resolve()
+  : migrate()
+
+migrated
   .then(() => initDatabaseModels(false))
   .then(() => startApplication())
   .catch(err => {
@@ -64,7 +123,6 @@ Promise.all([
 ]).catch(err => logger.error('Cannot load i18n/languages', { err }))
 
 // Express configuration
-import { program as cli } from 'commander'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
@@ -117,8 +175,12 @@ import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove
 import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
 import { VideoChannelSyncLatestScheduler } from '@server/lib/schedulers/video-channel-sync-latest-scheduler.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { StatsManager } from '@server/lib/stat-manager.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
-import { ApplicationModel } from '@server/models/application/application.js'
+import { initUploadxStorages } from '@server/lib/uploadx.js'
+import { ApplicationModel, clearServerActorCache } from '@server/models/application/application.js'
+import { ModelCache } from '@server/models/shared/model-cache.js'
+import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import {
   activityPubRouter,
   apiRouter,
@@ -137,43 +199,46 @@ import {
   wellKnownRouter
 } from './core/controllers/index.js'
 import { isHTTPSignatureDigestValid } from './core/helpers/peertube-crypto.js'
-import { installApplication } from './core/initializers/installer.js'
+import { ConfigDistribution } from './core/initializers/config/config-distribution.js'
+import { installPrimary, installSecondary } from './core/initializers/installer.js'
+import { TokensCache } from './core/lib/auth/tokens-cache.js'
 import { Emailer } from './core/lib/emailer.js'
+import { resetFilesCacheOfOtherStorage } from './core/lib/files-cache/reset-files-cache.js'
+import { removeRedundanciesOfOtherStorage } from './core/lib/redundancy.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
+import { HorizontalScalabilityStorage } from './core/lib/horizontal-scalability-storage.js'
+import { ClientHtml } from './core/lib/html/client-html.js'
 import { JobQueue } from './core/lib/job-queue/index.js'
 import { LiveManager } from './core/lib/live/index.js'
 import { PeerTubeSocket } from './core/lib/peertube-socket.js'
 import { Hooks } from './core/lib/plugins/hooks.js'
 import { PluginManager } from './core/lib/plugins/plugin-manager.js'
-import { Redis } from './core/lib/redis.js'
+import { Redis } from './core/lib/redis/index.js'
 import { ActorFollowScheduler } from './core/lib/schedulers/actor-follow-scheduler.js'
 import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-index-instances.js'
 import { BlocklistSubscriptionsScheduler } from './core/lib/schedulers/blocklist-subscriptions-scheduler.js'
 import { GeoIPUpdateScheduler } from './core/lib/schedulers/geo-ip-update-scheduler.js'
+import { LocalVideoStatsBufferScheduler } from './core/lib/schedulers/local-video-stats-buffer-scheduler.js'
 import { ManualMigrationScriptsScheduler } from './core/lib/schedulers/manual-migration-scripts-scheduler.js'
 import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
 import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
+import { RemoveDanglingStagingFilesScheduler } from './core/lib/schedulers/remove-dangling-staging-files-scheduler.js'
 import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
 import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
 import { RemoveOldUserLoginDevicesScheduler } from './core/lib/schedulers/remove-old-user-login-devices-scheduler.js'
 import { RunnerJobWatchDogScheduler } from './core/lib/schedulers/runner-job-watch-dog-scheduler.js'
 import { UpdateVideosScheduler } from './core/lib/schedulers/update-videos-scheduler.js'
-import { VideoStatsBufferScheduler } from './core/lib/schedulers/video-stats-buffer-scheduler.js'
+import { VideoFilesLifecycleScheduler } from './core/lib/schedulers/video-files-lifecycle-scheduler.js'
 import { VideosRedundancyScheduler } from './core/lib/schedulers/videos-redundancy-scheduler.js'
 import { WatchedWordsSubscriptionsScheduler } from './core/lib/schedulers/watched-words-subscriptions-scheduler.js'
 import { YoutubeDlUpdateScheduler } from './core/lib/schedulers/youtube-dl-update-scheduler.js'
-import { registerGracefulShutdown } from './core/lib/shutdown.js'
+import { registerGracefulShutdown, shutdownAndExit } from './core/lib/shutdown.js'
+import { updateTorrentsTrackersIfNeeded } from './core/lib/torrent-trackers.js'
+import { watchYoutubeDLCookies } from './core/lib/youtube-dl-cookies.js'
 import { advertiseDoNotTrack } from './core/middlewares/dnt.js'
 import { apiFailMiddleware } from './core/middlewares/error.js'
-
-// ----------- Command line -----------
-
-cli
-  .option('--no-client', 'Start PeerTube without client interface')
-  .option('--no-plugins', 'Start PeerTube without plugins/themes enabled')
-  .option('--benchmark-startup', 'Automatically stop server when initialized')
-  .parse(process.argv)
+import { primaryOnly } from './core/middlewares/primary-only.js'
 
 // ----------- App -----------
 
@@ -236,6 +301,12 @@ OpenTelemetryMetrics.Instance.init(app)
 
 // ----------- Views, routes and static files -----------
 
+const cliOptions = getServerCLIOptions()
+
+const secondary = isSecondaryProcess()
+
+app.use([ '/tracker', '/static' ], primaryOnly)
+
 app.use('/api/' + API_VERSION, apiRouter)
 
 // Services (oembed...)
@@ -264,7 +335,6 @@ app.use(cookieParser())
 app.use('/', pluginsRouter)
 
 // Client files, last valid routes!
-const cliOptions = cli.opts<{ client: boolean, plugins: boolean }>()
 if (cliOptions.client) app.use('/', clientsRouter)
 
 // ----------- Errors -----------
@@ -309,48 +379,97 @@ async function startApplication () {
   const port = CONFIG.LISTEN.PORT
   const hostname = CONFIG.LISTEN.HOSTNAME
 
-  await installApplication()
+  if (!secondary) {
+    await installPrimary()
 
-  // Check activity pub urls are valid
-  checkActivityPubUrls()
-    .catch(err => {
-      logger.error('Error in ActivityPub URLs checker.', { err })
-      process.exit(-1)
-    })
+    // Check activity pub urls are valid
+    checkActivityPubUrls()
+      .catch(err => {
+        logger.error('Error in ActivityPub URLs checker.', { err })
+        process.exit(-1)
+      })
+  } else {
+    await installSecondary()
+  }
 
   checkFFmpegVersion()
     .catch(err => logger.error('Cannot check ffmpeg version', { err }))
 
+  try {
+    await checkObjectStorageBucketsConnectivity()
+  } catch (err) {
+    logger.error('Cannot run with the current object storage configuration.', { err })
+
+    await flushLogs()
+    process.exit(1)
+  }
+
+  await initUploadxStorages()
+
   Redis.Instance.init()
-  Emailer.Instance.init()
+
+  // The primary publishes its configuration here, a secondary subscribes to the changes
+  // Secondary already fetched it while the module graph was loading
+  await ConfigDistribution.Instance.init()
+
+  // Secondary that cannot reach the files of the primary refuses to start
+  await HorizontalScalabilityStorage.Instance.init()
+
+  // Propagating token revocations to evict them from the LRU cache
+  await TokensCache.Instance.listenForInvalidations()
+
+  // Keep model cache in sync with the changes handled by the other ones
+  await ModelCache.Instance.listenForInvalidations()
+  await WatchedWordsListModel.listenForRegexCacheInvalidations()
+  await ServerConfigManager.Instance.listenForHomepageChanges()
+
+  ModelCache.Instance.registerCacheTypeClearedHandler('server-account', () => {
+    clearServerActorCache()
+
+    ClientHtml.invalidateCache()
+  })
+
   JobQueue.Instance.init()
+  await JobQueue.Instance.listenForStateChanges()
+  await JobQueue.Instance.listenForJobCancels()
+
+  // A secondary only pushes emails to the job queue, the primary is the process that sends them
+  if (!secondary) Emailer.Instance.init()
 
   await Promise.all([
-    Emailer.Instance.checkConnection(),
+    secondary
+      ? Promise.resolve()
+      : Emailer.Instance.checkConnection(),
     ServerConfigManager.Instance.init()
   ])
 
-  // Enable Schedulers
-  ActorFollowScheduler.Instance.enable()
-  UpdateVideosScheduler.Instance.enable()
-  YoutubeDlUpdateScheduler.Instance.enable()
-  VideosRedundancyScheduler.Instance.enable()
-  RemoveOldHistoryScheduler.Instance.enable()
-  RemoveOldStatsScheduler.Instance.enable()
-  PluginsCheckScheduler.Instance.enable()
-  PeerTubeVersionCheckScheduler.Instance.enable()
-  AutoFollowIndexInstances.Instance.enable()
-  BlocklistSubscriptionsScheduler.Instance.enable()
-  WatchedWordsSubscriptionsScheduler.Instance.enable()
-  RemoveDanglingResumableUploadsScheduler.Instance.enable()
-  VideoChannelSyncLatestScheduler.Instance.enable()
-  VideoStatsBufferScheduler.Instance.enable()
+  // These schedulers are only supported in the primary
+  if (!secondary) {
+    ActorFollowScheduler.Instance.enable()
+    UpdateVideosScheduler.Instance.enable()
+    VideosRedundancyScheduler.Instance.enable()
+    RemoveOldHistoryScheduler.Instance.enable()
+    RemoveOldStatsScheduler.Instance.enable()
+    PluginsCheckScheduler.Instance.enable()
+    PeerTubeVersionCheckScheduler.Instance.enable()
+    AutoFollowIndexInstances.Instance.enable()
+    BlocklistSubscriptionsScheduler.Instance.enable()
+    WatchedWordsSubscriptionsScheduler.Instance.enable()
+    RemoveDanglingResumableUploadsScheduler.Instance.enable()
+    RemoveDanglingStagingFilesScheduler.Instance.enable()
+    VideoChannelSyncLatestScheduler.Instance.enable()
+    LocalVideoStatsBufferScheduler.Instance.enable()
+    RunnerJobWatchDogScheduler.Instance.enable()
+    RemoveExpiredUserExportsScheduler.Instance.enable()
+  }
+
+  // These ones must also be run on the secondary
   GeoIPUpdateScheduler.Instance.enable()
-  RunnerJobWatchDogScheduler.Instance.enable()
-  RemoveExpiredUserExportsScheduler.Instance.enable()
+  YoutubeDlUpdateScheduler.Instance.enable() // Each process has its own binary, used by video imports
   UpdateTokenSessionScheduler.Instance.enable()
   RemoveOldUserLoginDevicesScheduler.Instance.enable()
   ManualMigrationScriptsScheduler.Instance.enable()
+  VideoFilesLifecycleScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })
 
@@ -359,30 +478,80 @@ async function startApplication () {
   PluginManager.Instance.registerWebSocketRouter()
 
   PeerTubeSocket.Instance.init(server)
-  VideoStatsManager.Instance.init()
 
-  updateStreamingPlaylistsInfohashesIfNeeded()
-    .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
+  // The secondary ingests views but never owns the flush/federation loops (primary role)
+  VideoStatsManager.Instance.init({ enableDatabaseFlush: !secondary })
 
-  LiveManager.Instance.init()
-  if (CONFIG.LIVE.ENABLED) await LiveManager.Instance.run()
+  // Primary only
+  if (!secondary) {
+    // The inbox stats of every process are counted since the start of the primary
+    await StatsManager.Instance.resetInboxStats()
+
+    // Before serving lazy static files
+    try {
+      await resetFilesCacheOfOtherStorage()
+    } catch (err) {
+      logger.error('Cannot reset the cache of remote files.', { err })
+    }
+
+    updateStreamingPlaylistsInfohashesIfNeeded()
+      .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
+
+    updateTorrentsTrackersIfNeeded()
+      .catch(err => logger.error('Cannot update the trackers of local torrent files.', { err }))
+
+    removeRedundanciesOfOtherStorage()
+      .catch(err => logger.error('Cannot remove redundancies of the previous storage.', { err }))
+
+    LiveManager.Instance.init()
+    await LiveManager.Instance.listenForSessionStopRequests()
+    watchYoutubeDLCookies()
+
+    if (CONFIG.LIVE.ENABLED) await LiveManager.Instance.run()
+  }
 
   // Make server listening
   server.listen(port, hostname, async () => {
+    // Plugins are registered by both roles so that filter/action hooks behave the same way
+    // The primary owns which plugins are installed and the secondary keeps in sync from the primary in its own plugin directory
     if (cliOptions.plugins) {
       try {
-        await PluginManager.Instance.removeUnsecurePluginsIfNeededBeforeRegistration()
+        let syncedNpmNames: Set<string>
+
+        if (secondary) {
+          // Registered below, after the native plugins rebuild
+          syncedNpmNames = await PluginManager.Instance.syncPlugins({ register: false })
+        } else {
+          await PluginManager.Instance.removeUnsecurePluginsIfNeededBeforeRegistration()
+        }
 
         await PluginManager.Instance.rebuildNativePluginsIfNeeded()
 
         await PluginManager.Instance.registerPluginsAndThemes()
+
+        if (secondary) {
+          // Registration reads the database again, so it can see plugins the primary installed after the sync
+          const notRegistered = await PluginManager.Instance.listPluginsOnlyRegisteredByPrimary(syncedNpmNames)
+          if (notRegistered.length !== 0) return exitOnPluginDivergence(notRegistered)
+
+          // Only after the initial registration, so a notification cannot race it
+          await PluginManager.Instance.listenForPluginChanges({ onDivergedFromPrimary: exitOnPluginDivergence })
+        } else {
+          await PluginManager.Instance.listenForPluginSettingsChanges()
+        }
       } catch (err) {
         logger.error('Cannot register plugins and themes.', { err })
       }
+    } else if (!secondary) {
+      // The secondaries would otherwise compare their plugins with the ones of a previous run
+      Redis.Instance.deletePrimaryRegisteredPlugins()
+        .catch(err => logger.error('Cannot clear the plugins registered by a previous run.', { err }))
     }
 
-    ApplicationModel.updateNodeVersionsOrConfig()
-      .catch(err => logger.error('Cannot update node versions.', { err }))
+    if (!secondary) {
+      ApplicationModel.updateConfigPart()
+        .catch(err => logger.error('Cannot update the stored configuration part.', { err }))
+    }
 
     JobQueue.Instance.start()
       .catch(err => {
@@ -390,11 +559,22 @@ async function startApplication () {
         process.exit(-1)
       })
 
-    logger.info('HTTP server listening on %s:%d', hostname, port)
+    logger.info('HTTP server listening on %s:%d as %s process', hostname, port, getProcessRole())
     logger.info('Web server: %s', WEBSERVER.URL)
 
     Hooks.runAction('action:application.listening')
 
-    if (cliOptions['benchmarkStartup']) process.exit(0)
+    if (cliOptions.benchmarkStartup) process.exit(0)
   })
+}
+
+// A secondary that failed to register a plugin the primary runs would not serve the same platform
+// We must exit the program
+function exitOnPluginDivergence (npmNames: string[]) {
+  logger.error(
+    `This process failed to register ${npmNames.join(', ')}, which the primary process runs. ` +
+      'Exiting so it is restarted and retries, see the plugin errors above.'
+  )
+
+  shutdownAndExit(1)
 }

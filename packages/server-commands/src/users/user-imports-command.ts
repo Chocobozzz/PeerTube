@@ -2,7 +2,6 @@ import { HttpStatusCode, HttpStatusCodeType, UserImport, UserImportUploadResult 
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class UserImportsCommand extends AbstractCommand {
-
   importArchive (options: OverrideCommandOptions & {
     userId: number
     fixture: string

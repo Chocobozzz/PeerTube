@@ -27,7 +27,6 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MChannel, MChannelAccountLight, MUserAccountId, MVideoFileInfoHash, MVideoFull } from '@server/types/models/index.js'
 import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { FfprobeData } from 'fluent-ffmpeg'
-import { move } from 'fs-extra/esm'
 import { getLocalVideoActivityPubUrl } from './activitypub/url.js'
 import { scheduleVideoFederation } from './activitypub/videos/federate.js'
 import { createVideoAutomaticTagsJob } from './automatic-tags/automatic-tags.js'
@@ -35,9 +34,8 @@ import { Hooks } from './plugins/hooks.js'
 import { createLocalVideoThumbnailsFromImage, createLocalVideoThumbnailsFromVideo } from './thumbnail.js'
 import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
 import { replaceChapters, replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
-import { buildNewFile, createVideoSource } from './video-file.js'
+import { buildNewFile, createVideoSource, FFmpegInput, storeNewWebVideoFile } from './video-file.js'
 import { addVideoJobsAfterCreation } from './video-jobs.js'
-import { VideoPathManager } from './video-path-manager.js'
 import { setVideoTags } from './video.js'
 
 const logger = createLogger('video')
@@ -80,9 +78,14 @@ type VideoAttributeHookFilter =
   | 'filter:api.video.upload.video-attribute.result'
   | 'filter:api.video.live.video-attribute.result'
 
+type FileInput = {
+  input: { path: string } | { url: string, size: number, extname: string, stagingKey: string }
+  probe: FfprobeData
+}
+
 export class LocalVideoCreator {
-  private readonly videoFilePath: string | undefined
-  private readonly videoFileProbe: FfprobeData
+  private readonly fileInput: FileInput | undefined
+  private readonly fileInputProbe: FfprobeData
 
   private readonly videoAttributes: VideoAttributes
   private readonly liveAttributes: LiveAttributes | undefined
@@ -92,14 +95,15 @@ export class LocalVideoCreator {
 
   private video: MVideoFull
   private videoFile: MVideoFileInfoHash
-  private videoPath: string
+  private storedFileInput: FFmpegInput
+  private videoFileInput: string // Local path or URL (staging) read to generate thumbnails
+
+  private cleanupLocalVideoFile: () => Promise<void>
+  private rollbackLocalVideoFile: () => Promise<void>
 
   constructor (
     private readonly options: {
-      videoFile: {
-        path: string
-        probe: FfprobeData
-      }
+      fileInput: FileInput | null // null with a live
 
       videoAttributes: VideoAttributes
       liveAttributes: LiveAttributes
@@ -116,8 +120,8 @@ export class LocalVideoCreator {
       }
     }
   ) {
-    this.videoFilePath = options.videoFile?.path
-    this.videoFileProbe = options.videoFile?.probe
+    this.fileInput = options.fileInput
+    this.fileInputProbe = options.fileInput?.probe
 
     this.videoAttributes = options.videoAttributes
     this.liveAttributes = options.liveAttributes
@@ -132,22 +136,51 @@ export class LocalVideoCreator {
       await Hooks.wrapObject(this.buildVideo(this.videoAttributes, this.channel), this.videoAttributeResultHook)
     )
 
-    return logger.withContext([ this.video.uuid ], () => this.runCreate())
+    return logger.withContext([ this.video.uuid ], async () => {
+      try {
+        const result = await this.runCreate()
+        await this.cleanupLocalVideoFile?.()
+
+        return result
+      } catch (err) {
+        await this.rollbackLocalVideoFile?.()
+        throw err
+      }
+    })
   }
 
   private async runCreate () {
     this.video.VideoChannel = this.channel
     this.video.url = getLocalVideoActivityPubUrl(this.video)
 
-    if (this.videoFilePath) {
+    if (this.fileInput) {
+      const { input } = this.fileInput
+
       this.videoFile = await buildNewFile({
-        path: this.videoFilePath,
+        input,
         mode: 'web-video',
-        ffprobe: this.videoFileProbe
+        ffprobe: this.fileInputProbe
       }) as MVideoFileInfoHash
 
-      this.videoPath = VideoPathManager.Instance.getFSVideoFileOutputPath(this.video, this.videoFile)
-      await move(this.videoFilePath, this.videoPath)
+      // Keep a local copy of the file until the end of the creation, even if it is stored in object storage
+      // A staged file is copied server side instead, and read from its staging URL
+      const { localPath, cleanup, rollback } = await storeNewWebVideoFile({
+        video: this.video,
+        videoFile: this.videoFile,
+        input
+      })
+
+      // The local copy if any or the original input (staging URL)
+      this.storedFileInput = localPath
+        ? { path: localPath }
+        : input
+
+      this.videoFileInput = 'path' in this.storedFileInput
+        ? this.storedFileInput.path
+        : this.storedFileInput.url
+
+      this.cleanupLocalVideoFile = cleanup
+      this.rollbackLocalVideoFile = rollback
 
       this.video.aspectRatio = buildAspectRatio({ width: this.videoFile.width, height: this.videoFile.height })
     }
@@ -278,8 +311,8 @@ export class LocalVideoCreator {
     if (this.videoAttributes.inputFilename) {
       await createVideoSource({
         inputFilename: this.videoAttributes.inputFilename,
-        inputPath: this.videoPath,
-        inputProbe: this.videoFileProbe,
+        inputFile: this.storedFileInput,
+        inputProbe: this.fileInputProbe,
         video: this.video
       })
     }
@@ -306,7 +339,8 @@ export class LocalVideoCreator {
     return createLocalVideoThumbnailsFromVideo({
       video: this.video,
       videoFile: this.videoFile,
-      ffprobe: this.videoFileProbe
+      fileInput: this.videoFileInput,
+      ffprobe: this.fileInputProbe
     })
   }
 

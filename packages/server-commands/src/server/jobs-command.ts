@@ -1,5 +1,5 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, Job, JobState, JobType, ResultList } from '@peertube/peertube-models'
+import { HttpStatusCode, Job, JobState, JobType, ProcessRole, ResultList } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class JobsCommand extends AbstractCommand {
@@ -13,25 +13,31 @@ export class JobsCommand extends AbstractCommand {
     return data[0]
   }
 
-  pauseJobQueue (options: OverrideCommandOptions = {}) {
+  pauseJobQueue (options: OverrideCommandOptions & {
+    processRoles?: ProcessRole[]
+  } = {}) {
     const path = '/api/v1/jobs/pause'
 
     return this.postBodyRequest({
       ...options,
 
       path,
+      fields: pick(options, [ 'processRoles' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
   }
 
-  resumeJobQueue (options: OverrideCommandOptions = {}) {
+  resumeJobQueue (options: OverrideCommandOptions & {
+    processRoles?: ProcessRole[]
+  } = {}) {
     const path = '/api/v1/jobs/resume'
 
     return this.postBodyRequest({
       ...options,
 
       path,
+      fields: pick(options, [ 'processRoles' ]),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })

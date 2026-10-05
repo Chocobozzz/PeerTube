@@ -104,7 +104,7 @@ export const generateVideoCaptionValidator = [
       if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) !== true) {
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          message: req.t('Only admins can force transcription')
+          message: req.t('Only moderators and administrators can force transcription')
         })
       }
 

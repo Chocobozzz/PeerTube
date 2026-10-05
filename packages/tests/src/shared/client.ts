@@ -72,11 +72,13 @@ export async function prepareClientTests () {
   let privateVideoId: string
   let internalVideoId: string
   let unlistedVideoId: string
+  let unlistedVideoNumericId: number
   let passwordProtectedVideoId: string
 
   let playlistIds: (string | number)[] = []
   let privatePlaylistId: string
   let unlistedPlaylistId: string
+  let unlistedPlaylistNumericId: number
 
   const videoName = 'my super name for server 1'
   const videoDescription = 'my<br> super __description__ for *server* 1<p></p>'
@@ -111,7 +113,10 @@ export async function prepareClientTests () {
 
   {
     ;({ uuid: privateVideoId } = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE }))
-    ;({ uuid: unlistedVideoId } = await servers[0].videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED }))
+    ;({ uuid: unlistedVideoId, id: unlistedVideoNumericId } = await servers[0].videos.quickUpload({
+      name: 'unlisted',
+      privacy: VideoPrivacy.UNLISTED
+    }))
     ;({ uuid: internalVideoId } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL }))
     ;({ uuid: passwordProtectedVideoId } = await servers[0].videos.quickUpload({
       name: 'password protected',
@@ -145,8 +150,9 @@ export async function prepareClientTests () {
         videoChannelId: servers[0].store.channel.id
       }
 
-      const { uuid } = await servers[0].playlists.create({ attributes })
+      const { uuid, id } = await servers[0].playlists.create({ attributes })
       unlistedPlaylistId = uuid
+      unlistedPlaylistNumericId = id
     }
 
     {
@@ -185,9 +191,11 @@ export async function prepareClientTests () {
 
     privatePlaylistId,
     unlistedPlaylistId,
+    unlistedPlaylistNumericId,
 
     privateVideoId,
     unlistedVideoId,
+    unlistedVideoNumericId,
     internalVideoId,
     passwordProtectedVideoId,
 

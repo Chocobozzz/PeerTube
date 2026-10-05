@@ -1,6 +1,6 @@
-import express from 'express'
 import { HttpStatusCode, ServerFollowCreate, UserRight } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
+import express from 'express'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sequelizeTypescript } from '../../../initializers/database.js'
@@ -32,6 +32,7 @@ import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 const logger = createLogger()
 
 const serverFollowsRouter = express.Router()
+
 serverFollowsRouter.get(
   '/following',
   listFollowsValidator,

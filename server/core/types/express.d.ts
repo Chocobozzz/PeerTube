@@ -34,7 +34,7 @@ import {
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
-  MVideoThumbnails,
+  MVideoThumbnailsBlacklist,
   MVideoWithBlacklist,
   MVideoWithRights,
   MWatchedWordsList,
@@ -96,28 +96,39 @@ declare module 'express' {
 
   // ---------------------------------------------------------------------------
 
-  // Upload file with a duration added by our middleware
-  export type VideoLegacyUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size' | 'originalname'> & {
+  export type VideoUploadMetadata = {
     duration?: number
+
+    // Local path to the uploaded video file or temporary path for staged uploads (filled by `makeUploadXFileAvailableForHookIfNeeded()`)
+    path: string
+
+    // Resumable uploads streamed to object storage staging
+    stagingKey?: string
+    ffmpegInput?: string
   }
+
+  // Upload file with a duration added by our middleware
+  export type VideoLegacyUploadFile = Pick<Express.Multer.File, 'path' | 'filename' | 'size' | 'originalname'> & VideoUploadMetadata
 
   // Our custom UploadXFile object using our custom metadata
   export type CustomUploadXFile<T extends Metadata> = UploadXFile & { metadata: T }
 
-  export type EnhancedUploadXFile = CustomUploadXFile<Metadata> & {
-    duration?: number // If video file
-    path: string
+  export type VideoUploadXFile<T extends Metadata> = CustomUploadXFile<T> & VideoUploadMetadata & {
     filename: string
     originalname: string
   }
 
-  // Extends Metadata property of UploadX object when uploading a video
-  export type UploadNewVideoXFileMetadata = Metadata & VideoCreate & {
-    previewfile: Express.Multer.File[]
-    thumbnailfile: Express.Multer.File[]
+  export type ResumableUploadImageFile = Express.Multer.File & {
+    // Set when resumable uploads are staged in object storage, so the process receiving the last chunk can get it
+    // `path` is then only set once this process downloaded the file (makeResumableUploadImagesAvailable())
+    stagingKey?: string
   }
 
-  export type UploadNewVideoUploadXFile = EnhancedUploadXFile & CustomUploadXFile<UploadNewVideoXFileMetadata>
+  // Extends Metadata property of UploadX object when uploading a video
+  export type UploadNewVideoXFileMetadata = Metadata & VideoCreate & {
+    previewfile: ResumableUploadImageFile[]
+    thumbnailfile: ResumableUploadImageFile[]
+  }
 
   // Extends Response with added functions and potential variables passed by middlewares
   interface Response {
@@ -161,7 +172,7 @@ declare module 'express' {
       videoImmutable?: MVideoImmutable
       videoWithBlacklist?: MVideoWithBlacklist
       videoWithRights?: MVideoWithRights
-      videoThumbnails?: MVideoThumbnails
+      videoThumbnailsBlacklist?: MVideoThumbnailsBlacklist
       videoId?: MVideoId
 
       videoLive?: MVideoLiveWithSettingSchedules
@@ -178,11 +189,20 @@ declare module 'express' {
         size: number
         originalname: string
       }
-      uploadVideoFileResumable?: UploadNewVideoUploadXFile
-      updateVideoFileResumable?: EnhancedUploadXFile
-      importUserFileResumable?: EnhancedUploadXFile
+      uploadVideoFileResumable?: VideoUploadXFile<UploadNewVideoXFileMetadata>
+      updateVideoFileResumable?: VideoUploadXFile<Metadata>
+      importUserFileResumable?: VideoUploadXFile<Metadata>
 
       videoImport?: MVideoImportDefault
+
+      // Torrent file of a new video import, parsed and handed over to the process that will run the import job
+      videoImportTorrentFile?: {
+        name: string
+        torrentName: string
+
+        torrentPath: string | null
+        torrentStagingKey?: string
+      }
 
       videoBlacklist?: MVideoBlacklist
 

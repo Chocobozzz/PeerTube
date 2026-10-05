@@ -18,6 +18,7 @@ import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import {
   approximateIntroOutroAdditionalSize,
+  makeStudioTaskFilesAvailable,
   onVideoStudioEnded,
   onVideoStudioFailed,
   safeCleanupStudioTMPFiles
@@ -40,6 +41,8 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
   const payload = job.data as VideoStudioEditionPayload
   const isNewVideo = !!payload.sourceVideoUUID
 
+  const taskFiles = pick(payload, [ 'tasks', 'taskFilesStaged' ])
+
   // Inner functions (processTask, buildFFmpegEdition...) inherit these tags without having to inject them
   const run = () =>
     logger.withContext([ payload.videoUUID ], async () => {
@@ -54,7 +57,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
         if (!video) {
           logger.info('Can\'t process job %d, video does not exist.', job.id)
 
-          await safeCleanupStudioTMPFiles(payload.tasks)
+          await safeCleanupStudioTMPFiles(taskFiles)
           return undefined
         }
 
@@ -66,57 +69,59 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
         if (!inputVideo) {
           logger.info('Can\'t process job %d, source video %s does not exist.', job.id, payload.sourceVideoUUID)
 
-          await safeCleanupStudioTMPFiles(payload.tasks)
+          await safeCleanupStudioTMPFiles(taskFiles)
           await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo })
           return undefined
         }
 
-        await checkUserQuotaOrThrow({ video, inputVideo, payload, isNewVideo })
+        const editionResultPath = await makeStudioTaskFilesAvailable(taskFiles, async tasks => {
+          await checkUserQuotaOrThrow({ video, inputVideo, tasks, isNewVideo })
 
-        await inputVideo.reload()
+          await inputVideo.reload()
 
-        const editionResultPath = await VideoPathManager.Instance.makeAvailableMaxQualityFiles(inputVideo, async ({
-          videoPath: originalVideoFilePath,
-          separatedAudioPath
-        }) => {
-          let tmpInputFilePath: string
-          let outputPath: string
+          return VideoPathManager.Instance.makeAvailableMaxQualityFiles(inputVideo, async ({
+            videoPath: originalVideoFilePath,
+            separatedAudioPath
+          }) => {
+            let tmpInputFilePath: string
+            let outputPath: string
 
-          for (const task of payload.tasks) {
-            const outputFilename = buildUUID() + extname(originalVideoFilePath)
-            outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
+            for (const task of tasks) {
+              const outputFilename = buildUUID() + extname(originalVideoFilePath)
+              outputPath = join(CONFIG.STORAGE.TMP_DIR, outputFilename)
 
-            await processTask({
-              videoInputPath: tmpInputFilePath ?? originalVideoFilePath,
+              await processTask({
+                videoInputPath: tmpInputFilePath ?? originalVideoFilePath,
 
-              separatedAudioInputPath: tmpInputFilePath
-                ? undefined
-                : separatedAudioPath,
+                separatedAudioInputPath: tmpInputFilePath
+                  ? undefined
+                  : separatedAudioPath,
 
-              inputFileMutexReleaser,
+                inputFileMutexReleaser,
 
-              video: inputVideo,
-              outputPath,
-              task,
+                video: inputVideo,
+                outputPath,
+                task,
 
-              abortSignal
-            })
+                abortSignal
+              })
 
-            if (tmpInputFilePath) await remove(tmpInputFilePath)
+              if (tmpInputFilePath) await remove(tmpInputFilePath)
 
-            // For the next iteration
-            tmpInputFilePath = outputPath
-            inputFileMutexReleaser = undefined
-          }
+              // For the next iteration
+              tmpInputFilePath = outputPath
+              inputFileMutexReleaser = undefined
+            }
 
-          return outputPath
+            return outputPath
+          })
         })
 
         logger.info('Video edition ended for video %s.', video.uuid)
 
-        await onVideoStudioEnded({ video, editionResultPath, tasks: payload.tasks, isNewVideo })
+        await onVideoStudioEnded({ video, editionResultPath, taskFiles, isNewVideo })
       } catch (err) {
-        await safeCleanupStudioTMPFiles(payload.tasks)
+        await safeCleanupStudioTMPFiles(taskFiles)
 
         try {
           await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo })
@@ -236,15 +241,15 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
 async function checkUserQuotaOrThrow (options: {
   video: MVideoFull
   inputVideo: MVideoFull
-  payload: VideoStudioEditionPayload
+  tasks: VideoStudioTaskPayload[]
   isNewVideo: boolean
 }) {
-  const { video, inputVideo, payload, isNewVideo } = options
+  const { video, inputVideo, tasks, isNewVideo } = options
   const user = await UserModel.loadByVideoId(video.id)
 
-  const filePathFinder = (i: number) => (payload.tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
+  const filePathFinder = (i: number) => (tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
 
-  let additionalBytes = await approximateIntroOutroAdditionalSize(inputVideo, payload.tasks, filePathFinder)
+  let additionalBytes = await approximateIntroOutroAdditionalSize(inputVideo, tasks, filePathFinder)
 
   // The source files are kept, so the result is extra usage: use the source size as an upper bound (cuts make it smaller)
   if (isNewVideo) additionalBytes += inputVideo.getMaxQualityBytes()

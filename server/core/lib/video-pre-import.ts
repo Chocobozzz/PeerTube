@@ -14,6 +14,7 @@ import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
 import { guessLanguageFromReq, t } from '@server/helpers/i18n.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode, YoutubeDLInfo, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
+import { getYoutubeDLCookiesPathIfEnabled } from '@server/lib/youtube-dl-cookies.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -188,7 +189,8 @@ export async function buildYoutubeDLImport (options: {
   const youtubeDL = new YoutubeDLWrapper(
     targetUrl,
     ServerConfigManager.Instance.getEnabledResolutions('vod'),
-    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+    await getYoutubeDLCookiesPathIfEnabled()
   )
 
   // Get video infos
@@ -374,7 +376,11 @@ async function processYoutubeSubtitles (options: {
 }
 
 async function hasUnicastURLsOnly (youtubeDLInfo: YoutubeDLInfo) {
-  const hosts = youtubeDLInfo.urls.map(u => new URL(u).hostname)
+  const urls = youtubeDLInfo.webpageUrl
+    ? [ ...youtubeDLInfo.urls, youtubeDLInfo.webpageUrl ]
+    : youtubeDLInfo.urls
+
+  const hosts = urls.map(u => new URL(u).hostname)
   const uniqHosts = new Set(hosts)
 
   for (const h of uniqHosts) {
