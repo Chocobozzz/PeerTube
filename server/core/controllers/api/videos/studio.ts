@@ -30,6 +30,7 @@ import {
 } from '@peertube/peertube-models'
 import { asyncMiddleware, authenticate, videoStudioAddEditionValidator } from '../../../middlewares/index.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
+import { MVideoFull } from '@server/types/models/index.js'
 
 const studioRouter = express.Router()
 
@@ -82,15 +83,15 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
 
   const tasks = await Bluebird.mapSeries(body.tasks, (t, i) => buildTaskPayload(t, i, files))
 
-  // The source video is left untouched: the result is saved in a new video that the user can edit while it is processing
-  const newVideo = body.saveAsNewVideo === true
-    ? await createNewVideoForStudio({ sourceVideo, user, name: sourceVideo.name })
-    : undefined
-
-  const video = newVideo ?? sourceVideo
+  let newVideo: MVideoFull | undefined
+  let video = sourceVideo
 
   try {
-    if (!newVideo) {
+    // The source video is left untouched: the result is saved in a new video that the user can edit while it is processing
+    if (body.saveAsNewVideo === true) {
+      newVideo = await createNewVideoForStudio({ sourceVideo, user, name: sourceVideo.name })
+      video = newVideo
+    } else {
       video.state = VideoState.TO_EDIT
       await video.save()
     }
