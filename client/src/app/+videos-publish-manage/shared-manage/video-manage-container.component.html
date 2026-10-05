@@ -23,6 +23,7 @@
               theme="secondary" class="save-as-new-button"
               icon="circle-tick"
               [disabled]="isUpdating"
+              [loading]="isSavingAsNew"
               (click)="onWantToSaveAsNewVideo()"
               >
               <ng-container i18n>Save as new video</ng-container>
@@ -33,7 +34,7 @@
             theme="primary" class="save-button"
             icon="circle-tick"
             [disabled]="!canUpdate() || !hasPendingChanges()" (click)="onWantToUpdate()"
-            [loading]="isUpdating"
+            [loading]="isUpdating && !isSavingAsNew"
             form="video-manage-form"
             >
             @if (hasStudioTasks()) {

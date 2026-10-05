@@ -51,6 +51,7 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   canRetryUpload = true
 
   isUpdating = false
+  isSavingAsNew = false
 
   private videoEdit: VideoEdit
 
@@ -147,20 +148,26 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
       })
   }
 
+  private resetUpdating () {
+    this.isUpdating = false
+    this.isSavingAsNew = false
+  }
+
   async onWantToSaveAsNewVideo () {
     if (this.isUpdating) return
 
     this.isUpdating = true
+    this.isSavingAsNew = true
 
     if (!await this.manageController.checkAndConfirmStudioTasksAsNewVideo()) {
-      this.isUpdating = false
+      this.resetUpdating()
       return
     }
 
     this.manageController.saveStudioTasksAsNewVideo()
       .subscribe({
         next: ({ video }) => {
-          this.isUpdating = false
+          this.resetUpdating()
 
           this.notifier.success($localize`The new video is being created, you can now update its information.`)
 
@@ -169,7 +176,7 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
         },
 
         error: (err: HttpErrorResponse) => {
-          this.isUpdating = false
+          this.resetUpdating()
 
           this.notifier.error(err.message)
         }
