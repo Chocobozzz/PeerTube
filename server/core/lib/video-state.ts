@@ -187,7 +187,8 @@ async function moveToPublishedState (options: {
 
   logger.info('Publishing video %s.', video.uuid, { previousState })
 
-  const isNewVideo = !video.firstPublishedAt
+  // The privacy of a studio new video can be set to public before its processing ends, which sets firstPublishedAt
+  const isNewVideo = !video.firstPublishedAt || previousState === VideoState.TO_EDIT_AS_NEW_VIDEO
 
   await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
 
