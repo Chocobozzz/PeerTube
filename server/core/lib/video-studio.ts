@@ -200,12 +200,15 @@ export async function onVideoStudioEnded (options: {
 
     const outputPath = VideoPathManager.Instance.getFSVideoFileOutputPath(video, newFile)
     await move(editionResultPath, outputPath)
-    videoFileMutexReleaser()
+
+    // removeAllFiles() takes the lock again. A new video has no file to remove, and the user can update its privacy
+    // meanwhile: keep the lock until the file is in database so a privacy change cannot miss it
+    if (!isNewVideo) videoFileMutexReleaser()
 
     await safeCleanupStudioTMPFiles(tasks)
 
     const { infoHash, torrentFilename } = await createTorrentForFileFromPath(video, newFile, outputPath)
-    await removeAllFiles(video, newFile)
+    if (!isNewVideo) await removeAllFiles(video, newFile)
 
     await sequelizeTypescript.transaction(async t => {
       newFile.torrentFilename = torrentFilename
@@ -213,6 +216,8 @@ export async function onVideoStudioEnded (options: {
 
       await VideoInfohashModel.replaceFileInfohash(newFile.id, infoHash, t)
     })
+
+    videoFileMutexReleaser()
 
     video.duration = await getVideoStreamDuration(outputPath)
     video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
