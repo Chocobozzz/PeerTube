@@ -6,7 +6,7 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption, VideoSource } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
-import { videoRequiresFileToken } from '@root-helpers/video'
+import { videoDownloadRequiresFileToken } from '@root-helpers/video'
 import { of } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { VideoDetails } from '../../shared-main/video/video-details.model'
@@ -80,7 +80,7 @@ export class VideoDownloadComponent {
           this.originalVideoFile = source
         }
 
-        if (this.originalVideoFile || videoRequiresFileToken(this.video)) {
+        if (this.originalVideoFile || videoDownloadRequiresFileToken(this.video)) {
           this.videoFileTokenService.getVideoFileToken({ videoUUID: this.video.uuid, videoPassword: this.videoPassword() })
             .subscribe(({ token }) => {
               this.videoFileToken = token
@@ -103,8 +103,7 @@ export class VideoDownloadComponent {
     if (!this.video.isLocal || !this.authService.isLoggedIn()) return of(undefined)
 
     const user = this.authService.getUser()
-    // User that can update the video can also get the original video file
-    if (!this.video.canBeUpdatedBy(user)) return of(undefined)
+    if (!this.video.canGetOriginalFile(user)) return of(undefined)
 
     return this.videoService.getSource(this.video.id)
       .pipe(catchError(err => {

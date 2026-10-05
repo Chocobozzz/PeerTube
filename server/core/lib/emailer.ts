@@ -490,7 +490,7 @@ export class Emailer {
           WEBSERVER,
           instanceName: CONFIG.INSTANCE.NAME,
           subject,
-          title: options.text,
+          title: options.title,
           action: options.action,
           text: options.text, // If MailText
           signature: this.buildSignature(),

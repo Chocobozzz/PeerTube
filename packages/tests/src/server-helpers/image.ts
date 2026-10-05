@@ -118,6 +118,20 @@ describe('Image helpers', function () {
     expect(metadata.pages).to.equal(1)
   })
 
+  it('Should refuse to process a SVG file with processImage()', async function () {
+    const input = join(tmpdir(), 'not-really-an-image.svg')
+    await writeFile(input, '<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>')
+
+    try {
+      await processImage({ path: input, destination: join(imageDestDir, 'out.svg'), keepOriginal: true })
+      expect.fail('Should not process a SVG file with processImage()')
+    } catch (err) {
+      expect(err.message).to.contain('processSVG')
+    } finally {
+      await remove(input)
+    }
+  })
+
   after(async function () {
     await remove(imageDestDir)
   })

@@ -1,7 +1,7 @@
 import { AccountVideoRateModel } from '@server/models/account/account-video-rate.js'
 import { PickWith } from '@peertube/peertube-typescript-utils'
 import { MAccountAudience, MAccountUrl } from '../account/account.js'
-import { MVideo, MVideoFormattable, MVideoUrl } from './video.js'
+import { MVideoFormattable, MVideoUrl, MVideoWithBlacklist } from './video.js'
 
 type Use<K extends keyof AccountVideoRateModel, M> = PickWith<AccountVideoRateModel, K, M>
 
@@ -20,7 +20,7 @@ export type MAccountVideoRateAccountUrl =
 export type MAccountVideoRateAccountVideo =
   & MAccountVideoRate
   & Use<'Account', MAccountAudience>
-  & Use<'Video', MVideo>
+  & Use<'Video', MVideoWithBlacklist>
 
 // ############################################################################
 

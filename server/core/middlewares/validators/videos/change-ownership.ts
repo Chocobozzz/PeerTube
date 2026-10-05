@@ -14,13 +14,16 @@ import { AccountModel } from '@server/models/account/account.js'
 import { ChangeOwnershipModel } from '@server/models/video/change-ownership.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoModel } from '@server/models/video/video.js'
+import { UserModel } from '@server/models/user/user.js'
+import { MUserAccountId } from '@server/types/models/index.js'
 import express from 'express'
-import { param, query } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import {
   areValidationErrors,
   checkCanManageAccount,
   checkCanManageChannel,
   checkCanManageVideo,
+  checkCanModerate,
   checkUserQuota,
   doesChangeOwnershipExist,
   doesChannelHandleExist,
@@ -62,6 +65,14 @@ export const acceptOrRejectChangeOwnershipValidatorFactory = (type: 'video' | 'c
           message: req.t('Cannot terminate an ownership change of another user')
         })
         return
+      }
+
+      // Moderators must not manage administrator or other moderator accounts
+      if (videoChangeOwnership.NextOwner.id !== user.Account.id) {
+        const nextOwnerUser = await loadNextOwnerUserOrFail({ nextOwnerAccountId: videoChangeOwnership.NextOwner.id, req, res })
+        if (!nextOwnerUser) return
+
+        if (!checkCanModerate({ authUser: user, onUser: nextOwnerUser, req, res })) return
       }
 
       const changeOwnership = res.locals.changeOwnership
@@ -128,11 +139,24 @@ export const changeVideoOwnershipValidator = [
 ]
 
 export const acceptVideoChangeOwnershipValidator = [
+  body('channelId').custom(isIdValid),
+
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
     const body = req.body as ChangeVideoOwnershipAccept
-    if (!await doesChannelIdExist({ id: body.channelId, req, res, checkCanManage: true, checkIsLocal: true, checkIsOwner: true })) return
+    if (!await doesChannelIdExist({ id: body.channelId, req, res, checkCanManage: false, checkIsLocal: true, checkIsOwner: false })) return
 
     const videoChangeOwnership = res.locals.changeOwnership
+
+    // The request can be accepted on behalf of the next owner (for example by a moderator)
+    if (res.locals.videoChannel.Account.id !== videoChangeOwnership.NextOwner.id) {
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: req.t('This channel does not belong to the next owner of this video')
+      })
+      return
+    }
 
     const video = await VideoModel.loadWithFiles(videoChangeOwnership.Video.id)
 
@@ -146,9 +170,11 @@ export const acceptVideoChangeOwnershipValidator = [
         return
       }
     } else {
-      const channelUser = res.locals.oauth.token.User
+      // Quota must be checked against the next owner, not the user accepting on their behalf (for example a moderator)
+      const nextOwnerUser = await loadNextOwnerUserOrFail({ nextOwnerAccountId: videoChangeOwnership.NextOwner.id, req, res })
+      if (!nextOwnerUser) return
 
-      if (!await checkUserQuota({ channelUser, uploadSize: video.getMaxQualityBytes(), req, res })) return
+      if (!await checkUserQuota({ channelUser: nextOwnerUser, uploadSize: video.getMaxQualityBytes(), req, res })) return
     }
 
     return next()
@@ -234,8 +260,19 @@ export const changeChannelOwnershipValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (
-      !await doesChannelHandleExist({ handle: req.params.handle, checkCanManage: true, checkIsLocal: true, checkIsOwner: true, req, res })
+      !await doesChannelHandleExist({
+        handle: req.params.handle,
+        checkCanManage: true,
+        checkIsLocal: true,
+        checkIsOwner: true,
+        specialRight: UserRight.CHANGE_CHANNEL_OWNERSHIP,
+        req,
+        res
+      })
     ) return
+
+    // Moderators must not manage the ownership of an administrator or another moderator's channel
+    if (!await checkCanModerateChannelOwner({ authUser: res.locals.oauth.token.User, channel: res.locals.videoChannel, req, res })) return
 
     if (!await checkNextOwner({ username: req.body.username, req, res })) return
 
@@ -271,7 +308,15 @@ export const listChannelOwnershipChangesValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (
-      !await doesChannelHandleExist({ handle: req.params.handle, checkCanManage: true, checkIsLocal: true, checkIsOwner: false, req, res })
+      !await doesChannelHandleExist({
+        handle: req.params.handle,
+        checkCanManage: true,
+        checkIsLocal: true,
+        checkIsOwner: false,
+        req,
+        res,
+        specialRight: UserRight.CHANGE_CHANNEL_OWNERSHIP
+      })
     ) return
 
     return next()
@@ -292,8 +337,12 @@ export const acceptChannelChangeOwnershipValidator = [
       return
     }
 
+    // Quota must be checked against the next owner, not the user accepting on their behalf (for example a moderator)
+    const nextOwnerUser = await loadNextOwnerUserOrFail({ nextOwnerAccountId: videoChangeOwnership.NextOwner.id, req, res })
+    if (!nextOwnerUser) return
+
     const channelQuota = await VideoChannelModel.getChannelQuota(videoChangeOwnership.VideoChannel.id)
-    if (!await checkUserQuota({ channelUser: getAuthUser(res), uploadSize: channelQuota, req, res })) return
+    if (!await checkUserQuota({ channelUser: nextOwnerUser, uploadSize: channelQuota, req, res })) return
 
     return next()
   }
@@ -330,9 +379,13 @@ export const deleteChangeChannelOwnershipValidator = [
         req,
         res,
         checkCanManage: true,
-        checkIsOwner: true
+        checkIsOwner: true,
+        specialRight: UserRight.CHANGE_CHANNEL_OWNERSHIP
       })
     ) return false
+
+    // Moderators must not manage the ownership of an administrator or another moderator's channel
+    if (!await checkCanModerateChannelOwner({ authUser: getAuthUser(res), channel, req, res })) return false
 
     return next()
   }
@@ -350,7 +403,8 @@ async function checkNextOwner (options: {
   const { username, req, res } = options
 
   const nextOwner = await AccountModel.loadLocalByName(username)
-  if (!nextOwner) {
+  // The application/instance account has no user and cannot own a video or a channel
+  if (!nextOwner?.userId) {
     res.fail({
       message: req.t('{username} does not exist on {instanceName}', { username: username, instanceName: CONFIG.INSTANCE.NAME })
     })
@@ -360,6 +414,45 @@ async function checkNextOwner (options: {
   res.locals.changeOwnershipNextOwner = nextOwner
 
   return true
+}
+
+// Loads the user behind the next owner account, failing cleanly if that account has no corresponding user anymore
+// (should not happen, but the user could have been removed between the request creation and its acceptance)
+async function loadNextOwnerUserOrFail (options: {
+  nextOwnerAccountId: number
+  req: express.Request
+  res: express.Response
+}) {
+  const { nextOwnerAccountId, req, res } = options
+
+  const nextOwnerUser = await UserModel.loadByAccountId(nextOwnerAccountId)
+
+  if (!nextOwnerUser) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('The next owner account does not exist anymore')
+    })
+    return undefined
+  }
+
+  return nextOwnerUser
+}
+
+// Moderators must not manage the ownership of an administrator or another moderator's channel, unless it is their own
+async function checkCanModerateChannelOwner (options: {
+  authUser: MUserAccountId
+  channel: { accountId: number }
+  req: express.Request
+  res: express.Response
+}) {
+  const { authUser, channel, req, res } = options
+
+  if (channel.accountId === authUser.Account.id) return true
+
+  const ownerUser = await UserModel.loadByAccountId(channel.accountId)
+  if (!ownerUser) return true
+
+  return checkCanModerate({ authUser, onUser: ownerUser, req, res })
 }
 
 function isOwnershipChangeStateValid (value: any): value is ChangeOwnershipStateType {

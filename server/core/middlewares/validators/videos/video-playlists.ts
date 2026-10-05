@@ -45,6 +45,7 @@ import {
   areValidationErrors,
   checkCanManageAccount,
   checkCanManageChannel,
+  checkCanSeeVideo,
   doesChannelIdExist,
   doesVideoExist,
   doesVideoPlaylistExist,
@@ -98,7 +99,7 @@ export const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().c
       !await checkCanManagePlaylist({
         user: res.locals.oauth.token.User,
         videoPlaylist,
-        right: UserRight.REMOVE_ANY_VIDEO_PLAYLIST,
+        right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
         req,
         res
       })
@@ -197,25 +198,32 @@ export const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) =>
         })
       }
 
-      if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-        if (!await authenticateOrFail({ req, res })) return
-
-        if (
-          !await checkCanManagePlaylist({
-            user: res.locals.oauth.token.User,
-            videoPlaylist,
-            right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
-            req,
-            res
-          })
-        ) {
-          return
-        }
-      }
+      if (!await checkCanSeePlaylist({ req, res, videoPlaylist })) return
 
       return next()
     }
   ]
+}
+
+// A private playlist can only be seen by users allowed to manage it (owner, moderator/admin)
+export async function checkCanSeePlaylist (options: {
+  req: express.Request
+  res: express.Response
+  videoPlaylist: MVideoPlaylistFullSummary
+}) {
+  const { req, res, videoPlaylist } = options
+
+  if (videoPlaylist.privacy !== VideoPlaylistPrivacy.PRIVATE) return true
+
+  if (!await authenticateOrFail({ req, res })) return false
+
+  return checkCanManagePlaylist({
+    user: res.locals.oauth.token.User,
+    videoPlaylist,
+    right: UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
+    req,
+    res
+  })
 }
 
 export const videoPlaylistsSearchValidator = [
@@ -264,7 +272,7 @@ export const videoPlaylistsAddVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist({ id: req.params.playlistId, req, res, fetchType: 'all' })) return
-    if (!await doesVideoExist(req.body.videoId, res, 'with-thumbnails')) return
+    if (!await doesVideoExist(req.body.videoId, res, 'with-thumbnails-blacklist')) return
 
     const videoPlaylist = getPlaylist(res)
 
@@ -279,6 +287,8 @@ export const videoPlaylistsAddVideoValidator = [
     ) {
       return
     }
+
+    if (!await checkCanSeeVideo({ req, res, video: res.locals.videoThumbnailsBlacklist, paramId: req.body.videoId })) return
 
     return next()
   }
@@ -356,6 +366,14 @@ export const videoPlaylistElementAPGetValidator = [
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: req.t('Cannot get this private video playlist.')
+      })
+    }
+
+    // Unlisted playlist elements can only be fetched using the playlist UUID (the element URL contains it)
+    if (videoPlaylistElement.VideoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED && !isUUIDValid(playlistId)) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: req.t('Video playlist element not found')
       })
     }
 
@@ -507,7 +525,7 @@ function getCommonPlaylistEditAttributes () {
   ] as (ValidationChain | ExpressPromiseHandler)[]
 }
 
-async function checkCanManagePlaylist (options: {
+export async function checkCanManagePlaylist (options: {
   user: MUserAccountId
   videoPlaylist: MVideoPlaylistFullSummary
   right: UserRightType

@@ -51,6 +51,7 @@ ownershipVideoRouter.get(
   authenticate,
   paginationValidator,
   setDefaultPagination,
+  changeOwnershipSortValidator,
   asyncRetryTransactionMiddleware(listAccountVideoOwnershipChanges)
 )
 
@@ -86,7 +87,8 @@ export {
 
 async function createChangeOwnershipRequest (req: express.Request, res: express.Response) {
   const video = res.locals.videoWithRights
-  const initiatorAccountId = res.locals.oauth.token.User.Account.id
+  // The initiator is the current owner of the video, not necessarily the user who made the request (for example a moderator)
+  const initiatorAccountId = video.VideoChannel.accountId
   const nextOwner = res.locals.changeOwnershipNextOwner
 
   const ownershipChange = await sequelizeTypescript.transaction(async t => {

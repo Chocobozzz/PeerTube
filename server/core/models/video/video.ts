@@ -108,6 +108,7 @@ import type {
   MVideoSeo,
   MVideoSummary,
   MVideoThumbnails,
+  MVideoThumbnailsBlacklist,
   MVideoWithAllFiles,
   MVideoWithBlacklist,
   MVideoWithFile,
@@ -1414,6 +1415,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails' })
+  }
+
+  static loadWithThumbnailsAndBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoThumbnailsBlacklist> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction, type: 'thumbnails-blacklist' })
   }
 
   static loadWithBlacklist (id: number | string, transaction?: Transaction): Promise<MVideoWithBlacklist> {

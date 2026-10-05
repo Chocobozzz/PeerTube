@@ -4,7 +4,7 @@ import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activit
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
-import { CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants.js'
+import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { updateRemotePlaylistThumbnailFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
@@ -127,11 +127,35 @@ async function getRemotePlaylistChannel (playlistObject: PlaylistObject) {
 
 async function fetchElementUrls (playlistObject: PlaylistObject) {
   let accItems: string[] = []
-  await crawlCollectionPage<string>(playlistObject.id, items => {
-    accItems = accItems.concat(items)
 
-    return Promise.resolve()
-  })
+  // Stop crawling remote pages entirely once we hit the element limit
+  const abortController = new AbortController()
+
+  try {
+    await crawlCollectionPage<string>(
+      playlistObject.id,
+      items => {
+        accItems = accItems.concat(items.slice(0, ACTIVITY_PUB.MAX_PLAYLIST_ELEMENTS - accItems.length))
+
+        if (accItems.length >= ACTIVITY_PUB.MAX_PLAYLIST_ELEMENTS) {
+          logger.warn(
+            'Playlist %s has more than %d elements, truncating and stopping the crawl.',
+            getAPId(playlistObject),
+            ACTIVITY_PUB.MAX_PLAYLIST_ELEMENTS
+          )
+
+          abortController.abort()
+        }
+
+        return Promise.resolve()
+      },
+      undefined,
+      abortController.signal
+    )
+  } catch (err) {
+    // We voluntarily aborted the crawl above once the element limit was reached, this is not an error
+    if (abortController.signal.aborted !== true) throw err
+  }
 
   return accItems.filter(i => isActivityPubUrlValid(i))
 }

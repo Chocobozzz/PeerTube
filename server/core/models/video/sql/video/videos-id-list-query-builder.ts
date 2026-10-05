@@ -1088,7 +1088,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     } else if (column === 'playlistElementPosition') {
       firstSort = '"VideoPlaylistElement"."position"'
     } else if (column.includes('.')) {
-      firstSort = column
+      firstSort = column.split('.').map(c => `"${c}"`).join('.')
     } else {
       firstSort = `"video"."${column}"`
     }

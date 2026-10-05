@@ -1,4 +1,4 @@
-import { HTMLServerConfig, User, Video, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+import { HTMLServerConfig, User, Video, VideoDetails, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 
 export function buildVideoOrPlaylistEmbed (options: {
   embedUrl: string
@@ -47,6 +47,11 @@ export function isP2PEnabled (video: Video, config: HTMLServerConfig, userP2PEna
 export function videoRequiresUserAuth (video: Video, videoPassword?: string) {
   return new Set<VideoPrivacyType>([ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]).has(video.privacy.id) ||
     (video.privacy.id === VideoPrivacy.PASSWORD_PROTECTED && !videoPassword)
+}
+
+// Download links can send the authorization header, so users bypassing a disabled download need a file token to identify themselves
+export function videoDownloadRequiresFileToken (video: VideoDetails) {
+  return video.downloadEnabled === false || videoRequiresFileToken(video)
 }
 
 export function videoRequiresFileToken (video: Video) {

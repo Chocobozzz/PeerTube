@@ -207,7 +207,7 @@ export class TagsHtml {
     } else if (embedIndexation) {
       tagsStr += `<meta name="robots" content="noindex, indexifembedded" />`
     } else if (url) { // SEO, use origin URL
-      tagsStr += `<link rel="canonical" href="${url}" />`
+      tagsStr += `<link rel="canonical" href="${escapeAttribute(url)}" />`
     }
 
     // RSS

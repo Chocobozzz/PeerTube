@@ -34,7 +34,7 @@ import {
   MVideoPassword,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
-  MVideoThumbnails,
+  MVideoThumbnailsBlacklist,
   MVideoWithBlacklist,
   MVideoWithRights,
   MWatchedWordsList,
@@ -161,7 +161,7 @@ declare module 'express' {
       videoImmutable?: MVideoImmutable
       videoWithBlacklist?: MVideoWithBlacklist
       videoWithRights?: MVideoWithRights
-      videoThumbnails?: MVideoThumbnails
+      videoThumbnailsBlacklist?: MVideoThumbnailsBlacklist
       videoId?: MVideoId
 
       videoLive?: MVideoLiveWithSettingSchedules

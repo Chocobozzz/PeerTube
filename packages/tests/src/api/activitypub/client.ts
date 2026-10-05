@@ -4,6 +4,7 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import {
   ActivityPubActor,
   HttpStatusCode,
+  PlaylistElementObject,
   VideoComment,
   VideoCreateResult,
   VideoObject,
@@ -31,9 +32,13 @@ describe('Test ActivityPub', function () {
 
   let video: VideoCreateResult
   let privateVideo: VideoCreateResult
+  let unlistedVideo: VideoCreateResult
 
   let playlist: VideoPlaylistCreateResult
   let privatePlaylist: VideoPlaylistCreateResult
+  let unlistedPlaylist: VideoPlaylistCreateResult
+  let privateVideoPlaylistElementId: number
+  let unlistedPlaylistElementId: number
 
   let comment: VideoComment
 
@@ -145,6 +150,7 @@ describe('Test ActivityPub', function () {
     {
       video = await servers[0].videos.quickUpload({ name: 'video' })
       privateVideo = await servers[0].videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })
+      unlistedVideo = await servers[0].videos.quickUpload({ name: 'unlisted video', privacy: VideoPrivacy.UNLISTED })
     }
 
     {
@@ -162,6 +168,28 @@ describe('Test ActivityPub', function () {
           videoChannelId: servers[0].store.channel.id
         }
       })
+
+      const { id } = await servers[0].playlists.addElement({
+        playlistId: playlist.id,
+        attributes: { videoId: privateVideo.id }
+      })
+      privateVideoPlaylistElementId = id
+    }
+
+    {
+      unlistedPlaylist = await servers[0].playlists.create({
+        attributes: {
+          displayName: 'unlisted playlist',
+          privacy: VideoPlaylistPrivacy.UNLISTED,
+          videoChannelId: servers[0].store.channel.id
+        }
+      })
+
+      const { id } = await servers[0].playlists.addElement({
+        playlistId: unlistedPlaylist.uuid,
+        attributes: { videoId: video.uuid }
+      })
+      unlistedPlaylistElementId = id
     }
 
     comment = await servers[0].comments.createThread({ text: 'thread', videoId: video.id })
@@ -221,13 +249,13 @@ describe('Test ActivityPub', function () {
     expect(res.header.location).to.equal(servers[0].url + '/videos/watch/' + video.uuid)
   })
 
-  it('Should return the watch action', async function () {
+  it('Should return the watch action of a remote video', async function () {
     this.timeout(50000)
 
-    await servers[0].views.simulateViewer({ id: video.uuid, currentTimes: [ 0, 2 ] })
+    await servers[1].views.simulateViewer({ id: video.uuid, currentTimes: [ 0, 2 ] })
     await processViewersStats(servers)
 
-    const res = await makeActivityPubGetRequest(servers[0].url, '/videos/local-viewer/1', HttpStatusCode.OK_200)
+    const res = await makeActivityPubGetRequest(servers[1].url, '/videos/local-viewer/1', HttpStatusCode.OK_200)
 
     const object: WatchActionObject = res.body
     expect(object.type).to.equal('WatchAction')
@@ -238,9 +266,53 @@ describe('Test ActivityPub', function () {
     expect(object.watchSections[0].endTimestamp).to.equal(2)
   })
 
+  it('Should not return the watch action of a local video', async function () {
+    this.timeout(50000)
+
+    // Stats of a local viewer
+    await servers[0].views.simulateViewer({ id: privateVideo.uuid, token: servers[0].accessToken, currentTimes: [ 0, 2 ] })
+    await processViewersStats(servers)
+
+    // servers[0] has stats received from servers[1] and stats of its local viewer
+    for (const id of [ 1, 2 ]) {
+      await makeActivityPubGetRequest(servers[0].url, '/videos/local-viewer/' + id, HttpStatusCode.NOT_FOUND_404)
+    }
+  })
+
+  it('Should only return rates of public videos', async function () {
+    for (const id of [ video.id, privateVideo.id, unlistedVideo.id ]) {
+      await servers[0].videos.rate({ id, rating: 'like' })
+    }
+
+    await makeActivityPubGetRequest(servers[0].url, '/accounts/root/likes/' + video.id, HttpStatusCode.OK_200)
+
+    await makeActivityPubGetRequest(servers[0].url, '/accounts/root/likes/' + privateVideo.id, HttpStatusCode.NOT_FOUND_404)
+    await makeActivityPubGetRequest(servers[0].url, '/accounts/root/likes/' + unlistedVideo.id, HttpStatusCode.NOT_FOUND_404)
+  })
+
   it('Should not return private video or private playlist', async function () {
     await makeActivityPubGetRequest(servers[0].url, '/videos/watch/' + privateVideo.uuid, HttpStatusCode.UNAUTHORIZED_401)
     await makeActivityPubGetRequest(servers[0].url, '/video-playlists/' + privatePlaylist.uuid, HttpStatusCode.UNAUTHORIZED_401)
+  })
+
+  it('Should not leak the URL of a private video that is a member of a public playlist', async function () {
+    const path = '/video-playlists/' + playlist.uuid + '/videos/' + privateVideoPlaylistElementId
+
+    const res = await makeActivityPubGetRequest(servers[0].url, path)
+    const object: PlaylistElementObject = res.body
+
+    expect(object.url).to.be.null
+  })
+
+  it('Should only return an unlisted playlist element using the playlist UUID', async function () {
+    const suffix = '/videos/' + unlistedPlaylistElementId
+
+    await makeActivityPubGetRequest(servers[0].url, '/video-playlists/' + unlistedPlaylist.id + suffix, HttpStatusCode.NOT_FOUND_404)
+
+    const res = await makeActivityPubGetRequest(servers[0].url, '/video-playlists/' + unlistedPlaylist.uuid + suffix)
+    const object: PlaylistElementObject = res.body
+
+    expect(object.url).to.equal(servers[0].url + '/videos/watch/' + video.uuid)
   })
 
   after(async function () {

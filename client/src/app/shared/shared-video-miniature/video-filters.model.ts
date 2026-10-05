@@ -302,7 +302,7 @@ export class VideoFilters {
     }
 
     if (this.allVideos) {
-      include = VideoInclude.NOT_PUBLISHED_STATE
+      include = VideoInclude.NOT_PUBLISHED_STATE | VideoInclude.BLOCKED_OWNER
       privacyOneOf = getAllPrivacies()
     }
 

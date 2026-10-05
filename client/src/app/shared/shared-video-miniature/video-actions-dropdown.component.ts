@@ -273,7 +273,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return (
       video &&
       video.isLive !== true &&
-      video.canBeUpdatedBy(this.user)
+      video.canBypassDisabledDownload(this.user)
     )
   }
 

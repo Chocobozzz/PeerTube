@@ -1,6 +1,6 @@
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { PickWith } from '@peertube/peertube-typescript-utils'
-import { MVideoFormattable, MVideoThumbnails, MVideoUrl } from './video.js'
+import { MVideo, MVideoFormattable, MVideoThumbnails, MVideoUrl } from './video.js'
 import { MVideoPlaylistPrivacy } from './video-playlist.js'
 
 type Use<K extends keyof VideoPlaylistElementModel, M> = PickWith<VideoPlaylistElementModel, K, M>
@@ -27,7 +27,7 @@ export type MVideoPlaylistElementVideoUrl =
 
 export type MVideoPlaylistElementVideoUrlPlaylistPrivacy =
   & MVideoPlaylistElement
-  & Use<'Video', MVideoUrl>
+  & Use<'Video', MVideoUrl & Pick<MVideo, 'privacy'>>
   & Use<'VideoPlaylist', MVideoPlaylistPrivacy>
 
 // ############################################################################
@@ -40,4 +40,4 @@ export type MVideoPlaylistElementFormattable =
 
 export type MVideoPlaylistElementAP =
   & MVideoPlaylistElement
-  & Use<'Video', MVideoUrl>
+  & Use<'Video', MVideoUrl & Pick<MVideo, 'privacy'>>
