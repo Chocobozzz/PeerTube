@@ -25,8 +25,9 @@ const videoStudioAddEditionValidator = [
 
   body('saveAsNewVideo')
     .optional()
-    .customSanitizer(toBooleanOrNull)
-    .custom(isBooleanValid).withMessage('Should have a valid saveAsNewVideo boolean'),
+    // Validate before sanitizing: `toBoolean` turns any non empty string into `true`
+    .custom(isBooleanValid).withMessage('Should have a valid saveAsNewVideo boolean')
+    .customSanitizer(toBooleanOrNull),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (CONFIG.VIDEO_STUDIO.ENABLED !== true) {
