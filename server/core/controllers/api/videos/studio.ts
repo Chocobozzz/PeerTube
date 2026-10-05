@@ -2,14 +2,24 @@ import Bluebird from 'bluebird'
 import express from 'express'
 import { move } from 'fs-extra/esm'
 import { basename } from 'path'
+import { uuidToShort } from '@peertube/peertube-node-utils'
 import { createAnyReqFiles } from '@server/helpers/express-utils.js'
 import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants.js'
-import { buildTaskFileFieldname, createVideoStudioJob, getStudioTaskFilePath, getTaskFileFromReq } from '@server/lib/video-studio.js'
+import {
+  buildTaskFileFieldname,
+  createNewVideoForStudio,
+  createVideoStudioJob,
+  getStudioTaskFilePath,
+  getTaskFileFromReq,
+  onVideoStudioFailed,
+  safeCleanupStudioTMPFiles
+} from '@server/lib/video-studio.js'
 import {
   HttpStatusCode,
   VideoChannelActivityAction,
   VideoState,
   VideoStudioCreateEdition,
+  VideoStudioCreateEditionNewVideo,
   VideoStudioTask,
   VideoStudioTaskCut,
   VideoStudioTaskIntro,
@@ -67,23 +77,42 @@ export {
 async function createEditionTasks (req: express.Request, res: express.Response) {
   const files = req.files as Express.Multer.File[]
   const body = req.body as VideoStudioCreateEdition
-  const video = res.locals.videoFull
-
-  video.state = VideoState.TO_EDIT
-  await video.save()
-
-  const payload = {
-    videoUUID: video.uuid,
-    tasks: await Bluebird.mapSeries(body.tasks, (t, i) => buildTaskPayload(t, i, files))
-  }
-
+  const sourceVideo = res.locals.videoFull
   const user = res.locals.oauth.token.User
 
-  await createVideoStudioJob({
-    user,
-    payload,
-    video
-  })
+  const tasks = await Bluebird.mapSeries(body.tasks, (t, i) => buildTaskPayload(t, i, files))
+
+  // The source video is left untouched: the result is saved in a new video that the user can edit while it is processing
+  const newVideo = body.saveAsNewVideo === true
+    ? await createNewVideoForStudio({ sourceVideo, user, name: sourceVideo.name })
+    : undefined
+
+  const video = newVideo ?? sourceVideo
+
+  try {
+    if (!newVideo) {
+      video.state = VideoState.TO_EDIT
+      await video.save()
+    }
+
+    await createVideoStudioJob({
+      user,
+      payload: {
+        videoUUID: video.uuid,
+        sourceVideoUUID: newVideo ? sourceVideo.uuid : undefined,
+        tasks
+      },
+      video,
+      sourceVideo: newVideo ? sourceVideo : undefined
+    })
+  } catch (err) {
+    await safeCleanupStudioTMPFiles(tasks)
+
+    // Don't leave a video stuck in edition state (or an empty new video) because its job was never created
+    await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: !!newVideo })
+
+    throw err
+  }
 
   await VideoChannelActivityModel.addVideoActivity({
     action: VideoChannelActivityAction.CREATE_STUDIO_TASKS,
@@ -92,6 +121,16 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
     video,
     transaction: null
   })
+
+  if (newVideo) {
+    return res.json({
+      video: {
+        id: newVideo.id,
+        uuid: newVideo.uuid,
+        shortUUID: uuidToShort(newVideo.uuid)
+      }
+    } satisfies VideoStudioCreateEditionNewVideo)
+  }
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

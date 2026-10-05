@@ -20,6 +20,7 @@ export function buildNextVideoState (currentState?: VideoStateType) {
 
   if (
     currentState !== VideoState.TO_EDIT &&
+    currentState !== VideoState.TO_EDIT_AS_NEW_VIDEO &&
     currentState !== VideoState.TO_TRANSCODE &&
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
     currentState !== VideoState.TO_MOVE_TO_FILE_SYSTEM &&
@@ -195,6 +196,10 @@ async function moveToPublishedState (options: {
   if (previousState === VideoState.TO_EDIT) {
     Notifier.Instance.notifyOfFinishedVideoStudioEdition(video)
     return
+  }
+
+  if (previousState === VideoState.TO_EDIT_AS_NEW_VIDEO) {
+    Notifier.Instance.notifyOfCreatedVideoStudioNewVideo(video)
   }
 
   if (isNewVideo) {

@@ -3417,10 +3417,28 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/VideoStudioCreateTask'
+              type: object
+              required:
+                - tasks
+              properties:
+                tasks:
+                  $ref: '#/components/schemas/VideoStudioCreateTask'
+                saveAsNewVideo:
+                  type: boolean
+                  description: >
+                    Keep the source video untouched and save the edition result in a new video.
+                    The new video is created in the `To edit` state (private by default, in the same channel),
+                    its metadata can be updated while the edition is processed,
+                    and it is deleted if the edition fails or is cancelled
       responses:
+        '200':
+          description: successful operation, when `saveAsNewVideo` is `true`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
         '204':
-          description: successful operation
+          description: successful operation, when the source video is edited in place
         '400':
           description: incorrect parameters
         '404':
@@ -10310,6 +10328,7 @@ components:
             - 7
             - 8
             - 9
+            - 13
           description: |
             The video state:
             - `1`: Published
@@ -10321,6 +10340,7 @@ components:
             - `7`: Transcoding failed
             - `8`: Moving to an external storage failed
             - `9`: To edit using studio edition feature
+            - `13`: To edit using studio edition feature, the result is saved in a new video
         label:
           type: string
 
@@ -13790,6 +13810,8 @@ components:
           - `31` CHANNEL_OWNERSHIP_CHANGED_REJECTED
 
           - `32` AUTOMATIC_BLOCKLIST_UPDATE
+
+          - `33` MY_VIDEO_STUDIO_NEW_VIDEO_CREATED
 
     NewFeatureInfoType:
       type: integer

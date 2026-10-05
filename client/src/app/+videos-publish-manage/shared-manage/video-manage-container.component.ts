@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http'
 import { booleanAttribute, Component, inject, input, OnDestroy, OnInit, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { Notifier, ScreenService } from '@app/core'
 import { HeaderService } from '@app/header/header.service'
 import { Video } from '@app/shared/shared-main/video/video.model'
@@ -36,6 +36,7 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   private headerService = inject(HeaderService)
   private screenService = inject(ScreenService)
   private videoStateMessage = inject(VideoStateMessageService)
+  private router = inject(Router)
 
   readonly canWatch = input.required<boolean, string | boolean>({ transform: booleanAttribute })
   readonly canUpdate = input.required<boolean, string | boolean>({ transform: booleanAttribute })
@@ -136,6 +137,35 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
           this.isUpdating = false
 
           return this.videoUpdated.emit()
+        },
+
+        error: (err: HttpErrorResponse) => {
+          this.isUpdating = false
+
+          this.notifier.error(err.message)
+        }
+      })
+  }
+
+  async onWantToSaveAsNewVideo () {
+    if (this.isUpdating) return
+
+    this.isUpdating = true
+
+    if (!await this.manageController.checkAndConfirmStudioTasksAsNewVideo()) {
+      this.isUpdating = false
+      return
+    }
+
+    this.manageController.saveStudioTasksAsNewVideo()
+      .subscribe({
+        next: ({ video }) => {
+          this.isUpdating = false
+
+          this.notifier.success($localize`The new video is being created, you can now update its information.`)
+
+          // Update information of the new video with the regular video form
+          this.router.navigateByUrl(Video.buildManageUrl(video))
         },
 
         error: (err: HttpErrorResponse) => {

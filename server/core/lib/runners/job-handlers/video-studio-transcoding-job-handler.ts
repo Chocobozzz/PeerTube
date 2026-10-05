@@ -4,7 +4,6 @@ import {
   RunnerJobStudioTranscodingPayload,
   RunnerJobUpdatePayload,
   RunnerJobVideoStudioTranscodingPrivatePayload,
-  VideoState,
   VideoStudioTaskPayload,
   VideoStudioTranscodingSuccess,
   isVideoStudioTaskIntro,
@@ -13,8 +12,7 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
-import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
+import { onVideoStudioEnded, onVideoStudioFailed, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
@@ -26,6 +24,7 @@ const logger = createLogger('studio', 'transcoding')
 
 type CreateOptions = {
   video: MVideoWithFile
+  sourceVideo?: MVideoWithFile
   tasks: VideoStudioTaskPayload[]
   priority: number
 }
@@ -36,17 +35,18 @@ export class VideoStudioTranscodingJobHandler
 {
   async create (options: CreateOptions) {
     const { video, priority, tasks } = options
+    const inputVideo = options.sourceVideo ?? video
 
     const jobUUID = buildUUID()
-    const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
+    const { separatedAudioFile } = inputVideo.getMaxQualityAudioAndVideoFiles()
 
     return logger.withContext([ jobUUID, video.uuid ], async () => {
       const payload: RunnerJobStudioTranscodingPayload = {
         input: {
-          videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'video' }),
+          videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: inputVideo.uuid, type: 'video' }),
 
           separatedAudioFileUrl: separatedAudioFile
-            ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
+            ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: inputVideo.uuid, type: 'audio' }) ]
             : []
         },
         output: {},
@@ -81,6 +81,7 @@ export class VideoStudioTranscodingJobHandler
 
       const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
         videoUUID: video.uuid,
+        sourceVideoUUID: options.sourceVideo?.uuid,
         originalTasks: tasks
       }
 
@@ -130,7 +131,22 @@ export class VideoStudioTranscodingJobHandler
     await logger.withContext([ video.uuid ], async () => {
       const videoFilePath = resultPayload.videoFile as string
 
-      await onVideoStudioEnded({ video, editionResultPath: videoFilePath, tasks: privatePayload.originalTasks })
+      try {
+        await onVideoStudioEnded({
+          video,
+          editionResultPath: videoFilePath,
+          tasks: privatePayload.originalTasks,
+          isNewVideo: !!privatePayload.sourceVideoUUID
+        })
+      } catch (err) {
+        // The runner job has errored: don't keep an incomplete new video
+        if (privatePayload.sourceVideoUUID) {
+          await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: true })
+          await safeCleanupStudioTMPFiles(privatePayload.originalTasks)
+        }
+
+        throw err
+      }
 
       logger.info('Runner video edition transcoding job %s for %s ended.', runnerJob.uuid, video.uuid)
     })
@@ -160,15 +176,8 @@ export class VideoStudioTranscodingJobHandler
 
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
-    const video = await sequelizeTypescript.transaction(async transaction => {
-      const video = await loadRunnerVideo(options.runnerJob, transaction)
-      if (!video || video.state === VideoState.PUBLISHED) return
+    await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo: !!payload.sourceVideoUUID })
 
-      await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
-
-      return video
-    })
-
-    await logger.withContext([ video.uuid ], () => safeCleanupStudioTMPFiles(payload.originalTasks))
+    await logger.withContext([ payload.videoUUID ], () => safeCleanupStudioTMPFiles(payload.originalTasks))
   }
 }

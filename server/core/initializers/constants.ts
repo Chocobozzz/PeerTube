@@ -714,6 +714,7 @@ export const VIDEO_STATES: { [id in VideoStateType]: string } = {
   [VideoState.TRANSCODING_FAILED]: 'Transcoding failed',
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
   [VideoState.TO_EDIT]: 'To edit',
+  [VideoState.TO_EDIT_AS_NEW_VIDEO]: 'To edit as new video',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM]: 'To move to file system',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed',
   [VideoState.TO_IMPORT_FAILED]: 'Import failed'

@@ -18,6 +18,17 @@
             </my-button>
           }
 
+          @if (canUpdate() && hasStudioTasks()) {
+            <my-button
+              theme="secondary" class="save-as-new-button"
+              icon="circle-tick"
+              [disabled]="isUpdating"
+              (click)="onWantToSaveAsNewVideo()"
+              >
+              <ng-container i18n>Save as new video</ng-container>
+            </my-button>
+          }
+
           <my-button
             theme="primary" class="save-button"
             icon="circle-tick"

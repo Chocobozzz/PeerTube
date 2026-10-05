@@ -281,6 +281,7 @@ export type VideoStudioTaskPayload =
 
 export interface VideoStudioEditionPayload {
   videoUUID: string
+  sourceVideoUUID?: string
   tasks: VideoStudioTaskPayload[]
 }
 

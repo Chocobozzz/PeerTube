@@ -9,6 +9,7 @@ import {
   VideoStudioCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test video studio API validator', function () {
   let server: PeerTubeServer
@@ -210,6 +211,57 @@ describe('Test video studio API validator', function () {
         })
 
         await server.jobs.resumeJobQueue()
+
+        await waitJobs([ server ])
+      })
+    })
+
+    describe('Save as new video', function () {
+      const tasks: VideoStudioTask[] = [ { name: 'cut', options: { start: 1 } } ]
+
+      it('Should fail with an invalid saveAsNewVideo', async function () {
+        await command.createEditionTasks({
+          videoId: videoUUID,
+          tasks,
+          saveAsNewVideo: 'hello' as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail with another user token', async function () {
+        await command.createEditionTasks({
+          token: userAccessToken,
+          videoId: videoUUID,
+          tasks,
+          saveAsNewVideo: true,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      })
+
+      it('Should not create a new video when validation fails', async function () {
+        const { total } = await server.videos.listMyVideos()
+
+        await command.createEditionTasks({
+          videoId: videoUUID,
+          tasks: [ { name: 'cut', options: {} } ],
+          saveAsNewVideo: true,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+
+        const after = await server.videos.listMyVideos()
+        expect(after.total).to.equal(total)
+      })
+
+      it('Should succeed with correct parameters and editor token', async function () {
+        const res = await command.createEditionTasks({
+          videoId: videoUUID,
+          tasks,
+          saveAsNewVideo: true,
+          token: editorToken
+        })
+
+        expect(res.video.uuid).to.exist
+        expect(res.video.uuid).to.not.equal(videoUUID)
 
         await waitJobs([ server ])
       })
