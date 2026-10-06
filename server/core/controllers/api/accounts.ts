@@ -60,7 +60,7 @@ accountsRouter.get(
 accountsRouter.get(
   '/:handle',
   asyncMiddleware(accountHandleGetValidatorFactory({ checkIsLocal: false, checkCanManage: false })),
-  getAccount
+  asyncMiddleware(getAccount)
 )
 
 accountsRouter.get(
@@ -144,12 +144,18 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getAccount (req: express.Request, res: express.Response) {
+async function getAccount (req: express.Request, res: express.Response) {
   const account = res.locals.account
 
   scheduleActorRefreshIfNeeded(account.Actor)
 
-  return res.json(account.toFormattedJSON())
+  return res.json(
+    await Hooks.wrapObject(
+      account.toFormattedJSON(),
+      'filter:api.account.get.result',
+      { account }
+    )
+  )
 }
 
 async function listAccounts (req: express.Request, res: express.Response) {
