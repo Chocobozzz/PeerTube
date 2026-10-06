@@ -2,7 +2,7 @@ import { Meter, ObservableResult } from '@opentelemetry/api'
 import { AggregationType, InstrumentType, ViewOptions } from '@opentelemetry/sdk-metrics'
 import { createLogger } from '@server/helpers/logger.js'
 import { readdir } from 'fs/promises'
-import { constants, NodeGCPerformanceDetail, PerformanceObserver } from 'perf_hooks'
+import { constants, monitorEventLoopDelay, NodeGCPerformanceDetail, performance, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
 
 const logger = createLogger()
@@ -39,6 +39,8 @@ export class NodeJSObserversBuilder {
 
     this.buildGCObserver()
     this.buildEventLoopLagObserver()
+    this.buildEventLoopDelayObserver()
+    this.buildEventLoopUtilizationObserver()
 
     this.buildLibUVActiveRequestsObserver()
     this.buildActiveResourcesObserver()
@@ -55,19 +57,13 @@ export class NodeJSObserversBuilder {
       description: 'Total system CPU time spent in seconds.'
     })
 
-    let lastCpuUsage = process.cpuUsage()
-
+    // Observable counters report the cumulative value: the CPU time since the process started
     this.meter.addBatchObservableCallback(observableResult => {
-      const cpuUsage = process.cpuUsage()
+      const { user, system } = process.cpuUsage()
 
-      const userUsageMicros = cpuUsage.user - lastCpuUsage.user
-      const systemUsageMicros = cpuUsage.system - lastCpuUsage.system
-
-      lastCpuUsage = cpuUsage
-
-      observableResult.observe(cpuTotal, (userUsageMicros + systemUsageMicros) / 1e6)
-      observableResult.observe(cpuUser, userUsageMicros / 1e6)
-      observableResult.observe(cpuSystem, systemUsageMicros / 1e6)
+      observableResult.observe(cpuTotal, (user + system) / 1e6)
+      observableResult.observe(cpuUser, user / 1e6)
+      observableResult.observe(cpuSystem, system / 1e6)
     }, [ cpuTotal, cpuUser, cpuSystem ])
   }
 
@@ -142,6 +138,59 @@ export class NodeJSObserversBuilder {
 
         setImmediate(reportEventLoopLag, start, observableResult, res)
       })
+    })
+  }
+
+  // Distribution of the event loop delays since the previous collection, sampled every 10ms
+  private buildEventLoopDelayObserver () {
+    const histogram = monitorEventLoopDelay({ resolution: 10 })
+    histogram.enable()
+
+    const gauges = {
+      min: 'Minimum',
+      max: 'Maximum',
+      mean: 'Mean',
+      stddev: 'Standard deviation of',
+      p50: '50th percentile of',
+      p90: '90th percentile of',
+      p99: '99th percentile of'
+    }
+
+    const instruments = Object.entries(gauges).map(([ key, description ]) => {
+      return {
+        key,
+        gauge: this.meter.createObservableGauge(`nodejs_eventloop_lag_${key}_seconds`, {
+          description: `${description} the recorded event loop delays.`
+        })
+      }
+    })
+
+    this.meter.addBatchObservableCallback(observableResult => {
+      if (histogram.count === 0) return
+
+      for (const { key, gauge } of instruments) {
+        const nanoseconds = key.startsWith('p')
+          ? histogram.percentile(parseInt(key.substring(1), 10))
+          : histogram[key as 'min' | 'max' | 'mean' | 'stddev']
+
+        observableResult.observe(gauge, nanoseconds / 1e9)
+      }
+
+      histogram.reset()
+    }, instruments.map(i => i.gauge))
+  }
+
+  private buildEventLoopUtilizationObserver () {
+    let last = performance.eventLoopUtilization()
+
+    this.meter.createObservableGauge('nodejs_eventloop_utilization_ratio', {
+      description: 'Ratio of time the event loop was busy since the previous collection.'
+    }).addCallback(observableResult => {
+      const current = performance.eventLoopUtilization()
+
+      observableResult.observe(performance.eventLoopUtilization(current, last).utilization)
+
+      last = current
     })
   }
 

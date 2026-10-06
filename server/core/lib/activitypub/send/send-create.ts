@@ -119,7 +119,7 @@ export function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, transacti
 export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVideoReply, transaction: Transaction) {
   return logger.withContext([ comment.url ], async () => {
     if (comment.Video.isLocal()) {
-      const videoWithBlacklist = await VideoModel.loadWithBlacklist(comment.Video.id)
+      const videoWithBlacklist = await VideoModel.loadWithBlacklist(comment.Video.id, transaction)
 
       if (!canVideoBeFederated(videoWithBlacklist)) {
         logger.debug(`Do not send comment ${comment.url} on a video that cannot be federated`)

@@ -82,6 +82,7 @@ import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { CONFIG } from './config.js'
 import { VIDEO_SEARCH_INDEXED_DESCRIPTION_LENGTH } from './constants.js'
+import { makeTransactionsRollbackSafe } from './database-transactions.js'
 
 const logger = createLogger()
 
@@ -141,6 +142,8 @@ export const sequelizeTypescript = new SequelizeTypescript({
     logger.debug(newMessage, { sql: message, tags: [ 'sql' ] })
   }
 })
+
+makeTransactionsRollbackSafe(sequelizeTypescript)
 
 export function checkDatabaseConnectionOrDie () {
   sequelizeTypescript.authenticate()

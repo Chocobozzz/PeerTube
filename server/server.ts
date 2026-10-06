@@ -135,6 +135,9 @@ const app = express().disable('x-powered-by')
 // Trust our proxy (IP forwarding...)
 app.set('trust proxy', CONFIG.TRUST_PROXY)
 
+import { cacheRequestIp } from './core/middlewares/request-ip-cache.js'
+app.use(cacheRequestIp)
+
 // Tag every logger call made while handling a request with a request id, first so every other middleware benefits from it
 import { requestLoggerContext } from './core/middlewares/logger-context.js'
 app.use(requestLoggerContext)
@@ -204,7 +207,6 @@ import { installPrimary, installSecondary } from './core/initializers/installer.
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
 import { Emailer } from './core/lib/emailer.js'
 import { resetFilesCacheOfOtherStorage } from './core/lib/files-cache/reset-files-cache.js'
-import { removeRedundanciesOfOtherStorage } from './core/lib/redundancy.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
 import { HorizontalScalabilityStorage } from './core/lib/horizontal-scalability-storage.js'
 import { ClientHtml } from './core/lib/html/client-html.js'
@@ -214,6 +216,7 @@ import { PeerTubeSocket } from './core/lib/peertube-socket.js'
 import { Hooks } from './core/lib/plugins/hooks.js'
 import { PluginManager } from './core/lib/plugins/plugin-manager.js'
 import { Redis } from './core/lib/redis/index.js'
+import { removeRedundanciesOfOtherStorage } from './core/lib/redundancy.js'
 import { ActorFollowScheduler } from './core/lib/schedulers/actor-follow-scheduler.js'
 import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-index-instances.js'
 import { BlocklistSubscriptionsScheduler } from './core/lib/schedulers/blocklist-subscriptions-scheduler.js'

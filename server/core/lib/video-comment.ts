@@ -1,5 +1,5 @@
 import { AutomaticTagPolicy, UserRight, VideoCommentPolicy, VideoCommentThreadTree } from '@peertube/peertube-models'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
+import { afterCommitIfTransaction, runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
@@ -91,7 +91,7 @@ export async function createLocalVideoComment (options: {
     inReplyToCommentId = inReplyToComment.id
   }
 
-  return sequelizeTypescript.transaction(async transaction => {
+  return runInReadCommittedTransaction(async transaction => {
     const account = await AccountModel.load(user.Account.id, transaction)
 
     const holdStatus = await getCommentHoldStatus({

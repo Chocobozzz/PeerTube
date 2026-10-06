@@ -57,6 +57,45 @@ describe('Open Telemetry', function () {
       expect(res.text).to.contain('http_request_duration_ms_bucket{')
     })
 
+    it('Should label HTTP request durations with the route rather than the URL', async function () {
+      await setAccessTokensToServers([ server ])
+
+      const { uuid } = await server.videos.quickUpload({ name: 'metrics video' })
+      await server.videos.get({ id: uuid })
+      await makeRawRequest({ url: server.url + '/static/unknown-file', expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: server.url + '/w/' + uuid, expectedStatus: HttpStatusCode.OK_200 })
+
+      const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+      expect(res.text).to.contain('http_request_duration_ms_count{path="/api/v1/videos/:id",method="GET",statusCode="200"')
+      expect(res.text).to.contain('http_request_duration_ms_count{path="/static/*",method="GET",statusCode="200"')
+      expect(res.text).to.contain('http_request_duration_ms_count{path="/w/*",method="GET",statusCode="200"')
+      expect(res.text).to.not.contain(uuid)
+    })
+
+    it('Should have cumulative CPU metrics', async function () {
+      const getCPU = async () => {
+        const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+        return parseFloat(res.text.match(/^process_cpu_seconds_total(?:\{[^}]*\})? ([\d.e+-]+)$/m)[1])
+      }
+
+      const first = await getCPU()
+      await server.videos.list()
+      const second = await getCPU()
+
+      expect(first).to.be.above(1)
+      expect(second).to.be.at.least(first)
+    })
+
+    it('Should have event loop metrics', async function () {
+      const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
+
+      expect(res.text).to.match(/^nodejs_eventloop_utilization_ratio(\{[^}]*\})? [\d.e+-]+$/m)
+      expect(res.text).to.match(/^nodejs_eventloop_lag_p99_seconds(\{[^}]*\})? [\d.e+-]+$/m)
+      expect(res.text).to.match(/^nodejs_eventloop_lag_seconds(\{[^}]*\})? [\d.e+-]+$/m)
+    })
+
     it('Should have runner observer metrics', async function () {
       await setAccessTokensToServers([ server ])
 

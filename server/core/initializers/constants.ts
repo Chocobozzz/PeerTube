@@ -56,7 +56,7 @@ import { readJsonSync } from 'fs-extra/esm'
 import invert from 'lodash-es/invert.js'
 import { join } from 'path'
 // Do not use barrels, remain constants as independent as possible
-import { cpus } from 'os'
+import { availableParallelism, cpus } from 'os'
 import { CONFIG, registerConfigChangedHandler } from './config.js'
 import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from './config/shared-config.js'
 
@@ -1021,6 +1021,15 @@ export let PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
 export const BCRYPT_SALT_SIZE = 10
+
+// bcrypt and RSA key generation, see helpers/peertube-crypto.ts
+export const CRYPTO_QUEUE = {
+  // Leave a CPU to the event loop. availableParallelism() takes the CPU affinity (cpusets...) into account, unlike cpus()
+  CONCURRENCY: Math.max(1, availableParallelism() - 1),
+
+  // A job takes ~50 ms (password check) to ~150 ms (signup) on a CPU: a request waits a few seconds at most before getting a 503
+  MAX_PENDING: 20
+}
 
 export const ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH = 20
 export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes

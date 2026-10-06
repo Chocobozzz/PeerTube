@@ -58,24 +58,14 @@ function getRetryDelayMs (attempts: number) {
   return Math.floor(Math.random() * maxDelay)
 }
 
-export function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>> (
+// The model state is restored if the transaction does not commit (see makeTransactionsRollbackSafe), so the save can be retried
+export function saveInTransactionWithRetries<T extends Pick<Model, 'save'>> (
   model: T,
   isolationLevel: Transaction.ISOLATION_LEVELS = Transaction.ISOLATION_LEVELS.SERIALIZABLE
 ) {
-  const changedKeys = model.changed() || []
-
   return retryTransactionWrapper(() => {
     return sequelizeTypescript.transaction({ isolationLevel }, async transaction => {
-      try {
-        await model.save({ transaction })
-      } catch (err) {
-        // Reinit changed keys
-        for (const key of changedKeys) {
-          model.changed(key as keyof Model, true)
-        }
-
-        throw err
-      }
+      await model.save({ transaction })
     })
   })
 }
