@@ -169,7 +169,7 @@ export const serverFilterHookObject = {
   // PeerTube >= 8.1
   'filter:feed.videos.list.result': true,
 
-  // Peertube >= 8.3
+  // Peertube >= 9.0
   'filter:api.account.get.result': true
 }
 

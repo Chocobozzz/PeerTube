@@ -485,7 +485,6 @@ describe('Test plugin filter hooks', function () {
     it('Should run filter:api.account.get.result', async function () {
       const result = await servers[0].accounts.get({ accountName: 'root' })
 
-      // 1 plugin do +1 to the count parameter
       expect(result.name).to.equal('toor')
     })
   })
