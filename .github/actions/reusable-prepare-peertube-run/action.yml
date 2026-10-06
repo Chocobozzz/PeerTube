@@ -14,7 +14,8 @@ runs:
         sudo apt-get install postgresql-client-common redis-tools parallel libimage-exiftool-perl nscd
         # The pip version of Ubuntu 22.04 (22.0.2) crashes in its resolver (AssertionError in get_topological_weights)
         # when installing whisper dependencies
-        sudo python3 -m pip install --upgrade pip
+        # --ignore-installed: on Ubuntu 24.04 (ubuntu-latest), pip is installed by Debian and cannot be uninstalled
+        sudo python3 -m pip install --upgrade --ignore-installed pip
         wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
         tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
         mkdir -p $HOME/bin

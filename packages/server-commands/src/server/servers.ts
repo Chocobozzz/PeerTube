@@ -83,7 +83,7 @@ export async function createSecondaryServer (
 
   // Do not flush: the primary owns the database and already ran the migrations
   await server.run(
-    merge(localConfig, ownStorage, { listen: { port } }, configOverride),
+    merge({}, localConfig, ownStorage, { listen: { port } }, configOverride),
     {
       ...options,
 

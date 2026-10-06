@@ -645,7 +645,6 @@ webrtc:
   stun_servers:
     - 'stun:stunserver2025.stunprotocol.org'
     - 'stun:stun.framasoft.org'
-    - 'stun:stun.ekiga.net'
     - 'stun:stun.freeswitch.org'
 
 nsfw_flags_settings:
