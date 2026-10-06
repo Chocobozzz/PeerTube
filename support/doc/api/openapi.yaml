@@ -3452,7 +3452,7 @@ paths:
       tags:
         - Video Transcoding
         - Video
-      description: Create a task to edit a video  (cut, add intro/outro etc)
+      description: Create a task to edit a video (cut, add intro/outro etc). By default the video is edited in place. Set `saveAsNewVideo` to keep it untouched and save the result in a new video.
       security:
         - OAuth2: []
       parameters:
@@ -3470,14 +3470,16 @@ paths:
                   $ref: '#/components/schemas/VideoStudioCreateTask'
                 saveAsNewVideo:
                   type: boolean
+                  default: false
                   description: >
                     Keep the source video untouched and save the edition result in a new video.
-                    The new video is created in the `To edit` state (private by default, in the same channel),
-                    its metadata can be updated while the edition is processed,
-                    and it is deleted if the edition fails or is cancelled
+                    The new video is created private, in the same channel as the source video, in the `To edit as new video` state (`13`).
+                    Its metadata can be updated (e.g. with the video update endpoint) while the edition is processed.
+                    The new video is deleted if the edition fails or is cancelled before its result is saved.
+                    The size of the source video counts towards the user quota.
       responses:
         '200':
-          description: successful operation, when `saveAsNewVideo` is `true`
+          description: successful operation, when `saveAsNewVideo` is `true`. Returns the identifiers of the new video
           content:
             application/json:
               schema:
@@ -10395,7 +10397,7 @@ components:
             - `7`: Transcoding failed
             - `8`: Moving to an external storage failed
             - `9`: To edit using studio edition feature
-            - `13`: To edit using studio edition feature, the result is saved in a new video
+            - `13`: To edit as new video, waiting for a studio edition whose result is saved in this new video
         label:
           type: string
 
