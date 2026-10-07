@@ -168,6 +168,22 @@ export async function getVideoStreamDimensionsInfo (path: string, existingProbe?
   }
 }
 
+/**
+ * The 3D packing that the container declares for the video stream (Matroska's StereoMode, the st3d box of MP4),
+ * `inverted` when the right eye comes first. The frame packing SEI of H.264 is in the frames and ffprobe does not tell it here.
+ */
+export async function getVideoStreamStereo3D (path: string, existingProbe?: FfprobeData) {
+  const videoStream = await getVideoStream(path, existingProbe)
+
+  // fluent-ffmpeg puts the side data of the stream into the stream: `type` and `inverted` are those of the "Stereo 3D" one
+  if (videoStream?.inverted === undefined || !videoStream.type || videoStream.type === '2D') return undefined
+
+  return {
+    type: videoStream.type as string,
+    inverted: forceNumber(videoStream.inverted) === 1
+  }
+}
+
 export async function getVideoStreamFPS (path: string, existingProbe?: FfprobeData) {
   const videoStream = await getVideoStream(path, existingProbe)
   if (!videoStream) return 0
