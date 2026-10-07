@@ -7,7 +7,8 @@ import {
   getVideoStream,
   getVideoStreamBitrate,
   getVideoStreamDimensionsInfo,
-  getVideoStreamFPS
+  getVideoStreamFPS,
+  getVideoStreamStereo3D
 } from '@peertube/peertube-ffmpeg'
 import { EncoderOptionsBuilder, EncoderOptionsBuilderParams } from '@peertube/peertube-models'
 import { FfprobeData } from 'fluent-ffmpeg'
@@ -149,6 +150,8 @@ export async function canDoQuickVideoTranscode (path: string, maxFPS: number, pr
   if (bitRate > getMaxTheoreticalBitrate({ ...resolutionData, fps })) return false
   // Force a re-encode when the input has a Display Matrix rotation to apply into the pixels
   if (resolutionData.hasRotation) return false
+  // Force a re-encode when the container declares 3D: the MP4 we write does not keep it, the frame packing SEI of libx264 does
+  if (await getVideoStreamStereo3D(path, probe)) return false
 
   return true
 }
