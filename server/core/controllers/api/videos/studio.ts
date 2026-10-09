@@ -19,6 +19,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants.js'
 import {
   buildTaskFileFieldname,
+  buildStudioNewVideoName,
   createNewVideoForStudio,
   createVideoStudioJob,
   getTaskFileFromReq,
@@ -90,7 +91,7 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
   try {
     // The source video is left untouched: the result is saved in a new video that the user can edit while it is processing
     if (body.saveAsNewVideo === true) {
-      newVideo = await createNewVideoForStudio({ sourceVideo, user, name: sourceVideo.name })
+      newVideo = await createNewVideoForStudio({ sourceVideo, user, name: buildStudioNewVideoName(sourceVideo.name) })
       video = newVideo
     } else {
       video.state = VideoState.TO_EDIT

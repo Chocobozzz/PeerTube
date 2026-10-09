@@ -3474,6 +3474,7 @@ paths:
                   description: >
                     Keep the source video untouched and save the edition result in a new video.
                     The new video is created private, in the same channel as the source video, in the `To edit as new video` state (`13`).
+                    Its name is the source video name followed by ` (Studio Edit)`.
                     Its metadata can be updated (e.g. with the video update endpoint) while the edition is processed.
                     The new video is deleted if the edition fails or is cancelled before its result is saved.
                     The size of the source video counts towards the user quota.

@@ -12,6 +12,7 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
@@ -39,6 +40,13 @@ const logger = createLogger('studio')
 
 export function buildTaskFileFieldname (indice: number, fieldName = 'file') {
   return `tasks[${indice}][options][${fieldName}]`
+}
+
+export function buildStudioNewVideoName (sourceName: string) {
+  const suffix = ' (Studio Edit)'
+  const maxSourceLength = CONSTRAINTS_FIELDS.VIDEOS.NAME.max - suffix.length
+
+  return sourceName.slice(0, maxSourceLength).trimEnd() + suffix
 }
 
 export function getTaskFileFromReq (files: Express.Multer.File[], indice: number, fieldName = 'file') {

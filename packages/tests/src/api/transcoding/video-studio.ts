@@ -532,10 +532,9 @@ describe('Test video studio', function () {
 
       expect(created.uuid).to.not.equal(sourceUUID)
 
-      // Visible in the library with the processing state, using the source title as default and a safe privacy
       const newVideo = await servers[0].videos.getWithToken({ id: created.uuid })
       expect(newVideo.state.id).to.equal(VideoState.TO_EDIT_AS_NEW_VIDEO)
-      expect(newVideo.name).to.equal(sourceBefore.name)
+      expect(newVideo.name).to.equal(sourceBefore.name + ' (Studio Edit)')
       expect(newVideo.privacy.id).to.equal(VideoPrivacy.PRIVATE)
       expect(newVideo.channel.id).to.equal(sourceBefore.channel.id)
 
