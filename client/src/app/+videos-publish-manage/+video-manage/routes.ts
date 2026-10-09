@@ -18,6 +18,9 @@ export default [
     component: VideoManageComponent,
     canActivate: [ LoginGuard ],
     canDeactivate: [ CanDeactivateGuard ],
+    data: {
+      reloadOnParamsChange: true
+    },
     providers: [
       VideoManageController,
       VideoManageResolver,

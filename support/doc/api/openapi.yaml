@@ -3452,7 +3452,7 @@ paths:
       tags:
         - Video Transcoding
         - Video
-      description: Create a task to edit a video  (cut, add intro/outro etc)
+      description: Create a task to edit a video (cut, add intro/outro etc). By default the video is edited in place. Set `saveAsNewVideo` to keep it untouched and save the result in a new video.
       security:
         - OAuth2: []
       parameters:
@@ -3462,10 +3462,31 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/VideoStudioCreateTask'
+              type: object
+              required:
+                - tasks
+              properties:
+                tasks:
+                  $ref: '#/components/schemas/VideoStudioCreateTask'
+                saveAsNewVideo:
+                  type: boolean
+                  default: false
+                  description: >
+                    Keep the source video untouched and save the edition result in a new video.
+                    The new video is created private, in the same channel as the source video, in the `To edit as new video` state (`13`).
+                    Its name is the source video name followed by ` (Studio Edit)`.
+                    Its metadata can be updated (e.g. with the video update endpoint) while the edition is processed.
+                    The new video is deleted if the edition fails or is cancelled before its result is saved.
+                    The size of the source video counts towards the user quota.
       responses:
+        '200':
+          description: successful operation, when `saveAsNewVideo` is `true`. Returns the identifiers of the new video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
         '204':
-          description: successful operation
+          description: successful operation, when the source video is edited in place
         '400':
           description: incorrect parameters
         '404':
@@ -10365,6 +10386,7 @@ components:
             - 7
             - 8
             - 9
+            - 13
           description: |
             The video state:
             - `1`: Published
@@ -10376,6 +10398,7 @@ components:
             - `7`: Transcoding failed
             - `8`: Moving to an external storage failed
             - `9`: To edit using studio edition feature
+            - `13`: To edit as new video, waiting for a studio edition whose result is saved in this new video
         label:
           type: string
 
@@ -13861,6 +13884,8 @@ components:
           - `31` CHANNEL_OWNERSHIP_CHANGED_REJECTED
 
           - `32` AUTOMATIC_BLOCKLIST_UPDATE
+
+          - `33` MY_VIDEO_STUDIO_NEW_VIDEO_CREATED
 
     NewFeatureInfoType:
       type: integer

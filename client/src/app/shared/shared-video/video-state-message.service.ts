@@ -145,6 +145,15 @@ export class VideoStateMessageService {
         }
       }
 
+      case VideoState.TO_EDIT_AS_NEW_VIDEO:
+        return {
+          title: $localize`New video being created from studio`,
+          manageMain: manageProcessed,
+          manageSecondary: manageFeaturesDisabled,
+          watchMain: watchNotPlayable,
+          watchSecondary: ''
+        }
+
       case VideoState.TO_EDIT:
         return {
           title: $localize`Studio edition in progress`,

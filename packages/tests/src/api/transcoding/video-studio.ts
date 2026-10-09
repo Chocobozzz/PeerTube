@@ -1,5 +1,5 @@
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
-import { VideoStudioTask } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPrivacy, VideoState, VideoStudioTask } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -480,6 +480,129 @@ describe('Test video studio', function () {
 
         await completeCheckHlsPlaylist({ servers, videoUUID, hlsOnly: true, splittedAudio: true, resolutions: [ 720, 240 ] })
       }
+    })
+  })
+
+  describe('Save as new video', function () {
+    let sourceUUID: string
+
+    async function getSource () {
+      const video = await servers[0].videos.getWithToken({ id: sourceUUID })
+      return { ...video, fileIds: getAllFiles(video).map(f => f.id).sort((a, b) => a - b) }
+    }
+
+    before(async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.save()
+      await servers[0].config.enableMinimumTranscoding()
+    })
+
+    it('Should keep editing the original video by default', async function () {
+      this.timeout(120_000)
+
+      await renewVideo()
+      const { total } = await servers[0].videos.listMyVideos()
+
+      await createTasks([ { name: 'cut', options: { start: 2 } } ])
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.state.id).to.equal(VideoState.PUBLISHED)
+      expect(video.duration).to.be.approximately(3, 1)
+
+      const after = await servers[0].videos.listMyVideos()
+      expect(after.total).to.equal(total)
+    })
+
+    it('Should create a new video in its own edition state that can be edited while processing', async function () {
+      this.timeout(120_000)
+
+      await renewVideo()
+      sourceUUID = videoUUID
+
+      const sourceBefore = await getSource()
+
+      await servers[0].jobs.pauseJobQueue()
+
+      const { video: created } = await servers[0].videoStudio.createEditionTasks({
+        videoId: sourceUUID,
+        tasks: [ { name: 'cut', options: { start: 2 } } ],
+        saveAsNewVideo: true
+      })
+
+      expect(created.uuid).to.not.equal(sourceUUID)
+
+      const newVideo = await servers[0].videos.getWithToken({ id: created.uuid })
+      expect(newVideo.state.id).to.equal(VideoState.TO_EDIT_AS_NEW_VIDEO)
+      expect(newVideo.name).to.equal(sourceBefore.name + ' (Studio Edit)')
+      expect(newVideo.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+      expect(newVideo.channel.id).to.equal(sourceBefore.channel.id)
+
+      const { data } = await servers[0].videos.listMyVideos({ sort: '-createdAt' })
+      expect(data.map(v => v.uuid)).to.include(created.uuid)
+
+      // Source is untouched while the new video is processing
+      expect((await getSource()).state.id).to.equal(VideoState.PUBLISHED)
+
+      // Metadata can be reviewed with the regular video update
+      await servers[0].videos.update({ id: created.uuid, attributes: { name: 'my clip', privacy: VideoPrivacy.PUBLIC } })
+
+      await servers[0].jobs.resumeJobQueue()
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const edited = await server.videos.get({ id: created.uuid })
+
+        expect(edited.state.id).to.equal(VideoState.PUBLISHED)
+        expect(edited.name).to.equal('my clip')
+        expect(edited.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+        expect(edited.files.length + edited.streamingPlaylists.length).to.be.above(0)
+        expect(edited.thumbnails).to.have.length.above(0)
+
+        await checkVideoDuration(server, created.uuid, 3)
+
+        // Source video was not modified nor deleted
+        const source = await server.videos.get({ id: sourceUUID })
+        expect(source.state.id).to.equal(VideoState.PUBLISHED)
+        expect(source.name).to.equal(sourceBefore.name)
+
+        await checkVideoDuration(server, sourceUUID, 5)
+      }
+
+      const sourceAfter = await getSource()
+      expect(sourceAfter.fileIds).to.deep.equal(sourceBefore.fileIds)
+      expect(sourceAfter.duration).to.equal(sourceBefore.duration)
+    })
+
+    it('Should remove the new video if the source video is deleted before the job runs', async function () {
+      this.timeout(120_000)
+
+      await renewVideo()
+      sourceUUID = videoUUID
+
+      await servers[0].jobs.pauseJobQueue()
+
+      const { video: created } = await servers[0].videoStudio.createEditionTasks({
+        videoId: sourceUUID,
+        tasks: [ { name: 'cut', options: { start: 2 } } ],
+        saveAsNewVideo: true
+      })
+
+      await servers[0].videos.remove({ id: sourceUUID })
+
+      await servers[0].jobs.resumeJobQueue()
+      await waitJobs(servers)
+
+      await servers[0].videos.getWithToken({ id: created.uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+      const { data } = await servers[0].videos.listMyVideos()
+      expect(data.map(v => v.uuid)).to.not.include(created.uuid)
+
+      await checkPersistentTmpIsEmpty(servers[0])
+    })
+
+    after(async function () {
+      await servers[0].config.rollback()
     })
   })
 

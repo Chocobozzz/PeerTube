@@ -1,6 +1,17 @@
-import { Component, Injector, OnDestroy, OnInit, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Injector,
+  OnDestroy,
+  OnInit,
+  afterRenderEffect,
+  effect,
+  inject,
+  signal,
+  viewChild
+} from '@angular/core'
 import { FormField, applyEach, form, validate } from '@angular/forms/signals'
-import { ServerService } from '@app/core'
+import { Notifier, ServerService } from '@app/core'
 import { FormErrorComponent } from '@app/shared/shared-forms/form-error.component'
 import { ReactiveFileComponent } from '@app/shared/shared-forms/reactive-file.component'
 import { TimestampInputComponent } from '@app/shared/shared-forms/timestamp-input.component'
@@ -10,6 +21,7 @@ import { EmbedComponent } from '@app/shared/shared-main/video/embed.component'
 import { sortBy } from '@peertube/peertube-core-utils'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
+import { PeerTubePlayer } from '../../../../standalone/embed-player-api/player'
 import { AlertComponent } from '../../../shared/shared-main/common/alert.component'
 import { getStudioUnavailability } from '../common/unavailable-features'
 import { VideoEdit } from '../common/video-edit.model'
@@ -50,6 +62,14 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
   private readonly injector = inject(Injector)
   private serverService = inject(ServerService)
   private manageController = inject(VideoManageController)
+  private notifier = inject(Notifier)
+
+  readonly embed = viewChild(EmbedComponent)
+  readonly playerReady = signal(false)
+  readonly capturingTime = signal(false)
+
+  private player: PeerTubePlayer
+  private playerIframe: HTMLIFrameElement
 
   readonly studioModel = signal<StudioModel>({
     'cut': { start: 0, end: 0 },
@@ -60,6 +80,14 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
   })
 
   readonly studioForm = form(this.studioModel, f => {
+    validate(f.cut, ({ value }) => {
+      const { start, end } = value()
+
+      return start >= end
+        ? { kind: 'startAfterEnd', message: $localize`Start time must be before end time.` }
+        : null
+    })
+
     validate(f['remove-segments'], ({ value }) => {
       const sorted = sortBy(value().filter(s => s.start < s.end), 'start')
 
@@ -94,6 +122,37 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
 
   private updatedSub!: Subscription
 
+  constructor () {
+    afterRenderEffect(() => {
+      const embed = this.embed()
+      embed?.video()
+      embed?.version()
+
+      const iframe = embed?.getIframe()
+      if (iframe === this.playerIframe) return
+
+      this.player = undefined
+      this.playerIframe = iframe
+      this.playerReady.set(false)
+      this.capturingTime.set(false)
+
+      if (!iframe) return
+
+      try {
+        const player = new PeerTubePlayer(iframe)
+        this.player = player
+
+        player.ready.then(() => {
+          if (this.player === player) this.playerReady.set(true)
+        }).catch(() => {
+          if (this.player === player) this.notifyPlayerError()
+        })
+      } catch {
+        this.notifyPlayerError()
+      }
+    })
+  }
+
   ngOnInit () {
     this.videoEdit = this.manageController.getStore().videoEdit
 
@@ -123,6 +182,7 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy (): void {
     this.updatedSub?.unsubscribe()
+    this.player = undefined
   }
 
   get videoExtensions () {
@@ -161,6 +221,57 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
     }))
   }
 
+  async setTimeFromPlayer (boundary: 'start' | 'end', segmentIndex?: number) {
+    const player = this.player
+    if (!player || !this.playerReady() || this.capturingTime()) return
+
+    const segment = segmentIndex === undefined
+      ? this.studioModel().cut
+      : this.studioModel()['remove-segments'][segmentIndex]
+
+    if (!segment) return
+
+    this.capturingTime.set(true)
+
+    try {
+      const currentTime = await player.getCurrentTime()
+      if (this.player !== player) return
+      if (!Number.isFinite(currentTime)) throw new Error('Invalid player time')
+
+      const duration = this.videoEdit.getVideoAttributes().duration
+      const timestamp = Math.max(0, Math.min(duration, Math.round(currentTime)))
+      const currentSegment = segmentIndex === undefined
+        ? this.studioModel().cut
+        : this.studioModel()['remove-segments'][segmentIndex]
+
+      if (currentSegment !== segment) return
+
+      this.studioModel.update(model => {
+        if (segmentIndex === undefined) {
+          return { ...model, cut: { ...segment, [boundary]: timestamp } }
+        }
+
+        return {
+          ...model,
+
+          'remove-segments': model['remove-segments'].map((value, index) =>
+            index === segmentIndex ? { ...value, [boundary]: timestamp } : value
+          )
+        }
+      })
+
+      const field = segmentIndex === undefined
+        ? this.studioForm.cut[boundary]
+        : this.studioForm['remove-segments'][segmentIndex][boundary]
+
+      field().markAsTouched()
+    } catch {
+      if (this.player === player) this.notifyPlayerError()
+    } finally {
+      if (this.player === player) this.capturingTime.set(false)
+    }
+  }
+
   noEdit () {
     return this.videoEdit.getStudioTasks().length === 0
   }
@@ -188,5 +299,9 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
       'add-watermark': { file: patch['add-watermark']?.file ?? null },
       'remove-segments': (patch['remove-segments'] ?? []).map(s => ({ start: s.start ?? 0, end: s.end ?? 0 }))
     })
+  }
+
+  private notifyPlayerError () {
+    this.notifier.error($localize`Could not read the current player time.`)
   }
 }

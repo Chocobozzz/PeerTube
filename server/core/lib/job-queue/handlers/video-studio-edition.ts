@@ -1,7 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { FFmpegEdition } from '@peertube/peertube-ffmpeg'
 import {
-  VideoState,
   VideoStudioEditionPayload,
   VideoStudioTask,
   VideoStudioTaskCutPayload,
@@ -14,7 +13,6 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -22,6 +20,7 @@ import {
   approximateIntroOutroAdditionalSize,
   makeStudioTaskFilesAvailable,
   onVideoStudioEnded,
+  onVideoStudioFailed,
   safeCleanupStudioTMPFiles
 } from '@server/lib/video-studio.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -40,6 +39,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
   const abortPromise = buildPromiseForAbortSignal(abortSignal)
 
   const payload = job.data as VideoStudioEditionPayload
+  const isNewVideo = !!payload.sourceVideoUUID
 
   const taskFiles = pick(payload, [ 'tasks', 'taskFilesStaged' ])
 
@@ -48,7 +48,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
     logger.withContext([ payload.videoUUID ], async () => {
       logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id)
 
-      let inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
+      let inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.sourceVideoUUID ?? payload.videoUUID)
 
       try {
         const video = await VideoModel.loadFull(payload.videoUUID)
@@ -61,12 +61,25 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
           return undefined
         }
 
+        const inputVideo = isNewVideo
+          ? await VideoModel.loadFull(payload.sourceVideoUUID)
+          : video
+
+        // The source video was deleted: there is nothing to edit, don't keep the empty new video
+        if (!inputVideo) {
+          logger.info('Can\'t process job %d, source video %s does not exist.', job.id, payload.sourceVideoUUID)
+
+          await safeCleanupStudioTMPFiles(taskFiles)
+          await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo })
+          return undefined
+        }
+
         const editionResultPath = await makeStudioTaskFilesAvailable(taskFiles, async tasks => {
-          await checkUserQuotaOrThrow(video, tasks)
+          await checkUserQuotaOrThrow({ video, inputVideo, tasks, isNewVideo })
 
-          await video.reload()
+          await inputVideo.reload()
 
-          return VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({
+          return VideoPathManager.Instance.makeAvailableMaxQualityFiles(inputVideo, async ({
             videoPath: originalVideoFilePath,
             separatedAudioPath
           }) => {
@@ -86,7 +99,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
 
                 inputFileMutexReleaser,
 
-                video,
+                video: inputVideo,
                 outputPath,
                 task,
 
@@ -106,17 +119,12 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
 
         logger.info('Video edition ended for video %s.', video.uuid)
 
-        await onVideoStudioEnded({ video, editionResultPath, taskFiles })
+        await onVideoStudioEnded({ video, editionResultPath, taskFiles, isNewVideo })
       } catch (err) {
         await safeCleanupStudioTMPFiles(taskFiles)
 
         try {
-          await sequelizeTypescript.transaction(async transaction => {
-            const video = await VideoModel.load(payload.videoUUID, transaction)
-            if (!video || video.state === VideoState.PUBLISHED) return
-
-            await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
-          })
+          await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo })
         } catch (err) {
           logger.error('Cannot reset video state after studio error', { err })
         }
@@ -230,12 +238,22 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
 
 // ---------------------------------------------------------------------------
 
-async function checkUserQuotaOrThrow (video: MVideoFull, tasks: VideoStudioTaskPayload[]) {
+async function checkUserQuotaOrThrow (options: {
+  video: MVideoFull
+  inputVideo: MVideoFull
+  tasks: VideoStudioTaskPayload[]
+  isNewVideo: boolean
+}) {
+  const { video, inputVideo, tasks, isNewVideo } = options
   const user = await UserModel.loadByVideoId(video.id)
 
   const filePathFinder = (i: number) => (tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
 
-  const additionalBytes = await approximateIntroOutroAdditionalSize(video, tasks, filePathFinder)
+  let additionalBytes = await approximateIntroOutroAdditionalSize(inputVideo, tasks, filePathFinder)
+
+  // The source files are kept, so the result is extra usage: use the source size as an upper bound (cuts make it smaller)
+  if (isNewVideo) additionalBytes += inputVideo.getMaxQualityBytes()
+
   if (await isUserQuotaValid({ channelUserId: user.id, uploadSize: additionalBytes }) === false) {
     throw new Error('Quota exceeded for this user to edit the video')
   }

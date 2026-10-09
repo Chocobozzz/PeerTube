@@ -57,6 +57,7 @@ import {
   RegistrationRequestForModerators,
   RequestChannelChangeOwnership,
   StudioEditionFinishedForOwner,
+  StudioNewVideoCreatedForOwner,
   UnblacklistForOwner,
   VideoTranscriptionGeneratedForOwner
 } from './shared/index.js'
@@ -71,6 +72,7 @@ class Notifier {
     publicationAfterScheduleUpdate: [ OwnedPublicationAfterScheduleUpdate ],
     publicationAfterAutoUnblacklist: [ OwnedPublicationAfterAutoUnblacklist ],
     videoStudioEditionFinished: [ StudioEditionFinishedForOwner ],
+    videoStudioNewVideoCreated: [ StudioNewVideoCreatedForOwner ],
     videoTranscriptionGenerated: [ VideoTranscriptionGeneratedForOwner ],
 
     newComment: [ CommentMention, NewCommentForVideoOwner ],
@@ -326,6 +328,15 @@ class Notifier {
 
     this.sendNotifications(models, video)
       .catch(err => logger.error('Cannot notify on finished studio edition %s.', video.url, { err }))
+  }
+
+  notifyOfCreatedVideoStudioNewVideo (video: MVideoFull) {
+    const models = this.notificationModels.videoStudioNewVideoCreated
+
+    logger.debug('Notify on video created by studio', { video: video.url })
+
+    this.sendNotifications(models, video)
+      .catch(err => logger.error('Cannot notify on video created by studio %s.', video.url, { err }))
   }
 
   notifyOfGeneratedVideoTranscription (caption: MVideoCaptionVideo) {

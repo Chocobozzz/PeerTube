@@ -329,6 +329,7 @@ export type VideoStudioTaskPayload =
 
 export interface VideoStudioEditionPayload {
   videoUUID: string
+  sourceVideoUUID?: string
   tasks: VideoStudioTaskPayload[]
 
   // Task files are staged in object storage: their `file` option is a staging key instead of a local path

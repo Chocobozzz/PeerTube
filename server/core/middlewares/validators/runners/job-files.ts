@@ -17,7 +17,9 @@ export const runnerJobGetVideoTranscodingFileValidator = [
 
     const runnerJob = res.locals.runnerJob
 
-    if (runnerJob.privatePayload.videoUUID !== res.locals.videoFull.uuid) {
+    const { videoUUID, sourceVideoUUID } = runnerJob.privatePayload as { videoUUID: string, sourceVideoUUID?: string }
+
+    if (res.locals.videoFull.uuid !== videoUUID && res.locals.videoFull.uuid !== sourceVideoUUID) {
       return res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: 'Job is not associated to this video',

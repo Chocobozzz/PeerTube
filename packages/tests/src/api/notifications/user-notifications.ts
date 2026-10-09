@@ -12,7 +12,8 @@ import {
   checkMyVideoIsPublished,
   checkNewLiveFromSubscription,
   checkNewVideoFromSubscription,
-  checkVideoStudioEditionIsFinished
+  checkVideoStudioEditionIsFinished,
+  checkVideoStudioNewVideoCreated
 } from '@tests/shared/notifications/check-video-notifications.js'
 import {
   getAllNotificationsSettings,
@@ -524,6 +525,24 @@ describe('Test user notifications', function () {
       await waitJobs(servers)
 
       await checkVideoStudioEditionIsFinished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+    })
+
+    it('Should send a new video notification when the studio result is saved as a new video', async function () {
+      this.timeout(240000)
+
+      const { name, id } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
+      await waitJobs(servers)
+
+      const tasks: VideoStudioTask[] = [ { name: 'cut', options: { start: 0, end: 1 } } ]
+      const { video } = await servers[1].videoStudio.createEditionTasks({ videoId: id, tasks, saveAsNewVideo: true })
+      await waitJobs(servers)
+
+      await checkVideoStudioNewVideoCreated({
+        ...baseParams,
+        videoName: name,
+        shortUUID: video.shortUUID,
+        checkType: 'presence'
+      })
     })
   })
 

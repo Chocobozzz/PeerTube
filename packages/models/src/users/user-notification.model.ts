@@ -56,7 +56,9 @@ export const UserNotificationType = {
   CHANNEL_OWNERSHIP_CHANGED_ACCEPTED: 30,
   CHANNEL_OWNERSHIP_CHANGED_REJECTED: 31,
 
-  AUTOMATIC_BLOCKLIST_UPDATE: 32
+  AUTOMATIC_BLOCKLIST_UPDATE: 32,
+
+  MY_VIDEO_STUDIO_NEW_VIDEO_CREATED: 33
 } as const
 
 export type UserNotificationType_Type = typeof UserNotificationType[keyof typeof UserNotificationType]
