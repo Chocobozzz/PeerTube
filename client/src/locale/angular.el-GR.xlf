@@ -12418,7 +12418,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1663379405062033606" datatype="html">
         <source>Minimum required age to create an account</source>
-        <target state="new">Minimum required age to create an account</target>
+        <target state="translated">Ελάχιστη απαιτούμενη ηλικία για τη δημιουργία λογαριασμού</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">240</context>
@@ -12426,7 +12426,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {year old} other {years old}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {year old} other {years old}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {έτους} other {ετών}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">251</context>
@@ -12434,7 +12434,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1980878931796709542" datatype="html">
         <source>Default video quota for a new user</source>
-        <target state="new">Default video quota for a new user</target>
+        <target state="translated">Προεπιλεγμένο όριο βίντεο για έναν νέο χρήστη</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">265</context>
@@ -12442,7 +12442,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
         <source>Enable Signup</source>
-        <target state="new">Enable Signup</target>
+        <target state="translated">Ενεργοποίηση Εγγραφής</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">183</context>
@@ -12450,7 +12450,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4924378635140045267" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation</source>
-        <target state="new">⚠️ This functionality requires a lot of attention and extra moderation</target>
+        <target state="translated">⚠️ Αυτή η λειτουργία απαιτεί μεγάλη προσοχή και επιπλέον έλεγχο από συντονιστές</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">185</context>
@@ -12498,7 +12498,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8147229944654164397" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Βίντεο} other {Βίντεο} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">27</context>
@@ -12510,7 +12510,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2068564237394270744" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Κανάλι} other {Κανάλια} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">33</context>
@@ -12522,7 +12522,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="407487463718398437" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Εγγεγραμμένος} other {Εγγεγραμμένοι} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">39</context>
@@ -12558,7 +12558,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3094586852616580737" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Σχόλιο} other {Σχόλια} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">57</context>
@@ -12626,7 +12626,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8819364692199793780" datatype="html">
         <source>Default daily upload limit for a new user</source>
-        <target state="new">Default daily upload limit for a new user</target>
+        <target state="translated">Προεπιλεγμένο ημερήσιο όριο μεταφόρτωσης για έναν νέο χρήστη</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">286</context>
@@ -12634,7 +12634,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3841475259822163079" datatype="html">
         <source>Automatically enable video history for a new user</source>
-        <target state="new">Automatically enable video history for a new user</target>
+        <target state="translated">Αυτόματη ενεργοποίηση του ιστορικού βίντεο για έναν νέο χρήστη</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">310</context>
@@ -12642,7 +12642,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7567466559668450627" datatype="html">
         <source>VIDEO IMPORTS</source>
-        <target state="new">VIDEO IMPORTS</target>
+        <target state="translated">ΕΙΣΑΓΩΓΕΣ ΒΙΝΤΕΟ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">322</context>
@@ -12650,7 +12650,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4719342289581047890" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target state="new">Allow import with a torrent file or a magnet URI</target>
+        <target state="translated">Να επιτρέπεται η εισαγωγή μέσω αρχείου torrent ή διεύθυνσης magnet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">362</context>
@@ -12658,7 +12658,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
         <source>⚠️ We don't recommend to enable this feature if you don't trust your users</source>
-        <target state="new">⚠️ We don't recommend to enable this feature if you don't trust your users</target>
+        <target state="translated">⚠️ Δεν συνιστούμε να ενεργοποιήσετε αυτή τη λειτουργία αν δεν εμπιστεύεστε τους χρήστες σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">365</context>
@@ -12666,7 +12666,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3991697548652611331" datatype="html">
         <source>Allow channel synchronization with channel of other platforms like YouTube</source>
-        <target state="new">Allow channel synchronization with channel of other platforms like YouTube</target>
+        <target state="translated">Να επιτρέπεται ο συγχρονισμός καναλιών με κανάλια άλλων πλατφορμών, όπως το YouTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">377</context>
@@ -12674,7 +12674,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7404104645798703279" datatype="html">
         <source>⛔ You need to allow import with HTTP URL to be able to activate this feature.</source>
-        <target state="new"> ⛔ You need to allow import with HTTP URL to be able to activate this feature. </target>
+        <target state="translated">⛔ Για να ενεργοποιήσετε αυτή τη λειτουργία, πρέπει να επιτρέψετε την εισαγωγή μέσω διεύθυνσης URL HTTP.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">381</context>
@@ -12682,7 +12682,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5239500638742740142" datatype="html">
         <source>Max channel synchronization per user</source>
-        <target state="new">Max channel synchronization per user</target>
+        <target state="translated">Μέγιστος αριθμός καναλιών συγχρονισμού ανά χρήστη</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">388</context>
@@ -12690,7 +12690,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7725203429401574666" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {sync} other {syncs}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {sync} other {syncs}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {συγχρονισμός} other {συγχρονισμοί}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">399</context>
@@ -12698,7 +12698,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5959922792614518034" datatype="html">
         <source>BROWSE VIDEOS</source>
-        <target state="new">BROWSE VIDEOS</target>
+        <target state="translated">ΠΕΡΙΗΓΗΣΗ ΣΤΑ ΒΙΝΤΕΟ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">61</context>
@@ -12706,7 +12706,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5668816720700287117" datatype="html">
         <source>Default sort</source>
-        <target state="new">Default sort</target>
+        <target state="translated">Προεπιλεγμένη ταξινόμηση</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">68</context>
@@ -12714,7 +12714,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8230654187625869910" datatype="html">
         <source>Default scope</source>
-        <target state="new">Default scope</target>
+        <target state="translated">Προεπιλεγμένο εύρος</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">78</context>
@@ -12722,7 +12722,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target state="new">Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</target>
+        <target state="translated">Εκτός αν ένας χρήστης έχει χαρακτηριστεί ως αξιόπιστος, τα βίντεό του θα παραμείνουν ιδιωτικά έως ότου τα ελέγξει ένας συντονιστής.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">430</context>
@@ -12730,7 +12730,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7055002182446434458" datatype="html">
         <source>Allow users to upload a new version of their video</source>
-        <target state="new">Allow users to upload a new version of their video</target>
+        <target state="translated">Να επιτρέπεται στους χρήστες να ανεβάζουν μια νέα έκδοση του βίντεό τους</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">445</context>
