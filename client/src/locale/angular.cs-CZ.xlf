@@ -385,6 +385,7 @@
       </trans-unit>
       <trans-unit id="1081216658260150122" datatype="html" xml:space="preserve">
         <source>A new <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>video abuse<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been created on video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/></source>
+        <target state="translated">U videa <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/> byl vytvořen nový <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>zneužívání videa<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">33</context>
