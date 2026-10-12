@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
+import { ServersCommand } from '@peertube/peertube-server-commands'
 import {
   addAfterCommitCallback,
   runSequelizeTransaction,
@@ -17,6 +18,10 @@ describe('Database transaction helpers', function () {
   let TestModel: ModelStatic<Model<TestAttributes, Partial<TestAttributes>> & TestAttributes>
 
   before(async function () {
+    this.timeout(30000)
+
+    await ServersCommand.flushTests(1)
+
     sequelize = new Sequelize({
       database: 'peertube_test1',
       dialect: 'postgres',

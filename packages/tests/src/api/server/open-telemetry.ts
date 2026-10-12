@@ -62,14 +62,18 @@ describe('Open Telemetry', function () {
 
       const { uuid } = await server.videos.quickUpload({ name: 'metrics video' })
       await server.videos.get({ id: uuid })
-      await makeRawRequest({ url: server.url + '/static/unknown-file', expectedStatus: HttpStatusCode.OK_200 })
-      await makeRawRequest({ url: server.url + '/w/' + uuid, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url: server.url + '/static/web-videos/unknown-file.mp4', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await makeRawRequest({
+        url: server.url + '/videos/watch/' + uuid,
+        headers: { Accept: 'application/activity+json' },
+        expectedStatus: HttpStatusCode.OK_200
+      })
 
       const res = await makeRawRequest({ url: metricsUrl, expectedStatus: HttpStatusCode.OK_200 })
 
       expect(res.text).to.contain('http_request_duration_ms_count{path="/api/v1/videos/:id",method="GET",statusCode="200"')
-      expect(res.text).to.contain('http_request_duration_ms_count{path="/static/*",method="GET",statusCode="200"')
-      expect(res.text).to.contain('http_request_duration_ms_count{path="/w/*",method="GET",statusCode="200"')
+      expect(res.text).to.contain('http_request_duration_ms_count{path="/static/*",method="GET",statusCode="404"')
+      expect(res.text).to.contain('http_request_duration_ms_count{path="/videos/*",method="GET",statusCode="200"')
       expect(res.text).to.not.contain(uuid)
     })
 

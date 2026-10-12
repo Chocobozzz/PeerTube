@@ -187,6 +187,8 @@ describe('Official plugin auth-openid-connect', function () {
 
     await server.kill()
     await server.run({
+      ...(withSecondary ? objectStorage.getDefaultMockConfig() : {}),
+
       oauth2: {
         token_lifetime: {
           access_token: '5 seconds',

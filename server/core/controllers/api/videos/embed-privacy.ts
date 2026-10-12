@@ -7,6 +7,7 @@ import {
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyUpdate
 } from '@peertube/peertube-models'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { getAuthUser } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { VIDEO_EMBED_PRIVACY_POLICIES, WEBSERVER } from '@server/initializers/constants.js'
@@ -17,13 +18,12 @@ import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-p
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
-import { asyncMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
 import {
   getVideoEmbedPrivacyValidator,
   isVideoEmbedOnDomainAllowedValidator,
   updateVideoEmbedPrivacyValidator
 } from '../../../middlewares/validators/index.js'
-import { runTransaction } from '@server/helpers/database-utils.js'
 
 const logger = createLogger('api', 'video', 'embed-privacy')
 
@@ -40,7 +40,7 @@ videoEmbedPrivacyRouter.put(
   '/:videoId/embed-privacy',
   authenticate,
   asyncMiddleware(updateVideoEmbedPrivacyValidator),
-  asyncMiddleware(updateVideoEmbedPrivacy)
+  asyncRetryTransactionMiddleware(updateVideoEmbedPrivacy)
 )
 
 videoEmbedPrivacyRouter.get(
