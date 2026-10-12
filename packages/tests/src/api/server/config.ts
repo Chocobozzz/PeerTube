@@ -243,7 +243,8 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       browseVideos: {
         defaultSort: '-trending',
-        defaultScope: 'local'
+        defaultScope: 'local',
+        includeScheduledLives: false
       },
       menu: {
         login: {

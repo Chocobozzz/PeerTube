@@ -1354,6 +1354,9 @@ client:
     # Available options: 'local' or 'federated'
     default_scope: 'federated'
 
+    # Whether to show scheduled lives
+    include_scheduled_lives: false
+
   menu:
     login:
       # If you enable only one external auth plugin

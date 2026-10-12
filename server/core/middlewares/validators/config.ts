@@ -288,5 +288,5 @@ function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, req: expres
     return false
   }
 
-  return true
+  return body('client.browseVideos.includeScheduledLives').isBoolean()
 }

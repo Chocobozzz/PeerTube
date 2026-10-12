@@ -208,6 +208,7 @@ export const CONFIG = buildConfig({
       }
     },
     BROWSE_VIDEOS: {
+      INCLUDE_SCHEDULED_LIVES: dynamicKey<boolean>('client.browse_videos.include_scheduled_lives'),
       DEFAULT_SORT: dynamicKey<string>('client.browse_videos.default_sort'),
       DEFAULT_SCOPE: dynamicKey<string>('client.browse_videos.default_scope')
     },

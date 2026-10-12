@@ -314,6 +314,15 @@ describe('Test live', function () {
       }
     })
 
+    it('Should have the live listed globally if includeScheduledLive is true', async function () {
+      const [server] = servers
+
+      const { total, data } = await server.videos.list({ includeScheduledLive: true })
+
+      expect(total).to.equal(1)
+      expect(data).to.have.lengthOf(1)
+    })
+
     it('Should have the live listed on the channel since it is scheduled', async function () {
       const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
 

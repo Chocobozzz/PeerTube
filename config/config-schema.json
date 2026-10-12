@@ -3194,6 +3194,11 @@
               "description": "Default scope option Available options: 'local' or 'federated'",
               "type": "string",
               "default": "federated"
+            },
+            "include_scheduled_lives": {
+              "description": "Whether to show scheduled lives",
+              "type": "boolean",
+              "default": false
             }
           },
           "additionalProperties": false

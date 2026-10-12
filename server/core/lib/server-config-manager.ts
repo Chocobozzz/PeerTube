@@ -89,7 +89,8 @@ class ServerConfigManager {
         },
         browseVideos: {
           defaultSort: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
-          defaultScope: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE
+          defaultScope: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE,
+          includeScheduledLives: CONFIG.CLIENT.BROWSE_VIDEOS.INCLUDE_SCHEDULED_LIVES
         },
         menu: {
           login: {
