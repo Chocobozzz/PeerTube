@@ -1,7 +1,13 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, UserRole } from '@peertube/peertube-models'
-import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers, TwoFactorCommand } from '@peertube/peertube-server-commands'
+import {
+  cleanupTests,
+  createSingleServer,
+  PeerTubeServer,
+  setAccessTokensToServers,
+  TwoFactorCommand
+} from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
 describe('Official plugin auth-ldap', function () {
@@ -131,10 +137,13 @@ describe('Official plugin auth-ldap', function () {
   it('Should be able to login if the user is unbanned', async function () {
     await server.users.unbanUser({ userId })
 
-    await server.login.login({
+    // Banning the user revoked its tokens
+    const { access_token } = await server.login.login({
       user: { username: 'fry@planetexpress.com', password: 'fry' },
       otpToken: TwoFactorCommand.buildOTP({ secret: otpSecret }).generate()
     })
+
+    accessToken = access_token
   })
 
   it('Should disable two factor authentication with the LDAP password', async function () {

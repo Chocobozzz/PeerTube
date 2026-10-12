@@ -321,7 +321,7 @@ export const usersUpdateMeValidator = [
       if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
-          message: req.t('Current password is incorrect.'),
+          message: req.t('currentPassword is invalid.'),
           type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }
@@ -471,22 +471,14 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
         })
       }
 
-      if (user.pluginAuth) {
-        if (await isExternalUserPasswordValid({ user, password: req.body.currentPassword }) !== true) {
-          return res.fail({
-            status: HttpStatusCode.FORBIDDEN_403,
-            message: req.t('Current password is incorrect.'),
-            type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
-          })
-        }
+      const isPasswordValid = user.pluginAuth
+        ? await isExternalUserPasswordValid({ user, password: req.body.currentPassword })
+        : await user.isPasswordMatch(req.body.currentPassword)
 
-        return next()
-      }
-
-      if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
+      if (isPasswordValid !== true) {
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          message: req.t('Current password is incorrect.'),
+          message: req.t('currentPassword is invalid.'),
           type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }

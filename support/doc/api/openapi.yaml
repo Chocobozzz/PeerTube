@@ -2018,6 +2018,8 @@ paths:
           description: invalid password
         '404':
           description: user not found
+        '429':
+          description: too many password checks for this user
 
   /api/v1/users/{id}/two-factor/confirm-request:
     post:
@@ -2072,7 +2074,7 @@ paths:
               properties:
                 currentPassword:
                   type: string
-                  description: Password of the currently authenticated user
+                  description: Password of the currently authenticated user. Users of an id and pass auth plugin must use the password they log in with
       responses:
         '204':
           description: successful operation
@@ -2080,6 +2082,8 @@ paths:
           description: invalid password
         '404':
           description: user not found
+        '429':
+          description: too many password checks for this user
 
   /api/v1/users/{userId}/imports/import-resumable:
     post:

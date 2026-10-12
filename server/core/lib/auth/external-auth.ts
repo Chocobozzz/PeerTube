@@ -183,6 +183,7 @@ async function getBypassFromPasswordGrant (username: string, password: string): 
 
     return {
       bypass: true,
+      type: 'id-and-pass',
       pluginName: npmName,
       authName,
       user,
@@ -250,6 +251,7 @@ async function consumeBypassFromExternalAuth (username: string, externalAuthToke
 
   return {
     bypass: true,
+    type: 'external',
     pluginName: npmName,
     authName,
     userUpdaterResults,
