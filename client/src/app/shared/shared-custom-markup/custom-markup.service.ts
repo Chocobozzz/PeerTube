@@ -228,6 +228,7 @@ export class CustomMarkupService {
 
       accountHandle: data.accountHandle || undefined,
       channelHandle: data.channelHandle || undefined,
+      playlistId: data.playlistId || undefined,
 
       host: data.host || undefined,
 

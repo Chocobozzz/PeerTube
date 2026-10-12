@@ -50,6 +50,7 @@ export type VideosListMarkupData = {
 
   channelHandle?: string
   accountHandle?: string
+  playlistId?: string
 
   host?: string
 

@@ -9,6 +9,7 @@ import { Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
 import { CustomMarkupComponent } from './shared'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 /*
  * Markup component list videos depending on criteria
@@ -23,6 +24,7 @@ import { CustomMarkupComponent } from './shared'
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
   private videoService = inject(VideoService)
+  private videoPlaylistService = inject(VideoPlaylistService)
   private notifier = inject(Notifier)
   private userService = inject(UserService)
   private cd = inject(ChangeDetectorRef)
@@ -37,6 +39,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   readonly maxRows = input<number>(undefined)
   readonly channelHandle = input<string>(undefined)
   readonly accountHandle = input<string>(undefined)
+  readonly playlistId = input<string>(undefined)
   readonly host = input<string>(undefined)
 
   readonly loaded = output<boolean>()
@@ -103,6 +106,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
 
     const channelHandle = this.channelHandle()
     const accountHandle = this.accountHandle()
+    const playlistId = this.playlistId()
     if (channelHandle) {
       obs = this.videoService.listChannelVideos({
         ...options,
@@ -114,6 +118,14 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
         ...options,
 
         account: { nameWithHost: accountHandle }
+      })
+    } else if (playlistId) {
+      obs = this.videoPlaylistService.getPlaylistVideosExtracted({
+        componentPagination: {
+          currentPage: 1,
+          itemsPerPage: this.count()
+        },
+        videoPlaylistId: playlistId
       })
     } else {
       obs = this.videoService.listVideos(options)
