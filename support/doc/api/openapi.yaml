@@ -11962,6 +11962,9 @@ components:
             views:
               type: object
               properties:
+                countViewAfter:
+                  type: number
+                  description: 'Milliseconds'
                 watchingInterval:
                   type: object
                   properties:

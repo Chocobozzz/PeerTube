@@ -420,6 +420,9 @@ export interface ServerConfig {
 
   views: {
     videos: {
+      // milliseconds
+      countViewAfter: number
+
       remote: {
         // milliseconds
         maxAge: number

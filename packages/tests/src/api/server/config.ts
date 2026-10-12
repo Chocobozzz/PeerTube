@@ -533,6 +533,7 @@ describe('Test config', function () {
       expect(data.openTelemetry.metrics.enabled).to.be.false
       expect(data.openTelemetry.metrics.playbackStatsInterval).to.equal(15000)
 
+      expect(data.views.videos.countViewAfter).to.equal(10000)
       expect(data.views.videos.watchingInterval.anonymous).to.equal(5000)
       expect(data.views.videos.watchingInterval.users).to.equal(5000)
 
