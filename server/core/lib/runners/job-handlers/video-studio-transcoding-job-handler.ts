@@ -13,7 +13,7 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
@@ -176,7 +176,7 @@ export class VideoStudioTranscodingJobHandler
 
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
-    await sequelizeTypescript.transaction(async transaction => {
+    await runTransaction(async transaction => {
       const video = await loadRunnerVideo(options.runnerJob, transaction)
       if (!video || video.state === VideoState.PUBLISHED) return
 

@@ -1,5 +1,5 @@
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { ServerModel } from '@server/models/server/server.js'
@@ -28,7 +28,7 @@ export async function addAccountInBlocklist (options: {
 }) {
   const { byAccountId, targetAccount, blocklistSubscription, removeNotificationOfUserId } = options
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     const existing = await AccountBlocklistModel.loadByAccountAndTarget(byAccountId, targetAccount.id, t)
 
     if (!existing) {
@@ -63,7 +63,7 @@ export async function addServerInBlocklist (options: {
 }) {
   const { byAccountId, targetServer, blocklistSubscription, removeNotificationOfUserId } = options
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     const existing = await ServerBlocklistModel.loadByAccountAndTarget(byAccountId, targetServer.id, t)
 
     if (!existing) {
@@ -91,7 +91,7 @@ export async function addServerInBlocklist (options: {
 }
 
 export function removeAccountFromBlocklist (accountBlock: MAccountBlocklist) {
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const targetAccount = await AccountModel.load(accountBlock.targetAccountId, t)
 
     await BlocklistLogModel.create({
@@ -107,7 +107,7 @@ export function removeAccountFromBlocklist (accountBlock: MAccountBlocklist) {
 }
 
 export function removeServerFromBlocklist (serverBlock: MServerBlocklist) {
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const targetServer = await ServerModel.load(serverBlock.targetServerId, t)
 
     await BlocklistLogModel.create({

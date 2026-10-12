@@ -1,9 +1,8 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { canCopyForHLS, getVideoStreamDuration, HLSFromTSTranscodeOptions, HLSTranscodeOptions } from '@peertube/peertube-ffmpeg'
 import { FileStorage } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { MStreamingPlaylist, MVideo, MVideoFile } from '@server/types/models/index.js'
@@ -84,7 +83,7 @@ export async function onHLSVideoFileTranscoding (options: {
 
   // Create or update the playlist
   const { playlist, generated: playlistGenerated } = await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
+    return runTransaction(async transaction => {
       return VideoStreamingPlaylistModel.loadOrGenerate(video, transaction)
     })
   })
@@ -134,7 +133,7 @@ export async function onHLSVideoFileTranscoding (options: {
     }
 
     const savedVideoFile = await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         const savedVideoFile = await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', t) as MVideoFile
 
         await VideoInfohashModel.replaceFileInfohash(savedVideoFile.id, infoHash, t)

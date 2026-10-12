@@ -1,7 +1,6 @@
 import { AutomaticTagPolicy, UserRight, VideoCommentPolicy, VideoCommentThreadTree } from '@peertube/peertube-models'
-import { afterCommitIfTransaction, runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
+import { afterCommitIfTransaction, runInReadCommittedTransaction, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import express from 'express'
@@ -28,7 +27,7 @@ const logger = createLogger()
 export async function removeComment (commentArg: MComment, req: express.Request, res: express.Response) {
   let videoCommentInstanceBefore: MCommentOwnerVideo
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(commentArg.url, t)
 
     videoCommentInstanceBefore = cloneDeep(comment)
@@ -72,7 +71,7 @@ export async function approveComment (commentArg: MComment, options: { notify?: 
   }
 
   if (transaction) await run(transaction)
-  else await sequelizeTypescript.transaction(run)
+  else await runTransaction(run)
 }
 
 export async function createLocalVideoComment (options: {

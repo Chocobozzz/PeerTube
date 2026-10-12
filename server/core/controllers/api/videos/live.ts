@@ -9,12 +9,11 @@ import {
 } from '@peertube/peertube-models'
 import { uuidToShort } from '@peertube/peertube-node-utils'
 import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createReqFiles } from '@server/helpers/express-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -139,7 +138,7 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
 
   return logger.withContext([ video.uuid ], async () => {
     await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         const newReplaySettingModel = await updateReplaySettings(videoLive, body, t)
 
         if (newReplaySettingModel) videoLive.replaySettingId = newReplaySettingModel.id

@@ -38,6 +38,7 @@ import { readFileSync } from 'fs'
 import pg from 'pg'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
+import { trackInstancesSavedInTransactions } from '../helpers/database-transaction.js'
 import { createLogger } from '../helpers/logger.js'
 import { AbuseMessageModel } from '../models/abuse/abuse-message.js'
 import { AbuseModel } from '../models/abuse/abuse.js'
@@ -82,7 +83,6 @@ import { VideoTagModel } from '../models/video/video-tag.js'
 import { VideoModel } from '../models/video/video.js'
 import { CONFIG } from './config.js'
 import { VIDEO_SEARCH_INDEXED_DESCRIPTION_LENGTH } from './constants.js'
-import { makeTransactionsRollbackSafe } from './database-transactions.js'
 
 const logger = createLogger()
 
@@ -143,7 +143,7 @@ export const sequelizeTypescript = new SequelizeTypescript({
   }
 })
 
-makeTransactionsRollbackSafe(sequelizeTypescript)
+trackInstancesSavedInTransactions(sequelizeTypescript)
 
 export function checkDatabaseConnectionOrDie () {
   sequelizeTypescript.authenticate()

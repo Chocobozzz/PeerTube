@@ -3,7 +3,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { autoFollowBackIfNeeded } from '../../../lib/activitypub/follow.js'
 import { sendAccept, sendReject, sendUndoFollow } from '../../../lib/activitypub/send/index.js'
 import { JobQueue } from '../../../lib/job-queue/index.js'
@@ -165,7 +165,7 @@ async function addFollow (req: express.Request, res: express.Response) {
 async function removeFollowing (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     if (follow.state === 'accepted') sendUndoFollow(follow, t)
 
     // Disable redundancy on unfollowed instances

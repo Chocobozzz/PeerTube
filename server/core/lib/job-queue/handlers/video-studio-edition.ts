@@ -14,7 +14,7 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -111,7 +111,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
         await safeCleanupStudioTMPFiles(taskFiles)
 
         try {
-          await sequelizeTypescript.transaction(async transaction => {
+          await runTransaction(async transaction => {
             const video = await VideoModel.load(payload.videoUUID, transaction)
             if (!video || video.state === VideoState.PUBLISHED) return
 

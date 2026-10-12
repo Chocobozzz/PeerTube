@@ -9,7 +9,7 @@ import { AbuseModel } from '@server/models/abuse/abuse.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import { getFormattedObjects } from '../../helpers/utils.js'
-import { sequelizeTypescript } from '../../initializers/database.js'
+import { runTransaction } from '../../helpers/database-utils.js'
 import {
   abuseGetValidator,
   abuseListForAdminsValidator,
@@ -160,7 +160,7 @@ async function updateAbuse (req: express.Request, res: express.Response) {
     stateUpdated = true
   }
 
-  await sequelizeTypescript.transaction(t => {
+  await runTransaction(t => {
     return abuse.save({ transaction: t })
   })
 
@@ -178,7 +178,7 @@ async function updateAbuse (req: express.Request, res: express.Response) {
 async function deleteAbuse (req: express.Request, res: express.Response) {
   const abuse = res.locals.abuse
 
-  await sequelizeTypescript.transaction(t => {
+  await runTransaction(t => {
     return abuse.destroy({ transaction: t })
   })
 
@@ -194,7 +194,7 @@ async function reportAbuse (req: express.Request, res: express.Response) {
 
   const body: AbuseCreate = req.body
 
-  const { id } = await sequelizeTypescript.transaction(async t => {
+  const { id } = await runTransaction(async t => {
     const user = res.locals.oauth.token.User
     // Don't send abuse notification if reporter is an admin/moderator
     const skipNotification = user.hasRight(UserRight.MANAGE_ABUSES)
@@ -284,7 +284,7 @@ async function addAbuseMessage (req: express.Request, res: express.Response) {
 async function deleteAbuseMessage (req: express.Request, res: express.Response) {
   const abuseMessage = res.locals.abuseMessage
 
-  await sequelizeTypescript.transaction(t => {
+  await runTransaction(t => {
     return abuseMessage.destroy({ transaction: t })
   })
 

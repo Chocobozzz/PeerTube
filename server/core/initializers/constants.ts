@@ -1022,12 +1022,8 @@ export let PRIVATE_RSA_KEY_SIZE = 2048
 // Password encryption
 export const BCRYPT_SALT_SIZE = 10
 
-// bcrypt and RSA key generation, see helpers/peertube-crypto.ts
 export const CRYPTO_QUEUE = {
-  // Leave a CPU to the event loop. availableParallelism() takes the CPU affinity (cpusets...) into account, unlike cpus()
   CONCURRENCY: Math.max(1, availableParallelism() - 1),
-
-  // A job takes ~50 ms (password check) to ~150 ms (signup) on a CPU: a request waits a few seconds at most before getting a 503
   MAX_PENDING: 20
 }
 

@@ -1,7 +1,8 @@
 import { wait } from '@peertube/peertube-core-utils'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { Transaction } from 'sequelize'
+import { Transaction, TransactionOptions } from 'sequelize'
 import { Model } from 'sequelize-typescript'
+import { addAfterCommitCallback, runSequelizeTransaction } from './database-transaction.js'
 import { createLogger } from './logger.js'
 
 const logger = createLogger()
@@ -58,13 +59,23 @@ function getRetryDelayMs (attempts: number) {
   return Math.floor(Math.random() * maxDelay)
 }
 
-// The model state is restored if the transaction does not commit (see makeTransactionsRollbackSafe), so the save can be retried
+export function runTransaction<T> (fn: (t: Transaction) => PromiseLike<T>): Promise<T>
+export function runTransaction<T> (options: TransactionOptions, fn: (t: Transaction) => PromiseLike<T>): Promise<T>
+export function runTransaction<T> (
+  optionsOrFn: TransactionOptions | ((t: Transaction) => PromiseLike<T>),
+  fn?: (t: Transaction) => PromiseLike<T>
+): Promise<T> {
+  if (typeof optionsOrFn === 'function') return runSequelizeTransaction(sequelizeTypescript, {}, optionsOrFn)
+
+  return runSequelizeTransaction(sequelizeTypescript, optionsOrFn, fn)
+}
+
 export function saveInTransactionWithRetries<T extends Pick<Model, 'save'>> (
   model: T,
   isolationLevel: Transaction.ISOLATION_LEVELS = Transaction.ISOLATION_LEVELS.SERIALIZABLE
 ) {
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction({ isolationLevel }, async transaction => {
+    return runTransaction({ isolationLevel }, async transaction => {
       await model.save({ transaction })
     })
   })
@@ -72,7 +83,7 @@ export function saveInTransactionWithRetries<T extends Pick<Model, 'save'>> (
 
 export function deleteInTransactionWithRetries<T extends Pick<Model, 'destroy'>> (model: T) {
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
+    return runTransaction(async transaction => {
       await model.destroy({ transaction })
     })
   })
@@ -100,11 +111,11 @@ export function deleteAllModels<T extends Pick<Model, 'destroy'>> (models: T[], 
 export function runInReadCommittedTransaction<T> (fn: (t: Transaction) => Promise<T>) {
   const options = { isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED }
 
-  return sequelizeTypescript.transaction(options, t => fn(t))
+  return runTransaction(options, t => fn(t))
 }
 
 export function afterCommitIfTransaction (t: Transaction, fn: Function) {
-  if (t) return t.afterCommit(() => fn())
+  if (t) return addAfterCommitCallback(t, () => fn())
 
   return fn()
 }

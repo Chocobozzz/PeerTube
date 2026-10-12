@@ -1,7 +1,6 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { buildNonDuplicatedVideoAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from '@server/lib/job-queue/index.js'
@@ -139,7 +138,7 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
     const inputFileUpdatedAt = new Date()
 
     const video = await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
+      return runTransaction(async transaction => {
         const video = await VideoModel.loadFull(res.locals.videoFull.id, transaction)
 
         oldWebVideoFiles = video.VideoFiles

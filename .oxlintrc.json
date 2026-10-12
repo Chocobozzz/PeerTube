@@ -581,6 +581,18 @@
         "no-regex-spaces": [
           "error"
         ],
+        "no-restricted-properties": [
+          "error",
+          {
+            "object": "sequelizeTypescript",
+            "property": "transaction",
+            "message": "Use runTransaction(), that restores model instances if the transaction does not commit"
+          },
+          {
+            "property": "afterCommit",
+            "message": "Use afterCommitIfTransaction(), Sequelize runs afterCommit hooks even if COMMIT fails"
+          }
+        ],
         "no-return-assign": [
           "error",
           "except-parens"

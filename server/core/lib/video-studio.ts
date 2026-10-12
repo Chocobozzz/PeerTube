@@ -3,7 +3,7 @@ import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import { hasVideoStudioTaskFile, VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
@@ -188,7 +188,7 @@ export async function onVideoStudioEnded (options: {
       const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newFile, localPath)
       await removeAllFilesUnderLock(video)
 
-      await sequelizeTypescript.transaction(async t => {
+      await runTransaction(async t => {
         newFile.torrentFilename = torrentFilename
         newFile.torrentStorage = torrentStorage
         await newFile.save({ transaction: t })

@@ -1,8 +1,12 @@
 import { HttpStatusCode, VideoChannelCollaboratorState } from '@peertube/peertube-models'
-import { deleteInTransactionWithRetries, retryTransactionWrapper, saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import {
+  deleteInTransactionWithRetries,
+  retryTransactionWrapper,
+  runTransaction,
+  saveInTransactionWithRetries
+} from '@server/helpers/database-utils.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { Notifier } from '@server/lib/notifier/notifier.js'
 import {
   channelAcceptOrRejectInviteCollaboratorsValidator,
@@ -80,7 +84,7 @@ async function inviteCollaborator (req: express.Request, res: express.Response) 
   }) as MChannelCollaboratorAccount
 
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
+    return runTransaction(async transaction => {
       // Existing rejected collaborator
       if (res.locals.channelCollaborator) {
         await res.locals.channelCollaborator.destroy({ transaction })

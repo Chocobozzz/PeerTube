@@ -1,4 +1,5 @@
 import { ActivityAudience, ActivityDelete } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -126,7 +127,7 @@ async function sendDeleteVideoComment (comment: MCommentOwnerVideo, transaction:
   }
 
   // Send to origin
-  return transaction.afterCommit(() => {
+  return afterCommitIfTransaction(transaction, () => {
     return unicastTo({
       data: activity,
       byActor,

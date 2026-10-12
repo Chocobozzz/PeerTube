@@ -3,11 +3,10 @@ import { buildSUUID } from '@peertube/peertube-node-utils'
 import { AbstractTranscriber, transcriberFactory, TranscriptionModel, WhisperBuiltinModel } from '@peertube/peertube-transcription'
 import { moveAndProcessCaptionFile } from '@server/helpers/captions-utils.js'
 import { isVideoCaptionLanguageValid, isVTTFileValid } from '@server/helpers/custom-validators/video-captions.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { DIRECTORIES } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoJobInfoModel } from '@server/models/video/video-job-info.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
@@ -70,7 +69,7 @@ export async function createLocalCaption (options: {
     : null
 
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(t => {
+    return runTransaction(t => {
       return VideoCaptionModel.insertOrReplaceLanguage(videoCaption, t)
     })
   })

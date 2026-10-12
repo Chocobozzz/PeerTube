@@ -1,9 +1,8 @@
 import { guessAspectRatio } from '@peertube/peertube-core-utils'
 import { ActivityTagObject, VideoChaptersObject, VideoObject, VideoStreamingPlaylistType_Type } from '@peertube/peertube-models'
 import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
-import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
 import { removeRedundanciesOfStreamingPlaylist } from '@server/lib/redundancy.js'
 import { replaceChapters } from '@server/lib/video-chapters.js'
@@ -159,7 +158,7 @@ export abstract class APVideoAbstractBuilder {
     logger.debug('Fetched chapters AP object', { body })
 
     return retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         const chapters = body.hasPart.map(p => ({ title: p.name, timecode: p.startOffset }))
 
         await replaceChapters({ chapters, transaction: t, video })

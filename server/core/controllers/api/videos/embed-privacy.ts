@@ -14,7 +14,6 @@ import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js
 import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
-import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
@@ -24,6 +23,7 @@ import {
   isVideoEmbedOnDomainAllowedValidator,
   updateVideoEmbedPrivacyValidator
 } from '../../../middlewares/validators/index.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 
 const logger = createLogger('api', 'video', 'embed-privacy')
 
@@ -114,7 +114,7 @@ function updateVideoEmbedPrivacy (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const body = req.body as VideoEmbedPrivacyUpdate
 
-    await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
+    await runTransaction(async (t: Transaction) => {
       video.embedPrivacyPolicy = body.policy
 
       await video.save({ transaction: t })

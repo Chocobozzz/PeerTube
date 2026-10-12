@@ -5,10 +5,9 @@ import { storeCommonFile } from '@server/lib/object-storage/common-files.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
-import { retryTransactionWrapper } from '../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../helpers/database-utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { UPLOAD_IMAGES_SIZE } from '../initializers/constants.js'
-import { sequelizeTypescript } from '../initializers/database.js'
 import { MActorUploadImages } from '../types/models/index.js'
 
 export async function replaceUploadImage (options: {
@@ -27,7 +26,7 @@ export async function replaceUploadImage (options: {
     : FileStorage.FILE_SYSTEM
 
   return retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
+    runTransaction(async t => {
       const imagesToDelete = await UploadImageModel.listByActorAndType(actor, type, t)
 
       for (const toDelete of imagesToDelete) {
@@ -110,7 +109,7 @@ export async function deleteUploadImages (options: {
   const { actor, type } = options
 
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
+    return runTransaction(async t => {
       const imagesToDelete = await UploadImageModel.listByActorAndType(actor, type, t)
 
       for (const toDelete of imagesToDelete) {

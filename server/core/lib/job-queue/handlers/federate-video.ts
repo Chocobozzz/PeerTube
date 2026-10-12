@@ -1,6 +1,5 @@
 import { FederateVideoPayload } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -15,7 +14,7 @@ export function processFederateVideo (job: Job) {
   logger.info('Processing video federation in job %s.', job.id)
 
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
+    return runTransaction(async t => {
       const video = await VideoModel.loadAP(payload.videoUUID, t)
       if (!video) return
 

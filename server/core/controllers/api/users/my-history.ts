@@ -2,7 +2,7 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import express from 'express'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -68,7 +68,7 @@ async function removeAllUserHistory (req: express.Request, res: express.Response
   const user = res.locals.oauth.token.User
   const beforeDate = req.body.beforeDate || null
 
-  await sequelizeTypescript.transaction(t => {
+  await runTransaction(t => {
     return UserVideoHistoryModel.removeUserHistoryBefore(user, beforeDate, t)
   })
 

@@ -8,11 +8,10 @@ import {
   hasVideoStream
 } from '@peertube/peertube-ffmpeg'
 import { LiveVideoError, LiveVideoErrorType, VideoResolution, VideoState } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG, registerConfigChangedHandler } from '@server/initializers/config.js'
 import { VIDEO_LIVE, WEBSERVER } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { isSecondaryProcess } from '@server/initializers/process-role.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -752,7 +751,7 @@ class LiveManager {
       : null
 
     return retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         if (videoLive.saveReplay) {
           await replaySettings.save({ transaction: t })
         }

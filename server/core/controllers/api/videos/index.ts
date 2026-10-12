@@ -16,7 +16,7 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_TEXT_LANGUAGES
 } from '../../../initializers/constants.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import {
   apiRateLimiter,
@@ -192,7 +192,7 @@ async function listVideos (req: express.Request, res: express.Response) {
 async function removeVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.videoFull
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await videoInstance.destroy({ transaction: t })
 
     await VideoChannelActivityModel.addVideoActivity({

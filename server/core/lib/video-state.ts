@@ -1,8 +1,7 @@
 import { FileStorage, FileStorageType, VideoState, VideoStateType } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
@@ -46,7 +45,7 @@ export function moveToNextState (options: {
   const { video, previousVideoState } = options
 
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
+    return runTransaction(async t => {
       // Maybe the video changed in database, refresh it
       const videoDatabase = await VideoModel.loadFull(video.uuid, t)
       // Video does not exist anymore

@@ -9,7 +9,7 @@ import express from 'express'
 import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { OTP } from '../../initializers/constants.js'
-import { sequelizeTypescript } from '../../initializers/database.js'
+import { runTransaction } from '../../helpers/database-utils.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { Emailer } from '../emailer.js'
@@ -329,7 +329,7 @@ async function updateUserFromExternal (options: {
     user.email = userOptions.email
   }
 
-  return sequelizeTypescript.transaction(async transaction => {
+  return runTransaction(async transaction => {
     user.Account = await user.Account.save({ transaction })
 
     return user.save({ transaction })

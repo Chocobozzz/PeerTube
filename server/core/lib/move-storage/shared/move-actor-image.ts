@@ -1,6 +1,6 @@
 import { FileStorageType } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { sendUpdateActor } from '@server/lib/activitypub/send/index.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -57,5 +57,5 @@ export async function moveActorImagesToStorage (options: {
   const accountOrChannel = actor.Account || actor.VideoChannel
   if (!accountOrChannel) return
 
-  await sequelizeTypescript.transaction(t => sendUpdateActor(Object.assign(accountOrChannel, { Actor: actor }), t))
+  await runTransaction(t => sendUpdateActor(Object.assign(accountOrChannel, { Actor: actor }), t))
 }

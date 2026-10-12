@@ -3,7 +3,7 @@ import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { GeoIP } from '@server/helpers/geo-ip.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { MAX_LOCAL_VIEWER_WATCH_SECTIONS, VIEW_LIFETIME } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { sendCreateWatchAction } from '@server/lib/activitypub/send/index.js'
 import { getLocalVideoViewerActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { LocalVideoViewer, Redis } from '@server/lib/redis/index.js'
@@ -127,7 +127,7 @@ export class VideoViewerStats {
         }
 
         try {
-          await sequelizeTypescript.transaction(async t => {
+          await runTransaction(async t => {
             const video = await VideoModel.load(stats.videoId, t)
             if (!video) return
 

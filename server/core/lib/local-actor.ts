@@ -7,10 +7,9 @@ import { ActorModel } from '@server/models/actor/actor.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Transaction } from 'sequelize'
-import { retryTransactionWrapper } from '../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../helpers/database-utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { ACTOR_IMAGES_SIZE, WEBSERVER } from '../initializers/constants.js'
-import { sequelizeTypescript } from '../initializers/database.js'
 import { MAccountDefault, MActor, MChannelDefault } from '../types/models/index.js'
 import { deleteActorImages, updateActorImages } from './activitypub/actors/index.js'
 import { sendUpdateActor } from './activitypub/send/index.js'
@@ -67,7 +66,7 @@ export async function updateLocalActorImageFiles (options: {
   await remove(imagePhysicalFile.path)
 
   return retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
+    runTransaction(async t => {
       const actorImagesInfo = processedImages.map(({ imageName, imageSize }) => ({
         name: imageName,
         fileUrl: null,
@@ -95,7 +94,7 @@ export async function updateLocalActorImageFiles (options: {
 
 export async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType_Type) {
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
+    return runTransaction(async t => {
       const updatedActor = await deleteActorImages(accountOrChannel.Actor, type, t)
       await updatedActor.save({ transaction: t })
 

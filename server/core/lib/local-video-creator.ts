@@ -13,10 +13,9 @@ import {
   VideoStateType
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { afterCommitIfTransaction, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
@@ -188,7 +187,7 @@ export class LocalVideoCreator {
     const thumbnails = await this.createThumbnails()
 
     await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
+      return runTransaction(async transaction => {
         await this.video.save({ transaction })
 
         await VideoChannelActivityModel.addVideoActivity({
@@ -285,7 +284,7 @@ export class LocalVideoCreator {
         }
 
         if (this.videoFile) {
-          transaction.afterCommit(() => {
+          afterCommitIfTransaction(transaction, () => {
             addVideoJobsAfterCreation({
               video: this.video,
               videoFile: this.videoFile,

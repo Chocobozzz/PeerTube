@@ -115,10 +115,7 @@ class OpenTelemetryMetrics {
         String(req.route.path)
     }
 
-    // Other paths (client pages, static files, ActivityPub, feeds...) don't give us a usable route template:
-    // static files are served by middlewares that don't set `req.route`, and routers mounted with parameters
-    // put the actual values (not the `:param` pattern) in `req.baseUrl`.
-    // Using the raw path would create one metric series per video/file, so keep the first segment only. For example:
+    // Other paths (client pages, static files, ActivityPub, feeds...):
     //   * /w/9c9de5e8-0a1b-4c2d-8e3f-123456789abc -> /w/*
     //   * /static/streaming-playlists/hls/<uuid>/<uuid>-720.mp4 -> /static/*
     //   * /videos/watch/<uuid>/comments (ActivityPub) -> /videos/*

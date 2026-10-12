@@ -8,7 +8,7 @@ import express from 'express'
 import 'multer'
 import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { JobQueue } from '../../../lib/job-queue/index.js'
 import {
   asyncMiddleware,
@@ -129,7 +129,7 @@ async function getUserSubscription (req: express.Request, res: express.Response)
 async function deleteUserSubscription (req: express.Request, res: express.Response) {
   const subscription = res.locals.subscription
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     if (subscription.state === 'accepted') {
       sendUndoFollow(subscription, t)
     }

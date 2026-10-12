@@ -1,11 +1,10 @@
 import { guessAspectRatio, promiseMap } from '@peertube/peertube-core-utils'
 import { ActivityIconObject, HttpStatusCode, PlaylistElementObject, PlaylistObject } from '@peertube/peertube-models'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { updateRemotePlaylistThumbnailFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
@@ -202,7 +201,7 @@ async function updatePlaylistThumbnail (playlistObject: PlaylistObject, playlist
   })
 
   try {
-    await sequelizeTypescript.transaction(async t => {
+    await runTransaction(async t => {
       await playlist.replaceAndSaveThumbnails(thumbnails, t)
     })
   } catch (err) {
@@ -242,7 +241,7 @@ async function rebuildVideoPlaylistElements (elements: FetchedElement[], playlis
   const elementsToCreate = elements.map(({ elementObject, video }) => playlistElementObjectToDBAttributes(elementObject, playlist, video))
 
   await retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
+    runTransaction(async t => {
       await VideoPlaylistElementModel.deleteAllOf(playlist.id, t)
 
       for (const element of elementsToCreate) {

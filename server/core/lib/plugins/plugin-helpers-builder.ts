@@ -5,6 +5,7 @@ import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { buildWinstonLogger, createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerAccount, getServerActor } from '@server/models/application/application.js'
@@ -96,7 +97,7 @@ function buildVideosHelpers (npmName: string) {
     },
 
     removeVideo: (id: number) => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         const video = await VideoModel.loadFull(id, t)
 
         await video.destroy({ transaction: t })

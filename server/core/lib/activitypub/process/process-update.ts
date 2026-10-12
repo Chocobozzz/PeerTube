@@ -13,9 +13,8 @@ import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file.js'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorFull, MActorSignature } from '../../../types/models/index.js'
@@ -145,7 +144,7 @@ async function processUpdateCacheFile (
     return
   }
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await createOrUpdateCacheFile(cacheFileObject, video, byActor, t)
   })
 

@@ -23,7 +23,7 @@ import { doRequest, doRequestAndSaveToFile } from '../helpers/requests.js'
 import { generateRandomString } from '../helpers/utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION, REQUEST_TIMEOUTS } from '../initializers/constants.js'
-import { sequelizeTypescript } from '../initializers/database.js'
+import { runTransaction } from '../helpers/database-utils.js'
 import { VideoFileModel } from '../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { storeHLSFileFromContent } from './object-storage/index.js'
@@ -52,7 +52,7 @@ export async function updateStreamingPlaylistsInfohashesIfNeeded () {
   // Use separate SQL queries, because we could have many videos to update
   for (const playlistId of playlistsToUpdateIds) {
     try {
-      await sequelizeTypescript.transaction(async t => {
+      await runTransaction(async t => {
         const playlist = await VideoStreamingPlaylistModel.loadWithVideo(playlistId, t)
         const videoFiles = await VideoFileModel.listByStreamingPlaylist(playlistId, t)
 

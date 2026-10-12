@@ -10,7 +10,7 @@ import {
 import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import {
   buildObjectStorageHLSPrivateFileUrl,
   buildObjectStoragePublicFileUrl,
@@ -292,7 +292,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     // Keep the delete + insert atomic even when the caller has no transaction
     const infoHashes = transaction
       ? await replace(transaction)
-      : await sequelizeTypescript.transaction(replace)
+      : await runTransaction(replace)
 
     this.InfoHashes = infoHashes
   }
