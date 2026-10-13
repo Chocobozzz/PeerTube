@@ -969,6 +969,38 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items.length).to.be.equal(2)
       }
     })
+
+    it('Should filter by onLocalVideo', async function () {
+      await servers[1].blocklist.removeFromMyBlocklist({ account: 'root@' + servers[0].host })
+
+      const getContents = async (server: PeerTubeServer, onLocalVideo?: boolean) => {
+        const json = await server.feed.getJSON({ feed: 'video-comments', query: { onLocalVideo }, ignoreCache: true })
+
+        return JSON.parse(json).items.map(i => i.content_html as string)
+      }
+
+      {
+        expect(await getContents(servers[1])).to.have.lengthOf(3)
+
+        const local = await getContents(servers[1], true)
+        expect(local).to.have.lengthOf(1)
+        expect(local[0]).to.contain('<p>super comment</p>')
+
+        const remote = await getContents(servers[1], false)
+        expect(remote).to.have.lengthOf(2)
+        expect(remote.some(c => c.includes('<p>super comment</p>'))).to.be.false
+      }
+
+      {
+        const local = await getContents(servers[0], true)
+        expect(local).to.have.lengthOf(2)
+        expect(local.some(c => c.includes('<p>super comment</p>'))).to.be.false
+
+        const remote = await getContents(servers[0], false)
+        expect(remote).to.have.lengthOf(1)
+        expect(remote[0]).to.contain('<p>super comment</p>')
+      }
+    })
   })
 
   describe('Video feed from my subscriptions', function () {

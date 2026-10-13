@@ -627,11 +627,12 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     videoId?: number
     videoAccountOwnerId?: number
     videoChannelOwnerId?: number
+    onLocalVideo?: boolean
   }) {
     const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ user: null })
 
     const queryOptions: ListVideoCommentsOptions = {
-      ...pick(parameters, [ 'start', 'count', 'videoAccountOwnerId', 'videoId', 'videoChannelOwnerId' ]),
+      ...pick(parameters, [ 'start', 'count', 'videoAccountOwnerId', 'videoId', 'videoChannelOwnerId', 'onLocalVideo' ]),
 
       selectType: 'feed',
 

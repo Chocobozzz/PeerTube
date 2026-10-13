@@ -2,7 +2,14 @@ import { HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import express from 'express'
 import { param, query } from 'express-validator'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds.js'
-import { exists, isIdOrUUIDValid, isIdValid, toCompleteUUID } from '../../helpers/custom-validators/misc.js'
+import {
+  exists,
+  isBooleanValid,
+  isIdOrUUIDValid,
+  isIdValid,
+  toBooleanOrNull,
+  toCompleteUUID
+} from '../../helpers/custom-validators/misc.js'
 import {
   areValidationErrors,
   checkCanSeeVideo,
@@ -185,6 +192,12 @@ export const videoCommentsFeedsValidator = [
     .optional()
     .customSanitizer(toCompleteUUID)
     .custom(isIdOrUUIDValid),
+
+  query('onLocalVideo')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid)
+    .withMessage('Should have a valid onLocalVideo boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

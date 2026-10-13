@@ -531,6 +531,7 @@ paths:
           description: 'limit listing comments to videos of a specific video channel'
           schema:
             type: string
+        - $ref: '#/components/parameters/onLocalVideo'
       responses:
         '200':
           description: successful operation
