@@ -539,7 +539,7 @@ describe('Test user notifications', function () {
 
       await checkVideoStudioNewVideoCreated({
         ...baseParams,
-        videoName: name,
+        videoName: name + ' (Studio Edit)',
         shortUUID: video.shortUUID,
         checkType: 'presence'
       })
