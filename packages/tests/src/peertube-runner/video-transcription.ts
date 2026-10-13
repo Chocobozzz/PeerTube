@@ -132,6 +132,10 @@ describe('Test transcription in peertube-runner program', function () {
 
       after(async function () {
         await objectStorage.cleanupMock()
+
+        // Restart the server without object storage
+        await servers[0].kill()
+        await servers[0].run()
       })
     })
 
