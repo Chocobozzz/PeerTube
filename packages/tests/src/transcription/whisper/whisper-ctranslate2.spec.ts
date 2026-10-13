@@ -25,7 +25,7 @@ describe('Whisper CTranslate2 transcriber', function () {
       command: 'whisper-ctranslate2',
       supportedModelFormats: [ 'CTranslate2' ],
       languageDetection: true,
-      version: '0.4.4'
+      version: '0.5.8'
     },
     logger: createConsoleLogger()
   })

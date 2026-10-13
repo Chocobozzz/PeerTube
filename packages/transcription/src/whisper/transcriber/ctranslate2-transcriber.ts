@@ -63,7 +63,6 @@ export class Ctranslate2Transcriber extends OpenaiTranscriber {
   async install (directory: string) {
     const $$ = this.getExec()
 
-    // faster-whisper <= 1.2.1 passes metadata_errors to av.open(), which PyAV 19 removed
-    await $$`pip3 install -U -t ${directory} whisper-ctranslate2==${this.engine.version} av<19`
+    await $$`pip3 install -U -t ${directory} whisper-ctranslate2==${this.engine.version}`
   }
 }
