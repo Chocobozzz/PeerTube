@@ -53,6 +53,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
     videoId: video?.id,
     videoAccountOwnerId: account?.id,
     videoChannelOwnerId: videoChannel?.id,
+    isLocal: req.query.isLocal,
     onLocalVideo: req.query.onLocalVideo
   })
 

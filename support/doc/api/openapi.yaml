@@ -531,7 +531,18 @@ paths:
           description: 'limit listing comments to videos of a specific video channel'
           schema:
             type: string
-        - $ref: '#/components/parameters/onLocalVideo'
+        - name: isLocal
+          in: query
+          required: false
+          description: '**PeerTube >= 9.0** Display only comments of local or remote accounts'
+          schema:
+            type: boolean
+        - name: onLocalVideo
+          in: query
+          required: false
+          description: '**PeerTube >= 9.0** Display only comments of local or remote videos'
+          schema:
+            type: boolean
       responses:
         '200':
           description: successful operation
