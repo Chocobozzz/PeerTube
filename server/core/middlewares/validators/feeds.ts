@@ -193,6 +193,12 @@ export const videoCommentsFeedsValidator = [
     .customSanitizer(toCompleteUUID)
     .custom(isIdOrUUIDValid),
 
+  query('isLocal')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid)
+    .withMessage('Should have a valid isLocal boolean'),
+
   query('onLocalVideo')
     .optional()
     .customSanitizer(toBooleanOrNull)
