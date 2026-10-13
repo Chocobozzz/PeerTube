@@ -315,6 +315,10 @@ log:
     max_files:
       __name: PEERTUBE_LOG_ROTATION_MAX_FILES
       __format: json
+  audit:
+    enabled:
+      __name: PEERTUBE_LOG_AUDIT_ENABLED
+      __format: json
   anonymize_ip:
     __name: PEERTUBE_LOG_ANONYMIZE_IP
     __format: json

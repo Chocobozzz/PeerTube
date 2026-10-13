@@ -56,6 +56,7 @@ export function checkMissedConfig () {
     'log.rotation.enabled',
     'log.rotation.max_file_size',
     'log.rotation.max_files',
+    'log.audit.enabled',
     'log.anonymize_ip',
     'log.tag_requests',
     'log.log_ping_requests',

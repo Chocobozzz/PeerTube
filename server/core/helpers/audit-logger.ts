@@ -40,24 +40,29 @@ addColors(colors)
 
 const auditLogger = createLogger({
   levels: { audit: 0 },
-  transports: [
-    new transports.File({
-      filename: join(CONFIG.STORAGE.LOG_DIR, AUDIT_LOG_FILENAME),
-      level: 'audit',
-      maxsize: 5242880,
-      maxFiles: 5,
-      format: format.combine(
-        format.timestamp(),
-        labelFormatter(),
-        format.splat(),
-        jsonLoggerFormat
-      )
-    })
-  ],
+  // Only register the file transport (and thus create/open the audit log file) if audit logging is enabled
+  transports: CONFIG.LOG.AUDIT.ENABLED === true
+    ? [
+      new transports.File({
+        filename: join(CONFIG.STORAGE.LOG_DIR, AUDIT_LOG_FILENAME),
+        level: 'audit',
+        maxsize: 5242880,
+        maxFiles: 5,
+        format: format.combine(
+          format.timestamp(),
+          labelFormatter(),
+          format.splat(),
+          jsonLoggerFormat
+        )
+      })
+    ]
+    : [],
   exitOnError: true
 })
 
 function auditLoggerWrapper (domain: string, user: string, action: AUDIT_TYPE, entity: EntityAuditView, oldEntity: EntityAuditView = null) {
+  if (CONFIG.LOG.AUDIT.ENABLED !== true) return
+
   let entityInfos: object
 
   if (action === AUDIT_TYPE.UPDATE && oldEntity) {

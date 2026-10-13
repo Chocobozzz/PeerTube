@@ -116,7 +116,14 @@ export async function completeWebVideoFilesCheck (options: {
 
       if (video.downloadEnabled) {
         await Promise.all([
-          makeRawRequest({ url: file.torrentDownloadUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+          makeRawRequest({
+            url: file.torrentDownloadUrl,
+            token,
+            // Local torrents are stored in object storage
+            expectedStatus: objectStorageBaseUrl && server.internalServerNumber === originServer.internalServerNumber
+              ? HttpStatusCode.FOUND_302
+              : HttpStatusCode.OK_200
+          }),
           makeRawRequest({
             url: file.fileDownloadUrl,
             token,

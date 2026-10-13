@@ -35,6 +35,7 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
   readonly name = input<string>(undefined)
   readonly displayLatestVideo = input<boolean>(undefined)
   readonly displayDescription = input<boolean>(undefined)
+  readonly sort = input<string>(undefined)
 
   readonly loaded = output<boolean>()
 
@@ -77,6 +78,10 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
     return [ '/c', this.channel.nameWithHost ]
   }
 
+  isSortedByPublicationDate () {
+    return [ '-publishedAt', '-originallyPublishedAt' ].includes(this.sort())
+  }
+
   private loadVideosObservable () {
     const videoOptions = {
       videoChannel: this.channel,
@@ -84,7 +89,7 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
         currentPage: 1,
         itemsPerPage: 1
       },
-      sort: '-publishedAt' as VideoSortField,
+      sort: this.sort() as VideoSortField,
       count: 1
     }
 

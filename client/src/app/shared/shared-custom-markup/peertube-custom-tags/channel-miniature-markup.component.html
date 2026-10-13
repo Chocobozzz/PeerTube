@@ -21,7 +21,11 @@
     </div>
     @if (video && displayLatestVideo()) {
       <div class="video">
-        <div i18n class="video-label">Latest published video</div>
+        @if (isSortedByPublicationDate()) {
+          <div i18n class="video-label">Latest published video</div>
+        } @else {
+          <div i18n class="video-label">Featured video</div>
+        }
         <my-video-miniature-markup [video]="video" [onlyDisplayTitle]="true"></my-video-miniature-markup>
       </div>
     }

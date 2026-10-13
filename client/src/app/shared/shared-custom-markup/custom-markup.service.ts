@@ -156,7 +156,8 @@ export class CustomMarkupService {
     const model = {
       name: data.name,
       displayLatestVideo: this.buildBoolean(data.displayLatestVideo) ?? true,
-      displayDescription: this.buildBoolean(data.displayDescription) ?? true
+      displayDescription: this.buildBoolean(data.displayDescription) ?? true,
+      sort: data.sort || '-publishedAt'
     }
 
     this.dynamicElementService.setModel(component, model)
