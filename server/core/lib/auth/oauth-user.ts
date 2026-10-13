@@ -45,7 +45,7 @@ export async function getUserOrThrow (options: {
 
   // Special treatment coming from a plugin
   if (bypassLogin?.bypass === true) {
-    const user = await handleGetUserBypass({ bypassLogin, req })
+    const user = await handleGetUserBypass({ bypassLogin, req, oauthHeaders })
 
     // Continue the password process if handleGetUserBypass returns undefined,
     // which means the user does not belong to the plugin and we should go through a regular login process
@@ -78,12 +78,7 @@ export async function getUserOrThrow (options: {
 
   if (isRootAuthDisabled(user)) throwInvalidGrantError()
 
-  // Check the per-account login failures counter so a locked account cannot have its password/OTP brute-forced
-  // Throw the exact same generic error as invalid credentials: a distinct error/status here would let an
-  // attacker use the lockout itself as a username-enumeration oracle (try N failed logins, see if it flips)
-  if (CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.ENABLED && await Redis.Instance.getLoginFailures(user.id) >= CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX) {
-    throwInvalidGrantError()
-  }
+  await checkLoginNotLockedOrThrow(user, req)
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) {
@@ -101,24 +96,36 @@ export async function getUserOrThrow (options: {
     throw new EmailNotVerifiedError(req.t('User email is not verified.'))
   }
 
-  if (user.otpSecret) {
-    if (!oauthHeaders[OTP.HEADER_NAME]) {
-      throw new MissingTwoFactorError(req.t('Missing two factor header'))
-    }
-
-    if (await isOTPValid({ encryptedSecret: user.otpSecret, token: oauthHeaders[OTP.HEADER_NAME] }) !== true) {
-      if (CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.ENABLED) {
-        const failures = await Redis.Instance.addLoginFailure(user.id, req.ip)
-        await notifyAccountLockedIfNeeded(user, failures, req.ip)
-      }
-
-      throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
-    }
-  }
+  await checkTwoFactorOrThrow(user, oauthHeaders, req)
 
   await Redis.Instance.deleteLoginFailures(user.id)
 
   return user
+}
+
+async function checkLoginNotLockedOrThrow (user: MUserDefault, req: express.Request) {
+  if (!CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.ENABLED) return
+  if (await Redis.Instance.getLoginFailures(user.id) < CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.MAX) return
+
+  // Prevent a username-enumeration oracle
+  throw new InvalidGrantError(req.t('Invalid grant: user credentials are invalid'))
+}
+
+async function checkTwoFactorOrThrow (user: MUserDefault, oauthHeaders: Record<string, string>, req: express.Request) {
+  if (!user.otpSecret) return
+
+  if (!oauthHeaders[OTP.HEADER_NAME]) {
+    throw new MissingTwoFactorError(req.t('Missing two factor header'))
+  }
+
+  if (await isOTPValid({ encryptedSecret: user.otpSecret, token: oauthHeaders[OTP.HEADER_NAME] }) === true) return
+
+  if (CONFIG.RATES_LIMIT.LOGIN_LOCKOUT.ENABLED) {
+    const failures = await Redis.Instance.addLoginFailure(user.id, req.ip)
+    await notifyAccountLockedIfNeeded(user, failures, req.ip)
+  }
+
+  throw new InvalidTwoFactorError(req.t('Invalid two factor header'))
 }
 
 // This is the exact failure that just crossed the threshold and locked the account: notify its owner once per lock
@@ -134,55 +141,85 @@ function notifyAccountLockedIfNeeded (user: MUserDefault, failures: number, ip: 
 }
 
 async function handleGetUserBypass (options: {
-  bypassLogin?: BypassLogin
+  bypassLogin: BypassLogin
   req: express.Request
+  oauthHeaders: Record<string, string>
 }) {
-  const { bypassLogin, req } = options
+  const { bypassLogin, req, oauthHeaders } = options
 
   logger.info('Bypassing oauth login by plugin %s.', bypassLogin.pluginName)
 
   const { pluginName, user: externalUser, userUpdaterResults } = bypassLogin
 
-  const user = await findExternalUserOrThrow({ externalUser, pluginName, userUpdaterResults, req })
+  const existing = await loadExistingExternalUser({ pluginName, externalUser })
+  if (!existing) return createUserFromExternal(pluginName, externalUser)
+
+  const { user, matchedBy } = existing
 
   // If the user does not belongs to a plugin, then we just go through a regular login process
-  if (user.pluginAuth !== null) {
-    checkUserNotBlockedOrThrow(user, req)
+  if (user.pluginAuth === null) return undefined
 
-    // This user does not belong to this plugin
-    if (user.pluginAuth !== pluginName) {
-      if (CONFIG.USER.ALLOW_CROSS_PROVIDER_AUTH !== true) {
-        logger.info(
-          'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
-          pluginName,
-          externalUser.email,
-          user.pluginAuth
-        )
-
-        throw new AccessDeniedError(
-          req.t('Cannot bypass oauth login by plugin {pluginName}: this account already uses another auth plugin.', { pluginName })
-        )
-      } else {
-        logger.info(
-          'Allowing cross authentication login for %s using plugin %s despite being known from plugin %s',
-          bypassLogin.user.email,
-          bypassLogin.pluginName,
-          user.pluginAuth
-        )
-
-        user.pluginAuth = pluginName
-        await updateUserFromExternal({ user, userOptions: externalUser, userUpdaterResults, syncEmail: true, req })
-
-        // Tokens issued under the previous auth plugin can no longer have their validity checked by that
-        // plugin's hookTokenValidity (the user is not registered under it anymore), so force a fresh login
-        await OAuthTokenModel.deleteUserToken({ userId: user.id })
-      }
-    }
-
-    return user
+  if (matchedBy === 'email' && user.pluginAuth === pluginName && externalUser.externalId && user.pluginAuthExternalId !== null) {
+    // This account is already linked to a different external id for this plugin
+    // Refuse to silently relink (identity provider email reuse, or a possible hijack attempt)
+    throw new AccessDeniedError(
+      req.t(
+        `Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.`,
+        { pluginName, email: externalUser.email }
+      )
+    )
   }
 
-  return undefined
+  checkUserNotBlockedOrThrow(user, req)
+
+  // This user does not belong to this plugin
+  const isCrossProvider = user.pluginAuth !== pluginName
+  if (isCrossProvider && CONFIG.USER.ALLOW_CROSS_PROVIDER_AUTH !== true) {
+    logger.info(
+      'Cannot bypass oauth login by plugin %s because %s has another plugin auth method (%s).',
+      pluginName,
+      externalUser.email,
+      user.pluginAuth
+    )
+
+    throw new AccessDeniedError(
+      req.t('Cannot bypass oauth login by plugin {pluginName}: this account already uses another auth plugin.', { pluginName })
+    )
+  }
+
+  await checkLoginNotLockedOrThrow(user, req)
+
+  // Only id and pass logins (even from auth plugins) are supported for OTP
+  if (bypassLogin.type === 'id-and-pass') {
+    await checkTwoFactorOrThrow(user, oauthHeaders, req)
+  }
+
+  // ---------------------------------------------------------------------------
+  // The user is now authenticated: apply the changes coming from the plugin
+  // ---------------------------------------------------------------------------
+
+  if (isCrossProvider) {
+    logger.info(
+      'Allowing cross authentication login for %s using plugin %s despite being known from plugin %s',
+      externalUser.email,
+      pluginName,
+      user.pluginAuth
+    )
+
+    user.pluginAuth = pluginName
+    await updateUserFromExternal({ user, userOptions: externalUser, userUpdaterResults, syncEmail: true, req })
+
+    // Tokens issued under the previous auth plugin can no longer have their validity checked by that
+    // plugin's hookTokenValidity (the user is not registered under it anymore), so force a fresh login
+    await OAuthTokenModel.deleteUserToken({ userId: user.id })
+  } else {
+    // Authoritative match by stable external id: trust it even if the email changed at the identity provider
+    await updateUserFromExternal({ user, userOptions: externalUser, userUpdaterResults, syncEmail: matchedBy === 'external-id', req })
+  }
+
+  await Redis.Instance.deleteLoginFailures(user.id)
+
+  return user
 }
 
 // ---------------------------------------------------------------------------
@@ -213,51 +250,6 @@ export async function computeUserUpdaterResults (options: {
         value: userUpdater({ fieldName, currentValue, newValue })
       }))
   }
-}
-
-async function findExternalUserOrThrow (options: {
-  externalUser: ExternalUser
-  pluginName: string
-  userUpdaterResults: UserUpdaterResults
-  req: express.Request
-}): Promise<MUserDefault> {
-  const { externalUser, pluginName, userUpdaterResults, req } = options
-
-  const existing = await loadExistingExternalUser({ pluginName, externalUser })
-  if (!existing) return createUserFromExternal(pluginName, externalUser)
-
-  const { user, matchedBy } = existing
-
-  if (matchedBy === 'external-id') {
-    // Check the block before updating: a blocked account must not have its profile rewritten by the plugin
-    checkUserNotBlockedOrThrow(user, req)
-
-    // Authoritative match by stable external id: trust it even if the email changed at the identity provider
-    await updateUserFromExternal({ user, userOptions: externalUser, userUpdaterResults, syncEmail: true, req })
-
-    return user
-  }
-
-  if (user.pluginAuth === pluginName) {
-    if (externalUser.externalId && user.pluginAuthExternalId !== null) {
-      // This account is already linked to a different external id for this plugin
-      // Refuse to silently relink (identity provider email reuse, or a possible hijack attempt)
-      throw new AccessDeniedError(
-        req.t(
-          `Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.`,
-          { pluginName, email: externalUser.email }
-        )
-      )
-    }
-
-    checkUserNotBlockedOrThrow(user, req)
-
-    await updateUserFromExternal({ user, userOptions: externalUser, userUpdaterResults, syncEmail: false, req })
-
-    return user
-  }
-
-  return user
 }
 
 async function loadExistingExternalUser (options: {

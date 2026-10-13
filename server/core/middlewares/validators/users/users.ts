@@ -2,6 +2,7 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { isExternalUserPasswordValid } from '@server/lib/auth/external-auth.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import express from 'express'
@@ -470,10 +471,14 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
         })
       }
 
-      if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
+      const isPasswordValid = user.pluginAuth
+        ? await isExternalUserPasswordValid({ user, password: req.body.currentPassword })
+        : await user.isPasswordMatch(req.body.currentPassword)
+
+      if (isPasswordValid !== true) {
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
-          message: 'currentPassword is invalid.',
+          message: req.t('currentPassword is invalid.'),
           type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
         })
       }

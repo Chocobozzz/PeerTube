@@ -1,7 +1,7 @@
 import { ViewportScroller } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { AfterViewChecked, ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
-import { AuthService, Notifier, User, UserService } from '@app/core'
+import { AuthService, Notifier, ServerService, User, UserService } from '@app/core'
 import { genericUploadErrorHandler } from '@app/helpers'
 import { shallowCopy } from '@peertube/peertube-core-utils'
 import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
@@ -41,6 +41,7 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
   private viewportScroller = inject(ViewportScroller)
   private userService = inject(UserService)
   private authService = inject(AuthService)
+  private serverService = inject(ServerService)
   private notifier = inject(Notifier)
 
   user: User
@@ -53,6 +54,13 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
 
   ngOnInit () {
     this.user = this.authService.getUser()
+  }
+
+  canManageTwoFactor () {
+    if (this.user.pluginAuth === null) return true
+
+    // 2FA is only supported by id and password auth plugins
+    return this.serverService.getHTMLConfig().plugin.registeredIdAndPassAuths.some(a => a.npmName === this.user.pluginAuth)
   }
 
   ngAfterViewChecked () {
