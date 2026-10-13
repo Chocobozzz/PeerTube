@@ -12184,9 +12184,12 @@ components:
           type: object
           description: 'PeerTube >= 6.1'
           properties:
-            views:
+            videos:
               type: object
               properties:
+                countViewAfter:
+                  type: number
+                  description: 'Milliseconds'
                 watchingInterval:
                   type: object
                   properties:

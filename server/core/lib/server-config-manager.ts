@@ -422,6 +422,8 @@ class ServerConfigManager {
 
       views: {
         videos: {
+          countViewAfter: CONFIG.VIEWS.VIDEOS.COUNT_VIEW_AFTER,
+
           remote: {
             maxAge: CONFIG.VIEWS.VIDEOS.REMOTE.MAX_AGE
           },
