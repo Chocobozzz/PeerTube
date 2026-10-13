@@ -3,7 +3,7 @@ import { getNodeABIVersion } from '@server/helpers/version.js'
 import { execa } from 'execa'
 import { outputJSON, pathExists, readJSON, remove } from 'fs-extra/esm'
 import { readFile, rename, writeFile } from 'fs/promises'
-import { join } from 'path'
+import { basename, join } from 'path'
 import { isNpmPluginNameValid } from '../../helpers/custom-validators/plugins.js'
 import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
@@ -31,6 +31,10 @@ export async function installNpmPlugin (npmName: string, versionArg?: string) {
 }
 
 export async function installNpmPluginFromDisk (path: string) {
+  // pnpm does not copy again a local directory it already installed
+  const npmName = basename(path)
+  if (await isNpmPluginInstalled(npmName)) await removeNpmPlugin(npmName)
+
   await execPNPM([ 'add', 'file:' + path ])
 }
 
@@ -145,6 +149,13 @@ function isPNPMUnexpectedStoreError (result: unknown) {
 }
 
 // ---------------------------------------------------------------------------
+
+async function isNpmPluginInstalled (npmName: string) {
+  const packageJSON = await readJSON(join(CONFIG.STORAGE.PLUGINS_DIR, 'package.json'))
+    .catch(() => ({})) as { dependencies?: { [name: string]: string } }
+
+  return !!packageJSON.dependencies?.[npmName]
+}
 
 function checkNpmPluginNameOrThrow (name: string) {
   if (!isNpmPluginNameValid(name)) throw new Error('Invalid NPM plugin name to install')
