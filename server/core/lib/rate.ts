@@ -1,5 +1,5 @@
 import { VIDEO_RATE_TYPES } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { AccountVideoRateModel } from '@server/models/account/account-video-rate.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getLocalRateUrl, sendVideoRateChange } from './activitypub/video-rates.js'
@@ -13,7 +13,7 @@ export async function userRateVideo (options: {
 }) {
   const { account, rateType, video } = options
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const accountInstance = await AccountModel.load(account.id, t)

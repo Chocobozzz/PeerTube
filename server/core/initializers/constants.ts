@@ -56,7 +56,7 @@ import { readJsonSync } from 'fs-extra/esm'
 import invert from 'lodash-es/invert.js'
 import { join } from 'path'
 // Do not use barrels, remain constants as independent as possible
-import { cpus } from 'os'
+import { availableParallelism, cpus } from 'os'
 import { CONFIG, registerConfigChangedHandler } from './config.js'
 import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from './config/shared-config.js'
 
@@ -315,7 +315,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'actor-keys': 60000 * 20, // 20 minutes
   'videos-stats': undefined, // Unlimited
   'activitypub-refresher': 60000 * 10, // 10 minutes
-  'video-redundancy': 1000 * 3600 * 3, // 3 hours
+  'video-redundancy': CONFIG.REDUNDANCY.VIDEOS.TIMEOUT,
   'video-live-ending': 1000 * 60 * 10, // 10 minutes
   'generate-video-storyboard': 1000 * 3600 * 6, // 6 hours
   'manage-video-torrent': 1000 * 3600 * 3, // 3 hours
@@ -366,6 +366,7 @@ export const JOB_REMOVAL_OPTIONS = {
 }
 
 export const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
+export const VIDEO_REDUNDANCY_TIMEOUT = Math.floor(JOB_TTL['video-redundancy'] * 0.9)
 
 export const RUNNER_JOBS = {
   MAX_FAILURES: 5,
@@ -1022,6 +1023,11 @@ export let PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
 export const BCRYPT_SALT_SIZE = 10
+
+export const CRYPTO_QUEUE = {
+  CONCURRENCY: Math.max(1, availableParallelism() - 1),
+  MAX_PENDING: 20
+}
 
 export const ADMIN_MEMORABLE_PASSWORD_GENERATION_LENGTH = 20
 export const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes

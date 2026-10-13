@@ -18,8 +18,19 @@ export type EncoderOptionsBuilderParams = {
   inputRatio: number
   inputProbe: FfprobeData
 
+  // 3D packing of the frames given to the encoder declared by the container of the input (undefined for 2D videos)
+  inputStereo3D?: VideoStereo3D
+
   // For lives
   streamNum?: number
+}
+
+export type VideoStereo3D = {
+  // Type name of FFmpeg: 'side by side', 'top and bottom', 'frame alternate', 'checkerboard', 'interleaved lines'...
+  type: string
+
+  // The right eye comes first
+  inverted: boolean
 }
 
 export type EncoderOptionsBuilder = (params: EncoderOptionsBuilderParams) => Promise<EncoderOptions> | EncoderOptions

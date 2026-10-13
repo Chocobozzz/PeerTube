@@ -1,7 +1,6 @@
 import { BuildObjectAutomaticTagsPayload } from '@peertube/peertube-models'
-import { afterCommitIfTransaction, retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { afterCommitIfTransaction, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { buildAndSaveCommentAutomaticTags, buildAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
 import { Notifier } from '@server/lib/notifier/index.js'
 import { autoBlacklistVideoByAutoTagPolicyIfNeeded, resolvePendingAutoTagBlacklist } from '@server/lib/video-blacklist.js'
@@ -43,7 +42,7 @@ async function buildOfVideo (payload: BuildObjectAutomaticTagsPayload) {
   // Building the tags can take a long time: reload the video and apply the moderation decision against its current
   // state, all in a single retried transaction
   await retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
+    runTransaction(async t => {
       const videoReloaded = await VideoModel.loadWithRights(payload.objectId, t)
       if (!videoReloaded) return
 
@@ -73,7 +72,7 @@ async function buildOfComment (payload: BuildObjectAutomaticTagsPayload) {
   // Building the tags can take a long time: reload the comment and apply the moderation decision against its current
   // state (a moderator may already have approved/rejected it), all in a single retried transaction
   await retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
+    runTransaction(async t => {
       const commentReloaded = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(payload.objectId, t)
       if (!commentReloaded || commentReloaded.isDeleted()) return
 

@@ -969,6 +969,52 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items.length).to.be.equal(2)
       }
     })
+
+    it('Should filter by isLocal/onLocalVideo', async function () {
+      await servers[1].blocklist.removeFromMyBlocklist({ account: 'root@' + servers[0].host })
+
+      const getContents = async (server: PeerTubeServer, query: { isLocal?: boolean, onLocalVideo?: boolean } = {}) => {
+        const json = await server.feed.getJSON({ feed: 'video-comments', query, ignoreCache: true })
+
+        return JSON.parse(json).items.map(i => i.content_html as string)
+      }
+
+      {
+        expect(await getContents(servers[1])).to.have.lengthOf(3)
+
+        const local = await getContents(servers[1], { onLocalVideo: true })
+        expect(local).to.have.lengthOf(1)
+        expect(local[0]).to.contain('<p>super comment</p>')
+
+        const remote = await getContents(servers[1], { onLocalVideo: false })
+        expect(remote).to.have.lengthOf(2)
+        expect(remote.some(c => c.includes('<p>super comment</p>'))).to.be.false
+      }
+
+      {
+        const local = await getContents(servers[0], { onLocalVideo: true })
+        expect(local).to.have.lengthOf(2)
+        expect(local.some(c => c.includes('<p>super comment</p>'))).to.be.false
+
+        const remote = await getContents(servers[0], { onLocalVideo: false })
+        expect(remote).to.have.lengthOf(1)
+        expect(remote[0]).to.contain('<p>super comment</p>')
+      }
+
+      {
+        expect(await getContents(servers[0], { isLocal: true })).to.have.lengthOf(3)
+        expect(await getContents(servers[0], { isLocal: false })).to.have.lengthOf(0)
+
+        expect(await getContents(servers[1], { isLocal: true })).to.have.lengthOf(0)
+        expect(await getContents(servers[1], { isLocal: false })).to.have.lengthOf(3)
+      }
+
+      {
+        const local = await getContents(servers[1], { isLocal: false, onLocalVideo: true })
+        expect(local).to.have.lengthOf(1)
+        expect(local[0]).to.contain('<p>super comment</p>')
+      }
+    })
   })
 
   describe('Video feed from my subscriptions', function () {

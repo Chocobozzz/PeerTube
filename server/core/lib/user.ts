@@ -8,13 +8,13 @@ import {
   UserRole,
   UserRoleType
 } from '@peertube/peertube-models'
+import { runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { createPrivateAndPublicKeys } from '@server/helpers/peertube-crypto.js'
+import { createUserKeysAndPasswordHash } from '@server/helpers/peertube-crypto.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { UserModel } from '@server/models/user/user.js'
 import { Transaction } from 'sequelize'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants.js'
-import { sequelizeTypescript } from '../initializers/database.js'
 import { AccountModel } from '../models/account/account.js'
 import { UserNotificationSettingModel } from '../models/user/user-notification-setting.js'
 import { MAccountDefault, MChannelActor } from '../types/models/index.js'
@@ -100,12 +100,19 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
 }): Promise<{ user: MUserDefault, account: MAccountDefault, videoChannel: MChannelActor }> {
   const { userToCreate, userDisplayName, channelNames, validateUser = true } = parameters
 
-  const [ accountKeys, channelKeys ] = await Promise.all([
-    createPrivateAndPublicKeys(),
-    createPrivateAndPublicKeys()
-  ])
+  // Hash the password here to not block the transaction
+  const passwordToHash = userToCreate.skipPasswordEncryption
+    ? undefined
+    : userToCreate.password
 
-  return sequelizeTypescript.transaction(async t => {
+  const { accountKeys, channelKeys, passwordHash } = await createUserKeysAndPasswordHash(passwordToHash)
+
+  if (passwordHash) {
+    userToCreate.password = passwordHash
+    userToCreate.skipPasswordEncryption = true
+  }
+
+  return runInReadCommittedTransaction(async t => {
     const userOptions = {
       transaction: t,
       validate: validateUser

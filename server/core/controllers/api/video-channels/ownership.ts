@@ -6,7 +6,7 @@ import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import express from 'express'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
 import { Notifier } from '../../../lib/notifier/notifier.js'
 import {
@@ -91,7 +91,7 @@ async function createChangeOwnershipRequest (req: express.Request, res: express.
   const initiatorAccountId = channel.accountId
   const nextOwner = res.locals.changeOwnershipNextOwner
 
-  const ownershipChange = await sequelizeTypescript.transaction(async t => {
+  const ownershipChange = await runTransaction(async t => {
     const ownershipChange = await ChangeOwnershipModel.create({
       initiatorAccountId,
       nextOwnerAccountId: nextOwner.id,
@@ -148,7 +148,7 @@ async function listAccountChannelOwnershipChanges (req: express.Request, res: ex
 }
 
 async function acceptOwnershipChange (req: express.Request, res: express.Response) {
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = await VideoChannelModel.load(changeOwnership.VideoChannel.id, t)
     const previousOwnerId = channel.accountId
@@ -193,7 +193,7 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
 }
 
 async function refuseOwnershipChange (req: express.Request, res: express.Response) {
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     const changeOwnership = res.locals.changeOwnership
 
     changeOwnership.state = ChangeOwnershipState.REJECTED
@@ -216,7 +216,7 @@ async function refuseOwnershipChange (req: express.Request, res: express.Respons
 }
 
 async function deleteOwnershipChange (req: express.Request, res: express.Response) {
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = await VideoChannelModel.loadAndPopulateAccount(changeOwnership.videoChannelId, t)
 

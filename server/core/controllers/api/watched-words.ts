@@ -1,8 +1,7 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
-import { deleteInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { deleteInTransactionWithRetries, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { createRebuildAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import { fetchAndValidateWatchedWordsSubscriptionActions } from '@server/lib/watched-words-subscriptions.js'
 import {
@@ -328,7 +327,7 @@ async function deleteWatchedWordsList (req: express.Request, res: express.Respon
 async function deleteWatchedWordsSubscription (req: express.Request, res: express.Response) {
   const subscription = res.locals.watchedWordsSubscription
 
-  await sequelizeTypescript.transaction(async transaction => {
+  await runTransaction(async transaction => {
     await WatchedWordsListModel.removeImportedBySubscription({
       accountId: subscription.accountId,
       watchedWordsSubscriptionId: subscription.id,

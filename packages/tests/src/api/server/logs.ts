@@ -217,6 +217,36 @@ describe('Test logs', function () {
       expect(logsString.includes('video 10')).to.be.true
       expect(logsString.includes('video 11')).to.be.false
     })
+
+    it('Should not log audit entries when the audit log is disabled', async function () {
+      this.timeout(60000)
+
+      await killallServers([ server ])
+      await server.run({ log: { audit: { enabled: false } } })
+
+      const now = new Date()
+
+      await server.videos.upload({ attributes: { name: 'video 12' } })
+      await waitJobs([ server ])
+
+      await logsCommand.getAuditLogs({ startDate: now, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should log audit entries again when the audit log is re-enabled', async function () {
+      this.timeout(60000)
+
+      await killallServers([ server ])
+      await server.run({ log: { audit: { enabled: true } } })
+
+      const now = new Date()
+
+      await server.videos.upload({ attributes: { name: 'video 13' } })
+      await waitJobs([ server ])
+
+      const body = await logsCommand.getAuditLogs({ startDate: now })
+
+      expect(body).to.have.lengthOf(1)
+    })
   })
 
   describe('When creating log from the client', function () {

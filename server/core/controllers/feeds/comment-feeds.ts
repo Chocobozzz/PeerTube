@@ -52,7 +52,9 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
     count: CONFIG.FEEDS.COMMENTS.COUNT,
     videoId: video?.id,
     videoAccountOwnerId: account?.id,
-    videoChannelOwnerId: videoChannel?.id
+    videoChannelOwnerId: videoChannel?.id,
+    isLocal: req.query.isLocal,
+    onLocalVideo: req.query.onLocalVideo
   })
 
   const { name, description, imageUrl, link } = await buildFeedMetadata({ video, account, videoChannel })

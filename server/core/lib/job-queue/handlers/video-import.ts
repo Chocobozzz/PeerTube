@@ -11,7 +11,7 @@ import {
   VideoState
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { createVideoAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
@@ -43,7 +43,6 @@ import { stat } from 'fs/promises'
 import { join } from 'path'
 import { createLogger } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, JOB_TTL, OBJECT_STORAGE_STAGING } from '../../../initializers/constants.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoFileModel } from '../../../models/video/video-file.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
@@ -279,7 +278,7 @@ async function processFile (options: {
       const { infoHash, torrentFilename, torrentStorage } = torrentResult
 
       const { videoImportUpdated, video } = await retryTransactionWrapper(() => {
-        return sequelizeTypescript.transaction(async t => {
+        return runTransaction(async t => {
           // Refresh video
           const video = await VideoModel.load(videoImportWithFiles.videoId, t)
           if (!video) {
@@ -431,7 +430,7 @@ async function onImportError (err: Error, tempVideoPath: string, videoImport: MV
     logger.warn('Cannot cleanup files after a video import error.', { err: errUnlink })
   }
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     videoImport.error = err.message
 
     if (videoImport.state !== VideoImportState.REJECTED) {

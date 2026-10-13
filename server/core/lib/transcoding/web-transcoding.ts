@@ -6,10 +6,9 @@ import {
   getVideoStreamDuration
 } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoFileStream } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { computeOutputFPS } from '@server/helpers/ffmpeg/index.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -272,7 +271,7 @@ export async function onWebVideoFileTranscoding (options: {
     if (existingFile) await video.removeWebVideoFile(existingFile)
 
     await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         videoFile = await VideoFileModel.customUpsert(videoFile, 'video', t)
         await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHashOfFile, t)
       })

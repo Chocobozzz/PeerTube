@@ -2,7 +2,7 @@ import { pick } from '@peertube/peertube-core-utils'
 import { FilterSpecification } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper } from '../ffmpeg-command-wrapper.js'
 import { getScaleFilter, StreamType } from '../ffmpeg-utils.js'
-import { ffprobePromise, getVideoStreamBitrate, getVideoStreamDimensionsInfo, hasAudioStream } from '../ffprobe.js'
+import { ffprobePromise, getVideoStreamBitrate, getVideoStreamDimensionsInfo, getVideoStreamStereo3D, hasAudioStream } from '../ffprobe.js'
 import { addDefaultEncoderGlobalParams, addDefaultEncoderParams, applyEncoderOptions } from './encoder-options.js'
 
 export async function presetVOD (options: {
@@ -26,6 +26,9 @@ export async function presetVOD (options: {
   } | null
 
   scaleFilterValue?: string
+
+  // When input is mixed with other content (intro, outro, watermark)
+  ignoreInputStereo3D?: boolean // default false
 }) {
   const {
     commandWrapper,
@@ -35,7 +38,8 @@ export async function presetVOD (options: {
     fps,
     videoStreamOnly,
     scaleFilterValue,
-    chainComplexFilters
+    chainComplexFilters,
+    ignoreInputStereo3D = false
   } = options
 
   if (videoStreamOnly && !resolution) {
@@ -57,6 +61,9 @@ export async function presetVOD (options: {
   // Audio encoder
   const bitrate = await getVideoStreamBitrate(videoInputPath, videoProbe)
   const videoStreamDimensions = await getVideoStreamDimensionsInfo(videoInputPath, videoProbe)
+  const videoStereo3D = ignoreInputStereo3D
+    ? undefined
+    : await getVideoStreamStereo3D(videoInputPath, videoProbe)
 
   let streamsToProcess: StreamType[] = [ 'audio', 'video' ]
 
@@ -83,6 +90,9 @@ export async function presetVOD (options: {
 
       inputBitrate: bitrate,
       inputRatio: videoStreamDimensions?.ratio || 0,
+      inputStereo3D: streamType === 'video'
+        ? videoStereo3D
+        : undefined,
 
       resolution,
       fps,

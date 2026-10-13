@@ -36,6 +36,8 @@ export type ChannelMiniatureMarkupData = {
 
   displayLatestVideo?: StringBoolean
   displayDescription?: StringBoolean
+
+  sort?: string
 }
 
 export type VideosListMarkupData = {
@@ -50,6 +52,7 @@ export type VideosListMarkupData = {
 
   channelHandle?: string
   accountHandle?: string
+  playlistId?: string
 
   host?: string
 

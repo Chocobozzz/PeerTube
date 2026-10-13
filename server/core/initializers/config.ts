@@ -415,6 +415,9 @@ export const CONFIG = buildConfig({
       MAX_FILE_SIZE: staticKey('log.rotation.max_file_size', { transform: bytes.parse }),
       MAX_FILES: staticKey<number>('log.rotation.max_files')
     },
+    AUDIT: {
+      ENABLED: staticKey<boolean>('log.audit.enabled')
+    },
     ANONYMIZE_IP: staticKey<boolean>('log.anonymize_ip'),
     TAG_REQUESTS: staticKey<boolean>('log.tag_requests'),
     LOG_PING_REQUESTS: staticKey<boolean>('log.log_ping_requests'),
@@ -458,6 +461,7 @@ export const CONFIG = buildConfig({
   REDUNDANCY: {
     VIDEOS: {
       CHECK_INTERVAL: staticKey('redundancy.videos.check_interval', { transform: parseDurationToMs }),
+      TIMEOUT: staticKey('redundancy.videos.timeout', { transform: parseDurationToMs }),
       STRATEGIES: staticKey('redundancy.videos.strategies', { transform: buildVideosRedundancy })
     }
   },

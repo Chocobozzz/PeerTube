@@ -20,9 +20,14 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkPeerTubeRunnerCacheIsEmpty } from '@tests/shared/directories.js'
 import { PeerTubeRunnerProcess } from '@tests/shared/peertube-runner-process.js'
+import { generateStereo3DVideo, getFramePacking, getStereo3DViews } from '@tests/shared/stereo3d.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { completeWebVideoFilesCheck } from '@tests/shared/videos.js'
 import { expect } from 'chai'
+import { remove } from 'fs-extra/esm'
+import { mkdtemp } from 'fs/promises'
+import { tmpdir } from 'os'
+import { join } from 'path'
 
 describe('Test VOD transcoding in peertube-runner program', function () {
   let servers: PeerTubeServer[] = []
@@ -460,6 +465,33 @@ describe('Test VOD transcoding in peertube-runner program', function () {
             }
           }
         })
+      })
+
+      it('Should keep the 3D packing of a 3D video, the left eye first', async function () {
+        this.timeout(120_000)
+
+        await servers[0].config.enableTranscoding({ resolutions: [ 240 ], hls: true, webVideo: true, splitAudioAndVideo: false })
+
+        const directory = await mkdtemp(join(tmpdir(), 'peertube-test-runner-stereo3d-'))
+
+        try {
+          // The red view is the right eye
+          const fixture = await generateStereo3DVideo({ directory, stereoMode: 'right_left', stack: 'hstack', viewSize: 240 })
+
+          const { uuid } = await servers[0].videos.quickUpload({ name: '3D video', fixture })
+          await waitJobs(servers, { runnerJobs: true })
+
+          const video = await servers[0].videos.get({ id: uuid })
+          const files = getAllFiles(video)
+          expect(files).to.have.lengthOf(2)
+
+          for (const file of files) {
+            expect(await getFramePacking(file.fileUrl)).to.deep.equal({ type: 'side by side', inverted: false })
+            expect(await getStereo3DViews(file.fileUrl, 'hstack')).to.deep.equal([ 'blue', 'red' ])
+          }
+        } finally {
+          await remove(directory)
+        }
       })
     })
   })

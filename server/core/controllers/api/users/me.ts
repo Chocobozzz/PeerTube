@@ -10,7 +10,7 @@ import {
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { UserAuditView, auditLoggerFactory, getAuditIdFromRes } from '@server/helpers/audit-logger.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
@@ -22,7 +22,6 @@ import { createReqFiles, getCountVideos } from '../../../helpers/express-utils.j
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor.js'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserChangeEmail } from '../../../lib/user.js'
@@ -288,7 +287,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(t => {
+    return runTransaction(t => {
       return user.destroy({ transaction: t })
     })
   })
@@ -342,7 +341,7 @@ async function updateMe (req: express.Request, res: express.Response) {
 
   await retryTransactionWrapper(async () => {
     try {
-      await sequelizeTypescript.transaction(async t => {
+      await runTransaction(async t => {
         if (body.password !== undefined) {
           await OAuthTokenModel.deleteUserToken({
             userId: user.id,

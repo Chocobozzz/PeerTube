@@ -1137,6 +1137,17 @@
           },
           "additionalProperties": false
         },
+        "audit": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "description": "Log user, administration and moderation actions in a dedicated audit log file",
+              "type": "boolean",
+              "default": true
+            }
+          },
+          "additionalProperties": false
+        },
         "anonymize_ip": {
           "type": "boolean",
           "default": false
@@ -1291,6 +1302,11 @@
               "description": "How often you want to check new videos to cache",
               "type": "string",
               "default": "1 hour"
+            },
+            "timeout": {
+              "description": "Maximum duration of a video mirror, mainly useful for big videos on slow connections",
+              "type": "string",
+              "default": "3 hours"
             },
             "strategies": {
               "description": "Just uncomment strategies you want",

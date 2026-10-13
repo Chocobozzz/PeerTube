@@ -5,6 +5,7 @@ import { join } from 'path'
 import { QueryTypes } from 'sequelize'
 import { createLogger } from '../helpers/logger.js'
 import { LAST_MIGRATION_VERSION } from './constants.js'
+import { runTransaction } from '../helpers/database-utils.js'
 import { sequelizeTypescript } from './database.js'
 
 const logger = createLogger()
@@ -98,7 +99,7 @@ async function executeMigration (actualVersion: number, entity: { version: strin
 
   const migrationScript = await import(join(currentDir(import.meta.url), 'migrations', migrationScriptName))
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const options = {
       transaction: t,
       queryInterface: sequelizeTypescript.getQueryInterface(),

@@ -4,7 +4,12 @@
 
 ### SECURITY
 
- * This release addresses vulnerabilities ranging from medium to critical severity affecting PeerTube. In a week, this changelog will be updated to disclose the vulnerabilities.
+ * **critical** Fix potential XSS with remote storyboard in SVG format [GHSA-jwcf-xj6w-xqm5](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-jwcf-xj6w-xqm5)
+ * **high** Do not allow moderators to act on 2FA/token sessions of other moderators/admins [GHSA-xpw4-mxj2-rj8x](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-xpw4-mxj2-rj8x)
+ * **moderate** Prevent private video metadata leak [GHSA-4hwq-4jr6-w3gg](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-4hwq-4jr6-w3gg)
+ * **moderate** Prevent ActivityPub DDOS [GHSA-r8wm-f869-fpw3](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-r8wm-f869-fpw3)
+ * **moderate** Fix SSRF for webfinger, HTTP video import and JSON-LD context resolver [GHSA-xgcr-r7cv-7xhv](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-xgcr-r7cv-7xhv)
+ * Security hardening
 
 ### Bug fixes
 

@@ -9,9 +9,8 @@ import {
   CacheFileObject
 } from '@peertube/peertube-models'
 import { VideoModel } from '@server/models/video/video.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../models/actor/actor.js'
@@ -79,7 +78,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
   const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: likeActivity.object })
   if (!onlyVideo?.isLocal()) return
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
     const video = await VideoModel.load(onlyVideo.id, t)
@@ -103,7 +102,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
   const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: dislikeActivity.object })
   if (!onlyVideo?.isLocal()) return
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
     const video = await VideoModel.load(onlyVideo.id, t)
@@ -130,7 +129,7 @@ async function processUndoCacheFile (
 ) {
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
     if (!cacheFile) {
       logger.debug('Cannot undo unknown video cache %s.', cacheFileObject.id)
@@ -151,7 +150,7 @@ async function processUndoCacheFile (
 }
 
 function processUndoAnnounce (byActor: MActorSignature, announceActivity: ActivityAnnounce) {
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
     if (!share) {
       logger.warn(`Unknown video share ${announceActivity.id}`)
@@ -180,7 +179,7 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
 // ---------------------------------------------------------------------------
 
 function processUndoFollow (follower: MActorSignature, followActivity: ActivityFollow) {
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
     if (!following) {
       logger.warn('Unknown actor %s to undo the follow of %s.', followActivity.object, follower.url)

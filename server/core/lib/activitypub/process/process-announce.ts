@@ -1,8 +1,7 @@
 import { ActivityAnnounce } from '@peertube/peertube-models'
 import { getAPId } from '@server/lib/activitypub/activity.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
@@ -44,7 +43,7 @@ async function processVideoShare (actorAnnouncer: MActorSignature, activity: Act
   const { video, created: videoCreated } = await maybeGetOrCreateAPVideo({ videoObject: objectUri })
   if (!video) return
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     // Add share entry
 
     const share = {

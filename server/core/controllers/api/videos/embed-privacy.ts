@@ -7,6 +7,7 @@ import {
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyUpdate
 } from '@peertube/peertube-models'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { getAuthUser } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { VIDEO_EMBED_PRIVACY_POLICIES, WEBSERVER } from '@server/initializers/constants.js'
@@ -14,11 +15,10 @@ import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js
 import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoEmbedPrivacyDomainModel } from '@server/models/video/video-embed-privacy-domain.js'
-import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
-import { asyncMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
+import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, optionalAuthenticate } from '../../../middlewares/index.js'
 import {
   getVideoEmbedPrivacyValidator,
   isVideoEmbedOnDomainAllowedValidator,
@@ -40,7 +40,7 @@ videoEmbedPrivacyRouter.put(
   '/:videoId/embed-privacy',
   authenticate,
   asyncMiddleware(updateVideoEmbedPrivacyValidator),
-  asyncMiddleware(updateVideoEmbedPrivacy)
+  asyncRetryTransactionMiddleware(updateVideoEmbedPrivacy)
 )
 
 videoEmbedPrivacyRouter.get(
@@ -114,7 +114,7 @@ function updateVideoEmbedPrivacy (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const body = req.body as VideoEmbedPrivacyUpdate
 
-    await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
+    await runTransaction(async (t: Transaction) => {
       video.embedPrivacyPolicy = body.policy
 
       await video.save({ transaction: t })

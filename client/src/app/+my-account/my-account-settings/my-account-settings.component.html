@@ -65,7 +65,7 @@
   </div>
 }
 
-@if (user.pluginAuth === null) {
+@if (canManageTwoFactor()) {
   <div class="pt-two-cols mt-5"> <!-- two factor auth grid -->
     <div class="title-col">
       <h2 i18n>TWO-FACTOR AUTHENTICATION</h2>

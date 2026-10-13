@@ -15,9 +15,8 @@ import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
 import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../types/models/index.js'
 import { Notifier } from '../../notifier/index.js'
@@ -113,7 +112,7 @@ async function processCreateCacheFile (
     return
   }
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     return createOrUpdateCacheFile(cacheFile, video, byActor, t)
   })
 
@@ -135,7 +134,7 @@ async function processCreateWatchAction (watchAction: WatchActionObject, byActor
   const video = await VideoModel.loadByUrl(watchAction.object)
   if (!video || video.remote) return
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     return createOrUpdateLocalVideoViewer(watchAction, video, t)
   })
 }

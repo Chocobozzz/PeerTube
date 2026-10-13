@@ -1,11 +1,10 @@
 import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
 import { FileStorage } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { STORYBOARD } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
@@ -86,7 +85,7 @@ export async function insertStoryboardInDatabase (options: {
     }
 
     inserted = await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
+      return runTransaction(async transaction => {
         const video = await VideoModel.loadFull(videoUUID, transaction)
         if (!video) {
           logger.info(`Video ${videoUUID} does not exist anymore, skipping storyboard generation.`)

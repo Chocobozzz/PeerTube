@@ -33,8 +33,8 @@ export function generateCachedFileObjectStorageKey (subPrefix: string, filename:
 // Private
 // ---------------------------------------------------------------------------
 
-function isSafeKey (key: string) {
-  const regex = new RegExp(`^[a-zA-Z0-9-:.]+\\.[a-z0-9]{1,8}$`)
+const SAFE_KEY_REGEX = /^[a-zA-Z0-9-:.]+\.[a-z0-9]{1,8}$/
 
-  return typeof key === 'string' && !!key.match(regex)
+function isSafeKey (key: string) {
+  return typeof key === 'string' && SAFE_KEY_REGEX.test(key)
 }

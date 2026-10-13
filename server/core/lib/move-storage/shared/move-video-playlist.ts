@@ -1,6 +1,6 @@
 import { FileStorageType } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { sendUpdateVideoPlaylist } from '@server/lib/activitypub/send/index.js'
 import { ThumbnailModel } from '@server/models/video/thumbnail.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
@@ -44,5 +44,5 @@ export async function moveVideoPlaylistToStorage (options: {
   // Reload them: the thumbnails loaded with the playlist still have their previous storage
   await playlist.reloadThumbnails()
 
-  await sequelizeTypescript.transaction(t => sendUpdateVideoPlaylist(playlist, t))
+  await runTransaction(t => sendUpdateVideoPlaylist(playlist, t))
 }

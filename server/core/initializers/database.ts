@@ -38,6 +38,7 @@ import { readFileSync } from 'fs'
 import pg from 'pg'
 import { QueryTypes, Transaction } from 'sequelize'
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
+import { trackInstancesSavedInTransactions } from '../helpers/database-transaction.js'
 import { createLogger } from '../helpers/logger.js'
 import { AbuseMessageModel } from '../models/abuse/abuse-message.js'
 import { AbuseModel } from '../models/abuse/abuse.js'
@@ -141,6 +142,8 @@ export const sequelizeTypescript = new SequelizeTypescript({
     logger.debug(newMessage, { sql: message, tags: [ 'sql' ] })
   }
 })
+
+trackInstancesSavedInTransactions(sequelizeTypescript)
 
 export function checkDatabaseConnectionOrDie () {
   sequelizeTypescript.authenticate()

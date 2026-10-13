@@ -15,6 +15,7 @@ import { generateRandomString } from '@server/helpers/utils.js'
 import { PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
+import { MUser } from '@server/types/models/user/user.js'
 import {
   RegisterServerAuthenticatedResult,
   RegisterServerAuthPassOptions,
@@ -182,6 +183,7 @@ async function getBypassFromPasswordGrant (username: string, password: string): 
 
     return {
       bypass: true,
+      type: 'id-and-pass',
       pluginName: npmName,
       authName,
       user,
@@ -191,6 +193,36 @@ async function getBypassFromPasswordGrant (username: string, password: string): 
   }
 
   return undefined
+}
+
+// Check the password of a user registered by an id and pass auth plugin, by asking the plugin to authenticate them again
+export async function isExternalUserPasswordValid (options: { user: MUser, password: string }) {
+  const { user, password } = options
+
+  const plugin = PluginManager.Instance.getIdAndPassAuths().find(p => p.npmName === user.pluginAuth)
+  if (!plugin) return false
+
+  // We don't know which identifier the user logged in with, and the plugin may only accept one of them (LDAP search filter etc)
+  const ids = Array.from(new Set([ user.username, user.email ]))
+
+  for (const auth of plugin.idAndPassAuths) {
+    for (const id of ids) {
+      let result: RegisterServerAuthenticatedResult
+
+      try {
+        result = await auth.login({ id, password })
+      } catch (err) {
+        logger.warn('Cannot reauthenticate user %s with auth method %s of plugin %s.', user.id, auth.authName, plugin.npmName, { err })
+        continue
+      }
+
+      if (!result || !isAuthResultValid(plugin.npmName, auth.authName, result)) continue
+
+      if (doesExternalAuthResultMatchUser(user, result)) return true
+    }
+  }
+
+  return false
 }
 
 async function consumeBypassFromExternalAuth (username: string, externalAuthToken: string): Promise<BypassLogin> {
@@ -219,6 +251,7 @@ async function consumeBypassFromExternalAuth (username: string, externalAuthToke
 
   return {
     bypass: true,
+    type: 'external',
     pluginName: npmName,
     authName,
     userUpdaterResults,
@@ -285,6 +318,12 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
 
     externalId: pluginResult.externalId || undefined
   }
+}
+
+function doesExternalAuthResultMatchUser (user: MUser, result: RegisterServerAuthenticatedResult) {
+  if (user.pluginAuthExternalId) return result.externalId === user.pluginAuthExternalId
+
+  return result.email.toLowerCase() === user.email.toLowerCase()
 }
 
 // ---------------------------------------------------------------------------

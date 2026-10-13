@@ -3,7 +3,13 @@ import { generateOTPSecret, isOTPValid } from '@server/helpers/otp.js'
 import { encrypt } from '@server/helpers/peertube-crypto.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { Redis } from '@server/lib/redis/index.js'
-import { asyncMiddleware, authenticate, confirmTokenRateLimiter, usersCheckCurrentPasswordFactory } from '@server/middlewares/index.js'
+import {
+  asyncMiddleware,
+  authenticate,
+  buildRateLimiter,
+  confirmTokenRateLimiter,
+  usersCheckCurrentPasswordFactory
+} from '@server/middlewares/index.js'
 import {
   confirmTwoFactorValidator,
   disableTwoFactorValidator,
@@ -13,9 +19,20 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 
 const twoFactorRouter = express.Router()
 
+// Checking the current password is a login attempt
+const currentPasswordRateLimiter = buildRateLimiter({
+  enabled: CONFIG.RATES_LIMIT.LOGIN.ENABLED,
+  name: 'two-factor-current-password',
+  windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
+  max: CONFIG.RATES_LIMIT.LOGIN.MAX,
+  perUserKey: true,
+  failOnUnavailableRedis: true
+})
+
 twoFactorRouter.post(
   '/:id/two-factor/request',
   authenticate,
+  currentPasswordRateLimiter,
   asyncMiddleware(usersCheckCurrentPasswordFactory(req => req.params.id)),
   asyncMiddleware(requestOrConfirmTwoFactorValidator),
   asyncMiddleware(requestTwoFactor)
@@ -33,6 +50,7 @@ twoFactorRouter.post(
 twoFactorRouter.post(
   '/:id/two-factor/disable',
   authenticate,
+  currentPasswordRateLimiter,
   asyncMiddleware(usersCheckCurrentPasswordFactory(req => req.params.id)),
   asyncMiddleware(disableTwoFactorValidator),
   asyncMiddleware(disableTwoFactor)

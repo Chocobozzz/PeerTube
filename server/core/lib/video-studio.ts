@@ -10,10 +10,10 @@ import {
   hasVideoStudioTaskFile
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
@@ -227,7 +227,7 @@ export async function createNewVideoForStudio (options: {
   video.VideoChannel = channel
   video.url = getLocalVideoActivityPubUrl(video)
 
-  await sequelizeTypescript.transaction(async transaction => {
+  await runTransaction(async transaction => {
     await video.save({ transaction })
 
     await VideoChannelActivityModel.addVideoActivity({
@@ -249,7 +249,7 @@ export function onVideoStudioFailed (options: {
 }) {
   const { videoUUID, isNewVideo } = options
 
-  return sequelizeTypescript.transaction(async transaction => {
+  return runTransaction(async transaction => {
     const video = await VideoModel.load(videoUUID, transaction)
     if (!video || video.state === VideoState.PUBLISHED) return
 
@@ -299,7 +299,7 @@ export async function onVideoStudioEnded (options: {
       const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFileFromPath(video, newFile, localPath)
       await removeAllFilesUnderLock(video)
 
-      await sequelizeTypescript.transaction(async t => {
+      await runTransaction(async t => {
         newFile.torrentFilename = torrentFilename
         newFile.torrentStorage = torrentStorage
         await newFile.save({ transaction: t })

@@ -3,7 +3,7 @@ import { blacklistVideo, unblacklistVideo } from '@server/lib/video-blacklist.js
 import express from 'express'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import {
   asyncMiddleware,
   authenticate,
@@ -91,7 +91,7 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
   if (body.reason !== undefined) videoBlacklist.reason = body.reason
   if (body.internalNote !== undefined) videoBlacklist.internalNote = body.internalNote
 
-  await sequelizeTypescript.transaction(t => {
+  await runTransaction(t => {
     return videoBlacklist.save({ transaction: t })
   })
 

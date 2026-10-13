@@ -1,9 +1,8 @@
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { SequelizeModel } from '@server/models/shared/sequelize-type.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { Mutex } from 'async-mutex'
@@ -100,7 +99,7 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
       })
 
       try {
-        await sequelizeTypescript.transaction(t => videoPlaylist.replaceAndSaveThumbnails(thumbnails, t))
+        await runTransaction(t => videoPlaylist.replaceAndSaveThumbnails(thumbnails, t))
       } catch (err) {
         // The next attempt generates new files, so don't leak the ones we just created
         await Promise.all(

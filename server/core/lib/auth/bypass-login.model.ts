@@ -15,6 +15,9 @@ export type UserUpdaterResults = {
 
 export type BypassLogin = {
   bypass: boolean
+
+  type: 'id-and-pass' | 'external'
+
   pluginName: string
   authName?: string
   user: ExternalUser

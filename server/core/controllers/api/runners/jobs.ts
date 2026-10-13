@@ -22,12 +22,11 @@ import {
   VODWebVideoTranscodingSuccess,
   VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { cleanUpReqFiles, createReqFiles } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { generateRunnerJobToken } from '@server/helpers/token-generator.js'
 import { MIMETYPES, RUNNER_JOBS } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getRunnerJobHandlerClass, runnerJobCanBeCancelled, updateLastRunnerContact } from '@server/lib/runners/index.js'
 import {
   apiRateLimiter,
@@ -211,7 +210,7 @@ async function acceptRunnerJob (req: express.Request, res: express.Response) {
 
   return logger.withContext([ runner.name, runnerJob.uuid, runnerJob.type ], async () => {
     const newRunnerJob = await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async transaction => {
+      return runTransaction(async transaction => {
         await runnerJob.reload({ transaction })
 
         if (runnerJob.state !== RunnerJobState.PENDING) {

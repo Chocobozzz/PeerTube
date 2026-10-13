@@ -4,9 +4,8 @@ import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { getAPId } from '../../../lib/activitypub/activity.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MAccountDefault, MActorSignature, MCommentOwnerVideo } from '../../../types/models/index.js'
@@ -48,7 +47,7 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
 
       logger.debug('Reporting remote abuse for object %s.', uri)
 
-      await sequelizeTypescript.transaction(async t => {
+      await runTransaction(async t => {
         const video = await VideoModel.loadByUrlAndPopulateAccountAndFiles(uri, t)
         let videoComment: MCommentOwnerVideo
         let flaggedAccount: MAccountDefault

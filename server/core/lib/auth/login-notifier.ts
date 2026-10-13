@@ -1,3 +1,4 @@
+import { runInReadCommittedTransaction } from '@server/helpers/database-utils.js'
 import { GeoIP } from '@server/helpers/geo-ip.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { Emailer } from '@server/lib/emailer.js'
@@ -11,7 +12,9 @@ async function notifyOnLoginSuccess (options: {
 }) {
   const { user, ip, userAgent } = options
 
-  const isNewDevice = await UserLoginDeviceModel.registerDevice({ userId: user.id, ip, userAgent })
+  const isNewDevice = await runInReadCommittedTransaction(transaction => {
+    return UserLoginDeviceModel.registerDevice({ userId: user.id, ip, userAgent, transaction })
+  })
   if (!isNewDevice) return
 
   if (!isEmailEnabled()) return

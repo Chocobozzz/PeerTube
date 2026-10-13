@@ -156,7 +156,8 @@ export class CustomMarkupService {
     const model = {
       name: data.name,
       displayLatestVideo: this.buildBoolean(data.displayLatestVideo) ?? true,
-      displayDescription: this.buildBoolean(data.displayDescription) ?? true
+      displayDescription: this.buildBoolean(data.displayDescription) ?? true,
+      sort: data.sort || '-publishedAt'
     }
 
     this.dynamicElementService.setModel(component, model)
@@ -220,7 +221,7 @@ export class CustomMarkupService {
       onlyDisplayTitle: this.buildBoolean(data.onlyDisplayTitle) ?? false,
       maxRows: this.buildNumber(data.maxRows) ?? -1,
 
-      sort: data.sort || '-publishedAt',
+      sort: data.sort || undefined,
       count: this.buildNumber(data.count) || 10,
 
       categoryOneOf: this.buildArrayNumber(data.categoryOneOf) ?? [],
@@ -228,6 +229,7 @@ export class CustomMarkupService {
 
       accountHandle: data.accountHandle || undefined,
       channelHandle: data.channelHandle || undefined,
+      playlistId: data.playlistId || undefined,
 
       host: data.host || undefined,
 

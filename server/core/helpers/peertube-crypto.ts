@@ -1,15 +1,54 @@
 import { ParsedDraftSignature, parseRequestSignature, verifyDraftSignature } from '@misskey-dev/node-http-message-signatures'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { generateRSAKeyPairPromise, sha256 } from '@peertube/peertube-node-utils'
 import { timingSafeEqual } from 'crypto'
 import { Request } from 'express'
-import { BCRYPT_SALT_SIZE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
+import PQueue from 'p-queue'
+import { BCRYPT_SALT_SIZE, CRYPTO_QUEUE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
 import { MActor } from '../types/models/index.js'
 import { decrypt, encrypt } from './encryption.js'
 import { createLogger } from './logger.js'
 
 const logger = createLogger()
 
+const cryptoQueue = new PQueue({ concurrency: CRYPTO_QUEUE.CONCURRENCY })
+
+const CRYPTO_PRIORITY = {
+  PASSWORD_CHECK: 1,
+  DEFAULT: 0
+}
+
+class CryptoQueueFullError extends Error {
+  status = HttpStatusCode.SERVICE_UNAVAILABLE_503
+  code = HttpStatusCode.SERVICE_UNAVAILABLE_503
+}
+
+function runInCryptoQueue<T> (fn: () => Promise<T>, priority: number) {
+  // Fail fast if we have too many jobs
+  if (cryptoQueue.size >= CRYPTO_QUEUE.MAX_PENDING) {
+    return Promise.reject(new CryptoQueueFullError('Server is too busy, please try again later'))
+  }
+
+  return cryptoQueue.add(fn, { priority })
+}
+
 function createPrivateAndPublicKeys () {
+  return runInCryptoQueue(generateKeys, CRYPTO_PRIORITY.DEFAULT)
+}
+
+function createUserKeysAndPasswordHash (password: string | undefined) {
+  return runInCryptoQueue(async () => {
+    return {
+      accountKeys: await generateKeys(),
+      channelKeys: await generateKeys(),
+      passwordHash: password
+        ? await hashPassword(password)
+        : undefined
+    }
+  }, CRYPTO_PRIORITY.DEFAULT)
+}
+
+function generateKeys () {
   logger.info('Generating a RSA key...')
 
   return generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE)
@@ -28,15 +67,17 @@ async function comparePassword (plainPassword: string, hashPassword: string) {
 
   const { compare } = await import('bcrypt')
 
-  return compare(plainPassword, hashPassword)
+  return runInCryptoQueue(() => compare(plainPassword, hashPassword), CRYPTO_PRIORITY.PASSWORD_CHECK)
 }
 
-async function cryptPassword (password: string) {
+function cryptPassword (password: string) {
+  return runInCryptoQueue(() => hashPassword(password), CRYPTO_PRIORITY.DEFAULT)
+}
+
+async function hashPassword (password: string) {
   const { genSalt, hash } = await import('bcrypt')
 
-  const salt = await genSalt(BCRYPT_SALT_SIZE)
-
-  return hash(password, salt)
+  return hash(password, await genSalt(BCRYPT_SALT_SIZE))
 }
 
 // ---------------------------------------------------------------------------
@@ -121,6 +162,8 @@ export {
   buildDigest,
   comparePassword,
   createPrivateAndPublicKeys,
+  createUserKeysAndPasswordHash,
+  CryptoQueueFullError,
   cryptPassword,
   decrypt,
   encrypt,
