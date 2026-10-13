@@ -14,7 +14,7 @@ import {
 import { testHelloWorldRegisteredSettings } from '@tests/shared/plugins.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
-import { pathExists, remove } from 'fs-extra/esm'
+import { copy, pathExists, remove } from 'fs-extra/esm'
 import { writeFile } from 'fs/promises'
 import { join } from 'path'
 
@@ -446,6 +446,36 @@ describe('Test plugins', function () {
       await checkSetting('updated-value')
     } finally {
       await command.uninstall({ npmName: 'peertube-plugin-test' })
+    }
+  })
+
+  it('Should update a plugin installed from disk with its new content', async function () {
+    this.timeout(60000)
+
+    const pluginPath = server.servers.buildDirectory(join('plugin-sources', 'peertube-plugin-test-unloading'))
+    await copy(PluginsCommand.getPluginTestPath('-unloading'), pluginPath)
+
+    const getValue = async () => {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: '/plugins/test-unloading/router/get',
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      return res.body.message
+    }
+
+    try {
+      await command.install({ path: pluginPath })
+      expect(await getValue()).to.be.a('number')
+
+      await remove(join(pluginPath, 'lib.js'))
+      await writeFile(join(pluginPath, 'lib.js'), `exports.value = 'updated'\n`)
+
+      await command.update({ path: pluginPath })
+      expect(await getValue()).to.equal('updated')
+    } finally {
+      await command.uninstall({ npmName: 'peertube-plugin-test-unloading' })
     }
   })
 

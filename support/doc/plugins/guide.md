@@ -1298,13 +1298,14 @@ peertube-cli plugins install --path /your/absolute/plugin-or-theme/path
 
 `plugins install` copies the directory into the instance plugin storage instead of linking to it,
 so rebuilding your plugin/theme afterwards does not change what the instance runs.
-To load a new build, update the `version` key in your `package.json` and reinstall it:
+To load a new build, update the plugin/theme:
 
-```sh
+```bash
 peertube-cli plugins update --path /your/absolute/plugin-or-theme/path
 ```
 
-Reusing the same version reinstalls the copy the instance already has, so your changes look like they were ignored.
+Static files and client scripts are cached by web browsers using the `version` of your `package.json`.
+If you changed them, also bump this `version` or disable the cache of your web browser.
 
 ### Publish
 
