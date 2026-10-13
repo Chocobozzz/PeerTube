@@ -1,15 +1,15 @@
 import { NgStyle } from '@angular/common'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, output } from '@angular/core'
-import { Notifier, User, UserService } from '@app/core'
+import { Notifier, ServerService, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoListParams, VideoService } from '@app/shared/shared-main/video/video.service'
+import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
 import { ResultList, VideoSortField } from '@peertube/peertube-models'
-import { Observable } from 'rxjs'
-import { finalize, map } from 'rxjs/operators'
+import { Observable, throwError } from 'rxjs'
+import { finalize, map, switchMap } from 'rxjs/operators'
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
 import { CustomMarkupComponent } from './shared'
-import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 
 /*
  * Markup component list videos depending on criteria
@@ -27,6 +27,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   private videoPlaylistService = inject(VideoPlaylistService)
   private notifier = inject(Notifier)
   private userService = inject(UserService)
+  private serverService = inject(ServerService)
   private cd = inject(ChangeDetectorRef)
 
   readonly sort = input<string>(undefined)
@@ -88,6 +89,9 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   }
 
   getVideosObservable () {
+    const playlistId = this.playlistId()
+    if (playlistId) return this.getPlaylistVideosObservable(playlistId)
+
     const options: VideoListParams = {
       videoPagination: {
         currentPage: 1,
@@ -98,7 +102,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
       host: this.host(),
       isLocal: this.isLocal(),
       isLive: this.isLive(),
-      sort: this.sort() as VideoSortField,
+      sort: (this.sort() || '-publishedAt') as VideoSortField,
       skipCount: true
     }
 
@@ -106,7 +110,6 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
 
     const channelHandle = this.channelHandle()
     const accountHandle = this.accountHandle()
-    const playlistId = this.playlistId()
     if (channelHandle) {
       obs = this.videoService.listChannelVideos({
         ...options,
@@ -119,18 +122,49 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
 
         account: { nameWithHost: accountHandle }
       })
-    } else if (playlistId) {
-      obs = this.videoPlaylistService.getPlaylistVideosExtracted({
-        componentPagination: {
-          currentPage: 1,
-          itemsPerPage: this.count()
-        },
-        videoPlaylistId: playlistId
-      })
     } else {
       obs = this.videoService.listVideos(options)
     }
 
     return obs.pipe(map(({ data }) => data))
+  }
+
+  private getPlaylistVideosObservable (playlistId: string) {
+    const incompatibleAttributes = this.getPlaylistIncompatibleAttributes()
+    if (incompatibleAttributes.length !== 0) {
+      return throwError(() => new Error($localize`data-playlist-id cannot be used with ${incompatibleAttributes.join(', ')}`))
+    }
+
+    const serverConfig = this.serverService.getHTMLConfig()
+
+    return this.userService.getAnonymousOrLoggedUser()
+      .pipe(
+        switchMap(user => {
+          return this.videoPlaylistService.getPlaylistVideos({
+            videoPlaylistId: playlistId,
+            componentPagination: {
+              currentPage: 1,
+              itemsPerPage: this.count()
+            }
+          }).pipe(
+            map(({ data }) => data.map(e => e.video).filter(v => !!v && !v.isNSFWHiddenForUser(user, serverConfig)))
+          )
+        })
+      )
+  }
+
+  private getPlaylistIncompatibleAttributes () {
+    const attributes: { name: string, isSet: boolean }[] = [
+      { name: 'data-sort', isSet: !!this.sort() },
+      { name: 'data-category-one-of', isSet: this.categoryOneOf()?.length > 0 },
+      { name: 'data-language-one-of', isSet: this.languageOneOf()?.length > 0 },
+      { name: 'data-only-local', isSet: this.isLocal() !== undefined },
+      { name: 'data-is-live', isSet: this.isLive() !== undefined },
+      { name: 'data-channel-handle', isSet: !!this.channelHandle() },
+      { name: 'data-account-handle', isSet: !!this.accountHandle() },
+      { name: 'data-host', isSet: !!this.host() }
+    ]
+
+    return attributes.filter(a => a.isSet).map(a => a.name)
   }
 }

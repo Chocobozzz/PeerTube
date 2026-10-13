@@ -31,7 +31,6 @@ import { VideoChannel } from '../shared-main/channel/video-channel.model'
 import { VideoChannelService } from '../shared-main/channel/video-channel.service'
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
-import { Video as VideoModel } from '../shared-main/video/video.model'
 
 const debugLogger = debug('peertube:playlists:VideoPlaylistService')
 
@@ -375,14 +374,6 @@ export class VideoPlaylistService {
         switchMap(res => this.extractVideoPlaylistElements(res)),
         catchError(err => this.restExtractor.handleError(err))
       )
-  }
-
-  getPlaylistVideosExtracted (options: {
-    videoPlaylistId: number | string
-    componentPagination: ComponentPaginationLight
-  }): Observable<ResultList<VideoModel>> {
-    return this.getPlaylistVideos(options)
-      .pipe(map(({ data, ...rest }) => ({ ...rest, data: data.filter(v => !!v.video).map(d => new VideoModel(d.video)) })))
   }
 
   listenToMyAccountPlaylistsChange () {

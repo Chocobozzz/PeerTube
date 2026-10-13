@@ -220,7 +220,7 @@ export class CustomMarkupService {
       onlyDisplayTitle: this.buildBoolean(data.onlyDisplayTitle) ?? false,
       maxRows: this.buildNumber(data.maxRows) ?? -1,
 
-      sort: data.sort || '-publishedAt',
+      sort: data.sort || undefined,
       count: this.buildNumber(data.count) || 10,
 
       categoryOneOf: this.buildArrayNumber(data.categoryOneOf) ?? [],
