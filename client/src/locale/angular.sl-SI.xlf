@@ -409,7 +409,7 @@
       </trans-unit>
       <trans-unit id="4506409188003413837" datatype="html">
         <source>A new <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuse<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been created</source>
-        <target state="new">A new <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>abuse<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been created</target>
+        <target state="translated">Nova <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>prijava<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bila ustvarjena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">39</context>
@@ -417,7 +417,7 @@
       </trans-unit>
       <trans-unit id="726431118472191958" datatype="html">
         <source>Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</source>
-        <target state="new">Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</target>
+        <target state="translated">Vaše poročilo o <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>videu <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bilo sprejeto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">48</context>
@@ -425,7 +425,7 @@
       </trans-unit>
       <trans-unit id="3106692650527238002" datatype="html">
         <source>Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in the video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</source>
-        <target state="new">Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in the video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</target>
+        <target state="translated">Vaša prijava <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>komentarja<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in the video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bila sprejeta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">50</context>
@@ -433,7 +433,7 @@
       </trans-unit>
       <trans-unit id="5271139318351730672" datatype="html">
         <source>Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the account <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</source>
-        <target state="new">Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the account <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</target>
+        <target state="translated">Vaša prijava <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uporabniškega računa <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bila sprejeta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">52</context>
@@ -441,7 +441,7 @@
       </trans-unit>
       <trans-unit id="444865599951985388" datatype="html">
         <source>Your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>report <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.id }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</source>
-        <target state="new">Your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>report <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.id }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been accepted</target>
+        <target state="translated">Vaša <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>prijava <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.id }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bila sprejeta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">54</context>
@@ -449,7 +449,7 @@
       </trans-unit>
       <trans-unit id="7800219122620226635" datatype="html">
         <source>Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been rejected</source>
-        <target state="new">Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the video <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been rejected</target>
+        <target state="translated">Vaša prijava <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>videa <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bila zavrnjena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">58</context>
@@ -457,7 +457,7 @@
       </trans-unit>
       <trans-unit id="5770340315760798460" datatype="html">
         <source>Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in the video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been rejected</source>
-        <target state="new">Your report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in the video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been rejected</target>
+        <target state="translated">Vaša prijava <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>komentarja<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> v videu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bila zavrnjena</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">60</context>
@@ -489,7 +489,7 @@
       </trans-unit>
       <trans-unit id="6648296169385262912" datatype="html">
         <source>Report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in the video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has a new message</source>
-        <target state="new">Report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the comment<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> in the video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has a new message</target>
+        <target state="translated">Poročilo o <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>komentarju<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> v videu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ima novo sporočilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">75</context>
@@ -497,7 +497,7 @@
       </trans-unit>
       <trans-unit id="3177140165891730922" datatype="html">
         <source>Report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the account <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has a new message</source>
-        <target state="new">Report of <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the account <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has a new message</target>
+        <target state="translated">Poročilo o <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>uporabniškem računu <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ima novo sporočilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">77</context>
@@ -505,7 +505,7 @@
       </trans-unit>
       <trans-unit id="7630073334744851367" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Report <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.id }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has a new message</source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Report <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.id }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has a new message</target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Poročilo <x id="INTERPOLATION" equiv-text="{{ n.payload.abuse.id }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ima novo sporočilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">79</context>
@@ -513,7 +513,7 @@
       </trans-unit>
       <trans-unit id="6465007199578220942" datatype="html">
         <source>The recently added video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoBlacklist.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been automatically blocked</source>
-        <target state="new">The recently added video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoBlacklist.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been automatically blocked</target>
+        <target state="translated">Nedavno objavljeni video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoBlacklist.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bil avtomatično blokiran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">86</context>
@@ -521,7 +521,7 @@
       </trans-unit>
       <trans-unit id="4874161298107302721" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ n.payload.comment.account.displayName }}"/> commented your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (n.payload.comment.heldForReview) {"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>This comment requires your approval<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ n.payload.comment.account.displayName }}"/> commented your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (n.payload.comment.heldForReview) {"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>This comment requires your approval<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ n.payload.comment.account.displayName }}"/> je komentiral vaš video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_BLOCK_IF" equiv-text="@if (n.payload.comment.heldForReview) {"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Ta komentar potrebuje vašo odobritev<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/><x id="CLOSE_BLOCK_IF" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">94</context>
@@ -529,7 +529,7 @@
       </trans-unit>
       <trans-unit id="5426784154028076896" datatype="html">
         <source>The notification concerns a comment now unavailable</source>
-        <target state="new">The notification concerns a comment now unavailable</target>
+        <target state="needs-translation">Sporočilo, ki zadeva komentar trenutno ni na voljo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">103</context>
@@ -541,7 +541,7 @@
       </trans-unit>
       <trans-unit id="4656637978298626546" datatype="html">
         <source>Your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been published</source>
-        <target state="new">Your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been published</target>
+        <target state="translated">Vaš video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bil objavljen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">110</context>
@@ -549,7 +549,7 @@
       </trans-unit>
       <trans-unit id="1351319664993327597" datatype="html">
         <source>Your video import <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;limit-characters&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> succeeded</source>
-        <target state="new">Your video import <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;limit-characters&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> succeeded</target>
+        <target state="translated">Vaš uvoz videa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;limit-characters&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je uspel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">116</context>
@@ -557,7 +557,7 @@
       </trans-unit>
       <trans-unit id="7958711566653679727" datatype="html">
         <source>Your video import <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;limit-characters&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> failed</source>
-        <target state="new">Your video import <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;limit-characters&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> failed</target>
+        <target state="translated">Vaš uvod videa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong class=&quot;limit-characters&quot;&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.videoImportIdentifier }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je bil neuspešen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">122</context>
@@ -565,7 +565,7 @@
       </trans-unit>
       <trans-unit id="5895332637147008765" datatype="html">
         <source>User <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.account.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> registered on your platform</source>
-        <target state="new">User <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.account.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> registered on your platform</target>
+        <target state="translated">Uporabnik <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.account.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> se je registriral na vašo platformo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">128</context>
@@ -573,7 +573,7 @@
       </trans-unit>
       <trans-unit id="26490925313529066" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.actorFollow.follower.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is following your channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.actorFollow.follower.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is following your channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.actorFollow.follower.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sledi vašemu kanalu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">136</context>
@@ -581,7 +581,7 @@
       </trans-unit>
       <trans-unit id="3761311151965681220" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.actorFollow.follower.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is following <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.actorFollow.follower.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is following <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your account<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.actorFollow.follower.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> sledi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>vašemu računu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">140</context>
@@ -589,7 +589,7 @@
       </trans-unit>
       <trans-unit id="304897745310435024" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.comment.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> mentioned you on video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.comment.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> mentioned you on video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.comment.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> vas je omenil na videu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.comment.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">149</context>
@@ -597,7 +597,7 @@
       </trans-unit>
       <trans-unit id="2841863296715062357" datatype="html">
         <source>Your platform has a new follower: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.followerHandle }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Your platform has a new follower: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.followerHandle }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Vaša platforma ima novega sledilca: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.followerHandle }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">162</context>
@@ -605,7 +605,7 @@
       </trans-unit>
       <trans-unit id="6562006871377772045" datatype="html">
         <source>It is awaiting your approval</source>
-        <target state="new">It is awaiting your approval</target>
+        <target state="translated">Čaka na vašo odobritev</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">165</context>
@@ -613,7 +613,7 @@
       </trans-unit>
       <trans-unit id="1397325530434097724" datatype="html">
         <source>Your platform automatically followed <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.followingHandle }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new">Your platform automatically followed <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.followingHandle }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Vaša platforma avtomatično sledi <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.followingHandle }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">173</context>
@@ -621,7 +621,7 @@
       </trans-unit>
       <trans-unit id="5363427723651407118" datatype="html">
         <source>A new version of the plugin/theme <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.plugin.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is available: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.plugin.latestVersion }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"> A new version of the plugin/theme <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.plugin.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is available: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.plugin.latestVersion }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Nova verzija vtičnika ali teme <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.plugin.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je na voljo: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.plugin.latestVersion }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">180</context>
@@ -629,7 +629,7 @@
       </trans-unit>
       <trans-unit id="8366741135969473924" datatype="html">
         <source>A <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>new version<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of PeerTube is available: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.peertube.latestVersion }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"> A <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>new version<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of PeerTube is available: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.peertube.latestVersion }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Nova verzija<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube je na voljo: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.peertube.latestVersion }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">188</context>
@@ -637,7 +637,7 @@
       </trans-unit>
       <trans-unit id="7227749084207450889" datatype="html">
         <source>The edits to your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> have been applied</source>
-        <target state="new">The edits to your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> have been applied</target>
+        <target state="translated">Spremembe vašega videa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> so bile vnešene</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">195</context>
@@ -645,7 +645,7 @@
       </trans-unit>
       <trans-unit id="5438321711839670625" datatype="html">
         <source>User <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.registration.username }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> wants to register on your platform</source>
-        <target state="new">User <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.registration.username }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> wants to register on your platform</target>
+        <target state="translated">Uporabnik <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.registration.username }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> se želi registrirati na vaši platformi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">201</context>
