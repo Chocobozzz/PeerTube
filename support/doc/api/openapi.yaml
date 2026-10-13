@@ -11959,7 +11959,7 @@ components:
           type: object
           description: 'PeerTube >= 6.1'
           properties:
-            views:
+            videos:
               type: object
               properties:
                 countViewAfter:
