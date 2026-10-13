@@ -1,5 +1,5 @@
 import { buildAspectRatio, forceNumber, redactSignedUrls } from '@peertube/peertube-core-utils'
-import { VideoResolution } from '@peertube/peertube-models'
+import { VideoResolution, VideoStereo3D } from '@peertube/peertube-models'
 import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
 import { buildRemoteInputOptions } from './ffmpeg-utils.js'
 
@@ -166,6 +166,68 @@ export async function getVideoStreamDimensionsInfo (path: string, existingProbe?
     isPortraitMode: videoStream.height > videoStream.width,
     hasRotation: rotation !== undefined && rotation !== '0'
   }
+}
+
+// Names of av_stereo3d_type_name()
+const stereo3DTypes = new Set([
+  'side by side',
+  'top and bottom',
+  'frame alternate',
+  'checkerboard',
+  'side by side (quincunx subsampling)',
+  'interleaved lines',
+  'interleaved columns',
+  'unspecified'
+])
+
+/**
+ * The 3D packing that the container declares for the video stream (Matroska's StereoMode, the st3d box of MP4),
+ * `inverted` when the right eye comes first. The frame packing SEI of H.264 is in the frames and ffprobe does not tell it here.
+ */
+export async function getVideoStreamStereo3D (path: string, existingProbe?: FfprobeData): Promise<VideoStereo3D> {
+  const videoStream = await getVideoStream(path, existingProbe)
+
+  // fluent-ffmpeg merges the side data blocks of the stream into the stream: only the "Stereo 3D" one has `inverted`
+  if (videoStream?.inverted === undefined) return undefined
+
+  // But another block may have overwritten `type`
+  const type = videoStream.type + ''
+  if (!stereo3DTypes.has(type)) return undefined
+
+  return rotateStereo3D({ type, inverted: forceNumber(videoStream.inverted) === 1 }, forceNumber(videoStream.rotation || 0))
+}
+
+function rotateStereo3D (stereo3D: VideoStereo3D, rotation: number): VideoStereo3D {
+  const angle = ((rotation % 360) + 360) % 360
+  if (angle === 0) return stereo3D
+
+  const { type, inverted } = stereo3D
+
+  if (type !== 'side by side' && type !== 'top and bottom') {
+    // A rotation does not change alternate frames, and we don't need to know how it changes the other packings
+    return type === 'frame alternate'
+      ? stereo3D
+      : { type: 'unspecified', inverted: false }
+  }
+
+  if (angle === 180) return { type, inverted: !inverted }
+
+  if (angle === 90) {
+    // The left half goes to the bottom, the top half to the left
+    return type === 'side by side'
+      ? { type: 'top and bottom', inverted: !inverted }
+      : { type: 'side by side', inverted }
+  }
+
+  if (angle === 270) {
+    // The left half goes to the top, the top half to the right
+    return type === 'side by side'
+      ? { type: 'top and bottom', inverted }
+      : { type: 'side by side', inverted: !inverted }
+  }
+
+  // ffmpeg does not keep the views in halves of the frame
+  return { type: 'unspecified', inverted: false }
 }
 
 export async function getVideoStreamFPS (path: string, existingProbe?: FfprobeData) {

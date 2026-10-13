@@ -44,6 +44,14 @@ class VideoTranscodingProfilesManager {
     }
   }
 
+  isDefaultVODVideoBuilderUsed (profile: string) {
+    if (this.getEncodersByPriority('vod', 'video')[0] !== 'libx264') return false
+
+    const builders = this.availableEncoders.vod['libx264']
+
+    return (builders[profile] || builders.default) === getDefaultAvailableEncoders().vod.libx264.default
+  }
+
   getAvailableProfiles (type: 'vod' | 'live') {
     return this.availableProfiles[type]
   }

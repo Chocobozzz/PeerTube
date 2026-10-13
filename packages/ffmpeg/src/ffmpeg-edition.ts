@@ -126,7 +126,10 @@ export class FFmpegEdition {
       chainComplexFilters: {
         complexFilters,
         lastVideoInput: 'v_overlay'
-      }
+      },
+
+      // The watermark is not 3D
+      ignoreInputStereo3D: true
     })
 
     await this.commandWrapper.runCommand()
@@ -275,7 +278,10 @@ export class FFmpegEdition {
         complexFilters,
         lastVideoInput: 'concat',
         videoOutput: 'v_out'
-      }
+      },
+
+      // The intro/outro is not 3D
+      ignoreInputStereo3D: true
     })
 
     await this.commandWrapper.runCommand()
