@@ -28,6 +28,7 @@ Some of these may be optional (for example your new endpoint may not need to sen
  * Controllers:
    - Create the controller file and fill it with your REST API routes
    - Import and use your controller in the parent controller
+   - Secondary processes (horizontal scalability) serve every route. If your route needs a state only the primary process has, add the `primaryOnly` middleware
  * Middlewares:
    - Create your validator middleware in `server/core/middlewares/validators` that will be used by your controllers
    - Add your new middleware file `server/core/middlewares/validators/index.ts` so it's easier to import

@@ -3,10 +3,12 @@
 import { expect } from 'chai'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { wait } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeActivityPubGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   waitJobs
@@ -270,6 +272,37 @@ describe('Test AP cleaner', function () {
 
     await checkLocal()
     await checkRemote('kyle')
+  })
+
+  it('Should not clean rates of remote unlisted videos', async function () {
+    this.timeout(120000)
+
+    // Server 3 does not federate its own unlisted videos, but still receives remote unlisted videos
+    await servers[2].kill()
+    await servers[2].run({ federation: { videos: { federate_unlisted: false, cleanup_remote_interactions: true } } })
+
+    const remoteUnlisted = await servers[0].videos.quickUpload({ name: 'server 1 unlisted', privacy: VideoPrivacy.UNLISTED })
+    const localUnlisted = await servers[2].videos.quickUpload({ name: 'server 3 unlisted', privacy: VideoPrivacy.UNLISTED })
+    await waitJobs(servers)
+
+    await servers[2].videos.rate({ id: remoteUnlisted.uuid, rating: 'like' })
+    await servers[2].videos.rate({ id: localUnlisted.uuid, rating: 'like' })
+    await waitJobs(servers)
+
+    // The origin of the remote unlisted video fetches the rate in its cleaner
+    {
+      const { id } = await servers[2].videos.get({ id: remoteUnlisted.uuid })
+      await makeActivityPubGetRequest(servers[2].url, '/accounts/root/likes/' + id, HttpStatusCode.OK_200)
+    }
+
+    // Nobody needs the rate of a local unlisted video: don't leak its URL
+    await makeActivityPubGetRequest(servers[2].url, '/accounts/root/likes/' + localUnlisted.id, HttpStatusCode.NOT_FOUND_404)
+
+    await wait(5000)
+    await waitJobs(servers)
+
+    const video = await servers[0].videos.get({ id: remoteUnlisted.uuid })
+    expect(video.likes).to.equal(1)
   })
 
   it('Should remove unavailable remote resources', async function () {

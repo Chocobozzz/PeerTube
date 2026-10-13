@@ -147,6 +147,35 @@ describe('Test plugin helpers', function () {
       expect(email['to'][0]['address']).to.equal('plugin-email-recipient@example.com')
       expect(email['subject']).to.contain('Email sent by a plugin')
       expect(email['text']).to.contain('Hello from plugin four')
+
+      // No title provided, so the subject is used as the HTML heading
+      expect(email['html']).to.contain('Email sent by a plugin')
+    })
+
+    it('Should send an email with a custom title', async function () {
+      await makePostBodyRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/send-email',
+        fields: {
+          to: 'plugin-email-recipient@example.com',
+          subject: 'Email sent by a plugin',
+          title: 'Custom email title',
+          text: 'Hello from plugin four'
+        },
+        expectedStatus: HttpStatusCode.CREATED_201
+      })
+
+      await waitJobs(servers)
+
+      expect(emails).to.have.lengthOf(2)
+
+      const email = emails[1]
+      expect(email['to'][0]['address']).to.equal('plugin-email-recipient@example.com')
+      expect(email['subject']).to.contain('Email sent by a plugin')
+      expect(email['text']).to.contain('Hello from plugin four')
+
+      // The custom title is used as the HTML heading, not the subject
+      expect(email['html']).to.contain('Custom email title')
     })
   })
 

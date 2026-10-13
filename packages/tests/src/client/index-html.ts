@@ -12,6 +12,7 @@ describe('Test index HTML generation', function () {
   let privateVideoId: string
   let internalVideoId: string
   let unlistedVideoId: string
+  let unlistedVideoNumericId: number
   let passwordProtectedVideoId: string
 
   let playlist: VideoPlaylistCreateResult
@@ -19,6 +20,7 @@ describe('Test index HTML generation', function () {
   let playlistIds: (string | number)[] = []
   let privatePlaylistId: string
   let unlistedPlaylistId: string
+  let unlistedPlaylistNumericId: number
 
   let instanceConfig: {
     name: string
@@ -36,8 +38,10 @@ describe('Test index HTML generation', function () {
       internalVideoId,
       passwordProtectedVideoId,
       unlistedVideoId,
+      unlistedVideoNumericId,
       privatePlaylistId,
       unlistedPlaylistId,
+      unlistedPlaylistNumericId,
       instanceConfig
     } = await prepareClientTests())
   })
@@ -262,6 +266,34 @@ describe('Test index HTML generation', function () {
         })
 
         expect(res.text).to.not.contain('password protected')
+      }
+    })
+
+    it('Should not display unlisted video using its numeric id', async function () {
+      for (const basePath of getWatchVideoBasePaths()) {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: basePath + unlistedVideoNumericId,
+          accept: 'text/html',
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
+        })
+
+        expect(res.text).to.not.contain(unlistedVideoId)
+        expect(res.text).to.not.contain('<meta property="og:title" content="unlisted" />')
+      }
+    })
+
+    it('Should not display unlisted video playlist using its numeric id', async function () {
+      for (const basePath of getWatchPlaylistBasePaths()) {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: basePath + unlistedPlaylistNumericId,
+          accept: 'text/html',
+          expectedStatus: HttpStatusCode.NOT_FOUND_404
+        })
+
+        expect(res.text).to.not.contain(unlistedPlaylistId)
+        expect(res.text).to.not.contain('<meta property="og:title" content="unlisted" />')
       }
     })
 

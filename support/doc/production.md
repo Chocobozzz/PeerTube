@@ -152,7 +152,7 @@ sudo sed -i 's/${PEERTUBE_HOST}/127.0.0.1:9000/g' /etc/nginx/sites-available/pee
 ```
 
 Then modify the webserver configuration file. Please pay attention to:
- * the `alias`, `root` and `rewrite` directives paths, the paths must correspond to your PeerTube filesystem location
+ * the `alias` and `root` directives paths, the paths must correspond to your PeerTube filesystem location
  * the `proxy_limit_rate` and `limit_rate` directives if you plan to stream high bitrate videos (like 4K at 60FPS)
 
 ```bash

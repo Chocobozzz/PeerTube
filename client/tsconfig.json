@@ -14,6 +14,12 @@
     "importHelpers": true,
     "strictBindCallApply": true,
     "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable",
+      "ES2025.Float16"
+    ],
     "isolatedModules": true,
     "strictPropertyInitialization": false,
     "strictNullChecks": false,

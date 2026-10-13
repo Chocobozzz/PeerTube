@@ -15,11 +15,13 @@ describe('Test embed HTML generation', function () {
   let privateVideoId: string
   let internalVideoId: string
   let unlistedVideoId: string
+  let unlistedVideoNumericId: number
   let passwordProtectedVideoId: string
 
   let playlistIds: (string | number)[] = []
   let privatePlaylistId: string
   let unlistedPlaylistId: string
+  let unlistedPlaylistNumericId: number
   let playlistName: string
   let playlistDescription: string
 
@@ -34,6 +36,7 @@ describe('Test embed HTML generation', function () {
       internalVideoId,
       passwordProtectedVideoId,
       unlistedVideoId,
+      unlistedVideoNumericId,
       videoName,
       videoDescriptionPlainText,
 
@@ -41,6 +44,7 @@ describe('Test embed HTML generation', function () {
       playlistName,
       playlistDescription,
       unlistedPlaylistId,
+      unlistedPlaylistNumericId,
       privatePlaylistId,
       instanceConfig
     } = await prepareClientTests())
@@ -172,6 +176,22 @@ describe('Test embed HTML generation', function () {
 
       expect(res.text).to.not.contain('private')
       expect(res.text).to.contain('<meta name="robots" content="noindex" />')
+    })
+
+    it('Should not leak unlisted video and playlist information in embed using their numeric id', async function () {
+      {
+        const res = await makeHTMLRequest(servers[0].url, '/videos/embed/' + unlistedVideoNumericId)
+
+        expect(res.text).to.not.contain(unlistedVideoId)
+        expect(res.text).to.contain('<meta name="robots" content="noindex" />')
+      }
+
+      {
+        const res = await makeHTMLRequest(servers[0].url, '/video-playlists/embed/' + unlistedPlaylistNumericId)
+
+        expect(res.text).to.not.contain(unlistedPlaylistId)
+        expect(res.text).to.contain('<meta name="robots" content="noindex" />')
+      }
     })
   })
 

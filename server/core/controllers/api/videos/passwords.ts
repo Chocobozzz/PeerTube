@@ -1,6 +1,6 @@
 import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import express from 'express'
@@ -81,7 +81,7 @@ function updateVideoPasswordList (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const passwordArray = req.body.passwords as string[]
 
-    await VideoPasswordModel.sequelize.transaction(async (t: Transaction) => {
+    await runTransaction(async (t: Transaction) => {
       await VideoPasswordModel.deleteAllPasswords(videoId, t)
       await VideoPasswordModel.addPasswords(passwordArray, videoId, t)
 
@@ -107,7 +107,7 @@ function addVideoPassword (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const newPassword = req.body.password as string
 
-    await sequelizeTypescript.transaction(t => {
+    await runTransaction(t => {
       return VideoPasswordModel.addPassword(newPassword, videoId, t)
     })
 

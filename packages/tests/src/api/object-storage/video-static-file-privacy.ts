@@ -2,7 +2,7 @@
 
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, LiveVideo, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
-import { areScalewayObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
+import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSingleServer,
@@ -22,15 +22,10 @@ import { checkPlaylistInfohash, checkVideoFileTokenReinjection } from '@tests/sh
 import { expect } from 'chai'
 import { basename } from 'path'
 
-function extractFilenameFromUrl (url: string) {
-  const parts = basename(url).split(':')
-
-  return parts[parts.length - 1]
-}
-
 describe('Object storage for video static file privacy', function () {
-  // We need real world object storage to check ACL
-  if (areScalewayObjectStorageTestsDisabled()) return
+  if (areMockObjectStorageTestsDisabled()) return
+
+  const objectStorage = new ObjectStorageCommand()
 
   let server: PeerTubeServer
   let sqlCommand: SQLCommand
@@ -51,28 +46,22 @@ describe('Object storage for video static file privacy', function () {
       }
     }
 
-    const internalUrls = [
-      ...video.files.map(file => {
-        return ObjectStorageCommand.getScalewayBaseUrl() +
-          `test:server-1-web-videos:private/${video.uuid}/${extractFilenameFromUrl(file.fileUrl)}`
-      }),
+    const hls = getHLS(video)
 
-      ...video.streamingPlaylists[0].files.map(file => {
-        return ObjectStorageCommand.getScalewayBaseUrl() +
-          `test:server-1-streaming-playlists:hls/private/${video.uuid}/${extractFilenameFromUrl(file.fileUrl)}`
+    // Mock buckets are publicly listable, so a wrong URL would give a 404, not a 403
+    // A 403 therefore proves the object exists and has a private ACL
+    const internalUrls = [
+      ...video.files.map(file => objectStorage.getMockWebVideosBaseUrl() + basename(file.fileUrl)),
+
+      ...[ ...hls.files.map(f => f.fileUrl), hls.playlistUrl, hls.segmentsSha256Url ].map(url => {
+        return objectStorage.getMockPlaylistBaseUrl() + `hls/${video.uuid}/${basename(url)}`
       })
     ]
 
     for (const internalUrl of internalUrls) {
-      const { text } = await makeRawRequest({
-        url: internalUrl,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.FORBIDDEN_403
-      })
+      const { text } = await makeRawRequest({ url: internalUrl, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
       expect(text).to.contain('AccessDenied')
     }
-
-    const hls = getHLS(video)
 
     if (hls) {
       for (const url of [ hls.playlistUrl, hls.segmentsSha256Url ]) {
@@ -97,17 +86,23 @@ describe('Object storage for video static file privacy', function () {
   async function checkPublicVODFiles (uuid: string) {
     const video = await server.videos.getWithToken({ id: uuid })
 
-    for (const file of getAllFiles(video)) {
-      expectStartWith(file.fileUrl, ObjectStorageCommand.getScalewayBaseUrl())
-
-      await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    for (const file of video.files) {
+      expectStartWith(file.fileUrl, objectStorage.getMockWebVideosBaseUrl())
     }
 
     const hls = getHLS(video)
 
+    for (const file of hls?.files ?? []) {
+      expectStartWith(file.fileUrl, objectStorage.getMockPlaylistBaseUrl())
+    }
+
+    for (const file of getAllFiles(video)) {
+      await makeRawRequest({ url: file.fileUrl, expectedStatus: HttpStatusCode.OK_200 })
+    }
+
     if (hls) {
-      expectStartWith(hls.playlistUrl, ObjectStorageCommand.getScalewayBaseUrl())
-      expectStartWith(hls.segmentsSha256Url, ObjectStorageCommand.getScalewayBaseUrl())
+      expectStartWith(hls.playlistUrl, objectStorage.getMockPlaylistBaseUrl())
+      expectStartWith(hls.segmentsSha256Url, objectStorage.getMockPlaylistBaseUrl())
 
       await makeRawRequest({ url: hls.playlistUrl, expectedStatus: HttpStatusCode.OK_200 })
       await makeRawRequest({ url: hls.segmentsSha256Url, expectedStatus: HttpStatusCode.OK_200 })
@@ -119,7 +114,9 @@ describe('Object storage for video static file privacy', function () {
   before(async function () {
     this.timeout(120000)
 
-    server = await createSingleServer(1, ObjectStorageCommand.getDefaultScalewayConfig({ serverNumber: 1 }))
+    await objectStorage.prepareDefaultMockBuckets()
+
+    server = await createSingleServer(1, objectStorage.getDefaultMockConfig())
     await setAccessTokensToServers([ server ])
     await setDefaultVideoChannel([ server ])
 
@@ -572,12 +569,7 @@ describe('Object storage for video static file privacy', function () {
 
       await server.kill()
 
-      const config = ObjectStorageCommand.getDefaultScalewayConfig({
-        serverNumber: 1,
-        enablePrivateProxy: false,
-        privateACL: 'public-read'
-      })
-      await server.run(config)
+      await server.run(objectStorage.getDefaultMockConfig({ proxifyPrivateFiles: false, privateACL: 'public-read' }))
 
       const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
       videoUUID = uuid
@@ -593,8 +585,8 @@ describe('Object storage for video static file privacy', function () {
 
     it('Should not be able to access object storage proxy', async function () {
       const privateVideo = await server.videos.getWithToken({ id: videoUUID })
-      const webVideoFilename = extractFilenameFromUrl(privateVideo.files[0].fileUrl)
-      const hlsFilename = extractFilenameFromUrl(getHLS(privateVideo).files[0].fileUrl)
+      const webVideoFilename = basename(privateVideo.files[0].fileUrl)
+      const hlsFilename = basename(getHLS(privateVideo).files[0].fileUrl)
 
       await makeRawRequest({
         url: server.url + '/object-storage-proxy/web-videos/private/' + webVideoFilename,
@@ -613,15 +605,7 @@ describe('Object storage for video static file privacy', function () {
   after(async function () {
     this.timeout(240000)
 
-    const { data } = await server.videos.listAllForAdmin()
-
-    for (const v of data) {
-      await server.videos.remove({ id: v.uuid })
-    }
-
-    for (const v of data) {
-      await server.servers.waitUntilLog('Removed files of video ' + v.url)
-    }
+    await objectStorage.cleanupMock()
 
     await sqlCommand.cleanup()
     await cleanupTests([ server ])

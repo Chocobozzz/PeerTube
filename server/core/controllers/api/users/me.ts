@@ -10,8 +10,10 @@ import {
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { UserAuditView, auditLoggerFactory, getAuditIdFromRes } from '@server/helpers/audit-logger.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-api-format.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import express from 'express'
@@ -20,7 +22,6 @@ import { createReqFiles, getCountVideos } from '../../../helpers/express-utils.j
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor.js'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserChangeEmail } from '../../../lib/user.js'
@@ -39,20 +40,18 @@ import { updateAvatarValidator } from '../../../middlewares/validators/actor-ima
 import {
   commonVideosFiltersValidatorFactory,
   deleteMeValidator,
-  listMyVideoImportsValidator,
   listCommentsOnUserVideosValidator,
+  listMyVideoImportsValidator,
   listMyVideosValidator,
+  usersNewFeatureInfoReadValidator,
   videoImportsSortValidator,
-  videosSortValidator,
-  usersNewFeatureInfoReadValidator
+  videosSortValidator
 } from '../../../middlewares/validators/index.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { AccountModel } from '../../../models/account/account.js'
 import { UserModel } from '../../../models/user/user.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -60,8 +59,37 @@ const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_
 
 const meRouter = express.Router()
 
-meRouter.get('/me', authenticate, asyncMiddleware(getMyInformation))
 meRouter.delete('/me', authenticate, deleteMeValidator, asyncMiddleware(deleteMe))
+
+meRouter.post(
+  '/me/avatar/pick',
+  authenticate,
+  reqAvatarFile,
+  updateAvatarValidator,
+  asyncRetryTransactionMiddleware(updateMyAvatar)
+)
+
+meRouter.delete(
+  '/me/avatar',
+  authenticate,
+  asyncRetryTransactionMiddleware(deleteMyAvatar)
+)
+
+meRouter.get('/me', authenticate, asyncMiddleware(getMyInformation))
+
+meRouter.put(
+  '/me',
+  authenticate,
+  asyncMiddleware(usersUpdateMeValidator),
+  asyncMiddleware(updateMe)
+)
+
+meRouter.post(
+  '/me/new-feature-info/read',
+  authenticate,
+  usersNewFeatureInfoReadValidator,
+  asyncMiddleware(usersNewFeatureInfoRead)
+)
 
 meRouter.get('/me/video-quota-used', authenticate, asyncMiddleware(getMyVideoQuotaUsed))
 
@@ -106,33 +134,7 @@ meRouter.get(
   asyncMiddleware(getMyVideoRating)
 )
 
-meRouter.put(
-  '/me',
-  authenticate,
-  asyncMiddleware(usersUpdateMeValidator),
-  asyncRetryTransactionMiddleware(updateMe)
-)
-
-meRouter.post(
-  '/me/avatar/pick',
-  authenticate,
-  reqAvatarFile,
-  updateAvatarValidator,
-  asyncRetryTransactionMiddleware(updateMyAvatar)
-)
-
-meRouter.delete(
-  '/me/avatar',
-  authenticate,
-  asyncRetryTransactionMiddleware(deleteMyAvatar)
-)
-
-meRouter.post(
-  '/me/new-feature-info/read',
-  authenticate,
-  usersNewFeatureInfoReadValidator,
-  asyncMiddleware(usersNewFeatureInfoRead)
-)
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 
@@ -223,7 +225,18 @@ async function listMyVideoImports (req: express.Request, res: express.Response) 
       ? user.Account.id
       : undefined,
 
-    ...pick(req.query, [ 'id', 'videoId', 'targetUrl', 'start', 'count', 'sort', 'search', 'videoChannelSyncId', 'includeCollaborations', 'stateOneOf' ])
+    ...pick(req.query, [
+      'id',
+      'videoId',
+      'targetUrl',
+      'start',
+      'count',
+      'sort',
+      'search',
+      'videoChannelSyncId',
+      'includeCollaborations',
+      'stateOneOf'
+    ])
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
@@ -274,7 +287,7 @@ async function deleteMe (req: express.Request, res: express.Response) {
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(t => {
+    return runTransaction(t => {
       return user.destroy({ transaction: t })
     })
   })
@@ -324,26 +337,41 @@ async function updateMe (req: express.Request, res: express.Response) {
     }
   }
 
-  await sequelizeTypescript.transaction(async t => {
-    if (body.password !== undefined) {
-      await OAuthTokenModel.deleteUserToken({
-        userId: user.id,
-        accessTokenException: res.locals.oauth.token.accessToken,
-        transaction: t
+  const changedKeys = user.changed() || []
+
+  await retryTransactionWrapper(async () => {
+    try {
+      await runTransaction(async t => {
+        if (body.password !== undefined) {
+          await OAuthTokenModel.deleteUserToken({
+            userId: user.id,
+            accessTokenException: res.locals.oauth.token.accessToken,
+            transaction: t
+          })
+        }
+
+        await user.save({ transaction: t })
+
+        if (body.displayName === undefined && body.description === undefined) return
+
+        const userAccount = await AccountModel.load(user.Account.id, t)
+
+        if (body.displayName !== undefined) userAccount.name = body.displayName
+        if (body.description !== undefined) userAccount.description = body.description
+        await userAccount.save({ transaction: t })
+
+        await sendUpdateActor(userAccount, t)
       })
+    } catch (err) {
+      // The password has been hashed by the save hook, restore the clear one so it is hashed only once
+      if (body.password !== undefined) user.password = body.password
+
+      for (const key of changedKeys) {
+        user.changed(key as keyof UserModel, true)
+      }
+
+      throw err
     }
-
-    await user.save({ transaction: t })
-
-    if (body.displayName === undefined && body.description === undefined) return
-
-    const userAccount = await AccountModel.load(user.Account.id, t)
-
-    if (body.displayName !== undefined) userAccount.name = body.displayName
-    if (body.description !== undefined) userAccount.description = body.description
-    await userAccount.save({ transaction: t })
-
-    await sendUpdateActor(userAccount, t)
   })
 
   if (sendVerificationEmail === true) {

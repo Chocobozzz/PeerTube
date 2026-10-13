@@ -2,14 +2,19 @@ import { Server as HTTPServer } from 'node:http'
 import { createLogger } from '../helpers/logger.js'
 import { SHUTDOWN_TIMEOUTS } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
+import { InboxManager } from './activitypub/inbox-manager.js'
+import { HorizontalScalabilityStorage } from './horizontal-scalability-storage.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { LiveManager } from './live/live-manager.js'
-import { Redis } from './redis.js'
+import { PeerTubeSocket } from './peertube-socket.js'
+import { Redis } from './redis/index.js'
+import { abortAllPendingRunnerJobCompletions } from './runners/runner-job-completions.js'
 import { AbstractScheduler } from './schedulers/abstract-scheduler.js'
 
 const logger = createLogger()
 
 let shuttingDown = false
+let registeredServer: HTTPServer
 
 /**
  * A signal that has no listener keeps its default disposition, and the kernel never delivers such a signal to the init process
@@ -17,6 +22,8 @@ let shuttingDown = false
  * the container is SIGKILLed after the runtime grace period. So always listen to the signals we want to handle.
  */
 export function registerGracefulShutdown (server: HTTPServer) {
+  registeredServer = server
+
   for (const signal of [ 'SIGINT', 'SIGTERM' ] as const) {
     process.on(signal, () => {
       if (shuttingDown === true) {
@@ -35,29 +42,53 @@ export function registerGracefulShutdown (server: HTTPServer) {
   }
 }
 
+// Stop the process like a signal does, but with an exit code telling the service manager it did not stop on request
+export function shutdownAndExit (exitCode: number) {
+  if (shuttingDown === true) return
+  shuttingDown = true
+
+  shutdown(registeredServer, exitCode)
+    .catch(err => logger.error('Error in graceful shutdown.', { err }))
+    .finally(() => process.exit(exitCode))
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
 
-async function shutdown (server: HTTPServer) {
+async function shutdown (server: HTTPServer, exitCode = 0) {
   const timeout = setTimeout(() => {
     logger.warn(`Graceful shutdown did not complete in ${SHUTDOWN_TIMEOUTS.GLOBAL}ms, exiting now.`)
 
-    process.exit(0)
+    process.exit(exitCode)
   }, SHUTDOWN_TIMEOUTS.GLOBAL)
   timeout.unref()
 
-  // Stop scheduling new work first, so nothing can grab a database connection we are about to close
   AbstractScheduler.disableAll()
   LiveManager.Instance.stop()
+  HorizontalScalabilityStorage.Instance.stop()
+
+  // Before closing the HTTP server, that would otherwise wait for the socket.io websockets
+  PeerTubeSocket.Instance.close()
 
   await Promise.all([
     closeHTTPServer(server),
 
     // Active jobs are not awaited: a transcoding job can run for hours. They are retried when detected as stalled
-    JobQueue.Instance.terminate({ force: true })
-      .catch(err => logger.error('Cannot terminate job queue.', { err }))
+    JobQueue.Instance.closeWorkers({ force: true })
+      .catch(err => logger.error('Cannot close job queue workers.', { err }))
   ])
+
+  // After closing the HTTP server, so no new activity is received
+  // Before closing the job queue, because processing activities creates jobs
+  await InboxManager.drain(SHUTDOWN_TIMEOUTS.INBOX_DRAIN)
+    .catch(err => logger.error('Cannot drain the inbox.', { err }))
+
+  await JobQueue.Instance.closeQueues()
+    .catch(err => logger.error('Cannot close job queues.', { err }))
+
+  // After closing the HTTP server, so no new completion can start
+  await abortAllPendingRunnerJobCompletions()
 
   await Promise.all([
     sequelizeTypescript.close()

@@ -481,6 +481,14 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Accounts', function () {
+    it('Should run filter:api.account.get.result', async function () {
+      const result = await servers[0].accounts.get({ accountName: 'root' })
+
+      expect(result.name).to.equal('toor')
+    })
+  })
+
   describe('Users', function () {
     it('Should run filter:api.user.me.get.result', async function () {
       const user = await servers[0].users.getMyInfo() as MyUser & { customParam: string }

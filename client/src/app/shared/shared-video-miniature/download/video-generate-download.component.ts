@@ -5,7 +5,7 @@ import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { getResolutionAndFPSLabel, maxBy } from '@peertube/peertube-core-utils'
 import { VideoFile, VideoResolution, VideoSource } from '@peertube/peertube-models'
-import { videoRequiresFileToken } from '@root-helpers/video'
+import { videoDownloadRequiresFileToken } from '@root-helpers/video'
 import { GlobalIconComponent } from '../../shared-icons/global-icon.component'
 import { BytesPipe } from '../../shared-main/common/bytes.pipe'
 import { VideoDetails } from '../../shared-main/video/video-details.model'
@@ -101,7 +101,7 @@ export class VideoGenerateDownloadComponent implements OnInit {
   // ---------------------------------------------------------------------------
 
   isConfidentialVideo () {
-    return this.videoFileChosen === 'file-original' || videoRequiresFileToken(this.video())
+    return this.videoFileChosen === 'file-original' || videoDownloadRequiresFileToken(this.video())
   }
 
   // ---------------------------------------------------------------------------

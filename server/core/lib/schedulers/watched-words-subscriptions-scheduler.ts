@@ -6,7 +6,7 @@ import {
 } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { fetchAndValidateWatchedWordsSubscriptionActions } from '@server/lib/watched-words-subscriptions.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
 import { WatchedWordsSubscriptionModel } from '@server/models/watched-words/watched-words-subscription.js'
@@ -88,7 +88,7 @@ export class WatchedWordsSubscriptionsScheduler extends AbstractScheduler {
 
     let shouldRebuildAutomaticTags = false
 
-    await sequelizeTypescript.transaction(async transaction => {
+    await runTransaction(async transaction => {
       const existing = await WatchedWordsListModel.loadByListName({
         accountId: subscription.accountId,
         listName,

@@ -1,7 +1,8 @@
+import { RunnerJobState } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { createLogger } from '../../helpers/logger.js'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
+import { RUNNER_JOBS, SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { getRunnerJobHandlerClass } from '../runners/index.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
@@ -47,6 +48,22 @@ export class RunnerJobWatchDogScheduler extends AbstractScheduler {
           runnerJob: stalled,
           abortNotSupportedErrorMessage: 'Stalled runner job'
         })
+      })
+    }
+
+    const stalledCompletingJobs = await RunnerJobModel.listStalledJobs({
+      staleTimeMS: RUNNER_JOBS.STALLED_COMPLETING_JOB_MS,
+      state: RunnerJobState.COMPLETING
+    })
+
+    for (const stalled of stalledCompletingJobs) {
+      await logger.withContext([ stalled.uuid, stalled.type ], async () => {
+        logger.warn('Error runner job %s (%s) stalled in completing state', stalled.uuid, stalled.type)
+
+        const Handler = getRunnerJobHandlerClass(stalled)
+
+        stalled.failures += 1
+        await new Handler().error({ runnerJob: stalled, message: 'Job completion was lost' })
       })
     }
   }

@@ -1,6 +1,5 @@
 import { AutomaticTagPolicyType, AutomaticTagsModeration, BuildObjectAutomaticTagsPayload } from '@peertube/peertube-models'
-import { afterCommitIfTransaction, retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { afterCommitIfTransaction, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
@@ -67,7 +66,7 @@ export async function setAndSaveVideoAutomaticTags (options: {
   if (Object.keys(automaticTagsByAccount).length === 0) return
 
   await retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
+    return runTransaction(async transaction => {
       const { toCreateItems, toDeleteItems } = await _buildAutomaticTagItems({
         automaticTagsByAccount,
 

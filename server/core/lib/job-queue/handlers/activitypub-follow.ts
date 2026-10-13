@@ -2,11 +2,10 @@ import { ActivitypubFollowPayload } from '@peertube/peertube-models'
 import { getApplicationActorOfHost } from '@server/helpers/activity-pub-utils.js'
 import { getLocalActorFollowActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { Job } from 'bullmq'
-import { sanitizeHost } from '../../../helpers/core-utils.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { sanitizeHost } from '@peertube/peertube-node-utils'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { REMOTE_SCHEME, SERVER_ACTOR_NAME, WEBSERVER } from '../../../initializers/constants.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { MActor, MActorFull } from '../../../types/models/index.js'
@@ -76,7 +75,7 @@ async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow 
   // Same server, direct accept
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
-  const actorFollow = await sequelizeTypescript.transaction(async t => {
+  const actorFollow = await runTransaction(async t => {
     const [ actorFollow ] = await ActorFollowModel.findOrCreateCustom({
       byActor: fromActor,
       state,

@@ -1,8 +1,17 @@
 import { createCommand } from '@commander-js/extra-typings'
-import { uniqify, wait } from '@peertube/peertube-core-utils'
+import { promiseMap, uniqify, wait } from '@peertube/peertube-core-utils'
 import { FileStorage } from '@peertube/peertube-models'
+import { readdirNonHidden } from '@server/helpers/fs.js'
 import { DIRECTORIES, USER_EXPORT_FILE_PREFIX, USER_IMPORT_FILE_PREFIX } from '@server/initializers/constants.js'
+import { isCacheObject } from '@server/lib/object-storage/cache.js'
+import {
+  getPrunableObjectStorageLocationConflicts,
+  getPrunableObjectStorageSections,
+  PrunableObjectStorageSection
+} from '@server/lib/object-storage/config.js'
 import { BucketInfo, listKeysOfPrefix, removeObjectByFullKey } from '@server/lib/object-storage/object-storage-helpers.js'
+import { isStagingObject } from '@server/lib/object-storage/staging.js'
+import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { UserImportModel } from '@server/models/user/user-import.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
@@ -10,9 +19,8 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoSourceModel } from '@server/models/video/video-source.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
-import Bluebird from 'bluebird'
 import { remove } from 'fs-extra/esm'
-import { readdir, stat } from 'fs/promises'
+import { stat } from 'fs/promises'
 import { basename, dirname, join } from 'path'
 import { getUUIDFromFilename } from '../core/helpers/utils.js'
 import { CONFIG } from '../core/initializers/config.js'
@@ -56,6 +64,15 @@ class ObjectStoragePruner {
   async prune () {
     if (!CONFIG.OBJECT_STORAGE.ENABLED) return
 
+    const conflicts = getPrunableObjectStorageLocationConflicts()
+    if (conflicts.length !== 0) {
+      throw new Error(
+        'Cannot prune object storage because some sections would delete the files of each other:\n' +
+          conflicts.map(c => ` - ${c}`).join('\n') +
+          '\nSet different bucket prefixes for these sections.'
+      )
+    }
+
     console.log('Pruning object storage.')
 
     const pathsToDeletePass1 = await this.buildKeysToDelete()
@@ -91,17 +108,27 @@ class ObjectStoragePruner {
   }
 
   private async buildKeysToDelete () {
-    return [
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.WEB_VIDEOS, this.doesWebVideoFileExistFactory())),
+    const existFactories: { [name in PrunableObjectStorageSection]: () => (key: string) => Promise<boolean> | boolean } = {
+      web_videos: () => this.doesWebVideoFileExistFactory(),
+      streaming_playlists: () => this.doesStreamingPlaylistFileExistFactory(),
+      original_video_files: () => this.doesOriginalFileExistFactory(),
+      user_exports: () => this.doesUserExportFileExistFactory(),
+      captions: () => this.doesCaptionFileExistFactory(),
+      avatars: () => this.doesActorImageFileExistFactory(),
+      thumbnails: () => this.doesThumbnailFileExistFactory(),
+      storyboards: () => this.doesStoryboardFileExistFactory(),
+      torrents: () => this.doesTorrentObjectExistFactory(),
+      uploads: () => this.doesUploadImageFileExistFactory(),
+      redundancy: () => this.doesRedundancyObjectExistFactory()
+    }
 
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS, this.doesStreamingPlaylistFileExistFactory())),
+    const keysToDelete: { bucket: string, key: string }[] = []
 
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.ORIGINAL_VIDEO_FILES, this.doesOriginalFileExistFactory())),
+    for (const { name, bucketInfo } of getPrunableObjectStorageSections()) {
+      keysToDelete.push(...await this.findKeysToDeleteInBucket(bucketInfo, existFactories[name]()))
+    }
 
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.USER_EXPORTS, this.doesUserExportFileExistFactory())),
-
-      ...(await this.findKeysToDeleteInBucket(CONFIG.OBJECT_STORAGE.CAPTIONS, this.doesCaptionFileExistFactory()))
-    ]
+    return keysToDelete
   }
 
   private async findKeysToDeleteInBucket (
@@ -113,7 +140,11 @@ class ObjectStoragePruner {
     try {
       const keys = await listKeysOfPrefix('', config)
 
-      await Bluebird.map(keys, async key => {
+      await promiseMap(keys, async key => {
+        // The staging and cache buckets can be shared with this section, and their files are not local files
+        if (isStagingObject({ bucketName: config.BUCKET_NAME, fullKey: key })) return
+        if (isCacheObject({ bucketName: config.BUCKET_NAME, fullKey: key })) return
+
         if (await existFun(key) !== true) {
           keysToDelete.push({ bucket: config.BUCKET_NAME, key })
         }
@@ -169,6 +200,59 @@ class ObjectStoragePruner {
       const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.CAPTIONS)
 
       return VideoCaptionModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesActorImageFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.ACTOR_IMAGES)
+
+      return ActorImageModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesThumbnailFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.THUMBNAILS)
+
+      return ThumbnailModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesStoryboardFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.STORYBOARDS)
+
+      return StoryboardModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesTorrentObjectExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.TORRENTS)
+
+      return VideoFileModel.doesOwnedTorrentFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesUploadImageFileExistFactory () {
+    return (key: string) => {
+      const filename = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.UPLOADS)
+
+      return UploadImageModel.doesOwnedFileExist(filename, FileStorage.OBJECT_STORAGE)
+    }
+  }
+
+  private doesRedundancyObjectExistFactory () {
+    const videoUUIDsPromise = VideoRedundancyModel.listVideoUUIDOfDuplicated(FileStorage.OBJECT_STORAGE)
+
+    return async (key: string) => {
+      const sanitizedKey = this.sanitizeKey(key, CONFIG.OBJECT_STORAGE.REDUNDANCY)
+      const uuid = dirname(sanitizedKey).replace(/^hls\//, '')
+
+      const videoUUIDs = await videoUUIDsPromise
+
+      return videoUUIDs.has(uuid)
     }
   }
 
@@ -244,7 +328,9 @@ class FSPruner {
 
       ...(await this.findFilesToDeleteInDir(CONFIG.STORAGE.STORYBOARDS_DIR, this.doesStoryboardExistFactory())),
 
-      ...(await this.findFilesToDeleteInDir(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.doesActorImageExistFactory()))
+      ...(await this.findFilesToDeleteInDir(CONFIG.STORAGE.ACTOR_IMAGES_DIR, this.doesActorImageExistFactory())),
+
+      ...(await this.findFilesToDeleteInDir(DIRECTORIES.UPLOAD_IMAGES, this.doesUploadImageExistFactory()))
     ]
 
     if (options.offline === true) {
@@ -258,9 +344,10 @@ class FSPruner {
 
   private async findFilesToDeleteInDir (directory: string, existFun: (file: string) => Promise<boolean> | boolean) {
     const pathsToDelete: string[] = []
-    const files = await readdir(directory)
+    // Hidden files are metadata the filesystem put there (.nfs* handles...), not files PeerTube manages
+    const files = await readdirNonHidden(directory)
 
-    await Bluebird.map(files, async file => {
+    await promiseMap(files, async file => {
       const filePath = join(directory, file)
 
       if (await existFun(filePath) !== true) {
@@ -296,7 +383,7 @@ class FSPruner {
   }
 
   private doesTorrentFileExistFactory () {
-    return (filePath: string) => VideoFileModel.doesOwnedTorrentFileExist(basename(filePath))
+    return (filePath: string) => VideoFileModel.doesOwnedTorrentFileExist(basename(filePath), FileStorage.FILE_SYSTEM)
   }
 
   private doesThumbnailExistFactory () {
@@ -304,6 +391,7 @@ class FSPruner {
       const thumbnail = await ThumbnailModel.loadByFilename(basename(filePath))
       if (!thumbnail) return false
       if (thumbnail.isLocal() === false) return false
+      if (thumbnail.storage !== FileStorage.FILE_SYSTEM) return false
 
       return true
     }
@@ -314,6 +402,7 @@ class FSPruner {
       const image = await ActorImageModel.loadByFilename(basename(filePath))
       if (!image) return false
       if (image.isLocal() === false) return false
+      if (image.storage !== FileStorage.FILE_SYSTEM) return false
 
       return true
     }
@@ -324,6 +413,7 @@ class FSPruner {
       const storyboard = await StoryboardModel.loadByFilename(basename(filePath))
       if (!storyboard) return false
       if (storyboard.isLocal() === false) return false
+      if (storyboard.storage !== FileStorage.FILE_SYSTEM) return false
 
       return true
     }
@@ -334,8 +424,20 @@ class FSPruner {
       const caption = await VideoCaptionModel.loadByFilename(basename(filePath))
       if (!caption) return false
       if (caption.isLocal() === false) return false
+      if (caption.storage !== FileStorage.FILE_SYSTEM) return false
 
-      return !!caption
+      return true
+    }
+  }
+
+  private doesUploadImageExistFactory () {
+    return async (filePath: string) => {
+      const image = await UploadImageModel.loadByFilename(basename(filePath))
+      if (!image) return false
+      if (image.isLocal() === false) return false
+      if (image.storage !== FileStorage.FILE_SYSTEM) return false
+
+      return true
     }
   }
 
@@ -355,7 +457,7 @@ class FSPruner {
         if (!p) return false
 
         const redundancy = await VideoRedundancyModel.loadLocalByStreamingPlaylistId(p.id)
-        return !!redundancy
+        return redundancy?.storage === FileStorage.FILE_SYSTEM
       }
 
       // WebTorrent support redundancy has been removed from PeerTube

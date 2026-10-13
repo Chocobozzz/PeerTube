@@ -23,6 +23,7 @@ import { testLiveVideoResolutions } from '@tests/shared/live.js'
 import { MockObjectStorageProxy } from '@tests/shared/mock-servers/mock-object-storage.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
+import merge from 'lodash-es/merge.js'
 
 async function createLive (server: PeerTubeServer, permanent: boolean) {
   const attributes: LiveVideoCreate = {
@@ -261,14 +262,8 @@ describe('Object storage for lives', function () {
 
       await objectStorage.prepareDefaultMockBuckets()
 
-      const config = {
+      const config = merge(objectStorage.getDefaultMockConfig(), {
         object_storage: {
-          enabled: true,
-          endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
-          region: ObjectStorageCommand.getMockRegion(),
-
-          credentials: ObjectStorageCommand.getMockCredentialsConfig(),
-
           streaming_playlists: {
             bucket_name: bucketName,
             prefix: '',
@@ -276,7 +271,7 @@ describe('Object storage for lives', function () {
             store_live_streams: true
           }
         }
-      }
+      })
 
       await servers[0].kill()
       await servers[0].run(config)
@@ -288,6 +283,7 @@ describe('Object storage for lives', function () {
       this.timeout(240000)
 
       const videoUUIDPermanent = await createLive(servers[0], true)
+      await waitJobs(servers)
 
       const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
       await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
@@ -318,13 +314,8 @@ describe('Object storage for lives', function () {
 
       await objectStorage.prepareDefaultMockBuckets()
 
-      const config = {
+      const config = merge(objectStorage.getDefaultMockConfig(), {
         object_storage: {
-          enabled: true,
-          endpoint: 'http://' + ObjectStorageCommand.getMockEndpointHost(),
-          region: ObjectStorageCommand.getMockRegion(),
-
-          credentials: ObjectStorageCommand.getMockCredentialsConfig(),
           force_path_style: true,
 
           streaming_playlists: {
@@ -333,7 +324,7 @@ describe('Object storage for lives', function () {
             store_live_streams: true
           }
         }
-      }
+      })
 
       await servers[0].kill()
       await servers[0].run(config)
@@ -345,6 +336,7 @@ describe('Object storage for lives', function () {
       this.timeout(240000)
 
       const videoUUIDPermanent = await createLive(servers[0], true)
+      await waitJobs(servers)
 
       const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: videoUUIDPermanent })
       await waitUntilLivePublishedOnAllServers(servers, videoUUIDPermanent)
@@ -370,11 +362,15 @@ describe('Object storage for lives', function () {
     let videoUUID: string
 
     before(async function () {
+      this.timeout(120000)
+
       await servers[0].kill()
       await servers[0].run(objectStorage.getDefaultMockConfig({ storeLiveStreams: false }))
       await servers[0].config.enableLive({ transcoding: false })
 
       videoUUID = await createLive(servers[0], false)
+
+      await waitJobs(servers)
     })
 
     it('Should create a live and keep it on file system', async function () {

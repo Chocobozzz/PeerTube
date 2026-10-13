@@ -75,6 +75,7 @@ export class SearchCommand extends AbstractCommand {
     options: OverrideCommandOptions & {
       search?: string
       sort?: string
+      videoPassword?: string
     }
   ) {
     const { search, sort } = options
@@ -92,9 +93,10 @@ export class SearchCommand extends AbstractCommand {
   advancedVideoSearch (
     options: OverrideCommandOptions & {
       search?: VideosSearchQuery
+      videoPassword?: string
     }
   ) {
-    const { search } = options
+    const { search, videoPassword } = options
     const path = '/api/v1/search/videos'
 
     return this.getRequestBody<ResultList<Video>>({
@@ -102,6 +104,7 @@ export class SearchCommand extends AbstractCommand {
 
       path,
       query: search,
+      headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

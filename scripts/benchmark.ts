@@ -20,6 +20,15 @@ let threadId: number
 program
   .option('-o, --outfile [outfile]', 'Outfile')
   .option('--grep [string]', 'Filter tests you want to execute')
+  .option('--url <url>', 'Benchmark an existing instance (for example behind a reverse proxy) instead of spawning local test servers')
+  .option('--username <username>', 'Administrator username of the --url instance', 'root')
+  .option('--password <password>', 'Administrator password of the --url instance')
+  .option('--connections <number>', 'Concurrent connections', v => parseInt(v, 10), 20)
+  .option('--duration <seconds>', 'Duration of each test', v => parseInt(v, 10), 10)
+  .option(
+    '--random-client-ips',
+    'Send a random client IP per connection in the X-Forwarded-For header, so a reverse proxy trusting this header sees many clients'
+  )
   .description('Run API REST benchmark')
   .parse(process.argv)
 
@@ -27,8 +36,16 @@ const options = program.opts()
 
 const outfile = options.outfile
 
+if (options.url && !options.password) {
+  console.error('--password is required with --url')
+  process.exit(-1)
+}
+
 run()
-  .catch(err => console.error(err))
+  .catch(err => {
+    console.error(err)
+    process.exitCode = 1
+  })
   .finally(() => {
     if (servers) return killallServers(servers)
   })
@@ -49,6 +66,13 @@ function buildJSONHeader () {
   return {
     'Content-Type': 'application/json'
   }
+}
+
+// In 198.18.0.0/15, reserved for benchmarks (RFC 2544)
+function buildRandomClientIP () {
+  const random = (max: number) => Math.floor(Math.random() * max)
+
+  return `198.${18 + random(2)}.${random(256)}.${1 + random(254)}`
 }
 
 async function run () {
@@ -210,24 +234,27 @@ async function run () {
   if (outfile) await writeJson(outfile, finalResult)
 }
 
-function runBenchmark (options: {
+function runBenchmark (test: {
   path: string
   method?: string
   body?: string
   headers?: { [id: string]: string }
   expecter: Function
 }) {
-  const { method = 'GET', path, body, expecter, headers } = options
+  const { method = 'GET', path, body, expecter, headers } = test
 
   return new Promise((res, rej) => {
     autocannon({
       url: server.url + path,
       method,
       body,
-      connections: 20,
+      connections: options.connections,
       headers,
       pipelining: 1,
-      duration: 10,
+      duration: options.duration,
+      setupClient: options.randomClientIps
+        ? client => client.setHeaders({ ...headers, 'X-Forwarded-For': buildRandomClientIP() })
+        : undefined,
       requests: [
         {
           onResponse: (status, body) => {
@@ -247,6 +274,40 @@ function runBenchmark (options: {
 }
 
 async function prepare () {
+  if (options.url) return prepareExistingServer()
+
+  return prepareTestServers()
+}
+
+async function prepareExistingServer () {
+  server = new PeerTubeServer({ url: options.url })
+
+  const user = { username: options.username, password: options.password }
+  const client = await server.login.getClient()
+
+  server.store.client = { id: client.client_id, secret: client.client_secret }
+  server.store.user = user
+  server.accessToken = await server.login.getAccessToken(user)
+
+  const { data } = await server.videos.list({ count: 100 })
+  const existing = data.find(v => v.name === 'my super video 1')
+
+  if (existing) {
+    console.log('Reusing the benchmark data of a previous run.')
+
+    video = existing
+
+    const threads = await server.comments.listThreads({ videoId: video.id, count: 1 })
+    threadId = threads.data[0].id
+
+    return
+  }
+
+  await createBenchmarkData()
+  await waitJobs([ server ])
+}
+
+async function prepareTestServers () {
   const config = {
     rates_limit: {
       api: {
@@ -293,6 +354,11 @@ async function prepare () {
   await doubleFollow(servers[0], servers[1])
   await doubleFollow(servers[0], servers[2])
 
+  await createBenchmarkData()
+  await waitJobs(servers)
+}
+
+async function createBenchmarkData () {
   const attributes = {
     name: 'my super video',
     category: 2,
@@ -308,6 +374,8 @@ async function prepare () {
   for (let i = 0; i < 10; i++) {
     await server.videos.upload({ attributes: { ...attributes, name: 'my super video ' + i } })
   }
+
+  await waitJobs(servers ?? [ server ])
 
   const { data } = await server.videos.list()
   video = data.find(v => v.name === 'my super video 1')
@@ -334,6 +402,4 @@ async function prepare () {
       fixture: 'subtitle-good2.vtt'
     })
   }
-
-  await waitJobs(servers)
 }

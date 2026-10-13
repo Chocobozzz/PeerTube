@@ -35,10 +35,13 @@ async function prepareViewsServers (options: {
   viewExpiration?: string // default 1 second
   trustViewerSessionId?: boolean // default true
   singleServer?: boolean // default false
+  configOverride?: object
 } = {}) {
-  const { viewExpiration = '1 second', trustViewerSessionId = true, singleServer } = options
+  const { viewExpiration = '1 second', trustViewerSessionId = true, singleServer, configOverride = {} } = options
 
   const config = {
+    ...configOverride,
+
     views: {
       videos: {
         view_expiration: viewExpiration,

@@ -20,7 +20,7 @@ export class AbusesCommand extends AbstractCommand {
     reason: string
 
     accountId?: number
-    videoId?: number
+    videoId?: number | string
     commentId?: number
 
     predefinedReasons?: AbusePredefinedReasonsString[]

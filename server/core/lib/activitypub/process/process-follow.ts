@@ -3,11 +3,11 @@ import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { Transaction } from 'sequelize'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { getAPId } from '../../../lib/activitypub/activity.js'
+import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
@@ -24,7 +24,9 @@ async function processFollowActivity (options: APProcessorOptions<ActivityFollow
   const activityId = activity.id
   const objectId = getAPId(activity.object)
 
-  return retryTransactionWrapper(() => processFollow(byActor, activityId, objectId))
+  return runWithAPObjectLock(buildAPFollowLockKey(byActor.url, objectId), () => {
+    return retryTransactionWrapper(() => processFollow(byActor, activityId, objectId))
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -36,7 +38,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processFollow (byActor: MActorSignature, activityId: string, targetActorURL: string) {
-  const { actorFollow, created, targetActor } = await sequelizeTypescript.transaction(async t => {
+  const { actorFollow, created, targetActor } = await runTransaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')

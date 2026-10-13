@@ -69,7 +69,29 @@ export function optionalAuthenticate (req: express.Request, res: express.Respons
   return next()
 }
 
-export function authenticateOrFail (options: {
+export function authenticatePromise (options: {
+  req: express.Request
+  res: express.Response
+}) {
+  const { req, res } = options
+
+  return new Promise<boolean>(resolve => {
+    // Already authenticated? (or tried to)
+    if (res.locals.oauth?.token.User) return resolve(true)
+
+    if (res.locals.authenticated === false || !req.header('authorization')) {
+      return resolve(false)
+    }
+
+    authenticate(req, res, () => {
+      if (res.locals.oauth?.token.User) return resolve(true)
+
+      resolve(false)
+    })
+  })
+}
+
+export async function authenticateOrFail (options: {
   req: express.Request
   res: express.Response
   errorMessage?: string
@@ -78,24 +100,14 @@ export function authenticateOrFail (options: {
 }) {
   const { req, res, errorMessage = req.t('Authentication is required'), errorStatus = HttpStatusCode.UNAUTHORIZED_401, errorType } = options
 
-  return new Promise<boolean>(resolve => {
-    // Already authenticated? (or tried to)
-    if (res.locals.oauth?.token.User) return resolve(true)
+  const authenticated = await authenticatePromise({ req, res })
 
-    if (res.locals.authenticated === false || !req.header('authorization')) {
-      res.fail({ status: errorStatus, type: errorType, message: errorMessage })
+  if (!authenticated) {
+    res.fail({ status: errorStatus, type: errorType, message: errorMessage })
+    return false
+  }
 
-      return resolve(false)
-    }
-
-    authenticate(req, res, () => {
-      if (res.locals.oauth?.token.User) return resolve(true)
-
-      res.fail({ status: errorStatus, type: errorType, message: errorMessage })
-
-      resolve(false)
-    })
-  })
+  return true
 }
 
 // ---------------------------------------------------------------------------

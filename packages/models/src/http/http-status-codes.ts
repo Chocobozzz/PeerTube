@@ -268,6 +268,14 @@ export const HttpStatusCode = {
   I_AM_A_TEAPOT_418: 418,
 
   /**
+   * Official Documentation @ https://tools.ietf.org/html/rfc9110#section-15.5.20
+   *
+   * The request was directed at a server that is unable or unwilling to produce an authoritative response for the target URI.
+   * PeerTube secondary processes use it for the endpoints only the primary process serves, so the reverse proxy can replay the request.
+   */
+  MISDIRECTED_REQUEST_421: 421,
+
+  /**
    * Official Documentation @ https://tools.ietf.org/html/rfc2518#section-10.3
    *
    * The request was well-formed but was unable to be followed due to semantic errors.

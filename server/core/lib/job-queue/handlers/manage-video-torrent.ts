@@ -1,7 +1,6 @@
 import { ManageVideoTorrentPayload } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { extractVideo } from '@server/helpers/video.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { createTorrentForFile, updateTorrentForFileAndSave } from '@server/lib/webtorrent.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -44,16 +43,17 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
       await video.reload()
       await file.reload()
 
-      const { infoHash, torrentFilename } = await createTorrentForFile(video, file)
+      const { infoHash, torrentFilename, torrentStorage } = await createTorrentForFile(video, file)
 
       const saved = await retryTransactionWrapper(() => {
-        return sequelizeTypescript.transaction(async transaction => {
+        return runTransaction(async transaction => {
           // Refresh videoFile because the createTorrentAndSetInfoHash could be long
           // Also reload on every attempt: after a rollback the previous instance has no changed attribute left to save
           const refreshedFile = await VideoFileModel.loadWithVideo(file.id, transaction)
           if (!refreshedFile) return false
 
           refreshedFile.torrentFilename = torrentFilename
+          refreshedFile.torrentStorage = torrentStorage
           await refreshedFile.save({ transaction })
 
           await VideoInfohashModel.replaceFileInfohash(refreshedFile.id, infoHash, transaction)
@@ -63,7 +63,7 @@ async function doCreateAction (payload: ManageVideoTorrentPayload & { action: 'c
       })
 
       // File does not exist anymore, remove the generated torrent
-      if (!saved) await file.removeTorrent()
+      if (!saved) await VideoFileModel.removeTorrentFile(torrentFilename, torrentStorage)
     } finally {
       fileMutexReleaser()
     }

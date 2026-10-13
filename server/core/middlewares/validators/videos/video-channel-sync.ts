@@ -1,6 +1,6 @@
 import { HttpStatusCode, VideoChannelSyncCreate } from '@peertube/peertube-models'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { toBooleanOrNull, toIntOrNull } from '@server/helpers/custom-validators/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { isVideoChannelSyncPrivacyValid } from '@server/helpers/custom-validators/video-channel-syncs.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'

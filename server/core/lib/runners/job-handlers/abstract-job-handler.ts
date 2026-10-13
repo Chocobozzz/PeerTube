@@ -30,6 +30,7 @@ import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { setAsUpdated } from '@server/models/shared/update.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { Transaction } from 'sequelize'
+import { commitPendingCompletion, registerPendingCompletion, unregisterPendingCompletion } from './shared/pending-completions.js'
 
 const logger = createLogger('runner')
 
@@ -153,34 +154,57 @@ export abstract class AbstractJobHandler<C, UpdatePayload extends RunnerJobUpdat
   }) {
     const { runnerJob, resultPayload } = options
 
-    await logger.withContext([ runnerJob.uuid, runnerJob.type ], async () => {
-      runnerJob.state = RunnerJobState.COMPLETING
-      await saveInTransactionWithRetries(runnerJob)
+    // A shutdown can abort it
+    const completion = registerPendingCompletion(runnerJob.uuid, { abortable: this.isCompletionAbortable() })
 
-      try {
-        await this.specificComplete(options)
+    try {
+      await logger.withContext([ runnerJob.uuid, runnerJob.type ], async () => {
+        runnerJob.state = RunnerJobState.COMPLETING
+        await saveInTransactionWithRetries(runnerJob)
 
-        runnerJob.state = RunnerJobState.COMPLETED
-      } catch (err) {
-        logger.error('Cannot complete runner job', { err })
+        try {
+          await this.specificComplete(options)
 
-        runnerJob.state = RunnerJobState.ERRORED
-        runnerJob.error = err.message
-      } finally {
-        // specificComplete() moves whatever uploaded file it consumes into permanent storage
-        // Remove anything it left behind in tmp directory
-        this.cleanupResultPayloadFiles(resultPayload)
-      }
+          runnerJob.state = RunnerJobState.COMPLETED
+        } catch (err) {
+          if (!completion.aborted) {
+            logger.error('Cannot complete runner job', { err })
 
-      runnerJob.progress = null
-      runnerJob.finishedAt = new Date()
+            runnerJob.state = RunnerJobState.ERRORED
+            runnerJob.error = err.message
+          }
+        } finally {
+          // specificComplete() moves whatever uploaded file it consumes into permanent storage
+          // Remove anything it left behind in tmp directory
+          this.cleanupResultPayloadFiles(resultPayload)
+        }
 
-      await saveInTransactionWithRetries(runnerJob)
+        // The job has been given back to the runners: don't overwrite its state
+        if (completion.aborted) {
+          logger.info('Completion of runner job %s ended after being aborted by the shutdown', runnerJob.uuid)
+          return
+        }
 
-      const [ affectedCount ] = await RunnerJobModel.updateDependantJobsOf(runnerJob)
+        // Synchronously after the check above: from now on, a shutdown cannot give the job back to the runners while its final state is saved
+        commitPendingCompletion(runnerJob.uuid)
 
-      if (affectedCount !== 0) PeerTubeSocket.Instance.sendAvailableJobsPingToRunners()
-    })
+        runnerJob.progress = null
+        runnerJob.finishedAt = new Date()
+
+        await saveInTransactionWithRetries(runnerJob)
+
+        const [ affectedCount ] = await RunnerJobModel.updateDependantJobsOf(runnerJob)
+
+        if (affectedCount !== 0) PeerTubeSocket.Instance.sendAvailableJobsPingToRunners()
+      })
+    } finally {
+      unregisterPendingCompletion(completion)
+    }
+  }
+
+  // A shutdown can give the job back to the runners while this process completes it
+  protected isCompletionAbortable () {
+    return false
   }
 
   private cleanupResultPayloadFiles (resultPayload: SuccessPayload) {

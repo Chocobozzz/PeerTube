@@ -258,6 +258,19 @@ describe('Test video channel sync API validator', () => {
       })
     })
 
+    it('Should succeed with every sortable column', async function () {
+      for (const column of [ 'externalChannelUrl', 'videoChannel', 'createdAt', 'lastSyncAt', 'state' ]) {
+        for (const sort of [ column, '-' + column ]) {
+          await command.listByAccount({
+            accountName: 'root',
+            sort,
+            token: server.accessToken,
+            expectedStatus: HttpStatusCode.OK_200
+          })
+        }
+      }
+    })
+
     it('Should fail with no authentication', async function () {
       await command.listByAccount({
         accountName: 'root',

@@ -1,6 +1,5 @@
 import { ActivityPubOrderedCollection } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
-import Bluebird from 'bluebird'
 import { URL } from 'url'
 import { createLogger } from '../../helpers/logger.js'
 import { ACTIVITY_PUB, WEBSERVER } from '../../initializers/constants.js'
@@ -8,7 +7,7 @@ import { fetchAP } from './activity.js'
 
 const logger = createLogger()
 
-type HandlerFunction<T> = (items: T[]) => Promise<any> | Bluebird<any>
+type HandlerFunction<T> = (items: T[]) => Promise<any>
 type CleanerFunction = (startedDate: Date) => Promise<any>
 
 export async function crawlCollectionPage<T> (

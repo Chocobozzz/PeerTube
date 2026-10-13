@@ -26,7 +26,7 @@ export class PlaylistHtml {
     ])
 
     // Let Angular application handle errors
-    if (!videoPlaylist || videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
+    if (!this.canBuildPlaylistTags(videoPlaylist, videoPlaylistId)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
@@ -51,7 +51,7 @@ export class PlaylistHtml {
 
     const [ html, playlist ] = await Promise.all([ PageHtml.getEmbedHTML(), playlistPromise ])
 
-    if (!playlist || playlist.privacy === VideoPlaylistPrivacy.PRIVATE) {
+    if (!this.canBuildPlaylistTags(playlist, playlistId)) {
       return buildEmptyEmbedHTML({ html, playlist })
     }
 
@@ -72,6 +72,15 @@ export class PlaylistHtml {
   // ---------------------------------------------------------------------------
   // Private
   // ---------------------------------------------------------------------------
+
+  private static canBuildPlaylistTags (playlist: MVideoPlaylist, playlistId: string) {
+    if (!playlist || playlist.privacy === VideoPlaylistPrivacy.PRIVATE) return false
+
+    // Unlisted playlists can only be fetched using their UUID
+    if (playlist.privacy === VideoPlaylistPrivacy.UNLISTED && !validator.default.isUUID(playlistId, 4)) return false
+
+    return true
+  }
 
   private static buildPlaylistHTML (options: {
     req: express.Request

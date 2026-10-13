@@ -1,7 +1,7 @@
 import { ActivityPubActor, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
 import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { ServerModel } from '@server/models/server/server.js'
@@ -37,7 +37,7 @@ export class APActorCreator {
 
     const { followersCount, followingCount } = await fetchActorFollowsCount(this.actorObject)
 
-    const actor = await sequelizeTypescript.transaction(async t => {
+    const actor = await runTransaction(async t => {
       const actorInstance = new ActorModel(getActorAttributesFromObject(this.actorObject, followersCount, followingCount)) as MActorFull
 
       const server = await this.setServer(actorInstance, t)

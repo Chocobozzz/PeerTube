@@ -2,7 +2,7 @@ import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { VideoStatModel } from '@server/models/stat/video-stat.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
-import { Redis } from '../../redis.js'
+import { Redis } from '../../redis/index.js'
 
 const logger = createLogger()
 
@@ -20,17 +20,17 @@ export async function processVideosStats () {
   const startDate = lastHour.setMinutes(0, 0, 0)
   const endDate = lastHour.setMinutes(59, 59, 999)
 
-  const videoIds = await Redis.Instance.listVideosForStats(hour)
+  const videoIds = await Redis.Instance.listVideosStatCounters(hour)
   if (videoIds.length === 0) return
 
   logger.info(`Processing videos stats in job for hour ${hour}`)
 
   for (const videoId of videoIds) {
     try {
-      const views = await Redis.Instance.getVideoStats('views', videoId, hour)
-      const downloads = await Redis.Instance.getVideoStats('downloads', videoId, hour)
+      const views = await Redis.Instance.getVideoStatCounters('views', videoId, hour)
+      const downloads = await Redis.Instance.getVideoStatCounters('downloads', videoId, hour)
 
-      await Redis.Instance.deleteVideoStats(videoId, hour)
+      await Redis.Instance.deleteVideoStatCounters(videoId, hour)
 
       if (!views && !downloads) continue
 

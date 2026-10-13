@@ -671,7 +671,7 @@ describe('Test live', function () {
       const video = await servers[0].videos.get({ id: liveVideoId })
 
       const masterPlaylist = video.streamingPlaylists[0].playlistUrl
-      const probe = await ffprobePromise(masterPlaylist)
+      const probe = await ffprobePromise(masterPlaylist, { disableRemoteFormatWhitelist: true })
 
       const bitrates = probe.streams.map(s => parseInt(s.tags.variant_bitrate))
       for (const bitrate of bitrates) {

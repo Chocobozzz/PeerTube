@@ -8,6 +8,8 @@ import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 const logger = createLogger('lazy-load', 'storyboard')
 
 export class VideoStoryboardsImageFileCache extends AbstractImageFileCache<MStoryboard> {
+  protected readonly cacheType = 'STORYBOARDS'
+
   protected loadModel (filename: string) {
     return StoryboardModel.loadByFilename(filename)
   }

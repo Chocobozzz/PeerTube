@@ -55,6 +55,7 @@ export interface ServerConfig {
         preferAuthorDisplayName: boolean
       }
       resumableUpload: {
+        minChunkSize: number
         maxChunkSize: number
       }
     }
@@ -315,6 +316,10 @@ export interface ServerConfig {
 
     users: {
       enabled: boolean
+
+      resumableUpload: {
+        minChunkSize: number
+      }
     }
   }
 

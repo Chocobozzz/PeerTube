@@ -1,9 +1,8 @@
 import { VideoPlaylistPrivacy, VideoPlaylistType } from '@peertube/peertube-models'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { generateImageFilename } from '@server/helpers/image-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { SequelizeModel } from '@server/models/shared/sequelize-type.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { Mutex } from 'async-mutex'
@@ -16,6 +15,7 @@ import { MVideoPlaylistOwner, MVideoPlaylistThumbnail } from '../types/models/vi
 import { sendUpdateVideoPlaylist } from './activitypub/send/send-update.js'
 import { getLocalVideoPlaylistActivityPubUrl } from './activitypub/url.js'
 import downloadImage from './image-downloader.js'
+import { withLocalCommonFile } from './object-storage/common-files.js'
 import { createLocalPlaylistThumbnailsFromImage } from './thumbnail.js'
 
 const logger = createLogger()
@@ -77,7 +77,7 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
   const tmpImagePath = join(CONFIG.STORAGE.TMP_DIR, tmpImageName)
 
   if (video.isLocal() === true) {
-    await copy(videoThumbnail.getFSPath(), tmpImagePath)
+    await withLocalCommonFile('thumbnails', videoThumbnail, path => copy(path, tmpImagePath))
   } else {
     await downloadImage({
       url: videoThumbnail.fileUrl,
@@ -99,7 +99,7 @@ async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbn
       })
 
       try {
-        await sequelizeTypescript.transaction(t => videoPlaylist.replaceAndSaveThumbnails(thumbnails, t))
+        await runTransaction(t => videoPlaylist.replaceAndSaveThumbnails(thumbnails, t))
       } catch (err) {
         // The next attempt generates new files, so don't leak the ones we just created
         await Promise.all(

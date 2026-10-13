@@ -7,7 +7,7 @@ import {
   VideoCommentForAdminOrUser,
   VideoCommentObject
 } from '@peertube/peertube-models'
-import { afterCommitIfTransaction, retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { afterCommitIfTransaction, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { extractLocalMentions } from '@server/helpers/mentions.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
@@ -255,7 +255,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
   static async rebuildCommentsCount (videoId: number) {
     try {
       await retryTransactionWrapper(() => {
-        return sequelizeTypescript.transaction(async transaction => {
+        return runTransaction(async transaction => {
           const video = await VideoModel.load(videoId, transaction)
           if (!video) return
 

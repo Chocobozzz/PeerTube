@@ -9,6 +9,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import {
   generateHLSFilePresignedUrl,
   generateOriginalFilePresignedUrl,
+  generateTorrentPresignedUrl,
   generateUserExportPresignedUrl,
   generateWebVideoPresignedUrl
 } from '@server/lib/object-storage/index.js'
@@ -68,6 +69,7 @@ downloadRouter.use(
 
 const downloadGenerateRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.DOWNLOAD_GENERATE_VIDEO.ENABLED,
+  name: 'download-generate-video',
   windowMs: CONFIG.RATES_LIMIT.DOWNLOAD_GENERATE_VIDEO.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.DOWNLOAD_GENERATE_VIDEO.MAX,
   skipFailedRequests: true
@@ -112,7 +114,8 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   const video = await VideoModel.loadFull(file.getVideo().id)
   if (!video) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
-  const path = video.isLocal()
+  // No local path when the torrent is not on our file system (remote video or object storage)
+  const path = video.isLocal() && file.torrentStorage === FileStorage.FILE_SYSTEM
     ? join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename)
     : undefined
 
@@ -136,6 +139,10 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   if (!checkAllowResult(res, allowParameters, allowedResult)) return
 
   if (video.isLocal()) {
+    if (file.torrentStorage === FileStorage.OBJECT_STORAGE) {
+      return redirectTorrentToObjectStorage({ res, file, downloadFilename })
+    }
+
     return res.download(path, downloadFilename)
   }
 
@@ -417,7 +424,8 @@ async function commonDownloadAllowed (object: {
 }): Promise<AllowedResult> {
   const { req, res, video } = object
 
-  const user = getAuthUser(res)
+  // Download links are opened by the browser without authorization header: fallback to video file token user
+  const user = getAuthUser(res) || res.locals.videoFileToken?.user
 
   if (video.downloadEnabled === true) {
     return { allowed: true }
@@ -567,6 +575,20 @@ async function redirectOriginalFileToObjectStorage (options: {
   const url = await generateOriginalFilePresignedUrl({ videoSource, downloadFilename })
 
   logger.debug('Generating pre-signed URL %s for original video file %s', url, videoSource.keptOriginalFilename)
+
+  return res.redirect(url)
+}
+
+async function redirectTorrentToObjectStorage (options: {
+  res: express.Response
+  downloadFilename: string
+  file: MVideoFile
+}) {
+  const { res, downloadFilename, file } = options
+
+  const url = await generateTorrentPresignedUrl({ file, downloadFilename })
+
+  logger.debug('Generating pre-signed URL %s for torrent %s', url, file.torrentFilename)
 
   return res.redirect(url)
 }

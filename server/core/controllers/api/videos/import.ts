@@ -9,12 +9,13 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode } from '@server/helpers/youtube-dl/youtube-dl-wrapper.js'
+import { buildStagingKey, removeStagingObject, storeStagingObject } from '@server/lib/object-storage/staging.js'
 import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
 import { buildRetryImportJob } from '@server/lib/video-post-import.js'
 import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB } from '@server/lib/video-pre-import.js'
 import { MVideoThumbnails } from '@server/types/models/index.js'
 import express from 'express'
-import { move } from 'fs-extra/esm'
+import { move, remove } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
 import { decode } from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
@@ -51,6 +52,8 @@ videoImportsRouter.post(
   authenticate,
   reqVideoFileImport,
   asyncMiddleware(videoImportAddValidator),
+  // Before the handler, that can be retried
+  asyncMiddleware(handleTorrentFile),
   asyncRetryTransactionMiddleware(handleVideoImport)
 )
 
@@ -122,13 +125,16 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
   let videoName: string
   let torrentName: string
   let magnetUri: string
+  let torrentPath: string = null
+  let torrentStagingKey: string
 
   if (torrentfile) {
-    const result = await processTorrentOrAbortRequest(req, res, torrentfile)
-    if (!result) return
+    const result = res.locals.videoImportTorrentFile
 
     videoName = result.name
     torrentName = result.torrentName
+    torrentPath = result.torrentPath
+    torrentStagingKey = result.torrentStagingKey
   } else {
     const result = processMagnetURI(body)
     magnetUri = result.magnetUri
@@ -168,7 +174,8 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
       videoImportId: videoImport.id,
       preventException: false,
       generateTranscription: body.generateTranscription,
-      torrentPath: torrentfile?.path ?? null
+      torrentPath,
+      torrentStagingKey
     }
 
     videoImport.payload = payload
@@ -240,30 +247,59 @@ function processThumbnails (req: express.Request, video: MVideoThumbnails) {
   })
 }
 
-async function processTorrentOrAbortRequest (req: express.Request, res: express.Response, torrentfile: Express.Multer.File) {
-  const torrentName = torrentfile.originalname
+async function handleTorrentFile (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const torrentfile: Express.Multer.File = req.files?.['torrentfile']?.[0]
+  if (!torrentfile) return next()
 
-  // Rename the torrent to a secured name
-  const newTorrentPath = join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, buildUUID() + '.torrent')
-  await move(torrentfile.path, newTorrentPath, { overwrite: true })
-  torrentfile.path = newTorrentPath
+  const torrentName = torrentfile.originalname
 
   const parsedTorrent = await parseTorrentPromise(torrentfile.path)
 
   if (parsedTorrent.files.length !== 1) {
     cleanUpReqFiles(req)
 
-    res.fail({
+    return res.fail({
       type: ServerErrorCode.INCORRECT_FILES_IN_TORRENT,
       message: 'Torrents with only 1 file are supported.'
     })
-    return undefined
   }
 
-  return {
-    name: extractNameFromArray(parsedTorrent.name),
-    torrentName
+  // Secured name
+  const filename = buildUUID() + '.torrent'
+
+  // The import job may be run by another process
+  let torrentPath: string = null
+  let torrentStagingKey: string
+
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+    torrentStagingKey = buildStagingKey('VIDEO_IMPORTS', filename)
+
+    await storeStagingObject({ key: torrentStagingKey, inputPath: torrentfile.path, contentType: 'application/x-bittorrent' })
+    await remove(torrentfile.path)
+  } else {
+    torrentPath = join(CONFIG.STORAGE.TMP_PERSISTENT_DIR, filename)
+
+    await move(torrentfile.path, torrentPath, { overwrite: true })
   }
+
+  res.on('finish', () => {
+    if (res.statusCode < HttpStatusCode.BAD_REQUEST_400) return
+
+    const removePromise = torrentStagingKey
+      ? removeStagingObject(torrentStagingKey)
+      : remove(torrentPath)
+
+    removePromise.catch(err => logger.error('Cannot remove torrent file %s of a failed video import.', filename, { err }))
+  })
+
+  res.locals.videoImportTorrentFile = {
+    name: extractNameFromArray(parsedTorrent.name),
+    torrentName,
+    torrentPath,
+    torrentStagingKey
+  }
+
+  return next()
 }
 
 function processMagnetURI (body: VideoImportCreate) {

@@ -8,6 +8,8 @@ import { AbstractImageFileCache } from './shared/abstract-image-file-cache.js'
 const logger = createLogger('lazy-load', 'thumbnail')
 
 export class VideoThumbnailsImageFileCache extends AbstractImageFileCache<MThumbnail> {
+  protected readonly cacheType = 'THUMBNAILS'
+
   protected loadModel (filename: string) {
     return ThumbnailModel.loadByFilename(filename)
   }

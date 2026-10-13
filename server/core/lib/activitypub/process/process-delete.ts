@@ -1,8 +1,7 @@
 import { ActivityDelete } from '@peertube/peertube-models'
 import { isAccountActor, isChannelActor } from '@server/helpers/actors.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist.js'
@@ -19,6 +18,7 @@ import {
   MVideoAccountLightBlacklistAllFiles,
   MVideoPlaylistAccountThumbnail
 } from '../../../types/models/index.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 
 const logger = createLogger()
@@ -28,6 +28,18 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
 
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
 
+  return runWithAPObjectLock(objectUrl, () => processDelete(byActor, activity, objectUrl))
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  processDeleteActivity
+}
+
+// ---------------------------------------------------------------------------
+
+async function processDelete (byActor: MActorSignature, activity: ActivityDelete, objectUrl: string) {
   if (activity.actor === objectUrl) {
     // We need more attributes (all the account and channel)
     const byActorFull = await ActorModel.loadByUrlAndPopulateAccountAndChannel(byActor.url)
@@ -77,18 +89,10 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   return undefined
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  processDeleteActivity
-}
-
-// ---------------------------------------------------------------------------
-
 async function processDeleteVideo (actor: MActor, videoToDelete: MVideoAccountLightBlacklistAllFiles) {
   logger.debug('Removing remote video "%s".', videoToDelete.uuid)
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     if (videoToDelete.VideoChannel.Account.Actor.id !== actor.id) {
       throw new Error('Account ' + actor.url + ' does not own video channel ' + videoToDelete.VideoChannel.Actor.url)
     }
@@ -102,7 +106,7 @@ async function processDeleteVideo (actor: MActor, videoToDelete: MVideoAccountLi
 async function processDeleteVideoPlaylist (actor: MActor, playlistToDelete: MVideoPlaylistAccountThumbnail) {
   logger.debug('Removing remote video playlist "%s".', playlistToDelete.uuid)
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     if (playlistToDelete.OwnerAccount.Actor.id !== actor.id) {
       throw new Error('Account ' + actor.url + ' does not own video playlist ' + playlistToDelete.url)
     }
@@ -116,7 +120,7 @@ async function processDeleteVideoPlaylist (actor: MActor, playlistToDelete: MVid
 async function processDeleteAccount (accountToRemove: MAccountActor) {
   logger.debug('Removing remote account "%s".', accountToRemove.Actor.url)
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await accountToRemove.destroy({ transaction: t })
   })
 
@@ -126,7 +130,7 @@ async function processDeleteAccount (accountToRemove: MAccountActor) {
 async function processDeleteVideoChannel (videoChannelToRemove: MChannelActor) {
   logger.debug('Removing remote video channel "%s".', videoChannelToRemove.Actor.url)
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await videoChannelToRemove.destroy({ transaction: t })
   })
 
@@ -139,7 +143,7 @@ function processDeleteVideoComment (byActor: MActorSignature, videoComment: MCom
 
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     if (byActor.Account.id !== videoComment.Account.id && byActor.Account.id !== videoComment.Video.VideoChannel.accountId) {
       throw new Error(`Account ${byActor.url} does not own video comment ${videoComment.url} or video ${videoComment.Video.url}`)
     }

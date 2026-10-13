@@ -1,4 +1,5 @@
 import { exec } from 'child_process'
+import merge from 'lodash-es/merge.js'
 import { AbstractCommand } from '../shared/index.js'
 
 export class CLICommand extends AbstractCommand {
@@ -20,6 +21,11 @@ export class CLICommand extends AbstractCommand {
   }
 
   getEnv (configOverride?: any) {
+    // In parallel mode, database suffix, ports and storage directories are only defined by the server config override
+    if (this.server.parallel) {
+      configOverride = merge(this.server.buildConfigOverride({}), configOverride)
+    }
+
     return `NODE_ENV=test NODE_APP_INSTANCE=${this.server.internalServerNumber} ${CLICommand.getNodeConfigEnv(configOverride)}`
   }
 

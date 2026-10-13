@@ -1,3 +1,4 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import {
   isAnnounceActivityValid,
@@ -9,11 +10,10 @@ import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { AP_CLEANER } from '@server/initializers/constants.js'
 import { fetchAP } from '@server/lib/activitypub/activity.js'
 import { checkUrlsSameHost } from '@server/lib/activitypub/url.js'
-import { Redis } from '@server/lib/redis.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoShareModel } from '@server/models/video/video-share.js'
 import { VideoModel } from '@server/models/video/video.js'
-import Bluebird from 'bluebird'
 import { Job } from 'bullmq'
 import { createLogger } from '../../../helpers/logger.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
@@ -29,7 +29,7 @@ async function processActivityPubCleaner (_job: Job) {
     const rateUrls = await AccountVideoRateModel.listRemoteRateUrlsOfLocalVideos()
     const { bodyValidator, deleter, updater } = rateOptionsFactory()
 
-    await Bluebird.map(rateUrls, async rateUrl => {
+    await promiseMap(rateUrls, async rateUrl => {
       // TODO: remove when https://github.com/mastodon/mastodon/issues/13571 is fixed
       if (rateUrl.includes('#')) return
 
@@ -47,7 +47,7 @@ async function processActivityPubCleaner (_job: Job) {
     const shareUrls = await VideoShareModel.listRemoteShareUrlsOfLocalVideos()
     const { bodyValidator, deleter, updater } = shareOptionsFactory()
 
-    await Bluebird.map(shareUrls, async shareUrl => {
+    await promiseMap(shareUrls, async shareUrl => {
       await updateObjectIfNeeded({ url: shareUrl, bodyValidator, updater, deleter })
     }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
@@ -56,7 +56,7 @@ async function processActivityPubCleaner (_job: Job) {
     const commentUrls = await VideoCommentModel.listRemoteCommentUrlsOfLocalVideos()
     const { bodyValidator, deleter, updater } = commentOptionsFactory()
 
-    await Bluebird.map(commentUrls, async commentUrl => {
+    await promiseMap(commentUrls, async commentUrl => {
       await updateObjectIfNeeded({ url: commentUrl, bodyValidator, updater, deleter })
     }, { concurrency: AP_CLEANER.CONCURRENCY })
   }

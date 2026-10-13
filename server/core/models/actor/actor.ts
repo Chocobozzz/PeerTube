@@ -404,7 +404,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     if (id === actorServer.id) return actorServer
 
     return ActorModel.unscoped().findOne({
-      attributes: [ 'id', 'createdAt', 'updatedAt', 'serverId' ],
+      attributes: [ 'id', 'url', 'createdAt', 'updatedAt', 'serverId' ],
       where: { id },
       transaction
     })

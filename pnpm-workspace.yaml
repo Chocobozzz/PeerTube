@@ -6,6 +6,24 @@ packages:
   - client/packages/*
   - client/src/standalone/player
 
+allowBuilds:
+  '@parcel/watcher': set this to true or false
+  '@swc/core': set this to true or false
+  bcrypt: set this to true or false
+  bufferutil: set this to true or false
+  core-js: set this to true or false
+  edgedriver: set this to true or false
+  es5-ext: set this to true or false
+  esbuild: set this to true or false
+  geckodriver: set this to true or false
+  ip-set: set this to true or false
+  lmdb: set this to true or false
+  msgpackr-extract: set this to true or false
+  node-datachannel: set this to true or false
+  protobufjs: set this to true or false
+  utf-8-validate: set this to true or false
+  utp-native: set this to true or false
+
 blockExoticSubdeps: false
 
 ignoredBuiltDependencies:
@@ -35,6 +53,5 @@ overrides:
   '@types/express-serve-static-core': 4.19.5
 
 patchedDependencies:
-  sharp: pnpm-patches/sharp.patch
   tinykeys: pnpm-patches/tinykeys.patch
   video.js: pnpm-patches/video.js.patch

@@ -1,16 +1,15 @@
-import { AbstractUserImporter } from './abstract-user-importer.js'
+import { pick } from '@peertube/peertube-core-utils'
 import { VideoRateType } from '@peertube/peertube-models'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
 import { userRateVideo } from '@server/lib/rate.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
-import { pick } from '@peertube/peertube-core-utils'
+import { AbstractUserImporter } from './abstract-user-importer.js'
 
 export type SanitizedRateObject = { videoUrl: string }
 
-export abstract class AbstractRatesImporter <ROOT_OBJECT, OBJECT> extends AbstractUserImporter <ROOT_OBJECT, OBJECT, SanitizedRateObject> {
-
-  protected sanitizeRate <O extends { videoUrl: string }> (data: O) {
+export abstract class AbstractRatesImporter<ROOT_OBJECT, OBJECT> extends AbstractUserImporter<ROOT_OBJECT, OBJECT, SanitizedRateObject> {
+  protected sanitizeRate<O extends { videoUrl: string }> (data: O) {
     if (!isUrlValid(data.videoUrl)) return undefined
 
     return pick(data, [ 'videoUrl' ])

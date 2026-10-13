@@ -1,6 +1,7 @@
 import { StreamSyncState, VideoImportState } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
+import { getYoutubeDLCookiesPathIfEnabled } from '@server/lib/youtube-dl-cookies.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { buildYoutubeDLImport } from '@server/lib/video-pre-import.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -36,7 +37,8 @@ export async function synchronizeChannel (options: {
       const youtubeDL = new YoutubeDLWrapper(
         externalChannelUrl,
         ServerConfigManager.Instance.getEnabledResolutions('vod'),
-        CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+        CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+        await getYoutubeDLCookiesPathIfEnabled()
       )
 
       const targetUrls = await youtubeDL.getInfoForListImport({

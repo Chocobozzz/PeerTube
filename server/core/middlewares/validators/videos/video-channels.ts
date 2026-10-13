@@ -1,5 +1,5 @@
 import { HttpStatusCode, UserRight, VIDEO_CHANNEL_STATS_DAYS_OPTIONS, VideosImportInChannelCreate } from '@peertube/peertube-models'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { MChannelAccountDefault } from '@server/types/models/index.js'
@@ -128,7 +128,8 @@ export const listAccountChannelsValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (req.query.withStats === true) {
+    // Stats and collaborations of an account are private
+    if (req.query.withStats === true || req.query.includeCollaborations === true) {
       const user = res.locals.oauth?.token.User
 
       if (!checkCanManageAccount({ account: res.locals.account, user, specialRight: UserRight.MANAGE_USERS, req, res })) return

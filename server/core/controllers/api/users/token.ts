@@ -31,8 +31,10 @@ const tokensRouter = express.Router()
 
 const loginRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.LOGIN.ENABLED,
+  name: 'login',
   windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.LOGIN.MAX
+  max: CONFIG.RATES_LIMIT.LOGIN.MAX,
+  failOnUnavailableRedis: true
 })
 
 tokensRouter.post(

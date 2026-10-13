@@ -1,5 +1,5 @@
 import { REMOTE_SCHEME, WEBSERVER } from '../../initializers/constants.js'
-import { sanitizeHost } from '../core-utils.js'
+import { sanitizeHost } from '@peertube/peertube-node-utils'
 import { exists } from './misc.js'
 
 export function isWebfingerLocalResourceValid (value: string) {

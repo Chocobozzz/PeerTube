@@ -1,7 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, UserCreate, UserRight, UserUpdate } from '@peertube/peertube-models'
 import { tokensRouter } from '@server/controllers/api/users/token.js'
-import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getResetPasswordUrl } from '@server/lib/client-urls.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -11,9 +11,8 @@ import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { Emailer } from '../../../lib/emailer.js'
-import { Redis } from '../../../lib/redis.js'
+import { Redis } from '../../../lib/redis/index.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../../../lib/user.js'
 import {
   adminUsersSortValidator,
@@ -59,8 +58,10 @@ const auditLogger = auditLoggerFactory('users')
 
 const askResetPasswordRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.ENABLED,
+  name: 'ask-reset-password',
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
+  max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX,
+  failOnUnavailableRedis: true
 })
 
 const usersRouter = express.Router()
@@ -277,7 +278,7 @@ async function removeUser (req: express.Request, res: express.Response) {
     auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
     await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(t => {
+      return runTransaction(t => {
         // Use a transaction to avoid inconsistencies with hooks (account/channel deletion & federation)
         return user.destroy({ transaction: t })
       })
@@ -374,7 +375,7 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
   user.blocked = block
   user.blockedReason = reason || null
 
-  await sequelizeTypescript.transaction(async transaction => {
+  await runTransaction(async transaction => {
     await OAuthTokenModel.deleteUserToken({ userId: user.id, transaction })
 
     await user.save({ transaction })

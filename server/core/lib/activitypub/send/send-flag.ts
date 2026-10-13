@@ -1,5 +1,6 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityFlag } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { MAbuseAP, MAccountLight, MActor } from '../../../types/models/index.js'
 import { audiencify, getPublicAudience } from '../audience.js'
@@ -19,7 +20,7 @@ function sendAbuse (byActor: MActor, abuse: MAbuseAP, flaggedAccount: MAccountLi
   const audience = { to: [ flaggedAccount.Actor.url ], cc: [] }
   const flagActivity = buildFlagActivity(url, byActor, abuse, audience)
 
-  return t.afterCommit(() => {
+  return afterCommitIfTransaction(t, () => {
     return unicastTo({
       data: flagActivity,
       byActor,

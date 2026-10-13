@@ -20,19 +20,30 @@ import {
   RegisterServerAuthPassOptions,
   RegisterServerExternalAuthenticatedResult
 } from '@server/types/plugins/register-server-auth.model.js'
-import { BypassLogin } from './bypass-login.model.js'
+import { Redis } from '../redis/index.js'
+import { BypassLogin, UserUpdaterResults } from './bypass-login.model.js'
 import { ExternalUser } from './external-user.model.js'
+import { computeUserUpdaterResults } from './oauth-user.js'
 
 const logger = createLogger()
 
-// Token is the key, expiration date is the value
-const authBypassTokens = new Map<string, {
-  expires: Date
+/**
+ * An external auth plugin authenticates the user on its own routes
+ * PeerTube then redirects the user to the login page with a one time token, that the client exchanges for an OAuth token
+ *
+ * Several PeerTube processes can serve the platform and the reverse proxy does not send both requests to the same one
+ */
+
+type ExternalAuthTokenPayload = {
+  // Timestamp in milliseconds
+  expires: number
+
   user: ExternalUser
-  userUpdater: RegisterServerAuthenticatedResult['userUpdater']
+  userUpdaterResults?: UserUpdaterResults
+
   authName: string
   npmName: string
-}>()
+}
 
 async function onExternalUserAuthenticated (options: {
   npmName: string
@@ -63,20 +74,22 @@ async function onExternalUserAuthenticated (options: {
   expires.setTime(expires.getTime() + PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME)
 
   const user = buildUserResult(authResult)
-  authBypassTokens.set(bypassToken, {
-    expires,
-    user,
-    npmName,
-    authName,
-    userUpdater: authResult.userUpdater
-  })
 
-  // Cleanup expired tokens
-  const now = new Date()
-  for (const [ key, value ] of authBypassTokens) {
-    if (value.expires.getTime() < now.getTime()) {
-      authBypassTokens.delete(key)
-    }
+  try {
+    const userUpdaterResults = await computeUserUpdaterResults({
+      pluginName: npmName,
+      externalUser: user,
+      userUpdater: authResult.userUpdater
+    })
+
+    const payload: ExternalAuthTokenPayload = { expires: expires.getTime(), user, npmName, authName, userUpdaterResults }
+
+    await Redis.Instance.setExternalAuthToken(bypassToken, payload)
+  } catch (err) {
+    logger.error('Cannot generate auth bypass token for auth %s of plugin %s.', authName, npmName, { err })
+
+    res.redirect('/login?externalAuthError=true')
+    return
   }
 
   if (externalRedirectUri) {
@@ -146,45 +159,48 @@ async function getBypassFromPasswordGrant (username: string, password: string): 
       authOptions.getWeight()
     )
 
+    let loginResult: RegisterServerAuthenticatedResult
+
     try {
-      const loginResult = await authOptions.login(loginOptions)
-
-      if (!loginResult) continue
-      if (!isAuthResultValid(pluginAuth.npmName, authOptions.authName, loginResult)) continue
-
-      logger.info(
-        'Login success with auth method %s of plugin %s for %s.',
-        authName,
-        npmName,
-        loginOptions.id
-      )
-
-      return {
-        bypass: true,
-        pluginName: pluginAuth.npmName,
-        authName: authOptions.authName,
-        user: buildUserResult(loginResult),
-        userUpdater: loginResult.userUpdater
-      }
+      loginResult = await authOptions.login(loginOptions)
     } catch (err) {
-      logger.error('Error in auth method %s of plugin %s', authOptions.authName, pluginAuth.npmName, { err })
+      logger.error('Error in auth method %s of plugin %s', authName, npmName, { err })
+      continue
+    }
+
+    if (!loginResult) continue
+    if (!isAuthResultValid(npmName, authName, loginResult)) continue
+
+    logger.info(
+      'Login success with auth method %s of plugin %s for %s.',
+      authName,
+      npmName,
+      loginOptions.id
+    )
+
+    const user = buildUserResult(loginResult)
+
+    return {
+      bypass: true,
+      pluginName: npmName,
+      authName,
+      user,
+      // Outside of the login error handling: an error of the plugin updater fails the login instead of trying the next auth method
+      userUpdaterResults: await computeUserUpdaterResults({ pluginName: npmName, externalUser: user, userUpdater: loginResult.userUpdater })
     }
   }
 
   return undefined
 }
 
-function consumeBypassFromExternalAuth (username: string, externalAuthToken: string): BypassLogin {
-  const obj = authBypassTokens.get(externalAuthToken)
+async function consumeBypassFromExternalAuth (username: string, externalAuthToken: string): Promise<BypassLogin> {
+  // Deleted when read, to prevent replaying the same token on any process
+  const obj = await Redis.Instance.consumeExternalAuthToken<ExternalAuthTokenPayload>(externalAuthToken)
   if (!obj) throw new Error('Cannot authenticate user with unknown bypass token')
 
-  // Prevent replaying the same token
-  authBypassTokens.delete(externalAuthToken)
+  const { expires, user, authName, npmName, userUpdaterResults } = obj
 
-  const { expires, user, authName, npmName } = obj
-
-  const now = new Date()
-  if (now.getTime() > expires.getTime()) {
+  if (Date.now() > expires) {
     throw new Error('Cannot authenticate user with an expired external auth token')
   }
 
@@ -205,7 +221,7 @@ function consumeBypassFromExternalAuth (username: string, externalAuthToken: str
     bypass: true,
     pluginName: npmName,
     authName,
-    userUpdater: obj.userUpdater,
+    userUpdaterResults,
     user
   }
 }

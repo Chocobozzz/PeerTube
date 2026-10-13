@@ -9,9 +9,8 @@ import {
   CacheFileObject
 } from '@peertube/peertube-models'
 import { VideoModel } from '@server/models/video/video.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../models/actor/actor.js'
@@ -19,7 +18,8 @@ import { VideoRedundancyModel } from '../../../models/redundancy/video-redundanc
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
-import { fetchAPObjectIfNeeded } from '../activity.js'
+import { fetchAPObjectIfNeeded, getAPId } from '../activity.js'
+import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { getOrCreateAPVideo, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
@@ -37,8 +37,10 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo<Act
     const objectToUndo = await fetchAPObjectIfNeeded<CacheFileObject>(activityToUndo.object)
 
     if (objectToUndo.type === 'CacheFile') {
-      return retryTransactionWrapper(() => {
-        return processUndoCacheFile(byActor, activity as ActivityUndo<ActivityCreate<CacheFileObject>>, objectToUndo)
+      return runWithAPObjectLock(objectToUndo.id, () => {
+        return retryTransactionWrapper(() => {
+          return processUndoCacheFile(byActor, activity as ActivityUndo<ActivityCreate<CacheFileObject>>, objectToUndo)
+        })
       })
     }
   }
@@ -48,7 +50,9 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo<Act
   }
 
   if (activityToUndo.type === 'Follow') {
-    return retryTransactionWrapper(() => processUndoFollow(byActor, activityToUndo))
+    return runWithAPObjectLock(buildAPFollowLockKey(byActor.url, getAPId(activityToUndo.object)), () => {
+      return retryTransactionWrapper(() => processUndoFollow(byActor, activityToUndo))
+    })
   }
 
   if (activityToUndo.type === 'Announce') {
@@ -74,7 +78,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
   const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: likeActivity.object })
   if (!onlyVideo?.isLocal()) return
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
     const video = await VideoModel.load(onlyVideo.id, t)
@@ -98,7 +102,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
   const { video: onlyVideo } = await maybeGetOrCreateAPVideo({ videoObject: dislikeActivity.object })
   if (!onlyVideo?.isLocal()) return
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
     const video = await VideoModel.load(onlyVideo.id, t)
@@ -125,7 +129,7 @@ async function processUndoCacheFile (
 ) {
   const { video } = await getOrCreateAPVideo({ videoObject: cacheFileObject.object })
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const cacheFile = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
     if (!cacheFile) {
       logger.debug('Cannot undo unknown video cache %s.', cacheFileObject.id)
@@ -146,7 +150,7 @@ async function processUndoCacheFile (
 }
 
 function processUndoAnnounce (byActor: MActorSignature, announceActivity: ActivityAnnounce) {
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
     if (!share) {
       logger.warn(`Unknown video share ${announceActivity.id}`)
@@ -175,7 +179,7 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
 // ---------------------------------------------------------------------------
 
 function processUndoFollow (follower: MActorSignature, followActivity: ActivityFollow) {
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
     if (!following) {
       logger.warn('Unknown actor %s to undo the follow of %s.', followActivity.object, follower.url)

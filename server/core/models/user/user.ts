@@ -23,6 +23,7 @@ import {
   MChannelFormattable,
   MMyUserFormattable,
   MUser,
+  MUserAccountUrl,
   MUserDefault,
   MUserFormattable,
   MUserNotifSettingChannelDefault,
@@ -692,6 +693,25 @@ export class UserModel extends SequelizeModel<UserModel> {
 
   static loadByIdFull (id: number): Promise<MUserDefault> {
     return UserModel.findByPk(id)
+  }
+
+  static loadByIdWithAccountUrl (id: number): Promise<MUserAccountUrl> {
+    return UserModel.unscoped().findByPk(id, {
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id', 'url' ],
+              model: ActorModel.unscoped(),
+              required: true
+            }
+          ]
+        }
+      ]
+    })
   }
 
   static loadByIdWithChannels (id: number, withStats = false): Promise<MUserDefault> {

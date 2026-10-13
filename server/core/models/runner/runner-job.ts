@@ -10,7 +10,7 @@ import {
 import { isArray, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { CONSTRAINTS_FIELDS, RUNNER_JOB_STATES } from '@server/initializers/constants.js'
 import { MRunnerJob, MRunnerJobRunner, MRunnerJobRunnerParent } from '@server/types/models/runners/index.js'
-import { literal, Op, Transaction } from 'sequelize'
+import { literal, Op, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -24,7 +24,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { SequelizeModel, getSort, parseAggregateResult, searchAttribute } from '../shared/index.js'
+import { getSort, parseAggregateResult, searchAttribute, SequelizeModel } from '../shared/index.js'
 import { RunnerModel } from './runner.js'
 
 enum ScopeNames {
@@ -156,6 +156,18 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
 
   // ---------------------------------------------------------------------------
 
+  // Only one caller can move the job out of PROCESSING
+  static async setAsCompletingIfProcessing (runnerJob: MRunnerJob) {
+    const [ affectedCount ] = await RunnerJobModel.update({ state: RunnerJobState.COMPLETING }, {
+      where: { id: runnerJob.id, state: RunnerJobState.PROCESSING }
+    })
+
+    if (affectedCount === 0) return false
+
+    runnerJob.state = RunnerJobState.COMPLETING
+    return true
+  }
+
   static loadWithRunner (uuid: string) {
     const query = {
       where: { uuid }
@@ -210,21 +222,24 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
 
   static listStalledJobs (options: {
     staleTimeMS: number
-    types: RunnerJobType[]
+    types?: RunnerJobType[] // default all types
+    state?: RunnerJobStateType // default PROCESSING
   }) {
+    const { types, state = RunnerJobState.PROCESSING } = options
     const before = new Date(Date.now() - options.staleTimeMS)
 
-    return RunnerJobModel.findAll<MRunnerJob>({
-      where: {
-        type: {
-          [Op.in]: options.types
-        },
-        state: RunnerJobState.PROCESSING,
-        updatedAt: {
-          [Op.lt]: before
-        }
+    const where: WhereOptions = {
+      state,
+      updatedAt: {
+        [Op.lt]: before
       }
-    })
+    }
+
+    if (types) {
+      Object.assign(where, { type: { [Op.in]: types } })
+    }
+
+    return RunnerJobModel.findAll<MRunnerJob>({ where })
   }
 
   static listChildrenOf (job: MRunnerJob, transaction?: Transaction) {

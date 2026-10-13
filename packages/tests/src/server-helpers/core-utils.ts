@@ -1,17 +1,19 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
-import snakeCase from 'lodash-es/snakeCase.js'
-import validator from 'validator'
 import {
   buildAspectRatio,
   getAverageTheoreticalBitrate,
   getMaxTheoreticalBitrate,
+  getResumableUploadChunkSize,
   parseChapters,
+  redactSignedUrls,
   timeToInt
 } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
-import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion } from '@peertube/peertube-server/core/helpers/core-utils.js'
+import { objectConverter, parseBytes, parseDurationToMs, parseSemVersion, peertubeTruncate } from '@peertube/peertube-node-utils'
+import { expect } from 'chai'
+import snakeCase from 'lodash-es/snakeCase.js'
+import validator from 'validator'
 
 describe('Parse Bytes', function () {
   it('Should pass on valid value', function () {
@@ -186,6 +188,71 @@ describe('Bitrate', function () {
   })
 })
 
+describe('Truncate', function () {
+  it('Should not truncate a string that fits', function () {
+    expect(peertubeTruncate('hello', { length: 5 })).to.equal('hello')
+    expect(peertubeTruncate('hello', { length: 50 })).to.equal('hello')
+    expect(peertubeTruncate('', { length: 5 })).to.equal('')
+  })
+
+  it('Should count the omission in the requested length', function () {
+    expect(peertubeTruncate('hi-diddly-ho there, neighborino', { length: 24 })).to.equal('hi-diddly-ho there, n...')
+      .and.to.have.length(24)
+
+    expect(peertubeTruncate('hi-diddly-ho there, neighborino', { length: 24, omission: ' […]' }))
+      .to.equal('hi-diddly-ho there,  […]')
+      .and.to.have.length(24)
+  })
+
+  it('Should move the cut back to the last separator', function () {
+    expect(peertubeTruncate('hi-diddly-ho there, neighborino', { length: 24, separator: /,? +/ }))
+      .to.equal('hi-diddly-ho there...')
+  })
+
+  it('Should return the omission alone when nothing else fits', function () {
+    expect(peertubeTruncate('hello world', { length: 3 })).to.equal('...')
+    expect(peertubeTruncate('hello world', { length: 2 })).to.equal('...')
+  })
+
+  // `String.prototype.length` counts UTF-16 code units, and callers pass database column limits
+  it('Should never exceed the requested length, emoji included', function () {
+    const emojis = 'mixed 😀 emoji 🎉 inside 🚀 a 🌍 long 🎬 string 🎨 that 🎯 gets 🔥 cut'
+
+    for (const length of [ 5, 10, 20, 44, 50 ]) {
+      expect(peertubeTruncate(emojis, { length }), `length ${length}`).to.have.length.at.most(length)
+      expect(peertubeTruncate(emojis, { length, separator: /,? +/, omission: ' […]' }), `length ${length} with separator`)
+        .to.have.length.at.most(length)
+    }
+  })
+
+  it('Should not cut inside a surrogate pair', function () {
+    // '😀' is 2 code units, so a length of 5 minus the 3 of the omission cuts in the middle of the second one
+    expect(peertubeTruncate('😀😀😀 rest of the string', { length: 5 })).to.equal('😀...')
+
+    for (let length = 4; length < 30; length++) {
+      const result = peertubeTruncate('😀😀😀 rest of the string', { length })
+
+      for (let i = 0; i < result.length; i++) {
+        const code = result.charCodeAt(i)
+        const isHigh = code >= 0xD800 && code <= 0xDBFF
+        const isLow = code >= 0xDC00 && code <= 0xDFFF
+
+        if (isHigh) expect(result.charCodeAt(i + 1), `lone high surrogate at ${i} of ${result}`).to.be.within(0xDC00, 0xDFFF)
+        if (isLow) expect(result.charCodeAt(i - 1), `lone low surrogate at ${i} of ${result}`).to.be.within(0xD800, 0xDBFF)
+      }
+    }
+  })
+
+  it('Should not move the lastIndex of the separator given by the caller', function () {
+    const separator = /,? +/g
+    separator.lastIndex = 0
+
+    peertubeTruncate('hi-diddly-ho there, neighborino', { length: 24, separator })
+
+    expect(separator.lastIndex).to.equal(0)
+  })
+})
+
 describe('Parse semantic version string', function () {
   it('Should parse Node.js version string', function () {
     const actual = parseSemVersion('v18.16.0')
@@ -277,5 +344,54 @@ describe('Extract chapters', function () {
       { timecode: 90, title: 'cha' },
       { timecode: 95, title: 'cha' }
     ])
+  })
+})
+
+describe('Redact signed URLs', function () {
+  it('Should redact the secrets of a pre-signed URL', function () {
+    const url = 'https://s3.example.com/bucket/staging/key.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256' +
+      '&X-Amz-Credential=AKIA%2F20260924%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260924T000000Z' +
+      '&X-Amz-Expires=3600&X-Amz-Security-Token=token&X-Amz-Signature=abcdef0123&X-Amz-SignedHeaders=host'
+
+    const redacted = redactSignedUrls(`ffprobe -show_chapters -i '${url}'`)
+
+    expect(redacted).to.not.contain('AKIA')
+    expect(redacted).to.not.contain('abcdef0123')
+    expect(redacted).to.not.contain('=token')
+
+    expect(redacted).to.contain('X-Amz-Credential=REDACTED&')
+    expect(redacted).to.contain('X-Amz-Signature=REDACTED&')
+    expect(redacted).to.contain('X-Amz-Security-Token=REDACTED&')
+    expect(redacted).to.contain('X-Amz-Date=20260924T000000Z')
+    expect(redacted).to.contain('/bucket/staging/key.mp4?')
+
+    expect(redactSignedUrls(`'https://a.b/c?X-Amz-Signature=abc' -f mp4`)).to.equal(`'https://a.b/c?X-Amz-Signature=REDACTED' -f mp4`)
+  })
+
+  it('Should not change a text without signed URLs', function () {
+    expect(redactSignedUrls('/var/www/peertube/storage/tmp/video.mp4')).to.equal('/var/www/peertube/storage/tmp/video.mp4')
+    expect(redactSignedUrls(undefined)).to.be.undefined
+  })
+})
+
+describe('Resumable upload chunk size', function () {
+  const MiB = 1024 * 1024
+
+  it('Should not require a chunk size without a min chunk size', function () {
+    expect(getResumableUploadChunkSize({ minChunkSize: 0, fileSize: 100 * 1024 * MiB })).to.equal(0)
+  })
+
+  it('Should use the min chunk size for a small file', function () {
+    expect(getResumableUploadChunkSize({ minChunkSize: 16 * MiB, fileSize: 10 * MiB })).to.equal(16 * MiB)
+    expect(getResumableUploadChunkSize({ minChunkSize: 16 * MiB, fileSize: 100 * 1024 * MiB })).to.equal(16 * MiB)
+  })
+
+  it('Should use bigger chunks for a big file, to not exceed 10,000 parts', function () {
+    for (const fileSize of [ 200 * 1024 * MiB, 1024 * 1024 * MiB + 1 ]) {
+      const chunkSize = getResumableUploadChunkSize({ minChunkSize: 16 * MiB, fileSize })
+
+      expect(chunkSize).to.be.above(16 * MiB)
+      expect(Math.ceil(fileSize / chunkSize)).to.be.at.most(10_000)
+    }
   })
 })

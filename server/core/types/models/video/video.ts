@@ -92,6 +92,10 @@ export type MVideoWithBlacklist =
   & MVideo
   & Use<'VideoBlacklist', MVideoBlacklistLight>
 
+export type MVideoThumbnailsBlacklist =
+  & MVideoThumbnails
+  & Use<'VideoBlacklist', MVideoBlacklistLight>
+
 export type MVideoTag =
   & MVideo
   & Use<'Tags', MTag[]>

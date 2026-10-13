@@ -15,16 +15,18 @@ import {
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares/index.js'
-import { listJobsValidator } from '../../middlewares/validators/jobs.js'
+import { jobQueueStateValidator, listJobsValidator } from '../../middlewares/validators/jobs.js'
 
 const jobsRouter = express.Router()
 
 jobsRouter.use(apiRateLimiter)
 
+// Pause/resume/cancel requests are broadcasted to every process of the platform
 jobsRouter.post(
   '/pause',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
+  jobQueueStateValidator,
   asyncMiddleware(pauseJobQueue)
 )
 
@@ -32,6 +34,7 @@ jobsRouter.post(
   '/resume',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
+  jobQueueStateValidator,
   asyncMiddleware(resumeJobQueue)
 )
 
@@ -54,7 +57,7 @@ jobsRouter.post(
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
   cancelJobValidator,
-  cancelJob
+  asyncMiddleware(cancelJob)
 )
 
 // ---------------------------------------------------------------------------
@@ -66,21 +69,21 @@ export {
 // ---------------------------------------------------------------------------
 
 async function pauseJobQueue (req: express.Request, res: express.Response) {
-  await JobQueue.Instance.pause()
+  await JobQueue.Instance.pause({ processRoles: req.body.processRoles })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function resumeJobQueue (req: express.Request, res: express.Response) {
-  await JobQueue.Instance.resume()
+  await JobQueue.Instance.resume({ processRoles: req.body.processRoles })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-function cancelJob (req: express.Request, res: express.Response) {
+async function cancelJob (req: express.Request, res: express.Response) {
   const job = res.locals.job
 
-  JobQueue.Instance.cancelJob(job.queueName as JobType, job)
+  await JobQueue.Instance.cancelJob(job.queueName as JobType, job)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

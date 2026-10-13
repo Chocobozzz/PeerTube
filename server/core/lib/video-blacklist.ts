@@ -7,9 +7,8 @@ import {
   VideoBlacklistType,
   VideoBlacklistType_Type
 } from '@peertube/peertube-models'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
+import { afterCommitIfTransaction, runTransaction } from '@server/helpers/database-utils.js'
 import { englishLanguage, t } from '@server/helpers/i18n.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import {
@@ -298,7 +297,7 @@ function _removeBlacklist (videoBlacklist: MVideoBlacklist, video: MVideoWithRig
 
   if (transaction) return run(transaction)
 
-  return sequelizeTypescript.transaction(run)
+  return runTransaction(run)
 }
 
 async function _notifyVideoReleasedFromAutoBlacklist (video: MVideoWithRights, transaction?: Transaction) {

@@ -23,12 +23,11 @@ import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoPlaylistFull } from '@server/types/models/index.js'
 import express from 'express'
-import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils.js'
+import { resetSequelizeInstance, retryTransactionWrapper, runTransaction } from '../../helpers/database-utils.js'
 import { createReqFiles } from '../../helpers/express-utils.js'
 import { createLogger } from '../../helpers/logger.js'
 import { getFormattedObjects } from '../../helpers/utils.js'
 import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants.js'
-import { sequelizeTypescript } from '../../initializers/database.js'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send/index.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url.js'
 import { createLocalPlaylistThumbnailsFromImage } from '../../lib/thumbnail.js'
@@ -79,6 +78,15 @@ videoPlaylistRouter.get(
 
 videoPlaylistRouter.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
 
+videoPlaylistRouter.get(
+  '/:playlistId/videos',
+  asyncMiddleware(videoPlaylistsGetValidator('summary')),
+  paginationValidator,
+  setDefaultPagination,
+  optionalAuthenticate,
+  asyncMiddleware(listVideosOfPlaylist)
+)
+
 videoPlaylistRouter.post(
   '/',
   authenticate,
@@ -105,15 +113,6 @@ videoPlaylistRouter.delete(
 // ---------------------------------------------------------------------------
 // Playlist elements
 // ---------------------------------------------------------------------------
-
-videoPlaylistRouter.get(
-  '/:playlistId/videos',
-  asyncMiddleware(videoPlaylistsGetValidator('summary')),
-  paginationValidator,
-  setDefaultPagination,
-  optionalAuthenticate,
-  asyncMiddleware(listVideosOfPlaylist)
-)
 
 videoPlaylistRouter.post(
   '/:playlistId/videos',
@@ -148,6 +147,8 @@ videoPlaylistRouter.delete(
 export {
   videoPlaylistRouter
 }
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 
@@ -207,7 +208,7 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
       : undefined
 
     const videoPlaylistCreated = await retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         if (videoPlaylist.videoChannelId) {
           videoPlaylist.videoChannelPosition = await VideoPlaylistModel.getNextPositionOf({
             videoChannelId: videoPlaylist.videoChannelId,
@@ -273,7 +274,7 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
           })
           : undefined
 
-        return sequelizeTypescript.transaction(async t => {
+        return runTransaction(async t => {
           // If this is a retried attempt, sequelize would otherwise think this instance has not changed
           await playlist.reload({ transaction: t })
 
@@ -386,7 +387,7 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
   const positionToDelete = videoPlaylistInstance.videoChannelPosition
 
   await logger.withContext([ videoPlaylistInstance.uuid ], async () => {
-    await sequelizeTypescript.transaction(async t => {
+    await runTransaction(async t => {
       await videoPlaylistInstance.destroy({ transaction: t })
 
       if (videoPlaylistInstance.privacy !== VideoPlaylistPrivacy.PRIVATE) {
@@ -428,9 +429,9 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
 async function addVideoInPlaylist (req: express.Request, res: express.Response) {
   const body: VideoPlaylistElementCreate = req.body
   const videoPlaylist = res.locals.videoPlaylistFull
-  const video = res.locals.videoThumbnails
+  const video = res.locals.videoThumbnailsBlacklist
 
-  const playlistElement = await sequelizeTypescript.transaction(async t => {
+  const playlistElement = await runTransaction(async t => {
     const position = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id, t)
 
     const playlistElement = await VideoPlaylistElementModel.create({
@@ -482,7 +483,7 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
   const videoPlaylist = res.locals.videoPlaylistFull
   const videoPlaylistElement = res.locals.videoPlaylistElement
 
-  const playlistElement: VideoPlaylistElementModel = await sequelizeTypescript.transaction(async t => {
+  const playlistElement: VideoPlaylistElementModel = await runTransaction(async t => {
     if (body.startTimestamp !== undefined) videoPlaylistElement.startTimestamp = body.startTimestamp
     if (body.stopTimestamp !== undefined) videoPlaylistElement.stopTimestamp = body.stopTimestamp
 
@@ -516,7 +517,7 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
   const videoPlaylist = res.locals.videoPlaylistFull
   const positionToDelete = videoPlaylistElement.position
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await videoPlaylistElement.destroy({ transaction: t })
 
     // Decrease position of the next elements
@@ -566,7 +567,7 @@ async function reorderVideosOfPlaylist (req: express.Request, res: express.Respo
     return res.status(HttpStatusCode.NO_CONTENT_204).end()
   }
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await reorderPlaylistOrElementsPosition({
       model: VideoPlaylistElementModel,
       instance: videoPlaylist,

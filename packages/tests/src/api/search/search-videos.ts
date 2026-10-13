@@ -667,6 +667,6 @@ describe('Test videos search', function () {
   })
 
   after(async function () {
-    await cleanupTests([ server ])
+    await cleanupTests([ server, remoteServer ])
   })
 })

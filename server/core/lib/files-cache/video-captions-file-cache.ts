@@ -8,6 +8,8 @@ import { AbstractFileCache } from './shared/abstract-file-cache.js'
 const logger = createLogger('lazy-load', 'caption')
 
 export class VideoCaptionsFileCache extends AbstractFileCache<MVideoCaption> {
+  protected readonly cacheType = 'VIDEO_CAPTIONS'
+
   protected loadModel (filename: string) {
     return VideoCaptionModel.loadByFilename(filename)
   }

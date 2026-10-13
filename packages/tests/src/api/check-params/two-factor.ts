@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -23,6 +23,11 @@ describe('Test two factor API validators', function () {
   let userRequestToken: string
   let userOTPToken: string
 
+  let moderatorToken: string
+  let moderator2Id: number
+
+  let user2Id: number
+
   // ---------------------------------------------------------------
 
   before(async function () {
@@ -44,6 +49,21 @@ describe('Test two factor API validators', function () {
       const { id } = await server.users.getMyInfo()
       rootId = id
       rootPassword = server.store.user.password
+    }
+
+    {
+      const result = await server.users.generate('moderator1', UserRole.MODERATOR)
+      moderatorToken = result.token
+    }
+
+    {
+      const result = await server.users.generate('moderator2', UserRole.MODERATOR)
+      moderator2Id = result.userId
+    }
+
+    {
+      const result = await server.users.generate('user2')
+      user2Id = result.userId
     }
   })
 
@@ -282,6 +302,34 @@ describe('Test two factor API validators', function () {
         currentPassword: userPassword,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
+    })
+  })
+
+  describe('When a moderator manages two factor of other users', function () {
+    it('Should fail to request two factor of an administrator with a moderator', async function () {
+      await server.twoFactor.request({ userId: rootId, token: moderatorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail to request two factor of another moderator with a moderator', async function () {
+      await server.twoFactor.request({ userId: moderator2Id, token: moderatorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail to disable two factor of an administrator with a moderator', async function () {
+      await server.twoFactor.disable({ userId: rootId, token: moderatorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should succeed to request, confirm and disable two factor of a regular user with a moderator', async function () {
+      const { otpRequest } = await server.twoFactor.request({ userId: user2Id, token: moderatorToken })
+      const otpToken = TwoFactorCommand.buildOTP({ secret: otpRequest.secret }).generate()
+
+      await server.twoFactor.confirmRequest({
+        userId: user2Id,
+        token: moderatorToken,
+        requestToken: otpRequest.requestToken,
+        otpToken
+      })
+
+      await server.twoFactor.disable({ userId: user2Id, token: moderatorToken })
     })
   })
 

@@ -14,7 +14,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { AuthService, DisableForReuseHook, Notifier } from '@app/core'
 import { secondsToTime } from '@peertube/peertube-core-utils'
-import { CachedVideoExistInPlaylist, Video, VideoChannelSummary, VideoPlaylistElementCreate } from '@peertube/peertube-models'
+import { CachedVideoExistInPlaylist, Video, VideoChannelSummary } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subject, Subscription } from 'rxjs'
 import { debounceTime, filter } from 'rxjs/operators'
@@ -23,7 +23,7 @@ import { TimestampInputComponent } from '../shared-forms/timestamp-input.compone
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { PlaylistCreateBlockComponent } from './shared/playlist-create-block.component'
-import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
+import { CachedPlaylist, PlaylistElementToAdd, VideoPlaylistService } from './video-playlist.service'
 
 const debugLogger = debug('peertube:playlists:VideoAddToPlaylistComponent')
 
@@ -374,7 +374,7 @@ export class VideoAddToPlaylistComponent implements OnInit, OnChanges, OnDestroy
   }
 
   private addVideoInPlaylist (playlist: PlaylistSummary, element: PlaylistElement) {
-    const body: VideoPlaylistElementCreate = { videoId: this.video().id }
+    const body: PlaylistElementToAdd = { video: this.video() }
 
     if (element.startTimestamp) body.startTimestamp = element.startTimestamp
     if (element.stopTimestamp && element.stopTimestamp !== this.video().duration) body.stopTimestamp = element.stopTimestamp

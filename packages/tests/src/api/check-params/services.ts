@@ -23,6 +23,8 @@ describe('Test services API validators', function () {
 
   let privateVideo: VideoCreateResult
   let unlistedVideo: VideoCreateResult
+  let blacklistedPublicVideo: VideoCreateResult
+  let blacklistedPrivateVideo: VideoCreateResult
 
   let privatePlaylist: VideoPlaylistCreateResult
   let unlistedPlaylist: VideoPlaylistCreateResult
@@ -40,6 +42,13 @@ describe('Test services API validators', function () {
 
     privateVideo = await server.videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE })
     unlistedVideo = await server.videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED })
+
+    blacklistedPublicVideo = await server.videos.quickUpload({ name: 'blacklisted public', privacy: VideoPrivacy.PUBLIC })
+    blacklistedPrivateVideo = await server.videos.quickUpload({ name: 'blacklisted private', privacy: VideoPrivacy.PRIVATE })
+
+    for (const video of [ blacklistedPublicVideo, blacklistedPrivateVideo ]) {
+      await server.blacklist.add({ videoId: video.uuid })
+    }
 
     {
       const created = await server.playlists.create({
@@ -138,6 +147,16 @@ describe('Test services API validators', function () {
         const embedUrl = `${server.url}/videos/watch/${uuid}`
 
         await checkParamEmbed(server, embedUrl, HttpStatusCode.OK_200)
+      }
+    })
+
+    it('Should fail with a blacklisted video', async function () {
+      for (const video of [ blacklistedPublicVideo, blacklistedPrivateVideo ]) {
+        for (const id of [ video.id, video.uuid ]) {
+          const embedUrl = `${server.url}/videos/watch/${id}`
+
+          await checkParamEmbed(server, embedUrl, HttpStatusCode.FORBIDDEN_403)
+        }
       }
     })
 

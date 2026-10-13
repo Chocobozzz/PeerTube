@@ -1,10 +1,16 @@
 import { ffprobePromise, getAudioStream, getVideoStreamDimensionsInfo, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream, VideoLiveEndingPayload, VideoState } from '@peertube/peertube-models'
-import { peertubeTruncate } from '@server/helpers/core-utils.js'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
-import { cleanupAndDestroyPermanentLive, cleanupTMPLiveFiles, cleanupUnsavedNormalLive } from '@server/lib/live/index.js'
+import {
+  cleanupAndDestroyPermanentLive,
+  cleanupTMPLiveFiles,
+  cleanupUnsavedNormalLive,
+  removeLiveDirectoriesOfDeletedVideo
+} from '@server/lib/live/index.js'
+import { withLocalCommonFile } from '@server/lib/object-storage/common-files.js'
 import {
   generateHLSMasterPlaylistFilename,
   generateHlsSha256SegmentsFilename,
@@ -18,6 +24,7 @@ import {
 } from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
 import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
+import { getNewHLSPlaylistStorage } from '@server/lib/video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { isVideoInPublicDirectory } from '@server/lib/video-privacy.js'
@@ -51,19 +58,29 @@ const logger = createLogger('live', 'job')
 
 export async function processVideoLiveEnding (job: Job) {
   const payload = job.data as VideoLiveEndingPayload
+  const videoId = payload.videoUUID ?? payload.videoId
 
-  await logger.withContext([ payload.videoId ], async () => {
-    logger.info('Processing video live ending for %s.', payload.videoId, { payload })
+  await logger.withContext([ videoId ], async () => {
+    logger.info('Processing video live ending for %s.', videoId, { payload })
 
     function logError () {
-      logger.warn('Video live %d does not exist anymore. Cannot process live ending.', payload.videoId)
+      logger.warn('Video live %s does not exist anymore. Cannot process live ending.', videoId)
     }
 
-    const video = await VideoModel.loadWithThumbnails(payload.videoId)
-    const live = await VideoLiveModel.loadByVideoId(payload.videoId)
+    const video = await VideoModel.loadWithThumbnails(videoId)
+    if (!video) {
+      logError()
+
+      // Deleted during the live, possibly by a secondary process before the end of the live was processed
+      if (payload.videoUUID) await removeLiveDirectoriesOfDeletedVideo(payload.videoUUID)
+
+      return
+    }
+
+    const live = await VideoLiveModel.loadByVideoId(video.id)
     const liveSession = await VideoLiveSessionModel.load(payload.liveSessionId)
 
-    if (!video || !live || !liveSession) {
+    if (!live || !liveSession) {
       logError()
       return
     }
@@ -243,17 +260,18 @@ async function copyOrRegenerateThumbnails (options: {
   const bestThumbnail = liveVideo.getBestThumbnail('16:9')
 
   if (bestThumbnail.automaticallyGenerated === false) {
-    thumbnails = await createLocalVideoThumbnailsFromImage({
-      inputPath: bestThumbnail.getFSPath(),
-      video: replayVideo,
-      automaticallyGenerated: false,
-      keepOriginal: true
-    })
+    thumbnails = await withLocalCommonFile('thumbnails', bestThumbnail, inputPath =>
+      createLocalVideoThumbnailsFromImage({
+        inputPath,
+        video: replayVideo,
+        automaticallyGenerated: false,
+        keepOriginal: true
+      }))
   } else {
-    thumbnails = await createLocalVideoThumbnailsFromVideo({
-      video: replayVideo,
-      videoFile: replayVideo.getMaxQualityFile(VideoFileStream.VIDEO) || replayVideo.getMaxQualityFile(VideoFileStream.AUDIO),
-      ffprobe: undefined
+    const videoFile = replayVideo.getMaxQualityFile(VideoFileStream.VIDEO) || replayVideo.getMaxQualityFile(VideoFileStream.AUDIO)
+
+    thumbnails = await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(replayVideo), fileInput => {
+      return createLocalVideoThumbnailsFromVideo({ video: replayVideo, videoFile, fileInput, ffprobe: undefined })
     })
   }
 
@@ -306,6 +324,7 @@ async function replaceLiveByReplay (options: {
   hlsPlaylist.VideoFiles = []
   hlsPlaylist.playlistFilename = generateHLSMasterPlaylistFilename()
   hlsPlaylist.segmentsSha256Filename = generateHlsSha256SegmentsFilename()
+  hlsPlaylist.storage = getNewHLSPlaylistStorage()
   await hlsPlaylist.save()
 
   await assignReplayFilesToVideo({ video: videoWithFiles, replayDirectory })
@@ -325,7 +344,14 @@ async function replaceLiveByReplay (options: {
 
   // Regenerate the thumbnail & preview?
   try {
-    await regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, undefined)
+    // Don't fetch the replay file from the video storage if we keep the existing thumbnails
+    if (videoWithFiles.Thumbnails.every(t => t.automaticallyGenerated !== false)) {
+      const videoFile = videoWithFiles.getMaxQualityFile(VideoFileStream.VIDEO) || videoWithFiles.getMaxQualityFile(VideoFileStream.AUDIO)
+
+      await VideoPathManager.Instance.makeAvailableVideoFile(videoFile.withVideoOrPlaylist(videoWithFiles), videoFileInput => {
+        return regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, undefined, videoFileInput)
+      })
+    }
   } catch (err) {
     logger.error(`Cannot regenerate thumbnails of ended live ${videoWithFiles.uuid}`)
   }

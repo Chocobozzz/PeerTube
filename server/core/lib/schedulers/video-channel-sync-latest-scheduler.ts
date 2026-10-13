@@ -30,43 +30,45 @@ export class VideoChannelSyncLatestScheduler extends AbstractScheduler {
     for (const sync of channelSyncs) {
       const channel = await VideoChannelModel.loadAndPopulateAccount(sync.videoChannelId)
 
-      // A previous full run got interrupted: retry where we stopped to not miss videos
-      if (sync.fullSyncCutoffAt) {
-        logger.info(
-          `Channel sync ${sync.id} has an unfinished full sync (cutoff ${sync.fullSyncCutoffAt.toISOString()}), continuing it`
-        )
+      await logger.withContext([ sync.externalChannelUrl ], async () => {
+        // A previous full run got interrupted: retry where we stopped to not miss videos
+        if (sync.fullSyncCutoffAt) {
+          logger.info(
+            `Channel sync ${sync.id} has an unfinished full sync (cutoff ${sync.fullSyncCutoffAt.toISOString()}), continuing it`
+          )
+
+          await synchronizeChannel({
+            channel,
+            externalChannelUrl: sync.externalChannelUrl,
+            videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.FULL_SYNC_VIDEOS_LIMIT,
+            channelSync: sync,
+            skipPublishedBeforeOrEq: sync.fullSyncCutoffAt
+          })
+
+          return
+        }
+
+        // We can't rely on publication date for playlist elements
+        // For example, an old video may have been added to a playlist since the last sync
+        let skipPublishedBeforeOrEq: Date
+
+        if (!this.isPlaylistUrl(sync.externalChannelUrl)) {
+          const lastImport = await VideoImportModel.loadLastImportBySyncId({ channelSyncId: sync.id })
+
+          if (lastImport && lastImport.Video?.originallyPublishedAt) {
+            skipPublishedBeforeOrEq = lastImport.Video.originallyPublishedAt
+          } else {
+            skipPublishedBeforeOrEq = sync.lastSyncAt || sync.createdAt
+          }
+        }
 
         await synchronizeChannel({
           channel,
           externalChannelUrl: sync.externalChannelUrl,
-          videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.FULL_SYNC_VIDEOS_LIMIT,
+          videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.VIDEOS_LIMIT_PER_SYNCHRONIZATION,
           channelSync: sync,
-          skipPublishedBeforeOrEq: sync.fullSyncCutoffAt
+          skipPublishedBeforeOrEq
         })
-
-        continue
-      }
-
-      // We can't rely on publication date for playlist elements
-      // For example, an old video may have been added to a playlist since the last sync
-      let skipPublishedBeforeOrEq: Date
-
-      if (!this.isPlaylistUrl(sync.externalChannelUrl)) {
-        const lastImport = await VideoImportModel.loadLastImportBySyncId({ channelSyncId: sync.id })
-
-        if (lastImport && lastImport.Video?.originallyPublishedAt) {
-          skipPublishedBeforeOrEq = lastImport.Video.originallyPublishedAt
-        } else {
-          skipPublishedBeforeOrEq = sync.lastSyncAt || sync.createdAt
-        }
-      }
-
-      await synchronizeChannel({
-        channel,
-        externalChannelUrl: sync.externalChannelUrl,
-        videosCountLimit: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.VIDEOS_LIMIT_PER_SYNCHRONIZATION,
-        channelSync: sync,
-        skipPublishedBeforeOrEq
       })
     }
   }

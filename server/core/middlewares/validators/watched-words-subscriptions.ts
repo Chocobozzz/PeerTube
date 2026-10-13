@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isIdValid } from '@server/helpers/custom-validators/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { WatchedWordsSubscriptionModel } from '@server/models/watched-words/watched-words-subscription.js'
 import { MAccountId } from '@server/types/models/index.js'
 import express from 'express'

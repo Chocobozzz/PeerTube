@@ -2,7 +2,7 @@ import { VideoPlaylistsExportJSON } from '@peertube/peertube-models'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MThumbnail, MVideoPlaylist } from '@server/types/models/index.js'
-import { createReadStream } from 'fs'
+import { buildLocalCommonFileReadStream } from '@server/lib/object-storage/common-files.js'
 import { extname, join } from 'path'
 import { AbstractUserExporter, ExportResult } from './abstract-user-exporter.js'
 
@@ -24,7 +24,7 @@ export class VideoPlaylistsExporter extends AbstractUserExporter<VideoPlaylistsE
       if (thumbnail) {
         staticFiles.push({
           archivePath: this.getArchiveThumbnailPath(playlist, thumbnail),
-          readStreamFactory: () => Promise.resolve(createReadStream(thumbnail.getFSPath()))
+          readStreamFactory: () => buildLocalCommonFileReadStream('thumbnails', thumbnail)
         })
 
         archiveFiles.thumbnail = join(this.relativeStaticDirPath, this.getArchiveThumbnailPath(playlist, thumbnail))

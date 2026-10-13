@@ -99,15 +99,31 @@ class OpenTelemetryMetrics {
       const duration = Date.now() - res.locals.requestStart
 
       requestDuration.record(duration, {
-        path: this.buildRequestPath(req.originalUrl),
+        path: this.buildRequestPath(req),
         method: req.method,
         statusCode: res.statusCode + ''
       })
     }
   }
 
-  private buildRequestPath (path: string) {
-    return path.split('?')[0]
+  private buildRequestPath (req: Request) {
+    const path = req.originalUrl.split('?')[0]
+
+    // API routes
+    if (path.startsWith('/api/') && req.route?.path) {
+      return req.baseUrl.replace(/\/(\d+|[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(?=\/|$)/g, '/:id') +
+        String(req.route.path)
+    }
+
+    // Other paths (client pages, static files, ActivityPub, feeds...):
+    //   * /w/9c9de5e8-0a1b-4c2d-8e3f-123456789abc -> /w/*
+    //   * /static/streaming-playlists/hls/<uuid>/<uuid>-720.mp4 -> /static/*
+    //   * /videos/watch/<uuid>/comments (ActivityPub) -> /videos/*
+    const firstSegment = path.split('/')[1]
+
+    return firstSegment
+      ? `/${firstSegment}/*`
+      : '/'
   }
 
   static get Instance () {

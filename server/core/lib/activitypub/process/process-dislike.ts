@@ -1,8 +1,7 @@
 import { ActivityDislike } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
@@ -38,7 +37,7 @@ async function processDislike (activity: ActivityDislike, byActor: MActorSignatu
     return
   }
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     const video = await VideoModel.load(onlyVideo.id, t)
 
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)

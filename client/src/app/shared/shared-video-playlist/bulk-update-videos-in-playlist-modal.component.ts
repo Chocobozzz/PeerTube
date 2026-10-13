@@ -4,7 +4,7 @@ import { AuthService, Notifier } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal'
 import { uniqify } from '@peertube/peertube-core-utils'
-import { Video, VideoPlaylistElementCreate, VideosExistInPlaylists } from '@peertube/peertube-models'
+import { Video, VideosExistInPlaylists } from '@peertube/peertube-models'
 import debug from 'debug'
 import { concat, Observable, of, Subject, Subscription } from 'rxjs'
 import { catchError, debounceTime, map, switchMap } from 'rxjs/operators'
@@ -13,7 +13,7 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared-main/buttons/button.component'
 import { CollaboratorStateComponent } from '../shared-main/channel/collaborator-state.component'
 import { PlaylistCreateBlockComponent } from './shared/playlist-create-block.component'
-import { CachedPlaylist, VideoPlaylistService } from './video-playlist.service'
+import { CachedPlaylist, PlaylistElementToAdd, VideoPlaylistService } from './video-playlist.service'
 
 const debugLogger = debug('peertube:playlists:BulkUpdateVideosInPlaylistModalComponent')
 
@@ -216,9 +216,9 @@ export class BulkUpdateVideosInPlaylistModalComponent implements OnInit, OnDestr
 
   private addVideosInPlaylist (playlist: CachedPlaylist) {
     const existing = new Set(this.elementsPerPlaylist[playlist.id].map(e => e.videoId))
-    const body: VideoPlaylistElementCreate[] = this.videos
+    const body: PlaylistElementToAdd[] = this.videos
       .filter(v => !existing.has(v.id))
-      .map(v => ({ videoId: v.id }))
+      .map(v => ({ video: v }))
 
     return this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
       .pipe(

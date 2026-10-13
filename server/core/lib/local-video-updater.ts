@@ -9,7 +9,7 @@ import {
 } from '@peertube/peertube-models'
 import { auditLoggerFactory, getAuditIdFromUser, VideoAuditView } from '@server/helpers/audit-logger.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoPasswordModel } from '@server/models/video/video-password.js'
@@ -67,7 +67,7 @@ export class LocalVideoUpdater {
     const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(this.oldVideo.uuid)
 
     try {
-      const { video, newVideoForSubscription } = await sequelizeTypescript.transaction(async t => {
+      const { video, newVideoForSubscription } = await runTransaction(async t => {
         // Refresh video to prevent concurrent updates
         const video = await VideoModel.loadFull(this.oldVideo.id, t)
 

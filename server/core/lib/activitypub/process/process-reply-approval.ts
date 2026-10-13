@@ -1,6 +1,6 @@
 import { ActivityApproveReply, ActivityRejectReply, ActivityType } from '@peertube/peertube-models'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MCommentOwnerVideoReply } from '../../../types/models/index.js'
 import { sendCreateVideoCommentIfNeeded } from '../send/send-create.js'
@@ -39,7 +39,7 @@ export function processReplyApprovalFactory (type: Extract<ActivityType, 'Approv
 async function processApproveReply (replyApproval: string, comment: MCommentOwnerVideoReply) {
   if (comment.heldForReview === false || comment.replyApproval === replyApproval) return
 
-  return sequelizeTypescript.transaction(async t => {
+  return runTransaction(async t => {
     comment.heldForReview = false
     comment.replyApproval = replyApproval
     await comment.save({ transaction: t })

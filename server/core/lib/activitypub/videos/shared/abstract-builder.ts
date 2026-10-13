@@ -1,10 +1,10 @@
 import { guessAspectRatio } from '@peertube/peertube-core-utils'
 import { ActivityTagObject, VideoChaptersObject, VideoObject, VideoStreamingPlaylistType_Type } from '@peertube/peertube-models'
 import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
-import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper } from '@server/helpers/database-utils.js'
+import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
+import { removeRedundanciesOfStreamingPlaylist } from '@server/lib/redundancy.js'
 import { replaceChapters } from '@server/lib/video-chapters.js'
 import { setVideoTags } from '@server/lib/video.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
@@ -158,7 +158,7 @@ export abstract class APVideoAbstractBuilder {
     logger.debug('Fetched chapters AP object', { body })
 
     return retryTransactionWrapper(() => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         const chapters = body.hasPart.map(p => ({ title: p.name, timecode: p.startOffset }))
 
         await replaceChapters({ chapters, transaction: t, video })
@@ -254,7 +254,13 @@ export abstract class APVideoAbstractBuilder {
     const { toCreate, oldFiles, t, mode } = options
 
     // Remove video files that do not exist anymore
-    await deleteAllModels(filterNonExistingModels(oldFiles, toCreate.map(({ file }) => file)), t)
+    const toDelete = filterNonExistingModels(oldFiles, toCreate.map(({ file }) => file))
+    await deleteAllModels(toDelete, t)
+
+    // Our cached copy of this playlist still contains the removed resolutions, so it's outdated
+    if (mode === 'streaming-playlist' && toDelete.length !== 0) {
+      await removeRedundanciesOfStreamingPlaylist(toDelete[0].videoStreamingPlaylistId, t)
+    }
 
     // Update or add other one
     const upsertTasks = toCreate.map(async ({ file, infoHash }) => {

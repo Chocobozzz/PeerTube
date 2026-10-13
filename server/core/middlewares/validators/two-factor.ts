@@ -2,7 +2,7 @@ import express from 'express'
 import { body, param } from 'express-validator'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { exists, isIdValid } from '../../helpers/custom-validators/misc.js'
-import { areValidationErrors, checkUserIdExist } from './shared/index.js'
+import { areValidationErrors, checkCanModerate, checkUserIdExist } from './shared/index.js'
 
 const requestOrConfirmTwoFactorValidator = [
   param('id').custom(isIdValid),
@@ -10,7 +10,7 @@ const requestOrConfirmTwoFactorValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await checkCanEnableOrDisableTwoFactor(req.params.id, res)) return
+    if (!await checkCanEnableOrDisableTwoFactor(req.params.id, req, res)) return
 
     if (res.locals.user.otpSecret) {
       return res.fail({
@@ -40,7 +40,7 @@ const disableTwoFactorValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    if (!await checkCanEnableOrDisableTwoFactor(req.params.id, res)) return
+    if (!await checkCanEnableOrDisableTwoFactor(req.params.id, req, res)) return
 
     if (!res.locals.user.otpSecret) {
       return res.fail({
@@ -63,12 +63,16 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function checkCanEnableOrDisableTwoFactor (userId: number | string, res: express.Response) {
+async function checkCanEnableOrDisableTwoFactor (userId: number | string, req: express.Request, res: express.Response) {
   const authUser = res.locals.oauth.token.user
 
   if (!await checkUserIdExist(userId, res)) return
 
-  if (res.locals.user.id !== authUser.id && authUser.hasRight(UserRight.MANAGE_USERS) !== true) {
+  const targetUser = res.locals.user
+
+  if (targetUser.id === authUser.id) return true
+
+  if (authUser.hasRight(UserRight.MANAGE_USERS) !== true) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: `User ${authUser.username} does not have right to change two factor setting of this user.`
@@ -76,6 +80,8 @@ async function checkCanEnableOrDisableTwoFactor (userId: number | string, res: e
 
     return false
   }
+
+  if (!checkCanModerate({ authUser, onUser: targetUser, req, res })) return false
 
   return true
 }

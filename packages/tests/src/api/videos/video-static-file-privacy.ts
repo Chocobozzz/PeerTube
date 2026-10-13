@@ -1,7 +1,15 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getAllFiles, wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, LiveVideo, VideoDetails, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  HttpStatusCodeType,
+  LiveVideo,
+  UserRole,
+  VideoDetails,
+  VideoPrivacy,
+  VideoResolution
+} from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -364,6 +372,27 @@ describe('Test video static file privacy', function () {
       await waitJobs([ server ])
 
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: server.accessToken, videoFileToken })
+    })
+
+    it('Should refuse the file token of a user that lost the right to see the video', async function () {
+      this.timeout(120000)
+
+      const { token: adminToken, userId } = await server.users.generate('admin_to_demote', UserRole.ADMINISTRATOR)
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video', token: userToken, privacy: VideoPrivacy.PRIVATE })
+      await waitJobs([ server ])
+
+      const videoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: adminToken })
+
+      const video = await server.videos.getWithToken({ id: uuid })
+      const url = video.files[0].fileUrl
+
+      await makeRawRequest({ url, query: { videoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+
+      await server.users.update({ userId, role: UserRole.USER })
+
+      // Another URL, so the access decision cached for a few seconds per URL does not answer the request
+      await makeRawRequest({ url, query: { videoFileToken, afterDemotion: 'true' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
     })
   })
 

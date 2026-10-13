@@ -1,7 +1,8 @@
 import { wait } from '@peertube/peertube-core-utils'
 import { sequelizeTypescript } from '@server/initializers/database.js'
-import { Transaction } from 'sequelize'
+import { Transaction, TransactionOptions } from 'sequelize'
 import { Model } from 'sequelize-typescript'
+import { addAfterCommitCallback, runSequelizeTransaction } from './database-transaction.js'
 import { createLogger } from './logger.js'
 
 const logger = createLogger()
@@ -35,7 +36,13 @@ export async function retryTransactionWrapper<T> (
       logger.debug('Maybe retrying the transaction function.', { willRetry, err, tags: [ 'sql', 'retry' ] })
 
       if (!willRetry) {
-        logger.warn(`Cannot execute function with many retries.`, { err, attempts, stack: err?.stack })
+        // The error is rethrown so the caller logs it at the level it deems appropriate.
+        // Only warn if we actually burned our retries, since in that case the caller has no way to know
+        const level = attempts > 1
+          ? 'warn'
+          : 'debug'
+
+        logger.log(level, `Cannot execute function with many retries.`, { err, attempts, stack: err?.stack })
 
         throw err
       }
@@ -52,31 +59,31 @@ function getRetryDelayMs (attempts: number) {
   return Math.floor(Math.random() * maxDelay)
 }
 
-export function saveInTransactionWithRetries<T extends Pick<Model, 'save' | 'changed'>> (
+export function runTransaction<T> (fn: (t: Transaction) => PromiseLike<T>): Promise<T>
+export function runTransaction<T> (options: TransactionOptions, fn: (t: Transaction) => PromiseLike<T>): Promise<T>
+export function runTransaction<T> (
+  optionsOrFn: TransactionOptions | ((t: Transaction) => PromiseLike<T>),
+  fn?: (t: Transaction) => PromiseLike<T>
+): Promise<T> {
+  if (typeof optionsOrFn === 'function') return runSequelizeTransaction(sequelizeTypescript, {}, optionsOrFn)
+
+  return runSequelizeTransaction(sequelizeTypescript, optionsOrFn, fn)
+}
+
+export function saveInTransactionWithRetries<T extends Pick<Model, 'save'>> (
   model: T,
   isolationLevel: Transaction.ISOLATION_LEVELS = Transaction.ISOLATION_LEVELS.SERIALIZABLE
 ) {
-  const changedKeys = model.changed() || []
-
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction({ isolationLevel }, async transaction => {
-      try {
-        await model.save({ transaction })
-      } catch (err) {
-        // Reinit changed keys
-        for (const key of changedKeys) {
-          model.changed(key as keyof Model, true)
-        }
-
-        throw err
-      }
+    return runTransaction({ isolationLevel }, async transaction => {
+      await model.save({ transaction })
     })
   })
 }
 
 export function deleteInTransactionWithRetries<T extends Pick<Model, 'destroy'>> (model: T) {
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async transaction => {
+    return runTransaction(async transaction => {
       await model.destroy({ transaction })
     })
   })
@@ -104,11 +111,11 @@ export function deleteAllModels<T extends Pick<Model, 'destroy'>> (models: T[], 
 export function runInReadCommittedTransaction<T> (fn: (t: Transaction) => Promise<T>) {
   const options = { isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED }
 
-  return sequelizeTypescript.transaction(options, t => fn(t))
+  return runTransaction(options, t => fn(t))
 }
 
 export function afterCommitIfTransaction (t: Transaction, fn: Function) {
-  if (t) return t.afterCommit(() => fn())
+  if (t) return addAfterCommitCallback(t, () => fn())
 
   return fn()
 }

@@ -3,7 +3,7 @@ import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { areVideoEmbedPrivacyDomainsValid, isVideoEmbedPrivacyPolicyValid } from '@server/helpers/custom-validators/video-embed-privacy.js'
 import express from 'express'
 import { body, query } from 'express-validator'
-import { areValidationErrors, checkCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
+import { areValidationErrors, checkCanManageVideo, checkCanSeeVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 
 export const isVideoEmbedOnDomainAllowedValidator = [
   isValidVideoIdParam('videoId'),
@@ -14,6 +14,13 @@ export const isVideoEmbedOnDomainAllowedValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
+
+    // Don't leak private/internal/blacklisted videos, or unlisted videos fetched using their numeric id
+    // Password protected videos only expose their embed policy, so password is not required
+    const video = res.locals.videoWithBlacklist
+    if (video.requiresUserAuth({ urlParamId: req.params.videoId, checkBlacklist: true })) {
+      if (!await checkCanSeeVideo({ req, res, video, paramId: req.params.videoId })) return
+    }
 
     return next()
   }

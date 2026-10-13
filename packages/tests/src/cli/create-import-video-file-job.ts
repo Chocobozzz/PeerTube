@@ -48,13 +48,13 @@ function runTests (enableObjectStorage: boolean) {
       ? objectStorage.getDefaultMockConfig()
       : {}
 
+    if (enableObjectStorage) await objectStorage.prepareDefaultMockBuckets()
+
     // Run server 2 to have transcoding enabled
     servers = await createMultipleServers(2, config)
     await setAccessTokensToServers(servers)
 
     await doubleFollow(servers[0], servers[1])
-
-    if (enableObjectStorage) await objectStorage.prepareDefaultMockBuckets()
 
     // Upload two videos for our needs
     {

@@ -28,20 +28,20 @@ playerSettingsRouter.get(
   asyncMiddleware(getVideoPlayerSettings)
 )
 
-playerSettingsRouter.put(
-  '/videos/:videoId',
-  authenticate,
-  asyncMiddleware(updateVideoPlayerSettingsValidator),
-  updatePlayerSettingsValidatorFactory('video'),
-  asyncMiddleware(updateVideoPlayerSettings)
-)
-
 playerSettingsRouter.get(
   '/video-channels/:handle',
   optionalAuthenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
   asyncMiddleware(getChannelPlayerSettingsValidator),
   asyncMiddleware(getChannelPlayerSettings)
+)
+
+playerSettingsRouter.put(
+  '/videos/:videoId',
+  authenticate,
+  asyncMiddleware(updateVideoPlayerSettingsValidator),
+  updatePlayerSettingsValidatorFactory('video'),
+  asyncMiddleware(updateVideoPlayerSettings)
 )
 
 playerSettingsRouter.put(

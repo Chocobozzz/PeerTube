@@ -1,6 +1,6 @@
 import { VideoObject } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { createVideoAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
@@ -30,7 +30,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
     const videoData = getVideoAttributesFromObject(channel, this.videoObject, this.videoObject.to)
     const video = VideoModel.build({ ...videoData, likes: 0, dislikes: 0 }) as MVideoThumbnails
 
-    const { autoBlacklistStatus, videoCreated } = await sequelizeTypescript.transaction(async t => {
+    const { autoBlacklistStatus, videoCreated } = await runTransaction(async t => {
       const videoCreated = await video.save({ transaction: t }) as MVideoFull
       videoCreated.VideoChannel = channel
 

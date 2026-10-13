@@ -18,11 +18,10 @@ import {
   updateNotificationSettingsValidator
 } from '../../../middlewares/validators/users/user-notifications.js'
 import { UserNotificationSettingModel } from '../../../models/user/user-notification-setting.js'
-import { meRouter } from './me.js'
 
 const myNotificationsRouter = express.Router()
 
-meRouter.put(
+myNotificationsRouter.put(
   '/me/notification-settings',
   authenticate,
   updateNotificationSettingsValidator,

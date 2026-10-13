@@ -25,12 +25,13 @@ async function processActivityPubHttpUnicast (job: Job) {
 
   try {
     await httpUnicastFromWorker({ uri, requestOptions: options })
-    ActorFollowHealthCache.Instance.updateActorFollowsHealth([ uri ], [])
   } catch (err) {
-    ActorFollowHealthCache.Instance.updateActorFollowsHealth([], [ uri ])
+    await ActorFollowHealthCache.Instance.updateActorFollowsHealth([], [ uri ])
 
     throw err
   }
+
+  await ActorFollowHealthCache.Instance.updateActorFollowsHealth([ uri ], [])
 }
 
 // ---------------------------------------------------------------------------

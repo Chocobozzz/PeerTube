@@ -10,7 +10,7 @@ import {
 } from '@server/helpers/custom-validators/video-channels.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { createLocalVideoChannelWithoutKeys } from '@server/lib/video-channel.js'
@@ -55,7 +55,7 @@ export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, Ch
     if (existingChannel) {
       logger.info(`Do not import channel ${existingChannel.name} that already exists on this PeerTube instance`)
     } else {
-      const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
+      const videoChannelCreated = await runTransaction(async t => {
         return createLocalVideoChannelWithoutKeys(
           pick(channelImportData, [ 'displayName', 'name', 'description', 'support', 'publicEmail' ]),
           account,

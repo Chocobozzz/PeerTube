@@ -1,8 +1,17 @@
-import express from 'express'
+import {
+  HttpStatusCode,
+  InstallOrUpdatePlugin,
+  ManagePlugin,
+  PeertubePluginIndexList,
+  PublicServerSetting,
+  RegisteredServerSettings,
+  UserRight
+} from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
 import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
+import { currentProcessId, RedisChannels } from '@server/lib/redis/index.js'
 import {
   apiRateLimiter,
   asyncMiddleware,
@@ -12,6 +21,7 @@ import {
   openapiOperationDoc,
   paginationValidator,
   pluginsSortValidator,
+  primaryOnly,
   setDefaultPagination,
   setDefaultSort
 } from '@server/middlewares/index.js'
@@ -24,15 +34,7 @@ import {
   updatePluginSettingsValidator
 } from '@server/middlewares/validators/plugins.js'
 import { PluginModel } from '@server/models/server/plugin.js'
-import {
-  HttpStatusCode,
-  InstallOrUpdatePlugin,
-  ManagePlugin,
-  PeertubePluginIndexList,
-  PublicServerSetting,
-  RegisteredServerSettings,
-  UserRight
-} from '@peertube/peertube-models'
+import express from 'express'
 
 const logger = createLogger()
 
@@ -40,7 +42,8 @@ const pluginRouter = express.Router()
 
 pluginRouter.use(apiRateLimiter)
 
-pluginRouter.get('/available',
+pluginRouter.get(
+  '/available',
   openapiOperationDoc({ operationId: 'getAvailablePlugins' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
@@ -52,7 +55,8 @@ pluginRouter.get('/available',
   asyncMiddleware(listAvailablePlugins)
 )
 
-pluginRouter.get('/',
+pluginRouter.get(
+  '/',
   openapiOperationDoc({ operationId: 'getPlugins' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
@@ -64,19 +68,18 @@ pluginRouter.get('/',
   asyncMiddleware(listPlugins)
 )
 
-pluginRouter.get('/:npmName/registered-settings',
+pluginRouter.get(
+  '/:npmName/registered-settings',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   asyncMiddleware(existingPluginValidator),
   getPluginRegisteredSettings
 )
 
-pluginRouter.get('/:npmName/public-settings',
-  asyncMiddleware(existingPluginValidator),
-  getPublicPluginSettings
-)
+pluginRouter.get('/:npmName/public-settings', asyncMiddleware(existingPluginValidator), getPublicPluginSettings)
 
-pluginRouter.put('/:npmName/settings',
+pluginRouter.put(
+  '/:npmName/settings',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   updatePluginSettingsValidator,
@@ -84,31 +87,40 @@ pluginRouter.put('/:npmName/settings',
   asyncMiddleware(updatePluginSettings)
 )
 
-pluginRouter.get('/:npmName',
+pluginRouter.get(
+  '/:npmName',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   asyncMiddleware(existingPluginValidator),
   getPlugin
 )
 
-pluginRouter.post('/install',
+// Plugins are installed in the plugin directory of the primary, that the secondaries sync from
+
+pluginRouter.post(
+  '/install',
   openapiOperationDoc({ operationId: 'addPlugin' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
   asyncMiddleware(installPlugin)
 )
 
-pluginRouter.post('/update',
+pluginRouter.post(
+  '/update',
   openapiOperationDoc({ operationId: 'updatePlugin' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   installOrUpdatePluginValidator,
   asyncMiddleware(updatePlugin)
 )
 
-pluginRouter.post('/uninstall',
+pluginRouter.post(
+  '/uninstall',
   openapiOperationDoc({ operationId: 'uninstallPlugin' }),
+  primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   uninstallPluginValidator,
@@ -212,6 +224,12 @@ async function updatePluginSettings (req: express.Request, res: express.Response
   await plugin.save()
 
   await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
+
+  try {
+    await RedisChannels.pluginChanges.publish({ type: 'plugin-settings-changed', npmName: req.params.npmName, senderId: currentProcessId })
+  } catch (err) {
+    logger.error('Failed to publish plugin settings change for %s.', req.params.npmName, { err })
+  }
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

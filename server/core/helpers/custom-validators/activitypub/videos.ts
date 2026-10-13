@@ -9,12 +9,14 @@ import {
   VideoObject,
   VideoState
 } from '@peertube/peertube-models'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { spdxToPeertubeLicence } from '@server/helpers/video.js'
+import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
 import validator from 'validator'
-import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
-import { peertubeTruncate } from '../../core-utils.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
+import { isTrackerUrlValid } from '../urls.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
   isVideoCommentsPolicyValid,
@@ -32,7 +34,6 @@ import {
   setValidAttributedTo,
   setValidRemoteIcon
 } from './misc.js'
-import { getDurationFromActivityStream } from '@server/lib/activitypub/activity.js'
 
 const logger = createLogger()
 
@@ -148,7 +149,7 @@ export function isAPVideoFileUrlMetadataObject (url: any): url is ActivityVideoF
 export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlObject {
   return isArray(url.rel) &&
     url.rel.includes('tracker') &&
-    isActivityPubUrlValid(url.href)
+    isTrackerUrlValid(url.href)
 }
 
 export function setAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObject {
@@ -168,6 +169,12 @@ export function setAPCaptionUrlObject (url: any): url is ActivityCaptionUrlObjec
 
 function setValidRemoteTags (video: VideoObject) {
   if (Array.isArray(video.tag) === false) video.tag = []
+
+  if (video.tag.length > ACTIVITY_PUB.MAX_VIDEO_TAGS) {
+    logger.debug('Truncating remote video tag array from %d to %d entries.', video.tag.length, ACTIVITY_PUB.MAX_VIDEO_TAGS)
+
+    video.tag = video.tag.slice(0, ACTIVITY_PUB.MAX_VIDEO_TAGS)
+  }
 
   video.tag = video.tag.filter(t => {
     return (t.type === 'Hashtag' && isVideoTagValid(t.name)) ||
@@ -220,7 +227,24 @@ function isRemoteVideoContentValid (mediaType: string, content: string) {
 function setValidRemoteVideoUrls (video: any) {
   if (Array.isArray(video.url) === false) return false
 
+  if (video.url.length > ACTIVITY_PUB.MAX_VIDEO_URLS) {
+    logger.debug('Truncating remote video url array from %d to %d entries.', video.url.length, ACTIVITY_PUB.MAX_VIDEO_URLS)
+
+    video.url = video.url.slice(0, ACTIVITY_PUB.MAX_VIDEO_URLS)
+  }
+
   video.url = video.url.filter(u => isRemoteVideoUrlValid(u))
+
+  // HLS playlist url objects carry their own nested `tag` array (video/torrent/magnet/metadata links + segment hashes)
+  for (const u of video.url) {
+    if (!Array.isArray(u.tag)) continue
+
+    if (u.tag.length > ACTIVITY_PUB.MAX_VIDEO_URLS) {
+      logger.debug('Truncating remote HLS playlist tag array from %d to %d entries.', u.tag.length, ACTIVITY_PUB.MAX_VIDEO_URLS)
+
+      u.tag = u.tag.slice(0, ACTIVITY_PUB.MAX_VIDEO_URLS)
+    }
+  }
 
   return true
 }

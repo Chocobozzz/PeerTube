@@ -5,10 +5,11 @@ import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import { AutoBlacklistStatus } from '@server/lib/video-blacklist.js'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnails, MVideoWithBlacklist } from '@server/types/models/index.js'
 import { getAPId } from '../activity.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { refreshVideoIfNeeded, scheduleVideoRefreshIfNeeded } from './refresh.js'
 import { APVideoCreator, fetchRemoteVideo, SyncParam, syncVideoExternalAttributes } from './shared/index.js'
 
-const logger = createLogger()
+const logger = createLogger('ap', 'video')
 
 type GetVideoResult<T> = Promise<{
   video: T
@@ -45,6 +46,17 @@ export function getOrCreateAPVideo (
 export async function getOrCreateAPVideo (
   options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
 ): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoWithBlacklist | MVideoImmutable> {
+  return getOrCreateAPVideoInternal(options, { alreadyRetried: false })
+}
+
+type GetVideoContext = {
+  alreadyRetried: boolean
+}
+
+async function getOrCreateAPVideoInternal (
+  options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther,
+  context: GetVideoContext
+): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoWithBlacklist | MVideoImmutable> {
   // Default params
   const syncParam = options.syncParam || { rates: true, shares: true, comments: true, refreshVideo: false }
   const fetchType = options.fetchType || 'full'
@@ -62,11 +74,7 @@ export async function getOrCreateAPVideo (
 
       if (allowRefresh === true && video.isOutdated()) {
         if (syncParam.refreshVideo === true) {
-          video = await refreshVideoIfNeeded({
-            video,
-            fetchedType: fetchType,
-            syncParam
-          })
+          video = await refreshVideoIfNeeded({ video, syncParam })
         } else {
           scheduleVideoRefreshIfNeeded(video)
         }
@@ -79,23 +87,40 @@ export async function getOrCreateAPVideo (
     if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
     // videoUrl is just an alias/redirection, so process object id instead
-    if (videoObject.id !== videoUrl) return getOrCreateAPVideo({ ...options, fetchType: 'full', videoObject })
+    if (videoObject.id !== videoUrl) return getOrCreateAPVideoInternal({ ...options, fetchType: 'full', videoObject }, context)
 
     try {
-      const creator = new APVideoCreator(videoObject)
-      const { autoBlacklistStatus, videoCreated } = await retryTransactionWrapper(() => creator.create())
-
-      await syncVideoExternalAttributes(videoCreated, videoObject, syncParam)
-
-      return { video: videoCreated, created: true, autoBlacklistStatus }
-    } catch (err) {
-      // Maybe a concurrent getOrCreateAPVideo call created this video
-      if (err.name === 'SequelizeUniqueConstraintError') {
+      const result = await runWithAPObjectLock(videoUrl, async () => {
+        // Created by another activity while we were waiting for the lock
         const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
-        if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false }
+        if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false as const }
 
-        logger.error('Cannot create video %s because of SequelizeUniqueConstraintError error, but cannot find it in database.', videoUrl)
+        const creator = new APVideoCreator(videoObject)
+        const { autoBlacklistStatus, videoCreated } = await retryTransactionWrapper(() => creator.create())
+
+        return { video: videoCreated, created: true as const, autoBlacklistStatus }
+      })
+
+      if (result.created !== true) return result
+
+      // Outside the lock: crawling can take a long time
+      await syncVideoExternalAttributes(result.video, videoObject, syncParam)
+
+      return result
+    } catch (err) {
+      if (err.name !== 'SequelizeUniqueConstraintError') throw err
+
+      // Maybe a concurrent getOrCreateAPVideo call created this video
+      const alreadyCreatedVideo = await loadVideoByUrl(videoUrl, fetchType)
+      if (alreadyCreatedVideo) return { video: alreadyCreatedVideo, created: false }
+
+      if (context.alreadyRetried !== true) {
+        logger.debug('Cannot create video %s because of a concurrent creation, retrying.', videoUrl, { err })
+
+        return getOrCreateAPVideoInternal(options, { ...context, alreadyRetried: true })
       }
+
+      logger.error('Cannot create video %s because of SequelizeUniqueConstraintError error, but cannot find it in database.', videoUrl)
 
       throw err
     }

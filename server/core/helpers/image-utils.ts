@@ -47,6 +47,11 @@ export async function processImage (options: {
     throw new Error('Input path must be different from output path.')
   }
 
+  // Defensive check: SVG must always go through processSVG() to be sanitized
+  if (extension === '.svg' || getLowercaseExtension(destination) === '.svg') {
+    throw new Error('SVG images must be sanitized using processSVG(), not processImage().')
+  }
+
   logger.debug('Processing image %s to %s.', path, destination)
 
   await sharpProcessor({ path, destination, newSize, inputExt: extension, animated: extension.toLowerCase() === '.gif' })

@@ -9,9 +9,9 @@ import {
 } from '../../../middlewares/index.js'
 import { UserExportModel } from '@server/models/user/user-export.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
-import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
+import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 
 const userExportsRouter = express.Router()
 
@@ -55,7 +55,7 @@ async function requestExport (req: express.Request, res: express.Response) {
   })
   exportModel.generateAndSetFilename()
 
-  await sequelizeTypescript.transaction(async transaction => {
+  await runTransaction(async transaction => {
     await exportModel.save({ transaction })
   })
 
@@ -81,7 +81,7 @@ async function listUserExports (req: express.Request, res: express.Response) {
 async function deleteUserExport (req: express.Request, res: express.Response) {
   const userExport = res.locals.userExport
 
-  const result = await sequelizeTypescript.transaction(async transaction => {
+  const result = await runTransaction(async transaction => {
     await userExport.reload({ transaction })
 
     if (!userExport.canBeSafelyRemoved()) {

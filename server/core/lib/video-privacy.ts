@@ -8,14 +8,14 @@ import { updateHLSFilesACL, updateWebVideoFileACL } from './object-storage/index
 
 const logger = createLogger('video-privacy')
 
-const validPrivacySet = new Set<VideoPrivacyType>([
+export const PROTECTED_VIDEO_PRIVACIES = new Set<VideoPrivacyType>([
   VideoPrivacy.PRIVATE,
   VideoPrivacy.INTERNAL,
   VideoPrivacy.PASSWORD_PROTECTED
 ])
 
 export function isVideoInPrivateDirectory (privacy: VideoPrivacyType) {
-  return validPrivacySet.has(privacy)
+  return PROTECTED_VIDEO_PRIVACIES.has(privacy)
 }
 
 export function isVideoInPublicDirectory (privacy: VideoPrivacyType) {

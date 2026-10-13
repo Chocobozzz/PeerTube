@@ -2,6 +2,7 @@
 
 import { wait } from '@peertube/peertube-core-utils'
 import { VideoDetails, VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createMultipleServers,
@@ -14,7 +15,8 @@ import {
 import { checkSegmentHash } from '@tests/shared/streaming-playlists.js'
 import { checkVideoFilesWereRemoved, saveVideoInServers } from '@tests/shared/videos.js'
 import { expect } from 'chai'
-import { readdir } from 'fs/promises'
+import { ensureDir, pathExists, remove } from 'fs-extra/esm'
+import { readdir, utimes, writeFile } from 'fs/promises'
 import { basename, join } from 'path'
 
 let servers: PeerTubeServer[] = []
@@ -478,6 +480,34 @@ describe('Test videos redundancy', function () {
 
       await check1PlaylistRedundancies()
       await checkStatsWith1Redundancy('manual')
+    })
+
+    it('Should remove orphan redundancy directories', async function () {
+      this.timeout(60000)
+
+      const createDirectory = async (mtime: Date) => {
+        const directory = join(servers[0].getDirectoryPath('redundancy/hls'), buildUUID())
+
+        await ensureDir(directory)
+        await writeFile(join(directory, 'master.m3u8'), '#EXTM3U')
+        await utimes(directory, mtime, mtime)
+
+        return directory
+      }
+
+      const oldOrphan = await createDirectory(new Date(Date.now() - 1000 * 3600 * 24 * 7))
+      // May be a redundancy in creation
+      const recentOrphan = await createDirectory(new Date())
+
+      // Wait for the redundancy scheduler
+      await wait(15000)
+
+      expect(await pathExists(oldOrphan)).to.be.false
+      expect(await pathExists(recentOrphan)).to.be.true
+
+      await check1PlaylistRedundancies()
+
+      await remove(recentOrphan)
     })
 
     it('Should manually remove redundancies on server 1 and remove duplicated videos', async function () {

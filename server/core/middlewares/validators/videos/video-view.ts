@@ -25,7 +25,10 @@ export const getVideoLocalViewerValidator = [
     if (areValidationErrors(req, res, { tags })) return
 
     const localViewer = await LocalVideoViewerModel.loadFullById(+req.params.localViewerId)
-    if (!localViewer) {
+
+    // Viewer stats are only federated to the origin server for remote videos
+    // Don't leak viewer stats of local videos (URL of unlisted/private videos, viewer location etc.)
+    if (localViewer?.Video.remote !== true) {
       return res.fail({
         status: HttpStatusCode.NOT_FOUND_404,
         message: 'Local viewer not found',

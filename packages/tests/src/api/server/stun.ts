@@ -63,7 +63,7 @@ async function testStun (url: string) {
   return new Promise<void>((res, rej) => {
     const timeout = setTimeout(() => {
       socket.close()
-      rej(new Error('timeout'))
+      rej(new Error('Timeout for ' + url))
     }, 3000)
 
     socket.once('message', msg => {

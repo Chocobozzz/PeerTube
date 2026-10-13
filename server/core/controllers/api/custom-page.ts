@@ -1,18 +1,20 @@
-import express from 'express'
+import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
-import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import express from 'express'
 import { apiRateLimiter, asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares/index.js'
 
 const customPageRouter = express.Router()
 
 customPageRouter.use(apiRateLimiter)
 
-customPageRouter.get('/homepage/instance',
+customPageRouter.get(
+  '/homepage/instance',
   asyncMiddleware(getInstanceHomepage)
 )
 
-customPageRouter.put('/homepage/instance',
+customPageRouter.put(
+  '/homepage/instance',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_INSTANCE_CUSTOM_PAGE),
   asyncMiddleware(updateInstanceHomepage)

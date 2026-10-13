@@ -1,4 +1,4 @@
-import Bluebird from 'bluebird'
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { doRequest, PeerTubeRequestOptions } from '@server/helpers/requests.js'
 import { BROADCAST_CONCURRENCY } from '@server/initializers/constants.js'
@@ -14,7 +14,7 @@ async function httpBroadcast (payload: {
   const badUrls: string[] = []
   const goodUrls: string[] = []
 
-  await Bluebird.map(uris, async uri => {
+  await promiseMap(uris, async uri => {
     try {
       await doRequest(uri, requestOptions)
       goodUrls.push(uri)

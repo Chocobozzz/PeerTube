@@ -55,7 +55,9 @@ export const UserRight = {
   MANAGE_INSTANCE_WATCHED_WORDS: 32,
   MANAGE_INSTANCE_AUTO_TAGS: 33,
 
-  MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS: 34
+  MANAGE_SERVER_BLOCKLIST_SUBSCRIPTIONS: 34,
+
+  CHANGE_CHANNEL_OWNERSHIP: 35
 } as const
 
 export type UserRightType = typeof UserRight[keyof typeof UserRight]

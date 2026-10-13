@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { areValidActorHandles } from '@server/helpers/custom-validators/activitypub/actor.js'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isDateValid, isIdValid, toArray } from '@server/helpers/custom-validators/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'

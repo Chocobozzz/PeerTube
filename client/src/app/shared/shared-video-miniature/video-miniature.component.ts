@@ -291,7 +291,7 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   addToWatchLater () {
-    const body = { videoId: this.video().id }
+    const body = { video: this.video() }
 
     this.videoPlaylistService.addVideoInPlaylist(this.watchLaterPlaylist.id, body)
       .subscribe(

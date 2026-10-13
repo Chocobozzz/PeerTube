@@ -5,6 +5,7 @@ import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { buildWinstonLogger, createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerAccount, getServerActor } from '@server/models/application/application.js'
@@ -47,7 +48,7 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
 
     plugin: buildPluginRelatedHelpers(pluginModel, npmName),
 
-    socket: buildSocketHelpers(),
+    socket: buildSocketHelpers(npmName),
 
     user: buildUserHelpers(),
 
@@ -96,7 +97,7 @@ function buildVideosHelpers (npmName: string) {
     },
 
     removeVideo: (id: number) => {
-      return sequelizeTypescript.transaction(async t => {
+      return runTransaction(async t => {
         const video = await VideoModel.loadFull(id, t)
 
         await video.destroy({ transaction: t })
@@ -181,7 +182,7 @@ function buildVideosHelpers (npmName: string) {
         width: t.width,
         height: t.height,
         url: t.getLocalFileUrl(),
-        path: t.isLocal()
+        path: t.isLocal() && t.storage === FileStorage.FILE_SYSTEM
           ? t.getFSPath()
           : null
       }))
@@ -293,9 +294,19 @@ function buildPluginRelatedHelpers (plugin: MPlugin, npmName: string) {
   }
 }
 
-function buildSocketHelpers () {
+function buildSocketHelpers (npmName: string) {
   return {
     sendNotification: (userId: number, notification: UserNotificationModelForApi) => {
+      if (typeof notification?.toFormattedJSON !== 'function') {
+        logger.error(
+          'Plugin %s tried to send a notification that is not a user notification model, ignoring it.',
+          npmName,
+          { userId }
+        )
+
+        return
+      }
+
       PeerTubeSocket.Instance.sendNotification(userId, notification)
     },
     sendVideoLiveNewState: (video: MVideo) => {

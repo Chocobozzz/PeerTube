@@ -1,4 +1,4 @@
-import { VideoFile } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoFile } from '@peertube/peertube-models'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 import { readFile } from 'fs/promises'
@@ -47,6 +47,19 @@ export async function magnetUriDecode (data: string) {
 
 export async function magnetUriEncode (data: MagnetUriInstance) {
   return (await import('magnet-uri')).encode(data)
+}
+
+export function getTorrentInfoHash (magnetUri: string) {
+  return new URL(magnetUri).searchParams.get('xt').replace('urn:btih:', '')
+}
+
+export async function fetchTorrent (url: string) {
+  const res = await fetch(url)
+  expect(res.status, url).to.equal(HttpStatusCode.OK_200)
+
+  const parseTorrent = (await import('parse-torrent')).default
+
+  return parseTorrent(Buffer.from(await res.arrayBuffer()))
 }
 
 // ---------------------------------------------------------------------------

@@ -31,6 +31,8 @@ export async function sendUpdateVideo (video: MVideoAP, transaction: Transaction
 
   const byActor = overriddenByActor || video.VideoChannel.Account.Actor
 
+  await video.bumpUpdatedAt(transaction)
+
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
 
   const videoObject = await video.toActivityPubObject()
@@ -96,6 +98,8 @@ export async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull
   const byActor = videoPlaylist.OwnerAccount.Actor
 
   logger.info('Creating job to update video playlist %s.', videoPlaylist.url)
+
+  await videoPlaylist.bumpUpdatedAt(transaction)
 
   const url = getUpdateActivityPubUrl(videoPlaylist.url, videoPlaylist.updatedAt.toISOString())
 

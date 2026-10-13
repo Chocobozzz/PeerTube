@@ -1,3 +1,4 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { federateVideoIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
@@ -10,7 +11,6 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { VideoModel } from '@server/models/video/video.js'
-import Bluebird from 'bluebird'
 import { move } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
@@ -33,7 +33,7 @@ async function run () {
 
   const ids = await VideoModel.listLocalIds()
 
-  await Bluebird.map(ids, async id => {
+  await promiseMap(ids, async id => {
     try {
       await processVideo(id)
     } catch (err) {

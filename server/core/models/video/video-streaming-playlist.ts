@@ -10,7 +10,7 @@ import {
 import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import {
   buildObjectStorageHLSPrivateFileUrl,
   buildObjectStoragePublicFileUrl,
@@ -257,7 +257,9 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
       playlist = new VideoStreamingPlaylistModel({
         p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
         type: VideoStreamingPlaylistType.HLS,
-        storage: FileStorage.FILE_SYSTEM,
+        storage: CONFIG.OBJECT_STORAGE.ENABLED
+          ? FileStorage.OBJECT_STORAGE
+          : FileStorage.FILE_SYSTEM,
         playlistFilename: generateHLSMasterPlaylistFilename(video.isLive),
         segmentsSha256Filename: generateHlsSha256SegmentsFilename(video.isLive),
         videoId: video.id
@@ -290,7 +292,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     // Keep the delete + insert atomic even when the caller has no transaction
     const infoHashes = transaction
       ? await replace(transaction)
-      : await sequelizeTypescript.transaction(replace)
+      : await runTransaction(replace)
 
     this.InfoHashes = infoHashes
   }
@@ -373,10 +375,6 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
     if (this.type === VideoStreamingPlaylistType.HLS) return 'hls'
 
     return 'unknown'
-  }
-
-  getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
-    return [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
   }
 
   hasSameUniqueKeysThan (other: MStreamingPlaylist) {

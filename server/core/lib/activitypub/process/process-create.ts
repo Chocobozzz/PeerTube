@@ -15,13 +15,13 @@ import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
 import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { retryTransactionWrapper } from '../../../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../types/models/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { fetchAPObjectIfNeeded } from '../activity.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { createOrUpdateCacheFile } from '../cache-file.js'
 import { createOrUpdateLocalVideoViewer } from '../local-video-viewer.js'
 import { createOrUpdateVideoPlaylist } from '../playlists/index.js'
@@ -49,8 +49,10 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
     // Comments will be fetched from videos
     if (options.fromFetch) return
 
-    return retryTransactionWrapper(() => {
-      return processCreateVideoComment(activity as ActivityCreate<VideoCommentObject | string>, activityObject, byActor, false)
+    return runWithAPObjectLock(activityObject.id, () => {
+      return retryTransactionWrapper(() => {
+        return processCreateVideoComment(activity as ActivityCreate<VideoCommentObject | string>, activityObject, byActor, false)
+      })
     })
   }
 
@@ -62,8 +64,10 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
   }
 
   if (activityType === 'CacheFile') {
-    return retryTransactionWrapper(() => {
-      return processCreateCacheFile(activity as ActivityCreate<CacheFileObject | string>, activityObject, byActor)
+    return runWithAPObjectLock(activityObject.id, () => {
+      return retryTransactionWrapper(() => {
+        return processCreateCacheFile(activity as ActivityCreate<CacheFileObject | string>, activityObject, byActor)
+      })
     })
   }
 
@@ -108,7 +112,7 @@ async function processCreateCacheFile (
     return
   }
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     return createOrUpdateCacheFile(cacheFile, video, byActor, t)
   })
 
@@ -130,7 +134,7 @@ async function processCreateWatchAction (watchAction: WatchActionObject, byActor
   const video = await VideoModel.loadByUrl(watchAction.object)
   if (!video || video.remote) return
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     return createOrUpdateLocalVideoViewer(watchAction, video, t)
   })
 }

@@ -1,10 +1,10 @@
-import { UploaderX, UploadxOptions } from 'ngx-uploadx'
 import { Injectable, inject } from '@angular/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { UploaderXFormData } from './uploaderx-form-data'
-import { getUploadXRetryConfig } from '@app/helpers'
+import { getUploadXRetryConfig, PeerTubeUploaderX } from '@app/helpers'
 import { BytesPipe } from '@app/shared/shared-main/common/bytes.pipe'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
+import { UploadxOptions } from 'ngx-uploadx'
+import { UploaderXFormData } from './uploaderx-form-data'
 
 @Injectable()
 export class VideoUploadService {
@@ -54,16 +54,22 @@ export class VideoUploadService {
   getReplaceUploadxOptions (videoId: string): UploadxOptions {
     return this.getUploadxOptions(
       VideoService.BASE_VIDEO_URL + '/' + videoId + '/source/replace-resumable',
-      UploaderX
+      PeerTubeUploaderX
     )
   }
 
-  private getUploadxOptions (endpoint: string, uploaderClass: typeof UploaderXFormData) {
+  private getUploadxOptions (endpoint: string, uploaderClass: typeof PeerTubeUploaderX) {
+    const resumableUpload = this.server.getHTMLConfig().client.videos.resumableUpload
+
     return {
       endpoint,
       multiple: false,
 
-      maxChunkSize: this.server.getHTMLConfig().client.videos.resumableUpload.maxChunkSize,
+      maxChunkSize: resumableUpload.maxChunkSize,
+
+      chunkSize: resumableUpload.minChunkSize > 0
+        ? resumableUpload.minChunkSize
+        : undefined,
 
       token: this.authService.getAccessToken(),
 

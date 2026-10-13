@@ -101,7 +101,8 @@ export class VideoReportComponent extends FormReactive implements OnInit {
       reason,
       predefinedReasons,
       video: {
-        id: this.video().id,
+        // Use the UUID: it is required by the server to report unlisted and password protected videos
+        id: this.video().uuid,
         startAt: hasStart && startAt ? startAt : undefined,
         endAt: hasEnd && endAt ? endAt : undefined
       }

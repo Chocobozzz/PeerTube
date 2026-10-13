@@ -30,21 +30,6 @@ export function areMockObjectStorageTestsDisabled () {
   return disabled
 }
 
-export function areScalewayObjectStorageTestsDisabled () {
-  if (areMockObjectStorageTestsDisabled()) return true
-
-  const enabled = process.env.OBJECT_STORAGE_SCALEWAY_KEY_ID && process.env.OBJECT_STORAGE_SCALEWAY_ACCESS_KEY
-  if (!enabled) {
-    console.log(
-      'OBJECT_STORAGE_SCALEWAY_KEY_ID and/or OBJECT_STORAGE_SCALEWAY_ACCESS_KEY are not set, so scaleway object storage tests are disabled'
-    )
-
-    return true
-  }
-
-  return false
-}
-
 export function isTestInstance () {
   return process.env.NODE_ENV === 'test'
 }

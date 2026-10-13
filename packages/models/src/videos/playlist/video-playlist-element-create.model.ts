@@ -1,5 +1,5 @@
 export interface VideoPlaylistElementCreate {
-  videoId: number
+  videoId: number | string
 
   startTimestamp?: number
   stopTimestamp?: number

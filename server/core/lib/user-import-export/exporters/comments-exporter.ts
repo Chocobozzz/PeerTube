@@ -1,9 +1,9 @@
+import { promiseMapSeries } from '@peertube/peertube-core-utils'
 import { CommentsExportJSON, VideoCommentObject } from '@peertube/peertube-models'
 import { audiencify, getPublicAudience } from '@server/lib/activitypub/audience.js'
 import { buildCreateActivity } from '@server/lib/activitypub/send/send-create.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { MCommentExport } from '@server/types/models/index.js'
-import Bluebird from 'bluebird'
 import { AbstractUserExporter } from './abstract-user-exporter.js'
 
 export class CommentsExporter extends AbstractUserExporter<CommentsExportJSON> {
@@ -32,7 +32,7 @@ export class CommentsExporter extends AbstractUserExporter<CommentsExportJSON> {
   }
 
   private formatCommentsAP (comments: MCommentExport[]) {
-    return Bluebird.mapSeries(comments, async ({ url }) => {
+    return promiseMapSeries(comments, async ({ url }) => {
       const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
 
       const threadParentComments = await VideoCommentModel.listThreadParentComments({ comment })

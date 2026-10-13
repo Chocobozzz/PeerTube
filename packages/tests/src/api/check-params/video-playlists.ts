@@ -2,6 +2,7 @@
 
 import {
   HttpStatusCode,
+  UserRole,
   VideoChannelCreateResult,
   VideoPlaylistCreate,
   VideoPlaylistCreateResult,
@@ -9,7 +10,8 @@ import {
   VideoPlaylistElementUpdate,
   VideoPlaylistPrivacy,
   VideoPlaylistReorder,
-  VideoPlaylistType
+  VideoPlaylistType,
+  VideoPrivacy
 } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -27,12 +29,15 @@ describe('Test video playlists API validator', function () {
   let server: PeerTubeServer
   let userAccessToken: string
   let editorToken: string
+  let moderatorToken: string
 
   let playlist: VideoPlaylistCreateResult
   let userPlaylist: VideoPlaylistCreateResult
 
   let privatePlaylistUUID: string
   let privatePlaylistElementId: number
+
+  let privateUserPlaylistUUID: string
 
   let anotherChannelPlaylistUUID: string
   let anotherChannelPlaylistElementId: number
@@ -41,6 +46,7 @@ describe('Test video playlists API validator', function () {
 
   let watchLaterPlaylistId: number
   let videoId: number
+  let privateVideoId: number
   let elementId: number
 
   let command: PlaylistsCommand
@@ -63,8 +69,10 @@ describe('Test video playlists API validator', function () {
     const user = await server.users.getMyInfo({ token: userAccessToken })
 
     editorToken = await server.channelCollaborators.createEditor('editor', 'root_channel')
+    moderatorToken = await server.users.generateUserAndToken('moderator', UserRole.MODERATOR)
 
     videoId = (await server.videos.quickUpload({ name: 'video 1' })).id
+    privateVideoId = (await server.videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })).id
 
     command = server.playlists
 
@@ -136,6 +144,17 @@ describe('Test video playlists API validator', function () {
           videoChannelId: user.videoChannels[0].id
         }
       })
+    }
+
+    {
+      const created = await command.create({
+        token: userAccessToken,
+        attributes: {
+          displayName: 'private user playlist',
+          privacy: VideoPlaylistPrivacy.PRIVATE
+        }
+      })
+      privateUserPlaylistUUID = created.uuid
     }
   })
 
@@ -257,6 +276,14 @@ describe('Test video playlists API validator', function () {
           await command.get({ playlistId, token, expectedStatus: HttpStatusCode.OK_200 })
         }
       }
+    })
+
+    it('Should succeed to get the private playlist of an administrator with a moderator', async function () {
+      await command.get({ playlistId: privatePlaylistUUID, token: moderatorToken, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
+    it('Should succeed to get the private playlist of a regular user with a moderator', async function () {
+      await command.get({ playlistId: privateUserPlaylistUUID, token: moderatorToken, expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 
@@ -503,6 +530,14 @@ describe('Test video playlists API validator', function () {
 
     it('Should fail with an unknown or incorrect video id', async function () {
       const params = getBase({ videoId: 42 }, { expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await command.addElement(params)
+    })
+
+    it('Should fail to add a video the user cannot see to their own playlist', async function () {
+      const params = getBase(
+        { videoId: privateVideoId },
+        { playlistId: userPlaylist.id, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 }
+      )
       await command.addElement(params)
     })
 

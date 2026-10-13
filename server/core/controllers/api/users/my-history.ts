@@ -1,8 +1,8 @@
-import express from 'express'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import express from 'express'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -17,7 +17,8 @@ import { UserVideoHistoryModel } from '../../../models/user/user-video-history.j
 
 const myVideosHistoryRouter = express.Router()
 
-myVideosHistoryRouter.get('/me/history/videos',
+myVideosHistoryRouter.get(
+  '/me/history/videos',
   authenticate,
   paginationValidator,
   setDefaultPagination,
@@ -25,13 +26,15 @@ myVideosHistoryRouter.get('/me/history/videos',
   asyncMiddleware(listMyVideosHistory)
 )
 
-myVideosHistoryRouter.delete('/me/history/videos/:videoId',
+myVideosHistoryRouter.delete(
+  '/me/history/videos/:videoId',
   authenticate,
   userHistoryRemoveElementValidator,
   asyncMiddleware(removeUserHistoryElement)
 )
 
-myVideosHistoryRouter.post('/me/history/videos/remove',
+myVideosHistoryRouter.post(
+  '/me/history/videos/remove',
   authenticate,
   userHistoryRemoveAllValidator,
   asyncRetryTransactionMiddleware(removeAllUserHistory)
@@ -65,11 +68,11 @@ async function removeAllUserHistory (req: express.Request, res: express.Response
   const user = res.locals.oauth.token.User
   const beforeDate = req.body.beforeDate || null
 
-  await sequelizeTypescript.transaction(t => {
+  await runTransaction(t => {
     return UserVideoHistoryModel.removeUserHistoryBefore(user, beforeDate, t)
   })
 
   return res.type('json')
-            .status(HttpStatusCode.NO_CONTENT_204)
-            .end()
+    .status(HttpStatusCode.NO_CONTENT_204)
+    .end()
 }

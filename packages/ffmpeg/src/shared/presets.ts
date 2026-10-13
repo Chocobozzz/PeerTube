@@ -165,21 +165,20 @@ function applyVideoFilters (options: {
 
   const command = commandWrapper.getCommand()
 
-  if (videoFilters.length === 0) return
-
   // We can't use `-vf` option if we have complex filters
   if (chainComplexFilters) {
+    const { lastVideoInput, videoOutput } = chainComplexFilters
     const complexFilters = [ ...chainComplexFilters.complexFilters ]
 
     for (let i = 0; i < videoFilters.length; i++) {
       const videoFilter = videoFilters[i]
 
       const outputName = i === videoFilters.length - 1
-        ? chainComplexFilters.videoOutput
+        ? videoOutput
         : `vf_${i}`
 
       const inputName = i === 0
-        ? chainComplexFilters.lastVideoInput
+        ? lastVideoInput
         : `vf_${i - 1}`
 
       complexFilters.push({
@@ -194,8 +193,20 @@ function applyVideoFilters (options: {
       })
     }
 
+    // No video filter was chained onto the last complex filter output (can happen with concat or overlay)
+    // Alias it through a no-op filter so a `videoOutput` label can still be mapped
+    if (videoFilters.length === 0) {
+      complexFilters.push({
+        filter: 'null',
+        inputs: [ lastVideoInput ],
+        outputs: videoOutput
+          ? [ videoOutput ]
+          : undefined
+      })
+    }
+
     command.complexFilter(complexFilters)
-  } else {
+  } else if (videoFilters.length !== 0) {
     const filterString = videoFilters
       .map(f => {
         if (f.rawOptions) return `${f.name}=${f.rawOptions}`

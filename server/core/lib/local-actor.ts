@@ -1,15 +1,15 @@
-import { ActivityPubActorType, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
+import { ActivityPubActorType, ActorImageType, ActorImageType_Type, FileStorage } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { processImage } from '@server/helpers/image-utils.js'
+import { storeCommonFile, withLocalCommonFile } from '@server/lib/object-storage/common-files.js'
 import { ActorReservedModel } from '@server/models/actor/actor-reserved.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Transaction } from 'sequelize'
-import { retryTransactionWrapper } from '../helpers/database-utils.js'
+import { retryTransactionWrapper, runTransaction } from '../helpers/database-utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { ACTOR_IMAGES_SIZE, WEBSERVER } from '../initializers/constants.js'
-import { sequelizeTypescript } from '../initializers/database.js'
 import { MAccountDefault, MActor, MChannelDefault } from '../types/models/index.js'
 import { deleteActorImages, updateActorImages } from './activitypub/actors/index.js'
 import { sendUpdateActor } from './activitypub/send/index.js'
@@ -39,12 +39,21 @@ export async function updateLocalActorImageFiles (options: {
 }) {
   const { accountOrChannel, imagePhysicalFile, type, sendActorUpdate } = options
 
+  const onObjectStorage = CONFIG.OBJECT_STORAGE.ENABLED
+
   const processImageSize = async (imageSize: { width: number, height: number }) => {
     const extension = getLowercaseExtension(imagePhysicalFile.path)
 
     const imageName = buildUUID() + extension
-    const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, imageName)
+
+    // Generate in tmp when the final destination is object storage
+    const destination = join(onObjectStorage ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.ACTOR_IMAGES_DIR, imageName)
     await processImage({ path: imagePhysicalFile.path, destination, newSize: imageSize, keepOriginal: true })
+
+    if (onObjectStorage) {
+      await storeCommonFile('avatars', destination, imageName)
+      await remove(destination)
+    }
 
     return {
       imageName,
@@ -52,17 +61,21 @@ export async function updateLocalActorImageFiles (options: {
     }
   }
 
+  // Uploads happen here, before the transaction is opened
   const processedImages = await Promise.all(ACTOR_IMAGES_SIZE[type].map(processImageSize))
   await remove(imagePhysicalFile.path)
 
   return retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
+    runTransaction(async t => {
       const actorImagesInfo = processedImages.map(({ imageName, imageSize }) => ({
         name: imageName,
         fileUrl: null,
         height: imageSize.height,
         width: imageSize.width,
-        cached: false
+        cached: false,
+        storage: onObjectStorage
+          ? FileStorage.OBJECT_STORAGE
+          : FileStorage.FILE_SYSTEM
       }))
 
       const updatedActor = await updateActorImages(accountOrChannel.Actor, type, actorImagesInfo, t)
@@ -81,7 +94,7 @@ export async function updateLocalActorImageFiles (options: {
 
 export async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType_Type) {
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
+    return runTransaction(async t => {
       const updatedActor = await deleteActorImages(accountOrChannel.Actor, type, t)
       await updatedActor.save({ transaction: t })
 
@@ -105,14 +118,13 @@ export async function regenerateActorImageFiles (options: {
   const image = accountOrChannel.Actor.getMaxQualityImage(type)
   if (!image) return
 
-  const physicalFilePath = image.getFSPath()
-
-  return updateLocalActorImageFiles({
-    accountOrChannel,
-    imagePhysicalFile: { path: physicalFilePath },
-    type,
-    sendActorUpdate: true
-  })
+  return withLocalCommonFile('avatars', image, physicalFilePath =>
+    updateLocalActorImageFiles({
+      accountOrChannel,
+      imagePhysicalFile: { path: physicalFilePath },
+      type,
+      sendActorUpdate: true
+    }))
 }
 
 // ---------------------------------------------------------------------------

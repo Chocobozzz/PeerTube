@@ -35,15 +35,7 @@ export class ActorFollowScheduler extends AbstractScheduler {
   }
 
   private async processPendingScores () {
-    const goodInboxes = ActorFollowHealthCache.Instance.getGoodInboxes()
-    const badInboxes = ActorFollowHealthCache.Instance.getBadInboxes()
-    const badServerIds = ActorFollowHealthCache.Instance.getBadFollowingServerIds()
-    const goodServerIds = ActorFollowHealthCache.Instance.getGoodFollowingServerIds()
-
-    ActorFollowHealthCache.Instance.clearGoodInboxes()
-    ActorFollowHealthCache.Instance.clearBadInboxes()
-    ActorFollowHealthCache.Instance.clearBadFollowingServerIds()
-    ActorFollowHealthCache.Instance.clearGoodFollowingServerIds()
+    const { goodInboxes, badInboxes, goodServerIds, badServerIds } = await ActorFollowHealthCache.Instance.popPendingHealth()
 
     for (const goodInbox of goodInboxes) {
       if (badInboxes.has(goodInbox)) continue

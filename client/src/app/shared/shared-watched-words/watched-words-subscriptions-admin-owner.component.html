@@ -72,8 +72,17 @@
     <div class="modal-body">
       <div class="callout callout-primary mb-3">
         @if (mode() === 'admin') {
-          <div i18n>
+          <div class="mb-3" i18n>
             The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list.
+          </div>
+
+          <div>
+            <div i18n>However, the auto-tagging policies will not affect existing videos:</div>
+
+            <ul class="mb-0">
+              <li i18n>Only new videos can be blocked by a new word added to the list</li>
+              <li i18n>If a word is removed from the list, any videos that are currently blacklisted will not be affected</li>
+            </ul>
           </div>
         } @else {
           <div class="mb-3" i18n>

@@ -34,6 +34,7 @@ describe('Test watched words API validators', function () {
     userToken = await server.users.generateUserAndToken('user1')
     userToken2 = await server.users.generateUserAndToken('user2')
     moderatorToken = await server.users.generateUserAndToken('moderator', UserRole.MODERATOR)
+    await server.users.generateUserAndToken('moderator2', UserRole.MODERATOR)
 
     command = server.watchedWordsLists
 
@@ -242,6 +243,47 @@ describe('Test watched words API validators', function () {
 
       it('Should fail with an unknown account', async function () {
         await command.deleteList({ ...baseParams(), accountName: 'unknown', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      })
+    })
+
+    describe('When a moderator manages watched words of other accounts', function () {
+      it('Should succeed to manage watched words of an administrator with a moderator', async function () {
+        await command.listWordsLists({ accountName: 'root', token: moderatorToken })
+
+        const { watchedWordsList } = await command.createList({
+          accountName: 'root',
+          token: moderatorToken,
+          listName: 'moderator-list-on-admin',
+          words: [ 'word1' ]
+        })
+
+        await command.deleteList({ accountName: 'root', token: moderatorToken, listId: watchedWordsList.id })
+      })
+
+      it('Should succeed to manage watched words of another moderator with a moderator', async function () {
+        await command.listWordsLists({ accountName: 'moderator2', token: moderatorToken })
+
+        const { watchedWordsList } = await command.createList({
+          accountName: 'moderator2',
+          token: moderatorToken,
+          listName: 'moderator-list-on-moderator',
+          words: [ 'word1' ]
+        })
+
+        await command.deleteList({ accountName: 'moderator2', token: moderatorToken, listId: watchedWordsList.id })
+      })
+
+      it('Should succeed to manage watched words of a regular user with a moderator', async function () {
+        await command.listWordsLists({ accountName: 'user1', token: moderatorToken })
+
+        const { watchedWordsList } = await command.createList({
+          accountName: 'user1',
+          token: moderatorToken,
+          listName: 'moderator-list',
+          words: [ 'word1' ]
+        })
+
+        await command.deleteList({ accountName: 'user1', token: moderatorToken, listId: watchedWordsList.id })
       })
     })
   })

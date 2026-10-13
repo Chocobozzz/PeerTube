@@ -7,6 +7,7 @@ import {
   doubleFollow,
   ObjectStorageCommand,
   PeerTubeServer,
+  PluginsCommand,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   VideoStudioCommand,
@@ -347,6 +348,90 @@ describe('Test video studio', function () {
       for (const server of servers) {
         await checkVideoDuration(server, videoUUID, VideoStudioCommand.getComplexTaskVideoDuration())
       }
+    })
+  })
+
+  describe('Editing with a profile that adds no video filter', function () {
+    before(async function () {
+      this.timeout(60_000)
+
+      await servers[0].plugins.install({ path: PluginsCommand.getPluginTestPath('-transcoding-one') })
+
+      await servers[0].config.save()
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          transcoding: {
+            profile: 'low-vod'
+          }
+        }
+      })
+    })
+
+    it('Should add an intro', async function () {
+      this.timeout(120_000)
+      await renewVideo()
+
+      await createTasks([
+        {
+          name: 'add-intro',
+          options: {
+            file: 'video_short.webm'
+          }
+        }
+      ])
+
+      for (const server of servers) {
+        await checkVideoDuration(server, videoUUID, 10)
+      }
+    })
+
+    it('Should remove a segment', async function () {
+      this.timeout(120_000)
+      await renewVideo('video_short1.webm') // 10 seconds
+
+      await createTasks([
+        {
+          name: 'remove-segments',
+          options: {
+            segments: [ { start: 2, end: 6 } ]
+          }
+        }
+      ])
+
+      for (const server of servers) {
+        await checkVideoDuration(server, videoUUID, 6)
+      }
+    })
+
+    it('Should add a watermark', async function () {
+      this.timeout(120_000)
+      await renewVideo()
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      const oldFileUrls = getAllFiles(video).map(f => f.fileUrl)
+
+      await createTasks([
+        {
+          name: 'add-watermark',
+          options: {
+            file: 'custom-thumbnail.png'
+          }
+        }
+      ])
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: videoUUID })
+        const fileUrls = getAllFiles(video).map(f => f.fileUrl)
+
+        for (const oldUrl of oldFileUrls) {
+          expect(fileUrls).to.not.include(oldUrl)
+        }
+      }
+    })
+
+    after(async function () {
+      await servers[0].config.rollback()
+      await servers[0].plugins.uninstall({ npmName: 'peertube-plugin-test-transcoding-one' })
     })
   })
 

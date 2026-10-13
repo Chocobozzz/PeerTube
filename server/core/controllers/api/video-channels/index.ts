@@ -17,11 +17,10 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { MChannelBannerAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../../helpers/audit-logger.js'
-import { resetSequelizeInstance } from '../../../helpers/database-utils.js'
+import { resetSequelizeInstance, runTransaction } from '../../../helpers/database-utils.js'
 import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { sequelizeTypescript } from '../../../initializers/database.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
 import { JobQueue } from '../../../lib/job-queue/index.js'
 import { createLocalVideoChannelWithoutKeys, federateAllVideosOfChannel } from '../../../lib/video-channel.js'
@@ -74,14 +73,12 @@ videoChannelRouter.use(channelCollaborators)
 videoChannelRouter.use(videoChannelLogosRouter)
 videoChannelRouter.use(ownershipChannelRouter)
 
-videoChannelRouter.get(
-  '/',
-  paginationValidator,
-  videoChannelsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  videoChannelsListValidator,
-  asyncMiddleware(listVideoChannels)
+videoChannelRouter.delete(
+  '/:handle',
+  authenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: true })),
+  asyncMiddleware(videoChannelsRemoveValidator),
+  asyncRetryTransactionMiddleware(removeVideoChannel)
 )
 
 videoChannelRouter.post(
@@ -99,54 +96,12 @@ videoChannelRouter.put(
   asyncRetryTransactionMiddleware(updateVideoChannel)
 )
 
-videoChannelRouter.delete(
-  '/:handle',
-  authenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: true })),
-  asyncMiddleware(videoChannelsRemoveValidator),
-  asyncRetryTransactionMiddleware(removeVideoChannel)
-)
-
-videoChannelRouter.get(
-  '/:handle',
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-  asyncMiddleware(getVideoChannel)
-)
-
-// ---------------------------------------------------------------------------
-
-videoChannelRouter.get(
-  '/:handle/video-playlists',
-  optionalAuthenticate,
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-  paginationValidator,
-  videoPlaylistsSortValidator,
-  setDefaultSort,
-  setDefaultPagination,
-  commonVideoPlaylistFiltersValidator,
-  asyncMiddleware(listVideoChannelPlaylists)
-)
-
 videoChannelRouter.post(
   '/:handle/video-playlists/reorder',
   authenticate,
   asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: true, checkCanManage: true, checkIsOwner: false })),
   asyncMiddleware(videoPlaylistsReorderInChannelValidator),
   asyncRetryTransactionMiddleware(reorderPlaylistsInChannel)
-)
-
-// ---------------------------------------------------------------------------
-
-videoChannelRouter.get(
-  '/:handle/videos',
-  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
-  paginationValidator,
-  videosSortValidator,
-  setDefaultVideosSort,
-  setDefaultPagination,
-  optionalAuthenticate,
-  commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(listVideoChannelVideos)
 )
 
 videoChannelRouter.get(
@@ -179,11 +134,53 @@ videoChannelRouter.post(
   asyncMiddleware(importVideosInChannel)
 )
 
+videoChannelRouter.get(
+  '/',
+  paginationValidator,
+  videoChannelsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  videoChannelsListValidator,
+  asyncMiddleware(listVideoChannels)
+)
+
+videoChannelRouter.get(
+  '/:handle',
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  asyncMiddleware(getVideoChannel)
+)
+
+videoChannelRouter.get(
+  '/:handle/video-playlists',
+  optionalAuthenticate,
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  paginationValidator,
+  videoPlaylistsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  commonVideoPlaylistFiltersValidator,
+  asyncMiddleware(listVideoChannelPlaylists)
+)
+
+videoChannelRouter.get(
+  '/:handle/videos',
+  asyncMiddleware(videoChannelsHandleValidatorFactory({ checkIsLocal: false, checkCanManage: false, checkIsOwner: false })),
+  paginationValidator,
+  videosSortValidator,
+  setDefaultVideosSort,
+  setDefaultPagination,
+  optionalAuthenticate,
+  commonVideosFiltersValidatorFactory(),
+  asyncMiddleware(listVideoChannelVideos)
+)
+
 // ---------------------------------------------------------------------------
 
 export {
   videoChannelRouter
 }
+
+// ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
 
@@ -209,7 +206,7 @@ async function listVideoChannels (req: express.Request, res: express.Response) {
 async function createVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
 
-  const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
+  const videoChannelCreated = await runTransaction(async t => {
     const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     return createLocalVideoChannelWithoutKeys(videoChannelInfo, account, t)
@@ -239,7 +236,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
   let doBulkVideoUpdate = false
 
   try {
-    await sequelizeTypescript.transaction(async t => {
+    await runTransaction(async t => {
       if (body.displayName !== undefined) videoChannelInstance.name = body.displayName
       if (body.description !== undefined) videoChannelInstance.description = body.description
       if (body.publicEmail !== undefined) videoChannelInstance.publicEmail = body.publicEmail
@@ -295,7 +292,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
 async function removeVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInstance = res.locals.videoChannel
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await VideoPlaylistModel.resetPlaylistsOfChannel(videoChannelInstance.id, t)
 
     await videoChannelInstance.destroy({ transaction: t })
@@ -360,7 +357,7 @@ async function reorderPlaylistsInChannel (req: express.Request, res: express.Res
     return res.status(HttpStatusCode.NO_CONTENT_204).end()
   }
 
-  await sequelizeTypescript.transaction(async t => {
+  await runTransaction(async t => {
     await reorderPlaylistOrElementsPosition({
       model: VideoPlaylistModel,
       instance: videoChannel,

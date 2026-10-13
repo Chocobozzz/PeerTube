@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
-import { AbuseCreate, AbuseState, HttpStatusCode } from '@peertube/peertube-models'
+import { AbuseCreate, AbuseState, HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   AbusesCommand,
   cleanupTests,
@@ -292,6 +292,38 @@ describe('Test abuses API validators', function () {
         fields,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+
+    it('Should fail to report a video the reporter cannot see', async function () {
+      const privateVideo = await server.videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE })
+      const blacklistedVideo = await server.videos.quickUpload({ name: 'blacklisted', privacy: VideoPrivacy.PUBLIC })
+      await server.blacklist.add({ videoId: blacklistedVideo.uuid })
+
+      for (const videoId of [ privateVideo.id, privateVideo.uuid, blacklistedVideo.id, blacklistedVideo.uuid ]) {
+        await command.report({ videoId, reason: 'my super reason', token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      }
+    })
+
+    it('Should fail to report an unlisted or password protected video using its numeric id', async function () {
+      const unlistedVideo = await server.videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED })
+      const passwordProtectedVideo = await server.videos.quickUpload({
+        name: 'password protected',
+        privacy: VideoPrivacy.PASSWORD_PROTECTED,
+        videoPasswords: [ 'password' ]
+      })
+
+      for (const video of [ unlistedVideo, passwordProtectedVideo ]) {
+        await command.report({
+          videoId: video.id,
+          reason: 'my super reason',
+          token: userToken,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+
+        for (const videoId of [ video.uuid, video.shortUUID ]) {
+          await command.report({ videoId, reason: 'my super reason', token: userToken })
+        }
+      }
     })
 
     it('Should fail to report a video the reporter collaborates on', async function () {

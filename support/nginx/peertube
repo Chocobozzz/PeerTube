@@ -1,6 +1,6 @@
-# Minimum Nginx version required:  1.13.0 (released Apr 25, 2017)
+# Minimum Nginx version required:  1.15.3 (released Aug 28, 2018)
 # Please check your Nginx installation features the following modules via 'nginx -V':
-# STANDARD HTTP MODULES: Core, Proxy, Rewrite, Access, Gzip, Headers, HTTP/2, Log, Real IP, SSL, Thread Pool, Upstream, AIO Multithreading.
+# STANDARD HTTP MODULES: Core, Proxy, Rewrite, Access, Gzip, Headers, HTTP/2, Log, Real IP, SSL, Thread Pool, Upstream, AIO Multithreading, Map.
 # THIRD PARTY MODULES:   None.
 
 server {
@@ -8,7 +8,9 @@ server {
   listen [::]:80;
   server_name ${WEBSERVER_HOST};
 
-  location /.well-known/acme-challenge/ {
+  server_tokens off; # don't advertise the nginx version in responses and error pages
+
+  location ^~ /.well-known/acme-challenge/ {
     default_type "text/plain";
     root /var/www/certbot;
   }
@@ -17,57 +19,177 @@ server {
 
 upstream backend {
   server ${PEERTUBE_HOST};
+
+  keepalive         16;
+
+  # Must stay below the keep-alive timeout of PeerTube (5s, NodeJS default)
+  keepalive_timeout 4s;
+}
+
+##
+# ---------------------------------------------------------------------------
+# Horizontal scalability
+# ---------------------------------------------------------------------------
+#
+# Leave this section untouched if you run a single PeerTube process.
+#
+# Horizontal scalability allows to offload most of the requests to `--role=secondary` processes.
+# See https://docs.joinpeertube.org/maintain/horizontal-scalability for more information.
+#
+# If you want to enable horizontal scalability, add one `server` line per secondary to the pools below.
+# `secondary_sticky_pool` sends the requests of a client to the same process (view/watch-time tracking and socket.io connections)
+#
+# For example:
+#
+#   upstream secondary_pool {
+#     server 127.0.0.1:9100;
+#     server 127.0.0.1:9101;
+#
+#     # Add `backup` keyword if you want this server to be used only when the secondary ones are not available
+#     server ${PEERTUBE_HOST};
+#
+#     keepalive         16;
+#     keepalive_timeout 4s;
+#   }
+#
+#   upstream secondary_sticky_pool {
+#     hash $remote_addr consistent;
+#
+#     server 127.0.0.1:9100;
+#     server 127.0.0.1:9101;
+#
+#     server ${PEERTUBE_HOST};
+#
+#     keepalive         16;
+#     keepalive_timeout 4s;
+#   }
+#
+# If a CDN or another load balancer sits in front, set `set_real_ip_from` / `real_ip_header` nginx directives.
+##
+
+upstream secondary_pool {
+  server ${PEERTUBE_HOST};
+
+  keepalive         16;
+  keepalive_timeout 4s;
+}
+
+upstream secondary_sticky_pool {
+  hash $remote_addr consistent;
+
+  server ${PEERTUBE_HOST};
+
+  keepalive         16;
+  keepalive_timeout 4s;
+}
+
+# Leave this section untouched, even if you don't use horizontal scalability.
+# Every request is routed to `secondary_pool`, except the ones listed below.
+#
+# A secondary answers `421 Misdirected Request` to unsupported endpoints, and `@api` replays these requests on the primary.
+#
+# This list is not exhaustive:
+#  * it avoids this round trip for the frequent primary-only requests,
+#  * it routes the requests that cannot be replayed because nginx streams their body (`proxy_request_buffering off` locations)
+#
+# method + path -> pool
+map $request_method$uri $peertube_pool {
+  default                                                  secondary_pool;
+
+  # Frequent requests only served by the primary
+  "~^[A-Z]+/(static|tracker)/"                             backend;
+  "~^[A-Z]+/plugins/[^/]+(/[^/]+)?/(router|auth)(/|$)"     backend;
+  "~^POST/api/v1/server/logs/client$"                      backend;
+
+  # Unbuffered request only served by the primary: cannot be replayed
+  "~^POST/api/v1/runners/jobs/[^/]+/update$"               backend;
+
+  # View/watch-time tracking: sticky to one process per viewer
+  "~^(PUT|POST)/api/v1/videos/[^/]+/(views|watching)$"     secondary_sticky_pool;
 }
 
 server {
+  # On nginx >= 1.25.1 `http2` as a `listen` parameter is deprecated and logs a warning on startup
+  # If your nginx is recent enough, replace the two lines below by `listen 443 ssl;` + `listen [::]:443 ssl;` + `http2 on;`
   listen 443 ssl http2;
   listen [::]:443 ssl http2;
+
   server_name ${WEBSERVER_HOST};
 
-  access_log /var/log/nginx/peertube.access.log; # reduce I/0 with buffer=10m flush=5m
+  # Don't advertise the nginx version in responses and error pages
+  server_tokens off;
+
+  access_log /var/log/nginx/peertube.access.log; # reduce I/O with buffer=10m flush=5m
   error_log  /var/log/nginx/peertube.error.log;
 
-  ##
-  # Certificates
-  # you need a certificate to run in production. see https://letsencrypt.org/
-  ##
   ssl_certificate     /etc/letsencrypt/live/${WEBSERVER_HOST}/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/${WEBSERVER_HOST}/privkey.pem;
 
-  location ^~ '/.well-known/acme-challenge' {
+  location ^~ /.well-known/acme-challenge/ {
     default_type "text/plain";
     root /var/www/certbot;
   }
 
   ##
-  # Security hardening (as of Nov 15, 2020)
-  # based on Mozilla Guideline v5.6
+  # Security hardening based on the Mozilla "intermediate" guideline v5.7
+  # The DHE ciphers of the guideline are left out because they require a `ssl_dhparam` file
   ##
 
   ssl_protocols             TLSv1.2 TLSv1.3;
-  ssl_prefer_server_ciphers on;
-  ssl_ciphers               ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256; # add ECDHE-RSA-AES256-SHA if you want compatibility with Android 4
+  ssl_prefer_server_ciphers off;
+  ssl_ciphers               ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305;
   ssl_session_timeout       1d; # defaults to 5m
-  ssl_session_cache         shared:SSL:10m; # estimated to 40k sessions
+  ssl_session_cache         shared:peertube_ssl:10m; # estimated to 40k sessions
   ssl_session_tickets       off;
-  # HSTS (https://hstspreload.org), requires to be copied in 'location' sections that have add_header directives
-  #add_header Strict-Transport-Security "max-age=63072000; includeSubDomains";
+  # HSTS (https://hstspreload.org)
+  # A location that sets its own `add_header` drops this one: copy it in these locations
+  #add_header Strict-Transport-Security "max-age=63072000" always;
 
   ##
   # Application
+  # ---------------------------------------------------------------------------
+  #
+  # IMPORTANT, read before editing a `location` below.
+  #
+  # `try_files /dev/null @named` performs an internal redirect that adds subtleties:
+  #   * `client_max_body_size` is read from the location matching the URI (the `location ~ ...` block)
+  #     except for request bodies sent without `Content-Length` (for example chunked), that are checked against the `@named` block
+  #   * `add_header` of the location matching the URI only applies to the responses nginx generates there (413, 403...),
+  #     the headers of a proxied response are read from the `@named` block
+  #   * `proxy_*` directives are read from the `@named` block
   ##
 
+  # Inherited by the locations below that don't set their own `proxy_set_header` / `proxy_*_timeout`
+  # A location that sets any `proxy_set_header` drops all these headers: repeat them there
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
+  proxy_set_header X-Real-IP       $remote_addr;
+
+  # Required by the `keepalive` of the upstreams
+  proxy_set_header Connection      "";
+  proxy_http_version 1.1;
+
+  proxy_connect_timeout 10m;
+  proxy_send_timeout    10m;
+  proxy_read_timeout    10m;
+
   location @api {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
-    proxy_set_header X-Real-IP       $remote_addr;
+    send_timeout 10m;
 
-    client_max_body_size  100k; # default is 1M
+    # Only applies to request bodies sent without `Content-Length`
+    # Matches the largest limit of the locations that use `try_files /dev/null @api`
+    client_max_body_size 12M;
 
-    proxy_connect_timeout 10m;
-    proxy_send_timeout    10m;
-    proxy_read_timeout    10m;
-    send_timeout          10m;
+    proxy_pass http://$peertube_pool;
+
+    # Only intercepts the status codes that have an `error_page`
+    proxy_intercept_errors on;
+    error_page 421 = @api_primary;
+  }
+
+  # Same as @api, on the primary
+  location @api_primary {
+    send_timeout 10m;
 
     proxy_pass http://backend;
   }
@@ -76,44 +198,50 @@ server {
     try_files /dev/null @api;
   }
 
-  location ~ ^/api/v1/videos/(upload-resumable|([^/]+/source/replace-resumable))$ {
-    client_max_body_size    0;
+  ##
+  # Uploads
+  #
+  # The upload locations below stream the request body directly to PeerTube instead of writing it to /var/lib/nginx first
+  # They proxy without `try_files` so `client_max_body_size` also applies to request bodies sent without `Content-Length`
+  # We can't rely on the 421 error code for these endpoints because the request body is not kept
+  ##
+
+  # Resumable uploads (PeerTube checks the file size declared when the upload starts) and runner job results
+  location ~ ^/api/v1/(videos/(upload-resumable|[^/]+/source/replace-resumable)|users/[^/]+/imports/import-resumable|runners/jobs/[^/]+/(update|success))$ {
+    client_max_body_size 0;
+
+    send_timeout            10m;
     proxy_request_buffering off;
 
-    try_files /dev/null @api;
+    proxy_pass http://$peertube_pool;
   }
 
-  location ~ ^/api/v1/users/[^/]+/imports/import-resumable$ {
-    client_max_body_size    0;
-    proxy_request_buffering off;
-
-    try_files /dev/null @api;
-  }
-
-  location ~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$ {
+  location ~ ^/api/v1/videos/(upload|[^/]+/studio/edit)$ {
     limit_except POST HEAD { deny all; }
 
-    # This is the maximum upload size, which roughly matches the maximum size of a video file.
-    # Note that temporary space is needed equal to the total size of all concurrent uploads.
-    # This data gets stored in /var/lib/nginx by default, so you may want to put this directory
-    # on a dedicated filesystem.
+    # This is the maximum upload size, which roughly matches the maximum size of a video file
     client_max_body_size                      12G; # default is 1M
-    add_header            X-File-Maximum-Size 8G always; # inform backend of the set value in bytes before mime-encoding (x * 1.4 >= client_max_body_size)
+    # Maximum file size advertised to the client, with a margin for the request overhead (8G * 1.4 <= 12G)
+    add_header            X-File-Maximum-Size 8G always;
+
+    send_timeout            10m;
     proxy_request_buffering off;
+
+    proxy_pass http://$peertube_pool;
+  }
+
+  # View tracking (PUT|POST /views and /watching)
+  location ~ ^/api/v1/videos/[^/]+/(views|watching)$ {
+    client_max_body_size 100k; # default is 1M
 
     try_files /dev/null @api;
   }
 
-  location ~ ^/api/v1/runners/jobs/[^/]+/(update|success)$ {
-    client_max_body_size    0;
-    proxy_request_buffering off;
-
-    try_files /dev/null @api;
-  }
-
-  location ~ ^/api/v1/(videos|video-playlists|video-channels|users/me) {
+  # Endpoints that accept an image (avatar, banner, thumbnail, preview, channel logo, instance logo)
+  location ~ ^/api/v1/(videos|video-playlists|video-channels|users/me|config/instance-(avatar|banner|logo)) {
     client_max_body_size                      12M; # default is 1M
-    add_header            X-File-Maximum-Size 8M always; # inform backend of the set value in bytes before mime-encoding (x * 1.4 >= client_max_body_size)
+    # Maximum file size advertised to the client, with a margin for the request overhead (8M * 1.4 <= 12M)
+    add_header            X-File-Maximum-Size 8M always;
 
     try_files /dev/null @api;
   }
@@ -123,25 +251,36 @@ server {
   ##
 
   location @api_websocket {
-    proxy_http_version 1.1;
-    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header   Host            $host; # Use $http_host if you use a non standard HTTP port
-    proxy_set_header   X-Real-IP       $remote_addr;
-    proxy_set_header   Upgrade         $http_upgrade;
-    proxy_set_header   Connection      "upgrade";
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    # Use $http_host if you use a non standard HTTP port
+    proxy_set_header Host            $host;
+    proxy_set_header X-Real-IP       $remote_addr;
+    proxy_set_header Upgrade         $http_upgrade;
+    proxy_set_header Connection      "upgrade";
+
+    # Peers send a message to the tracker every 15 minutes: don't close the websocket before then
+    proxy_read_timeout 15m;
 
     proxy_pass http://backend;
   }
 
-  location /socket.io {
-    try_files /dev/null @api_websocket;
+  # Same as @api_websocket, but socket.io connections can be served by a secondary process
+  location @api_socket_io {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    # Use $http_host if you use a non standard HTTP port
+    proxy_set_header Host            $host;
+    proxy_set_header X-Real-IP       $remote_addr;
+    proxy_set_header Upgrade         $http_upgrade;
+    proxy_set_header Connection      "upgrade";
+
+    proxy_pass http://secondary_sticky_pool;
+  }
+
+  location /socket.io/ {
+    try_files /dev/null @api_socket_io;
   }
 
   location /tracker/socket {
-    # Peers send a message to the tracker every 15 minutes
-    # Don't close the websocket before then
-    proxy_read_timeout 15m; # default is 60s
-
     try_files /dev/null @api_websocket;
   }
 
@@ -152,44 +291,51 @@ server {
 
   ##
   # Performance optimizations
-  # For extra performance please refer to https://github.com/denji/nginx-tuning
   ##
 
   root /var/www/peertube/storage;
 
-  # Enable compression for JS/CSS/HTML, for improved client load times.
-  # It might be nice to compress JSON/XML as returned by the API, but
-  # leaving that out to protect against potential BREACH attack.
+  # Compress the static client assets and the public XML feeds, for improved client load times
   gzip              on;
   gzip_vary         on;
-  gzip_types        # text/html is always compressed by HttpGzipModule
-                    text/css
+  # Do not include `application/json` to prevent BREACH (CVE-2013-3587)
+  # text/html is always compressed by HttpGzipModule
+  gzip_types        text/css
                     application/javascript
                     font/truetype
                     font/opentype
                     application/vnd.ms-fontobject
                     image/svg+xml
-                    application/xml;
-  gzip_min_length   1000; # default is 20 bytes
+                    # For /feeds/ endpoints and /sitemap.xml
+                    text/xml
+                    application/xml
+                    application/rss+xml
+                    application/atom+xml;
+  gzip_min_length   1000;
   gzip_buffers      16 8k;
-  gzip_comp_level   2; # default is 1
+  gzip_comp_level   2;
 
-  client_body_timeout       30s; # default is 60
-  client_header_timeout     10s; # default is 60
-  send_timeout              10s; # default is 60
-  keepalive_timeout         10s; # default is 75
-  resolver_timeout          10s; # default is 30
+  client_body_timeout       30s;
+  client_header_timeout     10s;
+  send_timeout              10s;
+  keepalive_timeout         10s;
+  resolver_timeout          10s;
   reset_timedout_connection on;
   proxy_ignore_client_abort on;
 
-  tcp_nopush                on; # send headers in one piece
-  tcp_nodelay               on; # don't buffer data sent, good for small data bursts in real time
+  # Send headers in one piece
+  tcp_nopush                on;
+  # Don't buffer data sent, good for small data bursts in real time
+  tcp_nodelay               on;
 
-  # If you have a small /var/lib partition, it could be interesting to store temp nginx uploads in a different place
+  # Buffered request bodies (e.g. image uploads, up to 12M above) are written to /var/lib/nginx by default
+  # The video upload locations above stream their body to PeerTube instead, so they don't use this directory
+  # If you have a small /var/lib partition, you may want to store them in a different place
   # See https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_temp_path
   #client_body_temp_path /var/www/peertube/storage/nginx/;
 
-  # Bypass PeerTube for performance reasons. Optional.
+  # Optional block
+  # Bypass PeerTube for performance reasons
   # Should be consistent with client-overrides assets list in client.ts server controller
   location ~ ^/client/(assets/images/(default-playlist\.jpg|default-avatar-account\.png|default-avatar-account-48x48\.png|default-avatar-video-channel\.png|default-avatar-video-channel-48x48\.png))$ {
     add_header Cache-Control "public, max-age=31536000, immutable"; # Cache 1 year
@@ -199,64 +345,46 @@ server {
     try_files /storage/client-overrides/$1 /peertube-latest/client/dist/$1 @api;
   }
 
-  # Bypass PeerTube for performance reasons. Optional.
+  # Optional block
+  # Bypass PeerTube for performance reasons
   location ~ ^/client/(.*\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$ {
     add_header Cache-Control "public, max-age=31536000, immutable"; # Cache 1 year
 
     alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
-  location ~ ^(/static/(webseed|web-videos|streaming-playlists/hls)/private/)|^/download {
-    # We can't rate limit a try_files directive, so we need to duplicate @api
-
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host            $host; # Use $http_host if you use a non standard HTTP port
-    proxy_set_header X-Real-IP       $remote_addr;
-
+  # Proxied without `try_files`, to rate limit the proxied response
+  location ~ ^(/static/(webseed|web-videos|streaming-playlists/hls)/private/)|^/object-storage-proxy/|^/download {
     # Prevent too much proxying, which results in high disk write IO
     proxy_max_temp_file_size 50M;
     proxy_limit_rate 5M;
 
-    proxy_pass http://backend;
+    # Private static files are only served by the primary, private object storage files and downloads by any process
+    proxy_pass http://$peertube_pool;
   }
 
-  # Bypass PeerTube for performance reasons. Optional.
-  location ~ ^/static/(webseed|web-videos|redundancy|streaming-playlists)/ {
-    limit_rate_after            5M;
+  # Optional block
+  # Bypass PeerTube for performance reasons
+  location ~ ^/static/(?<peertube_static_path>(web-videos|redundancy|streaming-playlists)/.+)$ {
+    limit_rate_after 5M;
+    limit_rate       5M;
 
-    set $peertube_limit_rate  5M;
+    # These files are public and unauthenticated, so they can be read cross origin
+    add_header Access-Control-Allow-Origin  '*' always;
+    add_header Access-Control-Allow-Methods 'GET, OPTIONS' always;
+    add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type' always;
+    add_header Access-Control-Max-Age       1728000 always; # Preflight request can be cached 20 days
 
-    # Use this line with nginx >= 1.17.0
-    limit_rate $peertube_limit_rate;
-    # Or this line with nginx < 1.17.0
-    # set $limit_rate $peertube_limit_rate;
-
+    # Keep this `if` free of `add_header` or it will replace the whole `add_header` above
     if ($request_method = 'OPTIONS') {
-      add_header Access-Control-Allow-Origin  '*';
-      add_header Access-Control-Allow-Methods 'GET, OPTIONS';
-      add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-      add_header Access-Control-Max-Age       1728000; # Preflight request can be cached 20 days
-      add_header Content-Type                 'text/plain; charset=UTF-8';
-      add_header Content-Length               0;
       return 204;
     }
 
-    if ($request_method = 'GET') {
-      add_header Access-Control-Allow-Origin  '*';
-      add_header Access-Control-Allow-Methods 'GET, OPTIONS';
-      add_header Access-Control-Allow-Headers 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-    }
-
-    # Enabling the sendfile directive eliminates the step of copying the data into the buffer
-    # and enables direct copying data from one file descriptor to another.
+    # Enables direct copying data from one file descriptor to another
     sendfile on;
     sendfile_max_chunk 1M; # prevent one fast connection from entirely occupying the worker process. should be > 800k.
     aio threads;
 
-    # web-videos is the name of the directory mapped to the `storage.web_videos` key in your PeerTube configuration
-    rewrite ^/static/webseed/(.*)$ /web-videos/$1 break;
-    rewrite ^/static/(.*)$         /$1        break;
-
-    try_files $uri @api;
+    try_files /$peertube_static_path @api;
   }
 }

@@ -1,3 +1,4 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamFPS } from '@peertube/peertube-ffmpeg'
 import { VideoFileStream } from '@peertube/peertube-models'
 import { initDatabaseModels, sequelizeTypescript } from '@server/initializers/database.js'
@@ -6,7 +7,6 @@ import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { ApplicationModel } from '@server/models/application/application.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoModel } from '@server/models/video/video.js'
-import Bluebird from 'bluebird'
 import { pathExists } from 'fs-extra/esm'
 import { QueryTypes } from 'sequelize'
 
@@ -63,7 +63,7 @@ async function run () {
 
   const ids = await VideoModel.listLocalIds()
 
-  await Bluebird.map(ids, async id => {
+  await promiseMap(ids, async id => {
     try {
       await processVideo(id)
     } catch (err) {

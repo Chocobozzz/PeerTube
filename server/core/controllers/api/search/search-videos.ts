@@ -1,5 +1,5 @@
 import { HttpStatusCode, ResultList, Video, VideosSearchQueryAfterSanitize } from '@peertube/peertube-models'
-import { sanitizeUrl } from '@server/helpers/core-utils.js'
+import { sanitizeUrl } from '@peertube/peertube-node-utils'
 import { pickSearchVideoQuery } from '@server/helpers/query.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -24,6 +24,7 @@ import {
   videosSearchSortValidator,
   videosSearchValidator
 } from '../../../middlewares/index.js'
+import { checkCanSeeVideo } from '../../../middlewares/validators/shared/videos.js'
 import { guessAdditionalAttributesFromQuery } from '../../../models/video/formatter/index.js'
 import { VideoModel } from '../../../models/video/video.js'
 import { MVideoAccountLightBlacklistAllFiles } from '../../../types/models/index.js'
@@ -57,7 +58,7 @@ function searchVideos (req: express.Request, res: express.Response) {
   const search = query.search
 
   if (isURISearch(search)) {
-    return searchVideoURI(search, res)
+    return searchVideoURI(search, req, res)
   }
 
   if (isSearchIndexSearch(query)) {
@@ -136,7 +137,7 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, req: expre
   return res.json(getFormattedObjects(resultList.data, resultList.total, guessAdditionalAttributesFromQuery(query)))
 }
 
-async function searchVideoURI (url: string, res: express.Response) {
+async function searchVideoURI (url: string, req: express.Request, res: express.Response) {
   let video: MVideoAccountLightBlacklistAllFiles
 
   // Check if we can fetch a remote video with the URL
@@ -160,6 +161,9 @@ async function searchVideoURI (url: string, res: express.Response) {
   } else {
     video = await searchLocalUrl(sanitizeLocalUrl(url), url => VideoModel.loadByUrlAndPopulateAccountAndFiles(url))
   }
+
+  // The resolved video may still be a local private/internal/password protected
+  if (video && !await checkCanSeeVideo({ req, res, video, paramId: video.uuid })) return
 
   return res.json({
     total: video ? 1 : 0,

@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, VideoBlacklistType } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoBlacklistType, VideoPrivacy } from '@peertube/peertube-models'
 import {
   BlacklistCommand,
   cleanupTests,
@@ -289,6 +289,19 @@ describe('Test video blacklist API validators', function () {
 
     it('Should succeed with the correct parameters', async function () {
       await servers[0].blacklist.list({ type: VideoBlacklistType.MANUAL })
+    })
+  })
+
+  describe('When getting a blacklisted video', function () {
+    it('Should not be able to get a blacklisted internal video of another user', async function () {
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'internal', privacy: VideoPrivacy.INTERNAL, token: userToken })
+      await command.add({ videoId: uuid })
+
+      await servers[0].videos.get({ id: uuid, token: anotherUserToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+      for (const token of [ userToken, servers[0].accessToken ]) {
+        await servers[0].videos.get({ id: uuid, token })
+      }
     })
   })
 

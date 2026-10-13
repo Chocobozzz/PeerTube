@@ -7,7 +7,7 @@ import {
   MVideoFull,
   MVideoId,
   MVideoImmutable,
-  MVideoThumbnails,
+  MVideoThumbnailsBlacklist,
   MVideoWithBlacklist,
   MVideoWithRights
 } from '@server/types/models/index.js'
@@ -18,7 +18,7 @@ type VideoLoadType =
   | 'ap'
   | 'full'
   | 'with-blacklist'
-  | 'with-thumbnails'
+  | 'with-thumbnails-blacklist'
   | 'with-rights'
   | 'id'
   | 'none'
@@ -28,7 +28,7 @@ function loadVideo (id: number | string, fetchType: 'for-api', userId?: number):
 function loadVideo (id: number | string, fetchType: 'ap'): Promise<MVideoAP>
 function loadVideo (id: number | string, fetchType: 'full', userId?: number): Promise<MVideoFull>
 function loadVideo (id: number | string, fetchType: 'with-blacklist', userId?: number): Promise<MVideoWithBlacklist>
-function loadVideo (id: number | string, fetchType: 'with-thumbnails', userId?: number): Promise<MVideoThumbnails>
+function loadVideo (id: number | string, fetchType: 'with-thumbnails-blacklist', userId?: number): Promise<MVideoThumbnailsBlacklist>
 function loadVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Promise<MVideoId>
 function loadVideo (id: number | string, fetchType: 'unsafe-immutable-only'): Promise<MVideoImmutable>
 function loadVideo (id: number | string, fetchType: 'with-rights'): Promise<MVideoWithRights>
@@ -36,12 +36,12 @@ function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoAP | MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnails | MVideoWithRights>
+): Promise<MVideoAP | MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnailsBlacklist | MVideoWithRights>
 function loadVideo (
   id: number | string,
   fetchType: VideoLoadType,
   userId?: number
-): Promise<MVideoAP | MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnails> {
+): Promise<MVideoAP | MVideoFull | MVideoWithBlacklist | MVideoId | MVideoImmutable | MVideoThumbnailsBlacklist> {
   if (fetchType === 'for-api') return VideoModel.loadForGetAPI({ id, userId })
 
   if (fetchType === 'ap') return VideoModel.loadAP(id)
@@ -52,7 +52,7 @@ function loadVideo (
 
   if (fetchType === 'with-blacklist') return VideoModel.loadWithBlacklist(id)
 
-  if (fetchType === 'with-thumbnails') return VideoModel.loadWithThumbnails(id)
+  if (fetchType === 'with-thumbnails-blacklist') return VideoModel.loadWithThumbnailsAndBlacklist(id)
 
   if (fetchType === 'with-rights') return VideoModel.loadWithRights(id)
 

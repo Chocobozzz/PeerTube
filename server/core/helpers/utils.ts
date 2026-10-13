@@ -1,9 +1,8 @@
 import { ResultList } from '@peertube/peertube-models'
-import { sha256 } from '@peertube/peertube-node-utils'
+import { randomBytesPromise, sha256 } from '@peertube/peertube-node-utils'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { join } from 'path'
 import { CONFIG } from '../initializers/config.js'
-import { randomBytesPromise } from './core-utils.js'
 
 export async function generateRandomString (size: number) {
   const raw = await randomBytesPromise(size)

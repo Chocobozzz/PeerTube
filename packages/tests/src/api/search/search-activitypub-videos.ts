@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
-import { VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -188,6 +188,62 @@ describe('Test ActivityPub videos search', function () {
     const body = await command.searchVideos({ search, token: servers[0].accessToken })
     expect(body.total).to.equal(0)
     expect(body.data).to.have.lengthOf(0)
+  })
+
+  it('Should not leak a private video via URI search', async function () {
+    const userToken = await servers[0].users.generateUserAndToken('user_private_search')
+
+    const { uuid } = await servers[0].videos.upload({ attributes: { name: 'private video', privacy: VideoPrivacy.PRIVATE } })
+    const search = servers[0].url + '/videos/watch/' + uuid
+
+    // Force path where we load the video from local database
+    await servers[0].config.updateExistingConfig({ newConfig: { search: { remoteUri: { users: false, anonymous: false } } } })
+
+    await command.searchVideos({ search, token: undefined, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    await command.searchVideos({ search, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+    const body = await command.searchVideos({ search, token: servers[0].accessToken })
+    expect(body.total).to.equal(1)
+    expect(body.data[0].uuid).to.equal(uuid)
+  })
+
+  it('Should require authentication or a password to find a password protected video via URI search', async function () {
+    const userToken = await servers[0].users.generateUserAndToken('user_password_video_search')
+    const videoPassword = 'my super password'
+
+    const { uuid } = await servers[0].videos.upload({
+      attributes: { name: 'password protected video', privacy: VideoPrivacy.PASSWORD_PROTECTED, videoPasswords: [ videoPassword ] }
+    })
+    const search = servers[0].url + '/videos/watch/' + uuid
+
+    // Force path where we load the video from local database
+    await servers[0].config.updateExistingConfig({ newConfig: { search: { remoteUri: { users: false, anonymous: false } } } })
+
+    // No password, no auth
+    await command.searchVideos({ search, token: undefined, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    // No password, authenticated but not allowed to bypass it
+    await command.searchVideos({ search, token: userToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    // Wrong password
+    await command.searchVideos({
+      search,
+      token: undefined,
+      videoPassword: 'wrong password',
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+
+    // Correct password, no auth needed
+    {
+      const body = await command.searchVideos({ search, token: undefined, videoPassword })
+      expect(body.total).to.equal(1)
+      expect(body.data[0].uuid).to.equal(uuid)
+    }
+
+    // Owner can find it without a password
+    {
+      const body = await command.searchVideos({ search, token: servers[0].accessToken })
+      expect(body.total).to.equal(1)
+      expect(body.data[0].uuid).to.equal(uuid)
+    }
   })
 
   after(async function () {

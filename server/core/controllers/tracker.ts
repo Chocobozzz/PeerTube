@@ -7,6 +7,7 @@ import { WebSocketServer } from 'ws'
 import { createLogger } from '../helpers/logger.js'
 import { CONFIG } from '../initializers/config.js'
 import { LRU_CACHE, TRACKER_RATE_LIMITS } from '../initializers/constants.js'
+import { isSecondaryProcess } from '../initializers/process-role.js'
 import { VideoInfohashModel } from '../models/video/video-infohash.js'
 
 const logger = createLogger()
@@ -98,6 +99,13 @@ export function createWebsocketTrackerServer (app: express.Application) {
 
   server.on('upgrade', (request: express.Request, socket, head) => {
     if (request.url === '/tracker/socket') {
+      // The tracker keeps the peers of a swarm in the memory of the primary: a secondary would run another swarm
+      if (isSecondaryProcess()) {
+        socket.write('HTTP/1.1 421 Misdirected Request\r\n\r\n')
+        socket.destroy()
+        return
+      }
+
       const ip = proxyAddr(request, CONFIG.TRUST_PROXY)
 
       if (blockedIPs.has(ip)) {

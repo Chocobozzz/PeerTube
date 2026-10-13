@@ -1,11 +1,13 @@
-import { LogoType, UploadImageType, UploadImageType_Type } from '@peertube/peertube-models'
+import { FileStorage, LogoType, UploadImageType, UploadImageType_Type } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { buildImageSize, processImage, processSVG } from '@server/helpers/image-utils.js'
+import { storeCommonFile } from '@server/lib/object-storage/common-files.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { remove } from 'fs-extra/esm'
-import { retryTransactionWrapper } from '../helpers/database-utils.js'
+import { join } from 'path'
+import { retryTransactionWrapper, runTransaction } from '../helpers/database-utils.js'
+import { CONFIG } from '../initializers/config.js'
 import { UPLOAD_IMAGES_SIZE } from '../initializers/constants.js'
-import { sequelizeTypescript } from '../initializers/database.js'
 import { MActorUploadImages } from '../types/models/index.js'
 
 export async function replaceUploadImage (options: {
@@ -15,11 +17,16 @@ export async function replaceUploadImage (options: {
 }) {
   const { actor, imagePhysicalFile, type } = options
 
-  const processedImages = await generateImageSizes(imagePhysicalFile.path, type)
+  // Upload before the transaction is opened
+  const processedImages = await generateImageSizesAndUploadIfNeeded(imagePhysicalFile.path, type)
   await remove(imagePhysicalFile.path)
 
+  const storage = CONFIG.OBJECT_STORAGE.ENABLED
+    ? FileStorage.OBJECT_STORAGE
+    : FileStorage.FILE_SYSTEM
+
   return retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
+    runTransaction(async t => {
       const imagesToDelete = await UploadImageModel.listByActorAndType(actor, type, t)
 
       for (const toDelete of imagesToDelete) {
@@ -34,6 +41,7 @@ export async function replaceUploadImage (options: {
           height: toCreate.imageSize.height,
           width: toCreate.imageSize.width,
           fileUrl: null,
+          storage,
           type,
           actorId: actor.id
         }, { transaction: t })
@@ -44,13 +52,14 @@ export async function replaceUploadImage (options: {
   )
 }
 
-async function generateImageSizes (imagePath: string, type: UploadImageType_Type) {
+async function generateImageSizesAndUploadIfNeeded (imagePath: string, type: UploadImageType_Type) {
   if (imagePath.endsWith('.svg')) {
     const extension = getLowercaseExtension(imagePath)
     const imageName = buildUUID() + extension
-    const destination = UploadImageModel.getFSPathOf(imageName)
+    const destination = buildUploadImageDestination(imageName)
 
     await processSVG({ path: imagePath, destination })
+    await storeUploadImageIfNeeded(destination, imageName)
 
     return [ { imageName, imageSize: { width: null, height: null } } ]
   }
@@ -69,11 +78,26 @@ async function generateImageSize (options: {
 
   const extension = getLowercaseExtension(imagePath)
   const imageName = buildUUID() + extension
-  const destination = UploadImageModel.getFSPathOf(imageName)
+  const destination = buildUploadImageDestination(imageName)
 
   await processImage({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
+  await storeUploadImageIfNeeded(destination, imageName)
 
   return { imageName, imageSize }
+}
+
+// Generate in tmp when the final destination is object storage
+function buildUploadImageDestination (imageName: string) {
+  if (CONFIG.OBJECT_STORAGE.ENABLED) return join(CONFIG.STORAGE.TMP_DIR, imageName)
+
+  return UploadImageModel.getFSPathOf(imageName)
+}
+
+async function storeUploadImageIfNeeded (destination: string, imageName: string) {
+  if (!CONFIG.OBJECT_STORAGE.ENABLED) return
+
+  await storeCommonFile('uploads', destination, imageName)
+  await remove(destination)
 }
 
 // ---------------------------------------------------------------------------
@@ -85,7 +109,7 @@ export async function deleteUploadImages (options: {
   const { actor, type } = options
 
   return retryTransactionWrapper(() => {
-    return sequelizeTypescript.transaction(async t => {
+    return runTransaction(async t => {
       const imagesToDelete = await UploadImageModel.listByActorAndType(actor, type, t)
 
       for (const toDelete of imagesToDelete) {

@@ -1,0 +1,182 @@
+import { FileStorage, FileStorageType } from '@peertube/peertube-models'
+import { createReadStream } from 'fs'
+import { Readable } from 'stream'
+import { CommonObjectStorageType, getObjectStorageFileConfig } from './config.js'
+import { getObjectStorageContentType } from './content-type.js'
+import { generateCommonFileObjectStorageKey } from './keys.js'
+import { makeAvailableInTmp } from './make-available.js'
+import {
+  BucketInfo,
+  copyObject,
+  createObjectReadStream,
+  isNotImplementedError,
+  objectStorageLogger as logger,
+  makeAvailable,
+  removeObject,
+  storeObject,
+  updateObjectACL
+} from './shared/index.js'
+import { buildObjectStoragePublicFileUrl } from './urls.js'
+
+// Common helpers for object storage entities (avatars, thumbnails, storyboards, etc.) that use a flat filename as their object storage key
+
+export type LocalCommonFile = {
+  filename: string
+  storage: FileStorageType
+
+  isLocal(): boolean
+  getFSPath(): string
+}
+
+export function storeCommonFile (
+  type: CommonObjectStorageType,
+  inputPath: string,
+  filename: string,
+  options: { isPrivate?: boolean } = {}
+) {
+  // Avatars, thumbnails, storyboards, torrents and uploads are always public, including for private videos
+  const { isPrivate = false } = options
+
+  return storeObject({
+    inputPath,
+    objectStorageKey: generateCommonFileObjectStorageKey(type, filename),
+    bucketInfo: getObjectStorageFileConfig(type),
+
+    isPrivate,
+
+    contentType: getObjectStorageContentType(filename),
+
+    // Force a download instead of inline rendering to prevent XSS if the svg is opened directly
+    // The object storage provider serves the file directly, so we can't set this header at request time
+    contentDisposition: type === 'uploads' && filename.endsWith('.svg')
+      ? 'attachment'
+      : undefined
+  })
+}
+
+// Server side copy of an object of the same object storage (another section, staging...): the file doesn't go through this instance
+// Falls back to a download and an upload for providers that don't support it (big files need UploadPartCopy)
+// Other errors (missing object, access denied...) are thrown: the fallback would fail the same way, only slower
+export async function copyObjectToCommonFile (options: {
+  sourceKey: string
+  sourceBucketInfo: BucketInfo
+  sourceSize?: number
+
+  type: CommonObjectStorageType
+  filename: string
+  isPrivate: boolean
+}) {
+  const { sourceKey, sourceBucketInfo, sourceSize, type, filename, isPrivate } = options
+
+  const bucketInfo = getObjectStorageFileConfig(type)
+  const objectStorageKey = generateCommonFileObjectStorageKey(type, filename)
+  const contentType = getObjectStorageContentType(filename)
+
+  try {
+    await copyObject({
+      sourceKey,
+      sourceBucketInfo,
+      sourceSize,
+      destinationKey: objectStorageKey,
+      destinationBucketInfo: bucketInfo,
+      isPrivate,
+      contentType
+    })
+  } catch (err) {
+    if (!isNotImplementedError(err)) throw err
+
+    logger.warn('Server side copy of object %s to %s is not supported, fallback to a download and an upload', sourceKey, objectStorageKey, {
+      err
+    })
+
+    await makeAvailableInTmp({
+      key: sourceKey,
+      bucketInfo: sourceBucketInfo,
+      filename,
+      cb: inputPath => storeObject({ inputPath, objectStorageKey, bucketInfo, isPrivate, contentType })
+    })
+  }
+}
+
+export function removeCommonFileObjectStorage (type: CommonObjectStorageType, filename: string) {
+  return removeObject(generateCommonFileObjectStorageKey(type, filename), getObjectStorageFileConfig(type))
+}
+
+export function updateCommonFileACL (type: CommonObjectStorageType, filename: string, isPrivate: boolean) {
+  return updateObjectACL({
+    objectStorageKey: generateCommonFileObjectStorageKey(type, filename),
+    bucketInfo: getObjectStorageFileConfig(type),
+    isPrivate
+  })
+}
+
+export function makeCommonFileAvailable<T> (type: CommonObjectStorageType, filename: string, cb: (path: string) => Promise<T>) {
+  return makeAvailableInTmp({
+    key: generateCommonFileObjectStorageKey(type, filename),
+    bucketInfo: getObjectStorageFileConfig(type),
+    filename,
+    cb
+  })
+}
+
+export function makeCommonFileAvailableIn (type: CommonObjectStorageType, filename: string, destination: string) {
+  return makeAvailable({
+    key: generateCommonFileObjectStorageKey(type, filename),
+    destination,
+    bucketInfo: getObjectStorageFileConfig(type)
+  })
+}
+
+// Full S3 response + stream: needed by callers that proxy HTTP range requests (web videos, captions, original files)
+export function getCommonFileReadStreamWithRes (type: CommonObjectStorageType, filename: string, rangeHeader: string) {
+  return createObjectReadStream({
+    key: generateCommonFileObjectStorageKey(type, filename),
+    bucketInfo: getObjectStorageFileConfig(type),
+    rangeHeader
+  })
+}
+
+export async function getCommonFileReadStream (type: CommonObjectStorageType, filename: string) {
+  const { stream } = await getCommonFileReadStreamWithRes(type, filename, undefined)
+
+  return stream
+}
+
+export function buildCommonFileObjectStorageUrl (type: CommonObjectStorageType, filename: string) {
+  return buildObjectStoragePublicFileUrl({
+    bucket: getObjectStorageFileConfig(type),
+    key: generateCommonFileObjectStorageKey(type, filename)
+  })
+}
+
+// ---------------------------------------------------------------------------
+
+// Build a read stream of a local file, wherever it is stored on filesystem or object storage
+export function buildLocalCommonFileReadStream (type: CommonObjectStorageType, file: LocalCommonFile): Promise<Readable> {
+  checkIsLocalOrThrow(type, file)
+
+  if (file.storage === FileStorage.OBJECT_STORAGE) {
+    return getCommonFileReadStream(type, file.filename)
+  }
+
+  return Promise.resolve(createReadStream(file.getFSPath()))
+}
+
+// Run `cb` on a physical path of a local file, downloading it from object storage if needed
+export function withLocalCommonFile<T> (type: CommonObjectStorageType, file: LocalCommonFile, cb: (path: string) => Promise<T>) {
+  checkIsLocalOrThrow(type, file)
+
+  if (file.storage === FileStorage.OBJECT_STORAGE) {
+    return makeCommonFileAvailable(type, file.filename, cb)
+  }
+
+  return cb(file.getFSPath())
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function checkIsLocalOrThrow (type: CommonObjectStorageType, file: LocalCommonFile) {
+  if (!file.isLocal()) throw new Error(`Cannot read remote file ${file.filename} (${type})`)
+}

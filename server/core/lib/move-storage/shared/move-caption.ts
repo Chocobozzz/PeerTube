@@ -1,21 +1,19 @@
+import { FileStorageType } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
-import { MStreamingPlaylistVideoUUID, MVideoCaption } from '@server/types/models/index.js'
+import { moveCaptionFiles } from './move-video.js'
 
 const logger = createLogger()
 
 export async function moveCaptionToStorage (options: {
   captionId: number
 
-  moveCaptionFiles: (captions: MVideoCaption[], hls: MStreamingPlaylistVideoUUID) => Promise<void>
+  targetStorage: FileStorageType
 }) {
-  const {
-    captionId,
-    moveCaptionFiles
-  } = options
+  const { captionId, targetStorage } = options
 
   const caption = await VideoCaptionModel.loadWithVideo(captionId)
 
@@ -30,7 +28,7 @@ export async function moveCaptionToStorage (options: {
     const hls = await VideoStreamingPlaylistModel.loadHLSByVideoWithVideo(caption.videoId)
 
     try {
-      await moveCaptionFiles([ caption ], hls)
+      await moveCaptionFiles([ caption ], hls, targetStorage)
 
       scheduleVideoFederation({ video: caption.Video })
     } finally {

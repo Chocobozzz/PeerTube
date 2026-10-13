@@ -12,6 +12,8 @@ import {
   makeRawRequest,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { convertCustomConfigBody } from '@peertube/peertube-server/core/initializers/config/custom-config.js'
+import { CONFIG_TIERS } from '@peertube/peertube-server/core/initializers/config.js'
 import { testAvatarSize, testFileExistsOnFSOrNot, testImage } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 import { basename } from 'path'
@@ -685,6 +687,35 @@ describe('Test config', function () {
     })
   })
 
+  describe('Configuration tiers', function () {
+    it('Should only expose dynamic keys through the custom configuration', async function () {
+      const customConfig = await server.config.getCustomConfig()
+
+      const paths: string[] = []
+
+      const collect = (node: any, prefix: string) => {
+        for (const [ key, value ] of Object.entries(node)) {
+          const path = prefix
+            ? `${prefix}.${key}`
+            : key
+
+          if (value !== null && typeof value === 'object' && !Array.isArray(value)) collect(value, path)
+          else paths.push(path)
+        }
+      }
+
+      collect(convertCustomConfigBody(customConfig), '')
+
+      const known = paths.filter(p => CONFIG_TIERS[p] !== undefined)
+
+      // Guards against the test passing because it matched nothing
+      expect(known).to.have.length.above(100)
+
+      expect(known.filter(p => CONFIG_TIERS[p] !== 'dynamic'), 'admin editable keys that need a restart')
+        .to.deep.equal([])
+    })
+  })
+
   describe('Image files', function () {
     async function checkAndGetServerImages () {
       const { instance } = await server.config.getAbout()
@@ -1077,7 +1108,8 @@ describe('Test config', function () {
       const icon = body.icons.find(f => f.sizes === '48x48')
       expect(icon).to.exist
 
-      await testImage({ url: server.url + icon.src, name: `avatar-resized-48x48.png` })
+      // src is absolute when the avatar is in object storage, relative otherwise
+      await testImage({ url: new URL(icon.src, server.url).href, name: `avatar-resized-48x48.png` })
     })
   })
 

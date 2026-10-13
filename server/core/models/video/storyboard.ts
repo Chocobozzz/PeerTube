@@ -1,13 +1,27 @@
-import { Storyboard } from '@peertube/peertube-models'
+import { FileStorage, type FileStorageType, Storyboard } from '@peertube/peertube-models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { removeCachedFile } from '@server/lib/object-storage/cache.js'
+import { buildCommonFileObjectStorageUrl, removeCommonFileObjectStorage } from '@server/lib/object-storage/common-files.js'
 import { MStoryboard, MStoryboardVideo, MVideo } from '@server/types/models/index.js'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { Op, Transaction } from 'sequelize'
-import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AfterDestroy,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import { createLogger } from '../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, FILES_CACHE, LAZY_STATIC_PATHS, WEBSERVER } from '../../initializers/constants.js'
-import { SequelizeModel } from '../shared/index.js'
+import { SequelizeModel, doesExist } from '../shared/index.js'
 import { VideoModel } from './video.js'
 
 const logger = createLogger()
@@ -50,6 +64,11 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
   @Column
   declare spriteDuration: number
 
+  @AllowNull(false)
+  @Default(FileStorage.FILE_SYSTEM)
+  @Column
+  declare storage: FileStorageType
+
   @AllowNull(true)
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
   declare fileUrl: string
@@ -77,10 +96,13 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
   declare updatedAt: Date
 
   @AfterDestroy
-  static removeInstanceFile (instance: StoryboardModel) {
-    // Don't block the transaction
-    instance.removeFile()
-      .catch(err => logger.error('Cannot remove storyboard file %s.', instance.filename, { err }))
+  static removeInstanceFile (instance: StoryboardModel, options: { transaction?: Transaction }) {
+    // Keep the file if the transaction is rolled back
+    afterCommitIfTransaction(options.transaction, () => {
+      // Don't block the caller
+      instance.removeFile()
+        .catch(err => logger.error('Cannot remove storyboard file %s.', instance.filename, { err }))
+    })
   }
 
   static loadByVideo (videoId: number, transaction?: Transaction): Promise<MStoryboard> {
@@ -129,14 +151,38 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
     })
   }
 
+  static doesOwnedFileExist (filename: string, storage: FileStorageType) {
+    const query = 'SELECT 1 FROM "storyboard" ' +
+      `WHERE "filename" = $filename AND "storage" = $storage AND "fileUrl" IS NULL LIMIT 1`
+
+    return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })
+  }
+
+  // Don't update a storyboard that has been replaced or moved in the meantime
+  static async updateStorageIfUnchanged (filename: string, from: FileStorageType, to: FileStorageType) {
+    const [ affectedCount ] = await StoryboardModel.update(
+      { storage: to },
+      { where: { filename, storage: from, fileUrl: null } }
+    )
+
+    return affectedCount !== 0
+  }
+
   // ---------------------------------------------------------------------------
 
   getLocalFileUrl () {
+    if (this.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) {
+      return buildCommonFileObjectStorageUrl('storyboards', this.filename)
+    }
+
     // Remote files are cached by our instance
     return WEBSERVER.URL + this.getFileStaticPath()
   }
 
+  // Returns null if the file is in object storage: it is not served by our instance
   getFileStaticPath () {
+    if (this.isLocal() && this.storage === FileStorage.OBJECT_STORAGE) return null
+
     return LAZY_STATIC_PATHS.STORYBOARDS + this.filename
   }
 
@@ -152,10 +198,22 @@ export class StoryboardModel extends SequelizeModel<StoryboardModel> {
     return !this.fileUrl
   }
 
-  removeFile () {
-    const path = this.cached
-      ? this.getFSCachedPath()
-      : this.getFSPath()
+  async removeFile () {
+    if (!this.isLocal()) {
+      if (!this.cached) return
+
+      logger.info('Removing cached storyboard file %s', this.filename)
+
+      return removeCachedFile({ type: 'STORYBOARDS', filename: this.filename, storage: this.storage, fsPath: this.getFSCachedPath() })
+    }
+
+    if (this.storage === FileStorage.OBJECT_STORAGE) {
+      logger.info('Removing storyboard file %s from object storage', this.filename)
+
+      return removeCommonFileObjectStorage('storyboards', this.filename)
+    }
+
+    const path = this.getFSPath()
 
     logger.info('Removing storyboard file ' + path)
 

@@ -1,6 +1,6 @@
+import { promiseMap } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCommentPolicy } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
-import Bluebird from 'bluebird'
 import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validators/activitypub/video-comments.js'
 import { createLogger } from '../../helpers/logger.js'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
@@ -25,9 +25,9 @@ const logger = createLogger()
 
 type ResolveThreadParams = {
   url: string
-  comments?: MCommentOwner[]
+  comments: MCommentOwner[]
   isVideo?: boolean
-  commentCreated?: boolean
+  commentCreated: boolean
 }
 type ResolveThreadResult = Promise<{
   video: MVideoAccountLightBlacklistAllFiles
@@ -39,7 +39,7 @@ type ResolveThreadResult = Promise<{
 export async function addVideoComments (commentUrls: string[]) {
   if (CONFIG.VIDEO_COMMENTS.ACCEPT_REMOTE_COMMENTS !== true) return
 
-  return Bluebird.map(commentUrls, async commentUrl => {
+  return promiseMap(commentUrls, async commentUrl => {
     await logger.withContext([ commentUrl ], async () => {
       try {
         await resolveThread({ url: commentUrl, isVideo: false })
@@ -56,15 +56,29 @@ export async function addVideoComments (commentUrls: string[]) {
 }
 
 // Resolves a full AP comment thread starting from `url`, walking up the `inReplyTo` chain until it hits
-// either a comment already stored locally or the video the thread is attached to.
-//
+// either a comment already stored locally or the video the thread is attached to
+export async function resolveThread (params: { url: string, isVideo?: boolean }): ResolveThreadResult {
+  try {
+    return await resolveThreadInternal({ ...params, comments: [], commentCreated: false })
+  } catch (err) {
+    if (err.name !== 'SequelizeUniqueConstraintError') throw err
+
+    // Another activity (maybe processed by another process) created a comment of this thread at the same time
+    // The next attempt finds it in database
+    logger.debug('Cannot resolve thread %s because of a concurrent comment creation, retrying.', params.url, { err })
+
+    return resolveThreadInternal({ ...params, comments: [], commentCreated: false })
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
 // `params.comments` accumulates the chain: index 0 ends up being the comment `url` originally pointed to
 // and the last index is the comment directly replying to the video (the thread root)
-export async function resolveThread (params: ResolveThreadParams): ResolveThreadResult {
+async function resolveThreadInternal (params: ResolveThreadParams): ResolveThreadResult {
   const { url, isVideo } = params
-
-  if (params.commentCreated === undefined) params.commentCreated = false
-  if (params.comments === undefined) params.comments = []
 
   // If it is not a video, or if we don't know if it's a video, try to get the thread from DB
   if (isVideo === false || isVideo === undefined) {
@@ -85,10 +99,6 @@ export async function resolveThread (params: ResolveThreadParams): ResolveThread
   return resolveRemoteParentComment(params)
 }
 
-// ---------------------------------------------------------------------------
-// Private
-// ---------------------------------------------------------------------------
-
 async function resolveCommentFromDB (params: ResolveThreadParams) {
   const { url, comments, commentCreated } = params
 
@@ -105,7 +115,7 @@ async function resolveCommentFromDB (params: ResolveThreadParams) {
   }
 
   // We know the video already, so skip straight to it instead of walking inReplyTo comment by comment
-  return resolveThread({
+  return resolveThreadInternal({
     url: commentFromDatabase.Video.url,
     comments: parentComments,
     isVideo: true,
@@ -281,7 +291,7 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
 
   logger.debug('Created remote comment %s', comment.url, { comment })
 
-  return resolveThread({
+  return resolveThreadInternal({
     url: body.inReplyTo,
     comments: comments.concat([ comment ]),
     commentCreated: true

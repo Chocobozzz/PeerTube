@@ -15,9 +15,10 @@ const userRoleRights: { [id in UserRoleType]: UserRightType[] } = {
     UserRight.MANAGE_VIDEO_BLACKLIST,
     UserRight.MANAGE_ABUSES,
     UserRight.MANAGE_ANY_VIDEO_CHANNEL,
-    UserRight.REMOVE_ANY_VIDEO,
+    UserRight.UPDATE_ANY_VIDEO_PLAYLIST,
     UserRight.REMOVE_ANY_VIDEO_PLAYLIST,
     UserRight.MANAGE_ANY_VIDEO_COMMENT,
+    UserRight.REMOVE_ANY_VIDEO,
     UserRight.UPDATE_ANY_VIDEO,
     UserRight.SEE_ALL_VIDEOS,
     UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST,
@@ -27,7 +28,9 @@ const userRoleRights: { [id in UserRoleType]: UserRightType[] } = {
     UserRight.SEE_ALL_COMMENTS,
     UserRight.MANAGE_REGISTRATIONS,
     UserRight.MANAGE_INSTANCE_WATCHED_WORDS,
-    UserRight.MANAGE_INSTANCE_AUTO_TAGS
+    UserRight.MANAGE_INSTANCE_AUTO_TAGS,
+    UserRight.CHANGE_VIDEO_OWNERSHIP,
+    UserRight.CHANGE_CHANNEL_OWNERSHIP
   ],
 
   [UserRole.USER]: []

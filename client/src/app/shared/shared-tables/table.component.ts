@@ -199,7 +199,6 @@ export class TableComponent<
 
   sortTooltip = $localize`Sort by this column`
 
-  private lastLazyLoadEvent: TableLazyLoadEvent
   private routeSubscription: Subscription
 
   ngOnInit (): void {
@@ -422,18 +421,14 @@ export class TableComponent<
   private parseLazy (event: TableLazyLoadEvent) {
     debugLogger('Parse lazy', event)
 
-    if (this.lastLazyLoadEvent) {
-      // Prevent lazy loading twice
-      // TODO: remove when https://github.com/primefaces/primeng/issues/5480 is fixed
-      if (
-        this.lastLazyLoadEvent.first === event.first &&
-        this.lastLazyLoadEvent.rows === event.rows &&
-        this.lastLazyLoadEvent.sortField === event.sortField &&
-        this.lastLazyLoadEvent.sortOrder === event.sortOrder
-      ) return false
-    }
-
-    this.lastLazyLoadEvent = event
+    // Prevent lazy loading twice
+    // TODO: remove when https://github.com/primefaces/primeng/issues/5480 is fixed
+    if (
+      this.pagination.start === event.first &&
+      this.pagination.count === event.rows &&
+      this.sort.field === event.sortField &&
+      this.sort.order === event.sortOrder
+    ) return false
 
     this.sort = {
       order: event.sortOrder,

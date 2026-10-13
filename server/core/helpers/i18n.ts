@@ -1,8 +1,7 @@
-import { AVAILABLE_LOCALES, getCompleteLocale } from '@peertube/peertube-core-utils'
+import { AVAILABLE_LOCALES, getCompleteLocale, promiseMap } from '@peertube/peertube-core-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { LANGUAGE_COOKIE_NAME, LANGUAGE_HEADER, SERVER_INTERNAL_LOCALES_BASE_PATH } from '@server/initializers/constants.js'
 import { MUser } from '@server/types/models/index.js'
-import Bluebird from 'bluebird'
 import express from 'express'
 import { readJson } from 'fs-extra/esm'
 import { readdir } from 'fs/promises'
@@ -17,7 +16,7 @@ export async function initI18n () {
   const locales = await readdir(SERVER_INTERNAL_LOCALES_BASE_PATH)
   const resources: Record<string, Record<string, string>> = {}
 
-  await Bluebird.map(locales, async locale => {
+  await promiseMap(locales, async locale => {
     const localePath = join(SERVER_INTERNAL_LOCALES_BASE_PATH, locale)
 
     const translation = await readJson(join(localePath, 'translation.json'))

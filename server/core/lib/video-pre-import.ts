@@ -14,8 +14,9 @@ import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
 import { guessLanguageFromReq, t } from '@server/helpers/i18n.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode, YoutubeDLInfo, YoutubeDLWrapper } from '@server/helpers/youtube-dl/index.js'
+import { getYoutubeDLCookiesPathIfEnabled } from '@server/lib/youtube-dl-cookies.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
@@ -59,7 +60,7 @@ export async function insertFromImportIntoDB (parameters: {
 }): Promise<MVideoImportFormattable> {
   const { video, thumbnails, videoChannel, tags, videoImportAttributes, user, videoPasswords } = parameters
 
-  const videoImport = await sequelizeTypescript.transaction(async t => {
+  const videoImport = await runTransaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const videoCreated = await video.save(
@@ -188,7 +189,8 @@ export async function buildYoutubeDLImport (options: {
   const youtubeDL = new YoutubeDLWrapper(
     targetUrl,
     ServerConfigManager.Instance.getEnabledResolutions('vod'),
-    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION
+    CONFIG.TRANSCODING.ALWAYS_TRANSCODE_ORIGINAL_RESOLUTION,
+    await getYoutubeDLCookiesPathIfEnabled()
   )
 
   // Get video infos
@@ -246,7 +248,7 @@ export async function buildYoutubeDLImport (options: {
     })
 
     try {
-      await sequelizeTypescript.transaction(async transaction => {
+      await runTransaction(async transaction => {
         // Priority to explicitly set description
         if (importDataOverride.description) {
           const inserted = await replaceChaptersFromDescriptionIfNeeded({
@@ -374,7 +376,11 @@ async function processYoutubeSubtitles (options: {
 }
 
 async function hasUnicastURLsOnly (youtubeDLInfo: YoutubeDLInfo) {
-  const hosts = youtubeDLInfo.urls.map(u => new URL(u).hostname)
+  const urls = youtubeDLInfo.webpageUrl
+    ? [ ...youtubeDLInfo.urls, youtubeDLInfo.webpageUrl ]
+    : youtubeDLInfo.urls
+
+  const hosts = urls.map(u => new URL(u).hostname)
   const uniqHosts = new Set(hosts)
 
   for (const h of uniqHosts) {

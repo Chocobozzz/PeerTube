@@ -2,8 +2,8 @@ import { pick } from '@peertube/peertube-core-utils'
 import { VideoPlaylistPrivacy, VideoPlaylistType, VideoPlaylistsExportJSON } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { isActorPreferredUsernameValid } from '@server/helpers/custom-validators/activitypub/actor.js'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
@@ -11,10 +11,9 @@ import {
   isVideoPlaylistTimestampValid,
   isVideoPlaylistTypeValid
 } from '@server/helpers/custom-validators/video-playlists.js'
-import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
+import { runTransaction, saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, USER_IMPORT } from '@server/initializers/constants.js'
-import { sequelizeTypescript } from '@server/initializers/database.js'
 import { sendCreateVideoPlaylist } from '@server/lib/activitypub/send/send-create.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
@@ -149,7 +148,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
       })
     }
 
-    const createdElements = await sequelizeTypescript.transaction(async t => {
+    const createdElements = await runTransaction(async t => {
       let position = await VideoPlaylistElementModel.getNextPositionOf(playlist.id, t)
       const createdElements: VideoPlaylistElementModel[] = []
 

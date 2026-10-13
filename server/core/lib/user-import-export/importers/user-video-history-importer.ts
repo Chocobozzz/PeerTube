@@ -1,6 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { UserVideoHistoryExportJSON } from '@peertube/peertube-models'
-import { isUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
 import { AbstractUserImporter } from './abstract-user-importer.js'

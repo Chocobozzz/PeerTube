@@ -1,7 +1,7 @@
 import { HttpStatusCode, JobType } from '@peertube/peertube-models'
 import express from 'express'
-import { param, query } from 'express-validator'
-import { isValidJobState, isValidJobType } from '../../helpers/custom-validators/jobs.js'
+import { body, param, query } from 'express-validator'
+import { isValidJobQueueProcessRoles, isValidJobState, isValidJobType } from '../../helpers/custom-validators/jobs.js'
 import { JobQueue } from '../../lib/job-queue/index.js'
 import { areValidationErrors } from './shared/index.js'
 
@@ -15,6 +15,18 @@ export const listJobsValidator = [
   query('jobType')
     .optional()
     .custom(isValidJobType),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res, { tags })) return
+
+    return next()
+  }
+]
+
+export const jobQueueStateValidator = [
+  body('processRoles')
+    .optional()
+    .custom(isValidJobQueueProcessRoles),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return

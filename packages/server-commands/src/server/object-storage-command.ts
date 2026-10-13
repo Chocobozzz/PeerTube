@@ -1,9 +1,10 @@
-import { HttpStatusCode } from '@peertube/peertube-models'
+import type { S3Client } from '@aws-sdk/client-s3'
 import { randomInt } from 'crypto'
-import { makePostBodyRequest } from '../requests/index.js'
+
+export type CommonFileObjectStorageType = 'avatars' | 'thumbnails' | 'storyboards' | 'torrents' | 'uploads'
 
 export class ObjectStorageCommand {
-  static readonly DEFAULT_SCALEWAY_BUCKET = 'peertube-ci-test'
+  private static mockClient: S3Client
 
   private readonly bucketsCreated: string[] = []
   private readonly seed: number
@@ -32,8 +33,15 @@ export class ObjectStorageCommand {
   getDefaultMockConfig (options: {
     storeLiveStreams?: boolean // default true
     proxifyPrivateFiles?: boolean // default true
+    privateACL?: 'private' | 'public-read' // default 'private'
   } = {}) {
-    const { storeLiveStreams = true, proxifyPrivateFiles = true } = options
+    const {
+      storeLiveStreams = true,
+      proxifyPrivateFiles = true,
+      privateACL = 'private'
+    } = options
+
+    const section = (bucketName: string) => ({ bucket_name: bucketName, prefix: '' })
 
     return {
       object_storage: {
@@ -43,31 +51,47 @@ export class ObjectStorageCommand {
 
         credentials: ObjectStorageCommand.getMockCredentialsConfig(),
 
+        upload_acl: {
+          public: 'public-read',
+          private: privateACL
+        },
+
         streaming_playlists: {
-          bucket_name: this.getMockStreamingPlaylistsBucketName(),
-          prefix: '',
+          ...section(this.getMockStreamingPlaylistsBucketName()),
 
           store_live_streams: storeLiveStreams
         },
 
-        web_videos: {
-          bucket_name: this.getMockWebVideosBucketName(),
-          prefix: ''
+        web_videos: section(this.getMockWebVideosBucketName()),
+
+        user_exports: section(this.getMockUserExportBucketName()),
+
+        original_video_files: section(this.getMockOriginalFileBucketName()),
+
+        captions: section(this.getMockCaptionsBucketName()),
+
+        avatars: section(this.getMockActorImagesBucketName()),
+        thumbnails: section(this.getMockThumbnailsBucketName()),
+        storyboards: section(this.getMockStoryboardsBucketName()),
+        torrents: section(this.getMockTorrentsBucketName()),
+        uploads: section(this.getMockUploadsBucketName()),
+
+        staging: {
+          bucket_name: this.getMockStagingBucketName(),
+          // Not empty, to check staging keys are always relative to it
+          prefix: 'staging/'
         },
 
-        user_exports: {
-          bucket_name: this.getMockUserExportBucketName(),
-          prefix: ''
+        cache: {
+          bucket_name: this.getMockCacheBucketName(),
+          // Not empty, to check cache keys are always relative to it
+          prefix: 'cache/'
         },
 
-        original_video_files: {
-          bucket_name: this.getMockOriginalFileBucketName(),
-          prefix: ''
-        },
-
-        captions: {
-          bucket_name: this.getMockCaptionsBucketName(),
-          prefix: ''
+        redundancy: {
+          bucket_name: this.getMockRedundancyBucketName(),
+          // Not empty, to check redundancy keys are always relative to it
+          prefix: 'redundancy/'
         },
 
         proxy: {
@@ -91,6 +115,10 @@ export class ObjectStorageCommand {
     const { pathStyle = false } = options
 
     return this.getMockFileBaseUrl({ bucketName: this.getMockStreamingPlaylistsBucketName(), pathStyle })
+  }
+
+  getMockRedundancyBaseUrl () {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockRedundancyBucketName(), pathStyle: false }) + 'redundancy/'
   }
 
   getMockUserExportBaseUrl (options: {
@@ -117,6 +145,30 @@ export class ObjectStorageCommand {
     return this.getMockFileBaseUrl({ bucketName: this.getMockCaptionsBucketName(), pathStyle })
   }
 
+  getMockActorImagesBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockActorImagesBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockThumbnailsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockThumbnailsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockStoryboardsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockStoryboardsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockTorrentsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockTorrentsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockCacheBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockCacheBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
+  getMockUploadsBaseUrl (options: { pathStyle?: boolean } = {}) {
+    return this.getMockFileBaseUrl({ bucketName: this.getMockUploadsBucketName(), pathStyle: options.pathStyle ?? false })
+  }
+
   private getMockFileBaseUrl (options: {
     bucketName: string
     pathStyle: boolean
@@ -138,24 +190,34 @@ export class ObjectStorageCommand {
     await this.createMockBucket(this.getMockOriginalFileBucketName())
     await this.createMockBucket(this.getMockUserExportBucketName())
     await this.createMockBucket(this.getMockCaptionsBucketName())
+    await this.createMockBucket(this.getMockActorImagesBucketName())
+    await this.createMockBucket(this.getMockThumbnailsBucketName())
+    await this.createMockBucket(this.getMockStoryboardsBucketName())
+    await this.createMockBucket(this.getMockTorrentsBucketName())
+    await this.createMockBucket(this.getMockUploadsBucketName())
+
+    // Staging files must never be public
+    await this.createMockBucket(this.getMockStagingBucketName(), { makePublic: false })
+
+    await this.createMockBucket(this.getMockCacheBucketName())
+    await this.createMockBucket(this.getMockRedundancyBucketName())
   }
 
-  async createMockBucket (name: string) {
+  async createMockBucket (name: string, options: {
+    // Anonymous users can list the bucket, so they get a 404 instead of a 403 for missing objects
+    // Reading an object still depends on its own ACL
+    makePublic?: boolean // default true
+  } = {}) {
+    const { makePublic = true } = options
+
     this.bucketsCreated.push(name)
 
     await this.deleteMockBucket(name)
 
-    await makePostBodyRequest({
-      url: ObjectStorageCommand.getMockEndpointHost(),
-      path: '/ui/' + name + '?create',
-      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
-    })
+    const { CreateBucketCommand } = await import('@aws-sdk/client-s3')
+    const client = await ObjectStorageCommand.getMockClient()
 
-    await makePostBodyRequest({
-      url: ObjectStorageCommand.getMockEndpointHost(),
-      path: '/ui/' + name + '?make-public',
-      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
-    })
+    await client.send(new CreateBucketCommand({ Bucket: name, ACL: makePublic ? 'public-read' : 'private' }))
   }
 
   async cleanupMock () {
@@ -184,73 +246,145 @@ export class ObjectStorageCommand {
     return this.getMockBucketName(name)
   }
 
+  getMockActorImagesBucketName (name = 'avatars') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockThumbnailsBucketName (name = 'thumbnails') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockStoryboardsBucketName (name = 'storyboards') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockTorrentsBucketName (name = 'torrents') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockUploadsBucketName (name = 'uploads') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockStagingBucketName (name = 'staging') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockCacheBucketName (name = 'cache') {
+    return this.getMockBucketName(name)
+  }
+
+  getMockRedundancyBucketName (name = 'redundancy') {
+    return this.getMockBucketName(name)
+  }
+
   getMockBucketName (name: string) {
     return `${this.seed}-${name}`
   }
 
-  private async deleteMockBucket (name: string) {
-    await makePostBodyRequest({
-      url: ObjectStorageCommand.getMockEndpointHost(),
-      path: '/ui/' + name + '?delete',
-      expectedStatus: HttpStatusCode.TEMPORARY_REDIRECT_307
-    })
+  // ---------------------------------------------------------------------------
+
+  async listMockObjectKeys (bucketName: string, prefix = '') {
+    const { ListObjectsV2Command } = await import('@aws-sdk/client-s3')
+    const client = await ObjectStorageCommand.getMockClient()
+
+    const keys: string[] = []
+    let continuationToken: string
+
+    do {
+      const { Contents = [], NextContinuationToken } = await client.send(
+        new ListObjectsV2Command({ Bucket: bucketName, Prefix: prefix, ContinuationToken: continuationToken })
+      )
+
+      keys.push(...Contents.map(c => c.Key))
+      continuationToken = NextContinuationToken
+    } while (continuationToken)
+
+    return keys
+  }
+
+  async getMockObjectContent (bucketName: string, key: string) {
+    const { GetObjectCommand } = await import('@aws-sdk/client-s3')
+    const client = await ObjectStorageCommand.getMockClient()
+
+    const { Body } = await client.send(new GetObjectCommand({ Bucket: bucketName, Key: key }))
+
+    return Body.transformToString()
+  }
+
+  async removeMockObject (bucketName: string, key: string) {
+    const { DeleteObjectCommand } = await import('@aws-sdk/client-s3')
+    const client = await ObjectStorageCommand.getMockClient()
+
+    await client.send(new DeleteObjectCommand({ Bucket: bucketName, Key: key }))
+  }
+
+  // Multipart uploads that were neither completed nor aborted
+  async listMockMultipartUploadKeys (bucketName: string, prefix = '') {
+    const { ListMultipartUploadsCommand } = await import('@aws-sdk/client-s3')
+    const client = await ObjectStorageCommand.getMockClient()
+
+    const { Uploads = [] } = await client.send(new ListMultipartUploadsCommand({ Bucket: bucketName, Prefix: prefix }))
+
+    return Uploads.map(u => u.Key)
   }
 
   // ---------------------------------------------------------------------------
 
-  static getDefaultScalewayConfig (options: {
-    serverNumber: number
-    enablePrivateProxy?: boolean // default true
-    privateACL?: 'private' | 'public-read' // default 'private'
-  }) {
-    const { serverNumber, enablePrivateProxy = true, privateACL = 'private' } = options
+  private async deleteMockBucket (name: string) {
+    const {
+      AbortMultipartUploadCommand,
+      DeleteBucketCommand,
+      DeleteObjectsCommand,
+      ListMultipartUploadsCommand,
+      ListObjectsV2Command
+    } = await import('@aws-sdk/client-s3')
 
-    return {
-      object_storage: {
-        enabled: true,
-        endpoint: this.getScalewayEndpointHost(),
-        region: this.getScalewayRegion(),
+    const client = await ObjectStorageCommand.getMockClient()
 
-        credentials: this.getScalewayCredentialsConfig(),
+    try {
+      // S3 refuses to delete a bucket that is not empty
+      const { Uploads = [] } = await client.send(new ListMultipartUploadsCommand({ Bucket: name }))
 
-        upload_acl: {
-          private: privateACL
-        },
-
-        proxy: {
-          proxify_private_files: enablePrivateProxy
-        },
-
-        streaming_playlists: {
-          bucket_name: this.DEFAULT_SCALEWAY_BUCKET,
-          prefix: `test:server-${serverNumber}-streaming-playlists:`,
-          store_live_streams: true
-        },
-
-        web_videos: {
-          bucket_name: this.DEFAULT_SCALEWAY_BUCKET,
-          prefix: `test:server-${serverNumber}-web-videos:`
-        }
+      for (const { Key, UploadId } of Uploads) {
+        await client.send(new AbortMultipartUploadCommand({ Bucket: name, Key, UploadId }))
       }
+
+      let continuationToken: string
+
+      do {
+        const { Contents = [], NextContinuationToken } = await client.send(
+          new ListObjectsV2Command({ Bucket: name, ContinuationToken: continuationToken })
+        )
+
+        if (Contents.length !== 0) {
+          await client.send(new DeleteObjectsCommand({ Bucket: name, Delete: { Objects: Contents.map(({ Key }) => ({ Key })) } }))
+        }
+
+        continuationToken = NextContinuationToken
+      } while (continuationToken)
+
+      await client.send(new DeleteBucketCommand({ Bucket: name }))
+    } catch (err) {
+      if (err.name === 'NoSuchBucket') return
+
+      throw err
     }
   }
 
-  static getScalewayCredentialsConfig () {
-    return {
-      access_key_id: process.env.OBJECT_STORAGE_SCALEWAY_KEY_ID,
-      secret_access_key: process.env.OBJECT_STORAGE_SCALEWAY_ACCESS_KEY
+  private static async getMockClient () {
+    if (!this.mockClient) {
+      const { S3Client } = await import('@aws-sdk/client-s3')
+      const { access_key_id: accessKeyId, secret_access_key: secretAccessKey } = this.getMockCredentialsConfig()
+
+      this.mockClient = new S3Client({
+        endpoint: 'http://' + this.getMockEndpointHost(),
+        region: this.getMockRegion(),
+        credentials: { accessKeyId, secretAccessKey },
+        forcePathStyle: true
+      })
     }
-  }
 
-  static getScalewayEndpointHost () {
-    return 's3.fr-par.scw.cloud'
-  }
-
-  static getScalewayRegion () {
-    return 'fr-par'
-  }
-
-  static getScalewayBaseUrl () {
-    return `https://${this.DEFAULT_SCALEWAY_BUCKET}.${this.getScalewayEndpointHost()}/`
+    return this.mockClient
   }
 }
