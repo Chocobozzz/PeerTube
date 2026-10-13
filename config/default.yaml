@@ -298,7 +298,7 @@ log:
     max_files: 20
 
   audit:
-    enabled: true # Log administration and moderation actions in a dedicated audit log file
+    enabled: true # Log user, administration and moderation actions in a dedicated audit log file
 
   anonymize_ip: false
 

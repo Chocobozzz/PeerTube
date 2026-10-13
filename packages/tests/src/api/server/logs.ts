@@ -222,7 +222,6 @@ describe('Test logs', function () {
       this.timeout(60000)
 
       await killallServers([ server ])
-
       await server.run({ log: { audit: { enabled: false } } })
 
       const now = new Date()
@@ -230,9 +229,23 @@ describe('Test logs', function () {
       await server.videos.upload({ attributes: { name: 'video 12' } })
       await waitJobs([ server ])
 
+      await logsCommand.getAuditLogs({ startDate: now, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should log audit entries again when the audit log is re-enabled', async function () {
+      this.timeout(60000)
+
+      await killallServers([ server ])
+      await server.run({ log: { audit: { enabled: true } } })
+
+      const now = new Date()
+
+      await server.videos.upload({ attributes: { name: 'video 13' } })
+      await waitJobs([ server ])
+
       const body = await logsCommand.getAuditLogs({ startDate: now })
 
-      expect(body).to.have.lengthOf(0)
+      expect(body).to.have.lengthOf(1)
     })
   })
 

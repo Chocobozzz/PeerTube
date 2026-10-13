@@ -992,7 +992,7 @@
           "type": "object",
           "properties": {
             "enabled": {
-              "description": "Log administration and moderation actions in a dedicated audit log file",
+              "description": "Log user, administration and moderation actions in a dedicated audit log file",
               "type": "boolean",
               "default": true
             }

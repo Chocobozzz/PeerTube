@@ -77,6 +77,10 @@ const getAuditLogsValidator = [
     .custom(isDateValid).withMessage('Should have a end date that conforms to ISO 8601'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (CONFIG.LOG.AUDIT.ENABLED !== true) {
+      return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
+    }
+
     if (areValidationErrors(req, res)) return
 
     return next()
