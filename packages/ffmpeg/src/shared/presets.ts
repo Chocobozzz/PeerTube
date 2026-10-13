@@ -2,13 +2,7 @@ import { pick } from '@peertube/peertube-core-utils'
 import { FilterSpecification } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper } from '../ffmpeg-command-wrapper.js'
 import { getScaleFilter, StreamType } from '../ffmpeg-utils.js'
-import {
-  ffprobePromise,
-  getVideoStreamBitrate,
-  getVideoStreamDimensionsInfo,
-  getVideoStreamStereo3D,
-  hasAudioStream
-} from '../ffprobe.js'
+import { ffprobePromise, getVideoStreamBitrate, getVideoStreamDimensionsInfo, getVideoStreamStereo3D, hasAudioStream } from '../ffprobe.js'
 import { addDefaultEncoderGlobalParams, addDefaultEncoderParams, applyEncoderOptions } from './encoder-options.js'
 
 export async function presetVOD (options: {
@@ -32,6 +26,9 @@ export async function presetVOD (options: {
   } | null
 
   scaleFilterValue?: string
+
+  // When input is mixed with other content (intro, outro, watermark)
+  ignoreInputStereo3D?: boolean // default false
 }) {
   const {
     commandWrapper,
@@ -41,7 +38,8 @@ export async function presetVOD (options: {
     fps,
     videoStreamOnly,
     scaleFilterValue,
-    chainComplexFilters
+    chainComplexFilters,
+    ignoreInputStereo3D = false
   } = options
 
   if (videoStreamOnly && !resolution) {
@@ -63,6 +61,9 @@ export async function presetVOD (options: {
   // Audio encoder
   const bitrate = await getVideoStreamBitrate(videoInputPath, videoProbe)
   const videoStreamDimensions = await getVideoStreamDimensionsInfo(videoInputPath, videoProbe)
+  const videoStereo3D = ignoreInputStereo3D
+    ? undefined
+    : await getVideoStreamStereo3D(videoInputPath, videoProbe)
 
   let streamsToProcess: StreamType[] = [ 'audio', 'video' ]
 
@@ -89,6 +90,9 @@ export async function presetVOD (options: {
 
       inputBitrate: bitrate,
       inputRatio: videoStreamDimensions?.ratio || 0,
+      inputStereo3D: streamType === 'video'
+        ? videoStereo3D
+        : undefined,
 
       resolution,
       fps,
@@ -121,21 +125,6 @@ export async function presetVOD (options: {
 
       for (const builderVideoFilter of builderResult.result.videoFilters || []) {
         videoFilters.push(builderVideoFilter)
-      }
-
-      // libx264 writes the frame packing SEI from the 3D packing of the input, but not when the right eye comes first:
-      // put the left eye first and say the packing to libx264
-      const stereo3D = builderResult.encoder === 'libx264'
-        ? await getVideoStreamStereo3D(videoInputPath, videoProbe)
-        : undefined
-
-      if (stereo3D?.inverted && (stereo3D.type === 'side by side' || stereo3D.type === 'top and bottom')) {
-        const isSideBySide = stereo3D.type === 'side by side'
-
-        videoFilters.push({ name: 'stereo3d', rawOptions: isSideBySide ? 'sbs2r:sbs2l' : 'ab2r:ab2l' })
-        // The frames keep the (inverted) side data of the input, and libx264 would drop the packing again because of it
-        videoFilters.push({ name: 'sidedata', rawOptions: 'mode=delete:type=STEREO3D' })
-        command.outputOption(`-x264-params frame-packing=${isSideBySide ? 3 : 4}`)
       }
 
       applyVideoFilters({

@@ -21,6 +21,7 @@ import { createAllCaptionPlaylistsIfNeeded } from '../video-captions.js'
 import { buildNewFile } from '../video-file.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import { buildFFmpegVOD } from './shared/index.js'
+import { doesReEncodeKeepsStereo3D } from './transcoding-quick-transcode.js'
 
 // Concat TS segments from a live video to a fragmented mp4 HLS playlist
 export async function generateHlsPlaylistResolutionFromTS (options: {
@@ -257,7 +258,8 @@ async function generateHlsPlaylistCommon (options: {
     resolution,
     fps,
 
-    copyCodecs: !separatedAudioInputPath && await canCopyForHLS({ fps, resolution, path: videoInputPath }),
+    copyCodecs: !separatedAudioInputPath &&
+      await canCopyForHLS({ fps, resolution, path: videoInputPath, reEncodeKeepsStereo3D: doesReEncodeKeepsStereo3D() }),
 
     separatedAudio,
 

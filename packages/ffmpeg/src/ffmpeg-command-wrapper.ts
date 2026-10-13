@@ -271,6 +271,7 @@ export class FFmpegCommandWrapper {
           'resolution',
           'inputBitrate',
           'inputProbe',
+          'inputStereo3D',
           'fps',
           'inputRatio',
           'streamNum'

@@ -10,20 +10,53 @@ import {
   getVideoStreamFPS,
   getVideoStreamStereo3D
 } from '@peertube/peertube-ffmpeg'
-import { EncoderOptionsBuilder, EncoderOptionsBuilderParams } from '@peertube/peertube-models'
+import { EncoderOptionsBuilder, EncoderOptionsBuilderParams, VideoStereo3D } from '@peertube/peertube-models'
 import { FfprobeData } from 'fluent-ffmpeg'
 
 const defaultX264VODOptionsBuilder: EncoderOptionsBuilder = (options: EncoderOptionsBuilderParams) => {
-  const { fps, inputRatio, inputBitrate, resolution } = options
+  const { fps, inputRatio, inputBitrate, resolution, inputStereo3D } = options
 
   const targetBitrate = getTargetBitrate({ inputBitrate, ratio: inputRatio, fps, resolution })
 
+  const videoFilters: { name: string, rawOptions?: string }[] = []
+  const outputOptions = getCommonOutputOptions(targetBitrate)
+
+  if (inputStereo3D) {
+    /**
+     * libx264 writes the 3D packing from the Stereo 3D side data of each frame, which ffmpeg >= 7 copies from the input stream.
+     *
+     * We can't rely on it:
+     *  * libx264 ignores the packing when the right eye comes first
+     *  * ffmpeg < 7 doesn't copy it
+     *  * after a rotation it describes the frame before rotation.
+     *
+     * So we remove it from the frames and pass the packing to libx264 ourselves
+     */
+
+    const framePacking = getX264FramePacking(inputStereo3D)
+
+    if (framePacking !== undefined && inputStereo3D.inverted) {
+      videoFilters.push({
+        name: 'stereo3d',
+        rawOptions: framePacking === 3
+          ? 'sbs2r:sbs2l'
+          : 'ab2r:ab2l'
+      })
+    }
+
+    videoFilters.push({ name: 'sidedata', rawOptions: 'mode=delete:type=STEREO3D' })
+
+    if (framePacking !== undefined) outputOptions.push(`-x264-params frame-packing=${framePacking}`)
+  }
+
+  if (fps) videoFilters.push({ name: 'fps', rawOptions: `fps=${fps}` })
+
   return {
-    videoFilters: fps
-      ? [ { name: 'fps', rawOptions: `fps=${fps}` } ]
+    videoFilters: videoFilters.length !== 0
+      ? videoFilters
       : undefined,
 
-    outputOptions: getCommonOutputOptions(targetBitrate)
+    outputOptions
   }
 }
 
@@ -131,7 +164,19 @@ export async function canDoQuickAudioTranscode (path: string, probe?: FfprobeDat
   return true
 }
 
-export async function canDoQuickVideoTranscode (path: string, maxFPS: number, probe?: FfprobeData): Promise<boolean> {
+export async function canDoQuickVideoTranscode (
+  path: string,
+  maxFPS: number,
+  existingProbe?: FfprobeData,
+  options: {
+    // Can be false if the encoder doesn't support stereo 3D
+    reEncodeKeepsStereo3D?: boolean // default true
+  } = {}
+): Promise<boolean> {
+  const { reEncodeKeepsStereo3D = true } = options
+
+  const probe = existingProbe ?? await ffprobePromise(path)
+
   const videoStream = await getVideoStream(path, probe)
   if (!videoStream) return true
 
@@ -150,8 +195,8 @@ export async function canDoQuickVideoTranscode (path: string, maxFPS: number, pr
   if (bitRate > getMaxTheoreticalBitrate({ ...resolutionData, fps })) return false
   // Force a re-encode when the input has a Display Matrix rotation to apply into the pixels
   if (resolutionData.hasRotation) return false
-  // Force a re-encode when the container declares 3D: the MP4 we write does not keep it, the frame packing SEI of libx264 does
-  if (await getVideoStreamStereo3D(path, probe)) return false
+  // Force a re-encode when the container declares a 3D packing: the MP4 we write does not keep it, the frame packing SEI of libx264 does
+  if (reEncodeKeepsStereo3D && getX264FramePacking(await getVideoStreamStereo3D(path, probe)) !== undefined) return false
 
   return true
 }
@@ -162,15 +207,16 @@ export async function canCopyForHLS (options: {
   path: string
   fps: number
   resolution: number
+  reEncodeKeepsStereo3D?: boolean // default true
 }, probe?: FfprobeData): Promise<boolean> {
-  const { path, fps, resolution } = options
+  const { path, fps, resolution, reEncodeKeepsStereo3D } = options
 
   const inputProbe = probe ?? await ffprobePromise(path)
   const { resolution: inputResolution } = await getVideoStreamDimensionsInfo(path, inputProbe)
   const inputFPS = await getVideoStreamFPS(path, inputProbe)
 
-  return await canDoQuickAudioTranscode(path, probe) &&
-    await canDoQuickVideoTranscode(path, fps, probe) &&
+  return await canDoQuickAudioTranscode(path, inputProbe) &&
+    await canDoQuickVideoTranscode(path, fps, inputProbe, { reEncodeKeepsStereo3D }) &&
     resolution === inputResolution &&
     (!inputResolution || fps === inputFPS)
 }
@@ -198,6 +244,14 @@ function capBitrate (inputBitrate: number, targetBitrate: number) {
   const inputBitrateWithMargin = inputBitrate + (inputBitrate * 0.3)
 
   return Math.min(targetBitrate, inputBitrateWithMargin)
+}
+
+function getX264FramePacking (stereo3D: VideoStereo3D) {
+  if (stereo3D?.type === 'side by side') return 3
+  if (stereo3D?.type === 'top and bottom') return 4
+
+  // We only handle side by side and top and bottom: the other packings don't survive scaling or fps changes
+  return undefined
 }
 
 function getCommonOutputOptions (targetBitrate: number, streamNum?: number) {
