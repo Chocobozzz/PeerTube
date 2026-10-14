@@ -105,7 +105,8 @@ export async function getFramePacking (path: string): Promise<VideoStereo3D> {
     '-'
   ])
 
-  const matches = stderr.match(/side data - Stereo 3D: type - ([^,(]+?)( \(inverted\))?(,|$)/m)
+  // FFmpeg 4.3 prints "stereoscopic information", newer versions "Stereo 3D"
+  const matches = stderr.match(/side data - (?:Stereo 3D|stereoscopic information): type - ([^,(]+?)( \(inverted\))?(,|$)/m)
   if (!matches) return undefined
 
   return { type: matches[1], inverted: !!matches[2] }

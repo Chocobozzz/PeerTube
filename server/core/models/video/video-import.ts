@@ -1,7 +1,7 @@
 import { VideoImport, type VideoImportPayload, VideoImportState, type VideoImportStateType } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { MVideoImport, MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import.js'
-import { Op } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -234,6 +234,13 @@ export class VideoImportModel extends SequelizeModel<VideoImportModel> {
         videoChannelSyncId: options.channelSyncId
       },
       order: getSort('-createdAt')
+    })
+  }
+
+  static loadByVideoId (videoId: number, transaction?: Transaction): Promise<MVideoImport> {
+    return VideoImportModel.unscoped().findOne({
+      where: { videoId },
+      transaction
     })
   }
 

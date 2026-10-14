@@ -2,13 +2,15 @@ import { FileStorage, FileStorageType, VideoState, VideoStateType } from '@peert
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { VideoImportModel } from '@server/models/video/video-import.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MVideo, MVideoFull, MVideoUUID } from '@server/types/models/index.js'
+import { MVideo, MVideoFull, MVideoId, MVideoUUID } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { scheduleVideoFederation } from './activitypub/videos/index.js'
 import { JobQueue } from './job-queue/index.js'
 import { Notifier } from './notifier/index.js'
 import { buildMoveVideoJob } from './video-jobs.js'
+import { isFromChannelImport } from './video-post-import.js'
 
 const logger = createLogger('video-state')
 
@@ -171,7 +173,10 @@ async function moveToPublishedState (options: {
 
   const isNewVideo = !video.firstPublishedAt
 
-  await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
+  // Keep the publication date of videos imported for channel import to keep external order
+  const keepPublishedAt = isNewVideo && await isImportedFromChannel(video, transaction)
+
+  await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, keepPublishedAt, transaction })
 
   scheduleVideoFederation({ video, transaction })
 
@@ -187,4 +192,11 @@ async function moveToPublishedState (options: {
       Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(video)
     }
   }
+}
+
+async function isImportedFromChannel (video: MVideoId, transaction: Transaction) {
+  const videoImport = await VideoImportModel.loadByVideoId(video.id, transaction)
+  if (!videoImport) return false
+
+  return isFromChannelImport(videoImport)
 }
