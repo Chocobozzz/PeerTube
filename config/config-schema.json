@@ -886,6 +886,7 @@
           "additionalProperties": false
         },
         "web_videos": {
+          "description": "Web Videos files, and the podcast optimized audio file (see transcoding.always_transcode_podcast_optimized_audio) With Web Videos transcoding disabled (the default), this bucket only contains audio files: videos are stored in the streaming_playlists bucket",
           "type": "object",
           "properties": {
             "bucket_name": {
@@ -2127,7 +2128,7 @@
           "default": true
         },
         "always_transcode_podcast_optimized_audio": {
-          "description": "If web_videos transcoding is not enabled, some podcast applications may not be able to correctly play the HLS audio file Enabling this option ensures that PeerTube always produces an audio file in a format compatible with podcasts even if web_videos transcoding or audio resolution are disabled",
+          "description": "If web_videos transcoding is not enabled, some podcast applications may not be able to correctly play the HLS audio file Enabling this option ensures that PeerTube always produces an audio file in a format compatible with podcasts even if web_videos transcoding or audio resolution are disabled This audio file is stored with Web Videos files (storage.web_videos directory or object_storage.web_videos bucket)",
           "type": "boolean",
           "default": true
         },
