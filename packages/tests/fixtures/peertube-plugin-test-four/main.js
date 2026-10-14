@@ -110,6 +110,16 @@ async function register ({
       })
     })
 
+    router.delete('/user/:id', async (req, res) => {
+      try {
+        await peertubeHelpers.user.removeUser(parseInt(req.params.id))
+      } catch (err) {
+        return res.sendStatus(400)
+      }
+
+      return res.sendStatus(204)
+    })
+
     router.get('/user', async (req, res) => {
       const user = await peertubeHelpers.user.getAuthUser(res)
       if (!user) return res.sendStatus(404)

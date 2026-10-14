@@ -8,6 +8,7 @@ import {
   createMultipleServers,
   createSingleServer,
   doubleFollow,
+  makeDeleteRequest,
   makeGetRequest,
   makePostBodyRequest,
   makeRawRequest,
@@ -249,6 +250,35 @@ describe('Test plugin helpers', function () {
           expectedStatus: HttpStatusCode.NOT_FOUND_404
         })
       }
+    })
+
+    it('Should not remove the root user', async function () {
+      await makeDeleteRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/user/' + rootId,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should remove a user', async function () {
+      const { id } = await servers[0].users.create({ username: 'user_to_remove', password: 'secret1234?' })
+
+      await makeDeleteRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/user/' + id,
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+
+      await servers[0].users.get({ userId: id, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+      await servers[0].accounts.get({ accountName: 'user_to_remove', expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should ignore removal of an unknown user', async function () {
+      await makeDeleteRequest({
+        url: servers[0].url,
+        path: '/plugins/test-four/router/user/42000',
+        expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
     })
   })
 

@@ -2,10 +2,10 @@ import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoBlacklistCreate } from '@peertube/peertube-models'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { buildWinstonLogger, createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
-import { runTransaction } from '@server/helpers/database-utils.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerAccount, getServerActor } from '@server/models/application/application.js'
@@ -50,7 +50,7 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
 
     socket: buildSocketHelpers(npmName),
 
-    user: buildUserHelpers(),
+    user: buildUserHelpers(npmName),
 
     automaticTags: buildAutomaticTagsHelpers(),
 
@@ -315,7 +315,7 @@ function buildSocketHelpers (npmName: string) {
   }
 }
 
-function buildUserHelpers () {
+function buildUserHelpers (npmName: string) {
   return {
     loadById: (id: number) => {
       return UserModel.loadByIdFull(id)
@@ -326,6 +326,21 @@ function buildUserHelpers () {
       if (!user) return undefined
 
       return UserModel.loadByIdFull(user.id)
+    },
+
+    removeUser: async (id: number) => {
+      const user = await UserModel.loadByIdFull(id)
+      if (!user) return
+
+      if (user.username === 'root') throw new Error('Cannot remove the root user')
+
+      await logger.withContext([ npmName, user.username ], async () => {
+        await retryTransactionWrapper(() => {
+          return runTransaction(t => user.destroy({ transaction: t }))
+        })
+
+        logger.info(`Removed user ${user.username} by plugin ${npmName}.`)
+      })
     }
   }
 }
