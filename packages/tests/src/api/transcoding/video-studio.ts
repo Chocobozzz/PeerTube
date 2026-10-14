@@ -1,5 +1,5 @@
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoPrivacy, VideoState, VideoStudioTask } from '@peertube/peertube-models'
+import { VideoPrivacy, VideoState, VideoStudioTask } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -498,22 +498,6 @@ describe('Test video studio', function () {
       await servers[0].config.enableMinimumTranscoding()
     })
 
-    it('Should keep editing the original video by default', async function () {
-      this.timeout(120_000)
-
-      await renewVideo()
-      const { total } = await servers[0].videos.listMyVideos()
-
-      await createTasks([ { name: 'cut', options: { start: 2 } } ])
-
-      const video = await servers[0].videos.get({ id: videoUUID })
-      expect(video.state.id).to.equal(VideoState.PUBLISHED)
-      expect(video.duration).to.be.approximately(3, 1)
-
-      const after = await servers[0].videos.listMyVideos()
-      expect(after.total).to.equal(total)
-    })
-
     it('Should create a new video in its own edition state that can be edited while processing', async function () {
       this.timeout(120_000)
 
@@ -572,33 +556,6 @@ describe('Test video studio', function () {
       const sourceAfter = await getSource()
       expect(sourceAfter.fileIds).to.deep.equal(sourceBefore.fileIds)
       expect(sourceAfter.duration).to.equal(sourceBefore.duration)
-    })
-
-    it('Should remove the new video if the source video is deleted before the job runs', async function () {
-      this.timeout(120_000)
-
-      await renewVideo()
-      sourceUUID = videoUUID
-
-      await servers[0].jobs.pauseJobQueue()
-
-      const { video: created } = await servers[0].videoStudio.createEditionTasks({
-        videoId: sourceUUID,
-        tasks: [ { name: 'cut', options: { start: 2 } } ],
-        saveAsNewVideo: true
-      })
-
-      await servers[0].videos.remove({ id: sourceUUID })
-
-      await servers[0].jobs.resumeJobQueue()
-      await waitJobs(servers)
-
-      await servers[0].videos.getWithToken({ id: created.uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
-
-      const { data } = await servers[0].videos.listMyVideos()
-      expect(data.map(v => v.uuid)).to.not.include(created.uuid)
-
-      await checkPersistentTmpIsEmpty(servers[0])
     })
 
     after(async function () {

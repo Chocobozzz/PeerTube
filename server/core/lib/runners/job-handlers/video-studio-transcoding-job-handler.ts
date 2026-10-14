@@ -18,7 +18,7 @@ import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
 import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
-import { commitPendingCompletion } from './shared/pending-completions.js'
+import { commitPendingCompletion, RunnerJobCompletionAbortedError } from './shared/pending-completions.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
 const logger = createLogger('studio', 'transcoding')
@@ -151,12 +151,11 @@ export class VideoStudioTranscodingJobHandler
           beforeIrreversibleChanges: () => commitPendingCompletion(runnerJob.uuid)
         })
       } catch (err) {
-        // The runner job has errored: don't keep an incomplete new video
-        if (privatePayload.sourceVideoUUID) {
-          await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: true })
+        // The runner job has errored (and was not aborted by a shutdown): reset the video state or remove the incomplete new video
+        if (!(err instanceof RunnerJobCompletionAbortedError)) {
+          await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: !!privatePayload.sourceVideoUUID })
+          await safeCleanupStudioTMPFiles(taskFiles)
         }
-
-        await safeCleanupStudioTMPFiles(taskFiles)
 
         throw err
       }

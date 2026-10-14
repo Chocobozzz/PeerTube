@@ -154,6 +154,16 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   }
 
   async onWantToSaveAsNewVideo () {
+    this.displayFormErrorsMsg = false
+
+    if (this.hasFormErrors()) {
+      this.displayFormErrorsMsg = true
+
+      window.scrollTo({ top: 0, behavior: 'instant' })
+
+      return
+    }
+
     if (this.isUpdating) return
 
     this.isUpdating = true

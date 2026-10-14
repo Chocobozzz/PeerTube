@@ -82,6 +82,9 @@ export class VideoStudioEditComponent implements OnInit, OnDestroy {
   readonly studioForm = form(this.studioModel, f => {
     validate(f.cut, ({ value }) => {
       const { start, end } = value()
+      const duration = this.videoEdit?.getVideoAttributes().duration ?? 0
+
+      if (start === 0 && end === duration) return null
 
       return start >= end
         ? { kind: 'startAfterEnd', message: $localize`Start time must be before end time.` }
