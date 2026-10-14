@@ -167,6 +167,9 @@ export type PeerTubeHelpers = {
 
     // PeerTube >= 4.3
     loadById: (id: number) => Promise<MUserDefault>
+
+    // PeerTube >= 9.0
+    removeUser: (id: number) => Promise<void>
   }
 
   automaticTags: {

@@ -15,6 +15,7 @@ export async function buildRetryImportJob (videoImport: MVideoImport) {
 
     // If part of a sync process, there is a parent job that will aggregate children results
     preventException: videoImport.payload?.preventException ?? !!videoImport.videoChannelSyncId,
+    fromChannelImport: isFromChannelImport(videoImport),
 
     generateTranscription: videoImport.payload?.generateTranscription ?? CONFIG.VIDEO_TRANSCRIPTION.ENABLED,
     fileExt: (videoImport.payload as VideoImportYoutubeDLPayload)?.fileExt,
@@ -26,4 +27,9 @@ export async function buildRetryImportJob (videoImport: MVideoImport) {
   await videoImport.save()
 
   return { type: 'video-import' as const, payload }
+}
+
+export function isFromChannelImport (videoImport: MVideoImport) {
+  // videoChannelSyncId is set to null if the sync is deleted, so also check the payload
+  return videoImport.payload?.fromChannelImport ?? !!videoImport.videoChannelSyncId
 }

@@ -131,7 +131,14 @@ describe('Transcoding of 3D videos', function () {
 
         const { stereoMode, stack, rotation } = toTest.input
 
-        input = await generateStereo3DVideo({ directory: tmpDirectory, stereoMode, stack, rotation, name: `${stereoMode}-${rotation}` })
+        try {
+          input = await generateStereo3DVideo({ directory: tmpDirectory, stereoMode, stack, rotation, name: `${stereoMode}-${rotation}` })
+        } catch (err) {
+          // Old ffmpeg versions do not have the -display_rotation option
+          if (/Unrecognized option 'display_rotation'/.test(err.stderr || err.message)) return this.skip()
+
+          throw err
+        }
 
         // Old ffmpeg versions do not read the rotation of Matroska files
         if (!(await getVideoStreamDimensionsInfo(input)).hasRotation) this.skip()

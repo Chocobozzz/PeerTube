@@ -408,6 +408,60 @@ describe('Test channel synchronizations', function () {
         }
       })
 
+      it('Should keep the external channel order when an import is retried', async function () {
+        this.timeout(240_000)
+
+        await servers[0].config.enableMinimumTranscoding()
+
+        const { id: channelId } = await servers[0].channels.create({ attributes: { name: 'channel4' } })
+
+        const { videoChannelSync } = await servers[0].channelSyncs.create({
+          attributes: {
+            externalChannelUrl: FIXTURE_URLS.youtubePlaylist,
+            videoChannelId: channelId
+          }
+        })
+
+        await servers[0].jobs.pauseJobQueue()
+        await servers[0].debug.sendCommand({ body: { command: 'process-video-channel-sync-latest' } })
+
+        const { data: imports } = await servers[0].videoImports.listMyVideoImports({
+          videoChannelSyncId: videoChannelSync.id,
+          sort: 'createdAt'
+        })
+        expect(imports).to.have.length.at.least(2)
+
+        const [ firstImport, ...otherImports ] = imports
+
+        // Make the first import fail, so it's published after the other ones
+        await sqlCommands[0].setImportUrl(firstImport.id, 'http://fail.example.com')
+        await servers[0].jobs.resumeJobQueue()
+        await waitJobs(servers)
+
+        {
+          const { data } = await servers[0].videos.listByChannel({ handle: 'channel4' })
+          expect(data.map(v => v.name)).to.have.members(otherImports.map(i => i.video.name))
+        }
+
+        // Retry the failed import in a next synchronization of this channel only
+        await sqlCommands[0].setImportUrl(firstImport.id, firstImport.targetUrl)
+        await servers[0].channels.importVideos({
+          channelName: 'channel4',
+          externalChannelUrl: FIXTURE_URLS.youtubePlaylist,
+          videoChannelSyncId: videoChannelSync.id
+        })
+        await waitJobs(servers)
+
+        {
+          const { data } = await servers[0].videos.listByChannel({ handle: 'channel4', sort: '-publishedAt' })
+
+          expect(data.map(v => v.name)).to.deep.equal(imports.map(i => i.video.name).reverse())
+          expect(new Date(data[data.length - 1].publishedAt)).to.be.below(new Date(data[data.length - 2].publishedAt))
+        }
+
+        await servers[0].config.disableTranscoding()
+      })
+
       after(async function () {
         for (const sqlCommand of sqlCommands) {
           await sqlCommand.cleanup()

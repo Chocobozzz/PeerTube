@@ -650,6 +650,11 @@ async function register ({
     })
   }
 
+  // Remove a user, with their account, channels and videos
+  {
+    await peertubeHelpers.user.removeUser(userId)
+  }
+
   // Send an email
   {
     await peertubeHelpers.email.createJob({

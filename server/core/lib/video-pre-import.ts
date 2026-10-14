@@ -163,6 +163,7 @@ export async function buildYoutubeDLImport (options: {
   importDataOverride: Partial<VideoImportCreate>
 
   channelSync?: MChannelSync
+  fromChannelImport?: boolean // default false
   thumbnailFilePath?: string
 
   skipPublishedBeforeOrEq?: Date
@@ -174,6 +175,7 @@ export async function buildYoutubeDLImport (options: {
     targetUrl,
     channel,
     channelSync,
+    fromChannelImport = false,
     importDataOverride,
     thumbnailFilePath,
     user,
@@ -287,7 +289,8 @@ export async function buildYoutubeDLImport (options: {
         fileExt,
         generateTranscription: importDataOverride.generateTranscription ?? true,
         // If part of a sync process, there is a parent job that will aggregate children results
-        preventException: !!channelSync
+        preventException: !!channelSync,
+        fromChannelImport
       }
 
       videoImport.payload = payload
