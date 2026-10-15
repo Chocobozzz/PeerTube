@@ -264,13 +264,15 @@ describe('Test my user API validators', function () {
       }
     })
 
-    it('Should fail with invalid browse videos preferences', async function () {
-      for (const fields of [
-        { browseVideosCategories: [ 999 ] },
-        { browseVideosCategories: [ '13' ] },
-        { browseVideosLive: 'invalid' }
-      ]) {
-        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
+    it('Should fail with an invalid videoCategories attribute', async function () {
+      for (const videoCategories of [ 'toto', [ 'toto' ], [ '13' ], [ 1.5 ], new Array(1000).fill(1) ]) {
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields: { videoCategories } })
+      }
+    })
+
+    it('Should fail with an invalid videoLive attribute', async function () {
+      for (const videoLive of [ 'toto', true, null ]) {
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields: { videoLive } })
       }
     })
 

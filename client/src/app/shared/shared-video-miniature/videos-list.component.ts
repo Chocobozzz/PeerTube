@@ -72,7 +72,6 @@ export class VideosListComponent implements OnInit {
   readonly hideScopeFilter = input(false, { transform: booleanAttribute })
 
   readonly loadUserVideoPreferences = input(false, { transform: booleanAttribute })
-  readonly loadUserBrowseVideosPreferences = input(false, { transform: booleanAttribute })
 
   readonly displayAsRow = input(false, { transform: booleanAttribute })
   readonly displayVideoActions = input(true, { transform: booleanAttribute })
@@ -286,11 +285,8 @@ export class VideosListComponent implements OnInit {
     this.filters.setNSFWPolicy(user)
 
     this.filters.setDefaultLanguages(user.videoLanguages)
-
-    if (this.loadUserBrowseVideosPreferences()) {
-      this.filters.setDefaultCategories(user.browseVideosCategories)
-      this.filters.setDefaultLive(user.browseVideosLive)
-    }
+    this.filters.setDefaultCategories(user.videoCategories)
+    this.filters.setDefaultLive(user.videoLive)
   }
 
   private reloadSyndicationItems () {
@@ -323,11 +319,17 @@ export class VideosListComponent implements OnInit {
 
         this.user = user
 
+        let filtersChanged = false
+
         if (this.loadUserVideoPreferences()) {
           this.loadUserSettings(user)
+
+          // Apply new default values, URL query params still have priority
+          filtersChanged = this.filters.load(this.route.snapshot.queryParams)
         }
 
-        if (this.hasDoneFirstQuery) {
+        // Videos are reloaded by the filters change callback if needed
+        if (this.hasDoneFirstQuery && !filtersChanged) {
           this.reloadVideos()
         }
       })

@@ -10,7 +10,7 @@ import { SelectOptionsItem } from '@pt-types'
 import { BuildFormArgument } from '../form-validators/form-validator.model'
 import { PeertubeCheckboxComponent } from '../shared-forms/peertube-checkbox.component'
 import { SelectLanguagesComponent } from '../shared-forms/select/select-languages.component'
-import { SelectCategoriesChipsComponent } from '../shared-forms/select/select-categories-chips.component'
+import { SelectCategoriesComponent } from '../shared-forms/select/select-categories.component'
 import { SelectRadioComponent } from '../shared-forms/select/select-radio.component'
 import { HelpComponent } from '../shared-main/buttons/help.component'
 
@@ -25,8 +25,8 @@ type Form = {
   autoPlayVideo: FormControl<boolean>
   autoPlayNextVideo: FormControl<boolean>
   videoLanguages: FormControl<string[]>
-  browseVideosCategories: FormControl<number[]>
-  browseVideosLive: FormControl<BooleanBothQuery>
+  videoCategories: FormControl<string[]>
+  videoLive: FormControl<BooleanBothQuery>
 }
 
 @Component({
@@ -39,7 +39,7 @@ type Form = {
     ReactiveFormsModule,
     HelpComponent,
     SelectLanguagesComponent,
-    SelectCategoriesChipsComponent,
+    SelectCategoriesComponent,
     PeertubeCheckboxComponent,
     SelectRadioComponent
   ]
@@ -102,7 +102,7 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
     }
   ]
 
-  browseVideosLiveItems: SelectOptionsItem[] = [
+  videoLiveItems: SelectOptionsItem[] = [
     {
       id: 'both',
       label: $localize`VOD & Live videos`
@@ -140,8 +140,8 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
             autoPlayVideo: this.user().autoPlayVideo === true,
             autoPlayNextVideo: this.user().autoPlayNextVideo,
             videoLanguages: this.user().videoLanguages,
-            browseVideosCategories: this.user().browseVideosCategories,
-            browseVideosLive: this.user().browseVideosLive || 'both'
+            videoCategories: this.user().videoCategories?.map(c => c + '') ?? null,
+            videoLive: this.user().videoLive || 'both'
           })
 
           if (this.reactiveUpdate()) this.handleReactiveUpdate()
@@ -163,8 +163,8 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
       autoPlayVideo: null,
       autoPlayNextVideo: null,
       videoLanguages: null,
-      browseVideosCategories: null,
-      browseVideosLive: null
+      videoCategories: null,
+      videoLive: null
     }
 
     const {
@@ -180,7 +180,10 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
 
   updateDetails (onlyKeys?: string[]) {
     const videoLanguages = this.form.value.videoLanguages
-    const browseVideosCategories = this.form.value.browseVideosCategories?.map(category => +category)
+    // null means all categories
+    const videoCategories = Array.isArray(this.form.value.videoCategories)
+      ? this.form.value.videoCategories.map(c => parseInt(c, 10))
+      : null
 
     if (Array.isArray(videoLanguages)) {
       if (videoLanguages.length > 20) {
@@ -203,8 +206,8 @@ export class UserVideoSettingsComponent implements OnInit, OnDestroy {
       nsfwFlagsBlurred: this.buildNSFWUpdateFlag('blur'),
 
       videoLanguages,
-      browseVideosCategories,
-      browseVideosLive: value.browseVideosLive
+      videoCategories,
+      videoLive: value.videoLive
     }
 
     if (onlyKeys) {

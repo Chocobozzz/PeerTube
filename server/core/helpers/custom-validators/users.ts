@@ -2,8 +2,9 @@ import { AVAILABLE_LOCALES } from '@peertube/peertube-core-utils'
 import { UserRole } from '@peertube/peertube-models'
 import validator from 'validator'
 import { isEmailEnabled } from '../../initializers/config.js'
-import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES, VIDEO_CATEGORIES } from '../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants.js'
 import { exists, isArray, isBooleanValid } from './misc.js'
+import { isBooleanBothQueryValid } from './search.js'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 
@@ -71,15 +72,17 @@ export function isUserVideoLanguages (value: any) {
   return value === null || (isArray(value) && value.length < CONSTRAINTS_FIELDS.USERS.VIDEO_LANGUAGES.max)
 }
 
-export function isUserBrowseVideosCategories (value: any) {
+// Don't check categories exist: plugins can add/remove categories
+export function isUserVideoCategories (value: any) {
   return value === null || (
     isArray(value) &&
-    value.every(category => Number.isInteger(category) && Object.hasOwn(VIDEO_CATEGORIES, category))
+    value.length < CONSTRAINTS_FIELDS.USERS.VIDEO_CATEGORIES.max &&
+    value.every(category => Number.isInteger(category))
   )
 }
 
-export function isUserBrowseVideosLive (value: any) {
-  return [ 'true', 'false', 'both' ].includes(value)
+export function isUserVideoLive (value: any) {
+  return isBooleanBothQueryValid(value)
 }
 
 export function isUserLanguage (value: any) {

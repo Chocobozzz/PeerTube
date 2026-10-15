@@ -7,8 +7,8 @@ import {
   isUserAutoPlayNextVideoPlaylistValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
-  isUserBrowseVideosCategories,
-  isUserBrowseVideosLive,
+  isUserVideoCategories,
+  isUserVideoLive,
   isUserLanguage,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
@@ -32,8 +32,8 @@ type SanitizedObject = Pick<
   | 'p2pEnabled'
   | 'videosHistoryEnabled'
   | 'videoLanguages'
-  | 'browseVideosCategories'
-  | 'browseVideosLive'
+  | 'videoCategories'
+  | 'videoLive'
   | 'language'
   | 'theme'
   | 'notificationSettings'
@@ -52,8 +52,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (!isUserP2PEnabledValid(o.p2pEnabled)) o.p2pEnabled = undefined
     if (!isUserVideosHistoryEnabledValid(o.videosHistoryEnabled)) o.videosHistoryEnabled = undefined
     if (!isUserVideoLanguages(o.videoLanguages)) o.videoLanguages = undefined
-    if (!isUserBrowseVideosCategories(o.browseVideosCategories)) o.browseVideosCategories = undefined
-    if (!isUserBrowseVideosLive(o.browseVideosLive)) o.browseVideosLive = undefined
+    if (!isUserVideoCategories(o.videoCategories)) o.videoCategories = undefined
+    if (!isUserVideoLive(o.videoLive)) o.videoLive = undefined
     if (!isUserLanguage(o.language)) o.language = undefined
     if (!isThemeNameValid(o.theme) || !isThemeRegistered(o.theme)) o.theme = undefined
 
@@ -69,8 +69,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
       'p2pEnabled',
       'videosHistoryEnabled',
       'videoLanguages',
-      'browseVideosCategories',
-      'browseVideosLive',
+      'videoCategories',
+      'videoLive',
       'language',
       'theme',
       'notificationSettings'
@@ -84,9 +84,10 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (exists(userImportData.autoPlayNextVideoPlaylist)) this.user.autoPlayNextVideoPlaylist = userImportData.autoPlayNextVideoPlaylist
     if (exists(userImportData.p2pEnabled)) this.user.p2pEnabled = userImportData.p2pEnabled
     if (exists(userImportData.videosHistoryEnabled)) this.user.videosHistoryEnabled = userImportData.videosHistoryEnabled
-    if (exists(userImportData.videoLanguages)) this.user.videoLanguages = userImportData.videoLanguages
-    if (exists(userImportData.browseVideosCategories)) this.user.browseVideosCategories = userImportData.browseVideosCategories
-    if (exists(userImportData.browseVideosLive)) this.user.browseVideosLive = userImportData.browseVideosLive
+    // null means all languages/categories
+    if (userImportData.videoLanguages !== undefined) this.user.videoLanguages = userImportData.videoLanguages
+    if (userImportData.videoCategories !== undefined) this.user.videoCategories = userImportData.videoCategories
+    if (exists(userImportData.videoLive)) this.user.videoLive = userImportData.videoLive
     if (exists(userImportData.language)) this.user.language = userImportData.language
     if (exists(userImportData.theme)) this.user.theme = userImportData.theme
 

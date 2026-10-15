@@ -155,7 +155,8 @@ export class VideoFiltersHeaderComponent implements OnInit {
         .map(v => {
           if (v === '_unknown') return $localize`Unknown`
 
-          return translated.find(c => c.id + '' === v)?.label
+          // Default categories (from user settings) are numbers
+          return translated.find(c => c.id + '' === v + '')?.label
         })
         .join(', ')
 

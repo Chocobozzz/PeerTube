@@ -91,7 +91,7 @@ export class UserLocalStorageService {
 
   getUserInfo () {
     let videoLanguages: string[]
-    let browseVideosCategories: number[]
+    let videoCategories: number[]
 
     try {
       const languagesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
@@ -104,13 +104,13 @@ export class UserLocalStorageService {
     }
 
     try {
-      const categoriesString = this.localStorageService.getItem(UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES)
-      browseVideosCategories = categoriesString && categoriesString !== 'undefined'
+      const categoriesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_CATEGORIES)
+      videoCategories = categoriesString && categoriesString !== 'undefined'
         ? JSON.parse(categoriesString)
         : null
     } catch (err) {
-      browseVideosCategories = null
-      logger.error('Cannot parse desired browse videos categories from localStorage.', err)
+      videoCategories = null
+      logger.error('Cannot parse desired video categories from localStorage.', err)
     }
 
     const htmlConfig = this.server.getHTMLConfig()
@@ -129,8 +129,8 @@ export class UserLocalStorageService {
       p2pEnabled: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.P2P_ENABLED), defaultP2PEnabled),
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,
-      browseVideosCategories,
-      browseVideosLive: this.localStorageService.getItem<BooleanBothQuery>(UserLocalStorageKeys.BROWSE_VIDEOS_LIVE) || 'both',
+      videoCategories,
+      videoLive: this.localStorageService.getItem<BooleanBothQuery>(UserLocalStorageKeys.VIDEO_LIVE) || 'both',
 
       autoPlayVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO), defaultAutoPlay),
       autoPlayNextVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO), false),
@@ -151,8 +151,8 @@ export class UserLocalStorageService {
       autoPlayNextVideoPlaylist: UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       theme: UserLocalStorageKeys.THEME,
       videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES,
-      browseVideosCategories: UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES,
-      browseVideosLive: UserLocalStorageKeys.BROWSE_VIDEOS_LIVE
+      videoCategories: UserLocalStorageKeys.VIDEO_CATEGORIES,
+      videoLive: UserLocalStorageKeys.VIDEO_LIVE
     }
 
     const obj: [string, string | boolean | number | string[] | number[]][] = objectKeysTyped(localStorageKeys)
@@ -188,8 +188,8 @@ export class UserLocalStorageService {
     this.localStorageService.removeItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST)
     this.localStorageService.removeItem(UserLocalStorageKeys.THEME)
     this.localStorageService.removeItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
-    this.localStorageService.removeItem(UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES)
-    this.localStorageService.removeItem(UserLocalStorageKeys.BROWSE_VIDEOS_LIVE)
+    this.localStorageService.removeItem(UserLocalStorageKeys.VIDEO_CATEGORIES)
+    this.localStorageService.removeItem(UserLocalStorageKeys.VIDEO_LIVE)
   }
 
   listenUserInfoChange () {
@@ -205,8 +205,8 @@ export class UserLocalStorageService {
       UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       UserLocalStorageKeys.THEME,
       UserLocalStorageKeys.VIDEO_LANGUAGES,
-      UserLocalStorageKeys.BROWSE_VIDEOS_CATEGORIES,
-      UserLocalStorageKeys.BROWSE_VIDEOS_LIVE
+      UserLocalStorageKeys.VIDEO_CATEGORIES,
+      UserLocalStorageKeys.VIDEO_LIVE
     ]).pipe(
       throttleTime(200),
       filter(() => this.authService.isLoggedIn() !== true)

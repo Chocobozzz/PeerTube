@@ -84,7 +84,7 @@ export class VideoFilters {
   }
 
   private triggerChange () {
-    if (this.onChangeCallbacks.length === 0) return
+    if (this.onChangeCallbacks.length === 0) return false
 
     // Don't run on change if the values did not change
     const currentFormObjectString = JSON.stringify(this.toFormObject())
@@ -93,13 +93,15 @@ export class VideoFilters {
 
     debugLogger('Checking if we need to trigger change', { changes: !noChanges })
 
-    if (noChanges) return
+    if (noChanges) return false
 
     this.oldFormObjectString = currentFormObjectString
 
     for (const cb of this.onChangeCallbacks) {
       cb()
     }
+
+    return true
   }
 
   // ---------------------------------------------------------------------------
@@ -176,7 +178,8 @@ export class VideoFilters {
     if (obj.search !== undefined) this.search = obj.search
 
     this.buildActiveFilters()
-    this.triggerChange()
+
+    return this.triggerChange()
   }
 
   clone () {
@@ -294,9 +297,16 @@ export class VideoFilters {
     const result: { [id: string]: any } = {}
 
     for (const [ key, defaultValue ] of this.defaultValues) {
-      if (this[key] !== defaultValue) {
-        result[key] = this[key]
+      const value = this[key]
+      if (value === defaultValue) continue
+
+      if (Array.isArray(defaultValue) && defaultValue.length !== 0 && (!Array.isArray(value) || value.length === 0)) {
+        // Use an empty value so "all languages/categories" is kept in the URL
+        result[key] = ''
+        continue
       }
+
+      result[key] = value
     }
 
     return result

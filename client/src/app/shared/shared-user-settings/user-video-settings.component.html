@@ -63,27 +63,24 @@
   </div>
 
   <div class="form-group">
-    <div class="anchor" id="browse-videos-filters"></div>
+    <div class="anchor" id="video-categories"></div>
 
-    <div class="pt-label-container">
-      <span id="browseVideosCategories-label" class="group-label" i18n>Only display videos in the following categories</span>
-      <my-help i18n>In Browse videos</my-help>
+    <label i18n for="videoCategories">Only display videos in the following categories</label>
+
+    <div>
+      <my-select-categories inputId="videoCategories" formControlName="videoCategories"></my-select-categories>
     </div>
-
-    <my-select-categories-chips inputId="browseVideosCategories" formControlName="browseVideosCategories"></my-select-categories-chips>
   </div>
 
   <div class="form-group">
     <my-select-radio
-      [items]="browseVideosLiveItems"
-      inputId="browseVideosLive"
+      [items]="videoLiveItems"
+      inputId="videoLive"
       isGroup="true"
       i18n-label
       label="Only display videos of the following types"
-      formControlName="browseVideosLive"
-    >
-      <my-help i18n>In Browse videos</my-help>
-    </my-select-radio>
+      formControlName="videoLive"
+    ></my-select-radio>
   </div>
 
   <ng-content select="inner-title"></ng-content>

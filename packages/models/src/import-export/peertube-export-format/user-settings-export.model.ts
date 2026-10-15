@@ -15,8 +15,8 @@ export interface UserSettingsExportJSON {
 
   videosHistoryEnabled: boolean
   videoLanguages: string[]
-  browseVideosCategories: number[]
-  browseVideosLive: BooleanBothQuery
+  videoCategories: number[]
+  videoLive: BooleanBothQuery
   language: string
 
   theme: string

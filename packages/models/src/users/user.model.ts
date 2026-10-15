@@ -35,8 +35,8 @@ export interface User {
 
   videosHistoryEnabled: boolean
   videoLanguages: string[]
-  browseVideosCategories: number[]
-  browseVideosLive: BooleanBothQuery
+  videoCategories: number[]
+  videoLive: BooleanBothQuery
   language: string
 
   role: {

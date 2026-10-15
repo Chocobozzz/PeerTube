@@ -189,6 +189,9 @@ function runTest (withObjectStorage: boolean) {
 
         expect(me.p2pEnabled).to.be.false
         expect(me.language).to.equal('fr')
+        expect(me.videoLanguages).to.deep.equal([ 'fr', 'en' ])
+        expect(me.videoCategories).to.deep.equal([ 13, 15 ])
+        expect(me.videoLive).to.equal('false')
 
         const settings = me.notificationSettings
 

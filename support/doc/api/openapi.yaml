@@ -13142,19 +13142,19 @@ components:
           items:
             type: string
           description: list of languages to filter videos down to
-        browseVideosCategories:
+        videoCategories:
           type: array
           items:
             type: integer
           nullable: true
-          description: list of categories to filter Browse videos down to
-        browseVideosLive:
+          description: list of categories to filter videos down to (`null` means all categories)
+        videoLive:
           type: string
           enum:
             - 'true'
             - 'false'
             - both
-          description: type of videos to display when browsing videos
+          description: filter videos down to lives (`true`), VODs (`false`) or display both
         language:
           type: string
           description: default language for this user
@@ -13351,19 +13351,19 @@ components:
           items:
             type: string
           description: list of languages to filter videos down to
-        browseVideosCategories:
+        videoCategories:
           type: array
           items:
             type: integer
           nullable: true
-          description: list of categories to filter Browse videos down to
-        browseVideosLive:
+          description: list of categories to filter videos down to (`null` means all categories)
+        videoLive:
           type: string
           enum:
             - 'true'
             - 'false'
             - both
-          description: type of videos to display when browsing videos
+          description: filter videos down to lives (`true`), VODs (`false`) or display both
         language:
           type: string
           description: default language for this user

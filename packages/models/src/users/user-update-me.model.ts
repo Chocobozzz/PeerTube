@@ -18,8 +18,8 @@ export interface UserUpdateMe {
   autoPlayNextVideoPlaylist?: boolean
   videosHistoryEnabled?: boolean
   videoLanguages?: string[]
-  browseVideosCategories?: number[]
-  browseVideosLive?: BooleanBothQuery
+  videoCategories?: number[]
+  videoLive?: BooleanBothQuery
   language?: string
 
   email?: string

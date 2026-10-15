@@ -59,8 +59,8 @@ import {
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
-  isUserBrowseVideosCategories,
-  isUserBrowseVideosLive,
+  isUserVideoCategories,
+  isUserVideoLive,
   isUserEmailVerifiedValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
@@ -363,15 +363,15 @@ export class UserModel extends SequelizeModel<UserModel> {
 
   @AllowNull(true)
   @Default(null)
-  @Is('UserBrowseVideosCategories', value => throwIfNotValid(value, isUserBrowseVideosCategories, 'browse videos categories'))
+  @Is('UserVideoCategories', value => throwIfNotValid(value, isUserVideoCategories, 'video categories'))
   @Column(DataType.ARRAY(DataType.INTEGER))
-  declare browseVideosCategories: number[]
+  declare videoCategories: number[]
 
   @AllowNull(false)
   @Default('both')
-  @Is('UserBrowseVideosLive', value => throwIfNotValid(value, isUserBrowseVideosLive, 'browse videos live'))
+  @Is('UserVideoLive', value => throwIfNotValid(value, isUserVideoLive, 'video live'))
   @Column(DataType.STRING)
-  declare browseVideosLive: BooleanBothQuery
+  declare videoLive: BooleanBothQuery
 
   @AllowNull(false)
   @Default(UserAdminFlag.NONE)
@@ -1137,8 +1137,8 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideo: this.autoPlayNextVideo,
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
-      browseVideosCategories: this.browseVideosCategories,
-      browseVideosLive: this.browseVideosLive,
+      videoCategories: this.videoCategories,
+      videoLive: this.videoLive,
 
       language: this.language,
 

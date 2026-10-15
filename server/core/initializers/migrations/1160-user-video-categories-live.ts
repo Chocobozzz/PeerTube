@@ -7,13 +7,13 @@ async function up (utils: {
 }): Promise<void> {
   const { transaction } = utils
 
-  await utils.queryInterface.addColumn('user', 'browseVideosCategories', {
+  await utils.queryInterface.addColumn('user', 'videoCategories', {
     type: Sequelize.ARRAY(Sequelize.INTEGER),
     allowNull: true,
     defaultValue: null
   }, { transaction })
 
-  await utils.queryInterface.addColumn('user', 'browseVideosLive', {
+  await utils.queryInterface.addColumn('user', 'videoLive', {
     type: Sequelize.STRING,
     allowNull: false,
     defaultValue: 'both'

@@ -17,8 +17,8 @@ export class UserSettingsExporter extends AbstractUserExporter<UserSettingsExpor
 
         videosHistoryEnabled: this.user.videosHistoryEnabled,
         videoLanguages: this.user.videoLanguages,
-        browseVideosCategories: this.user.browseVideosCategories,
-        browseVideosLive: this.user.browseVideosLive,
+        videoCategories: this.user.videoCategories,
+        videoLive: this.user.videoLive,
         language: this.user.language,
 
         theme: this.user.theme,

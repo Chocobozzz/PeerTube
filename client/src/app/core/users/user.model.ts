@@ -2,6 +2,7 @@ import { Account } from '@app/shared/shared-main/account/account.model'
 import { hasUserRight, objectKeysTyped } from '@peertube/peertube-core-utils'
 import {
   ActorImage,
+  BooleanBothQuery,
   HTMLServerConfig,
   NSFWPolicyType,
   UserAdminFlag,
@@ -37,8 +38,8 @@ export class User implements UserServerModel {
 
   videosHistoryEnabled: boolean
   videoLanguages: string[]
-  browseVideosCategories: number[]
-  browseVideosLive: 'true' | 'false' | 'both'
+  videoCategories: number[]
+  videoLive: BooleanBothQuery
 
   role: {
     id: UserRoleType

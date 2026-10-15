@@ -6,15 +6,10 @@
   @include responsive-width(340px);
 }
 
-my-select-languages {
+my-select-languages,
+my-select-categories {
   display: block;
 
   width: 340px;
   max-width: 100%;
-}
-
-.pt-label-container .group-label {
-  display: inline;
-
-  @include margin-right(0.25rem);
 }
