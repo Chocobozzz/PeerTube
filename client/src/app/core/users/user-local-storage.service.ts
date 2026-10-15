@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
+import { BooleanBothQuery, NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
 import { getBoolOrDefault, getNumberOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
 import { OAuthUserTokens, UserLocalStorageKeys } from '@root-helpers/users'
@@ -90,17 +90,8 @@ export class UserLocalStorageService {
   // ---------------------------------------------------------------------------
 
   getUserInfo () {
-    let videoLanguages: string[]
-
-    try {
-      const languagesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
-      videoLanguages = languagesString && languagesString !== 'undefined'
-        ? JSON.parse(languagesString)
-        : null
-    } catch (err) {
-      videoLanguages = null
-      logger.error('Cannot parse desired video languages from localStorage.', err)
-    }
+    const videoLanguages = this.getJSONArrayOrNull<string>(UserLocalStorageKeys.VIDEO_LANGUAGES, 'video languages')
+    const videoCategories = this.getJSONArrayOrNull<number>(UserLocalStorageKeys.VIDEO_CATEGORIES, 'video categories')
 
     const htmlConfig = this.server.getHTMLConfig()
 
@@ -118,6 +109,8 @@ export class UserLocalStorageService {
       p2pEnabled: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.P2P_ENABLED), defaultP2PEnabled),
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
       videoLanguages,
+      videoCategories,
+      videoLive: this.localStorageService.getItem<BooleanBothQuery>(UserLocalStorageKeys.VIDEO_LIVE) || 'both',
 
       autoPlayVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO), defaultAutoPlay),
       autoPlayNextVideo: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO), false),
@@ -137,10 +130,12 @@ export class UserLocalStorageService {
       autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
       autoPlayNextVideoPlaylist: UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       theme: UserLocalStorageKeys.THEME,
-      videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES
+      videoLanguages: UserLocalStorageKeys.VIDEO_LANGUAGES,
+      videoCategories: UserLocalStorageKeys.VIDEO_CATEGORIES,
+      videoLive: UserLocalStorageKeys.VIDEO_LIVE
     }
 
-    const obj: [string, string | boolean | number | string[]][] = objectKeysTyped(localStorageKeys)
+    const obj: [string, string | boolean | number | string[] | number[]][] = objectKeysTyped(localStorageKeys)
       .filter(key => key in profile)
       .map(key => [ localStorageKeys[key], profile[key] ])
 
@@ -173,6 +168,8 @@ export class UserLocalStorageService {
     this.localStorageService.removeItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST)
     this.localStorageService.removeItem(UserLocalStorageKeys.THEME)
     this.localStorageService.removeItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
+    this.localStorageService.removeItem(UserLocalStorageKeys.VIDEO_CATEGORIES)
+    this.localStorageService.removeItem(UserLocalStorageKeys.VIDEO_LIVE)
   }
 
   listenUserInfoChange () {
@@ -187,7 +184,9 @@ export class UserLocalStorageService {
       UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST,
       UserLocalStorageKeys.THEME,
-      UserLocalStorageKeys.VIDEO_LANGUAGES
+      UserLocalStorageKeys.VIDEO_LANGUAGES,
+      UserLocalStorageKeys.VIDEO_CATEGORIES,
+      UserLocalStorageKeys.VIDEO_LIVE
     ]).pipe(
       throttleTime(200),
       filter(() => this.authService.isLoggedIn() !== true)
@@ -206,5 +205,21 @@ export class UserLocalStorageService {
 
   flushTokens () {
     OAuthUserTokens.flushLocalStorage(this.localStorageService)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private getJSONArrayOrNull<T> (key: string, label: string): T[] {
+    try {
+      const value = this.localStorageService.getItem(key)
+
+      return value && value !== 'undefined'
+        ? JSON.parse(value)
+        : null
+    } catch (err) {
+      logger.error(`Cannot parse ${label} from localStorage.`, err)
+
+      return null
+    }
   }
 }

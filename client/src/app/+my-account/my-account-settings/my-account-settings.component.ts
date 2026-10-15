@@ -7,7 +7,9 @@ import { shallowCopy } from '@peertube/peertube-core-utils'
 import { ActorAvatarEditComponent } from '../../shared/shared-actor-image-edit/actor-avatar-edit.component'
 import { UserQuotaComponent } from '../../shared/shared-main/users/user-quota.component'
 import { UserInterfaceSettingsComponent } from '../../shared/shared-user-settings/user-interface-settings.component'
-import { UserVideoSettingsComponent } from '../../shared/shared-user-settings/user-video-settings.component'
+import { UserContentPreferencesComponent } from '../../shared/shared-user-settings/user-content-preferences.component'
+import { UserPlayerSettingsComponent } from '../../shared/shared-user-settings/user-player-settings.component'
+import { UserSensitiveContentSettingsComponent } from '../../shared/shared-user-settings/user-sensitive-content-settings.component'
 import { AccountTokenSessionsComponent } from '../../shared/shared-users/account-token-sessions.component'
 import { MyAccountChangeEmailComponent } from './my-account-change-email/my-account-change-email.component'
 import { MyAccountChangePasswordComponent } from './my-account-change-password/my-account-change-password.component'
@@ -28,7 +30,9 @@ import { MyAccountTwoFactorButtonComponent } from './my-account-two-factor/my-ac
     UserQuotaComponent,
     MyAccountProfileComponent,
     UserInterfaceSettingsComponent,
-    UserVideoSettingsComponent,
+    UserSensitiveContentSettingsComponent,
+    UserContentPreferencesComponent,
+    UserPlayerSettingsComponent,
     MyAccountNotificationPreferencesComponent,
     MyAccountChangePasswordComponent,
     MyAccountTwoFactorButtonComponent,

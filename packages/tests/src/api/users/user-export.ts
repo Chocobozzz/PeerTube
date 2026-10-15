@@ -407,6 +407,9 @@ function runTest (withObjectStorage: boolean) {
       const json = await parseZIPJSONFile<UserSettingsExportJSON>(zip, 'peertube/user-settings.json')
       expect(json.email).to.equal('noah@example.com')
       expect(json.p2pEnabled).to.be.false
+      expect(json.videoLanguages).to.deep.equal([ 'fr', 'en' ])
+      expect(json.videoCategories).to.deep.equal([ 13, 15 ])
+      expect(json.videoLive).to.equal('false')
       expect(json.notificationSettings.myVideoPublished).to.equal(UserNotificationSettingValue.NONE)
       expect(json.notificationSettings.commentMention).to.equal(UserNotificationSettingValue.EMAIL)
     }

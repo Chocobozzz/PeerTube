@@ -82,16 +82,49 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="languageOneOf" i18n>Languages</label>
+        <div class="d-flex gap-3 justify-content-between flex-wrap">
+          <div>
+            <div class="form-group">
+              <label for="languageOneOf" i18n>Languages</label>
 
-          <my-select-languages inputId="languageOneOf" [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
+              <my-select-languages inputId="languageOneOf" [maxLanguages]="20" formControlName="languageOneOf"></my-select-languages>
+            </div>
+
+            <div class="form-group">
+              <label for="categoryOneOf" i18n>Categories</label>
+
+              <my-select-categories inputId="categoryOneOf" formControlName="categoryOneOf"></my-select-categories>
+            </div>
+          </div>
+
+          <div>
+            <div class="form-group" role="radiogroup">
+              <label for="type" i18n>Type</label>
+
+              <div class="peertube-radio-container">
+                <input formControlName="live" type="radio" name="live" id="liveBoth" value="both" />
+                <label for="liveBoth" i18n>VOD & Live videos</label>
+              </div>
+
+              <div class="peertube-radio-container">
+                <input formControlName="live" type="radio" name="live" id="liveTrue" value="true" />
+                <label for="liveTrue" i18n>Live videos</label>
+              </div>
+
+              <div class="peertube-radio-container">
+                <input formControlName="live" type="radio" name="live" id="liveFalse" value="false" />
+                <label for="liveFalse" i18n>VOD videos</label>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class="form-group" role="radiogroup">
-          <label for="nsfw" i18n>Sensitive content</label>
+      <div class="section">
+        <div class="section-title">
+          <ng-container i18n>Sensitive content</ng-container>
 
-          <div class="form-group-description">
+          <div class="with-description">
             <div>{{ filters().getNSFWSettingsLabel() }}</div>
 
             <div i18n>
@@ -122,36 +155,6 @@
           </div>
         </div>
       }
-
-      <div class="section">
-        <div class="section-title" i18n>Content type</div>
-
-        <div class="form-group">
-          <label for="categoryOneOf" i18n>Categories</label>
-
-          <my-select-categories inputId="categoryOneOf" formControlName="categoryOneOf"></my-select-categories>
-        </div>
-
-        <div class="form-group" role="radiogroup">
-          <label for="type" i18n>Type</label>
-
-          <div class="peertube-radio-container">
-            <input formControlName="live" type="radio" name="live" id="liveBoth" value="both" />
-            <label for="liveBoth" i18n>VOD & Live videos</label>
-          </div>
-
-          <div class="peertube-radio-container">
-            <input formControlName="live" type="radio" name="live" id="liveTrue" value="true" />
-            <label for="liveTrue" i18n>Live videos</label>
-          </div>
-
-          <div class="peertube-radio-container">
-            <input formControlName="live" type="radio" name="live" id="liveFalse" value="false" />
-            <label for="liveFalse" i18n>VOD videos</label>
-          </div>
-        </div>
-      </div>
-
       @if (canSeeAllVideos()) {
         <div class="section">
           <div class="section-title" i18n>Moderation</div>

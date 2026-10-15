@@ -56,6 +56,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.client.videos.miniature.preferAuthorDisplayName).to.be.false
   expect(data.client.browseVideos.defaultSort).to.equal('-publishedAt')
   expect(data.client.browseVideos.defaultScope).to.equal('federated')
+  expect(data.client.browseVideos.includeScheduledLive).to.be.false
   expect(data.client.menu.login.redirectOnSingleExternalAuth).to.be.false
 
   expect(data.signup.enabled).to.be.true
@@ -243,7 +244,8 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       },
       browseVideos: {
         defaultSort: '-trending',
-        defaultScope: 'local'
+        defaultScope: 'local',
+        includeScheduledLive: true
       },
       menu: {
         login: {
@@ -588,6 +590,9 @@ describe('Test config', function () {
 
       const data = await server.config.getCustomConfig()
       expect(data).to.deep.equal(buildNewCustomConfig(server))
+
+      const htmlConfig = await server.config.getConfig()
+      expect(htmlConfig.client.browseVideos.includeScheduledLive).to.be.true
     })
 
     it('Should have the correct updated video allowed extensions', async function () {

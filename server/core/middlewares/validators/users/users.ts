@@ -14,6 +14,8 @@ import {
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
+  isUserVideoCategories,
+  isUserVideoLive,
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserFeatureInfo,
@@ -264,6 +266,12 @@ export const usersUpdateMeValidator = [
   body('videoLanguages')
     .optional()
     .custom(isUserVideoLanguages),
+  body('videoCategories')
+    .optional()
+    .custom(isUserVideoCategories),
+  body('videoLive')
+    .optional()
+    .custom(isUserVideoLive),
   body('language')
     .optional()
     .custom(isUserLanguage),

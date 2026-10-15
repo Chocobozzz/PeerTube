@@ -1,0 +1,10 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+my-select-languages,
+my-select-categories {
+  display: block;
+
+  width: 340px;
+  max-width: 100%;
+}
