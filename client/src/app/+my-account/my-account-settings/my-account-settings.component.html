@@ -32,14 +32,40 @@
   </div>
 </div>
 
-<div class="pt-two-cols mt-5"> <!-- video settings grid -->
+<div class="pt-two-cols mt-5"> <!-- sensitive content grid -->
   <div class="title-col">
     <div class="anchor" id="video-settings"></div> <!-- video settings anchor -->
-    <h2 i18n>VIDEO SETTINGS</h2>
+    <h2 i18n>SENSITIVE CONTENT</h2>
   </div>
 
   <div class="content-col">
-    <my-user-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-video-settings>
+    <my-user-sensitive-content-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-sensitive-content-settings>
+  </div>
+</div>
+
+<div class="pt-two-cols mt-5"> <!-- content preferences grid -->
+  <div class="title-col">
+    <div class="anchor" id="content-preferences"></div> <!-- content preferences anchor -->
+    <h2 i18n>CONTENT PREFERENCES</h2>
+
+    <p class="title-subtitle" i18n>
+      These preferences apply to Recently added, Trending, Local, Most liked, Search, account and channel pages
+    </p>
+  </div>
+
+  <div class="content-col">
+    <my-user-content-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-content-preferences>
+  </div>
+</div>
+
+<div class="pt-two-cols mt-5"> <!-- player settings grid -->
+  <div class="title-col">
+    <div class="anchor" id="player-settings"></div> <!-- player settings anchor -->
+    <h2 i18n>PLAYER SETTINGS</h2>
+  </div>
+
+  <div class="content-col">
+    <my-user-player-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-player-settings>
   </div>
 </div>
 

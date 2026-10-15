@@ -155,7 +155,7 @@ export class VideoFiltersHeaderComponent implements OnInit {
         .map(v => {
           if (v === '_unknown') return $localize`Unknown`
 
-          return translated.find(c => c.id + '' === v)?.label
+          return (translated as ConstantLabel<string | number>[]).find(c => c.id === v)?.label
         })
         .join(', ')
 

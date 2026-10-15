@@ -358,18 +358,36 @@ describe('Test users', function () {
       expect(user.noAccountSetupWarningModal).to.be.true
     })
 
-    it('Should be able to update my languages', async function () {
+    it('Should be able to update my languages, categories and live filter', async function () {
       await server.users.updateMe({
         token: userToken,
         language: 'fr',
-        videoLanguages: [ 'fr', 'en' ]
+        videoLanguages: [ 'fr', 'en' ],
+        videoCategories: [ 13, 15 ],
+        videoLive: 'false'
       })
 
       {
         const user = await server.users.getMyInfo({ token: userToken })
         expect(user.language).to.equal('fr')
         expect(user.videoLanguages).to.deep.equal([ 'fr', 'en' ])
+        expect(user.videoCategories).to.deep.equal([ 13, 15 ])
+        expect(user.videoLive).to.equal('false')
       }
+    })
+
+    it('Should be able to reset my video languages and categories', async function () {
+      await server.users.updateMe({
+        token: userToken,
+        videoLanguages: null,
+        videoCategories: null,
+        videoLive: 'both'
+      })
+
+      const user = await server.users.getMyInfo({ token: userToken })
+      expect(user.videoLanguages).to.be.null
+      expect(user.videoCategories).to.be.null
+      expect(user.videoLive).to.equal('both')
     })
   })
 

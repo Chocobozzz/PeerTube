@@ -16,11 +16,11 @@ export class AdvancedSearch {
   originallyPublishedStartDate: string // ISO 8601
   originallyPublishedEndDate: string // ISO 8601
 
-  categoryOneOf: string
+  categoryOneOf: string[]
 
   licenceOneOf: string
 
-  languageOneOf: string
+  languageOneOf: string[]
 
   tagsOneOf: string[]
   tagsAllOf: string[]
@@ -44,9 +44,9 @@ export class AdvancedSearch {
     endDate?: string
     originallyPublishedStartDate?: string
     originallyPublishedEndDate?: string
-    categoryOneOf?: string
+    categoryOneOf?: any
     licenceOneOf?: string
-    languageOneOf?: string
+    languageOneOf?: any
 
     tagsOneOf?: any
     tagsAllOf?: any
@@ -72,9 +72,9 @@ export class AdvancedSearch {
 
     this.isLive = options.isLive || undefined
 
-    this.categoryOneOf = options.categoryOneOf || undefined
+    this.categoryOneOf = splitIntoArray(options.categoryOneOf)
     this.licenceOneOf = options.licenceOneOf || undefined
-    this.languageOneOf = options.languageOneOf || undefined
+    this.languageOneOf = splitIntoArray(options.languageOneOf)
     this.tagsOneOf = splitIntoArray(options.tagsOneOf)
     this.tagsAllOf = splitIntoArray(options.tagsAllOf)
     this.durationMin = options.durationMin ? parseInt(options.durationMin, 10) : undefined
@@ -151,9 +151,9 @@ export class AdvancedSearch {
       endDate: this.endDate,
       originallyPublishedStartDate: this.originallyPublishedStartDate,
       originallyPublishedEndDate: this.originallyPublishedEndDate,
-      categoryOneOf: splitIntoArray(this.categoryOneOf),
+      categoryOneOf: this.categoryOneOf?.map(c => parseInt(c, 10)),
       licenceOneOf: splitIntoArray(this.licenceOneOf),
-      languageOneOf: splitIntoArray(this.languageOneOf),
+      languageOneOf: this.languageOneOf,
       tagsOneOf: this.tagsOneOf,
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
@@ -199,8 +199,8 @@ export class AdvancedSearch {
     return acc
   }
 
-  private isValidValue (val: any) {
-    if (val === undefined) return false
+  isValidValue (val: any) {
+    if (val === undefined || val === null) return false
     if (val === '') return false
     if (Array.isArray(val) && val.length === 0) return false
 
@@ -213,7 +213,7 @@ export class AdvancedSearch {
       this.endDate !== undefined ||
       this.originallyPublishedStartDate !== undefined ||
       this.originallyPublishedEndDate !== undefined ||
-      this.categoryOneOf !== undefined ||
+      this.isValidValue(this.categoryOneOf) ||
       this.licenceOneOf !== undefined ||
       this.tagsOneOf !== undefined ||
       this.tagsAllOf !== undefined ||

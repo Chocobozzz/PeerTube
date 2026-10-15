@@ -27,8 +27,6 @@ $filters-background: pvar(--bg-secondary-400);
 
 .section {
   min-width: 1px;
-
-  @include margin-right(3rem);
 }
 
 .section-title {
@@ -59,6 +57,7 @@ $filters-background: pvar(--bg-secondary-400);
 
   @include define-input-css-variables-in-secondary;
   @include rfs(1.5rem, padding);
+  @include rfs(3rem, gap);
 
   input[type="radio"] + label {
     font-weight: $font-regular;

@@ -16,7 +16,10 @@ form {
   @include margin-right(30px);
 }
 
-.peertube-select-container {
+.peertube-select-container,
+my-select-categories,
+my-select-languages {
+  display: block;
   margin-bottom: 1rem;
 }
 

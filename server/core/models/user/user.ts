@@ -9,6 +9,7 @@ import {
   UserRole,
   VideoChannelCollaboratorState,
   VideoPlaylistType,
+  type BooleanBothQuery,
   type NSFWPolicyType,
   type UserAdminFlagType,
   type UserNewFeatureInfoType,
@@ -58,6 +59,8 @@ import {
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
+  isUserVideoCategories,
+  isUserVideoLive,
   isUserEmailVerifiedValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
@@ -357,6 +360,18 @@ export class UserModel extends SequelizeModel<UserModel> {
   @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
   @Column(DataType.ARRAY(DataType.STRING))
   declare videoLanguages: string[]
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserVideoCategories', value => throwIfNotValid(value, isUserVideoCategories, 'video categories'))
+  @Column(DataType.ARRAY(DataType.INTEGER))
+  declare videoCategories: number[]
+
+  @AllowNull(false)
+  @Default('both')
+  @Is('UserVideoLive', value => throwIfNotValid(value, isUserVideoLive, 'video live'))
+  @Column(DataType.STRING)
+  declare videoLive: BooleanBothQuery
 
   @AllowNull(false)
   @Default(UserAdminFlag.NONE)
@@ -1122,6 +1137,8 @@ export class UserModel extends SequelizeModel<UserModel> {
       autoPlayNextVideo: this.autoPlayNextVideo,
       autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
+      videoCategories: this.videoCategories,
+      videoLive: this.videoLive,
 
       language: this.language,
 

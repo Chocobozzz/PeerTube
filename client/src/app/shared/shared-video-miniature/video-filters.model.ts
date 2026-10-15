@@ -84,7 +84,7 @@ export class VideoFilters {
   }
 
   private triggerChange () {
-    if (this.onChangeCallbacks.length === 0) return
+    if (this.onChangeCallbacks.length === 0) return false
 
     // Don't run on change if the values did not change
     const currentFormObjectString = JSON.stringify(this.toFormObject())
@@ -93,13 +93,15 @@ export class VideoFilters {
 
     debugLogger('Checking if we need to trigger change', { changes: !noChanges })
 
-    if (noChanges) return
+    if (noChanges) return false
 
     this.oldFormObjectString = currentFormObjectString
 
     for (const cb of this.onChangeCallbacks) {
       cb()
     }
+
+    return true
   }
 
   // ---------------------------------------------------------------------------
@@ -114,6 +116,14 @@ export class VideoFilters {
 
   setDefaultLanguages (languages: string[]) {
     this.defaultValues.set('languageOneOf', languages)
+  }
+
+  setDefaultCategories (categories: number[]) {
+    this.defaultValues.set('categoryOneOf', categories)
+  }
+
+  setDefaultLive (live: BooleanBothQuery) {
+    this.defaultValues.set('live', live)
   }
 
   setNSFWPolicy (user: Pick<User, 'nsfwPolicy' | 'nsfwFlagsDisplayed' | 'nsfwFlagsHidden' | 'nsfwFlagsWarned' | 'nsfwFlagsBlurred'>) {
@@ -158,7 +168,7 @@ export class VideoFilters {
     if (obj.sort !== undefined) this.sort = obj.sort
 
     if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(obj.languageOneOf)
-    if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(obj.categoryOneOf)
+    if (obj.categoryOneOf !== undefined) this.categoryOneOf = this.toCategoryIds(obj.categoryOneOf)
 
     if (obj.scope !== undefined) this.scope = obj.scope
     if (obj.allVideos !== undefined) this.allVideos = toBoolean(obj.allVideos)
@@ -168,7 +178,8 @@ export class VideoFilters {
     if (obj.search !== undefined) this.search = obj.search
 
     this.buildActiveFilters()
-    this.triggerChange()
+
+    return this.triggerChange()
   }
 
   clone () {
@@ -177,6 +188,8 @@ export class VideoFilters {
     const cloned = new VideoFilters(this.defaultValues.get('sort'), this.defaultValues.get('scope'), this.hiddenFields)
 
     cloned.setDefaultLanguages(this.defaultValues.get('languageOneOf'))
+    cloned.setDefaultCategories(this.defaultValues.get('categoryOneOf'))
+    cloned.setDefaultLive(this.defaultValues.get('live'))
 
     cloned.setNSFWPolicy({
       nsfwPolicy: this.nsfwPolicy,
@@ -284,12 +297,34 @@ export class VideoFilters {
     const result: { [id: string]: any } = {}
 
     for (const [ key, defaultValue ] of this.defaultValues) {
-      if (this[key] !== defaultValue) {
-        result[key] = this[key]
+      const value = this[key]
+      if (this.isSameValue(value, defaultValue)) continue
+
+      if (Array.isArray(defaultValue) && defaultValue.length !== 0 && (!Array.isArray(value) || value.length === 0)) {
+        // Use an empty value so "all languages/categories" is kept in the URL
+        result[key] = ''
+        continue
       }
+
+      result[key] = value
     }
 
     return result
+  }
+
+  private toCategoryIds (value: any): number[] {
+    // Categories come as strings from the URL and the form
+    return splitIntoArray(value)
+      ?.map((c: string | number) => parseInt(c + '', 10))
+      .filter((c: number) => !isNaN(c))
+  }
+
+  private isSameValue (a: any, b: any) {
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return a.length === b.length && a.every((v, i) => v === b[i])
+    }
+
+    return a === b
   }
 
   toVideosAPIObject () {

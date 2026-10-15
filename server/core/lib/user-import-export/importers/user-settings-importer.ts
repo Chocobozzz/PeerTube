@@ -7,6 +7,8 @@ import {
   isUserAutoPlayNextVideoPlaylistValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
+  isUserVideoCategories,
+  isUserVideoLive,
   isUserLanguage,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
@@ -30,6 +32,8 @@ type SanitizedObject = Pick<
   | 'p2pEnabled'
   | 'videosHistoryEnabled'
   | 'videoLanguages'
+  | 'videoCategories'
+  | 'videoLive'
   | 'language'
   | 'theme'
   | 'notificationSettings'
@@ -48,6 +52,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (!isUserP2PEnabledValid(o.p2pEnabled)) o.p2pEnabled = undefined
     if (!isUserVideosHistoryEnabledValid(o.videosHistoryEnabled)) o.videosHistoryEnabled = undefined
     if (!isUserVideoLanguages(o.videoLanguages)) o.videoLanguages = undefined
+    if (!isUserVideoCategories(o.videoCategories)) o.videoCategories = undefined
+    if (!isUserVideoLive(o.videoLive)) o.videoLive = undefined
     if (!isUserLanguage(o.language)) o.language = undefined
     if (!isThemeNameValid(o.theme) || !isThemeRegistered(o.theme)) o.theme = undefined
 
@@ -63,6 +69,8 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
       'p2pEnabled',
       'videosHistoryEnabled',
       'videoLanguages',
+      'videoCategories',
+      'videoLive',
       'language',
       'theme',
       'notificationSettings'
@@ -76,7 +84,10 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
     if (exists(userImportData.autoPlayNextVideoPlaylist)) this.user.autoPlayNextVideoPlaylist = userImportData.autoPlayNextVideoPlaylist
     if (exists(userImportData.p2pEnabled)) this.user.p2pEnabled = userImportData.p2pEnabled
     if (exists(userImportData.videosHistoryEnabled)) this.user.videosHistoryEnabled = userImportData.videosHistoryEnabled
-    if (exists(userImportData.videoLanguages)) this.user.videoLanguages = userImportData.videoLanguages
+    // null means all languages/categories
+    if (userImportData.videoLanguages !== undefined) this.user.videoLanguages = userImportData.videoLanguages
+    if (userImportData.videoCategories !== undefined) this.user.videoCategories = userImportData.videoCategories
+    if (exists(userImportData.videoLive)) this.user.videoLive = userImportData.videoLive
     if (exists(userImportData.language)) this.user.language = userImportData.language
     if (exists(userImportData.theme)) this.user.theme = userImportData.theme
 
