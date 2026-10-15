@@ -90,28 +90,8 @@ export class UserLocalStorageService {
   // ---------------------------------------------------------------------------
 
   getUserInfo () {
-    let videoLanguages: string[]
-    let videoCategories: number[]
-
-    try {
-      const languagesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_LANGUAGES)
-      videoLanguages = languagesString && languagesString !== 'undefined'
-        ? JSON.parse(languagesString)
-        : null
-    } catch (err) {
-      videoLanguages = null
-      logger.error('Cannot parse desired video languages from localStorage.', err)
-    }
-
-    try {
-      const categoriesString = this.localStorageService.getItem(UserLocalStorageKeys.VIDEO_CATEGORIES)
-      videoCategories = categoriesString && categoriesString !== 'undefined'
-        ? JSON.parse(categoriesString)
-        : null
-    } catch (err) {
-      videoCategories = null
-      logger.error('Cannot parse desired video categories from localStorage.', err)
-    }
+    const videoLanguages = this.getJSONArrayOrNull<string>(UserLocalStorageKeys.VIDEO_LANGUAGES, 'video languages')
+    const videoCategories = this.getJSONArrayOrNull<number>(UserLocalStorageKeys.VIDEO_CATEGORIES, 'video categories')
 
     const htmlConfig = this.server.getHTMLConfig()
 
@@ -225,5 +205,21 @@ export class UserLocalStorageService {
 
   flushTokens () {
     OAuthUserTokens.flushLocalStorage(this.localStorageService)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private getJSONArrayOrNull<T> (key: string, label: string): T[] {
+    try {
+      const value = this.localStorageService.getItem(key)
+
+      return value && value !== 'undefined'
+        ? JSON.parse(value)
+        : null
+    } catch (err) {
+      logger.error(`Cannot parse ${label} from localStorage.`, err)
+
+      return null
+    }
   }
 }

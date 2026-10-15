@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms'
 import { ServerService } from '@app/core'
 import { AdvancedSearch } from '@app/shared/shared-search/advanced-search.model'
 import { HTMLServerConfig, ConstantLabel } from '@peertube/peertube-models'
+import { SelectCategoriesComponent } from '../shared/shared-forms/select/select-categories.component'
+import { SelectLanguagesComponent } from '../shared/shared-forms/select/select-languages.component'
 import { SelectTagsComponent } from '../shared/shared-forms/select/select-tags.component'
 
 type FormOption = { id: string, label: string }
@@ -12,7 +14,7 @@ type FormOption = { id: string, label: string }
   styleUrls: [ './search-filters.component.scss' ],
   templateUrl: './search-filters.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ FormsModule, SelectTagsComponent ]
+  imports: [ FormsModule, SelectTagsComponent, SelectCategoriesComponent, SelectLanguagesComponent ]
 })
 export class SearchFiltersComponent implements OnInit {
   private serverService = inject(ServerService)
@@ -20,9 +22,7 @@ export class SearchFiltersComponent implements OnInit {
   advancedSearch = input<AdvancedSearch>(new AdvancedSearch())
   filtered = output<AdvancedSearch>()
 
-  videoCategories: ConstantLabel<number>[] = []
   videoLicences: ConstantLabel<number>[] = []
-  videoLanguages: ConstantLabel<string>[] = []
 
   publishedDateRanges: FormOption[] = []
   sorts: FormOption[] = []
@@ -90,9 +90,7 @@ export class SearchFiltersComponent implements OnInit {
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
 
-    this.serverService.getVideoCategories().subscribe(categories => this.videoCategories = categories)
     this.serverService.getVideoLicences().subscribe(licences => this.videoLicences = licences)
-    this.serverService.getVideoLanguages().subscribe(languages => this.videoLanguages = languages)
 
     this.loadFromDurationRange()
     this.loadFromPublishedRange()

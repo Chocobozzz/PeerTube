@@ -201,25 +201,24 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewChecked, OnDes
 
     Object.assign(queryParams, { search: this.search, searchTarget })
 
-    const o = this.authService.isLoggedIn()
-      ? this.loadUserVideoFiltersIfNeeded(queryParams)
+    // On the search page, keep the filters of the user (a missing filter means "all")
+    const o = this.authService.isLoggedIn() && !this.isOnSearch()
+      ? this.loadUserVideoFilters(queryParams)
       : of(true)
 
     o.subscribe(() => this.router.navigate([ '/search' ], { queryParams }))
   }
 
-  private loadUserVideoFiltersIfNeeded (queryParams: any) {
-    if (queryParams?.languageOneOf && queryParams?.categoryOneOf && queryParams?.isLive) return of(queryParams)
-
+  private loadUserVideoFilters (queryParams: Params) {
     return this.authService.userInformationLoaded
       .pipe(
         first(),
         tap(() => {
           const user = this.authService.getUser()
 
-          if (!queryParams.languageOneOf) queryParams.languageOneOf = user.videoLanguages
-          if (!queryParams.categoryOneOf) queryParams.categoryOneOf = user.videoCategories
-          if (!queryParams.isLive && user.videoLive !== 'both') queryParams.isLive = user.videoLive
+          queryParams.languageOneOf = user.videoLanguages
+          queryParams.categoryOneOf = user.videoCategories
+          if (user.videoLive !== 'both') queryParams.isLive = user.videoLive
         })
       )
   }

@@ -3,7 +3,7 @@ import { UserRole } from '@peertube/peertube-models'
 import validator from 'validator'
 import { isEmailEnabled } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants.js'
-import { exists, isArray, isBooleanValid } from './misc.js'
+import { exists, hasArrayLength, isArray, isArrayOf, isBooleanValid } from './misc.js'
 import { isBooleanBothQueryValid } from './search.js'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
@@ -74,11 +74,7 @@ export function isUserVideoLanguages (value: any) {
 
 // Don't check categories exist: plugins can add/remove categories
 export function isUserVideoCategories (value: any) {
-  return value === null || (
-    isArray(value) &&
-    value.length < CONSTRAINTS_FIELDS.USERS.VIDEO_CATEGORIES.max &&
-    value.every(category => Number.isInteger(category))
-  )
+  return value === null || (isArrayOf(value, Number.isInteger) && hasArrayLength(value, USERS_CONSTRAINTS_FIELDS.VIDEO_CATEGORIES))
 }
 
 export function isUserVideoLive (value: any) {

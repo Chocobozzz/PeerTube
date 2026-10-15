@@ -1,10 +1,5 @@
 @use "_variables" as *;
 @use "_mixins" as *;
-@use "_form-mixins" as *;
-
-.peertube-select-container {
-  @include responsive-width(340px);
-}
 
 my-select-languages,
 my-select-categories {

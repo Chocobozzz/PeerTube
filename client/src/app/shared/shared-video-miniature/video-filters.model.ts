@@ -168,7 +168,7 @@ export class VideoFilters {
     if (obj.sort !== undefined) this.sort = obj.sort
 
     if (obj.languageOneOf !== undefined) this.languageOneOf = splitIntoArray(obj.languageOneOf)
-    if (obj.categoryOneOf !== undefined) this.categoryOneOf = splitIntoArray(obj.categoryOneOf)
+    if (obj.categoryOneOf !== undefined) this.categoryOneOf = this.toCategoryIds(obj.categoryOneOf)
 
     if (obj.scope !== undefined) this.scope = obj.scope
     if (obj.allVideos !== undefined) this.allVideos = toBoolean(obj.allVideos)
@@ -298,7 +298,7 @@ export class VideoFilters {
 
     for (const [ key, defaultValue ] of this.defaultValues) {
       const value = this[key]
-      if (value === defaultValue) continue
+      if (this.isSameValue(value, defaultValue)) continue
 
       if (Array.isArray(defaultValue) && defaultValue.length !== 0 && (!Array.isArray(value) || value.length === 0)) {
         // Use an empty value so "all languages/categories" is kept in the URL
@@ -310,6 +310,21 @@ export class VideoFilters {
     }
 
     return result
+  }
+
+  private toCategoryIds (value: any): number[] {
+    // Categories come as strings from the URL and the form
+    return splitIntoArray(value)
+      ?.map((c: string | number) => parseInt(c + '', 10))
+      .filter((c: number) => !isNaN(c))
+  }
+
+  private isSameValue (a: any, b: any) {
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return a.length === b.length && a.every((v, i) => v === b[i])
+    }
+
+    return a === b
   }
 
   toVideosAPIObject () {
