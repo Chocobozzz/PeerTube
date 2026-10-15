@@ -371,6 +371,36 @@ describe('Test live', function () {
       }
     })
 
+    it('Should not duplicate a live that has multiple schedules', async function () {
+      const schedules = [
+        { startAt: new Date(Date.now() + 3600000).toISOString() },
+        { startAt: new Date(Date.now() + 7200000).toISOString() }
+      ]
+
+      await servers[0].live.update({ videoId: liveVideoUUID, fields: { schedules } })
+      await waitJobs(servers)
+
+      const handle = servers[0].store.channel.name + '@' + servers[0].store.channel.host
+
+      for (const server of servers) {
+        for (const sort of [ '-publishedAt', '-trending' ]) {
+          const { total, data } = await server.videos.list({ includeScheduledLive: true, sort })
+
+          expect(total).to.equal(1)
+          expect(data).to.have.lengthOf(1)
+          expect(data[0].uuid).to.equal(liveVideoUUID)
+          expect(data[0].liveSchedules).to.have.lengthOf(2)
+        }
+
+        {
+          const { total, data } = await server.videos.listByChannel({ handle, includeScheduledLive: true })
+
+          expect(total).to.equal(1)
+          expect(data).to.have.lengthOf(1)
+        }
+      }
+    })
+
     it('Should not list scheduled lives of the past', async function () {
       const newSchedule = new Date(Date.now() - 1).toISOString()
 

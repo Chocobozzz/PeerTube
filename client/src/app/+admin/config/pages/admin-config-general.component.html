@@ -83,6 +83,14 @@
               <div class="form-error" role="alert">{{ formErrors.client.browseVideos.defaultScope }}</div>
             }
           </div>
+
+          <div class="form-group">
+            <my-peertube-checkbox
+              formControlName="includeScheduledLive"
+              i18n-labelText
+              labelText="Display scheduled lives"
+            ></my-peertube-checkbox>
+          </div>
         </ng-container>
       </div>
 

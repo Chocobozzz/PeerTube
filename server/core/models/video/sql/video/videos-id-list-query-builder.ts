@@ -252,8 +252,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     // Only list published videos
     if (!(options.include & VideoInclude.NOT_PUBLISHED_STATE) && !options.stateOneOf) {
-      if (options.includeScheduledLive) this.joinLiveSchedules()
-
       this.whereStateAvailable({ includeScheduledLive: options.includeScheduledLive ?? false })
     } else if (options.stateOneOf) {
       this.whereStateOneOf(options.stateOneOf)
@@ -468,13 +466,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.replacements.videoPlaylistId = playlistId
   }
 
-  private joinLiveSchedules () {
-    this.joins.push(
-      'LEFT JOIN "videoLive" ON "video"."id" = "videoLive"."videoId"',
-      'LEFT JOIN "videoLiveSchedule" ON "videoLiveSchedule"."liveVideoId" = "videoLive"."id"'
-    )
-  }
-
   private joinChannel () {
     if (this.builtChannelJoin) return
     this.builtChannelJoin = true
@@ -513,7 +504,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     or.push(`("video"."state" = ${VideoState.TO_TRANSCODE} AND "video"."waitTranscoding" IS false)`)
 
     if (options.includeScheduledLive) {
-      or.push(`("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND "videoLiveSchedule"."startAt" > NOW())`)
+      // Use EXISTS instead of a join: a live can have multiple schedules and we don't want duplicate videos
+      or.push(
+        `("video"."state" = ${VideoState.WAITING_FOR_LIVE} AND EXISTS (` +
+          'SELECT 1 FROM "videoLive" ' +
+          'INNER JOIN "videoLiveSchedule" ON "videoLiveSchedule"."liveVideoId" = "videoLive"."id" ' +
+          'WHERE "videoLive"."videoId" = "video"."id" AND "videoLiveSchedule"."startAt" > NOW()' +
+          '))'
+      )
     }
 
     this.and.push(`(${or.join(' OR ')})`)
