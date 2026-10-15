@@ -155,6 +155,8 @@ export const customConfigUpdateValidator = [
 
   body('videoComments.acceptRemoteComments').isBoolean(),
 
+  body('client.browseVideos.includeScheduledLive').isBoolean(),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, req, res)) return
@@ -288,5 +290,5 @@ function checkInvalidBrowseVideosConfig (customConfig: CustomConfig, req: expres
     return false
   }
 
-  return body('client.browseVideos.includeScheduledLives').isBoolean()
+  return true
 }

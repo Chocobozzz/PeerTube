@@ -1345,7 +1345,7 @@ client:
     default_scope: 'federated'
 
     # Whether to show scheduled lives
-    include_scheduled_lives: false
+    include_scheduled_live: false
 
   menu:
     login:

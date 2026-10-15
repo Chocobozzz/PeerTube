@@ -52,7 +52,7 @@ type Form = {
     browseVideos: FormGroup<{
       defaultSort: FormControl<string>
       defaultScope: FormControl<string>
-      includeScheduledLives: FormControl<boolean>
+      includeScheduledLive: FormControl<boolean>
     }>
 
     menu: FormGroup<{
@@ -328,7 +328,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         browseVideos: {
           defaultSort: null,
           defaultScope: null,
-          includeScheduledLives: null
+          includeScheduledLive: null
         },
         menu: {
           login: {

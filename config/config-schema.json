@@ -3195,7 +3195,7 @@
               "type": "string",
               "default": "federated"
             },
-            "include_scheduled_lives": {
+            "include_scheduled_live": {
               "description": "Whether to show scheduled lives",
               "type": "boolean",
               "default": false

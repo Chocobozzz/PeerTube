@@ -383,7 +383,7 @@ function customConfig (): CustomConfig {
       browseVideos: {
         defaultSort: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SORT,
         defaultScope: CONFIG.CLIENT.BROWSE_VIDEOS.DEFAULT_SCOPE,
-        includeScheduledLives: CONFIG.CLIENT.BROWSE_VIDEOS.INCLUDE_SCHEDULED_LIVES
+        includeScheduledLive: CONFIG.CLIENT.BROWSE_VIDEOS.INCLUDE_SCHEDULED_LIVE
       },
       menu: {
         login: {

@@ -97,7 +97,7 @@ export interface CustomConfig {
     browseVideos: {
       defaultSort: string
       defaultScope: string
-      includeScheduledLives: boolean
+      includeScheduledLive: boolean
     }
 
     menu: {

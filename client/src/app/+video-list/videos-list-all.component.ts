@@ -58,7 +58,7 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
     const params = {
       ...filters.toVideosAPIObject(),
 
-      includeScheduledLive: this.serverConfig.client.browseVideos.includeScheduledLives,
+      includeScheduledLive: this.serverConfig.client.browseVideos.includeScheduledLive,
       videoPagination: { ...pagination },
       skipCount: true
     }

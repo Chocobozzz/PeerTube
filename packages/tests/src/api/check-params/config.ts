@@ -298,6 +298,24 @@ describe('Test config API validators', function () {
           'Browse videos default scope should be local or federated, instead of hello'
         )
       })
+
+      it('Should fail with an invalid include scheduled live', async function () {
+        const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {
+          client: {
+            browseVideos: {
+              includeScheduledLive: 'hello'
+            }
+          }
+        })
+
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: newUpdateParams,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
     })
   })
 
