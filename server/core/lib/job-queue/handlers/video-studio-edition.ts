@@ -39,7 +39,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
   const abortPromise = buildPromiseForAbortSignal(abortSignal)
 
   const payload = job.data as VideoStudioEditionPayload
-  const isNewVideo = !!payload.sourceVideoUUID
+  const isNewVideo = payload.isNewVideo === true
 
   const taskFiles = pick(payload, [ 'tasks', 'taskFilesStaged' ])
 
@@ -48,7 +48,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
     logger.withContext([ payload.videoUUID ], async () => {
       logger.info('Process video studio edition of %s in job %s.', payload.videoUUID, job.id)
 
-      let inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.sourceVideoUUID ?? payload.videoUUID)
+      let inputFileMutexReleaser = await VideoPathManager.Instance.lockFiles(payload.videoUUID)
 
       try {
         const video = await VideoModel.loadFull(payload.videoUUID)
@@ -61,25 +61,12 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
           return undefined
         }
 
-        const inputVideo = isNewVideo
-          ? await VideoModel.loadFull(payload.sourceVideoUUID)
-          : video
-
-        // The source video was deleted: there is nothing to edit, don't keep the empty new video
-        if (!inputVideo) {
-          logger.info('Can\'t process job %d, source video %s does not exist.', job.id, payload.sourceVideoUUID)
-
-          await safeCleanupStudioTMPFiles(taskFiles)
-          await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo })
-          return undefined
-        }
-
         const editionResultPath = await makeStudioTaskFilesAvailable(taskFiles, async tasks => {
-          await checkUserQuotaOrThrow({ video, inputVideo, tasks, isNewVideo })
+          await checkUserQuotaOrThrow(video, tasks)
 
-          await inputVideo.reload()
+          await video.reload()
 
-          return VideoPathManager.Instance.makeAvailableMaxQualityFiles(inputVideo, async ({
+          return VideoPathManager.Instance.makeAvailableMaxQualityFiles(video, async ({
             videoPath: originalVideoFilePath,
             separatedAudioPath
           }) => {
@@ -99,7 +86,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
 
                 inputFileMutexReleaser,
 
-                video: inputVideo,
+                video,
                 outputPath,
                 task,
 
@@ -238,22 +225,12 @@ function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWater
 
 // ---------------------------------------------------------------------------
 
-async function checkUserQuotaOrThrow (options: {
-  video: MVideoFull
-  inputVideo: MVideoFull
-  tasks: VideoStudioTaskPayload[]
-  isNewVideo: boolean
-}) {
-  const { video, inputVideo, tasks, isNewVideo } = options
+async function checkUserQuotaOrThrow (video: MVideoFull, tasks: VideoStudioTaskPayload[]) {
   const user = await UserModel.loadByVideoId(video.id)
 
   const filePathFinder = (i: number) => (tasks[i] as VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload).options.file
 
-  let additionalBytes = await approximateIntroOutroAdditionalSize(inputVideo, tasks, filePathFinder)
-
-  // The source files are kept, so the result is extra usage: use the source size as an upper bound (cuts make it smaller)
-  if (isNewVideo) additionalBytes += inputVideo.getMaxQualityBytes()
-
+  const additionalBytes = await approximateIntroOutroAdditionalSize(video, tasks, filePathFinder)
   if (await isUserQuotaValid({ channelUserId: user.id, uploadSize: additionalBytes }) === false) {
     throw new Error('Quota exceeded for this user to edit the video')
   }

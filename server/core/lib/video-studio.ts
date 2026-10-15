@@ -162,23 +162,20 @@ export async function approximateIntroOutroAdditionalSize (
 // ---------------------------------------------------------------------------
 
 export async function createVideoStudioJob (options: {
-  // Video that receives the result
   video: MVideoWithFile
-  // Video to read the input from, set when the result is saved in a new video
-  sourceVideo?: MVideoWithFile
   user: MUser
   payload: VideoStudioEditionPayload
 }) {
-  const { video, sourceVideo, user, payload } = options
+  const { video, user, payload } = options
 
   const priority = await getTranscodingJobPriority({ user, type: 'studio' })
 
   if (CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED) {
     await new VideoStudioTranscodingJobHandler().create({
       video,
-      sourceVideo,
       tasks: payload.tasks,
       taskFilesStaged: payload.taskFilesStaged,
+      isNewVideo: payload.isNewVideo,
       priority
     })
     return
@@ -199,7 +196,7 @@ export async function createNewVideoForStudio (options: {
   const video = new VideoModel({
     uuid: buildUUID(),
     name,
-    state: VideoState.TO_EDIT_AS_NEW_VIDEO,
+    state: VideoState.TO_DUPLICATE,
     remote: false,
     isLive: false,
     channelId: channel.id,
@@ -242,7 +239,6 @@ export async function createNewVideoForStudio (options: {
   return video
 }
 
-// Remove the video created for a failed/cancelled edition, or give the edited video back its previous state
 export function onVideoStudioFailed (options: {
   videoUUID: string
   isNewVideo: boolean
@@ -251,11 +247,10 @@ export function onVideoStudioFailed (options: {
 
   return runTransaction(async transaction => {
     const video = await VideoModel.load(videoUUID, transaction)
-    if (!video || video.state === VideoState.PUBLISHED) return
+    if (!video || (video.state !== VideoState.TO_EDIT && video.state !== VideoState.TO_EDIT_AS_NEW_VIDEO)) return
 
-    // The new video has no content to fall back on. Later states are handled by the jobs that follow the edition
     if (isNewVideo) {
-      if (video.state === VideoState.TO_EDIT_AS_NEW_VIDEO) await video.destroy({ transaction })
+      await video.update({ state: VideoState.TO_EDIT_FAILED }, { transaction })
       return
     }
 
@@ -348,11 +343,10 @@ export async function onVideoStudioEnded (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-// The new video was created without file, thumbnail nor moderation check
 async function prepareNewVideoAfterStudio (video: MVideoFull, videoPath: string) {
   const videoWithFiles = await VideoModel.loadFull(video.uuid)
 
-  await regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, await ffprobePromise(videoPath), videoPath)
+  await regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, await ffprobePromise(videoPath), videoPath, true)
 
   await autoBlacklistVideoIfNeeded({
     video: videoWithFiles,

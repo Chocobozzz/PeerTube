@@ -498,7 +498,7 @@ describe('Test video studio', function () {
       await servers[0].config.enableMinimumTranscoding()
     })
 
-    it('Should create a new video in its own edition state that can be edited while processing', async function () {
+    it('Should create a private duplicate and allow changing its privacy while processing', async function () {
       this.timeout(120_000)
 
       await renewVideo()
@@ -517,7 +517,7 @@ describe('Test video studio', function () {
       expect(created.uuid).to.not.equal(sourceUUID)
 
       const newVideo = await servers[0].videos.getWithToken({ id: created.uuid })
-      expect(newVideo.state.id).to.equal(VideoState.TO_EDIT_AS_NEW_VIDEO)
+      expect(newVideo.state.id).to.equal(VideoState.TO_DUPLICATE)
       expect(newVideo.name).to.equal(sourceBefore.name + ' (Studio Edit)')
       expect(newVideo.privacy.id).to.equal(VideoPrivacy.PRIVATE)
       expect(newVideo.channel.id).to.equal(sourceBefore.channel.id)
@@ -529,13 +529,21 @@ describe('Test video studio', function () {
       expect((await getSource()).state.id).to.equal(VideoState.PUBLISHED)
 
       // Metadata can be reviewed with the regular video update
-      await servers[0].videos.update({ id: created.uuid, attributes: { name: 'my clip', privacy: VideoPrivacy.PUBLIC } })
+      await servers[0].videos.update({ id: created.uuid, attributes: { name: 'my clip' } })
+      await servers[0].videos.update({
+        id: created.uuid,
+        attributes: { privacy: VideoPrivacy.PUBLIC }
+      })
+
+      const updated = await servers[0].videos.getWithToken({ id: created.uuid })
+      expect(updated.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+      expect(updated.state.id).to.equal(VideoState.TO_DUPLICATE)
 
       await servers[0].jobs.resumeJobQueue()
       await waitJobs(servers)
 
-      for (const server of servers) {
-        const edited = await server.videos.get({ id: created.uuid })
+      {
+        const edited = await servers[0].videos.getWithToken({ id: created.uuid })
 
         expect(edited.state.id).to.equal(VideoState.PUBLISHED)
         expect(edited.name).to.equal('my clip')
@@ -543,19 +551,48 @@ describe('Test video studio', function () {
         expect(edited.files.length + edited.streamingPlaylists.length).to.be.above(0)
         expect(edited.thumbnails).to.have.length.above(0)
 
-        await checkVideoDuration(server, created.uuid, 3)
+        expect(edited.duration).to.equal(3)
 
         // Source video was not modified nor deleted
-        const source = await server.videos.get({ id: sourceUUID })
+        const source = await servers[0].videos.get({ id: sourceUUID })
         expect(source.state.id).to.equal(VideoState.PUBLISHED)
         expect(source.name).to.equal(sourceBefore.name)
 
-        await checkVideoDuration(server, sourceUUID, 5)
+        await checkVideoDuration(servers[0], sourceUUID, 5)
       }
+
+      const remote = await servers[1].videos.get({ id: created.uuid })
+      expect(remote.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+      expect(remote.duration).to.equal(3)
 
       const sourceAfter = await getSource()
       expect(sourceAfter.fileIds).to.deep.equal(sourceBefore.fileIds)
       expect(sourceAfter.duration).to.equal(sourceBefore.duration)
+    })
+
+    it('Should retain a failed private placeholder when the source is deleted before duplication', async function () {
+      this.timeout(120_000)
+
+      await renewVideo()
+      await servers[0].jobs.pauseJobQueue()
+      let created: { uuid: string }
+      try {
+        const result = await servers[0].videoStudio.createEditionTasks({
+          videoId: videoUUID,
+          tasks: [ { name: 'cut', options: { start: 1 } } ],
+          saveAsNewVideo: true
+        })
+        created = result.video
+        await servers[0].videos.remove({ id: videoUUID })
+      } finally {
+        await servers[0].jobs.resumeJobQueue()
+      }
+      await waitJobs(servers)
+      const video = await servers[0].videos.getWithToken({ id: created.uuid })
+      expect(video.state.id).to.equal(VideoState.TO_DUPLICATE_FAILED)
+      expect(video.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+      expect(getAllFiles(video)).to.have.lengthOf(0)
+      await servers[0].videos.remove({ id: created.uuid })
     })
 
     after(async function () {

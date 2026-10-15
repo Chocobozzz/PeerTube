@@ -323,9 +323,10 @@ export function updateRemoteVideoThumbnail (options: {
 export async function regenerateLocalVideoThumbnailsFromVideoIfNeeded (
   video: MVideoWithAllFiles,
   ffprobe: FfprobeData,
-  fileInput: string // local path or URL of the max quality file of the video
+  fileInput: string, // local path or URL of the max quality file of the video
+  force = false
 ) {
-  if (video.Thumbnails.some(t => t.automaticallyGenerated === false)) return
+  if (!force && video.Thumbnails.some(t => t.automaticallyGenerated === false)) return
 
   logger.info('Re-generate thumbnails for video ' + video.url)
 

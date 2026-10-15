@@ -29,6 +29,7 @@ import {
 } from '@server/lib/video-studio.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoFull } from '@server/types/models/index.js'
+import { JobQueue } from '@server/lib/job-queue/index.js'
 import { asyncMiddleware, authenticate, videoStudioAddEditionValidator } from '../../../middlewares/index.js'
 
 const studioRouter = express.Router()
@@ -94,26 +95,30 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
       newVideo = await createNewVideoForStudio({ sourceVideo, user, name: buildStudioNewVideoName(sourceVideo.name) })
       video = newVideo
     } else {
-      video.state = VideoState.TO_EDIT
+      video.state = video.state === VideoState.TO_EDIT_FAILED ? VideoState.TO_EDIT_AS_NEW_VIDEO : VideoState.TO_EDIT
       await video.save()
     }
 
-    await createVideoStudioJob({
-      user,
-      payload: {
-        videoUUID: video.uuid,
-        sourceVideoUUID: newVideo ? sourceVideo.uuid : undefined,
-        tasks,
-        taskFilesStaged
-      },
-      video,
-      sourceVideo: newVideo ? sourceVideo : undefined
-    })
+    const payload = { videoUUID: video.uuid, tasks, taskFilesStaged, isNewVideo: video.state === VideoState.TO_EDIT_AS_NEW_VIDEO }
+    if (newVideo) {
+      await JobQueue.Instance.createJob({
+        type: 'video-duplicate',
+        payload: {
+          videoUUID: video.uuid,
+          sourceVideoUUID: sourceVideo.uuid,
+          userId: user.id,
+          studio: payload
+        }
+      })
+    } else {
+      await createVideoStudioJob({ user, payload, video })
+    }
   } catch (err) {
     await safeCleanupStudioTMPFiles({ tasks, taskFilesStaged })
 
     // Don't leave a video stuck in edition state (or an empty new video) because its job was never created
-    await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: !!newVideo })
+    if (newVideo) await newVideo.destroy()
+    else await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: video.state === VideoState.TO_EDIT_AS_NEW_VIDEO })
 
     throw err
   }

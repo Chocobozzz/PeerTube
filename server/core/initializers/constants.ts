@@ -250,6 +250,7 @@ export const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-redundancy': 1,
   'video-live-ending': 1,
   'video-studio-edition': 1,
+  'video-duplicate': 1,
   'video-files-lifecycle': 1,
   'manage-video-torrent': 1,
   'video-channel-import': 1,
@@ -283,6 +284,7 @@ export const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'v
   'video-redundancy': 1,
   'video-live-ending': 10,
   'video-studio-edition': 1,
+  'video-duplicate': 1,
   'video-files-lifecycle': 1, // Keep it to 1 so we don't delete/move many files at the same time
   'manage-video-torrent': 1, // Keep it to 1 to prevent concurrency issues
   'move-to-object-storage': 1,
@@ -309,6 +311,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-studio-edition': 1000 * 3600 * 10, // 10 hours
+  'video-duplicate': 1000 * 3600 * 10,
   'video-files-lifecycle': 1000 * 3600, // 1 hour
   'video-import': CONFIG.IMPORT.VIDEOS.TIMEOUT,
   'email': 60000 * 10, // 10 minutes
@@ -740,6 +743,9 @@ export const VIDEO_STATES: { [id in VideoStateType]: string } = {
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
   [VideoState.TO_EDIT]: 'To edit',
   [VideoState.TO_EDIT_AS_NEW_VIDEO]: 'To edit as new video',
+  [VideoState.TO_DUPLICATE]: 'To duplicate',
+  [VideoState.TO_DUPLICATE_FAILED]: 'Duplication failed',
+  [VideoState.TO_EDIT_FAILED]: 'Studio edition failed',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM]: 'To move to file system',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed',
   [VideoState.TO_IMPORT_FAILED]: 'Import failed'

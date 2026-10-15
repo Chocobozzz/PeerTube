@@ -24,8 +24,8 @@ import { loadRunnerVideo } from './shared/utils.js'
 const logger = createLogger('studio', 'transcoding')
 
 type CreateOptions = {
+  isNewVideo?: boolean
   video: MVideoWithFile
-  sourceVideo?: MVideoWithFile
   tasks: VideoStudioTaskPayload[]
   taskFilesStaged: boolean
   priority: number
@@ -37,18 +37,17 @@ export class VideoStudioTranscodingJobHandler
 {
   async create (options: CreateOptions) {
     const { video, priority, tasks, taskFilesStaged } = options
-    const inputVideo = options.sourceVideo ?? video
 
     const jobUUID = buildUUID()
-    const { separatedAudioFile } = inputVideo.getMaxQualityAudioAndVideoFiles()
+    const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
 
     return logger.withContext([ jobUUID, video.uuid ], async () => {
       const payload: RunnerJobStudioTranscodingPayload = {
         input: {
-          videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: inputVideo.uuid, type: 'video' }),
+          videoFileUrl: generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'video' }),
 
           separatedAudioFileUrl: separatedAudioFile
-            ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: inputVideo.uuid, type: 'audio' }) ]
+            ? [ generateRunnerTranscodingInputFileUrl({ jobUUID, videoUUID: video.uuid, type: 'audio' }) ]
             : []
         },
         output: {},
@@ -83,7 +82,7 @@ export class VideoStudioTranscodingJobHandler
 
       const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
         videoUUID: video.uuid,
-        sourceVideoUUID: options.sourceVideo?.uuid,
+        isNewVideo: options.isNewVideo,
         originalTasks: tasks,
         taskFilesStaged
       }
@@ -145,7 +144,7 @@ export class VideoStudioTranscodingJobHandler
           video,
           editionResultPath: videoFilePath,
           taskFiles,
-          isNewVideo: !!privatePayload.sourceVideoUUID,
+          isNewVideo: privatePayload.isNewVideo === true,
 
           // A shutdown can give the job back to the runners until then
           beforeIrreversibleChanges: () => commitPendingCompletion(runnerJob.uuid)
@@ -153,7 +152,7 @@ export class VideoStudioTranscodingJobHandler
       } catch (err) {
         // The runner job has errored (and was not aborted by a shutdown): reset the video state or remove the incomplete new video
         if (!(err instanceof RunnerJobCompletionAbortedError)) {
-          await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: !!privatePayload.sourceVideoUUID })
+          await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: privatePayload.isNewVideo === true })
           await safeCleanupStudioTMPFiles(taskFiles)
         }
 
@@ -188,7 +187,7 @@ export class VideoStudioTranscodingJobHandler
 
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
-    await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo: !!payload.sourceVideoUUID })
+    await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo: payload.isNewVideo === true })
 
     await logger.withContext([ payload.videoUUID ], () => {
       return safeCleanupStudioTMPFiles({ tasks: payload.originalTasks, taskFilesStaged: payload.taskFilesStaged })

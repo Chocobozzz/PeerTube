@@ -31,6 +31,7 @@ export type JobType =
   | 'video-file-import'
   | 'video-files-lifecycle'
   | 'video-import'
+  | 'video-duplicate'
   | 'video-live-ending'
   | 'video-redundancy'
   | 'video-studio-edition'
@@ -331,11 +332,18 @@ export type VideoStudioTaskPayload =
 
 export interface VideoStudioEditionPayload {
   videoUUID: string
-  sourceVideoUUID?: string
+  isNewVideo?: boolean
   tasks: VideoStudioTaskPayload[]
 
   // Task files are staged in object storage: their `file` option is a staging key instead of a local path
   taskFilesStaged?: boolean
+}
+
+export interface VideoDuplicatePayload {
+  videoUUID: string
+  sourceVideoUUID: string
+  userId: number
+  studio: VideoStudioEditionPayload
 }
 
 // ---------------------------------------------------------------------------

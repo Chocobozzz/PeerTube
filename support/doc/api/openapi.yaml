@@ -3623,10 +3623,14 @@ paths:
                   default: false
                   description: >
                     Keep the source video untouched and save the edition result in a new video.
-                    The new video is created private, in the same channel as the source video, in the `To edit as new video` state (`13`).
+                    The new video is created private, in the same channel as the source video, in the `To duplicate` state (`14`).
+                    Its highest-quality video and any separate audio are copied before studio tasks run on the copy in state `13`.
                     Its name is the source video name followed by ` (Studio Edit)`.
                     Its metadata can be updated (e.g. with the video update endpoint) while the edition is processed.
-                    The new video is deleted if the edition fails or is cancelled before its result is saved.
+                    It is private by default. Users can change its privacy and publication settings through the normal video update endpoint; studio processing preserves these choices.
+                    If duplication fails, the placeholder is retained in state `15` and can be deleted.
+                    If studio editing fails, the copied input and thumbnail are retained in state `16`; the user can delete the copy or submit new in-place studio tasks.
+                    Existing thumbnails are copied initially, then regenerated from the edited result when studio processing succeeds.
                     The size of the source video counts towards the user quota.
       responses:
         '200':
@@ -3639,6 +3643,8 @@ paths:
           description: successful operation, when the source video is edited in place
         '400':
           description: incorrect parameters
+        '409':
+          description: video is already being processed
         '404':
           description: video not found
 
@@ -10537,6 +10543,9 @@ components:
             - 8
             - 9
             - 13
+            - 14
+            - 15
+            - 16
           description: |
             The video state:
             - `1`: Published
@@ -10549,6 +10558,9 @@ components:
             - `8`: Moving to an external storage failed
             - `9`: To edit using studio edition feature
             - `13`: To edit as new video, waiting for a studio edition whose result is saved in this new video
+            - `14`: To duplicate, copying independent studio input
+            - `15`: Duplication failed
+            - `16`: Studio edition failed, copied input retained for a new in-place edit
         label:
           type: string
 
