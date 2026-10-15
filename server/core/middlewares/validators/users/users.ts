@@ -23,6 +23,7 @@ import {
   isUserNoModal,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
+  isUserPasswordTooLong,
   isUserPasswordValid,
   isUserPasswordValidOrEmpty,
   isUserRoleValid,
@@ -326,6 +327,14 @@ export const usersUpdateMeValidator = [
         return res.fail({ message: req.t('currentPassword parameter is missing') })
       }
 
+      if (isUserPasswordTooLong(body.currentPassword)) {
+        return res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: req.t('Password is too long. Please reset it using the password reset procedure.'),
+          type: ServerErrorCode.TOO_LONG_PASSWORD
+        })
+      }
+
       if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.UNAUTHORIZED_401,
@@ -476,6 +485,14 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
         return res.fail({
           status: HttpStatusCode.BAD_REQUEST_400,
           message: 'currentPassword is missing'
+        })
+      }
+
+      if (!user.pluginAuth && isUserPasswordTooLong(req.body.currentPassword)) {
+        return res.fail({
+          status: HttpStatusCode.BAD_REQUEST_400,
+          message: req.t('Password is too long. Please reset it using the password reset procedure.'),
+          type: ServerErrorCode.TOO_LONG_PASSWORD
         })
       }
 
