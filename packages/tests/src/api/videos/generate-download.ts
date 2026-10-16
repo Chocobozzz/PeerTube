@@ -54,6 +54,7 @@ describe('Test generate download', function () {
       {
         await server.config.enableTranscoding({ hls: true, webVideo: true, splitAudioAndVideo: false, resolutions })
         await server.videos.quickUpload({ name: 'common-' + seed })
+        await server.videos.upload({ attributes: { name: 'webp-thumbnail-' + seed, thumbnailfile: 'avatar.webp' } })
         await waitJobs(servers)
       }
 
@@ -76,7 +77,7 @@ describe('Test generate download', function () {
       return files.find(f => f.hasAudio === true && f.hasVideo === false)
     }
 
-    async function getProbe (name: 'common' | 'splitted', filesGetter: (video: VideoDetails) => number[]) {
+    async function getProbe (name: 'common' | 'splitted' | 'webp-thumbnail', filesGetter: (video: VideoDetails) => number[]) {
       const video = await servers[0].videos.findFull({ name: name + '-' + seed })
 
       const body = await servers[0].videos.generateDownload({ videoId: video.id, videoFileIds: filesGetter(video) })
@@ -116,6 +117,12 @@ describe('Test generate download', function () {
 
     it('Should generate an audio only HLS file', async function () {
       const probe = await getProbe('common', video => [ getAudioOnlyFile(getHLS(video).files).id ])
+
+      checkProbe(probe, { hasAudio: true, hasVideo: false, hasImage: true, muxed: true })
+    })
+
+    it('Should generate an audio only file with a webp thumbnail', async function () {
+      const probe = await getProbe('webp-thumbnail', video => [ getAudioOnlyFile(video.files).id ])
 
       checkProbe(probe, { hasAudio: true, hasVideo: false, hasImage: true, muxed: true })
     })
