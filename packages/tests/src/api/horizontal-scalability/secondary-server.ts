@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
+import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled, buildUUID } from '@peertube/peertube-node-utils'
 import {
@@ -136,7 +137,6 @@ describe('Test a secondary server process', function () {
 
       const getPaths = [
         '/api/v1/server/logs',
-        '/api/v1/server/audit-logs',
         '/api/v1/server/debug',
         '/static/web-videos/' + buildUUID() + '.mp4',
         '/tracker/announce',
@@ -449,6 +449,31 @@ describe('Test a secondary server process', function () {
       await primary.login.logout({ token })
 
       await secondary.users.getMyInfo({ token, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+  })
+
+  describe('Audit logs', function () {
+    it('Should store the audit logs of both processes in the same place', async function () {
+      const startDate = new Date()
+
+      await primary.comments.createThread({ videoId: videoUUID, text: 'audited comment from the primary' })
+      await secondary.comments.createThread({ videoId: videoUUID, token: primary.accessToken, text: 'audited comment from the secondary' })
+
+      // Wait for audit log to be inserted
+      while ((await primary.logs.listAuditLogs({ startDate })).total < 2) {
+        await wait(100)
+      }
+
+      for (const server of [ primary, secondary ]) {
+        const body = await server.logs.listAuditLogs({ startDate, sort: 'createdAt', token: primary.accessToken })
+        expect(body.total).to.equal(2)
+
+        expect(body.data.map(l => l.entityType)).to.deep.equal([ 'comment', 'comment' ])
+        expect(body.data.map(l => l.entity.text)).to.deep.equal([
+          'audited comment from the primary',
+          'audited comment from the secondary'
+        ])
+      }
     })
   })
 

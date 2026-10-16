@@ -1,4 +1,5 @@
 import { HttpStatusCode, UserImportState } from '@peertube/peertube-models'
+import { auditLog, buildUserImportAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
@@ -78,6 +79,8 @@ async function doAddUserImportResumable (req: express.Request, res: express.Resp
     type: 'import-user-archive',
     payload: { userImportId: userImport.id, stagingKey: file.stagingKey }
   })
+
+  auditLog.create(getAuditActorFromRes(res), () => buildUserImportAuditEntity({ user, userImport }))
 
   logger.info('User import request job created for user ' + user.username)
 

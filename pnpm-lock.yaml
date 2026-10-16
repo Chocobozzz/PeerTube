@@ -173,9 +173,6 @@ importers:
       create-torrent:
         specifier: ^6.1.3
         version: 6.1.3
-      deep-object-diff:
-        specifier: ^1.1.9
-        version: 1.1.9
       email-templates:
         specifier: ^13.0.1
         version: 13.0.1(ejs@3.1.10)(handlebars@4.7.9)(mustache@4.2.0)(pug@3.0.4)(react@19.3.0)(underscore@1.13.8)
@@ -191,9 +188,6 @@ importers:
       express-validator:
         specifier: ^7.3.2
         version: 7.3.2
-      flat:
-        specifier: ^6.0.1
-        version: 6.0.1
       fluent-ffmpeg:
         specifier: ^2.1.3
         version: 2.1.3
@@ -6067,9 +6061,6 @@ packages:
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
-  deep-object-diff@1.1.9:
-    resolution: {integrity: sha512-Rn+RuwkmkDwCi2/oXOFS9Gsr5lJZu/yTGpK7wAaAIE75CC+LCGEZHpY6VQJa/RoJcrmaA/docWJZvYohlNkWPA==}
-
   deepmerge-ts@8.0.2:
     resolution: {integrity: sha512-uqbvqLUMrc6p0MO+WBRtTxY55hmyh94WRwI5a++PZe54X+bfVh59FSN7uWCBCW1CCVjzjnrwzfI8zidE2obMMw==}
     engines: {node: '>=16.9.0'}
@@ -6880,11 +6871,6 @@ packages:
 
   flat@5.0.2:
     resolution: {integrity: sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==}
-    hasBin: true
-
-  flat@6.0.1:
-    resolution: {integrity: sha512-/3FfIa8mbrg3xE7+wAhWeV+bd7L2Mof+xtZb5dRDKZ+wDvYJK4WDYeIOuOhre5Yv5aQObZrlbRmk3RTSiuQBtw==}
-    engines: {node: '>=18'}
     hasBin: true
 
   flatted@3.4.4:
@@ -17064,8 +17050,6 @@ snapshots:
 
   deep-is@0.1.4: {}
 
-  deep-object-diff@1.1.9: {}
-
   deepmerge-ts@8.0.2: {}
 
   deepmerge@4.3.1: {}
@@ -18252,8 +18236,6 @@ snapshots:
       hookified: 1.15.1
 
   flat@5.0.2: {}
-
-  flat@6.0.1: {}
 
   flatted@3.4.4: {}
 

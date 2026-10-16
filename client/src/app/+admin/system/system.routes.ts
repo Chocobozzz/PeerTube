@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@peertube/peertube-models'
+import { AuditLogListComponent } from './audit-logs'
 import { DebugComponent } from './debug'
 import { JobsComponent } from './jobs/jobs.component'
 import { LogsComponent } from './logs'
@@ -34,6 +35,17 @@ export const systemRoutes: Routes = [
           meta: {
             userRight: UserRight.MANAGE_LOGS,
             title: $localize`Logs`
+          }
+        }
+      },
+      {
+        path: 'audit-logs',
+        canActivate: [ UserRightGuard ],
+        component: AuditLogListComponent,
+        data: {
+          meta: {
+            userRight: UserRight.MANAGE_LOGS,
+            title: $localize`Audit logs`
           }
         }
       },

@@ -1,4 +1,5 @@
 import { ChangeOwnershipState, ChangeOwnershipStateType, HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
+import { auditLog, buildOwnershipChangeAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { canVideoBeFederated, scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoWithRights } from '@server/types/models/index.js'
@@ -113,6 +114,8 @@ async function createChangeOwnershipRequest (req: express.Request, res: express.
 
   const ownershipChangeFull = await ChangeOwnershipModel.load(ownershipChange.id)
 
+  auditLog.create(getAuditActorFromRes(res), () => buildOwnershipChangeAuditEntity(ownershipChangeFull.toFormattedJSON()))
+
   Notifier.Instance.notifyOfRequestedVideoOwnershipChange(ownershipChangeFull)
 
   logger.info('Ownership change for video %s created.', video.name)
@@ -149,6 +152,10 @@ async function listAccountVideoOwnershipChanges (req: express.Request, res: expr
 }
 
 async function acceptOwnershipChange (req: express.Request, res: express.Response) {
+  const oldOwnershipChangeAuditEntity = auditLog.snapshot(() =>
+    buildOwnershipChangeAuditEntity(res.locals.changeOwnership.toFormattedJSON())
+  )
+
   await runTransaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = res.locals.videoChannel
@@ -173,6 +180,13 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
     changeOwnership.state = ChangeOwnershipState.ACCEPTED
     await changeOwnership.save({ transaction: t })
 
+    auditLog.update(
+      getAuditActorFromRes(res),
+      () => buildOwnershipChangeAuditEntity(changeOwnership.toFormattedJSON()),
+      oldOwnershipChangeAuditEntity,
+      { transaction: t }
+    )
+
     for (const channel of [ oldVideoChannel, targetVideoUpdated.VideoChannel ]) {
       await VideoChannelActivityModel.addVideoOwnershipChangeActivity({
         action: VideoChannelActivityAction.ACCEPT_OWNERSHIP_REQUEST,
@@ -191,11 +205,22 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
 }
 
 async function refuseOwnershipChange (req: express.Request, res: express.Response) {
+  const oldOwnershipChangeAuditEntity = auditLog.snapshot(() =>
+    buildOwnershipChangeAuditEntity(res.locals.changeOwnership.toFormattedJSON())
+  )
+
   await runTransaction(async t => {
     const changeOwnership = res.locals.changeOwnership
 
     changeOwnership.state = ChangeOwnershipState.REJECTED
     await changeOwnership.save({ transaction: t })
+
+    auditLog.update(
+      getAuditActorFromRes(res),
+      () => buildOwnershipChangeAuditEntity(changeOwnership.toFormattedJSON()),
+      oldOwnershipChangeAuditEntity,
+      { transaction: t }
+    )
 
     const channel = await VideoChannelModel.loadAndPopulateAccount(changeOwnership.Video.channelId, t)
 
@@ -220,6 +245,8 @@ async function deleteOwnershipChange (req: express.Request, res: express.Respons
     const channel = await VideoChannelModel.loadAndPopulateAccount(changeOwnership.Video.channelId, t)
 
     await changeOwnership.destroy({ transaction: t })
+
+    auditLog.delete(getAuditActorFromRes(res), () => buildOwnershipChangeAuditEntity(changeOwnership.toFormattedJSON()), { transaction: t })
 
     await VideoChannelActivityModel.addVideoOwnershipChangeActivity({
       action: VideoChannelActivityAction.DELETE_OWNERSHIP_REQUEST,

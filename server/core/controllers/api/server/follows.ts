@@ -1,4 +1,6 @@
 import { HttpStatusCode, ServerFollowCreate, UserRight } from '@peertube/peertube-models'
+import { auditLog, buildFollowAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
+import { MActorFollowActorsDefault } from '@server/types/models/index.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
 import { createLogger } from '../../../helpers/logger.js'
@@ -137,6 +139,7 @@ async function listFollowers (req: express.Request, res: express.Response) {
 async function addFollow (req: express.Request, res: express.Response) {
   const { hosts, handles } = req.body as ServerFollowCreate
   const follower = await getServerActor()
+  const auditActor = getAuditActorFromRes(res)
 
   for (const host of hosts) {
     const payload = {
@@ -145,6 +148,11 @@ async function addFollow (req: express.Request, res: express.Response) {
     }
 
     JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
+
+    auditLog.create(
+      auditActor,
+      () => buildFollowAuditEntity({ id: null, follower: follower.getFullIdentifier(), following: host, state: 'pending' })
+    )
   }
 
   for (const handle of handles) {
@@ -157,6 +165,11 @@ async function addFollow (req: express.Request, res: express.Response) {
     }
 
     JobQueue.Instance.createJobAsync({ type: 'activitypub-follow', payload })
+
+    auditLog.create(
+      auditActor,
+      () => buildFollowAuditEntity({ id: null, follower: follower.getFullIdentifier(), following: handle, state: 'pending' })
+    )
   }
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
@@ -180,14 +193,19 @@ async function removeFollowing (req: express.Request, res: express.Response) {
     await follow.destroy({ transaction: t })
   })
 
+  auditLog.delete(getAuditActorFromRes(res), () => buildFollowEntityOf(follow))
+
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function rejectFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
+  const oldFollowAuditEntity = auditLog.snapshot(() => buildFollowEntityOf(follow))
 
   follow.state = 'rejected'
   await follow.save()
+
+  auditLog.update(getAuditActorFromRes(res), () => buildFollowEntityOf(follow), oldFollowAuditEntity)
 
   sendReject(follow.url, follow.ActorFollower, follow.ActorFollowing)
 
@@ -203,18 +221,32 @@ async function removeFollower (req: express.Request, res: express.Response) {
 
   await follow.destroy()
 
+  auditLog.delete(getAuditActorFromRes(res), () => buildFollowEntityOf(follow))
+
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function acceptFollower (req: express.Request, res: express.Response) {
   const follow = res.locals.follow
+  const oldFollowAuditEntity = auditLog.snapshot(() => buildFollowEntityOf(follow))
 
   sendAccept(follow)
 
   follow.state = 'accepted'
   await follow.save()
 
+  auditLog.update(getAuditActorFromRes(res), () => buildFollowEntityOf(follow), oldFollowAuditEntity)
+
   await autoFollowBackIfNeeded(follow)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
+}
+
+function buildFollowEntityOf (follow: MActorFollowActorsDefault) {
+  return buildFollowAuditEntity({
+    id: follow.id,
+    follower: follow.ActorFollower.getFullIdentifier(),
+    following: follow.ActorFollowing.getFullIdentifier(),
+    state: follow.state
+  })
 }

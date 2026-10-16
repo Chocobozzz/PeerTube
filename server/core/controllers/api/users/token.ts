@@ -4,6 +4,15 @@ import { buildUUID } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { OTP } from '@server/initializers/constants.js'
+import {
+  auditLog,
+  buildFailedLoginAuditEntity,
+  buildScopedTokenAuditEntity,
+  buildTokenSessionAuditEntity,
+  getAuditActorFromRes,
+  getAuditActorFromUser,
+  getAuditAnonymousActor
+} from '@server/lib/audit-log/index.js'
 import { BypassLogin } from '@server/lib/auth/bypass-login.model.js'
 import { consumeBypassFromExternalAuth, getAuthNameFromRefreshGrant, getBypassFromPasswordGrant } from '@server/lib/auth/external-auth.js'
 import { MissingTwoFactorError } from '@server/lib/auth/oauth-errors.js'
@@ -99,6 +108,7 @@ export {
 
 async function handleToken (req: express.Request, res: express.Response, next: express.NextFunction) {
   const grantType = req.body.grant_type
+  const isNewLogin = grantType === 'password'
 
   try {
     const client = await handleOAuthClient(req)
@@ -119,6 +129,20 @@ async function handleToken (req: express.Request, res: express.Response, next: e
     res.set('Cache-Control', 'no-store')
     res.set('Pragma', 'no-cache')
 
+    // Only record logins, not token refreshes
+    if (isNewLogin) {
+      auditLog.create(
+        getAuditActorFromUser(token.user, req),
+        () =>
+          buildTokenSessionAuditEntity({
+            user: token.user,
+            tokenSessionId: null,
+            authName: bypassLogin?.authName,
+            loginDevice: req.get('user-agent')
+          })
+      )
+    }
+
     Hooks.runAction('action:api.user.oauth2-got-token', { username: token.user.username, ip: req.ip, req, res })
 
     return res.json({
@@ -131,6 +155,10 @@ async function handleToken (req: express.Request, res: express.Response, next: e
       refresh_token_expires_in: token.refreshTokenExpiresIn
     })
   } catch (err) {
+    if (isNewLogin && !(err instanceof MissingTwoFactorError)) {
+      auditLog.create(getAuditAnonymousActor(req), () => buildFailedLoginAuditEntity({ username: req.body.username, error: err.message }))
+    }
+
     if (err instanceof MissingTwoFactorError) {
       res.set(OTP.HEADER_NAME, OTP.HEADER_REQUIRED_VALUE)
       logger.debug('Missing two factor error', { err })
@@ -152,6 +180,11 @@ async function handleTokenRevocation (req: express.Request, res: express.Respons
   const token = res.locals.oauth.token
 
   const result = await revokeToken(token, { req, explicitLogout: true })
+
+  auditLog.delete(
+    getAuditActorFromRes(res),
+    () => buildTokenSessionAuditEntity({ user: token.User, tokenSessionId: token.id, loginDevice: token.loginDevice })
+  )
 
   return res.json(result)
 }
@@ -181,6 +214,11 @@ async function revokeTokenSession (req: express.Request, res: express.Response) 
 
   const result = await revokeToken(token, { req, explicitLogout: true })
 
+  auditLog.delete(
+    getAuditActorFromRes(res),
+    () => buildTokenSessionAuditEntity({ user: res.locals.user, tokenSessionId: token.id, loginDevice: token.loginDevice })
+  )
+
   return res.json(result)
 }
 
@@ -199,6 +237,15 @@ async function renewScopedTokens (req: express.Request, res: express.Response) {
 
   user.feedToken = buildUUID()
   await user.save()
+
+  auditLog.update(
+    getAuditActorFromRes(res),
+    () => buildScopedTokenAuditEntity(user),
+    auditLog.snapshot(() => buildScopedTokenAuditEntity(user)),
+    {
+      secretChanges: [ 'feedToken' ]
+    }
+  )
 
   return res.json({
     feedToken: user.feedToken

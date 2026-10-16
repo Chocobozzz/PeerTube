@@ -12,7 +12,14 @@ import { Emailer } from '@server/lib/emailer.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import express from 'express'
-import { auditLoggerFactory, UserAuditView } from '../../../helpers/audit-logger.js'
+import {
+  auditLog,
+  buildRegistrationAuditEntity,
+  buildUserAuditEntity,
+  getAuditActorFromRes,
+  getAuditActorFromUser,
+  getAuditAnonymousActor
+} from '../../../lib/audit-log/index.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { Notifier } from '../../../lib/notifier/index.js'
@@ -43,8 +50,6 @@ import {
 } from '../../../middlewares/index.js'
 
 const logger = createLogger()
-
-const auditLogger = auditLoggerFactory('users')
 
 const registrationRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.SIGNUP.ENABLED,
@@ -136,6 +141,8 @@ async function requestRegistration (req: express.Request, res: express.Response)
 
   await registration.save()
 
+  auditLog.create(getAuditAnonymousActor(req), () => buildRegistrationAuditEntity(registration))
+
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
     await sendVerifyRegistrationRequestEmail(registration)
   }
@@ -152,6 +159,8 @@ async function requestRegistration (req: express.Request, res: express.Response)
 async function acceptRegistration (req: express.Request, res: express.Response) {
   const registration = res.locals.userRegistration
   const body: UserRegistrationUpdateState = req.body
+
+  const oldRegistrationAuditEntity = auditLog.snapshot(() => buildRegistrationAuditEntity(registration))
 
   const userToCreate = buildUser({
     username: registration.username,
@@ -183,6 +192,10 @@ async function acceptRegistration (req: express.Request, res: express.Response) 
 
   await registration.save()
 
+  const auditActor = getAuditActorFromRes(res)
+  auditLog.create(auditActor, () => buildUserAuditEntity(user))
+  auditLog.update(auditActor, () => buildRegistrationAuditEntity(registration), oldRegistrationAuditEntity)
+
   logger.info('Registration of %s accepted', registration.username)
 
   if (body.preventEmailDelivery !== true) {
@@ -196,12 +209,16 @@ async function rejectRegistration (req: express.Request, res: express.Response) 
   const registration = res.locals.userRegistration
   const body: UserRegistrationUpdateState = req.body
 
+  const oldRegistrationAuditEntity = auditLog.snapshot(() => buildRegistrationAuditEntity(registration))
+
   registration.state = UserRegistrationState.REJECTED
   registration.moderationResponse = body.moderationResponse
 
   if (!registration.processedAt) registration.processedAt = new Date()
 
   await registration.save()
+
+  auditLog.update(getAuditActorFromRes(res), () => buildRegistrationAuditEntity(registration), oldRegistrationAuditEntity)
 
   if (body.preventEmailDelivery !== true) {
     Emailer.Instance.addUserRegistrationRequestProcessedJob(registration)
@@ -218,6 +235,8 @@ async function deleteRegistration (req: express.Request, res: express.Response) 
   const registration = res.locals.userRegistration
 
   await registration.destroy()
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildRegistrationAuditEntity(registration))
 
   logger.info('Registration of %s deleted', registration.username)
 
@@ -262,7 +281,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     channelNames: body.channel
   })
 
-  auditLogger.create(body.username, new UserAuditView(user.toFormattedJSON()))
+  auditLog.create(getAuditActorFromUser(user, req), () => buildUserAuditEntity(user))
   logger.info('User %s with its channel and account registered.', body.username)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {

@@ -7,7 +7,7 @@ import {
   VideoPrivacyType,
   VideoUpdate
 } from '@peertube/peertube-models'
-import { auditLoggerFactory, getAuditIdFromUser, VideoAuditView } from '@server/helpers/audit-logger.js'
+import { auditLog, AuditLogActor, AuditLogSnapshot, buildVideoAuditEntity } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { runTransaction } from '@server/helpers/database-utils.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
@@ -28,7 +28,6 @@ import { VideoPathManager } from './video-path-manager.js'
 import { isNewVideoForSubscription, moveFilesIfPrivacyChanged } from './video-privacy.js'
 import { setVideoTags } from './video.js'
 
-const auditLogger = auditLoggerFactory('videos')
 const logger = createLogger('video')
 
 export class LocalVideoUpdater {
@@ -38,19 +37,23 @@ export class LocalVideoUpdater {
   private readonly oldPrivacy: VideoPrivacyType
   private readonly hadPrivacyForFederation: boolean
 
-  private readonly oldVideoAuditView: VideoAuditView
+  private readonly auditActor: AuditLogActor | null
+  private readonly oldVideoAuditEntity: AuditLogSnapshot
 
   constructor (options: {
     video: MVideoFull
     user: MUserAccountUrl | null
+    // Null if the update doesn't come from a user action
+    auditActor: AuditLogActor | null
   }) {
     this.user = options.user
+    this.auditActor = options.auditActor
     this.oldVideo = options.video
 
     this.hadPrivacyForFederation = isPrivacyForFederation(this.oldVideo.privacy)
     this.oldPrivacy = this.oldVideo.privacy
 
-    this.oldVideoAuditView = new VideoAuditView(this.oldVideo.toFormattedDetailsJSON())
+    this.oldVideoAuditEntity = auditLog.snapshot(() => buildVideoAuditEntity(this.oldVideo.toFormattedDetailsJSON()))
   }
 
   update (options: Omit<VideoUpdate, 'thumbnailfile' | 'previewfile'> & {
@@ -217,11 +220,12 @@ export class LocalVideoUpdater {
           createVideoAutomaticTagsJob({ video, moderation: 'apply', transaction: t })
         }
 
-        if (this.user) {
-          auditLogger.update(
-            getAuditIdFromUser(this.user),
-            new VideoAuditView(video.toFormattedDetailsJSON()),
-            this.oldVideoAuditView
+        if (this.auditActor) {
+          auditLog.update(
+            this.auditActor,
+            () => buildVideoAuditEntity(video.toFormattedDetailsJSON()),
+            this.oldVideoAuditEntity,
+            { transaction: t }
           )
         }
 

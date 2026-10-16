@@ -5,7 +5,7 @@ import { allowReplicaReadsToController } from '@server/middlewares/replica-reads
 import { getServerActor } from '@server/models/application/application.js'
 import { MCommentFormattable } from '@server/types/models/index.js'
 import express from 'express'
-import { CommentAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../../helpers/audit-logger.js'
+import { auditLog, buildCommentAuditEntity, getAuditActorFromRes } from '../../../lib/audit-log/index.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { VIDEO_COMMENTS_TREE } from '../../../initializers/constants.js'
@@ -44,7 +44,6 @@ import {
 } from '../../../middlewares/validators/index.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 
-const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
 
 // Each comment fans out notifications and ActivityPub deliveries to followers
@@ -300,7 +299,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
   // The `build-object-automatic-tags` job notifies once the held status of the comment is final
   if (holdStatus !== 'held-for-auto-tags') Notifier.Instance.notifyOnNewComment(comment)
 
-  auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
+  auditLog.create(getAuditActorFromRes(res), () => buildCommentAuditEntity(comment.toFormattedJSON(), res.locals.videoWithRights))
 
   Hooks.runAction('action:api.video-thread.created', { comment, req, res })
 
@@ -320,7 +319,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
   // The `build-object-automatic-tags` job notifies once the held status of the comment is final
   if (holdStatus !== 'held-for-auto-tags') Notifier.Instance.notifyOnNewComment(comment)
 
-  auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
+  auditLog.create(getAuditActorFromRes(res), () => buildCommentAuditEntity(comment.toFormattedJSON(), res.locals.videoWithRights))
 
   Hooks.runAction('action:api.video-comment-reply.created', { comment, req, res })
 
@@ -332,13 +331,19 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
 
   await removeComment(comment, req, res)
 
-  auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
+  auditLog.delete(getAuditActorFromRes(res), () => buildCommentAuditEntity(comment.toFormattedJSON(), comment.Video))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function approveVideoComment (req: express.Request, res: express.Response) {
-  await approveComment(res.locals.videoCommentFull)
+  const comment = res.locals.videoCommentFull
+  const oldCommentAuditEntity = auditLog.snapshot(() => buildCommentAuditEntity(comment.toFormattedJSON(), comment.Video))
+
+  await approveComment(comment)
+
+  comment.heldForReview = false
+  auditLog.update(getAuditActorFromRes(res), () => buildCommentAuditEntity(comment.toFormattedJSON(), comment.Video), oldCommentAuditEntity)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

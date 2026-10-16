@@ -8,9 +8,16 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { MUserAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
-import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { generateRandomString, getFormattedObjects } from '../../../helpers/utils.js'
+import {
+  auditLog,
+  buildPasswordResetAuditEntity,
+  buildUserAuditEntity,
+  getAuditActorFromRes,
+  getAuditActorFromUser,
+  getAuditAnonymousActor
+} from '../../../lib/audit-log/index.js'
 import { Emailer } from '../../../lib/emailer.js'
 import { Redis } from '../../../lib/redis/index.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../../../lib/user.js'
@@ -53,8 +60,6 @@ import { userExportsRouter } from './user-exports.js'
 import { userImportRouter } from './user-imports.js'
 
 const logger = createLogger('api', 'users')
-
-const auditLogger = auditLoggerFactory('users')
 
 const askResetPasswordRateLimiter = buildRateLimiter({
   enabled: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.ENABLED,
@@ -186,7 +191,7 @@ async function createUser (req: express.Request, res: express.Response) {
       channelNames: body.channelName && { name: body.channelName, displayName: body.channelName }
     })
 
-    auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })))
+    auditLog.create(getAuditActorFromRes(res), () => buildUserAuditEntity(user))
     logger.info('User %s with its channel and account created.', body.username)
 
     if (createPassword) {
@@ -275,7 +280,7 @@ async function removeUser (req: express.Request, res: express.Response) {
   const byUser = res.locals.oauth.token.User
 
   return logger.withContext([ user.username, byUser.username ], async () => {
-    auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
+    auditLog.delete(getAuditActorFromRes(res), () => buildUserAuditEntity(user))
 
     await retryTransactionWrapper(() => {
       return runTransaction(t => {
@@ -298,7 +303,7 @@ async function updateUser (req: express.Request, res: express.Response) {
 
   return logger.withContext([ userToUpdate.username, byUser.username ], async () => {
     const body: UserUpdate = req.body
-    const oldUserAuditView = new UserAuditView(userToUpdate.toFormattedJSON())
+    const oldUserAuditEntity = auditLog.snapshot(() => buildUserAuditEntity(userToUpdate))
     const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
     const keysToUpdate: (keyof UserUpdate)[] = [
@@ -323,7 +328,11 @@ async function updateUser (req: express.Request, res: express.Response) {
       await OAuthTokenModel.deleteUserToken({ userId: userToUpdate.id })
     }
 
-    auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })), oldUserAuditView)
+    auditLog.update(getAuditActorFromRes(res), () => buildUserAuditEntity(user), oldUserAuditEntity, {
+      secretChanges: body.password !== undefined
+        ? [ 'password' ]
+        : []
+    })
 
     logger.info(`Updated user ${user.username} by moderator ${byUser.username}.`)
 
@@ -347,6 +356,8 @@ async function askResetUserPassword (req: express.Request, res: express.Response
       resetPasswordUrl: getResetPasswordUrl(user, verificationString)
     })
 
+    auditLog.create(getAuditAnonymousActor(req), () => buildPasswordResetAuditEntity(user))
+
     logger.info(`User ${user.username} asked password reset.`)
 
     return res.status(HttpStatusCode.NO_CONTENT_204).end()
@@ -357,9 +368,17 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
   const user = res.locals.user
 
   return logger.withContext([ user.username ], async () => {
+    const oldUserAuditEntity = auditLog.snapshot(() => buildUserAuditEntity(user))
+
     user.password = req.body.password
 
     await user.save()
+
+    // The user is not authenticated, but proved they own the account with the reset link
+    auditLog.update(getAuditActorFromUser(user, req), () => buildUserAuditEntity(user), oldUserAuditEntity, {
+      secretChanges: [ 'password' ]
+    })
+
     await Redis.Instance.removePasswordVerificationString(user.id)
     await OAuthTokenModel.deleteUserToken({ userId: user.id })
 
@@ -370,7 +389,7 @@ async function resetUserPassword (req: express.Request, res: express.Response) {
 }
 
 async function changeUserBlock (res: express.Response, user: MUserAccountDefault, block: boolean, reason?: string) {
-  const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
+  const oldUserAuditEntity = auditLog.snapshot(() => buildUserAuditEntity(user))
 
   user.blocked = block
   user.blockedReason = reason || null
@@ -383,5 +402,5 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
 
   Emailer.Instance.addUserBlockJob({ username: user.username, email: user.email, language: user.getLanguage(), blocked: block, reason })
 
-  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({ withAdminFlags: true })), oldUserAuditView)
+  auditLog.update(getAuditActorFromRes(res), () => buildUserAuditEntity(user), oldUserAuditEntity)
 }

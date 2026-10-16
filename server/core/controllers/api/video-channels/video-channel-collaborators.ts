@@ -1,5 +1,11 @@
 import { HttpStatusCode, VideoChannelCollaboratorState } from '@peertube/peertube-models'
 import {
+  auditLog,
+  buildChannelAuditSummary,
+  buildChannelCollaboratorAuditEntity,
+  getAuditActorFromRes
+} from '@server/lib/audit-log/index.js'
+import {
   deleteInTransactionWithRetries,
   retryTransactionWrapper,
   runTransaction,
@@ -96,6 +102,8 @@ async function inviteCollaborator (req: express.Request, res: express.Response) 
 
   collaborator.Account = res.locals.account
 
+  auditLog.create(getAuditActorFromRes(res), () => buildCollaboratorEntityOf(res, collaborator))
+
   Notifier.Instance.notifyOfChannelCollaboratorInvitation(collaborator, res.locals.videoChannel)
 
   return res.json({ collaborator: collaborator.toFormattedJSON() })
@@ -103,9 +111,13 @@ async function inviteCollaborator (req: express.Request, res: express.Response) 
 
 async function acceptCollaboratorInvite (req: express.Request, res: express.Response) {
   const collaborator = res.locals.channelCollaborator
+  const oldCollaboratorAuditEntity = auditLog.snapshot(() => buildCollaboratorEntityOf(res, collaborator))
+
   collaborator.state = VideoChannelCollaboratorState.ACCEPTED
 
   await saveInTransactionWithRetries(collaborator)
+
+  auditLog.update(getAuditActorFromRes(res), () => buildCollaboratorEntityOf(res, collaborator), oldCollaboratorAuditEntity)
 
   Notifier.Instance.notifyOfAcceptedChannelCollaborator(collaborator, res.locals.videoChannel)
 
@@ -114,9 +126,13 @@ async function acceptCollaboratorInvite (req: express.Request, res: express.Resp
 
 async function rejectCollaboratorInvite (req: express.Request, res: express.Response) {
   const collaborator = res.locals.channelCollaborator
+  const oldCollaboratorAuditEntity = auditLog.snapshot(() => buildCollaboratorEntityOf(res, collaborator))
+
   collaborator.state = VideoChannelCollaboratorState.REJECTED
 
   await saveInTransactionWithRetries(collaborator)
+
+  auditLog.update(getAuditActorFromRes(res), () => buildCollaboratorEntityOf(res, collaborator), oldCollaboratorAuditEntity)
 
   Notifier.Instance.notifyOfRefusedChannelCollaborator(collaborator, res.locals.videoChannel)
 
@@ -128,5 +144,14 @@ async function removeCollaborator (req: express.Request, res: express.Response) 
 
   await deleteInTransactionWithRetries(collaborator)
 
+  auditLog.delete(getAuditActorFromRes(res), () => buildCollaboratorEntityOf(res, collaborator))
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+function buildCollaboratorEntityOf (res: express.Response, collaborator: MChannelCollaboratorAccount) {
+  return buildChannelCollaboratorAuditEntity({
+    channel: buildChannelAuditSummary(res.locals.videoChannel),
+    collaborator: collaborator.toFormattedJSON()
+  })
 }

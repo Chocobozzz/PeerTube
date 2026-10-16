@@ -232,6 +232,7 @@ import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-ve
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
 import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
 import { RemoveDanglingStagingFilesScheduler } from './core/lib/schedulers/remove-dangling-staging-files-scheduler.js'
+import { RemoveOldAuditLogsScheduler } from './core/lib/schedulers/remove-old-audit-logs-scheduler.js'
 import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
 import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
 import { RemoveOldUserLoginDevicesScheduler } from './core/lib/schedulers/remove-old-user-login-devices-scheduler.js'
@@ -460,6 +461,7 @@ async function startApplication () {
     UpdateVideosScheduler.Instance.enable()
     VideosRedundancyScheduler.Instance.enable()
     RemoveOldHistoryScheduler.Instance.enable()
+    RemoveOldAuditLogsScheduler.Instance.enable()
     RemoveOldStatsScheduler.Instance.enable()
     PluginsCheckScheduler.Instance.enable()
     PeerTubeVersionCheckScheduler.Instance.enable()

@@ -1,5 +1,6 @@
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
+import { auditLog, awaitableAuditLog, buildInstanceHostAuditEntity, getAuditCLIActor } from '@server/lib/audit-log/index.js'
 import {
   getLocalAccountActivityPubUrl,
   getLocalVideoActivityPubUrl,
@@ -33,6 +34,7 @@ async function run () {
   await initDatabaseModels(true)
 
   const serverAccount = await getServerActor()
+  const oldHost = new URL(serverAccount.url).host
 
   {
     const res = await ActorFollowModel.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined, 0, 1)
@@ -187,4 +189,10 @@ async function run () {
       await updateTorrentForFileAndSave(playlist, file)
     }
   }
+
+  await awaitableAuditLog.update(
+    getAuditCLIActor(),
+    () => buildInstanceHostAuditEntity(WEBSERVER.HOST),
+    auditLog.snapshot(() => buildInstanceHostAuditEntity(oldHost))
+  )
 }

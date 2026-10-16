@@ -1,4 +1,5 @@
 import { createCommand } from '@commander-js/extra-typings'
+import { awaitableAuditLog, buildStoragePruneAuditEntity, getAuditCLIActor } from '@server/lib/audit-log/index.js'
 import { promiseMap, uniqify, wait } from '@peertube/peertube-core-utils'
 import { FileStorage } from '@peertube/peertube-models'
 import { readdirNonHidden } from '@server/helpers/fs.js'
@@ -105,6 +106,11 @@ class ObjectStoragePruner {
     }
 
     console.log(`${pathsToDelete.length} object storage files deleted.`)
+
+    await awaitableAuditLog.delete(
+      getAuditCLIActor(),
+      () => buildStoragePruneAuditEntity({ storage: 'object-storage', deletedFiles: pathsToDelete.length })
+    )
   }
 
   private async buildKeysToDelete () {
@@ -306,6 +312,11 @@ class FSPruner {
     }
 
     console.log(`${pathsToDelete.length} filesystem files deleted.`)
+
+    await awaitableAuditLog.delete(
+      getAuditCLIActor(),
+      () => buildStoragePruneAuditEntity({ storage: 'file-system', deletedFiles: pathsToDelete.length })
+    )
   }
 
   private async buildFilesToDelete () {

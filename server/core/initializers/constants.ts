@@ -62,7 +62,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1160
+export const LAST_MIGRATION_VERSION = 1165
 
 // ---------------------------------------------------------------------------
 
@@ -142,6 +142,8 @@ export const SORTABLE_COLUMNS = {
   CHANNEL_FOLLOWERS: [ 'createdAt' ],
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
+
+  AUDIT_LOGS: [ 'createdAt' ],
 
   TOKEN_SESSIONS: [ 'createdAt' ],
 
@@ -429,6 +431,7 @@ export const SCHEDULER_INTERVALS_MS = {
   AUTO_FOLLOW_INDEX_INSTANCES: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_STATS: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
+  REMOVE_OLD_AUDIT_LOGS: 60000 * 60 * 24, // 1 day
   REMOVE_EXPIRED_USER_EXPORTS: 1000 * 3600, // 1 hour
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
@@ -1392,8 +1395,8 @@ export const CUSTOM_HTML_TAG_COMMENTS = {
 }
 
 export const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
+export const MAX_AUDIT_LOGS_OUTPUT = 10000
 export const LOG_FILENAME = 'peertube.log'
-export const AUDIT_LOG_FILENAME = 'peertube-audit.log'
 
 // ---------------------------------------------------------------------------
 
@@ -1449,6 +1452,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
 
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_HISTORY = 5000
+    SCHEDULER_INTERVALS_MS.REMOVE_OLD_AUDIT_LOGS = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS = 5000
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
 

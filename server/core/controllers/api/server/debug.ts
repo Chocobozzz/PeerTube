@@ -9,6 +9,7 @@ import {
   UserRight
 } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import { auditLog, buildDebugCommandAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { Emailer } from '@server/lib/emailer.js'
@@ -83,6 +84,8 @@ async function runCommand (req: express.Request, res: express.Response) {
   logger.info('Executing debug command: ' + body.command)
 
   await processors[body.command]()
+
+  auditLog.create(getAuditActorFromRes(res), () => buildDebugCommandAuditEntity(body.command))
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

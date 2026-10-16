@@ -1,7 +1,7 @@
 import { NgClass } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { LocalStorageService, Notifier } from '@app/core'
+import { Notifier } from '@app/core'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { ServerLogLevel } from '@peertube/peertube-models'
@@ -28,9 +28,6 @@ import { LogsService } from './logs.service'
 export class LogsComponent implements OnInit {
   private logsService = inject(LogsService)
   private notifier = inject(Notifier)
-  private localStorage = inject(LocalStorageService)
-
-  private static LS_LOG_TYPE_CHOICE_KEY = 'admin-logs-log-type-choice'
 
   readonly logsElement = viewChild<ElementRef<HTMLElement>>('logsElement')
   readonly logsContent = viewChild<ElementRef<HTMLElement>>('logsContent')
@@ -42,27 +39,20 @@ export class LogsComponent implements OnInit {
 
   timeChoices: { id: string, label: string, dateFormat: string }[] = []
   levelChoices: { id: ServerLogLevel, label: string }[] = []
-  logTypeChoices: { id: 'audit' | 'standard', label: string }[] = []
 
   startDate: string
   level: ServerLogLevel
-  logType: 'audit' | 'standard'
   tagsOneOf: string[] = []
 
   ngOnInit (): void {
     this.buildTimeChoices()
     this.buildLevelChoices()
-    this.buildLogTypeChoices()
-
-    this.loadPreviousChoices()
 
     this.load()
   }
 
   refresh () {
     this.logs = []
-
-    this.localStorage.setItem(LogsComponent.LS_LOG_TYPE_CHOICE_KEY, this.logType)
 
     this.load()
   }
@@ -75,7 +65,6 @@ export class LogsComponent implements OnInit {
       : undefined
 
     this.logsService.getLogs({
-      isAuditLog: this.isAuditLog(),
       level: this.level,
       startDate: this.startDate,
       tagsOneOf
@@ -94,10 +83,6 @@ export class LogsComponent implements OnInit {
 
       complete: () => this.loading = false
     })
-  }
-
-  isAuditLog () {
-    return this.logType === 'audit'
   }
 
   buildTimeChoices () {
@@ -152,24 +137,5 @@ export class LogsComponent implements OnInit {
     ]
 
     this.level = 'warn'
-  }
-
-  buildLogTypeChoices () {
-    this.logTypeChoices = [
-      {
-        id: 'standard',
-        label: $localize`Standard logs`
-      },
-      {
-        id: 'audit',
-        label: $localize`Audit logs`
-      }
-    ]
-  }
-
-  private loadPreviousChoices () {
-    this.logType = this.localStorage.getItem(LogsComponent.LS_LOG_TYPE_CHOICE_KEY)
-
-    if (this.logType !== 'standard' && this.logType !== 'audit') this.logType = 'audit'
   }
 }
