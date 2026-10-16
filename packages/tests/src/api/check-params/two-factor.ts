@@ -111,6 +111,14 @@ describe('Test two factor API validators', function () {
       })
     })
 
+    it('Should fail to request two factor with a too long current password', async function () {
+      await server.twoFactor.request({
+        userId: rootId,
+        currentPassword: 'super'.repeat(61),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should succeed to request two factor without a password when targeting a remote user with an admin account', async function () {
       await server.twoFactor.request({ userId })
     })

@@ -1,6 +1,7 @@
 import { AccessDeniedError, InvalidGrantError } from '@node-oauth/oauth2-server'
 import { pick } from '@peertube/peertube-core-utils'
 import { UserRegistrationState } from '@peertube/peertube-models'
+import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { isOTPValid } from '@server/helpers/otp.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { AuthenticatedResultUpdaterFieldName, RegisterServerAuthenticatedResult } from '@server/types/index.js'
@@ -25,7 +26,8 @@ import {
   InvalidTwoFactorError,
   MissingTwoFactorError,
   RegistrationApprovalRejected,
-  RegistrationWaitingForApproval
+  RegistrationWaitingForApproval,
+  TooLongPasswordError
 } from './oauth-errors.js'
 
 const logger = createLogger()
@@ -79,6 +81,14 @@ export async function getUserOrThrow (options: {
   if (isRootAuthDisabled(user)) throwInvalidGrantError()
 
   await checkLoginNotLockedOrThrow(user, req)
+
+  // bcrypt silently truncates its input to 72 bytes, so a longer password could authenticate
+  // against a shorter one that shares the same 72 first bytes. Only passwords we hash
+  // ourselves can hit that, so the check belongs here and not at the password grant entry:
+  // passwords validated by an auth plugin never go through bcrypt.
+  if (isUserPasswordTooLong(password)) {
+    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
+  }
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) {
