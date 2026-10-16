@@ -1,8 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
 import { FFmpegContainer, ffprobePromise } from '@peertube/peertube-ffmpeg'
-import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
+import { buildAbsoluteFixturePath, execPromise } from '@peertube/peertube-node-utils'
 import { expect } from 'chai'
 import { createWriteStream } from 'fs'
 import { copy, remove } from 'fs-extra/esm'
