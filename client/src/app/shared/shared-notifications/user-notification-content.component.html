@@ -356,6 +356,12 @@
       </div>
     }
 
+    @case (33) { <!-- UserNotificationType.MY_VIDEO_STUDIO_NEW_VIDEO_CREATED -->
+      <my-global-icon iconName="film"></my-global-icon>
+
+      <div class="message" i18n>Your new video <strong>{{ n.payload.video.name }}</strong> has been created</div>
+    }
+
     @default {
       <my-global-icon iconName="alert"></my-global-icon>
 

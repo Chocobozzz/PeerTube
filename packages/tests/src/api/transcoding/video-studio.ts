@@ -1,5 +1,5 @@
 import { getAllFiles, getHLS } from '@peertube/peertube-core-utils'
-import { VideoStudioTask } from '@peertube/peertube-models'
+import { VideoPrivacy, VideoState, VideoStudioTask } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -480,6 +480,123 @@ describe('Test video studio', function () {
 
         await completeCheckHlsPlaylist({ servers, videoUUID, hlsOnly: true, splittedAudio: true, resolutions: [ 720, 240 ] })
       }
+    })
+  })
+
+  describe('Save as new video', function () {
+    let sourceUUID: string
+
+    async function getSource () {
+      const video = await servers[0].videos.getWithToken({ id: sourceUUID })
+      return { ...video, fileIds: getAllFiles(video).map(f => f.id).sort((a, b) => a - b) }
+    }
+
+    before(async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.save()
+      await servers[0].config.enableMinimumTranscoding()
+    })
+
+    it('Should create a private duplicate and allow changing its privacy while processing', async function () {
+      this.timeout(120_000)
+
+      await renewVideo()
+      sourceUUID = videoUUID
+
+      const sourceBefore = await getSource()
+
+      await servers[0].jobs.pauseJobQueue()
+
+      const { video: created } = await servers[0].videoStudio.createEditionTasks({
+        videoId: sourceUUID,
+        tasks: [ { name: 'cut', options: { start: 2 } } ],
+        saveAsNewVideo: true
+      })
+
+      expect(created.uuid).to.not.equal(sourceUUID)
+
+      const newVideo = await servers[0].videos.getWithToken({ id: created.uuid })
+      expect(newVideo.state.id).to.equal(VideoState.TO_DUPLICATE)
+      expect(newVideo.name).to.equal(sourceBefore.name + ' (Studio Edit)')
+      expect(newVideo.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+      expect(newVideo.channel.id).to.equal(sourceBefore.channel.id)
+
+      const { data } = await servers[0].videos.listMyVideos({ sort: '-createdAt' })
+      expect(data.map(v => v.uuid)).to.include(created.uuid)
+
+      // Source is untouched while the new video is processing
+      expect((await getSource()).state.id).to.equal(VideoState.PUBLISHED)
+
+      // Metadata can be reviewed with the regular video update
+      await servers[0].videos.update({ id: created.uuid, attributes: { name: 'my clip' } })
+      await servers[0].videos.update({
+        id: created.uuid,
+        attributes: { privacy: VideoPrivacy.PUBLIC }
+      })
+
+      const updated = await servers[0].videos.getWithToken({ id: created.uuid })
+      expect(updated.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+      expect(updated.state.id).to.equal(VideoState.TO_DUPLICATE)
+
+      await servers[0].jobs.resumeJobQueue()
+      await waitJobs(servers)
+
+      {
+        const edited = await servers[0].videos.getWithToken({ id: created.uuid })
+
+        expect(edited.state.id).to.equal(VideoState.PUBLISHED)
+        expect(edited.name).to.equal('my clip')
+        expect(edited.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+        expect(edited.files.length + edited.streamingPlaylists.length).to.be.above(0)
+        expect(edited.thumbnails).to.have.length.above(0)
+
+        expect(edited.duration).to.equal(3)
+
+        // Source video was not modified nor deleted
+        const source = await servers[0].videos.get({ id: sourceUUID })
+        expect(source.state.id).to.equal(VideoState.PUBLISHED)
+        expect(source.name).to.equal(sourceBefore.name)
+
+        await checkVideoDuration(servers[0], sourceUUID, 5)
+      }
+
+      const remote = await servers[1].videos.get({ id: created.uuid })
+      expect(remote.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+      expect(remote.duration).to.equal(3)
+
+      const sourceAfter = await getSource()
+      expect(sourceAfter.fileIds).to.deep.equal(sourceBefore.fileIds)
+      expect(sourceAfter.duration).to.equal(sourceBefore.duration)
+    })
+
+    it('Should retain a failed private placeholder when the source is deleted before duplication', async function () {
+      this.timeout(120_000)
+
+      await renewVideo()
+      await servers[0].jobs.pauseJobQueue()
+      let created: { uuid: string }
+      try {
+        const result = await servers[0].videoStudio.createEditionTasks({
+          videoId: videoUUID,
+          tasks: [ { name: 'cut', options: { start: 1 } } ],
+          saveAsNewVideo: true
+        })
+        created = result.video
+        await servers[0].videos.remove({ id: videoUUID })
+      } finally {
+        await servers[0].jobs.resumeJobQueue()
+      }
+      await waitJobs(servers)
+      const video = await servers[0].videos.getWithToken({ id: created.uuid })
+      expect(video.state.id).to.equal(VideoState.TO_DUPLICATE_FAILED)
+      expect(video.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+      expect(getAllFiles(video)).to.have.lengthOf(0)
+      await servers[0].videos.remove({ id: created.uuid })
+    })
+
+    after(async function () {
+      await servers[0].config.rollback()
     })
   })
 

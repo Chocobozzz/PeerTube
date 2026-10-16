@@ -1,4 +1,4 @@
-import { HttpStatusCode, VideoStudioTask } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoStudioCreateEditionNewVideo, VideoStudioTask } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class VideoStudioCommand extends AbstractCommand {
@@ -57,6 +57,7 @@ export class VideoStudioCommand extends AbstractCommand {
     options: OverrideCommandOptions & {
       videoId: number | string
       tasks: VideoStudioTask[]
+      saveAsNewVideo?: boolean
     }
   ) {
     const path = '/api/v1/videos/' + options.videoId + '/studio/edit'
@@ -75,9 +76,15 @@ export class VideoStudioCommand extends AbstractCommand {
 
       path,
       attaches,
-      fields: { tasks: options.tasks },
+      fields: {
+        tasks: options.tasks,
+
+        ...(options.saveAsNewVideo !== undefined ? { saveAsNewVideo: options.saveAsNewVideo } : {})
+      },
       implicitToken: true,
-      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
-    })
+      defaultExpectedStatus: options.saveAsNewVideo === true
+        ? HttpStatusCode.OK_200
+        : HttpStatusCode.NO_CONTENT_204
+    }).then(res => res.body as VideoStudioCreateEditionNewVideo | undefined)
   }
 }

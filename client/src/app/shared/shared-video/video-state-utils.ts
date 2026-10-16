@@ -16,6 +16,10 @@ export function getVideoStateLabel (state: VideoStateType) {
     [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE]: $localize`Moving to external storage`,
     [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: $localize`Move to external storage failed`,
     [VideoState.TO_EDIT]: $localize`To edit`,
+    [VideoState.TO_EDIT_AS_NEW_VIDEO]: $localize`Creating from studio`,
+    [VideoState.TO_DUPLICATE]: $localize`Duplicating`,
+    [VideoState.TO_DUPLICATE_FAILED]: $localize`Duplication failed`,
+    [VideoState.TO_EDIT_FAILED]: $localize`Studio edition failed`,
     [VideoState.TO_MOVE_TO_FILE_SYSTEM]: $localize`Moving to file system`,
     [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: $localize`Moving to file system failed`
   }
@@ -35,6 +39,10 @@ export function getVideoStateBadgeClass (state: VideoStateType) {
     [VideoState.TRANSCODING_FAILED]: 'badge-red',
     [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'badge-red',
     [VideoState.TO_EDIT]: 'badge-brown',
+    [VideoState.TO_EDIT_AS_NEW_VIDEO]: 'badge-brown',
+    [VideoState.TO_DUPLICATE]: 'badge-brown',
+    [VideoState.TO_DUPLICATE_FAILED]: 'badge-red',
+    [VideoState.TO_EDIT_FAILED]: 'badge-red',
     [VideoState.TO_MOVE_TO_FILE_SYSTEM]: 'badge-brown',
     [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'badge-brown'
   }

@@ -16,23 +16,43 @@
 
         <div class="form-group">
           <label i18n for="cutStart">New start</label>
-          <my-timestamp-input
-            inputName="cutStart"
-            enableBorder="true"
-            [maxTimestamp]="videoEdit.getVideoAttributes().duration"
-            [formField]="studioForm.cut.start"
-          ></my-timestamp-input>
+          <div class="timestamp-control">
+            <my-timestamp-input
+              inputName="cutStart"
+              enableBorder="true"
+              [maxTimestamp]="videoEdit.getVideoAttributes().duration"
+              [formField]="studioForm.cut.start"
+            ></my-timestamp-input>
+            <my-button
+              icon="clock-arrow-down"
+              [disabled]="!playerReady() || capturingTime()"
+              (click)="setTimeFromPlayer('start')"
+              i18n-title title="Set new start to current player time"
+              i18n-tooltip tooltip="Set new start to current player time"
+            ></my-button>
+          </div>
         </div>
 
         <div class="form-group">
           <label i18n for="cutEnd">New end</label>
-          <my-timestamp-input
-            inputName="cutEnd"
-            enableBorder="true"
-            [maxTimestamp]="videoEdit.getVideoAttributes().duration"
-            [formField]="studioForm.cut.end"
-          ></my-timestamp-input>
+          <div class="timestamp-control">
+            <my-timestamp-input
+              inputName="cutEnd"
+              enableBorder="true"
+              [maxTimestamp]="videoEdit.getVideoAttributes().duration"
+              [formField]="studioForm.cut.end"
+            ></my-timestamp-input>
+            <my-button
+              icon="clock-arrow-down"
+              [disabled]="!playerReady() || capturingTime()"
+              (click)="setTimeFromPlayer('end')"
+              i18n-title title="Set new end to current player time"
+              i18n-tooltip tooltip="Set new end to current player time"
+            ></my-button>
+          </div>
         </div>
+
+        <my-form-error class="d-block mb-3" [field]="studioForm.cut()"></my-form-error>
       </div>
 
       <div class="section">
@@ -104,22 +124,40 @@
             <div class="remove-segment-inputs">
               <div>
                 <label i18n [for]="'removeStart-' + i">Start</label>
-                <my-timestamp-input
-                  [inputName]="'removeStart-' + i"
-                  enableBorder="true"
-                  [maxTimestamp]="videoEdit.getVideoAttributes().duration"
-                  [formField]="studioForm['remove-segments'][i].start"
-                ></my-timestamp-input>
+                <div class="timestamp-control">
+                  <my-timestamp-input
+                    [inputName]="'removeStart-' + i"
+                    enableBorder="true"
+                    [maxTimestamp]="videoEdit.getVideoAttributes().duration"
+                    [formField]="studioForm['remove-segments'][i].start"
+                  ></my-timestamp-input>
+                  <my-button
+                    icon="clock-arrow-down"
+                    [disabled]="!playerReady() || capturingTime()"
+                    (click)="setTimeFromPlayer('start', i)"
+                    i18n-title title="Set start of segment {{ i + 1 }} to current player time"
+                    i18n-tooltip tooltip="Set start of segment {{ i + 1 }} to current player time"
+                  ></my-button>
+                </div>
               </div>
 
               <div>
                 <label i18n [for]="'removeEnd-' + i">End</label>
-                <my-timestamp-input
-                  [inputName]="'removeEnd-' + i"
-                  enableBorder="true"
-                  [maxTimestamp]="videoEdit.getVideoAttributes().duration"
-                  [formField]="studioForm['remove-segments'][i].end"
-                ></my-timestamp-input>
+                <div class="timestamp-control">
+                  <my-timestamp-input
+                    [inputName]="'removeEnd-' + i"
+                    enableBorder="true"
+                    [maxTimestamp]="videoEdit.getVideoAttributes().duration"
+                    [formField]="studioForm['remove-segments'][i].end"
+                  ></my-timestamp-input>
+                  <my-button
+                    icon="clock-arrow-down"
+                    [disabled]="!playerReady() || capturingTime()"
+                    (click)="setTimeFromPlayer('end', i)"
+                    i18n-title title="Set end of segment {{ i + 1 }} to current player time"
+                    i18n-tooltip tooltip="Set end of segment {{ i + 1 }} to current player time"
+                  ></my-button>
+                </div>
               </div>
 
               <my-button theme="secondary" (click)="removeSegmentRemoval(i)" icon="delete" i18n-title title="Cancel segment removal"></my-button>
@@ -139,7 +177,7 @@
 
     <div class="embed-container">
       <div class="mb-1 fw-bold" i18n>Original video</div>
-      <my-embed [video]="videoEdit.getVideoAttributes()"></my-embed>
+      <my-embed [video]="videoEdit.getVideoAttributes()" [enableAPI]="true"></my-embed>
     </div>
 
     @if (!noEdit()) {
