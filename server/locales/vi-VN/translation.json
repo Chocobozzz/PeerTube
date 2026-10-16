@@ -205,7 +205,6 @@
   "Not imported due to error: {errors}": "Không nhập được vì lỗi: {errors}",
   "One of videoChannelId or playlistId is required.": "One of videoChannelId or playlistId is required.",
   "Only a user with sufficient right can manage this account resource.": "Chỉ người dùng có đủ quyền mới có thể quản lý tài nguyên tài khoản này.",
-  "Only admins can force transcription": "Only admins can force transcription",
   "Only moderators and administrators can force transcription": "Only moderators and administrators can force transcription",
   "Original video file not found": "Không tìm thấy tệp video gốc",
   "Ownership already accepted or refused": "Quyền sở hữu đã được chấp nhận hoặc bị từ chối",

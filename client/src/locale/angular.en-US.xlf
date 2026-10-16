@@ -3345,27 +3345,27 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">144</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">162</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">190</context>
+          <context context-type="linenumber">174</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">184</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">226</context>
+          <context context-type="linenumber">210</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">268</context>
+          <context context-type="linenumber">252</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
@@ -4460,7 +4460,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Import jobs concurrency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">329</context>
+          <context context-type="linenumber">337</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2452704893861050818" datatype="html">
@@ -4468,7 +4468,7 @@ The link will expire within 1 hour.</target>
         <target state="final">allows to import multiple videos in parallel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">330</context>
+          <context context-type="linenumber">338</context>
         </context-group>
       </trans-unit>
       <trans-unit id="780513172839038392" datatype="html">
@@ -4476,11 +4476,11 @@ The link will expire within 1 hour.</target>
         <target state="final">jobs in parallel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">334</context>
+          <context context-type="linenumber">342</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">254</context>
+          <context context-type="linenumber">255</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5997625369044180192" datatype="html">
@@ -4488,7 +4488,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow import with HTTP URL (e.g. YouTube)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">355</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2095604754338363597" datatype="html">
@@ -4496,7 +4496,7 @@ The link will expire within 1 hour.</target>
         <target state="final">⚠️ If enabled, we recommend to use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/maintain-configuration?id=security&quot;&gt;"/>a HTTP proxy<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to prevent private URL access from your PeerTube server</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">351</context>
+          <context context-type="linenumber">359</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7627544798203088407" datatype="html">
@@ -4504,7 +4504,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Discover</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">605</context>
+          <context context-type="linenumber">607</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
@@ -4520,7 +4520,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Browse all videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">606</context>
+          <context context-type="linenumber">608</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5174743927852553765" datatype="html">
@@ -4528,7 +4528,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Browse local videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">607</context>
+          <context context-type="linenumber">609</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5491172370003945798" datatype="html">
@@ -5102,10 +5102,6 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">150</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">131</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/metadata/video-attributes.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
@@ -5118,14 +5114,6 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2199290266269383925" datatype="html">
-        <source>Display all categories</source>
-        <target state="final">Display all categories</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">139</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="9065795501872450602" datatype="html">
         <source>Licence</source>
         <target state="final">Licence</target>
@@ -5135,7 +5123,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">149</context>
+          <context context-type="linenumber">141</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/metadata/video-attributes.component.html</context>
@@ -5155,7 +5143,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Display all licenses</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2826581353496868063" datatype="html">
@@ -5164,10 +5152,6 @@ The link will expire within 1 hour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">151</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">167</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/metadata/video-attributes.component.html</context>
@@ -5194,20 +5178,12 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7904142744051432458" datatype="html">
-        <source>Display all languages</source>
-        <target state="final">Display all languages</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">175</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="2252476112877289102" datatype="html">
         <source>All of these tags</source>
         <target state="final">All of these tags</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">171</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4413784616961145955" datatype="html">
@@ -5219,7 +5195,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">197</context>
+          <context context-type="linenumber">181</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5143793904897598509" datatype="html">
@@ -5227,7 +5203,7 @@ The link will expire within 1 hour.</target>
         <target state="final">PeerTube instance host</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8244789432276387088" datatype="html">
@@ -5235,7 +5211,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Result types</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">223</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="283421392567624698" datatype="html">
@@ -5243,7 +5219,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Search target</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">233</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2489767671380266270" datatype="html">
@@ -5251,7 +5227,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Vidiverse</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5478121364779850827" datatype="html">
@@ -5281,7 +5257,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">278</context>
+          <context context-type="linenumber">262</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4088311569349098646" datatype="html">
@@ -5556,7 +5532,15 @@ The link will expire within 1 hour.</target>
         <target state="final">Latest published video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7761833209726865885" datatype="html">
+        <source>Featured video</source>
+        <target state="final">Featured video</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
+          <context context-type="linenumber">27,28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="283609029522452529" datatype="html">
@@ -5564,7 +5548,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Error in channel miniature component: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3059355667050002541" datatype="html">
@@ -5588,7 +5572,15 @@ The link will expire within 1 hour.</target>
         <target state="final">Error in videos list component: <x id="PH" equiv-text="err.message"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="760957797157374239" datatype="html">
+        <source>data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></source>
+        <target state="final">data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6420937489222972725" datatype="html">
@@ -6387,8 +6379,8 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">169</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4299493457408757206" datatype="html">
@@ -9608,12 +9600,12 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">48</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5910947217931634219" datatype="html">
@@ -9624,12 +9616,12 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">124</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5416471102816014001" datatype="html">
@@ -9640,12 +9632,12 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">128</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">62</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7049348886126005391" datatype="html">
@@ -9833,7 +9825,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="17234570072885140" datatype="html">
@@ -10709,7 +10701,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">254</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6453471031802119612" datatype="html">
@@ -11323,7 +11315,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2734022681675842051" datatype="html">
@@ -11822,56 +11814,64 @@ The link will expire within 1 hour.</target>
         <source>Help share videos being played</source>
         <target state="final">Help share videos being played</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3054784834831786148" datatype="html">
         <source>The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://docs.joinpeertube.org/admin/privacy-guide#peertube-p2p-privacy&quot; target=&quot;_blank&quot;&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load. </source>
         <target state="final"> The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; href=&quot;https://docs.joinpeertube.org/admin/privacy-guide#peertube-p2p-privacy&quot; target=&quot;_blank&quot;&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load. </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">71,73</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6236140336967052987" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
         <target state="final">When on a video page, directly start playing the video.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9135112681389493865" datatype="html">
         <source>Automatically play videos</source>
         <target state="final">Automatically play videos</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="575474399125992547" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
         <target state="final">When a video ends, follow up with the next suggested video.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1243134386580173960" datatype="html">
-        <source>Save video settings</source>
-        <target state="final">Save video settings</target>
+      <trans-unit id="8866329773573088545" datatype="html">
+        <source>Save player settings</source>
+        <target state="final">Save player settings</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7148806470329294902" datatype="html">
+        <source>Player settings updated.</source>
+        <target state="final">Player settings updated.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.ts</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2701970773087072815" datatype="html">
         <source>Automatically start playing the next video</source>
         <target state="final">Automatically start playing the next video</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5983800192187691457" datatype="html">
@@ -11914,7 +11914,7 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">248</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
@@ -11946,12 +11946,12 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">20</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">74</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6377618413283681806" datatype="html">
@@ -12151,7 +12151,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Default trending algorithm</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="554741830445276244" datatype="html">
@@ -12159,7 +12159,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Hot videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4046343890883004514" datatype="html">
@@ -12167,7 +12167,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Recent views</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">105</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8177374861384376651" datatype="html">
@@ -12175,7 +12175,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Most liked videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="297360345401834321" datatype="html">
@@ -12183,7 +12183,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Global views</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5862227717871131052" datatype="html">
@@ -12311,7 +12311,7 @@ The link will expire within 1 hour.</target>
         <target state="final">BROADCAST MESSAGE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8147283395759737895" datatype="html">
@@ -12319,7 +12319,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> Display a message on your platform </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4686199497574248459" datatype="html">
@@ -12327,7 +12327,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable broadcast message</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9192050065623241777" datatype="html">
@@ -12335,7 +12335,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow users to dismiss the broadcast message </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">144</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6582848618760132901" datatype="html">
@@ -12343,7 +12343,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Broadcast message level</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">141</context>
+          <context context-type="linenumber">149</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8066608938393600549" datatype="html">
@@ -12351,7 +12351,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Message</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5631159720194597622" datatype="html">
@@ -12359,7 +12359,7 @@ The link will expire within 1 hour.</target>
         <target state="final">NEW USERS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">177</context>
+          <context context-type="linenumber">185</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4497115134891299867" datatype="html">
@@ -12367,7 +12367,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Signup requires email verification</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8133107840061687919" datatype="html">
@@ -12375,7 +12375,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Signup limit</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4328465163710612366" datatype="html">
@@ -12383,7 +12383,7 @@ The link will expire within 1 hour.</target>
         <target state="final">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">224</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html">
@@ -12391,7 +12391,7 @@ The link will expire within 1 hour.</target>
         <target state="final">{VAR_PLURAL, plural, =1 {user} other {users}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">227</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8766972676494797493" datatype="html">
@@ -12399,7 +12399,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Signup won't be limited to a fixed number of users</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1663379405062033606" datatype="html">
@@ -12407,7 +12407,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Minimum required age to create an account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">240</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8342879272354516454" datatype="html">
@@ -12415,7 +12415,7 @@ The link will expire within 1 hour.</target>
         <target state="final">{VAR_PLURAL, plural, =1 {year old} other {years old}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">251</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1980878931796709542" datatype="html">
@@ -12423,7 +12423,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Default video quota for a new user</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">265</context>
+          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7456307533995141215" datatype="html">
@@ -12431,7 +12431,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable Signup</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4924378635140045267" datatype="html">
@@ -12439,11 +12439,11 @@ The link will expire within 1 hour.</target>
         <target state="final">⚠️ This functionality requires a lot of attention and extra moderation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">185</context>
+          <context context-type="linenumber">193</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">655</context>
+          <context context-type="linenumber">663</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4555457172864212828" datatype="html">
@@ -12583,15 +12583,15 @@ The link will expire within 1 hour.</target>
         <target state="final">bytes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">274</context>
+          <context context-type="linenumber">282</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">295</context>
+          <context context-type="linenumber">303</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">900</context>
+          <context context-type="linenumber">908</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
@@ -12615,7 +12615,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Default daily upload limit for a new user</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">286</context>
+          <context context-type="linenumber">294</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3841475259822163079" datatype="html">
@@ -12623,7 +12623,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Automatically enable video history for a new user</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">310</context>
+          <context context-type="linenumber">318</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7567466559668450627" datatype="html">
@@ -12631,7 +12631,7 @@ The link will expire within 1 hour.</target>
         <target state="final">VIDEO IMPORTS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">322</context>
+          <context context-type="linenumber">330</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4719342289581047890" datatype="html">
@@ -12639,7 +12639,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow import with a torrent file or a magnet URI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">362</context>
+          <context context-type="linenumber">370</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6801844913630625451" datatype="html">
@@ -12647,7 +12647,7 @@ The link will expire within 1 hour.</target>
         <target state="final">⚠️ We don't recommend to enable this feature if you don't trust your users</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">365</context>
+          <context context-type="linenumber">373</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3991697548652611331" datatype="html">
@@ -12655,7 +12655,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow channel synchronization with channel of other platforms like YouTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">377</context>
+          <context context-type="linenumber">385</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7404104645798703279" datatype="html">
@@ -12663,7 +12663,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> ⛔ You need to allow import with HTTP URL to be able to activate this feature. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">381</context>
+          <context context-type="linenumber">389</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5239500638742740142" datatype="html">
@@ -12671,7 +12671,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Max channel synchronization per user</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">388</context>
+          <context context-type="linenumber">396</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7725203429401574666" datatype="html">
@@ -12679,7 +12679,7 @@ The link will expire within 1 hour.</target>
         <target state="final">{VAR_PLURAL, plural, =1 {sync} other {syncs}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">399</context>
+          <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5959922792614518034" datatype="html">
@@ -12706,12 +12706,20 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7343456225783046295" datatype="html">
+        <source>Display scheduled lives</source>
+        <target state="final">Display scheduled lives</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
+          <context context-type="linenumber">91,92</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3950258704315544174" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
         <target state="final">Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">430</context>
+          <context context-type="linenumber">438</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7055002182446434458" datatype="html">
@@ -12719,7 +12727,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow users to upload a new version of their video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">445</context>
+          <context context-type="linenumber">453</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6098767935728651255" datatype="html">
@@ -12727,7 +12735,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable video storyboards</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">454</context>
+          <context context-type="linenumber">462</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7773354014171617955" datatype="html">
@@ -12735,7 +12743,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Generate storyboards of local videos using ffmpeg so users can see the video preview in the player while scrubbing the video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">456</context>
+          <context context-type="linenumber">464</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2791679701370281550" datatype="html">
@@ -12743,7 +12751,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable remote runners to generate storyboards</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">465</context>
+          <context context-type="linenumber">473</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3150443263101390303" datatype="html">
@@ -12751,7 +12759,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to generate storyboards.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">468</context>
+          <context context-type="linenumber">476</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9163699669526337385" datatype="html">
@@ -12759,11 +12767,11 @@ The link will expire within 1 hour.</target>
         <target state="final">Remote runners have to register on your instance first.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">469</context>
+          <context context-type="linenumber">477</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">496</context>
+          <context context-type="linenumber">504</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
@@ -12771,11 +12779,11 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">214</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">308</context>
+          <context context-type="linenumber">309</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2136244827103907557" datatype="html">
@@ -12783,7 +12791,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable video transcription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">480</context>
+          <context context-type="linenumber">488</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8008057374731814667" datatype="html">
@@ -12791,7 +12799,7 @@ The link will expire within 1 hour.</target>
         <target state="final"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin/configuration#automatic-transcription&quot; target=&quot;_blank&quot;&gt;"/>Automatically create subtitles<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for uploaded/imported VOD videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">482</context>
+          <context context-type="linenumber">490</context>
         </context-group>
       </trans-unit>
       <trans-unit id="776440228653665977" datatype="html">
@@ -12799,7 +12807,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable remote runners for transcription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">492</context>
+          <context context-type="linenumber">500</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5060595856718581647" datatype="html">
@@ -12807,7 +12815,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process transcription tasks.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">495</context>
+          <context context-type="linenumber">503</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5960828389062108087" datatype="html">
@@ -12815,7 +12823,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Default video privacy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">508</context>
+          <context context-type="linenumber">516</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3734974125618373942" datatype="html">
@@ -12823,7 +12831,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Default video licence</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">518</context>
+          <context context-type="linenumber">526</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8251821314400241425" datatype="html">
@@ -12831,7 +12839,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Default comment policy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">528</context>
+          <context context-type="linenumber">536</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6375285763528205588" datatype="html">
@@ -12839,7 +12847,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Default download policy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">538</context>
+          <context context-type="linenumber">546</context>
         </context-group>
       </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
@@ -12847,7 +12855,7 @@ The link will expire within 1 hour.</target>
         <target state="final">VIDEO CHANNELS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7026684190224451991" datatype="html">
@@ -12855,7 +12863,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Max video channels per user</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">558</context>
+          <context context-type="linenumber">566</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
@@ -12863,7 +12871,7 @@ The link will expire within 1 hour.</target>
         <target state="final">{VAR_PLURAL, plural, =1 {channel} other {channels}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">569</context>
+          <context context-type="linenumber">577</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3428986951244800347" datatype="html">
@@ -12871,7 +12879,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Block new videos automatically</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">427</context>
+          <context context-type="linenumber">435</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2054846790157376783" datatype="html">
@@ -12879,7 +12887,7 @@ The link will expire within 1 hour.</target>
         <target state="final">SEARCH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">767</context>
+          <context context-type="linenumber">775</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
@@ -12887,7 +12895,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow users to do remote URI/handle search</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">778</context>
+          <context context-type="linenumber">786</context>
         </context-group>
       </trans-unit>
       <trans-unit id="481446928803565156" datatype="html">
@@ -12895,7 +12903,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">781</context>
+          <context context-type="linenumber">789</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
@@ -12903,7 +12911,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow anonymous to do remote URI/handle search</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">791</context>
+          <context context-type="linenumber">799</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7372107248244982956" datatype="html">
@@ -12911,7 +12919,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors that may not be federated with your platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">794</context>
+          <context context-type="linenumber">802</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
@@ -12919,7 +12927,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Search index URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">809</context>
+          <context context-type="linenumber">817</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2653219516680751118" datatype="html">
@@ -12927,7 +12935,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;&gt;"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;&gt;"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, that is not moderated. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">812</context>
+          <context context-type="linenumber">820</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
@@ -12935,7 +12943,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Disable local search in search bar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">835</context>
+          <context context-type="linenumber">843</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6117138245696620472" datatype="html">
@@ -12943,7 +12951,7 @@ The link will expire within 1 hour.</target>
         <target state="final">USER IMPORT/EXPORT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">862</context>
+          <context context-type="linenumber">870</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6056998652615283808" datatype="html">
@@ -12951,7 +12959,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow your users to import a data archive</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">869</context>
+          <context context-type="linenumber">877</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4091781230315618850" datatype="html">
@@ -12959,7 +12967,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Video quota is checked on import so the user doesn't upload a too big archive file</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">871</context>
+          <context context-type="linenumber">879</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3112747752460656486" datatype="html">
@@ -12967,7 +12975,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">872</context>
+          <context context-type="linenumber">880</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4793397386811591255" datatype="html">
@@ -12975,7 +12983,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow your users to export their data</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">882</context>
+          <context context-type="linenumber">890</context>
         </context-group>
       </trans-unit>
       <trans-unit id="74636758368624456" datatype="html">
@@ -12983,7 +12991,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">884</context>
+          <context context-type="linenumber">892</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7396688046674522189" datatype="html">
@@ -12991,7 +12999,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Max user video quota allowed to generate the export</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">889</context>
+          <context context-type="linenumber">897</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1967420418158999705" datatype="html">
@@ -12999,7 +13007,7 @@ The link will expire within 1 hour.</target>
         <target state="final">If the user decides to include the video files in the archive</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">891</context>
+          <context context-type="linenumber">899</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8092614302698579026" datatype="html">
@@ -13007,7 +13015,7 @@ The link will expire within 1 hour.</target>
         <target state="final">User export expiration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">910</context>
+          <context context-type="linenumber">918</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8981181756195068779" datatype="html">
@@ -13015,7 +13023,7 @@ The link will expire within 1 hour.</target>
         <target state="final">The archive file is deleted after this period</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">918</context>
+          <context context-type="linenumber">926</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5344594655022049812" datatype="html">
@@ -13023,7 +13031,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allowed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">271</context>
+          <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
@@ -13031,7 +13039,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Search bar uses the global search index by default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">845</context>
+          <context context-type="linenumber">853</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4557533619513324614" datatype="html">
@@ -13039,7 +13047,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Otherwise, the local search will be used by default</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">848</context>
+          <context context-type="linenumber">856</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
@@ -13047,7 +13055,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable global search</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">802</context>
+          <context context-type="linenumber">810</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
@@ -13059,7 +13067,7 @@ The link will expire within 1 hour.</target>
         <target state="final">⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">804</context>
+          <context context-type="linenumber">812</context>
         </context-group>
       </trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
@@ -13067,7 +13075,7 @@ The link will expire within 1 hour.</target>
         <target state="final">FEDERATION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">581</context>
+          <context context-type="linenumber">589</context>
         </context-group>
       </trans-unit>
       <trans-unit id="75928143875482960" datatype="html">
@@ -13075,7 +13083,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> with other platforms. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">583</context>
+          <context context-type="linenumber">591</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2072884891614263775" datatype="html">
@@ -13083,7 +13091,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Accept comments made on remote platforms</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">594</context>
+          <context context-type="linenumber">602</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5963121551419269989" datatype="html">
@@ -13091,7 +13099,7 @@ The link will expire within 1 hour.</target>
         <target state="final">This setting is not retroactive: current comments from remote platforms will not be deleted</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">597</context>
+          <context context-type="linenumber">605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="735929773748569631" datatype="html">
@@ -13099,7 +13107,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Remote actors can follow channels of your platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">610</context>
+          <context context-type="linenumber">618</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7331615583751184681" datatype="html">
@@ -13107,7 +13115,7 @@ The link will expire within 1 hour.</target>
         <target state="final">This setting is not retroactive: current followers of channels of your platform will not be affected</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">613</context>
+          <context context-type="linenumber">621</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4707019046470605528" datatype="html">
@@ -13115,7 +13123,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Remote actors can follow your platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">625</context>
+          <context context-type="linenumber">633</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5240371005291842688" datatype="html">
@@ -13123,7 +13131,7 @@ The link will expire within 1 hour.</target>
         <target state="final">This setting is not retroactive: current followers of your platform will not be affected</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">628</context>
+          <context context-type="linenumber">636</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4899539058271084907" datatype="html">
@@ -13131,7 +13139,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Manually approve new followers that follow your platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">638</context>
+          <context context-type="linenumber">646</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6240145294614933263" datatype="html">
@@ -13139,7 +13147,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Automatically follow back followers that follow your platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">652</context>
+          <context context-type="linenumber">660</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2362368426377094869" datatype="html">
@@ -13147,7 +13155,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Automatically follow platforms of a public index</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">667</context>
+          <context context-type="linenumber">675</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2092224316392295720" datatype="html">
@@ -13155,7 +13163,7 @@ The link will expire within 1 hour.</target>
         <target state="final">⚠️ This functionality requires a lot of attention and extra moderation.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">670</context>
+          <context context-type="linenumber">678</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
@@ -13163,7 +13171,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Signup requires approval by moderators</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">199</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
@@ -13171,7 +13179,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Index URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">684</context>
+          <context context-type="linenumber">692</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1579260248722004935" datatype="html">
@@ -13179,7 +13187,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Publicly share your instance blocklist</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">712,713</context>
+          <context context-type="linenumber">720</context>
         </context-group>
       </trans-unit>
       <trans-unit id="920870595764681136" datatype="html">
@@ -13187,7 +13195,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Allow other instances to subscribe to your blocklist to automatically mute the same accounts and servers</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">715,716</context>
+          <context context-type="linenumber">723</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2709958363414972972" datatype="html">
@@ -13195,7 +13203,7 @@ The link will expire within 1 hour.</target>
         <target state="final">PLAYER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">726</context>
+          <context context-type="linenumber">734</context>
         </context-group>
       </trans-unit>
       <trans-unit id="286395473992592179" datatype="html">
@@ -13203,7 +13211,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Automatically play videos in the player</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">737</context>
+          <context context-type="linenumber">745</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3184039004441581991" datatype="html">
@@ -13211,7 +13219,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable P2P streaming by default on your platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">748</context>
+          <context context-type="linenumber">756</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6069715963308979270" datatype="html">
@@ -13219,7 +13227,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable P2P streaming by default for videos embedded on external websites</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">757</context>
+          <context context-type="linenumber">765</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
@@ -13227,7 +13235,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://docs.joinpeertube.org/admin-following-instances?id=automatically-follow-other-instances&quot; rel=&quot;noopener noreferer&quot; target=&quot;_blank&quot;&gt;"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt; "/> for more information about the expected URL </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">673</context>
+          <context context-type="linenumber">681</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3946988229617310200" datatype="html">
@@ -13315,7 +13323,7 @@ The link will expire within 1 hour.</target>
         <target state="final">1 day</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">296</context>
+          <context context-type="linenumber">297</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context>
@@ -13327,7 +13335,7 @@ The link will expire within 1 hour.</target>
         <target state="final">2 days</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">297</context>
+          <context context-type="linenumber">298</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8542568275115626925" datatype="html">
@@ -13335,7 +13343,7 @@ The link will expire within 1 hour.</target>
         <target state="final">7 days</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">298</context>
+          <context context-type="linenumber">299</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7152095234138763013" datatype="html">
@@ -13343,7 +13351,7 @@ The link will expire within 1 hour.</target>
         <target state="final">30 days</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">299</context>
+          <context context-type="linenumber">300</context>
         </context-group>
       </trans-unit>
       <trans-unit id="493135676263039396" datatype="html">
@@ -13555,7 +13563,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5429376346987783852" datatype="html">
@@ -13930,12 +13938,20 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2302969578909684603" datatype="html">
+        <source>This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</source>
+        <target state="final">This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
+          <context context-type="linenumber">151,152</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2798443406255719006" datatype="html">
         <source>Max video FPS</source>
         <target state="final">Max video FPS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">157</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6032385969775568523" datatype="html">
@@ -13943,7 +13959,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Cap transcoded video FPS. Max resolution file still keeps the original FPS.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6698240176427495644" datatype="html">
@@ -13951,7 +13967,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Resolutions to generate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2720128810058691158" datatype="html">
@@ -13959,7 +13975,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Even if it's above your maximum enabled resolution</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8056487097039524924" datatype="html">
@@ -13967,7 +13983,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable remote runners for VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">209</context>
+          <context context-type="linenumber">210</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4869944184588194039" datatype="html">
@@ -13975,7 +13991,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process VOD transcoding.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">212</context>
+          <context context-type="linenumber">213</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1126867109775813762" datatype="html">
@@ -13983,7 +13999,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Transcoding threads</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">219</context>
+          <context context-type="linenumber">220</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7815122216882553289" datatype="html">
@@ -13991,7 +14007,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> will claim at most <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">224</context>
+          <context context-type="linenumber">225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8685484763568827375" datatype="html">
@@ -13999,7 +14015,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> will claim at least <x id="INTERPOLATION" equiv-text="{{ getTotalTranscodingThreads().value }}"/> <x id="INTERPOLATION_1" equiv-text="{{ getTotalTranscodingThreads().unit }}"/> with live transcoding </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7185278676178506632" datatype="html">
@@ -14007,7 +14023,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Transcoding jobs concurrency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">249</context>
+          <context context-type="linenumber">250</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1407247798083071149" datatype="html">
@@ -14015,7 +14031,7 @@ The link will expire within 1 hour.</target>
         <target state="final">allows to transcode multiple files in parallel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">250</context>
+          <context context-type="linenumber">251</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2184317712452071847" datatype="html">
@@ -14023,7 +14039,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Transcoding profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">263</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6289966287765074028" datatype="html">
@@ -14031,7 +14047,7 @@ The link will expire within 1 hour.</target>
         <target state="final">new transcoding profiles can be added by PeerTube plugins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">264</context>
+          <context context-type="linenumber">265</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5843661880070076970" datatype="html">
@@ -14039,7 +14055,7 @@ The link will expire within 1 hour.</target>
         <target state="final">VIDEO STUDIO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">280</context>
+          <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4078329985026583770" datatype="html">
@@ -14047,7 +14063,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> Allows your users to edit their video (cut, add intro/outro, add a watermark etc) </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">283</context>
         </context-group>
       </trans-unit>
       <trans-unit id="252604800845369275" datatype="html">
@@ -14055,7 +14071,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable video studio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">292</context>
+          <context context-type="linenumber">293</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3313548535394806921" datatype="html">
@@ -14063,7 +14079,7 @@ The link will expire within 1 hour.</target>
         <target state="final">⚠️ You need to enable transcoding first to enable video studio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">296</context>
+          <context context-type="linenumber">297</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7185229240632050966" datatype="html">
@@ -14071,7 +14087,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Enable remote runners for studio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">304</context>
+          <context context-type="linenumber">305</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5159526565235763891" datatype="html">
@@ -14079,7 +14095,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/admin/settings/system/runners/runners-list&quot;&gt;"/>remote runners<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to process studio transcoding tasks.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
-          <context context-type="linenumber">307</context>
+          <context context-type="linenumber">308</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1671557140564655234" datatype="html">
@@ -14386,20 +14402,12 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5439158575454281141" datatype="html">
-        <source>VIDEO SETTINGS</source>
-        <target state="final">VIDEO SETTINGS</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">38</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="507542497458686905" datatype="html">
         <source>NOTIFICATIONS</source>
         <target state="final">NOTIFICATIONS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9138757724802460941" datatype="html">
@@ -14414,12 +14422,60 @@ The link will expire within 1 hour.</target>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8998777763062753479" datatype="html">
+        <source>SENSITIVE CONTENT</source>
+        <target state="final">SENSITIVE CONTENT</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
+          <context context-type="linenumber">38,39</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
+          <context context-type="linenumber">21,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7842214202809434810" datatype="html">
+        <source>CONTENT PREFERENCES</source>
+        <target state="final">CONTENT PREFERENCES</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
+          <context context-type="linenumber">49,51</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
+          <context context-type="linenumber">27,28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7954417898841346620" datatype="html">
+        <source> These preferences apply to Recently added, Trending, Local, Most liked, Search, account and channel pages </source>
+        <target state="final"> These preferences apply to Recently added, Trending, Local, Most liked, Search, account and channel pages </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3025095234300750951" datatype="html">
+        <source>PLAYER SETTINGS</source>
+        <target state="final">PLAYER SETTINGS</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
+          <context context-type="linenumber">64,65</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
+          <context context-type="linenumber">36,38</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7789395291034300662" datatype="html">
         <source>PASSWORD</source>
         <target state="final">PASSWORD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4543888618160534551" datatype="html">
@@ -14427,7 +14483,7 @@ The link will expire within 1 hour.</target>
         <target state="final">TWO-FACTOR AUTHENTICATION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">97</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4101055224952526966" datatype="html">
@@ -14435,7 +14491,7 @@ The link will expire within 1 hour.</target>
         <target state="final">ACCOUNT SESSIONS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5931890111155614195" datatype="html">
@@ -14443,7 +14499,7 @@ The link will expire within 1 hour.</target>
         <target state="final">These are the devices currently logged in to your account.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9012586956848595996" datatype="html">
@@ -14455,7 +14511,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">121</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7772317372473797900" datatype="html">
@@ -14531,7 +14587,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Are you sure you want to disable two factor authentication of your account?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3757273554886026258" datatype="html">
@@ -14539,7 +14595,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Disable two factor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7121657131608757909" datatype="html">
@@ -14547,7 +14603,31 @@ The link will expire within 1 hour.</target>
         <target state="final">Two factor authentication disabled</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2145525708983498763" datatype="html">
+        <source>Please check your password and try again.</source>
+        <target state="final">Please check your password and try again.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="808192240005869552" datatype="html">
+        <source>Password not recognized</source>
+        <target state="final">Password not recognized</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4366272566851193097" datatype="html">
@@ -14587,7 +14667,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">132</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
@@ -14722,8 +14802,12 @@ The link will expire within 1 hour.</target>
         <source>VOD &amp; Live videos</source>
         <target state="final">VOD &amp; Live videos</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">140</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5630677130087951545" datatype="html">
@@ -14731,7 +14815,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Display all videos (private, unlisted, password protected, not yet published or sensitive videos)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2128860191118589382" datatype="html">
@@ -14838,16 +14922,40 @@ The link will expire within 1 hour.</target>
         <source>Only display videos in the following languages/subtitles</source>
         <target state="final">Only display videos in the following languages/subtitles</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1534085756270333258" datatype="html">
-        <source>In Recently added, Trending, Local, Most liked and Search pages</source>
-        <target state="final">In Recently added, Trending, Local, Most liked and Search pages</target>
+      <trans-unit id="2121031655330028809" datatype="html">
+        <source>Only display videos in the following categories</source>
+        <target state="final">Only display videos in the following categories</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6299207692385994112" datatype="html">
+        <source>Only display videos of the following types</source>
+        <target state="final">Only display videos of the following types</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
+          <context context-type="linenumber">32,33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1573340911001383998" datatype="html">
+        <source>Save content preferences</source>
+        <target state="final">Save content preferences</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8417167703731637027" datatype="html">
+        <source>Content preferences updated.</source>
+        <target state="final">Content preferences updated.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.ts</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2658703380934466003" datatype="html">
@@ -16096,11 +16204,11 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">676</context>
+          <context context-type="linenumber">678</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">712</context>
+          <context context-type="linenumber">714</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5691818894884119596" datatype="html">
@@ -16172,15 +16280,15 @@ The link will expire within 1 hour.</target>
         <target state="final">VIEWS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">375</context>
+          <context context-type="linenumber">377</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2405893290244253562" datatype="html">
-        <source>A view means that someone watched the video for several seconds (10 seconds by default)</source>
-        <target state="final">A view means that someone watched the video for several seconds (10 seconds by default)</target>
+      <trans-unit id="5411116568190223417" datatype="html">
+        <source>A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</source>
+        <target state="final">A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">377</context>
+          <context context-type="linenumber">379</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6241152435233737914" datatype="html">
@@ -16188,7 +16296,7 @@ The link will expire within 1 hour.</target>
         <target state="final">DOWNLOADS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">380</context>
+          <context context-type="linenumber">382</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6837594486982933976" datatype="html">
@@ -16196,7 +16304,7 @@ The link will expire within 1 hour.</target>
         <target state="final">LIKES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">384</context>
+          <context context-type="linenumber">386</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7292844496438783099" datatype="html">
@@ -16204,7 +16312,7 @@ The link will expire within 1 hour.</target>
         <target state="final">AVERAGE WATCH TIME</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">391</context>
+          <context context-type="linenumber">393</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4302414285233819411" datatype="html">
@@ -16212,7 +16320,7 @@ The link will expire within 1 hour.</target>
         <target state="final">TOTAL WATCH TIME</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">395</context>
+          <context context-type="linenumber">397</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5898795291446911875" datatype="html">
@@ -16220,7 +16328,7 @@ The link will expire within 1 hour.</target>
         <target state="final">PEAK VIEWERS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">399</context>
+          <context context-type="linenumber">401</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6782077395930235254" datatype="html">
@@ -16276,7 +16384,7 @@ The link will expire within 1 hour.</target>
         <target state="final">at <x id="PH" equiv-text="new Date(overallStats.viewersPeakDate).toLocaleString()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">402</context>
+          <context context-type="linenumber">404</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7783808619122709343" datatype="html">
@@ -16284,7 +16392,7 @@ The link will expire within 1 hour.</target>
         <target state="final">UNIQUE VIEWERS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">406</context>
+          <context context-type="linenumber">408</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3952157513492420828" datatype="html">
@@ -16292,7 +16400,7 @@ The link will expire within 1 hour.</target>
         <target state="final">COUNTRIES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">413</context>
+          <context context-type="linenumber">415</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1122460335094529756" datatype="html">
@@ -16300,7 +16408,7 @@ The link will expire within 1 hour.</target>
         <target state="final">REGIONS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
-          <context context-type="linenumber">420</context>
+          <context context-type="linenumber">422</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5321335688371682440" datatype="html">
@@ -17568,11 +17676,11 @@ The link will expire within 1 hour.</target>
         <target state="final">Sensitive content</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">125</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9158483906909080531" datatype="html">
@@ -17580,7 +17688,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> Update your policy in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;video-sensitive-content-policy&quot; (click)=&quot;onAccountSettingsClick($event)&quot;&gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5859845485947900894" datatype="html">
@@ -17588,7 +17696,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Platforms order</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">141</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7098240021806375524" datatype="html">
@@ -17596,7 +17704,7 @@ The link will expire within 1 hour.</target>
         <target state="final"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> platform subscribes to content from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/about/follows&quot; target=&quot;_blank&quot;&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ totalFollowing }}"/> <x id="ICU" equiv-text="{totalFollowing, plural, =1 {other platform} other {other platforms}}" xid="3907811049330252725"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">145</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8603409827386793098" datatype="html">
@@ -17604,7 +17712,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Set your display preferences here.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">148</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1753457183754409152" datatype="html">
@@ -17612,15 +17720,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Displayed videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">120</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3029609593829675670" datatype="html">
-        <source>Content type</source>
-        <target state="final">Content type</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5590086849807274701" datatype="html">
@@ -17628,7 +17728,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Scope</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">228</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1840036002282013872" datatype="html">
@@ -17636,7 +17736,7 @@ The link will expire within 1 hour.</target>
         <target state="final">All platforms</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">217</context>
+          <context context-type="linenumber">230</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8317194248349445422" datatype="html">
@@ -17644,31 +17744,39 @@ The link will expire within 1 hour.</target>
         <target state="final">This platform</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">218</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1949800099101277248" datatype="html">
         <source>Languages</source>
         <target state="final">Languages</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
+          <context context-type="linenumber">159</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">88</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">238</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1902100407096396858" datatype="html">
         <source>Categories</source>
         <target state="final">Categories</target>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3599150758014724057" datatype="html">
@@ -17676,7 +17784,7 @@ The link will expire within 1 hour.</target>
         <target state="final">All videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">245</context>
+          <context context-type="linenumber">258</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2150280748663310169" datatype="html">
@@ -17792,7 +17900,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Only lives</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">253</context>
+          <context context-type="linenumber">266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="403276015827477743" datatype="html">
@@ -17800,7 +17908,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Only VOD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">259</context>
+          <context context-type="linenumber">272</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7216759144314993217" datatype="html">
@@ -17808,7 +17916,7 @@ The link will expire within 1 hour.</target>
         <target state="final"> Some videos with a specific sensitive content category have a different policy.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">356</context>
+          <context context-type="linenumber">391</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3343072271931497433" datatype="html">
@@ -17816,7 +17924,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Sensitive content hidden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">363</context>
+          <context context-type="linenumber">398</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4167711622812285080" datatype="html">
@@ -17824,7 +17932,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Sensitive content has a warning.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">364</context>
+          <context context-type="linenumber">399</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2995961823224509765" datatype="html">
@@ -17832,7 +17940,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Sensitive content has a warning and the thumbnail is blurred.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">365</context>
+          <context context-type="linenumber">400</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6447635594696346395" datatype="html">
@@ -17840,7 +17948,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Sensitive content is displayed.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">367</context>
+          <context context-type="linenumber">402</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8383768985718581098" datatype="html">
@@ -17848,7 +17956,7 @@ The link will expire within 1 hour.</target>
         <target state="final">hidden (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">372</context>
+          <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4104450881162058902" datatype="html">
@@ -17856,7 +17964,7 @@ The link will expire within 1 hour.</target>
         <target state="final">warned (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">373</context>
+          <context context-type="linenumber">408</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8042820180196501836" datatype="html">
@@ -17864,7 +17972,7 @@ The link will expire within 1 hour.</target>
         <target state="final">blurred (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">374</context>
+          <context context-type="linenumber">409</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5493896943986215282" datatype="html">
@@ -17872,7 +17980,7 @@ The link will expire within 1 hour.</target>
         <target state="final">displayed (with exceptions)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">376</context>
+          <context context-type="linenumber">411</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7054829409324166420" datatype="html">
@@ -17880,7 +17988,7 @@ The link will expire within 1 hour.</target>
         <target state="final">hidden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">379</context>
+          <context context-type="linenumber">414</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8640163781966564737" datatype="html">
@@ -17888,7 +17996,7 @@ The link will expire within 1 hour.</target>
         <target state="final">warned</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">380</context>
+          <context context-type="linenumber">415</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5766954855630346873" datatype="html">
@@ -17896,7 +18004,7 @@ The link will expire within 1 hour.</target>
         <target state="final">blurred</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">381</context>
+          <context context-type="linenumber">416</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1833483831276078393" datatype="html">
@@ -17904,7 +18012,7 @@ The link will expire within 1 hour.</target>
         <target state="final">displayed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
-          <context context-type="linenumber">383</context>
+          <context context-type="linenumber">418</context>
         </context-group>
       </trans-unit>
       <trans-unit id="166448092104563965" datatype="html">
@@ -17984,15 +18092,11 @@ The link will expire within 1 hour.</target>
         <target state="final">VIDEOS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">415</context>
+          <context context-type="linenumber">423</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">121</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/menu/quick-settings-modal.component.html</context>
-          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="25349740244798533" datatype="html">
@@ -18212,7 +18316,7 @@ The link will expire within 1 hour.</target>
         <target state="final">You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">641</context>
+          <context context-type="linenumber">643</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5566531034799611502" datatype="html">
@@ -18220,7 +18324,7 @@ The link will expire within 1 hour.</target>
         <target state="final">General configuration updated.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">672</context>
+          <context context-type="linenumber">674</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6266228793864841619" datatype="html">
@@ -19838,7 +19942,7 @@ The link will expire within 1 hour.</target>
         <target state="final">info</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">153</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
@@ -19850,7 +19954,7 @@ The link will expire within 1 hour.</target>
         <target state="final">warning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">154</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
@@ -19862,7 +19966,7 @@ The link will expire within 1 hour.</target>
         <target state="final">error</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">147</context>
+          <context context-type="linenumber">155</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
@@ -21133,32 +21237,48 @@ The link will expire within 1 hour.</target>
         <source>Override sensitive content policy for certain videos</source>
         <target state="final">Override sensitive content policy for certain videos</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">18,20</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8679065902183523301" datatype="html">
         <source>These subjective criteria may be optionally applied to certain videos. The classification of some videos may differ from your personal judgment.</source>
         <target state="final"> These subjective criteria may be optionally applied to certain videos. The classification of some videos may differ from your personal judgment. </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">21,22</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2144169480053809136" datatype="html">
         <source>Violent content</source>
         <target state="final">Violent content</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">31,32</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9105013661444128554" datatype="html">
         <source>Sexually explicit content</source>
         <target state="final">Sexually explicit content</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context>
-          <context context-type="linenumber">43,44</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2927658547953689823" datatype="html">
+        <source>Save sensitive content settings</source>
+        <target state="final">Save sensitive content settings</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2316900873583051641" datatype="html">
+        <source>Sensitive content settings updated.</source>
+        <target state="final">Sensitive content settings updated.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4343589211916204486" datatype="html">
@@ -21334,7 +21454,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Profile updated.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6721822899525405039" datatype="html">
@@ -21358,7 +21478,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Avatar changed.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8920809083620698740" datatype="html">
@@ -21366,7 +21486,7 @@ The link will expire within 1 hour.</target>
         <target state="final">avatar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">93</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/video-channel-manage.component.ts</context>
@@ -21378,7 +21498,7 @@ The link will expire within 1 hour.</target>
         <target state="final">Avatar deleted.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1233062525939746039" datatype="html">
@@ -21449,32 +21569,16 @@ The link will expire within 1 hour.</target>
         <source>Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</source>
         <target state="final">Too many languages are enabled. Please enable them all or stay below 20 enabled languages.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">163</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3960396487495291449" datatype="html">
-        <source>Video settings updated.</source>
-        <target state="final">Video settings updated.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">225</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3326446048041727269" datatype="html">
-        <source>Display/Video settings updated.</source>
-        <target state="final">Display/Video settings updated.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">236</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.ts</context>
+          <context context-type="linenumber">60</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3780312603830034411" datatype="html">
         <source>Default (<x id="PH" equiv-text="nsfwPolicyLabel"/>)</source>
         <target state="final">Default (<x id="PH" equiv-text="nsfwPolicyLabel"/>)</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.ts</context>
-          <context context-type="linenumber">264</context>
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3931294879857217619" datatype="html">
@@ -22666,7 +22770,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">221</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
@@ -22770,7 +22874,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">216</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.html</context>
@@ -22802,7 +22906,7 @@ The link will expire within 1 hour.</target>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">226</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
@@ -23200,14 +23304,14 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Trending</target>
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/videos-list-all.component.ts</context><context context-type="linenumber">121</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context><context context-type="linenumber">134</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+video-list/videos-list-all.component.ts</context><context context-type="linenumber">122</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context><context context-type="linenumber">134</context></context-group></trans-unit>
       <trans-unit id="2821179408673282599" datatype="html" xml:space="preserve">
         <source>Home</source>
         <target state="translated">Home</target>
         
         
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">601</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/home-menu.component.ts</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">130</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context><context context-type="linenumber">603</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/home-menu.component.ts</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.ts</context><context context-type="linenumber">130</context></context-group></trans-unit>
       <trans-unit id="4648900870671159218" datatype="html">
         <source>Success</source>
         <target state="final">Success</target>
@@ -23392,8 +23496,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">37</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">150</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2180217594100853008" datatype="html">
@@ -23404,8 +23512,12 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8487565500496466433" datatype="html">
@@ -23893,7 +24005,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="final">Two factor authentication has been enabled.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2364233042886987548" datatype="html">
@@ -25961,7 +26073,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="final">Disabled</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">273</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
@@ -28227,7 +28339,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4814285799071780083" datatype="html">
@@ -29039,7 +29151,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="final">Cannot load more videos. Please try again later.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.ts</context>
-          <context context-type="linenumber">369</context>
+          <context context-type="linenumber">377</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-selection.component.ts</context>
@@ -30021,7 +30133,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="final">Recently added</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/videos-list-all.component.ts</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">117</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
@@ -30133,7 +30245,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/videos-list-all.component.ts</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7147755274837297932" datatype="html">

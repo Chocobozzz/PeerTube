@@ -205,7 +205,6 @@
   "Not imported due to error: {errors}": "Δεν εισήχθη λόγω σφάλματος: {errors}",
   "One of videoChannelId or playlistId is required.": "Απαιτείται είτε το videoChannelId είτε το playlistId.",
   "Only a user with sufficient right can manage this account resource.": "Μόνο ένας χρήστης με τα κατάλληλα δικαιώματα μπορεί να διαχειριστεί αυτόν τον λογαριασμό.",
-  "Only admins can force transcription": "Μόνο οι διαχειριστές μπορούν να επιβάλλουν τη μεταγραφή",
   "Only moderators and administrators can force transcription": "Only moderators and administrators can force transcription",
   "Original video file not found": "Δεν βρέθηκε το αρχικό αρχείο βίντεο",
   "Ownership already accepted or refused": "Η ιδιοκτησία έχει ήδη γίνει αποδεκτή ή απορριφθεί",
