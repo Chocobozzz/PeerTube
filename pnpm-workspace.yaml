@@ -53,5 +53,6 @@ overrides:
   '@types/express-serve-static-core': 4.19.5
 
 patchedDependencies:
+  node-media-server: pnpm-patches/node-media-server.patch
   tinykeys: pnpm-patches/tinykeys.patch
   video.js: pnpm-patches/video.js.patch

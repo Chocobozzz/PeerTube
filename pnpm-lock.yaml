@@ -9,6 +9,9 @@ overrides:
   '@types/express-serve-static-core': 4.19.5
 
 patchedDependencies:
+  node-media-server:
+    hash: 44332d754691bc46768006541f90c923cd34ddf847c6f7ed2736890ae3ab4e0a
+    path: pnpm-patches/node-media-server.patch
   tinykeys:
     hash: 286ec06b460cf7b02035c2e64f11f165dcc17e4141d0c185bbee2a5a9d3b35b9
     path: pnpm-patches/tinykeys.patch
@@ -274,7 +277,7 @@ importers:
         version: 9.0.4
       node-media-server:
         specifier: ^2.7.4
-        version: 2.7.4(bufferutil@4.1.0)(utf-8-validate@6.0.6)
+        version: 2.7.4(patch_hash=44332d754691bc46768006541f90c923cd34ddf847c6f7ed2736890ae3ab4e0a)(bufferutil@4.1.0)(utf-8-validate@6.0.6)
       nodemailer:
         specifier: ^9.1.1
         version: 9.1.1
@@ -20275,7 +20278,7 @@ snapshots:
 
   node-int64@0.4.0: {}
 
-  node-media-server@2.7.4(bufferutil@4.1.0)(utf-8-validate@6.0.6):
+  node-media-server@2.7.4(patch_hash=44332d754691bc46768006541f90c923cd34ddf847c6f7ed2736890ae3ab4e0a)(bufferutil@4.1.0)(utf-8-validate@6.0.6):
     dependencies:
       basic-auth-connect: 1.1.0
       chalk: 4.1.2
