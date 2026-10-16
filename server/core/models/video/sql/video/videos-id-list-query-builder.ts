@@ -164,12 +164,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   getQuery (options: BuildVideosListQueryOptions) {
     this.buildIdsListQuery(options)
 
-    return {
-      query: this.query,
-      sort: this.sort,
-      replacements: this.replacements,
-      queryConfig: this.queryConfig
-    }
+    return { query: this.query, sort: this.sort, replacements: this.replacements }
   }
 
   private buildIdsListQuery (options: BuildVideosListQueryOptions) {
@@ -438,12 +433,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     for (const queryOption of queryOptions) {
       const builder = new VideosIdListQueryBuilder(this.sequelize)
-      const { query, replacements, queryConfig } = builder.getQuery(queryOption)
+      const { query, replacements } = builder.getQuery(queryOption)
 
       queries.push('(' + query + ')')
 
       this.replacements = { ...this.replacements, ...replacements }
-      this.queryConfig = this.queryConfig || queryConfig
     }
 
     return queries.join(' UNION')
@@ -839,8 +833,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     const escapedSearch = this.sequelize.escape(search)
     const escapedLikeSearch = this.sequelize.escape('%' + search + '%')
-
-    this.queryConfig = 'SET pg_trgm.word_similarity_threshold = 0.40;'
 
     // A search made only of punctuation ("!!!", "...") has no lexeme to look for: skip the full text search
     const tsQueryTerms = buildTSQueryTerms(search)

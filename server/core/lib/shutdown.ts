@@ -3,6 +3,7 @@ import { createLogger } from '../helpers/logger.js'
 import { SHUTDOWN_TIMEOUTS } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
 import { InboxManager } from './activitypub/inbox-manager.js'
+import { closeDatabaseReadReplicas } from './database-replicas/database-replicas.js'
 import { HorizontalScalabilityStorage } from './horizontal-scalability-storage.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { LiveManager } from './live/live-manager.js'
@@ -93,6 +94,9 @@ async function shutdown (server: HTTPServer, exitCode = 0) {
   await Promise.all([
     sequelizeTypescript.close()
       .catch(err => logger.error('Cannot close database connection.', { err })),
+
+    closeDatabaseReadReplicas()
+      .catch(err => logger.error('Cannot close database read replica connections.', { err })),
 
     Redis.Instance.quit()
       .catch(err => logger.error('Cannot close redis connection.', { err }))

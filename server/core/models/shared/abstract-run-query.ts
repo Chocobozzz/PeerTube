@@ -1,7 +1,7 @@
-import { QueryTypes, Sequelize, Transaction } from 'sequelize'
-import { getSort, throwOnInvalidSortColumnName } from './sort.js'
-import { Col } from 'sequelize/lib/utils'
 import { exists } from '@peertube/peertube-core-utils'
+import { QueryTypes, Sequelize, Transaction } from 'sequelize'
+import { Col } from 'sequelize/lib/utils'
+import { getSort, throwOnInvalidSortColumnName } from './sort.js'
 
 /**
  * Abstract builder to run video SQL queries
@@ -11,22 +11,16 @@ export class AbstractRunQuery {
   protected query: string
   protected replacements: Record<string, string | number | string[] | number[]> = {}
 
-  protected queryConfig = ''
-
   constructor (protected readonly sequelize: Sequelize) {
   }
 
-  protected async runQuery (options: { nest?: boolean, transaction?: Transaction, logging?: boolean } = {}) {
+  protected runQuery (options: { nest?: boolean, transaction?: Transaction, logging?: boolean } = {}) {
     const queryOptions = {
       transaction: options.transaction,
       logging: options.logging,
       replacements: this.replacements,
       type: QueryTypes.SELECT as QueryTypes.SELECT,
       nest: options.nest ?? false
-    }
-
-    if (this.queryConfig) {
-      await this.sequelize.query(this.queryConfig, queryOptions)
     }
 
     return this.sequelize.query<any>(this.query, queryOptions)

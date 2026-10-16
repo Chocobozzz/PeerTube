@@ -31,6 +31,8 @@ export function checkMissedConfig () {
     'database.ssl_settings.ca',
     'database.ssl_settings.cert',
     'database.ssl_settings.key',
+    'database.read_replicas.max_lag',
+    'database.read_replicas.hosts',
     'smtp.hostname',
     'smtp.port',
     'smtp.username',

@@ -3,12 +3,13 @@ import { handlesToNameAndHost } from '@server/helpers/actors.js'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { sendUndoFollow } from '@server/lib/activitypub/send/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import express from 'express'
 import 'multer'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { runTransaction } from '../../../helpers/database-utils.js'
 import { JobQueue } from '../../../lib/job-queue/index.js'
 import {
   asyncMiddleware,
@@ -42,7 +43,7 @@ mySubscriptionsRouter.get(
   setDefaultVideosSort,
   setDefaultPagination,
   commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(getUserSubscriptionVideos)
+  asyncMiddleware(allowReplicaReadsToController(getUserSubscriptionVideos))
 )
 
 mySubscriptionsRouter.get('/me/subscriptions/exist', authenticate, areSubscriptionsExistValidator, asyncMiddleware(areSubscriptionsExist))

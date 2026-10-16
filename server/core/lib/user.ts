@@ -21,6 +21,7 @@ import { MAccountDefault, MChannelActor } from '../types/models/index.js'
 import { MRegistration, MUser, MUserDefault, MUserId } from '../types/models/user/index.js'
 import { generateAndSaveActorKeys } from './activitypub/actors/index.js'
 import { getLocalAccountActivityPubUrl } from './activitypub/url.js'
+import { recordUserDatabaseWrite } from './database-replicas/database-replicas.js'
 import { Emailer } from './emailer.js'
 import { LiveQuotaStore } from './live/live-quota-store.js'
 import { buildActorInstance, findAvailableLocalActorName } from './local-actor.js'
@@ -112,7 +113,7 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
     userToCreate.skipPasswordEncryption = true
   }
 
-  return runInReadCommittedTransaction(async t => {
+  const result = await runInReadCommittedTransaction(async t => {
     const userOptions = {
       transaction: t,
       validate: validateUser
@@ -145,6 +146,11 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
 
     return { user: userCreated, account: accountCreated, videoChannel, videoPlaylist }
   })
+
+  // The new user may use the API right away
+  await recordUserDatabaseWrite(result.user.id)
+
+  return result
 }
 
 export async function createLocalAccountWithoutKeys (parameters: {

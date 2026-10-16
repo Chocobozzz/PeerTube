@@ -1,4 +1,5 @@
 import { toSafeHtml } from '@server/helpers/markdown.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import express from 'express'
 import { CONFIG } from '../../initializers/config.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
@@ -30,7 +31,7 @@ commentFeedsRouter.get(
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   asyncMiddleware(feedsAccountOrChannelFiltersValidator),
   asyncMiddleware(videoCommentsFeedsValidator),
-  asyncMiddleware(generateVideoCommentsFeed)
+  asyncMiddleware(allowReplicaReadsToController(generateVideoCommentsFeed))
 )
 
 // ---------------------------------------------------------------------------

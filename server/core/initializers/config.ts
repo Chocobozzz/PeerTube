@@ -123,6 +123,10 @@ export const CONFIG = buildConfig({
     PASSWORD: staticKey<string>('database.password'),
     POOL: {
       MAX: staticKey<number>('database.pool.max')
+    },
+    READ_REPLICAS: {
+      MAX_LAG: staticKey('database.read_replicas.max_lag', { transform: parseDurationToMs }),
+      HOSTS: staticKey<{ hostname: string, port: number }[]>('database.read_replicas.hosts', { transform: v => v ?? [] })
     }
   },
   REDIS: {

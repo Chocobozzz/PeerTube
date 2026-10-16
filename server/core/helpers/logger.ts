@@ -349,6 +349,7 @@ export type StaticLoggerTag =
   | 'config'
   | 'create'
   | 'custom-config'
+  | 'database-replicas'
   | 'debug-controller'
   | 'distributed-lock'
   | 'download'

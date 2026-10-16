@@ -2,10 +2,12 @@ import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-m
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { scheduleVideoRefreshIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import express from 'express'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
@@ -16,7 +18,6 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_TEXT_LANGUAGES
 } from '../../../initializers/constants.js'
-import { runTransaction } from '../../../helpers/database-utils.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import {
   apiRateLimiter,
@@ -99,7 +100,7 @@ videosRouter.get(
   setDefaultPagination,
   optionalAuthenticate,
   commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(listVideos)
+  asyncMiddleware(allowReplicaReadsToController(listVideos))
 )
 
 videosRouter.get(

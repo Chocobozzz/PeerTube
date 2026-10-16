@@ -19,7 +19,7 @@ import { ApplicationModel, getServerActor } from '../models/application/applicat
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getConfigModule, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
-import { LOCAL_TRACKER_URLS_KEYWORD, OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
+import { DATABASE_READ_REPLICAS, LOCAL_TRACKER_URLS_KEYWORD, OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
 
 const logger = createLogger()
 
@@ -67,6 +67,7 @@ function checkConfig () {
   checkThumbnailsConfig()
   checkBrowseVideosConfig()
   checkTrackerConfig()
+  checkDatabaseReadReplicasConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -429,6 +430,26 @@ function checkThumbnailsConfig () {
   const sizes = CONFIG.THUMBNAILS.SIZES.map(s => `${s.width}x${s.height}`)
   if (new Set(sizes).size !== sizes.length) {
     throw new Error('thumbnails.sizes must not contain multiple sizes with the same width and height')
+  }
+}
+
+function checkDatabaseReadReplicasConfig () {
+  const { HOSTS, MAX_LAG } = CONFIG.DATABASE.READ_REPLICAS
+
+  if (!isArray(HOSTS)) {
+    throw new Error('database.read_replicas.hosts must be an array')
+  }
+
+  for (const host of HOSTS) {
+    if (!host?.hostname || !host.port) {
+      throw new Error('Each database.read_replicas.hosts entry must have a hostname and a port')
+    }
+  }
+
+  const minMaxLag = DATABASE_READ_REPLICAS.MONITOR_INTERVAL_MS * 3
+
+  if (HOSTS.length !== 0 && (!MAX_LAG || MAX_LAG < minMaxLag)) {
+    throw new Error(`database.read_replicas.max_lag must be at least ${minMaxLag / 1000} seconds`)
   }
 }
 

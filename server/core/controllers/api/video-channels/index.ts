@@ -11,6 +11,7 @@ import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { scheduleActorRefreshIfNeeded } from '@server/lib/activitypub/actors/refresh.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { reorderPlaylistOrElementsPosition, sendPlaylistPositionUpdateOfChannel } from '@server/lib/video-playlist.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
@@ -141,7 +142,7 @@ videoChannelRouter.get(
   setDefaultSort,
   setDefaultPagination,
   videoChannelsListValidator,
-  asyncMiddleware(listVideoChannels)
+  asyncMiddleware(allowReplicaReadsToController(listVideoChannels))
 )
 
 videoChannelRouter.get(
@@ -159,7 +160,7 @@ videoChannelRouter.get(
   setDefaultSort,
   setDefaultPagination,
   commonVideoPlaylistFiltersValidator,
-  asyncMiddleware(listVideoChannelPlaylists)
+  asyncMiddleware(allowReplicaReadsToController(listVideoChannelPlaylists))
 )
 
 videoChannelRouter.get(
@@ -171,7 +172,7 @@ videoChannelRouter.get(
   setDefaultPagination,
   optionalAuthenticate,
   commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(listVideoChannelVideos)
+  asyncMiddleware(allowReplicaReadsToController(listVideoChannelVideos))
 )
 
 // ---------------------------------------------------------------------------

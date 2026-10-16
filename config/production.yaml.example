@@ -124,6 +124,17 @@ database:
   pool:
     max: 5
 
+  # Optional PostgreSQL streaming replicas (hot standbys of the database above)
+  # PeerTube uses them for some heavy read only requests: video lists, search, feeds...
+  # Database name, username, password, SSL settings and pool size are the same as the primary.
+  read_replicas:
+    # Don't use replicas lagging more than this duration behind the primary (minimum: 3 seconds)
+    max_lag: '5 seconds'
+
+    hosts:
+    # - hostname: '127.0.0.1'
+    #   port: 5433
+
 # Redis server for short time storage
 redis:
   # You can also specify a 'socket' path to a unix socket but first need to
