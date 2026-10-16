@@ -111,7 +111,29 @@ const videoPlaylistsListSearchValidator = [
 
 // ---------------------------------------------------------------------------
 
+const videoCaptionSegmentsSearchValidator = [
+  query('search')
+    .exists()
+    .not().isEmpty()
+    .withMessage('Should have a search string'),
+
+  query('languageOneOf')
+    .optional()
+    .customSanitizer(toArray)
+    .custom(v => hasArrayLength(v, { max: 100 }))
+    .custom(isNotEmptyStringArray),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+// ---------------------------------------------------------------------------
+
 export {
+  videoCaptionSegmentsSearchValidator,
   videoChannelsListSearchValidator,
   videoPlaylistsListSearchValidator,
   videosSearchValidator
