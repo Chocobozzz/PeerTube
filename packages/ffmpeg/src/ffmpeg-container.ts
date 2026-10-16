@@ -29,7 +29,15 @@ export class FFmpegContainer {
     }
 
     command.outputOption('-c copy')
-      .outputOption('-movflags frag_every_frame+empty_moov')
+
+    // The cover can be in any image format (webp etc.) but the MP4 container doesn't support all of them, so convert it to JPEG
+    // A cover is only added to audio inputs, so the cover is the only video stream to encode
+    if (coverPath) {
+      command.outputOption('-c:v mjpeg')
+        .outputOption('-q:v 2')
+    }
+
+    command.outputOption('-movflags frag_every_frame+empty_moov')
       .outputOption('-min_frag_duration 5M') // 5 seconds
       .format('mp4')
       .output(output)
