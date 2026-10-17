@@ -661,7 +661,7 @@
       </trans-unit>
       <trans-unit id="2397763603212120934" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> went live: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> went live: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je predvajal v živo: <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">211</context>
@@ -669,7 +669,7 @@
       </trans-unit>
       <trans-unit id="7677244464103233875" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ n.payload.videoCaption.language.label }}"/> transcription of your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoCaption.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been generated </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ n.payload.videoCaption.language.label }}"/> transcription of your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoCaption.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> has been generated </target>
+        <target state="translated">Ustvarjena je bila <x id="INTERPOLATION" equiv-text="{{ n.payload.videoCaption.language.label }}"/> transkripcija vašega videa <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoCaption.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">224</context>
@@ -677,7 +677,7 @@
       </trans-unit>
       <trans-unit id="7710432640967627087" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoChannelCollaborator.channelOwner.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> invited you to become an<x id="START_TAG_MY_COLLABORATOR_STATE" ctype="x-my_collaborator_state" equiv-text="&lt;my-collaborator-state class=&quot;mx-2&quot; type=&quot;accepted&quot;&gt;"/><x id="CLOSE_TAG_MY_COLLABORATOR_STATE" ctype="x-my_collaborator_state" equiv-text="&lt;/my-collaborator-state&gt;"/> of their channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoChannelCollaborator.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoChannelCollaborator.channelOwner.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> invited you to become an<x id="START_TAG_MY_COLLABORATOR_STATE" ctype="x-my_collaborator_state" equiv-text="&lt;my-collaborator-state class=&quot;mx-2&quot; type=&quot;accepted&quot;&gt;"/><x id="CLOSE_TAG_MY_COLLABORATOR_STATE" ctype="x-my_collaborator_state" equiv-text="&lt;/my-collaborator-state&gt;"/> of their channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoChannelCollaborator.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoChannelCollaborator.channelOwner.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> vas je povabil, da postanete<x id="START_TAG_MY_COLLABORATOR_STATE" ctype="x-my_collaborator_state" equiv-text="&lt;my-collaborator-state class=&quot;mx-2&quot; type=&quot;accepted&quot;&gt;"/><x id="CLOSE_TAG_MY_COLLABORATOR_STATE" ctype="x-my_collaborator_state" equiv-text="&lt;/my-collaborator-state&gt;"/> njihovega kanala <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoChannelCollaborator.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">233,235</context>
@@ -685,7 +685,7 @@
       </trans-unit>
       <trans-unit id="7105490533744744390" datatype="html">
         <source>Invitation declined</source>
-        <target state="new">Invitation declined</target>
+        <target state="translated">Vabilo zavrnjeno</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">241</context>
@@ -693,7 +693,7 @@
       </trans-unit>
       <trans-unit id="8116175184239166510" datatype="html">
         <source>Decline</source>
-        <target state="new">Decline</target>
+        <target state="translated">Zavrni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">246</context>
@@ -705,7 +705,7 @@
       </trans-unit>
       <trans-unit id="8542704940294208915" datatype="html">
         <source>Invitation accepted</source>
-        <target state="new">Invitation accepted</target>
+        <target state="translated">Vabilo sprejeto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">252</context>
@@ -713,7 +713,7 @@
       </trans-unit>
       <trans-unit id="2661718419697549317" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoChannelCollaborator.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> accepted your invitation to become an editor for your channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoChannelCollaborator.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoChannelCollaborator.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> accepted your invitation to become an editor for your channel <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoChannelCollaborator.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.videoChannelCollaborator.account.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> je sprejel_a vabilo, da postane urednik vašega kanala <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ n.payload.videoChannelCollaborator.channel.displayName }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">261</context>
