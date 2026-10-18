@@ -24,7 +24,7 @@
                 <span class="comment-account-name" [ngClass]="{ 'video-author': video().account.id === comment().account.id }">
                   {{ comment().account.displayName }}
                 </span>
-                <span class="comment-account-handle ms-1">{{ comment().by }}</span>
+                <span class="comment-account-handle ms-1">{{ comment().by | punycode }}</span>
               </a>
             </div>
 
