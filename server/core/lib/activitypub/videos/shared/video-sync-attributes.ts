@@ -30,7 +30,12 @@ export function syncVideoExternalAttributes (
     logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
     const ratePromise = updateVideoRates(video, fetchedVideo)
-    if (syncParam.rates) await ratePromise
+
+    if (syncParam.rates) {
+      await ratePromise
+    } else {
+      ratePromise.catch(err => logger.log(getRemoteErrorLogLevel(err), 'Cannot sync rates of video %s.', video.uuid, { err }))
+    }
 
     await syncShares(video, fetchedVideo, syncParam.shares)
 
@@ -44,9 +49,12 @@ export async function updateVideoRates (video: MVideo, fetchedVideo: VideoObject
     getRatesCount('dislike', video, fetchedVideo)
   ])
 
+  // Remote video may not provide likes/dislikes collections
+  if (likes === undefined && dislikes === undefined) return
+
   return runInReadCommittedTransaction(async t => {
-    await VideoModel.updateRatesOf(video.id, 'like', likes, t)
-    await VideoModel.updateRatesOf(video.id, 'dislike', dislikes, t)
+    if (likes !== undefined) await VideoModel.updateRatesOf(video.id, 'like', likes, t)
+    if (dislikes !== undefined) await VideoModel.updateRatesOf(video.id, 'dislike', dislikes, t)
   })
 }
 
