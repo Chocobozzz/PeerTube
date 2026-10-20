@@ -477,6 +477,19 @@ async function startApplication () {
   // These ones must also be run on the secondary
   GeoIPUpdateScheduler.Instance.enable()
   YoutubeDlUpdateScheduler.Instance.enable() // Each process has its own binary, used by video imports
+  UpdateTokenSessionScheduler.Instance.enable()// These ones must also be run on the secondary
+  GeoIPUpdateScheduler.Instance.enable()
+
+  const isYoutubeDlUsed = CONFIG.IMPORT.VIDEOS.HTTP.ENABLED === true ||
+                          CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED === true ||
+                          CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.ENABLED === true
+
+  if (isYoutubeDlUsed) {
+    YoutubeDlUpdateScheduler.Instance.enable() // Each process has its own binary, used by video imports
+  } else {
+    logger.info('youtube-dl updates scheduler is disabled because video imports and synchronizations are disabled.')
+  }
+
   UpdateTokenSessionScheduler.Instance.enable()
   RemoveOldUserLoginDevicesScheduler.Instance.enable()
   ManualMigrationScriptsScheduler.Instance.enable()
