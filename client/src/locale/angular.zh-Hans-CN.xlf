@@ -5730,7 +5730,7 @@
       </trans-unit>
       <trans-unit id="7813761224520792935" datatype="html">
         <source>Accepted registrations</source>
-        <target state="new">Accepted registrations</target>
+        <target state="translated">已接受的注册</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">81</context>
