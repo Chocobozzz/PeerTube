@@ -8463,7 +8463,7 @@
       </trans-unit>
       <trans-unit id="13907554132985944" datatype="html">
         <source>This video is password protected.</source>
-        <target state="new"> This video is password protected. </target>
+        <target state="translated">此视频已设置密码保护。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">53,54</context>
