@@ -8423,7 +8423,7 @@
       </trans-unit>
       <trans-unit id="8135904866638934226" datatype="html">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video().scheduledUpdate.updateAt | ptDate: 'full'  }}"/>. </source>
-        <target state="new"> This video will be published on <x id="INTERPOLATION" equiv-text="{{ video().scheduledUpdate.updateAt | ptDate: 'full'  }}"/>. </target>
+        <target state="translated">此视频将于 <x id="INTERPOLATION" equiv-text="{{ video().scheduledUpdate.updateAt | ptDate: 'full'  }}"/> 发布。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">3,7</context>
@@ -8447,7 +8447,7 @@
       </trans-unit>
       <trans-unit id="1598621320854281428" datatype="html">
         <source>This live has ended.</source>
-        <target state="new"> This live has ended. </target>
+        <target state="translated">本次直播已结束。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -8455,7 +8455,7 @@
       </trans-unit>
       <trans-unit id="701669367074099795" datatype="html">
         <source>There are no videos available in this playlist.</source>
-        <target state="new"> There are no videos available in this playlist. </target>
+        <target state="translated">此播放列表中没有可用视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">47,48</context>
