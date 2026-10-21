@@ -5560,7 +5560,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="760957797157374239" datatype="html">
         <source>data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></source>
-        <target state="translated">data-playlist-id não pode ser utilizado com &lt;x id="PH" equiv-text=“incompatibleAttributes.join(‘, ’)”/&gt;</target>
+        <target state="translated">data-playlist-id não pode ser utilizado com <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">135</context>
