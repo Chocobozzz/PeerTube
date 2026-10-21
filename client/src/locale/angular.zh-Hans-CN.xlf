@@ -5562,7 +5562,7 @@
       </trans-unit>
       <trans-unit id="760957797157374239" datatype="html">
         <source>data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></source>
-        <target state="new">data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></target>
+        <target state="translated">data-playlist-id 无法与 <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/> 配合使用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -5570,7 +5570,7 @@
       </trans-unit>
       <trans-unit id="6420937489222972725" datatype="html">
         <source>Open filters</source>
-        <target state="new">Open filters</target>
+        <target state="translated">打开过滤器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5578,7 +5578,7 @@
       </trans-unit>
       <trans-unit id="5098514115800581725" datatype="html">
         <source>Close filters</source>
-        <target state="new">Close filters</target>
+        <target state="translated">关闭过滤器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">24,25</context>
@@ -5586,7 +5586,7 @@
       </trans-unit>
       <trans-unit id="4391289919356861627" datatype="html">
         <source>Apply</source>
-        <target state="new">Apply</target>
+        <target state="translated">应用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">120</context>
@@ -5714,7 +5714,7 @@
       </trans-unit>
       <trans-unit id="4253402786518820650" datatype="html">
         <source>Registration state</source>
-        <target state="new">Registration state</target>
+        <target state="translated">注册状态</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -5722,7 +5722,7 @@
       </trans-unit>
       <trans-unit id="1162417745553050010" datatype="html">
         <source>All registrations</source>
-        <target state="new">All registrations</target>
+        <target state="translated">所有注册</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">80</context>
