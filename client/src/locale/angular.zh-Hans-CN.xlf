@@ -9883,7 +9883,7 @@
       </trans-unit>
       <trans-unit id="492747807721713007" datatype="html">
         <source>That contain &lt;strong&gt;an external link&lt;/strong&gt;</source>
-        <target state="new">That contain &lt;strong&gt;an external link&lt;/strong&gt;</target>
+        <target state="translated">包含&lt;strong&gt;外部链接&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.ts</context>
           <context context-type="linenumber">33</context>
