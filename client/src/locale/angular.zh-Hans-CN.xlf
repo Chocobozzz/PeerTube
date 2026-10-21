@@ -5738,7 +5738,7 @@
       </trans-unit>
       <trans-unit id="9164244516568257595" datatype="html">
         <source>Rejected registrations</source>
-        <target state="new">Rejected registrations</target>
+        <target state="translated">已拒绝注册</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -5746,7 +5746,7 @@
       </trans-unit>
       <trans-unit id="843338523216932248" datatype="html">
         <source>Pending registrations</source>
-        <target state="new">Pending registrations</target>
+        <target state="translated">待处理的注册</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">83</context>
