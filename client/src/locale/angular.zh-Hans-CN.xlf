@@ -8531,7 +8531,7 @@
       </trans-unit>
       <trans-unit id="428714747970105694" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 more reply} other {<x id="INTERPOLATION"/> more replies}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 more reply} other {<x id="INTERPOLATION"/> more replies}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {另有 1 条回复} other {另有 <x id="INTERPOLATION"/> 条回复}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">124</context>
@@ -8563,7 +8563,7 @@
       </trans-unit>
       <trans-unit id="7744067301899481362" datatype="html">
         <source>Go back to the previous comment</source>
-        <target state="new">Go back to the previous comment</target>
+        <target state="translated">返回上一条评论</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">120</context>
@@ -8571,7 +8571,7 @@
       </trans-unit>
       <trans-unit id="1023624020352383228" datatype="html">
         <source>Replies to <x id="INTERPOLATION" equiv-text="{{ getRepliesModalRoot()?.comment?.account?.displayName || 'Unknown' }}"/></source>
-        <target state="new">Replies to <x id="INTERPOLATION" equiv-text="{{ getRepliesModalRoot()?.comment?.account?.displayName || 'Unknown' }}"/></target>
+        <target state="translated">对 <x id="INTERPOLATION" equiv-text="{{ getRepliesModalRoot()?.comment?.account?.displayName || 'Unknown' }}"/> 的回复</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">125,127</context>
@@ -8731,7 +8731,7 @@
       </trans-unit>
       <trans-unit id="2094509918271039422" datatype="html">
         <source>View <x id="ICU" equiv-text="{getNotFetchedRepliesCount(), plural, =1 {1 reply} other {{{ getNotFetchedRepliesCount() }} replies}}" xid="2084023438878610739"/> </source>
-        <target state="new"> View <x id="ICU" equiv-text="{getNotFetchedRepliesCount(), plural, =1 {1 reply} other {{{ getNotFetchedRepliesCount() }} replies}}" xid="2084023438878610739"/> </target>
+        <target state="translated">查看 <x id="ICU" xid="2084023438878610739" equiv-text="{getNotFetchedRepliesCount(), plural, =1 {1 reply} other {{{ getNotFetchedRepliesCount() }} replies}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">120,121</context>
@@ -8743,7 +8743,7 @@
       </trans-unit>
       <trans-unit id="338501496330700774" datatype="html">
         <source>Reply to <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></source>
-        <target state="new">Reply to <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></target>
+        <target state="translated">回复 <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">144</context>
@@ -9055,7 +9055,7 @@
       </trans-unit>
       <trans-unit id="8857733928646598624" datatype="html">
         <source>Owner channels</source>
-        <target state="new">Owner channels</target>
+        <target state="translated">所有者频道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/channel/select-channel-admin.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -9063,7 +9063,7 @@
       </trans-unit>
       <trans-unit id="6504815889069382256" datatype="html">
         <source>Your channels</source>
-        <target state="new">Your channels</target>
+        <target state="translated">您的频道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/channel/select-channel-admin.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -9071,7 +9071,7 @@
       </trans-unit>
       <trans-unit id="3312785003874860520" datatype="html">
         <source>Searched channels</source>
-        <target state="new">Searched channels</target>
+        <target state="translated">搜索频道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/channel/select-channel-admin.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -9699,7 +9699,7 @@
       </trans-unit>
       <trans-unit id="7879576310526838355" datatype="html">
         <source>Ban status</source>
-        <target state="new">Ban status</target>
+        <target state="translated">封禁状态</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -9707,7 +9707,7 @@
       </trans-unit>
       <trans-unit id="925001787165440116" datatype="html">
         <source>Not banned</source>
-        <target state="new">Not banned</target>
+        <target state="translated">未被封禁</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -9715,7 +9715,7 @@
       </trans-unit>
       <trans-unit id="2149300564474427551" datatype="html">
         <source>Administrator</source>
-        <target state="new">Administrator</target>
+        <target state="translated">管理员</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -9723,7 +9723,7 @@
       </trans-unit>
       <trans-unit id="4968151111061046122" datatype="html">
         <source>Moderator</source>
-        <target state="new">Moderator</target>
+        <target state="translated">主持人</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -9731,7 +9731,7 @@
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
         <source>User</source>
-        <target state="new">User</target>
+        <target state="translated">用户</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -9875,7 +9875,7 @@
       </trans-unit>
       <trans-unit id="5349840085927711709" datatype="html">
         <source>Automatically block videos:</source>
-        <target state="new">Automatically block videos:</target>
+        <target state="translated">自动屏蔽视频：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.html</context>
           <context context-type="linenumber">1,3</context>
