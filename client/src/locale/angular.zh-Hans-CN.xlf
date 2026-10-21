@@ -5754,7 +5754,7 @@
       </trans-unit>
       <trans-unit id="7578466065199888239" datatype="html">
         <source>Accept...</source>
-        <target state="new">Accept...</target>
+        <target state="translated">接受...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -5766,7 +5766,7 @@
       </trans-unit>
       <trans-unit id="3557445363988301484" datatype="html">
         <source>Reject...</source>
-        <target state="new">Reject...</target>
+        <target state="translated">拒绝...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">100</context>
