@@ -11851,7 +11851,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="8866329773573088545" datatype="html">
         <source>Save player settings</source>
-        <target state="new">Save player settings</target>
+        <target state="translated">Guardar definições do reprodutor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
           <context context-type="linenumber">35</context>
@@ -11859,7 +11859,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="7148806470329294902" datatype="html">
         <source>Player settings updated.</source>
-        <target state="new">Player settings updated.</target>
+        <target state="translated">Definições do reprodutor atualizadas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -12707,7 +12707,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="7343456225783046295" datatype="html">
         <source>Display scheduled lives</source>
-        <target state="new">Display scheduled lives</target>
+        <target state="translated">Mostrar transmissões ao vivo programadas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -13939,7 +13939,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="2302969578909684603" datatype="html">
         <source>This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</source>
-        <target state="new">This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</target>
+        <target state="translated">Este ficheiro de áudio está armazenado juntamente com os ficheiros do Web Videos: se a saída do Web Videos estiver desativada, o diretório ou bucket de armazenamento do Web Videos conterá apenas ficheiros de áudio e os vídeos serão armazenados juntamente com os ficheiros HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">151,152</context>
@@ -14423,7 +14423,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="8998777763062753479" datatype="html">
         <source>SENSITIVE CONTENT</source>
-        <target state="new">SENSITIVE CONTENT</target>
+        <target state="translated">CONTEÚDO SENSÍVEL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">38,39</context>
@@ -14435,7 +14435,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="7842214202809434810" datatype="html">
         <source>CONTENT PREFERENCES</source>
-        <target state="new">CONTENT PREFERENCES</target>
+        <target state="translated">PREFERÊNCIAS DE CONTEÚDO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">49,51</context>
@@ -14447,7 +14447,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="7954417898841346620" datatype="html">
         <source>These preferences apply to Recently added, Trending, Local, Most liked, Search, account and channel pages</source>
-        <target state="new"> These preferences apply to Recently added, Trending, Local, Most liked, Search, account and channel pages </target>
+        <target state="translated">Estas preferências aplicam-se às páginas Adicionados recentemente, Em destaque, Local, Mais apreciados, Pesquisa, Conta e Canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">52,53</context>
@@ -14459,7 +14459,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="3025095234300750951" datatype="html">
         <source>PLAYER SETTINGS</source>
-        <target state="new">PLAYER SETTINGS</target>
+        <target state="translated">DEFINIÇÕES DO REPRODUTOR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">64,65</context>
@@ -14607,7 +14607,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="2145525708983498763" datatype="html">
         <source>Please check your password and try again.</source>
-        <target state="new">Please check your password and try again.</target>
+        <target state="translated">Por favor verifique a sua palavra-passe e tente novamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -14619,7 +14619,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="808192240005869552" datatype="html">
         <source>Password not recognized</source>
-        <target state="new">Password not recognized</target>
+        <target state="translated">Palavra-passe não reconhecida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -14927,7 +14927,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="2121031655330028809" datatype="html">
         <source>Only display videos in the following categories</source>
-        <target state="new">Only display videos in the following categories</target>
+        <target state="translated">Mostrar apenas vídeos das seguintes categorias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -14935,7 +14935,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="6299207692385994112" datatype="html">
         <source>Only display videos of the following types</source>
-        <target state="new">Only display videos of the following types</target>
+        <target state="translated">Mostrar apenas vídeos dos seguintes tipos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -14943,7 +14943,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="1573340911001383998" datatype="html">
         <source>Save content preferences</source>
-        <target state="new">Save content preferences</target>
+        <target state="translated">Guardar preferências de conteúdo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
           <context context-type="linenumber">38</context>
@@ -14951,7 +14951,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="8417167703731637027" datatype="html">
         <source>Content preferences updated.</source>
-        <target state="new">Content preferences updated.</target>
+        <target state="translated">Preferências de conteúdo atualizadas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -16284,7 +16284,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="5411116568190223417" datatype="html">
         <source>A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</source>
-        <target state="new">A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</target>
+        <target state="translated">Uma visualização significa que alguém viu o vídeo por pelo menos <x id="seconds" equiv-text="countViewAfterSeconds"/> segundos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">379</context>
@@ -21245,7 +21245,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="2927658547953689823" datatype="html">
         <source>Save sensitive content settings</source>
-        <target state="new">Save sensitive content settings</target>
+        <target state="translated">Guardar definições de conteúdo sensível</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
           <context context-type="linenumber">51</context>
@@ -21253,7 +21253,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="2316900873583051641" datatype="html">
         <source>Sensitive content settings updated.</source>
-        <target state="new">Sensitive content settings updated.</target>
+        <target state="translated">Definições de conteúdo sensível atualizadas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
           <context context-type="linenumber">30</context>
