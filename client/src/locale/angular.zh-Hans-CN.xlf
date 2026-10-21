@@ -6280,7 +6280,7 @@
       </trans-unit>
       <trans-unit id="6449526184705760626" datatype="html">
         <source>Name of the uploaded file.</source>
-        <target state="new">Name of the uploaded file.</target>
+        <target state="translated">上传文件的名称。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">13,15</context>
@@ -6392,7 +6392,7 @@
       </trans-unit>
       <trans-unit id="6267228851810421946" datatype="html">
         <source>DVR window is required.</source>
-        <target state="new">DVR window is required.</target>
+        <target state="translated">需要DVR窗口。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -6400,7 +6400,7 @@
       </trans-unit>
       <trans-unit id="3557296975463596398" datatype="html">
         <source>DVR window must be at least 1 minute.</source>
-        <target state="new">DVR window must be at least 1 minute.</target>
+        <target state="translated">DVR窗口必须至少为1分钟。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
           <context context-type="linenumber">152</context>
@@ -6408,7 +6408,7 @@
       </trans-unit>
       <trans-unit id="6927279544841158879" datatype="html">
         <source>DVR window exceeds the maximum.</source>
-        <target state="new">DVR window exceeds the maximum.</target>
+        <target state="translated">DVR窗口超过了最大值。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
           <context context-type="linenumber">153</context>
@@ -6745,7 +6745,7 @@
       </trans-unit>
       <trans-unit id="1268292519317944726" datatype="html">
         <source>Imported from a watched words subscription</source>
-        <target state="new">Imported from a watched words subscription</target>
+        <target state="translated">从观看文字订阅导入</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.html</context>
           <context context-type="linenumber">29</context>
@@ -6837,7 +6837,7 @@
       </trans-unit>
       <trans-unit id="5240842733297472555" datatype="html">
         <source>The auto tags on existing comments will be updated based on the words in this list.</source>
-        <target state="new">The auto tags on existing comments will be updated based on the words in this list.</target>
+        <target state="translated">现有评论的自动标签将根据此列表中的词语进行更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -6845,7 +6845,7 @@
       </trans-unit>
       <trans-unit id="5908006683848456416" datatype="html">
         <source>However, the auto-tagging policies will not affect existing comments:</source>
-        <target state="new">However, the auto-tagging policies will not affect existing comments:</target>
+        <target state="translated">但是，自动标记政策不会影响现有评论：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -6857,7 +6857,7 @@
       </trans-unit>
       <trans-unit id="6879611118172119569" datatype="html">
         <source>Only new comments can be blocked by a new word</source>
-        <target state="new">Only new comments can be blocked by a new word</target>
+        <target state="translated">只有新评论才能被新词屏蔽。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -6865,7 +6865,7 @@
       </trans-unit>
       <trans-unit id="6123892565355794580" datatype="html">
         <source>If you remove a word from the list, any comments that are currently awaiting review will not be affected</source>
-        <target state="new">If you remove a word from the list, any comments that are currently awaiting review will not be affected</target>
+        <target state="translated">如果您从列表中删除某个词，任何正在等待审核的评论都不会受到影响。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">20,21</context>
@@ -6873,7 +6873,7 @@
       </trans-unit>
       <trans-unit id="4417518529461614977" datatype="html">
         <source>The auto tags on existing comments and videos will be updated based on the words in this list.</source>
-        <target state="new">The auto tags on existing comments and videos will be updated based on the words in this list.</target>
+        <target state="translated">现有评论和视频的自动标签将根据此列表中的词语进行更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -6905,7 +6905,7 @@
       </trans-unit>
       <trans-unit id="8198822568347366196" datatype="html">
         <source>Add a watched words subscription</source>
-        <target state="new">Add a watched words subscription</target>
+        <target state="translated">添加“观看词”订阅</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">65,67</context>
@@ -6913,7 +6913,7 @@
       </trans-unit>
       <trans-unit id="6076623101349323411" datatype="html">
         <source>The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list.</source>
-        <target state="new"> The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list. </target>
+        <target state="translated">远程列表将定期同步，现有评论和视频的自动标签将根据列表中的词语进行更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">76</context>
@@ -6921,7 +6921,7 @@
       </trans-unit>
       <trans-unit id="3212629476561103950" datatype="html">
         <source>However, the auto-tagging policies will not affect existing videos:</source>
-        <target state="new">However, the auto-tagging policies will not affect existing videos:</target>
+        <target state="translated">但是，自动标记策略不会影响现有视频：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">80,82</context>
@@ -6929,7 +6929,7 @@
       </trans-unit>
       <trans-unit id="9069205412472719482" datatype="html">
         <source>Only new videos can be blocked by a new word added to the list</source>
-        <target state="new">Only new videos can be blocked by a new word added to the list</target>
+        <target state="translated">只有新添加的关键词才能屏蔽新视频。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">83,84</context>
@@ -6937,7 +6937,7 @@
       </trans-unit>
       <trans-unit id="7471441043625129428" datatype="html">
         <source>If a word is removed from the list, any videos that are currently blacklisted will not be affected</source>
-        <target state="new">If a word is removed from the list, any videos that are currently blacklisted will not be affected</target>
+        <target state="translated">如果从列表中移除某个词语，当前已被列入黑名单的任何视频都不会受到影响。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">84,85</context>
@@ -6945,7 +6945,7 @@
       </trans-unit>
       <trans-unit id="3536332983620084462" datatype="html">
         <source>The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list.</source>
-        <target state="new"> The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list. </target>
+        <target state="translated">远程列表将定期同步，现有评论的自动标签将根据列表中的词语进行更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">89</context>
@@ -6953,7 +6953,7 @@
       </trans-unit>
       <trans-unit id="2322571852303891260" datatype="html">
         <source>Only new comments can be blocked by a new word added to the list</source>
-        <target state="new">Only new comments can be blocked by a new word added to the list</target>
+        <target state="translated">只有通过在列表中添加新词才能屏蔽新评论。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">96</context>
@@ -6961,7 +6961,7 @@
       </trans-unit>
       <trans-unit id="1627379234330905470" datatype="html">
         <source>If a word is removed from the list, any comments that are currently awaiting review will not be affected</source>
-        <target state="new">If a word is removed from the list, any comments that are currently awaiting review will not be affected</target>
+        <target state="translated">如果从列表中删除某个词，任何正在等待审核的评论都不会受到影响。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">97</context>
@@ -6969,7 +6969,7 @@
       </trans-unit>
       <trans-unit id="8886093131637035111" datatype="html">
         <source>Watched words URL</source>
-        <target state="new">Watched words URL</target>
+        <target state="translated">监控词 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">104</context>
@@ -6977,7 +6977,7 @@
       </trans-unit>
       <trans-unit id="2602880137044610698" datatype="html">
         <source>Watched words URL is required.</source>
-        <target state="new">Watched words URL is required.</target>
+        <target state="translated">需要提供被监控词的URL。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -6985,7 +6985,7 @@
       </trans-unit>
       <trans-unit id="4147764481886042165" datatype="html">
         <source>Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments and videos.</source>
-        <target state="new">Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments and videos.</target>
+        <target state="translated">删除此订阅将移除分配给评论和视频的 &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; 自动标签。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">134</context>
@@ -6993,7 +6993,7 @@
       </trans-unit>
       <trans-unit id="3433732042719776492" datatype="html">
         <source>Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments.</source>
-        <target state="new">Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments.</target>
+        <target state="translated">删除此订阅将移除分配给评论的 &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; 自动标签。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -7001,7 +7001,7 @@
       </trans-unit>
       <trans-unit id="1212937397936989983" datatype="html">
         <source>Subscription to &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; deleted.</source>
-        <target state="new">Subscription to &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; deleted.</target>
+        <target state="translated">已删除对 &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; 的订阅。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">145</context>
@@ -7449,7 +7449,7 @@
       </trans-unit>
       <trans-unit id="6669227017523476557" datatype="html">
         <source>Embedding of this video is disabled, so it can only be shared via the direct link or QR code.</source>
-        <target state="new">Embedding of this video is disabled, so it can only be shared via the direct link or QR code.</target>
+        <target state="translated">此视频已禁用嵌入功能，因此只能通过直接链接或二维码分享。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">24,25</context>
@@ -7589,7 +7589,7 @@
       </trans-unit>
       <trans-unit id="898637641369730933" datatype="html">
         <source>Filter by banned users</source>
-        <target state="new">Filter by banned users</target>
+        <target state="translated">按被禁用户筛选</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">43</context>
@@ -8191,7 +8191,7 @@
       </trans-unit>
       <trans-unit id="3946683396888479808" datatype="html">
         <source>Blocklist URL is required.</source>
-        <target state="new">Blocklist URL is required.</target>
+        <target state="translated">必须提供黑名单 URL。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -8199,7 +8199,7 @@
       </trans-unit>
       <trans-unit id="4061698394390279322" datatype="html">
         <source>Please enter a valid URL.</source>
-        <target state="new">Please enter a valid URL.</target>
+        <target state="translated">请输入有效的网址。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -8311,7 +8311,7 @@
       </trans-unit>
       <trans-unit id="351190432239278934" datatype="html">
         <source>Synchronize with video</source>
-        <target state="new">Synchronize with video</target>
+        <target state="translated">与视频同步</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">67</context>
