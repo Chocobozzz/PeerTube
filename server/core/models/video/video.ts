@@ -1209,7 +1209,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         | 'includeRedundancy'
         | 'localRedundancy'
         | 'tableAttributes'
-        | 'currentVideoUuid'
       >
   ) {
     if (options.skipPrivateIncludeCheck !== true) {
@@ -1218,36 +1217,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     }
 
     const serverActor = await getServerActor()
-
-    // Apply recommendation filtering based on current video
-    if (options.currentVideoUuid) {
-      const current = await VideoModel.findOne({
-        attributes: [ 'id', 'channelId', 'recommendationPolicy' ],
-        where: { uuid: options.currentVideoUuid },
-        include: [ {
-          association: 'VideoChannel',
-          attributes: [ 'id' ],
-          include: [ {
-            association: 'Account',
-            attributes: [ 'id' ]
-          } ]
-        } ]
-      })
-
-      if (current) {
-        switch (current.recommendationPolicy) {
-          case VideoRecommendationPolicy.ONLY_OWNER_VIDEOS:
-            options.accountId = current.VideoChannel?.Account?.id
-            break
-          case VideoRecommendationPolicy.ONLY_CHANNEL_VIDEOS:
-            options.videoChannelId = current.channelId
-            break
-          case VideoRecommendationPolicy.ONLY_LOCAL_VIDEOS:
-            options.isLocal = true
-            break
-        }
-      }
-    }
 
     const queryOptions = {
       ...pick(options, [

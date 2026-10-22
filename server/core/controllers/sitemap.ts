@@ -91,7 +91,6 @@ async function getSitemapLocalVideoUrls () {
       },
       isLocal: true,
       countVideos: false,
-      currentVideoUuid: undefined,
       include: VideoInclude.FILES | VideoInclude.TAGS
     })
 

@@ -104,20 +104,6 @@ videosRouter.get(
 )
 
 videosRouter.get(
-  '/:id/recommendations',
-  openapiOperationDoc({ operationId: 'getVideoRecommendations' }),
-  paginationValidator,
-  videosSortValidator,
-  setDefaultVideosSort,
-  setDefaultPagination,
-  optionalAuthenticate,
-  commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(videoGetValidatorFactory('for-api')),
-  asyncMiddleware(checkVideoFollowConstraints),
-  asyncMiddleware(listVideos)
-)
-
-videosRouter.get(
   '/:id',
   openapiOperationDoc({ operationId: 'getVideo' }),
   optionalAuthenticate,
@@ -191,7 +177,6 @@ async function listVideos (req: express.Request, res: express.Response) {
       actorId: serverActor.id,
       orLocalVideos: true
     },
-    currentVideoUuid: res.locals?.videoAPI?.uuid,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
     countVideos
   }, 'filter:api.videos.list.params')

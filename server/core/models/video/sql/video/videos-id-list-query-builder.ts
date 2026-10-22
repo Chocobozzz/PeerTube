@@ -125,7 +125,6 @@ export type BuildVideosListQueryOptions = {
   redundancyStrategy?: string
   includeRedundancy?: boolean
   localRedundancy?: boolean
-  currentVideoUuid?: string
 }
 
 type SortDirection = 'ASC' | 'DESC'

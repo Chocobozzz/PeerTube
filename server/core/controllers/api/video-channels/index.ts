@@ -408,7 +408,6 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     displayOnlyForFollower,
     videoChannelId: videoChannelInstance.id,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
-    currentVideoUuid: undefined,
     countVideos
   }, 'filter:api.video-channels.videos.list.params')
 

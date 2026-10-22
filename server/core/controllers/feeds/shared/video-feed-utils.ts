@@ -36,7 +36,6 @@ export async function getVideosForFeeds (options: {
       },
       hasFiles: true,
       countVideos: false,
-      currentVideoUuid: undefined,
 
       privacyOneOf: options.allowUnlisted
         ? [ VideoPrivacy.PUBLIC, VideoPrivacy.UNLISTED ]
