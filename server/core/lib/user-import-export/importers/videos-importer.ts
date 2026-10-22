@@ -12,6 +12,7 @@ import { isLiveDvrWindowValid, isLiveLatencyModeValid, isLiveScheduleValid } fro
 import {
   isPasswordValid,
   isVideoCategoryValid,
+  isRecommendationStrategyValid,
   isVideoCommentsPolicyValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -62,6 +63,7 @@ type SanitizedObject = Pick<
   | 'nsfw'
   | 'isLive'
   | 'commentsPolicy'
+  | 'recommendationStrategy'
   | 'downloadEnabled'
   | 'videoEmbedPrivacy'
   | 'waitTranscoding'
@@ -100,6 +102,10 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     if (!o.commentsPolicy || !isVideoCommentsPolicyValid(o.commentsPolicy)) {
       o.commentsPolicy = CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
+    }
+
+    if (!o.recommendationStrategy || !isRecommendationStrategyValid(o.recommendationStrategy)) {
+      o.recommendationStrategy = CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_STRATEGY
     }
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
@@ -165,6 +171,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'nsfw',
       'isLive',
       'commentsPolicy',
+      'recommendationStrategy',
       'downloadEnabled',
       'videoEmbedPrivacy',
       'waitTranscoding',
@@ -244,6 +251,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
           'nsfw',
           'tags',
           'commentsPolicy',
+          'recommendationStrategy',
           'downloadEnabled',
           'waitTranscoding',
           'originallyPublishedAt'

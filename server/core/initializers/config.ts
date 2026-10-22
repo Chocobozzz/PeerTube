@@ -7,6 +7,7 @@ import {
   VideoCommentPolicyType,
   VideoLifecyclePolicy,
   VideoPrivacyType,
+  VideoRecommendationStrategyType,
   VideoRedundancyConfigFilter,
   VideosRedundancyStrategy
 } from '@peertube/peertube-models'
@@ -243,6 +244,7 @@ export const CONFIG = buildConfig({
     PUBLISH: {
       DOWNLOAD_ENABLED: dynamicKey<boolean>('defaults.publish.download_enabled'),
       COMMENTS_POLICY: dynamicKey<VideoCommentPolicyType>('defaults.publish.comments_policy'),
+      RECOMMENDATION_STRATEGY: dynamicKey<VideoRecommendationStrategyType>('defaults.publish.recommendation_strategy'),
       PRIVACY: dynamicKey<VideoPrivacyType>('defaults.publish.privacy'),
       LICENCE: dynamicKey<number>('defaults.publish.licence')
     },
