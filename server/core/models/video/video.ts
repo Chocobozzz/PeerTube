@@ -1535,6 +1535,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return queryBuilder.queryVideo({ url, transaction, type: 'account' })
   }
 
+  static loadAndPopulateAccount (id: number | string, transaction?: Transaction): Promise<MVideoAccountLight> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ id, transaction, type: 'account' })
+  }
+
   static loadByUrlAndPopulateAccountAndFiles (url: string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 

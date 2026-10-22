@@ -3661,6 +3661,66 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
+  /api/v1/recommendations/videos:
+    get:
+      summary: List recommended videos
+      description: |
+        Return a list of recommended videos depending on the current video (or instance default if unspecifid)
+      operationId: getRecommendationVideos
+      tags:
+        - Video
+      parameters:
+        - name: strategy
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/VideoRecommendationStrategySet'
+        - name: videoId
+          in: query
+          required: false
+          description: Reference video. Required if strategy is`3` or `4`
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/id'
+              - $ref: '#/components/schemas/UUIDv4'
+              - $ref: '#/components/schemas/shortUUID'
+        # Common video filter parameters
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/skipCount'
+        - $ref: '#/components/parameters/videosSort'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/isLive'
+        - $ref: '#/components/parameters/includeScheduledLive'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/isLocal'
+        - $ref: '#/components/parameters/include'
+        - $ref: '#/components/parameters/hasHLSFiles'
+        - $ref: '#/components/parameters/hasWebVideoFiles'
+        - $ref: '#/components/parameters/host'
+        - $ref: '#/components/parameters/autoTagOneOfVideo'
+        - $ref: '#/components/parameters/stateOneOfVideo'
+        - $ref: '#/components/parameters/privacyOneOf'
+        - $ref: '#/components/parameters/excludeAlreadyWatched'
+        - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+        '400':
+          description: invalid strategy or missing `videoId`
+        '404':
+          description: video not found
+
   /api/v1/videos/categories:
     get:
       summary: List available video categories
@@ -3820,6 +3880,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationStrategy:
+                  $ref: '#/components/schemas/VideoRecommendationStrategySet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -4395,6 +4457,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationStrategy:
+                  $ref: '#/components/schemas/VideoRecommendationStrategySet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -10375,6 +10439,26 @@ components:
         label:
           type: string
 
+    VideoRecommendationStrategySet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        Strategy used to select recommended videos:
+          - `1` Any videos
+          - `2` Only videos of the instance that owns the reference video (or of the current instance if no video is given)
+          - `3` Only videos of the account that owns the reference video
+          - `4` Only videos of the channel of the reference video
+    VideoRecommendationStrategyConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoRecommendationStrategySet'
+        label:
+          type: string
+
     BlockStatus:
       properties:
         accounts:
@@ -11019,6 +11103,8 @@ components:
                 maxLength: 30
             commentsPolicy:
               $ref: '#/components/schemas/VideoCommentsPolicyConstant'
+            recommendationStrategy:
+              $ref: '#/components/schemas/VideoRecommendationStrategyConstant'
             downloadEnabled:
               type: boolean
             inputFileUpdatedAt:
@@ -12614,6 +12700,8 @@ components:
                   type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationStrategy:
+                  $ref: '#/components/schemas/VideoRecommendationStrategySet'
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 licence:
@@ -12819,6 +12907,8 @@ components:
             maxLength: 30
         commentsPolicy:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
+        recommendationStrategy:
+          $ref: '#/components/schemas/VideoRecommendationStrategySet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean
