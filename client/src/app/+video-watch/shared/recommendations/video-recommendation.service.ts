@@ -63,7 +63,8 @@ export class VideoRecommendationService {
             skipCount: true,
             videoPagination: pagination,
             sort: '-publishedAt',
-            currentVideo
+            strategy: currentVideo.recommendationStrategy.id,
+            videoId: currentVideo.uuid
           }).pipe(map(v => v.data))
 
           if (currentVideo.recommendationStrategy.id !== VideoRecommendationStrategy.ANY_VIDEOS) {

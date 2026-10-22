@@ -35,6 +35,7 @@ import {
   VideoLicenceType,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoRecommendationStrategyType,
   VideosCommonQuery,
   Video as VideoServerModel,
   VideoSortField,
@@ -70,6 +71,7 @@ export class VideoService {
   private userService = inject(UserService)
 
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
+  static BASE_RECOMMENDATIONS_URL = environment.apiUrl + '/api/v1/recommendations'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static PODCAST_FEEDS_URL = environment.apiUrl + '/feeds/podcast/videos.xml'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
@@ -166,10 +168,23 @@ export class VideoService {
 
   listRecommendationVideos (
     options: VideoListParams & {
-      currentVideo: Pick<Video, 'uuid'>
+      strategy: VideoRecommendationStrategyType
+      videoId?: string
     }
   ): Observable<ResultList<Video>> {
-    return this.listVideos({ ...options, currentVideo: options.currentVideo })
+    const { strategy, videoId, ...listParams } = options
+
+    let params = new HttpParams()
+    params = this.buildVideoListParams({ params, ...listParams })
+    params = params.set('strategy', strategy)
+    if (videoId) params = params.set('videoId', videoId)
+
+    return this.authHttp
+      .get<ResultList<Video>>(VideoService.BASE_RECOMMENDATIONS_URL + '/videos', { params })
+      .pipe(
+        switchMap(res => this.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
   }
 
   listAccountVideos (
@@ -191,19 +206,16 @@ export class VideoService {
   listVideos (
     optionsArg: VideoListParams & {
       videoChannel?: Pick<VideoChannel, 'nameWithHost'>
-      currentVideo?: Pick<Video, 'uuid'>
       account?: Pick<Account, 'nameWithHost'>
     }
   ): Observable<ResultList<Video>> {
-    const { account, videoChannel, currentVideo, ...options } = optionsArg
+    const { account, videoChannel, ...options } = optionsArg
 
     let params = new HttpParams()
     params = this.buildVideoListParams({ params, ...options })
 
     let url: string
-    if (currentVideo) {
-      url = VideoService.BASE_VIDEO_URL + '/' + currentVideo.uuid + '/recommendations'
-    } else if (videoChannel) {
+    if (videoChannel) {
       url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos'
     } else if (account) {
       url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos'
