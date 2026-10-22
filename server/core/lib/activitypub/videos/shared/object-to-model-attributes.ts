@@ -305,6 +305,8 @@ export function getVideoAttributesFromObject (videoChannel: MChannelId, videoObj
 
     commentsPolicy: videoObject.commentsPolicy,
 
+    recommendationStrategy: videoObject.recommendationStrategy,
+
     downloadEnabled: videoObject.downloadEnabled,
     waitTranscoding: videoObject.waitTranscoding,
     isLive: videoObject.isLiveBroadcast,
