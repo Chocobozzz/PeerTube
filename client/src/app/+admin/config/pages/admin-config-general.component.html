@@ -551,6 +551,18 @@
               <div class="form-error" role="alert">{{ formErrors.defaults.publish.downloadPolicy }}</div>
             }
           </div>
+
+          <div class="form-group">
+            <label i18n for="defaultsRecommendationStrategy">Default recommendation strategy</label>
+
+            <my-select-options
+              inputId="defaultsRecommendationStrategy" [items]="recommendationStrategiesOptions" formControlName="recommendationStrategy"
+            ></my-select-options>
+
+            @if (formErrors.defaults.publish.recommendationStrategy) {
+              <div class="form-error" role="alert">{{ formErrors.defaults.publish.recommendationStrategy }}</div>
+            }
+          </div>
         </ng-container>
       </ng-container>
     </div>

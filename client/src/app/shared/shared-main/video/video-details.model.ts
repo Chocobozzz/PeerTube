@@ -3,6 +3,7 @@ import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.mode
 import {
   ConstantLabel,
   VideoCommentPolicyType,
+  VideoRecommendationStrategyType,
   VideoDetails as VideoDetailsServerModel,
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
@@ -22,6 +23,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   downloadEnabled: boolean
 
   commentsPolicy: ConstantLabel<VideoCommentPolicyType>
+  recommendationStrategy: ConstantLabel<VideoRecommendationStrategyType>
 
   likesPercent: number
   dislikesPercent: number
@@ -48,6 +50,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.support = hash.support
     this.commentsPolicy = hash.commentsPolicy
     this.downloadEnabled = hash.downloadEnabled
+    this.recommendationStrategy = hash.recommendationStrategy
 
     this.inputFileUpdatedAt = hash.inputFileUpdatedAt
 

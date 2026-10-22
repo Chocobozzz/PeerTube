@@ -44,6 +44,7 @@ import {
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
   isVideoCommentsPolicyValid,
+  isRecommendationStrategyValid,
   isVideoDescriptionValid,
   isVideoImageValid,
   isVideoIncludeValid,
@@ -481,6 +482,9 @@ export function getCommonVideoEditAttributes () {
     body('commentsPolicy')
       .optional()
       .custom(isVideoCommentsPolicyValid),
+    body('recommendationStrategy')
+      .optional()
+      .custom(isRecommendationStrategyValid),
 
     body('downloadEnabled')
       .optional()

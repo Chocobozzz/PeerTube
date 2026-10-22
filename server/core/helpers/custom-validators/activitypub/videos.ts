@@ -7,6 +7,7 @@ import {
   LiveVideoLatencyMode,
   VideoCommentPolicy,
   VideoObject,
+  VideoRecommendationStrategy,
   VideoState
 } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@peertube/peertube-node-utils'
@@ -19,6 +20,7 @@ import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../mi
 import { isTrackerUrlValid } from '../urls.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
+  isRecommendationStrategyValid,
   isVideoCommentsPolicyValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -75,6 +77,11 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
     }
   } else {
     video.commentsPolicy = VideoCommentPolicy.DISABLED
+  }
+
+  // If the remote doesn’t send the field, it means "any"
+  if (!isRecommendationStrategyValid(video.recommendationStrategy)) {
+    video.recommendationStrategy = VideoRecommendationStrategy.ANY_VIDEOS
   }
 
   if (!isActivityPubUrlValid(video.id)) return fail('id')

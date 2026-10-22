@@ -363,6 +363,7 @@ export class LocalVideoCreator {
       licence: videoInfo.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
       language: videoInfo.language,
       commentsPolicy: videoInfo.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+      recommendationStrategy: videoInfo.recommendationStrategy ?? CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_STRATEGY,
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
 

@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { VideoCommentPolicy, VideoDetails, VideoPrivacy } from '@peertube/peertube-models'
+import { VideoCommentPolicy, VideoDetails, VideoPrivacy, VideoRecommendationStrategy } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -33,6 +33,7 @@ describe('Test config defaults', function () {
             publish: {
               commentsPolicy: 2,
               downloadEnabled: false,
+              recommendationStrategy: VideoRecommendationStrategy.ONLY_LOCAL_VIDEOS,
               privacy: VideoPrivacy.INTERNAL,
               licence: 4
             },
@@ -48,6 +49,7 @@ describe('Test config defaults', function () {
       name: 'video',
       downloadEnabled: undefined,
       commentsPolicy: undefined,
+      recommendationStrategy: undefined,
       licence: undefined,
       privacy: VideoPrivacy.PUBLIC // Privacy is mandatory for server
     }
@@ -55,6 +57,7 @@ describe('Test config defaults', function () {
     function checkVideo (video: VideoDetails) {
       expect(video.downloadEnabled).to.be.false
       expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
+      expect(video.recommendationStrategy.id).to.equal(VideoRecommendationStrategy.ONLY_LOCAL_VIDEOS)
       expect(video.licence.id).to.equal(4)
     }
 
@@ -69,6 +72,7 @@ describe('Test config defaults', function () {
 
       expect(config.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.DISABLED)
       expect(config.defaults.publish.downloadEnabled).to.be.false
+      expect(config.defaults.publish.recommendationStrategy).to.equal(VideoRecommendationStrategy.ONLY_LOCAL_VIDEOS)
       expect(config.defaults.publish.licence).to.equal(4)
       expect(config.defaults.publish.privacy).to.equal(VideoPrivacy.INTERNAL)
     })

@@ -1,5 +1,5 @@
 import { PlayerTheme } from '../player/player-theme.type.js'
-import { VideoCommentPolicyType, VideoPrivacyType } from '../videos/index.js'
+import { VideoCommentPolicyType, VideoPrivacyType, VideoRecommendationStrategyType } from '../videos/index.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { BroadcastMessageLevel } from './broadcast-message-level.type.js'
 
@@ -352,6 +352,7 @@ export interface CustomConfig {
     publish: {
       downloadEnabled: boolean
       commentsPolicy: VideoCommentPolicyType
+      recommendationStrategy: VideoRecommendationStrategyType
       privacy: VideoPrivacyType
       licence: number
     }

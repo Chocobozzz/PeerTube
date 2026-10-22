@@ -1,6 +1,7 @@
 import { Account, AccountSummary } from '../actors/index.js'
 import { VideoChannel, VideoChannelSummary } from './channel/video-channel.model.js'
 import { VideoCommentPolicyType } from './comment/video-comment-policy.enum.js'
+import { VideoRecommendationStrategyType } from './video-recommendation-strategies.enum.js'
 import { VideoEmbedPrivacyPolicyType } from './embed-privacy/video-embed-privacy-policy.enum.js'
 import { VideoFile } from './file/index.js'
 import { LiveVideoScheduleEdit } from './live/live-video-schedule.model.js'
@@ -124,6 +125,11 @@ export interface VideoDetails extends Video {
   channel: VideoChannel
   account: Account
   tags: string[]
+
+  recommendationStrategy: {
+    id: VideoRecommendationStrategyType
+    label: string
+  }
 
   commentsPolicy: {
     id: VideoCommentPolicyType

@@ -18,6 +18,7 @@ import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
   VIDEO_CATEGORIES,
   VIDEO_COMMENTS_POLICY,
+  VIDEO_RECOMMENDATION_STRATEGIES,
   VIDEO_EMBED_PRIVACY_POLICIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
@@ -204,6 +205,11 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     embedPrivacyPolicy: {
       id: video.embedPrivacyPolicy,
       label: VIDEO_EMBED_PRIVACY_POLICIES[video.embedPrivacyPolicy]
+    },
+
+    recommendationStrategy: {
+      id: video.recommendationStrategy,
+      label: VIDEO_RECOMMENDATION_STRATEGIES[video.recommendationStrategy]
     }
   }
 
