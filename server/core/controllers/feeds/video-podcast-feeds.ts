@@ -15,6 +15,7 @@ import {
   cacheRouteFactory,
   videoFeedsPodcastSetCacheKey
 } from '@server/middlewares/index.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { MVideo, MVideoCaptionVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
@@ -84,7 +85,7 @@ videoPodcastFeedsRouter.get(
   videoFeedsPodcastSetCacheKey,
   podcastCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   asyncMiddleware(videoFeedsPodcastValidator),
-  asyncMiddleware(generateVideoPodcastFeed)
+  asyncMiddleware(allowReplicaReadsToController(generateVideoPodcastFeed))
 )
 
 // ---------------------------------------------------------------------------

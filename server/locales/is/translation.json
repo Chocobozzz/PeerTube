@@ -205,7 +205,6 @@
   "Not imported due to error: {errors}": "Not imported due to error: {errors}",
   "One of videoChannelId or playlistId is required.": "One of videoChannelId or playlistId is required.",
   "Only a user with sufficient right can manage this account resource.": "Only a user with sufficient right can manage this account resource.",
-  "Only admins can force transcription": "Only admins can force transcription",
   "Only moderators and administrators can force transcription": "Only moderators and administrators can force transcription",
   "Original video file not found": "Original video file not found",
   "Ownership already accepted or refused": "Ownership already accepted or refused",

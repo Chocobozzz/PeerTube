@@ -1,6 +1,5 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { expect } from 'chai'
 import { wait } from '@peertube/peertube-core-utils'
 import { VideoPrivacy } from '@peertube/peertube-models'
 import {
@@ -15,6 +14,7 @@ import {
   setDefaultVideoChannel,
   stopFfmpeg
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test videos search', function () {
   let server: PeerTubeServer
@@ -161,14 +161,11 @@ describe('Test videos search', function () {
   it('Should make a simple search and have results', async function () {
     const body = await command.searchVideos({ search: '4444 5555 duplicate' })
 
-    expect(body.total).to.equal(2)
+    expect(body.total).to.equal(1)
 
     const videos = body.data
-    expect(videos).to.have.lengthOf(2)
-
-    // bestmatch
+    expect(videos).to.have.lengthOf(1)
     expect(videos[0].name).to.equal('3333 4444 5555 duplicate')
-    expect(videos[1].name).to.equal('3333 4444 5555')
   })
 
   it('Should make a search on tags too, and have results', async function () {

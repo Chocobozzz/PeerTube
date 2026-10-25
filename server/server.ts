@@ -142,6 +142,10 @@ app.use(cacheRequestIp)
 import { requestLoggerContext } from './core/middlewares/logger-context.js'
 app.use(requestLoggerContext)
 
+// Database context shared by the middlewares and the controller of a request
+import { requestDbContext } from './core/middlewares/replica-reads.js'
+app.use(requestDbContext)
+
 app.use((_req, res, next) => {
   // OpenTelemetry
   res.locals.requestStart = Date.now()
@@ -205,6 +209,7 @@ import { isHTTPSignatureDigestValid } from './core/helpers/peertube-crypto.js'
 import { ConfigDistribution } from './core/initializers/config/config-distribution.js'
 import { installPrimary, installSecondary } from './core/initializers/installer.js'
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
+import { initDatabaseReadReplicas } from './core/lib/database-replicas/database-replicas.js'
 import { Emailer } from './core/lib/emailer.js'
 import { resetFilesCacheOfOtherStorage } from './core/lib/files-cache/reset-files-cache.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
@@ -410,6 +415,9 @@ async function startApplication () {
   await initUploadxStorages()
 
   Redis.Instance.init()
+
+  // Needs Redis, to know the last write position of users
+  initDatabaseReadReplicas()
 
   // The primary publishes its configuration here, a secondary subscribes to the changes
   // Secondary already fetched it while the module graph was loading

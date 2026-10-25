@@ -1,6 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ResultList, ThreadsResultList, UserRight, VideoCommentCreate, VideoCommentPolicy } from '@peertube/peertube-models'
 import { getAuthUser } from '@server/helpers/express-utils.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MCommentFormattable } from '@server/types/models/index.js'
 import express from 'express'
@@ -64,13 +65,13 @@ videoCommentRouter.get(
   setDefaultPagination,
   asyncMiddleware(listVideoCommentThreadsValidator),
   optionalAuthenticate,
-  asyncMiddleware(listVideoThreads)
+  asyncMiddleware(allowReplicaReadsToController(listVideoThreads))
 )
 videoCommentRouter.get(
   '/:videoId/comment-threads/:threadId',
   asyncMiddleware(listVideoThreadCommentsValidator),
   optionalAuthenticate,
-  asyncMiddleware(listVideoThreadComments)
+  asyncMiddleware(allowReplicaReadsToController(listVideoThreadComments))
 )
 videoCommentRouter.get(
   '/:videoId/comments/:commentId/replies',
@@ -80,7 +81,7 @@ videoCommentRouter.get(
   setDefaultPagination,
   optionalAuthenticate,
   asyncMiddleware(listVideoCommentRepliesValidator),
-  asyncMiddleware(listVideoCommentReplies)
+  asyncMiddleware(allowReplicaReadsToController(listVideoCommentReplies))
 )
 
 videoCommentRouter.post(

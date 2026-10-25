@@ -205,7 +205,6 @@
   "Not imported due to error: {errors}": "No importat a causa d'un error: {errors}",
   "One of videoChannelId or playlistId is required.": "One of videoChannelId or playlistId is required.",
   "Only a user with sufficient right can manage this account resource.": "Només un compte amb drets suficients pot gestionar aquest recurs.",
-  "Only admins can force transcription": "Only admins can force transcription",
   "Only moderators and administrators can force transcription": "Only moderators and administrators can force transcription",
   "Original video file not found": "No s'ha trobat el fitxer de vídeo original",
   "Ownership already accepted or refused": "Propietat ja acceptada o rebutjada",

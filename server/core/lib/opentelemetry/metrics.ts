@@ -8,6 +8,7 @@ import { MVideoImmutable } from '@server/types/models/index.js'
 import { Application, Request, Response } from 'express'
 import {
   BittorrentTrackerObserversBuilder,
+  DatabaseReadReplicasObserversBuilder,
   JobQueueObserversBuilder,
   LivesObserversBuilder,
   NodeJSObserversBuilder,
@@ -82,6 +83,7 @@ class OpenTelemetryMetrics {
     new LivesObserversBuilder(this.meter).buildObservers()
     new ViewersObserversBuilder(this.meter).buildObservers()
     new WorkerThreadsObserversBuilder(this.meter).buildObservers()
+    new DatabaseReadReplicasObserversBuilder(this.meter).buildObservers()
     new BittorrentTrackerObserversBuilder(this.meter, options.trackerServer).buildObservers()
   }
 

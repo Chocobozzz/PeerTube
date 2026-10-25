@@ -1,4 +1,5 @@
 export * from './bittorrent-tracker-observers-builder.js'
+export * from './database-read-replicas-observers-builder.js'
 export * from './lives-observers-builder.js'
 export * from './job-queue-observers-builder.js'
 export * from './nodejs-observers-builder.js'

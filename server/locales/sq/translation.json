@@ -205,7 +205,6 @@
   "Not imported due to error: {errors}": "S’u importua, për shkak gabimi: {errors}",
   "One of videoChannelId or playlistId is required.": "Është e domosdoshme një nga videoChannelId ose playlistId.",
   "Only a user with sufficient right can manage this account resource.": "Këtë burim llogarie mund ta administrojë vetëm një përdorues me leje të mjaftueshme.",
-  "Only admins can force transcription": "Vetëm përgjegjësit mund të zbatojmë transkriptim me detyrim",
   "Only moderators and administrators can force transcription": "Only moderators and administrators can force transcription",
   "Original video file not found": "S’u gjet kartela origjinale e videos",
   "Ownership already accepted or refused": "Pronësi tashmë e pranuar, ose e hedhur poshtë",

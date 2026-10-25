@@ -40,7 +40,7 @@ function extractInlineComment (rest: string): string | null {
   for (let i = 0; i < rest.length; i++) {
     const ch = rest[i]
 
-    if (ch === "'" && !inDouble) {
+    if (ch === '\'' && !inDouble) {
       inSingle = !inSingle
     } else if (ch === '"' && !inSingle) {
       inDouble = !inDouble
@@ -61,17 +61,23 @@ function extractInlineComment (rest: string): string | null {
  *  - List items are identified only by their parent key path (not by index).
  *  - Only indentation-based nesting is tracked; flow-style YAML is ignored.
  */
-function extractComments (yamlText: string): Map<string, string> {
+function extractComments (yamlText: string) {
   const lines = yamlText.split('\n')
   const commentMap = new Map<string, string>()
+  // Keys without value followed by commented list items (`# - ...`): null by default, but admins fill them with a list
+  const nullListPaths = new Set<string>()
 
   let pendingComments: string[] = []
   // Stack entries: { indent, key } – used to reconstruct the dotted path.
-  const pathStack: { indent: number; key: string }[] = []
+  const pathStack: { indent: number, key: string }[] = []
+  let lastEmptyKeyPath: string | null = null
 
   for (const line of lines) {
     // 1. Pure comment line
     if (/^\s*#/.test(line)) {
+      // Keep looking after other comment lines, explaining the commented list for example
+      if (lastEmptyKeyPath && /^\s*#\s*- /.test(line)) nullListPaths.add(lastEmptyKeyPath)
+
       const comment = line.replace(/^\s*#\s?/, '').trim()
       if (comment) pendingComments.push(comment)
       continue
@@ -81,6 +87,7 @@ function extractComments (yamlText: string): Map<string, string> {
     //    previous block and are separated from the next key by blank space).
     if (/^\s*$/.test(line)) {
       pendingComments = []
+      lastEmptyKeyPath = null
       continue
     }
 
@@ -98,6 +105,7 @@ function extractComments (yamlText: string): Map<string, string> {
       pathStack.push({ indent, key })
 
       const fullPath = pathStack.map(p => p.key).join('.')
+      lastEmptyKeyPath = /^\s*$/.test(rest) ? fullPath : null
 
       // Inline comment on the same line takes priority / is appended.
       const inlineComment = extractInlineComment(rest)
@@ -115,9 +123,10 @@ function extractComments (yamlText: string): Map<string, string> {
 
     // 4. List-item lines (`- value`) and anything else: discard pending comments.
     pendingComments = []
+    lastEmptyKeyPath = null
   }
 
-  return commentMap
+  return { commentMap, nullListPaths }
 }
 
 // ---------------------------------------------------------------------------
@@ -136,6 +145,7 @@ function inferType (value: unknown): JsonSchemaType | JsonSchemaType[] {
 function generateSchema (
   value: unknown,
   commentMap: Map<string, string>,
+  nullListPaths: Set<string>,
   path: string
 ): JsonSchema {
   const description = commentMap.get(path)
@@ -143,6 +153,8 @@ function generateSchema (
   if (description) base.description = description
 
   if (value === null) {
+    if (nullListPaths.has(path)) return { ...base, type: [ 'null', 'array' ], default: null, items: {} }
+
     return { ...base, type: [ 'null', 'string' ], default: null }
   }
 
@@ -161,7 +173,7 @@ function generateSchema (
   if (Array.isArray(value)) {
     const schema: JsonSchema = { ...base, type: 'array', default: value }
     if (value.length > 0) {
-      schema.items = generateSchema(value[0], commentMap, path + '[]')
+      schema.items = generateSchema(value[0], commentMap, nullListPaths, path + '[]')
     } else {
       schema.items = {}
     }
@@ -173,7 +185,7 @@ function generateSchema (
     const properties: Record<string, JsonSchema> = {}
     for (const [ key, val ] of Object.entries(value as Record<string, unknown>)) {
       const childPath = path ? `${path}.${key}` : key
-      properties[key] = generateSchema(val, commentMap, childPath)
+      properties[key] = generateSchema(val, commentMap, nullListPaths, childPath)
     }
     return { ...base, type: 'object', properties, additionalProperties: false }
   }
@@ -187,13 +199,12 @@ function generateSchema (
 
 const yamlContent = readFileSync(yamlPath, 'utf8')
 const parsed = load(yamlContent) as Record<string, unknown>
-const commentMap = extractComments(yamlContent)
+const { commentMap, nullListPaths } = extractComments(yamlContent)
 
 const schema: JsonSchema = {
   $schema: 'https://json-schema.org/draft/2020-12/schema',
   title: 'PeerTube Configuration',
-  description:
-    'Full configuration schema for a PeerTube server instance. ' +
+  description: 'Full configuration schema for a PeerTube server instance. ' +
     'Corresponds to the YAML configuration files (default.yaml / production.yaml). ',
   type: 'object',
   properties: {},
@@ -201,7 +212,7 @@ const schema: JsonSchema = {
 }
 
 for (const [ key, val ] of Object.entries(parsed)) {
-  schema.properties[key] = generateSchema(val, commentMap, key)
+  schema.properties[key] = generateSchema(val, commentMap, nullListPaths, key)
 }
 
 writeFileSync(outputPath, JSON.stringify(schema, null, 2) + '\n')

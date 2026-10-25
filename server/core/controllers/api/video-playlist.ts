@@ -19,6 +19,7 @@ import {
   reorderPlaylistOrElementsPosition,
   sendPlaylistPositionUpdateOfChannel
 } from '@server/lib/video-playlist.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoPlaylistFull } from '@server/types/models/index.js'
@@ -73,7 +74,7 @@ videoPlaylistRouter.get(
   setDefaultSort,
   setDefaultPagination,
   commonVideoPlaylistFiltersValidator,
-  asyncMiddleware(listVideoPlaylists)
+  asyncMiddleware(allowReplicaReadsToController(listVideoPlaylists))
 )
 
 videoPlaylistRouter.get('/:playlistId', asyncMiddleware(videoPlaylistsGetValidator('summary')), getVideoPlaylist)
@@ -84,7 +85,7 @@ videoPlaylistRouter.get(
   paginationValidator,
   setDefaultPagination,
   optionalAuthenticate,
-  asyncMiddleware(listVideosOfPlaylist)
+  asyncMiddleware(allowReplicaReadsToController(listVideosOfPlaylist))
 )
 
 videoPlaylistRouter.post(

@@ -205,7 +205,6 @@
   "Not imported due to error: {errors}": "因為發生錯誤而未匯入：{errors}",
   "One of videoChannelId or playlistId is required.": "必須填寫 videoChannelId 或 playlistId 其中一項。",
   "Only a user with sufficient right can manage this account resource.": "僅具足夠權限的使用者方可管理此帳號資源。",
-  "Only admins can force transcription": "只有管理員可以強制進行文字轉錄",
   "Only moderators and administrators can force transcription": "Only moderators and administrators can force transcription",
   "Original video file not found": "找不到原始影片檔",
   "Ownership already accepted or refused": "所有權已接受或拒絕",

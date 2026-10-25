@@ -464,6 +464,26 @@
             }
           },
           "additionalProperties": false
+        },
+        "read_replicas": {
+          "description": "Optional PostgreSQL streaming replicas (hot standbys of the database above) PeerTube uses them for some heavy read only requests: video lists, search, feeds... Database name, username, password, SSL settings and pool size are the same as the primary.",
+          "type": "object",
+          "properties": {
+            "max_lag": {
+              "description": "Don't use replicas lagging more than this duration behind the primary (minimum: 3 seconds)",
+              "type": "string",
+              "default": "5 seconds"
+            },
+            "hosts": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "default": null,
+              "items": {}
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -2574,9 +2594,10 @@
                   "description": "By default PeerTube uses HTTP_PROXY and HTTPS_PROXY environment variables But you can specify custom proxies for youtube-dl because remote websites (like YouTube) may block your server IP address PeerTube will randomly select a proxy from the following list You may need to use a standalone youtube-dl binary (see `url` key comment above) to use this feature",
                   "type": [
                     "null",
-                    "string"
+                    "array"
                   ],
-                  "default": null
+                  "default": null,
+                  "items": {}
                 },
                 "cookies": {
                   "type": "object",
@@ -2767,17 +2788,19 @@
           "description": "Describe the languages spoken on your instance, to interact with your users for example Uncomment or add the languages you want List of supported languages: https://peertube.cpy.re/api/v1/videos/languages PeerTube plugins can add additional languages to the official list of supported languages",
           "type": [
             "null",
-            "string"
+            "array"
           ],
-          "default": null
+          "default": null,
+          "items": {}
         },
         "categories": {
           "description": "Describe the main categories of your instance (to explain for example that your instance is dedicated to music, gaming, etc.) Uncomment categories you want List of supported categories: https://peertube.cpy.re/api/v1/videos/categories PeerTube plugins can add additional categories to the official list of supported categories",
           "type": [
             "null",
-            "string"
+            "array"
           ],
-          "default": null
+          "default": null,
+          "items": {}
         },
         "default_client_route": {
           "type": "string",

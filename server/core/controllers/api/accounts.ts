@@ -1,6 +1,7 @@
 import { VideoPlaylistForAccountListQuery } from '@peertube/peertube-models'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { scheduleActorRefreshIfNeeded } from '@server/lib/activitypub/actors/refresh.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
@@ -72,7 +73,7 @@ accountsRouter.get(
   setDefaultPagination,
   optionalAuthenticate,
   commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(listAccountVideos)
+  asyncMiddleware(allowReplicaReadsToController(listAccountVideos))
 )
 
 accountsRouter.get(
@@ -84,7 +85,7 @@ accountsRouter.get(
   videoChannelsSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  asyncMiddleware(listAccountChannels)
+  asyncMiddleware(allowReplicaReadsToController(listAccountChannels))
 )
 
 accountsRouter.get(
@@ -98,7 +99,7 @@ accountsRouter.get(
   commonVideoPlaylistFiltersValidator,
   videoPlaylistsSearchValidator,
   videoPlaylistsAccountValidator,
-  asyncMiddleware(listAccountPlaylists)
+  asyncMiddleware(allowReplicaReadsToController(listAccountPlaylists))
 )
 
 accountsRouter.get(

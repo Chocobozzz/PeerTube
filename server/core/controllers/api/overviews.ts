@@ -1,6 +1,7 @@
 import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
@@ -16,7 +17,12 @@ const overviewsRouter = express.Router()
 
 overviewsRouter.use(apiRateLimiter)
 
-overviewsRouter.get('/videos', videosOverviewValidator, optionalAuthenticate, asyncMiddleware(getVideosOverview))
+overviewsRouter.get(
+  '/videos',
+  videosOverviewValidator,
+  optionalAuthenticate,
+  asyncMiddleware(allowReplicaReadsToController(getVideosOverview))
+)
 
 // ---------------------------------------------------------------------------
 

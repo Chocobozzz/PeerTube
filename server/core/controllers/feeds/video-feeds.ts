@@ -2,6 +2,7 @@ import { Feed } from '@peertube/feed'
 import { buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
 import { VideoInclude, VideoResolution } from '@peertube/peertube-models'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { extname } from 'path'
@@ -42,7 +43,7 @@ videoFeedsRouter.get(
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   commonVideosFiltersValidatorFactory(),
   asyncMiddleware(feedsAccountOrChannelFiltersValidator),
-  asyncMiddleware(generateVideoFeed)
+  asyncMiddleware(allowReplicaReadsToController(generateVideoFeed))
 )
 
 videoFeedsRouter.get(
@@ -53,7 +54,7 @@ videoFeedsRouter.get(
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   commonVideosFiltersValidatorFactory(),
   asyncMiddleware(videoSubscriptionFeedsValidator),
-  asyncMiddleware(generateVideoFeedForSubscriptions)
+  asyncMiddleware(allowReplicaReadsToController(generateVideoFeedForSubscriptions))
 )
 
 // ---------------------------------------------------------------------------

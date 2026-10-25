@@ -205,7 +205,6 @@
   "Not imported due to error: {errors}": "Nicht importiert aufgrund eines Fehlers: {errors}",
   "One of videoChannelId or playlistId is required.": "videoChannelId oder playlistId wird benötigt.",
   "Only a user with sufficient right can manage this account resource.": "Nur ein Benutzer mit ausreichenden Rechten kann diese Kontoressource verwalten.",
-  "Only admins can force transcription": "Nur Administratoren können die Transkription erzwingen",
   "Only moderators and administrators can force transcription": "Only moderators and administrators can force transcription",
   "Original video file not found": "Ursprüngliche Videodatei nicht gefunden",
   "Ownership already accepted or refused": "Eigentum bereits akzeptiert oder abgelehnt",

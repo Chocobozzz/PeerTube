@@ -115,6 +115,17 @@ jobs:
         run: |
           echo "DISABLE_HTTP_IMPORT_TESTS=true" >> $GITHUB_ENV
 
+      # Install PG to setup a secondary database for read replica tests
+      - name: Setup PostgreSQL server binaries
+        if: matrix.test_suite == 'api-2'
+        run: |
+          # Only install binaries, without creating and starting a main cluster
+          sudo mkdir -p /etc/postgresql-common/createcluster.d
+          echo 'create_main_cluster = false' | sudo tee /etc/postgresql-common/createcluster.d/00-peertube.conf
+          sudo apt-get install -y postgresql-14
+          echo "/usr/lib/postgresql/14/bin" >> $GITHUB_PATH
+          echo "ENABLE_DB_REPLICA_TESTS=true" >> $GITHUB_ENV
+
       - name: Run Test
         # external-plugins tests only run on schedule
         if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'

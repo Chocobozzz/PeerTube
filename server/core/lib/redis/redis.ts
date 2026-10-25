@@ -4,6 +4,7 @@ import * as actorFollowHealth from './actor-follow-health.js'
 import { ActorFollowHealthKind } from './actor-follow-health.js'
 import * as apUnavailability from './ap-unavailability.js'
 import * as contactForm from './contact-form.js'
+import * as dbRecentWrites from './db-recent-writes.js'
 import * as emailVerification from './email-verification.js'
 import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
@@ -354,6 +355,16 @@ export class Redis {
 
   releaseLock (lockKey: string, token: string) {
     return locks.releaseLock(lockKey, token)
+  }
+
+  /* ************ Database recent writes ************ */
+
+  setUserRecentDbWrite (userId: number, ttlMs: number) {
+    return dbRecentWrites.setUserRecentDbWrite(userId, ttlMs)
+  }
+
+  hasUserRecentDbWrite (userId: number) {
+    return dbRecentWrites.hasUserRecentDbWrite(userId)
   }
 
   /* ************ Actor follow health ************ */
