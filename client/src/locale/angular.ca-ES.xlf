@@ -1779,7 +1779,7 @@
       </trans-unit>
       <trans-unit id="5543980198518546562" datatype="html">
         <source>Waiting for live</source>
-        <target state="new">Waiting for live</target>
+        <target state="translated">S'està esperant el directe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-thumbnail/video-thumbnail.component.ts</context>
           <context context-type="linenumber">163</context>
@@ -2311,7 +2311,7 @@
       </trans-unit>
       <trans-unit id="1898581791654225317" datatype="html">
         <source>Save to playlist...</source>
-        <target state="new">Save to playlist...</target>
+        <target state="translated">Desa a la llista de reproducció...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">555</context>
@@ -2319,7 +2319,7 @@
       </trans-unit>
       <trans-unit id="298947678131483247" datatype="html">
         <source>Download...</source>
-        <target state="new">Download...</target>
+        <target state="translated">Baixa...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">563</context>
@@ -2663,7 +2663,7 @@
       </trans-unit>
       <trans-unit id="2727852160479343870" datatype="html">
         <source>downloads</source>
-        <target state="new">downloads</target>
+        <target state="translated">baixades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/instance-stat-rules.component.html</context>
           <context context-type="linenumber">33,34</context>
@@ -3459,7 +3459,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2750704831338623812" datatype="html">
         <source>Do you use Mastodon, ActivityPub or an RSS feed aggregator?</source>
-        <target state="new">Do you use Mastodon, ActivityPub or an RSS feed aggregator?</target>
+        <target state="translated">Utilitzeu Mastodon, ActivityPub o un agregador?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">36,38</context>
