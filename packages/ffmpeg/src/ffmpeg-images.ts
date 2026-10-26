@@ -33,6 +33,9 @@ export class FFmpegImage {
     try {
       return await this.commandWrapper.runCommand()
     } catch (err) {
+      // Don't retry if ffmpeg has been killed (OOM killer for example), the fallback would have the same resource usage
+      if (err?.message?.includes('killed with signal')) throw err
+
       this.commandWrapper.debugLog('Cannot generate thumbnail from video using seek input, fallback to no seek', { err })
 
       this.commandWrapper.resetCommand()
@@ -55,17 +58,19 @@ export class FFmpegImage {
     const { fromPath, output, framesToAnalyze, scale } = options
 
     const command = this.commandWrapper.buildCommand(fromPath)
-      .videoFilter('thumbnail=' + framesToAnalyze)
-      .outputOption('-frames:v 1')
-      .outputOption('-q:v 5')
-      .outputOption('-abort_on empty_output')
-      .output(output)
+      .inputOption('-threads 2')
 
+    // Scale before the thumbnail filter, that buffers all analyzed frames
     if (scale) {
       command.videoFilter(`scale=${scale.width}x${scale.height}:force_original_aspect_ratio=decrease`)
     }
 
     return command
+      .videoFilter('thumbnail=' + framesToAnalyze)
+      .outputOption('-frames:v 1')
+      .outputOption('-q:v 5')
+      .outputOption('-abort_on empty_output')
+      .output(output)
   }
 
   // ---------------------------------------------------------------------------
