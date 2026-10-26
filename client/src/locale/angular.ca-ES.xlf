@@ -3491,7 +3491,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2864997292120720545" datatype="html">
         <source>If you want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/>, you must create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </source>
-        <target state="new"> If you want to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publish videos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> on <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/>, you must create your first <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>channel<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
+        <target state="translated">Si voleu <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>publicar vídeos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> a <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/>, primer heu de crear un <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>canal<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">3,7</context>
