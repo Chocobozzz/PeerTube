@@ -162,7 +162,7 @@ async function generateChannelPodcastFeed (req: express.Request, res: express.Re
     author: { name: CONFIG.INSTANCE.NAME, link: WEBSERVER.URL },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
-    medium: 'video',
+    medium: getPodcastMedium(req.query.enclosurePreference),
     customXMLNS,
     customTags
   })
@@ -233,7 +233,7 @@ async function generatePlaylistPodcastFeed (req: express.Request, res: express.R
     author: { name: channelName, link: ownerLink },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
-    medium: 'video',
+    medium: getPodcastMedium(req.query.enclosurePreference),
     customXMLNS,
     customTags
   })
@@ -308,6 +308,12 @@ async function generatePodcastItem (options: {
 
     customTags
   }
+}
+
+function getPodcastMedium (enclosurePreference?: FeedEnclosurePreference) {
+  return enclosurePreference === 'audio'
+    ? 'podcast'
+    : 'video'
 }
 
 async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[], enclosurePreference?: FeedEnclosurePreference) {
