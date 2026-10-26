@@ -1,5 +1,22 @@
 # Changelog
 
+## v8.3.2
+
+### SECURITY
+
+ * **critical** Upgrade vulnerable `sharp` (image processing dependency) that can lead to a RCE with a special crafted SVG file [GHSA-wq5f-xc86-pv6w](https://github.com/advisories/GHSA-wq5f-xc86-pv6w)
+ * **high** Fix federation vulnerability where a remote attacker could exploit the redirection of cached remote objects to impersonate actors of another instance and modify its videos federated on an instance [GHSA-5j4v-77rx-h5qg](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-5j4v-77rx-h5qg)
+
+### Bug Fixes
+
+ * Update whisper-ctranslate2 package to fix installation on Python 3.12+
+ * Fix channel deletion cancel showing success message [#7837](https://github.com/Chocobozzz/PeerTube/pull/7837)
+ * Fix podcast feed `podcast:medium` value with `audio` enclosure preference
+ * Fix audio download with a webp thumbnail [#7833](https://github.com/Chocobozzz/PeerTube/pull/7833)
+ * Fix crash when remote video has no likes/dislikes collections [#7836](https://github.com/Chocobozzz/PeerTube/pull/7836)
+ * Limit resource usage when generating thumbnails
+
+
 ## v8.3.1
 
 ### SECURITY
