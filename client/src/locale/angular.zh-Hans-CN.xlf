@@ -19153,7 +19153,7 @@
       </trans-unit>
       <trans-unit id="7306208116385748361" datatype="html">
         <source>Switch to manual block</source>
-        <target state="new">Switch to manual block</target>
+        <target state="translated">切换至手动屏蔽</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -19189,7 +19189,7 @@
       </trans-unit>
       <trans-unit id="759552082340137565" datatype="html">
         <source>{count, plural, =1 {Delete report} other {Delete reports}}</source>
-        <target state="new">{count, plural, =1 {Delete report} other {Delete reports}}</target>
+        <target state="translated">{count, plural, =1 {删除此举报} other {删除这些举报}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">391</context>
@@ -19197,7 +19197,7 @@
       </trans-unit>
       <trans-unit id="1893484749636135486" datatype="html">
         <source>Actions for the flagged {count, plural, =1 {account} other {accounts}}</source>
-        <target state="new">Actions for the flagged {count, plural, =1 {account} other {accounts}}</target>
+        <target state="translated">对 {count, plural, =1 {此} other {这些}} 标记账号的操作</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">405</context>
@@ -19205,7 +19205,7 @@
       </trans-unit>
       <trans-unit id="2052464115821785206" datatype="html">
         <source>Mute flagged {count, plural, =1 {account} other {accounts}}</source>
-        <target state="new">Mute flagged {count, plural, =1 {account} other {accounts}}</target>
+        <target state="translated">屏蔽来自 {count, plural, =1 {此} other {这些}} 标记账号的消息</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">413</context>
@@ -19213,7 +19213,7 @@
       </trans-unit>
       <trans-unit id="6244674823326566150" datatype="html">
         <source>Mute flagged {count, plural, =1 {platform} other {platforms}}</source>
-        <target state="new">Mute flagged {count, plural, =1 {platform} other {platforms}}</target>
+        <target state="translated">屏蔽标记的 {count, plural, =1 {此} other {这些}} 平台</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">420</context>
@@ -19253,7 +19253,7 @@
       </trans-unit>
       <trans-unit id="127978769406607253" datatype="html">
         <source>Block the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Block the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">屏蔽 {count, plural, =1 {此} other {这些}} 视频</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">466</context>
@@ -19261,7 +19261,7 @@
       </trans-unit>
       <trans-unit id="4121384633096511327" datatype="html">
         <source>Unblock the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Unblock the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">解除 {count, plural, =1 {此} other {这些}} 视频的屏蔽</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">472</context>
@@ -19269,7 +19269,7 @@
       </trans-unit>
       <trans-unit id="360751696384645624" datatype="html">
         <source>Delete the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Delete the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">删除 {count, plural, =1 {此} other {这些}} 视频</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">478</context>
@@ -19277,7 +19277,7 @@
       </trans-unit>
       <trans-unit id="7476104506257949513" datatype="html">
         <source>Actions for {count, plural, =1 {the comment} other {the comments}}</source>
-        <target state="new">Actions for {count, plural, =1 {the comment} other {the comments}}</target>
+        <target state="translated">评论 {count, plural, =1 {操作} other {操作列表}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">492</context>
@@ -19285,7 +19285,7 @@
       </trans-unit>
       <trans-unit id="8870282537679260686" datatype="html">
         <source>Delete {count, plural, =1 {comment} other {comments}}</source>
-        <target state="new">Delete {count, plural, =1 {comment} other {comments}}</target>
+        <target state="translated">删除 {count, plural, =1 {此} other {这些}} 评论</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">500</context>
@@ -19317,7 +19317,7 @@
       </trans-unit>
       <trans-unit id="6241663452799238433" datatype="html">
         <source>Messages with reporter...</source>
-        <target state="new">Messages with reporter...</target>
+        <target state="translated">举报者的消息...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">347</context>
@@ -19325,7 +19325,7 @@
       </trans-unit>
       <trans-unit id="7649552191076397260" datatype="html">
         <source>Messages with moderators...</source>
-        <target state="new">Messages with moderators...</target>
+        <target state="translated">审核者的消息...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">348</context>
@@ -19333,7 +19333,7 @@
       </trans-unit>
       <trans-unit id="394817347378438833" datatype="html">
         <source>Accept/Reject</source>
-        <target state="new">Accept/Reject</target>
+        <target state="translated">接受/拒绝</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">358</context>
@@ -19341,7 +19341,7 @@
       </trans-unit>
       <trans-unit id="3005976570489477141" datatype="html">
         <source>Set internal note</source>
-        <target state="new">Set internal note</target>
+        <target state="translated">设置内部标记</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -19349,7 +19349,7 @@
       </trans-unit>
       <trans-unit id="86347555539001429" datatype="html">
         <source>Set internal note for {count} videos</source>
-        <target state="new">Set internal note for {count} videos</target>
+        <target state="translated">为 {count} 个视频设置内部标记</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -19357,7 +19357,7 @@
       </trans-unit>
       <trans-unit id="8583413527299223090" datatype="html">
         <source>{count, plural, =1 {Internal note updated} other {<x id="count"/> internal notes updated}}</source>
-        <target state="new">{count, plural, =1 {Internal note updated} other {<x id="count"/> internal notes updated}}</target>
+        <target state="translated">{count, plural, =1 {内部标记已更新} other {<x id="count"/> 这些内部标记已更新}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">80</context>
