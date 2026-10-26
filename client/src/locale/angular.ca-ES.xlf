@@ -6394,7 +6394,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3557296975463596398" datatype="html">
         <source>DVR window must be at least 1 minute.</source>
-        <target state="new">DVR window must be at least 1 minute.</target>
+        <target state="translated">La finestra DVR ha de durar almenys un minut.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
           <context context-type="linenumber">152</context>
