@@ -20,7 +20,7 @@ const logger = createLogger('thumbnail')
 
 type ImageSize = { height: number, width: number, aspectRatio: ThumbnailAspectRatio }
 
-export function createLocalPlaylistThumbnailsFromImage (options: {
+export async function createLocalPlaylistThumbnailsFromImage (options: {
   inputPath: string
   playlist: MVideoPlaylistThumbnail
   automaticallyGenerated: boolean
@@ -28,18 +28,22 @@ export function createLocalPlaylistThumbnailsFromImage (options: {
 }) {
   const { inputPath, playlist, automaticallyGenerated, keepOriginal = false } = options
 
-  return Promise.all(
-    CONFIG.THUMBNAILS.SIZES.map((size, i) => {
-      return _createLocalPlaylistThumbnailFromImage({
-        inputPath,
-        playlist,
-        automaticallyGenerated,
-        size,
-        // Keep original image until the last thumbnail is generated
-        keepOriginal: keepOriginal || i !== CONFIG.THUMBNAILS.SIZES.length - 1
-      })
-    })
-  )
+  try {
+    return await Promise.all(
+      CONFIG.THUMBNAILS.SIZES.map(size =>
+        // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
+        _createLocalPlaylistThumbnailFromImage({ inputPath, playlist, automaticallyGenerated, size, keepOriginal: true })
+      )
+    )
+  } finally {
+    if (!keepOriginal) {
+      try {
+        await remove(inputPath)
+      } catch (err) {
+        logger.error('Cannot remove original image after thumbnail generation.', { err })
+      }
+    }
+  }
 }
 
 function _createLocalPlaylistThumbnailFromImage (options: {
@@ -125,22 +129,22 @@ export async function createLocalVideoThumbnailsFromImage (options: {
 }) {
   const { inputPath, automaticallyGenerated, video, keepOriginal = false } = options
 
-  const thumbnails = await Promise.all(
-    CONFIG.THUMBNAILS.SIZES.map(size =>
-      // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
-      _createLocalVideoThumbnailFromImage({ inputPath, video, automaticallyGenerated, size, keepOriginal: true })
+  try {
+    return await Promise.all(
+      CONFIG.THUMBNAILS.SIZES.map(size =>
+        // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
+        _createLocalVideoThumbnailFromImage({ inputPath, video, automaticallyGenerated, size, keepOriginal: true })
+      )
     )
-  )
-
-  if (!keepOriginal) {
-    try {
-      await remove(inputPath)
-    } catch (err) {
-      logger.error('Cannot remove original image after thumbnail generation.', { err })
+  } finally {
+    if (!keepOriginal) {
+      try {
+        await remove(inputPath)
+      } catch (err) {
+        logger.error('Cannot remove original image after thumbnail generation.', { err })
+      }
     }
   }
-
-  return thumbnails
 }
 
 function _createLocalVideoThumbnailFromImage (options: {

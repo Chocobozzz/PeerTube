@@ -1,6 +1,6 @@
 import { LogoType, UploadImageType, UploadImageType_Type } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { buildImageSize, processImage, processSVG } from '@server/helpers/image-utils.js'
+import { buildImageSize, processImage, processImagesOrCleanup, processSVG } from '@server/helpers/image-utils.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { remove } from 'fs-extra/esm'
 import { retryTransactionWrapper } from '../helpers/database-utils.js'
@@ -15,8 +15,13 @@ export async function replaceUploadImage (options: {
 }) {
   const { actor, imagePhysicalFile, type } = options
 
-  const processedImages = await generateImageSizes(imagePhysicalFile.path, type)
-  await remove(imagePhysicalFile.path)
+  let processedImages: { imageName: string, imageSize: { width: number, height: number } }[]
+
+  try {
+    processedImages = await generateImageSizes(imagePhysicalFile.path, type)
+  } finally {
+    await remove(imagePhysicalFile.path)
+  }
 
   return retryTransactionWrapper(() =>
     sequelizeTypescript.transaction(async t => {
@@ -55,25 +60,23 @@ async function generateImageSizes (imagePath: string, type: UploadImageType_Type
     return [ { imageName, imageSize: { width: null, height: null } } ]
   }
 
-  return Promise.all(UPLOAD_IMAGES_SIZE[type].map(size => generateImageSize({ ...size, imagePath })))
-}
-
-async function generateImageSize (options: {
-  imagePath: string
-  width: number
-  height: number
-}) {
-  const { imagePath, width, height } = options
-
-  const imageSize = await buildImageSize(imagePath, { width, height })
-
   const extension = getLowercaseExtension(imagePath)
-  const imageName = buildUUID() + extension
-  const destination = UploadImageModel.getFSPathOf(imageName)
 
-  await processImage({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
+  return processImagesOrCleanup(UPLOAD_IMAGES_SIZE[type].map(({ width, height }) => {
+    const imageName = buildUUID() + extension
+    const destination = UploadImageModel.getFSPathOf(imageName)
 
-  return { imageName, imageSize }
+    return {
+      destination,
+      process: async () => {
+        const imageSize = await buildImageSize(imagePath, { width, height })
+
+        await processImage({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
+
+        return { imageName, imageSize }
+      }
+    }
+  }))
 }
 
 // ---------------------------------------------------------------------------

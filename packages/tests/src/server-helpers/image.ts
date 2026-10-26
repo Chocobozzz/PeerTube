@@ -1,8 +1,10 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath, root } from '@peertube/peertube-node-utils'
 import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
-import { processImage, processSVG } from '@peertube/peertube-server/core/helpers/image-utils.js'
+import { isDecodableImageExtension, processImage, processSVG } from '@peertube/peertube-server/core/helpers/image-utils.js'
+import { CONSTRAINTS_FIELDS, MIMETYPES } from '@peertube/peertube-server/core/initializers/constants.js'
 import { expect } from 'chai'
 import { ensureDir, remove } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
@@ -129,6 +131,67 @@ describe('Image helpers', function () {
       expect(err.message).to.contain('processSVG')
     } finally {
       await remove(input)
+    }
+  })
+
+  it('Should refuse to decode a SVG file disguised as a jpg file', async function () {
+    await ensureDir(imageDestDir)
+
+    const input = join(imageDestDir, 'svg-disguised-as.jpg')
+    await writeFile(input, '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10"/></svg>')
+
+    try {
+      await processImage({ path: input, destination: imageDestJPG, newSize: thumbnailSize, keepOriginal: true })
+      expect.fail('Should not decode a SVG file disguised as a jpg file')
+    } catch (err) {
+      expect(err.message).to.contain('unsupported image format')
+      expect(err.status).to.equal(HttpStatusCode.BAD_REQUEST_400)
+    } finally {
+      await remove(input)
+    }
+  })
+
+  it('Should process webp', async function () {
+    const input = buildAbsoluteFixturePath('avatar.webp')
+    const dest = join(imageDestDir, 'avatar.webp')
+
+    await processImage({ path: input, destination: dest, newSize: { width: 48, height: 48 }, keepOriginal: true })
+
+    const metadata = await sharp(await readFile(dest)).metadata()
+    expect(metadata.format).to.equal('webp')
+    expect(metadata.width).to.equal(48)
+  })
+
+  it('Should process avif and tiff', async function () {
+    await ensureDir(imageDestDir)
+
+    const source = buildAbsoluteFixturePath('custom-thumbnail-big.jpg')
+
+    for (const ext of [ '.avif', '.tiff' ]) {
+      const input = join(imageDestDir, 'source' + ext)
+      await sharp(source).toFile(input)
+
+      const dest = join(imageDestDir, 'from-' + ext.slice(1) + '.jpg')
+      await processImage({ path: input, destination: dest, newSize: thumbnailSize, keepOriginal: true })
+
+      const metadata = await sharp(await readFile(dest)).metadata()
+      expect(metadata.format).to.equal('jpeg')
+      expect(metadata.width).to.equal(thumbnailSize.width)
+    }
+  })
+
+  it('Should be able to decode all accepted image extensions', async function () {
+    const extensions = [
+      ...Object.values(MIMETYPES.IMAGE.MIMETYPE_EXT),
+      ...Object.values(MIMETYPES.LOGO_IMAGE.MIMETYPE_EXT),
+      ...CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME,
+      ...CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.IMAGE.EXTNAME,
+      ...CONSTRAINTS_FIELDS.ACTORS.IMAGE.EXTNAME,
+      ...CONSTRAINTS_FIELDS.LOGO.IMAGE.EXTNAME
+    ].filter(ext => ext !== '.svg') // SVG files are sanitized, not decoded
+
+    for (const ext of extensions) {
+      expect(isDecodableImageExtension(ext), ext).to.be.true
     }
   })
 

@@ -1,6 +1,6 @@
 import { ActivityPubActorType, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { processImage } from '@server/helpers/image-utils.js'
+import { processImage, processImagesOrCleanup } from '@server/helpers/image-utils.js'
 import { ActorReservedModel } from '@server/models/actor/actor-reserved.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { remove } from 'fs-extra/esm'
@@ -39,44 +39,15 @@ export async function updateLocalActorImageFiles (options: {
 }) {
   const { accountOrChannel, imagePhysicalFile, type, sendActorUpdate } = options
 
-  const processImageSize = async (imageSize: { width: number, height: number }) => {
-    const extension = getLowercaseExtension(imagePhysicalFile.path)
+  let processedImages: ProcessedActorImage[]
 
-    const imageName = buildUUID() + extension
-    const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, imageName)
-    await processImage({ path: imagePhysicalFile.path, destination, newSize: imageSize, keepOriginal: true })
-
-    return {
-      imageName,
-      imageSize
-    }
+  try {
+    processedImages = await generateActorImageSizes(imagePhysicalFile.path, type)
+  } finally {
+    await remove(imagePhysicalFile.path)
   }
 
-  const processedImages = await Promise.all(ACTOR_IMAGES_SIZE[type].map(processImageSize))
-  await remove(imagePhysicalFile.path)
-
-  return retryTransactionWrapper(() =>
-    sequelizeTypescript.transaction(async t => {
-      const actorImagesInfo = processedImages.map(({ imageName, imageSize }) => ({
-        name: imageName,
-        fileUrl: null,
-        height: imageSize.height,
-        width: imageSize.width,
-        cached: false
-      }))
-
-      const updatedActor = await updateActorImages(accountOrChannel.Actor, type, actorImagesInfo, t)
-      await updatedActor.save({ transaction: t })
-
-      if (sendActorUpdate) {
-        await sendUpdateActor(accountOrChannel, t)
-      }
-
-      return type === ActorImageType.AVATAR
-        ? updatedActor.Avatars
-        : updatedActor.Banners
-    })
-  )
+  return saveLocalActorImages({ accountOrChannel, processedImages, type, sendActorUpdate })
 }
 
 export async function deleteLocalActorImageFile (accountOrChannel: MAccountDefault | MChannelDefault, type: ActorImageType_Type) {
@@ -107,12 +78,11 @@ export async function regenerateActorImageFiles (options: {
 
   const physicalFilePath = image.getFSPath()
 
-  return updateLocalActorImageFiles({
-    accountOrChannel,
-    imagePhysicalFile: { path: physicalFilePath },
-    type,
-    sendActorUpdate: true
-  })
+  // Keep the original image if generation fails, since it is still used by the actor
+  const processedImages = await generateActorImageSizes(physicalFilePath, type)
+  await remove(physicalFilePath)
+
+  return saveLocalActorImages({ accountOrChannel, processedImages, type, sendActorUpdate: true })
 }
 
 // ---------------------------------------------------------------------------
@@ -133,4 +103,60 @@ export async function findAvailableLocalActorName (baseName: string, transaction
 
 export async function loadReservedActorName (baseName: string, transaction?: Transaction) {
   return await ActorModel.loadLocalByName(baseName, transaction) ?? await ActorReservedModel.loadByName(baseName, transaction)
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+type ProcessedActorImage = { imageName: string, imageSize: { width: number, height: number } }
+
+function generateActorImageSizes (path: string, type: ActorImageType_Type): Promise<ProcessedActorImage[]> {
+  const extension = getLowercaseExtension(path)
+
+  return processImagesOrCleanup(ACTOR_IMAGES_SIZE[type].map(imageSize => {
+    const imageName = buildUUID() + extension
+    const destination = join(CONFIG.STORAGE.ACTOR_IMAGES_DIR, imageName)
+
+    return {
+      destination,
+      process: async () => {
+        await processImage({ path, destination, newSize: imageSize, keepOriginal: true })
+
+        return { imageName, imageSize }
+      }
+    }
+  }))
+}
+
+function saveLocalActorImages (options: {
+  accountOrChannel: MAccountDefault | MChannelDefault
+  processedImages: ProcessedActorImage[]
+  type: ActorImageType_Type
+  sendActorUpdate: boolean
+}) {
+  const { accountOrChannel, processedImages, type, sendActorUpdate } = options
+
+  return retryTransactionWrapper(() =>
+    sequelizeTypescript.transaction(async t => {
+      const actorImagesInfo = processedImages.map(({ imageName, imageSize }) => ({
+        name: imageName,
+        fileUrl: null,
+        height: imageSize.height,
+        width: imageSize.width,
+        cached: false
+      }))
+
+      const updatedActor = await updateActorImages(accountOrChannel.Actor, type, actorImagesInfo, t)
+      await updatedActor.save({ transaction: t })
+
+      if (sendActorUpdate) {
+        await sendUpdateActor(accountOrChannel, t)
+      }
+
+      return type === ActorImageType.AVATAR
+        ? updatedActor.Avatars
+        : updatedActor.Banners
+    })
+  )
 }
