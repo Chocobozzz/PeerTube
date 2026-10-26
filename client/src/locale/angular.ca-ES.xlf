@@ -6274,7 +6274,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6449526184705760626" datatype="html">
         <source>Name of the uploaded file.</source>
-        <target state="new">Name of the uploaded file.</target>
+        <target state="translated">Nom del fitxer penjat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">13,15</context>
