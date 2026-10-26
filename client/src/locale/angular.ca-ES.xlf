@@ -6987,7 +6987,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3433732042719776492" datatype="html">
         <source>Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments.</source>
-        <target state="new">Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments.</target>
+        <target state="translated">Suprimir aquesta subscripció eliminarà &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; les etiquetes assignades automàticament als comentaris.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -6995,7 +6995,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1212937397936989983" datatype="html">
         <source>Subscription to &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; deleted.</source>
-        <target state="new">Subscription to &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; deleted.</target>
+        <target state="translated">Subscripció a &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; suprimida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">145</context>
