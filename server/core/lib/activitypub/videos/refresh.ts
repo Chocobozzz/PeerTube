@@ -50,7 +50,8 @@ export async function refreshVideoIfNeeded (options: {
       const videoUpdater = new APVideoUpdater(videoObject, video, video.url)
       await videoUpdater.update()
 
-      await syncVideoExternalAttributes(video, videoObject, options.syncParam)
+      // Rates have already been updated by the updater
+      await syncVideoExternalAttributes(video, videoObject, options.syncParam, { skipRates: true })
 
       ActorFollowHealthCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
 
