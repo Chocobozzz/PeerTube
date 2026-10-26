@@ -2,6 +2,7 @@
 
 import { FFmpegContainer, ffprobePromise } from '@peertube/peertube-ffmpeg'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { execPromise } from '@peertube/peertube-server/core/helpers/core-utils.js'
 import { expect } from 'chai'
 import { createWriteStream } from 'fs'
 import { copy, remove } from 'fs-extra/esm'
@@ -17,21 +18,23 @@ describe('FFmpeg container', function () {
   })
 
   describe('Merge an audio file with a cover', function () {
+    const audioPath = buildAbsoluteFixturePath('video_short_0p.mp4')
+
     async function mergeAndProbe (coverPath: string) {
       const outputPath = join(tmpDirectory, 'output.mp4')
 
       await buildFFmpegContainer().mergeInputs({
-        inputs: [ buildAbsoluteFixturePath('video_short_0p.mp4') ],
+        inputs: [ audioPath ],
         output: createWriteStream(outputPath),
         logError: true,
         coverPath
       })
 
-      return ffprobePromise(outputPath)
+      return { probe: await ffprobePromise(outputPath), outputPath }
     }
 
     async function checkAudioWithJPEGCover (coverPath: string) {
-      const probe = await mergeAndProbe(coverPath)
+      const { probe, outputPath } = await mergeAndProbe(coverPath)
 
       const audioStreams = probe.streams.filter(s => s.codec_type === 'audio')
       expect(audioStreams).to.have.lengthOf(1)
@@ -40,9 +43,14 @@ describe('FFmpeg container', function () {
       const videoStreams = probe.streams.filter(s => s.codec_type === 'video')
       expect(videoStreams).to.have.lengthOf(1)
       expect(videoStreams[0].codec_name).to.equal('mjpeg')
+
+      // The cover is a single image and the audio stream is entirely copied
+      const outputPackets = await countPackets(outputPath)
+      expect(outputPackets.video).to.equal(1)
+      expect(outputPackets.audio).to.equal((await countPackets(audioPath)).audio)
     }
 
-    for (const coverFixture of [ 'custom-thumbnail-big.jpg', 'avatar.png', 'avatar.webp' ]) {
+    for (const coverFixture of [ 'custom-thumbnail-big.jpg', 'avatar.png', 'avatar.webp', 'avatar.gif' ]) {
       it(`Should embed ${coverFixture} cover as JPEG`, async function () {
         this.timeout(30000)
 
@@ -53,7 +61,7 @@ describe('FFmpeg container', function () {
     it('Should embed a webp cover with a misleading extension as JPEG', async function () {
       this.timeout(30000)
 
-      // Remote thumbnails are downloaded as is, with an extension built from the mimetype sent by the remote server
+      // Remote thumbnails are downloaded as is, with an extension built from the remote file URL
       const coverPath = join(tmpDirectory, 'webp-cover.jpg')
       await copy(buildAbsoluteFixturePath('avatar.webp'), coverPath)
 
@@ -74,5 +82,16 @@ describe('FFmpeg container', function () {
       tmpDirectory,
       logger: { info: noop, debug: noop, warn: noop, error: noop }
     })
+  }
+
+  async function countPackets (path: string) {
+    const result = JSON.parse(
+      await execPromise(`ffprobe -v error -count_packets -show_entries stream=codec_type,nb_read_packets -of json ${path}`)
+    )
+
+    const streams: { codec_type: string, nb_read_packets: string }[] = result.streams
+    const getCount = (type: string) => parseInt(streams.find(s => s.codec_type === type)?.nb_read_packets)
+
+    return { audio: getCount('audio'), video: getCount('video') }
   }
 })

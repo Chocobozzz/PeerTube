@@ -35,6 +35,9 @@ export class FFmpegContainer {
     if (coverPath) {
       command.outputOption('-c:v mjpeg')
         .outputOption('-q:v 2')
+        // Only keep the first frame of animated images
+        // Don't use -frames:v 1 that also stops the audio stream
+        .outputOption('-filter:v trim=end_frame=1')
     }
 
     command.outputOption('-movflags frag_every_frame+empty_moov')
