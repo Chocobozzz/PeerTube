@@ -71,7 +71,7 @@ async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVi
 
   logger.info('Sync %s of video %s', type, video.url)
 
-  const { body } = await fetchAP<ActivityPubOrderedCollection<any>>(uri)
+  const { body } = await fetchAP<ActivityPubOrderedCollection<any>>(uri, { preventCrossHostRedirect: false })
 
   if (isNaN(body.totalItems)) {
     logger.error('Cannot sync %s of video %s, totalItems is not a number', type, video.url, { body })

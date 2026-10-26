@@ -52,6 +52,8 @@ export type PeerTubeRequestOptions = {
 
   followRedirect?: boolean
 
+  preventCrossHostRedirect?: boolean
+
   // Support AbortSignal for request cancellation (e.g., on job timeout)
   signal?: AbortSignal
 } & Pick<OptionsInit, 'headers' | 'json' | 'method' | 'searchParams'>
@@ -131,6 +133,17 @@ const unsafeSSRFGot = got.extend({
             httpSignatureOptions.headers
           )
         }
+      }
+    ],
+
+    beforeRedirect: [
+      (options, response) => {
+        if (options.context?.preventCrossHostRedirect !== true) return
+
+        const redirectUrl = buildUrl(options.url)
+        if (redirectUrl.host === new URL(response.url).host) return
+
+        throw new Error(`Cannot follow redirection of ${response.url} to another host (${redirectUrl.href})`)
       }
     ],
 
@@ -280,7 +293,7 @@ function getUserAgent () {
 function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResponseBodyWrapped {
   const { activityPub, bodyKBLimit = 3000 } = options
 
-  const context = { bodyKBLimit, httpSignature: options.httpSignature }
+  const context = { bodyKBLimit, httpSignature: options.httpSignature, preventCrossHostRedirect: options.preventCrossHostRedirect }
 
   let headers = options.headers || {}
 
