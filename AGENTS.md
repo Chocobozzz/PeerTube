@@ -472,6 +472,12 @@ Non-obvious setup facts:
   `/client/assets` (mascots, default avatars) through that route. The entrypoint
   copies `client/src/assets` to `client/dist/assets` once, which is what keeps
   those images from 404ing in dev.
+- **PWA manifest.** The dev client serves `client/src/index.html` as-is, so its
+  `<link rel="manifest" href="/manifest.webmanifest?[manifestContentHash]">`
+  reaches the browser with the server-side placeholder still in it instead of
+  the hash the API would substitute. `client/proxy.config.json` forwards
+  `/manifest.webmanifest` to the API, which serves the manifest dynamically;
+  without that entry the link 404s on every page load in dev.
 - **pnpm store** lives in the `pnpm-store` volume (`store-dir=/pnpm-store`) so it
   does not create a `.pnpm-store` directory inside the bind-mounted repo.
 - **Dev credentials**: `root` / `test` (created automatically because
@@ -483,6 +489,8 @@ Verifying it works:
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/                       # 200, client
 curl -s http://localhost:3000/api/v1/config/about | head -c 80                        # API through the dev proxy
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/client/assets/images/mascot/default.svg
+curl -s -o /dev/null -w "%{http_code}\n" \
+  "http://localhost:3000/manifest.webmanifest?%5BmanifestContentHash%5D"               # 200, proxied to the API
 # the preview proxy's Host must be accepted (403 "Blocked request" if the allowlist regressed)
 curl -s -o /dev/null -w "%{http_code}\n" \
   -H "Host: 3000-${BASE44_PUBLIC_HOST_SUFFIX}" http://localhost:3000/
