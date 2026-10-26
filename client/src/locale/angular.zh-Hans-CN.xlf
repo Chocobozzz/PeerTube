@@ -19365,7 +19365,7 @@
       </trans-unit>
       <trans-unit id="4985871382843824389" datatype="html">
         <source>Actions for videos</source>
-        <target state="new">Actions for videos</target>
+        <target state="translated">视频操作</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">120</context>
@@ -19405,7 +19405,7 @@
       </trans-unit>
       <trans-unit id="82990740698454566" datatype="html">
         <source>{count, plural, =1 {Delete video} other {Delete videos}}</source>
-        <target state="new">{count, plural, =1 {Delete video} other {Delete videos}}</target>
+        <target state="translated">{count, plural, =1 {删除此视频} other {删除这些视频}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">131</context>
