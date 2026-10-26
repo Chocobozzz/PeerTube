@@ -6831,7 +6831,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5240842733297472555" datatype="html">
         <source>The auto tags on existing comments will be updated based on the words in this list.</source>
-        <target state="new">The auto tags on existing comments will be updated based on the words in this list.</target>
+        <target state="translated">Les etiquetes automàtiques dels comentaris existents s'actualitzaran segons les paraules d'aquesta llista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">14,16</context>
@@ -6839,7 +6839,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5908006683848456416" datatype="html">
         <source>However, the auto-tagging policies will not affect existing comments:</source>
-        <target state="new">However, the auto-tagging policies will not affect existing comments:</target>
+        <target state="translated">Tanmateix, les polítiques d'etiquetatge automàtic no afectaran els comentaris existents:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">16</context>
