@@ -6955,7 +6955,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1627379234330905470" datatype="html">
         <source>If a word is removed from the list, any comments that are currently awaiting review will not be affected</source>
-        <target state="new">If a word is removed from the list, any comments that are currently awaiting review will not be affected</target>
+        <target state="translated">Si s'elimina una paraula de la llista, qualsevol comentari que estigui actualment pendent de revisió no es veurà afectat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">97</context>
@@ -6963,7 +6963,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8886093131637035111" datatype="html">
         <source>Watched words URL</source>
-        <target state="new">Watched words URL</target>
+        <target state="translated">URL de les paraules buscades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">104</context>
@@ -6971,7 +6971,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2602880137044610698" datatype="html">
         <source>Watched words URL is required.</source>
-        <target state="new">Watched words URL is required.</target>
+        <target state="translated">És necessari l'URL de les paraules buscades.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">51</context>
