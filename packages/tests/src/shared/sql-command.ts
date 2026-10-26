@@ -38,6 +38,12 @@ export class SQLCommand {
       .then(rows => rows[0].fileUrl)
   }
 
+  async countActorsByUrl (url: string) {
+    const [ { total } ] = await this.selectQuery<{ total: string }>(`SELECT COUNT(*) AS total FROM "actor" WHERE "url" = :url`, { url })
+
+    return parseInt(total, 10)
+  }
+
   setActorField (to: string, field: string, value: string) {
     return this.updateQuery(`UPDATE actor SET ${this.escapeColumnName(field)} = :value WHERE url = :to`, { value, to })
   }

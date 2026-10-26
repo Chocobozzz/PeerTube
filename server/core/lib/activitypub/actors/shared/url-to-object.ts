@@ -56,7 +56,7 @@ export async function fetchActorFollowsCount (actorObject: ActivityPubActor) {
 
 async function fetchActorTotalItems (url: string) {
   try {
-    const { body } = await fetchAP<ActivityPubOrderedCollection<unknown>>(url)
+    const { body } = await fetchAP<ActivityPubOrderedCollection<unknown>>(url, { preventCrossHostRedirect: false })
 
     return body.totalItems || 0
   } catch (err) {

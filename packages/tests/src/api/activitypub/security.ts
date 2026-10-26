@@ -12,7 +12,7 @@ import {
 import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 import { signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
-import { makePOSTAPRequest } from '@tests/shared/requests.js'
+import { fakeContextFilter, makePOSTAPRequest, makeSignedPOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'
@@ -23,10 +23,6 @@ function signJsonLDObjectWithoutAssertion (options: Parameters<typeof signJsonLD
 
     disableWorkerThreadAssertion: true
   })
-}
-
-function fakeFilter () {
-  return (data: any) => Promise.resolve(data)
 }
 
 function setKeysOfServer (onServer: SQLCommand, ofServerUrl: string, publicKey: string, privateKey: string) {
@@ -62,7 +58,7 @@ function getAnnounceWithoutContext (server: PeerTubeServer) {
   return result
 }
 
-async function makeFollowRequest (to: { url: string }, by: { url: string, privateKey }) {
+function makeFollowRequest (to: { url: string }, by: { url: string, privateKey }) {
   const follow = {
     type: 'Follow',
     id: by.url + '/' + new Date().getTime(),
@@ -70,20 +66,13 @@ async function makeFollowRequest (to: { url: string }, by: { url: string, privat
     object: to.url
   }
 
-  const body = await activityPubContextify(follow, 'Follow', fakeFilter())
-
-  const httpSignature = {
+  return makeSignedPOSTAPRequest({
+    url: to.url + '/inbox',
+    activity: follow,
+    contextType: 'Follow',
     keyId: by.url,
-    key: by.privateKey,
-    headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
-  }
-  const headers = {
-    'digest': buildDigest(body),
-    'content-type': 'application/activity+json',
-    'accept': ACTIVITY_PUB.ACCEPT_HEADER
-  }
-
-  return makePOSTAPRequest(to.url + '/inbox', body, httpSignature, headers)
+    privateKey: by.privateKey
+  })
 }
 
 describe('Test ActivityPub security', function () {
@@ -106,7 +95,7 @@ describe('Test ActivityPub security', function () {
       byActor: signer,
       data: activity,
       contextType: 'Announce',
-      contextFilter: fakeFilter(),
+      contextFilter: fakeContextFilter(),
       signerFunction: signJsonLDObjectWithoutAssertion
     })
 
@@ -142,7 +131,7 @@ describe('Test ActivityPub security', function () {
 
   describe('When checking HTTP signature', function () {
     it('Should fail with an invalid digest', async function () {
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
       const headers = {
         Digest: buildDigest({ hello: 'coucou' })
       }
@@ -156,7 +145,7 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should fail with an invalid date', async function () {
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
       headers['date'] = 'Wed, 21 Oct 2015 07:28:00 GMT'
 
@@ -172,7 +161,7 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(sqlCommands[0], servers[1].url, invalidKeys.publicKey, invalidKeys.privateKey)
       await setKeysOfServer(sqlCommands[1], servers[1].url, invalidKeys.publicKey, invalidKeys.privateKey)
 
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       try {
@@ -187,7 +176,7 @@ describe('Test ActivityPub security', function () {
       await setKeysOfServer(sqlCommands[0], servers[1].url, keys.publicKey, keys.privateKey)
       await setKeysOfServer(sqlCommands[1], servers[1].url, keys.publicKey, keys.privateKey)
 
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       const signatureOptions = baseHttpSignature()
@@ -210,7 +199,7 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should succeed with a valid HTTP signature draft 11 (without date but with (created))', async function () {
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       const signatureOptions = baseHttpSignature()
@@ -221,7 +210,7 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should succeed with a valid HTTP signature', async function () {
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
@@ -246,7 +235,7 @@ describe('Test ActivityPub security', function () {
         actor: servers[1].url + '/accounts/peertube',
         totalItems: items.length,
         orderedItems: items
-      }, 'Collection', fakeFilter())
+      }, 'Collection', fakeContextFilter())
 
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
@@ -270,7 +259,7 @@ describe('Test ActivityPub security', function () {
       await killallServers([ servers[1] ])
       await servers[1].run()
 
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeFilter())
+      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
       try {
@@ -306,7 +295,7 @@ describe('Test ActivityPub security', function () {
         byActor: signer,
         data: body,
         contextType: 'Announce',
-        contextFilter: fakeFilter(),
+        contextFilter: fakeContextFilter(),
         signerFunction: signJsonLDObjectWithoutAssertion
       })
 
@@ -332,7 +321,7 @@ describe('Test ActivityPub security', function () {
         byActor: signer,
         data: body,
         contextType: 'Announce',
-        contextFilter: fakeFilter(),
+        contextFilter: fakeContextFilter(),
         signerFunction: signJsonLDObjectWithoutAssertion
       })
 
@@ -557,7 +546,7 @@ describe('Test ActivityPub security', function () {
         byActor: signer,
         data: body,
         contextType: 'Announce',
-        contextFilter: fakeFilter(),
+        contextFilter: fakeContextFilter(),
         signerFunction: signJsonLDObjectWithoutAssertion
       })
 
