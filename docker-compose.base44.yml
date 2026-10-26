@@ -1,0 +1,95 @@
+# Base44 sandbox/dev environment for PeerTube.
+#
+# Runs the project's own development workflow (`npm run dev`) from the bind-mounted
+# source tree: Express API on :9000 and the Angular dev server on :3000, which is the
+# single public entry point (it proxies /api, /static, /client... to the API).
+#
+#   docker compose -f docker-compose.base44.yml up -d --build
+#
+# Dev credentials created on first boot: root / test
+name: peertube-base44
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: peertube
+      POSTGRES_PASSWORD: peertube
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      # Creates the peertube_dev database with the pg_trgm/unaccent extensions PeerTube requires
+      - ./docker/base44/init.sql:/docker-entrypoint-initdb.d/10-peertube.sql:ro
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U peertube -d postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: on-failure
+    labels:
+      base44.project: "PeerTube"
+      base44.kind: "infra"
+
+  redis:
+    image: redis:7
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep -q PONG" ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: on-failure
+    labels:
+      base44.project: "PeerTube"
+      base44.kind: "infra"
+
+  app:
+    build:
+      context: ./docker/base44
+    working_dir: /app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      # Angular dev server (frontend + /api proxy)
+      - "3000:3000"
+    volumes:
+      - .:/app
+      # pnpm content-addressable store, kept out of the source tree
+      - pnpm-store:/pnpm-store
+    environment:
+      # Delivered by the sandbox: BASE44_PREVIEW_MODE gates the sandbox-only dev tweaks
+      # (public webserver hostname written to config/local-dev.json, Angular --allowed-hosts)
+      - BASE44_PREVIEW_MODE
+      - BASE44_PUBLIC_HOST_SUFFIX
+      - BASE44_SANDBOX_HOST_DOMAIN
+      - PEERTUBE_DB_HOST=postgres
+      - PEERTUBE_REDIS_HOST=redis
+    # Dependencies are installed on startup, from the current lockfile, then the dev stack starts
+    command: [ "sh", "-ec", "CI=true pnpm install --frozen-lockfile && exec sh docker/base44/dev-entrypoint.sh" ]
+    healthcheck:
+      # Both components must answer: Angular client on :3000 and the API on :9000
+      test:
+        - "CMD-SHELL"
+        - >-
+          curl -fsS -o /dev/null http://127.0.0.1:3000/
+          && curl -fsS -o /dev/null http://127.0.0.1:9000/api/v1/config/about
+          || { echo "peerTube not ready (client :3000 or API :9000)"; exit 1; }
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      # First boot compiles the server (tsc) and the Angular client
+      start_period: 600s
+    restart: on-failure
+    labels:
+      base44.project: "PeerTube"
+      base44.kind: "web"
+      base44.port: "3000"
+
+volumes:
+  postgres-data:
+  redis-data:
+  pnpm-store:

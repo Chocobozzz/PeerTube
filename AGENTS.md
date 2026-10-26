@@ -413,3 +413,87 @@ Export to Jaeger (tracing) or Prometheus (metrics) is configurable in
   — Library / business-logic documentation
 - [SECURITY.md](SECURITY.md) — Vulnerability disclosure policy
 - [FAQ.md](FAQ.md) — Frequently asked questions
+
+## Base44 sandbox environment
+
+`docker-compose.base44.yml` runs the project's own development workflow from the
+bind-mounted source tree — it never builds a production image, so source edits
+reach the running app through the watchers.
+
+```bash
+docker compose -f docker-compose.base44.yml up -d --build   # first boot ~4 min
+docker compose -f docker-compose.base44.yml logs -f app
+```
+
+Services:
+
+- `postgres` — PostgreSQL 15, user/password `peertube`. `docker/base44/init.sql`
+  creates the `peertube_dev` database with the `pg_trgm` and `unaccent`
+  extensions PeerTube migrations require (upstream leaves this to the operator).
+- `redis` — job queue/cache.
+- `app` — `docker/base44/Dockerfile` (Node 22 + FFmpeg). Startup installs
+  dependencies from the lockfile (`CI=true pnpm install --frozen-lockfile`), then
+  `docker/base44/dev-entrypoint.sh` runs `npm run dev`: the Express API on :9000
+  and the Angular dev server on :3000, which is the only published port and
+  proxies `/api`, `/static`, `/client`… to the API.
+
+Non-obvious setup facts:
+
+- **Config override.** `dev-entrypoint.sh` builds a `NODE_CONFIG` JSON override
+  (PeerTube logs the hierarchy as `default.yaml -> dev.yaml -> $NODE_CONFIG`) to
+  point `database`/`redis` at the compose services instead of the `127.0.0.1`
+  hosts from `config/dev.yaml`. No YAML file in the repo is modified.
+- **Public URL.** Under the sandbox preview (`BASE44_PREVIEW_MODE=1` and
+  `BASE44_PUBLIC_HOST_SUFFIX` set) the entrypoint writes the gitignored
+  `config/local-dev.json` (node-config's `local-$NODE_ENV` layer) with
+  `webserver.hostname` = the public `3000-…` origin, `port: 443`, `https: true`,
+  so the absolute URLs PeerTube generates (thumbnails, avatars, HLS playlists…)
+  go back through the port 3000 proxy. With the flag unset nothing is written and
+  PeerTube keeps its normal `localhost:9000` behaviour.
+- **Why `webserver.hostname` is not in `$NODE_CONFIG`.**
+  `client/src/standalone/videos/vite.config.mjs` reads
+  `$NODE_CONFIG.webserver.hostname` as the address its dev server *binds* to (and
+  as its proxy target). Putting the public hostname there makes that server fail
+  with `EADDRNOTAVAIL`, and `concurrently -k` then tears down `npm run dev`, so
+  the stack crash-loops. `$NODE_CONFIG` therefore carries only `database`/`redis`;
+  the API gets the public hostname from the local config file, which the dev
+  tooling never reads.
+- **Preview host allowlist.** The Angular dev server answers
+  `403 Blocked request. This host is not allowed` to the preview proxy's `Host`,
+  and it does **not** read Vite's `__VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS`.
+  `ng serve` only accepts `--allowed-hosts` without a value (Vite's "allow all"):
+  a host list is an `angular.json` option only, and the sandbox hostname is
+  environment-specific, so it cannot be written there. `scripts/dev/client.sh`
+  therefore appends `--allowed-hosts` to `ng serve` only when
+  `BASE44_PREVIEW_MODE=1`; when the flag is unset the command is unchanged and
+  the dev server keeps Vite's default localhost-only allowlist.
+- **Client assets.** The API serves `/client/*` from `client/dist`, and
+  `npm run dev` only copies the locales there — the dev client fetches
+  `/client/assets` (mascots, default avatars) through that route. The entrypoint
+  copies `client/src/assets` to `client/dist/assets` once, which is what keeps
+  those images from 404ing in dev.
+- **pnpm store** lives in the `pnpm-store` volume (`store-dir=/pnpm-store`) so it
+  does not create a `.pnpm-store` directory inside the bind-mounted repo.
+- **Dev credentials**: `root` / `test` (created automatically because
+  `NODE_ENV=dev`; see `server/core/initializers/installer.ts`).
+
+Verifying it works:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/                       # 200, client
+curl -s http://localhost:3000/api/v1/config/about | head -c 80                        # API through the dev proxy
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:3000/client/assets/images/mascot/default.svg
+# the preview proxy's Host must be accepted (403 "Blocked request" if the allowlist regressed)
+curl -s -o /dev/null -w "%{http_code}\n" \
+  -H "Host: 3000-${BASE44_PUBLIC_HOST_SUFFIX}" http://localhost:3000/
+docker compose -f docker-compose.base44.yml ps                                        # app healthy
+```
+
+Both the Angular dev server on :3000 and the embed dev server on :5173 must be
+running (`docker compose ... exec app ps aux | grep vite`); if the embed server
+exits, `concurrently -k` kills the whole client group and :3000 goes down.
+
+Not covered by this environment: video transcoding works (FFmpeg is installed)
+but HLS/WebRTC live streaming and RTMP ingest ports are not published, and no
+SMTP server is configured — `config/dev.yaml` leaves SMTP unset, so emails
+(verification, password reset) are only logged.
