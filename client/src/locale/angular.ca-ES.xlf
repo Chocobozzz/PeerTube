@@ -4611,7 +4611,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5393752421173524034" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Set up<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Set up<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>your account<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Configura<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>el vostre compte<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">57,59</context>
@@ -5246,7 +5246,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4088311569349098646" datatype="html">
         <source>Stats</source>
-        <target state="new">Stats</target>
+        <target state="translated">Estadístiques</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">19,21</context>
@@ -5558,7 +5558,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="760957797157374239" datatype="html">
         <source>data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></source>
-        <target state="new">data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></target>
+        <target state="translated">data-playlist-id no es pot utilitzar amb <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">135</context>
@@ -5566,7 +5566,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6420937489222972725" datatype="html">
         <source>Open filters</source>
-        <target state="new">Open filters</target>
+        <target state="translated">Obre els filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5574,7 +5574,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5098514115800581725" datatype="html">
         <source>Close filters</source>
-        <target state="new">Close filters</target>
+        <target state="translated">Tanca els filtres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">24,25</context>
@@ -5582,7 +5582,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4391289919356861627" datatype="html">
         <source>Apply</source>
-        <target state="new">Apply</target>
+        <target state="translated">Aplica</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/advanced-input-filter.component.html</context>
           <context context-type="linenumber">120</context>
@@ -5710,7 +5710,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4253402786518820650" datatype="html">
         <source>Registration state</source>
-        <target state="new">Registration state</target>
+        <target state="translated">Estat del registre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">78</context>
@@ -5718,7 +5718,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1162417745553050010" datatype="html">
         <source>All registrations</source>
-        <target state="new">All registrations</target>
+        <target state="translated">Tots els registres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -5726,7 +5726,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7813761224520792935" datatype="html">
         <source>Accepted registrations</source>
-        <target state="new">Accepted registrations</target>
+        <target state="translated">Registres acceptats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -5734,7 +5734,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9164244516568257595" datatype="html">
         <source>Rejected registrations</source>
-        <target state="new">Rejected registrations</target>
+        <target state="translated">Registres rebutjats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -5742,7 +5742,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="843338523216932248" datatype="html">
         <source>Pending registrations</source>
-        <target state="new">Pending registrations</target>
+        <target state="translated">Registres pendents</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -5750,7 +5750,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7578466065199888239" datatype="html">
         <source>Accept...</source>
-        <target state="new">Accept...</target>
+        <target state="translated">Accepta...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -5762,7 +5762,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3557445363988301484" datatype="html">
         <source>Reject...</source>
-        <target state="new">Reject...</target>
+        <target state="translated">Rebutja...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -5890,7 +5890,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6741450303391308175" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Drag and drop your new video file here<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or click on the button below to replace your video: </source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Drag and drop your new video file here<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or click on the button below to replace your video: </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Arrossegueu i deixeu anar aquí el nou fitxer de vídeo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> o feu clic al botó de sota per substituir el vídeo: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/replace-file/video-replace-file.component.html</context>
           <context context-type="linenumber">20,23</context>
