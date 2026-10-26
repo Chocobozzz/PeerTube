@@ -6979,7 +6979,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4147764481886042165" datatype="html">
         <source>Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments and videos.</source>
-        <target state="new">Deleting this subscription will remove &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; auto tags assigned to comments and videos.</target>
+        <target state="translated">Suprimir aquesta subscripció eliminarà &lt;strong&gt;<x id="PH" equiv-text="subscription.name"/>&lt;/strong&gt; les etiquetes assignades automàticament als comentaris i als vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.ts</context>
           <context context-type="linenumber">134</context>
