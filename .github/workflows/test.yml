@@ -122,8 +122,8 @@ jobs:
           # Only install binaries, without creating and starting a main cluster
           sudo mkdir -p /etc/postgresql-common/createcluster.d
           echo 'create_main_cluster = false' | sudo tee /etc/postgresql-common/createcluster.d/00-peertube.conf
-          sudo apt-get install -y postgresql-14
-          echo "/usr/lib/postgresql/14/bin" >> $GITHUB_PATH
+          sudo apt-get install -y postgresql
+          echo "/usr/lib/postgresql/$(ls /usr/lib/postgresql | sort -V | tail -n 1)/bin" >> $GITHUB_PATH
           echo "ENABLE_DB_REPLICA_TESTS=true" >> $GITHUB_ENV
 
       - name: Run Test
