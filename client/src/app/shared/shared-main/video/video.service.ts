@@ -35,7 +35,7 @@ import {
   VideoLicenceType,
   VideoPrivacy,
   VideoPrivacyType,
-  VideoRecommendationStrategyType,
+  VideoRecommendationScopeType,
   VideosCommonQuery,
   Video as VideoServerModel,
   VideoSortField,
@@ -166,21 +166,26 @@ export class VideoService {
       )
   }
 
-  listRecommendationVideos (
-    options: VideoListParams & {
-      strategy: VideoRecommendationStrategyType
-      videoId?: string
-    }
-  ): Observable<ResultList<Video>> {
-    const { strategy, videoId, ...listParams } = options
+  listRecommendationVideos (options: {
+    scope?: VideoRecommendationScopeType
+    videoId?: string
+    videoPassword?: string
+    count: number
+    excludeVideoIds?: number[]
+  }): Observable<ResultList<Video>> {
+    const { scope, videoId, videoPassword, count, excludeVideoIds = [] } = options
+
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
 
     let params = new HttpParams()
-    params = this.buildVideoListParams({ params, ...listParams })
-    params = params.set('strategy', strategy)
+    params = this.buildNSFWParams(params)
+    if (scope) params = params.set('scope', scope)
+    params = params.set('count', count)
     if (videoId) params = params.set('videoId', videoId)
+    params = this.restService.addArrayParams(params, 'excludeVideoIds', excludeVideoIds)
 
     return this.authHttp
-      .get<ResultList<Video>>(VideoService.BASE_RECOMMENDATIONS_URL + '/videos', { params })
+      .get<ResultList<Video>>(VideoService.BASE_RECOMMENDATIONS_URL + '/videos', { params, headers })
       .pipe(
         switchMap(res => this.extractVideos(res)),
         catchError(err => this.restExtractor.handleError(err))

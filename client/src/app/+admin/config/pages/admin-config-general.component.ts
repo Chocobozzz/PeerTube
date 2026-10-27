@@ -30,7 +30,7 @@ import {
   CustomConfig,
   VideoCommentPolicyType,
   VideoPrivacyType,
-  VideoRecommendationStrategyType
+  VideoRecommendationScopeType
 } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '@pt-types'
 import merge from 'lodash-es/merge'
@@ -210,7 +210,7 @@ type Form = {
     publish: FormGroup<{
       downloadPolicy: FormControl<DownloadPolicy>
       commentsPolicy: FormControl<VideoCommentPolicyType>
-      recommendationStrategy: FormControl<VideoRecommendationStrategyType>
+      recommendationScope: FormControl<VideoRecommendationScopeType>
       privacy: FormControl<VideoPrivacyType>
       licence: FormControl<number>
     }>
@@ -276,7 +276,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
 
   privacyOptions: SelectOptionsItem[] = []
   commentPoliciesOptions: SelectOptionsItem[] = []
-  recommendationStrategiesOptions: SelectOptionsItem[] = []
+  recommendationScopesOptions: SelectOptionsItem[] = []
   downloadPoliciesOptions: SelectOptionsItem<DownloadPolicy>[] = [
     { id: 'allowed', label: $localize`Allowed` },
     { id: 'disabled', label: $localize`Disabled` }
@@ -293,14 +293,14 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
       licences: ConstantLabel<number>[]
       privacies: ConstantLabel<VideoPrivacyType>[]
       commentPolicies: ConstantLabel<VideoCommentPolicyType>[]
-      recommendationStrategies: ConstantLabel<VideoRecommendationStrategyType>[]
+      recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[]
     }
 
     this.privacyOptions = this.videoService.explainedPrivacyLabels(data.privacies).videoPrivacies
     this.licenceOptions = data.licences
 
     this.commentPoliciesOptions = data.commentPolicies
-    this.recommendationStrategiesOptions = data.recommendationStrategies
+    this.recommendationScopesOptions = data.recommendationScopes
 
     this.buildLandingPageOptions()
 
@@ -470,7 +470,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         publish: {
           downloadPolicy: null,
           commentsPolicy: null,
-          recommendationStrategy: null,
+          recommendationScope: null,
           privacy: null,
           licence: null
         },

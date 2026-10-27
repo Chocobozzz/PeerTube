@@ -11,7 +11,7 @@ import {
   VideoPlaylistPrivacy,
   VideoPlaylistType,
   VideoPrivacy,
-  VideoRecommendationStrategy,
+  VideoRecommendationScope,
   VideoResolution,
   VideoState
 } from '@peertube/peertube-models'
@@ -506,7 +506,7 @@ function runTest (withObjectStorage: boolean) {
           })
 
           const video = await checkServer.videos.get({ id: otherVideo.uuid })
-          expect(video.recommendationStrategy.id).to.equal(VideoRecommendationStrategy.ONLY_CHANNEL_VIDEOS)
+          expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
         }
 
         const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })

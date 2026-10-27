@@ -324,7 +324,7 @@ export class VideoTableAttributes {
       'aspectRatio',
       'url',
       'commentsPolicy',
-      'recommendationStrategy',
+      'recommendationScope',
       'downloadEnabled',
       'embedPrivacyPolicy',
       'waitTranscoding',

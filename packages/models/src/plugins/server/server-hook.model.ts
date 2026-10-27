@@ -27,7 +27,7 @@ export const serverFilterHookObject = {
   'filter:api.overviews.videos.list.params': true,
   'filter:api.overviews.videos.list.result': true,
 
-  // Filter params/result used to list recommented videos for the REST API
+  // Filter params/result used to list recommended videos for the REST API
   'filter:api.recommendations.videos.list.params': true,
   'filter:api.recommendations.videos.list.result': true,
 

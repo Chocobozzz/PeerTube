@@ -88,7 +88,7 @@ export class LocalVideoUpdater {
           'description',
           'downloadEnabled',
           'commentsPolicy',
-          'recommendationStrategy'
+          'recommendationScope'
         ]
 
         for (const key of keysToUpdate) {

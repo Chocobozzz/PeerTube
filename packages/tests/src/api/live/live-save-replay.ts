@@ -8,6 +8,7 @@ import {
   VideoEmbedPrivacyPolicy,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoRecommendationScope,
   VideoState,
   VideoStateType
 } from '@peertube/peertube-models'
@@ -458,6 +459,7 @@ describe('Save replay setting', function () {
           domains: [ 'example.com' ],
           policy: VideoEmbedPrivacyPolicy.ALLOWLIST
         })
+        await servers[0].videos.update({ id: liveVideoUUID, attributes: { recommendationScope: VideoRecommendationScope.CHANNEL } })
 
         await waitJobs(servers)
 
@@ -513,6 +515,11 @@ describe('Save replay setting', function () {
         const videoEmbedPrivacy = await servers[0].videoEmbedPrivacy.get({ videoId: lastReplayUUID })
         expect(videoEmbedPrivacy.policy.id).to.equal(VideoEmbedPrivacyPolicy.ALLOWLIST)
         expect(videoEmbedPrivacy.domains).to.deep.equal([ 'example.com' ])
+
+        for (const server of servers) {
+          const video = await server.videos.get({ id: lastReplayUUID })
+          expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
+        }
       })
 
       it('Should have appropriate ended session and replay live session', async function () {

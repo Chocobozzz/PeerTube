@@ -127,7 +127,7 @@ type UpdateFromAPIOptions = {
     | 'waitTranscoding'
     | 'support'
     | 'commentsPolicy'
-    | 'recommendationStrategy'
+    | 'recommendationScope'
     | 'downloadEnabled'
     | 'pluginData'
     | 'scheduledUpdate'
@@ -338,6 +338,7 @@ export class VideoEdit {
     this.common.downloadEnabled = serverDefaults.publish.downloadEnabled
     this.common.licence = serverDefaults.publish.licence
     this.common.commentsPolicy = serverDefaults.publish.commentsPolicy
+    this.common.recommendationScope = serverDefaults.publish.recommendationScope
     this.common.nsfw = this.serverConfig.instance.isNSFW
 
     this.common.waitTranscoding = true
@@ -428,7 +429,7 @@ export class VideoEdit {
         waitTranscoding: video.waitTranscoding ?? null,
         support: video.support ?? '',
         commentsPolicy: video.commentsPolicy?.id ?? null,
-        recommendationStrategy: video.recommendationStrategy?.id ?? null,
+        recommendationScope: video.recommendationScope?.id ?? null,
 
         downloadEnabled: video.downloadEnabled ?? null,
 
@@ -590,7 +591,7 @@ export class VideoEdit {
     if (values.waitTranscoding !== undefined) this.common.waitTranscoding = values.waitTranscoding
     if (values.support !== undefined) this.common.support = values.support
     if (values.commentsPolicy !== undefined) this.common.commentsPolicy = values.commentsPolicy
-    if (values.recommendationStrategy !== undefined) this.common.recommendationStrategy = values.recommendationStrategy
+    if (values.recommendationScope !== undefined) this.common.recommendationScope = values.recommendationScope
     if (values.downloadEnabled !== undefined) this.common.downloadEnabled = values.downloadEnabled
     if (values.thumbnailfile !== undefined) this.common.thumbnailfile = values.thumbnailfile
     if (values.pluginData !== undefined) this.common.pluginData = values.pluginData
@@ -688,7 +689,7 @@ export class VideoEdit {
       nsfwSummary: this.common.nsfwSummary,
 
       commentsPolicy: this.common.commentsPolicy,
-      recommendationStrategy: this.common.recommendationStrategy,
+      recommendationScope: this.common.recommendationScope,
       waitTranscoding: this.common.waitTranscoding,
       channelId: this.common.channelId,
       privacy: this.common.privacy,
@@ -758,7 +759,7 @@ export class VideoEdit {
       nsfwSummary: this.common.nsfwSummary || null,
       waitTranscoding: this.common.waitTranscoding,
       commentsPolicy: this.common.commentsPolicy,
-      recommendationStrategy: this.common.recommendationStrategy,
+      recommendationScope: this.common.recommendationScope,
       downloadEnabled: this.common.downloadEnabled,
       thumbnailfile: this.common.thumbnailfile,
       scheduleUpdate: this.common.scheduleUpdate || null,

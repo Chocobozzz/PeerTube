@@ -14,14 +14,14 @@ import {
   VideoObject,
   VideoPrivacy,
   VideoRateType,
-  VideoRecommendationStrategy,
+  VideoRecommendationScope,
   VideoState,
   VideoStreamingPlaylistType,
   VideoSummary,
   type VideoCommentPolicyType,
-  type VideoRecommendationStrategyType,
   type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
+  type VideoRecommendationScopeType,
   type VideoStateType
 } from '@peertube/peertube-models'
 import { peertubeTruncate, uuidToShort } from '@peertube/peertube-node-utils'
@@ -585,9 +585,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   declare embedPrivacyPolicy: VideoEmbedPrivacyPolicyType
 
   @AllowNull(false)
-  @Default(VideoRecommendationStrategy.ANY_VIDEOS)
+  @Default(VideoRecommendationScope.ALL)
   @Column
-  declare recommendationStrategy: VideoRecommendationStrategyType
+  declare recommendationScope: VideoRecommendationScopeType
 
   @AllowNull(false)
   @Column
@@ -1204,6 +1204,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         | 'hasWebVideoFiles'
         | 'search'
         | 'excludeAlreadyWatched'
+        | 'excludeVideoIds'
         | 'hasRedundancy'
         | 'redundancyStrategy'
         | 'includeRedundancy'
@@ -1252,6 +1253,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'hasWebVideoFiles',
         'search',
         'excludeAlreadyWatched',
+        'excludeVideoIds',
         'redundancyStrategy',
         'hasRedundancy',
         'localRedundancy',
@@ -1533,12 +1535,6 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ url, transaction, type: 'account' })
-  }
-
-  static loadAndPopulateAccount (id: number | string, transaction?: Transaction): Promise<MVideoAccountLight> {
-    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
-
-    return queryBuilder.queryVideo({ id, transaction, type: 'account' })
   }
 
   static loadByUrlAndPopulateAccountAndFiles (url: string, transaction?: Transaction): Promise<MVideoAccountLightBlacklistAllFiles> {

@@ -5,7 +5,7 @@ import {
   VideoEmbedPrivacyPolicyType,
   VideoFileMetadata,
   VideoPrivacyType,
-  VideoRecommendationStrategyType,
+  VideoRecommendationScopeType,
   VideoStateType,
   VideoStreamingPlaylistType_Type
 } from '../../videos/index.js'
@@ -67,7 +67,7 @@ export interface VideoExportJSON {
 
     commentsPolicy: VideoCommentPolicyType
 
-    recommendationStrategy: VideoRecommendationStrategyType
+    recommendationScope: VideoRecommendationScopeType
 
     downloadEnabled: boolean
 

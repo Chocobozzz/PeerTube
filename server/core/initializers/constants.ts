@@ -45,11 +45,11 @@ import {
   VideoPrivacy,
   VideoPrivacyType,
   VideoRateType,
+  VideoRecommendationScope,
+  VideoRecommendationScopeType,
   VideoResolution,
   VideoState,
-  VideoStateType,
-  VideoRecommendationStrategy,
-  VideoRecommendationStrategyType
+  VideoStateType
 } from '@peertube/peertube-models'
 import { isDevInstance, isTestInstance, isTestOrDevInstance, parseDurationToMs, root, sanitizeUrl } from '@peertube/peertube-node-utils'
 import { RepeatOptions } from 'bullmq'
@@ -64,7 +64,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1165
+export const LAST_MIGRATION_VERSION = 1170
 
 // ---------------------------------------------------------------------------
 
@@ -82,6 +82,16 @@ export const PAGINATION = {
     COUNT: {
       MAX: 50
     }
+  }
+}
+
+export const VIDEO_RECOMMENDATIONS = {
+  COUNT: {
+    DEFAULT: 10,
+    MAX: 30
+  },
+  EXCLUDE_VIDEO_IDS: {
+    MAX: 50
   }
 }
 
@@ -737,11 +747,11 @@ export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
 }
 
-export const VIDEO_RECOMMENDATION_STRATEGIES: { [id in VideoRecommendationStrategyType]: string } = {
-  [VideoRecommendationStrategy.ANY_VIDEOS]: 'Any videos',
-  [VideoRecommendationStrategy.ONLY_LOCAL_VIDEOS]: 'Only instance local videos',
-  [VideoRecommendationStrategy.ONLY_OWNER_VIDEOS]: 'Only owner videos',
-  [VideoRecommendationStrategy.ONLY_CHANNEL_VIDEOS]: 'Only same channel videos'
+export const VIDEO_RECOMMENDATION_SCOPES: { [id in VideoRecommendationScopeType]: string } = {
+  [VideoRecommendationScope.ALL]: 'All videos',
+  [VideoRecommendationScope.LOCAL]: 'Videos of the same platform',
+  [VideoRecommendationScope.ACCOUNT]: 'Videos of the same account',
+  [VideoRecommendationScope.CHANNEL]: 'Videos of the same channel'
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {

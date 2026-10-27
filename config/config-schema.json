@@ -3366,8 +3366,8 @@
               "type": "integer",
               "default": 1
             },
-            "recommendation_strategy": {
-              "description": "any videos = 1, only local videos = 2, only owner videos = 3, only same channel videos = 4",
+            "recommendation_scope": {
+              "description": "Videos recommended next to a video: all = 1, same platform as the video = 2, same account = 3, same channel = 4",
               "type": "integer",
               "default": 1
             },

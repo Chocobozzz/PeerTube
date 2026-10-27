@@ -7,10 +7,10 @@ async function up (utils: {
 }): Promise<void> {
   const { transaction } = utils
 
-  await utils.queryInterface.addColumn('video', 'recommendationStrategy', {
+  await utils.queryInterface.addColumn('video', 'recommendationScope', {
     type: Sequelize.INTEGER,
     allowNull: false,
-    defaultValue: 1 // ANY_VIDEOS
+    defaultValue: 1 // ALL
   }, { transaction })
 }
 

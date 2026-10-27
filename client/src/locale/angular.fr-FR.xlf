@@ -29763,62 +29763,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6013968934491019078" datatype="html">
-        <source>Default recommendation strategy</source>
-        <target state="translated">Stratégie de recommandation par défaut</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">556,558</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1305196290439963752" datatype="html">
-        <source>Recommendation strategy</source>
-        <target state="translated">Stratégie de recommandation</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8665815902586291990" datatype="html">
-        <source> Control which videos appear in recommendations for this video </source>
-        <target state="translated">Choisir quelles vidéos apparaissent dans les recommandations de cette vidéo</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
-          <context context-type="linenumber">52</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="430547699904151571" datatype="html">
-        <source>Allow any videos in recommendations</source>
-        <target state="translated">Autoriser toutes les vidéos dans les recommandations</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">160</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4083166915954995496" datatype="html">
-        <source>Only allow instance-local videos in recommendations</source>
-        <target state="translated">Autoriser uniquement les vidéos de l’instance dans les recommandations</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">164</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5947155063351111323" datatype="html">
-        <source>Only allow same channel videos in recommendations</source>
-        <target state="translated">Autoriser uniquement les vidéos de la même chaîne dans les recommandations</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">168</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1729705764700207267" datatype="html">
-        <source>Only allow owner videos in recommendations</source>
-        <target state="translated">Autoriser uniquement les vidéos du propriétaire dans les recommandations</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">172</context>
-        </context-group>
-      </trans-unit>
     </body>
   </file>
 </xliff>

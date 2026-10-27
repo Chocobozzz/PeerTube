@@ -8,7 +8,7 @@ import {
   VideoCommentPolicyType,
   ConstantLabel,
   VideoPrivacyType,
-  VideoRecommendationStrategyType
+  VideoRecommendationScopeType
 } from '@peertube/peertube-models'
 import { map } from 'rxjs'
 import { AdminConfigComponent } from './admin-config.component'
@@ -61,11 +61,11 @@ export const commentPoliciesResolver: ResolveFn<ConstantLabel<VideoCommentPolicy
   return inject(ServerService).getCommentPolicies()
 }
 
-export const recommendationStrategiesResolver: ResolveFn<ConstantLabel<VideoRecommendationStrategyType>[]> = (
+export const recommendationScopesResolver: ResolveFn<ConstantLabel<VideoRecommendationScopeType>[]> = (
   _route: ActivatedRouteSnapshot,
   _state: RouterStateSnapshot
 ) => {
-  return inject(ServerService).getRecommendationStrategies()
+  return inject(ServerService).getRecommendationScopes()
 }
 
 export const logosResolver: ResolveFn<ReturnType<InstanceLogoService['getAllLogos']>> = (
@@ -160,7 +160,7 @@ export const configRoutes: Routes = [
           privacies: privaciesResolver,
           licences: licencesResolver,
           commentPolicies: commentPoliciesResolver,
-          recommendationStrategies: recommendationStrategiesResolver
+          recommendationScopes: recommendationScopesResolver
         },
         data: {
           meta: {

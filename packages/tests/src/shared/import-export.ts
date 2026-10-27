@@ -13,7 +13,7 @@ import {
   VideoObject,
   VideoPlaylistPrivacy,
   VideoPrivacy,
-  VideoRecommendationStrategy
+  VideoRecommendationScope
 } from '@peertube/peertube-models'
 import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
 import {
@@ -237,7 +237,7 @@ export async function prepareImportExportTests (options: {
       category: 12,
       tags: [ 'tag1', 'tag2' ],
       commentsPolicy: VideoCommentPolicy.DISABLED,
-      recommendationStrategy: VideoRecommendationStrategy.ONLY_CHANNEL_VIDEOS,
+      recommendationScope: VideoRecommendationScope.CHANNEL,
       description: 'video description',
       downloadEnabled: false,
       language: 'fr',

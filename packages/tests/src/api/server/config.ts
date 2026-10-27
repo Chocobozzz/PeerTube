@@ -8,7 +8,7 @@ import {
   LogoType,
   VideoCommentPolicy,
   VideoPrivacy,
-  VideoRecommendationStrategy
+  VideoRecommendationScope
 } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
@@ -165,7 +165,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.ENABLED)
   expect(data.defaults.publish.downloadEnabled).to.be.true
-  expect(data.defaults.publish.recommendationStrategy).to.equal(VideoRecommendationStrategy.ANY_VIDEOS)
+  expect(data.defaults.publish.recommendationScope).to.equal(VideoRecommendationScope.ALL)
   expect(data.defaults.publish.licence).to.be.null
   expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
   expect(data.defaults.live.saveReplay).to.be.false
@@ -471,7 +471,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       publish: {
         commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL,
         downloadEnabled: false,
-        recommendationStrategy: VideoRecommendationStrategy.ONLY_CHANNEL_VIDEOS,
+        recommendationScope: VideoRecommendationScope.CHANNEL,
         licence: 2,
         privacy: VideoPrivacy.INTERNAL
       },

@@ -18,11 +18,11 @@ import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
   VIDEO_CATEGORIES,
   VIDEO_COMMENTS_POLICY,
-  VIDEO_RECOMMENDATION_STRATEGIES,
   VIDEO_EMBED_PRIVACY_POLICIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES,
+  VIDEO_RECOMMENDATION_SCOPES,
   VIDEO_STATES
 } from '../../../initializers/constants.js'
 import {
@@ -207,9 +207,9 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
       label: VIDEO_EMBED_PRIVACY_POLICIES[video.embedPrivacyPolicy]
     },
 
-    recommendationStrategy: {
-      id: video.recommendationStrategy,
-      label: VIDEO_RECOMMENDATION_STRATEGIES[video.recommendationStrategy]
+    recommendationScope: {
+      id: video.recommendationScope,
+      label: VIDEO_RECOMMENDATION_SCOPES[video.recommendationScope]
     }
   }
 

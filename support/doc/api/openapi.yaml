@@ -3665,50 +3665,55 @@ paths:
     get:
       summary: List recommended videos
       description: |
-        Return a list of recommended videos depending on the current video (or instance default if unspecifid)
+        Return videos recommended next to a reference video (or general recommendations if no reference video is given).
+
+        PeerTube decides the recommendation algorithm: it currently lists videos sharing tags with the reference video
+        (excluding videos already watched by the authenticated user), then the latest videos.
+        All returned videos are restricted to the `scope`, which defaults to the `recommendationScope` of the reference video.
       operationId: getRecommendationVideos
       tags:
         - Video
       parameters:
-        - name: strategy
+        - name: scope
           in: query
-          required: true
+          required: false
+          description: |
+            Restrict recommended videos. Defaults to the `recommendationScope` of the reference video, or to `1` (all videos) if no reference video is given
           schema:
-            $ref: '#/components/schemas/VideoRecommendationStrategySet'
+            $ref: '#/components/schemas/VideoRecommendationScopeSet'
         - name: videoId
           in: query
           required: false
-          description: Reference video. Required if strategy is`3` or `4`
+          description: Reference video. Required if `scope` is `3` or `4`
           schema:
             oneOf:
               - $ref: '#/components/schemas/id'
               - $ref: '#/components/schemas/UUIDv4'
               - $ref: '#/components/schemas/shortUUID'
-        # Common video filter parameters
-        - $ref: '#/components/parameters/start'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/skipCount'
-        - $ref: '#/components/parameters/videosSort'
+        - name: count
+          in: query
+          required: false
+          description: Number of videos to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 30
+            default: 10
+        - name: excludeVideoIds
+          in: query
+          required: false
+          description: Videos that must not be recommended (the reference video is always excluded)
+          style: form
+          explode: true
+          schema:
+            type: array
+            maxItems: 50
+            items:
+              $ref: '#/components/schemas/id'
+        - $ref: '#/components/parameters/videoPasswordHeader'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
-        - $ref: '#/components/parameters/isLive'
-        - $ref: '#/components/parameters/includeScheduledLive'
-        - $ref: '#/components/parameters/categoryOneOf'
-        - $ref: '#/components/parameters/licenceOneOf'
-        - $ref: '#/components/parameters/languageOneOf'
-        - $ref: '#/components/parameters/tagsOneOf'
-        - $ref: '#/components/parameters/tagsAllOf'
-        - $ref: '#/components/parameters/isLocal'
-        - $ref: '#/components/parameters/include'
-        - $ref: '#/components/parameters/hasHLSFiles'
-        - $ref: '#/components/parameters/hasWebVideoFiles'
-        - $ref: '#/components/parameters/host'
-        - $ref: '#/components/parameters/autoTagOneOfVideo'
-        - $ref: '#/components/parameters/stateOneOfVideo'
-        - $ref: '#/components/parameters/privacyOneOf'
-        - $ref: '#/components/parameters/excludeAlreadyWatched'
-        - $ref: '#/components/parameters/search'
       responses:
         '200':
           description: successful operation
@@ -3717,9 +3722,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
         '400':
-          description: invalid strategy or missing `videoId`
+          description: invalid parameters or missing `videoId`
+        '401':
+          description: reference video requires authentication or a password
+        '403':
+          description: reference video is not visible by the user or the password is invalid
         '404':
-          description: video not found
+          description: reference video not found
 
   /api/v1/videos/categories:
     get:
@@ -3880,8 +3889,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
-                recommendationStrategy:
-                  $ref: '#/components/schemas/VideoRecommendationStrategySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -4457,8 +4466,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
-                recommendationStrategy:
-                  $ref: '#/components/schemas/VideoRecommendationStrategySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -10439,7 +10448,7 @@ components:
         label:
           type: string
 
-    VideoRecommendationStrategySet:
+    VideoRecommendationScopeSet:
       type: integer
       enum:
         - 1
@@ -10447,15 +10456,17 @@ components:
         - 3
         - 4
       description: |
-        Strategy used to select recommended videos:
-          - `1` Any videos
-          - `2` Only videos of the instance that owns the reference video (or of the current instance if no video is given)
+        Videos that can be recommended next to a video:
+          - `1` All videos
+          - `2` Only videos of the platform that owns the reference video (or of the current platform if no video is given)
           - `3` Only videos of the account that owns the reference video
           - `4` Only videos of the channel of the reference video
-    VideoRecommendationStrategyConstant:
+
+        This is a preference of the video owner: applications displaying recommendations may not apply it
+    VideoRecommendationScopeConstant:
       properties:
         id:
-          $ref: '#/components/schemas/VideoRecommendationStrategySet'
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
         label:
           type: string
 
@@ -11103,8 +11114,8 @@ components:
                 maxLength: 30
             commentsPolicy:
               $ref: '#/components/schemas/VideoCommentsPolicyConstant'
-            recommendationStrategy:
-              $ref: '#/components/schemas/VideoRecommendationStrategyConstant'
+            recommendationScope:
+              $ref: '#/components/schemas/VideoRecommendationScopeConstant'
             downloadEnabled:
               type: boolean
             inputFileUpdatedAt:
@@ -12700,8 +12711,8 @@ components:
                   type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
-                recommendationStrategy:
-                  $ref: '#/components/schemas/VideoRecommendationStrategySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 licence:
@@ -12907,8 +12918,8 @@ components:
             maxLength: 30
         commentsPolicy:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
-        recommendationStrategy:
-          $ref: '#/components/schemas/VideoRecommendationStrategySet'
+        recommendationScope:
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean

@@ -169,9 +169,9 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@id': 'pt:commentsPolicy'
     },
 
-    recommendationStrategy: {
+    recommendationScope: {
       '@type': 'sc:Number',
-      '@id': 'pt:recommendationStrategy'
+      '@id': 'pt:recommendationScope'
     },
 
     downloadEnabled: {

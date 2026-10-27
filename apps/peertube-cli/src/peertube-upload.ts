@@ -1,5 +1,5 @@
 import { Command } from '@commander-js/extra-typings'
-import { VideoCommentPolicy, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
+import { VideoCommentPolicy, VideoPrivacy, VideoPrivacyType, VideoRecommendationScopeType } from '@peertube/peertube-models'
 import { PeerTubeServer, VideoEdit } from '@peertube/peertube-server-commands'
 import { access, constants } from 'fs/promises'
 import { isAbsolute } from 'path'
@@ -24,6 +24,11 @@ const program = new Command('upload')
   .option('-P, --privacy <privacy_number>', 'Privacy', v => parseInt(v) as VideoPrivacyType)
   .option('-C, --channel-name <channel_name>', 'Channel name')
   .option('--no-comments-enabled', 'Disable video comments')
+  .option(
+    '--recommendation-scope <scope_number>',
+    'Videos recommended next to this video: all = 1, same platform = 2, same account = 3, same channel = 4',
+    v => parseInt(v) as VideoRecommendationScopeType
+  )
   .option('-s, --support <support>', 'Video support text')
   .option('--no-wait-transcoding', 'Do not wait transcoding before publishing the video')
   .option('--no-download-enabled', 'Disable video download')
@@ -113,6 +118,8 @@ async function buildVideoAttributesFromCommander (server: PeerTubeServer, option
     commentsPolicy: options.commentsEnabled === false
       ? VideoCommentPolicy.DISABLED
       : undefined,
+
+    recommendationScope: options.recommendationScope || undefined,
 
     nsfw: options.nsfw,
     downloadEnabled: options.downloadEnabled === false

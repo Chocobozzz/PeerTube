@@ -188,7 +188,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
 
       commentsPolicy: video.commentsPolicy,
 
-      recommendationStrategy: video.recommendationStrategy,
+      recommendationScope: video.recommendationScope,
 
       downloadEnabled: video.downloadEnabled,
 

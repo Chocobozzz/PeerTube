@@ -44,7 +44,6 @@ import {
   isValidPasswordProtectedPrivacy,
   isVideoCategoryValid,
   isVideoCommentsPolicyValid,
-  isRecommendationStrategyValid,
   isVideoDescriptionValid,
   isVideoImageValid,
   isVideoIncludeValid,
@@ -53,6 +52,7 @@ import {
   isVideoNameValid,
   isVideoPrivacyValid,
   isVideoPublicationDateValid,
+  isVideoRecommendationScopeValid,
   isVideoSourceFilenameValid,
   isVideoSupportValid
 } from '../../../helpers/custom-validators/videos.js'
@@ -482,9 +482,9 @@ export function getCommonVideoEditAttributes () {
     body('commentsPolicy')
       .optional()
       .custom(isVideoCommentsPolicyValid),
-    body('recommendationStrategy')
+    body('recommendationScope')
       .optional()
-      .custom(isRecommendationStrategyValid),
+      .custom(isVideoRecommendationScopeValid),
 
     body('downloadEnabled')
       .optional()

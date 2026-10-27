@@ -9,7 +9,7 @@ import {
   VideoCommentPolicy,
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
-  VideoRecommendationStrategy,
+  VideoRecommendationScope,
   ConstantLabel,
   VideoLicenceType,
   VideoPlaylistPrivacyType,
@@ -153,23 +153,23 @@ export class ServerService {
     ])
   }
 
-  getRecommendationStrategies () {
+  getRecommendationScopes () {
     return of([
       {
-        id: VideoRecommendationStrategy.ANY_VIDEOS,
-        label: $localize`Allow any videos in recommendations`
+        id: VideoRecommendationScope.ALL,
+        label: $localize`Recommend any video`
       },
       {
-        id: VideoRecommendationStrategy.ONLY_LOCAL_VIDEOS,
-        label: $localize`Only allow instance-local videos in recommendations`
+        id: VideoRecommendationScope.LOCAL,
+        label: $localize`Only recommend videos of this platform`
       },
       {
-        id: VideoRecommendationStrategy.ONLY_CHANNEL_VIDEOS,
-        label: $localize`Only allow same channel videos in recommendations`
+        id: VideoRecommendationScope.ACCOUNT,
+        label: $localize`Only recommend videos of the same account`
       },
       {
-        id: VideoRecommendationStrategy.ONLY_OWNER_VIDEOS,
-        label: $localize`Only allow owner videos in recommendations`
+        id: VideoRecommendationScope.CHANNEL,
+        label: $localize`Only recommend videos of the same channel`
       }
     ])
   }

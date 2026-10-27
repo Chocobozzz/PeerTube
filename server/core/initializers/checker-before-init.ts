@@ -149,7 +149,7 @@ export function checkMissedConfig () {
     'client.header.hide_instance_name',
     'defaults.publish.download_enabled',
     'defaults.publish.comments_policy',
-    'defaults.publish.recommendation_strategy',
+    'defaults.publish.recommendation_scope',
     'defaults.publish.privacy',
     'defaults.publish.licence',
     'defaults.player.auto_play',

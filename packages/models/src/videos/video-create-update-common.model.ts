@@ -1,6 +1,6 @@
 import { VideoCommentPolicyType } from './comment/video-comment-policy.enum.js'
-import { VideoRecommendationStrategyType } from './video-recommendation-strategies.enum.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
+import { VideoRecommendationScopeType } from './video-recommendation-scope.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
 
 export interface VideoCreateUpdateCommon {
@@ -32,5 +32,5 @@ export interface VideoCreateUpdateCommon {
   originallyPublishedAt?: Date | string
   videoPasswords?: string[]
 
-  recommendationStrategy?: VideoRecommendationStrategyType
+  recommendationScope?: VideoRecommendationScopeType
 }

@@ -126,22 +126,24 @@ describe('Test config API validators', function () {
       })
     })
 
-    it('Should fail with a bad default recommendation strategy', async function () {
-      const newUpdateParams = merge({}, updateParams, {
-        defaults: {
-          publish: {
-            recommendationStrategy: 11
+    it('Should fail with a bad default recommendation scope', async function () {
+      for (const recommendationScope of [ 11, null ]) {
+        const newUpdateParams = merge({}, updateParams, {
+          defaults: {
+            publish: {
+              recommendationScope
+            }
           }
-        }
-      })
+        })
 
-      await makePutBodyRequest({
-        url: server.url,
-        path,
-        fields: newUpdateParams,
-        token: server.accessToken,
-        expectedStatus: HttpStatusCode.BAD_REQUEST_400
-      })
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: newUpdateParams,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should fail if email disabled and signup requires email verification', async function () {

@@ -2,7 +2,7 @@ import { ActorImage, LogoType, PlayerTheme, VideoCommentPolicyType } from '../in
 import { ClientScriptJSON } from '../plugins/plugin-package-json.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
-import { VideoRecommendationStrategyType } from '../videos/video-recommendation-strategies.enum.js'
+import { VideoRecommendationScopeType } from '../videos/video-recommendation-scope.enum.js'
 import { BroadcastMessageLevel } from './broadcast-message-level.type.js'
 
 export interface ServerConfigPlugin {
@@ -98,7 +98,7 @@ export interface ServerConfig {
 
       commentsPolicy: VideoCommentPolicyType
 
-      recommendationStrategy: VideoRecommendationStrategyType
+      recommendationScope: VideoRecommendationScopeType
 
       privacy: VideoPrivacyType
       licence: number

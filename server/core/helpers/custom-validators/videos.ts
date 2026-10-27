@@ -12,8 +12,8 @@ import {
   VIDEO_LIVE,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
-  VIDEO_STATES,
-  VIDEO_RECOMMENDATION_STRATEGIES
+  VIDEO_RECOMMENDATION_SCOPES,
+  VIDEO_STATES
 } from '../../initializers/constants.js'
 import { exists, isArray, isDateValid, isFileValid } from './misc.js'
 
@@ -52,8 +52,8 @@ export function isVideoCommentsPolicyValid (value: any) {
   return value === null || VIDEO_COMMENTS_POLICY[value] !== undefined
 }
 
-export function isRecommendationStrategyValid (value: any) {
-  return value === null || VIDEO_RECOMMENDATION_STRATEGIES[value] !== undefined
+export function isVideoRecommendationScopeValid (value: any) {
+  return VIDEO_RECOMMENDATION_SCOPES[value] !== undefined
 }
 
 export function isVideoSupportValid (value: string) {

@@ -25,6 +25,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
   private videoRecommendation = inject(VideoRecommendationService)
 
   readonly currentVideo = input<VideoDetails>(undefined)
+  readonly videoPassword = input<string>(undefined)
   readonly playlist = input<VideoPlaylist>(undefined)
   readonly displayAsRow = input<boolean>(undefined)
 
@@ -94,15 +95,18 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private loadRecommendations () {
-    this.videoRecommendation.getRecommendations(this.currentVideo(), this.videoRecommendation.getRecommendationHistory())
-      .subscribe({
-        next: videos => {
-          this.videos = videos
+    this.videoRecommendation.getRecommendations(
+      this.currentVideo(),
+      this.videoPassword(),
+      this.videoRecommendation.getRecommendationHistory()
+    ).subscribe({
+      next: videos => {
+        this.videos = videos
 
-          this.gotRecommendations.emit(this.videos)
-        },
+        this.gotRecommendations.emit(this.videos)
+      },
 
-        error: err => this.notifier.handleError(err)
-      })
+      error: err => this.notifier.handleError(err)
+    })
   }
 }

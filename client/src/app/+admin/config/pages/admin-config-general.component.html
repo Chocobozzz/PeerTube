@@ -553,14 +553,14 @@
           </div>
 
           <div class="form-group">
-            <label i18n for="defaultsRecommendationStrategy">Default recommendation strategy</label>
+            <label i18n for="defaultsRecommendationScope">Default recommended videos</label>
 
             <my-select-options
-              inputId="defaultsRecommendationStrategy" [items]="recommendationStrategiesOptions" formControlName="recommendationStrategy"
+              inputId="defaultsRecommendationScope" [items]="recommendationScopesOptions" formControlName="recommendationScope"
             ></my-select-options>
 
-            @if (formErrors.defaults.publish.recommendationStrategy) {
-              <div class="form-error" role="alert">{{ formErrors.defaults.publish.recommendationStrategy }}</div>
+            @if (formErrors.defaults.publish.recommendationScope) {
+              <div class="form-error" role="alert">{{ formErrors.defaults.publish.recommendationScope }}</div>
             }
           </div>
         </ng-container>

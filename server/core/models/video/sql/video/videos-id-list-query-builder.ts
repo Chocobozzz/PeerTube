@@ -77,6 +77,7 @@ export type BuildVideosListQueryOptions = {
   stateOneOf?: VideoStateType[]
 
   uuids?: string[]
+  excludeVideoIds?: number[]
 
   hasFiles?: boolean
   hasHLSFiles?: boolean
@@ -315,6 +316,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.uuids) {
       this.whereUUIDs(options.uuids)
+    }
+
+    if (options.excludeVideoIds && options.excludeVideoIds.length !== 0) {
+      this.whereExcludeVideoIds(options.excludeVideoIds)
     }
 
     if (options.nsfw === true) {
@@ -727,6 +732,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
   private whereUUIDs (uuids: string[]) {
     this.and.push('"video"."uuid" IN (' + createSafeIn(this.sequelize, uuids) + ')')
+  }
+
+  private whereExcludeVideoIds (excludeVideoIds: number[]) {
+    this.and.push('"video"."id" NOT IN (:excludeVideoIds)')
+    this.replacements.excludeVideoIds = excludeVideoIds
   }
 
   private whereCategoryOneOf (categoryOneOf: number[]) {

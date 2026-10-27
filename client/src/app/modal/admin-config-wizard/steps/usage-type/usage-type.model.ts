@@ -1,5 +1,5 @@
 import { exists } from '@peertube/peertube-core-utils'
-import { CustomConfig, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import { CustomConfig, VideoCommentPolicy, VideoPrivacy, VideoRecommendationScope } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { getBytes } from '@root-helpers/bytes'
 import merge from 'lodash-es/merge'
@@ -17,6 +17,7 @@ export class UsageType {
   globalSearch: EnabledDisabled
   defaultPrivacy: typeof VideoPrivacy.INTERNAL | typeof VideoPrivacy.PUBLIC
   defaultCommentPolicy: typeof VideoCommentPolicy.REQUIRES_APPROVAL
+  defaultRecommendationScope: typeof VideoRecommendationScope.LOCAL
   p2p: EnabledDisabled
   federation: EnabledDisabled
   keepOriginalVideo: EnabledDisabled
@@ -51,6 +52,7 @@ export class UsageType {
 
       // Use current config
       defaultCommentPolicy: undefined,
+      defaultRecommendationScope: undefined,
       authType: undefined,
       preferDisplayName: undefined,
       transcription: undefined
@@ -78,6 +80,7 @@ export class UsageType {
 
       // Use current config
       defaultCommentPolicy: undefined,
+      defaultRecommendationScope: undefined,
       authType: undefined,
       transcription: undefined
     })
@@ -105,6 +108,7 @@ export class UsageType {
       transcription: 'enabled',
 
       defaultCommentPolicy: VideoCommentPolicy.REQUIRES_APPROVAL,
+      defaultRecommendationScope: VideoRecommendationScope.LOCAL,
 
       // Use current config
       federation: undefined
@@ -130,6 +134,7 @@ export class UsageType {
     this.computeP2P()
     this.computeGlobalSearch()
     this.computeDefaultVideoCommentPolicy()
+    this.computeDefaultVideoRecommendationScope()
     this.computeFederation()
     this.computeMiniatureSettings()
     this.computeTranscription()
@@ -319,6 +324,22 @@ export class UsageType {
     })
 
     this.addExplanation($localize`:bullet point of "PeerTube will\:":<strong>Require approval</strong> by default of new video comment`)
+  }
+
+  private computeDefaultVideoRecommendationScope () {
+    if (!exists(this.defaultRecommendationScope)) return
+
+    this.addConfig({
+      defaults: {
+        publish: {
+          recommendationScope: this.defaultRecommendationScope
+        }
+      }
+    })
+
+    this.addExplanation(
+      $localize`:bullet point of "PeerTube will\:":<strong>Only recommend videos of your platform</strong> by default next to new videos`
+    )
   }
 
   private computeP2P () {
