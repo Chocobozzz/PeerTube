@@ -14,6 +14,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { Emailer } from '@server/lib/emailer.js'
 import { LocalVideoStatsBufferScheduler } from '@server/lib/schedulers/local-video-stats-buffer-scheduler.js'
+import { ProcessHeartbeatScheduler } from '@server/lib/schedulers/process-heartbeat-scheduler.js'
 import { RemoveDanglingResumableUploadsScheduler } from '@server/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
 import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
 import { RemoveOldStatsScheduler } from '@server/lib/schedulers/remove-old-stats-scheduler.js'
@@ -54,10 +55,15 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getDebug (req: express.Request, res: express.Response) {
+  const processes = await ProcessHeartbeatScheduler.Instance.listUpProcesses()
+
   return res.json(
     {
       ip: req.ip,
-      activityPubMessagesWaiting: await StatsManager.Instance.getActivityPubMessagesWaiting()
+      activityPubMessagesWaiting: await StatsManager.Instance.getActivityPubMessagesWaiting(),
+
+      secondariesUp: processes.filter(p => p.role === 'secondary').length,
+      processes
     } satisfies Debug
   )
 }

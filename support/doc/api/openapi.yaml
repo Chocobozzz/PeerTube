@@ -7618,6 +7618,35 @@ paths:
                     type: string
                   activityPubMessagesWaiting:
                     type: integer
+                  secondariesUp:
+                    type: integer
+                    description: Number of secondary processes that recently sent a heartbeat
+                  processes:
+                    type: array
+                    description: Processes of the platform that recently sent a heartbeat, the primary first
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        role:
+                          type: string
+                          enum:
+                            - primary
+                            - secondary
+                        hostname:
+                          type: string
+                        pid:
+                          type: integer
+                        version:
+                          type: string
+                        startedAt:
+                          type: string
+                          format: date-time
+                          description: When the process started to serve requests
+                        lastSeenAt:
+                          type: string
+                          format: date-time
 
   /api/v1/server/debug/run-command:
     post:

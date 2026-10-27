@@ -230,6 +230,7 @@ import { LocalVideoStatsBufferScheduler } from './core/lib/schedulers/local-vide
 import { ManualMigrationScriptsScheduler } from './core/lib/schedulers/manual-migration-scripts-scheduler.js'
 import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
+import { ProcessHeartbeatScheduler } from './core/lib/schedulers/process-heartbeat-scheduler.js'
 import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
 import { RemoveDanglingStagingFilesScheduler } from './core/lib/schedulers/remove-dangling-staging-files-scheduler.js'
 import { RemoveOldAuditLogsScheduler } from './core/lib/schedulers/remove-old-audit-logs-scheduler.js'
@@ -571,6 +572,9 @@ async function startApplication () {
         logger.error('Cannot start job queue.', { err })
         process.exit(-1)
       })
+
+    // Once the process is ready to serve requests
+    await ProcessHeartbeatScheduler.Instance.register()
 
     logger.info('HTTP server listening on %s:%d as %s process', hostname, port, getProcessRole())
     logger.info('Web server: %s', WEBSERVER.URL)
