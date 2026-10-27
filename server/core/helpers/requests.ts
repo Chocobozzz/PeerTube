@@ -1,9 +1,12 @@
 import { signAsDraftToRequest } from '@misskey-dev/node-http-message-signatures'
+import { pipelinePromise } from '@peertube/peertube-node-utils'
 import { CONFIG } from '@server/initializers/config.js'
+import CacheableLookup from 'cacheable-lookup'
 import { createWriteStream } from 'fs'
 import { remove } from 'fs-extra/esm'
 import got, {
   Got,
+  NormalizedOptions,
   OptionsInit,
   OptionsOfBufferResponseBody,
   OptionsOfTextResponseBody,
@@ -12,12 +15,11 @@ import got, {
   RequestError,
   Response
 } from 'got'
-import { gotSsrf } from 'got-ssrf'
 import http from 'http'
 import https from 'https'
 import { HttpProxyAgent, HttpsProxyAgent } from '../helpers/hpagent.js'
 import { ACTIVITY_PUB, BINARY_CONTENT_TYPES, PEERTUBE_VERSION, REQUEST_TIMEOUTS, WEBSERVER } from '../initializers/constants.js'
-import { pipelinePromise } from '@peertube/peertube-node-utils'
+import { buildUnicastOnlyLookup, getIPFromURLHostname, isResolvingToUnicastOnly, isUnicastIP } from './dns.js'
 import { createLogger } from './logger.js'
 import { getProxy, isProxyEnabled } from './proxy.js'
 
@@ -156,8 +158,36 @@ const unsafeSSRFGot = got.extend({
 })
 
 export const peertubeGot: Got = CONFIG.FEDERATION.PREVENT_SSRF
-  ? got.extend(gotSsrf, unsafeSSRFGot)
+  ? buildSSRFSafeGot(unsafeSSRFGot)
   : unsafeSSRFGot
+
+export function buildSSRFSafeGot (gotInstance: Got, dnsCache = new CacheableLookup()) {
+  // Node doesn't call the DNS lookup for IP hostnames, they must be checked before the request
+  const checkHost = async (options: NormalizedOptions) => {
+    const hostname = buildUrl(options.url).hostname
+
+    const ip = getIPFromURLHostname(hostname)
+    if (ip) {
+      if (!isUnicastIP(ip)) throw new Error(`Cannot request ${hostname}: not a unicast IP`)
+
+      return
+    }
+
+    // The proxy resolves the hostname and doesn't use our DNS lookup
+    if (isProxyEnabled() && await isResolvingToUnicastOnly(hostname) !== true) {
+      throw new Error(`Cannot request ${hostname}: it does not resolve to unicast IPs only`)
+    }
+  }
+
+  return gotInstance.extend({
+    dnsLookup: buildUnicastOnlyLookup(dnsCache.lookup.bind(dnsCache)),
+
+    hooks: {
+      beforeRequest: [ checkHost ],
+      beforeRedirect: [ checkHost ]
+    }
+  })
+}
 
 // ---------------------------------------------------------------------------
 
@@ -227,7 +257,8 @@ export function generateRequestStream (url: string, options: PeerTubeRequestOpti
 export function getProxyAgent () {
   if (!isProxyEnabled()) {
     return {
-      agent: { // Fix issue https://github.com/node-fetch/node-fetch/issues/1735 with Node 20
+      // keepAlive: false is required by the SSRF protection because they are shared with unsafeSSRFGot
+      agent: {
         http: new http.Agent({ keepAlive: false }),
         https: new https.Agent({ keepAlive: false })
       }

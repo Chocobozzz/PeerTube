@@ -4,7 +4,7 @@
 
 ### SECURITY
 
- * **critical** Upgrade vulnerable `sharp` (image processing dependency) that can lead to a RCE with a special crafted SVG file [GHSA-wq5f-xc86-pv6w](https://github.com/advisories/GHSA-wq5f-xc86-pv6w)
+ * **critical** Upgrade vulnerable `sharp` (image processing dependency) that can lead to a RCE with a special crafted SVG file [GHSA-wq5f-xc86-pv6w](https://github.com/advisories/GHSA-wq5f-xc86-pv6w). Thanks to [unoptimizedthoughts](https://github.com/unoptimizedthoughts) for reporting it
  * **high** Fix federation vulnerability where a remote attacker could exploit the redirection of cached remote objects to impersonate actors of another instance and modify its videos federated on an instance [GHSA-5j4v-77rx-h5qg](https://github.com/Chocobozzz/PeerTube/security/advisories/GHSA-5j4v-77rx-h5qg)
 
 ### Bug Fixes

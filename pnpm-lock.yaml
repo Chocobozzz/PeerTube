@@ -152,6 +152,9 @@ importers:
       bytes:
         specifier: ^3.1.2
         version: 3.1.2
+      cacheable-lookup:
+        specifier: ^7.0.0
+        version: 7.0.0
       commander:
         specifier: ^15.0.0
         version: 15.0.0
@@ -200,9 +203,6 @@ importers:
       got:
         specifier: ^15.1.0
         version: 15.1.0
-      got-ssrf:
-        specifier: ^3.0.0
-        version: 3.0.0(got@15.1.0)
       handlebars:
         specifier: ^4.7.9
         version: 4.7.9
@@ -7149,12 +7149,6 @@ packages:
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
-
-  got-ssrf@3.0.0:
-    resolution: {integrity: sha512-Cg9lmGkaNzT8cUSDbnb1GIgetnsrwCSA8S6ZW6NiY37cEbJ/HoDs/LIradAzLcrL62XPcK6eP1442OFvrNzoIg==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      got: ^14
 
   got@15.1.0:
     resolution: {integrity: sha512-DG+DAAkRtno+oDr/GBsliAkhN9+zczOPM5qXk3efDZY3qvyRnZU+NwQlb/IOY6cSnxxTR9z3aHCcShJyjb0hJA==}
@@ -18583,14 +18577,6 @@ snapshots:
   globrex@0.1.2: {}
 
   gopd@1.2.0: {}
-
-  got-ssrf@3.0.0(got@15.1.0):
-    dependencies:
-      debug: 4.4.3(supports-color@8.1.1)
-      got: 15.1.0
-      ipaddr.js: 2.5.0
-    transitivePeerDependencies:
-      - supports-color
 
   got@15.1.0:
     dependencies:
