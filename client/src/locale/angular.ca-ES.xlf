@@ -6923,7 +6923,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9069205412472719482" datatype="html">
         <source>Only new videos can be blocked by a new word added to the list</source>
-        <target state="new">Only new videos can be blocked by a new word added to the list</target>
+        <target state="translated">Només els vídeos nous es poden bloquejar amb una paraula nova afegida a la llista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">83,84</context>
@@ -6931,7 +6931,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7471441043625129428" datatype="html">
         <source>If a word is removed from the list, any videos that are currently blacklisted will not be affected</source>
-        <target state="new">If a word is removed from the list, any videos that are currently blacklisted will not be affected</target>
+        <target state="translated">Eliminar una paraula de la llista no afectarà cap vídeo que estigui a la llista negra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">84,85</context>
@@ -6939,7 +6939,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3536332983620084462" datatype="html">
         <source>The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list.</source>
-        <target state="new"> The remote list will be synchronized periodically, and auto tags on existing comments will be updated based on the words in the list. </target>
+        <target state="translated">La llista remota se sincronitzarà periòdicament i les etiquetes automàtiques dels comentaris existents s'actualitzaran en funció de les paraules de la llista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">89</context>
@@ -6947,7 +6947,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2322571852303891260" datatype="html">
         <source>Only new comments can be blocked by a new word added to the list</source>
-        <target state="new">Only new comments can be blocked by a new word added to the list</target>
+        <target state="translated">Només es bloquejaran els comentaris nous si s'afegeix una paraula nova a la llista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">96</context>
@@ -7443,7 +7443,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6669227017523476557" datatype="html">
         <source>Embedding of this video is disabled, so it can only be shared via the direct link or QR code.</source>
-        <target state="new">Embedding of this video is disabled, so it can only be shared via the direct link or QR code.</target>
+        <target state="translated">La incrustació d'aquest vídeo està desactivada, per tant, només es pot compartir mitjançant l'enllaç directe o el codi QR .</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-video.component.html</context>
           <context context-type="linenumber">24,25</context>
@@ -7599,7 +7599,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="898637641369730933" datatype="html">
         <source>Filter by banned users</source>
-        <target state="new">Filter by banned users</target>
+        <target state="needs-translation">Filtra per usuaris bandejats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">43</context>
@@ -8201,7 +8201,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3946683396888479808" datatype="html">
         <source>Blocklist URL is required.</source>
-        <target state="new">Blocklist URL is required.</target>
+        <target state="translated">És necessari l'URL de la llista de bloqueig.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -8209,7 +8209,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4061698394390279322" datatype="html">
         <source>Please enter a valid URL.</source>
-        <target state="new">Please enter a valid URL.</target>
+        <target state="translated">Introduïu un URL vàlid.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">50</context>
@@ -8321,7 +8321,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="351190432239278934" datatype="html">
         <source>Synchronize with video</source>
-        <target state="new">Synchronize with video</target>
+        <target state="translated">Sincronitza amb el vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/player-widgets/video-transcription.component.html</context>
           <context context-type="linenumber">67</context>
@@ -8433,7 +8433,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8135904866638934226" datatype="html">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video().scheduledUpdate.updateAt | ptDate: 'full'  }}"/>. </source>
-        <target state="new"> This video will be published on <x id="INTERPOLATION" equiv-text="{{ video().scheduledUpdate.updateAt | ptDate: 'full'  }}"/>. </target>
+        <target state="translated">Aquest vídeo es publicarà a <x id="INTERPOLATION" equiv-text="{{ video().scheduledUpdate.updateAt | ptDate: 'full'  }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">3,7</context>
@@ -8457,7 +8457,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1598621320854281428" datatype="html">
         <source>This live has ended.</source>
-        <target state="new"> This live has ended. </target>
+        <target state="translated">El directe ha finalitzat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -8465,7 +8465,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="701669367074099795" datatype="html">
         <source>There are no videos available in this playlist.</source>
-        <target state="new"> There are no videos available in this playlist. </target>
+        <target state="translated">No hi ha vídeos disponibles en aquesta llista de reproducció.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">47,48</context>
@@ -8473,7 +8473,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="13907554132985944" datatype="html">
         <source>This video is password protected.</source>
-        <target state="new"> This video is password protected. </target>
+        <target state="translated">Aquest vídeo està protegit amb contrasenya.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/information/video-alert.component.html</context>
           <context context-type="linenumber">53,54</context>
@@ -8541,7 +8541,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="428714747970105694" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 more reply} other {<x id="INTERPOLATION"/> more replies}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 more reply} other {<x id="INTERPOLATION"/> more replies}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 resposta més} other {<x id="INTERPOLATION"/> respostes més}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">124</context>
@@ -8573,7 +8573,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7744067301899481362" datatype="html">
         <source>Go back to the previous comment</source>
-        <target state="new">Go back to the previous comment</target>
+        <target state="translated">Torna al comentari anterior</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">120</context>
@@ -8581,7 +8581,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1023624020352383228" datatype="html">
         <source>Replies to <x id="INTERPOLATION" equiv-text="{{ getRepliesModalRoot()?.comment?.account?.displayName || 'Unknown' }}"/></source>
-        <target state="new">Replies to <x id="INTERPOLATION" equiv-text="{{ getRepliesModalRoot()?.comment?.account?.displayName || 'Unknown' }}"/></target>
+        <target state="translated">Respostes a <x id="INTERPOLATION" equiv-text="{{ getRepliesModalRoot()?.comment?.account?.displayName || 'Unknown' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.html</context>
           <context context-type="linenumber">125,127</context>
@@ -8773,7 +8773,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2094509918271039422" datatype="html">
         <source>View <x id="ICU" equiv-text="{getNotFetchedRepliesCount(), plural, =1 {1 reply} other {{{ getNotFetchedRepliesCount() }} replies}}" xid="2084023438878610739"/> </source>
-        <target state="new"> View <x id="ICU" equiv-text="{getNotFetchedRepliesCount(), plural, =1 {1 reply} other {{{ getNotFetchedRepliesCount() }} replies}}" xid="2084023438878610739"/> </target>
+        <target state="translated">Visualitza <x id="ICU" xid="2084023438878610739" equiv-text="{getNotFetchedRepliesCount(), plural, =1 {1 reply} other {{{ getNotFetchedRepliesCount() }} replies}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">120,121</context>
@@ -8785,7 +8785,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="338501496330700774" datatype="html">
         <source>Reply to <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></source>
-        <target state="new">Reply to <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></target>
+        <target state="translated">Respon a <x id="INTERPOLATION" equiv-text="{{ comment().account?.displayName || 'Unknown' }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">144</context>
