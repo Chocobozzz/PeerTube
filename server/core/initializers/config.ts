@@ -706,7 +706,9 @@ export const CONFIG = buildConfig({
       ENABLED: dynamicKey<boolean>('live.rtmp.enabled'),
       PORT: dynamicKey<number>('live.rtmp.port'),
       HOSTNAME: dynamicKey<number>('live.rtmp.hostname'),
-      PUBLIC_HOSTNAME: dynamicKey<number>('live.rtmp.public_hostname')
+      PUBLIC_HOSTNAME: dynamicKey<number>('live.rtmp.public_hostname'),
+      PING: staticKey<number>('live.rtmp.ping'),
+      PING_TIMEOUT: staticKey<number>('live.rtmp.ping_timeout')
     },
 
     RTMPS: {

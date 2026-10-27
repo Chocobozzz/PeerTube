@@ -1350,8 +1350,6 @@ export const VIDEO_LIVE = {
   RTMP: {
     CHUNK_SIZE: 60000,
     GOP_CACHE: true,
-    PING: 60,
-    PING_TIMEOUT: 30,
     BASE_PATH: 'live'
   }
 }
