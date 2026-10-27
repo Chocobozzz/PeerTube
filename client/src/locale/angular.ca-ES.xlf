@@ -9949,7 +9949,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7093801939412883219" datatype="html">
         <source>Video auto-block policies updated</source>
-        <target state="new">Video auto-block policies updated</target>
+        <target state="translated">Polítiques de bloqueig automàtic de vídeo actualitzades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -9957,7 +9957,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5495831699036030311" datatype="html">
         <source>Add a subscription</source>
-        <target state="new">Add a subscription</target>
+        <target state="translated">Afegeix una subscripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">19</context>
@@ -9969,7 +9969,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3749773804330190688" datatype="html">
         <source>Open muted servers filtered by this subscription</source>
-        <target state="new">Open muted servers filtered by this subscription</target>
+        <target state="translated">Obre els servidors silenciats filtrats per aquesta subscripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">46,47</context>
@@ -9977,7 +9977,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8187072229527761312" datatype="html">
         <source>Open muted accounts filtered by this subscription</source>
-        <target state="new">Open muted accounts filtered by this subscription</target>
+        <target state="translated">Obre comptes silenciats filtrats per aquesta subscripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">55,56</context>
@@ -9985,7 +9985,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="188289424231773769" datatype="html">
         <source>No subscription found matching current filters.</source>
-        <target state="new">No subscription found matching current filters.</target>
+        <target state="translated">No s'han trobat subscripcions que coincideixin amb els filtres actuals.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">68</context>
@@ -9997,7 +9997,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8321738754107271611" datatype="html">
         <source>No subscription found.</source>
-        <target state="new">No subscription found.</target>
+        <target state="translated">No s'ha trobat cap subscripció.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">70</context>
@@ -10193,7 +10193,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1764978878891351511" datatype="html">
         <source>{count, plural, =1 {Delete comment} other {Delete comments}}</source>
-        <target state="new">{count, plural, =1 {Delete comment} other {Delete comments}}</target>
+        <target state="translated">{count, plural, =1 {Suprimeix el comentari} other {Suprimeix els comentaris}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">116</context>
@@ -10233,7 +10233,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3290271898086890437" datatype="html">
         <source>Awaiting your approval</source>
-        <target state="new">Awaiting your approval</target>
+        <target state="translated">Pendent de la vostra aprovació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">281</context>
