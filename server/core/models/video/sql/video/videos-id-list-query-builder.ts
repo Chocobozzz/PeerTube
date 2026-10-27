@@ -79,6 +79,9 @@ export type BuildVideosListQueryOptions = {
   uuids?: string[]
   excludeVideoIds?: number[]
 
+  // Inclusive
+  idRange?: { min: number, max: number }
+
   hasFiles?: boolean
   hasHLSFiles?: boolean
 
@@ -320,6 +323,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.excludeVideoIds && options.excludeVideoIds.length !== 0) {
       this.whereExcludeVideoIds(options.excludeVideoIds)
+    }
+
+    if (options.idRange) {
+      this.whereIdRange(options.idRange)
     }
 
     if (options.nsfw === true) {
@@ -681,8 +688,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     const tagsOneOfLower = tagsOneOf.map(t => t.toLowerCase())
 
     this.cte.push(
+      // DISTINCT so a video matching multiple tags is not listed multiple times
       '"tagsOneOf" AS (' +
-        '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
+        '  SELECT DISTINCT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
         '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
         '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsOneOfLower) + ') ' +
         ')'
@@ -737,6 +745,12 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereExcludeVideoIds (excludeVideoIds: number[]) {
     this.and.push('"video"."id" NOT IN (:excludeVideoIds)')
     this.replacements.excludeVideoIds = excludeVideoIds
+  }
+
+  private whereIdRange (idRange: { min: number, max: number }) {
+    this.and.push('"video"."id" BETWEEN :idRangeMin AND :idRangeMax')
+    this.replacements.idRangeMin = idRange.min
+    this.replacements.idRangeMax = idRange.max
   }
 
   private whereCategoryOneOf (categoryOneOf: number[]) {

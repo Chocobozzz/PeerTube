@@ -149,7 +149,7 @@ export abstract class APVideoAbstractBuilder {
   protected async updateChapters (video: MVideoFull) {
     if (!this.videoObject.hasParts || typeof this.videoObject.hasParts !== 'string') return
 
-    const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts)
+    const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts, { preventCrossHostRedirect: false })
     if (!isVideoChaptersObjectValid(body)) {
       logger.warn('Chapters AP object is not valid, skipping', { body })
       return

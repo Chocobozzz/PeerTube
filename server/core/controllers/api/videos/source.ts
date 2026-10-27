@@ -1,4 +1,5 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import { auditLog, buildVideoSourceAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
@@ -77,6 +78,8 @@ async function deleteVideoLatestSourceFile (req: express.Request, res: express.R
   videoSource.storage = null
 
   await videoSource.save()
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildVideoSourceAuditEntity({ video, inputFilename: videoSource.inputFilename }))
 
   await VideoChannelActivityModel.addVideoActivity({
     action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
@@ -204,6 +207,8 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
     await video.VideoChannel.setAsUpdated()
 
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
+
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoSourceAuditEntity({ video, inputFilename: originalFilename }))
 
     logger.info('Replaced video file of video %s with uuid %s.', video.name, video.uuid)
 

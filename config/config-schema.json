@@ -1162,9 +1162,14 @@
           "type": "object",
           "properties": {
             "enabled": {
-              "description": "Log user, administration and moderation actions in a dedicated audit log file",
+              "description": "Log user, administration and moderation actions in the database, viewable in the administration",
               "type": "boolean",
               "default": true
+            },
+            "max_age": {
+              "description": "-1 means there is no limitations",
+              "type": "string",
+              "default": "1 year"
             }
           },
           "additionalProperties": false

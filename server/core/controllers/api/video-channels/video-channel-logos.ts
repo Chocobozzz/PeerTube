@@ -1,7 +1,7 @@
 import { ActorImageType, HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import express from 'express'
-import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../../helpers/audit-logger.js'
+import { auditLog, buildChannelAuditEntity, getAuditActorFromRes } from '../../../lib/audit-log/index.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor.js'
@@ -9,7 +9,6 @@ import { asyncMiddleware, authenticate } from '../../../middlewares/index.js'
 import { updateAvatarValidator, updateBannerValidator } from '../../../middlewares/validators/actor-image.js'
 import { videoChannelsHandleValidatorFactory } from '../../../middlewares/validators/index.js'
 
-const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 const reqBannerFile = createReqFiles([ 'bannerfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
@@ -58,7 +57,7 @@ export {
 async function updateVideoChannelBanner (req: express.Request, res: express.Response) {
   const bannerPhysicalFile = req.files['bannerfile'][0]
   const videoChannel = res.locals.videoChannel
-  const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
+  const oldChannelAuditEntity = auditLog.snapshot(() => buildChannelAuditEntity(videoChannel.toFormattedJSON()))
 
   const banners = await updateLocalActorImageFiles({
     accountOrChannel: videoChannel,
@@ -74,7 +73,7 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
     transaction: undefined
   })
 
-  auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
+  auditLog.update(getAuditActorFromRes(res), () => buildChannelAuditEntity(videoChannel.toFormattedJSON()), oldChannelAuditEntity)
 
   return res.json({
     banners: banners.map(b => b.toFormattedJSON())
@@ -84,7 +83,7 @@ async function updateVideoChannelBanner (req: express.Request, res: express.Resp
 async function updateVideoChannelAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files['avatarfile'][0]
   const videoChannel = res.locals.videoChannel
-  const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
+  const oldChannelAuditEntity = auditLog.snapshot(() => buildChannelAuditEntity(videoChannel.toFormattedJSON()))
 
   const avatars = await updateLocalActorImageFiles({
     accountOrChannel: videoChannel,
@@ -100,7 +99,7 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
     transaction: undefined
   })
 
-  auditLogger.update(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannel.toFormattedJSON()), oldVideoChannelAuditKeys)
+  auditLog.update(getAuditActorFromRes(res), () => buildChannelAuditEntity(videoChannel.toFormattedJSON()), oldChannelAuditEntity)
 
   return res.json({
     avatars: avatars.map(a => a.toFormattedJSON())
@@ -109,8 +108,11 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
 
 async function deleteVideoChannelAvatar (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
+  const oldChannelAuditEntity = auditLog.snapshot(() => buildChannelAuditEntity(videoChannel.toFormattedJSON()))
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.AVATAR)
+
+  auditLog.update(getAuditActorFromRes(res), () => buildChannelAuditEntity(videoChannel.toFormattedJSON()), oldChannelAuditEntity)
 
   await VideoChannelActivityModel.addChannelActivity({
     action: VideoChannelActivityAction.UPDATE,
@@ -124,8 +126,11 @@ async function deleteVideoChannelAvatar (req: express.Request, res: express.Resp
 
 async function deleteVideoChannelBanner (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
+  const oldChannelAuditEntity = auditLog.snapshot(() => buildChannelAuditEntity(videoChannel.toFormattedJSON()))
 
   await deleteLocalActorImageFile(videoChannel, ActorImageType.BANNER)
+
+  auditLog.update(getAuditActorFromRes(res), () => buildChannelAuditEntity(videoChannel.toFormattedJSON()), oldChannelAuditEntity)
 
   await VideoChannelActivityModel.addChannelActivity({
     action: VideoChannelActivityAction.UPDATE,

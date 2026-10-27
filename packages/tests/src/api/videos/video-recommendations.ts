@@ -125,6 +125,20 @@ describe('Test video recommendations', function () {
       }
     })
 
+    it('Should not waste recommendations on videos sharing multiple tags', async function () {
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video G', tags: [ 'tag1', 'tag2' ] } })
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const names = await listNames(server, { scope: VideoRecommendationScope.ALL, videoId: videoA.uuid, count: 2 })
+
+        expect(names).to.deep.equal([ 'video G', 'video E' ])
+      }
+
+      await servers[0].videos.remove({ id: uuid })
+      await waitJobs(servers)
+    })
+
     it('Should not recommend already watched related videos first to a logged in user', async function () {
       const { uuid } = (await servers[0].videos.list()).data.find(v => v.name === 'video D')
       await servers[0].views.view({ id: uuid, token: userToken, currentTime: 2 })

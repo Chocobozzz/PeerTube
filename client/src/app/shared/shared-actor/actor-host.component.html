@@ -14,15 +14,17 @@
     </svg>
   </button>
 
-  <div ngbDropdownMenu class="content">
-    <strong class="question mb-3" i18n>What is it?</strong>
+  <div ngbDropdownMenu class="content" data-nosnippet>
+    @if (dropdown.isOpen()) {
+      <strong class="question mb-3" i18n>What is it?</strong>
 
-    <div class="answer mb-3">
-      This video comes from <a [href]="'https://' + host()" target="_blank" rel="noopener noreferrer">{{ host() }} <my-global-icon iconName="external-link"></my-global-icon></a> platform, to which we have subscribed.
-    </div>
+      <div class="answer mb-3" i18n>
+        This video comes from <a [href]="'https://' + host()" target="_blank" rel="noopener noreferrer">{{ host() }} <my-global-icon iconName="external-link"></my-global-icon></a> platform, to which we have subscribed.
+      </div>
 
-    <a (click)="dropdown.close()" i18n class="mt-3 mb-3 d-block peertube-button-link secondary-button" routerLink="/about/follows">Show all our subscriptions</a>
+      <a (click)="dropdown.close()" i18n class="mt-3 mb-3 d-block peertube-button-link secondary-button" routerLink="/about/follows">Show all our subscriptions</a>
 
-    <my-button (click)="dropdown.close()" i18n class="d-block" theme="primary" ptRouterLink="/search" [ptQueryParams]="{ 'host': host(), 'searchTarget': searchTarget }">More {{ host() }} content</my-button>
+      <my-button (click)="dropdown.close()" i18n class="d-block" theme="primary" ptRouterLink="/search" [ptQueryParams]="{ 'host': host(), 'searchTarget': searchTarget }">More {{ host() }} content</my-button>
+    }
   </div>
 </div>

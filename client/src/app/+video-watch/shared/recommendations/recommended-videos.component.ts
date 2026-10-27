@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnChanges, OnDestroy, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
@@ -63,8 +63,8 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
       })
   }
 
-  ngOnChanges () {
-    if (this.currentVideo()) {
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['currentVideo'] && this.currentVideo()) {
       this.loadRecommendations()
     }
   }

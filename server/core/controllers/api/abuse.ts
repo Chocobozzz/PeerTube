@@ -1,6 +1,7 @@
 import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
 import { AbuseCreate, AbuseState, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import { auditLog, buildAbuseAuditEntity, buildAbuseMessageAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation.js'
 import { Notifier } from '@server/lib/notifier/index.js'
@@ -149,6 +150,8 @@ async function updateAbuse (req: express.Request, res: express.Response) {
   const abuse = res.locals.abuse
   let stateUpdated = false
 
+  const oldAbuseAuditEntity = await auditLog.snapshot(async () => buildAbuseAuditEntity(await AbuseModel.loadFull(abuse.id)))
+
   if (req.body.moderationComment !== undefined) abuse.moderationComment = req.body.moderationComment
 
   if (req.body.state !== undefined) {
@@ -164,6 +167,8 @@ async function updateAbuse (req: express.Request, res: express.Response) {
     return abuse.save({ transaction: t })
   })
 
+  auditLog.update(getAuditActorFromRes(res), async () => buildAbuseAuditEntity(await AbuseModel.loadFull(abuse.id)), oldAbuseAuditEntity)
+
   if (stateUpdated === true) {
     AbuseModel.loadFull(abuse.id)
       .then(abuseFull => Notifier.Instance.notifyOnAbuseStateChange(abuseFull))
@@ -177,10 +182,13 @@ async function updateAbuse (req: express.Request, res: express.Response) {
 
 async function deleteAbuse (req: express.Request, res: express.Response) {
   const abuse = res.locals.abuse
+  const abuseAuditEntity = await auditLog.snapshot(async () => buildAbuseAuditEntity(await AbuseModel.loadFull(abuse.id)))
 
   await runTransaction(t => {
     return abuse.destroy({ transaction: t })
   })
+
+  auditLog.delete(getAuditActorFromRes(res), abuseAuditEntity)
 
   // Do not send the delete to other instances, we delete OUR copy of this abuse
 
@@ -264,6 +272,8 @@ async function addAbuseMessage (req: express.Request, res: express.Response) {
     abuseId: abuse.id
   })
 
+  auditLog.create(getAuditActorFromRes(res), () => buildAbuseMessageAuditEntity(abuseMessage))
+
   // If a moderator created an abuse message, we consider it as processed
   if (byModerator && !abuse.processedAt) {
     abuse.processedAt = new Date()
@@ -287,6 +297,8 @@ async function deleteAbuseMessage (req: express.Request, res: express.Response) 
   await runTransaction(t => {
     return abuseMessage.destroy({ transaction: t })
   })
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildAbuseMessageAuditEntity(abuseMessage))
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }

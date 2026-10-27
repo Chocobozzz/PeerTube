@@ -2,6 +2,7 @@
 
 import { expect } from 'chai'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import {
   cleanupTests,
   createSingleServer,
@@ -95,6 +96,111 @@ describe('Test logs API validators', function () {
         path,
         token: server.accessToken,
         query: { startDate: new Date().toISOString() },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+  })
+
+  describe('When listing audit logs', function () {
+    const auditPath = '/api/v1/server/audit-logs'
+    const listQuery = { format: 'list' }
+
+    it('Should fail with a non authenticated user', async function () {
+      await makeGetRequest({ url: server.url, path: auditPath, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with a non admin user', async function () {
+      await makeGetRequest({ url: server.url, path: auditPath, token: userAccessToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, auditPath, server.accessToken, listQuery)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, auditPath, server.accessToken, listQuery)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSort(server.url, auditPath, server.accessToken, listQuery)
+    })
+
+    it('Should fail with a bad format', async function () {
+      await makeGetRequest({
+        url: server.url,
+        path: auditPath,
+        token: server.accessToken,
+        query: { format: 'toto', startDate: new Date().toISOString() },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail without a startDate with the default array format', async function () {
+      for (const query of [ {}, { format: 'array' } ]) {
+        await makeGetRequest({
+          url: server.url,
+          path: auditPath,
+          token: server.accessToken,
+          query,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
+    it('Should fail with bad filters', async function () {
+      const queries = [
+        { entityType: 'toto' },
+        { action: 'toto' },
+        { entityId: 'toto' },
+        { startDate: 'toto' },
+        { endDate: 'toto' }
+      ]
+
+      for (const query of queries) {
+        await makeGetRequest({
+          url: server.url,
+          path: auditPath,
+          token: server.accessToken,
+          query: { ...listQuery, ...query },
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
+    it('Should succeed with the correct params', async function () {
+      // List format doesn't require a start date
+      await makeGetRequest({
+        url: server.url,
+        path: auditPath,
+        token: server.accessToken,
+        query: listQuery,
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path: auditPath,
+        token: server.accessToken,
+        query: { startDate: new Date(0).toISOString() },
+        expectedStatus: HttpStatusCode.OK_200
+      })
+
+      await makeGetRequest({
+        url: server.url,
+        path: auditPath,
+        token: server.accessToken,
+        query: {
+          format: 'list',
+          start: 0,
+          count: 10,
+          sort: '-createdAt',
+          search: 'root',
+          entityType: 'video',
+          entityId: 1,
+          action: 'update',
+          startDate: new Date(0).toISOString(),
+          endDate: new Date().toISOString()
+        },
         expectedStatus: HttpStatusCode.OK_200
       })
     })

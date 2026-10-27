@@ -6,7 +6,6 @@ import { allowReplicaReadsToController } from '@server/middlewares/replica-reads
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import express from 'express'
-import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
 import { runTransaction } from '../../../helpers/database-utils.js'
 import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
@@ -18,6 +17,7 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_TEXT_LANGUAGES
 } from '../../../initializers/constants.js'
+import { auditLog, buildVideoAuditEntity, getAuditActorFromRes } from '../../../lib/audit-log/index.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import {
   apiRateLimiter,
@@ -60,7 +60,6 @@ import { viewRouter } from './view.js'
 
 const logger = createLogger()
 
-const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
 
 videosRouter.use(apiRateLimiter)
@@ -205,7 +204,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
     })
   })
 
-  auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
+  auditLog.delete(getAuditActorFromRes(res), () => buildVideoAuditEntity(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
 
   Hooks.runAction('action:api.video.deleted', { video: videoInstance, req, res })

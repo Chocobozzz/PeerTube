@@ -1,7 +1,7 @@
 import express, { VideoLegacyUploadFile } from 'express'
 import { PathLike } from 'fs-extra/esm'
 import { Transaction } from 'sequelize'
-import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger.js'
+import { auditLog, buildAbuseAuditEntity, getAuditActorFromAccount } from '@server/lib/audit-log/index.js'
 import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { AbuseModel } from '@server/models/abuse/abuse.js'
@@ -224,7 +224,6 @@ async function createAbuse (options: {
   transaction: Transaction
 }) {
   const { base, reporterAccount, flaggedAccount, associateFun, transaction, skipNotification } = options
-  const auditLogger = auditLoggerFactory('abuse')
 
   const abuseAttributes = Object.assign({}, base, { flaggedAccountId: flaggedAccount.id })
   const abuseInstance: MAbuseFull = await AbuseModel.create(abuseAttributes, { transaction })
@@ -239,7 +238,7 @@ async function createAbuse (options: {
   }
 
   const abuseJSON = abuseInstance.toFormattedAdminJSON()
-  auditLogger.create(reporterAccount.Actor.getIdentifier(), new AbuseAuditView(abuseJSON))
+  auditLog.create(getAuditActorFromAccount(reporterAccount), () => buildAbuseAuditEntity(abuseInstance), { transaction })
 
   if (!skipNotification) {
     afterCommitIfTransaction(transaction, () => {

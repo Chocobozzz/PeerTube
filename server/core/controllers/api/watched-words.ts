@@ -2,6 +2,12 @@ import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { deleteInTransactionWithRetries, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
+import {
+  auditLog,
+  buildWatchedWordsListAuditEntity,
+  buildWatchedWordsSubscriptionAuditEntity,
+  getAuditActorFromRes
+} from '@server/lib/audit-log/index.js'
 import { createRebuildAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import { fetchAndValidateWatchedWordsSubscriptionActions } from '@server/lib/watched-words-subscriptions.js'
 import {
@@ -242,6 +248,8 @@ function addWatchedWordsListFactory (accountGetter: (res: express.Response) => A
       words: req.body.words
     })
 
+    auditLog.create(getAuditActorFromRes(res), () => buildWatchedWordsListAuditEntity(list))
+
     await createRebuildAutomaticTagsJob({ accountId: account.id })
 
     return res.json({
@@ -289,6 +297,8 @@ function addWatchedWordsSubscriptionFactory (accountGetter: (res: express.Respon
         lastActionCreatedAt: null
       })
 
+      auditLog.create(getAuditActorFromRes(res), () => buildWatchedWordsSubscriptionAuditEntity(subscription))
+
       return res.json(subscription.toFormattedJSON())
     } catch (err) {
       logger.warn('Failed to fetch or parse watched words URL when adding watched word subscription.', { url: req.body.url, err })
@@ -303,11 +313,14 @@ function addWatchedWordsSubscriptionFactory (accountGetter: (res: express.Respon
 
 async function updateWatchedWordsList (req: express.Request, res: express.Response) {
   const list = res.locals.watchedWordsList
+  const oldListAuditEntity = auditLog.snapshot(() => buildWatchedWordsListAuditEntity(list))
 
   await list.updateList({
     listName: req.body.listName,
     words: req.body.words
   })
+
+  auditLog.update(getAuditActorFromRes(res), () => buildWatchedWordsListAuditEntity(list), oldListAuditEntity)
 
   await createRebuildAutomaticTagsJob({ accountId: list.accountId })
 
@@ -318,6 +331,8 @@ async function deleteWatchedWordsList (req: express.Request, res: express.Respon
   const list = res.locals.watchedWordsList
 
   await deleteInTransactionWithRetries(list)
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildWatchedWordsListAuditEntity(list))
 
   await createRebuildAutomaticTagsJob({ accountId: list.accountId })
 
@@ -335,6 +350,8 @@ async function deleteWatchedWordsSubscription (req: express.Request, res: expres
     })
     await subscription.destroy({ transaction })
   })
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildWatchedWordsSubscriptionAuditEntity(subscription))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

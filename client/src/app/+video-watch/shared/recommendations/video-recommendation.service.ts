@@ -19,6 +19,8 @@ export class VideoRecommendationService {
   }
 
   getRecommendations (currentVideo: VideoDetails, videoPassword?: string, exceptions = new Set<number>()): Observable<Video[]> {
+    // Re-insert to move the video at the end of the history
+    this.videoIdsHistory.delete(currentVideo.id)
     this.videoIdsHistory.add(currentVideo.id)
 
     // Most recent viewed videos are excluded first

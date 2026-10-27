@@ -1,7 +1,7 @@
 <div class="root" [ngClass]="{ 'theater-enabled': theaterEnabled }" [hidden]="!playlist && !video">
   <div class="margin-content player-margin-content">
     <!-- We need the video container for videojs so we just hide it -->
-    <div id="video-wrapper">
+    <div id="video-wrapper" data-nosnippet>
       @if (remoteServerDown) {
         <div class="remote-server-down">
           <ng-container i18n>Sorry, but this video did not load because the remote instance did not respond.</ng-container>

@@ -423,7 +423,8 @@ export const CONFIG = buildConfig({
       MAX_FILES: staticKey<number>('log.rotation.max_files')
     },
     AUDIT: {
-      ENABLED: staticKey<boolean>('log.audit.enabled')
+      ENABLED: staticKey<boolean>('log.audit.enabled'),
+      MAX_AGE: staticKey('log.audit.max_age', { transform: parseDurationToMs })
     },
     ANONYMIZE_IP: staticKey<boolean>('log.anonymize_ip'),
     TAG_REQUESTS: staticKey<boolean>('log.tag_requests'),

@@ -1,4 +1,6 @@
-<h1 class="visually-hidden" i18n>Browse videos</h1>
+<h1 class="visually-hidden">
+  <ng-container i18n>Browse videos</ng-container> - {{ instanceName }}
+</h1>
 
 <my-videos-list
   [getVideosObservableFunction]="getVideosObservableFunction"

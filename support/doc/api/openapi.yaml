@@ -7691,6 +7691,35 @@ paths:
                     type: string
                   activityPubMessagesWaiting:
                     type: integer
+                  secondariesUp:
+                    type: integer
+                    description: Number of secondary processes that recently sent a heartbeat
+                  processes:
+                    type: array
+                    description: Processes of the platform that recently sent a heartbeat, the primary first
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        role:
+                          type: string
+                          enum:
+                            - primary
+                            - secondary
+                        hostname:
+                          type: string
+                        pid:
+                          type: integer
+                        version:
+                          type: string
+                        startedAt:
+                          type: string
+                          format: date-time
+                          description: When the process started to serve requests
+                        lastSeenAt:
+                          type: string
+                          format: date-time
 
   /api/v1/server/debug/run-command:
     post:
@@ -7780,19 +7809,94 @@ paths:
       tags:
         - Logs
       summary: Get instance audit logs
+      description: |
+        User, administration and moderation actions recorded by all the PeerTube processes of the instance.
+
+        By default (`format=array`), returns an array of at most the 10,000 most recent entries of the requested date range, oldest first.
+        `startDate` is then required and pagination parameters are ignored.
+
+        With `format=list`, returns a paginated list.
       operationId: getInstanceAuditLogs
       security:
         - OAuth2:
           - admin
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: array
+            enum:
+            - array
+            - list
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+            - -createdAt
+            - createdAt
+        - name: search
+          in: query
+          required: false
+          description: Search in usernames, IP addresses and audited entities
+          schema:
+            type: string
+        - name: entityType
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditLogEntityType'
+        - name: entityId
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: action
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditLogAction'
+        - name: startDate
+          in: query
+          required: false
+          description: Required with the default `array` format
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - type: array
+                    description: Default `array` format
+                    items:
+                      $ref: '#/components/schemas/AuditLog'
+                  - type: object
+                    description: '`list` format'
+                    properties:
+                      total:
+                        type: integer
+                        example: 1
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AuditLog'
+        '403':
+          description: audit log is disabled
 
   /api/v1/plugins:
     get:
@@ -13557,6 +13661,133 @@ components:
           description: Set it to true if you don't want PeerTube to send an email to the user
       required:
         - moderationResponse
+
+    AuditLogAction:
+      type: string
+      enum:
+        - create
+        - update
+        - delete
+
+    AuditLogEntityType:
+      type: string
+      enum:
+        - video
+        - video-import
+        - video-live
+        - video-source
+        - video-file
+        - video-caption
+        - video-chapters
+        - video-password
+        - video-embed-privacy
+        - video-transcoding
+        - video-transcription
+        - video-studio-edition
+        - video-player-settings
+        - ownership-change
+        - comment
+        - channel
+        - channel-sync
+        - channel-videos-import
+        - channel-collaborator
+        - channel-player-settings
+        - channel-playlists-order
+        - playlist
+        - playlist-element
+        - playlist-elements-order
+        - user
+        - registration
+        - password-reset
+        - token-session
+        - failed-login
+        - scoped-token
+        - user-export
+        - user-import
+        - abuse
+        - abuse-message
+        - video-block
+        - account-block
+        - server-block
+        - blocklist-subscription
+        - watched-words-list
+        - watched-words-subscription
+        - automatic-tag-policy
+        - config
+        - instance-image
+        - instance-homepage
+        - instance-host
+        - plugin
+        - follow
+        - server-redundancy
+        - video-redundancy
+        - job-queue
+        - job
+        - runner
+        - runner-registration-token
+        - debug-command
+        - storage-prune
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        action:
+          $ref: '#/components/schemas/AuditLogAction'
+        entityType:
+          $ref: '#/components/schemas/AuditLogEntityType'
+        entityId:
+          type: integer
+          nullable: true
+          description: Id of the audited entity, `null` for the instance configuration
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              nullable: true
+              description: '`null` if the user has been deleted, for remote actors or for entries imported from the legacy audit log files'
+            username:
+              type: string
+              description: Username at the time of the action, or the actor handle for remote actors
+        ip:
+          type: string
+          nullable: true
+          description: IP address of the request, anonymized if `log.anonymize_ip` is enabled
+        entity:
+          type: object
+          additionalProperties: true
+          description: Snapshot of the entity after the action (before the action for deletions)
+        changes:
+          type: object
+          nullable: true
+          description: Only for updates. Keys are dot-separated paths of the changed entity attributes
+          additionalProperties:
+            type: object
+            properties:
+              old: {}
+              new: {}
+        createdAt:
+          type: string
+          format: date-time
+        timestamp:
+          type: string
+          format: date-time
+          deprecated: true
+          description: Same as `createdAt`. Field of the format used before audit logs were stored in the database
+        level:
+          type: string
+          deprecated: true
+          enum:
+            - audit
+          description: Field of the format used before audit logs were stored in the database
+        message:
+          type: string
+          deprecated: true
+          description: |
+            JSON string containing the `user`, `domain` (entity type), `action`, `entityId`, `ip` and `changes` of the entry, and the properties of the audited entity.
+            Field of the format used before audit logs were stored in the database
 
     UserRegistrationState:
       type: integer

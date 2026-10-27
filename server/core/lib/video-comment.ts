@@ -44,6 +44,8 @@ export async function removeComment (commentArg: MComment, req: express.Request,
   })
 
   Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstanceBefore, req, res })
+
+  return videoCommentInstanceBefore
 }
 
 export async function approveComment (commentArg: MComment, options: { notify?: boolean, transaction?: Transaction } = {}) {

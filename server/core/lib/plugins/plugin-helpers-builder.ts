@@ -1,3 +1,11 @@
+import {
+  auditLog,
+  buildAccountBlockAuditEntity,
+  buildServerBlockAuditEntity,
+  buildVideoAuditEntity,
+  buildVideoBlockAuditEntity,
+  getAuditPluginActor
+} from '@server/lib/audit-log/index.js'
 import { ffprobePromise } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoBlacklistCreate } from '@peertube/peertube-models'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
@@ -44,7 +52,7 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
 
     server: buildServerHelpers(httpServer),
 
-    moderation: buildModerationHelpers(),
+    moderation: buildModerationHelpers(npmName),
 
     plugin: buildPluginRelatedHelpers(pluginModel, npmName),
 
@@ -100,7 +108,10 @@ function buildVideosHelpers (npmName: string) {
       return runTransaction(async t => {
         const video = await VideoModel.loadFull(id, t)
 
+        const videoAuditEntity = auditLog.snapshot(() => buildVideoAuditEntity(video.toFormattedDetailsJSON()))
         await video.destroy({ transaction: t })
+
+        auditLog.delete(getAuditPluginActor(npmName), videoAuditEntity, { transaction: t })
       })
     },
 
@@ -109,7 +120,7 @@ function buildVideosHelpers (npmName: string) {
       if (!video) return
 
       await logger.withContext([ npmName, video.uuid ], async () => {
-        const updater = new LocalVideoUpdater({ video, user: null })
+        const updater = new LocalVideoUpdater({ video, user: null, auditActor: getAuditPluginActor(npmName) })
         await updater.update(options.attributes)
       })
     },
@@ -202,7 +213,9 @@ function buildVideosHelpers (npmName: string) {
   }
 }
 
-function buildModerationHelpers () {
+function buildModerationHelpers (npmName: string) {
+  const auditActor = getAuditPluginActor(npmName)
+
   return {
     blockServer: async (options: { byAccountId: number, hostToBlock: string }) => {
       const serverToBlock = await ServerModel.loadOrCreateByHost(options.hostToBlock)
@@ -213,6 +226,8 @@ function buildModerationHelpers () {
         targetServer: serverToBlock,
         removeNotificationOfUserId: user?.id
       })
+
+      auditLog.create(auditActor, () => buildServerBlockAuditEntity({ byAccountId: options.byAccountId, targetServer: serverToBlock }))
     },
 
     unblockServer: async (options: { byAccountId: number, hostToUnblock: string }) => {
@@ -220,6 +235,15 @@ function buildModerationHelpers () {
       if (!serverBlock) return
 
       await removeServerFromBlocklist(serverBlock)
+
+      auditLog.delete(
+        auditActor,
+        () =>
+          buildServerBlockAuditEntity({
+            byAccountId: options.byAccountId,
+            targetServer: { id: serverBlock.targetServerId, host: options.hostToUnblock }
+          })
+      )
     },
 
     blockAccount: async (options: { byAccountId: number, handleToBlock: string }) => {
@@ -233,6 +257,15 @@ function buildModerationHelpers () {
         targetAccount: accountToBlock,
         removeNotificationOfUserId: user?.id
       })
+
+      auditLog.create(
+        auditActor,
+        () =>
+          buildAccountBlockAuditEntity({
+            byAccountId: options.byAccountId,
+            targetAccount: { id: accountToBlock.id, handle: accountToBlock.Actor.getFullIdentifier() }
+          })
+      )
     },
 
     unblockAccount: async (options: { byAccountId: number, handleToUnblock: string }) => {
@@ -243,6 +276,15 @@ function buildModerationHelpers () {
       if (!accountBlock) return
 
       await removeAccountFromBlocklist(accountBlock)
+
+      auditLog.delete(
+        auditActor,
+        () =>
+          buildAccountBlockAuditEntity({
+            byAccountId: options.byAccountId,
+            targetAccount: { id: targetAccount.id, handle: targetAccount.Actor.getFullIdentifier() }
+          })
+      )
     },
 
     blacklistVideo: async (options: { videoIdOrUUID: number | string, createOptions: VideoBlacklistCreate }) => {
@@ -250,7 +292,9 @@ function buildModerationHelpers () {
       if (!video) return
 
       await logger.withContext([ video.uuid ], async () => {
-        await blacklistVideo(video, options.createOptions)
+        const videoBlock = await blacklistVideo(video, options.createOptions)
+
+        auditLog.create(auditActor, () => buildVideoBlockAuditEntity({ video, videoBlock }))
       })
     },
 
@@ -262,6 +306,8 @@ function buildModerationHelpers () {
       if (!videoBlacklist) return
 
       await unblacklistVideo(videoBlacklist, video)
+
+      auditLog.delete(auditActor, () => buildVideoBlockAuditEntity({ video, videoBlock: videoBlacklist }))
     }
   }
 }

@@ -1,3 +1,5 @@
+import { escapeHTML } from '@peertube/peertube-core-utils'
+import { CONFIG } from '@server/initializers/config.js'
 import { MVideoPlaylist } from '@server/types/models/video/video-playlist.js'
 import { MVideo } from '@server/types/models/video/video.js'
 import { TagsHtml } from './tags-html.js'
@@ -10,7 +12,7 @@ export function buildEmptyEmbedHTML (options: {
   const { html, playlist, video } = options
 
   let htmlResult = TagsHtml.addTitleTag(html)
-  htmlResult = TagsHtml.addDescriptionTag(htmlResult)
+  htmlResult = TagsHtml.addDescriptionTag(htmlResult, escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION))
 
   return TagsHtml.addTags(htmlResult, { forbidIndexation: true, embedIndexation: true }, { playlist, video })
 }

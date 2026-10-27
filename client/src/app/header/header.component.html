@@ -1,5 +1,5 @@
 @if (mobileMsg) {
-  <div class="mobile-msg">
+  <div class="mobile-msg" data-nosnippet>
     <div class="msg ellipsis me-auto" i18n>Open in the application?</div>
     <a class="peertube-button-link secondary-button me-3" [href]="androidAppUrl || iosAppUrl" (click)="onOpenClientClick()">Open</a>
 
@@ -9,7 +9,7 @@
   </div>
 }
 
-<div class="root" [ngClass]="{ 'search-hidden': searchHidden }">
+<div class="root" data-nosnippet [ngClass]="{ 'search-hidden': searchHidden }">
   <a class="peertube-title" [routerLink]="getDefaultRoute()" [queryParams]="getDefaultRouteQuery()" title="Go to homepage" i18n-title>
     <img [src]="getLogoUrl()" alt="" [title]="instanceName" class="logo" />
 

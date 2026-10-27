@@ -9,21 +9,11 @@ import {
   setAccessTokensToServers,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import {
-  activityPubContextify,
-  buildGlobalHTTPHeaders,
-  getAPPublicValue
-} from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
-import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
-import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
-import { makePOSTAPRequest } from '@tests/shared/requests.js'
+import { getAPPublicValue } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
+import { makeSignedPOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'
-
-function fakeFilter () {
-  return (data: any) => Promise.resolve(data)
-}
 
 function setKeysOfServer (onServer: SQLCommand, ofServerUrl: string, publicKey: string, privateKey: string) {
   const url = ofServerUrl + '/accounts/peertube'
@@ -44,14 +34,6 @@ describe('Test ActivityPub actor identity binding', function () {
 
   const keys = readJsonSync(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
 
-  function buildHttpSignature () {
-    return {
-      keyId: remoteActorUrl,
-      key: keys.privateKey,
-      headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
-    }
-  }
-
   // Send an "Update" of the remote actor, signed by that same remote actor
   async function sendActorUpdate (actorObject: any) {
     const activity = {
@@ -62,16 +44,14 @@ describe('Test ActivityPub actor identity binding', function () {
       object: actorObject
     }
 
-    const body = await activityPubContextify(activity, 'Actor', fakeFilter())
-    const headers = {
-      ...buildGlobalHTTPHeaders(body, buildDigest),
-
-      'content-type': 'application/activity+json',
-      'accept': ACTIVITY_PUB.ACCEPT_HEADER
-    }
-
     try {
-      const { statusCode } = await makePOSTAPRequest(inboxUrl, body, buildHttpSignature(), headers)
+      const { statusCode } = await makeSignedPOSTAPRequest({
+        url: inboxUrl,
+        activity,
+        contextType: 'Actor',
+        keyId: remoteActorUrl,
+        privateKey: keys.privateKey
+      })
 
       return { rejected: false, statusCode }
     } catch (err) {

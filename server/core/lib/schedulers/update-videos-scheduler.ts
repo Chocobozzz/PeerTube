@@ -1,3 +1,4 @@
+import { getAuditSystemActor } from '@server/lib/audit-log/index.js'
 import { VideoPrivacy, VideoPrivacyType, VideoState } from '@peertube/peertube-models'
 import { VideoModel } from '@server/models/video/video.js'
 import { MScheduleVideoUpdate } from '@server/types/models/index.js'
@@ -58,7 +59,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
     if (schedule.privacy) {
       oldPrivacy = video.privacy
 
-      const updater = new LocalVideoUpdater({ user: null, video })
+      const updater = new LocalVideoUpdater({ user: null, video, auditActor: getAuditSystemActor() })
 
       video = await updater.update({ privacy: schedule.privacy })
 

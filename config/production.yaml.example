@@ -363,7 +363,10 @@ log:
     max_files: 20
 
   audit:
-    enabled: true # Log user, administration and moderation actions in a dedicated audit log file
+    enabled: true # Log user, administration and moderation actions in the database, viewable in the administration
+
+    # -1 means there is no limitations
+    max_age: '1 year'
 
   anonymize_ip: false
 

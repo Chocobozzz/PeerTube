@@ -1,5 +1,6 @@
 import { HttpStatusCode, VideoUpdate } from '@peertube/peertube-models'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
+import { getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { LocalVideoUpdater } from '@server/lib/local-video-updater.js'
 import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
@@ -42,7 +43,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   await logger.inContext(async () => {
     const thumbnails = await buildVideoThumbnailsFromReq(videoFromReq, req)
 
-    const localVideoUpdater = new LocalVideoUpdater({ user, video: videoFromReq })
+    const localVideoUpdater = new LocalVideoUpdater({ user, video: videoFromReq, auditActor: getAuditActorFromRes(res) })
 
     const video = await localVideoUpdater.update({ ...body, thumbnails, channel: res.locals.videoChannel })
 

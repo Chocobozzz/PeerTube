@@ -115,8 +115,9 @@ const taskCheckers: {
 }
 
 function checkTask (req: express.Request, task: VideoStudioTask, indice?: number) {
+  if (Object.hasOwn(taskCheckers, task.name) !== true) return false
+
   const checker = taskCheckers[task.name]
-  if (!checker) return false
 
   return checker({ task, indice, files: req.files as Express.Multer.File[] })
 }

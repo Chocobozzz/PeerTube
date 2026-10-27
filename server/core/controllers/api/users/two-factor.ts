@@ -1,4 +1,5 @@
 import express from 'express'
+import { auditLog, buildUserAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { generateOTPSecret, isOTPValid } from '@server/helpers/otp.js'
 import { encrypt } from '@server/helpers/peertube-crypto.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -101,8 +102,12 @@ async function confirmRequestTwoFactor (req: express.Request, res: express.Respo
     })
   }
 
+  const oldUserAuditEntity = auditLog.snapshot(() => buildUserAuditEntity(user))
+
   user.otpSecret = encryptedSecret
   await user.save()
+
+  auditLog.update(getAuditActorFromRes(res), () => buildUserAuditEntity(user), oldUserAuditEntity)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -110,8 +115,12 @@ async function confirmRequestTwoFactor (req: express.Request, res: express.Respo
 async function disableTwoFactor (req: express.Request, res: express.Response) {
   const user = res.locals.user
 
+  const oldUserAuditEntity = auditLog.snapshot(() => buildUserAuditEntity(user))
+
   user.otpSecret = null
   await user.save()
+
+  auditLog.update(getAuditActorFromRes(res), () => buildUserAuditEntity(user), oldUserAuditEntity)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

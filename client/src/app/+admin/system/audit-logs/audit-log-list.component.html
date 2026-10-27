@@ -1,0 +1,120 @@
+<my-table
+  #table
+  key="AuditLogListComponent"
+  [defaultColumns]="columns"
+  i18n-paginatorText
+  paginatorText="entries per page"
+  [defaultRowsPerPage]="20"
+  columnConfig="true"
+  [dataLoader]="dataLoader"
+  searchInput="true"
+  refreshButton="true"
+  [inputFilters]="inputFilters"
+>
+  <ng-template #totalTitle let-totalRecords>
+    <ng-container i18n>{ totalRecords, plural, =0 {No entry} =1 {1 entry} other {{{ totalRecords | myNumberFormatter }} entries}}</ng-container>
+  </ng-template>
+
+  <ng-template #tableCells let-auditLog>
+    @if (table.isColumnDisplayed('createdAt')) {
+      <td>{{ auditLog.createdAt | ptDate: 'medium'  }}</td>
+    }
+
+    @if (table.isColumnDisplayed('user')) {
+      <td>{{ auditLog.user.username }}</td>
+    }
+
+    @if (table.isColumnDisplayed('action')) {
+      <td>
+        <a
+          routerLink="."
+          [queryParams]="{ action: auditLog.action }"
+          class="pt-badge"
+          [ngClass]="getActionBadgeColor(auditLog.action)"
+          i18n-title
+          title="Filter by this action"
+        >{{ getActionLabel(auditLog.action) }}</a>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('entityType')) {
+      <td>
+        <a routerLink="." [queryParams]="{ entityType: auditLog.entityType }" i18n-title title="Filter by this entity type">
+          {{ getEntityTypeLabel(auditLog.entityType) }}
+        </a>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('entity')) {
+      <td>
+        @if (auditLog.entityLink) {
+          <a
+            target="_blank"
+            [routerLink]="auditLog.entityLink.routerLink"
+            [queryParams]="auditLog.entityLink.queryParams"
+            i18n-title
+            title="Open the entity page"
+          >
+            @if (auditLog.entityLabel) {
+              {{ auditLog.entityLabel }}
+            } @else {
+              <ng-container i18n>Open entity</ng-container>
+            }
+
+            <my-global-icon iconName="external-link"></my-global-icon>
+          </a>
+        } @else {
+          {{ auditLog.entityLabel || '-' }}
+        }
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('entityId')) {
+      <td>
+        @if (auditLog.entityId) {
+          <a
+            routerLink="."
+            [queryParams]="{ entityType: auditLog.entityType, entityId: auditLog.entityId }"
+            i18n-title
+            title="Show the history of this entity"
+          >{{ auditLog.entityId }}</a>
+        }
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('ip')) {
+      <td>{{ auditLog.ip || '-' }}</td>
+    }
+  </ng-template>
+
+  <ng-template #expandedRow let-auditLog>
+    @if (auditLog.hasChanges) {
+      <div class="mt-2">
+        <strong i18n>Changes:</strong>
+
+        <div class="changes">
+          <div>
+            <div class="changes-title" i18n>Old values</div>
+            <pre class="changes-old">{{ auditLog.oldChangesJSON }}</pre>
+          </div>
+
+          <div>
+            <div class="changes-title" i18n>New values</div>
+            <pre class="changes-new">{{ auditLog.newChangesJSON }}</pre>
+          </div>
+        </div>
+      </div>
+    } @else if (auditLog.action === 'update') {
+      <div class="mt-2" i18n>No attribute change recorded.</div>
+    }
+
+    <div class="mt-2">
+      <strong i18n>Entity:</strong>
+      <pre>{{ auditLog.entityJSON }}</pre>
+    </div>
+  </ng-template>
+
+  <ng-template #noResults>
+    <ng-container i18n>No audit log entries found.</ng-container>
+  </ng-template>
+</my-table>

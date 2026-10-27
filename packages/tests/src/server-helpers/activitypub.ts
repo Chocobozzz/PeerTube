@@ -4,6 +4,7 @@ import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { signAndContextify } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
 import { isHTTPSignatureVerified, parseHTTPSignature } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 import { compactJSONLDAndCheckSignature, signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
+import { fakeContextFilter } from '@tests/shared/requests.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'
 import cloneDeep from 'lodash-es/cloneDeep.js'
@@ -18,10 +19,6 @@ function signJsonLDObjectWithoutAssertion (options: Parameters<typeof signJsonLD
 
     disableWorkerThreadAssertion: true
   })
-}
-
-function fakeFilter () {
-  return (data: any) => Promise.resolve(data)
 }
 
 function fakeExpressReq (body: any) {
@@ -69,7 +66,7 @@ describe('Test activity pub helpers', function () {
         byActor: actorSignature as any,
         data: body,
         contextType: 'Announce',
-        contextFilter: fakeFilter(),
+        contextFilter: fakeContextFilter(),
         signerFunction: signJsonLDObjectWithoutAssertion
       })
 
@@ -88,7 +85,7 @@ describe('Test activity pub helpers', function () {
         byActor: actorSignature as any,
         data: body,
         contextType: 'Announce',
-        contextFilter: fakeFilter(),
+        contextFilter: fakeContextFilter(),
         signerFunction: signJsonLDObjectWithoutAssertion
       })
 

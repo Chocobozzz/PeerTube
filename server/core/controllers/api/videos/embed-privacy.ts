@@ -10,6 +10,7 @@ import {
 import { runTransaction } from '@server/helpers/database-utils.js'
 import { getAuthUser } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
+import { auditLog, buildVideoEmbedPrivacyAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { VIDEO_EMBED_PRIVACY_POLICIES, WEBSERVER } from '@server/initializers/constants.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
@@ -114,6 +115,14 @@ function updateVideoEmbedPrivacy (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const body = req.body as VideoEmbedPrivacyUpdate
 
+    const oldEmbedPrivacyAuditEntity = await auditLog.snapshot(async () => {
+      return buildVideoEmbedPrivacyAuditEntity({
+        video,
+        policy: video.embedPrivacyPolicy,
+        domains: (await VideoEmbedPrivacyDomainModel.list(video.id)).map(d => d.domain)
+      })
+    })
+
     await runTransaction(async (t: Transaction) => {
       video.embedPrivacyPolicy = body.policy
 
@@ -121,6 +130,13 @@ function updateVideoEmbedPrivacy (req: express.Request, res: express.Response) {
 
       await VideoEmbedPrivacyDomainModel.deleteAllDomains(video.id, t)
       await VideoEmbedPrivacyDomainModel.addDomains(body.domains, video.id, t)
+
+      auditLog.update(
+        getAuditActorFromRes(res),
+        () => buildVideoEmbedPrivacyAuditEntity({ video, policy: body.policy, domains: body.domains }),
+        oldEmbedPrivacyAuditEntity,
+        { transaction: t }
+      )
 
       await VideoChannelActivityModel.addVideoActivity({
         action: VideoChannelActivityAction.UPDATE_EMBED_POLICY,
