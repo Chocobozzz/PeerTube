@@ -6851,7 +6851,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6879611118172119569" datatype="html">
         <source>Only new comments can be blocked by a new word</source>
-        <target state="new">Only new comments can be blocked by a new word</target>
+        <target state="translated">Només els comentaris nous es poden bloquejar amb una paraula nova</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">19,20</context>
@@ -6859,7 +6859,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6123892565355794580" datatype="html">
         <source>If you remove a word from the list, any comments that are currently awaiting review will not be affected</source>
-        <target state="new">If you remove a word from the list, any comments that are currently awaiting review will not be affected</target>
+        <target state="translated">Eliminar una paraula de la llista no afecta cap comentari que estigui pendent de revisió</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">20,21</context>
@@ -6867,7 +6867,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4417518529461614977" datatype="html">
         <source>The auto tags on existing comments and videos will be updated based on the words in this list.</source>
-        <target state="new">The auto tags on existing comments and videos will be updated based on the words in this list.</target>
+        <target state="translated">Les etiquetes automàtiques en els comentaris i vídeos existents s'actualitzaran segons les paraules de la llista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">23,24</context>
