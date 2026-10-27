@@ -6867,7 +6867,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4417518529461614977" datatype="html">
         <source>The auto tags on existing comments and videos will be updated based on the words in this list.</source>
-        <target state="translated">Les etiquetes automàtiques en els comentaris i vídeos existents s'actualitzaran segons les paraules de la llista.</target>
+        <target state="translated">Les etiquetes automàtiques en els comentaris i vídeos existents s'actualitzaran en funció de les paraules de la llista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-save-modal.component.html</context>
           <context context-type="linenumber">23,24</context>
@@ -6907,7 +6907,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6076623101349323411" datatype="html">
         <source>The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list.</source>
-        <target state="new"> The remote list will be synchronized periodically, and auto tags on existing comments and videos will be updated based on the words in the list. </target>
+        <target state="translated">La llista remota se sincronitzarà periòdicament i les etiquetes automàtiques dels comentaris i vídeos existents s'actualitzaran en funció de les paraules de la llista.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">76</context>
@@ -6915,7 +6915,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3212629476561103950" datatype="html">
         <source>However, the auto-tagging policies will not affect existing videos:</source>
-        <target state="new">However, the auto-tagging policies will not affect existing videos:</target>
+        <target state="translated">Tanmateix, les polítiques d'etiquetatge automàtic no afectaran els vídeos existents:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">80,82</context>
