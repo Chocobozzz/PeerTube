@@ -2,6 +2,8 @@ import {
   HttpStatusCode,
   ResultList,
   Video,
+  VideoCaptionSegment,
+  VideoCaptionSegmentsSearchQuery,
   VideoChannel,
   VideoChannelsSearchQuery,
   VideoPlaylist,
@@ -62,6 +64,24 @@ export class SearchCommand extends AbstractCommand {
     const path = '/api/v1/search/video-playlists'
 
     return this.getRequestBody<ResultList<VideoPlaylist>>({
+      ...options,
+
+      path,
+      query: search,
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  searchVideoCaptionSegments (
+    options: OverrideCommandOptions & {
+      search: VideoCaptionSegmentsSearchQuery
+    }
+  ) {
+    const { search } = options
+    const path = '/api/v1/search/video-caption-segments'
+
+    return this.getRequestBody<ResultList<VideoCaptionSegment>>({
       ...options,
 
       path,
