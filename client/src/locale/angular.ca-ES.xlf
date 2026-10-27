@@ -9097,7 +9097,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8857733928646598624" datatype="html">
         <source>Owner channels</source>
-        <target state="new">Owner channels</target>
+        <target state="translated">Canals del propietari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/channel/select-channel-admin.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -9105,7 +9105,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6504815889069382256" datatype="html">
         <source>Your channels</source>
-        <target state="new">Your channels</target>
+        <target state="translated">Els vostres canals</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/channel/select-channel-admin.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -9113,7 +9113,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3312785003874860520" datatype="html">
         <source>Searched channels</source>
-        <target state="new">Searched channels</target>
+        <target state="translated">Canals cercats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/channel/select-channel-admin.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -9749,7 +9749,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="925001787165440116" datatype="html">
         <source>Not banned</source>
-        <target state="new">Not banned</target>
+        <target state="translated">No està bandejat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -9757,7 +9757,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2149300564474427551" datatype="html">
         <source>Administrator</source>
-        <target state="new">Administrator</target>
+        <target state="translated">Administrador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -9765,7 +9765,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4968151111061046122" datatype="html">
         <source>Moderator</source>
-        <target state="new">Moderator</target>
+        <target state="translated">Moderador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -9773,7 +9773,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2392488717875840729" datatype="html">
         <source>User</source>
-        <target state="new">User</target>
+        <target state="translated">Usuari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -9917,7 +9917,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5349840085927711709" datatype="html">
         <source>Automatically block videos:</source>
-        <target state="new">Automatically block videos:</target>
+        <target state="translated">Bloqueja vídeos automàticament:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.html</context>
           <context context-type="linenumber">1,3</context>
@@ -9925,7 +9925,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="492747807721713007" datatype="html">
         <source>That contain &lt;strong&gt;an external link&lt;/strong&gt;</source>
-        <target state="new">That contain &lt;strong&gt;an external link&lt;/strong&gt;</target>
+        <target state="translated">Que contenen &lt;strong&gt;un enllaç extern&lt;/strong&gt;</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/automatic-tag-policies/automatic-tag-policies-admin.component.ts</context>
           <context context-type="linenumber">33</context>
