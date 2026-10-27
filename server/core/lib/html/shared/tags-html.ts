@@ -1,5 +1,5 @@
 import { escapeAttribute, escapeHTML, escapeHtmlJSONStr } from '@peertube/peertube-core-utils'
-import { mdToPlainText } from '@server/helpers/markdown.js'
+import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { getActivityStreamDuration } from '@server/lib/activitypub/activity.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -143,11 +143,29 @@ export class TagsHtml {
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.TITLE, titleTag)
   }
 
-  static addDescriptionTag (htmlStringPage: string, escapedTruncatedDescription?: string) {
-    const content = escapedTruncatedDescription || escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION)
-    const descriptionTag = `<meta name="description" content="${escapeAttribute(content)}" />`
+  static addDescriptionTag (htmlStringPage: string, escapedTruncatedDescription: string) {
+    // Don't fallback on the instance description: many pages would have the same description
+    // Search engines prefer to generate the snippet from the page content
+    const descriptionTag = escapedTruncatedDescription
+      ? `<meta name="description" content="${escapeAttribute(escapedTruncatedDescription)}" />`
+      : ''
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, descriptionTag)
+  }
+
+  // Give the main content of the page to crawlers that don't execute JavaScript
+  // The Angular application replaces the content of its root element when it starts
+  static addServerRenderedContent (htmlStringPage: string, options: {
+    escapedTitle: string
+    markdownDescription?: string
+  }) {
+    const { escapedTitle, markdownDescription } = options
+
+    // Visually hidden: this content is quickly replaced by the application, so we don't want it to flash
+    const style = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap'
+    const content = `<div style="${style}"><h1>${escapedTitle}</h1>${toSafeHtml(markdownDescription)}</div>`
+
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_RENDERED_CONTENT, content)
   }
 
   static findRelMe (content: string) {
@@ -313,8 +331,8 @@ export class TagsHtml {
         'mainEntity': {
           '@id': '#main-author',
           '@type': 'Person',
-          'name': tags.escapedTitle,
-          'description': tags.escapedTruncatedDescription,
+          'name': this.decodeHTML(tags.escapedTitle),
+          'description': this.decodeHTML(tags.escapedTruncatedDescription),
           'image': tags.image?.url
         }
       }
@@ -325,8 +343,8 @@ export class TagsHtml {
     const schema: JsonldSchema = {
       '@context': 'http://schema.org',
       '@type': tags.schemaType,
-      'name': tags.escapedTitle,
-      'description': tags.escapedTruncatedDescription,
+      'name': this.decodeHTML(tags.escapedTitle),
+      'description': this.decodeHTML(tags.escapedTruncatedDescription),
       'image': tags.image?.url,
       'url': tags.url
     }
@@ -347,7 +365,8 @@ export class TagsHtml {
       }
 
       schema['embedUrl'] = videoOrPlaylist.embedUrl
-      schema['uploadDate'] = videoOrPlaylist.createdAt
+
+      schema['uploadDate'] = video?.publishedAt ?? videoOrPlaylist.createdAt
 
       schema['thumbnailUrl'] = tags.image?.url
 
@@ -412,5 +431,11 @@ export class TagsHtml {
 
   static buildEscapedTruncatedDescription (description: string) {
     return truncate(mdToPlainText(description), { length: 200 })
+  }
+
+  private static decodeHTML (escaped: string) {
+    if (!escaped) return escaped
+
+    return parse(escaped).text
   }
 }

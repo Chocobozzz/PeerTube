@@ -106,6 +106,10 @@ export class VideoHtml {
 
     let customHTML = TagsHtml.addTitleTag(html, video.name)
     customHTML = TagsHtml.addDescriptionTag(customHTML, escapedTruncatedDescription)
+    customHTML = TagsHtml.addServerRenderedContent(customHTML, {
+      escapedTitle: escapeHTML(video.name),
+      markdownDescription: video.description
+    })
 
     const thumbnail = video.getBestThumbnail('16:9')
 

@@ -1,3 +1,4 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import { Account, AccountSummary, ActivityPubActor, ActivityUrlObject, VideoPrivacy } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { ModelCache } from '@server/models/shared/model-cache.js'
@@ -425,31 +426,61 @@ export class AccountModel extends SequelizeModel<AccountModel> {
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static listLocalsForSitemap (sort: string): Promise<MAccountHost[]> {
+  static listLocalsForSitemap (idRange: { min: number, max: number }): Promise<MAccountHost[]> {
     return AccountModel.unscoped().findAll({
+      ...this.buildLocalsForSitemapQuery({ actorAttributes: [ 'preferredUsername', 'serverId' ], idRange }),
+
       attributes: [ 'updatedAt' ],
-      offset: 0,
-      order: getSort(sort),
+      order: [ [ 'id', 'ASC' ] ]
+    })
+  }
+
+  static async listLocalSitemapPages (idsPerPage: number): Promise<{ page: number, lastUpdatedAt: Date }[]> {
+    const rows = await AccountModel.unscoped().findAll<any>({
+      ...this.buildLocalsForSitemapQuery({ actorAttributes: [] }),
+
+      attributes: [
+        [ literal(`("AccountModel"."id" - 1) / ${forceNumber(idsPerPage)} + 1`), 'page' ],
+        [ literal('MAX("AccountModel"."updatedAt")'), 'lastUpdatedAt' ]
+      ],
+      group: 'page',
+      order: [ literal('"page" ASC') ],
+      raw: true
+    })
+
+    return rows.map(r => ({ page: forceNumber(r.page), lastUpdatedAt: new Date(r.lastUpdatedAt) }))
+  }
+
+  private static buildLocalsForSitemapQuery (options: {
+    actorAttributes: string[]
+    idRange?: { min: number, max: number }
+  }) {
+    // Use a sub query instead of a channels include, so we don't join multiple rows per account
+    const hasPublicVideos = 'EXISTS (' +
+      'SELECT 1 FROM "videoChannel" INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" ' +
+      `WHERE "videoChannel"."accountId" = "AccountModel"."id" AND "video"."privacy" = ${VideoPrivacy.PUBLIC}` +
+      ')'
+
+    const and: WhereOptions[] = [ literal(hasPublicVideos) ]
+
+    if (options.idRange) {
+      and.push({ id: { [Op.between]: [ options.idRange.min, options.idRange.max ] } })
+    }
+
+    return {
       include: [
         {
-          attributes: [ 'preferredUsername', 'serverId' ],
+          attributes: options.actorAttributes,
           model: ActorModel.unscoped(),
           where: {
             serverId: null
           }
-        },
-        {
-          attributes: [ 'id' ],
-          model: VideoChannelModel.unscoped(),
-          required: true,
-          where: {
-            [Op.and]: [
-              literal(`EXISTS (SELECT 1 FROM "video" WHERE "privacy" = ${VideoPrivacy.PUBLIC} AND "channelId" = "VideoChannels"."id")`)
-            ]
-          }
         }
-      ]
-    })
+      ],
+      where: {
+        [Op.and]: and
+      }
+    }
   }
 
   // ---------------------------------------------------------------------------

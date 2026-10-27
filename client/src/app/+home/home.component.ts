@@ -1,5 +1,5 @@
 import { Component, ElementRef, inject, OnDestroy, OnInit, viewChild, ChangeDetectionStrategy } from '@angular/core'
-import { DisableForReuseHook, PeerTubeRouterService } from '@app/core'
+import { DisableForReuseHook, PeerTubeRouterService, ServerService } from '@app/core'
 import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
 import { debounceTime, fromEvent, Subscription } from 'rxjs'
 import { CustomMarkupContainerComponent } from '../shared/shared-custom-markup/custom-markup-container.component'
@@ -13,11 +13,13 @@ export class HomeComponent implements OnInit, OnDestroy, DisableForReuseHook {
   private customPageService = inject(CustomPageService)
   private sub: Subscription
   private peertubeRouter = inject(PeerTubeRouterService)
+  private server = inject(ServerService)
   private disabled = false
 
   readonly contentWrapper = viewChild<ElementRef<HTMLInputElement>>('contentWrapper')
 
   homepageContent: string
+  instanceName = this.server.getHTMLConfig().instance.name
 
   ngOnInit () {
     this.customPageService.getInstanceHomepage()

@@ -78,6 +78,9 @@ export type BuildVideosListQueryOptions = {
 
   uuids?: string[]
 
+  // Inclusive
+  idRange?: { min: number, max: number }
+
   hasFiles?: boolean
   hasHLSFiles?: boolean
 
@@ -315,6 +318,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.uuids) {
       this.whereUUIDs(options.uuids)
+    }
+
+    if (options.idRange) {
+      this.whereIdRange(options.idRange)
     }
 
     if (options.nsfw === true) {
@@ -727,6 +734,12 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
   private whereUUIDs (uuids: string[]) {
     this.and.push('"video"."uuid" IN (' + createSafeIn(this.sequelize, uuids) + ')')
+  }
+
+  private whereIdRange (idRange: { min: number, max: number }) {
+    this.and.push('"video"."id" BETWEEN :idRangeMin AND :idRangeMax')
+    this.replacements.idRangeMin = idRange.min
+    this.replacements.idRangeMax = idRange.max
   }
 
   private whereCategoryOneOf (categoryOneOf: number[]) {

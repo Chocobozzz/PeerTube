@@ -1188,9 +1188,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setMetaTags (video: Video) {
+    // Don't update the description: crawlers load this page directly and must keep the plain text one set by the server
     this.metaService.setTitle(video.name)
-
-    this.metaService.setDescription(video.description)
 
     if (this.playlist?.isLocal) {
       this.metaService.setRSSFeeds(

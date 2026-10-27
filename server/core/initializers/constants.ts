@@ -196,6 +196,15 @@ export const SORTABLE_COLUMNS = {
   LIVE_SESSIONS: [ 'startDate' ]
 }
 
+// Search engines limit a sitemap file to 50,000 URLs and 50MB
+export const SITEMAP = {
+  // A video entry can reach ~12KB
+  VIDEOS_PER_PAGE: 2000,
+  ACTORS_PER_PAGE: 50000,
+
+  MAX_PAGE: 2_000_000
+}
+
 export const ROUTE_CACHE_LIFETIME = {
   FEEDS: '15 minutes',
   ROBOTS: '2 hours',
@@ -1392,7 +1401,8 @@ export const CUSTOM_HTML_TAG_COMMENTS = {
   DESCRIPTION: '<!-- description tag -->',
   CUSTOM_CSS: '<!-- custom css tag -->',
   META_TAGS: '<!-- meta tags -->',
-  SERVER_CONFIG: '<!-- server config -->'
+  SERVER_CONFIG: '<!-- server config -->',
+  SERVER_RENDERED_CONTENT: '<!-- server rendered content -->'
 }
 
 export const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
@@ -1494,6 +1504,9 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
     ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
     ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+
+    SITEMAP.VIDEOS_PER_PAGE = 2
+    SITEMAP.ACTORS_PER_PAGE = 2
 
     CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
     CONSTRAINTS_FIELDS.LOGO.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB

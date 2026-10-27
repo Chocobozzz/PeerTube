@@ -1,3 +1,4 @@
+import { forceNumber } from '@peertube/peertube-core-utils'
 import {
   ActivityPubActor,
   ActivityUrlObject,
@@ -11,7 +12,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { getLocalActorPlayerSettingsActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { InternalEventEmitter } from '@server/lib/internal-event-emitter.js'
 import { MAccountIdHost } from '@server/types/models/index.js'
-import { FindOptions, Includeable, literal, Op, QueryTypes, Transaction } from 'sequelize'
+import { FindOptions, Includeable, literal, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   AfterCreate,
   AfterDestroy,
@@ -54,7 +55,7 @@ import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/a
 import { ActorImageModel } from '../actor/actor-image.js'
 import { ActorModel, actorSummaryAttributes } from '../actor/actor.js'
 import { ServerModel, serverSummaryAttributes } from '../server/server.js'
-import { buildSQLAttributes, buildTrigramSearchIndex, getSort, SequelizeModel, setAsUpdated, throwIfNotValid } from '../shared/index.js'
+import { buildSQLAttributes, buildTrigramSearchIndex, SequelizeModel, setAsUpdated, throwIfNotValid } from '../shared/index.js'
 import { ListVideoChannelsOptions, VideoChannelListQueryBuilder } from './sql/channel/video-channel-list-query-builder.js'
 import { VideoChannelCollaboratorModel } from './video-channel-collaborator.js'
 import { VideoPlaylistModel } from './video-playlist.js'
@@ -368,14 +369,51 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
 
   // ---------------------------------------------------------------------------
 
-  static listLocalsForSitemap (sort: string): Promise<MChannelHost[]> {
-    const query = {
-      attributes: [ 'updatedAt' ],
-      offset: 0,
-      order: getSort(sort),
+  static listLocalsForSitemap (idRange: { min: number, max: number }): Promise<MChannelHost[]> {
+    return VideoChannelModel
+      .unscoped()
+      .findAll({
+        ...this.buildLocalsForSitemapQuery({ actorAttributes: [ 'preferredUsername', 'serverId' ], idRange }),
+
+        attributes: [ 'updatedAt' ],
+        order: [ [ 'id', 'ASC' ] ]
+      })
+  }
+
+  static async listLocalSitemapPages (idsPerPage: number): Promise<{ page: number, lastUpdatedAt: Date }[]> {
+    const rows = await VideoChannelModel
+      .unscoped()
+      .findAll<any>({
+        ...this.buildLocalsForSitemapQuery({ actorAttributes: [] }),
+
+        attributes: [
+          [ literal(`("VideoChannelModel"."id" - 1) / ${forceNumber(idsPerPage)} + 1`), 'page' ],
+          [ literal('MAX("VideoChannelModel"."updatedAt")'), 'lastUpdatedAt' ]
+        ],
+        group: 'page',
+        order: [ literal('"page" ASC') ],
+        raw: true
+      })
+
+    return rows.map(r => ({ page: forceNumber(r.page), lastUpdatedAt: new Date(r.lastUpdatedAt) }))
+  }
+
+  private static buildLocalsForSitemapQuery (options: {
+    actorAttributes: string[]
+    idRange?: { min: number, max: number }
+  }) {
+    const and: WhereOptions[] = [
+      literal(`EXISTS (SELECT 1 FROM "video" WHERE "privacy" = ${VideoPrivacy.PUBLIC} AND "channelId" = "VideoChannelModel"."id")`)
+    ]
+
+    if (options.idRange) {
+      and.push({ id: { [Op.between]: [ options.idRange.min, options.idRange.max ] } })
+    }
+
+    return {
       include: [
         {
-          attributes: [ 'preferredUsername', 'serverId' ],
+          attributes: options.actorAttributes,
           model: ActorModel.unscoped(),
           where: {
             serverId: null
@@ -383,15 +421,9 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
         }
       ],
       where: {
-        [Op.and]: [
-          literal(`EXISTS (SELECT 1 FROM "video" WHERE "privacy" = ${VideoPrivacy.PUBLIC} AND "channelId" = "VideoChannelModel"."id")`)
-        ]
+        [Op.and]: and
       }
     }
-
-    return VideoChannelModel
-      .unscoped()
-      .findAll(query)
   }
 
   // ---------------------------------------------------------------------------
