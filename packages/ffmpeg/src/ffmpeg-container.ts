@@ -30,6 +30,13 @@ export class FFmpegContainer {
 
     command.outputOption('-c copy')
 
+    // Inputs can be separate audio/video files that don't start at the same timestamp (live replay files keep the live timestamps)
+    // Without -copyts, FFmpeg makes each input start at 0, which would desync audio and video
+    // Only use when we have audio and video input streams
+    if (inputs.length > 1) {
+      command.outputOption('-copyts')
+    }
+
     // The cover can be in any image format (webp etc.) but the MP4 container doesn't support all of them, so convert it to JPEG
     // A cover is only added to audio inputs, so the cover is the only video stream to encode
     if (coverPath) {
