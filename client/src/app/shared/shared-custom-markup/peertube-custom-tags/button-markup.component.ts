@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core'
 import { CustomMarkupComponent } from './shared'
 import { NgClass } from '@angular/common'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
+import { RouterLink } from '@angular/router'
 
 /*
  * Markup component that creates a button
@@ -12,11 +13,12 @@ import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.mode
   templateUrl: 'button-markup.component.html',
   styleUrls: [ 'button-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ NgClass ]
+  imports: [ NgClass, RouterLink ]
 })
 export class ButtonMarkupComponent implements CustomMarkupComponent {
   readonly theme = input<'primary' | 'secondary'>(undefined)
   readonly href = input<string>(undefined)
+  readonly path = input<string>(undefined)
   readonly label = input<string>(undefined)
   readonly blankTarget = input<boolean>(undefined)
 

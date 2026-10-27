@@ -1,1 +1,5 @@
-<a [href]="href()" [ngClass]="getClasses()" [target]="getTarget()">{{ label() }}</a>
+@if (path()) {
+    <a [routerLink]="path()" [ngClass]="getClasses()">{{ label() }}</a>
+} @else {
+    <a [href]="href()" [ngClass]="getClasses()" [target]="getTarget()">{{ label() }}</a>
+}

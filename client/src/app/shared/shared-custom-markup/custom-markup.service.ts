@@ -172,6 +172,7 @@ export class CustomMarkupService {
     const model = {
       theme: data.theme ?? 'primary',
       href: data.href,
+      path: data.path,
       label: data.label,
       blankTarget: this.buildBoolean(data.blankTarget) ?? false
     }
