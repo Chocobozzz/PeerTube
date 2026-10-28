@@ -8928,7 +8928,7 @@
       </trans-unit>
       <trans-unit id="9031514421077169181" datatype="html">
         <source>Video redundancies</source>
-        <target state="translated">Videoredundans</target>
+        <target state="translated">Videoredundanser</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -10724,7 +10724,7 @@
       </trans-unit>
       <trans-unit id="5115867744933923483" datatype="html">
         <source>Channel synchronization</source>
-        <target state="new">Channel synchronization</target>
+        <target state="translated">Kanalsynkronisering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -10732,7 +10732,7 @@
       </trans-unit>
       <trans-unit id="3716078862516198785" datatype="html">
         <source>Channel videos import</source>
-        <target state="new">Channel videos import</target>
+        <target state="translated">Importera videor från kanaler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -10740,7 +10740,7 @@
       </trans-unit>
       <trans-unit id="1116156446586993227" datatype="html">
         <source>Channel collaborator</source>
-        <target state="new">Channel collaborator</target>
+        <target state="translated">Kanalpartner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -10748,7 +10748,7 @@
       </trans-unit>
       <trans-unit id="3515431346551474480" datatype="html">
         <source>Channel player settings</source>
-        <target state="new">Channel player settings</target>
+        <target state="translated">Inställningar för kanalspelaren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -10756,7 +10756,7 @@
       </trans-unit>
       <trans-unit id="7595000774670746941" datatype="html">
         <source>Channel playlists order</source>
-        <target state="new">Channel playlists order</target>
+        <target state="translated">Ordning på spellistor i kanaler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -10764,7 +10764,7 @@
       </trans-unit>
       <trans-unit id="5344791164491756179" datatype="html">
         <source>Playlist</source>
-        <target state="new">Playlist</target>
+        <target state="translated">Spellista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -10772,7 +10772,7 @@
       </trans-unit>
       <trans-unit id="2593394684821903865" datatype="html">
         <source>Playlist element</source>
-        <target state="new">Playlist element</target>
+        <target state="translated">Spellistelement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -10780,7 +10780,7 @@
       </trans-unit>
       <trans-unit id="959734269659247344" datatype="html">
         <source>Playlist elements order</source>
-        <target state="new">Playlist elements order</target>
+        <target state="translated">Ordning på elementen i spellistan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -10788,7 +10788,7 @@
       </trans-unit>
       <trans-unit id="1795209702226263984" datatype="html">
         <source>Registration request</source>
-        <target state="new">Registration request</target>
+        <target state="translated">Registreringsförfrågningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -10796,7 +10796,7 @@
       </trans-unit>
       <trans-unit id="3731138383017594666" datatype="html">
         <source>Password reset request</source>
-        <target state="new">Password reset request</target>
+        <target state="translated">Begäran om återställning av lösenord</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -10804,7 +10804,7 @@
       </trans-unit>
       <trans-unit id="8278867930540753765" datatype="html">
         <source>Login session</source>
-        <target state="new">Login session</target>
+        <target state="translated">Inloggningssession</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -10812,7 +10812,7 @@
       </trans-unit>
       <trans-unit id="3087041799555785636" datatype="html">
         <source>Failed login</source>
-        <target state="new">Failed login</target>
+        <target state="translated">Inloggningen misslyckades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -10820,7 +10820,7 @@
       </trans-unit>
       <trans-unit id="6271694097392260677" datatype="html">
         <source>Scoped token</source>
-        <target state="new">Scoped token</target>
+        <target state="translated">Nyckel med begränsad räckvidd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -10828,7 +10828,7 @@
       </trans-unit>
       <trans-unit id="9004948288516709730" datatype="html">
         <source>User export</source>
-        <target state="new">User export</target>
+        <target state="translated">Exportera användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -10836,7 +10836,7 @@
       </trans-unit>
       <trans-unit id="1674542451187778327" datatype="html">
         <source>User import</source>
-        <target state="new">User import</target>
+        <target state="translated">Importer användare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -10844,7 +10844,7 @@
       </trans-unit>
       <trans-unit id="1570575029487446253" datatype="html">
         <source>Abuse report</source>
-        <target state="new">Abuse report</target>
+        <target state="translated">Rapporter om missbruk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -10852,7 +10852,7 @@
       </trans-unit>
       <trans-unit id="5938187881228362946" datatype="html">
         <source>Abuse message</source>
-        <target state="new">Abuse message</target>
+        <target state="translated">Meddelande om missbruk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -10860,7 +10860,7 @@
       </trans-unit>
       <trans-unit id="6273276327864872621" datatype="html">
         <source>Video block</source>
-        <target state="new">Video block</target>
+        <target state="translated">Blockerade videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -10868,7 +10868,7 @@
       </trans-unit>
       <trans-unit id="1547455266629178601" datatype="html">
         <source>Account mute</source>
-        <target state="new">Account mute</target>
+        <target state="translated">Tystade konton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -10876,7 +10876,7 @@
       </trans-unit>
       <trans-unit id="327915996170847189" datatype="html">
         <source>Server mute</source>
-        <target state="new">Server mute</target>
+        <target state="translated">Tystade servrar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -10884,7 +10884,7 @@
       </trans-unit>
       <trans-unit id="9098134874193744197" datatype="html">
         <source>Blocklist subscription</source>
-        <target state="new">Blocklist subscription</target>
+        <target state="translated">Prenumeration på blockeringslista</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -10892,7 +10892,7 @@
       </trans-unit>
       <trans-unit id="7772026812316405493" datatype="html">
         <source>Watched words list</source>
-        <target state="new">Watched words list</target>
+        <target state="translated">Lista över bevakade ord</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -10900,7 +10900,7 @@
       </trans-unit>
       <trans-unit id="6553028739335153683" datatype="html">
         <source>Watched words subscription</source>
-        <target state="new">Watched words subscription</target>
+        <target state="translated">Prenumerationer på bevakade ord-listor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -10908,7 +10908,7 @@
       </trans-unit>
       <trans-unit id="3249621195779537062" datatype="html">
         <source>Automatic tag policy</source>
-        <target state="new">Automatic tag policy</target>
+        <target state="translated">Policy för automatisk etikettering</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -10916,7 +10916,7 @@
       </trans-unit>
       <trans-unit id="9218994438129306852" datatype="html">
         <source>Instance configuration</source>
-        <target state="new">Instance configuration</target>
+        <target state="translated">Instanskonfiguration</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -10924,7 +10924,7 @@
       </trans-unit>
       <trans-unit id="2655184267144582011" datatype="html">
         <source>Instance image</source>
-        <target state="new">Instance image</target>
+        <target state="translated">Bild för instansen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -10932,7 +10932,7 @@
       </trans-unit>
       <trans-unit id="6409891194258344393" datatype="html">
         <source>Instance homepage</source>
-        <target state="new">Instance homepage</target>
+        <target state="translated">Instansens startsida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -10940,7 +10940,7 @@
       </trans-unit>
       <trans-unit id="139976802650778603" datatype="html">
         <source>Instance host</source>
-        <target state="new">Instance host</target>
+        <target state="translated">Instansens värd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -10948,7 +10948,7 @@
       </trans-unit>
       <trans-unit id="6944772343529365140" datatype="html">
         <source>Plugin or theme</source>
-        <target state="new">Plugin or theme</target>
+        <target state="translated">Tillägg eller tema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -10956,7 +10956,7 @@
       </trans-unit>
       <trans-unit id="6739459399674606457" datatype="html">
         <source>Server redundancy</source>
-        <target state="new">Server redundancy</target>
+        <target state="translated">Serverredundans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -10964,7 +10964,7 @@
       </trans-unit>
       <trans-unit id="8986777419550560431" datatype="html">
         <source>Video redundancy</source>
-        <target state="new">Video redundancy</target>
+        <target state="translated">Videoredundans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -10972,7 +10972,7 @@
       </trans-unit>
       <trans-unit id="6362661861630729641" datatype="html">
         <source>Job queue</source>
-        <target state="new">Job queue</target>
+        <target state="translated">Jobbkö</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -10980,7 +10980,7 @@
       </trans-unit>
       <trans-unit id="1895957424873987405" datatype="html">
         <source>Job</source>
-        <target state="new">Job</target>
+        <target state="translated">Jobb</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">88</context>
@@ -10988,7 +10988,7 @@
       </trans-unit>
       <trans-unit id="1607659813099506795" datatype="html">
         <source>Remote runner</source>
-        <target state="new">Remote runner</target>
+        <target state="translated">Fjärrarbetare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -10996,7 +10996,7 @@
       </trans-unit>
       <trans-unit id="419317103351341491" datatype="html">
         <source>Runner registration token</source>
-        <target state="new">Runner registration token</target>
+        <target state="translated">Registrerings-token för arbetare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -11004,7 +11004,7 @@
       </trans-unit>
       <trans-unit id="102326508230089402" datatype="html">
         <source>Debug command</source>
-        <target state="new">Debug command</target>
+        <target state="translated">Felsökningskommando</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -11012,7 +11012,7 @@
       </trans-unit>
       <trans-unit id="5046373286319271287" datatype="html">
         <source>Storage prune</source>
-        <target state="new">Storage prune</target>
+        <target state="translated">Rensa lagringsutrymmet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -11856,7 +11856,7 @@
       </trans-unit>
       <trans-unit id="2398422581918975504" datatype="html">
         <source>These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </source>
-        <target state="new"> These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </target>
+        <target state="translated">Dessa loggfiler kommer endast från den primära PeerTube-processen: <x id="ICU" xid="4109582258601121399" equiv-text="{secondariesUp, plural, =1 {1 skundär process} other {{{ secondariesUp }} sekundära processer}"/> körs också, men dess loggfiler visas inte här. Kontrollera loggfilerna för varje sekundär process för att se deras loggfiler. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3,8</context>
@@ -11864,7 +11864,7 @@
       </trans-unit>
       <trans-unit id="2468359540835782741" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 sekundär process} other {<x id="INTERPOLATION"/> sekundära processer}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3</context>
@@ -13292,7 +13292,7 @@
       </trans-unit>
       <trans-unit id="1747993932679092589" datatype="html">
         <source>Default recommended videos</source>
-        <target state="new">Default recommended videos</target>
+        <target state="translated">Standardrekommenderade videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">556,558</context>
@@ -15580,7 +15580,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6591389737926814971" datatype="html" xml:space="preserve">
         <source>Blocked hosts</source>
-        <target state="translated">Tystade servrar</target>
+        <target state="translated">Blockerade servrar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -15588,7 +15588,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8123929268700752046" datatype="html" xml:space="preserve">
         <source>Blocked accounts</source>
-        <target state="translated">Tystade konton</target>
+        <target state="translated">Blockerade konton</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -15992,7 +15992,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2864486939135008600" datatype="html">
         <source>Playlist elements</source>
-        <target state="translated">Spellista</target>
+        <target state="translated">Spellisteelement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/routes.ts</context>
           <context context-type="linenumber">203</context>
@@ -20543,7 +20543,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4051525516940092257" datatype="html">
         <source>Recommend any video</source>
-        <target state="new">Recommend any video</target>
+        <target state="translated">Rekommendera vilken video som helst</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">160</context>
@@ -20551,7 +20551,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5417323712077821234" datatype="html">
         <source>Only recommend videos of this platform</source>
-        <target state="new">Only recommend videos of this platform</target>
+        <target state="translated">Rekommendera endast videor från den här plattformen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">164</context>
@@ -20559,7 +20559,7 @@ color: red;
       </trans-unit>
       <trans-unit id="471527578637508515" datatype="html">
         <source>Only recommend videos of the same account</source>
-        <target state="new">Only recommend videos of the same account</target>
+        <target state="translated">Rekommendera endast videor från samma konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">168</context>
@@ -20567,7 +20567,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8417319179553621681" datatype="html">
         <source>Only recommend videos of the same channel</source>
-        <target state="new">Only recommend videos of the same channel</target>
+        <target state="translated">Rekommendera endast videor från samma kanal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">172</context>
@@ -20731,7 +20731,7 @@ color: red;
       </trans-unit>
       <trans-unit id="492731212914442494" datatype="html" xml:space="preserve">
         <source>Runner</source>
-        <target state="translated">Fjärrarbetare</target>
+        <target state="translated">Arbetare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -21607,7 +21607,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7643080703382863606" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ingen post} =1 {1 post} other {<x id="INTERPOLATION"/> poster}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -21615,7 +21615,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8594058340554724711" datatype="html">
         <source>Filter by this action</source>
-        <target state="new">Filter by this action</target>
+        <target state="translated">Filtrera efter denna åtgärd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">35,36</context>
@@ -21623,7 +21623,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1754374478903587424" datatype="html">
         <source>Filter by this entity type</source>
-        <target state="new">Filter by this entity type</target>
+        <target state="translated">Filtrera efter denna entitetstyp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -21631,7 +21631,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5240280650062800421" datatype="html">
         <source>Open the entity page</source>
-        <target state="new">Open the entity page</target>
+        <target state="translated">Öppna entitetssidan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">56,57</context>
@@ -21639,7 +21639,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4397869042036937810" datatype="html">
         <source>Open entity</source>
-        <target state="new">Open entity</target>
+        <target state="translated">Öppna entitet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">61</context>
@@ -21647,7 +21647,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3854011688949394332" datatype="html">
         <source>Show the history of this entity</source>
-        <target state="new">Show the history of this entity</target>
+        <target state="translated">Visa historiken för denna entitet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">79,80</context>
@@ -21655,7 +21655,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2296970491051796628" datatype="html">
         <source>Changes:</source>
-        <target state="new">Changes:</target>
+        <target state="translated">Ändringar:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">93,95</context>
@@ -21663,7 +21663,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3122528284209641420" datatype="html">
         <source>Old values</source>
-        <target state="new">Old values</target>
+        <target state="translated">Gamla värden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">97,98</context>
@@ -21671,7 +21671,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1253939581454379208" datatype="html">
         <source>New values</source>
-        <target state="new">New values</target>
+        <target state="translated">Nya värden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">102,103</context>
@@ -21679,7 +21679,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8870532132156762013" datatype="html">
         <source>No attribute change recorded.</source>
-        <target state="new">No attribute change recorded.</target>
+        <target state="translated">Ingen ändring av attribut har registrerats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">108,109</context>
@@ -21687,7 +21687,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4878071410105934844" datatype="html">
         <source>Entity:</source>
-        <target state="new">Entity:</target>
+        <target state="translated">Entitet:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">112,113</context>
@@ -21695,7 +21695,7 @@ color: red;
       </trans-unit>
       <trans-unit id="96125621973663460" datatype="html">
         <source>No audit log entries found.</source>
-        <target state="new">No audit log entries found.</target>
+        <target state="translated">Inga poster hittades i granskningsloggen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">118</context>
@@ -21703,7 +21703,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6715369993446601276" datatype="html">
         <source>Video import</source>
-        <target state="new">Video import</target>
+        <target state="translated">Videoimport</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -28666,7 +28666,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3742728431516357098" datatype="html">
         <source>Entity type</source>
-        <target state="new">Entity type</target>
+        <target state="translated">Entitetstyp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -28678,7 +28678,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4153243589245423084" datatype="html">
         <source>Entity id</source>
-        <target state="new">Entity id</target>
+        <target state="translated">Entitets-ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">115</context>
@@ -28690,7 +28690,7 @@ color: red;
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">Åtgärd</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -28702,7 +28702,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7693952740891603217" datatype="html">
         <source>Entity</source>
-        <target state="new">Entity</target>
+        <target state="translated">Entitet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">132</context>
