@@ -45,6 +45,8 @@ import {
   VideoPrivacy,
   VideoPrivacyType,
   VideoRateType,
+  VideoRecommendationScope,
+  VideoRecommendationScopeType,
   VideoResolution,
   VideoState,
   VideoStateType
@@ -62,7 +64,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1165
+export const LAST_MIGRATION_VERSION = 1170
 
 // ---------------------------------------------------------------------------
 
@@ -80,6 +82,16 @@ export const PAGINATION = {
     COUNT: {
       MAX: 50
     }
+  }
+}
+
+export const VIDEO_RECOMMENDATIONS = {
+  COUNT: {
+    DEFAULT: 10,
+    MAX: 30
+  },
+  EXCLUDE_VIDEO_IDS: {
+    MAX: 50
   }
 }
 
@@ -746,6 +758,13 @@ export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal',
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
+}
+
+export const VIDEO_RECOMMENDATION_SCOPES: { [id in VideoRecommendationScopeType]: string } = {
+  [VideoRecommendationScope.ALL]: 'All videos',
+  [VideoRecommendationScope.LOCAL]: 'Videos of the same platform',
+  [VideoRecommendationScope.ACCOUNT]: 'Videos of the same account',
+  [VideoRecommendationScope.CHANNEL]: 'Videos of the same channel'
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {

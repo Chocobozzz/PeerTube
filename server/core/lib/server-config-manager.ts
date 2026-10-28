@@ -121,6 +121,8 @@ class ServerConfigManager {
 
           commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
 
+          recommendationScope: CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE,
+
           privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
           licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
         },

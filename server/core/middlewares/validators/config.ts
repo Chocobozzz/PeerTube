@@ -3,7 +3,12 @@ import { isConfigLogoTypeValid, isLogoImageFile } from '@server/helpers/custom-v
 import { isIntOrNull } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerThemeValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
-import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
+import {
+  isVideoCommentsPolicyValid,
+  isVideoLicenceValid,
+  isVideoPrivacyValid,
+  isVideoRecommendationScopeValid
+} from '@server/helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '@server/helpers/express-utils.js'
 import { guessLanguageFromReq } from '@server/helpers/i18n.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
@@ -143,6 +148,7 @@ export const customConfigUpdateValidator = [
   body('search.searchIndex.isDefaultSearch').isBoolean(),
 
   body('defaults.publish.commentsPolicy').custom(isVideoCommentsPolicyValid),
+  body('defaults.publish.recommendationScope').custom(isVideoRecommendationScopeValid),
   body('defaults.publish.privacy').custom(isVideoPrivacyValid),
   body('defaults.publish.licence').optional().custom(isVideoLicenceValid),
   body('defaults.p2p.webapp.enabled').isBoolean(),

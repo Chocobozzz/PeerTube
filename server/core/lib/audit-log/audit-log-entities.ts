@@ -45,6 +45,7 @@ export function buildVideoAuditEntity (video: VideoDetails) {
     nsfwFlags: video.nsfwFlags,
     nsfwSummary: video.nsfwSummary,
     commentsPolicy: video.commentsPolicy,
+    recommendationScope: video.recommendationScope,
     downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
     scheduledUpdate: video.scheduledUpdate ?? null,

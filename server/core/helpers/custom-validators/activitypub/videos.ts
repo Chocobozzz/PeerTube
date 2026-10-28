@@ -7,6 +7,7 @@ import {
   LiveVideoLatencyMode,
   VideoCommentPolicy,
   VideoObject,
+  VideoRecommendationScope,
   VideoState
 } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@peertube/peertube-node-utils'
@@ -23,6 +24,7 @@ import {
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
+  isVideoRecommendationScopeValid,
   isVideoStateValid,
   isVideoTagValid,
   isVideoViewsValid
@@ -75,6 +77,11 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
     }
   } else {
     video.commentsPolicy = VideoCommentPolicy.DISABLED
+  }
+
+  // Remote platforms that don't send this field don't restrict recommendations
+  if (!isVideoRecommendationScopeValid(video.recommendationScope)) {
+    video.recommendationScope = VideoRecommendationScope.ALL
   }
 
   if (!isActivityPubUrlValid(video.id)) return fail('id')

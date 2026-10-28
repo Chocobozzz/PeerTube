@@ -3661,6 +3661,75 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
+  /api/v1/recommendations/videos:
+    get:
+      summary: List recommended videos
+      description: |
+        Return videos recommended next to a reference video (or general recommendations if no reference video is given).
+
+        PeerTube decides the recommendation algorithm: it currently lists videos sharing tags with the reference video
+        (excluding videos already watched by the authenticated user), then the latest videos.
+        All returned videos are restricted to the `scope`, which defaults to the `recommendationScope` of the reference video.
+      operationId: getRecommendationVideos
+      tags:
+        - Video
+      parameters:
+        - name: scope
+          in: query
+          required: false
+          description: |
+            Restrict recommended videos. Defaults to the `recommendationScope` of the reference video, or to `1` (all videos) if no reference video is given
+          schema:
+            $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        - name: videoId
+          in: query
+          required: false
+          description: Reference video. Required if `scope` is `3` or `4`
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/id'
+              - $ref: '#/components/schemas/UUIDv4'
+              - $ref: '#/components/schemas/shortUUID'
+        - name: count
+          in: query
+          required: false
+          description: Number of videos to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 30
+            default: 10
+        - name: excludeVideoIds
+          in: query
+          required: false
+          description: Videos that must not be recommended (the reference video is always excluded)
+          style: form
+          explode: true
+          schema:
+            type: array
+            maxItems: 50
+            items:
+              $ref: '#/components/schemas/id'
+        - $ref: '#/components/parameters/videoPasswordHeader'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+        '400':
+          description: invalid parameters or missing `videoId`
+        '401':
+          description: reference video requires authentication or a password
+        '403':
+          description: reference video is not visible by the user or the password is invalid
+        '404':
+          description: reference video not found
+
   /api/v1/videos/categories:
     get:
       summary: List available video categories
@@ -3820,6 +3889,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -4395,6 +4466,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -10479,6 +10552,28 @@ components:
         label:
           type: string
 
+    VideoRecommendationScopeSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        Videos that can be recommended next to a video:
+          - `1` All videos
+          - `2` Only videos of the platform that owns the reference video (or of the current platform if no video is given)
+          - `3` Only videos of the account that owns the reference video
+          - `4` Only videos of the channel of the reference video
+
+        This is a preference of the video owner: applications displaying recommendations may not apply it
+    VideoRecommendationScopeConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        label:
+          type: string
+
     BlockStatus:
       properties:
         accounts:
@@ -11123,6 +11218,8 @@ components:
                 maxLength: 30
             commentsPolicy:
               $ref: '#/components/schemas/VideoCommentsPolicyConstant'
+            recommendationScope:
+              $ref: '#/components/schemas/VideoRecommendationScopeConstant'
             downloadEnabled:
               type: boolean
             inputFileUpdatedAt:
@@ -12718,6 +12815,8 @@ components:
                   type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 licence:
@@ -12923,6 +13022,8 @@ components:
             maxLength: 30
         commentsPolicy:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
+        recommendationScope:
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean

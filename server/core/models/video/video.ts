@@ -14,12 +14,14 @@ import {
   VideoObject,
   VideoPrivacy,
   VideoRateType,
+  VideoRecommendationScope,
   VideoState,
   VideoStreamingPlaylistType,
   VideoSummary,
   type VideoCommentPolicyType,
   type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
+  type VideoRecommendationScopeType,
   type VideoStateType
 } from '@peertube/peertube-models'
 import { peertubeTruncate, uuidToShort } from '@peertube/peertube-node-utils'
@@ -581,6 +583,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @AllowNull(false)
   @Column
   declare embedPrivacyPolicy: VideoEmbedPrivacyPolicyType
+
+  @AllowNull(false)
+  @Default(VideoRecommendationScope.ALL)
+  @Column
+  declare recommendationScope: VideoRecommendationScopeType
 
   @AllowNull(false)
   @Column
@@ -1197,6 +1204,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         | 'hasWebVideoFiles'
         | 'search'
         | 'excludeAlreadyWatched'
+        | 'excludeVideoIds'
         | 'hasRedundancy'
         | 'redundancyStrategy'
         | 'includeRedundancy'
@@ -1246,6 +1254,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'hasWebVideoFiles',
         'search',
         'excludeAlreadyWatched',
+        'excludeVideoIds',
         'redundancyStrategy',
         'hasRedundancy',
         'localRedundancy',

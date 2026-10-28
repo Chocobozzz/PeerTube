@@ -35,6 +35,7 @@ import {
   VideoLicenceType,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoRecommendationScopeType,
   VideosCommonQuery,
   Video as VideoServerModel,
   VideoSortField,
@@ -70,6 +71,7 @@ export class VideoService {
   private userService = inject(UserService)
 
   static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos'
+  static BASE_RECOMMENDATIONS_URL = environment.apiUrl + '/api/v1/recommendations'
   static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
   static PODCAST_FEEDS_URL = environment.apiUrl + '/feeds/podcast/videos.xml'
   static BASE_SUBSCRIPTION_FEEDS_URL = environment.apiUrl + '/feeds/subscriptions.'
@@ -158,6 +160,32 @@ export class VideoService {
 
     return this.authHttp
       .get<ResultList<Video>>(UserService.BASE_USERS_URL + 'me/videos', { params })
+      .pipe(
+        switchMap(res => this.extractVideos(res)),
+        catchError(err => this.restExtractor.handleError(err))
+      )
+  }
+
+  listRecommendationVideos (options: {
+    scope?: VideoRecommendationScopeType
+    videoId?: string
+    videoPassword?: string
+    count: number
+    excludeVideoIds?: number[]
+  }): Observable<ResultList<Video>> {
+    const { scope, videoId, videoPassword, count, excludeVideoIds = [] } = options
+
+    const headers = VideoPasswordService.buildVideoPasswordHeader(videoPassword)
+
+    let params = new HttpParams()
+    params = this.buildNSFWParams(params)
+    if (scope) params = params.set('scope', scope)
+    params = params.set('count', count)
+    if (videoId) params = params.set('videoId', videoId)
+    params = this.restService.addArrayParams(params, 'excludeVideoIds', excludeVideoIds)
+
+    return this.authHttp
+      .get<ResultList<Video>>(VideoService.BASE_RECOMMENDATIONS_URL + '/videos', { params, headers })
       .pipe(
         switchMap(res => this.extractVideos(res)),
         catchError(err => this.restExtractor.handleError(err))

@@ -135,6 +135,20 @@ describe('Test plugin filter hooks', function () {
       expect(total).to.equal(11)
     })
 
+    it('Should run filter:api.recommendations.videos.list.params', async function () {
+      const { data } = await servers[0].videos.listRecommendations({ videoId: videoUUID, count: 2 })
+
+      // 1 plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(3)
+    })
+
+    it('Should run filter:api.recommendations.videos.list.result', async function () {
+      const { data, total } = await servers[0].videos.listRecommendations({ videoId: videoUUID, count: 2 })
+
+      // Plugin do +1 to the total result
+      expect(total).to.equal(data.length + 1)
+    })
+
     it('Should run filter:api.accounts.videos.list.params', async function () {
       const { data } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
 

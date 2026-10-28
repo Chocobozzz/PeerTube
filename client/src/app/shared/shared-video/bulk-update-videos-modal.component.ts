@@ -6,7 +6,15 @@ import { AuthService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal'
-import { ConstantLabel, Video, VideoCommentPolicyType, VideoPrivacy, VideoPrivacyType, VideoUpdate } from '@peertube/peertube-models'
+import {
+  ConstantLabel,
+  Video,
+  VideoCommentPolicyType,
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoRecommendationScopeType,
+  VideoUpdate
+} from '@peertube/peertube-models'
 import { SelectChannelItem } from '@pt-types'
 import { concatMap, from, toArray } from 'rxjs'
 import { videoSupportValidator } from '../form-validators/video-validators'
@@ -28,6 +36,7 @@ type BulkVideoUpdateModel = {
   licence: number | null
   downloadEnabled: boolean
   commentsPolicy: VideoCommentPolicyType | null
+  recommendationScope: VideoRecommendationScopeType | null
 }
 
 type FieldName = keyof BulkVideoUpdateModel
@@ -82,13 +91,18 @@ export class BulkUpdateVideosModalComponent {
     privacy: null,
     licence: null,
     downloadEnabled: true,
-    commentsPolicy: null
+    commentsPolicy: null,
+    recommendationScope: null
   })
 
   readonly bulkUpdateForm = form(this.bulkUpdateModel, f => {
     required(f.channelId, { when: () => this.activeFields().has('channelId'), message: $localize`Channel is required.` })
     required(f.privacy, { when: () => this.activeFields().has('privacy'), message: $localize`Privacy is required.` })
     required(f.commentsPolicy, { when: () => this.activeFields().has('commentsPolicy'), message: $localize`Comments policy is required.` })
+    required(f.recommendationScope, {
+      when: () => this.activeFields().has('recommendationScope'),
+      message: $localize`Recommended videos setting is required.`
+    })
 
     videoSupportValidator(f.support)
   })
@@ -101,6 +115,7 @@ export class BulkUpdateVideosModalComponent {
     { key: 'language', label: $localize`Language` },
     { key: 'licence', label: $localize`Licence` },
     { key: 'privacy', label: $localize`Privacy` },
+    { key: 'recommendationScope', label: $localize`Recommended videos` },
     { key: 'support', label: $localize`Support` }
   ]
 
@@ -115,6 +130,7 @@ export class BulkUpdateVideosModalComponent {
   videoLanguages: ConstantLabel<string>[] = []
   videoPrivacies: ConstantLabel<VideoPrivacyType>[] = []
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[]
+  recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[]
 
   get authUser () {
     return this.authService.getUser()
@@ -135,6 +151,7 @@ export class BulkUpdateVideosModalComponent {
     this.server.getVideoLicences().subscribe(licences => this.videoLicences = licences)
     this.server.getVideoLanguages().subscribe(languages => this.videoLanguages = languages)
     this.server.getCommentPolicies().subscribe(policies => this.commentPolicies = policies)
+    this.server.getRecommendationScopes().subscribe(scopes => this.recommendationScopes = scopes)
 
     this.server.getVideoPrivacies().subscribe(privacies => {
       this.videoPrivacies = privacies.filter(p => !BULK_PRIVACY_EXCLUDE.has(p.id))
@@ -181,6 +198,8 @@ export class BulkUpdateVideosModalComponent {
         return this.videoPrivacies
       case 'commentsPolicy':
         return this.commentPolicies
+      case 'recommendationScope':
+        return this.recommendationScopes
       default:
         return []
     }
@@ -211,6 +230,9 @@ export class BulkUpdateVideosModalComponent {
       case 'commentsPolicy':
         return this.commentPolicies?.find(p => p.id === value)?.label
 
+      case 'recommendationScope':
+        return this.recommendationScopes?.find(s => s.id === value)?.label
+
       case 'downloadEnabled':
         return value ? $localize`Yes` : $localize`No`
 
@@ -240,6 +262,7 @@ export class BulkUpdateVideosModalComponent {
       if (active.has('licence')) update.licence = model.licence
       if (active.has('downloadEnabled')) update.downloadEnabled = model.downloadEnabled
       if (active.has('commentsPolicy')) update.commentsPolicy = model.commentsPolicy
+      if (active.has('recommendationScope')) update.recommendationScope = model.recommendationScope
 
       return update
     }

@@ -1,7 +1,13 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { maxBy, promiseMap, wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoCommentPolicy, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  VideoCommentPolicy,
+  VideoCommentThreadTree,
+  VideoPrivacy,
+  VideoRecommendationScope
+} from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -1040,7 +1046,8 @@ describe('Test multiple servers', function () {
 
       const attributes = {
         commentsPolicy: VideoCommentPolicy.DISABLED,
-        downloadEnabled: false
+        downloadEnabled: false,
+        recommendationScope: VideoRecommendationScope.LOCAL
       }
 
       await servers[0].videos.update({ id: videoUUID, attributes })
@@ -1052,6 +1059,7 @@ describe('Test multiple servers', function () {
         expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
         expect(video.commentsPolicy.label).to.equal('Disabled')
         expect(video.downloadEnabled).to.be.false
+        expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.LOCAL)
 
         const text = 'my super forbidden comment'
         await server.comments.createThread({ videoId: videoUUID, text, expectedStatus: HttpStatusCode.CONFLICT_409 })

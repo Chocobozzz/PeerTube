@@ -612,6 +612,7 @@ function customConfig (): CustomConfig {
       publish: {
         downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
         commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+        recommendationScope: CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE,
         privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
         licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
       },
