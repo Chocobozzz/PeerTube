@@ -45,7 +45,7 @@ handled via FFmpeg, with optional distributed runners.
 ### Prerequisites
 
 - Node.js >= 22.x
-- pnpm >= 10.9 (do **not** use npm or yarn for install)
+- pnpm >= 12 (do **not** use npm or yarn for install)
 - PostgreSQL >= 14 with `pg_trgm` and `unaccent` extensions
 - Redis >= 6.x
 - FFmpeg >= 4.3

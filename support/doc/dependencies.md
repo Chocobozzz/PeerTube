@@ -5,7 +5,7 @@
 Main dependencies supported by PeerTube:
 
  * `node` LTS (**>= 22.12 and <25**)
- * `pnpm` >= 10.x
+ * `pnpm` >= 12.x
  * `postgres` >=14.x
  * `redis-server` >=6.2
  * `ffmpeg` >=4.3 (using a ffmpeg static build [is not recommended](https://github.com/Chocobozzz/PeerTube/issues/6308))
