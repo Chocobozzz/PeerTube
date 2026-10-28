@@ -14,6 +14,7 @@ import {
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
+import { expect } from 'chai'
 
 describe('Test my user API validators', function () {
   const path = '/api/v1/users/'
@@ -130,6 +131,20 @@ describe('Test my user API validators', function () {
 
         await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields })
       }
+    })
+
+    it('Should fail with a too long current password', async function () {
+      const res = await makePutBodyRequest({
+        url: server.url,
+        path: path + 'me',
+        token: userToken,
+        fields: {
+          currentPassword: 'super'.repeat(61),
+          password: 'a valid new password 1!'
+        }
+      })
+
+      expect(res.body.code).to.equal('too_long_password')
     })
 
     it('Should fail without the current password', async function () {
