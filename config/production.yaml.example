@@ -879,6 +879,13 @@ live:
     # Use null to use the same value than `webserver.hostname`
     public_hostname: null
 
+    # Interval (in seconds) between keepalive pings sent to the RTMP publisher
+    ping: 60
+
+    # Time (in seconds) without activity after which an RTMP connection is considered dead
+    # Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...)
+    ping_timeout: 30
+
   rtmps:
     enabled: false
 

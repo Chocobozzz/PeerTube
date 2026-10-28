@@ -2275,6 +2275,16 @@
                 "string"
               ],
               "default": null
+            },
+            "ping": {
+              "description": "Interval (in seconds) between keepalive pings sent to the RTMP publisher",
+              "type": "integer",
+              "default": 60
+            },
+            "ping_timeout": {
+              "description": "Time (in seconds) without activity after which an RTMP connection is considered dead Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...)",
+              "type": "integer",
+              "default": 30
             }
           },
           "additionalProperties": false
