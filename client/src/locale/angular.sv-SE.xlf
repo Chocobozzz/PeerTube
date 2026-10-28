@@ -6412,7 +6412,7 @@
       </trans-unit>
       <trans-unit id="6172864563872578497" datatype="html">
         <source>Choose which videos can be recommended next to this video. Other applications displaying your video may not apply this preference.</source>
-        <target state="new"> Choose which videos can be recommended next to this video. Other applications displaying your video may not apply this preference. </target>
+        <target state="translated">Välj vilka videor som ska kunna rekommenderas bredvid den här videon. Andra appar som visar din video kanske inte tillämpar den här inställningen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">52</context>
@@ -7757,7 +7757,7 @@
       </trans-unit>
       <trans-unit id="7989254487121769088" datatype="html">
         <source>Video studio edition</source>
-        <target state="new">Video studio edition</target>
+        <target state="translated">Videostudio-utgåvan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -7765,7 +7765,7 @@
       </trans-unit>
       <trans-unit id="8684644623876839783" datatype="html">
         <source>Video player settings</source>
-        <target state="new">Video player settings</target>
+        <target state="translated">Inställningar för videospelaren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -7773,7 +7773,7 @@
       </trans-unit>
       <trans-unit id="116372526259554106" datatype="html">
         <source>Ownership change</source>
-        <target state="new">Ownership change</target>
+        <target state="translated">Ägarbyte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -8051,7 +8051,7 @@
       </trans-unit>
       <trans-unit id="7441473480860312458" datatype="html">
         <source>&lt;strong&gt;Only recommend videos of your platform&lt;/strong&gt; by default next to new videos</source>
-        <target state="new">&lt;strong&gt;Only recommend videos of your platform&lt;/strong&gt; by default next to new videos</target>
+        <target state="translated">&lt;strong&gt;Rekommendera som standard endast videor från din plattform&lt;/strong&gt; bredvid nya videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">341</context>
