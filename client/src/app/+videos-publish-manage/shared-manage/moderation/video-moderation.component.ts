@@ -12,8 +12,7 @@ import {
   HTMLServerConfig,
   VideoCommentPolicyType,
   VideoEmbedPrivacyPolicy,
-  VideoEmbedPrivacyPolicyType,
-  VideoRecommendationScopeType
+  VideoEmbedPrivacyPolicyType
 } from '@peertube/peertube-models'
 import debug from 'debug'
 import { Subscription } from 'rxjs'
@@ -33,7 +32,6 @@ type Form = {
   nsfwSummary: FormControl<string>
 
   commentPolicies: FormControl<VideoCommentPolicyType>
-  recommendationScope: FormControl<VideoRecommendationScopeType>
 
   videoPrivacyEmbedPolicy: FormControl<VideoEmbedPrivacyPolicyType>
   videoPrivacyEmbedAllowlistDomains: FormControl<string>
@@ -70,7 +68,6 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
 
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[] = []
   embedPrivacyPolicies: ConstantLabel<VideoEmbedPrivacyPolicyType>[] = []
-  recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[] = []
 
   serverConfig: HTMLServerConfig
 
@@ -86,9 +83,6 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
 
     this.serverService.getEmbedPrivacyPolicies()
       .subscribe(res => this.embedPrivacyPolicies = res)
-
-    this.serverService.getRecommendationScopes()
-      .subscribe(res => this.recommendationScopes = res)
   }
 
   ngOnDestroy () {
@@ -101,7 +95,6 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
     const defaultValues = { ...videoEdit.toCommonFormPatch(), ...videoEdit.toEmbedPrivacyFormPatch() }
     const obj: BuildFormArgument = {
       commentsPolicy: null,
-      recommendationScope: null,
       nsfw: null,
       nsfwFlagViolent: null,
       nsfwFlagSex: null,

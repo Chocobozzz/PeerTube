@@ -133,6 +133,19 @@
             </div>
           </div>
         </div>
+
+        <div class="section-title">
+          <ng-container i18n>AI-generated content</ng-container>
+
+          <div class="with-description">
+            <div>{{ filters().getAIUsageSettingsLabel() }}</div>
+
+            <div i18n>
+              Update your preferences in <a routerLink="/my-account/settings" fragment="ai-content-settings" (click)="onAccountSettingsClick($event)"
+              >your settings</a>.
+            </div>
+          </div>
+        </div>
       </div>
 
       @if (totalFollowing && !hideScope()) {

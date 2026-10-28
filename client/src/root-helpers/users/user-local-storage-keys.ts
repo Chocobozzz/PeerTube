@@ -11,6 +11,8 @@ export const UserLocalStorageKeys = {
   NSFW_FLAGS_WARNED: 'nsfw_flags_warned',
   NSFW_FLAGS_BLURRED: 'nsfw_flags_blurred',
 
+  AI_USAGES_HIDDEN: 'ai_usages_hidden',
+
   P2P_ENABLED: 'peertube-videojs-webtorrent_enabled',
 
   AUTO_PLAY_VIDEO: 'auto_play_video',

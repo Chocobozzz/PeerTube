@@ -49,7 +49,15 @@ import {
 } from 'bullmq'
 import { RedisOptions } from 'ioredis'
 import { createLogger } from '../../helpers/logger.js'
-import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
+import {
+  JOB_ATTEMPTS,
+  JOB_CONCURRENCY,
+  JOB_REMOVAL_OPTIONS,
+  JOB_STALLED_DETECTION,
+  JOB_TTL,
+  REPEAT_JOBS,
+  WEBSERVER
+} from '../../initializers/constants.js'
 import { Hooks } from '../plugins/hooks.js'
 import { currentProcessId, Redis, RedisChannels } from '../redis/index.js'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner.js'
@@ -305,7 +313,9 @@ class JobQueue {
       concurrency: this.getJobConcurrency(handlerName),
       prefix: this.jobRedisPrefix,
       connection: Redis.getRedisClientOptions('Worker', bullMQRedisOptions),
-      maxStalledCount: 10
+      maxStalledCount: 10,
+      lockDuration: JOB_STALLED_DETECTION.LOCK_DURATION,
+      stalledInterval: JOB_STALLED_DETECTION.STALLED_INTERVAL
     }
 
     const handler = function (options: { job: Job, signal: AbortSignal }) {

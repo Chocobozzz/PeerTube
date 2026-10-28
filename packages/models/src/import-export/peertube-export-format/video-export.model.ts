@@ -2,6 +2,7 @@ import { PlayerThemeVideoSetting } from '../../player/player-theme.type.js'
 import {
   LiveVideoLatencyModeType,
   VideoCommentPolicyType,
+  VideoAIUsageType,
   VideoEmbedPrivacyPolicyType,
   VideoFileMetadata,
   VideoPrivacyType,
@@ -68,6 +69,8 @@ export interface VideoExportJSON {
     commentsPolicy: VideoCommentPolicyType
 
     recommendationScope: VideoRecommendationScopeType
+
+    aiUsage: VideoAIUsageType
 
     downloadEnabled: boolean
 

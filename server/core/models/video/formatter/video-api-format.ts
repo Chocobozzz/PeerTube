@@ -16,6 +16,7 @@ import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
+  VIDEO_AI_USAGES,
   VIDEO_CATEGORIES,
   VIDEO_COMMENTS_POLICY,
   VIDEO_EMBED_PRIVACY_POLICIES,
@@ -108,6 +109,11 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     nsfw: video.nsfw,
     nsfwFlags: video.nsfwFlags,
     nsfwSummary: video.nsfwSummary,
+
+    aiUsage: {
+      id: video.aiUsage,
+      label: getAIUsageLabel(video.aiUsage)
+    },
 
     truncatedDescription: video.getTruncatedDescription(),
     description: options?.completeDescription === true
@@ -334,6 +340,10 @@ export function getLanguageLabel (id: string) {
 
 export function getPrivacyLabel (id: number) {
   return VIDEO_PRIVACIES[id] || 'Unknown'
+}
+
+export function getAIUsageLabel (id: number) {
+  return VIDEO_AI_USAGES[id] || 'Unknown'
 }
 
 export function getStateLabel (id: number) {

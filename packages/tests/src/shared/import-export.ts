@@ -8,6 +8,7 @@ import {
   UserExport,
   UserNotificationSettingValue,
   VideoCommentObject,
+  VideoAIUsage,
   VideoCommentPolicy,
   VideoEmbedPrivacyPolicy,
   VideoObject,
@@ -238,6 +239,7 @@ export async function prepareImportExportTests (options: {
       tags: [ 'tag1', 'tag2' ],
       commentsPolicy: VideoCommentPolicy.DISABLED,
       recommendationScope: VideoRecommendationScope.CHANNEL,
+      aiUsage: VideoAIUsage.AI_GENERATED,
       description: 'video description',
       downloadEnabled: false,
       language: 'fr',
@@ -279,7 +281,9 @@ export async function prepareImportExportTests (options: {
     language: 'fr',
     videoLanguages: [ 'fr', 'en' ],
     videoCategories: [ 13, 15 ],
-    videoLive: 'false'
+    videoLive: 'false',
+    // Don't hide noah videos
+    aiUsagesHidden: [ VideoAIUsage.CONTAINS_AI ]
   })
 
   // My notification settings

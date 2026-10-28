@@ -325,6 +325,7 @@ export class VideoTableAttributes {
       'url',
       'commentsPolicy',
       'recommendationScope',
+      'aiUsage',
       'downloadEnabled',
       'embedPrivacyPolicy',
       'waitTranscoding',

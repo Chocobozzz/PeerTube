@@ -6,7 +6,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import memoizee from 'memoizee'
-import { buildNSFWFilters } from '../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters } from '../../helpers/express-utils.js'
 import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants.js'
 import { apiRateLimiter, asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares/index.js'
 import { TagModel } from '../../models/video/tag.js'
@@ -120,6 +120,7 @@ async function getVideos (
 
   const query = await Hooks.wrapObject({
     ...buildNSFWFilters({ res }),
+    ...buildAIUsageFilters({ res }),
 
     start: 0,
     count: 12,

@@ -2,7 +2,7 @@ import { VideoRecommendationScope } from '@peertube/peertube-models'
 import { VIDEO_RECOMMENDATIONS } from '@server/initializers/constants.js'
 import { listRecommendedVideos, ListRecommendedVideosOptions } from '@server/lib/video-recommendations.js'
 import express from 'express'
-import { buildNSFWFilters } from '../../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import { asyncMiddleware, openapiOperationDoc, optionalAuthenticate, videoRecommendationsValidator } from '../../../middlewares/index.js'
@@ -29,6 +29,7 @@ async function listRecommendationVideos (req: express.Request, res: express.Resp
   const apiOptions = await Hooks.wrapObject<ListRecommendedVideosOptions, 'filter:api.recommendations.videos.list.params'>(
     {
       ...buildNSFWFilters({ req, res }),
+      ...buildAIUsageFilters({ req, res }),
 
       video,
       // Respect the preference of the video owner by default

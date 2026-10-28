@@ -5,6 +5,7 @@ import {
   HttpStatusCode,
   HttpStatusCodeType,
   LiveVideoError,
+  VideoAIUsage,
   VideoEmbedPrivacyPolicy,
   VideoPrivacy,
   VideoPrivacyType,
@@ -459,7 +460,10 @@ describe('Save replay setting', function () {
           domains: [ 'example.com' ],
           policy: VideoEmbedPrivacyPolicy.ALLOWLIST
         })
-        await servers[0].videos.update({ id: liveVideoUUID, attributes: { recommendationScope: VideoRecommendationScope.CHANNEL } })
+        await servers[0].videos.update({
+          id: liveVideoUUID,
+          attributes: { recommendationScope: VideoRecommendationScope.CHANNEL, aiUsage: VideoAIUsage.CONTAINS_AI }
+        })
 
         await waitJobs(servers)
 
@@ -519,6 +523,7 @@ describe('Save replay setting', function () {
         for (const server of servers) {
           const video = await server.videos.get({ id: lastReplayUUID })
           expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
+          expect(video.aiUsage.id).to.equal(VideoAIUsage.CONTAINS_AI)
         }
       })
 

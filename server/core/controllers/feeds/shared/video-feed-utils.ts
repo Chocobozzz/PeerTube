@@ -1,5 +1,5 @@
 import { getChannelPodcastFeed, getPlaylistPodcastFeed } from '@peertube/peertube-core-utils'
-import { VideoIncludeType, VideoPrivacy } from '@peertube/peertube-models'
+import { VideoAIUsageType, VideoIncludeType, VideoPrivacy } from '@peertube/peertube-models'
 import { mdToPlainText, toSafeHtml } from '@server/helpers/markdown.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
@@ -13,6 +13,7 @@ import { MChannelHostOnly, MUserDefault, MVideoPlaylist } from '@server/types/mo
 export async function getVideosForFeeds (options: {
   sort: string
   nsfw: boolean
+  aiUsageOneOf?: VideoAIUsageType[]
   isLocal: boolean
   include: VideoIncludeType
 

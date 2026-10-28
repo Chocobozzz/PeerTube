@@ -1,5 +1,11 @@
 import { Command } from '@commander-js/extra-typings'
-import { VideoCommentPolicy, VideoPrivacy, VideoPrivacyType, VideoRecommendationScopeType } from '@peertube/peertube-models'
+import {
+  VideoAIUsageType,
+  VideoCommentPolicy,
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoRecommendationScopeType
+} from '@peertube/peertube-models'
 import { PeerTubeServer, VideoEdit } from '@peertube/peertube-server-commands'
 import { access, constants } from 'fs/promises'
 import { isAbsolute } from 'path'
@@ -28,6 +34,11 @@ const program = new Command('upload')
     '--recommendation-scope <scope_number>',
     'Videos recommended next to this video: all = 1, same platform = 2, same account = 3, same channel = 4',
     v => parseInt(v) as VideoRecommendationScopeType
+  )
+  .option(
+    '--ai-usage <ai_usage_number>',
+    'AI usage in this video: not specified = 1, no AI-generated content = 2, contains AI-generated content = 3, AI-generated = 4',
+    v => parseInt(v) as VideoAIUsageType
   )
   .option('-s, --support <support>', 'Video support text')
   .option('--no-wait-transcoding', 'Do not wait transcoding before publishing the video')
@@ -120,6 +131,8 @@ async function buildVideoAttributesFromCommander (server: PeerTubeServer, option
       : undefined,
 
     recommendationScope: options.recommendationScope || undefined,
+
+    aiUsage: options.aiUsage || undefined,
 
     nsfw: options.nsfw,
     downloadEnabled: options.downloadEnabled === false

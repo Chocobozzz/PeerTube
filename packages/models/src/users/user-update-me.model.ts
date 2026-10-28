@@ -1,5 +1,6 @@
 import { BooleanBothQuery } from '../search/boolean-both-query.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
+import { VideoAIUsageType } from '../videos/video-ai-usage.enum.js'
 
 export interface UserUpdateMe {
   displayName?: string
@@ -10,6 +11,8 @@ export interface UserUpdateMe {
   nsfwFlagsHidden?: number
   nsfwFlagsBlurred?: number
   nsfwFlagsWarned?: number
+
+  aiUsagesHidden?: VideoAIUsageType[]
 
   p2pEnabled?: boolean
 

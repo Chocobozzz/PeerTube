@@ -7,6 +7,7 @@ import {
   ResultList,
   UserVideoRateType,
   Video,
+  VideoAIUsageType,
   VideoCommentPolicy,
   VideoCreate,
   VideoCreateResult,
@@ -276,16 +277,17 @@ export class VideosCommand extends AbstractCommand {
       count?: number
       excludeVideoIds?: number[]
       nsfw?: boolean
+      aiUsageOneOf?: VideoAIUsageType[]
     }
   ) {
-    const { scope, videoId, videoPassword, count, excludeVideoIds, nsfw } = options
+    const { scope, videoId, videoPassword, count, excludeVideoIds, nsfw, aiUsageOneOf } = options
     const path = '/api/v1/recommendations/videos'
 
     return this.getRequestBody<ResultList<Video>>({
       ...options,
 
       path,
-      query: { scope, videoId, count, excludeVideoIds, nsfw },
+      query: { scope, videoId, count, excludeVideoIds, nsfw, aiUsageOneOf },
       headers: this.buildVideoPasswordHeader(videoPassword),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
@@ -687,6 +689,7 @@ export class VideosCommand extends AbstractCommand {
       'categoryOneOf',
       'licenceOneOf',
       'languageOneOf',
+      'aiUsageOneOf',
       'host',
       'privacyOneOf',
       'tagsOneOf',

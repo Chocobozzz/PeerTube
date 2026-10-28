@@ -3,7 +3,7 @@ import express from 'express'
 import { query } from 'express-validator'
 import { isIdOrUUIDValid, toArray, toCompleteUUID, toIntArray, toIntOrNull } from '../../helpers/custom-validators/misc.js'
 import { isBooleanBothQueryValid, isNumberArray } from '../../helpers/custom-validators/search.js'
-import { isNSFWFlagsValid, isVideoRecommendationScopeValid } from '../../helpers/custom-validators/videos.js'
+import { isNSFWFlagsValid, isVideoAIUsageArrayValid, isVideoRecommendationScopeValid } from '../../helpers/custom-validators/videos.js'
 import { VIDEO_RECOMMENDATIONS } from '../../initializers/constants.js'
 import { areValidationErrors, checkCanSeeVideo, doesVideoExist } from './shared/index.js'
 
@@ -44,6 +44,11 @@ export const videoRecommendationsValidator = [
     .optional()
     .customSanitizer(toIntOrNull)
     .custom(isNSFWFlagsValid),
+
+  query('aiUsageOneOf')
+    .optional()
+    .customSanitizer(toIntArray)
+    .custom(isVideoAIUsageArrayValid).withMessage('Should have a valid aiUsageOneOf array'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

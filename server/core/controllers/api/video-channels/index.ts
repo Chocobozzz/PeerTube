@@ -26,7 +26,7 @@ import {
   getAuditActorFromRes
 } from '../../../lib/audit-log/index.js'
 import { resetSequelizeInstance, runTransaction } from '../../../helpers/database-utils.js'
-import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
@@ -420,6 +420,7 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
   const apiOptions = await Hooks.wrapObject({
     ...query,
     ...buildNSFWFilters({ req, res }),
+    ...buildAIUsageFilters({ req, res }),
 
     displayOnlyForFollower,
     videoChannelId: videoChannelInstance.id,

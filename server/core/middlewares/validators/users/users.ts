@@ -1,7 +1,7 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
-import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { isNSFWFlagsValid, isVideoAIUsageArrayValid } from '@server/helpers/custom-validators/videos.js'
 import { isExternalUserPasswordValid } from '@server/lib/auth/external-auth.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -256,6 +256,9 @@ export const usersUpdateMeValidator = [
   body('nsfwFlagsBlurred')
     .optional()
     .custom(isNSFWFlagsValid),
+  body('aiUsagesHidden')
+    .optional()
+    .custom(isVideoAIUsageArrayValid).withMessage('Should have a valid aiUsagesHidden array'),
 
   body('autoPlayVideo')
     .optional()

@@ -1,4 +1,4 @@
-import { ResultList, VideoRecommendationScope, VideoRecommendationScopeType } from '@peertube/peertube-models'
+import { ResultList, VideoAIUsageType, VideoRecommendationScope, VideoRecommendationScopeType } from '@peertube/peertube-models'
 import { getServerActor } from '@server/models/application/application.js'
 import { TagModel } from '@server/models/video/tag.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -17,6 +17,8 @@ export type ListRecommendedVideosOptions = {
   nsfwFlagsIncluded: number
   nsfwFlagsExcluded: number
 
+  aiUsageOneOf?: VideoAIUsageType[]
+
   user?: MUserAccountId
 }
 
@@ -31,6 +33,8 @@ export async function listRecommendedVideos (options: ListRecommendedVideosOptio
     nsfw: options.nsfw,
     nsfwFlagsIncluded: options.nsfwFlagsIncluded,
     nsfwFlagsExcluded: options.nsfwFlagsExcluded,
+
+    aiUsageOneOf: options.aiUsageOneOf,
 
     displayOnlyForFollower: {
       actorId: serverActor.id,

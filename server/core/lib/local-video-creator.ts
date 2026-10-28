@@ -4,6 +4,7 @@ import {
   LiveVideoLatencyMode,
   NSFWFlag,
   PeerTubeError,
+  VideoAIUsage,
   VideoChannelActivityAction,
   VideoCreate,
   VideoEmbedPrivacyPolicy,
@@ -364,6 +365,7 @@ export class LocalVideoCreator {
       language: videoInfo.language,
       commentsPolicy: videoInfo.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
       recommendationScope: videoInfo.recommendationScope ?? CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE,
+      aiUsage: videoInfo.aiUsage ?? VideoAIUsage.NOT_SPECIFIED,
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
 

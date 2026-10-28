@@ -2,6 +2,7 @@ import { Account } from '../actors/index.js'
 import { BooleanBothQuery } from '../search/boolean-both-query.model.js'
 import { VideoChannel } from '../videos/channel/video-channel.model.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
+import { VideoAIUsageType } from '../videos/video-ai-usage.enum.js'
 import { VideoPlaylistType_Type } from '../videos/playlist/video-playlist-type.model.js'
 import { UserAdminFlagType } from './user-flag.model.js'
 import { UserNotificationSetting } from './user-notification-setting.model.js'
@@ -24,6 +25,8 @@ export interface User {
   nsfwFlagsHidden: number
   nsfwFlagsBlurred: number
   nsfwFlagsWarned: number
+
+  aiUsagesHidden: VideoAIUsageType[]
 
   adminFlags?: UserAdminFlagType
 

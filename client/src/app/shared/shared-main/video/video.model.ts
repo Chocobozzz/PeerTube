@@ -9,6 +9,8 @@ import {
   HTMLServerConfig,
   Thumbnail,
   UserRight,
+  VideoAIUsage,
+  VideoAIUsageType,
   VideoFile,
   VideoPrivacy,
   VideoPrivacyType,
@@ -79,6 +81,8 @@ export class Video implements VideoServerModel {
   nsfw: boolean
   nsfwFlags: number
   nsfwSummary: string
+
+  aiUsage: ConstantLabel<VideoAIUsageType>
 
   originInstanceUrl: string
   originInstanceHost: string
@@ -185,6 +189,11 @@ export class Video implements VideoServerModel {
     this.nsfw = hash.nsfw
     this.nsfwFlags = hash.nsfwFlags
     this.nsfwSummary = hash.nsfwSummary
+
+    // Search indexes may not provide this attribute
+    this.aiUsage = hash.aiUsage
+      ? { ...hash.aiUsage, label: peertubeTranslate(hash.aiUsage.label, translations) }
+      : { id: VideoAIUsage.NOT_SPECIFIED, label: $localize`Not specified` }
 
     this.account = hash.account
     this.channel = hash.channel

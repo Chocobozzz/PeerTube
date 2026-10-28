@@ -1,10 +1,12 @@
 import { User } from '@app/core'
 import { splitIntoArray, toBoolean } from '@app/helpers'
-import { getAllPrivacies } from '@peertube/peertube-core-utils'
+import { getAllAIUsages, getAllPrivacies } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
   NSFWFlag,
   NSFWPolicyType,
+  VideoAIUsage,
+  VideoAIUsageType,
   VideoInclude,
   VideoIncludeType,
   VideoPrivacyType,
@@ -48,6 +50,8 @@ export class VideoFilters {
   private nsfwFlagsHidden: number
   private nsfwFlagsWarned: number
   private nsfwFlagsBlurred: number
+
+  private aiUsagesHidden: VideoAIUsageType[] = []
 
   private defaultValues = new Map<keyof VideoFilters, any>([
     [ 'sort', undefined ],
@@ -134,6 +138,12 @@ export class VideoFilters {
     this.nsfwFlagsBlurred = user.nsfwFlagsBlurred
   }
 
+  setAIUsagesHidden (user: Pick<User, 'aiUsagesHidden'>) {
+    this.aiUsagesHidden = user.aiUsagesHidden || []
+
+    this.buildActiveFilters()
+  }
+
   // ---------------------------------------------------------------------------
 
   private reset (options: {
@@ -199,6 +209,8 @@ export class VideoFilters {
       nsfwFlagsBlurred: this.nsfwFlagsBlurred
     })
 
+    cloned.setAIUsagesHidden({ aiUsagesHidden: this.aiUsagesHidden })
+
     cloned.load(this.toUrlObject(), this.customizedByUser)
 
     return cloned
@@ -221,6 +233,15 @@ export class VideoFilters {
       label: $localize`Sensitive content`,
       value: this.getNSFWValue()
     })
+
+    if (this.aiUsagesHidden.length !== 0) {
+      this.activeFilters.push({
+        key: 'aiUsage',
+        canRemove: false,
+        label: $localize`AI-generated content`,
+        value: $localize`hidden`
+      })
+    }
 
     this.activeFilters.push({
       key: 'scope',
@@ -348,6 +369,11 @@ export class VideoFilters {
     return {
       ...this.buildNSFWVideosAPIObject(),
 
+      // Admins listing all videos don't want the AI usage preference to apply
+      aiUsageOneOf: this.allVideos
+        ? getAllAIUsages()
+        : undefined,
+
       sort: this.sort,
       languageOneOf: this.languageOneOf,
       categoryOneOf: this.categoryOneOf,
@@ -392,6 +418,22 @@ export class VideoFilters {
     }
 
     return result
+  }
+
+  getAIUsageSettingsLabel () {
+    const labels: { [id in VideoAIUsageType]?: string } = {
+      [VideoAIUsage.AI_GENERATED]: $localize`AI-generated videos`,
+      [VideoAIUsage.CONTAINS_AI]: $localize`videos containing AI-generated content`,
+      [VideoAIUsage.NOT_SPECIFIED]: $localize`videos that don't specify whether AI has been used`
+    }
+
+    const hidden = this.aiUsagesHidden
+      .map(a => labels[a])
+      .filter(l => !!l)
+
+    if (hidden.length === 0) return $localize`All videos are displayed, whatever their use of AI.`
+
+    return $localize`Hidden: ${hidden.join(', ')}.`
   }
 
   private getGlobalNSFWLabel () {

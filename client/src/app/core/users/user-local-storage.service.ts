@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core'
 import { AuthService, AuthStatus } from '@app/core/auth'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
-import { BooleanBothQuery, NSFWPolicyType, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
+import { BooleanBothQuery, NSFWPolicyType, UserRoleType, UserUpdateMe, VideoAIUsageType } from '@peertube/peertube-models'
 import { getBoolOrDefault, getNumberOrDefault } from '@root-helpers/local-storage-utils'
 import { logger } from '@root-helpers/logger'
 import { OAuthUserTokens, UserLocalStorageKeys } from '@root-helpers/users'
@@ -92,6 +92,7 @@ export class UserLocalStorageService {
   getUserInfo () {
     const videoLanguages = this.getJSONArrayOrNull<string>(UserLocalStorageKeys.VIDEO_LANGUAGES, 'video languages')
     const videoCategories = this.getJSONArrayOrNull<number>(UserLocalStorageKeys.VIDEO_CATEGORIES, 'video categories')
+    const aiUsagesHidden = this.getJSONArrayOrNull<VideoAIUsageType>(UserLocalStorageKeys.AI_USAGES_HIDDEN, 'AI usages hidden') ?? []
 
     const htmlConfig = this.server.getHTMLConfig()
 
@@ -105,6 +106,8 @@ export class UserLocalStorageService {
       nsfwFlagsWarned: getNumberOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.NSFW_FLAGS_WARNED), undefined),
       nsfwFlagsBlurred: getNumberOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.NSFW_FLAGS_BLURRED), undefined),
       nsfwFlagsHidden: getNumberOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.NSFW_FLAGS_HIDDEN), undefined),
+
+      aiUsagesHidden,
 
       p2pEnabled: getBoolOrDefault(this.localStorageService.getItem(UserLocalStorageKeys.P2P_ENABLED), defaultP2PEnabled),
       theme: this.localStorageService.getItem(UserLocalStorageKeys.THEME) || 'instance-default',
@@ -125,6 +128,7 @@ export class UserLocalStorageService {
       nsfwFlagsHidden: UserLocalStorageKeys.NSFW_FLAGS_HIDDEN,
       nsfwFlagsWarned: UserLocalStorageKeys.NSFW_FLAGS_WARNED,
       nsfwFlagsBlurred: UserLocalStorageKeys.NSFW_FLAGS_BLURRED,
+      aiUsagesHidden: UserLocalStorageKeys.AI_USAGES_HIDDEN,
       p2pEnabled: UserLocalStorageKeys.P2P_ENABLED,
       autoPlayVideo: UserLocalStorageKeys.AUTO_PLAY_VIDEO,
       autoPlayNextVideo: UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,
@@ -163,6 +167,7 @@ export class UserLocalStorageService {
     this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_FLAGS_WARNED)
     this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_FLAGS_BLURRED)
     this.localStorageService.removeItem(UserLocalStorageKeys.NSFW_FLAGS_HIDDEN)
+    this.localStorageService.removeItem(UserLocalStorageKeys.AI_USAGES_HIDDEN)
     this.localStorageService.removeItem(UserLocalStorageKeys.P2P_ENABLED)
     this.localStorageService.removeItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO)
     this.localStorageService.removeItem(UserLocalStorageKeys.AUTO_PLAY_VIDEO_PLAYLIST)
@@ -179,6 +184,7 @@ export class UserLocalStorageService {
       UserLocalStorageKeys.NSFW_FLAGS_WARNED,
       UserLocalStorageKeys.NSFW_FLAGS_BLURRED,
       UserLocalStorageKeys.NSFW_FLAGS_HIDDEN,
+      UserLocalStorageKeys.AI_USAGES_HIDDEN,
       UserLocalStorageKeys.P2P_ENABLED,
       UserLocalStorageKeys.AUTO_PLAY_VIDEO,
       UserLocalStorageKeys.AUTO_PLAY_NEXT_VIDEO,

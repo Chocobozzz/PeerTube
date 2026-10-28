@@ -8,7 +8,7 @@ import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import express from 'express'
 import 'multer'
 import { runTransaction } from '../../../helpers/database-utils.js'
-import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import { JobQueue } from '../../../lib/job-queue/index.js'
 import {
@@ -166,6 +166,7 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
   const apiOptions = await Hooks.wrapObject({
     ...query,
     ...buildNSFWFilters({ req, res }),
+    ...buildAIUsageFilters({ req, res }),
 
     displayOnlyForFollower: {
       actorId: user.Account.Actor.id,

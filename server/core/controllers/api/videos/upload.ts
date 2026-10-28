@@ -51,6 +51,7 @@ const resumableInitMetadataFields: Record<Exclude<keyof VideoCreate, 'thumbnailf
   tags: true,
   commentsPolicy: true,
   recommendationScope: true,
+  aiUsage: true,
   downloadEnabled: true,
   nsfw: true,
   nsfwSummary: true,

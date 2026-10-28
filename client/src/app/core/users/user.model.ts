@@ -11,7 +11,8 @@ import {
   UserRightType,
   UserRole,
   UserRoleType,
-  User as UserServerModel
+  User as UserServerModel,
+  VideoAIUsageType
 } from '@peertube/peertube-models'
 
 export class User implements UserServerModel {
@@ -27,6 +28,8 @@ export class User implements UserServerModel {
   nsfwFlagsHidden: number
   nsfwFlagsWarned: number
   nsfwFlagsBlurred: number
+
+  aiUsagesHidden: VideoAIUsageType[]
 
   adminFlags?: UserAdminFlagType
 

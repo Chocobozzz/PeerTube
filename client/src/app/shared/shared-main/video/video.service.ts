@@ -11,7 +11,7 @@ import {
   UserService
 } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { arrayify, buildDownloadFilesUrl, exists } from '@peertube/peertube-core-utils'
+import { arrayify, buildDownloadFilesUrl, exists, getAllAIUsages } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
   FeedFormat,
@@ -32,6 +32,7 @@ import {
   VideoFile,
   VideoFileMetadata,
   VideoLicence,
+  VideoAIUsageType,
   VideoLicenceType,
   VideoPrivacy,
   VideoPrivacyType,
@@ -179,6 +180,7 @@ export class VideoService {
 
     let params = new HttpParams()
     params = this.buildNSFWParams(params)
+    params = this.buildAIUsageParams(params)
     if (scope) params = params.set('scope', scope)
     params = params.set('count', count)
     if (videoId) params = params.set('videoId', videoId)
@@ -249,6 +251,7 @@ export class VideoService {
       nsfw,
       nsfwFlagsExcluded,
       nsfwFlagsIncluded,
+      aiUsageOneOf,
       autoTagOneOf,
       stateOneOf,
 
@@ -271,6 +274,7 @@ export class VideoService {
     if (search) newParams = newParams.set('search', search)
 
     newParams = this.buildNSFWParams(newParams, { nsfw, nsfwFlagsExcluded, nsfwFlagsIncluded })
+    newParams = this.buildAIUsageParams(newParams, aiUsageOneOf)
 
     return this.restService.addObjectParams(newParams, otherOptions)
   }
@@ -300,6 +304,18 @@ export class VideoService {
     else if (anonymousFlagsIncluded !== undefined) params = params.set('nsfwFlagsIncluded', anonymousFlagsIncluded)
 
     return params
+  }
+
+  buildAIUsageParams (params: HttpParams, aiUsageOneOf?: VideoAIUsageType[]) {
+    if (Array.isArray(aiUsageOneOf)) return this.restService.addArrayParams(params, 'aiUsageOneOf', aiUsageOneOf)
+
+    // The server applies the preference of logged in users
+    if (this.auth.isLoggedIn()) return params
+
+    const hidden = this.userService.getAnonymousUser().aiUsagesHidden
+    if (hidden.length === 0) return params
+
+    return this.restService.addArrayParams(params, 'aiUsageOneOf', getAllAIUsages().filter(a => !hidden.includes(a)))
   }
 
   private buildListSort (sortArg: VideoSortField | SortMeta) {

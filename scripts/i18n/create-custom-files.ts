@@ -13,6 +13,7 @@ import {
   USER_EXPORT_STATES,
   USER_IMPORT_STATES,
   USER_REGISTRATION_STATES,
+  VIDEO_AI_USAGES,
   VIDEO_CATEGORIES,
   VIDEO_CHANNEL_ACTIVITY_ACTIONS,
   VIDEO_CHANNEL_ACTIVITY_TARGETS,
@@ -118,6 +119,7 @@ Object.values(VIDEO_CATEGORIES)
   .concat(Object.values(VIDEO_PLAYLIST_PRIVACIES))
   .concat(Object.values(VIDEO_PLAYLIST_TYPES))
   .concat(Object.values(VIDEO_RECOMMENDATION_SCOPES))
+  .concat(Object.values(VIDEO_AI_USAGES))
   .concat(Object.values(VIDEO_COMMENTS_POLICY))
   .concat(Object.values(USER_ROLE_LABELS))
   .concat(Object.values(STREAM_SYNC_STATE))

@@ -7,7 +7,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import express from 'express'
 import { runTransaction } from '../../../helpers/database-utils.js'
-import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
@@ -171,6 +171,7 @@ async function listVideos (req: express.Request, res: express.Response) {
   const apiOptions = await Hooks.wrapObject({
     ...query,
     ...buildNSFWFilters({ req, res }),
+    ...buildAIUsageFilters({ req, res }),
 
     displayOnlyForFollower: {
       actorId: serverActor.id,

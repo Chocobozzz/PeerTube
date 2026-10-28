@@ -3,6 +3,7 @@ import { UserNotificationSetting, UserSettingsExportJSON } from '@peertube/peert
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { isThemeNameValid } from '@server/helpers/custom-validators/plugins.js'
 import { isUserNotificationSettingValid } from '@server/helpers/custom-validators/user-notifications.js'
+import { isVideoAIUsageArrayValid } from '@server/helpers/custom-validators/videos.js'
 import {
   isUserAutoPlayNextVideoPlaylistValid,
   isUserAutoPlayNextVideoValid,
@@ -26,6 +27,7 @@ const logger = createLogger()
 type SanitizedObject = Pick<
   UserSettingsExportJSON,
   | 'nsfwPolicy'
+  | 'aiUsagesHidden'
   | 'autoPlayVideo'
   | 'autoPlayNextVideo'
   | 'autoPlayNextVideoPlaylist'
@@ -46,6 +48,7 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
 
   protected sanitize (o: UserSettingsExportJSON) {
     if (!isUserNSFWPolicyValid(o.nsfwPolicy)) o.nsfwPolicy = undefined
+    if (!isVideoAIUsageArrayValid(o.aiUsagesHidden)) o.aiUsagesHidden = undefined
     if (!isUserAutoPlayVideoValid(o.autoPlayVideo)) o.autoPlayVideo = undefined
     if (!isUserAutoPlayNextVideoValid(o.autoPlayNextVideo)) o.autoPlayNextVideo = undefined
     if (!isUserAutoPlayNextVideoPlaylistValid(o.autoPlayNextVideoPlaylist)) o.autoPlayNextVideoPlaylist = undefined
@@ -63,6 +66,7 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
 
     return pick(o, [
       'nsfwPolicy',
+      'aiUsagesHidden',
       'autoPlayVideo',
       'autoPlayNextVideo',
       'autoPlayNextVideoPlaylist',
@@ -79,6 +83,7 @@ export class UserSettingsImporter extends AbstractUserImporter<UserSettingsExpor
 
   protected async importObject (userImportData: SanitizedObject) {
     if (exists(userImportData.nsfwPolicy)) this.user.nsfwPolicy = userImportData.nsfwPolicy
+    if (exists(userImportData.aiUsagesHidden)) this.user.aiUsagesHidden = userImportData.aiUsagesHidden
     if (exists(userImportData.autoPlayVideo)) this.user.autoPlayVideo = userImportData.autoPlayVideo
     if (exists(userImportData.autoPlayNextVideo)) this.user.autoPlayNextVideo = userImportData.autoPlayNextVideo
     if (exists(userImportData.autoPlayNextVideoPlaylist)) this.user.autoPlayNextVideoPlaylist = userImportData.autoPlayNextVideoPlaylist

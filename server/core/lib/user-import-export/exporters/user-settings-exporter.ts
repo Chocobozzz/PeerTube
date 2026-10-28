@@ -9,6 +9,8 @@ export class UserSettingsExporter extends AbstractUserExporter<UserSettingsExpor
 
         nsfwPolicy: this.user.nsfwPolicy,
 
+        aiUsagesHidden: this.user.aiUsagesHidden,
+
         autoPlayVideo: this.user.autoPlayVideo,
         autoPlayNextVideo: this.user.autoPlayNextVideo,
         autoPlayNextVideoPlaylist: this.user.autoPlayNextVideoPlaylist,

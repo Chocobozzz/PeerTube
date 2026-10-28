@@ -1,6 +1,13 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { LiveVideoLatencyMode, VideoEmbedPrivacyPolicy, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import {
+  LiveVideoLatencyMode,
+  VideoAIUsage,
+  VideoEmbedPrivacyPolicy,
+  VideoExportJSON,
+  VideoPrivacy,
+  VideoState
+} from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
@@ -20,6 +27,7 @@ import {
   isVideoNameValid,
   isVideoPrivacyValid,
   isVideoPublicationDateValid,
+  isVideoAIUsageValid,
   isVideoRecommendationScopeValid,
   isVideoReplayPrivacyValid,
   isVideoSourceFilenameValid,
@@ -64,6 +72,7 @@ type SanitizedObject = Pick<
   | 'isLive'
   | 'commentsPolicy'
   | 'recommendationScope'
+  | 'aiUsage'
   | 'downloadEnabled'
   | 'videoEmbedPrivacy'
   | 'waitTranscoding'
@@ -107,6 +116,8 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     if (!o.recommendationScope || !isVideoRecommendationScopeValid(o.recommendationScope)) {
       o.recommendationScope = CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE
     }
+
+    if (!isVideoAIUsageValid(o.aiUsage)) o.aiUsage = VideoAIUsage.NOT_SPECIFIED
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
@@ -172,6 +183,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'isLive',
       'commentsPolicy',
       'recommendationScope',
+      'aiUsage',
       'downloadEnabled',
       'videoEmbedPrivacy',
       'waitTranscoding',
@@ -252,6 +264,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
           'tags',
           'commentsPolicy',
           'recommendationScope',
+          'aiUsage',
           'downloadEnabled',
           'waitTranscoding',
           'originallyPublishedAt'

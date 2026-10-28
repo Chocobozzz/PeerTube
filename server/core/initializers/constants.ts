@@ -24,6 +24,8 @@ import {
   UserImportStateType,
   UserRegistrationState,
   UserRegistrationStateType,
+  VideoAIUsage,
+  VideoAIUsageType,
   VideoChannelActivityAction,
   VideoChannelActivityActionType,
   VideoChannelActivityTarget,
@@ -64,7 +66,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1170
+export const LAST_MIGRATION_VERSION = 1175
 
 // ---------------------------------------------------------------------------
 
@@ -386,6 +388,11 @@ export const JOB_REMOVAL_OPTIONS = {
   FAILURE: { // Failed job
     DEFAULT: parseDurationToMs('7 days')
   }
+}
+
+export const JOB_STALLED_DETECTION = {
+  LOCK_DURATION: 30000, // BullMQ default
+  STALLED_INTERVAL: 30000 // BullMQ default
 }
 
 export const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
@@ -765,6 +772,13 @@ export const VIDEO_RECOMMENDATION_SCOPES: { [id in VideoRecommendationScopeType]
   [VideoRecommendationScope.LOCAL]: 'Videos of the same platform',
   [VideoRecommendationScope.ACCOUNT]: 'Videos of the same account',
   [VideoRecommendationScope.CHANNEL]: 'Videos of the same channel'
+}
+
+export const VIDEO_AI_USAGES: { [id in VideoAIUsageType]: string } = {
+  [VideoAIUsage.NOT_SPECIFIED]: 'Not specified',
+  [VideoAIUsage.NO_AI]: 'No AI-generated content',
+  [VideoAIUsage.CONTAINS_AI]: 'Contains AI-generated content',
+  [VideoAIUsage.AI_GENERATED]: 'AI-generated'
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {
@@ -1501,6 +1515,10 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     CONTACT_FORM_LIFETIME = 1000 // 1 second
 
     JOB_ATTEMPTS['email'] = 1
+
+    // Tests restart servers while they process jobs
+    JOB_STALLED_DETECTION.LOCK_DURATION = 10000
+    JOB_STALLED_DETECTION.STALLED_INTERVAL = 5000
 
     MEMOIZE_TTL.OVERVIEWS_SAMPLE = 3000
     MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD = 3000

@@ -1,5 +1,6 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import {
+  VideoAIUsageType,
   VideoChannelCollaboratorState,
   VideoInclude,
   VideoIncludeType,
@@ -66,6 +67,8 @@ export type BuildVideosListQueryOptions = {
   categoryOneOf?: number[]
   licenceOneOf?: number[]
   languageOneOf?: string[]
+
+  aiUsageOneOf?: VideoAIUsageType[]
 
   tagsOneOf?: string[]
   tagsAllOf?: string[]
@@ -353,6 +356,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.languageOneOf) {
       this.whereLanguageOneOf(options.languageOneOf)
+    }
+
+    if (options.aiUsageOneOf && options.aiUsageOneOf.length !== 0) {
+      this.whereAIUsageOneOf(options.aiUsageOneOf)
     }
 
     if (options.historyOfUser) {
@@ -761,6 +768,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereLicenceOneOf (licenceOneOf: number[]) {
     this.and.push('"video"."licence" IN (:licenceOneOf)')
     this.replacements.licenceOneOf = licenceOneOf
+  }
+
+  private whereAIUsageOneOf (aiUsageOneOf: VideoAIUsageType[]) {
+    this.and.push('"video"."aiUsage" IN (:aiUsageOneOf)')
+    this.replacements.aiUsageOneOf = aiUsageOneOf
   }
 
   private whereLanguageOneOf (languageOneOf: string[]) {

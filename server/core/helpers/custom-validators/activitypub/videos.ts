@@ -6,6 +6,7 @@ import {
   ActivityVideoFileMetadataUrlObject,
   LiveVideoLatencyMode,
   VideoCommentPolicy,
+  VideoAIUsage,
   VideoObject,
   VideoRecommendationScope,
   VideoState
@@ -24,6 +25,7 @@ import {
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
+  isVideoAIUsageValid,
   isVideoRecommendationScopeValid,
   isVideoStateValid,
   isVideoTagValid,
@@ -82,6 +84,11 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   // Remote platforms that don't send this field don't restrict recommendations
   if (!isVideoRecommendationScopeValid(video.recommendationScope)) {
     video.recommendationScope = VideoRecommendationScope.ALL
+  }
+
+  // Remote platforms that don't send this field don't declare AI usage
+  if (!isVideoAIUsageValid(video.aiUsage)) {
+    video.aiUsage = VideoAIUsage.NOT_SPECIFIED
   }
 
   if (!isActivityPubUrlValid(video.id)) return fail('id')

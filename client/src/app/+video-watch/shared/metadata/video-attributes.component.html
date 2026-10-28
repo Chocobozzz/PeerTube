@@ -57,6 +57,13 @@
   </div>
 }
 
+@if (video().aiUsage.id !== VideoAIUsage.NOT_SPECIFIED) {
+  <div class="attribute attribute-ai-usage">
+    <span i18n class="attribute-label">Use of AI</span>
+    <span class="attribute-value">{{ video().aiUsage.label }}</span>
+  </div>
+}
+
 @if (getVideoTags().length > 0) {
   <div class="attribute attribute-tags">
     <span i18n class="attribute-label">Tags</span>

@@ -27,6 +27,7 @@ import { MarkdownTextareaComponent } from '@app/shared/shared-forms/markdown-tex
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { SelectChannelAutoComponent } from '@app/shared/shared-forms/select/channel/select-channel-auto.component'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
+import { SelectRadioComponent } from '@app/shared/shared-forms/select/select-radio.component'
 import { SelectTagsComponent } from '@app/shared/shared-forms/select/select-tags.component'
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
@@ -40,10 +41,11 @@ import {
   HTMLServerConfig,
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
+  VideoAIUsageType,
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
-import { SelectChannelItem } from '@pt-types'
+import { SelectChannelItem, SelectRadioItem } from '@pt-types'
 import { PluginInfo } from '@root-helpers/plugins-manager'
 import debug from 'debug'
 import { DatePickerModule } from 'primeng/datepicker'
@@ -74,6 +76,7 @@ type Form = {
   category: FormControl<number>
   licence: FormControl<number>
   language: FormControl<string>
+  aiUsage: FormControl<VideoAIUsageType>
   description: FormControl<string>
   tags: FormArray<FormControl<string>>
   thumbnailfile: FormControl<Blob>
@@ -98,6 +101,7 @@ type Form = {
     SelectTagsComponent,
     MarkdownTextareaComponent,
     SelectOptionsComponent,
+    SelectRadioComponent,
     InputTextComponent,
     DatePickerModule,
     PeertubeCheckboxComponent,
@@ -141,6 +145,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   videoCategories: ConstantLabel<number>[] = []
   videoLicences: ConstantLabel<number>[] = []
   videoLanguages: ConstantLabel<string>[] = []
+  aiUsages: SelectRadioItem[] = []
 
   pluginDataFormGroup: FormGroup
 
@@ -207,6 +212,9 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
     this.serverService.getVideoLicences()
       .subscribe(res => this.videoLicences = this.videoService.explainedLicenceLabels(res))
+
+    this.serverService.getVideoAIUsages()
+      .subscribe(res => this.aiUsages = res)
 
     this.buildLanguages()
     this.buildPrivacies()
@@ -299,6 +307,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
       category: VIDEO_CATEGORY_VALIDATOR,
       licence: VIDEO_LICENCE_VALIDATOR,
       language: VIDEO_LANGUAGE_VALIDATOR,
+      aiUsage: null,
       description: VIDEO_DESCRIPTION_VALIDATOR,
       tags: VIDEO_TAGS_ARRAY_VALIDATOR,
       thumbnailfile: null,

@@ -13,9 +13,10 @@ import {
   type NSFWPolicyType,
   type UserAdminFlagType,
   type UserNewFeatureInfoType,
-  type UserRoleType
+  type UserRoleType,
+  type VideoAIUsageType
 } from '@peertube/peertube-models'
-import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
+import { isNSFWFlagsValid, isVideoAIUsageArrayValid } from '@server/helpers/custom-validators/videos.js'
 import { englishLanguage } from '@server/helpers/i18n.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { TokensCache } from '@server/lib/auth/tokens-cache.js'
@@ -318,6 +319,12 @@ export class UserModel extends SequelizeModel<UserModel> {
   @Is('UserNSFWFlagsWarned', value => throwIfNotValid(value, isNSFWFlagsValid, 'NSFW flags'))
   @Column
   declare nsfwFlagsWarned: number
+
+  @AllowNull(false)
+  @Default([])
+  @Is('UserAIUsagesHidden', value => throwIfNotValid(value, isVideoAIUsageArrayValid, 'AI usages hidden'))
+  @Column(DataType.ARRAY(DataType.INTEGER))
+  declare aiUsagesHidden: VideoAIUsageType[]
 
   @AllowNull(false)
   @Is('p2pEnabled', value => throwIfNotValid(value, isUserP2PEnabledValid, 'P2P enabled'))
@@ -1129,6 +1136,8 @@ export class UserModel extends SequelizeModel<UserModel> {
       nsfwFlagsBlurred: CONFIG.NSFW_FLAGS_SETTINGS.ENABLED
         ? this.nsfwFlagsBlurred
         : NSFWFlag.NONE,
+
+      aiUsagesHidden: this.aiUsagesHidden,
 
       p2pEnabled: this.p2pEnabled,
 

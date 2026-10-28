@@ -309,6 +309,7 @@ async function updateMe (req: express.Request, res: express.Response) {
     'nsfwFlagsHidden',
     'nsfwFlagsWarned',
     'nsfwFlagsBlurred',
+    'aiUsagesHidden',
     'p2pEnabled',
     'autoPlayVideo',
     'autoPlayNextVideo',

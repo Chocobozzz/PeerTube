@@ -6,6 +6,7 @@ import validator from 'validator'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,
+  VIDEO_AI_USAGES,
   VIDEO_CATEGORIES,
   VIDEO_COMMENTS_POLICY,
   VIDEO_LICENCES,
@@ -54,6 +55,14 @@ export function isVideoCommentsPolicyValid (value: any) {
 
 export function isVideoRecommendationScopeValid (value: any) {
   return VIDEO_RECOMMENDATION_SCOPES[value] !== undefined
+}
+
+export function isVideoAIUsageValid (value: any) {
+  return VIDEO_AI_USAGES[value] !== undefined
+}
+
+export function isVideoAIUsageArrayValid (value: any) {
+  return isArray(value) && value.length <= Object.keys(VIDEO_AI_USAGES).length && value.every(v => isVideoAIUsageValid(v))
 }
 
 export function isVideoSupportValid (value: string) {

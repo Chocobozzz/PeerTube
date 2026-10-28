@@ -14,10 +14,12 @@ import {
   VideoObject,
   VideoPrivacy,
   VideoRateType,
+  VideoAIUsage,
   VideoRecommendationScope,
   VideoState,
   VideoStreamingPlaylistType,
   VideoSummary,
+  type VideoAIUsageType,
   type VideoCommentPolicyType,
   type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
@@ -588,6 +590,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Default(VideoRecommendationScope.ALL)
   @Column
   declare recommendationScope: VideoRecommendationScopeType
+
+  @AllowNull(false)
+  @Default(VideoAIUsage.NOT_SPECIFIED)
+  @Column
+  declare aiUsage: VideoAIUsageType
 
   @AllowNull(false)
   @Column
@@ -1182,6 +1189,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         | 'categoryOneOf'
         | 'licenceOneOf'
         | 'languageOneOf'
+        | 'aiUsageOneOf'
         | 'host'
         | 'autoTagOneOf'
         | 'stateOneOf'
@@ -1232,6 +1240,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'categoryOneOf',
         'licenceOneOf',
         'languageOneOf',
+        'aiUsageOneOf',
         'host',
         'autoTagOneOf',
         'stateOneOf',
@@ -1286,6 +1295,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
+    aiUsageOneOf?: VideoAIUsageType[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
     privacyOneOf?: VideoPrivacyType[]
@@ -1333,6 +1343,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'categoryOneOf',
         'licenceOneOf',
         'languageOneOf',
+        'aiUsageOneOf',
         'autoTagOneOf',
         'tagsOneOf',
         'tagsAllOf',

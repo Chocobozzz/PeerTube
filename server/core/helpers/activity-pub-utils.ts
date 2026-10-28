@@ -174,6 +174,11 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@id': 'pt:recommendationScope'
     },
 
+    aiUsage: {
+      '@type': 'sc:Number',
+      '@id': 'pt:aiUsage'
+    },
+
     downloadEnabled: {
       '@type': 'sc:Boolean',
       '@id': 'pt:downloadEnabled'

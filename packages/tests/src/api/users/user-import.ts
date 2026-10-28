@@ -5,6 +5,7 @@ import {
   LiveVideoLatencyMode,
   UserImportState,
   UserNotificationSettingValue,
+  VideoAIUsage,
   VideoCommentPolicy,
   VideoCreateResult,
   VideoEmbedPrivacyPolicy,
@@ -193,6 +194,7 @@ function runTest (withObjectStorage: boolean) {
         expect(me.videoLanguages).to.deep.equal([ 'fr', 'en' ])
         expect(me.videoCategories).to.deep.equal([ 13, 15 ])
         expect(me.videoLive).to.equal('false')
+        expect(me.aiUsagesHidden).to.deep.equal([ VideoAIUsage.CONTAINS_AI ])
 
         const settings = me.notificationSettings
 
@@ -507,6 +509,7 @@ function runTest (withObjectStorage: boolean) {
 
           const video = await checkServer.videos.get({ id: otherVideo.uuid })
           expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
+          expect(video.aiUsage.id).to.equal(VideoAIUsage.AI_GENERATED)
         }
 
         const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })

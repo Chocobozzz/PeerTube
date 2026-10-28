@@ -1,4 +1,10 @@
-import { LiveVideoLatencyModeType, VideoCommentPolicyType, VideoRecommendationScopeType, VideoStateType } from '../../videos/index.js'
+import {
+  LiveVideoLatencyModeType,
+  VideoAIUsageType,
+  VideoCommentPolicyType,
+  VideoRecommendationScopeType,
+  VideoStateType
+} from '../../videos/index.js'
 import {
   ActivityIconObject,
   ActivityIdentifierObject,
@@ -37,6 +43,8 @@ export interface VideoObject {
   canReply: 'as:Public' | 'https://www.w3.org/ns/activitystreams#Public'
 
   recommendationScope: VideoRecommendationScopeType
+
+  aiUsage: VideoAIUsageType
 
   downloadEnabled: boolean
   waitTranscoding: boolean

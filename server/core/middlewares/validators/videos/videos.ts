@@ -52,6 +52,8 @@ import {
   isVideoNameValid,
   isVideoPrivacyValid,
   isVideoPublicationDateValid,
+  isVideoAIUsageArrayValid,
+  isVideoAIUsageValid,
   isVideoRecommendationScopeValid,
   isVideoSourceFilenameValid,
   isVideoSupportValid
@@ -485,6 +487,10 @@ export function getCommonVideoEditAttributes () {
     body('recommendationScope')
       .optional()
       .custom(isVideoRecommendationScopeValid),
+    body('aiUsage')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .custom(isVideoAIUsageValid),
 
     body('downloadEnabled')
       .optional()
@@ -523,6 +529,10 @@ export const commonVideosFiltersValidatorFactory = (options: {
       .optional()
       .customSanitizer(toArray)
       .custom(isStringArray).withMessage('Should have a valid languageOneOf array'),
+    query('aiUsageOneOf')
+      .optional()
+      .customSanitizer(toIntArray)
+      .custom(isVideoAIUsageArrayValid).withMessage('Should have a valid aiUsageOneOf array'),
     query('privacyOneOf')
       .optional()
       .customSanitizer(toArray)

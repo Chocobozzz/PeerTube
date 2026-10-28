@@ -960,6 +960,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -2657,6 +2658,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -2765,6 +2767,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -3636,6 +3639,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -3714,6 +3718,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
       responses:
         '200':
           description: successful operation
@@ -3891,6 +3896,8 @@ paths:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
                 recommendationScope:
                   $ref: '#/components/schemas/VideoRecommendationScopeSet'
+                aiUsage:
+                  $ref: '#/components/schemas/VideoAIUsageSet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -4468,6 +4475,8 @@ paths:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
                 recommendationScope:
                   $ref: '#/components/schemas/VideoRecommendationScopeSet'
+                aiUsage:
+                  $ref: '#/components/schemas/VideoAIUsageSet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -5611,6 +5620,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -6884,6 +6894,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -10085,6 +10096,21 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/NSFWFlag'
+    aiUsageOneOf:
+      name: aiUsageOneOf
+      in: query
+      required: false
+      description: |
+        **PeerTube >= 9.0** Only list videos with one of these AI usages, declared by video creators.
+        If not provided, the preference of the authenticated user (`aiUsagesHidden`) is used
+      schema:
+        oneOf:
+        - $ref: '#/components/schemas/VideoAIUsageSet'
+        - type: array
+          items:
+            $ref: '#/components/schemas/VideoAIUsageSet'
+      style: form
+      explode: true
     isLocal:
       name: isLocal
       in: query
@@ -10571,6 +10597,26 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        label:
+          type: string
+
+    VideoAIUsageSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        **PeerTube >= 9.0** Use of AI in the video, declared by the video creator:
+          - `1` Not specified
+          - `2` No AI-generated content: nothing seen or heard in the video has been generated by AI
+          - `3` Contains AI-generated content: some parts of the video have been generated by AI
+          - `4` AI-generated: the whole video, or most of it, has been generated by AI
+    VideoAIUsageConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoAIUsageSet'
         label:
           type: string
 
@@ -11128,6 +11174,8 @@ components:
         nsfwSummary:
           type: string
           description: "**PeerTube >= 7.2** More information about the sensitive content of the video"
+        aiUsage:
+          $ref: '#/components/schemas/VideoAIUsageConstant'
         waitTranscoding:
           type: boolean
           nullable: true
@@ -13024,6 +13072,8 @@ components:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
         recommendationScope:
           $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        aiUsage:
+          $ref: '#/components/schemas/VideoAIUsageSet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean
@@ -13321,6 +13371,11 @@ components:
           $ref: '#/components/schemas/NSFWFlag'
         nsfwFlagsBlurred:
           $ref: '#/components/schemas/NSFWFlag'
+        aiUsagesHidden:
+          type: array
+          description: "**PeerTube >= 9.0** Videos with these AI usages are hidden from video lists"
+          items:
+            $ref: '#/components/schemas/VideoAIUsageSet'
 
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
@@ -13536,6 +13591,11 @@ components:
           $ref: '#/components/schemas/NSFWFlag'
         nsfwFlagsBlurred:
           $ref: '#/components/schemas/NSFWFlag'
+        aiUsagesHidden:
+          type: array
+          description: "**PeerTube >= 9.0** Videos with these AI usages are hidden from video lists"
+          items:
+            $ref: '#/components/schemas/VideoAIUsageSet'
         p2pEnabled:
           type: boolean
           description: whether to enable P2P in the player or not

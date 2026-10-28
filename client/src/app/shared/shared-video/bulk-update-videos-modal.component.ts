@@ -9,6 +9,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal'
 import {
   ConstantLabel,
   Video,
+  VideoAIUsageType,
   VideoCommentPolicyType,
   VideoPrivacy,
   VideoPrivacyType,
@@ -37,6 +38,7 @@ type BulkVideoUpdateModel = {
   downloadEnabled: boolean
   commentsPolicy: VideoCommentPolicyType | null
   recommendationScope: VideoRecommendationScopeType | null
+  aiUsage: VideoAIUsageType | null
 }
 
 type FieldName = keyof BulkVideoUpdateModel
@@ -92,13 +94,15 @@ export class BulkUpdateVideosModalComponent {
     licence: null,
     downloadEnabled: true,
     commentsPolicy: null,
-    recommendationScope: null
+    recommendationScope: null,
+    aiUsage: null
   })
 
   readonly bulkUpdateForm = form(this.bulkUpdateModel, f => {
     required(f.channelId, { when: () => this.activeFields().has('channelId'), message: $localize`Channel is required.` })
     required(f.privacy, { when: () => this.activeFields().has('privacy'), message: $localize`Privacy is required.` })
     required(f.commentsPolicy, { when: () => this.activeFields().has('commentsPolicy'), message: $localize`Comments policy is required.` })
+    required(f.aiUsage, { when: () => this.activeFields().has('aiUsage'), message: $localize`Use of AI is required.` })
     required(f.recommendationScope, {
       when: () => this.activeFields().has('recommendationScope'),
       message: $localize`Recommended videos setting is required.`
@@ -116,7 +120,8 @@ export class BulkUpdateVideosModalComponent {
     { key: 'licence', label: $localize`Licence` },
     { key: 'privacy', label: $localize`Privacy` },
     { key: 'recommendationScope', label: $localize`Recommended videos` },
-    { key: 'support', label: $localize`Support` }
+    { key: 'support', label: $localize`Support` },
+    { key: 'aiUsage', label: $localize`Use of AI` }
   ]
 
   readonly activeAvailableFields = computed(() => this.allFields.filter(f => !this.activeFields().has(f.key)))
@@ -131,6 +136,7 @@ export class BulkUpdateVideosModalComponent {
   videoPrivacies: ConstantLabel<VideoPrivacyType>[] = []
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[]
   recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[]
+  aiUsages: ConstantLabel<VideoAIUsageType>[]
 
   get authUser () {
     return this.authService.getUser()
@@ -152,6 +158,7 @@ export class BulkUpdateVideosModalComponent {
     this.server.getVideoLanguages().subscribe(languages => this.videoLanguages = languages)
     this.server.getCommentPolicies().subscribe(policies => this.commentPolicies = policies)
     this.server.getRecommendationScopes().subscribe(scopes => this.recommendationScopes = scopes)
+    this.server.getVideoAIUsages().subscribe(aiUsages => this.aiUsages = aiUsages)
 
     this.server.getVideoPrivacies().subscribe(privacies => {
       this.videoPrivacies = privacies.filter(p => !BULK_PRIVACY_EXCLUDE.has(p.id))
@@ -200,6 +207,8 @@ export class BulkUpdateVideosModalComponent {
         return this.commentPolicies
       case 'recommendationScope':
         return this.recommendationScopes
+      case 'aiUsage':
+        return this.aiUsages
       default:
         return []
     }
@@ -233,6 +242,9 @@ export class BulkUpdateVideosModalComponent {
       case 'recommendationScope':
         return this.recommendationScopes?.find(s => s.id === value)?.label
 
+      case 'aiUsage':
+        return this.aiUsages?.find(a => a.id === value)?.label
+
       case 'downloadEnabled':
         return value ? $localize`Yes` : $localize`No`
 
@@ -263,6 +275,7 @@ export class BulkUpdateVideosModalComponent {
       if (active.has('downloadEnabled')) update.downloadEnabled = model.downloadEnabled
       if (active.has('commentsPolicy')) update.commentsPolicy = model.commentsPolicy
       if (active.has('recommendationScope')) update.recommendationScope = model.recommendationScope
+      if (active.has('aiUsage')) update.aiUsage = model.aiUsage
 
       return update
     }

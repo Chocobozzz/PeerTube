@@ -20,6 +20,7 @@ import {
   UserNotificationSettingValue,
   UserSettingsExportJSON,
   UserVideoHistoryExportJSON,
+  VideoAIUsage,
   VideoChapterObject,
   VideoCommentObject,
   VideoCreateResult,
@@ -410,6 +411,7 @@ function runTest (withObjectStorage: boolean) {
       expect(json.videoLanguages).to.deep.equal([ 'fr', 'en' ])
       expect(json.videoCategories).to.deep.equal([ 13, 15 ])
       expect(json.videoLive).to.equal('false')
+      expect(json.aiUsagesHidden).to.deep.equal([ VideoAIUsage.CONTAINS_AI ])
       expect(json.notificationSettings.myVideoPublished).to.equal(UserNotificationSettingValue.NONE)
       expect(json.notificationSettings.commentMention).to.equal(UserNotificationSettingValue.EMAIL)
     }
@@ -608,6 +610,7 @@ function runTest (withObjectStorage: boolean) {
       {
         const secondaryChannelVideo = json.videos.find(v => v.name === 'noah public video second channel')
         expect(secondaryChannelVideo.channel.name).to.equal('noah_second_channel')
+        expect(secondaryChannelVideo.aiUsage).to.equal(VideoAIUsage.AI_GENERATED)
       }
     }
 

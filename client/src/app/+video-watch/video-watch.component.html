@@ -49,6 +49,8 @@
                   <ng-container i18n>Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle></ng-container>
                   •
                   <my-video-views-counter [isLive]="video.isLive" [viewers]="video.viewers" [views]="video.views"></my-video-views-counter>
+
+                  <my-video-ai-usage-badge class="ms-2" [video]="video"></my-video-ai-usage-badge>
                 </div>
 
                 <my-action-buttons
