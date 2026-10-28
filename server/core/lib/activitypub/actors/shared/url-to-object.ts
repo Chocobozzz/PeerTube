@@ -50,18 +50,28 @@ export async function fetchActorFollowsCount (actorObject: ActivityPubActor) {
   return { followersCount, followingCount }
 }
 
+export async function tryToFetchActorFollowersCount (followersUrl: string) {
+  if (!followersUrl) return undefined
+
+  return tryToFetchActorTotalItems(followersUrl)
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
 
 async function fetchActorTotalItems (url: string) {
+  return await tryToFetchActorTotalItems(url) ?? 0
+}
+
+async function tryToFetchActorTotalItems (url: string) {
   try {
     const { body } = await fetchAP<ActivityPubOrderedCollection<unknown>>(url, { preventCrossHostRedirect: false })
 
     return body.totalItems || 0
   } catch (err) {
     logger.info('Cannot fetch remote actor count %s.', url, { err })
-    return 0
+    return undefined
   }
 }
 

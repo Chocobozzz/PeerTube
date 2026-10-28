@@ -396,7 +396,7 @@ function runTest (withObjectStorage: boolean) {
       // We observe weird behaviour in the CI, so re-wait jobs here just to be sure
       await waitJobs([ remoteServer, server ])
 
-      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken, sort: '-publishedAt' })
+      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken, sort: '-createdAt' })
       expect(data).to.have.lengthOf(5)
 
       // Correct order

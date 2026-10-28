@@ -10,6 +10,75 @@ fi
 retries=3
 speedFactor="${2:-1}"
 
+
+durationsFile="./scripts/ci/test-durations.txt"
+defaultDuration=180
+
+# Output example:
+#   521 ./packages/tests/dist/api/transcoding/video-studio.js
+#   180 ./packages/tests/dist/api/transcoding/new-test.js
+#   171 ./packages/tests/dist/api/transcoding/hls.js
+#   ...
+withDurations () {
+    printf '%s\n' "$@" | awk -v durationsFile="$durationsFile" -v defaultDuration=$defaultDuration '
+        BEGIN { while ((getline line < durationsFile) > 0) { split(line, a, " "); durations[a[1]] = a[2] } }
+        {
+            key = $0
+            sub(/^\.\/packages\/tests\/(dist|src)\//, "", key)
+            sub(/\.(js|ts)$/, "", key)
+
+            print (key in durations ? durations[key] : defaultDuration), $0
+        }' | sort -k1,1nr -k2,2
+}
+
+# Longest files first
+sortByDuration () {
+    withDurations "$@" | cut -d ' ' -f 2 | xargs echo
+}
+
+# Split files in shards of similar durations
+#
+# Each file, longest first, goes to the shard with the lowest total duration so far
+# Example output (with shard 1 = 521s):
+#   ./packages/tests/dist/api/transcoding/video-studio.js
+# And (with shard 2 = 171 + 152 + 24 = 347s):
+#   ./packages/tests/dist/api/transcoding/hls.js ./packages/tests/dist/api/transcoding/transcoder.js ./packages/tests/dist/api/transcoding/audio-only.js
+shardFiles () {
+    shard=$1
+    shift
+
+    shardCount=$1
+    shift
+
+    withDurations "$@" | awk -v shard=$shard -v shardCount=$shardCount '
+        {
+            min = 1
+            for (i = 2; i <= shardCount; i++) if (loads[i] < loads[min]) min = i
+
+            loads[min] += $1
+            if (min == shard) print $2
+        }' | xargs echo
+}
+
+runMochaFile () {
+    file=$1
+
+    echo "Trying $file" >> "$triesLog"
+
+    output=$(mktemp)
+    npm run mocha -- --timeout 30000 --no-config -c --exit --bail "$file" > "$output" 2>&1 && code=0 || code=$?
+    cat "$output"
+
+    if [ $code -ne 0 ]; then
+        mkdir -p artifacts/failed-attempts
+        cp "$output" "artifacts/failed-attempts/$(basename "$file")-$(date +%s).log"
+    fi
+
+    rm "$output"
+    return $code
+}
+export -f runMochaFile
+
 runJSTest () {
     jobname=$1
     shift
@@ -17,17 +86,32 @@ runJSTest () {
     jobs=$1
     shift
 
-    files=$@
+    files=$(sortByDuration "$@")
 
     echo $files
 
-    joblog="$jobname-ci.log"
+    export triesLog="$jobname-ci.log"
+    joblog="$jobname-ci-joblog.log"
 
-    parallel -j $jobs --retries $retries \
-        "echo Trying {} >> $joblog; npm run mocha -- --timeout 30000 --no-config -c --exit --bail {}" \
-        ::: $files
+    parallel -j $jobs --retries $retries --joblog "$joblog" runMochaFile ::: $files
 
-    cat "$joblog" | sort | uniq -c
+    cat "$triesLog" | sort | uniq -c
+    rm "$triesLog"
+
+    # Print the duration of each test file, parsed by ./scripts/ci/update-test-durations.sh
+    # $joblog is a TSV file with a header line. 4th column is the job duration in seconds, 9th is the command
+    # Example of $joblog line:
+    #   3	:	1793173119.512	   392.734	0	1838	0	0	runMochaFile ./packages/tests/dist/api/redundancy/redundancy.js
+    # Output:
+    #   [test-duration] api/redundancy/redundancy 393
+    awk -F '\t' 'NR > 1 {
+        n = split($9, a, " ")
+        key = a[n]
+        sub(/^\.\/packages\/tests\/(dist|src)\//, "", key)
+        sub(/\.(js|ts)$/, "", key)
+
+        print "[test-duration]", key, int($4 + 0.5)
+    }' "$joblog"
     rm "$joblog"
 }
 
@@ -86,52 +170,76 @@ elif [ "$1" = "cli-plugin" ]; then
 
     MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $pluginsFiles
     runJSTest "$1" 1 $cliFiles
-elif [ "$1" = "api-1" ]; then
+elif [ "$1" = "api-check-params-search" ]; then
     npm run build:server
     npm run build:tests
 
     checkParamFiles=$(findTestFiles ./packages/tests/dist/api/check-params)
-    notificationsFiles=$(findTestFiles ./packages/tests/dist/api/notifications)
     searchFiles=$(findTestFiles ./packages/tests/dist/api/search)
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $notificationsFiles $searchFiles $checkParamFiles
-elif [ "$1" = "api-2" ]; then
-    npm run build:server
-    npm run build:tests
-
-    liveFiles=$(findTestFiles ./packages/tests/dist/api/live)
-    # plugins test needs an HTML file
-    serverFiles=$(findTestFiles ./packages/tests/dist/api/server plugins.js)
-    usersFiles=$(findTestFiles ./packages/tests/dist/api/users)
-    horizontalScalabilityFiles=$(findTestFiles ./packages/tests/dist/api/horizontal-scalability)
-
-    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $liveFiles $serverFiles $usersFiles $horizontalScalabilityFiles
-elif [ "$1" = "api-3" ]; then
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $checkParamFiles $searchFiles
+elif [ "$1" = "api-videos-1" ] || [ "$1" = "api-videos-2" ]; then
     npm run build:server
     npm run build:tests
 
     videosFiles=$(findTestFiles ./packages/tests/dist/api/videos)
+
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $(shardFiles ${1##*-} 2 $videosFiles)
+elif [ "$1" = "api-server" ]; then
+    npm run build:server
+    npm run build:tests
+
+    # plugins test needs an HTML file
+    serverFiles=$(findTestFiles ./packages/tests/dist/api/server plugins.js)
+
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $serverFiles
+elif [ "$1" = "api-live-scalability" ]; then
+    npm run build:server
+    npm run build:tests
+
+    liveFiles=$(findTestFiles ./packages/tests/dist/api/live)
+    horizontalScalabilityFiles=$(findTestFiles ./packages/tests/dist/api/horizontal-scalability)
+
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $liveFiles $horizontalScalabilityFiles
+elif [ "$1" = "api-users-stats" ]; then
+    npm run build:server
+    npm run build:tests
+
+    usersFiles=$(findTestFiles ./packages/tests/dist/api/users)
     statsFiles=$(findTestFiles ./packages/tests/dist/api/stats)
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $statsFiles $videosFiles
-elif [ "$1" = "api-4" ]; then
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $usersFiles $statsFiles
+elif [ "$1" = "api-moderation-notifications" ]; then
     npm run build:server
     npm run build:tests
 
     moderationFiles=$(findTestFiles ./packages/tests/dist/api/moderation)
-    redundancyFiles=$(findTestFiles ./packages/tests/dist/api/redundancy)
-    objectStorageFiles=$(findTestFiles ./packages/tests/dist/api/object-storage)
-    activitypubFiles=$(findTestFiles ./packages/tests/dist/api/activitypub)
+    notificationsFiles=$(findTestFiles ./packages/tests/dist/api/notifications)
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $moderationFiles $redundancyFiles $activitypubFiles $objectStorageFiles
-elif [ "$1" = "api-5" ]; then
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $moderationFiles $notificationsFiles
+elif [ "$1" = "api-federation" ]; then
+    npm run build:server
+    npm run build:tests
+
+    activitypubFiles=$(findTestFiles ./packages/tests/dist/api/activitypub)
+    redundancyFiles=$(findTestFiles ./packages/tests/dist/api/redundancy)
+
+    MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $activitypubFiles $redundancyFiles
+elif [ "$1" = "api-object-storage" ]; then
+    npm run build:server
+    npm run build:tests
+
+    objectStorageFiles=$(findTestFiles ./packages/tests/dist/api/object-storage)
+
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $objectStorageFiles
+elif [ "$1" = "api-transcoding-1" ] || [ "$1" = "api-transcoding-2" ]; then
     npm run build:server
     npm run build:tests
 
     transcodingFiles=$(findTestFiles ./packages/tests/dist/api/transcoding)
     runnersFiles=$(findTestFiles ./packages/tests/dist/api/runners)
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $transcodingFiles $runnersFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $(shardFiles ${1##*-} 2 $transcodingFiles $runnersFiles)
 elif [ "$1" = "external-plugins" ]; then
     pnpm run --filter=@peertube/tests install-dependencies:transcription
 

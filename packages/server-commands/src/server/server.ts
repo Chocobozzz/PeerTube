@@ -1,4 +1,3 @@
-import { randomInt } from '@peertube/peertube-core-utils'
 import { User, Video, VideoChannelSync, VideoCreateResult, VideoDetails } from '@peertube/peertube-models'
 import { parallelTests, root } from '@peertube/peertube-node-utils'
 import { ChildProcess, fork } from 'child_process'
@@ -58,6 +57,7 @@ import { DebugCommand } from './debug-command.js'
 import { FollowsCommand } from './follows-command.js'
 import { JobsCommand } from './jobs-command.js'
 import { MetricsCommand } from './metrics-command.js'
+import { allocateParallelPort, allocateParallelServerNumber } from './parallel-allocator.js'
 import { PluginsCommand } from './plugins-command.js'
 import { RedundancyCommand } from './redundancy-command.js'
 import { ServersCommand } from './servers-command.js'
@@ -216,10 +216,10 @@ export class PeerTubeServer {
 
     this.parallel = parallelTests()
 
-    this.internalServerNumber = this.parallel ? this.randomServer() : this.serverNumber
+    this.internalServerNumber = this.parallel ? allocateParallelServerNumber() : this.serverNumber
     this.nodeAppInstance = this.internalServerNumber.toString()
-    this.rtmpPort = this.parallel ? this.randomRTMP() : 1936
-    this.rtmpsPort = this.parallel ? this.randomRTMP() : 1937
+    this.rtmpPort = this.parallel ? allocateParallelPort() : 1936
+    this.rtmpsPort = this.parallel ? allocateParallelPort() : 1937
     this.port = 9000 + this.internalServerNumber
 
     this.url = `http://127.0.0.1:${this.port}`
@@ -411,20 +411,6 @@ export class PeerTubeServer {
         res()
       }
     })
-  }
-
-  private randomServer () {
-    const low = 2500
-    const high = 10000
-
-    return randomInt(low, high)
-  }
-
-  private randomRTMP () {
-    const low = 1900
-    const high = 2100
-
-    return randomInt(low, high)
   }
 
   private async assignCustomConfigFile () {

@@ -28,8 +28,9 @@ jobs:
           POSTGRES_USER: peertube
           POSTGRES_HOST_AUTH_METHOD: trust
 
+      # Only used by external-plugins tests, that only run on schedule. A service with an empty image does not start
       ldap:
-        image: chocobozzz/docker-test-openldap
+        image: ${{ matrix.test_suite == 'external-plugins' && github.event_name == 'schedule' && 'chocobozzz/docker-test-openldap' || '' }}
         ports:
           - 10389:10389
 
@@ -43,8 +44,9 @@ jobs:
           SCALITY_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
           SCALITY_SECRET_ACCESS_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 
+      # Only used by external-plugins tests, that only run on schedule
       keycloak:
-        image: chocobozzz/peertube-tests-keycloak
+        image: ${{ matrix.test_suite == 'external-plugins' && github.event_name == 'schedule' && 'chocobozzz/peertube-tests-keycloak' || '' }}
         ports:
           - 8082:8080
         env:
@@ -54,7 +56,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        test_suite: [ types-package, client, api-1, api-2, api-3, api-4, api-5, transcription, cli-plugin, lint, external-plugins ]
+        # Longest suites first. API suites are balanced using scripts/ci/test-durations.txt
+        test_suite:
+          - api-live-scalability
+          - api-server
+          - api-users-stats
+          - api-check-params-search
+          - api-videos-1
+          - api-videos-2
+          - api-transcoding-1
+          - api-transcoding-2
+          - api-moderation-notifications
+          - api-federation
+          - api-object-storage
+          - transcription
+          - cli-plugin
+          - client
+          - types-package
+          - lint
+          - external-plugins
 
     env:
       PGUSER: peertube
@@ -117,7 +137,7 @@ jobs:
 
       # Install PG to setup a secondary database for read replica tests
       - name: Setup PostgreSQL server binaries
-        if: matrix.test_suite == 'api-2'
+        if: matrix.test_suite == 'api-server'
         run: |
           # Only install binaries, without creating and starting a main cluster
           sudo mkdir -p /etc/postgresql-common/createcluster.d
@@ -142,9 +162,19 @@ jobs:
           ) || \
           echo "parse-log.js script does not exist, skipping."
 
+      # Output of every failed attempt, including the ones of flaky test files that passed after a retry
+      - name: Display failed test attempts
+        if: ${{ always() && hashFiles('artifacts/failed-attempts/*') != '' }}
+        run: |
+          for file in artifacts/failed-attempts/*; do
+            echo "::group::$file"
+            cat "$file"
+            echo "::endgroup::"
+          done
+
       - name: Upload logs and database
         uses: actions/upload-artifact@v7
-        if: failure()
+        if: ${{ failure() || hashFiles('artifacts/failed-attempts/*') != '' }}
         with:
           name: test-storages-${{ matrix.test_suite }}
           path: artifacts

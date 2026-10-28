@@ -1,9 +1,11 @@
 import { ActivityAccept } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
+import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorDefault, MActorSignature } from '../../../types/models/index.js'
 import { getAPId } from '../activity.js'
+import { tryToFetchActorFollowersCount } from '../actors/shared/index.js'
 import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 import { addFetchOutboxJob } from '../outbox.js'
 import { sendUndoFollow } from '../send/index.js'
@@ -51,6 +53,15 @@ async function processAccept (activity: ActivityAccept, actor: MActorDefault, ta
     follow.state = 'accepted'
     await follow.save()
 
+    await updateFollowersCount(targetActor)
+
     await addFetchOutboxJob(targetActor)
   }
+}
+
+async function updateFollowersCount (targetActor: MActorSignature) {
+  const followersCount = await tryToFetchActorFollowersCount(targetActor.followersUrl)
+  if (followersCount === undefined) return
+
+  await ActorModel.update({ followersCount }, { where: { id: targetActor.id } })
 }
