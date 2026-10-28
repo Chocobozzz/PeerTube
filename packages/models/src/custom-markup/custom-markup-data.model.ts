@@ -63,8 +63,9 @@ export type VideosListMarkupData = {
 
 export type ButtonMarkupData = {
   theme: 'primary' | 'secondary'
-  href: string
   label: string
+  href?: string
+  path?: string
   blankTarget?: StringBoolean
 }
 
