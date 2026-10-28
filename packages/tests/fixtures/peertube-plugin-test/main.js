@@ -468,6 +468,13 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
+    target: 'filter:api.config.about.get.result',
+    handler: (result, { language }) => {
+      return { ...result, instance: { ...result.instance, terms: 'Terms in ' + language } }
+    }
+  })
+
+  registerHook({
     target: 'filter:job-queue.process.params',
     handler: (object, context) => {
       if (context.type !== 'video-studio-edition') return object

@@ -10,6 +10,7 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
 import { isTestOrDevInstance, root, sha256 } from '@peertube/peertube-node-utils'
 import { setClientLanguageCookie } from '@server/helpers/i18n.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { getInstanceInformation } from '@server/lib/instance-translation.js'
 import { getDefaultRSSFeeds } from '@server/lib/rss.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
@@ -53,16 +54,19 @@ export class PageHtml {
   }
 
   static async getDefaultHTML (req: express.Request, res: express.Response, paramLang?: string) {
-    const html = await this.getIndexHTML(req, res, paramLang)
+    const language = this.getIndexHTMLLanguage(req, res, paramLang)
+
+    const html = await this.getIndexHTMLOfLanguage(language)
     const serverActor = await getServerActor()
 
     const openGraphImage = ServerConfigManager.Instance.getDefaultOpenGraph(serverActor)
+    const { shortDescription } = getInstanceInformation(language)
 
     let customHTML = TagsHtml.addTitleTag(html)
-    customHTML = TagsHtml.addDescriptionTag(customHTML, escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION))
+    customHTML = TagsHtml.addDescriptionTag(customHTML, escapeHTML(shortDescription))
     customHTML = TagsHtml.addServerRenderedContent(customHTML, {
       escapedTitle: escapeHTML(CONFIG.INSTANCE.NAME),
-      markdownDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION
+      markdownDescription: shortDescription
     })
 
     // Query parameters only filter/sort the page content: don't consider them as different pages
@@ -77,10 +81,10 @@ export class PageHtml {
 
       escapedSiteName: escapeHTML(CONFIG.INSTANCE.NAME),
       escapedTitle: escapeHTML(CONFIG.INSTANCE.NAME),
-      escapedTruncatedDescription: escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION),
+      escapedTruncatedDescription: escapeHTML(shortDescription),
 
       relMe: url === WEBSERVER.URL
-        ? TagsHtml.findRelMe(CONFIG.INSTANCE.DESCRIPTION)
+        ? this.findInstanceRelMe()
         : undefined,
 
       image: openGraphImage
@@ -120,12 +124,21 @@ export class PageHtml {
 
   // ---------------------------------------------------------------------------
 
-  static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
-    const path = this.getIndexHTMLPath(req, res, paramLang)
+  static getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
+    return this.getIndexHTMLOfLanguage(this.getIndexHTMLLanguage(req, res, paramLang))
+  }
+
+  // ---------------------------------------------------------------------------
+  // Private
+  // ---------------------------------------------------------------------------
+
+  // Cached per language: the server config includes instance information translated in this language
+  private static async getIndexHTMLOfLanguage (language: string) {
+    const path = join(root(), 'client', 'dist', language, 'index.html')
     if (this.htmlCache[path]) return this.htmlCache[path]
 
     const buffer = await readFile(path)
-    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig()
+    const serverConfig = await ServerConfigManager.Instance.getHTMLServerConfig(language)
 
     let html = buffer.toString()
 
@@ -140,15 +153,11 @@ export class PageHtml {
     return html
   }
 
-  // ---------------------------------------------------------------------------
-  // Private
-  // ---------------------------------------------------------------------------
-
   private static getEmbedHTMLPath () {
     return join(root(), 'client', 'dist', 'standalone', 'videos', 'embed.html')
   }
 
-  private static getIndexHTMLPath (req: express.Request, res: express.Response, paramLang: string) {
+  private static getIndexHTMLLanguage (req: express.Request, res: express.Response, paramLang: string) {
     let lang: string
 
     // Check param lang validity
@@ -169,7 +178,13 @@ export class PageHtml {
       { cookie: req.cookies?.clientLanguage, paramLang, acceptLanguage: req.headers['accept-language'] }
     )
 
-    return join(root(), 'client', 'dist', buildFileLocale(lang), 'index.html')
+    return buildFileLocale(lang)
+  }
+
+  private static findInstanceRelMe () {
+    const descriptions = [ CONFIG.INSTANCE.DESCRIPTION, ...CONFIG.INSTANCE.TRANSLATIONS.map(t => t.description) ]
+
+    return [ ...new Set(descriptions.flatMap(d => TagsHtml.findRelMe(d) ?? [])) ]
   }
 
   // ---------------------------------------------------------------------------

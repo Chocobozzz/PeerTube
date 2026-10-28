@@ -11,6 +11,7 @@ import {
   FormReactiveErrorsTyped,
   FormReactiveMessagesTyped
 } from '@app/shared/form-validators/form-validator.model'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { PeertubeColorPickerComponent } from '@app/shared/shared-forms/peertube-color-picker.component'
 import { ImageInputComponent } from '@app/shared/shared-forms/image-input.component'
@@ -40,12 +41,14 @@ export type FormEditInfo = FormDefaultTyped<Form>
     CdkStepperModule,
     ButtonComponent,
     ImageInputComponent
-  ]
+  ],
+  providers: [ AdminConfigService ]
 })
 export class AdminConfigWizardEditInfoComponent implements OnInit {
   private server = inject(ServerService)
   private formReactiveService = inject(FormReactiveService)
   private themeService = inject(ThemeService)
+  private adminConfigService = inject(AdminConfigService)
 
   readonly currentStep = input.required({ transform: numberAttribute })
   readonly totalSteps = input.required({ transform: numberAttribute })
@@ -61,6 +64,15 @@ export class AdminConfigWizardEditInfoComponent implements OnInit {
 
   ngOnInit () {
     this.buildForm()
+
+    // The HTML config short description is translated in the language of the interface
+    this.adminConfigService.getCustomConfig()
+      .subscribe(customConfig => {
+        const control = this.form.controls.shortDescription
+        if (control.dirty) return
+
+        control.setValue(customConfig.instance.shortDescription)
+      })
 
     const avatar = findAppropriateImage(this.server.getHTMLConfig().instance.avatars, 128)
     if (avatar) {

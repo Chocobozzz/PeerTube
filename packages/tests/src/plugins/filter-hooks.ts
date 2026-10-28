@@ -880,6 +880,20 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('About filters', function () {
+    it('Should run filter:api.config.about.get.result', async function () {
+      {
+        const { instance } = await servers[0].config.getAbout({ language: 'fr' })
+        expect(instance.terms).to.equal('Terms in fr-FR')
+      }
+
+      {
+        const { instance } = await servers[0].config.getAbout({ acceptLanguage: 'es-ES' })
+        expect(instance.terms).to.equal('Terms in es-ES')
+      }
+    })
+  })
+
   describe('Job queue filters', function () {
     let videoUUID: string
 

@@ -12,27 +12,27 @@
     <p i18n>You enabled user registration on your instance but did not configure the following fields:</p>
 
     <ul>
-      @if (about.instance.name.toLowerCase() === 'peertube') {
+      @if (instance.name.toLowerCase() === 'peertube') {
         <li i18n>Instance name</li>
       }
-      @if (isDefaultShortDescription(about.instance.shortDescription)) {
+      @if (isDefaultShortDescription(instance.shortDescription)) {
         <li i18n>Instance short description</li>
       }
 
-      @if (!about.instance.administrator) {
+      @if (!instance.administrator) {
         <li i18n>Who you are</li>
       }
-      @if (!about.instance.maintenanceLifetime) {
+      @if (!instance.maintenanceLifetime) {
         <li i18n>How long you plan to maintain your instance</li>
       }
-      @if (!about.instance.businessModel) {
+      @if (!instance.businessModel) {
         <li i18n>How you plan to pay for keeping your instance running</li>
       }
 
-      @if (!about.instance.moderationInformation) {
+      @if (!instance.moderationInformation) {
         <li i18n>How you will moderate your instance</li>
       }
-      @if (!about.instance.terms) {
+      @if (!instance.terms) {
         <li i18n>Instance terms</li>
       }
     </ul>

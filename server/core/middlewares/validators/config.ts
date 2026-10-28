@@ -1,5 +1,5 @@
 import { CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
-import { isConfigLogoTypeValid, isLogoImageFile } from '@server/helpers/custom-validators/config.js'
+import { areInstanceTranslationsValid, isConfigLogoTypeValid, isLogoImageFile } from '@server/helpers/custom-validators/config.js'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerThemeValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
@@ -34,6 +34,10 @@ export const customConfigUpdateValidator = [
   body('instance.maintenanceLifetime').exists(),
   body('instance.businessModel').exists(),
   body('instance.hardwareInformation').exists(),
+  body('instance.translations')
+    .optional()
+    .custom(areInstanceTranslationsValid)
+    .withMessage('Should have valid instance translations, with a unique language supported by the web interface'),
   body('instance.serverCountry').exists(),
   body('instance.support.text').exists(),
   body('instance.social.externalLink').exists(),

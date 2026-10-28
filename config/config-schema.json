@@ -2784,6 +2784,15 @@
           "type": "string",
           "default": ""
         },
+        "translations": {
+          "description": "Translations of the information above, displayed depending on the language of the visitor. Empty or missing fields fall back to the information above. \"language\" must be a locale supported by the web interface: 'fr-FR', 'pt-BR'...",
+          "type": [
+            "null",
+            "array"
+          ],
+          "default": null,
+          "items": {}
+        },
         "default_language": {
           "description": "Default language of your instance, used in emails for example The web interface still uses the web browser preferred language",
           "type": "string",

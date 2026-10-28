@@ -1,7 +1,7 @@
 import { CustomConfig } from '@peertube/peertube-models'
+import { objectConverter } from '@peertube/peertube-node-utils'
 import snakeCase from 'lodash-es/snakeCase.js'
 import validator from 'validator'
-import { objectConverter } from '@peertube/peertube-node-utils'
 
 /**
  * Convert the body of `PUT /api/v1/config/custom` into the shape of the configuration file: camelCase to

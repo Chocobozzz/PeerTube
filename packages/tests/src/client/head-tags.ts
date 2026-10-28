@@ -312,6 +312,38 @@ describe('Test <head> HTML tags', function () {
       await check('/', 'https://social.example.com/@username3')
       await check('/about', 'https://social.example.com/@username3', false)
     })
+
+    it('Should include Mastodon links of translated descriptions on homepage, whatever the language', async function () {
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            translations: [
+              {
+                language: 'fr-FR',
+                description: 'Suivez-moi <a rel="me" href="https://social.example.com/@username4">sur Mastodon</a> ' +
+                  '<a rel="me" href="https://social.example.com/@username3">et ici</a>'
+              }
+            ]
+          }
+        }
+      })
+
+      for (const acceptLanguage of [ 'en-US', 'fr-FR' ]) {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: '/',
+          accept: 'text/html',
+          headers: { 'Accept-Language': acceptLanguage },
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        for (const username of [ 'username3', 'username4' ]) {
+          const expected = `<link href="https://social.example.com/@${username}" rel="me">`
+
+          expect(res.text.split(expected)).to.have.lengthOf(2)
+        }
+      }
+    })
   })
 
   describe('RSS links', function () {

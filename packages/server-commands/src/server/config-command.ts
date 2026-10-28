@@ -3,6 +3,12 @@ import { DeepPartial } from '@peertube/peertube-typescript-utils'
 import merge from 'lodash-es/merge.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/abstract-command.js'
 
+type LanguageOptions = {
+  // x-peertube-language header
+  language?: string
+  acceptLanguage?: string
+}
+
 export class ConfigCommand extends AbstractCommand {
   private savedConfig: CustomConfig
 
@@ -455,23 +461,25 @@ export class ConfigCommand extends AbstractCommand {
 
   // ---------------------------------------------------------------------------
 
-  getConfig (options: OverrideCommandOptions = {}) {
+  getConfig (options: OverrideCommandOptions & LanguageOptions = {}) {
     const path = '/api/v1/config'
 
     return this.getRequestBody<ServerConfig>({
       ...options,
 
       path,
+      headers: this.buildLanguageHeaders(options),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
   }
 
-  async getIndexHTMLConfig (options: OverrideCommandOptions = {}) {
+  async getIndexHTMLConfig (options: OverrideCommandOptions & { acceptLanguage?: string } = {}) {
     const text = await this.getRequestText({
       ...options,
 
       path: '/',
+      headers: this.buildLanguageHeaders(options),
       accept: 'text/html',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
@@ -483,13 +491,14 @@ export class ConfigCommand extends AbstractCommand {
     return JSON.parse(JSON.parse(match[1])) as ServerConfig
   }
 
-  getAbout (options: OverrideCommandOptions = {}) {
+  getAbout (options: OverrideCommandOptions & LanguageOptions = {}) {
     const path = '/api/v1/config/about'
 
     return this.getRequestBody<About>({
       ...options,
 
       path,
+      headers: this.buildLanguageHeaders(options),
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -644,5 +653,16 @@ export class ConfigCommand extends AbstractCommand {
 
   rollback () {
     return this.updateCustomConfig({ newCustomConfig: this.savedConfig })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private buildLanguageHeaders (options: LanguageOptions) {
+    const headers: Record<string, string> = {}
+
+    if (options.language) headers['x-peertube-language'] = options.language
+    if (options.acceptLanguage) headers['Accept-Language'] = options.acceptLanguage
+
+    return headers
   }
 }

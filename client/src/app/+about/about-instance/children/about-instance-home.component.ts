@@ -32,17 +32,20 @@ export class AboutInstanceHomeComponent implements OnInit {
   categories: string[] = []
 
   config: HTMLServerConfig
+  supportText: string
 
   ngOnInit () {
     this.config = this.serverService.getHTMLConfig()
 
     const {
+      about,
       languages,
       categories,
       aboutHTML,
       descriptionElement
     }: ResolverData = this.route.parent.snapshot.data.instanceData
 
+    this.supportText = about.instance.support.text
     this.aboutHTML = aboutHTML
     this.descriptionElement = descriptionElement
 

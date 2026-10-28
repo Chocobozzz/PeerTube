@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import { basename } from 'path'
 import { URL } from 'url'
 import { getBrowseVideosDefaultScopeError, getBrowseVideosDefaultSortError } from '../helpers/custom-validators/browse-videos.js'
+import { areInstanceTranslationsValid, isInstanceTranslationValid } from '../helpers/custom-validators/config.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
 import { createLogger } from '../helpers/logger.js'
 import {
@@ -53,6 +54,7 @@ function checkConfig () {
   checkSecretsConfig()
   checkEmailConfig()
   checkNSFWPolicyConfig()
+  checkInstanceTranslationsConfig()
   checkLocalRedundancyConfig()
   checkRemoteRedundancyConfig()
   checkStorageConfig()
@@ -242,6 +244,27 @@ function checkNSFWPolicyConfig () {
   const available = [ 'do_not_list', 'warn', 'blur', 'display' ]
   if (available.includes(defaultNSFWPolicy) === false) {
     throw new Error('NSFW policy setting should be ' + available.join(' or ') + ' instead of ' + defaultNSFWPolicy)
+  }
+}
+
+function checkInstanceTranslationsConfig () {
+  const translations = CONFIG.INSTANCE.TRANSLATIONS
+
+  if (!Array.isArray(translations)) {
+    throw new Error('instance.translations must be a list of translations')
+  }
+
+  translations.forEach((translation, index) => {
+    if (!isInstanceTranslationValid(translation)) {
+      throw new Error(
+        `instance.translations[${index}] has an invalid language "${translation.language}": ` +
+          'it must be a locale supported by the web interface (fr-FR, pt-BR...)'
+      )
+    }
+  })
+
+  if (!areInstanceTranslationsValid(translations)) {
+    throw new Error('instance.translations must have a unique language per translation')
   }
 }
 

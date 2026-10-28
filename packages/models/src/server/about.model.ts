@@ -16,6 +16,10 @@ export interface About {
     maintenanceLifetime: string
     businessModel: string
 
+    support: {
+      text: string
+    }
+
     languages: string[]
     categories: number[]
 

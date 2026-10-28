@@ -2,6 +2,7 @@
 
 import { wait } from '@peertube/peertube-core-utils'
 import {
+  About,
   ActorImageType,
   CustomConfig,
   HttpStatusCode,
@@ -20,8 +21,8 @@ import {
   makeRawRequest,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { convertCustomConfigBody } from '@peertube/peertube-server/core/initializers/config/custom-config.js'
 import { CONFIG_TIERS } from '@peertube/peertube-server/core/initializers/config.js'
+import { convertCustomConfigBody } from '@peertube/peertube-server/core/initializers/config/custom-config.js'
 import { testAvatarSize, testFileExistsOnFSOrNot, testImage } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 import { basename } from 'path'
@@ -41,6 +42,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.maintenanceLifetime).to.be.empty
   expect(data.instance.businessModel).to.be.empty
   expect(data.instance.hardwareInformation).to.be.empty
+  expect(data.instance.translations).to.deep.equal([])
   expect(data.instance.serverCountry).to.be.empty
   expect(data.instance.support.text).to.be.empty
   expect(data.instance.defaultLanguage).to.equal('en')
@@ -192,9 +194,55 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       creationReason: 'my super creation reason',
       moderationInformation: 'my super moderation information',
       administrator: 'Kuja',
-      maintenanceLifetime: 'forever',
+      maintenanceLifetime: '2.5', // Free text that looks like a number must stay as is
       businessModel: 'my super business model',
       hardwareInformation: '2vCore 3GB RAM',
+
+      translations: [
+        {
+          language: 'es-ES',
+          shortDescription: 'mi descripción corta',
+          description: 'mi súper descripción',
+          terms: 'mis súper condiciones',
+          codeOfConduct: 'mi súper código de conducta',
+          moderationInformation: 'mi súper información de moderación',
+          administrator: 'Kuja ES',
+          creationReason: 'mi súper razón de creación',
+          maintenanceLifetime: 'para siempre',
+          businessModel: 'mi súper modelo de negocio',
+          // Free text that looks like a number must stay as is
+          hardwareInformation: '007.50',
+          supportText: 'mi texto de soporte'
+        },
+        {
+          language: 'pt-BR',
+          shortDescription: '',
+          description: '',
+          terms: 'meus super termos',
+          codeOfConduct: '',
+          moderationInformation: '',
+          administrator: '',
+          creationReason: '',
+          maintenanceLifetime: '',
+          businessModel: '',
+          hardwareInformation: '',
+          supportText: ''
+        },
+        {
+          language: 'zh-Hans-CN',
+          shortDescription: '',
+          description: '',
+          terms: '我的超级条款',
+          codeOfConduct: '',
+          moderationInformation: '',
+          administrator: '',
+          creationReason: '',
+          maintenanceLifetime: '',
+          businessModel: '',
+          hardwareInformation: '',
+          supportText: ''
+        }
+      ],
 
       languages: [ 'en', 'es' ],
       categories: [ 1, 2 ],
@@ -649,14 +697,109 @@ describe('Test config', function () {
       expect(instance.creationReason).to.equal('my super creation reason')
       expect(instance.moderationInformation).to.equal('my super moderation information')
       expect(instance.administrator).to.equal('Kuja')
-      expect(instance.maintenanceLifetime).to.equal('forever')
+      expect(instance.maintenanceLifetime).to.equal('2.5')
       expect(instance.businessModel).to.equal('my super business model')
       expect(instance.hardwareInformation).to.equal('2vCore 3GB RAM')
+
+      expect(instance.support.text).to.equal('My support text')
 
       expect(instance.languages).to.deep.equal([ 'en', 'es' ])
       expect(instance.categories).to.deep.equal([ 1, 2 ])
 
       expect(instance.banners).to.have.lengthOf(0)
+    })
+
+    it('Should fetch the about information in another language', async function () {
+      const checkSpanish = (instance: About['instance']) => {
+        expect(instance.name).to.equal('PeerTube updated')
+        expect(instance.shortDescription).to.equal('mi descripción corta')
+        expect(instance.description).to.equal('mi súper descripción')
+        expect(instance.terms).to.equal('mis súper condiciones')
+        expect(instance.codeOfConduct).to.equal('mi súper código de conducta')
+        expect(instance.creationReason).to.equal('mi súper razón de creación')
+        expect(instance.moderationInformation).to.equal('mi súper información de moderación')
+        expect(instance.administrator).to.equal('Kuja ES')
+        expect(instance.maintenanceLifetime).to.equal('para siempre')
+        expect(instance.businessModel).to.equal('mi súper modelo de negocio')
+        expect(instance.hardwareInformation).to.equal('007.50')
+        expect(instance.support.text).to.equal('mi texto de soporte')
+      }
+
+      checkSpanish((await server.config.getAbout({ language: 'es-ES' })).instance)
+      checkSpanish((await server.config.getAbout({ language: 'es' })).instance)
+      checkSpanish((await server.config.getAbout({ acceptLanguage: 'es-ES,es;q=0.9' })).instance)
+
+      // The header takes precedence over Accept-Language
+      {
+        const { instance } = await server.config.getAbout({ language: 'de-DE', acceptLanguage: 'es-ES' })
+        expect(instance.terms).to.equal('my super terms')
+      }
+    })
+
+    it('Should fall back to the default information when a field is not translated', async function () {
+      // pt-PT falls back on the pt-BR translation
+      for (const language of [ 'pt-BR', 'pt-PT' ]) {
+        const { instance } = await server.config.getAbout({ language })
+
+        expect(instance.terms).to.equal('meus super termos')
+
+        expect(instance.shortDescription).to.equal('my short description')
+        expect(instance.description).to.equal('my super description')
+        expect(instance.codeOfConduct).to.equal('my super coc')
+        expect(instance.support.text).to.equal('My support text')
+      }
+
+      {
+        const { instance } = await server.config.getAbout({ language: 'de-DE' })
+
+        expect(instance.terms).to.equal('my super terms')
+        expect(instance.shortDescription).to.equal('my short description')
+      }
+
+      {
+        const { instance } = await server.config.getAbout({ language: 'zh-CN' })
+        expect(instance.terms).to.equal('我的超级条款')
+      }
+
+      {
+        const { instance } = await server.config.getAbout({ language: 'zh-Hant-TW' })
+        expect(instance.terms).to.equal('my super terms')
+      }
+    })
+
+    it('Should translate the instance information of the server config', async function () {
+      {
+        const configs = [
+          await server.config.getConfig({ language: 'es-ES' }),
+          await server.config.getIndexHTMLConfig({ acceptLanguage: 'es-ES' })
+        ]
+
+        for (const config of configs) {
+          expect(config.instance.shortDescription).to.equal('mi descripción corta')
+          expect(config.instance.support.text).to.equal('mi texto de soporte')
+        }
+      }
+
+      {
+        const configs = [
+          await server.config.getConfig({ language: 'de-DE' }),
+          await server.config.getIndexHTMLConfig({ acceptLanguage: 'de-DE' })
+        ]
+
+        for (const config of configs) {
+          expect(config.instance.shortDescription).to.equal('my short description')
+          expect(config.instance.support.text).to.equal('My support text')
+        }
+      }
+    })
+
+    it('Should set the Vary header on translated config endpoints', async function () {
+      for (const path of [ '/api/v1/config', '/api/v1/config/about' ]) {
+        const res = await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
+
+        expect(res.headers['vary']).to.contain('x-peertube-language')
+        expect(res.headers['vary']).to.contain('Accept-Language')
+      }
     })
 
     it('Should remove the custom configuration', async function () {

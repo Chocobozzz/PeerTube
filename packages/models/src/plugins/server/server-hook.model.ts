@@ -102,6 +102,10 @@ export const serverFilterHookObject = {
   // Filter get stats result
   'filter:api.server.stats.get.result': true,
 
+  // Filter the instance about information (with values translated in the requested language)
+  // PeerTube >= 9.0
+  'filter:api.config.about.get.result': true,
+
   // Filter result used to check if we need to auto blacklist a video
   // (fired when a local or remote video is created or updated)
   'filter:video.auto-blacklist.result': true,

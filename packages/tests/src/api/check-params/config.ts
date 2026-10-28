@@ -1,5 +1,4 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import { expect } from 'chai'
 import { omit } from '@peertube/peertube-core-utils'
 import { ActorImageType, CustomConfig, HttpStatusCode, LogoType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -13,6 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 import merge from 'lodash-es/merge.js'
 import { DeepPartial } from '../../../../typescript-utils/src/types.js'
 
@@ -106,6 +106,31 @@ describe('Test config API validators', function () {
         token: server.accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
+    })
+
+    it('Should fail with bad instance translations', async function () {
+      const translation = { language: 'fr-FR', terms: 'Conditions' }
+
+      const badTranslations = [
+        'hello',
+        [ 'hello' ],
+        [ null ],
+        [ { terms: 'Conditions' } ],
+        [ { ...translation, language: 'xx-XX' } ],
+        [ { ...translation, terms: 42 } ],
+        [ { ...translation, supportText: [ 'support' ] } ],
+        [ translation, { ...translation, language: 'fr' } ]
+      ]
+
+      for (const translations of badTranslations) {
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: { ...updateParams, instance: { ...updateParams.instance, translations } },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should fail with a bad default comment policy', async function () {

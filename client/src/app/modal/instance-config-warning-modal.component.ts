@@ -2,10 +2,11 @@ import { Location } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, output, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { Notifier, User, UserService } from '@app/core'
+import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { PeertubeCheckboxComponent } from '@app/shared/shared-forms/peertube-checkbox.component'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { About, ServerConfig } from '@peertube/peertube-models'
+import { CustomConfig, ServerConfig } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
@@ -14,20 +15,22 @@ import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
   templateUrl: './instance-config-warning-modal.component.html',
   styleUrls: [ './instance-config-warning-modal.component.scss' ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ]
+  imports: [ FormsModule, GlobalIconComponent, PeertubeCheckboxComponent ],
+  providers: [ AdminConfigService ]
 })
 export class InstanceConfigWarningModalComponent implements OnInit {
   private userService = inject(UserService)
   private location = inject(Location)
   private modalService = inject(NgbModal)
   private notifier = inject(Notifier)
+  private adminConfigService = inject(AdminConfigService)
 
   readonly modal = viewChild<ElementRef>('modal')
 
   readonly created = output()
 
   stopDisplayModal = false
-  about: About
+  instance: CustomConfig['instance']
 
   private LS_KEYS = {
     NO_INSTANCE_CONFIG_WARNING_MODAL: 'no_instance_config_warning_modal'
@@ -45,30 +48,35 @@ export class InstanceConfigWarningModalComponent implements OnInit {
     return true
   }
 
-  shouldAutoOpen (serverConfig: ServerConfig, about: About) {
-    if (this.modalService.hasOpenModals()) return false
-    if (!serverConfig.signup.allowed) return false
-
-    return serverConfig.instance.name.toLowerCase() === 'peertube' ||
-      !about.instance.terms ||
-      !about.instance.administrator ||
-      !about.instance.maintenanceLifetime
-  }
-
-  show (about: About) {
+  // About information is translated in the language of the interface: use the custom config instead
+  showIfNeeded (serverConfig: ServerConfig) {
+    if (!serverConfig.signup.allowed) return
     if (this.location.path().startsWith('/admin/settings/config/edit-custom')) return
 
-    this.about = about
+    this.adminConfigService.getCustomConfig()
+      .subscribe(customConfig => {
+        if (this.modalService.hasOpenModals()) return
+        if (!this.hasMissingInformation(customConfig.instance)) return
 
-    const ref = this.modalService.open(this.modal(), { centered: true })
+        this.instance = customConfig.instance
 
-    ref.result.finally(() => {
-      if (this.stopDisplayModal === true) this.doNotOpenAgain()
-    })
+        const ref = this.modalService.open(this.modal(), { centered: true })
+
+        ref.result.finally(() => {
+          if (this.stopDisplayModal === true) this.doNotOpenAgain()
+        })
+      })
   }
 
   isDefaultShortDescription (description: string) {
     return description === 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
+  }
+
+  private hasMissingInformation (instance: CustomConfig['instance']) {
+    return instance.name.toLowerCase() === 'peertube' ||
+      !instance.terms ||
+      !instance.administrator ||
+      !instance.maintenanceLifetime
   }
 
   private doNotOpenAgain () {

@@ -1,6 +1,7 @@
 import { guessAspectRatio, sortBy } from '@peertube/peertube-core-utils'
 import {
   BroadcastMessageLevel,
+  InstanceTranslation,
   NSFWPolicyType,
   PlayerTheme,
   ThumbnailAspectRatio,
@@ -842,6 +843,8 @@ export const CONFIG = buildConfig({
     BUSINESS_MODEL: dynamicKey<string>('instance.business_model'),
     HARDWARE_INFORMATION: dynamicKey<string>('instance.hardware_information'),
 
+    TRANSLATIONS: dynamicKey<InstanceTranslation[]>('instance.translations', { transform: buildInstanceTranslations }),
+
     DEFAULT_LANGUAGE: dynamicKey<string>('instance.default_language'),
     LANGUAGES: dynamicComputed([ 'instance.languages' ], () => config.get<string[]>('instance.languages') || []),
     CATEGORIES: dynamicComputed([ 'instance.categories' ], () => config.get<number[]>('instance.categories') || []),
@@ -967,12 +970,35 @@ function getLocalConfigDir () {
   return dirname(configSources[0].name)
 }
 
-// `checkVideoFilesLifecycleConfig` is in charge of the validation
-// Return the value as is when it's not an array, so it can complain about a policy list that is not correctly uncommented
 function buildVideoFileLifecyclePolicies (objs: any[]): VideoLifecyclePolicy[] {
   if (!objs) return []
 
   return objs
+}
+
+function buildInstanceTranslations (objs: any[]): InstanceTranslation[] {
+  if (!objs) return []
+
+  if (!Array.isArray(objs)) return objs
+
+  // Values written as numbers in the YAML file must be strings
+  const toString = (value: any) => (value ?? '') + ''
+
+  return objs.map(obj => ({
+    language: obj?.language,
+
+    shortDescription: toString(obj?.short_description),
+    description: toString(obj?.description),
+    terms: toString(obj?.terms),
+    codeOfConduct: toString(obj?.code_of_conduct),
+    moderationInformation: toString(obj?.moderation_information),
+    administrator: toString(obj?.administrator),
+    creationReason: toString(obj?.creation_reason),
+    maintenanceLifetime: toString(obj?.maintenance_lifetime),
+    businessModel: toString(obj?.business_model),
+    hardwareInformation: toString(obj?.hardware_information),
+    supportText: toString(obj?.support_text)
+  }))
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {

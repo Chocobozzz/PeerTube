@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Injectable, LOCALE_ID, inject } from '@angular/core'
 import { MarkdownService, RestExtractor, ServerService } from '@app/core'
-import { objectKeysTyped, peertubeTranslate } from '@peertube/peertube-core-utils'
+import { getDevLocale, isOnDevLocale } from '@app/helpers'
+import { getCompleteLocale, objectKeysTyped, peertubeTranslate } from '@peertube/peertube-core-utils'
 import { About } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { forkJoin, Observable } from 'rxjs'
@@ -26,6 +27,7 @@ export class InstanceService {
   private restExtractor = inject(RestExtractor)
   private markdownService = inject(MarkdownService)
   private serverService = inject(ServerService)
+  private localeId = inject(LOCALE_ID)
 
   static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config'
   static BASE_SERVER_URL = environment.apiUrl + '/api/v1/server'
@@ -34,7 +36,11 @@ export class InstanceService {
 
   getAboutWithCache () {
     if (!this.aboutCache$) {
-      this.aboutCache$ = this.authHttp.get<About>(InstanceService.BASE_CONFIG_URL + '/about')
+      // Get instance information translated in the language of the interface
+      const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
+      const headers = new HttpHeaders().set('x-peertube-language', completeLocale)
+
+      this.aboutCache$ = this.authHttp.get<About>(InstanceService.BASE_CONFIG_URL + '/about', { headers })
         .pipe(
           catchError(res => this.restExtractor.handleError(res)),
           shareReplay(1)

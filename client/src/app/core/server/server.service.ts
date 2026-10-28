@@ -1,20 +1,20 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale } from '@app/helpers'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@peertube/peertube-core-utils'
 import {
+  ConstantLabel,
   HTMLServerConfig,
   ServerConfig,
   ServerStats,
+  VideoAIUsage,
   VideoCommentPolicy,
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
-  VideoAIUsage,
-  VideoRecommendationScope,
-  ConstantLabel,
   VideoLicenceType,
   VideoPlaylistPrivacyType,
-  VideoPrivacyType
+  VideoPrivacyType,
+  VideoRecommendationScope
 } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { Observable, of, Subject } from 'rxjs'
@@ -84,7 +84,10 @@ export class ServerService {
     if (this.configLoaded) return of(this.config)
 
     if (!this.configObservable) {
-      this.configObservable = this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
+      const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
+      const headers = new HttpHeaders().set('x-peertube-language', completeLocale)
+
+      this.configObservable = this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL, { headers })
         .pipe(
           tap(config => {
             this.config = config

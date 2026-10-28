@@ -2,6 +2,7 @@ import { PlayerTheme } from '../player/player-theme.type.js'
 import { VideoCommentPolicyType, VideoPrivacyType, VideoRecommendationScopeType } from '../videos/index.js'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type.js'
 import { BroadcastMessageLevel } from './broadcast-message-level.type.js'
+import { InstanceTranslation } from './instance-translation.model.js'
 
 export type ConfigResolutions = {
   '0p': boolean
@@ -29,6 +30,8 @@ export interface CustomConfig {
     maintenanceLifetime: string
     businessModel: string
     hardwareInformation: string
+
+    translations: InstanceTranslation[]
 
     defaultLanguage: string
 

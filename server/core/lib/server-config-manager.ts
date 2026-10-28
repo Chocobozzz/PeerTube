@@ -11,6 +11,7 @@ import {
 import { getServerCommit } from '@server/helpers/version.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, WEBSERVER } from '@server/initializers/constants.js'
+import { getInstanceInformation } from '@server/lib/instance-translation.js'
 import { getResumableUploadMinChunkSize } from '@server/lib/object-storage/config.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '@server/lib/signup.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
@@ -63,10 +64,12 @@ class ServerConfigManager {
     this.homepageEnabled = !!instanceHomepage?.content
   }
 
-  async getHTMLServerConfig (): Promise<HTMLServerConfig> {
+  // Instance information is translated in `language` when the instance has a translation for it
+  async getHTMLServerConfig (language?: string): Promise<HTMLServerConfig> {
     if (this.serverCommit === undefined) this.serverCommit = await getServerCommit()
 
     const serverActor = await getServerActor()
+    const information = getInstanceInformation(language)
 
     const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
@@ -153,13 +156,13 @@ class ServerConfigManager {
 
       instance: {
         name: CONFIG.INSTANCE.NAME,
-        shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
+        shortDescription: information.shortDescription,
         isNSFW: CONFIG.INSTANCE.IS_NSFW,
         defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
         defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
         serverCountry: CONFIG.INSTANCE.SERVER_COUNTRY,
         support: {
-          text: CONFIG.INSTANCE.SUPPORT.TEXT
+          text: information.supportText
         },
         social: {
           blueskyLink: CONFIG.INSTANCE.SOCIAL.BLUESKY,
@@ -468,7 +471,7 @@ class ServerConfigManager {
     }
   }
 
-  async getServerConfig (ip?: string): Promise<ServerConfig> {
+  async getServerConfig (ip?: string, language?: string): Promise<ServerConfig> {
     const { allowed } = await Hooks.wrapPromiseFun(
       isSignupAllowed,
       {
@@ -492,7 +495,7 @@ class ServerConfigManager {
       requiresEmailVerification: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION
     } satisfies ServerConfig['signup']
 
-    const htmlConfig = await this.getHTMLServerConfig()
+    const htmlConfig = await this.getHTMLServerConfig(language)
 
     return { ...htmlConfig, signup }
   }

@@ -980,6 +980,9 @@ instance:
   maintenance_lifetime: PEERTUBE_INSTANCE_MAINTENANCE_LIFETIME
   business_model: PEERTUBE_INSTANCE_BUSINESS_MODEL
   hardware_information: PEERTUBE_INSTANCE_HARDWARE_INFORMATION
+  translations:
+    __name: PEERTUBE_INSTANCE_TRANSLATIONS
+    __format: json
   default_language: PEERTUBE_INSTANCE_DEFAULT_LANGUAGE
   languages:
     __name: PEERTUBE_INSTANCE_LANGUAGES
