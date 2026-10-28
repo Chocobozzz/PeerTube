@@ -256,7 +256,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7922989125096435449" datatype="html">
@@ -1133,7 +1133,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.ts</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">124</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-menu.component.ts</context>
@@ -1522,18 +1522,29 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4737341634746310376" datatype="html">
+        <source>Audit logs</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
+          <context context-type="linenumber">156</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3422890808980876594" datatype="html">
         <source>Debug</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin-settings.component.ts</context>
-          <context context-type="linenumber">158</context>
+          <context context-type="linenumber">163</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5037437391296624618" datatype="html">
@@ -1629,14 +1640,14 @@
         <source>Edit your platform homepage</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1577436512754482869" datatype="html">
         <source>Platform customization</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">124</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
@@ -1647,7 +1658,7 @@
         <source>Platform information</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">138</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
@@ -1658,14 +1669,14 @@
         <source>Platform logos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">151</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6105834577396901822" datatype="html">
         <source>General configuration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">167</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
@@ -1676,7 +1687,7 @@
         <source>VOD configuration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">177</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
@@ -1687,7 +1698,7 @@
         <source>Live configuration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">172</context>
+          <context context-type="linenumber">187</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
@@ -1698,7 +1709,7 @@
         <source>Advanced configuration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/config.routes.ts</context>
-          <context context-type="linenumber">182</context>
+          <context context-type="linenumber">197</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-advanced.component.html</context>
@@ -2287,7 +2298,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3379167598974960777" datatype="html">
@@ -2298,7 +2309,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8772116786769251214" datatype="html">
@@ -2309,7 +2320,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">150</context>
+          <context context-type="linenumber">154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8066608938393600549" datatype="html">
@@ -2341,7 +2352,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">663,664</context>
+          <context context-type="linenumber">675,676</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1206277798664538171" datatype="html">
@@ -2419,7 +2430,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">908</context>
+          <context context-type="linenumber">920</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
@@ -2679,207 +2690,214 @@
           <context context-type="linenumber">546,548</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1747993932679092589" datatype="html">
+        <source>Default recommended videos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
+          <context context-type="linenumber">556,558</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="424703522835656806" datatype="html">
         <source>VIDEO CHANNELS</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">561,562</context>
+          <context context-type="linenumber">573,574</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7026684190224451991" datatype="html">
         <source>Max video channels per user</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">566,568</context>
+          <context context-type="linenumber">578,580</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3840267063842708224" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {channel} other {channels}}</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">577</context>
+          <context context-type="linenumber">589</context>
         </context-group>
       </trans-unit>
       <trans-unit id="836183323506117145" datatype="html">
         <source>FEDERATION</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">589,590</context>
+          <context context-type="linenumber">601,602</context>
         </context-group>
       </trans-unit>
       <trans-unit id="75928143875482960" datatype="html">
         <source> Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; routerLink=&quot;/admin/settings/follows&quot;>"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> with other platforms. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">591,593</context>
+          <context context-type="linenumber">603,605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2072884891614263775" datatype="html">
         <source>Accept comments made on remote platforms</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">602,603</context>
+          <context context-type="linenumber">614,615</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5963121551419269989" datatype="html">
         <source>This setting is not retroactive: current comments from remote platforms will not be deleted</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">605,606</context>
+          <context context-type="linenumber">617,618</context>
         </context-group>
       </trans-unit>
       <trans-unit id="735929773748569631" datatype="html">
         <source>Remote actors can follow channels of your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">618,619</context>
+          <context context-type="linenumber">630,631</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7331615583751184681" datatype="html">
         <source>This setting is not retroactive: current followers of channels of your platform will not be affected</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">621,622</context>
+          <context context-type="linenumber">633,634</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4707019046470605528" datatype="html">
         <source>Remote actors can follow your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">633,634</context>
+          <context context-type="linenumber">645,646</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5240371005291842688" datatype="html">
         <source>This setting is not retroactive: current followers of your platform will not be affected</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">636,637</context>
+          <context context-type="linenumber">648,649</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4899539058271084907" datatype="html">
         <source>Manually approve new followers that follow your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">646,647</context>
+          <context context-type="linenumber">658,659</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6240145294614933263" datatype="html">
         <source>Automatically follow back followers that follow your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">660,661</context>
+          <context context-type="linenumber">672,673</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2362368426377094869" datatype="html">
         <source>Automatically follow platforms of a public index</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">675,676</context>
+          <context context-type="linenumber">687,688</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2092224316392295720" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">678,680</context>
+          <context context-type="linenumber">690,692</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9076632742417302918" datatype="html">
         <source> See <x id="START_LINK" ctype="x-a" equiv-text="&lt;a                       class=&quot;link-primary&quot;                       href=&quot;https://docs.joinpeertube.org/admin/following-instances#automatically-follow-other-instances&quot;                       rel=&quot;noopener noreferrer&quot;                       target=&quot;_blank&quot;                     >"/>the documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> for more information about the expected URL </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">681,687</context>
+          <context context-type="linenumber">693,699</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1718269478813020014" datatype="html">
         <source>Index URL</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">692,693</context>
+          <context context-type="linenumber">704,705</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1579260248722004935" datatype="html">
         <source>Publicly share your instance blocklist</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">720,721</context>
+          <context context-type="linenumber">732,733</context>
         </context-group>
       </trans-unit>
       <trans-unit id="920870595764681136" datatype="html">
         <source>Allow other instances to subscribe to your blocklist to automatically mute the same accounts and servers</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">723,724</context>
+          <context context-type="linenumber">735,736</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2709958363414972972" datatype="html">
         <source>PLAYER</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">734,735</context>
+          <context context-type="linenumber">746,747</context>
         </context-group>
       </trans-unit>
       <trans-unit id="286395473992592179" datatype="html">
         <source>Automatically play videos in the player</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">745,746</context>
+          <context context-type="linenumber">757,758</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3184039004441581991" datatype="html">
         <source>Enable P2P streaming by default on your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">756,757</context>
+          <context context-type="linenumber">768,769</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6069715963308979270" datatype="html">
         <source>Enable P2P streaming by default for videos embedded on external websites</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">765,766</context>
+          <context context-type="linenumber">777,778</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2054846790157376783" datatype="html">
         <source>SEARCH</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">775,776</context>
+          <context context-type="linenumber">787,788</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3442084803796199253" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">786,787</context>
+          <context context-type="linenumber">798,799</context>
         </context-group>
       </trans-unit>
       <trans-unit id="481446928803565156" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> to look up remote videos/actors that may not be federated with your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">789,790</context>
+          <context context-type="linenumber">801,802</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7295422540935146771" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">799,800</context>
+          <context context-type="linenumber">811,812</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7372107248244982956" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> to look up remote videos/actors that may not be federated with your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">802,803</context>
+          <context context-type="linenumber">814,815</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6476750382562952780" datatype="html">
         <source>Enable global search</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">810,811</context>
+          <context context-type="linenumber">822,823</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
@@ -2890,126 +2908,126 @@
         <source>⚠️ This functionality depends heavily on the moderation of platforms followed by the search index you select</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">812,813</context>
+          <context context-type="linenumber">824,825</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2331464426553277323" datatype="html">
         <source>Search index URL</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">817,819</context>
+          <context context-type="linenumber">829,831</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2653219516680751118" datatype="html">
         <source> Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://framagit.org/framasoft/peertube/search-index&quot;>"/>your own search index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> or choose the official one, <x id="START_LINK_1" equiv-text="&lt;a class=&quot;link-primary&quot; target=&quot;_blank&quot; href=&quot;https://sepiasearch.org&quot;>"/>https://sepiasearch.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>, that is not moderated. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">820,822</context>
+          <context context-type="linenumber">832,834</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8524278911521465398" datatype="html">
         <source>Disable local search in search bar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">843,844</context>
+          <context context-type="linenumber">855,856</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4444955208013675027" datatype="html">
         <source>Search bar uses the global search index by default</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">853,854</context>
+          <context context-type="linenumber">865,866</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4557533619513324614" datatype="html">
         <source>Otherwise, the local search will be used by default</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">856,857</context>
+          <context context-type="linenumber">868,869</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6117138245696620472" datatype="html">
         <source>USER IMPORT/EXPORT</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">870,871</context>
+          <context context-type="linenumber">882,883</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6056998652615283808" datatype="html">
         <source>Allow your users to import a data archive</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">877,878</context>
+          <context context-type="linenumber">889,890</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4091781230315618850" datatype="html">
         <source>Video quota is checked on import so the user doesn't upload a too big archive file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">879,880</context>
+          <context context-type="linenumber">891,892</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3112747752460656486" datatype="html">
         <source>Video quota (daily quota is not taken into account) is also checked for each video when PeerTube is processing the import</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">880,881</context>
+          <context context-type="linenumber">892,893</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4793397386811591255" datatype="html">
         <source>Allow your users to export their data</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">890,891</context>
+          <context context-type="linenumber">902,903</context>
         </context-group>
       </trans-unit>
       <trans-unit id="74636758368624456" datatype="html">
         <source>Users can export their PeerTube data in a .zip for backup or re-import. Only one export at a time is allowed per user</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">892,893</context>
+          <context context-type="linenumber">904,905</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7396688046674522189" datatype="html">
         <source>Max user video quota allowed to generate the export</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">897,899</context>
+          <context context-type="linenumber">909,911</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1967420418158999705" datatype="html">
         <source>If the user decides to include the video files in the archive</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">899,901</context>
+          <context context-type="linenumber">911,913</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8092614302698579026" datatype="html">
         <source>User export expiration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">918,920</context>
+          <context context-type="linenumber">930,932</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8981181756195068779" datatype="html">
         <source>The archive file is deleted after this period</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
-          <context context-type="linenumber">926,928</context>
+          <context context-type="linenumber">938,940</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5344594655022049812" datatype="html">
         <source>Allowed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">281</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">282</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/community-based-config.component.ts</context>
@@ -3040,7 +3058,7 @@
         <source>1 day</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">297</context>
+          <context context-type="linenumber">308</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/days-duration-formatter.pipe.ts</context>
@@ -3051,28 +3069,28 @@
         <source>2 days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">298</context>
+          <context context-type="linenumber">309</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8542568275115626925" datatype="html">
         <source>7 days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">299</context>
+          <context context-type="linenumber">310</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7152095234138763013" datatype="html">
         <source>30 days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">300</context>
+          <context context-type="linenumber">311</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
         <source>Home</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">603</context>
+          <context context-type="linenumber">615</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/home-menu.component.ts</context>
@@ -3087,11 +3105,11 @@
         <source>Discover</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">607</context>
+          <context context-type="linenumber">619</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
-          <context context-type="linenumber">1,3</context>
+          <context context-type="linenumber">2</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/home-menu.component.ts</context>
@@ -3102,28 +3120,28 @@
         <source>Browse all videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">608</context>
+          <context context-type="linenumber">620</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5174743927852553765" datatype="html">
         <source>Browse local videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">609</context>
+          <context context-type="linenumber">621</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3203902538239082422" datatype="html">
         <source>You enabled signup: we automatically enabled the "Block new videos automatically" checkbox of the "Videos" section just below.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">643</context>
+          <context context-type="linenumber">655</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5566531034799611502" datatype="html">
         <source>General configuration updated.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.ts</context>
-          <context context-type="linenumber">674</context>
+          <context context-type="linenumber">686</context>
         </context-group>
       </trans-unit>
       <trans-unit id="931264342164481222" datatype="html">
@@ -4715,6 +4733,10 @@
           <context context-type="linenumber">541</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">110</context>
         </context-group>
@@ -4854,6 +4876,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">21</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5322177163493113456" datatype="html">
@@ -5954,6 +5980,10 @@
           <context context-type="linenumber">65</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-follows/my-followers.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
@@ -5995,7 +6025,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8025853188527690631" datatype="html">
@@ -6310,6 +6340,10 @@
           <context context-type="linenumber">115</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
           <context context-type="linenumber">46</context>
         </context-group>
@@ -6362,7 +6396,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="linenumber">117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7574091010118901399" datatype="html">
@@ -6400,6 +6434,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">88</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">128</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-export.component.html</context>
@@ -6643,6 +6681,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">8,9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">98</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.ts</context>
@@ -7276,6 +7318,14 @@
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">102</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="8140268298586972139" datatype="html">
         <source>Daily quota</source>
@@ -7635,7 +7685,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/videos-list-all.component.ts</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5333260366112063495" datatype="html">
@@ -8084,7 +8134,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
-          <context context-type="linenumber">4,5</context>
+          <context context-type="linenumber">6,7</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/videos-list.component.html</context>
@@ -8392,6 +8442,564 @@
           <context context-type="linenumber">11,12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3944604937816174486" datatype="html">
+        <source>entries per page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7643080703382863606" datatype="html">
+        <source>{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8594058340554724711" datatype="html">
+        <source>Filter by this action</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">35,36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1754374478903587424" datatype="html">
+        <source>Filter by this entity type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">42,43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5240280650062800421" datatype="html">
+        <source>Open the entity page</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">56,57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4397869042036937810" datatype="html">
+        <source>Open entity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3854011688949394332" datatype="html">
+        <source>Show the history of this entity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">79,80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2296970491051796628" datatype="html">
+        <source>Changes:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">93,95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3122528284209641420" datatype="html">
+        <source>Old values</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">97,98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1253939581454379208" datatype="html">
+        <source>New values</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">102,103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8870532132156762013" datatype="html">
+        <source>No attribute change recorded.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">108,109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4878071410105934844" datatype="html">
+        <source>Entity:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">112,113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="96125621973663460" datatype="html">
+        <source>No audit log entries found.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6715369993446601276" datatype="html">
+        <source>Video import</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8508836953540308271" datatype="html">
+        <source>Live settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
+          <context context-type="linenumber">180</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-menu.component.ts</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5885647893975820500" datatype="html">
+        <source>Video source file</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="944677751881832102" datatype="html">
+        <source>Video file</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6366382678145139905" datatype="html">
+        <source>Video caption</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6399209945765397658" datatype="html">
+        <source>Video chapters</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8904960460092884203" datatype="html">
+        <source>Video password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="820349246776410615" datatype="html">
+        <source>Video embed privacy</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3617023035573084133" datatype="html">
+        <source>Video transcoding</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1026007885641869192" datatype="html">
+        <source>Video transcription</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
+          <context context-type="linenumber">18,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7989254487121769088" datatype="html">
+        <source>Video studio edition</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8684644623876839783" datatype="html">
+        <source>Video player settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="116372526259554106" datatype="html">
+        <source>Ownership change</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2662644497259948010" datatype="html">
+        <source>Comment</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.ts</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5115867744933923483" datatype="html">
+        <source>Channel synchronization</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3716078862516198785" datatype="html">
+        <source>Channel videos import</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1116156446586993227" datatype="html">
+        <source>Channel collaborator</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3515431346551474480" datatype="html">
+        <source>Channel player settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7595000774670746941" datatype="html">
+        <source>Channel playlists order</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5344791164491756179" datatype="html">
+        <source>Playlist</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2593394684821903865" datatype="html">
+        <source>Playlist element</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="959734269659247344" datatype="html">
+        <source>Playlist elements order</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1795209702226263984" datatype="html">
+        <source>Registration request</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3731138383017594666" datatype="html">
+        <source>Password reset request</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8278867930540753765" datatype="html">
+        <source>Login session</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3087041799555785636" datatype="html">
+        <source>Failed login</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6271694097392260677" datatype="html">
+        <source>Scoped token</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9004948288516709730" datatype="html">
+        <source>User export</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1674542451187778327" datatype="html">
+        <source>User import</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1570575029487446253" datatype="html">
+        <source>Abuse report</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5938187881228362946" datatype="html">
+        <source>Abuse message</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">70</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6273276327864872621" datatype="html">
+        <source>Video block</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1547455266629178601" datatype="html">
+        <source>Account mute</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="327915996170847189" datatype="html">
+        <source>Server mute</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9098134874193744197" datatype="html">
+        <source>Blocklist subscription</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7772026812316405493" datatype="html">
+        <source>Watched words list</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6553028739335153683" datatype="html">
+        <source>Watched words subscription</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3249621195779537062" datatype="html">
+        <source>Automatic tag policy</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9218994438129306852" datatype="html">
+        <source>Instance configuration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2655184267144582011" datatype="html">
+        <source>Instance image</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6409891194258344393" datatype="html">
+        <source>Instance homepage</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="139976802650778603" datatype="html">
+        <source>Instance host</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6944772343529365140" datatype="html">
+        <source>Plugin or theme</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6739459399674606457" datatype="html">
+        <source>Server redundancy</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8986777419550560431" datatype="html">
+        <source>Video redundancy</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6362661861630729641" datatype="html">
+        <source>Job queue</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1895957424873987405" datatype="html">
+        <source>Job</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1607659813099506795" datatype="html">
+        <source>Remote runner</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="419317103351341491" datatype="html">
+        <source>Runner registration token</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="102326508230089402" datatype="html">
+        <source>Debug command</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5046373286319271287" datatype="html">
+        <source>Storage prune</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4021752662928002901" datatype="html">
+        <source>Update</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3742728431516357098" datatype="html">
+        <source>Entity type</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4153243589245423084" datatype="html">
+        <source>Entity id</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9216117865911519658" datatype="html">
+        <source>Action</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7693952740891603217" datatype="html">
+        <source>Entity</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="512712988274106243" datatype="html">
+        <source>IP</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2483018961011868950" datatype="html">
         <source>IP address</source>
         <context-group purpose="location">
@@ -8663,53 +9271,60 @@
           <context context-type="linenumber">193</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1653926345388884833" datatype="html">
-        <source>Log type</source>
+      <trans-unit id="2398422581918975504" datatype="html">
+        <source> These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">4,6</context>
+          <context context-type="linenumber">3,8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2468359540835782741" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="888341446683346521" datatype="html">
         <source>Start date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">17,19</context>
+          <context context-type="linenumber">11,13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6052766076365105714" datatype="html">
         <source>now</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">21,22</context>
+          <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5311176376484381099" datatype="html">
         <source>Log level</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">27,29</context>
+          <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8984988128489304664" datatype="html">
         <source>Filter logs by tags</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">38,40</context>
+          <context context-type="linenumber">31,33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9053612499880707554" datatype="html">
         <source>Example: ffmpeg, api</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">42,43</context>
+          <context context-type="linenumber">35,36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1102717806459547726" datatype="html">
         <source>Refresh</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-tables/table.component.html</context>
@@ -8724,7 +9339,7 @@
         <source>Loading...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">54,56</context>
+          <context context-type="linenumber">45,47</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/channel/select-channel-admin.component.ts</context>
@@ -8735,70 +9350,49 @@
         <source>Logs copied</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2064122482972455058" datatype="html">
         <source>Copy logs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">60,61</context>
+          <context context-type="linenumber">51,52</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1570003374195931619" datatype="html">
         <source>No log.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">66,67</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2232767208623640457" datatype="html">
-        <source>By <x id="INTERPOLATION" equiv-text="{{ log.by }}"/> -></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
-          <context context-type="linenumber">77,78</context>
+          <context context-type="linenumber">57,58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7591870443991978948" datatype="html">
         <source>Last week</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">116</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4981709795568846080" datatype="html">
         <source>Last day</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">121</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9178360613965745088" datatype="html">
         <source>Last hour</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3164845764519833078" datatype="html">
         <source>debug</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">138</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5076187961693950167" datatype="html">
-        <source>Standard logs</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">161</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4737341634746310376" datatype="html">
-        <source>Audit logs</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">142</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5944078821855011619" datatype="html">
@@ -8897,17 +9491,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.html</context>
           <context context-type="linenumber">36</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="512712988274106243" datatype="html">
-        <source>IP</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/system/runners/runner-list/runner-list.component.ts</context>
-          <context context-type="linenumber">33</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
-          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2724055831234181057" datatype="html">
@@ -9061,7 +9644,7 @@
         <source>Jobs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.routes.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3290262698447971494" datatype="html">
@@ -10145,7 +10728,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
-          <context context-type="linenumber">36,37</context>
+          <context context-type="linenumber">38,39</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context>
@@ -11969,13 +12552,6 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3944604937816174486" datatype="html">
-        <source>entries per page</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.html</context>
-          <context context-type="linenumber">6,7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3450773959633339422" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No video ownership change} =1 {1 video ownership change} other {<x id="INTERPOLATION"/> video ownership changes}}</source>
         <context-group purpose="location">
@@ -12491,29 +13067,6 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4021752662928002901" datatype="html">
-        <source>Update</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
-          <context context-type="linenumber">151</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-main/buttons/edit-button.component.ts</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
-          <context context-type="linenumber">127</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.ts</context>
-          <context context-type="linenumber">78</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="6426647253249467388" datatype="html">
         <source>Filter by a channel</source>
         <context-group purpose="location">
@@ -12646,7 +13199,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
-          <context context-type="linenumber">16,17</context>
+          <context context-type="linenumber">18,19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7607713563510753803" datatype="html">
@@ -12752,7 +13305,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2826581353496868063" datatype="html">
@@ -12783,7 +13336,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9065795501872450602" datatype="html">
@@ -12806,7 +13359,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3403196612855474932" datatype="html">
@@ -14035,49 +14588,49 @@ The link will expire within 1 hour.</source>
         <source>Quick access:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.html</context>
-          <context context-type="linenumber">8,10</context>
+          <context context-type="linenumber">10,12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7855115715004732406" datatype="html">
         <source>Browse "<x id="PH" equiv-text="value.category.label"/>" videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">154</context>
+          <context context-type="linenumber">156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6981830104215014781" datatype="html">
         <source>category</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">161</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8844207666221087270" datatype="html">
         <source>Browse "#<x id="PH" equiv-text="value.tag"/>" videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">167</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6402703264596649214" datatype="html">
         <source>tag</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7116189699742808060" datatype="html">
         <source>Browse <x id="PH" equiv-text="channelName"/> channel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="674351509173816083" datatype="html">
         <source>channel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">188</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4668975178372693951" datatype="html">
@@ -14098,7 +14651,7 @@ The link will expire within 1 hour.</source>
         <source>Browse videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/videos-list-all.component.html</context>
-          <context context-type="linenumber">1,3</context>
+          <context context-type="linenumber">2</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/home-menu.component.ts</context>
@@ -14109,7 +14662,7 @@ The link will expire within 1 hour.</source>
         <source>Recently added</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/videos-list-all.component.ts</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">119</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
@@ -14120,7 +14673,7 @@ The link will expire within 1 hour.</source>
         <source>Trending</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/videos-list-all.component.ts</context>
-          <context context-type="linenumber">122</context>
+          <context context-type="linenumber">124</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.ts</context>
@@ -14318,17 +14871,6 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">90,92</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2662644497259948010" datatype="html">
-        <source>Comment</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment-add.component.ts</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
-          <context context-type="linenumber">73</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4502286564339177240" datatype="html">
@@ -14872,7 +15414,7 @@ The link will expire within 1 hour.</source>
         <source>When active, the next video is automatically played after the current one.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/recommendations/recommended-videos.component.ts</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9065310971920830281" datatype="html">
@@ -15089,39 +15631,39 @@ The link will expire within 1 hour.</source>
         <source><x id="PH" equiv-text="this.serverConfig.instance.name"/> - Videos feed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1201</context>
+          <context context-type="linenumber">1200</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1217</context>
+          <context context-type="linenumber">1216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="513070917830516194" datatype="html">
         <source><x id="PH" equiv-text="this.playlist.displayName"/> - Podcast feed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1202</context>
+          <context context-type="linenumber">1201</context>
         </context-group>
       </trans-unit>
       <trans-unit id="744434188649519534" datatype="html">
         <source><x id="PH" equiv-text="this.playlist.displayName"/> - Apple Podcast audio feed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1203</context>
+          <context context-type="linenumber">1202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6373039497266755686" datatype="html">
         <source><x id="PH" equiv-text="this.playlist.displayName"/> - Apple Podcast video feed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1204</context>
+          <context context-type="linenumber">1203</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5232693393816852420" datatype="html">
         <source><x id="PH" equiv-text="video.name"/> - Comments feed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context>
-          <context context-type="linenumber">1218</context>
+          <context context-type="linenumber">1217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8306050839443016954" datatype="html">
@@ -16346,49 +16888,49 @@ The link will expire within 1 hour.</source>
         <source>"<x id="PH" equiv-text="t.options.file as File).name"/>" will be added at the beginning of the video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">1035</context>
+          <context context-type="linenumber">1041</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4952096817126306891" datatype="html">
         <source>"<x id="PH" equiv-text="t.options.file as File).name"/>" will be added at the end of the video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">1037</context>
+          <context context-type="linenumber">1043</context>
         </context-group>
       </trans-unit>
       <trans-unit id="665518679871959619" datatype="html">
         <source>"<x id="PH" equiv-text="t.options.file as File).name"/>" image watermark will be added to the video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">1039</context>
+          <context context-type="linenumber">1045</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2677581013897190613" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/> and stop at <x id="PH_1" equiv-text="secondsToTime(end)"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">1044</context>
+          <context context-type="linenumber">1050</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2299077646120636288" datatype="html">
         <source>Video will begin at <x id="PH" equiv-text="secondsToTime(start)"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">1046</context>
+          <context context-type="linenumber">1052</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7209039243783736285" datatype="html">
         <source>Video will stop at <x id="PH" equiv-text="secondsToTime(end)"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">1048</context>
+          <context context-type="linenumber">1054</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6111432337975865048" datatype="html">
         <source>Remove segment <x id="PH" equiv-text="i"/> – <x id="PH_1" equiv-text="secondsToTime(parts.start)"/> to <x id="PH_2" equiv-text="secondsToTime(parts.end)"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/video-edit.model.ts</context>
-          <context context-type="linenumber">1054</context>
+          <context context-type="linenumber">1060</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6995024616159044376" datatype="html">
@@ -16434,7 +16976,7 @@ The link will expire within 1 hour.</source>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">114</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5637879201055173642" datatype="html">
@@ -16560,21 +17102,6 @@ The link will expire within 1 hour.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/live-stream-information.component.ts</context>
           <context context-type="linenumber">46</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8508836953540308271" datatype="html">
-        <source>Live settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.ts</context>
-          <context context-type="linenumber">180</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-menu.component.ts</context>
-          <context context-type="linenumber">59</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3327477703628774598" datatype="html">
@@ -17021,11 +17548,29 @@ The link will expire within 1 hour.</source>
           <context context-type="linenumber">44,45</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6753098121361475708" datatype="html">
+        <source>Recommended videos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6172864563872578497" datatype="html">
+        <source> Choose which videos can be recommended next to this video. Other applications displaying your video may not apply this preference. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8151017381798767627" datatype="html">
         <source>Embed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-share-modal/share-playlist.component.html</context>
@@ -17040,7 +17585,7 @@ The link will expire within 1 hour.</source>
         <source>Allowed domains</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
-          <context context-type="linenumber">60,61</context>
+          <context context-type="linenumber">68,69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2849879057149700533" datatype="html">
@@ -17597,14 +18142,14 @@ The link will expire within 1 hour.</source>
         <source>Skip to main content</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">5,7</context>
+          <context context-type="linenumber">6,7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5410940035535748578" datatype="html">
         <source>Close this message</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/header.component.html</context>
@@ -17839,49 +18384,77 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Comments are disabled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">124</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5018413305553485964" datatype="html">
         <source>Comments are enabled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="63077766244971546" datatype="html">
         <source>Comments may require approval depending on your auto tag policies</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">130</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8069667549070509050" datatype="html">
         <source>Any new comment requires approval</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3880813706903242192" datatype="html">
         <source>Anyone can embed this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">143</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7638465001181691817" datatype="html">
         <source>Only allowed domains can embed this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="linenumber">147</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4025271240119663251" datatype="html">
         <source>Nobody can embed this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
-          <context context-type="linenumber">150</context>
+          <context context-type="linenumber">151</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4051525516940092257" datatype="html">
+        <source>Recommend any video</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
+          <context context-type="linenumber">160</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5417323712077821234" datatype="html">
+        <source>Only recommend videos of this platform</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
+          <context context-type="linenumber">164</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="471527578637508515" datatype="html">
+        <source>Only recommend videos of the same account</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8417319179553621681" datatype="html">
+        <source>Only recommend videos of the same channel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
+          <context context-type="linenumber">172</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5217863338130648698" datatype="html">
@@ -18749,7 +19322,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3757873457081573953" datatype="html">
@@ -18779,7 +19352,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2137796204126498003" datatype="html">
@@ -18837,13 +19410,6 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
           <context context-type="linenumber">11,14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1026007885641869192" datatype="html">
-        <source>Video transcription</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/institutional-config.component.html</context>
-          <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5044207350353038684" datatype="html">
@@ -18977,7 +19543,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Allow&lt;/strong> any user &lt;strong>to register&lt;/strong></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">168</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -18985,7 +19551,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Allow users to &lt;strong>apply for registration&lt;/strong> on your platform</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">178</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -18993,7 +19559,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Disable&lt;/strong> user &lt;strong>registration&lt;/strong></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">183</context>
+          <context context-type="linenumber">188</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19001,7 +19567,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Require &lt;strong>moderator approval&lt;/strong> for videos published by your community</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">194</context>
+          <context context-type="linenumber">199</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19009,7 +19575,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Prevent&lt;/strong> new users &lt;strong>from uploading videos&lt;/strong> (can be changed by moderators)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">221</context>
+          <context context-type="linenumber">226</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19017,7 +19583,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Not limit the amount of videos&lt;/strong> new users can upload</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">230</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19025,7 +19591,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Set &lt;strong>video quota to <x id="PH" equiv-text="getBytes(this.videoQuota, 0)"/>&lt;/strong> for new users (can be changed by moderators)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">229,231</context>
+          <context context-type="linenumber">234,236</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19033,7 +19599,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Allow&lt;/strong> your users &lt;strong>to import and synchronize&lt;/strong> videos from remote platforms (YouTube, Vimeo...)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">255</context>
+          <context context-type="linenumber">260</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19041,7 +19607,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Prevent&lt;/strong> your users &lt;strong>from importing videos&lt;/strong> from remote platforms</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">260</context>
+          <context context-type="linenumber">265</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19049,7 +19615,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Allow&lt;/strong> your users &lt;strong>to stream lives&lt;/strong> and chat with their viewers using the &lt;strong>Livechat&lt;/strong> plugin</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">279</context>
+          <context context-type="linenumber">284</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19057,7 +19623,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Prevent&lt;/strong> your users from running &lt;strong>live streams&lt;/strong></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">283</context>
+          <context context-type="linenumber">288</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19065,7 +19631,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Set the &lt;strong>default video privacy&lt;/strong> to &lt;strong>Internal&lt;/strong></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">301</context>
+          <context context-type="linenumber">306</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19073,7 +19639,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Set the &lt;strong>default video privacy&lt;/strong> to &lt;strong>Public&lt;/strong></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">305</context>
+          <context context-type="linenumber">310</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19081,7 +19647,15 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Require approval&lt;/strong> by default of new video comment</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">321</context>
+          <context context-type="linenumber">326</context>
+        </context-group>
+        <note priority="1" from="description">bullet point of "PeerTube will:"</note>
+      </trans-unit>
+      <trans-unit id="7441473480860312458" datatype="html">
+        <source>&lt;strong>Only recommend videos of your platform&lt;/strong> by default next to new videos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
+          <context context-type="linenumber">341</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19089,7 +19663,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Enable P2P streaming&lt;/strong> by default for anonymous and new users</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">342</context>
+          <context context-type="linenumber">363</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19097,7 +19671,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Disable P2P streaming&lt;/strong> by default for anonymous and new users</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">346</context>
+          <context context-type="linenumber">367</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19105,7 +19679,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Allow&lt;/strong> external platforms/users to &lt;strong>subscribe&lt;/strong> to your content</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">368</context>
+          <context context-type="linenumber">389</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19113,7 +19687,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Prevent&lt;/strong> external platforms/users to &lt;strong>subscribe to your content&lt;/strong></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">373</context>
+          <context context-type="linenumber">394</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19121,7 +19695,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Save a copy&lt;/strong> of the uploaded video file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">390</context>
+          <context context-type="linenumber">411</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19129,7 +19703,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Allow&lt;/strong> your users &lt;strong>to replace a video&lt;/strong> that has already been published</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">408</context>
+          <context context-type="linenumber">429</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19137,7 +19711,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Set &lt;a href="https://sepiasearch.org" target="_blank">SepiaSearch&lt;/a> as &lt;strong>default search engine&lt;/strong></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">443</context>
+          <context context-type="linenumber">464</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19145,7 +19719,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>&lt;strong>Enable automatic transcription&lt;/strong> of videos to create subtitles and improve accessibility</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">460</context>
+          <context context-type="linenumber">481</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19153,7 +19727,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source> The plugin &lt;strong>must be configured&lt;/strong> after the pre-configuration wizard confirmation.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">470</context>
+          <context context-type="linenumber">491</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19161,7 +19735,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Install the &lt;strong>LDAP&lt;/strong> authentication plugin.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">474</context>
+          <context context-type="linenumber">495</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19169,7 +19743,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Install the &lt;strong>SAML 2.0&lt;/strong> authentication plugin.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">480</context>
+          <context context-type="linenumber">501</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -19177,7 +19751,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Install the &lt;strong>OpenID Connect&lt;/strong> authentication plugin.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
-          <context context-type="linenumber">486</context>
+          <context context-type="linenumber">507</context>
         </context-group>
         <note priority="1" from="description">bullet point of "PeerTube will:"</note>
       </trans-unit>
@@ -20196,7 +20770,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1276238402004616037" datatype="html">
@@ -21083,21 +21657,28 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>What is it?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor/actor-host.component.html</context>
-          <context context-type="linenumber">18,20</context>
+          <context context-type="linenumber">19,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3126338480608317836" datatype="html">
+        <source> This video comes from <x id="START_LINK" ctype="x-a" equiv-text="&lt;a [href]=&quot;'https://' + host()&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;>"/><x id="INTERPOLATION" equiv-text="{{ host() }}"/> <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;external-link&quot;>"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon>"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> platform, to which we have subscribed. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-actor/actor-host.component.html</context>
+          <context context-type="linenumber">22,25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6548380581349467642" datatype="html">
         <source>Show all our subscriptions</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor/actor-host.component.html</context>
-          <context context-type="linenumber">24,26</context>
+          <context context-type="linenumber">25,27</context>
         </context-group>
       </trans-unit>
       <trans-unit id="99339465301704740" datatype="html">
         <source>More <x id="INTERPOLATION" equiv-text="{{ host() }}"/> content</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-actor/actor-host.component.html</context>
-          <context context-type="linenumber">26,27</context>
+          <context context-type="linenumber">27,28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4429589272373948258" datatype="html">
@@ -22462,140 +23043,140 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>PeerTube considers video "<x id="PH" equiv-text="video.name"/>" is already being transcoded.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">422</context>
+          <context context-type="linenumber">450</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5630101530611188113" datatype="html">
         <source> If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">424</context>
+          <context context-type="linenumber">452</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3524359509497681458" datatype="html">
         <source>Force transcoding</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">427</context>
+          <context context-type="linenumber">455</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2439066254855913806" datatype="html">
         <source>Only I can see this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">546</context>
+          <context context-type="linenumber">574</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6767380569816110388" datatype="html">
         <source>Only shareable via a private link</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">547</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6828965264297239528" datatype="html">
         <source>Anyone can see this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">548</context>
+          <context context-type="linenumber">576</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5731228558519519588" datatype="html">
         <source>Only users of this platform can see this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">549</context>
+          <context context-type="linenumber">577</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6173113330681958102" datatype="html">
         <source>Only users with the appropriate password can see this video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">550</context>
+          <context context-type="linenumber">578</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8976313793734636314" datatype="html">
         <source>CC-BY</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">569</context>
+          <context context-type="linenumber">597</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1256008580886882898" datatype="html">
         <source>CC-BY-SA</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">570</context>
+          <context context-type="linenumber">598</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8077240690934035882" datatype="html">
         <source>CC-BY-ND</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">571</context>
+          <context context-type="linenumber">599</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5730960273819949495" datatype="html">
         <source>CC-BY-NC</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">572</context>
+          <context context-type="linenumber">600</context>
         </context-group>
       </trans-unit>
       <trans-unit id="893990935328461810" datatype="html">
         <source>CC-BY-NC-SA</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">573</context>
+          <context context-type="linenumber">601</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5533720746883435346" datatype="html">
         <source>CC-BY-NC-ND</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">574</context>
+          <context context-type="linenumber">602</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3796514789644247978" datatype="html">
         <source>Public domain mark</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">576</context>
+          <context context-type="linenumber">604</context>
         </context-group>
       </trans-unit>
       <trans-unit id="342764856805181985" datatype="html">
         <source>You are the owner of the content or you have the rights of the copyright holders</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">577</context>
+          <context context-type="linenumber">605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7556792076818503558" datatype="html">
         <source>violence</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">595</context>
+          <context context-type="linenumber">623</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8977658296907974818" datatype="html">
         <source>explicit sex</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">599</context>
+          <context context-type="linenumber">627</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2249128431249193118" datatype="html">
         <source>This video contains sensitive content</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">603</context>
+          <context context-type="linenumber">631</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4189036340433233769" datatype="html">
         <source>This video contains sensitive content: <x id="PH" equiv-text="flags.join(' - ')"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
-          <context context-type="linenumber">606</context>
+          <context context-type="linenumber">634</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6746743143272021955" datatype="html">
@@ -26110,39 +26691,46 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Channel is required.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4933210538840626810" datatype="html">
         <source>Comments policy is required.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5837937742957978798" datatype="html">
+        <source>Recommended videos setting is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
+          <context context-type="linenumber">104</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2526668322478941170" datatype="html">
         <source>Comment policy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2085611136494552870" datatype="html">
         <source>Not set</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="linenumber">212</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">218</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7920422780199126266" datatype="html">
         <source>{count, plural, =1 {1 video updated} other {<x id="count"/> videos updated}}</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
-          <context context-type="linenumber">273</context>
+          <context context-type="linenumber">296</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7391051635981764507" datatype="html">
