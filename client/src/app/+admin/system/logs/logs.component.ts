@@ -1,13 +1,15 @@
 import { NgClass } from '@angular/common'
 import { Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { Notifier } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
+import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
-import { ServerLogLevel } from '@peertube/peertube-models'
+import { ServerLogLevel, UserRight } from '@peertube/peertube-models'
 import { SelectTagsComponent } from '../../../shared/shared-forms/select/select-tags.component'
 import { ButtonComponent } from '../../../shared/shared-main/buttons/button.component'
 import { CopyButtonComponent } from '../../../shared/shared-main/buttons/copy-button.component'
+import { DebugService } from '../debug/debug.service'
 import { LogRow } from './log-row.model'
 import { LogsService } from './logs.service'
 
@@ -22,12 +24,15 @@ import { LogsService } from './logs.service'
     ButtonComponent,
     PTDatePipe,
     CopyButtonComponent,
-    SelectOptionsComponent
+    SelectOptionsComponent,
+    AlertComponent
   ]
 })
 export class LogsComponent implements OnInit {
   private logsService = inject(LogsService)
   private notifier = inject(Notifier)
+  private debugService = inject(DebugService)
+  private auth = inject(AuthService)
 
   readonly logsElement = viewChild<ElementRef<HTMLElement>>('logsElement')
   readonly logsContent = viewChild<ElementRef<HTMLElement>>('logsContent')
@@ -44,11 +49,14 @@ export class LogsComponent implements OnInit {
   level: ServerLogLevel
   tagsOneOf: string[] = []
 
+  secondariesUp = 0
+
   ngOnInit (): void {
     this.buildTimeChoices()
     this.buildLevelChoices()
 
     this.load()
+    this.loadSecondariesUp()
   }
 
   refresh () {
@@ -83,6 +91,17 @@ export class LogsComponent implements OnInit {
 
       complete: () => this.loading = false
     })
+  }
+
+  loadSecondariesUp () {
+    if (!this.auth.getUser().hasRight(UserRight.MANAGE_DEBUG)) return
+
+    this.debugService.getDebug()
+      .subscribe({
+        next: debug => this.secondariesUp = debug.secondariesUp,
+
+        error: err => this.notifier.handleError(err)
+      })
   }
 
   buildTimeChoices () {

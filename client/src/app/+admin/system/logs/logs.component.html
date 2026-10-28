@@ -1,3 +1,10 @@
+@if (secondariesUp !== 0) {
+  <my-alert class="d-block mb-3" type="warning" i18n>
+    These logs only come from the primary PeerTube process: {secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}} also running, and their logs are not displayed here.
+    Check the log files of each secondary process to get their logs.
+  </my-alert>
+}
+
 <div class="header">
 
   <div>
