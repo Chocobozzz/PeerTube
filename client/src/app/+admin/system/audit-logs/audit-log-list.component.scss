@@ -1,0 +1,31 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
+.changes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  margin-top: 0.5rem;
+
+  pre {
+    margin: 0;
+    padding: 0.5rem;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
+
+.changes-title {
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  color: pvar(--fg-300);
+}
+
+.changes-old {
+  background-color: color-mix(in srgb, pvar(--red) 15%, transparent);
+}
+
+.changes-new {
+  background-color: color-mix(in srgb, pvar(--green) 15%, transparent);
+}

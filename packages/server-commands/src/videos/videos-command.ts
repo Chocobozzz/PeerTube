@@ -15,6 +15,7 @@ import {
   VideoInclude,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoRecommendationScopeType,
   VideosCommonQuery,
   VideoSource,
   VideoTranscodingCreate
@@ -266,6 +267,30 @@ export class VideosCommand extends AbstractCommand {
   }
 
   // ---------------------------------------------------------------------------
+
+  listRecommendations (
+    options: OverrideCommandOptions & {
+      scope?: VideoRecommendationScopeType
+      videoId?: number | string
+      videoPassword?: string
+      count?: number
+      excludeVideoIds?: number[]
+      nsfw?: boolean
+    }
+  ) {
+    const { scope, videoId, videoPassword, count, excludeVideoIds, nsfw } = options
+    const path = '/api/v1/recommendations/videos'
+
+    return this.getRequestBody<ResultList<Video>>({
+      ...options,
+
+      path,
+      query: { scope, videoId, count, excludeVideoIds, nsfw },
+      headers: this.buildVideoPasswordHeader(videoPassword),
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
 
   list (options: OverrideCommandOptions & VideosCommonQuery = {}) {
     const path = '/api/v1/videos'

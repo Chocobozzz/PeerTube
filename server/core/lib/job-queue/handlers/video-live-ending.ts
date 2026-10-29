@@ -180,6 +180,7 @@ async function saveReplayToExternalVideo (options: {
     licence: liveVideo.licence,
     language: liveVideo.language,
     commentsPolicy: liveVideo.commentsPolicy,
+    recommendationScope: liveVideo.recommendationScope,
     downloadEnabled: liveVideo.downloadEnabled,
     embedPrivacyPolicy: liveVideo.embedPrivacyPolicy,
     waitTranscoding: true,

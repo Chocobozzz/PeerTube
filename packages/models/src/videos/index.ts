@@ -29,6 +29,7 @@ export * from './video-licence.enum.js'
 export * from './video-privacy.enum.js'
 export * from './video-include.enum.js'
 export * from './video-rate.type.js'
+export * from './video-recommendation-scope.enum.js'
 
 export * from './video-schedule-update.model.js'
 export * from './video-sort-field.type.js'

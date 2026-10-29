@@ -26,64 +26,127 @@ http_timeouts:
 
 rates_limit:
   api:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_API_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_API_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_API_MAX
       __format: json
   login:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_LOGIN_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_LOGIN_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_LOGIN_MAX
       __format: json
   signup:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_SIGNUP_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_SIGNUP_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_SIGNUP_MAX
       __format: json
   ask_send_email:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_ASK_SEND_EMAIL_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_ASK_SEND_EMAIL_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_ASK_SEND_EMAIL_MAX
       __format: json
   confirm_token:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_CONFIRM_TOKEN_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_CONFIRM_TOKEN_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_CONFIRM_TOKEN_MAX
       __format: json
   receive_client_log:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_RECEIVE_CLIENT_LOG_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_RECEIVE_CLIENT_LOG_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_RECEIVE_CLIENT_LOG_MAX
       __format: json
   plugins:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_PLUGINS_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_PLUGINS_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_PLUGINS_MAX
       __format: json
   well_known:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_WELL_KNOWN_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_WELL_KNOWN_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_WELL_KNOWN_MAX
       __format: json
   feeds:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_FEEDS_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_FEEDS_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_FEEDS_MAX
       __format: json
   activity_pub:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_ACTIVITY_PUB_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_ACTIVITY_PUB_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_ACTIVITY_PUB_MAX
       __format: json
   client:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_CLIENT_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_CLIENT_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_CLIENT_MAX
       __format: json
   download_generate_video:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_DOWNLOAD_GENERATE_VIDEO_ENABLED
+      __format: json
     window: PEERTUBE_RATES_LIMIT_DOWNLOAD_GENERATE_VIDEO_WINDOW
     max:
       __name: PEERTUBE_RATES_LIMIT_DOWNLOAD_GENERATE_VIDEO_MAX
+      __format: json
+  report_abuse:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_REPORT_ABUSE_ENABLED
+      __format: json
+    window: PEERTUBE_RATES_LIMIT_REPORT_ABUSE_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_REPORT_ABUSE_MAX
+      __format: json
+  create_comment:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_CREATE_COMMENT_ENABLED
+      __format: json
+    window: PEERTUBE_RATES_LIMIT_CREATE_COMMENT_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_CREATE_COMMENT_MAX
+      __format: json
+  login_lockout:
+    enabled:
+      __name: PEERTUBE_RATES_LIMIT_LOGIN_LOCKOUT_ENABLED
+      __format: json
+    window: PEERTUBE_RATES_LIMIT_LOGIN_LOCKOUT_WINDOW
+    max:
+      __name: PEERTUBE_RATES_LIMIT_LOGIN_LOCKOUT_MAX
+      __format: json
+    max_per_ip:
+      __name: PEERTUBE_RATES_LIMIT_LOGIN_LOCKOUT_MAX_PER_IP
       __format: json
 
 oauth2:
@@ -123,6 +186,11 @@ database:
   pool:
     max:
       __name: PEERTUBE_DATABASE_POOL_MAX
+      __format: json
+  read_replicas:
+    max_lag: PEERTUBE_DATABASE_READ_REPLICAS_MAX_LAG
+    hosts:
+      __name: PEERTUBE_DATABASE_READ_REPLICAS_HOSTS
       __format: json
 
 redis:
@@ -296,11 +364,14 @@ object_storage:
   staging:
     bucket_name: PEERTUBE_OBJECT_STORAGE_STAGING_BUCKET_NAME
     prefix: PEERTUBE_OBJECT_STORAGE_STAGING_PREFIX
-
   cache:
     bucket_name: PEERTUBE_OBJECT_STORAGE_CACHE_BUCKET_NAME
     prefix: PEERTUBE_OBJECT_STORAGE_CACHE_PREFIX
     base_url: PEERTUBE_OBJECT_STORAGE_CACHE_BASE_URL
+  redundancy:
+    bucket_name: PEERTUBE_OBJECT_STORAGE_REDUNDANCY_BUCKET_NAME
+    prefix: PEERTUBE_OBJECT_STORAGE_REDUNDANCY_PREFIX
+    base_url: PEERTUBE_OBJECT_STORAGE_REDUNDANCY_BASE_URL
 
 log:
   level: PEERTUBE_LOG_LEVEL
@@ -319,6 +390,7 @@ log:
     enabled:
       __name: PEERTUBE_LOG_AUDIT_ENABLED
       __format: json
+    max_age: PEERTUBE_LOG_AUDIT_MAX_AGE
   anonymize_ip:
     __name: PEERTUBE_LOG_ANONYMIZE_IP
     __format: json
@@ -374,6 +446,7 @@ trending:
 redundancy:
   videos:
     check_interval: PEERTUBE_REDUNDANCY_VIDEOS_CHECK_INTERVAL
+    timeout: PEERTUBE_REDUNDANCY_VIDEOS_TIMEOUT
     strategies:
       __name: PEERTUBE_REDUNDANCY_VIDEOS_STRATEGIES
       __format: json
@@ -412,6 +485,9 @@ tracker:
     __format: json
   reject_too_many_announces:
     __name: PEERTUBE_TRACKER_REJECT_TOO_MANY_ANNOUNCES
+    __format: json
+  urls:
+    __name: PEERTUBE_TRACKER_URLS
     __format: json
 
 history:
@@ -584,6 +660,9 @@ signup:
         __format: json
 
 user:
+  disable_root_auth:
+    __name: PEERTUBE_USER_DISABLE_ROOT_AUTH
+    __format: json
   allow_cross_provider_auth:
     __name: PEERTUBE_USER_ALLOW_CROSS_PROVIDER_AUTH
     __format: json
@@ -809,6 +888,20 @@ video_file:
     enabled:
       __name: PEERTUBE_VIDEO_FILE_UPDATE_ENABLED
       __format: json
+  lifecycle:
+    enabled:
+      __name: PEERTUBE_VIDEO_FILE_LIFECYCLE_ENABLED
+      __format: json
+    check_interval: PEERTUBE_VIDEO_FILE_LIFECYCLE_CHECK_INTERVAL
+    dry_run:
+      __name: PEERTUBE_VIDEO_FILE_LIFECYCLE_DRY_RUN
+      __format: json
+    max_videos_per_run:
+      __name: PEERTUBE_VIDEO_FILE_LIFECYCLE_MAX_VIDEOS_PER_RUN
+      __format: json
+    policies:
+      __name: PEERTUBE_VIDEO_FILE_LIFECYCLE_POLICIES
+      __format: json
 
 import:
   videos:
@@ -942,6 +1035,12 @@ followings:
         __format: json
       index_url: PEERTUBE_FOLLOWINGS_INSTANCE_AUTO_FOLLOW_INDEX_INDEX_URL
 
+blocklist:
+  public_log:
+    enabled:
+      __name: PEERTUBE_BLOCKLIST_PUBLIC_LOG_ENABLED
+      __format: json
+
 theme:
   default: PEERTUBE_THEME_DEFAULT
   customization:
@@ -1029,6 +1128,9 @@ client:
   browse_videos:
     default_sort: PEERTUBE_CLIENT_BROWSE_VIDEOS_DEFAULT_SORT
     default_scope: PEERTUBE_CLIENT_BROWSE_VIDEOS_DEFAULT_SCOPE
+    include_scheduled_live:
+      __name: PEERTUBE_CLIENT_BROWSE_VIDEOS_INCLUDE_SCHEDULED_LIVE
+      __format: json
   menu:
     login:
       redirect_on_single_external_auth:

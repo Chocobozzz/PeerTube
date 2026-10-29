@@ -163,17 +163,7 @@ export class FFmpegEdition {
       : videoInput
 
     const introInput = audioInput + 1
-    let introAudio = introInput
-
-    if (!introOutroHasAudio && mainHasAudio) {
-      const duration = await getVideoStreamDuration(introOutroPath, introOutroProbe)
-
-      command.input('anullsrc')
-      command.withInputFormat('lavfi')
-      command.withInputOption('-t ' + duration)
-
-      introAudio++
-    }
+    let introOutroAudio = `${introInput}:a`
 
     // Add black background to correctly scale intro/outro with padding
     const complexFilters: FilterSpecification[] = [
@@ -225,6 +215,19 @@ export class FFmpegEdition {
       }
     ]
 
+    if (!introOutroHasAudio && mainHasAudio) {
+      const duration = await getVideoStreamDuration(introOutroPath, introOutroProbe)
+
+      // Generate silence in the filter graph rather than using `withInputFormat` that causes issues with recent ffmpeg versions
+      complexFilters.push({
+        filter: 'anullsrc',
+        options: { d: duration },
+        outputs: 'intro-outro-silence'
+      })
+
+      introOutroAudio = 'intro-outro-silence'
+    }
+
     const concatFilter = {
       inputs: [], // Defined later as it depends on the presence of audio and the type (intro or outro)
       filter: 'concat',
@@ -242,7 +245,7 @@ export class FFmpegEdition {
     if (mainHasAudio) {
       mainFilterInputs.push(`${audioInput}:a`)
 
-      introOutroFilterInputs.push(`${introAudio}:a`)
+      introOutroFilterInputs.push(introOutroAudio)
     }
 
     if (type === 'intro') {

@@ -1,4 +1,10 @@
 import { HttpStatusCode, VideoCaptionGenerate, VideoChannelActivityAction } from '@peertube/peertube-models'
+import {
+  auditLog,
+  buildVideoCaptionAuditEntity,
+  buildVideoTranscriptionAuditEntity,
+  getAuditActorFromRes
+} from '@server/lib/audit-log/index.js'
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { createLocalCaption, createTranscriptionTaskIfNeeded, updateHLSMasterOnCaptionChangeIfNeeded } from '@server/lib/video-captions.js'
@@ -68,6 +74,11 @@ function createGenerateVideoCaption (req: express.Request, res: express.Response
 
     await createTranscriptionTaskIfNeeded(video)
 
+    auditLog.create(
+      getAuditActorFromRes(res),
+      () => buildVideoTranscriptionAuditEntity({ video, forceTranscription: body.forceTranscription === true })
+    )
+
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })
 }
@@ -120,6 +131,8 @@ function createVideoCaption (req: express.Request, res: express.Response) {
       })
     })
 
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoCaptionAuditEntity({ video, language: captionLanguage }))
+
     Hooks.runAction('action:api.video-caption.created', { caption: videoCaption, req, res })
 
     return res.status(HttpStatusCode.NO_CONTENT_204).end()
@@ -139,6 +152,10 @@ async function deleteVideoCaption (req: express.Request, res: express.Response) 
     try {
       await runTransaction(async t => {
         await videoCaption.destroy({ transaction: t })
+
+        auditLog.delete(getAuditActorFromRes(res), () => buildVideoCaptionAuditEntity({ video, language: videoCaption.language }), {
+          transaction: t
+        })
       })
 
       if (hasM3U8) {

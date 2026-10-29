@@ -365,7 +365,10 @@ log:
     max_files: 20
 
   audit:
-    enabled: true # Log user, administration and moderation actions in a dedicated audit log file
+    enabled: true # Log user, administration and moderation actions in the database, viewable in the administration
+
+    # -1 means there is no limitations
+    max_age: '1 year'
 
   anonymize_ip: false
 
@@ -1411,6 +1414,9 @@ defaults:
 
     # enabled = 1, disabled = 2, requires_approval = 3
     comments_policy: 1
+
+    # Videos recommended next to a video: all = 1, same platform as the video = 2, same account = 3, same channel = 4
+    recommendation_scope: 1
 
     # public = 1, unlisted = 2, private = 3, internal = 4
     privacy: 1

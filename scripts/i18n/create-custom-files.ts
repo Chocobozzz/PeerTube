@@ -7,6 +7,7 @@ import {
   ABUSE_STATES,
   buildLanguages,
   CHANGE_OWNERSHIP_STATES,
+  CHANNEL_COLLABORATOR_STATE,
   RUNNER_JOB_STATES,
   STREAM_SYNC_STATE,
   USER_EXPORT_STATES,
@@ -15,12 +16,14 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_CHANNEL_ACTIVITY_ACTIONS,
   VIDEO_CHANNEL_ACTIVITY_TARGETS,
+  VIDEO_COMMENTS_POLICY,
   VIDEO_EMBED_PRIVACY_POLICIES,
   VIDEO_IMPORT_STATES,
   VIDEO_LICENCES,
   VIDEO_PLAYLIST_PRIVACIES,
   VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
+  VIDEO_RECOMMENDATION_SCOPES,
   VIDEO_STATES
 } from '../../server/core/initializers/constants.js'
 
@@ -34,13 +37,11 @@ const playerKeys = {
   'peers': 'peers',
   'peer': 'peer',
   'no peers': 'no peers',
-  'Go to the video page': 'Go to the video page',
   'Settings': 'Settings',
   'Watching this video may reveal your IP address to others.': 'Watching this video may reveal your IP address to others.',
   'Copy the video URL': 'Copy the video URL',
   'Copy the video URL at the current time': 'Copy the video URL at the current time',
   'Copy embed code': 'Copy embed code',
-  'Copy magnet URI': 'Copy magnet URI',
   'Total downloaded: ': 'Total downloaded: ',
   'Total uploaded: ': 'Total uploaded: ',
   'From servers: ': 'From servers: ',
@@ -70,8 +71,6 @@ const playerKeys = {
   '  off': '  off',
   'Player mode': 'Player mode',
   'Play in loop': 'Play in loop',
-  'This live is not currently streaming.': 'This live is not currently streaming.',
-  'This live has ended.': 'This live has ended.',
   'The video failed to play, will try to fast forward.': 'The video failed to play, will try to fast forward.',
   '{1} / {2} dropped of {3}': '{1} / {2} dropped of {3}',
   ' (muted)': ' (muted)',
@@ -79,9 +78,6 @@ const playerKeys = {
   'Previous video': 'Previous video',
   'Video page (new window)': 'Video page (new window)',
   'Next video': 'Next video',
-  'This video is password protected': 'This video is password protected',
-  'You need a password to watch this video.': 'You need a password to watch this video.',
-  'Incorrect password, please enter a correct password': 'Incorrect password, please enter a correct password',
   'Cancel': 'Cancel',
   'Up Next': 'Up Next',
   'Autoplay is suspended': 'Autoplay is suspended',
@@ -91,23 +87,24 @@ const playerKeys = {
   '{1} (auto-generated)': '{1} (auto-generated)',
   'Go back': 'Go back',
   'Audio only': 'Audio only',
-  'Sensitive content': 'Sensitive content',
   'This video contains sensitive content.': 'This video contains sensitive content.',
   'This video contains sensitive content, including:': 'This video contains sensitive content, including:',
   'Learn more': 'Learn more',
-  'Content warning': 'Content warning',
-  'Violence': 'Violence',
-  'Shocking Content': 'Shocking Content',
-  'Explicit Sex': 'Explicit Sex',
   'Upload speed:': 'Upload speed:',
   'Download speed:': 'Download speed:',
   'Uploader note:': 'Uploader note:',
-  'Close': 'Close',
   '(skipped {1} buffers) ': '(skipped {1} buffers) ',
   'Video Filter': 'Video Filter',
   'Mirror Video': 'Mirror Video',
   'Mirror': 'Mirror',
-  'This playlist is empty': 'This playlist is empty'
+  'By {1}': 'By {1}',
+  'Unavailable video': 'Unavailable video',
+  'Close details': 'Close details',
+  'Potentially violent content': 'Potentially violent content',
+  'Potentially sexually explicit content': 'Potentially sexually explicit content',
+  'Failed to play video': 'Failed to play video',
+  'The video failed to play due to technical issues.': 'The video failed to play due to technical issues.',
+  'You seem to be offline and the video may not work': 'You seem to be offline and the video may not work'
 }
 Object.assign(playerKeys, videojs)
 
@@ -120,12 +117,15 @@ Object.values(VIDEO_CATEGORIES)
   .concat(Object.values(VIDEO_IMPORT_STATES))
   .concat(Object.values(VIDEO_PLAYLIST_PRIVACIES))
   .concat(Object.values(VIDEO_PLAYLIST_TYPES))
+  .concat(Object.values(VIDEO_RECOMMENDATION_SCOPES))
+  .concat(Object.values(VIDEO_COMMENTS_POLICY))
   .concat(Object.values(USER_ROLE_LABELS))
   .concat(Object.values(STREAM_SYNC_STATE))
   .concat(Object.values(VIDEO_CHANNEL_ACTIVITY_ACTIONS))
   .concat(Object.values(VIDEO_CHANNEL_ACTIVITY_TARGETS))
   .concat(Object.values(VIDEO_EMBED_PRIVACY_POLICIES))
   .concat(Object.values(CHANGE_OWNERSHIP_STATES))
+  .concat(Object.values(CHANNEL_COLLABORATOR_STATE))
   .concat(Object.values(ABUSE_STATES))
   .concat(Object.values(USER_REGISTRATION_STATES))
   .concat(Object.values(RUNNER_JOB_STATES))
@@ -138,9 +138,15 @@ Object.values(VIDEO_CATEGORIES)
     'This video is not available because the remote instance is not responding.',
     'This playlist does not exist',
     'We cannot fetch the playlist. Please try again later.',
-    'Playlist: {1}',
-    'By {1}',
-    'Unavailable video',
+    'This playlist does not have any valid element',
+    'This playlist is empty',
+    'This live is not currently streaming.',
+    'This live has ended.',
+    'This video is password protected',
+    'You need a password to watch this video.',
+    'Incorrect password, please enter a correct password',
+    'Watch Video',
+    'Password',
     'Audio only',
     'Unknown',
     'Embedding is disabled for this video.',

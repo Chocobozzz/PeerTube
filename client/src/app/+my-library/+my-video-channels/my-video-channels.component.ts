@@ -159,7 +159,7 @@ export class MyVideoChannelsComponent implements OnInit {
   deleteVideoChannel (videoChannel: VideoChannel) {
     this.videoChannelService.removeWithConfirmation(videoChannel)
       .subscribe({
-        next: removed => {
+        next: ({ removed }) => {
           if (!removed) return
 
           this.videoChannels = this.videoChannels.filter(c => c.id !== videoChannel.id)

@@ -22,6 +22,7 @@ import {
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES,
+  VIDEO_RECOMMENDATION_SCOPES,
   VIDEO_STATES
 } from '../../../initializers/constants.js'
 import {
@@ -204,6 +205,11 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     embedPrivacyPolicy: {
       id: video.embedPrivacyPolicy,
       label: VIDEO_EMBED_PRIVACY_POLICIES[video.embedPrivacyPolicy]
+    },
+
+    recommendationScope: {
+      id: video.recommendationScope,
+      label: VIDEO_RECOMMENDATION_SCOPES[video.recommendationScope]
     }
   }
 

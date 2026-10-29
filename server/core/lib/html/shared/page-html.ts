@@ -23,6 +23,26 @@ import { TagsHtml } from './tags-html.js'
 
 const logger = createLogger()
 
+const NOINDEX_CLIENT_PATHS = [
+  '/admin',
+  '/login',
+  '/manage',
+  '/my-account',
+  '/my-library',
+  '/remote-interaction',
+  '/reset-password',
+  '/search',
+  '/signup',
+  '/stats',
+  '/studio',
+  '/verify-account',
+  '/videos/manage',
+  '/videos/publish',
+  '/videos/subscriptions',
+  '/videos/update',
+  '/videos/upload'
+]
+
 export class PageHtml {
   private static htmlCache: { [path: string]: string } = {}
 
@@ -39,11 +59,18 @@ export class PageHtml {
     const openGraphImage = ServerConfigManager.Instance.getDefaultOpenGraph(serverActor)
 
     let customHTML = TagsHtml.addTitleTag(html)
-    customHTML = TagsHtml.addDescriptionTag(customHTML)
+    customHTML = TagsHtml.addDescriptionTag(customHTML, escapeHTML(CONFIG.INSTANCE.SHORT_DESCRIPTION))
+    customHTML = TagsHtml.addServerRenderedContent(customHTML, {
+      escapedTitle: escapeHTML(CONFIG.INSTANCE.NAME),
+      markdownDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION
+    })
 
-    const url = req.originalUrl === '/'
+    // Query parameters only filter/sort the page content: don't consider them as different pages
+    const { pathname } = new URL(req.originalUrl, WEBSERVER.URL)
+
+    const url = pathname === '/'
       ? WEBSERVER.URL
-      : WEBSERVER.URL + req.originalUrl
+      : WEBSERVER.URL + pathname
 
     customHTML = await TagsHtml.addTags(customHTML, {
       url,
@@ -62,7 +89,7 @@ export class PageHtml {
 
       ogType: 'website',
       twitterCard: 'summary_large_image',
-      forbidIndexation: false,
+      forbidIndexation: NOINDEX_CLIENT_PATHS.some(p => pathname === p || pathname.startsWith(p + '/')),
       embedIndexation: false,
       rssFeeds: getDefaultRSSFeeds(req)
     }, {})

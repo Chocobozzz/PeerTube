@@ -1,6 +1,6 @@
 import { FileStorage, LogoType, UploadImageType, UploadImageType_Type } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
-import { buildImageSize, processImage, processSVG } from '@server/helpers/image-utils.js'
+import { buildImageSize, processImage, processImagesOrCleanup, processSVG } from '@server/helpers/image-utils.js'
 import { storeCommonFile } from '@server/lib/object-storage/common-files.js'
 import { UploadImageModel } from '@server/models/application/upload-image.js'
 import { remove } from 'fs-extra/esm'
@@ -10,6 +10,8 @@ import { CONFIG } from '../initializers/config.js'
 import { UPLOAD_IMAGES_SIZE } from '../initializers/constants.js'
 import { MActorUploadImages } from '../types/models/index.js'
 
+type ProcessedUploadImage = { imageName: string, imageSize: { width: number, height: number } }
+
 export async function replaceUploadImage (options: {
   actor: MActorUploadImages
   imagePhysicalFile: { path: string }
@@ -17,9 +19,14 @@ export async function replaceUploadImage (options: {
 }) {
   const { actor, imagePhysicalFile, type } = options
 
-  // Upload before the transaction is opened
-  const processedImages = await generateImageSizesAndUploadIfNeeded(imagePhysicalFile.path, type)
-  await remove(imagePhysicalFile.path)
+  let processedImages: ProcessedUploadImage[]
+
+  try {
+    // Upload before the transaction is opened
+    processedImages = await generateImageSizesAndUploadIfNeeded(imagePhysicalFile.path, type)
+  } finally {
+    await remove(imagePhysicalFile.path)
+  }
 
   const storage = CONFIG.OBJECT_STORAGE.ENABLED
     ? FileStorage.OBJECT_STORAGE
@@ -52,38 +59,51 @@ export async function replaceUploadImage (options: {
   )
 }
 
-async function generateImageSizesAndUploadIfNeeded (imagePath: string, type: UploadImageType_Type) {
+async function generateImageSizesAndUploadIfNeeded (imagePath: string, type: UploadImageType_Type): Promise<ProcessedUploadImage[]> {
+  const generated = await generateImageSizes(imagePath, type)
+
+  if (CONFIG.OBJECT_STORAGE.ENABLED) {
+    // Upload only when all sizes have been generated, so an invalid image doesn't leave orphan objects
+    try {
+      await Promise.all(generated.map(({ imageName, destination }) => storeCommonFile('uploads', destination, imageName)))
+    } finally {
+      await Promise.all(generated.map(({ destination }) => remove(destination)))
+    }
+  }
+
+  return generated.map(({ imageName, imageSize }) => ({ imageName, imageSize }))
+}
+
+async function generateImageSizes (
+  imagePath: string,
+  type: UploadImageType_Type
+): Promise<(ProcessedUploadImage & { destination: string })[]> {
+  const extension = getLowercaseExtension(imagePath)
+
   if (imagePath.endsWith('.svg')) {
-    const extension = getLowercaseExtension(imagePath)
     const imageName = buildUUID() + extension
     const destination = buildUploadImageDestination(imageName)
 
     await processSVG({ path: imagePath, destination })
-    await storeUploadImageIfNeeded(destination, imageName)
 
-    return [ { imageName, imageSize: { width: null, height: null } } ]
+    return [ { imageName, imageSize: { width: null, height: null }, destination } ]
   }
 
-  return Promise.all(UPLOAD_IMAGES_SIZE[type].map(size => generateImageSize({ ...size, imagePath })))
-}
+  return processImagesOrCleanup(UPLOAD_IMAGES_SIZE[type].map(({ width, height }) => {
+    const imageName = buildUUID() + extension
+    const destination = buildUploadImageDestination(imageName)
 
-async function generateImageSize (options: {
-  imagePath: string
-  width: number
-  height: number
-}) {
-  const { imagePath, width, height } = options
+    return {
+      destination,
+      process: async () => {
+        const imageSize = await buildImageSize(imagePath, { width, height })
 
-  const imageSize = await buildImageSize(imagePath, { width, height })
+        await processImage({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
 
-  const extension = getLowercaseExtension(imagePath)
-  const imageName = buildUUID() + extension
-  const destination = buildUploadImageDestination(imageName)
-
-  await processImage({ path: imagePath, destination, newSize: imageSize, keepOriginal: true })
-  await storeUploadImageIfNeeded(destination, imageName)
-
-  return { imageName, imageSize }
+        return { imageName, imageSize, destination }
+      }
+    }
+  }))
 }
 
 // Generate in tmp when the final destination is object storage
@@ -91,13 +111,6 @@ function buildUploadImageDestination (imageName: string) {
   if (CONFIG.OBJECT_STORAGE.ENABLED) return join(CONFIG.STORAGE.TMP_DIR, imageName)
 
   return UploadImageModel.getFSPathOf(imageName)
-}
-
-async function storeUploadImageIfNeeded (destination: string, imageName: string) {
-  if (!CONFIG.OBJECT_STORAGE.ENABLED) return
-
-  await storeCommonFile('uploads', destination, imageName)
-  await remove(destination)
 }
 
 // ---------------------------------------------------------------------------

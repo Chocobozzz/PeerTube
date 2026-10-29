@@ -1,7 +1,15 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { ActorImageType, CustomConfig, HttpStatusCode, LogoType, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  ActorImageType,
+  CustomConfig,
+  HttpStatusCode,
+  LogoType,
+  VideoCommentPolicy,
+  VideoPrivacy,
+  VideoRecommendationScope
+} from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -157,6 +165,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.ENABLED)
   expect(data.defaults.publish.downloadEnabled).to.be.true
+  expect(data.defaults.publish.recommendationScope).to.equal(VideoRecommendationScope.ALL)
   expect(data.defaults.publish.licence).to.be.null
   expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
   expect(data.defaults.live.saveReplay).to.be.false
@@ -462,6 +471,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       publish: {
         commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL,
         downloadEnabled: false,
+        recommendationScope: VideoRecommendationScope.CHANNEL,
         licence: 2,
         privacy: VideoPrivacy.INTERNAL
       },

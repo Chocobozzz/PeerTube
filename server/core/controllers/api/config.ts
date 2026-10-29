@@ -10,7 +10,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import express from 'express'
 import { remove, writeJSON } from 'fs-extra/esm'
-import { CustomConfigAuditView, auditLoggerFactory, getAuditIdFromRes } from '../../helpers/audit-logger.js'
+import { auditLog, buildConfigAuditEntity, buildInstanceImageAuditEntity, getAuditActorFromRes } from '../../lib/audit-log/index.js'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
 import { convertCustomConfigBody } from '../../initializers/config/custom-config.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
@@ -34,8 +34,6 @@ import {
 const configRouter = express.Router()
 
 configRouter.use(apiRateLimiter)
-
-const auditLogger = auditLoggerFactory('config')
 
 configRouter.get('/', openapiOperationDoc({ operationId: 'getConfig' }), asyncMiddleware(getConfig))
 
@@ -175,9 +173,9 @@ function getCustomConfig (req: express.Request, res: express.Response) {
 }
 
 async function deleteCustomConfig (req: express.Request, res: express.Response) {
-  await remove(CONFIG.CUSTOM_FILE)
+  const oldConfigAuditEntity = auditLog.snapshot(() => buildConfigAuditEntity(customConfig()))
 
-  auditLogger.delete(getAuditIdFromRes(res), new CustomConfigAuditView(customConfig()))
+  await remove(CONFIG.CUSTOM_FILE)
 
   await reloadConfig()
   ClientHtml.invalidateCache()
@@ -187,11 +185,14 @@ async function deleteCustomConfig (req: express.Request, res: express.Response) 
 
   const data = customConfig()
 
+  // Resetting the custom config is an update to the default values
+  auditLog.update(getAuditActorFromRes(res), () => buildConfigAuditEntity(data), oldConfigAuditEntity)
+
   return res.json(data)
 }
 
 async function updateCustomConfig (req: express.Request, res: express.Response) {
-  const oldCustomConfigAuditKeys = new CustomConfigAuditView(customConfig())
+  const oldConfigAuditEntity = auditLog.snapshot(() => buildConfigAuditEntity(customConfig()))
 
   // camelCase to snake_case key + Force number conversion
   const toUpdateJSON = convertCustomConfigBody(req.body)
@@ -206,11 +207,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
 
   const data = customConfig()
 
-  auditLogger.update(
-    getAuditIdFromRes(res),
-    new CustomConfigAuditView(data),
-    oldCustomConfigAuditKeys
-  )
+  auditLog.update(getAuditActorFromRes(res), () => buildConfigAuditEntity(data), oldConfigAuditEntity)
 
   return res.json(data)
 }
@@ -239,6 +236,8 @@ function updateInstanceImageFactory (imageType: ActorImageType_Type) {
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
 
+    auditLog.create(getAuditActorFromRes(res), () => buildInstanceImageAuditEntity(getInstanceImageAuditType(imageType)))
+
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   }
 }
@@ -253,6 +252,8 @@ function deleteInstanceImageFactory (imageType: ActorImageType_Type) {
 
     ClientHtml.invalidateCache()
     ModelCache.Instance.clearCache('server-account')
+
+    auditLog.delete(getAuditActorFromRes(res), () => buildInstanceImageAuditEntity(getInstanceImageAuditType(imageType)))
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   }
@@ -282,6 +283,8 @@ async function updateInstanceLogo (req: express.Request, res: express.Response) 
   ClientHtml.invalidateCache()
   ModelCache.Instance.clearCache('server-account')
 
+  auditLog.create(getAuditActorFromRes(res), () => buildInstanceImageAuditEntity('logo-' + req.params.logoType))
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
@@ -294,7 +297,15 @@ async function deleteInstanceLogo (req: express.Request, res: express.Response) 
   ClientHtml.invalidateCache()
   ModelCache.Instance.clearCache('server-account')
 
+  auditLog.delete(getAuditActorFromRes(res), () => buildInstanceImageAuditEntity('logo-' + req.params.logoType))
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+function getInstanceImageAuditType (imageType: ActorImageType_Type) {
+  return imageType === ActorImageType.BANNER
+    ? 'banner'
+    : 'avatar'
 }
 
 // ---------------------------------------------------------------------------
@@ -601,6 +612,7 @@ function customConfig (): CustomConfig {
       publish: {
         downloadEnabled: CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
         commentsPolicy: CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+        recommendationScope: CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE,
         privacy: CONFIG.DEFAULTS.PUBLISH.PRIVACY,
         licence: CONFIG.DEFAULTS.PUBLISH.LICENCE
       },

@@ -15,7 +15,7 @@ import {
 import { buildNextVideoState } from '@server/lib/video-state.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
 import express from 'express'
-import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
+import { auditLog, buildVideoAuditEntity, getAuditActorFromRes } from '../../../lib/audit-log/index.js'
 import { createReqFiles } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
@@ -30,7 +30,6 @@ import {
 } from '../../../middlewares/index.js'
 
 const logger = createLogger('api', 'video')
-const auditLogger = auditLoggerFactory('videos')
 
 const uploadRouter = express.Router()
 
@@ -51,6 +50,7 @@ const resumableInitMetadataFields: Record<Exclude<keyof VideoCreate, 'thumbnailf
   support: true,
   tags: true,
   commentsPolicy: true,
+  recommendationScope: true,
   downloadEnabled: true,
   nsfw: true,
   nsfwSummary: true,
@@ -201,7 +201,7 @@ function addVideo (options: {
       const { video } = await localVideoCreator.create()
 
       return logger.withContext([ video.uuid ], () => {
-        auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(video.toFormattedDetailsJSON()))
+        auditLog.create(getAuditActorFromRes(res), () => buildVideoAuditEntity(video.toFormattedDetailsJSON()))
         logger.info('Video with name %s and uuid %s created.', videoInfo.name, video.uuid)
 
         Hooks.runAction('action:api.video.uploaded', { video, req, res })

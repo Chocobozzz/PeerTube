@@ -45,6 +45,8 @@ import {
   VideoPrivacy,
   VideoPrivacyType,
   VideoRateType,
+  VideoRecommendationScope,
+  VideoRecommendationScopeType,
   VideoResolution,
   VideoState,
   VideoStateType
@@ -62,7 +64,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1160
+export const LAST_MIGRATION_VERSION = 1170
 
 // ---------------------------------------------------------------------------
 
@@ -80,6 +82,16 @@ export const PAGINATION = {
     COUNT: {
       MAX: 50
     }
+  }
+}
+
+export const VIDEO_RECOMMENDATIONS = {
+  COUNT: {
+    DEFAULT: 10,
+    MAX: 30
+  },
+  EXCLUDE_VIDEO_IDS: {
+    MAX: 50
   }
 }
 
@@ -143,6 +155,8 @@ export const SORTABLE_COLUMNS = {
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
 
+  AUDIT_LOGS: [ 'createdAt' ],
+
   TOKEN_SESSIONS: [ 'createdAt' ],
 
   RUNNERS: [ 'createdAt' ],
@@ -192,6 +206,15 @@ export const SORTABLE_COLUMNS = {
   VIDEO_CHANNEL_ACTIVITIES: [ 'createdAt' ],
 
   LIVE_SESSIONS: [ 'startDate' ]
+}
+
+// Search engines limit a sitemap file to 50,000 URLs and 50MB
+export const SITEMAP = {
+  // A video entry can reach ~12KB
+  VIDEOS_PER_PAGE: 2000,
+  ACTORS_PER_PAGE: 50000,
+
+  MAX_PAGE: 2_000_000
 }
 
 export const ROUTE_CACHE_LIFETIME = {
@@ -432,8 +455,10 @@ export const SCHEDULER_INTERVALS_MS = {
   AUTO_FOLLOW_INDEX_INSTANCES: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_STATS: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
+  REMOVE_OLD_AUDIT_LOGS: 60000 * 60 * 24, // 1 day
   REMOVE_EXPIRED_USER_EXPORTS: 1000 * 3600, // 1 hour
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
+  PROCESS_HEARTBEAT: 1000 * 30, // 30 seconds
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
   REMOVE_DANGLING_STAGING_FILES: 60000 * 60, // 1 hour
   CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL,
@@ -736,6 +761,13 @@ export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PRIVATE]: 'Private',
   [VideoPrivacy.INTERNAL]: 'Internal',
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
+}
+
+export const VIDEO_RECOMMENDATION_SCOPES: { [id in VideoRecommendationScopeType]: string } = {
+  [VideoRecommendationScope.ALL]: 'All videos',
+  [VideoRecommendationScope.LOCAL]: 'Videos of the same platform',
+  [VideoRecommendationScope.ACCOUNT]: 'Videos of the same account',
+  [VideoRecommendationScope.CHANNEL]: 'Videos of the same channel'
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {
@@ -1395,12 +1427,13 @@ export const CUSTOM_HTML_TAG_COMMENTS = {
   DESCRIPTION: '<!-- description tag -->',
   CUSTOM_CSS: '<!-- custom css tag -->',
   META_TAGS: '<!-- meta tags -->',
-  SERVER_CONFIG: '<!-- server config -->'
+  SERVER_CONFIG: '<!-- server config -->',
+  SERVER_RENDERED_CONTENT: '<!-- server rendered content -->'
 }
 
 export const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
+export const MAX_AUDIT_LOGS_OUTPUT = 10000
 export const LOG_FILENAME = 'peertube.log'
-export const AUDIT_LOG_FILENAME = 'peertube-audit.log'
 
 // ---------------------------------------------------------------------------
 
@@ -1456,10 +1489,12 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
 
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_HISTORY = 5000
+    SCHEDULER_INTERVALS_MS.REMOVE_OLD_AUDIT_LOGS = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS = 5000
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
 
     SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
+    SCHEDULER_INTERVALS_MS.PROCESS_HEARTBEAT = 2000
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
     SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000
 
@@ -1495,6 +1530,9 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
     ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
     ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+
+    SITEMAP.VIDEOS_PER_PAGE = 2
+    SITEMAP.ACTORS_PER_PAGE = 2
 
     CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
     CONSTRAINTS_FIELDS.LOGO.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB

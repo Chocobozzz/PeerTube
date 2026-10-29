@@ -1,5 +1,5 @@
-import { randomInt } from '@peertube/peertube-core-utils'
 import { parallelTests } from '@peertube/peertube-node-utils'
+import { allocateParallelPort } from '@peertube/peertube-server-commands'
 
 class MockSmtpServer {
   private static instance: MockSmtpServer
@@ -25,7 +25,7 @@ class MockSmtpServer {
       : undefined
 
     return new Promise<number>(async (res, rej) => {
-      const port = parallelTests() ? randomInt(1025, 2000) : 1025
+      const port = parallelTests() ? allocateParallelPort() : 1025
       this.emails = emailsCollection
 
       if (this.started) {

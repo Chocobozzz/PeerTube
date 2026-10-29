@@ -159,8 +159,9 @@ async function processTask (options: TaskProcessorOptions) {
 
   logger.info('Processing %s task for video %s.', task.name, video.uuid, { task })
 
-  const processor = taskProcessors[options.task.name]
-  if (!process) throw new Error('Unknown task ' + task.name)
+  if (Object.hasOwn(taskProcessors, task.name) !== true) throw new Error('Unknown task ' + task.name)
+
+  const processor = taskProcessors[task.name]
 
   return processor(options)
 }

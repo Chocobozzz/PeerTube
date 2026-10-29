@@ -1,4 +1,5 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { auditLog, buildInstanceHomepageAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { ActorCustomPageModel } from '@server/models/account/actor-custom-page.js'
 import express from 'express'
@@ -43,7 +44,16 @@ async function getInstanceHomepage (req: express.Request, res: express.Response)
 async function updateInstanceHomepage (req: express.Request, res: express.Response) {
   const content = req.body.content
 
+  const oldHomepageAuditEntity = await auditLog.snapshot(async () => {
+    const oldHomepage = await ActorCustomPageModel.loadInstanceHomepage()
+
+    return buildInstanceHomepageAuditEntity(oldHomepage?.content)
+  })
+
   await ActorCustomPageModel.updateInstanceHomepage(content)
+
+  auditLog.update(getAuditActorFromRes(res), () => buildInstanceHomepageAuditEntity(content), oldHomepageAuditEntity)
+
   ServerConfigManager.Instance.updateHomepageState(content)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()

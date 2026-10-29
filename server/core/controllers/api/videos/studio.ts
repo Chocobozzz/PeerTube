@@ -14,6 +14,7 @@ import {
   VideoStudioTaskRemoveSegments,
   VideoStudioTaskWatermark
 } from '@peertube/peertube-models'
+import { auditLog, buildVideoStudioEditionAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createAnyReqFiles } from '@server/helpers/express-utils.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants.js'
@@ -122,6 +123,8 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
 
     throw err
   }
+
+  auditLog.create(getAuditActorFromRes(res), () => buildVideoStudioEditionAuditEntity({ video, tasks: body.tasks }))
 
   await VideoChannelActivityModel.addVideoActivity({
     action: VideoChannelActivityAction.CREATE_STUDIO_TASKS,

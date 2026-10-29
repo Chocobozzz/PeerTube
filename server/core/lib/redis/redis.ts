@@ -13,6 +13,8 @@ import * as locks from './locks.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
 import * as primaryRegisteredPlugins from './primary-registered-plugins.js'
+import * as processHeartbeats from './process-heartbeats.js'
+import { ProcessHeartbeat } from './process-heartbeats.js'
 import * as rateLimit from './rate-limit.js'
 import {
   buildLoggedRedisClientOptions,
@@ -415,6 +417,20 @@ export class Redis {
 
   getInboxWaiting (staleAfterMs: number) {
     return inboxStats.getInboxWaiting(staleAfterMs)
+  }
+
+  /* ************ Process heartbeats ************ */
+
+  setProcessHeartbeat (processId: string, heartbeat: ProcessHeartbeat) {
+    return processHeartbeats.setProcessHeartbeat(processId, heartbeat)
+  }
+
+  removeProcessHeartbeat (processId: string) {
+    return processHeartbeats.removeProcessHeartbeat(processId)
+  }
+
+  getProcessHeartbeats (staleAfterMs: number) {
+    return processHeartbeats.getProcessHeartbeats(staleAfterMs)
   }
 
   /* ************ Keys generation ************ */

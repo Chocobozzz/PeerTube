@@ -122,6 +122,14 @@ export type MVideoSeo =
   & Use<'VideoFiles', MVideoFile[]>
   & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
 
+export type MVideoSitemap =
+  & MVideo
+  & Use<'Thumbnails', MThumbnail[]>
+  & Use<'VideoChannel', MChannelAccountLight>
+  & Use<'Tags', MTag[]>
+  & Use<'VideoFiles', MVideoFile[]>
+  & Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
+
 // ############################################################################
 
 // Associations with not all their attributes

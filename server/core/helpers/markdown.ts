@@ -6,6 +6,7 @@ import {
 } from '@peertube/peertube-core-utils'
 import MarkdownItClass from 'markdown-it'
 import markdownItEmoji from 'markdown-it-emoji/lib/light.mjs'
+import { parse } from 'node-html-parser'
 import sanitizeHtml from 'sanitize-html'
 
 type MarkdownIt = InstanceType<typeof MarkdownItClass>
@@ -45,6 +46,13 @@ export const mdToPlainText = (text: string) => {
   return sanitizeHtml(markdownItForPlainText.plainText, textOnlySanitizeOptions)
 }
 
+export const mdToUnescapedPlainText = (text: string) => {
+  const plainText = mdToPlainText(text)
+  if (!plainText) return ''
+
+  return parse(plainText).text
+}
+
 export const toSafeMailHtml = (text: string) => {
   if (!text) return ''
 
@@ -62,7 +70,6 @@ type MarkdownItToken = MarkdownItState['tokens'][number]
 function plainTextPlugin (markdownIt: MarkdownIt) {
   function plainTextRule (state: MarkdownItState) {
     const text = scan(state.tokens)
-
     ;(markdownIt as MarkdownItWithPlainText).plainText = text
   }
 

@@ -267,6 +267,8 @@ export async function blacklistVideo (videoInstance: MVideoAccountLight, options
   }
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)
+
+  return blacklist
 }
 
 export async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: MVideoWithRights) {

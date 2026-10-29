@@ -7,6 +7,7 @@ import { LiveVideoScheduleEdit } from './live/live-video-schedule.model.js'
 import { Thumbnail } from './thumbnail/thumbnail.model.js'
 import { ConstantLabel } from '../common/constant-label.model.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
+import { VideoRecommendationScopeType } from './video-recommendation-scope.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
 import { VideoSource } from './video-source.model.js'
 import { VideoStateType } from './video-state.enum.js'
@@ -124,6 +125,11 @@ export interface VideoDetails extends Video {
   channel: VideoChannel
   account: Account
   tags: string[]
+
+  recommendationScope: {
+    id: VideoRecommendationScopeType
+    label: string
+  }
 
   commentsPolicy: {
     id: VideoCommentPolicyType

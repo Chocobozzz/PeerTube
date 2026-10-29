@@ -65,6 +65,20 @@ export class TagModel extends SequelizeModel<TagModel> {
       .then(data => data.map(d => d.name))
   }
 
+  static listNamesOfVideo (videoId: number): Promise<string[]> {
+    const query = 'SELECT tag.name FROM tag ' +
+      'INNER JOIN "videoTag" ON "videoTag"."tagId" = tag.id ' +
+      'WHERE "videoTag"."videoId" = $videoId'
+
+    const options = {
+      bind: { videoId },
+      type: QueryTypes.SELECT as QueryTypes.SELECT
+    }
+
+    return TagModel.sequelize.query<{ name: string }>(query, options)
+      .then(data => data.map(d => d.name))
+  }
+
   static findOrCreateMultiple (options: {
     tags: string[]
     transaction?: Transaction

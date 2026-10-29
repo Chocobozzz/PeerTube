@@ -9,6 +9,7 @@ import {
 } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { getFormattedObjects } from '@server/helpers/utils.js'
+import { auditLog, buildPluginAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { listAvailablePluginsFromIndex } from '@server/lib/plugins/plugin-index.js'
 import { PluginManager } from '@server/lib/plugins/plugin-manager.js'
 import { currentProcessId, RedisChannels } from '@server/lib/redis/index.js'
@@ -35,6 +36,7 @@ import {
 } from '@server/middlewares/validators/plugins.js'
 import { PluginModel } from '@server/models/server/plugin.js'
 import express from 'express'
+import { basename } from 'path'
 
 const logger = createLogger()
 
@@ -169,6 +171,11 @@ async function installPlugin (req: express.Request, res: express.Response) {
   try {
     const plugin = await PluginManager.Instance.install({ toInstall, version: pluginVersion, fromDisk })
 
+    auditLog.create(
+      getAuditActorFromRes(res),
+      () => buildPluginAuditEntity({ plugin, npmName: PluginModel.buildNpmName(plugin.name, plugin.type) })
+    )
+
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
     logger.warn('Cannot install plugin %s.', toInstall, { err })
@@ -182,7 +189,22 @@ async function updatePlugin (req: express.Request, res: express.Response) {
   const fromDisk = !!body.path
   const toUpdate = body.npmName || body.path
   try {
+    const oldPluginAuditEntity = await auditLog.snapshot(async () => {
+      const npmName = fromDisk ? basename(toUpdate) : toUpdate
+      const oldPlugin = await PluginModel.loadByNpmName(npmName)
+
+      return oldPlugin
+        ? buildPluginAuditEntity({ plugin: oldPlugin, npmName })
+        : null
+    })
+
     const plugin = await PluginManager.Instance.update(toUpdate, fromDisk)
+
+    auditLog.update(
+      getAuditActorFromRes(res),
+      () => buildPluginAuditEntity({ plugin, npmName: PluginModel.buildNpmName(plugin.name, plugin.type) }),
+      oldPluginAuditEntity
+    )
 
     return res.json(plugin.toFormattedJSON())
   } catch (err) {
@@ -194,7 +216,17 @@ async function updatePlugin (req: express.Request, res: express.Response) {
 async function uninstallPlugin (req: express.Request, res: express.Response) {
   const body: ManagePlugin = req.body
 
+  const pluginAuditEntity = await auditLog.snapshot(async () => {
+    const plugin = await PluginModel.loadByNpmName(body.npmName)
+
+    return plugin
+      ? buildPluginAuditEntity({ plugin, npmName: body.npmName })
+      : null
+  })
+
   await PluginManager.Instance.uninstall({ npmName: body.npmName })
+
+  auditLog.delete(getAuditActorFromRes(res), pluginAuditEntity)
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
@@ -219,9 +251,21 @@ function getPluginRegisteredSettings (req: express.Request, res: express.Respons
 
 async function updatePluginSettings (req: express.Request, res: express.Response) {
   const plugin = res.locals.plugin
+  const npmName = req.params.npmName
+
+  const registeredSettings = PluginManager.Instance.getRegisteredSettings(npmName)
+  const oldPluginAuditEntity = auditLog.snapshot(() =>
+    buildPluginAuditEntity({ plugin, npmName, settings: plugin.settings ?? {}, registeredSettings })
+  )
 
   plugin.settings = req.body.settings
   await plugin.save()
+
+  auditLog.update(
+    getAuditActorFromRes(res),
+    () => buildPluginAuditEntity({ plugin, npmName, settings: plugin.settings ?? {}, registeredSettings }),
+    oldPluginAuditEntity
+  )
 
   await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
 

@@ -1,4 +1,5 @@
 import express from 'express'
+import { auditLog, buildRunnerRegistrationTokenAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { generateRunnerRegistrationToken } from '@server/helpers/token-generator.js'
 import {
@@ -19,14 +20,16 @@ const logger = createLogger('api', 'runner')
 
 const runnerRegistrationTokensRouter = express.Router()
 
-runnerRegistrationTokensRouter.post('/registration-tokens/generate',
+runnerRegistrationTokensRouter.post(
+  '/registration-tokens/generate',
   apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
   asyncMiddleware(generateRegistrationToken)
 )
 
-runnerRegistrationTokensRouter.delete('/registration-tokens/:id',
+runnerRegistrationTokensRouter.delete(
+  '/registration-tokens/:id',
   apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
@@ -34,7 +37,8 @@ runnerRegistrationTokensRouter.delete('/registration-tokens/:id',
   asyncMiddleware(deleteRegistrationToken)
 )
 
-runnerRegistrationTokensRouter.get('/registration-tokens',
+runnerRegistrationTokensRouter.get(
+  '/registration-tokens',
   apiRateLimiter,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_RUNNERS),
@@ -62,6 +66,8 @@ async function generateRegistrationToken (req: express.Request, res: express.Res
 
   await registrationToken.save()
 
+  auditLog.create(getAuditActorFromRes(res), () => buildRunnerRegistrationTokenAuditEntity(registrationToken))
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
@@ -71,6 +77,8 @@ async function deleteRegistrationToken (req: express.Request, res: express.Respo
   const runnerRegistrationToken = res.locals.runnerRegistrationToken
 
   await runnerRegistrationToken.destroy()
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildRunnerRegistrationTokenAuditEntity(runnerRegistrationToken))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

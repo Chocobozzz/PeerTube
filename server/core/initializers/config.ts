@@ -7,6 +7,7 @@ import {
   VideoCommentPolicyType,
   VideoLifecyclePolicy,
   VideoPrivacyType,
+  VideoRecommendationScopeType,
   VideoRedundancyConfigFilter,
   VideosRedundancyStrategy
 } from '@peertube/peertube-models'
@@ -243,6 +244,7 @@ export const CONFIG = buildConfig({
     PUBLISH: {
       DOWNLOAD_ENABLED: dynamicKey<boolean>('defaults.publish.download_enabled'),
       COMMENTS_POLICY: dynamicKey<VideoCommentPolicyType>('defaults.publish.comments_policy'),
+      RECOMMENDATION_SCOPE: dynamicKey<VideoRecommendationScopeType>('defaults.publish.recommendation_scope'),
       PRIVACY: dynamicKey<VideoPrivacyType>('defaults.publish.privacy'),
       LICENCE: dynamicKey<number>('defaults.publish.licence')
     },
@@ -421,7 +423,8 @@ export const CONFIG = buildConfig({
       MAX_FILES: staticKey<number>('log.rotation.max_files')
     },
     AUDIT: {
-      ENABLED: staticKey<boolean>('log.audit.enabled')
+      ENABLED: staticKey<boolean>('log.audit.enabled'),
+      MAX_AGE: staticKey('log.audit.max_age', { transform: parseDurationToMs })
     },
     ANONYMIZE_IP: staticKey<boolean>('log.anonymize_ip'),
     TAG_REQUESTS: staticKey<boolean>('log.tag_requests'),

@@ -250,12 +250,15 @@ npm run build:tests
 npm run test
 
 # Run a specific CI suite
-npm run ci -- api-1       # check-params, notifications, search
-npm run ci -- api-2       # live, server plugins, users
-npm run ci -- api-3       # videos, stats
-npm run ci -- api-4       # moderation, redundancy, object-storage,
-                          # activitypub
-npm run ci -- api-5       # transcoding, runners
+npm run ci -- api-check-params-search       # check-params, search
+npm run ci -- api-videos-1 | api-videos-2   # videos, split in 2 shards balanced by duration
+npm run ci -- api-server                    # server
+npm run ci -- api-live-scalability          # live, horizontal-scalability
+npm run ci -- api-users-stats               # users, stats
+npm run ci -- api-moderation-notifications  # moderation, notifications
+npm run ci -- api-federation                # activitypub, redundancy
+npm run ci -- api-object-storage            # object-storage
+npm run ci -- api-transcoding-1 | api-transcoding-2  # transcoding + runners, split in 2 shards
 npm run ci -- client      # feeds, client, misc-endpoints, plugins
 npm run ci -- cli-plugin  # CLI and plugin tests
 npm run ci -- lint        # OXlint + OpenAPI validation + client lint
@@ -287,7 +290,7 @@ docker run -p 8082:8080 \
 
 GitHub Actions (`.github/workflows/test.yml`), Ubuntu 22.04, Node.js
 22.x. Matrix strategy runs suites in parallel: `types-package`,
-`client`, `api-1`–`api-5`, `cli-plugin`, `lint`, `transcription`,
+`client`, the `api-*` suites listed above, `cli-plugin`, `lint`, `transcription`,
 `external-plugins`.
 
 Services provisioned per job: PostgreSQL 10, Redis, LDAP, S3 Ninja,

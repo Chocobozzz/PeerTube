@@ -151,6 +151,11 @@ export class AdminSettingsComponent implements OnInit {
         label: $localize`Logs`,
         routerLink: '/admin/settings/system/logs'
       })
+
+      systemItems.children.push({
+        label: $localize`Audit logs`,
+        routerLink: '/admin/settings/system/audit-logs'
+      })
     }
 
     if (this.hasRight(UserRight.MANAGE_DEBUG)) {

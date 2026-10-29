@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common'
-import { Component, OnChanges, OnDestroy, OnInit, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, inject, input, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { AuthService, Notifier, User, UserService } from '@app/core'
 import { InputSwitchComponent } from '@app/shared/shared-forms/input-switch.component'
@@ -25,6 +25,7 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
   private videoRecommendation = inject(VideoRecommendationService)
 
   readonly currentVideo = input<VideoDetails>(undefined)
+  readonly videoPassword = input<string>(undefined)
   readonly playlist = input<VideoPlaylist>(undefined)
   readonly displayAsRow = input<boolean>(undefined)
 
@@ -62,8 +63,8 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
       })
   }
 
-  ngOnChanges () {
-    if (this.currentVideo()) {
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['currentVideo'] && this.currentVideo()) {
       this.loadRecommendations()
     }
   }
@@ -94,15 +95,18 @@ export class RecommendedVideosComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   private loadRecommendations () {
-    this.videoRecommendation.getRecommendations(this.currentVideo(), this.videoRecommendation.getRecommendationHistory())
-      .subscribe({
-        next: videos => {
-          this.videos = videos
+    this.videoRecommendation.getRecommendations(
+      this.currentVideo(),
+      this.videoPassword(),
+      this.videoRecommendation.getRecommendationHistory()
+    ).subscribe({
+      next: videos => {
+        this.videos = videos
 
-          this.gotRecommendations.emit(this.videos)
-        },
+        this.gotRecommendations.emit(this.videos)
+      },
 
-        error: err => this.notifier.handleError(err)
-      })
+      error: err => this.notifier.handleError(err)
+    })
   }
 }

@@ -9,7 +9,7 @@ import {
   VideoInclude
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { UserAuditView, auditLoggerFactory, getAuditIdFromRes } from '@server/helpers/audit-logger.js'
+import { auditLog, buildUserAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -52,8 +52,6 @@ import { AccountModel } from '../../../models/account/account.js'
 import { UserModel } from '../../../models/user/user.js'
 import { VideoImportModel } from '../../../models/video/video-import.js'
 import { VideoModel } from '../../../models/video/video.js'
-
-const auditLogger = auditLoggerFactory('users')
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT)
 
@@ -284,7 +282,7 @@ async function getMyVideoRating (req: express.Request, res: express.Response) {
 async function deleteMe (req: express.Request, res: express.Response) {
   const user = await UserModel.loadByIdWithChannels(res.locals.oauth.token.User.id)
 
-  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
+  auditLog.delete(getAuditActorFromRes(res), () => buildUserAuditEntity(user))
 
   await retryTransactionWrapper(() => {
     return runTransaction(t => {
@@ -302,6 +300,7 @@ async function updateMe (req: express.Request, res: express.Response) {
   let sendVerificationEmail = false
 
   const user = res.locals.oauth.token.user
+  const oldUserAuditEntity = await auditLog.snapshot(() => loadUserAuditEntity(user.id))
 
   const keysToUpdate: (keyof UserUpdateMe & keyof AttributesOnly<UserModel>)[] = [
     'password',
@@ -376,6 +375,12 @@ async function updateMe (req: express.Request, res: express.Response) {
     }
   })
 
+  auditLog.update(getAuditActorFromRes(res), () => loadUserAuditEntity(user.id), oldUserAuditEntity, {
+    secretChanges: body.password !== undefined
+      ? [ 'password' ]
+      : []
+  })
+
   if (sendVerificationEmail === true) {
     await sendVerifyUserChangeEmail(user)
   }
@@ -388,6 +393,7 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
 
   const userAccount = await AccountModel.load(user.Account.id)
+  const oldUserAuditEntity = await auditLog.snapshot(() => loadUserAuditEntity(user.id))
 
   const avatars = await updateLocalActorImageFiles({
     accountOrChannel: userAccount,
@@ -395,6 +401,8 @@ async function updateMyAvatar (req: express.Request, res: express.Response) {
     type: ActorImageType.AVATAR,
     sendActorUpdate: true
   })
+
+  auditLog.update(getAuditActorFromRes(res), () => loadUserAuditEntity(user.id), oldUserAuditEntity)
 
   return res.json({
     avatars: avatars.map(avatar => avatar.toFormattedJSON())
@@ -405,7 +413,11 @@ async function deleteMyAvatar (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
 
   const userAccount = await AccountModel.load(user.Account.id)
+  const oldUserAuditEntity = await auditLog.snapshot(() => loadUserAuditEntity(user.id))
+
   await deleteLocalActorImageFile(userAccount, ActorImageType.AVATAR)
+
+  auditLog.update(getAuditActorFromRes(res), () => loadUserAuditEntity(user.id), oldUserAuditEntity)
 
   return res.json({ avatars: [] })
 }
@@ -418,4 +430,10 @@ async function usersNewFeatureInfoRead (req: express.Request, res: express.Respo
   await user.save()
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
+}
+
+async function loadUserAuditEntity (userId: number) {
+  const user = await UserModel.loadByIdFull(userId)
+
+  return buildUserAuditEntity(user)
 }

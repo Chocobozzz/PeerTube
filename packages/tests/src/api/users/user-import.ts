@@ -11,6 +11,7 @@ import {
   VideoPlaylistPrivacy,
   VideoPlaylistType,
   VideoPrivacy,
+  VideoRecommendationScope,
   VideoResolution,
   VideoState
 } from '@peertube/peertube-models'
@@ -395,7 +396,7 @@ function runTest (withObjectStorage: boolean) {
       // We observe weird behaviour in the CI, so re-wait jobs here just to be sure
       await waitJobs([ remoteServer, server ])
 
-      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken, sort: '-publishedAt' })
+      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken, sort: '-createdAt' })
       expect(data).to.have.lengthOf(5)
 
       // Correct order
@@ -503,6 +504,9 @@ function runTest (withObjectStorage: boolean) {
               thumbnails: [ 'custom-thumbnail-user-import-280x157.jpg', 'custom-thumbnail-user-import-850x480.jpg' ]
             }
           })
+
+          const video = await checkServer.videos.get({ id: otherVideo.uuid })
+          expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
         }
 
         const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })

@@ -1,4 +1,5 @@
 export * from './about.model.js'
+export * from './audit-log.model.js'
 export * from './broadcast-message-level.type.js'
 export * from './client-log-create.model.js'
 export * from './client-log-level.type.js'

@@ -17,7 +17,14 @@ import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MChannelBannerAccountDefault } from '@server/types/models/index.js'
 import express from 'express'
-import { auditLoggerFactory, getAuditIdFromRes, VideoChannelAuditView } from '../../../helpers/audit-logger.js'
+import {
+  auditLog,
+  buildChannelAuditEntity,
+  buildChannelAuditSummary,
+  buildChannelPlaylistsOrderAuditEntity,
+  buildChannelVideosImportAuditEntity,
+  getAuditActorFromRes
+} from '../../../lib/audit-log/index.js'
 import { resetSequelizeInstance, runTransaction } from '../../../helpers/database-utils.js'
 import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
@@ -64,8 +71,6 @@ import { channelCollaborators } from './video-channel-collaborators.js'
 import { videoChannelLogosRouter } from './video-channel-logos.js'
 
 const logger = createLogger()
-
-const auditLogger = auditLoggerFactory('channels')
 
 const videoChannelRouter = express.Router()
 
@@ -218,7 +223,7 @@ async function createVideoChannel (req: express.Request, res: express.Response) 
     payload: { actorId: videoChannelCreated.Actor.id }
   })
 
-  auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
+  auditLog.create(getAuditActorFromRes(res), () => buildChannelAuditEntity(videoChannelCreated.toFormattedJSON()))
   logger.info('Video channel %s created.', videoChannelCreated.Actor.url)
 
   Hooks.runAction('action:api.video-channel.created', { videoChannel: videoChannelCreated, req, res })
@@ -232,7 +237,7 @@ async function createVideoChannel (req: express.Request, res: express.Response) 
 
 async function updateVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInstance = res.locals.videoChannel
-  const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannelInstance.toFormattedJSON())
+  const oldChannelAuditEntity = auditLog.snapshot(() => buildChannelAuditEntity(videoChannelInstance.toFormattedJSON()))
   const body = req.body as VideoChannelUpdate
   let doBulkVideoUpdate = false
 
@@ -255,10 +260,11 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
       const videoChannelInstanceUpdated = await videoChannelInstance.save({ transaction: t }) as MChannelBannerAccountDefault
       await sendUpdateActor(videoChannelInstanceUpdated, t)
 
-      auditLogger.update(
-        getAuditIdFromRes(res),
-        new VideoChannelAuditView(videoChannelInstanceUpdated.toFormattedJSON()),
-        oldVideoChannelAuditKeys
+      auditLog.update(
+        getAuditActorFromRes(res),
+        () => buildChannelAuditEntity(videoChannelInstanceUpdated.toFormattedJSON()),
+        oldChannelAuditEntity,
+        { transaction: t }
       )
 
       await VideoChannelActivityModel.addChannelActivity({
@@ -300,7 +306,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
 
     Hooks.runAction('action:api.video-channel.deleted', { videoChannel: videoChannelInstance, req, res })
 
-    auditLogger.delete(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelInstance.toFormattedJSON()))
+    auditLog.delete(getAuditActorFromRes(res), () => buildChannelAuditEntity(videoChannelInstance.toFormattedJSON()), { transaction: t })
     logger.info('Video channel %s deleted.', videoChannelInstance.Actor.url)
   })
 
@@ -372,6 +378,16 @@ async function reorderPlaylistsInChannel (req: express.Request, res: express.Res
     await videoChannel.save({ transaction: t })
 
     await sendUpdateActor(videoChannel, t)
+
+    auditLog.update(
+      getAuditActorFromRes(res),
+      () =>
+        buildChannelPlaylistsOrderAuditEntity({ channel: buildChannelAuditSummary(videoChannel), position: insertAfter, reorderLength }),
+      auditLog.snapshot(() =>
+        buildChannelPlaylistsOrderAuditEntity({ channel: buildChannelAuditSummary(videoChannel), position: start, reorderLength })
+      ),
+      { transaction: t }
+    )
     await sendPlaylistPositionUpdateOfChannel(videoChannel.id, t)
   })
 
@@ -461,6 +477,16 @@ async function importVideosInChannel (req: express.Request, res: express.Respons
       partOfChannelSyncId: res.locals.videoChannelSync?.id
     }
   })
+
+  auditLog.create(
+    getAuditActorFromRes(res),
+    () =>
+      buildChannelVideosImportAuditEntity({
+        channel: buildChannelAuditSummary(res.locals.videoChannel),
+        externalChannelUrl,
+        videoChannelSyncId: res.locals.videoChannelSync?.id ?? null
+      })
+  )
 
   logger.info('Video import job for channel "%s" with url "%s" created.', res.locals.videoChannel.name, externalChannelUrl)
 

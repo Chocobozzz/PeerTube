@@ -3688,6 +3688,75 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
 
+  /api/v1/recommendations/videos:
+    get:
+      summary: List recommended videos
+      description: |
+        Return videos recommended next to a reference video (or general recommendations if no reference video is given).
+
+        PeerTube decides the recommendation algorithm: it currently lists videos sharing tags with the reference video
+        (excluding videos already watched by the authenticated user), then the latest videos.
+        All returned videos are restricted to the `scope`, which defaults to the `recommendationScope` of the reference video.
+      operationId: getRecommendationVideos
+      tags:
+        - Video
+      parameters:
+        - name: scope
+          in: query
+          required: false
+          description: |
+            Restrict recommended videos. Defaults to the `recommendationScope` of the reference video, or to `1` (all videos) if no reference video is given
+          schema:
+            $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        - name: videoId
+          in: query
+          required: false
+          description: Reference video. Required if `scope` is `3` or `4`
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/id'
+              - $ref: '#/components/schemas/UUIDv4'
+              - $ref: '#/components/schemas/shortUUID'
+        - name: count
+          in: query
+          required: false
+          description: Number of videos to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 30
+            default: 10
+        - name: excludeVideoIds
+          in: query
+          required: false
+          description: Videos that must not be recommended (the reference video is always excluded)
+          style: form
+          explode: true
+          schema:
+            type: array
+            maxItems: 50
+            items:
+              $ref: '#/components/schemas/id'
+        - $ref: '#/components/parameters/videoPasswordHeader'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+        '400':
+          description: invalid parameters or missing `videoId`
+        '401':
+          description: reference video requires authentication or a password
+        '403':
+          description: reference video is not visible by the user or the password is invalid
+        '404':
+          description: reference video not found
+
   /api/v1/videos/categories:
     get:
       summary: List available video categories
@@ -3847,6 +3916,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -4422,6 +4493,8 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -7645,6 +7718,35 @@ paths:
                     type: string
                   activityPubMessagesWaiting:
                     type: integer
+                  secondariesUp:
+                    type: integer
+                    description: Number of secondary processes that recently sent a heartbeat
+                  processes:
+                    type: array
+                    description: Processes of the platform that recently sent a heartbeat, the primary first
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        role:
+                          type: string
+                          enum:
+                            - primary
+                            - secondary
+                        hostname:
+                          type: string
+                        pid:
+                          type: integer
+                        version:
+                          type: string
+                        startedAt:
+                          type: string
+                          format: date-time
+                          description: When the process started to serve requests
+                        lastSeenAt:
+                          type: string
+                          format: date-time
 
   /api/v1/server/debug/run-command:
     post:
@@ -7734,19 +7836,94 @@ paths:
       tags:
         - Logs
       summary: Get instance audit logs
+      description: |
+        User, administration and moderation actions recorded by all the PeerTube processes of the instance.
+
+        By default (`format=array`), returns an array of at most the 10,000 most recent entries of the requested date range, oldest first.
+        `startDate` is then required and pagination parameters are ignored.
+
+        With `format=list`, returns a paginated list.
       operationId: getInstanceAuditLogs
       security:
         - OAuth2:
           - admin
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: array
+            enum:
+            - array
+            - list
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+            - -createdAt
+            - createdAt
+        - name: search
+          in: query
+          required: false
+          description: Search in usernames, IP addresses and audited entities
+          schema:
+            type: string
+        - name: entityType
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditLogEntityType'
+        - name: entityId
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: action
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditLogAction'
+        - name: startDate
+          in: query
+          required: false
+          description: Required with the default `array` format
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - type: array
+                    description: Default `array` format
+                    items:
+                      $ref: '#/components/schemas/AuditLog'
+                  - type: object
+                    description: '`list` format'
+                    properties:
+                      total:
+                        type: integer
+                        example: 1
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AuditLog'
+        '403':
+          description: audit log is disabled
 
   /api/v1/plugins:
     get:
@@ -10402,6 +10579,28 @@ components:
         label:
           type: string
 
+    VideoRecommendationScopeSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        Videos that can be recommended next to a video:
+          - `1` All videos
+          - `2` Only videos of the platform that owns the reference video (or of the current platform if no video is given)
+          - `3` Only videos of the account that owns the reference video
+          - `4` Only videos of the channel of the reference video
+
+        This is a preference of the video owner: applications displaying recommendations may not apply it
+    VideoRecommendationScopeConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        label:
+          type: string
+
     BlockStatus:
       properties:
         accounts:
@@ -11054,6 +11253,8 @@ components:
                 maxLength: 30
             commentsPolicy:
               $ref: '#/components/schemas/VideoCommentsPolicyConstant'
+            recommendationScope:
+              $ref: '#/components/schemas/VideoRecommendationScopeConstant'
             downloadEnabled:
               type: boolean
             inputFileUpdatedAt:
@@ -12649,6 +12850,8 @@ components:
                   type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 licence:
@@ -12854,6 +13057,8 @@ components:
             maxLength: 30
         commentsPolicy:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
+        recommendationScope:
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean
@@ -13491,6 +13696,133 @@ components:
           description: Set it to true if you don't want PeerTube to send an email to the user
       required:
         - moderationResponse
+
+    AuditLogAction:
+      type: string
+      enum:
+        - create
+        - update
+        - delete
+
+    AuditLogEntityType:
+      type: string
+      enum:
+        - video
+        - video-import
+        - video-live
+        - video-source
+        - video-file
+        - video-caption
+        - video-chapters
+        - video-password
+        - video-embed-privacy
+        - video-transcoding
+        - video-transcription
+        - video-studio-edition
+        - video-player-settings
+        - ownership-change
+        - comment
+        - channel
+        - channel-sync
+        - channel-videos-import
+        - channel-collaborator
+        - channel-player-settings
+        - channel-playlists-order
+        - playlist
+        - playlist-element
+        - playlist-elements-order
+        - user
+        - registration
+        - password-reset
+        - token-session
+        - failed-login
+        - scoped-token
+        - user-export
+        - user-import
+        - abuse
+        - abuse-message
+        - video-block
+        - account-block
+        - server-block
+        - blocklist-subscription
+        - watched-words-list
+        - watched-words-subscription
+        - automatic-tag-policy
+        - config
+        - instance-image
+        - instance-homepage
+        - instance-host
+        - plugin
+        - follow
+        - server-redundancy
+        - video-redundancy
+        - job-queue
+        - job
+        - runner
+        - runner-registration-token
+        - debug-command
+        - storage-prune
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        action:
+          $ref: '#/components/schemas/AuditLogAction'
+        entityType:
+          $ref: '#/components/schemas/AuditLogEntityType'
+        entityId:
+          type: integer
+          nullable: true
+          description: Id of the audited entity, `null` for the instance configuration
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              nullable: true
+              description: '`null` if the user has been deleted, for remote actors or for entries imported from the legacy audit log files'
+            username:
+              type: string
+              description: Username at the time of the action, or the actor handle for remote actors
+        ip:
+          type: string
+          nullable: true
+          description: IP address of the request, anonymized if `log.anonymize_ip` is enabled
+        entity:
+          type: object
+          additionalProperties: true
+          description: Snapshot of the entity after the action (before the action for deletions)
+        changes:
+          type: object
+          nullable: true
+          description: Only for updates. Keys are dot-separated paths of the changed entity attributes
+          additionalProperties:
+            type: object
+            properties:
+              old: {}
+              new: {}
+        createdAt:
+          type: string
+          format: date-time
+        timestamp:
+          type: string
+          format: date-time
+          deprecated: true
+          description: Same as `createdAt`. Field of the format used before audit logs were stored in the database
+        level:
+          type: string
+          deprecated: true
+          enum:
+            - audit
+          description: Field of the format used before audit logs were stored in the database
+        message:
+          type: string
+          deprecated: true
+          description: |
+            JSON string containing the `user`, `domain` (entity type), `action`, `entityId`, `ip` and `changes` of the entry, and the properties of the audited entity.
+            Field of the format used before audit logs were stored in the database
 
     UserRegistrationState:
       type: integer

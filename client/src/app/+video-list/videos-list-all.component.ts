@@ -26,6 +26,7 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
   getSyndicationItemsFunction = this.getSyndicationItems.bind(this)
 
   title: string
+  instanceName: string
 
   groupByDate: boolean
 
@@ -43,6 +44,7 @@ export class VideosListAllComponent implements OnInit, OnDestroy, DisableForReus
 
   ngOnInit () {
     this.serverConfig = this.serverService.getHTMLConfig()
+    this.instanceName = this.serverConfig.instance.name
 
     this.defaultSort = this.serverConfig.client.browseVideos.defaultSort as VideoSortField
     this.defaultScope = this.serverConfig.client.browseVideos.defaultScope as VideoFilterScope

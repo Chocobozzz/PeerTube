@@ -2,7 +2,7 @@ import { Route, Routes, UrlSegment } from '@angular/router'
 import { configRoutes } from '@app/+admin/config'
 import { moderationRoutes } from '@app/+admin/moderation/moderation.routes'
 import { pluginsRoutes } from '@app/+admin/plugins/plugins.routes'
-import { DebugService, JobService, LogsService, RunnerService, systemRoutes } from '@app/+admin/system'
+import { AuditLogService, DebugService, JobService, LogsService, RunnerService, systemRoutes } from '@app/+admin/system'
 import { CustomMarkupService } from '@app/shared/shared-custom-markup/custom-markup.service'
 import { DynamicElementService } from '@app/shared/shared-custom-markup/dynamic-element.service'
 import { InstanceFollowService } from '@app/shared/shared-instance/instance-follow.service'
@@ -34,6 +34,7 @@ const commonConfig = {
     UserAdminService,
     BulkService,
     AdminRegistrationService,
+    AuditLogService,
     CustomMarkupService,
     CustomPageService,
     DebugService,

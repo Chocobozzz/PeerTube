@@ -1,4 +1,5 @@
 import { pick } from '@peertube/peertube-core-utils'
+import { auditLog, buildVideoAuditEntity, buildVideoLiveAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import {
   HttpStatusCode,
   LiveVideoCreate,
@@ -29,7 +30,7 @@ import { VideoChannelActivityModel } from '@server/models/video/video-channel-ac
 import { VideoLiveReplaySettingModel } from '@server/models/video/video-live-replay-setting.js'
 import { VideoLiveScheduleModel } from '@server/models/video/video-live-schedule.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
-import { MVideoLive } from '@server/types/models/index.js'
+import { MVideo, MVideoLive, MVideoLiveWithSettingSchedules } from '@server/types/models/index.js'
 import express from 'express'
 import { Transaction } from 'sequelize'
 import { createLogger } from '../../../helpers/logger.js'
@@ -137,6 +138,8 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   const videoLive = res.locals.videoLive
 
   return logger.withContext([ video.uuid ], async () => {
+    const oldLiveAuditEntity = auditLog.snapshot(() => buildLiveAuditEntity(video, videoLive, videoLive.ReplaySetting?.privacy))
+
     await retryTransactionWrapper(() => {
       return runTransaction(async t => {
         const newReplaySettingModel = await updateReplaySettings(videoLive, body, t)
@@ -158,6 +161,13 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
         }
 
         video.VideoLive = await videoLive.save({ transaction: t })
+
+        auditLog.update(
+          getAuditActorFromRes(res),
+          () => buildLiveAuditEntity(video, videoLive, newReplaySettingModel?.privacy),
+          oldLiveAuditEntity,
+          { transaction: t }
+        )
 
         await VideoChannelActivityModel.addVideoActivity({
           action: VideoChannelActivityAction.UPDATE,
@@ -244,6 +254,8 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
 
     const { video } = await localVideoCreator.create()
 
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoAuditEntity(video.toFormattedDetailsJSON()))
+
     logger.info('Video live %s with uuid %s created.', videoInfo.name, video.uuid)
 
     Hooks.runAction('action:api.live-video.created', { video, req, res })
@@ -255,5 +267,17 @@ async function addLiveVideo (req: express.Request, res: express.Response) {
         uuid: video.uuid
       }
     })
+  })
+}
+
+function buildLiveAuditEntity (video: MVideo, videoLive: MVideoLiveWithSettingSchedules, replayPrivacy: number) {
+  return buildVideoLiveAuditEntity({
+    video,
+    saveReplay: videoLive.saveReplay,
+    replayPrivacy: replayPrivacy ?? null,
+    permanentLive: videoLive.permanentLive,
+    latencyMode: videoLive.latencyMode,
+    dvrWindow: videoLive.dvrWindow,
+    schedules: videoLive.LiveSchedules
   })
 }

@@ -20,6 +20,7 @@ import {
   isVideoNameValid,
   isVideoPrivacyValid,
   isVideoPublicationDateValid,
+  isVideoRecommendationScopeValid,
   isVideoReplayPrivacyValid,
   isVideoSourceFilenameValid,
   isVideoSupportValid,
@@ -62,6 +63,7 @@ type SanitizedObject = Pick<
   | 'nsfw'
   | 'isLive'
   | 'commentsPolicy'
+  | 'recommendationScope'
   | 'downloadEnabled'
   | 'videoEmbedPrivacy'
   | 'waitTranscoding'
@@ -100,6 +102,10 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     if (!o.commentsPolicy || !isVideoCommentsPolicyValid(o.commentsPolicy)) {
       o.commentsPolicy = CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
+    }
+
+    if (!o.recommendationScope || !isVideoRecommendationScopeValid(o.recommendationScope)) {
+      o.recommendationScope = CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE
     }
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
@@ -165,6 +171,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'nsfw',
       'isLive',
       'commentsPolicy',
+      'recommendationScope',
       'downloadEnabled',
       'videoEmbedPrivacy',
       'waitTranscoding',
@@ -244,6 +251,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
           'nsfw',
           'tags',
           'commentsPolicy',
+          'recommendationScope',
           'downloadEnabled',
           'waitTranscoding',
           'originallyPublishedAt'

@@ -1,4 +1,5 @@
 import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
+import { auditLog, buildVideoPasswordAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { runTransaction } from '@server/helpers/database-utils.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
@@ -80,10 +81,23 @@ function updateVideoPasswordList (req: express.Request, res: express.Response) {
 
   return logger.withContext([ video.uuid ], async () => {
     const passwordArray = req.body.passwords as string[]
+    const oldPasswordsAuditEntity = await auditLog.snapshot(async () => {
+      const { total } = await VideoPasswordModel.listPasswords({ videoId, start: 0, count: 1, sort: 'createdAt' })
+
+      return buildVideoPasswordAuditEntity({ video, passwordId: null, passwordsCount: total })
+    })
 
     await runTransaction(async (t: Transaction) => {
       await VideoPasswordModel.deleteAllPasswords(videoId, t)
       await VideoPasswordModel.addPasswords(passwordArray, videoId, t)
+
+      auditLog.update(
+        getAuditActorFromRes(res),
+        () => buildVideoPasswordAuditEntity({ video, passwordId: null, passwordsCount: passwordArray.length }),
+        oldPasswordsAuditEntity,
+        // Passwords are replaced even if their count didn't change
+        { transaction: t, secretChanges: [ 'passwords' ] }
+      )
 
       await VideoChannelActivityModel.addVideoActivity({
         action: VideoChannelActivityAction.UPDATE_PASSWORDS,
@@ -107,9 +121,11 @@ function addVideoPassword (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const newPassword = req.body.password as string
 
-    await runTransaction(t => {
+    const password = await runTransaction(t => {
       return VideoPasswordModel.addPassword(newPassword, videoId, t)
     })
+
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoPasswordAuditEntity({ video, passwordId: password.id }))
 
     logger.info(`Video password for video with name ${video.name} and uuid ${video.uuid} have been added`)
 
@@ -123,6 +139,8 @@ function removeVideoPassword (req: express.Request, res: express.Response) {
 
   return logger.withContext([ videoInstance.uuid ], async () => {
     await VideoPasswordModel.deletePassword(password.id)
+
+    auditLog.delete(getAuditActorFromRes(res), () => buildVideoPasswordAuditEntity({ video: videoInstance, passwordId: password.id }))
 
     await VideoChannelActivityModel.addVideoActivity({
       action: VideoChannelActivityAction.UPDATE_PASSWORDS,

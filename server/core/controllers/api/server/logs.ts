@@ -2,18 +2,25 @@ import { pick } from '@peertube/peertube-core-utils'
 import { ClientLogCreate, HttpStatusCode, ServerLogLevel, UserRight } from '@peertube/peertube-models'
 import { isArray } from '@server/helpers/custom-validators/misc.js'
 import { buildSearchTags, createLogger, mtimeSortFilesDesc } from '@server/helpers/logger.js'
+import { getFormattedObjects } from '@server/helpers/utils.js'
+import { AuditLogModel } from '@server/models/server/audit-log.js'
 import express from 'express'
 import { readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import { CONFIG } from '../../../initializers/config.js'
-import { AUDIT_LOG_FILENAME, LOG_FILENAME, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers/constants.js'
+import { LOG_FILENAME, MAX_AUDIT_LOGS_OUTPUT, MAX_LOGS_OUTPUT_CHARACTERS } from '../../../initializers/constants.js'
 import {
   asyncMiddleware,
+  auditLogsSortValidator,
   authenticate,
   buildRateLimiter,
   ensureUserHasRight,
+  openapiOperationDoc,
   optionalAuthenticate,
-  primaryOnly
+  paginationValidator,
+  primaryOnly,
+  setDefaultPagination,
+  setDefaultSort
 } from '../../../middlewares/index.js'
 import { createClientLogValidator, getAuditLogsValidator, getLogsValidator } from '../../../middlewares/validators/logs.js'
 
@@ -49,10 +56,14 @@ logsRouter.get(
 )
 
 logsRouter.get(
-  '/audit-logs',
-  primaryOnly,
+  '/audit-logs', // Stored in the database, accessible by all processes
+  openapiOperationDoc({ operationId: 'getInstanceAuditLogs' }),
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_LOGS),
+  paginationValidator,
+  auditLogsSortValidator,
+  setDefaultSort,
+  setDefaultPagination,
   getAuditLogsValidator,
   asyncMiddleware(getAuditLogs)
 )
@@ -80,16 +91,40 @@ function createClientLog (req: express.Request, res: express.Response) {
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
-const auditLogNameFilter = generateLogNameFilter(AUDIT_LOG_FILENAME)
 async function getAuditLogs (req: express.Request, res: express.Response) {
-  const output = await generateOutput({
-    startDateQuery: req.query.startDate,
-    endDateQuery: req.query.endDate,
-    level: 'audit',
-    nameFilter: auditLogNameFilter
+  const filters = {
+    search: req.query.search,
+    entityType: req.query.entityType,
+    entityId: req.query.entityId,
+    action: req.query.action,
+    startDate: req.query.startDate ? new Date(req.query.startDate) : undefined,
+    endDate: req.query.endDate ? new Date(req.query.endDate) : undefined
+  }
+
+  if (req.query.format === 'list') {
+    const resultList = await AuditLogModel.listForApi({
+      ...filters,
+
+      start: req.query.start,
+      count: req.query.count,
+      sort: req.query.sort,
+      withTotal: true
+    })
+
+    return res.json(getFormattedObjects(resultList.data, resultList.total))
+  }
+
+  // Default format, kept to not break the API
+  const { data } = await AuditLogModel.listForApi({
+    ...filters,
+
+    start: 0,
+    count: MAX_AUDIT_LOGS_OUTPUT,
+    sort: '-createdAt',
+    withTotal: false
   })
 
-  return res.json(output).end()
+  return res.json(data.reverse().map(l => l.toFormattedJSON()))
 }
 
 const logNameFilter = generateLogNameFilter(LOG_FILENAME)

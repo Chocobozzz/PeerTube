@@ -25,7 +25,10 @@ describe('Official plugin Akismet', function () {
       npmName: 'peertube-plugin-akismet'
     })
 
-    if (!process.env.AKISMET_KEY) throw new Error('Missing AKISMET_KEY from env')
+    // AKISMET_KEY is a repository secret: forks never have it (push/PR CI already skips this
+    // suite via test.yml), but a fork's own *schedule* trigger does run it against the fork's
+    // context, which has no access to the upstream secret. Skip instead of failing the build.
+    if (!process.env.AKISMET_KEY) return this.skip()
 
     await servers[0].plugins.updateSettings({
       npmName: 'peertube-plugin-akismet',

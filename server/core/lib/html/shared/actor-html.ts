@@ -76,6 +76,10 @@ export class ActorHtml {
 
     let customHTML = TagsHtml.addTitleTag(html, entity.getDisplayName())
     customHTML = TagsHtml.addDescriptionTag(customHTML, escapedTruncatedDescription)
+    customHTML = TagsHtml.addServerRenderedContent(customHTML, {
+      escapedTitle: escapeHTML(entity.getDisplayName()),
+      markdownDescription: entity.description
+    })
 
     const url = entity.getClientUrl()
     const siteName = CONFIG.INSTANCE.NAME
