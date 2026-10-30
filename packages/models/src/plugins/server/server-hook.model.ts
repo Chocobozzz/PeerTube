@@ -1,6 +1,9 @@
 // {hookType}:{root}.{location}.{subLocation?}.{actionType}.{target}
 
 export const serverFilterHookObject = {
+  // Filter ordinary sitemap page entries before XML generation (excludes videos, channels and accounts)
+  'filter:sitemap.pages.list.result': true,
+
   // Filter params/result used to list videos for the REST API
   // (used by the trending page, recently-added page, local page etc)
   'filter:api.videos.list.params': true,

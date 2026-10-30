@@ -11,6 +11,29 @@ Themes are exactly the same as plugins, except that:
 
 ### Hooks
 
+#### Sitemap pages
+
+The server filter `filter:sitemap.pages.list.result` receives the ordinary page entries for
+`/sitemaps/pages.xml`, before XML generation. Return an array of sitemap entries to add, modify,
+or remove pages. Async handlers are supported. Each entry has a `url` (absolute or relative to the
+instance URL) and may include sitemap metadata such as `lastmod`.
+
+```js
+registerHook({
+  target: 'filter:sitemap.pages.list.result',
+  handler: async entries => [
+    ...entries,
+    { url: '/plugins/my-plugin/router/my-page' }
+  ]
+})
+```
+
+Only add public URLs intended for indexing. This hook does not affect video, channel, account,
+or sitemap index entries. Results use the existing sitemap response cache, so plugin changes
+appear after cache expiry. Returning an empty array produces the existing sitemap page `404` response.
+
+#### Registering hooks
+
 A plugin registers functions in JavaScript to execute when PeerTube (server and client) fires events. There are 3 types of hooks:
  * `filter`: used to filter functions parameters or return values.
  For example to replace words in video comments, or change the videos list behaviour
