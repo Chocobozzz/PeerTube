@@ -3,7 +3,14 @@
 
 my-timestamp-input {
   display: block;
+  flex-shrink: 0;
   width: 100px;
+}
+
+.timestamp-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .grid-container {

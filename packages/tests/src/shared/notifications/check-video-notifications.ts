@@ -128,6 +128,36 @@ export async function checkVideoStudioEditionIsFinished (
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
+export async function checkVideoStudioNewVideoCreated (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    checkType: CheckerType
+  }
+) {
+  const { videoName, shortUUID } = options
+  const notificationType = UserNotificationType.MY_VIDEO_STUDIO_NEW_VIDEO_CREATED
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      checkVideo(notification.video, videoName, shortUUID)
+      checkActor(notification.video.channel)
+    } else {
+      expect(notification.video).to.satisfy(v => v === undefined || v.name !== videoName)
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text: string = email['text']
+    return text.includes(shortUUID) && text.includes('Your new video')
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
 export async function checkMyVideoImportIsFinished (
   options: CheckerBaseParams & {
     videoName: string

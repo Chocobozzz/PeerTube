@@ -68,7 +68,15 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
 
   // Reuse the route if we're going to and from the same route
   shouldReuseRoute (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
-    return future.routeConfig === curr.routeConfig && future.routeConfig?.data?.reloadOnSameNavigation !== true
+    if (future.routeConfig !== curr.routeConfig) return false
+
+    const data = future.routeConfig?.data
+    if (data?.reloadOnSameNavigation === true) return false
+
+    // Rebuild the component when it is displayed for another object (e.g. another video to manage)
+    if (data?.reloadOnParamsChange === true && JSON.stringify(future.params) !== JSON.stringify(curr.params)) return false
+
+    return true
   }
 
   private gb () {
