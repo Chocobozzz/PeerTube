@@ -10,6 +10,7 @@ import {
 import { USER_REGISTRATION_STATES } from '@server/initializers/constants.js'
 import { Emailer } from '@server/lib/emailer.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import express from 'express'
 import {
@@ -141,6 +142,8 @@ async function requestRegistration (req: express.Request, res: express.Response)
 
   await registration.save()
 
+  if (body.signupClient) await Redis.Instance.setRegistrationSignupClient(registration.id, body.signupClient)
+
   auditLog.create(getAuditAnonymousActor(req), () => buildRegistrationAuditEntity(registration))
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
@@ -199,7 +202,9 @@ async function acceptRegistration (req: express.Request, res: express.Response) 
   logger.info('Registration of %s accepted', registration.username)
 
   if (body.preventEmailDelivery !== true) {
-    Emailer.Instance.addUserRegistrationRequestProcessedJob(registration)
+    const signupClient = await Redis.Instance.getRegistrationSignupClient(registration.id)
+
+    Emailer.Instance.addUserRegistrationRequestProcessedJob(registration, signupClient)
   }
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
@@ -283,6 +288,8 @@ async function registerUser (req: express.Request, res: express.Response) {
 
   auditLog.create(getAuditActorFromUser(user, req), () => buildUserAuditEntity(user))
   logger.info('User %s with its channel and account registered.', body.username)
+
+  if (body.signupClient) await Redis.Instance.setUserSignupClient(user.id, body.signupClient)
 
   if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
     await sendVerifyRegistrationEmail(user)

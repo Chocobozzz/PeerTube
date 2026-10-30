@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, UserSignupClient } from '@peertube/peertube-models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -64,6 +64,8 @@ describe('Test users email verification', function () {
 
     verificationString = verificationStringMatches[1]
     expect(verificationString).to.have.length.above(2)
+
+    expect(email['text']).to.not.contain('signupClient')
 
     const userIdMatches = /userId=([0-9]+)/.exec(email['text'])
     expect(userIdMatches).not.to.be.null
@@ -201,6 +203,75 @@ describe('Test users email verification', function () {
     })
 
     await server.login.getAccessToken(user2)
+  })
+
+  describe('Signup client', function () {
+    function getLastEmailText () {
+      return emails[emails.length - 1]['text'] as string
+    }
+
+    it('Should add the signup client in the verification email links of a direct registration', async function () {
+      const verifyRegex = /\/verify-account\/email\?userId=\d+&verificationString=[a-z0-9]+&signupClient=peertube-app&username=user_app_1/
+
+      await server.registrations.register({ username: 'user_app_1', signupClient: UserSignupClient.PEERTUBE_APP })
+      await waitJobs(server)
+
+      expect(getLastEmailText()).to.match(verifyRegex)
+
+      await server.users.askSendVerifyEmail({ email: 'user_app_1@example.com' })
+      await waitJobs(server)
+
+      expect(getLastEmailText()).to.match(verifyRegex)
+    })
+
+    it('Should add the signup client in the verification and accepted email links of a registration request', async function () {
+      await server.config.updateExistingConfig({
+        newConfig: {
+          signup: {
+            requiresApproval: true
+          }
+        }
+      })
+
+      await server.registrations.requestRegistration({
+        username: 'user_app_2',
+        registrationReason: 'reason',
+        signupClient: UserSignupClient.PEERTUBE_APP
+      })
+      await waitJobs(server)
+
+      const verifyRegex =
+        /\/verify-account\/email\?registrationId=(\d+)&verificationString=([a-z0-9]+)&signupClient=peertube-app&username=user_app_2/
+      expect(getLastEmailText()).to.match(verifyRegex)
+
+      await server.registrations.askSendVerifyEmail({ email: 'user_app_2@example.com' })
+      await waitJobs(server)
+
+      const [ , registrationId, registrationVerificationString ] = verifyRegex.exec(getLastEmailText())
+
+      await server.registrations.verifyEmail({ registrationId: +registrationId, verificationString: registrationVerificationString })
+      await server.registrations.accept({ id: +registrationId, moderationResponse: 'welcome' })
+      await waitJobs(server)
+
+      expect(getLastEmailText()).to.contain(`${server.url}/login?signupClient=peertube-app&username=user_app_2`)
+    })
+
+    it('Should not add the signup client in the accepted email link of a web registration request', async function () {
+      await server.registrations.requestRegistration({ username: 'user_web_3', registrationReason: 'reason' })
+      await waitJobs(server)
+
+      const [ , registrationId, registrationVerificationString ] = /registrationId=(\d+)&verificationString=([a-z0-9]+)/.exec(
+        getLastEmailText()
+      )
+      expect(getLastEmailText()).to.not.contain('signupClient')
+
+      await server.registrations.verifyEmail({ registrationId: +registrationId, verificationString: registrationVerificationString })
+      await server.registrations.accept({ id: +registrationId, moderationResponse: 'welcome' })
+      await waitJobs(server)
+
+      expect(getLastEmailText()).to.contain(`${server.url}/login`)
+      expect(getLastEmailText()).to.not.contain('signupClient')
+    })
   })
 
   after(async function () {

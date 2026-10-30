@@ -1,5 +1,5 @@
 import { AVAILABLE_LOCALES } from '@peertube/peertube-core-utils'
-import { UserRole } from '@peertube/peertube-models'
+import { UserRole, UserSignupClient } from '@peertube/peertube-models'
 import validator from 'validator'
 import { isEmailEnabled } from '../../initializers/config.js'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants.js'
@@ -49,6 +49,11 @@ export function isUserDescriptionValid (value: string) {
 
 export function isUserEmailVerifiedValid (value: any) {
   return isBooleanValid(value)
+}
+
+const signupClients = new Set<string>(Object.values(UserSignupClient))
+export function isUserSignupClientValid (value: any) {
+  return exists(value) && signupClients.has(value)
 }
 
 const nsfwPolicies = new Set(Object.values(NSFW_POLICY_TYPES))

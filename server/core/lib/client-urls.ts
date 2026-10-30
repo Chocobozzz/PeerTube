@@ -1,4 +1,4 @@
-import { PluginType_Type } from '@peertube/peertube-models'
+import { PluginType_Type, UserSignupClientType } from '@peertube/peertube-models'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { MAbuseId, MUserId } from '@server/types/models/index.js'
 
@@ -33,4 +33,16 @@ export function getResetPasswordUrl (user: MUserId, verificationString: string) 
 
 export function getPluginUrl (pluginType: PluginType_Type) {
   return WEBSERVER.URL + '/admin/settings/plugins/list-installed?pluginType=' + pluginType
+}
+
+// Let the web client redirect the user to the client they used to sign up
+export function addSignupClientQuery (url: string, options: {
+  signupClient: UserSignupClientType
+  username: string
+}) {
+  if (!options.signupClient) return url
+
+  const separator = url.includes('?') ? '&' : '?'
+
+  return url + separator + 'signupClient=' + options.signupClient + '&username=' + options.username
 }

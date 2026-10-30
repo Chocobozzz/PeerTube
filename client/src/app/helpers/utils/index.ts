@@ -1,6 +1,7 @@
 export * from './date'
 export * from './dom'
 export * from './html'
+export * from './mobile-app'
 export * from './object'
 export * from './simple-memoize'
 export * from './upload'

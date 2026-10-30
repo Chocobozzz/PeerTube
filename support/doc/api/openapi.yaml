@@ -1096,9 +1096,19 @@ paths:
   /api/v1/config/about:
     get:
       summary: Get instance "About" information
+      description: |
+        Translatable information is returned in the language of the request, using the `x-peertube-language` header
+        or the `Accept-Language` header. If the instance has no translation for this language, the default information is returned.
       operationId: getAbout
       tags:
         - Config
+      parameters:
+        - name: x-peertube-language
+          in: header
+          required: false
+          description: Locale of the web interface (`fr-FR`, `pt-BR`...) used to translate the instance information
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -12595,6 +12605,11 @@ components:
               type: string
             businessModel:
               type: string
+            support:
+              type: object
+              properties:
+                text:
+                  type: string
             languages:
               type: array
               items:
@@ -12611,6 +12626,34 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/ActorImage'
+    InstanceTranslation:
+      properties:
+        language:
+          type: string
+          description: Locale of the web interface
+          example: fr-FR
+        shortDescription:
+          type: string
+        description:
+          type: string
+        terms:
+          type: string
+        codeOfConduct:
+          type: string
+        moderationInformation:
+          type: string
+        administrator:
+          type: string
+        creationReason:
+          type: string
+        maintenanceLifetime:
+          type: string
+        businessModel:
+          type: string
+        hardwareInformation:
+          type: string
+        supportText:
+          type: string
     ServerConfigCustom:
       properties:
         instance:
@@ -12638,6 +12681,11 @@ components:
               type: string
             hardwareInformation:
               type: string
+            translations:
+              type: array
+              description: Translations of the instance information. Empty fields fall back to the default instance information
+              items:
+                $ref: '#/components/schemas/InstanceTranslation'
             languages:
               type: array
               items:
@@ -13694,6 +13742,13 @@ components:
               $ref: '#/components/schemas/usernameChannel'
             displayName:
               type: string
+        signupClient:
+          type: string
+          enum:
+            - peertube-app
+          description: |
+            **PeerTube >= 9.0** Client used to sign up. If set, links of the verification and registration accepted emails
+            make the web client propose to open this client
       required:
         - username
         - password

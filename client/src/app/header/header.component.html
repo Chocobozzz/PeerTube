@@ -1,7 +1,12 @@
 @if (mobileMsg) {
   <div class="mobile-msg" data-nosnippet>
-    <div class="msg ellipsis me-auto" i18n>Open in the application?</div>
-    <a class="peertube-button-link secondary-button me-3" [href]="androidAppUrl || iosAppUrl" (click)="onOpenClientClick()">Open</a>
+    @if (mobileMsgLogin) {
+      <div class="msg ellipsis me-auto" i18n>Log in in the application?</div>
+      <a class="peertube-button-link secondary-button me-3" [href]="mobileAppUrl" (click)="onOpenClientClick()" i18n>Log in</a>
+    } @else {
+      <div class="msg ellipsis me-auto" i18n>Open in the application?</div>
+      <a class="peertube-button-link secondary-button me-3" [href]="mobileAppUrl" (click)="onOpenClientClick()" i18n>Open</a>
+    }
 
     <button class="border-0 p-0" title="Close this message" i18n-title (click)="hideMobileMsg()">
       <my-global-icon iconName="cross"></my-global-icon>

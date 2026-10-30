@@ -1,4 +1,4 @@
-import { ActivityType } from '@peertube/peertube-models'
+import { ActivityType, UserSignupClientType } from '@peertube/peertube-models'
 import { RedisOptions } from 'ioredis'
 import * as actorFollowHealth from './actor-follow-health.js'
 import { ActorFollowHealthKind } from './actor-follow-health.js'
@@ -30,6 +30,7 @@ import {
 } from './redis-client.js'
 import * as remoteVideoStats from './remote-video-stats.js'
 import * as sharedInstanceConfig from './shared-instance-config.js'
+import * as signupClient from './signup-client.js'
 import * as twoFactorRequest from './two-factor-request.js'
 import * as uploadSession from './upload-session.js'
 import * as videoStatCounters from './video-stat-counters.js'
@@ -165,6 +166,24 @@ export class Redis {
 
   deleteRegistrationVerifyEmailLink (registrationId: number) {
     return emailVerification.deleteRegistrationVerifyEmailLink(registrationId)
+  }
+
+  /* ************ Signup client ************ */
+
+  setUserSignupClient (userId: number, client: UserSignupClientType) {
+    return signupClient.setUserSignupClient(userId, client)
+  }
+
+  getUserSignupClient (userId: number) {
+    return signupClient.getUserSignupClient(userId)
+  }
+
+  setRegistrationSignupClient (registrationId: number, client: UserSignupClientType) {
+    return signupClient.setRegistrationSignupClient(registrationId, client)
+  }
+
+  getRegistrationSignupClient (registrationId: number) {
+    return signupClient.getRegistrationSignupClient(registrationId)
   }
 
   /* ************ Contact form per IP ************ */
