@@ -126,6 +126,20 @@
       </td>
     }
 
+    @if (table.isColumnDisplayed('aiUsage')) {
+      <td>
+        <my-video-ai-usage-badge [video]="video"></my-video-ai-usage-badge>
+      </td>
+    }
+
+    @if (table.isColumnDisplayed('recommendationScope')) {
+      <td>{{ video.recommendationScope.label }}</td>
+    }
+
+    @if (table.isColumnDisplayed('commercialContent')) {
+      <td>{{ video.commercialContent.label }}</td>
+    }
+
     @if (table.isColumnDisplayed('playlists')) {
       <td>
         <div class="badges playlists">

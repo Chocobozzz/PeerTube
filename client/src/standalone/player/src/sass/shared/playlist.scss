@@ -83,6 +83,9 @@ $playlist-menu-width: 350px;
 
 .vjs-playlist-button {
   flex: none;
+  // Larger hit area
+  padding: 10px;
+  margin: -10px;
   font-size: 16px;
   cursor: pointer;
 }

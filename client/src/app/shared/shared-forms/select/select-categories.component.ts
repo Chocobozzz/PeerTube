@@ -10,7 +10,7 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
 @if (availableCategories) {
   <my-select-checkbox-default-all
     [inputId]="inputId()"
-    [(ngModel)]="selectedCategories"
+    [(ngModel)]="selectedCategories" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
     [availableItems]="availableCategories"
     i18n-placeholder placeholder="Add a new category"

@@ -237,20 +237,8 @@ describe('Test plugins', function () {
     // Wait the scheduler that get the latest plugins versions
     await wait(6000)
 
-    async function testUpdate (type: 'plugin' | 'theme', name: string) {
-      // Fake update our plugin version
-      await sqlCommand.setPluginVersion(name, '0.0.1')
-
-      // Fake update package.json
-      const packageJSON = await command.getPackageJSON(`peertube-${type}-${name}`)
-      const oldVersion = packageJSON.version
-
-      packageJSON.version = '0.0.1'
-      await command.updatePackageJSON(`peertube-${type}-${name}`, packageJSON)
-
-      // Restart the server to take into account this change
-      await killallServers([ server ])
-      await server.run()
+    async function testUpdate (type: 'plugin' | 'theme', name: string, oldVersion: string) {
+      const npmName = `peertube-${type}-${name}`
 
       const checkConfig = async (version: string) => {
         for (const config of [ await server.config.getConfig(), await server.config.getIndexHTMLConfig() ]) {
@@ -264,30 +252,39 @@ describe('Test plugins', function () {
         return body.data.find(p => p.name === name)
       }
 
+      const { latestVersion } = await getPluginFromAPI()
+
+      // Replace the installed version by an old one
+      await command.install({ npmName, pluginVersion: oldVersion })
+
+      // Restart the server to check the old version is loaded from the disk
+      await killallServers([ server ])
+      await server.run()
+
       {
-        const plugin = await getPluginFromAPI()
-        expect(plugin.version).to.equal('0.0.1')
-        expect(plugin.latestVersion).to.exist
-        expect(plugin.latestVersion).to.not.equal('0.0.1')
-
-        await checkConfig('0.0.1')
-      }
-
-      {
-        await command.update({ npmName: `peertube-${type}-${name}` })
-
         const plugin = await getPluginFromAPI()
         expect(plugin.version).to.equal(oldVersion)
-
-        const updatedPackageJSON = await command.getPackageJSON(`peertube-${type}-${name}`)
-        expect(updatedPackageJSON.version).to.equal(oldVersion)
+        expect(plugin.latestVersion).to.equal(latestVersion)
+        expect(plugin.latestVersion).to.not.equal(oldVersion)
 
         await checkConfig(oldVersion)
       }
+
+      {
+        await command.update({ npmName })
+
+        const plugin = await getPluginFromAPI()
+        expect(plugin.version).to.equal(latestVersion)
+
+        const updatedPackageJSON = await command.getPackageJSON(npmName)
+        expect(updatedPackageJSON.version).to.equal(latestVersion)
+
+        await checkConfig(latestVersion)
+      }
     }
 
-    await testUpdate('theme', 'background-red')
-    await testUpdate('plugin', 'hello-world')
+    await testUpdate('theme', 'background-red', '0.0.1')
+    await testUpdate('plugin', 'hello-world', '0.0.2')
   })
 
   it('Should uninstall the plugin', async function () {

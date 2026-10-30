@@ -7,7 +7,6 @@ import {
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
   VideoFile,
-  VideoRecommendationScopeType,
   VideoStateType,
   VideoStreamingPlaylist,
   VideoStreamingPlaylistType
@@ -23,7 +22,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   downloadEnabled: boolean
 
   commentsPolicy: ConstantLabel<VideoCommentPolicyType>
-  recommendationScope: ConstantLabel<VideoRecommendationScopeType>
 
   likesPercent: number
   dislikesPercent: number
@@ -50,7 +48,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.support = hash.support
     this.commentsPolicy = hash.commentsPolicy
     this.downloadEnabled = hash.downloadEnabled
-    this.recommendationScope = hash.recommendationScope
 
     this.inputFileUpdatedAt = hash.inputFileUpdatedAt
 

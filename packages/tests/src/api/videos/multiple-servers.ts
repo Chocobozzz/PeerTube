@@ -1062,6 +1062,11 @@ describe('Test multiple servers', function () {
         expect(video.downloadEnabled).to.be.false
         expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.LOCAL)
 
+        const { data } = await server.videos.list()
+        const listedVideo = data.find(v => v.uuid === videoUUID)
+        expect(listedVideo.recommendationScope.id).to.equal(VideoRecommendationScope.LOCAL)
+        expect(listedVideo.recommendationScope.label).to.equal('Videos of the same platform')
+
         const text = 'my super forbidden comment'
         await server.comments.createThread({ videoId: videoUUID, text, expectedStatus: HttpStatusCode.CONFLICT_409 })
       }
@@ -1163,6 +1168,11 @@ describe('Test multiple servers', function () {
 
         expect(video.commercialContent.id).to.equal(VideoCommercialContent.NONE)
         expect(video.commercialContent.label).to.equal('None')
+
+        const { data } = await server.videos.list()
+        const listedVideo = data.find(v => v.uuid === uuid)
+        expect(listedVideo.recommendationScope.id).to.equal(VideoRecommendationScope.ALL)
+        expect(listedVideo.recommendationScope.label).to.equal('All videos')
       }
     })
 

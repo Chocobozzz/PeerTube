@@ -121,6 +121,11 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
       label: getCommercialContentLabel(video.commercialContent)
     },
 
+    recommendationScope: {
+      id: video.recommendationScope,
+      label: VIDEO_RECOMMENDATION_SCOPES[video.recommendationScope]
+    },
+
     truncatedDescription: video.getTruncatedDescription(),
     description: options?.completeDescription === true
       ? video.description
@@ -217,11 +222,6 @@ export function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetail
     embedPrivacyPolicy: {
       id: video.embedPrivacyPolicy,
       label: VIDEO_EMBED_PRIVACY_POLICIES[video.embedPrivacyPolicy]
-    },
-
-    recommendationScope: {
-      id: video.recommendationScope,
-      label: VIDEO_RECOMMENDATION_SCOPES[video.recommendationScope]
     }
   }
 

@@ -86,6 +86,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
 
   commercialContent: ConstantLabel<VideoCommercialContentType>
 
+  recommendationScope: ConstantLabel<VideoRecommendationScopeType>
+
   account: AccountSummary
   channel: VideoChannelSummary
 
@@ -131,11 +133,6 @@ export interface VideoDetails extends Video {
   channel: VideoChannel
   account: Account
   tags: string[]
-
-  recommendationScope: {
-    id: VideoRecommendationScopeType
-    label: string
-  }
 
   commentsPolicy: {
     id: VideoCommentPolicyType

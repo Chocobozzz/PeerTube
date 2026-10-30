@@ -16,6 +16,8 @@ import {
   VideoFile,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoRecommendationScope,
+  VideoRecommendationScopeType,
   VideoScheduleUpdate,
   Video as VideoServerModel,
   VideoSource,
@@ -86,6 +88,7 @@ export class Video implements VideoServerModel {
 
   aiUsage: ConstantLabel<VideoAIUsageType>
   commercialContent: ConstantLabel<VideoCommercialContentType>
+  recommendationScope: ConstantLabel<VideoRecommendationScopeType>
 
   originInstanceUrl: string
   originInstanceHost: string
@@ -201,6 +204,10 @@ export class Video implements VideoServerModel {
     this.commercialContent = hash.commercialContent
       ? { ...hash.commercialContent, label: peertubeTranslate(hash.commercialContent.label, translations) }
       : { id: VideoCommercialContent.NONE, label: $localize`None` }
+
+    this.recommendationScope = hash.recommendationScope
+      ? { ...hash.recommendationScope, label: peertubeTranslate(hash.recommendationScope.label, translations) }
+      : { id: VideoRecommendationScope.ALL, label: $localize`All videos` }
 
     this.account = hash.account
     this.channel = hash.channel

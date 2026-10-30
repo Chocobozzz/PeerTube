@@ -14,7 +14,7 @@ import { SelectOptionsComponent } from './select-options.component'
 
     [items]="themes"
 
-    [(ngModel)]="selectedId"
+    [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
     filter="false"
   ></my-select-options>

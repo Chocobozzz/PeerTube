@@ -194,7 +194,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       creationReason: 'my super creation reason',
       moderationInformation: 'my super moderation information',
       administrator: 'Kuja',
-      maintenanceLifetime: '2.5', // Free text that looks like a number must stay as is
+      maintenanceLifetime: 'maintenance lifetime',
       businessModel: 'my super business model',
       hardwareInformation: '2vCore 3GB RAM',
 
@@ -210,8 +210,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
           creationReason: 'mi súper razón de creación',
           maintenanceLifetime: 'para siempre',
           businessModel: 'mi súper modelo de negocio',
-          // Free text that looks like a number must stay as is
-          hardwareInformation: '007.50',
+          hardwareInformation: 'hardware information',
           supportText: 'mi texto de soporte'
         },
         {
@@ -697,7 +696,7 @@ describe('Test config', function () {
       expect(instance.creationReason).to.equal('my super creation reason')
       expect(instance.moderationInformation).to.equal('my super moderation information')
       expect(instance.administrator).to.equal('Kuja')
-      expect(instance.maintenanceLifetime).to.equal('2.5')
+      expect(instance.maintenanceLifetime).to.equal('maintenance lifetime')
       expect(instance.businessModel).to.equal('my super business model')
       expect(instance.hardwareInformation).to.equal('2vCore 3GB RAM')
 
@@ -721,7 +720,7 @@ describe('Test config', function () {
         expect(instance.administrator).to.equal('Kuja ES')
         expect(instance.maintenanceLifetime).to.equal('para siempre')
         expect(instance.businessModel).to.equal('mi súper modelo de negocio')
-        expect(instance.hardwareInformation).to.equal('007.50')
+        expect(instance.hardwareInformation).to.equal('hardware information')
         expect(instance.support.text).to.equal('mi texto de soporte')
       }
 

@@ -11209,6 +11209,8 @@ components:
           $ref: '#/components/schemas/VideoAIUsageConstant'
         commercialContent:
           $ref: '#/components/schemas/VideoCommercialContentConstant'
+        recommendationScope:
+          $ref: '#/components/schemas/VideoRecommendationScopeConstant'
         waitTranscoding:
           type: boolean
           nullable: true
@@ -11299,8 +11301,6 @@ components:
                 maxLength: 30
             commentsPolicy:
               $ref: '#/components/schemas/VideoCommentsPolicyConstant'
-            recommendationScope:
-              $ref: '#/components/schemas/VideoRecommendationScopeConstant'
             downloadEnabled:
               type: boolean
             inputFileUpdatedAt:
