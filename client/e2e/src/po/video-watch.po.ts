@@ -1,4 +1,4 @@
-import { browserSleep, FIXTURE_URLS, go } from '../utils'
+import { browserSleep, FIXTURE_URLS, go, waitForDisplayedFresh } from '../utils'
 
 export class VideoWatchPage {
   constructor (private isSafari: boolean) {
@@ -221,8 +221,10 @@ export class VideoWatchPage {
     await replyButton.scrollIntoView({ block: 'center' })
     await confirmButton.click()
 
+    // The reply may be rendered again just after its creation
+    await waitForDisplayedFresh(() => $('.is-child .comment-html p'))
+
     const createdComment = $('.is-child .comment-html p')
-    await createdComment.waitForDisplayed()
 
     return expect(await createdComment.getText()).toBe(comment)
   }

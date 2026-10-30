@@ -66,6 +66,13 @@ export async function selectCustomSelect (id: string, valueLabel: string) {
   return (await getOption()).click()
 }
 
+// waitForDisplayed() keeps the element found on the first try: if the element is rendered again by Angular,
+// Firefox does not throw a stale element error, so it never becomes displayed.
+// So find the element on each try instead
+export function waitForDisplayedFresh (getElement: () => ChainablePromiseElement) {
+  return browser.waitUntil(() => getElement().isDisplayed())
+}
+
 export async function findParentElement (
   el: ChainablePromiseElement,
   finder: (el: ChainablePromiseElement) => Promise<boolean>

@@ -1,4 +1,4 @@
-import { browserSleep, findParentElement, go } from '../utils'
+import { browserSleep, findParentElement, go, setCheckboxEnabled } from '../utils'
 
 export class AdminRegistrationPage {
   async navigateToRegistrationsList () {
@@ -7,7 +7,9 @@ export class AdminRegistrationPage {
     await $('my-registration-list').waitForDisplayed()
   }
 
-  async accept (username: string, moderationResponse: string) {
+  async accept (username: string, moderationResponse: string, options: {
+    preventEmailDelivery?: boolean
+  } = {}) {
     const usernameEl = $('*=' + username)
     await usernameEl.waitForDisplayed()
 
@@ -23,6 +25,10 @@ export class AdminRegistrationPage {
     await moderationResponseTextarea.waitForDisplayed()
 
     await moderationResponseTextarea.setValue(moderationResponse)
+
+    if (options.preventEmailDelivery !== undefined) {
+      await setCheckboxEnabled('preventEmailDelivery', options.preventEmailDelivery)
+    }
 
     const submitButton = $('.modal-footer input[type=submit]')
     await submitButton.waitForClickable()

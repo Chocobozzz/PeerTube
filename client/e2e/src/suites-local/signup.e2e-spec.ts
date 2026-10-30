@@ -3,16 +3,61 @@ import { AdminRegistrationPage } from '../po/admin-registration.po'
 import { LoginPage } from '../po/login.po'
 import { SignupPage } from '../po/signup.po'
 import {
-  browserSleep,
-  findEmailTo,
   getEmailPort,
+  getLoginLink,
   getScreenshotPath,
   getVerificationLink,
   go,
   MockSMTPServer,
   prepareWebBrowser,
+  waitEmailTo,
   waitServerUp
 } from '../utils'
+
+const ANDROID_USER_AGENT = 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) ' +
+  'Chrome/130.0.0.0 Mobile Safari/537.36'
+const IPHONE_USER_AGENT = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) ' +
+  'Version/18.0 Mobile/15E148 Safari/604.1'
+
+// Simulate a signup from the PeerTube mobile app
+async function registerFromApp (options: {
+  username: string
+  password: string
+  registrationReason?: string
+}) {
+  const res = await fetch(browser.options.baseUrl + '/api/v1/users/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ...options,
+
+      email: `${options.username}@example.com`,
+      displayName: `${options.username} display name`,
+      signupClient: 'peertube-app'
+    })
+  })
+
+  if (res.status !== 200) throw new Error(`Cannot register ${options.username}: ${res.status} ${await res.text()}`)
+}
+
+// The mobile app message is displayed in the header for mobile user agents with a mobile screen size
+async function withMobileBrowser (userAgent: string, fn: () => Promise<void>) {
+  const windowSize = await browser.getWindowSize()
+
+  const restoreUserAgent = await browser.emulate('userAgent', userAgent)
+  await browser.setWindowSize(400, 900)
+
+  try {
+    await fn()
+  } finally {
+    await restoreUserAgent()
+    await browser.setWindowSize(windowSize.width, windowSize.height)
+  }
+}
+
+function getHost () {
+  return new URL(browser.options.baseUrl).host
+}
 
 function checkEndMessage (options: {
   message: string
@@ -289,11 +334,7 @@ describe('Signup', () => {
       })
 
       it('Should validate the email', async function () {
-        let email: { text: string }
-
-        while (!(email = findEmailTo(emails, 'user_3@example.com'))) {
-          await browserSleep(100)
-        }
+        const email = await waitEmailTo(emails, 'user_3@example.com')
 
         await go(getVerificationLink(email))
 
@@ -306,12 +347,16 @@ describe('Signup', () => {
           afterEmailVerification: true
         })
 
+        const button = await signupPage.getEndMessageButton()
+        expect(button.text).toBe('Log in')
+        expect(button.href).toMatch(/\/login$/)
+
         await browser.saveScreenshot(getScreenshotPath('direct-after-email.png'))
       })
     })
 
     describe('Registration with approval', function () {
-      it('Should enable signup without approval', async () => {
+      it('Should enable signup with approval', async () => {
         await prepareSignup({ enabled: true, requiresApproval: true, requiresEmailVerification: true })
 
         await signupPage.getRegisterMenuButton().waitForDisplayed()
@@ -375,11 +420,7 @@ describe('Signup', () => {
       })
 
       it('Should validate the email', async function () {
-        let email: { text: string }
-
-        while (!(email = findEmailTo(emails, 'user_4@example.com'))) {
-          await browserSleep(100)
-        }
+        const email = await waitEmailTo(emails, 'user_4@example.com', '/verify-account/')
 
         await go(getVerificationLink(email))
 
@@ -393,6 +434,112 @@ describe('Signup', () => {
         })
 
         await browser.saveScreenshot(getScreenshotPath('request-after-email.png'))
+      })
+
+      it('Should propose to log in in the app on the login page', async function () {
+        await withMobileBrowser(ANDROID_USER_AGENT, async () => {
+          await go('/login')
+
+          expect(await signupPage.getMobileAppMessage()).toBe('Log in in the application?')
+          expect(await signupPage.getMobileAppLink()).toContain(`intent://joinpeertube.org/login-redirect?host=${getHost()}#Intent;`)
+        })
+      })
+    })
+
+    describe('Direct registration from the mobile app', function () {
+      it('Should enable signup without approval', async () => {
+        await prepareSignup({ enabled: true, requiresApproval: false, requiresEmailVerification: true })
+      })
+
+      it('Should register from the app', async function () {
+        await registerFromApp({ username: 'user_5', password: 'superpassword' })
+      })
+
+      it('Should validate the email on Android and propose to log in in the app', async function () {
+        const email = await waitEmailTo(emails, 'user_5@example.com')
+
+        await withMobileBrowser(ANDROID_USER_AGENT, async () => {
+          await go(getVerificationLink(email))
+
+          checkEndMessage({
+            message: await signupPage.getEndMessage(),
+            requiresEmailVerification: false,
+            requiresApproval: false,
+            afterEmailVerification: true
+          })
+
+          const button = await signupPage.getEndMessageButton()
+          expect(button.text).toBe('Log in in the app')
+          expect(button.href).toContain(`intent://joinpeertube.org/signup-verified?host=${getHost()}&username=user_5`)
+          expect(button.href).toContain('#Intent;scheme=peertube;S.browser_fallback_url=https://play.google.com/')
+
+          expect(await signupPage.getMobileAppMessage()).toBe('Open in the application?')
+
+          await browser.saveScreenshot(getScreenshotPath('app-direct-after-email.png'))
+        })
+      })
+    })
+
+    describe('Registration with approval from the mobile app', function () {
+      it('Should enable signup with approval', async () => {
+        await prepareSignup({ enabled: true, requiresApproval: true, requiresEmailVerification: true })
+      })
+
+      it('Should request a registration from the app', async function () {
+        await registerFromApp({ username: 'user_6', password: 'superpassword', registrationReason: 'my app reason' })
+      })
+
+      it('Should validate the email without proposing to log in in the app', async function () {
+        const email = await waitEmailTo(emails, 'user_6@example.com', '/verify-account/')
+
+        await withMobileBrowser(ANDROID_USER_AGENT, async () => {
+          await go(getVerificationLink(email))
+
+          checkEndMessage({
+            message: await signupPage.getEndMessage(),
+            requiresEmailVerification: false,
+            requiresApproval: true,
+            afterEmailVerification: true
+          })
+
+          // The account does not exist yet: the accepted email will redirect the user on the login page
+          expect(await signupPage.getMobileAppMessage()).toBe('Open in the application?')
+        })
+      })
+
+      it('Should accept the registration', async function () {
+        await loginPage.loginAsRootUser()
+
+        await adminRegistrationPage.navigateToRegistrationsList()
+        await adminRegistrationPage.accept('user_6', 'moderation response app', { preventEmailDelivery: false })
+
+        await loginPage.logout()
+      })
+
+      it('Should propose to log in in the app on iPhone', async function () {
+        const email = await waitEmailTo(emails, 'user_6@example.com', '/login')
+
+        await withMobileBrowser(IPHONE_USER_AGENT, async () => {
+          await go(getLoginLink(email))
+
+          expect(await signupPage.getMobileAppMessage()).toBe('Log in in the application?')
+          expect(await signupPage.getMobileAppLink()).toBe(`peertube://joinpeertube.org/login-redirect?host=${getHost()}&username=user_6`)
+
+          await browser.saveScreenshot(getScreenshotPath('app-request-accepted-login.png'))
+        })
+      })
+
+      it('Should log in on the web with the prefilled username', async function () {
+        const email = await waitEmailTo(emails, 'user_6@example.com', '/login')
+
+        await go(getLoginLink(email))
+
+        expect(await loginPage.getUsernameValue()).toBe('user_6')
+        expect(await $('.mobile-msg').isExisting()).toBe(false)
+
+        await loginPage.loginWithPrefilledUsername({ password: 'superpassword', displayName: 'user_6 display name' })
+
+        await loginPage.logout()
       })
     })
 

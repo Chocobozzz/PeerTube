@@ -34,6 +34,24 @@ export class SignupPage {
     return alert.getText()
   }
 
+  async getMobileAppMessage () {
+    const msg = $('.mobile-msg .msg')
+    await msg.waitForDisplayed()
+
+    return msg.getText()
+  }
+
+  getMobileAppLink () {
+    return $('.mobile-msg a').getAttribute('href')
+  }
+
+  async getEndMessageButton () {
+    const button = $('.pt-alert-primary a.peertube-button-link')
+    await button.waitForDisplayed()
+
+    return { text: await button.getText(), href: await button.getAttribute('href') }
+  }
+
   async fillRegistrationReason (reason: string) {
     await $('#registrationReason').setValue(reason)
   }
