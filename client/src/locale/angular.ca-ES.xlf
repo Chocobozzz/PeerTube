@@ -13858,7 +13858,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3772621869333652421" datatype="html">
         <source>Allow your users to enable DVR (pause/rewind live)</source>
-        <target state="new">Allow your users to enable DVR (pause/rewind live)</target>
+        <target state="translated">Permet que els usuaris activin el DVR (pausa/rebobina el directe)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-live.component.html</context>
           <context context-type="linenumber">46,47</context>
@@ -14398,7 +14398,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2302969578909684603" datatype="html">
         <source>This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</source>
-        <target state="new">This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</target>
+        <target state="needs-translation">Aquest fitxer d'àudio està emmagatzemat amb fitxers Web Videos: si la sortida de Web Videos està desactivada, el directori d'emmagatzematge o el compartiment de Web Videos només conté fitxers d'àudio i els vídeos estan emmagatzemats amb fitxers HLS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">151,152</context>
@@ -15630,7 +15630,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4704830002959987080" datatype="html">
         <source>Deleting this subscription will unblock all accounts and servers that were muted because of it. Are you sure you want to delete the subscription to "<x id="PH" equiv-text="subscription.name"/>"?</source>
-        <target state="new">Deleting this subscription will unblock all accounts and servers that were muted because of it. Are you sure you want to delete the subscription to "<x id="PH" equiv-text="subscription.name"/>"?</target>
+        <target state="translated">Si suprimiu aquesta subscripció, es desbloquejaran tots els comptes i servidors que estaven silenciats. Confirmeu que voleu suprimir la subscripció a "<x id="PH" equiv-text="subscription.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.ts</context>
           <context context-type="linenumber">105</context>
@@ -15658,7 +15658,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3621260373818132752" datatype="html">
         <source>Manage video</source>
-        <target state="new">Manage video</target>
+        <target state="translated">Gestiona el vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
           <context context-type="linenumber">60</context>
@@ -15682,7 +15682,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8533487962503184458" datatype="html">
         <source>Target account</source>
-        <target state="new">Target account</target>
+        <target state="translated">Compte de destinació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-ownership-changes/my-video-ownership-changes/my-video-ownership-changes.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -15722,7 +15722,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8372007266188249803" datatype="html">
         <source>Never</source>
-        <target state="new">Never</target>
+        <target state="translated">Mai</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.html</context>
           <context context-type="linenumber">47</context>
@@ -15850,7 +15850,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7393513054709860599" datatype="html">
         <source>Privacy of imported videos</source>
-        <target state="new">Privacy of imported videos</target>
+        <target state="translated">Privacitat dels vídeos importats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">58,59</context>
@@ -15898,7 +15898,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6993827833437178306" datatype="html">
         <source>PENDING</source>
-        <target state="new">PENDING</target>
+        <target state="translated">PENDENT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -15906,7 +15906,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7460287376550328285" datatype="html">
         <source>PROCESSING</source>
-        <target state="new">PROCESSING</target>
+        <target state="translated">S'ESTÀ PROCESSANT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -15914,7 +15914,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="596635599679128324" datatype="html">
         <source>SUCCESS</source>
-        <target state="new">SUCCESS</target>
+        <target state="translated">ÈXIT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -15922,7 +15922,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6625459318768903986" datatype="html">
         <source>FAILED</source>
-        <target state="new">FAILED</target>
+        <target state="translated">ERROR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -15930,7 +15930,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="93629944271772876" datatype="html">
         <source>REJECTED</source>
-        <target state="new">REJECTED</target>
+        <target state="translated">S'HA REBUTJAT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -15938,7 +15938,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7723943001220840254" datatype="html">
         <source>CANCELLED</source>
-        <target state="new">CANCELLED</target>
+        <target state="translated">S'HA CANCEL·LAT</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">71</context>
@@ -15946,7 +15946,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2628791643775383047" datatype="html">
         <source>Target URL</source>
-        <target state="new">Target URL</target>
+        <target state="translated">URL de destinació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -15954,7 +15954,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7105588718549441747" datatype="html">
         <source>https://example.com/.../video.mp4</source>
-        <target state="new">https://example.com/.../video.mp4</target>
+        <target state="translated">https://example.com/.../video.mp4</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -15962,7 +15962,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7335875272696063069" datatype="html">
         <source>Import ID</source>
-        <target state="new">Import ID</target>
+        <target state="translated">Identificador d'importació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -15970,7 +15970,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3120167430727242536" datatype="html">
         <source>Video ID</source>
-        <target state="new">Video ID</target>
+        <target state="translated">Identificador del vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -15978,7 +15978,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1833025987045683485" datatype="html">
         <source>Channel sync ID</source>
-        <target state="new">Channel sync ID</target>
+        <target state="translated">Identificador de la sincronització del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-imports/my-video-imports.component.ts</context>
           <context context-type="linenumber">97</context>
@@ -16050,7 +16050,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="619179346387768216" datatype="html">
         <source>Change ownership of your channel</source>
-        <target state="new">Change ownership of your channel</target>
+        <target state="translated">Canvia el propietari del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">142,143</context>
