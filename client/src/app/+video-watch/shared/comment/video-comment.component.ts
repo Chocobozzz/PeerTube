@@ -25,6 +25,7 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { LoaderComponent } from '@app/shared/shared-main/common/loader.component'
+import { PunycodePipe } from '@app/shared/shared-main/common/punycode.pipe'
 import { FromNowPipe } from '@app/shared/shared-main/date/from-now.pipe'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
@@ -53,7 +54,8 @@ import { VideoCommentAddComponent } from './video-comment-add.component'
     CommentReportComponent,
     GlobalIconComponent,
     FromNowPipe,
-    LoaderComponent
+    LoaderComponent,
+    PunycodePipe
   ]
 })
 export class VideoCommentComponent implements OnChanges, OnDestroy {
