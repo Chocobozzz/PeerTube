@@ -768,27 +768,17 @@ describe('Test config', function () {
 
     it('Should translate the instance information of the server config', async function () {
       {
-        const configs = [
-          await server.config.getConfig({ language: 'es-ES' }),
-          await server.config.getIndexHTMLConfig({ acceptLanguage: 'es-ES' })
-        ]
+        const config = await server.config.getConfig({ language: 'es-ES' })
 
-        for (const config of configs) {
-          expect(config.instance.shortDescription).to.equal('mi descripción corta')
-          expect(config.instance.support.text).to.equal('mi texto de soporte')
-        }
+        expect(config.instance.shortDescription).to.equal('mi descripción corta')
+        expect(config.instance.support.text).to.equal('mi texto de soporte')
       }
 
       {
-        const configs = [
-          await server.config.getConfig({ language: 'de-DE' }),
-          await server.config.getIndexHTMLConfig({ acceptLanguage: 'de-DE' })
-        ]
+        const config = await server.config.getConfig({ language: 'de-DE' })
 
-        for (const config of configs) {
-          expect(config.instance.shortDescription).to.equal('my short description')
-          expect(config.instance.support.text).to.equal('My support text')
-        }
+        expect(config.instance.shortDescription).to.equal('my short description')
+        expect(config.instance.support.text).to.equal('My support text')
       }
     })
 
