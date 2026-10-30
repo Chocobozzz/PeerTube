@@ -19835,7 +19835,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3005976570489477141" datatype="html">
         <source>Set internal note</source>
-        <target state="new">Set internal note</target>
+        <target state="translated">Estableix una nota interna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -19843,7 +19843,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="86347555539001429" datatype="html">
         <source>Set internal note for {count} videos</source>
-        <target state="new">Set internal note for {count} videos</target>
+        <target state="translated">Estableix una nota interna per {count} vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">62</context>
