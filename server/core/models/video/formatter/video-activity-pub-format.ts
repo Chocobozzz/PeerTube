@@ -92,6 +92,7 @@ export function videoModelToActivityPubObject (video: MVideoAP): VideoObject {
     recommendationScope: video.recommendationScope,
 
     aiUsage: video.aiUsage,
+    commercialContent: video.commercialContent,
 
     downloadEnabled: video.downloadEnabled,
     published: video.publishedAt.toISOString(),

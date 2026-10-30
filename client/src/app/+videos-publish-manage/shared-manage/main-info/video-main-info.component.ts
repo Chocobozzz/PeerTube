@@ -42,6 +42,7 @@ import {
   RegisterClientFormFieldOptions,
   RegisterClientVideoFieldOptions,
   VideoAIUsageType,
+  VideoCommercialContentType,
   VideoPrivacy,
   VideoPrivacyType
 } from '@peertube/peertube-models'
@@ -77,6 +78,7 @@ type Form = {
   licence: FormControl<number>
   language: FormControl<string>
   aiUsage: FormControl<VideoAIUsageType>
+  commercialContent: FormControl<VideoCommercialContentType>
   description: FormControl<string>
   tags: FormArray<FormControl<string>>
   thumbnailfile: FormControl<Blob>
@@ -146,6 +148,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
   videoLicences: ConstantLabel<number>[] = []
   videoLanguages: ConstantLabel<string>[] = []
   aiUsages: SelectRadioItem[] = []
+  commercialContents: SelectRadioItem[] = []
 
   pluginDataFormGroup: FormGroup
 
@@ -215,6 +218,9 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
 
     this.serverService.getVideoAIUsages()
       .subscribe(res => this.aiUsages = res)
+
+    this.serverService.getVideoCommercialContents()
+      .subscribe(res => this.commercialContents = res)
 
     this.buildLanguages()
     this.buildPrivacies()
@@ -308,6 +314,7 @@ export class VideoMainInfoComponent implements OnInit, OnDestroy {
       licence: VIDEO_LICENCE_VALIDATOR,
       language: VIDEO_LANGUAGE_VALIDATOR,
       aiUsage: null,
+      commercialContent: null,
       description: VIDEO_DESCRIPTION_VALIDATOR,
       tags: VIDEO_TAGS_ARRAY_VALIDATOR,
       thumbnailfile: null,

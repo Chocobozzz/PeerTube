@@ -6,7 +6,7 @@
 <div class="root" [ngClass]="{ 'maximized': maximized, monospace: monospace() }">
 
   <textarea #textarea
-    [(ngModel)]="content" (ngModelChange)="onModelChange()"
+    [(ngModel)]="content" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onModelChange()"
     [ngClass]="{ 'input-error': formError() }"
     [attr.disabled]="disabled || null"
     [id]="inputId()" [name]="inputId()" [dir]="dir()">

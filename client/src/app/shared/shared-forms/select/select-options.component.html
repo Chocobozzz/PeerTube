@@ -4,7 +4,7 @@
   [options]="items()"
   [group]="group()"
 
-  [(ngModel)]="selectedId"
+  [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
   (ngModelChange)="onModelChange()"
 
   optionValue="id"

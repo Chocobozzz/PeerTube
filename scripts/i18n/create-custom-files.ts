@@ -14,6 +14,7 @@ import {
   USER_IMPORT_STATES,
   USER_REGISTRATION_STATES,
   VIDEO_AI_USAGES,
+  VIDEO_COMMERCIAL_CONTENTS,
   VIDEO_CATEGORIES,
   VIDEO_CHANNEL_ACTIVITY_ACTIONS,
   VIDEO_CHANNEL_ACTIVITY_TARGETS,
@@ -91,6 +92,8 @@ const playerKeys = {
   'This video contains sensitive content.': 'This video contains sensitive content.',
   'This video contains sensitive content, including:': 'This video contains sensitive content, including:',
   'Learn more': 'Learn more',
+  'Includes promotional content': 'Includes promotional content',
+  'Includes paid partnership': 'Includes paid partnership',
   'Upload speed:': 'Upload speed:',
   'Download speed:': 'Download speed:',
   'Uploader note:': 'Uploader note:',
@@ -120,6 +123,7 @@ Object.values(VIDEO_CATEGORIES)
   .concat(Object.values(VIDEO_PLAYLIST_TYPES))
   .concat(Object.values(VIDEO_RECOMMENDATION_SCOPES))
   .concat(Object.values(VIDEO_AI_USAGES))
+  .concat(Object.values(VIDEO_COMMERCIAL_CONTENTS))
   .concat(Object.values(VIDEO_COMMENTS_POLICY))
   .concat(Object.values(USER_ROLE_LABELS))
   .concat(Object.values(STREAM_SYNC_STATE))

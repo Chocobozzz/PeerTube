@@ -1,8 +1,10 @@
 @use './peertube-skin';
+@use './top-bar';
 @use './dock';
 @use './control-bar';
 @use './mobile';
 @use './nsfw';
+@use './commercial-content';
 @use './context-menu';
 @use './settings-menu';
 @use './spinner';

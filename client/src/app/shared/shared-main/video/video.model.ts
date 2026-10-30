@@ -11,6 +11,8 @@ import {
   UserRight,
   VideoAIUsage,
   VideoAIUsageType,
+  VideoCommercialContent,
+  VideoCommercialContentType,
   VideoFile,
   VideoPrivacy,
   VideoPrivacyType,
@@ -83,6 +85,7 @@ export class Video implements VideoServerModel {
   nsfwSummary: string
 
   aiUsage: ConstantLabel<VideoAIUsageType>
+  commercialContent: ConstantLabel<VideoCommercialContentType>
 
   originInstanceUrl: string
   originInstanceHost: string
@@ -194,6 +197,10 @@ export class Video implements VideoServerModel {
     this.aiUsage = hash.aiUsage
       ? { ...hash.aiUsage, label: peertubeTranslate(hash.aiUsage.label, translations) }
       : { id: VideoAIUsage.NOT_SPECIFIED, label: $localize`Not specified` }
+
+    this.commercialContent = hash.commercialContent
+      ? { ...hash.commercialContent, label: peertubeTranslate(hash.commercialContent.label, translations) }
+      : { id: VideoCommercialContent.NONE, label: $localize`None` }
 
     this.account = hash.account
     this.channel = hash.channel

@@ -21,6 +21,7 @@ import {
   UserSettingsExportJSON,
   UserVideoHistoryExportJSON,
   VideoAIUsage,
+  VideoCommercialContent,
   VideoChapterObject,
   VideoCommentObject,
   VideoCreateResult,
@@ -611,6 +612,7 @@ function runTest (withObjectStorage: boolean) {
         const secondaryChannelVideo = json.videos.find(v => v.name === 'noah public video second channel')
         expect(secondaryChannelVideo.channel.name).to.equal('noah_second_channel')
         expect(secondaryChannelVideo.aiUsage).to.equal(VideoAIUsage.AI_GENERATED)
+        expect(secondaryChannelVideo.commercialContent).to.equal(VideoCommercialContent.PROMOTIONAL)
       }
     }
 

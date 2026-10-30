@@ -3,6 +3,7 @@ import {
   LiveVideoLatencyModeType,
   VideoCommentPolicyType,
   VideoAIUsageType,
+  VideoCommercialContentType,
   VideoEmbedPrivacyPolicyType,
   VideoFileMetadata,
   VideoPrivacyType,
@@ -71,6 +72,8 @@ export interface VideoExportJSON {
     recommendationScope: VideoRecommendationScopeType
 
     aiUsage: VideoAIUsageType
+
+    commercialContent: VideoCommercialContentType
 
     downloadEnabled: boolean
 

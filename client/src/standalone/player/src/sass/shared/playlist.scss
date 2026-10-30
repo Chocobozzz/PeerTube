@@ -82,12 +82,8 @@ $playlist-menu-width: 350px;
 }
 
 .vjs-playlist-button {
+  flex: none;
   font-size: 16px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 100;
-  padding: $dock-padding;
   cursor: pointer;
 }
 

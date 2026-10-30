@@ -2,6 +2,7 @@ import { Command } from '@commander-js/extra-typings'
 import {
   VideoAIUsageType,
   VideoCommentPolicy,
+  VideoCommercialContentType,
   VideoPrivacy,
   VideoPrivacyType,
   VideoRecommendationScopeType
@@ -39,6 +40,11 @@ const program = new Command('upload')
     '--ai-usage <ai_usage_number>',
     'AI usage in this video: not specified = 1, no AI-generated content = 2, contains AI-generated content = 3, AI-generated = 4',
     v => parseInt(v) as VideoAIUsageType
+  )
+  .option(
+    '--commercial-content <commercial_content_number>',
+    'Commercial content in this video: none = 1, promotional content (own products or business) = 2, paid partnership = 3',
+    v => parseInt(v) as VideoCommercialContentType
   )
   .option('-s, --support <support>', 'Video support text')
   .option('--no-wait-transcoding', 'Do not wait transcoding before publishing the video')
@@ -133,6 +139,7 @@ async function buildVideoAttributesFromCommander (server: PeerTubeServer, option
     recommendationScope: options.recommendationScope || undefined,
 
     aiUsage: options.aiUsage || undefined,
+    commercialContent: options.commercialContent || undefined,
 
     nsfw: options.nsfw,
     downloadEnabled: options.downloadEnabled === false

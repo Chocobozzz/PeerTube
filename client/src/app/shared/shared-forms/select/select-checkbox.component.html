@@ -2,7 +2,7 @@
   [inputId]="inputId()"
 
   [options]="availableItems()"
-  [(ngModel)]="selectedItems"
+  [(ngModel)]="selectedItems" [ngModelOptions]="{ standalone: true }"
   (ngModelChange)="onModelChange()"
 
   [placeholder]="placeholder()"

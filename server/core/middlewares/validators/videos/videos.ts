@@ -54,6 +54,7 @@ import {
   isVideoPublicationDateValid,
   isVideoAIUsageArrayValid,
   isVideoAIUsageValid,
+  isVideoCommercialContentValid,
   isVideoRecommendationScopeValid,
   isVideoSourceFilenameValid,
   isVideoSupportValid
@@ -491,6 +492,10 @@ export function getCommonVideoEditAttributes () {
       .optional()
       .customSanitizer(toIntOrNull)
       .custom(isVideoAIUsageValid),
+    body('commercialContent')
+      .optional()
+      .customSanitizer(toIntOrNull)
+      .custom(isVideoCommercialContentValid),
 
     body('downloadEnabled')
       .optional()

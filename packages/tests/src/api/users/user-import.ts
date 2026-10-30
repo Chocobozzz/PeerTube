@@ -6,6 +6,7 @@ import {
   UserImportState,
   UserNotificationSettingValue,
   VideoAIUsage,
+  VideoCommercialContent,
   VideoCommentPolicy,
   VideoCreateResult,
   VideoEmbedPrivacyPolicy,
@@ -510,6 +511,7 @@ function runTest (withObjectStorage: boolean) {
           const video = await checkServer.videos.get({ id: otherVideo.uuid })
           expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
           expect(video.aiUsage.id).to.equal(VideoAIUsage.AI_GENERATED)
+          expect(video.commercialContent.id).to.equal(VideoCommercialContent.PROMOTIONAL)
         }
 
         const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })

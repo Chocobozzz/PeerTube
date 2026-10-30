@@ -3908,6 +3908,8 @@ paths:
                   $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 aiUsage:
                   $ref: '#/components/schemas/VideoAIUsageSet'
+                commercialContent:
+                  $ref: '#/components/schemas/VideoCommercialContentSet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -4487,6 +4489,8 @@ paths:
                   $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 aiUsage:
                   $ref: '#/components/schemas/VideoAIUsageSet'
+                commercialContent:
+                  $ref: '#/components/schemas/VideoCommercialContentSet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -10629,6 +10633,23 @@ components:
           $ref: '#/components/schemas/VideoAIUsageSet'
         label:
           type: string
+    VideoCommercialContentSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: |
+        **PeerTube >= 9.0** Commercial content in the video, declared by the video creator:
+          - `1` None
+          - `2` Promotional content: the creator promotes their own products, services or business
+          - `3` Paid partnership: a third party paid, or provided goods or services, in exchange for the promotion
+    VideoCommercialContentConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoCommercialContentSet'
+        label:
+          type: string
 
     BlockStatus:
       properties:
@@ -11186,6 +11207,8 @@ components:
           description: "**PeerTube >= 7.2** More information about the sensitive content of the video"
         aiUsage:
           $ref: '#/components/schemas/VideoAIUsageConstant'
+        commercialContent:
+          $ref: '#/components/schemas/VideoCommercialContentConstant'
         waitTranscoding:
           type: boolean
           nullable: true
@@ -13122,6 +13145,8 @@ components:
           $ref: '#/components/schemas/VideoRecommendationScopeSet'
         aiUsage:
           $ref: '#/components/schemas/VideoAIUsageSet'
+        commercialContent:
+          $ref: '#/components/schemas/VideoCommercialContentSet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean

@@ -1034,6 +1034,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         }
         : undefined,
 
+      commercialContent: video.commercialContent.id,
+
       videoCaptions: playerCaptions,
       videoChapters,
       storyboard,

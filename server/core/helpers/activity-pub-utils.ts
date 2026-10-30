@@ -179,6 +179,11 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@id': 'pt:aiUsage'
     },
 
+    commercialContent: {
+      '@type': 'sc:Number',
+      '@id': 'pt:commercialContent'
+    },
+
     downloadEnabled: {
       '@type': 'sc:Boolean',
       '@id': 'pt:downloadEnabled'

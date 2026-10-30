@@ -191,6 +191,7 @@ export class VideosExporter extends AbstractUserExporter<VideoExportJSON> {
       recommendationScope: video.recommendationScope,
 
       aiUsage: video.aiUsage,
+      commercialContent: video.commercialContent,
 
       downloadEnabled: video.downloadEnabled,
 

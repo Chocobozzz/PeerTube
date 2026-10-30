@@ -6,6 +6,7 @@ import {
   PeerTubeError,
   VideoAIUsage,
   VideoChannelActivityAction,
+  VideoCommercialContent,
   VideoCreate,
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
@@ -366,6 +367,7 @@ export class LocalVideoCreator {
       commentsPolicy: videoInfo.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
       recommendationScope: videoInfo.recommendationScope ?? CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE,
       aiUsage: videoInfo.aiUsage ?? VideoAIUsage.NOT_SPECIFIED,
+      commercialContent: videoInfo.commercialContent ?? VideoCommercialContent.NONE,
       downloadEnabled: videoInfo.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
       waitTranscoding: videoInfo.waitTranscoding || false,
 

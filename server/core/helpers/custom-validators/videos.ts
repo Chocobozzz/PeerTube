@@ -8,6 +8,7 @@ import {
   MIMETYPES,
   VIDEO_AI_USAGES,
   VIDEO_CATEGORIES,
+  VIDEO_COMMERCIAL_CONTENTS,
   VIDEO_COMMENTS_POLICY,
   VIDEO_LICENCES,
   VIDEO_LIVE,
@@ -63,6 +64,10 @@ export function isVideoAIUsageValid (value: any) {
 
 export function isVideoAIUsageArrayValid (value: any) {
   return isArray(value) && value.length <= Object.keys(VIDEO_AI_USAGES).length && value.every(v => isVideoAIUsageValid(v))
+}
+
+export function isVideoCommercialContentValid (value: any) {
+  return VIDEO_COMMERCIAL_CONTENTS[value] !== undefined
 }
 
 export function isVideoSupportValid (value: string) {

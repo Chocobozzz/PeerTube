@@ -1,5 +1,6 @@
 import videojs from 'video.js'
 import { VideojsPlayer, VideojsPlugin } from '../../types'
+import { getPlayerTopBar } from '../top-bar/peertube-top-bar-component'
 import { PeerTubeDockComponent } from './peertube-dock-component'
 
 const Plugin = videojs.getPlugin('plugin') as typeof VideojsPlugin
@@ -22,6 +23,7 @@ class PeerTubeDockPlugin extends Plugin {
 
     this.dockComponent = new PeerTubeDockComponent(player, options)
     player.addChild(this.dockComponent)
+    getPlayerTopBar(player).addItem(this.dockComponent)
   }
 
   dispose () {

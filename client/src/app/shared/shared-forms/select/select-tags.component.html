@@ -1,6 +1,6 @@
 <p-autoComplete
   class="w-100"
-  [(ngModel)]="selectedItems"
+  [(ngModel)]="selectedItems" [ngModelOptions]="{ standalone: true }"
   (ngModelChange)="onModelChange()"
   [placeholder]="placeholder()"
   [inputId]="inputId()"

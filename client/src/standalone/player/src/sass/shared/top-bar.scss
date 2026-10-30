@@ -1,0 +1,53 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
+
+.video-js.vjs-peertube-skin {
+  --top-bar-gap: 1rem;
+
+  .peertube-top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // Below stats (64), control bar and its menus (100)
+    z-index: 50;
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    gap: var(--top-bar-gap);
+    padding: $dock-padding;
+    pointer-events: none;
+
+    .nsfw-info,
+    .vjs-playlist-button {
+      pointer-events: auto;
+    }
+  }
+
+  .peertube-top-bar-items {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--top-bar-gap);
+  }
+
+  &.peertube-dock .peertube-top-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0, rgba(20, 20, 20, 0));
+    transition: opacity 0.1s;
+  }
+
+  &.peertube-dock.vjs-playing.vjs-user-inactive .peertube-top-bar::before {
+    opacity: 0;
+    transition: opacity 1s;
+  }
+}

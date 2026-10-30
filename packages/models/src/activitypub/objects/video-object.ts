@@ -1,6 +1,7 @@
 import {
   LiveVideoLatencyModeType,
   VideoAIUsageType,
+  VideoCommercialContentType,
   VideoCommentPolicyType,
   VideoRecommendationScopeType,
   VideoStateType
@@ -45,6 +46,8 @@ export interface VideoObject {
   recommendationScope: VideoRecommendationScopeType
 
   aiUsage: VideoAIUsageType
+
+  commercialContent: VideoCommercialContentType
 
   downloadEnabled: boolean
   waitTranscoding: boolean

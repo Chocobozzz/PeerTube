@@ -321,6 +321,8 @@ export class PlayerOptionsBuilder {
         }
         : undefined,
 
+      commercialContent: video.commercialContent?.id,
+
       thumbnails: nsfwBlur
         ? null
         : video.thumbnails,

@@ -1,5 +1,6 @@
 import videojs from 'video.js'
 import { VideojsPlayer, VideojsPlugin } from '../../types'
+import { getPlayerTopBar } from '../top-bar/peertube-top-bar-component'
 import { PeerTubeNSFWDetailsComponent } from './peertube-nsfw-details-component'
 import { PeerTubeNSFWInfoComponent } from './peertube-nsfw-info-component'
 
@@ -22,6 +23,7 @@ class PeerTubeNSFWPlugin extends Plugin {
 
       this.nsfwInfoComponent = new PeerTubeNSFWInfoComponent(player, options)
       player.addChild(this.nsfwInfoComponent)
+      getPlayerTopBar(player).addItem(this.nsfwInfoComponent)
 
       this.nsfwDetailsComponent = new PeerTubeNSFWDetailsComponent(player, options)
       this.nsfwDetailsComponent.hide()

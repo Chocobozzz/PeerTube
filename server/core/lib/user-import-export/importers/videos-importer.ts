@@ -3,6 +3,7 @@ import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpe
 import {
   LiveVideoLatencyMode,
   VideoAIUsage,
+  VideoCommercialContent,
   VideoEmbedPrivacyPolicy,
   VideoExportJSON,
   VideoPrivacy,
@@ -28,6 +29,7 @@ import {
   isVideoPrivacyValid,
   isVideoPublicationDateValid,
   isVideoAIUsageValid,
+  isVideoCommercialContentValid,
   isVideoRecommendationScopeValid,
   isVideoReplayPrivacyValid,
   isVideoSourceFilenameValid,
@@ -73,6 +75,7 @@ type SanitizedObject = Pick<
   | 'commentsPolicy'
   | 'recommendationScope'
   | 'aiUsage'
+  | 'commercialContent'
   | 'downloadEnabled'
   | 'videoEmbedPrivacy'
   | 'waitTranscoding'
@@ -118,6 +121,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     }
 
     if (!isVideoAIUsageValid(o.aiUsage)) o.aiUsage = VideoAIUsage.NOT_SPECIFIED
+    if (!isVideoCommercialContentValid(o.commercialContent)) o.commercialContent = VideoCommercialContent.NONE
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
@@ -184,6 +188,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'commentsPolicy',
       'recommendationScope',
       'aiUsage',
+      'commercialContent',
       'downloadEnabled',
       'videoEmbedPrivacy',
       'waitTranscoding',
@@ -265,6 +270,7 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
           'commentsPolicy',
           'recommendationScope',
           'aiUsage',
+          'commercialContent',
           'downloadEnabled',
           'waitTranscoding',
           'originallyPublishedAt'

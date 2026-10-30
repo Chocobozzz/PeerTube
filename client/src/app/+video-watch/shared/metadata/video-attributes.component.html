@@ -64,6 +64,13 @@
   </div>
 }
 
+@if (video().commercialContent.id !== VideoCommercialContent.NONE) {
+  <div class="attribute attribute-commercial-content">
+    <span i18n class="attribute-label">Commercial content</span>
+    <span class="attribute-value">{{ video().commercialContent.label }}</span>
+  </div>
+}
+
 @if (getVideoTags().length > 0) {
   <div class="attribute attribute-tags">
     <span i18n class="attribute-label">Tags</span>

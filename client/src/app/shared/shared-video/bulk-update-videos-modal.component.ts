@@ -11,6 +11,7 @@ import {
   Video,
   VideoAIUsageType,
   VideoCommentPolicyType,
+  VideoCommercialContentType,
   VideoPrivacy,
   VideoPrivacyType,
   VideoRecommendationScopeType,
@@ -39,6 +40,7 @@ type BulkVideoUpdateModel = {
   commentsPolicy: VideoCommentPolicyType | null
   recommendationScope: VideoRecommendationScopeType | null
   aiUsage: VideoAIUsageType | null
+  commercialContent: VideoCommercialContentType | null
 }
 
 type FieldName = keyof BulkVideoUpdateModel
@@ -95,7 +97,8 @@ export class BulkUpdateVideosModalComponent {
     downloadEnabled: true,
     commentsPolicy: null,
     recommendationScope: null,
-    aiUsage: null
+    aiUsage: null,
+    commercialContent: null
   })
 
   readonly bulkUpdateForm = form(this.bulkUpdateModel, f => {
@@ -103,6 +106,10 @@ export class BulkUpdateVideosModalComponent {
     required(f.privacy, { when: () => this.activeFields().has('privacy'), message: $localize`Privacy is required.` })
     required(f.commentsPolicy, { when: () => this.activeFields().has('commentsPolicy'), message: $localize`Comments policy is required.` })
     required(f.aiUsage, { when: () => this.activeFields().has('aiUsage'), message: $localize`Use of AI is required.` })
+    required(f.commercialContent, {
+      when: () => this.activeFields().has('commercialContent'),
+      message: $localize`Commercial content is required.`
+    })
     required(f.recommendationScope, {
       when: () => this.activeFields().has('recommendationScope'),
       message: $localize`Recommended videos setting is required.`
@@ -121,7 +128,8 @@ export class BulkUpdateVideosModalComponent {
     { key: 'privacy', label: $localize`Privacy` },
     { key: 'recommendationScope', label: $localize`Recommended videos` },
     { key: 'support', label: $localize`Support` },
-    { key: 'aiUsage', label: $localize`Use of AI` }
+    { key: 'aiUsage', label: $localize`Use of AI` },
+    { key: 'commercialContent', label: $localize`Commercial content` }
   ]
 
   readonly activeAvailableFields = computed(() => this.allFields.filter(f => !this.activeFields().has(f.key)))
@@ -137,6 +145,7 @@ export class BulkUpdateVideosModalComponent {
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[]
   recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[]
   aiUsages: ConstantLabel<VideoAIUsageType>[]
+  commercialContents: ConstantLabel<VideoCommercialContentType>[]
 
   get authUser () {
     return this.authService.getUser()
@@ -159,6 +168,7 @@ export class BulkUpdateVideosModalComponent {
     this.server.getCommentPolicies().subscribe(policies => this.commentPolicies = policies)
     this.server.getRecommendationScopes().subscribe(scopes => this.recommendationScopes = scopes)
     this.server.getVideoAIUsages().subscribe(aiUsages => this.aiUsages = aiUsages)
+    this.server.getVideoCommercialContents().subscribe(commercialContents => this.commercialContents = commercialContents)
 
     this.server.getVideoPrivacies().subscribe(privacies => {
       this.videoPrivacies = privacies.filter(p => !BULK_PRIVACY_EXCLUDE.has(p.id))
@@ -209,6 +219,8 @@ export class BulkUpdateVideosModalComponent {
         return this.recommendationScopes
       case 'aiUsage':
         return this.aiUsages
+      case 'commercialContent':
+        return this.commercialContents
       default:
         return []
     }
@@ -245,6 +257,9 @@ export class BulkUpdateVideosModalComponent {
       case 'aiUsage':
         return this.aiUsages?.find(a => a.id === value)?.label
 
+      case 'commercialContent':
+        return this.commercialContents?.find(c => c.id === value)?.label
+
       case 'downloadEnabled':
         return value ? $localize`Yes` : $localize`No`
 
@@ -276,6 +291,7 @@ export class BulkUpdateVideosModalComponent {
       if (active.has('commentsPolicy')) update.commentsPolicy = model.commentsPolicy
       if (active.has('recommendationScope')) update.recommendationScope = model.recommendationScope
       if (active.has('aiUsage')) update.aiUsage = model.aiUsage
+      if (active.has('commercialContent')) update.commercialContent = model.commercialContent
 
       return update
     }

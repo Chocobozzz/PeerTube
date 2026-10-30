@@ -34,6 +34,8 @@ import {
   VideoChannelCollaboratorStateType,
   VideoCommentPolicy,
   VideoCommentPolicyType,
+  VideoCommercialContent,
+  VideoCommercialContentType,
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
   VideoImportState,
@@ -66,7 +68,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1175
+export const LAST_MIGRATION_VERSION = 1180
 
 // ---------------------------------------------------------------------------
 
@@ -779,6 +781,12 @@ export const VIDEO_AI_USAGES: { [id in VideoAIUsageType]: string } = {
   [VideoAIUsage.NO_AI]: 'No AI-generated content',
   [VideoAIUsage.CONTAINS_AI]: 'Contains AI-generated content',
   [VideoAIUsage.AI_GENERATED]: 'AI-generated'
+}
+
+export const VIDEO_COMMERCIAL_CONTENTS: { [id in VideoCommercialContentType]: string } = {
+  [VideoCommercialContent.NONE]: 'None',
+  [VideoCommercialContent.PROMOTIONAL]: 'Promotional content',
+  [VideoCommercialContent.PAID_PARTNERSHIP]: 'Paid partnership'
 }
 
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {

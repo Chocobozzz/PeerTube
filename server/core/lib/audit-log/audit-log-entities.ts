@@ -47,6 +47,7 @@ export function buildVideoAuditEntity (video: VideoDetails) {
     commentsPolicy: video.commentsPolicy,
     recommendationScope: video.recommendationScope,
     aiUsage: video.aiUsage,
+    commercialContent: video.commercialContent,
     downloadEnabled: video.downloadEnabled,
     waitTranscoding: video.waitTranscoding,
     scheduledUpdate: video.scheduledUpdate ?? null,

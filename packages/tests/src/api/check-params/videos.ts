@@ -381,6 +381,15 @@ describe('Test videos API validator', function () {
         }
       })
 
+      it('Should fail with bad commercialContent', async function () {
+        for (const commercialContent of [ 42, 'hello', 0 ]) {
+          const fields = { ...baseCorrectParams, commercialContent: commercialContent as any }
+          const attaches = baseCorrectAttaches
+
+          await checkUploadVideoParam({ ...baseOptions(), attributes: { ...fields, ...attaches } })
+        }
+      })
+
       it('Should fail with a long description', async function () {
         const fields = { ...baseCorrectParams, description: 'super'.repeat(2500) }
         const attaches = baseCorrectAttaches

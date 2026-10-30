@@ -18,6 +18,7 @@ import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
   VIDEO_AI_USAGES,
   VIDEO_CATEGORIES,
+  VIDEO_COMMERCIAL_CONTENTS,
   VIDEO_COMMENTS_POLICY,
   VIDEO_EMBED_PRIVACY_POLICIES,
   VIDEO_LANGUAGES,
@@ -113,6 +114,11 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
     aiUsage: {
       id: video.aiUsage,
       label: getAIUsageLabel(video.aiUsage)
+    },
+
+    commercialContent: {
+      id: video.commercialContent,
+      label: getCommercialContentLabel(video.commercialContent)
     },
 
     truncatedDescription: video.getTruncatedDescription(),
@@ -344,6 +350,10 @@ export function getPrivacyLabel (id: number) {
 
 export function getAIUsageLabel (id: number) {
   return VIDEO_AI_USAGES[id] || 'Unknown'
+}
+
+export function getCommercialContentLabel (id: number) {
+  return VIDEO_COMMERCIAL_CONTENTS[id] || 'Unknown'
 }
 
 export function getStateLabel (id: number) {

@@ -5,8 +5,9 @@ import {
   ActivityTrackerUrlObject,
   ActivityVideoFileMetadataUrlObject,
   LiveVideoLatencyMode,
-  VideoCommentPolicy,
   VideoAIUsage,
+  VideoCommentPolicy,
+  VideoCommercialContent,
   VideoObject,
   VideoRecommendationScope,
   VideoState
@@ -21,11 +22,12 @@ import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../mi
 import { isTrackerUrlValid } from '../urls.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
+  isVideoAIUsageValid,
   isVideoCommentsPolicyValid,
+  isVideoCommercialContentValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
-  isVideoAIUsageValid,
   isVideoRecommendationScopeValid,
   isVideoStateValid,
   isVideoTagValid,
@@ -81,15 +83,11 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
     video.commentsPolicy = VideoCommentPolicy.DISABLED
   }
 
-  // Remote platforms that don't send this field don't restrict recommendations
-  if (!isVideoRecommendationScopeValid(video.recommendationScope)) {
-    video.recommendationScope = VideoRecommendationScope.ALL
-  }
-
+  // Use defaults values for remote instances that don't send these fields
+  if (!isVideoRecommendationScopeValid(video.recommendationScope)) video.recommendationScope = VideoRecommendationScope.ALL
   // Remote platforms that don't send this field don't declare AI usage
-  if (!isVideoAIUsageValid(video.aiUsage)) {
-    video.aiUsage = VideoAIUsage.NOT_SPECIFIED
-  }
+  if (!isVideoAIUsageValid(video.aiUsage)) video.aiUsage = VideoAIUsage.NOT_SPECIFIED
+  if (!isVideoCommercialContentValid(video.commercialContent)) video.commercialContent = VideoCommercialContent.NONE
 
   if (!isActivityPubUrlValid(video.id)) return fail('id')
   if (!isVideoNameValid(video.name)) return fail('name')

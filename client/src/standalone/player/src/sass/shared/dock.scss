@@ -4,23 +4,20 @@
 @use "./_player-variables" as *;
 
 .video-js.vjs-peertube-skin {
+  // Item of the top bar
   .peertube-dock {
     --dock-avatar-size: 48px;
+
+    order: 1;
+    // Long titles are truncated instead of wrapping other top bar items
+    flex: 1 1 18rem;
+    min-width: 0;
 
     transition: opacity 0.1s;
 
     display: flex;
     align-items: center;
     pointer-events: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-
-    padding: $dock-padding;
-    background: linear-gradient(to bottom, rgba(20, 20, 20, 0.7) 0, rgba(20, 20, 20, 0));
-
-    @include padding-right(60px);
   }
 
   .peertube-dock-avatar {

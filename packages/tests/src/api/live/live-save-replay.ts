@@ -6,6 +6,7 @@ import {
   HttpStatusCodeType,
   LiveVideoError,
   VideoAIUsage,
+  VideoCommercialContent,
   VideoEmbedPrivacyPolicy,
   VideoPrivacy,
   VideoPrivacyType,
@@ -462,7 +463,11 @@ describe('Save replay setting', function () {
         })
         await servers[0].videos.update({
           id: liveVideoUUID,
-          attributes: { recommendationScope: VideoRecommendationScope.CHANNEL, aiUsage: VideoAIUsage.CONTAINS_AI }
+          attributes: {
+            recommendationScope: VideoRecommendationScope.CHANNEL,
+            aiUsage: VideoAIUsage.CONTAINS_AI,
+            commercialContent: VideoCommercialContent.PAID_PARTNERSHIP
+          }
         })
 
         await waitJobs(servers)
@@ -524,6 +529,7 @@ describe('Save replay setting', function () {
           const video = await server.videos.get({ id: lastReplayUUID })
           expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
           expect(video.aiUsage.id).to.equal(VideoAIUsage.CONTAINS_AI)
+          expect(video.commercialContent.id).to.equal(VideoCommercialContent.PAID_PARTNERSHIP)
         }
       })
 

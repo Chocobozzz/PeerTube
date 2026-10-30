@@ -3,7 +3,7 @@
     <label>
       <input
         type="checkbox"
-        [(ngModel)]="checked"
+        [(ngModel)]="checked" [ngModelOptions]="{ standalone: true }"
         (ngModelChange)="onModelChange()"
         [id]="inputName()"
         [disabled]="disabled"

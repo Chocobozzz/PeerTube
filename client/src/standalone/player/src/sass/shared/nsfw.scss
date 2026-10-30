@@ -5,14 +5,7 @@
 @use "./_player-variables" as *;
 
 .video-js.vjs-peertube-skin {
-  --nsfw-info-margin-x: 20px;
-  --nsfw-info-margin-y: 20px;
   --nsfw-font-size: 13px;
-
-  &.vjs-size-570 {
-    --nsfw-info-margin-x: 10px;
-    --nsfw-info-margin-y: 10px;
-  }
 
   button:not(.vjs-disabled) {
     cursor: pointer;
@@ -20,11 +13,8 @@
 
   .nsfw-info,
   .nsfw-details {
-    width: 100%;
-    width: fit-content;
     background-color: pvar(--pt-player-overlay-secondary-bg);
     color: pvar(--pt-player-overlay-secondary-fg);
-    max-width: calc(40% - 2 * var(--nsfw-info-margin-x));
     padding: 1rem;
   }
 
@@ -32,11 +22,11 @@
   // NSFW info
   // ---------------------------------------------------------------------------
 
+  // Item of the top bar
   .nsfw-info {
-    position: absolute;
-    top: var(--nsfw-info-margin-y);
-    right: var(--nsfw-info-margin-x);
-    max-height: calc(100% - 2 * var(--nsfw-info-margin-y));
+    order: 2;
+    flex: 0 1 auto;
+    max-width: min(100%, 20rem);
 
     font-size: var(--nsfw-font-size);
     border-radius: 4px;
@@ -62,14 +52,6 @@
     }
   }
 
-  &.peertube-dock {
-    .nsfw-info {
-      top: unset;
-      bottom: var(--nsfw-info-margin-y);
-      max-width: 90%;
-    }
-  }
-
   // ---------------------------------------------------------------------------
   // NSFW details
   // ---------------------------------------------------------------------------
@@ -85,6 +67,8 @@
   }
 
   .nsfw-details {
+    width: fit-content;
+    max-width: 40%;
     margin-left: auto;
     height: 100%;
 

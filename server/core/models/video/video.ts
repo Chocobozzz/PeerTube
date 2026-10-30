@@ -15,11 +15,13 @@ import {
   VideoPrivacy,
   VideoRateType,
   VideoAIUsage,
+  VideoCommercialContent,
   VideoRecommendationScope,
   VideoState,
   VideoStreamingPlaylistType,
   VideoSummary,
   type VideoAIUsageType,
+  type VideoCommercialContentType,
   type VideoCommentPolicyType,
   type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
@@ -595,6 +597,11 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @Default(VideoAIUsage.NOT_SPECIFIED)
   @Column
   declare aiUsage: VideoAIUsageType
+
+  @AllowNull(false)
+  @Default(VideoCommercialContent.NONE)
+  @Column
+  declare commercialContent: VideoCommercialContentType
 
   @AllowNull(false)
   @Column

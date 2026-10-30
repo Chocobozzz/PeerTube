@@ -7,6 +7,7 @@ import { LiveVideoScheduleEdit } from './live/live-video-schedule.model.js'
 import { Thumbnail } from './thumbnail/thumbnail.model.js'
 import { ConstantLabel } from '../common/constant-label.model.js'
 import { VideoAIUsageType } from './video-ai-usage.enum.js'
+import { VideoCommercialContentType } from './video-commercial-content.enum.js'
 import { VideoPrivacyType } from './video-privacy.enum.js'
 import { VideoRecommendationScopeType } from './video-recommendation-scope.enum.js'
 import { VideoScheduleUpdate } from './video-schedule-update.model.js'
@@ -82,6 +83,8 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   nsfwSummary: string
 
   aiUsage: ConstantLabel<VideoAIUsageType>
+
+  commercialContent: ConstantLabel<VideoCommercialContentType>
 
   account: AccountSummary
   channel: VideoChannelSummary

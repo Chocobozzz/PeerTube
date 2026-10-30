@@ -2,7 +2,7 @@
   <p-colorpicker 
     class="d-block" 
     [inputId]="inputId()" 
-    [(ngModel)]="value" 
+    [(ngModel)]="value" [ngModelOptions]="{ standalone: true }" 
     (ngModelChange)="onValueChange()" 
     />
   <div class="d-flex align-items-center gap-1">
@@ -10,7 +10,7 @@
     <input 
       [id]="hexCodeInputId" 
       [name]="hexCodeInputId" 
-      [(ngModel)]="hexCode" 
+      [(ngModel)]="hexCode" [ngModelOptions]="{ standalone: true }" 
       (ngModelChange)="onHexCodeChange()" 
       type="text" 
       class="form-control" 
