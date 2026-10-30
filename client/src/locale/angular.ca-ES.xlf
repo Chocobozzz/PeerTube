@@ -18258,7 +18258,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6206068034684850445" datatype="html">
         <source>The video was blocked due to automatic blocking of new videos on this instance</source>
-        <target state="new">The video was blocked due to automatic blocking of new videos on this instance</target>
+        <target state="translated">El vídeo s'ha bloquejat a causa del bloqueig automàtic dels vídeos nous en aquesta instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">28</context>
@@ -18266,7 +18266,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6318444543938896075" datatype="html">
         <source>Auto block - Instance policy</source>
-        <target state="new">Auto block - Instance policy</target>
+        <target state="translated">Bloqueig automàtic - Política de la instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">28,29</context>
@@ -18274,7 +18274,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7982453315165016089" datatype="html">
         <source>The video was blocked due to automatic blocking of videos with specific tags</source>
-        <target state="new">The video was blocked due to automatic blocking of videos with specific tags</target>
+        <target state="translated">El vídeo s'ha bloquejat a causa del bloqueig automàtic dels vídeos amb etiquetes específiques</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">30</context>
@@ -18282,7 +18282,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5360561995743597310" datatype="html">
         <source>Auto block - Auto-tag policy</source>
-        <target state="new">Auto block - Auto-tag policy</target>
+        <target state="translated">Bloqueig automàtic - Política d'etiquetatge automàtic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">30,31</context>
@@ -18474,7 +18474,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9034944789675397899" datatype="html">
         <source>Open actions of video <x id="PH" equiv-text="this.video().name"/></source>
-        <target state="new">Open actions of video <x id="PH" equiv-text="this.video().name"/></target>
+        <target state="translated">Obre les accions de vídeo <x id="PH" equiv-text="this.video().name"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-miniature.component.ts</context>
           <context context-type="linenumber">254</context>
@@ -18830,7 +18830,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5328830884001308231" datatype="html">
         <source>{count, plural, =1 {Account muted} other {<x id="count"/> accounts muted}}</source>
-        <target state="new">{count, plural, =1 {Account muted} other {<x id="count"/> accounts muted}}</target>
+        <target state="translated">{count, plural, =1 {Compte silenciat} other {<x id="count"/> comptes silenciats}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/blocklist.service.ts</context>
           <context context-type="linenumber">177</context>
@@ -18838,7 +18838,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4407621544946779419" datatype="html">
         <source>{count, plural, =1 {Account unmuted} other {<x id="count"/> accounts unmuted}}</source>
-        <target state="new">{count, plural, =1 {Account unmuted} other {<x id="count"/> accounts unmuted}}</target>
+        <target state="translated">{count, plural, =1 {Compte no silenciat} other {<x id="count"/> comptes no silenciats}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/blocklist.service.ts</context>
           <context context-type="linenumber">206</context>
@@ -18846,7 +18846,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="769280935524762114" datatype="html">
         <source>{count, plural, =1 {Server muted} other {<x id="count"/> servers muted}}</source>
-        <target state="new">{count, plural, =1 {Server muted} other {<x id="count"/> servers muted}}</target>
+        <target state="translated">{count, plural, =1 {Servidor silenciat} other {<x id="count"/> servidors silenciats}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/blocklist.service.ts</context>
           <context context-type="linenumber">252</context>
@@ -18854,7 +18854,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7904102710153841836" datatype="html">
         <source>{count, plural, =1 {Server unmuted} other {<x id="count"/> servers unmuted}}</source>
-        <target state="new">{count, plural, =1 {Server unmuted} other {<x id="count"/> servers unmuted}}</target>
+        <target state="translated">{count, plural, =1 {Servidor no silenciat} other {<x id="count"/> servidors no silenciats}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/blocklist.service.ts</context>
           <context context-type="linenumber">281</context>
@@ -18878,7 +18878,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8161638703749617630" datatype="html">
         <source>Filter muted accounts by this subscription</source>
-        <target state="new">Filter muted accounts by this subscription</target>
+        <target state="translated">Filtra els comptes silenciats per aquesta subscripció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/generic-account-blocklist.component.html</context>
           <context context-type="linenumber">39,40</context>
@@ -19647,7 +19647,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7306208116385748361" datatype="html">
         <source>Switch to manual block</source>
-        <target state="new">Switch to manual block</target>
+        <target state="translated">Canvia al bloqueig manual</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -19655,7 +19655,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3033597475544118118" datatype="html">
         <source>Set internal note...</source>
-        <target state="new">Set internal note...</target>
+        <target state="translated">Estableix una nota interna...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">113</context>
@@ -19683,7 +19683,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="759552082340137565" datatype="html">
         <source>{count, plural, =1 {Delete report} other {Delete reports}}</source>
-        <target state="new">{count, plural, =1 {Delete report} other {Delete reports}}</target>
+        <target state="translated">{count, plural, =1 {Suprimeix l'informe} other {Suprimeix els informes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">391</context>
@@ -19747,7 +19747,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="127978769406607253" datatype="html">
         <source>Block the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Block the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Bloqueja {count, plural, =1 {el vídeo} other {els vídeos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">466</context>
@@ -19755,7 +19755,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4121384633096511327" datatype="html">
         <source>Unblock the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Unblock the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Desbloqueja {count, plural, =1 {el vídeo} other {els vídeos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">472</context>
@@ -19763,7 +19763,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="360751696384645624" datatype="html">
         <source>Delete the {count, plural, =1 {video} other {videos}}</source>
-        <target state="new">Delete the {count, plural, =1 {video} other {videos}}</target>
+        <target state="translated">Suprimeix {count, plural, =1 {el vídeo} other {els vídeos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">478</context>
@@ -19779,7 +19779,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8870282537679260686" datatype="html">
         <source>Delete {count, plural, =1 {comment} other {comments}}</source>
-        <target state="new">Delete {count, plural, =1 {comment} other {comments}}</target>
+        <target state="translated">Suprimeix {count, plural, =1 {el comentari} other {els comentaris}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">500</context>
@@ -19811,7 +19811,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6241663452799238433" datatype="html">
         <source>Messages with reporter...</source>
-        <target state="new">Messages with reporter...</target>
+        <target state="translated">Missatges amb l'informador...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">347</context>
@@ -19819,7 +19819,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7649552191076397260" datatype="html">
         <source>Messages with moderators...</source>
-        <target state="new">Messages with moderators...</target>
+        <target state="translated">Missatges amb els moderadors...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">348</context>
@@ -19827,7 +19827,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="394817347378438833" datatype="html">
         <source>Accept/Reject</source>
-        <target state="new">Accept/Reject</target>
+        <target state="translated">Accepta/Rebutja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">358</context>
