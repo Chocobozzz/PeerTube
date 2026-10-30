@@ -465,6 +465,30 @@ describe('Test server plugins API validators', function () {
       }
     })
 
+    it('Should fail to install/update without the current password', async function () {
+      for (const suffix of [ 'install', 'update' ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + suffix,
+          fields: { npmName: npmPlugin },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
+    it('Should fail to install/update with an invalid current password', async function () {
+      for (const suffix of [ 'install', 'update' ]) {
+        await makePostBodyRequest({
+          url: server.url,
+          path: path + suffix,
+          fields: { npmName: npmPlugin, currentPassword: 'bad password' },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
     it('Should succeed with the correct parameters', async function () {
       const it = [
         { suffix: 'install', status: HttpStatusCode.OK_200 },
@@ -476,7 +500,7 @@ describe('Test server plugins API validators', function () {
         await makePostBodyRequest({
           url: server.url,
           path: path + obj.suffix,
-          fields: { npmName: npmPlugin },
+          fields: { npmName: npmPlugin, currentPassword: server.store.user.password },
           token: server.accessToken,
           expectedStatus: obj.status
         })

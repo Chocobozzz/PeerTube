@@ -211,6 +211,14 @@ export abstract class AbstractCommand {
     return expectedStatus !== undefined ? expectedStatus : defaultExpectedStatus
   }
 
+  protected buildCurrentPassword (options: OverrideCommandOptions & { currentPassword?: string }) {
+    if (options.currentPassword === null) return undefined
+    if (options.currentPassword !== undefined) return options.currentPassword
+    if (options.token && options.token !== this.server.accessToken) return undefined
+
+    return this.server.store?.user?.password ?? undefined
+  }
+
   protected buildVideoPasswordHeader (videoPassword: string) {
     return videoPassword !== undefined && videoPassword !== null
       ? { 'x-peertube-video-password': videoPassword }

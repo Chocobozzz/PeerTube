@@ -238,6 +238,14 @@ info:
 
     The current password is invalid.
 
+    ## current_password_is_missing
+
+    The action requires a [password confirmation](#section/Password-confirmation) but `currentPassword` is missing.
+
+    ## password_confirmation_unavailable
+
+    The action requires a [password confirmation](#section/Password-confirmation) but the user authenticates with an external auth plugin (OpenID Connect, SAML...), so PeerTube cannot check their password.
+
     # Rate limits
 
     We are rate-limiting all endpoints of PeerTube's API. Custom values can be set by administrators:
@@ -261,6 +269,19 @@ info:
     | `X-RateLimit-Remaining` | Number of remaining requests in the current time period    |
     | `X-RateLimit-Reset`     | Timestamp of end of current time period as UNIX timestamp  |
     | `Retry-After`           | Seconds to delay after the first `429` is received         |
+
+    # Password confirmation
+
+    If the `webadmin.password_confirmation.enabled` setting is enabled (default), sensitive administrator actions require
+    the user password in the `currentPassword` field of the request body:
+
+      - Install or update a plugin/theme
+      - Change the custom JavaScript or CSS of the instance (`instance.customizations` of the custom configuration)
+      - Create an administrator, or give the administrator role to a user
+      - Change the password, email or auth plugin (`pluginAuth`) of an administrator
+
+    After 10 failed password confirmations in 10 minutes (configurable), the user receives a `429 Too Many Requests` status code
+    until the end of the time frame, even with the correct password.
 
     # CORS
 
@@ -1138,6 +1159,9 @@ paths:
                 $ref: '#/components/schemas/ServerConfigCustom'
     put:
       summary: Set instance runtime configuration
+      description: >
+        Changing `instance.customizations.javascript` or `instance.customizations.css` requires a
+        [password confirmation](#section/Password-confirmation): set `currentPassword` at the root of the request body.
       operationId: putCustomConfig
       tags:
         - Config
@@ -1153,6 +1177,11 @@ paths:
             Arises when:
               - the emailer is disabled and the instance is open to registrations
               - web videos and hls are disabled with transcoding enabled - you need at least one enabled
+              - the custom JavaScript or CSS changed and `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
     delete:
       summary: Delete instance runtime configuration
       operationId: delCustomConfig
@@ -8006,6 +8035,8 @@ paths:
                     npmName:
                       type: string
                       example: peertube-plugin-auth-ldap
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - npmName
                   additionalProperties: false
@@ -8013,6 +8044,8 @@ paths:
                   properties:
                     path:
                       type: string
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - path
                   additionalProperties: false
@@ -8020,7 +8053,11 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: should have either `npmName` or `path` set
+          description: should have either `npmName` or `path` set, or `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
 
   /api/v1/plugins/update:
     post:
@@ -8041,6 +8078,8 @@ paths:
                     npmName:
                       type: string
                       example: peertube-plugin-auth-ldap
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - npmName
                   additionalProperties: false
@@ -8048,6 +8087,8 @@ paths:
                   properties:
                     path:
                       type: string
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - path
                   additionalProperties: false
@@ -8055,7 +8096,11 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: should have either `npmName` or `path` set
+          description: should have either `npmName` or `path` set, or `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
         '404':
           description: existing plugin not found
 
@@ -10498,6 +10543,10 @@ components:
       format: password
       minLength: 6
       maxLength: 50
+    currentPassword:
+      type: string
+      format: password
+      description: Password of the authenticated user, required if [password confirmation](#section/Password-confirmation) is enabled
 
     VideoCategorySet:
       type: integer
@@ -13603,6 +13652,10 @@ components:
           $ref: '#/components/schemas/UserRole'
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
+        currentPassword:
+          description: Required to create an administrator, see [password confirmation](#section/Password-confirmation)
+          allOf:
+            - $ref: '#/components/schemas/currentPassword'
       required:
         - username
         - password
@@ -13634,6 +13687,11 @@ components:
           $ref: '#/components/schemas/UserAdminFlags'
         password:
           $ref: '#/components/schemas/password'
+        currentPassword:
+          description: >
+            Required to give the administrator role, or to change the password, email or auth plugin of an administrator, see [password confirmation](#section/Password-confirmation)
+          allOf:
+            - $ref: '#/components/schemas/currentPassword'
     UpdateMe:
       properties:
         password:

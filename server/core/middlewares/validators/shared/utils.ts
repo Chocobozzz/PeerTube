@@ -24,7 +24,7 @@ function areValidationErrors (
       {
         body: omitBodyLog
           ? 'omitted'
-          : req.body,
+          : omitCurrentPassword(req.body),
         params: req.params,
         query: req.query,
         files: req.files,
@@ -62,6 +62,14 @@ function isValidPlaylistIdParam (paramName: string) {
   return param(paramName)
     .customSanitizer(toCompleteUUID)
     .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id (id, short UUID or UUID)')
+}
+
+// ---------------------------------------------------------------------------
+
+function omitCurrentPassword (body: any) {
+  if (!body || typeof body !== 'object' || body.currentPassword === undefined) return body
+
+  return { ...body, currentPassword: 'omitted' }
 }
 
 // ---------------------------------------------------------------------------

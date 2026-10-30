@@ -306,7 +306,7 @@ async function updateUser (req: express.Request, res: express.Response) {
     const oldUserAuditEntity = auditLog.snapshot(() => buildUserAuditEntity(userToUpdate))
     const roleChanged = body.role !== undefined && body.role !== userToUpdate.role
 
-    const keysToUpdate: (keyof UserUpdate)[] = [
+    const keysToUpdate: (keyof Omit<UserUpdate, 'currentPassword'>)[] = [
       'password',
       'email',
       'emailVerified',

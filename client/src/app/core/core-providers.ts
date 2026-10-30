@@ -2,7 +2,7 @@ import { MessageService } from 'primeng/api'
 import { PeerTubeSocket } from '@app/core/notification/peertube-socket.service'
 import { HooksService, PluginService } from '@app/core/plugins'
 import { AuthService } from './auth'
-import { ConfirmService } from './confirm'
+import { ConfirmService, PasswordConfirmationService } from './confirm'
 import { MenuService } from './menu'
 import { Notifier } from './notification'
 import { HtmlRendererService, LinkifierService, MarkdownService } from './renderer'
@@ -32,6 +32,7 @@ export function getCoreProviders () {
     AuthService,
     ScopedTokensService,
     ConfirmService,
+    PasswordConfirmationService,
     ServerService,
     ThemeService,
     MenuService,

@@ -10,4 +10,7 @@ export interface UserCreate {
   role: UserRoleType
   adminFlags?: UserAdminFlagType
   channelName?: string
+
+  // Required to create an administrator if password confirmation is enabled
+  currentPassword?: string
 }

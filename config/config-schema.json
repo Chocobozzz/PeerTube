@@ -358,6 +358,26 @@
             }
           },
           "additionalProperties": false
+        },
+        "password_confirmation": {
+          "description": "Failed password confirmations of sensitive actions",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "window": {
+              "description": "10 failures in 10 minutes",
+              "type": "string",
+              "default": "10 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -1667,6 +1687,17 @@
                 }
               },
               "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "password_confirmation": {
+          "description": "Ask administrators to type their password again before sensitive actions in the web interface or REST API",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
             }
           },
           "additionalProperties": false

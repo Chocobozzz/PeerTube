@@ -2,7 +2,7 @@ import { CommonModule, NgTemplateOutlet } from '@angular/common'
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router'
-import { AuthService, Notifier, ScreenService, ServerService, User, UserService } from '@app/core'
+import { AuthService, Notifier, PasswordConfirmationService, ScreenService, ServerService, User, UserService } from '@app/core'
 import { REQUIRED_EMAIL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import {
   USER_ROLE_VALIDATOR,
@@ -57,6 +57,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute)
   private router = inject(Router)
   private notifier = inject(Notifier)
+  private passwordConfirmation = inject(PasswordConfirmationService)
   private userService = inject(UserService)
   private twoFactorService = inject(TwoFactorService)
   private userAdminService = inject(UserAdminService)
@@ -109,7 +110,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   formValidated () {
     this.error = undefined
 
-    const userUpdate: UserUpdate = this.form.value
+    const userUpdate: UserUpdate = { ...this.form.value }
     userUpdate.adminFlags = this.buildAdminFlags(this.form.value)
 
     // A select in HTML is always mapped as a string, we convert it to number
@@ -118,17 +119,35 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     if (userUpdate.pluginAuth === 'null') userUpdate.pluginAuth = null
 
-    this.userAdminService.updateUser(this.user.id, userUpdate)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`User ${this.user.username} updated.`)
-          this.router.navigate([ '/admin/overview/users/list' ])
-        },
+    this.passwordConfirmation.runWithPassword({
+      title: $localize`Update ${this.user.username}`,
+      message: this.user.role.id === UserRole.ADMINISTRATOR
+        ? $localize`${this.user.username} is an administrator.`
+        : $localize`Administrators can install plugins, that execute any code on your platform.`,
+      required: this.isAdminRoleOrCredentialsUpdate(),
+      request: currentPassword => this.userAdminService.updateUser(this.user.id, { ...userUpdate, currentPassword })
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`User ${this.user.username} updated.`)
+        this.router.navigate([ '/admin/overview/users/list' ])
+      },
 
-        error: err => {
-          this.error = err.message
-        }
-      })
+      error: err => {
+        this.error = this.passwordConfirmation.buildErrorMessage(err)
+      }
+    })
+  }
+
+  // Changing the credentials of an administrator would allow to log in as them
+  private isAdminRoleOrCredentialsUpdate () {
+    const { role, email, pluginAuth } = this.form.value
+
+    if (parseInt(role, 10) === UserRole.ADMINISTRATOR && this.user.role.id !== UserRole.ADMINISTRATOR) return true
+    if (this.user.role.id !== UserRole.ADMINISTRATOR) return false
+
+    const newPluginAuth = pluginAuth === 'null' ? null : pluginAuth
+
+    return (email !== undefined && email !== this.user.email) || (newPluginAuth !== undefined && newPluginAuth !== this.user.pluginAuth)
   }
 
   isCreation () {

@@ -96,6 +96,11 @@ rates_limit:
     window: 5 minutes
     max: 60 # Requires at least 10 distinct IPs (`max / max_per_ip`) to lock an account
     max_per_ip: 6 # A single IP's contribution to the account lock is capped at 6 failures
+  password_confirmation: # Failed password confirmations of sensitive actions
+    enabled: true
+    # 10 failures in 10 minutes
+    window: 10 minutes
+    max: 10
 
 oauth2:
   token_lifetime:
@@ -590,6 +595,10 @@ webadmin:
     edition:
       # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
+
+  # Ask administrators to type their password again before sensitive actions in the web interface or REST API
+  password_confirmation:
+    enabled: true
 
 # XML, Atom or JSON feeds
 feeds:

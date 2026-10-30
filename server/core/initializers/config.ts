@@ -413,6 +413,11 @@ export const CONFIG = buildConfig({
       WINDOW_MS: staticKey('rates_limit.login_lockout.window', { transform: parseDurationToMs }),
       MAX: staticKey<number>('rates_limit.login_lockout.max'),
       MAX_PER_IP: staticKey<number>('rates_limit.login_lockout.max_per_ip')
+    },
+    PASSWORD_CONFIRMATION: {
+      ENABLED: staticKey<boolean>('rates_limit.password_confirmation.enabled'),
+      WINDOW_MS: staticKey('rates_limit.password_confirmation.window', { transform: parseDurationToMs }),
+      MAX: staticKey<number>('rates_limit.password_confirmation.max')
     }
   },
   TRUST_PROXY: staticKey<string[]>('trust_proxy'),
@@ -557,6 +562,9 @@ export const CONFIG = buildConfig({
       EDITION: {
         ALLOWED: staticKey<boolean>('webadmin.configuration.edition.allowed')
       }
+    },
+    PASSWORD_CONFIRMATION: {
+      ENABLED: staticKey<boolean>('webadmin.password_confirmation.enabled')
     }
   },
   FEEDS: {
