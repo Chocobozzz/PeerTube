@@ -13,8 +13,20 @@
 
         <div class="watch-save">
           @if (canWatch()) {
-            <my-button class="watch-button" icon="external-link" theme="secondary" class="me-3" [href]="getWatchUrl()">
+            <my-button class="watch-button" icon="external-link" theme="secondary" [href]="getWatchUrl()">
               <span i18n class="watch-button-label">Watch the video</span>
+            </my-button>
+          }
+
+          @if (canUpdate() && hasStudioTasks()) {
+            <my-button
+              theme="secondary" class="save-as-new-button"
+              icon="circle-tick"
+              [disabled]="isUpdating"
+              [loading]="isSavingAsNew"
+              (click)="onWantToSaveAsNewVideo()"
+              >
+              <ng-container i18n>Save as new video</ng-container>
             </my-button>
           }
 
@@ -22,7 +34,7 @@
             theme="primary" class="save-button"
             icon="circle-tick"
             [disabled]="!canUpdate() || !hasPendingChanges()" (click)="onWantToUpdate()"
-            [loading]="isUpdating"
+            [loading]="isUpdating && !isSavingAsNew"
             form="video-manage-form"
             >
             @if (hasStudioTasks()) {

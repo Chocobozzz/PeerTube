@@ -1,9 +1,11 @@
+import express from 'express'
+import { uuidToShort } from '@peertube/peertube-node-utils'
 import {
   HttpStatusCode,
   VideoChannelActivityAction,
   VideoState,
   VideoStudioCreateEdition,
-  VideoStudioEditionPayload,
+  VideoStudioCreateEditionNewVideo,
   VideoStudioTask,
   VideoStudioTaskCut,
   VideoStudioTaskIntro,
@@ -18,13 +20,17 @@ import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants.js'
 import {
   buildTaskFileFieldname,
+  buildStudioNewVideoName,
+  createNewVideoForStudio,
   createVideoStudioJob,
   getTaskFileFromReq,
   handleStudioTaskFile,
+  onVideoStudioFailed,
   safeCleanupStudioTMPFiles
 } from '@server/lib/video-studio.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
-import express from 'express'
+import { MVideoFull } from '@server/types/models/index.js'
+import { JobQueue } from '@server/lib/job-queue/index.js'
 import { asyncMiddleware, authenticate, videoStudioAddEditionValidator } from '../../../middlewares/index.js'
 
 const studioRouter = express.Router()
@@ -73,27 +79,50 @@ export {
 async function createEditionTasks (req: express.Request, res: express.Response) {
   const files = req.files as Express.Multer.File[]
   const body = req.body as VideoStudioCreateEdition
-  const video = res.locals.videoFull
+  const sourceVideo = res.locals.videoFull
+  const user = res.locals.oauth.token.User
 
   const taskFilesStaged = CONFIG.OBJECT_STORAGE.ENABLED
 
   // Before changing the video state: storing task files in object storage can fail, and no job would reset the state
-  const payload: VideoStudioEditionPayload = {
-    videoUUID: video.uuid,
-    tasks: await buildTaskPayloads({ tasks: body.tasks, files, taskFilesStaged }),
-    taskFilesStaged
+  const tasks = await buildTaskPayloads({ tasks: body.tasks, files, taskFilesStaged })
+
+  let newVideo: MVideoFull | undefined
+  let video = sourceVideo
+
+  try {
+    // The source video is left untouched: the result is saved in a new video that the user can edit while it is processing
+    if (body.saveAsNewVideo === true) {
+      newVideo = await createNewVideoForStudio({ sourceVideo, user, name: buildStudioNewVideoName(sourceVideo.name) })
+      video = newVideo
+    } else {
+      video.state = video.state === VideoState.TO_EDIT_FAILED ? VideoState.TO_EDIT_AS_NEW_VIDEO : VideoState.TO_EDIT
+      await video.save()
+    }
+
+    const payload = { videoUUID: video.uuid, tasks, taskFilesStaged, isNewVideo: video.state === VideoState.TO_EDIT_AS_NEW_VIDEO }
+    if (newVideo) {
+      await JobQueue.Instance.createJob({
+        type: 'video-duplicate',
+        payload: {
+          videoUUID: video.uuid,
+          sourceVideoUUID: sourceVideo.uuid,
+          userId: user.id,
+          studio: payload
+        }
+      })
+    } else {
+      await createVideoStudioJob({ user, payload, video })
+    }
+  } catch (err) {
+    await safeCleanupStudioTMPFiles({ tasks, taskFilesStaged })
+
+    // Don't leave a video stuck in edition state (or an empty new video) because its job was never created
+    if (newVideo) await newVideo.destroy()
+    else await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: video.state === VideoState.TO_EDIT_AS_NEW_VIDEO })
+
+    throw err
   }
-
-  video.state = VideoState.TO_EDIT
-  await video.save()
-
-  const user = res.locals.oauth.token.User
-
-  await createVideoStudioJob({
-    user,
-    payload,
-    video
-  })
 
   auditLog.create(getAuditActorFromRes(res), () => buildVideoStudioEditionAuditEntity({ video, tasks: body.tasks }))
 
@@ -104,6 +133,16 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
     video,
     transaction: null
   })
+
+  if (newVideo) {
+    return res.json({
+      video: {
+        id: newVideo.id,
+        uuid: newVideo.uuid,
+        shortUUID: uuidToShort(newVideo.uuid)
+      }
+    } satisfies VideoStudioCreateEditionNewVideo)
+  }
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

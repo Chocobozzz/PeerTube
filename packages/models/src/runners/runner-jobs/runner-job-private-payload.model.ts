@@ -51,6 +51,7 @@ export interface RunnerJobLiveRTMPHLSTranscodingPrivatePayload {
 
 export interface RunnerJobVideoStudioTranscodingPrivatePayload {
   videoUUID: string
+  isNewVideo?: boolean
   originalTasks: VideoStudioTaskPayload[]
 
   // Task files are staged in object storage: their `file` option is a staging key instead of a local path

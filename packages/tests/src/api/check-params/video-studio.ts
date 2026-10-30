@@ -189,6 +189,15 @@ describe('Test video studio API validator', function () {
         })
       })
 
+      it('Should fail with an invalid saveAsNewVideo', async function () {
+        await command.createEditionTasks({
+          videoId: videoUUID,
+          tasks: [ { name: 'cut', options: { start: 1 } } ],
+          saveAsNewVideo: 'hello' as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
       it('Should succeed with correct parameters and editor token', async function () {
         await server.jobs.pauseJobQueue()
 

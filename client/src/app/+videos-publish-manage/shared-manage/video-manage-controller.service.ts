@@ -432,6 +432,32 @@ export class VideoManageController implements OnDestroy {
     return true
   }
 
+  async checkAndConfirmStudioTasksAsNewVideo () {
+    if (!this.videoEdit.hasStudioTasks()) return false
+
+    const title = $localize`Are you sure you want to save the result of studio tasks as a new video?`
+    const listHTML = this.videoEdit.getStudioTasksSummary().map(t => `<li>${t}</li>`).join('')
+
+    const confirmHTML =
+      $localize`The current video will <strong>not</strong> be modified.` + ' ' +
+      $localize`A new private video will be created in the same channel.` + ' ' +
+      $localize`You will be able to update its information while it is processed.` +
+      '<br /><br />' +
+      $localize`Other unsaved changes of the current video will not be saved.` +
+      '<br /><br />' +
+      $localize`As a reminder, the following tasks will be executed: <ol>${listHTML}</ol>`
+
+    return await this.confirmService.confirm(confirmHTML, title) === true
+  }
+
+  // Doesn't update the source video: only the studio tasks are sent
+  saveStudioTasksAsNewVideo () {
+    const { uuid } = this.videoEdit.getVideoAttributes()
+
+    return this.videoStudio.editVideoAsNewVideo(uuid, this.videoEdit.getStudioTasks())
+      .pipe(tap(() => this.videoEdit.resetStudio()))
+  }
+
   checkUserQuota (file: File) {
     const user = this.auth.getUser()
 

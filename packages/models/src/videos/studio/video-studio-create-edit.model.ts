@@ -1,5 +1,14 @@
 export interface VideoStudioCreateEdition {
   tasks: VideoStudioTask[]
+  saveAsNewVideo?: boolean
+}
+
+export interface VideoStudioCreateEditionNewVideo {
+  video: {
+    id: number
+    uuid: string
+    shortUUID: string
+  }
 }
 
 export type VideoStudioTask =

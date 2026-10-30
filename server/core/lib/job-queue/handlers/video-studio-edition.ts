@@ -1,7 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { FFmpegEdition } from '@peertube/peertube-ffmpeg'
 import {
-  VideoState,
   VideoStudioEditionPayload,
   VideoStudioTask,
   VideoStudioTaskCutPayload,
@@ -14,7 +13,6 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { runTransaction } from '@server/helpers/database-utils.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -22,6 +20,7 @@ import {
   approximateIntroOutroAdditionalSize,
   makeStudioTaskFilesAvailable,
   onVideoStudioEnded,
+  onVideoStudioFailed,
   safeCleanupStudioTMPFiles
 } from '@server/lib/video-studio.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -40,6 +39,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
   const abortPromise = buildPromiseForAbortSignal(abortSignal)
 
   const payload = job.data as VideoStudioEditionPayload
+  const isNewVideo = payload.isNewVideo === true
 
   const taskFiles = pick(payload, [ 'tasks', 'taskFilesStaged' ])
 
@@ -106,17 +106,12 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
 
         logger.info('Video edition ended for video %s.', video.uuid)
 
-        await onVideoStudioEnded({ video, editionResultPath, taskFiles })
+        await onVideoStudioEnded({ video, editionResultPath, taskFiles, isNewVideo })
       } catch (err) {
         await safeCleanupStudioTMPFiles(taskFiles)
 
         try {
-          await runTransaction(async transaction => {
-            const video = await VideoModel.load(payload.videoUUID, transaction)
-            if (!video || video.state === VideoState.PUBLISHED) return
-
-            await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
-          })
+          await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo })
         } catch (err) {
           logger.error('Cannot reset video state after studio error', { err })
         }

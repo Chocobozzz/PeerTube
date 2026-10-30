@@ -1,20 +1,36 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
-import { getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { hasVideoStudioTaskFile, VideoStudioEditionPayload, VideoStudioTask, VideoStudioTaskPayload } from '@peertube/peertube-models'
+import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
+import {
+  VideoChannelActivityAction,
+  VideoPrivacy,
+  VideoState,
+  VideoStudioEditionPayload,
+  VideoStudioTask,
+  VideoStudioTaskPayload,
+  hasVideoStudioTaskFile
+} from '@peertube/peertube-models'
+import { buildUUID } from '@peertube/peertube-node-utils'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { runTransaction } from '@server/helpers/database-utils.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
 import { createTorrentForFileFromPath } from '@server/lib/webtorrent.js'
+import { UserModel } from '@server/models/user/user.js'
+import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoInfohashModel } from '@server/models/video/video-infohash.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MUser, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
+import { MUser, MUserAccountId, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { move, remove } from 'fs-extra/esm'
 import { basename, join } from 'path'
+import { buildNonDuplicatedVideoAutomaticTagsJob } from './automatic-tags/automatic-tags.js'
 import { JobQueue } from './job-queue/index.js'
 import { buildStagingKey, downloadStagingObject, removeStagingObject, storeStagingObject } from './object-storage/staging.js'
 import { VideoStudioTranscodingJobHandler } from './runners/index.js'
 import { getTranscodingJobPriority } from './transcoding/transcoding-priority.js'
+import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from './thumbnail.js'
+import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
 import { regenerateTranscriptionTaskIfNeeded } from './video-captions.js'
 import { buildNewFile, removeAllWebVideoFilesUnderLock, removeHLSPlaylistUnderLock, storeNewWebVideoFile } from './video-file.js'
 import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded } from './video-jobs.js'
@@ -24,6 +40,13 @@ const logger = createLogger('studio')
 
 export function buildTaskFileFieldname (indice: number, fieldName = 'file') {
   return `tasks[${indice}][options][${fieldName}]`
+}
+
+export function buildStudioNewVideoName (sourceName: string) {
+  const suffix = ' (Studio Edit)'
+  const maxSourceLength = CONSTRAINTS_FIELDS.VIDEOS.NAME.max - suffix.length
+
+  return sourceName.slice(0, maxSourceLength).trimEnd() + suffix
 }
 
 export function getTaskFileFromReq (files: Express.Multer.File[], indice: number, fieldName = 'file') {
@@ -148,22 +171,103 @@ export async function createVideoStudioJob (options: {
   const priority = await getTranscodingJobPriority({ user, type: 'studio' })
 
   if (CONFIG.VIDEO_STUDIO.REMOTE_RUNNERS.ENABLED) {
-    await new VideoStudioTranscodingJobHandler().create({ video, tasks: payload.tasks, taskFilesStaged: payload.taskFilesStaged, priority })
+    await new VideoStudioTranscodingJobHandler().create({
+      video,
+      tasks: payload.tasks,
+      taskFilesStaged: payload.taskFilesStaged,
+      isNewVideo: payload.isNewVideo,
+      priority
+    })
     return
   }
 
   await JobQueue.Instance.createJob({ type: 'video-studio-edition', payload, priority })
 }
 
+export async function createNewVideoForStudio (options: {
+  sourceVideo: MVideoFull
+  name: string
+  user: MUserAccountId
+}) {
+  const { sourceVideo, name, user } = options
+  const channel = sourceVideo.VideoChannel
+
+  // Descriptive metadata is only a default: the user reviews it in the video form before the edition ends
+  const video = new VideoModel({
+    uuid: buildUUID(),
+    name,
+    state: VideoState.TO_DUPLICATE,
+    remote: false,
+    isLive: false,
+    channelId: channel.id,
+
+    // Don't publish a copy before the user reviewed it
+    privacy: VideoPrivacy.PRIVATE,
+
+    category: sourceVideo.category,
+    licence: sourceVideo.licence,
+    language: sourceVideo.language,
+    description: sourceVideo.description,
+    support: sourceVideo.support,
+    nsfw: sourceVideo.nsfw,
+    nsfwSummary: sourceVideo.nsfwSummary,
+    nsfwFlags: sourceVideo.nsfwFlags,
+    commentsPolicy: sourceVideo.commentsPolicy,
+    downloadEnabled: sourceVideo.downloadEnabled,
+    waitTranscoding: sourceVideo.waitTranscoding,
+    embedPrivacyPolicy: sourceVideo.embedPrivacyPolicy,
+
+    publishedAt: new Date(),
+    duration: sourceVideo.duration
+  }) as MVideoFull
+
+  video.VideoChannel = channel
+  video.url = getLocalVideoActivityPubUrl(video)
+
+  await runTransaction(async transaction => {
+    await video.save({ transaction })
+
+    await VideoChannelActivityModel.addVideoActivity({
+      action: VideoChannelActivityAction.CREATE,
+      user,
+      channel,
+      video,
+      transaction
+    })
+  })
+
+  return video
+}
+
+export function onVideoStudioFailed (options: {
+  videoUUID: string
+  isNewVideo: boolean
+}) {
+  const { videoUUID, isNewVideo } = options
+
+  return runTransaction(async transaction => {
+    const video = await VideoModel.load(videoUUID, transaction)
+    if (!video || (video.state !== VideoState.TO_EDIT && video.state !== VideoState.TO_EDIT_AS_NEW_VIDEO)) return
+
+    if (isNewVideo) {
+      await video.update({ state: VideoState.TO_EDIT_FAILED }, { transaction })
+      return
+    }
+
+    await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
+  })
+}
+
 export async function onVideoStudioEnded (options: {
   editionResultPath: string
   taskFiles: StudioTaskFiles
   video: MVideoFull
+  isNewVideo?: boolean
 
   // Can throw to cancel the end of the edition
   beforeIrreversibleChanges?: () => void
 }) {
-  const { taskFiles, editionResultPath, beforeIrreversibleChanges } = options
+  const { taskFiles, editionResultPath, isNewVideo = false, beforeIrreversibleChanges } = options
 
   const newFile = await buildNewFile({ input: { path: editionResultPath }, mode: 'web-video' })
 
@@ -181,6 +285,8 @@ export async function onVideoStudioEnded (options: {
     let duration: number
 
     try {
+      if (!localPath) throw new Error('Cannot access the local video studio result file')
+
       beforeIrreversibleChanges?.()
 
       await safeCleanupStudioTMPFiles(taskFiles)
@@ -197,22 +303,28 @@ export async function onVideoStudioEnded (options: {
       })
 
       duration = await getVideoStreamDuration(localPath)
+      video.duration = duration
+      video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
+      await video.save()
+
+      if (isNewVideo) await prepareNewVideoAfterStudio(video, localPath)
+
       await cleanup()
     } catch (err) {
       // The file was not saved in database: also remove it from its storage, so it is not left orphaned
       await rollback()
       throw err
     }
-
-    video.duration = duration
-    video.aspectRatio = buildAspectRatio({ width: newFile.width, height: newFile.height })
-    await video.save()
   } finally {
     videoFileMutexReleaser()
   }
 
   await JobQueue.Instance.createSequentialJobFlow(
     await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
+    // Like an upload: apply auto tags policies before the video is announced
+    isNewVideo
+      ? buildNonDuplicatedVideoAutomaticTagsJob({ video, moderation: 'apply' })
+      : undefined,
     buildNonDuplicatedFederateVideoJob({ video }),
     {
       type: 'transcoding-job-builder' as 'transcoding-job-builder',
@@ -230,6 +342,23 @@ export async function onVideoStudioEnded (options: {
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+async function prepareNewVideoAfterStudio (video: MVideoFull, videoPath: string) {
+  const videoWithFiles = await VideoModel.loadFull(video.uuid)
+
+  await regenerateLocalVideoThumbnailsFromVideoIfNeeded(videoWithFiles, await ffprobePromise(videoPath), videoPath, true)
+
+  await autoBlacklistVideoIfNeeded({
+    video: videoWithFiles,
+    user: await UserModel.loadByVideoId(video.id),
+    isRemote: false,
+    isNew: true,
+    isNewFile: true,
+    holdIfAutoTagPolicy: false
+  })
+
+  await videoWithFiles.VideoChannel.setAsUpdated()
+}
 
 async function removeAllFilesUnderLock (video: MVideoWithAllFiles) {
   await removeHLSPlaylistUnderLock(video)

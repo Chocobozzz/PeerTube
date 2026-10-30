@@ -86,7 +86,12 @@ export function checkVideoFileCanBeEdited (video: MVideo, req: express.Request, 
     return false
   }
 
-  if (video.state === VideoState.TO_TRANSCODE || video.state === VideoState.TO_EDIT) {
+  if (
+    video.state === VideoState.TO_TRANSCODE ||
+    video.state === VideoState.TO_EDIT ||
+    video.state === VideoState.TO_EDIT_AS_NEW_VIDEO ||
+    video.state === VideoState.TO_DUPLICATE
+  ) {
     res.fail({
       status: HttpStatusCode.CONFLICT_409,
       message: req.t('Cannot edit video that is already waiting for transcoding/edition')
@@ -138,6 +143,10 @@ export function checkVideoCanBeTranscribedOrTranscoded (options: {
   const incompatibleStates = new Set<VideoStateType>([
     VideoState.TO_IMPORT,
     VideoState.TO_EDIT,
+    VideoState.TO_EDIT_AS_NEW_VIDEO,
+    VideoState.TO_DUPLICATE,
+    VideoState.TO_DUPLICATE_FAILED,
+    VideoState.TO_EDIT_FAILED,
     VideoState.TO_MOVE_TO_EXTERNAL_STORAGE,
     VideoState.TO_MOVE_TO_FILE_SYSTEM,
     VideoState.TO_IMPORT_FAILED
