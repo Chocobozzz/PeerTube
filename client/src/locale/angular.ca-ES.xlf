@@ -19851,7 +19851,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8583413527299223090" datatype="html">
         <source>{count, plural, =1 {Internal note updated} other {<x id="count"/> internal notes updated}}</source>
-        <target state="new">{count, plural, =1 {Internal note updated} other {<x id="count"/> internal notes updated}}</target>
+        <target state="translated">{count, plural, =1 {Nota interna actualitzada} other {<x id="count"/> notes internes actualitzades}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">80</context>
