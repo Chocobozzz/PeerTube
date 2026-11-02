@@ -16854,7 +16854,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3952157513492420828" datatype="html">
         <source>COUNTRIES</source>
-        <target state="new">COUNTRIES</target>
+        <target state="translated">PAÏSOS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">415</context>
@@ -17210,7 +17210,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="690106965183468214" datatype="html">
         <source>Delete video channel</source>
-        <target state="new">Delete video channel</target>
+        <target state="translated">Suprimeix el canal de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/channel/video-channel.service.ts</context>
           <context context-type="linenumber">110</context>
@@ -17918,7 +17918,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="274881441113962981" datatype="html">
         <source>This is the name that will be publicly visible to other users.</source>
-        <target state="new">This is the name that will be publicly visible to other users.</target>
+        <target state="translated">Aquest és el nom que veuran la resta d'usuaris.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-channel.component.html</context>
           <context context-type="linenumber">25,27</context>
@@ -18022,7 +18022,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1869511367449012579" datatype="html">
         <source>This is the name that will be publicly visible to other users.</source>
-        <target state="new"> This is the name that will be publicly visible to other users. </target>
+        <target state="translated">Aquest és el nom que veuran la resta d'usuaris.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-user.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -20688,7 +20688,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="568290249049802891" datatype="html">
         <source>Cancel this job and abort its underlying process</source>
-        <target state="new">Cancel this job and abort its underlying process</target>
+        <target state="translated">Cancel·la aquesta tasca i atura el procés subjacent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">75,76</context>
@@ -20880,7 +20880,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8551670396148163744" datatype="html">
         <source><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registrations.length }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registrations will create the accounts and channels. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
-        <target state="new"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registrations.length }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registrations will create the accounts and channels. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Accepting<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> registration will create the account and channel. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Si accepteu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registrations.length }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> els registres, es crearan els comptes i els canals. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Si accepteu<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ registration.username }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> el registre, es crearà el compte i el canal. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -20888,7 +20888,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5488516772394120306" datatype="html">
         <source>At least one registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> At least one registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">Almenys un correu electrònic de registre no s'ha verificat. L'enviament de correus electrònics s'ha desactivat per defecte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">4</context>
@@ -20896,7 +20896,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4616488263446093258" datatype="html">
         <source>The registration email has not been verified. Email delivery has been disabled by default.</source>
-        <target state="new"> The registration email has not been verified. Email delivery has been disabled by default. </target>
+        <target state="translated">El correu electrònic de registre no s'ha verificat. L'enviament de correus electrònics s'ha desactivat per defecte.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -20912,7 +20912,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2583091767247736198" datatype="html">
         <source>Emails are not enabled on this instance so PeerTube won't be able to send an email explaining accounts have been created.</source>
-        <target state="new"> Emails are not enabled on this instance so PeerTube won't be able to send an email explaining accounts have been created. </target>
+        <target state="translated">L'enviament de correus electrònics no està habilitat en aquesta instància, per tant, PeerTube no podrà enviar un correu electrònic per informar que s'han creat els comptes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">51</context>
@@ -21596,7 +21596,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7643080703382863606" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Cap entrada} =1 {1 entrada} other {<x id="INTERPOLATION"/> entrades}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -21612,7 +21612,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1754374478903587424" datatype="html">
         <source>Filter by this entity type</source>
-        <target state="new">Filter by this entity type</target>
+        <target state="translated">Filtra per aquest tipus d'entitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -21628,7 +21628,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4397869042036937810" datatype="html">
         <source>Open entity</source>
-        <target state="new">Open entity</target>
+        <target state="translated">Obre l'entitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">61</context>
@@ -21636,7 +21636,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3854011688949394332" datatype="html">
         <source>Show the history of this entity</source>
-        <target state="new">Show the history of this entity</target>
+        <target state="translated">Mostra l'historial d'aquesta entitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">79,80</context>
@@ -21644,7 +21644,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2296970491051796628" datatype="html">
         <source>Changes:</source>
-        <target state="new">Changes:</target>
+        <target state="translated">Canvis:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">93,95</context>
@@ -21652,7 +21652,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3122528284209641420" datatype="html">
         <source>Old values</source>
-        <target state="new">Old values</target>
+        <target state="translated">Valors antics</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">97,98</context>
@@ -21660,7 +21660,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1253939581454379208" datatype="html">
         <source>New values</source>
-        <target state="new">New values</target>
+        <target state="translated">Valors nous</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">102,103</context>
@@ -21676,7 +21676,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4878071410105934844" datatype="html">
         <source>Entity:</source>
-        <target state="new">Entity:</target>
+        <target state="translated">Entitat:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">112,113</context>
@@ -21684,7 +21684,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="96125621973663460" datatype="html">
         <source>No audit log entries found.</source>
-        <target state="new">No audit log entries found.</target>
+        <target state="translated">No s'ha trobat cap entrada de registre d'auditoria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">118</context>
@@ -21852,7 +21852,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2927658547953689823" datatype="html">
         <source>Save sensitive content settings</source>
-        <target state="new">Save sensitive content settings</target>
+        <target state="translated">Desa la configuració del contingut sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
           <context context-type="linenumber">51</context>
@@ -21860,7 +21860,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2316900873583051641" datatype="html">
         <source>Sensitive content settings updated.</source>
-        <target state="new">Sensitive content settings updated.</target>
+        <target state="translated">La configuració del contingut sensible s'ha actualitzat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -22004,7 +22004,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2180917783438257495" datatype="html">
         <source>An account or server was automatically blocked/unblocked by a blocklist subscription</source>
-        <target state="new">An account or server was automatically blocked/unblocked by a blocklist subscription</target>
+        <target state="translated">Un compte o un servidor s'ha bloquejat/desbloquejat automàticament per una subscripció a una llista de bloqueig.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -22224,7 +22224,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3690226221168769707" datatype="html">
         <source>Are you sure you want to cancel the ownership change request to "<x id="PH" equiv-text="this.pendingOwnershipRequest.nextOwnerAccount.name"/>"?</source>
-        <target state="new">Are you sure you want to cancel the ownership change request to "<x id="PH" equiv-text="this.pendingOwnershipRequest.nextOwnerAccount.name"/>"?</target>
+        <target state="translated">Confirmeu que voleu cancel·lar la sol·licitud de canvi de propietari a "<x id="PH" equiv-text="this.pendingOwnershipRequest.nextOwnerAccount.name"/>"?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.ts</context>
           <context context-type="linenumber">237</context>
@@ -22236,7 +22236,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6207697803784242615" datatype="html">
         <source>Cancel request</source>
-        <target state="new">Cancel request</target>
+        <target state="translated">Cancel·la la sol·licitud</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.ts</context>
           <context context-type="linenumber">238</context>
@@ -22248,7 +22248,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3228361257063604986" datatype="html">
         <source>Ownership change request cancelled</source>
-        <target state="new">Ownership change request cancelled</target>
+        <target state="translated">Sol·licitud de canvi de propietari cancel·lada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.ts</context>
           <context context-type="linenumber">244</context>
@@ -22516,7 +22516,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2605658322936929408" datatype="html">
         <source>Podcast</source>
-        <target state="new">Podcast</target>
+        <target state="translated">Pòdcast</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">4</context>
@@ -22536,7 +22536,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4140988188396275590" datatype="html">
         <source>PODCAST APPLICATIONS</source>
-        <target state="new">PODCAST APPLICATIONS</target>
+        <target state="translated">APLICACIONS DEL PÒDCAST</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">11,12</context>
@@ -22544,7 +22544,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6242225133806126562" datatype="html">
         <source>Podcast feed - Audio &amp; Video</source>
-        <target state="new">Podcast feed - Audio &amp; Video</target>
+        <target state="translated">Canal de continguts del podcast - Àudio &amp; Vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">16,18</context>
@@ -22552,7 +22552,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7822131829511776426" datatype="html">
         <source>This feed contains both audio and video enclosures so podcast clients can choose their preferred format</source>
-        <target state="new"> This feed contains both audio and video enclosures so podcast clients can choose their preferred format </target>
+        <target state="translated">Aquest canal de continguts conté tant adjuncions d'àudio com de vídeo perquè els usuaris dels pòdcasts puguin escollir el format que prefereixin.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">19</context>
@@ -22560,7 +22560,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1758336343548732220" datatype="html">
         <source>Podcast feed URL copied to clipboard!</source>
-        <target state="new">Podcast feed URL copied to clipboard!</target>
+        <target state="translated">L'URL del canal de continguts del pòdcast s'ha copiat al porta-retalls.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">30,31</context>
@@ -22576,7 +22576,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="680100801345947215" datatype="html">
         <source>Apple Podcast requires a public email to be set in order to submit your podcast.</source>
-        <target state="new"> Apple Podcast requires a public email to be set in order to submit your podcast. </target>
+        <target state="translated">Apple Podcast requereix una adreça de correu electrònic pública per poder enviar el pòdcast.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">45</context>
@@ -22584,7 +22584,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6902305305260322146" datatype="html">
         <source>Apple Podcast - Audio</source>
-        <target state="new">Apple Podcast - Audio</target>
+        <target state="translated">Apple Podcast - Àudio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">51,53</context>
@@ -22592,7 +22592,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5716506319682052502" datatype="html">
         <source>Use this URL in Apple Podcast if you only want to broadcast only the audio from your videos</source>
-        <target state="new"> Use this URL in Apple Podcast if you only want to broadcast only the audio from your videos </target>
+        <target state="translated">Utilitzeu aquest URL a Apple Podcast si voleu emetre només l'àudio dels vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">54</context>
@@ -22600,7 +22600,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8656603930507061492" datatype="html">
         <source>Apple Podcast feed URL for audio copied to clipboard!</source>
-        <target state="new">Apple Podcast feed URL for audio copied to clipboard!</target>
+        <target state="translated">L'URL del canal de continguts d'Apple Podcast per l'àudio s'ha copiat al porta-retalls.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">65,66</context>
@@ -22608,7 +22608,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7922077976297336450" datatype="html">
         <source>Apple Podcast - Video</source>
-        <target state="new">Apple Podcast - Video</target>
+        <target state="translated">Apple Podcast - Vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">71,73</context>
@@ -22616,7 +22616,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3465823082431938170" datatype="html">
         <source>Use this URL in Apple Podcast if you only want to broadcast your videos</source>
-        <target state="new"> Use this URL in Apple Podcast if you only want to broadcast your videos </target>
+        <target state="translated">Utilitzeu aquest URL a Apple Podcast si només voleu emetre els vídeos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">74</context>
@@ -22624,7 +22624,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8037279882124796632" datatype="html">
         <source>Apple Podcast feed URL for videos copied to clipboard!</source>
-        <target state="new">Apple Podcast feed URL for videos copied to clipboard!</target>
+        <target state="translated">L'URL del canal de continguts d'Apple Podcast pels vídeos s'ha copiat al porta-retalls.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">85,86</context>
@@ -22632,7 +22632,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1560657119807970004" datatype="html">
         <source>PODCAST SETTINGS</source>
-        <target state="new">PODCAST SETTINGS</target>
+        <target state="translated">CONFIGURACIÓ DEL PÒDCAST</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">94,95</context>
@@ -22640,7 +22640,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="317671111678792150" datatype="html">
         <source>Public email</source>
-        <target state="new">Public email</target>
+        <target state="translated">Correu electrònic públic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-podcast.component.html</context>
           <context context-type="linenumber">99,101</context>
@@ -22976,7 +22976,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1990743270860913672" datatype="html">
         <source>Server <x id="PH" equiv-text="host"/> muted.</source>
-        <target state="new">Server <x id="PH" equiv-text="host"/> muted.</target>
+        <target state="translated">Servidor <x id="PH" equiv-text="host"/> silenciat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">404</context>
@@ -22984,7 +22984,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3494132403413285893" datatype="html">
         <source>Server <x id="PH" equiv-text="host"/> unmuted.</source>
-        <target state="new">Server <x id="PH" equiv-text="host"/> unmuted.</target>
+        <target state="translated">Servidor <x id="PH" equiv-text="host"/> no silenciat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">420</context>
@@ -23412,7 +23412,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3665821958852235002" datatype="html">
         <source>Add to playlist...</source>
-        <target state="new">Add to playlist...</target>
+        <target state="translated">Afegeix a la llista de reproducció...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">313</context>
@@ -23420,7 +23420,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1494349999258688802" datatype="html">
         <source>Filter by privacy: <x id="PH" equiv-text="privacy"/></source>
-        <target state="new">Filter by privacy: <x id="PH" equiv-text="privacy"/></target>
+        <target state="translated">Filtra per privacitat: <x id="PH" equiv-text="privacy"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">337</context>
