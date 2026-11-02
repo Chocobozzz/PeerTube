@@ -31,6 +31,10 @@
         </div>
       }
 
+      @case ('input-radio') {
+        <my-select-radio [inputId]="setting().name" [items]="radioItems()" [formControlName]="setting().name"></my-select-radio>
+      }
+
       @case ('input-password') {
         <my-input-text [formError]="formErrors()['settings.name']" [formControlName]="setting().name" [inputId]="setting().name"></my-input-text>
       }
