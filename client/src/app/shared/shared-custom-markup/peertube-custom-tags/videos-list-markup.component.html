@@ -12,4 +12,12 @@
     }
 
   </div>
+
+  @if ((moreHref() || morePath()) && videos?.length !== 0) {
+    <div class="more">
+      <my-link className="peertube-button-link primary-button" [internalLink]="morePathUrlTree()" [href]="morePath() ? undefined : moreHref()">
+        {{ getMoreLabel() }}
+      </my-link>
+    </div>
+  }
 </div>
