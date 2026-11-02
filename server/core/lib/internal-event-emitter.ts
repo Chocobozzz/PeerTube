@@ -18,7 +18,7 @@ export interface PeerTubeInternalEvents {
   'playlist-element-updated': (options: { playlistElement: MVideoPlaylistElement }) => void
   'playlist-element-deleted': (options: { playlistElement: MVideoPlaylistElement }) => void
 
-  'chapters-updated': (options: { video: MVideoImmutable }) => void
+  'chapters-updated': (options: { video: MVideoImmutable & Pick<MVideo, 'channelId'> }) => void
 }
 
 class InternalEventEmitter extends TypedEventEmitter<PeerTubeInternalEvents> {

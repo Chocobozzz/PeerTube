@@ -16,6 +16,7 @@ import {
   videoFeedsPodcastSetCacheKey
 } from '@server/middlewares/index.js'
 import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { MVideo, MVideoCaptionVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
@@ -58,6 +59,21 @@ for (const event of ([ 'video-created', 'video-updated', 'video-deleted' ] as co
     }
   })
 }
+
+InternalEventEmitter.Instance.on('chapters-updated', async ({ video }) => {
+  // Clear the channel cache synchronously so the feed can't be served stale after the update
+  podcastApiCache.clearGroupSafe(buildPodcastChannelGroupsCache({ channelId: video.channelId }))
+
+  try {
+    const playlistIds = await VideoPlaylistElementModel.listPlaylistIdsForVideoId(video.id)
+
+    for (const playlistId of playlistIds) {
+      podcastApiCache.clearGroupSafe(buildPodcastPlaylistGroupsCache({ playlistId }))
+    }
+  } catch (err) {
+    logger.error('Error while clearing podcast feed cache after chapters update', { videoId: video.id, error: err })
+  }
+})
 
 for (const event of ([ 'channel-updated', 'channel-deleted' ] as const)) {
   InternalEventEmitter.Instance.on(event, ({ channel }) => {
@@ -263,11 +279,12 @@ async function generatePodcastItem (options: {
   video: VideoModel
   liveItem: boolean
   media: PodcastMedia[]
+  hasChapters?: boolean
 }) {
-  const { video, liveItem, media } = options
+  const { video, liveItem, media, hasChapters = false } = options
 
   const customTags: CustomTag[] = await Hooks.wrapObject(
-    [],
+    hasChapters ? [ buildPodcastChaptersCustomTag(video) ] : [],
     'filter:feed.podcast.video.create-custom-tags.result',
     { video, liveItem }
   )
@@ -318,11 +335,13 @@ function getPodcastMedium (enclosurePreference?: FeedEnclosurePreference) {
 }
 
 async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[], enclosurePreference?: FeedEnclosurePreference) {
-  const captionsGroup = await VideoCaptionModel.listCaptionsOfMultipleVideos(videos.map(v => v.id))
+  const videoIds = videos.map(v => v.id)
+  const captionsGroup = await VideoCaptionModel.listCaptionsOfMultipleVideos(videoIds)
+  const videoIdsWithChapters = await VideoChapterModel.listVideoIdsWithChapters(videoIds)
 
   for (const video of videos) {
     if (!video.isLive) {
-      await addVODPodcastItem({ feed, video, captionsGroup, enclosurePreference })
+      await addVODPodcastItem({ feed, video, captionsGroup, enclosurePreference, hasChapters: videoIdsWithChapters.has(video.id) })
     } else if (video.isLive && video.state !== VideoState.LIVE_ENDED) {
       await addLivePodcastItem({ feed, video })
     }
@@ -334,8 +353,9 @@ async function addVODPodcastItem (options: {
   video: VideoModel
   captionsGroup: { [id: number]: MVideoCaptionVideo[] }
   enclosurePreference?: FeedEnclosurePreference
+  hasChapters: boolean
 }) {
-  const { feed, video, captionsGroup, enclosurePreference } = options
+  const { feed, video, captionsGroup, enclosurePreference, hasChapters } = options
 
   const resolutionSortOrder = enclosurePreference === 'video'
     ? 'desc' as const
@@ -360,7 +380,7 @@ async function addVODPodcastItem (options: {
   if (media.length === 0) return
 
   const videoCaptions = buildVODCaptions(captionsGroup[video.id])
-  const item = await generatePodcastItem({ video, liveItem: false, media })
+  const item = await generatePodcastItem({ video, liveItem: false, media, hasChapters })
 
   feed.addPodcastItem({ ...item, subTitle: videoCaptions })
 }
@@ -389,6 +409,17 @@ async function addLivePodcastItem (options: {
 }
 
 // ---------------------------------------------------------------------------
+
+// https://podcasting2.org/docs/podcast-namespace/tags/chapters
+function buildPodcastChaptersCustomTag (video: MVideo): CustomTag {
+  return {
+    name: 'podcast:chapters',
+    attributes: {
+      url: `${WEBSERVER.URL}/api/v1/videos/${video.uuid}/podcasting-chapters`,
+      type: 'application/json+chapters'
+    }
+  }
+}
 
 function buildVODWebVideoFile (video: MVideo, videoFile: VideoFile) {
   const sources = [

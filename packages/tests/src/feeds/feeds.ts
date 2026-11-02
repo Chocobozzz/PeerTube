@@ -277,6 +277,73 @@ describe('Test syndication feeds', () => {
           expect(socialInteract['@_accountUrl']).to.exist
         })
 
+        it('Should contain podcast:chapters only when the video has chapters, and refresh it on update', async function () {
+          const getItem = async () => {
+            const xmlDoc = parseXMLFeed(
+              await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: userChannelId })
+            )
+
+            return xmlDoc.rss.channel.item
+          }
+
+          // The cache is cleared asynchronously (Redis) after the chapters update, so we retry a few times
+          const waitForChaptersTag = async (shouldExist: boolean) => {
+            let item: any
+
+            for (let i = 0; i < 20; i++) {
+              item = await getItem()
+              if (!!item['podcast:chapters'] === shouldExist) break
+
+              await new Promise(resolve => setTimeout(resolve, 100))
+            }
+
+            return item['podcast:chapters']
+          }
+
+          // Fill the feed cache
+          expect((await getItem())['podcast:chapters']).to.not.exist
+
+          await servers[0].chapters.update({
+            token: userAccessToken,
+            videoId: videoIdWithoutComments,
+            chapters: [
+              { timecode: 0, title: 'Intro' },
+              { timecode: 1, title: 'Second chapter' }
+            ]
+          })
+
+          const chaptersTag = await waitForChaptersTag(true)
+          expect(chaptersTag).to.exist
+          expect(chaptersTag['@_type']).to.equal('application/json+chapters')
+          expect(chaptersTag['@_url']).to.equal(`${servers[0].url}/api/v1/videos/${videoIdWithoutComments}/podcasting-chapters`)
+
+          const { body } = await makeGetRequest({
+            url: servers[0].url,
+            path: new URL(chaptersTag['@_url']).pathname,
+            expectedStatus: HttpStatusCode.OK_200
+          })
+
+          expect(body).to.deep.equal({
+            version: '1.2.0',
+            chapters: [
+              { startTime: 0, title: 'Intro' },
+              { startTime: 1, title: 'Second chapter' }
+            ]
+          })
+
+          // Removing chapters removes the tag
+          await servers[0].chapters.update({ token: userAccessToken, videoId: videoIdWithoutComments, chapters: [] })
+          expect(await waitForChaptersTag(false)).to.not.exist
+        })
+
+        it('Should return a 404 on podcasting chapters of an unknown video', async function () {
+          await makeGetRequest({
+            url: servers[0].url,
+            path: '/api/v1/videos/00000000-0000-4000-8000-000000000000/podcasting-chapters',
+            expectedStatus: HttpStatusCode.NOT_FOUND_404
+          })
+        })
+
         it('Should contain a valid support custom tags for plugins', async function () {
           const xmlDoc = parseXMLFeed(
             await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: userChannelId })
