@@ -28,7 +28,8 @@
 
 .watch-icon-overlay,
 .duration-overlay,
-.live-overlay {
+.live-overlay,
+.captions-overlay {
   font-size: 0.75rem;
   line-height: normal;
   z-index: z(miniature);
@@ -52,6 +53,17 @@
 
   bottom: 0;
   // right property is defined below
+}
+
+.captions-overlay {
+  position: absolute;
+  padding: 2px 8px;
+  border-top-right-radius: 4px;
+
+  font-weight: $font-bold;
+
+  bottom: 0;
+  // left property is defined below
 }
 
 .live-overlay {
@@ -110,11 +122,21 @@
   .live-overlay {
     left: 0;
   }
+
+  .captions-overlay {
+    right: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 4px;
+  }
 }
 
 .video-thumbnail:not(.is-rtl) {
   .duration-overlay,
   .live-overlay {
     right: 0;
+  }
+
+  .captions-overlay {
+    left: 0;
   }
 }

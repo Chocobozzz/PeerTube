@@ -95,6 +95,11 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
     currentTime: number
   }
 
+  /**
+   * Languages (ISO 639 codes) of the video captions, only available in videos lists
+   */
+  captionLanguages?: string[]
+
   pluginData?: any
 }
 

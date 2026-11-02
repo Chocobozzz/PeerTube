@@ -78,6 +78,12 @@
     <div class="duration-overlay" data-nosnippet>{{ getDurationLabel() }}</div>
   }
 
+  @if (hasCaptions) {
+    <div class="captions-overlay" data-nosnippet [title]="getCaptionsOverlayLabel()">
+      <ng-container i18n>CC</ng-container>
+    </div>
+  }
+
   @if (playOverlay()) {
     <div class="play-overlay">
       <div class="icon"></div>

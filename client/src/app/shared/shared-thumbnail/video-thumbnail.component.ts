@@ -2,6 +2,7 @@ import { CommonModule, getLocaleDirection } from '@angular/common'
 import { booleanAttribute, ChangeDetectionStrategy, Component, inject, input, LOCALE_ID, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
+import { hasLanguageForLocale } from '@peertube/peertube-core-utils'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
@@ -20,6 +21,7 @@ export type VideoThumbnailInput = Pick<
   | 'userHistory'
   | 'originallyPublishedAt'
   | 'liveSchedules'
+  | 'captionLanguages'
 >
 
 @Component({
@@ -59,6 +61,9 @@ export class VideoThumbnailComponent implements OnChanges {
 
   durationLabel: string
 
+  // Video has at least one caption in the interface language
+  hasCaptions: boolean
+
   src: string
   srcset: string
 
@@ -74,6 +79,8 @@ export class VideoThumbnailComponent implements OnChanges {
     this.durationLabel = this.video().duration
       ? Video.buildDurationLabel(this.video())
       : undefined
+
+    this.hasCaptions = hasLanguageForLocale(this.video().captionLanguages, this.localeId)
 
     const thumbnails = this.video().thumbnails || []
     this.src = thumbnails.length > 0
@@ -106,6 +113,8 @@ export class VideoThumbnailComponent implements OnChanges {
 
     if (this.video().isLive) parts.push(this.getLiveOverlayLabel())
     else if (this.getDurationLabel()) parts.push(this.getDurationOverlayLabel())
+
+    if (this.hasCaptions) parts.push(this.getCaptionsOverlayLabel())
 
     const progressPercent = this.getProgressPercent()
     if (progressPercent) parts.push($localize`You watched ${progressPercent}% of this video`)
@@ -153,6 +162,10 @@ export class VideoThumbnailComponent implements OnChanges {
 
   getDurationOverlayLabel () {
     return $localize`Video duration is ${this.getDurationLabel()}`
+  }
+
+  getCaptionsOverlayLabel () {
+    return $localize`Captions available in your language`
   }
 
   getLiveOverlayLabel () {

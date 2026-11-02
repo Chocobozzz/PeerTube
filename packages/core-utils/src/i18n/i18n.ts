@@ -122,6 +122,18 @@ export function getShortLocale (locale: string) {
   return locale.split('-')[0]
 }
 
+/**
+ * Check if one of the language codes (ISO 639, like video captions languages) matches the language of the locale
+ * Regions and scripts of the locale are ignored (`zh-Hans-CN` matches `zh`)
+ */
+export function hasLanguageForLocale (languages: string[], locale: string) {
+  if (!locale || !Array.isArray(languages) || languages.length === 0) return false
+
+  const localeLanguage = getShortLocale(locale).toLowerCase()
+
+  return languages.some(language => language?.toLowerCase() === localeLanguage)
+}
+
 export function buildFileLocale (locale: string) {
   return getCompleteLocale(locale)
 }
