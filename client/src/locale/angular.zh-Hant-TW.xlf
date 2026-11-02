@@ -11858,7 +11858,7 @@
       </trans-unit>
       <trans-unit id="2398422581918975504" datatype="html">
         <source>These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </source>
-        <target state="new"> These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </target>
+        <target state="translated">這些紀錄檔僅來自主要的 PeerTube 處理程序：<x id="ICU" xid="4109582258601121399" equiv-text="{secondariesUp, plural, =1 {有 1 個次要處理程序} other {有 {{ secondariesUp }} 個次要處理程序}}"/>正在運作，其紀錄檔不會在此顯示。請檢查各次要處理程序的紀錄檔以取得其紀錄。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3,8</context>
@@ -11866,7 +11866,7 @@
       </trans-unit>
       <trans-unit id="2468359540835782741" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 個次要處理程序} other {<x id="INTERPOLATION"/> 個次要處理程序}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3</context>
@@ -12294,7 +12294,7 @@
       </trans-unit>
       <trans-unit id="8866329773573088545" datatype="html">
         <source>Save player settings</source>
-        <target state="new">Save player settings</target>
+        <target state="translated">儲存播放程式設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
           <context context-type="linenumber">35</context>
@@ -12302,7 +12302,7 @@
       </trans-unit>
       <trans-unit id="7148806470329294902" datatype="html">
         <source>Player settings updated.</source>
-        <target state="new">Player settings updated.</target>
+        <target state="translated">播放程式設定已更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -13150,7 +13150,7 @@
       </trans-unit>
       <trans-unit id="7343456225783046295" datatype="html">
         <source>Display scheduled lives</source>
-        <target state="new">Display scheduled lives</target>
+        <target state="translated">顯示已安排的直播</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -13294,7 +13294,7 @@
       </trans-unit>
       <trans-unit id="1747993932679092589" datatype="html">
         <source>Default recommended videos</source>
-        <target state="new">Default recommended videos</target>
+        <target state="translated">預設推薦影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">556,558</context>
@@ -14390,7 +14390,7 @@
       </trans-unit>
       <trans-unit id="2302969578909684603" datatype="html">
         <source>This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</source>
-        <target state="new">This audio file is stored with Web Videos files: if Web Videos output is disabled, your Web Videos storage directory or bucket only contains audio files and videos are stored with HLS files</target>
+        <target state="translated">此音訊檔案與「Web 影片」檔案一同儲存：若已停用「Web 影片」輸出功能，您的「Web 影片」儲存目錄或儲存桶中將僅包含音訊檔案，而影片則會與 HLS 檔案一同儲存</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-vod.component.html</context>
           <context context-type="linenumber">151,152</context>
@@ -14874,7 +14874,7 @@
       </trans-unit>
       <trans-unit id="8998777763062753479" datatype="html">
         <source>SENSITIVE CONTENT</source>
-        <target state="new">SENSITIVE CONTENT</target>
+        <target state="translated">敏感內容</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">38,39</context>
@@ -14886,7 +14886,7 @@
       </trans-unit>
       <trans-unit id="7842214202809434810" datatype="html">
         <source>CONTENT PREFERENCES</source>
-        <target state="new">CONTENT PREFERENCES</target>
+        <target state="translated">內容偏好設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">49,51</context>
@@ -14898,7 +14898,7 @@
       </trans-unit>
       <trans-unit id="7954417898841346620" datatype="html">
         <source>These preferences apply to Recently added, Trending, Local, Most liked, Search, account and channel pages</source>
-        <target state="new"> These preferences apply to Recently added, Trending, Local, Most liked, Search, account and channel pages </target>
+        <target state="translated">這些偏好設定適用於「最近新增」、「熱門」、「本地」、「最受歡迎」、「搜尋」、帳號及頻道頁面</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">52,53</context>
@@ -14910,7 +14910,7 @@
       </trans-unit>
       <trans-unit id="3025095234300750951" datatype="html">
         <source>PLAYER SETTINGS</source>
-        <target state="new">PLAYER SETTINGS</target>
+        <target state="translated">播放程式設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">64,65</context>
@@ -15058,7 +15058,7 @@
       </trans-unit>
       <trans-unit id="2145525708983498763" datatype="html">
         <source>Please check your password and try again.</source>
-        <target state="new">Please check your password and try again.</target>
+        <target state="translated">請檢查您的密碼並重試。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-two-factor/my-account-two-factor-button.component.ts</context>
           <context context-type="linenumber">45</context>
