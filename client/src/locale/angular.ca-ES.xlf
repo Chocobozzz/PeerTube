@@ -23664,7 +23664,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4837974734395209553" datatype="html">
         <source>REMOVE SEGMENTS</source>
-        <target state="new">REMOVE SEGMENTS</target>
+        <target state="translated">ELIMINA ELS SEGMENTS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">96,98</context>
@@ -23672,7 +23672,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1746426923877296190" datatype="html">
         <source>Remove specific segments of the video. Each segment requires a start and end time.</source>
-        <target state="new">Remove specific segments of the video. Each segment requires a start and end time.</target>
+        <target state="translated">Elimina segments concrets del vídeo. Cada segment requereix un temps d'inici i un de final.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">98,100</context>
@@ -23680,7 +23680,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="2740889539948793235" datatype="html">
         <source>Segment <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> to remove</source>
-        <target state="new">Segment <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> to remove</target>
+        <target state="translated">Segment <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> per eliminar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">102,104</context>
@@ -23688,7 +23688,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5162686434580248853" datatype="html">
         <source>Start</source>
-        <target state="new">Start</target>
+        <target state="translated">Inici</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">106,107</context>
@@ -23696,7 +23696,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1241348629231510663" datatype="html">
         <source>End</source>
-        <target state="new">End</target>
+        <target state="translated">Final</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">116,117</context>
@@ -23704,7 +23704,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1753020831308849516" datatype="html">
         <source>Cancel segment removal</source>
-        <target state="new">Cancel segment removal</target>
+        <target state="translated">Cancel·la l'eliminació del segment</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">125</context>
@@ -23712,7 +23712,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6237325718337910703" datatype="html">
         <source>Add segment to remove</source>
-        <target state="new">Add segment to remove</target>
+        <target state="translated">Afegeix un segment per eliminar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">135</context>
@@ -23736,7 +23736,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3352412724795096355" datatype="html">
         <source>Segments must not overlap each other.</source>
-        <target state="new">Segments must not overlap each other.</target>
+        <target state="translated">Els segments no poden superposar-se.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.ts</context>
           <context context-type="linenumber">68</context>
@@ -23744,7 +23744,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="302400330356481570" datatype="html">
         <source>Start time must be before end time.</source>
-        <target state="new">Start time must be before end time.</target>
+        <target state="translated">El temps d'inici ha de ser anterior al temps de final.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -23856,7 +23856,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="3545929198870894557" datatype="html">
         <source>Go to my playlists</source>
-        <target state="new">Go to my playlists</target>
+        <target state="translated">Ves a les meves llistes de reproducció</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">77</context>
@@ -24062,7 +24062,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="7469939859049484736" datatype="html">
         <source>Last 90 days</source>
-        <target state="new">Last 90 days</target>
+        <target state="translated">Últims 90 dies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">100</context>
@@ -24070,7 +24070,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3566342898065860218" datatype="html">
         <source>Last year</source>
-        <target state="new">Last year</target>
+        <target state="translated">L'any passat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">101</context>
@@ -24078,7 +24078,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="6766102946271499187" datatype="html">
         <source>All time</source>
-        <target state="new">All time</target>
+        <target state="translated">De tots els temps</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -24166,7 +24166,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1460318440531551596" datatype="html">
         <source>Search results</source>
-        <target state="new">Search results</target>
+        <target state="translated">Resultats de la cerca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.html</context>
           <context context-type="linenumber">1,3</context>
@@ -24186,7 +24186,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="2763962212821976257" datatype="html">
         <source>Week of <x id="PH" equiv-text="weekStart"/></source>
-        <target state="new">Week of <x id="PH" equiv-text="weekStart"/></target>
+        <target state="translated">Setmana del <x id="PH" equiv-text="weekStart"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">320</context>
@@ -24194,7 +24194,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="7976537672642844467" datatype="html">
         <source><x id="PH" equiv-text="tooltip.raw"/> {value, plural, =1 {view} other {views}}</source>
-        <target state="new"><x id="PH" equiv-text="tooltip.raw"/> {value, plural, =1 {view} other {views}}</target>
+        <target state="translated"><x id="PH" equiv-text="tooltip.raw"/> {value, plural, =1 {visualització} other {visualitzacions}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.ts</context>
           <context context-type="linenumber">356</context>
@@ -25257,7 +25257,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3602466303802021992" datatype="html">
         <source>As you've probably noticed, creating an account is not necessary to watch videos on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </source>
-        <target state="new"> As you've probably noticed, creating an account is not necessary to watch videos on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> However, creating an account on <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> will allow you to: </target>
+        <target state="translated">Com segurament haureu notat, no cal crear un compte per veure vídeos a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/> No obstant, crear un compte a <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> us permetrà: </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/steps/register-step-about.component.html</context>
           <context context-type="linenumber">19,25</context>
@@ -25481,7 +25481,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3317581690509286296" datatype="html">
         <source>Internal note must be at least 2 characters long.</source>
-        <target state="new">Internal note must be at least 2 characters long.</target>
+        <target state="translated">La nota interna ha de tenir una longitud mínima de 2 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">15</context>
@@ -25489,7 +25489,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3906109803242939451" datatype="html">
         <source>Internal note cannot be more than 300 characters long.</source>
-        <target state="new">Internal note cannot be more than 300 characters long.</target>
+        <target state="translated">La nota interna no pot tenir més de 300 caràcters.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/form-validators/video-block-validators.ts</context>
           <context context-type="linenumber">16</context>
@@ -25777,7 +25777,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3649698008903201987" datatype="html">
         <source>Enable DVR</source>
-        <target state="new">Enable DVR</target>
+        <target state="translated">Activa el DVR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">93</context>
@@ -25785,7 +25785,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="9111762185226509379" datatype="html">
         <source>Allows viewers to pause, rewind, and jump back to live during the stream</source>
-        <target state="new">Allows viewers to pause, rewind, and jump back to live during the stream</target>
+        <target state="translated">Permet que els espectadors posin en pausa, rebobinin i tornin a la retransmissió en directe durant l'emissió.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">97,98</context>
@@ -25793,7 +25793,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="5217869465602782408" datatype="html">
         <source>DVR window</source>
-        <target state="new">DVR window</target>
+        <target state="translated">finestra DVR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">104,105</context>
@@ -25801,7 +25801,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="4948126596693803585" datatype="html">
         <source>Maximum is <x id="INTERPOLATION" equiv-text="{{ getMaxDvrWindowMinutes() }}"/> minutes</source>
-        <target state="new">Maximum is <x id="INTERPOLATION" equiv-text="{{ getMaxDvrWindowMinutes() }}"/> minutes</target>
+        <target state="translated">El màxim és <x id="INTERPOLATION" equiv-text="{{ getMaxDvrWindowMinutes() }}"/> minuts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/live-settings/video-live-settings.component.html</context>
           <context context-type="linenumber">105,107</context>
@@ -26586,7 +26586,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="287668130427730182" datatype="html">
         <source>Channel podcast configuration</source>
-        <target state="new">Channel podcast configuration</target>
+        <target state="translated">Configuració del pòdcast del canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">27</context>
@@ -26876,7 +26876,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="8641661446906422260" datatype="html">
         <source>Follow state</source>
-        <target state="new">Follow state</target>
+        <target state="translated">Segueix l'estat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">137</context>
@@ -26884,7 +26884,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1479450344012607518" datatype="html">
         <source>All follows</source>
-        <target state="new">All follows</target>
+        <target state="translated">Tots els seguidors</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-follow.service.ts</context>
           <context context-type="linenumber">139</context>
@@ -27012,7 +27012,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1650769414409383224" datatype="html">
         <source>Mastodon verification link</source>
-        <target state="new">Mastodon verification link</target>
+        <target state="translated">Enllaç de verificació de Mastodon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -27020,7 +27020,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="734181343721986643" datatype="html">
         <source>Learn more about Markdown</source>
-        <target state="new">Learn more about Markdown</target>
+        <target state="translated">Més informació sobre Markdown</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/text/markdown-hint.component.html</context>
           <context context-type="linenumber">14,15</context>
@@ -27232,7 +27232,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3505675485823209412" datatype="html">
         <source>This comment can only be seen by you or the other moderators.</source>
-        <target state="new">This comment can only be seen by you or the other moderators.</target>
+        <target state="translated">Només podeu veure aquest comentari vós i els altres moderadors.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -27240,7 +27240,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1625695500739106522" datatype="html">
         <source>{count, plural, =1 {Update this comment} other {Update all comments}}</source>
-        <target state="new">{count, plural, =1 {Update this comment} other {Update all comments}}</target>
+        <target state="translated">{count, plural, =1 {Actualitza aquest comentari} other {Actualitza tots els comentaris}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -27256,7 +27256,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="8739776362237979542" datatype="html">
         <source>{count, plural, =1 {Comment updated.} other {<x id="count"/> comments updated.}}</source>
-        <target state="new">{count, plural, =1 {Comment updated.} other {<x id="count"/> comments updated.}}</target>
+        <target state="translated">{count, plural, =1 {Comentari actualitzat.} other {<x id="count"/> comentaris actualitzats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -27336,7 +27336,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="4520874627181617607" datatype="html">
         <source>Internal note...</source>
-        <target state="new">Internal note...</target>
+        <target state="translated">Nota interna...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -27696,7 +27696,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="9076535770939468902" datatype="html">
         <source>Platform muted</source>
-        <target state="new">Platform muted</target>
+        <target state="translated">Plataforma silenciada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">6,9</context>
@@ -27704,7 +27704,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="2091437057461184519" datatype="html">
         <source>Muted by your platform</source>
-        <target state="new">Muted by your platform</target>
+        <target state="translated">Silenciat per la vostra plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">15</context>
@@ -27712,7 +27712,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="7397658297443401496" datatype="html">
         <source>Platform muted by your platform</source>
-        <target state="new">Platform muted by your platform</target>
+        <target state="translated">Plataforma silenciada per la vostra plataforma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.html</context>
           <context context-type="linenumber">23</context>
@@ -27720,7 +27720,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="448706002751214202" datatype="html">
         <source>Muted by subscription "<x id="PH" equiv-text="subscriptionName"/>"</source>
-        <target state="new">Muted by subscription "<x id="PH" equiv-text="subscriptionName"/>"</target>
+        <target state="translated">Silenciat per la subscripció "<x id="PH" equiv-text="subscriptionName"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/account-block-badges.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -27908,7 +27908,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="7702673391746650814" datatype="html">
         <source>Filter by this account</source>
-        <target state="new">Filter by this account</target>
+        <target state="translated">Filtra per aquest compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.html</context>
           <context context-type="linenumber">50</context>
@@ -27928,7 +27928,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="4081209700623120257" datatype="html">
         <source>Update...</source>
-        <target state="new">Update...</target>
+        <target state="translated">Actualitza...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">239</context>
@@ -27940,7 +27940,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="1966943649898653173" datatype="html">
         <source>Block...</source>
-        <target state="new">Block...</target>
+        <target state="translated">Bloqueja...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">251</context>
@@ -28028,7 +28028,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="368656696071815451" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {this report?} other {<x id="count"/> reports?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {this report?} other {<x id="count"/> reports?}}</target>
+        <target state="translated">Confirmeu que voleu suprimir {count, plural, =1 {aquest informe?} other {<x id="count"/> informes?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">510</context>
@@ -28060,7 +28060,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="7883629715645527621" datatype="html">
         <source>{count, plural, =1 {Reporter muted.} other {<x id="count"/> reporters muted.}}</source>
-        <target state="new">{count, plural, =1 {Reporter muted.} other {<x id="count"/> reporters muted.}}</target>
+        <target state="translated">{count, plural, =1 {Informant silenciat.} other {<x id="count"/> informants silenciats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">593</context>
@@ -28068,7 +28068,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="6178299862221951759" datatype="html">
         <source>{count, plural, =1 {Reporter server muted.} other {<x id="count"/> reporter servers muted.}}</source>
-        <target state="new">{count, plural, =1 {Reporter server muted.} other {<x id="count"/> reporter servers muted.}}</target>
+        <target state="translated">{count, plural, =1 {Servidor de l'informant silenciat.} other {<x id="count"/> servidors de l'informant silenciats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">615</context>
@@ -28076,7 +28076,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="5440091471769708291" datatype="html">
         <source>{count, plural, =1 {Video blocked.} other {<x id="count"/> videos blocked.}}</source>
-        <target state="new">{count, plural, =1 {Video blocked.} other {<x id="count"/> videos blocked.}}</target>
+        <target state="translated">{count, plural, =1 {Vídeo bloquejat.} other {<x id="count"/> vídeos bloquejats.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">636</context>
@@ -28084,7 +28084,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="108745724002877541" datatype="html">
         <source>Do you really want to delete {count, plural, =1 {this comment?} other {<x id="count"/> comments?}}</source>
-        <target state="new">Do you really want to delete {count, plural, =1 {this comment?} other {<x id="count"/> comments?}}</target>
+        <target state="translated">Confirmeu que voleu suprimir {count, plural, =1 {aquest comentari?} other {<x id="count"/> comentaris?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">698</context>
@@ -28092,7 +28092,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3036032783101046738" datatype="html">
         <source>{count, plural, =1 {Comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="new">{count, plural, =1 {Comment deleted.} other {<x id="count"/> comments deleted.}}</target>
+        <target state="translated">{count, plural, =1 {Comentari suprimit.} other {<x id="count"/> comentaris suprimits.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
           <context context-type="linenumber">715</context>
@@ -28488,7 +28488,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="5392341774767336507" datatype="html">
         <source>Copied!</source>
-        <target state="new">Copied!</target>
+        <target state="translated">S'ha copiat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/input-text.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -28644,7 +28644,7 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       </trans-unit>
       <trans-unit id="3742728431516357098" datatype="html">
         <source>Entity type</source>
-        <target state="new">Entity type</target>
+        <target state="translated">Tipus d'entitat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">107</context>
