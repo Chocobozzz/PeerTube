@@ -15378,7 +15378,7 @@
       </trans-unit>
       <trans-unit id="2121031655330028809" datatype="html">
         <source>Only display videos in the following categories</source>
-        <target state="new">Only display videos in the following categories</target>
+        <target state="translated">僅顯示以下分類的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
           <context context-type="linenumber">18,19</context>
@@ -15386,7 +15386,7 @@
       </trans-unit>
       <trans-unit id="6299207692385994112" datatype="html">
         <source>Only display videos of the following types</source>
-        <target state="new">Only display videos of the following types</target>
+        <target state="translated">僅顯示以下類型的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -15394,7 +15394,7 @@
       </trans-unit>
       <trans-unit id="1573340911001383998" datatype="html">
         <source>Save content preferences</source>
-        <target state="new">Save content preferences</target>
+        <target state="translated">儲存內容偏好設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.html</context>
           <context context-type="linenumber">38</context>
@@ -15402,7 +15402,7 @@
       </trans-unit>
       <trans-unit id="8417167703731637027" datatype="html">
         <source>Content preferences updated.</source>
-        <target state="new">Content preferences updated.</target>
+        <target state="translated">內容偏好設定已更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-content-preferences.component.ts</context>
           <context context-type="linenumber">31</context>
@@ -16735,7 +16735,7 @@
       </trans-unit>
       <trans-unit id="5411116568190223417" datatype="html">
         <source>A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</source>
-        <target state="new">A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</target>
+        <target state="translated">「觀看次數」是指有人觀看該影片的時間至少達到 <x id="seconds" equiv-text="countViewAfterSeconds"/> 秒</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">379</context>
@@ -20547,7 +20547,7 @@
       </trans-unit>
       <trans-unit id="4051525516940092257" datatype="html">
         <source>Recommend any video</source>
-        <target state="new">Recommend any video</target>
+        <target state="translated">推薦任何影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">160</context>
@@ -20555,7 +20555,7 @@
       </trans-unit>
       <trans-unit id="5417323712077821234" datatype="html">
         <source>Only recommend videos of this platform</source>
-        <target state="new">Only recommend videos of this platform</target>
+        <target state="translated">僅推薦此平台的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">164</context>
@@ -20563,7 +20563,7 @@
       </trans-unit>
       <trans-unit id="471527578637508515" datatype="html">
         <source>Only recommend videos of the same account</source>
-        <target state="new">Only recommend videos of the same account</target>
+        <target state="translated">僅推薦相同帳號的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">168</context>
@@ -20571,7 +20571,7 @@
       </trans-unit>
       <trans-unit id="8417319179553621681" datatype="html">
         <source>Only recommend videos of the same channel</source>
-        <target state="new">Only recommend videos of the same channel</target>
+        <target state="translated">僅推薦相同頻道的影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">172</context>
@@ -21611,7 +21611,7 @@
       </trans-unit>
       <trans-unit id="7643080703382863606" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No entry} =1 {1 entry} other {<x id="INTERPOLATION"/> entries}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {沒有條目} =1 {1 個條目} other {<x id="INTERPOLATION"/> 個條目}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -21619,7 +21619,7 @@
       </trans-unit>
       <trans-unit id="8594058340554724711" datatype="html">
         <source>Filter by this action</source>
-        <target state="new">Filter by this action</target>
+        <target state="translated">按此動作篩選</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">35,36</context>
@@ -21627,7 +21627,7 @@
       </trans-unit>
       <trans-unit id="1754374478903587424" datatype="html">
         <source>Filter by this entity type</source>
-        <target state="new">Filter by this entity type</target>
+        <target state="translated">按此實體類型篩選</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -21635,7 +21635,7 @@
       </trans-unit>
       <trans-unit id="5240280650062800421" datatype="html">
         <source>Open the entity page</source>
-        <target state="new">Open the entity page</target>
+        <target state="translated">開啟實體頁面</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">56,57</context>
@@ -21643,7 +21643,7 @@
       </trans-unit>
       <trans-unit id="4397869042036937810" datatype="html">
         <source>Open entity</source>
-        <target state="new">Open entity</target>
+        <target state="translated">開啟實體</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">61</context>
@@ -21651,7 +21651,7 @@
       </trans-unit>
       <trans-unit id="3854011688949394332" datatype="html">
         <source>Show the history of this entity</source>
-        <target state="new">Show the history of this entity</target>
+        <target state="translated">顯示此實體的歷史紀錄</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">79,80</context>
@@ -21659,7 +21659,7 @@
       </trans-unit>
       <trans-unit id="2296970491051796628" datatype="html">
         <source>Changes:</source>
-        <target state="new">Changes:</target>
+        <target state="translated">變更：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">93,95</context>
@@ -21667,7 +21667,7 @@
       </trans-unit>
       <trans-unit id="3122528284209641420" datatype="html">
         <source>Old values</source>
-        <target state="new">Old values</target>
+        <target state="translated">舊值</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">97,98</context>
@@ -21675,7 +21675,7 @@
       </trans-unit>
       <trans-unit id="1253939581454379208" datatype="html">
         <source>New values</source>
-        <target state="new">New values</target>
+        <target state="translated">新值</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">102,103</context>
@@ -21683,7 +21683,7 @@
       </trans-unit>
       <trans-unit id="8870532132156762013" datatype="html">
         <source>No attribute change recorded.</source>
-        <target state="new">No attribute change recorded.</target>
+        <target state="translated">未記錄任何屬性變更。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">108,109</context>
@@ -21691,7 +21691,7 @@
       </trans-unit>
       <trans-unit id="4878071410105934844" datatype="html">
         <source>Entity:</source>
-        <target state="new">Entity:</target>
+        <target state="translated">實體：</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">112,113</context>
@@ -21699,7 +21699,7 @@
       </trans-unit>
       <trans-unit id="96125621973663460" datatype="html">
         <source>No audit log entries found.</source>
-        <target state="new">No audit log entries found.</target>
+        <target state="translated">找不到稽核紀錄。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.html</context>
           <context context-type="linenumber">118</context>
@@ -21707,7 +21707,7 @@
       </trans-unit>
       <trans-unit id="6715369993446601276" datatype="html">
         <source>Video import</source>
-        <target state="new">Video import</target>
+        <target state="translated">影片匯入</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">35</context>
@@ -21867,7 +21867,7 @@
       </trans-unit>
       <trans-unit id="2927658547953689823" datatype="html">
         <source>Save sensitive content settings</source>
-        <target state="new">Save sensitive content settings</target>
+        <target state="translated">儲存敏感內容設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.html</context>
           <context context-type="linenumber">51</context>
@@ -21875,7 +21875,7 @@
       </trans-unit>
       <trans-unit id="2316900873583051641" datatype="html">
         <source>Sensitive content settings updated.</source>
-        <target state="new">Sensitive content settings updated.</target>
+        <target state="translated">敏感內容設定已更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-sensitive-content-settings.component.ts</context>
           <context context-type="linenumber">30</context>
@@ -28663,7 +28663,7 @@
       </trans-unit>
       <trans-unit id="3742728431516357098" datatype="html">
         <source>Entity type</source>
-        <target state="new">Entity type</target>
+        <target state="translated">實體類型</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">107</context>
@@ -28675,7 +28675,7 @@
       </trans-unit>
       <trans-unit id="4153243589245423084" datatype="html">
         <source>Entity id</source>
-        <target state="new">Entity id</target>
+        <target state="translated">實體 ID</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">115</context>
@@ -28687,7 +28687,7 @@
       </trans-unit>
       <trans-unit id="9216117865911519658" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">動作</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">121</context>
@@ -28699,7 +28699,7 @@
       </trans-unit>
       <trans-unit id="7693952740891603217" datatype="html">
         <source>Entity</source>
-        <target state="new">Entity</target>
+        <target state="translated">實體</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">132</context>
