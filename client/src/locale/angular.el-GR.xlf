@@ -11015,7 +11015,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1607659813099506795" datatype="html">
         <source>Remote runner</source>
-        <target state="new">Remote runner</target>
+        <target state="translated">Απομακρυσμένοι εκτελεστής</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -11023,7 +11023,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="419317103351341491" datatype="html">
         <source>Runner registration token</source>
-        <target state="new">Runner registration token</target>
+        <target state="translated">Διακριτικό εγγραφής εκτελεστή</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -11039,7 +11039,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5046373286319271287" datatype="html">
         <source>Storage prune</source>
-        <target state="new">Storage prune</target>
+        <target state="translated">Εκκαθάριση χώρου αποθήκευσης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -11883,7 +11883,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2398422581918975504" datatype="html">
         <source>These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </source>
-        <target state="new"> These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </target>
+        <target state="translated">Αυτά τα αρχεία καταγραφής προέρχονται αποκλειστικά από την κύρια διεργασία του PeerTube: <x id="ICU" xid="4109582258601121399" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}"/> επίσης, αλλά τα αρχεία καταγραφής της δεν εμφανίζονται εδώ. Ελέγξτε τα αρχεία καταγραφής κάθε δευτερεύουσας διεργασίας για να δείτε τα αρχεία καταγραφής της. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3,8</context>
@@ -11891,7 +11891,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="2468359540835782741" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 δευτερεύουσα διεργασία εκτελείται} other {<x id="INTERPOLATION"/> δευτερεύουσες διεργασίες εκτελούνται}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3</context>
@@ -12319,7 +12319,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8866329773573088545" datatype="html">
         <source>Save player settings</source>
-        <target state="new">Save player settings</target>
+        <target state="translated">Αποθήκευση ρυθμίσεων αναπαραγωγέα</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
           <context context-type="linenumber">35</context>
@@ -12327,7 +12327,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7148806470329294902" datatype="html">
         <source>Player settings updated.</source>
-        <target state="new">Player settings updated.</target>
+        <target state="translated">Οι ρυθμίσεις του αναπαραγωγέα ενημερώθηκαν.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -12647,7 +12647,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="297360345401834321" datatype="html">
         <source>Global views</source>
-        <target state="new">Global views</target>
+        <target state="translated">Καθολικές προβολές</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">107</context>
@@ -12719,7 +12719,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3907392983067010584" datatype="html">
         <source>You can't preview the changes because you aren't using your platform's default theme.</source>
-        <target state="new">You can't preview the changes because you aren't using your platform's default theme.</target>
+        <target state="translated">Δεν μπορείτε να δείτε τις αλλαγές σε προεπισκόπηση, επειδή δεν χρησιμοποιείτε το προεπιλεγμένο θέμα της πλατφόρμας σας.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">60</context>
@@ -12775,7 +12775,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4809162812315301010" datatype="html">
         <source>BROADCAST MESSAGE</source>
-        <target state="new">BROADCAST MESSAGE</target>
+        <target state="translated">ΜΗΝΥΜΑ ΜΕΤΑΔΟΣΗΣ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">122</context>
@@ -12783,7 +12783,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8147283395759737895" datatype="html">
         <source>Display a message on your platform</source>
-        <target state="new"> Display a message on your platform </target>
+        <target state="translated">Εμφάνιση ενός μηνύματος στην πλατφόρμα σας</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">124</context>
@@ -12791,7 +12791,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4686199497574248459" datatype="html">
         <source>Enable broadcast message</source>
-        <target state="new">Enable broadcast message</target>
+        <target state="translated">Ενεργοποίηση μηνύματος μετάδοσης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">135</context>
@@ -12807,7 +12807,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6582848618760132901" datatype="html">
         <source>Broadcast message level</source>
-        <target state="new">Broadcast message level</target>
+        <target state="translated">Επίπεδο μηνυμάτων μετάδοσης</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">149</context>
@@ -12847,7 +12847,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4328465163710612366" datatype="html">
         <source>When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</source>
-        <target state="new">When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</target>
+        <target state="translated">Όταν ο συνολικός αριθμός χρηστών στην πλατφόρμα σας φτάσει αυτό το όριο, οι εγγραφές απενεργοποιούνται. -1 = απεριόριστο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">224</context>
@@ -12855,7 +12855,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8497774075394617130" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {user} other {users}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {user} other {users}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {χρήστης} other {χρήστες}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">235</context>
@@ -12863,7 +12863,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="8766972676494797493" datatype="html">
         <source>Signup won't be limited to a fixed number of users</source>
-        <target state="new">Signup won't be limited to a fixed number of users</target>
+        <target state="translated">Η εγγραφή δεν θα περιορίζεται σε συγκεκριμένο αριθμό χρηστών</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">243</context>
@@ -13175,7 +13175,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7343456225783046295" datatype="html">
         <source>Display scheduled lives</source>
-        <target state="new">Display scheduled lives</target>
+        <target state="translated">Εμφάνιση προγραμματισμένων ζωντανών μεταδόσεων</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -13199,7 +13199,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6098767935728651255" datatype="html">
         <source>Enable video storyboards</source>
-        <target state="new">Enable video storyboards</target>
+        <target state="translated">Ενεργοποίηση εικονοσενάριων βίντεο</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">462</context>
