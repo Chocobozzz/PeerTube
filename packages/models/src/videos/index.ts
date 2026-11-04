@@ -24,6 +24,7 @@ export * from './thumbnail/index.js'
 
 export * from './video-create-update-common.model.js'
 export * from './video-create.model.js'
+export * from './video-duplicate.model.js'
 
 export * from './video-licence.enum.js'
 export * from './video-privacy.enum.js'

@@ -49,6 +49,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       'action:api.video.updated',
       'action:api.video.deleted',
       'action:api.video.uploaded',
+      'action:api.video.duplicated',
       'action:api.video.viewed',
 
       'action:api.video.file-updated',
@@ -532,7 +533,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'filter:api.video.import-url.video-attribute.result',
     'filter:api.video.import-torrent.video-attribute.result',
     'filter:api.video.live.video-attribute.result',
-    'filter:api.video.user-import.video-attribute.result'
+    'filter:api.video.user-import.video-attribute.result',
+    'filter:api.video.duplicate.video-attribute.result'
   ]) {
     registerHook({
       target,

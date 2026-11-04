@@ -1,5 +1,6 @@
+import { sliceWithoutSplittingSurrogates } from '@peertube/peertube-core-utils'
 import { VideoPrivacy } from '@peertube/peertube-models'
-import { MEMOIZE_LENGTH, MEMOIZE_TTL, VIDEO_PRIVACIES } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, MEMOIZE_LENGTH, MEMOIZE_TTL, VIDEO_PRIVACIES } from '@server/initializers/constants.js'
 import { TagModel } from '@server/models/video/tag.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoTag } from '@server/types/models/index.js'
@@ -40,6 +41,15 @@ export const getCachedVideoDuration = memoizee(getVideoDuration, {
   max: MEMOIZE_LENGTH.VIDEO_DURATION,
   maxAge: MEMOIZE_TTL.VIDEO_DURATION
 })
+
+// ---------------------------------------------------------------------------
+
+// Truncate the source name so the name built by `template` fits in the name constraint
+export function buildNameFromVideoName (sourceName: string, template: (videoName: string) => string) {
+  const maxSourceLength = CONSTRAINTS_FIELDS.VIDEOS.NAME.max - template('').length
+
+  return template(sliceWithoutSplittingSurrogates(sourceName, maxSourceLength).trimEnd())
+}
 
 // ---------------------------------------------------------------------------
 

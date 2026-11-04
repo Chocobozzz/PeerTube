@@ -1,4 +1,4 @@
-import { FileStorage } from '@peertube/peertube-models'
+import { FileStorage, FileStorageType } from '@peertube/peertube-models'
 import { sha1 } from '@peertube/peertube-node-utils'
 import { isObjectNotFoundError } from '@server/lib/object-storage/object-storage-helpers.js'
 import { makeCommonFileAvailable, storeCommonFile } from '@server/lib/object-storage/common-files.js'
@@ -189,28 +189,9 @@ export async function updateTorrentForFileAndSave (videoOrPlaylist: MVideo | MSt
     return
   }
 
-  const decoded = bencode.decode(torrentContent)
+  const { infoHash, torrentFilename: newTorrentFilename } = await rewriteTorrent({ videoOrPlaylist, videoFile, torrentContent, storage })
 
-  decoded['announce-list'] = buildLocalAnnounceList()
-  decoded.announce = decoded['announce-list'][0][0]
-
-  decoded['url-list'] = buildUrlList(video, videoFile)
-
-  decoded.info.name = buildInfoName(video, videoFile)
-  decoded['creation date'] = Math.ceil(Date.now() / 1000)
-
-  const newTorrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
-  const onObjectStorage = storage === FileStorage.OBJECT_STORAGE
-
-  logger.info('Updating torrent metadata %s -> %s.', oldTorrentFilename, newTorrentFilename)
-
-  const newTorrentPath = join(onObjectStorage ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.TORRENTS_DIR, newTorrentFilename)
-  await writeFile(newTorrentPath, bencode.encode(decoded))
-
-  if (onObjectStorage) {
-    await storeCommonFile('torrents', newTorrentPath, newTorrentFilename)
-    await remove(newTorrentPath)
-  }
+  logger.info('Updated torrent metadata %s -> %s.', oldTorrentFilename, newTorrentFilename)
 
   // The video file may have been deleted in the meantime, so don't leave the new torrent behind
   if (!await VideoFileModel.load(videoFile.id)) {
@@ -223,11 +204,72 @@ export async function updateTorrentForFileAndSave (videoOrPlaylist: MVideo | MSt
   videoFile.torrentFilename = newTorrentFilename
   videoFile.torrentStorage = storage
 
-  await VideoInfohashModel.replaceFileInfohash(videoFile.id, sha1(bencode.encode(decoded.info)))
+  await VideoInfohashModel.replaceFileInfohash(videoFile.id, infoHash)
 
   await videoFile.save()
 
   await VideoFileModel.removeTorrentFile(oldTorrentFilename, storage)
+}
+
+export async function createTorrentFromTorrentOf (options: {
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo
+  videoFile: MVideoFile
+  sourceFile: MVideoFile
+}) {
+  const { videoOrPlaylist, videoFile, sourceFile } = options
+
+  const torrentContent = sourceFile.torrentFilename
+    ? await readTorrentContent(sourceFile)
+    : undefined
+
+  if (!torrentContent) return createTorrentForFile(videoOrPlaylist, videoFile)
+
+  return rewriteTorrent({
+    videoOrPlaylist,
+    videoFile,
+    torrentContent,
+    storage: CONFIG.OBJECT_STORAGE.ENABLED
+      ? FileStorage.OBJECT_STORAGE
+      : FileStorage.FILE_SYSTEM
+  })
+}
+
+// Write a new torrent for this video file with the pieces of an existing torrent
+async function rewriteTorrent (options: {
+  videoOrPlaylist: MVideo | MStreamingPlaylistVideo
+  videoFile: MVideoFile
+  torrentContent: Buffer
+  storage: FileStorageType
+}) {
+  const { videoOrPlaylist, videoFile, torrentContent, storage } = options
+  const video = extractVideo(videoOrPlaylist)
+
+  const decoded = bencode.decode(torrentContent)
+
+  decoded['announce-list'] = buildLocalAnnounceList()
+  decoded.announce = decoded['announce-list'][0][0]
+
+  decoded['url-list'] = buildUrlList(video, videoFile)
+
+  decoded.info.name = buildInfoName(video, videoFile)
+  decoded['creation date'] = Math.ceil(Date.now() / 1000)
+
+  const torrentFilename = generateTorrentFileName(videoOrPlaylist, videoFile.resolution)
+  const onObjectStorage = storage === FileStorage.OBJECT_STORAGE
+
+  const torrentPath = join(onObjectStorage ? CONFIG.STORAGE.TMP_DIR : CONFIG.STORAGE.TORRENTS_DIR, torrentFilename)
+  await writeFile(torrentPath, bencode.encode(decoded))
+
+  if (onObjectStorage) {
+    await storeCommonFile('torrents', torrentPath, torrentFilename)
+    await remove(torrentPath)
+  }
+
+  return {
+    infoHash: sha1(bencode.encode(decoded.info)),
+    torrentFilename,
+    torrentStorage: storage
+  }
 }
 
 async function readTorrentContent (videoFile: MVideoFile) {

@@ -1,6 +1,8 @@
+import { uuidToShort } from '@peertube/peertube-node-utils'
 import {
   HttpStatusCode,
   VideoChannelActivityAction,
+  VideoCreateResult,
   VideoState,
   VideoStudioCreateEdition,
   VideoStudioEditionPayload,
@@ -14,13 +16,17 @@ import {
 } from '@peertube/peertube-models'
 import { auditLog, buildVideoStudioEditionAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createAnyReqFiles } from '@server/helpers/express-utils.js'
+import { guessLanguageFromReq } from '@server/helpers/i18n.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants.js'
+import { createVideoDuplicate } from '@server/lib/video-duplicate/index.js'
 import {
+  buildStudioNewVideoName,
   buildTaskFileFieldname,
   createVideoStudioJob,
   getTaskFileFromReq,
   handleStudioTaskFile,
+  onVideoStudioFailed,
   safeCleanupStudioTMPFiles
 } from '@server/lib/video-studio.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
@@ -78,9 +84,13 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
   const taskFilesStaged = CONFIG.OBJECT_STORAGE.ENABLED
 
   // Before changing the video state: storing task files in object storage can fail, and no job would reset the state
+  const tasks = await buildTaskPayloads({ tasks: body.tasks, files, taskFilesStaged })
+
+  if (body.saveAsNewVideo === true) return createEditionTasksInNewVideo({ req, res, tasks, taskFilesStaged })
+
   const payload: VideoStudioEditionPayload = {
     videoUUID: video.uuid,
-    tasks: await buildTaskPayloads({ tasks: body.tasks, files, taskFilesStaged }),
+    tasks,
     taskFilesStaged
   }
 
@@ -89,11 +99,18 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
 
   const user = res.locals.oauth.token.User
 
-  await createVideoStudioJob({
-    user,
-    payload,
-    video
-  })
+  try {
+    await createVideoStudioJob({
+      video,
+      user,
+      payload
+    })
+  } catch (err) {
+    await safeCleanupStudioTMPFiles(payload)
+    await onVideoStudioFailed({ videoUUID: video.uuid, isDuplicate: false })
+
+    throw err
+  }
 
   auditLog.create(getAuditActorFromRes(res), () => buildVideoStudioEditionAuditEntity({ video, tasks: body.tasks }))
 
@@ -106,6 +123,46 @@ async function createEditionTasks (req: express.Request, res: express.Response) 
   })
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
+}
+
+async function createEditionTasksInNewVideo (options: {
+  req: express.Request
+  res: express.Response
+  tasks: VideoStudioTaskPayload[]
+  taskFilesStaged: boolean
+}) {
+  const { req, res, tasks, taskFilesStaged } = options
+  const body = req.body as VideoStudioCreateEdition
+  const sourceVideo = res.locals.videoFull
+  const user = res.locals.oauth.token.User
+
+  // It auto removes the task files on failure
+  const video = await createVideoDuplicate({
+    sourceVideo,
+    user,
+    name: buildStudioNewVideoName(sourceVideo.name, guessLanguageFromReq(req, res)),
+    studio: { tasks, taskFilesStaged },
+    req,
+    res
+  })
+
+  auditLog.create(getAuditActorFromRes(res), () => buildVideoStudioEditionAuditEntity({ video, tasks: body.tasks }))
+
+  await VideoChannelActivityModel.addVideoActivity({
+    action: VideoChannelActivityAction.CREATE_STUDIO_TASKS,
+    user,
+    channel: video.VideoChannel,
+    video,
+    transaction: null
+  })
+
+  return res.json({
+    video: {
+      id: video.id,
+      uuid: video.uuid,
+      shortUUID: uuidToShort(video.uuid)
+    } satisfies VideoCreateResult
+  })
 }
 
 type TaskPayloadBuilderOptions<T extends VideoStudioTask = VideoStudioTask> = {

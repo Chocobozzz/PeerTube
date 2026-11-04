@@ -55,6 +55,8 @@ export interface RunnerJobVideoStudioTranscodingPrivatePayload {
 
   // Task files are staged in object storage: their `file` option is a staging key instead of a local path
   taskFilesStaged?: boolean
+
+  isDuplicate?: boolean
 }
 
 // ---------------------------------------------------------------------------

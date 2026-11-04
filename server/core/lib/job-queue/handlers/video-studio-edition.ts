@@ -14,7 +14,6 @@ import {
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { runTransaction } from '@server/helpers/database-utils.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -22,6 +21,7 @@ import {
   approximateIntroOutroAdditionalSize,
   makeStudioTaskFilesAvailable,
   onVideoStudioEnded,
+  onVideoStudioFailed,
   safeCleanupStudioTMPFiles
 } from '@server/lib/video-studio.js'
 import { UserModel } from '@server/models/user/user.js'
@@ -56,6 +56,13 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
         // No video, maybe deleted?
         if (!video) {
           logger.info('Can\'t process job %d, video does not exist.', job.id)
+
+          await safeCleanupStudioTMPFiles(taskFiles)
+          return undefined
+        }
+
+        if (video.state !== VideoState.TO_EDIT) {
+          logger.info('Can\'t process job %d, video %s is not waiting for its edition.', job.id, video.uuid)
 
           await safeCleanupStudioTMPFiles(taskFiles)
           return undefined
@@ -111,12 +118,7 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
         await safeCleanupStudioTMPFiles(taskFiles)
 
         try {
-          await runTransaction(async transaction => {
-            const video = await VideoModel.load(payload.videoUUID, transaction)
-            if (!video || video.state === VideoState.PUBLISHED) return
-
-            await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
-          })
+          await onVideoStudioFailed({ videoUUID: payload.videoUUID, isDuplicate: payload.isDuplicate === true })
         } catch (err) {
           logger.error('Cannot reset video state after studio error', { err })
         }
