@@ -297,6 +297,10 @@ describe('Test password confirmation of sensitive actions', function () {
     it('Should run sensitive actions as an administrator using an external auth plugin', async function () {
       this.timeout(60000)
 
+      // external-auth-2 access tokens are only valid 5 seconds
+      const res = await loginExternal({ server, npmName: 'test-external-auth-one', authName: 'external-auth-2', username: 'kefka' })
+      kefkaToken = res.access_token
+
       await server.users.update({ userId: moderatorId, role: UserRole.ADMINISTRATOR, token: kefkaToken, currentPassword: null })
       await server.users.create({ username: 'other_admin6', role: UserRole.ADMINISTRATOR, token: kefkaToken, currentPassword: null })
     })

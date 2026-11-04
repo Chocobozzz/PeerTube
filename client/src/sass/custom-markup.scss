@@ -1,6 +1,18 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+
 peertube-container {
   display: block;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+
+  // Nested containers
+  peertube-container {
+    margin-bottom: 2rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
 
   > .layout-row {
     display: flex;
@@ -12,6 +24,17 @@ peertube-container {
     > peertube-playlist-embed {
       flex-grow: 1;
     }
+
+    &:has(> peertube-channel-miniature) {
+      gap: 1rem;
+    }
+
+    > peertube-channel-miniature {
+      flex: 1 1 0;
+      min-width: 260px;
+      max-width: none;
+      margin-bottom: 0;
+    }
   }
 
   > .layout-column {
@@ -20,11 +43,158 @@ peertube-container {
   }
 
   .header {
-    margin: 0 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0 0 1.5rem;
+
+    &::after {
+      content: "";
+      width: 23px;
+      height: 4px;
+      border-radius: 2px;
+      background-color: pvar(--primary-550);
+    }
+  }
+
+  .header-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
 
     > h4 {
       margin-bottom: 0;
-      line-height: 1; // Align with the top of the container
+      font-size: 24px;
+      font-weight: $font-regular;
+      line-height: 1.2;
+      color: pvar(--fg-400);
+    }
+
+    > .description {
+      font-size: 14px;
+      color: pvar(--fg-200);
+    }
+
+    > h4 + .description::before {
+      content: "·";
+
+      @include margin-right(8px);
+    }
+  }
+}
+
+peertube-channel-miniature {
+  display: block;
+  max-width: 400px;
+  margin-bottom: 1rem;
+}
+
+// ---------------------------------------------------------------------------
+
+peertube-hero {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.peertube-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 32px 32px 16px;
+  border-radius: 14px;
+  background: linear-gradient(to bottom, pvar(--bg-secondary-400) 25%, pvar(--bg) 75%);
+
+  @media screen and (max-width: $small-view) {
+    padding: 1rem;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1 1 400px;
+    max-width: 640px;
+    color: pvar(--fg-300);
+  }
+
+  .hero-title {
+    margin: 0;
+    font-weight: $font-bold;
+    line-height: 1.3;
+    color: inherit;
+
+    @include font-size(40px);
+
+    &::after {
+      content: "";
+      display: block;
+      width: 43px;
+      height: 8px;
+      margin-top: 10px;
+      border-radius: 100px;
+      background-color: pvar(--primary-550);
+    }
+  }
+
+  .hero-description {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 0 1 410px;
+  }
+}
+
+peertube-card {
+  display: block;
+}
+
+.peertube-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: pvar(--fg-300);
+
+  &.bordered {
+    border: 1px solid pvar(--bg-secondary-450);
+  }
+
+  .card-title {
+    font-weight: $font-bold;
+  }
+
+  .card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    > peertube-button {
+      flex: 1 1 0;
+      min-width: 150px;
+
+      > div,
+      my-link,
+      a {
+        display: flex;
+        width: 100%;
+        height: 100%;
+      }
+
+      a {
+        align-items: center;
+        justify-content: center;
+        line-height: normal;
+      }
     }
   }
 }

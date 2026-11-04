@@ -429,8 +429,8 @@ open_telemetry:
     enabled:
       __name: PEERTUBE_OPEN_TELEMETRY_TRACING_ENABLED
       __format: json
-    jaeger_exporter:
-      endpoint: PEERTUBE_OPEN_TELEMETRY_TRACING_JAEGER_EXPORTER_ENDPOINT
+    otlp_exporter:
+      endpoint: PEERTUBE_OPEN_TELEMETRY_TRACING_OTLP_EXPORTER_ENDPOINT
 
 trending:
   videos:

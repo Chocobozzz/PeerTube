@@ -414,8 +414,10 @@ open_telemetry:
     # If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary
     enabled: false
 
-    # Send traces to a Jaeger compatible endpoint
-    jaeger_exporter:
+    # Send traces to an OpenTelemetry (OTLP over HTTP) compatible endpoint, like Jaeger
+    otlp_exporter:
+      # For example 'http://127.0.0.1:4318/v1/traces'.
+      # If empty, use OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable or 'http://localhost:4318/v1/traces'
       endpoint: ''
 
 trending:

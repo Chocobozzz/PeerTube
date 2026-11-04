@@ -1,6 +1,6 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common'
 import { booleanAttribute, Component, OnInit, input, ChangeDetectionStrategy } from '@angular/core'
-import { RouterLink } from '@angular/router'
+import { RouterLink, UrlTree } from '@angular/router'
 import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 
 @Component({
@@ -11,7 +11,7 @@ import { GlobalIconComponent, GlobalIconName } from '@app/shared/shared-icons/gl
   imports: [ RouterLink, NgClass, NgTemplateOutlet, GlobalIconComponent ]
 })
 export class LinkComponent implements OnInit {
-  readonly internalLink = input<string | any[]>(undefined)
+  readonly internalLink = input<string | any[] | UrlTree>(undefined)
 
   readonly href = input<string>(undefined)
   readonly target = input('_self')

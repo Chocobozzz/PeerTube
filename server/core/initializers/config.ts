@@ -458,8 +458,8 @@ export const CONFIG = buildConfig({
     TRACING: {
       ENABLED: staticKey<boolean>('open_telemetry.tracing.enabled'),
 
-      JAEGER_EXPORTER: {
-        ENDPOINT: staticKey<string>('open_telemetry.tracing.jaeger_exporter.endpoint')
+      OTLP_EXPORTER: {
+        ENDPOINT: staticKey<string>('open_telemetry.tracing.otlp_exporter.endpoint')
       }
     }
   },

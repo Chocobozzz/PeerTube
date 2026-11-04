@@ -62,10 +62,15 @@ describe('Test video duplicate', function () {
 
     expect(copyUrls).to.have.length.above(0)
 
+    // Public files may be served by object storage that rejects requests with an unknown authorization header
+    const token = copy.privacy.id === VideoPrivacy.PUBLIC
+      ? undefined
+      : servers[0].accessToken
+
     for (const url of copyUrls) {
       expect(sourceUrls).to.not.include(url)
 
-      await makeRawRequest({ url, token: servers[0].accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      await makeRawRequest({ url, token, expectedStatus: HttpStatusCode.OK_200 })
     }
   }
 
