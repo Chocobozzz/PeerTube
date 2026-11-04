@@ -461,6 +461,17 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   // ---------------------------------------------------------------------------
 
   registerHook({
+    target: 'filter:sitemap.pages.list.result',
+    handler: entries => {
+      return entries
+        .filter(entry => !entry.url.endsWith('/videos/browse'))
+        .concat({ url: '/plugins/test/router/sitemap-page', lastmod: '2026-01-01' })
+    }
+  })
+
+  // ---------------------------------------------------------------------------
+
+  registerHook({
     target: 'filter:api.server.stats.get.result',
     handler: (result) => {
       return { ...result, customStats: 14 }

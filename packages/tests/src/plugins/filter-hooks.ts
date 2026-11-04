@@ -713,6 +713,18 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Sitemap filters', function () {
+    it('Should run filter:sitemap.pages.list.result', async function () {
+      const res = await makeGetRequest({ url: servers[0].url, path: '/sitemaps/pages.xml', expectedStatus: HttpStatusCode.OK_200 })
+
+      expect(res.text).to.contain(`<loc>${servers[0].url}/about/instance/home</loc>`)
+      expect(res.text).to.not.contain(`<loc>${servers[0].url}/videos/browse</loc>`)
+      expect(res.text).to.contain(
+        `<loc>${servers[0].url}/plugins/test/router/sitemap-page</loc><lastmod>2026-01-01T00:00:00.000Z</lastmod>`
+      )
+    })
+  })
+
   describe('Search filters', function () {
     before(async function () {
       await servers[0].config.updateExistingConfig({
