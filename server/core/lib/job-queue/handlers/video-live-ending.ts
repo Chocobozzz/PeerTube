@@ -23,7 +23,7 @@ import {
   regenerateLocalVideoThumbnailsFromVideoIfNeeded
 } from '@server/lib/thumbnail.js'
 import { generateHlsPlaylistResolutionFromTS } from '@server/lib/transcoding/hls-transcoding.js'
-import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
+import { createTranscriptionTaskIfNeeded } from '@server/lib/transcription/video-transcription.js'
 import { getNewHLSPlaylistStorage } from '@server/lib/video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'

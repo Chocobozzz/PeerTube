@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Plugin test",
   "engine": {
-    "peertube": ">=1.3.0"
+    "peertube": ">=8.4.0"
   },
   "keywords": [
     "peertube",

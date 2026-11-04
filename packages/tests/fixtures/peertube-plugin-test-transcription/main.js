@@ -1,13 +1,25 @@
 async function register ({ registerHook, peertubeHelpers }) {
   registerHook({
-    target: 'filter:transcription.get-transcriber.result',
+    target: 'filter:transcription.transcriber.result',
 
-    handler: () => {
+    handler: (result, { video }) => {
       return {
         name: 'test-plugin-transcriber',
 
         transcribe: async ({ language }) => {
-          peertubeHelpers.logger.info('Generate subtitles with the test plugin transcriber, language: %s', language)
+          peertubeHelpers.logger.info(
+            'Generate subtitles of %s (channel %s, account %s) with the test plugin transcriber, language: %s',
+            video.uuid,
+            video.channel.name,
+            video.account.name,
+            language
+          )
+
+          if (video.name === 'fallback') return undefined
+
+          if (video.name === 'invalid language') {
+            return { language: 'english', content: 'WEBVTT\n\n00:00:00.000 --> 00:00:01.000\nInvalid language\n' }
+          }
 
           return {
             language: language || 'en',

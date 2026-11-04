@@ -1,7 +1,7 @@
 import { toCompleteUUID } from '@server/helpers/custom-validators/misc.js'
 import { initDatabaseModels } from '@server/initializers/database.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
-import { createTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
+import { createTranscriptionTaskIfNeeded } from '@server/lib/transcription/video-transcription.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { program } from 'commander'
