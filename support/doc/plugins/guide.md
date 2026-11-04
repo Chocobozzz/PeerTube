@@ -283,6 +283,22 @@ The `ping` route can be accessed using:
  * `/plugins/:pluginName/:pluginVersion/router/ping`
  * Or `/plugins/:pluginName/router/ping`
 
+**PeerTube >= 9.0**
+
+To add your public pages to the instance sitemap (`/sitemaps/pages.xml`), use the `filter:sitemap.pages.list.result` server hook.
+Each entry has a `url` (absolute, or relative to the instance URL) and optional `lastmod`, `changefreq` and `priority` fields:
+
+```js
+function register ({ registerHook }) {
+  registerHook({
+    target: 'filter:sitemap.pages.list.result',
+    handler: entries => entries.concat([ { url: '/plugins/my-plugin/router/my-page' } ])
+  })
+}
+```
+
+The sitemap is cached, so changes may take up to one day to appear.
+
 
 #### Add custom WebSocket handlers
 

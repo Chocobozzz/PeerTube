@@ -186,7 +186,10 @@ export const serverFilterHookObject = {
   'filter:feed.videos.list.result': true,
 
   // Peertube >= 9.0
-  'filter:api.account.get.result': true
+  'filter:api.account.get.result': true,
+
+  // Peertube >= 9.0
+  'filter:sitemap.pages.list.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
