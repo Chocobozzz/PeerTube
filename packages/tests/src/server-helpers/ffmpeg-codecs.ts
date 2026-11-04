@@ -1,5 +1,3 @@
-/* oxlint-disable @typescript-eslint/no-unused-expressions */
-
 import { getAudioStreamCodec } from '@peertube/peertube-server/core/helpers/ffmpeg/codecs.js'
 import { expect } from 'chai'
 import { FfprobeData } from 'fluent-ffmpeg'

@@ -1,5 +1,5 @@
 import { sortBy, uniqify, uuidRegex } from '@peertube/peertube-core-utils'
-import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
+import { ffprobePromise, getVideoStreamDimensionsInfo, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { ApplicationModel } from '@server/models/application/application.js'
@@ -177,12 +177,17 @@ function updateMasterHLSPlaylist (
         let line = `#EXT-X-STREAM-INF:${bandwidth}${resolution}`
         if (file.fps) line += ',FRAME-RATE=' + file.fps
 
-        const codecs = await Promise.all([
+        const [ videoCodec, audioCodec, hasAudio ] = await Promise.all([
           getVideoStreamCodec(path, probe),
-          separatedAudioCodec || getAudioStreamCodec(path, probe)
+          separatedAudioCodec || getAudioStreamCodec(path, probe),
+          splitAudioAndVideo || hasAudioStream(path, probe)
         ])
 
-        line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
+        // Omit CODECS it if one of the codec is unknown to not break players
+        const codecs = [ videoCodec, audioCodec ].filter(c => !!c)
+        if (codecs.length !== 0 && (audioCodec || !hasAudio)) {
+          line += `,CODECS="${codecs.join(',')}"`
+        }
 
         if (splitAudioAndVideo) line += `,AUDIO="audio"`
         if (extMediaSubtitle.length !== 0) line += `,SUBTITLES="subtitles"`
