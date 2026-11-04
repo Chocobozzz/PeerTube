@@ -19,7 +19,8 @@ import { encode as magnetUriEncode } from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { dirname, join } from 'path'
 import { pipeline } from 'stream'
-import type { Instance, TorrentFile } from 'webtorrent'
+import type WebTorrent from 'webtorrent'
+import type { TorrentFile } from 'webtorrent'
 import { createLogger } from '../helpers/logger.js'
 import { generateVideoImportTmpPath } from '../helpers/utils.js'
 import { extractVideo } from '../helpers/video.js'
@@ -45,7 +46,7 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentPat
     lsd: false,
     downloadLimit: 5_000_000,
     uploadLimit: 5_000_000
-  } as any)
+  })
 
   return new Promise<string>(async (res, rej) => {
     let file: TorrentFile
@@ -276,7 +277,7 @@ export function generateMagnetUri (
 // ---------------------------------------------------------------------------
 
 function safeWebtorrentDestroy (options: {
-  webtorrent: Instance
+  webtorrent: WebTorrent
   downloadedFile: { directoryPath: string, filepath: string } | null
   torrentPath: string | null
 }) {

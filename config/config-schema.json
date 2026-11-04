@@ -1281,11 +1281,12 @@
               "type": "boolean",
               "default": false
             },
-            "jaeger_exporter": {
-              "description": "Send traces to a Jaeger compatible endpoint",
+            "otlp_exporter": {
+              "description": "Send traces to an OpenTelemetry (OTLP over HTTP) compatible endpoint, like Jaeger",
               "type": "object",
               "properties": {
                 "endpoint": {
+                  "description": "For example 'http://127.0.0.1:4318/v1/traces'. If empty, use OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable or 'http://localhost:4318/v1/traces'",
                   "type": "string",
                   "default": ""
                 }

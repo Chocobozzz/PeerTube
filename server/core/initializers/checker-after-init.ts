@@ -190,6 +190,13 @@ function checkRemovedConfigKeys () {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
+  if (config.has('open_telemetry.tracing.jaeger_exporter')) {
+    logger.warn(
+      'open_telemetry.tracing.jaeger_exporter configuration has been replaced by open_telemetry.tracing.otlp_exporter ' +
+        '(Jaeger supports OTLP, for example on http://127.0.0.1:4318/v1/traces). Please update your configuration file.'
+    )
+  }
+
   if (config.has('transcoding.webtorrent.enabled')) {
     const localConfigPath = getLocalConfigFilePath()
 

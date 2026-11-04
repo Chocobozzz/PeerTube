@@ -71,7 +71,7 @@ export function checkMissedConfig () {
     'open_telemetry.metrics.prometheus_exporter.hostname',
     'open_telemetry.metrics.prometheus_exporter.port',
     'open_telemetry.tracing.enabled',
-    'open_telemetry.tracing.jaeger_exporter.endpoint',
+    'open_telemetry.tracing.otlp_exporter.endpoint',
     'open_telemetry.metrics.http_request_duration.enabled',
     'user.history.videos.enabled',
     'user.disable_root_auth',
@@ -387,7 +387,7 @@ export function checkNodeVersion () {
     throw new Error(`Your NodeJS version ${v} is not supported. Please upgrade to NodeJS 22 or NodeJS 24`)
   }
 
-  if (major === 22 && minor < 12) {
-    throw new Error(`NodeJS >= v22.12 or NodeJS 24 is required`)
+  if (major === 22 && minor < 22) {
+    throw new Error(`NodeJS >= v22.22 or NodeJS 24 is required`)
   }
 }

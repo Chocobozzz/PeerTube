@@ -30,8 +30,8 @@ export class InboxManager {
     this.viewsAndDownloadsInboxQueue = new PQueue({ concurrency: INBOX_CONCURRENCY.VIEWS_AND_DOWNLOADS })
 
     for (const queue of this.getQueues()) {
-      queue.on('add', () => this.onQueueChange())
-      queue.on('next', () => this.onQueueChange())
+      queue.addEventListener('add', () => this.onQueueChange())
+      queue.addEventListener('next', () => this.onQueueChange())
     }
 
     // Other processes ignore our count if we don't refresh it
@@ -51,7 +51,12 @@ export class InboxManager {
       const options = { signatureActor: param.signatureActor, inboxActor: param.inboxActor }
 
       return processActivities(param.activities, options)
-    }).catch(err => logger.error('Error with inbox queue.', { err }))
+    }).catch(err => {
+      // Messages removed from the queue when stopping, already logged by drain()
+      if (err?.name === 'AbortError') return
+
+      logger.error('Error with inbox queue.', { err })
+    })
   }
 
   static async drain (timeoutMs: number) {
