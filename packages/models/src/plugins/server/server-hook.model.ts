@@ -141,6 +141,12 @@ export const serverFilterHookObject = {
   'filter:transcoding.manual.resolutions-to-transcode.result': true,
   'filter:transcoding.auto.resolutions-to-transcode.result': true,
 
+  // Filter the transcriber used to generate the video subtitles (automatic or on demand transcription)
+  // A plugin can return its own transcriber (to use an external or self-hosted ASR service)
+  // Not used when transcription is processed by remote runners
+  // PeerTube >= 9.0
+  'filter:transcription.transcriber.result': true,
+
   'filter:activity-pub.remote-video-comment.create.accept.result': true,
 
   'filter:activity-pub.activity.context.build.result': true,

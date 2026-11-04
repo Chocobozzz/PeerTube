@@ -619,6 +619,44 @@ To remove an auto tagger, pass the same options object (the `handler` reference 
 
 You can read the automatic tags of an object using `peertubeHelpers.automaticTags.getServerVideoAutomaticTags({ videoId })`, `peertubeHelpers.automaticTags.getServerCommentAutomaticTags({ commentId })` or `peertubeHelpers.automaticTags.getAccountCommentAutomaticTags({ commentId, accountId })`.
 
+#### Provide a transcriber
+
+**PeerTube >= 8.4**
+
+Your plugin can generate video subtitles with its own ASR service or tool instead of the whisper engine shipped with PeerTube, using the `filter:transcription.transcriber.result` hook:
+
+```js
+async function register ({ registerHook }) {
+  registerHook({
+    target: 'filter:transcription.transcriber.result',
+
+    // Return `result` to let PeerTube (or another plugin) handle this video
+    // Only video.id, video.uuid, video.name, video.language, video.duration, video.privacy, video.channel and video.account are provided
+    handler: (result, { video }) => {
+      return {
+        name: 'my-asr',
+
+        // workingDirectory is an empty directory removed by PeerTube after the transcription
+        transcribe: async ({ mediaFilePath, language, workingDirectory, signal }) => {
+          const { vtt, detectedLanguage } = await callMyASRService(mediaFilePath, { language, signal })
+
+          // Return undefined to let PeerTube generate the subtitles with its whisper engine
+          if (!vtt) return undefined
+
+          return { language: detectedLanguage, content: vtt }
+        }
+      }
+    }
+  })
+}
+```
+
+How plugin transcribers work:
+ * The returned `language` must be a language code supported by PeerTube (`en`, `de`...). The transcription job fails otherwise
+ * The returned `content` must be WebVTT
+ * PeerTube only installs its whisper engine when a video is not transcribed by a plugin
+ * The hook is not used when transcription is processed by remote runners
+
 #### Server helpers
 
 PeerTube provides your plugin some helpers. For example:
