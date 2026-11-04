@@ -25,7 +25,6 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
 import { Account } from '@app/shared/shared-main/account/account.model'
 import { DropdownAction } from '@app/shared/shared-main/buttons/action-dropdown.component'
 import { LoaderComponent } from '@app/shared/shared-main/common/loader.component'
-import { PunycodePipe } from '@app/shared/shared-main/common/punycode.pipe'
 import { FromNowPipe } from '@app/shared/shared-main/date/from-now.pipe'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
@@ -38,6 +37,7 @@ import { User, UserRight } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
 import { VideoCommentAddComponent } from './video-comment-add.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   selector: 'my-video-comment',
@@ -55,7 +55,7 @@ import { VideoCommentAddComponent } from './video-comment-add.component'
     GlobalIconComponent,
     FromNowPipe,
     LoaderComponent,
-    PunycodePipe
+    DisplayHandlePipe
   ]
 })
 export class VideoCommentComponent implements OnChanges, OnDestroy {

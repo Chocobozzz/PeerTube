@@ -787,6 +787,9 @@ importers:
       primeng:
         specifier: ^21.1.9
         version: 21.1.10(ca93d22143683b088d43583c278f58d3)
+      punycode.js:
+        specifier: ^2.3.1
+        version: 2.3.1
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2

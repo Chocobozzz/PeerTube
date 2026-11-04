@@ -9,6 +9,7 @@ import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avat
 import { SearchInputComponent } from '../../shared/shared-forms/search-input.component'
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
 import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/subscribe-button.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   templateUrl: './my-subscriptions.component.html',
@@ -19,7 +20,8 @@ import { SubscribeButtonComponent } from '../../shared/shared-user-subscription/
     InfiniteScrollerDirective,
     ActorAvatarComponent,
     RouterLink,
-    SubscribeButtonComponent
+    SubscribeButtonComponent,
+    DisplayHandlePipe
   ]
 })
 export class MySubscriptionsComponent {

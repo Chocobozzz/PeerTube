@@ -16,8 +16,12 @@ export function getEmbedUrl () {
   return environment.embedUrl || getOriginUrl()
 }
 
+let backendHost: string
+
 export function getBackendHost () {
-  return new URL(getBackendUrl()).host
+  if (!backendHost) backendHost = new URL(getBackendUrl()).host
+
+  return backendHost
 }
 
 // Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34

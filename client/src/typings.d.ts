@@ -9,3 +9,12 @@ interface NodeModule {
 declare module 'markdown-it-emoji/lib/light.mjs'
 
 declare module '*.scss'
+
+declare module 'punycode.js' {
+  const punycode: {
+    toUnicode(input: string): string
+    toASCII(input: string): string
+  }
+
+  export default punycode
+}

@@ -17,6 +17,7 @@ import { VideoViewsCounterComponent } from '../shared-video/video-views-counter.
 import { VideoPlaylistElement } from './video-playlist-element.model'
 import { VideoPlaylist } from './video-playlist.model'
 import { VideoPlaylistService } from './video-playlist.service'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   selector: 'my-video-playlist-element-miniature',
@@ -34,7 +35,8 @@ import { VideoPlaylistService } from './video-playlist.service'
     PeertubeCheckboxComponent,
     FormsModule,
     TimestampInputComponent,
-    NgbTooltipModule
+    NgbTooltipModule,
+    DisplayHandlePipe
   ]
 })
 export class VideoPlaylistElementMiniatureComponent implements OnInit {

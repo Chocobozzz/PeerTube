@@ -19,6 +19,7 @@ import { ActorAvatarComponent } from '../shared/shared-actor-image/actor-avatar.
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
 import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   templateUrl: './video-channels.component.html',
@@ -35,7 +36,8 @@ import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account
     NgClass,
     HorizontalMenuComponent,
     RouterOutlet,
-    SupportModalComponent
+    SupportModalComponent,
+    DisplayHandlePipe
   ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {

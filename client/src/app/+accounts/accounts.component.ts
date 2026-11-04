@@ -31,6 +31,7 @@ import { SimpleSearchInputComponent } from '../shared/shared-main/search/simple-
 import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
 import { UserModerationDropdownComponent } from '../shared/shared-moderation/user-moderation-dropdown.component'
 import { SubscribeButtonComponent } from '../shared/shared-user-subscription/subscribe-button.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -50,7 +51,8 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
     SimpleSearchInputComponent,
     RouterOutlet,
     AccountReportComponent,
-    HorizontalMenuComponent
+    HorizontalMenuComponent,
+    DisplayHandlePipe
   ]
 })
 export class AccountsComponent implements OnInit, OnDestroy {

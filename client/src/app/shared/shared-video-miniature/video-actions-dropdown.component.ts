@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnChanges, booleanAttribute, inject, input, output, viewChild } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, ServerService } from '@app/core'
+import { getDisplayHandle } from '@app/helpers'
 import { NgbDropdown, NgbDropdownAnchor, NgbDropdownMenu } from '@ng-bootstrap/ng-bootstrap'
 import { UserRight, VideoCaption, VideoState } from '@peertube/peertube-models'
 import { of } from 'rxjs'
@@ -372,7 +373,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByUser(params)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Account ${params.nameWithHost} muted.`)
+          this.notifier.success($localize`Account ${getDisplayHandle(params.nameWithHost)} muted.`)
           this.muted.emit()
         },
 
@@ -388,7 +389,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
         next: () => {
           this.unmuted.emit()
 
-          this.notifier.success($localize`Account ${params.nameWithHost} unmuted.`)
+          this.notifier.success($localize`Account ${getDisplayHandle(params.nameWithHost)} unmuted.`)
         },
 
         error: err => this.notifier.handleError(err)

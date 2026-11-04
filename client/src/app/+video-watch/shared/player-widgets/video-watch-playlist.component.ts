@@ -21,13 +21,21 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import { getBoolOrDefault } from '@root-helpers/local-storage-utils'
 import { peertubeSessionStorage } from '@root-helpers/peertube-web-storage'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   selector: 'my-video-watch-playlist',
   templateUrl: './video-watch-playlist.component.html',
   styleUrls: [ './player-widget.component.scss', './video-watch-playlist.component.scss' ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ InfiniteScrollerDirective, NgClass, NgbTooltip, GlobalIconComponent, VideoPlaylistElementMiniatureComponent ]
+  imports: [
+    InfiniteScrollerDirective,
+    NgClass,
+    NgbTooltip,
+    GlobalIconComponent,
+    VideoPlaylistElementMiniatureComponent,
+    DisplayHandlePipe
+  ]
 })
 export class VideoWatchPlaylistComponent {
   private hooks = inject(HooksService)

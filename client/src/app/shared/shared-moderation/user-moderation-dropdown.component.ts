@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnChanges, inject, input, output, viewChild } from '@angular/core'
 import { AuthService, ConfirmService, HooksService, Notifier, UserService } from '@app/core'
+import { getDisplayHandle } from '@app/helpers'
 import { BulkRemoveCommentsOfBody, User, UserRight } from '@peertube/peertube-models'
 import { Account } from '../shared-main/account/account.model'
 import { ActionDropdownComponent, DropdownAction } from '../shared-main/buttons/action-dropdown.component'
@@ -146,7 +147,7 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByUser(account)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Account ${account.nameWithHost} muted.`)
+          this.notifier.success($localize`Account ${getDisplayHandle(account.nameWithHost)} muted.`)
 
           this.account().mutedByUser = true
           this.emitUserChanged()
@@ -160,7 +161,7 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockAccountByUser(account)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Account ${account.nameWithHost} unmuted.`)
+          this.notifier.success($localize`Account ${getDisplayHandle(account.nameWithHost)} unmuted.`)
 
           this.account().mutedByUser = false
           this.emitUserChanged()
@@ -202,7 +203,7 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.blockAccountByInstance(account)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Account ${account.nameWithHost} muted by your platform.`)
+          this.notifier.success($localize`Account ${getDisplayHandle(account.nameWithHost)} muted by your platform.`)
 
           this.account().mutedByInstance = true
           this.emitUserChanged()
@@ -216,7 +217,7 @@ export class UserModerationDropdownComponent implements OnChanges {
     this.blocklistService.unblockAccountByInstance(account)
       .subscribe({
         next: () => {
-          this.notifier.success($localize`Account ${account.nameWithHost} unmuted by your platform.`)
+          this.notifier.success($localize`Account ${getDisplayHandle(account.nameWithHost)} unmuted by your platform.`)
 
           this.account().mutedByInstance = false
           this.emitUserChanged()

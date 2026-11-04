@@ -23,7 +23,7 @@
               <my-actor-avatar [actor]="abuse.reporterAccount" actorType="account" size="32"></my-actor-avatar>
               <div>
                 {{ abuse.reporterAccount.displayName }}
-                <span>{{ abuse.reporterAccount.nameWithHost }}</span>
+                <span>{{ abuse.reporterAccount.nameWithHost | displayHandle }}</span>
               </div>
             </div>
           </a>
@@ -46,7 +46,7 @@
                 <span i18n class="pt-badge badge-secondary ms-1">Deleted video</span>
               </div>
 
-              <div class="video-owner" i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
+              <div class="video-owner" i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host | displayHost }} </div>
             </div>
           </div>
         </td>
@@ -86,7 +86,7 @@
         <a [href]="getAccountUrl(abuse)" class="table-account-link d-inline-block" target="_blank" rel="noopener noreferrer">
           <div>{{ abuse.flaggedAccount.displayName }}</div>
 
-          <div class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</div>
+          <div class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced | displayHandle }}</div>
         </a>
 
         <my-account-block-badges class="d-inline-block ms-3 align-top" [account]="abuse.flaggedAccount" platformOnly="true"></my-account-block-badges>

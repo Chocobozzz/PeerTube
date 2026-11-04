@@ -31,7 +31,7 @@
               </div>
 
               <div class="actor-handle">
-                <span>&#64;{{ account.nameWithHost }}</span>
+                <span>&#64;{{ account.nameWithHost | displayHandle }}</span>
 
                 <my-copy-button
                   [value]="account.nameWithHostForced"
