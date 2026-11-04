@@ -1,6 +1,7 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { FFmpegEdition } from '@peertube/peertube-ffmpeg'
 import {
+  VideoState,
   VideoStudioEditionPayload,
   VideoStudioTask,
   VideoStudioTaskCutPayload,
@@ -39,7 +40,6 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
   const abortPromise = buildPromiseForAbortSignal(abortSignal)
 
   const payload = job.data as VideoStudioEditionPayload
-  const isNewVideo = payload.isNewVideo === true
 
   const taskFiles = pick(payload, [ 'tasks', 'taskFilesStaged' ])
 
@@ -56,6 +56,13 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
         // No video, maybe deleted?
         if (!video) {
           logger.info('Can\'t process job %d, video does not exist.', job.id)
+
+          await safeCleanupStudioTMPFiles(taskFiles)
+          return undefined
+        }
+
+        if (video.state !== VideoState.TO_EDIT) {
+          logger.info('Can\'t process job %d, video %s is not waiting for its edition.', job.id, video.uuid)
 
           await safeCleanupStudioTMPFiles(taskFiles)
           return undefined
@@ -106,12 +113,12 @@ async function processVideoStudioEdition (job: Job, abortSignal?: AbortSignal) {
 
         logger.info('Video edition ended for video %s.', video.uuid)
 
-        await onVideoStudioEnded({ video, editionResultPath, taskFiles, isNewVideo })
+        await onVideoStudioEnded({ video, editionResultPath, taskFiles })
       } catch (err) {
         await safeCleanupStudioTMPFiles(taskFiles)
 
         try {
-          await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo })
+          await onVideoStudioFailed({ videoUUID: payload.videoUUID, isDuplicate: payload.isDuplicate === true })
         } catch (err) {
           logger.error('Cannot reset video state after studio error', { err })
         }

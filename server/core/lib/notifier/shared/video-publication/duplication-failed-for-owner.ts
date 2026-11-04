@@ -9,7 +9,8 @@ import { AbstractNotification } from '../common/abstract-notification.js'
 
 const logger = createLogger()
 
-export class StudioNewVideoCreatedForOwner extends AbstractNotification<MVideoFull> {
+// The payload is the duplicate, that could not receive the files of its source video
+export class DuplicationFailedForOwner extends AbstractNotification<MVideoFull> {
   private user: MUserDefault
 
   async prepare () {
@@ -17,9 +18,10 @@ export class StudioNewVideoCreatedForOwner extends AbstractNotification<MVideoFu
   }
 
   log () {
-    logger.info('Notifying user %s its new video %s created by the studio is ready.', this.user.username, this.payload.url)
+    logger.info('Notifying user %s the duplication of its video in %s failed.', this.user.username, this.payload.url)
   }
 
+  // Share the setting of the studio to not have too many notification settings
   getSetting (user: MUserWithNotificationSetting) {
     return user.NotificationSetting.myVideoStudioEditionFinished
   }
@@ -32,7 +34,7 @@ export class StudioNewVideoCreatedForOwner extends AbstractNotification<MVideoFu
 
   createNotification (user: MUserWithNotificationSetting) {
     const notification = UserNotificationModel.build<UserNotificationModelForApi>({
-      type: UserNotificationType.MY_VIDEO_STUDIO_NEW_VIDEO_CREATED,
+      type: UserNotificationType.MY_VIDEO_DUPLICATION_ERROR,
       userId: user.id,
       videoId: this.payload.id
     })
@@ -43,16 +45,15 @@ export class StudioNewVideoCreatedForOwner extends AbstractNotification<MVideoFu
 
   createEmail (user: MUserWithNotificationSetting) {
     const to = { email: user.email, language: user.getLanguage() }
-    const videoUrl = WEBSERVER.URL + this.payload.getWatchStaticPath()
 
     return {
       to,
-      subject: t('Your new video has been created', to.language),
-      text: t('Your new video {videoName} has been created.', to.language, { videoName: this.payload.name }),
-      title: t('New video created', to.language),
+      subject: t('Duplication of your video has failed', to.language),
+      text: t('The copy {videoName} of your video could not be created.', to.language, { videoName: this.payload.name }),
+      title: t('Video duplication failed', to.language),
       action: {
         text: t('View video', to.language),
-        url: videoUrl
+        url: WEBSERVER.URL + this.payload.getWatchStaticPath()
       }
     }
   }

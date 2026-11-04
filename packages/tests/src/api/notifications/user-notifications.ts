@@ -12,8 +12,9 @@ import {
   checkMyVideoIsPublished,
   checkNewLiveFromSubscription,
   checkNewVideoFromSubscription,
-  checkVideoStudioEditionIsFinished,
-  checkVideoStudioNewVideoCreated
+  checkVideoDuplicationError,
+  checkVideoStudioEditionError,
+  checkVideoStudioEditionIsFinished
 } from '@tests/shared/notifications/check-video-notifications.js'
 import {
   getAllNotificationsSettings,
@@ -173,6 +174,61 @@ describe('Test user notifications', function () {
           typeOneOf: [ UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION ]
         })
         expect(notifications.filter(n => new Date(n.createdAt) > beforeAnotherUpdate)).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should send a new video notification when a transcoded private video becomes public for the first time', async function () {
+      this.timeout(120000)
+
+      await servers[0].config.save()
+      await servers[0].config.enableMinimumTranscoding()
+
+      try {
+        const { name, uuid, shortUUID } = await uploadRandomVideoOnServers(servers, 1, { privacy: VideoPrivacy.PRIVATE })
+        await waitJobs(servers)
+
+        await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
+
+        await servers[0].videos.update({ id: uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
+        await waitJobs(servers)
+
+        await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+      } finally {
+        await servers[0].config.rollback()
+      }
+    })
+
+    it('Should send a new video notification on a scheduled publication of a transcoded private video', async function () {
+      this.timeout(120000)
+
+      await servers[0].config.save()
+      await servers[0].config.enableMinimumTranscoding()
+
+      try {
+        // Let the transcoding end before the scheduled publication
+        const updateAt = new Date(new Date().getTime() + 15000)
+
+        const data = {
+          privacy: VideoPrivacy.PRIVATE,
+          scheduleUpdate: {
+            updateAt: updateAt.toISOString(),
+            privacy: VideoPrivacy.PUBLIC
+          }
+        }
+        const { name, uuid, shortUUID } = await uploadRandomVideoOnServers(servers, 1, data)
+        await waitJobs(servers)
+
+        const video = await servers[0].videos.getWithToken({ id: uuid })
+        expect(video.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+
+        await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'absence' })
+
+        await wait(updateAt.getTime() - new Date().getTime() + 6000)
+        await waitJobs(servers)
+
+        await checkNewVideoFromSubscription({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+      } finally {
+        await servers[0].config.rollback()
       }
     })
 
@@ -527,7 +583,7 @@ describe('Test user notifications', function () {
       await checkVideoStudioEditionIsFinished({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
     })
 
-    it('Should send a new video notification when the studio result is saved as a new video', async function () {
+    it('Should send a notification after studio edition saved as a new video', async function () {
       this.timeout(240000)
 
       const { name, id } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
@@ -537,12 +593,59 @@ describe('Test user notifications', function () {
       const { video } = await servers[1].videoStudio.createEditionTasks({ videoId: id, tasks, saveAsNewVideo: true })
       await waitJobs(servers)
 
-      await checkVideoStudioNewVideoCreated({
+      await checkVideoStudioEditionIsFinished({
         ...baseParams,
         videoName: name + ' (Studio Edit)',
         shortUUID: video.shortUUID,
         checkType: 'presence'
       })
+    })
+
+    it('Should send a notification when a studio edition fails', async function () {
+      this.timeout(240000)
+
+      const { name, shortUUID, id } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
+      await waitJobs(servers)
+
+      await servers[1].config.enableRemoteStudio()
+
+      try {
+        await servers[1].videoStudio.createEditionTasks({ videoId: id, tasks: [ { name: 'cut', options: { start: 0, end: 1 } } ] })
+        await waitJobs(servers)
+
+        await servers[1].runnerJobs.cancelAllJobs()
+        await waitJobs(servers)
+      } finally {
+        await servers[1].config.updateExistingConfig({ newConfig: { videoStudio: { remoteRunners: { enabled: false } } } })
+      }
+
+      await checkVideoStudioEditionError({ ...baseParams, videoName: name, shortUUID, checkType: 'presence' })
+    })
+
+    it('Should send a notification when a duplication fails', async function () {
+      this.timeout(240000)
+
+      const { name, id } = await uploadRandomVideoOnServers(servers, 2, { waitTranscoding: true })
+      await waitJobs(servers)
+
+      let shortUUID: string
+
+      await servers[1].jobs.pauseJobQueue()
+
+      try {
+        const tasks: VideoStudioTask[] = [ { name: 'cut', options: { start: 0, end: 1 } } ]
+        const { video } = await servers[1].videoStudio.createEditionTasks({ videoId: id, tasks, saveAsNewVideo: true })
+        shortUUID = video.shortUUID
+
+        // The files of the source video cannot be copied anymore
+        await servers[1].videos.remove({ id })
+      } finally {
+        await servers[1].jobs.resumeJobQueue()
+      }
+
+      await waitJobs(servers)
+
+      await checkVideoDuplicationError({ ...baseParams, videoName: name + ' (Studio Edit)', shortUUID, checkType: 'presence' })
     })
   })
 

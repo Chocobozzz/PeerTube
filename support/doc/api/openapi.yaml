@@ -3664,15 +3664,8 @@ paths:
                   type: boolean
                   default: false
                   description: >
-                    Keep the source video untouched and save the edition result in a new video.
-                    The new video is created private, in the same channel as the source video, in the `To duplicate` state (`14`).
-                    Its highest-quality video and any separate audio are copied before studio tasks run on the copy in state `13`.
-                    Its name is the source video name followed by ` (Studio Edit)`.
-                    Its metadata can be updated (e.g. with the video update endpoint) while the edition is processed.
-                    It is private by default. Users can change its privacy and publication settings through the normal video update endpoint; studio processing preserves these choices.
-                    If duplication fails, the placeholder is retained in state `15` and can be deleted.
-                    If studio editing fails, the copied input and thumbnail are retained in state `16`; the user can delete the copy or submit new in-place studio tasks.
-                    Existing thumbnails are copied initially, then regenerated from the edited result when studio processing succeeds.
+                    Keep the source video untouched: duplicate it, and edit the duplicate.
+                    The duplicate is created private, in the same channel as the source video, with the source video metadata.
                     The size of the source video counts towards the user quota.
       responses:
         '200':
@@ -3685,10 +3678,55 @@ paths:
           description: successful operation, when the source video is edited in place
         '400':
           description: incorrect parameters
+        '403':
+          description: the user cannot manage this video, or `saveAsNewVideo` is `true` on a blocked video and the user cannot manage blocks
         '409':
           description: video is already being processed
         '404':
           description: video not found
+
+  /api/v1/videos/{id}/duplicate:
+    post:
+      summary: Duplicate a video
+      operationId: duplicateVideo
+      tags:
+        - Video
+      description: |
+        Create a copy of a local video, in the same channel.
+
+        The copy of a blocked video (that only moderators can duplicate) is blocked for the same reason.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 120
+                  description: Name of the copy. Defaults to the name of the source video followed by "(Copy)"
+      responses:
+        '200':
+          description: successful operation. Returns the identifiers of the new video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '400':
+          description: incorrect parameters
+        '403':
+          description: the user cannot manage this video, the video is not local, or the video is blocked and the user cannot manage blocks
+        '404':
+          description: video not found
+        '409':
+          description: video is already being processed
+        '413':
+          description: the user video quota is exceeded
 
   /api/v1/videos:
     get:
@@ -10867,10 +10905,12 @@ components:
             - 7
             - 8
             - 9
+            - 10
+            - 11
+            - 12
             - 13
             - 14
             - 15
-            - 16
           description: |
             The video state:
             - `1`: Published
@@ -10882,10 +10922,12 @@ components:
             - `7`: Transcoding failed
             - `8`: Moving to an external storage failed
             - `9`: To edit using studio edition feature
-            - `13`: To edit as new video, waiting for a studio edition whose result is saved in this new video
-            - `14`: To duplicate, copying independent studio input
-            - `15`: Duplication failed
-            - `16`: Studio edition failed, copied input retained for a new in-place edit
+            - `10`: To move to the file system
+            - `11`: Moving to the file system failed
+            - `12`: Import failed
+            - `13`: To duplicate, the files of another video are being copied
+            - `14`: Duplication failed, the files of the other video could not be copied
+            - `15`: The studio edition of a video saved as a new video failed
         label:
           type: string
 
@@ -14544,6 +14586,7 @@ components:
         - 31
         - 32
         - 33
+        - 34
       description: >
         Notification type. One of the following values:
 
@@ -14611,7 +14654,9 @@ components:
 
           - `32` AUTOMATIC_BLOCKLIST_UPDATE
 
-          - `33` MY_VIDEO_STUDIO_NEW_VIDEO_CREATED
+          - `33` MY_VIDEO_STUDIO_EDITION_ERROR
+
+          - `34` MY_VIDEO_DUPLICATION_ERROR
 
     NewFeatureInfoType:
       type: integer

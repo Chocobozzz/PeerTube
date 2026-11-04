@@ -21,7 +21,7 @@ export function buildNextVideoState (currentState?: VideoStateType) {
 
   if (
     currentState !== VideoState.TO_EDIT &&
-    currentState !== VideoState.TO_EDIT_AS_NEW_VIDEO &&
+    currentState !== VideoState.TO_DUPLICATE &&
     currentState !== VideoState.TO_TRANSCODE &&
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
     currentState !== VideoState.TO_MOVE_TO_FILE_SYSTEM &&
@@ -172,8 +172,7 @@ async function moveToPublishedState (options: {
 
   logger.info('Publishing video %s.', video.uuid, { previousState })
 
-  // The privacy of a studio new video can be set to public before its processing ends, which sets firstPublishedAt
-  const isNewVideo = !video.firstPublishedAt || previousState === VideoState.TO_EDIT_AS_NEW_VIDEO
+  const isNewVideo = !video.firstPublishedAt
 
   // Keep the publication date of videos imported for channel import to keep external order
   const keepPublishedAt = isNewVideo && await isImportedFromChannel(video, transaction)
@@ -184,13 +183,9 @@ async function moveToPublishedState (options: {
 
   if (previousState === VideoState.TO_EDIT) {
     Notifier.Instance.notifyOfFinishedVideoStudioEdition(video)
-    return
   }
 
-  if (previousState === VideoState.TO_EDIT_AS_NEW_VIDEO) {
-    Notifier.Instance.notifyOfCreatedVideoStudioNewVideo(video)
-  }
-
+  // A duplicate edited in studio is published for the first time after its edition
   if (isNewVideo) {
     Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
 

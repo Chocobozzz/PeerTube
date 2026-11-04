@@ -103,6 +103,9 @@ export class VideoManageController implements OnDestroy {
     this.userChannels = undefined
     this.userQuota = undefined
     this.privacies = undefined
+
+    this.formErrors = []
+    this.saveHook = undefined
   }
 
   // ---------------------------------------------------------------------------
@@ -176,6 +179,10 @@ export class VideoManageController implements OnDestroy {
 
   hasFormErrors () {
     return this.formErrors.some(({ errors }) => errors.length !== 0)
+  }
+
+  hasStudioFormErrors () {
+    return this.formErrors.some(({ path, errors }) => path === 'studio' && errors.length !== 0)
   }
 
   getEmbedVersion () {
@@ -438,8 +445,7 @@ export class VideoManageController implements OnDestroy {
     const title = $localize`Are you sure you want to save the result of studio tasks as a new video?`
     const listHTML = this.videoEdit.getStudioTasksSummary().map(t => `<li>${t}</li>`).join('')
 
-    const confirmHTML =
-      $localize`The current video will <strong>not</strong> be modified.` + ' ' +
+    const confirmHTML = $localize`The current video will <strong>not</strong> be modified.` + ' ' +
       $localize`A new private video will be created in the same channel.` + ' ' +
       $localize`You will be able to update its information while it is processed.` +
       '<br /><br />' +

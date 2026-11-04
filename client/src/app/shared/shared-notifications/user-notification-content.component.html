@@ -356,10 +356,16 @@
       </div>
     }
 
-    @case (33) { <!-- UserNotificationType.MY_VIDEO_STUDIO_NEW_VIDEO_CREATED -->
-      <my-global-icon iconName="film"></my-global-icon>
+    @case (33) { <!-- UserNotificationType.MY_VIDEO_STUDIO_EDITION_ERROR -->
+      <my-global-icon iconName="cloud-error"></my-global-icon>
 
-      <div class="message" i18n>Your new video <strong>{{ n.payload.video.name }}</strong> has been created</div>
+      <div class="message" i18n>The edits to your video <strong>{{ n.payload.video.name }}</strong> could not be applied</div>
+    }
+
+    @case (34) { <!-- UserNotificationType.MY_VIDEO_DUPLICATION_ERROR -->
+      <my-global-icon iconName="cloud-error"></my-global-icon>
+
+      <div class="message" i18n>The copy <strong>{{ n.payload.video.name }}</strong> of your video could not be created</div>
     }
 
     @default {

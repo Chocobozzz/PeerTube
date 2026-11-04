@@ -332,18 +332,30 @@ export type VideoStudioTaskPayload =
 
 export interface VideoStudioEditionPayload {
   videoUUID: string
-  isNewVideo?: boolean
   tasks: VideoStudioTaskPayload[]
 
   // Task files are staged in object storage: their `file` option is a staging key instead of a local path
   taskFilesStaged?: boolean
+
+  isDuplicate?: boolean
 }
 
 export interface VideoDuplicatePayload {
   videoUUID: string
   sourceVideoUUID: string
-  userId: number
-  studio: VideoStudioEditionPayload
+
+  // 'max-quality': the max quality files are copied as web video files, without torrent nor original file
+  // 'all': all the files are copied
+  filesToCopy: 'max-quality' | 'all'
+
+  // Additional job after duplication
+  studio?: {
+    tasks: VideoStudioTaskPayload[]
+    taskFilesStaged: boolean
+
+    // The studio tasks were validated against these files
+    sourceFilenames: string[]
+  }
 }
 
 // ---------------------------------------------------------------------------

@@ -58,7 +58,8 @@ export const UserNotificationType = {
 
   AUTOMATIC_BLOCKLIST_UPDATE: 32,
 
-  MY_VIDEO_STUDIO_NEW_VIDEO_CREATED: 33
+  MY_VIDEO_STUDIO_EDITION_ERROR: 33,
+  MY_VIDEO_DUPLICATION_ERROR: 34
 } as const
 
 export type UserNotificationType_Type = typeof UserNotificationType[keyof typeof UserNotificationType]

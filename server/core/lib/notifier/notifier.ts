@@ -57,7 +57,7 @@ import {
   RegistrationRequestForModerators,
   RequestChannelChangeOwnership,
   StudioEditionFinishedForOwner,
-  StudioNewVideoCreatedForOwner,
+  DuplicationFailedForOwner,
   UnblacklistForOwner,
   VideoTranscriptionGeneratedForOwner
 } from './shared/index.js'
@@ -72,7 +72,7 @@ class Notifier {
     publicationAfterScheduleUpdate: [ OwnedPublicationAfterScheduleUpdate ],
     publicationAfterAutoUnblacklist: [ OwnedPublicationAfterAutoUnblacklist ],
     videoStudioEditionFinished: [ StudioEditionFinishedForOwner ],
-    videoStudioNewVideoCreated: [ StudioNewVideoCreatedForOwner ],
+    videoDuplicationFailed: [ DuplicationFailedForOwner ],
     videoTranscriptionGenerated: [ VideoTranscriptionGeneratedForOwner ],
 
     newComment: [ CommentMention, NewCommentForVideoOwner ],
@@ -326,17 +326,26 @@ class Notifier {
 
     logger.debug('Notify on finished video studio edition', { video: video.url })
 
-    this.sendNotifications(models, video)
+    this.sendNotifications(models, { video, success: true })
       .catch(err => logger.error('Cannot notify on finished studio edition %s.', video.url, { err }))
   }
 
-  notifyOfCreatedVideoStudioNewVideo (video: MVideoFull) {
-    const models = this.notificationModels.videoStudioNewVideoCreated
+  notifyOfFailedVideoStudioEdition (video: MVideoFull) {
+    const models = this.notificationModels.videoStudioEditionFinished
 
-    logger.debug('Notify on video created by studio', { video: video.url })
+    logger.debug('Notify on failed video studio edition', { video: video.url })
+
+    this.sendNotifications(models, { video, success: false })
+      .catch(err => logger.error('Cannot notify on failed studio edition %s.', video.url, { err }))
+  }
+
+  notifyOfFailedVideoDuplication (video: MVideoFull) {
+    const models = this.notificationModels.videoDuplicationFailed
+
+    logger.debug('Notify on failed video duplication', { video: video.url })
 
     this.sendNotifications(models, video)
-      .catch(err => logger.error('Cannot notify on video created by studio %s.', video.url, { err }))
+      .catch(err => logger.error('Cannot notify on failed duplication %s.', video.url, { err }))
   }
 
   notifyOfGeneratedVideoTranscription (caption: MVideoCaptionVideo) {

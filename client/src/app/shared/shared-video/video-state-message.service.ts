@@ -146,32 +146,37 @@ export class VideoStateMessageService {
       }
 
       case VideoState.TO_DUPLICATE:
-      case VideoState.TO_EDIT_AS_NEW_VIDEO:
         return {
-          title: $localize`New video being created from studio`,
+          title: $localize`Duplication in progress`,
           manageMain: manageProcessed,
           manageSecondary: manageFeaturesDisabled,
           watchMain: watchNotPlayable,
-          watchSecondary: ''
+          watchSecondary: $localize`The files of the video are being copied.`
         }
 
-      case VideoState.TO_DUPLICATE_FAILED:
+      case VideoState.TO_DUPLICATE_FAILED: {
+        const details = $localize`The new video could not be created from the original video.`
+
         return {
           title: $localize`Duplication failed`,
-          manageMain: $localize`The video could not be duplicated. You can delete it and try again from the source video.`,
+          manageMain: details + ' ' + $localize`You can delete this video and try again from the original video.`,
           manageSecondary: '',
           watchMain: watchNotPlayable,
-          watchSecondary: ''
+          watchSecondary: details
         }
+      }
 
-      case VideoState.TO_EDIT_FAILED:
+      case VideoState.TO_EDIT_FAILED: {
+        const details = $localize`The studio edition of this new video failed.`
+
         return {
           title: $localize`Studio edition failed`,
-          manageMain: $localize`The copied video has been kept. You can retry an edit in Studio or delete this video.`,
+          manageMain: details + ' ' + $localize`You can delete this video and try again from the original video.`,
           manageSecondary: '',
           watchMain: watchNotPlayable,
-          watchSecondary: ''
+          watchSecondary: details
         }
+      }
 
       case VideoState.TO_EDIT:
         return {

@@ -14,7 +14,7 @@ import { approximateIntroOutroAdditionalSize, getTaskFileFromReq } from '@server
 import { isAudioFile } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode, UserRight, VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
 import { areValidationErrors, checkCanManageVideo, checkUserQuota, doesVideoExist } from '../shared/index.js'
-import { checkVideoFileCanBeEdited } from './shared/index.js'
+import { checkVideoCanBeDuplicated, checkVideoFileCanBeEdited } from './shared/index.js'
 
 const videoStudioAddEditionValidator = [
   param('videoId')
@@ -92,6 +92,8 @@ const videoStudioAddEditionValidator = [
     if (!await checkCanManageVideo({ user, video, right: UserRight.UPDATE_ANY_VIDEO, req, res, checkIsLocal: true, checkIsOwner: false })) {
       return cleanUpReqFiles(req)
     }
+
+    if (body.saveAsNewVideo === true && !checkVideoCanBeDuplicated({ video, user, req, res })) return cleanUpReqFiles(req)
 
     // Try to make an approximation of bytes added by the intro/outro
     let additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)

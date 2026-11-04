@@ -71,6 +71,25 @@ describe('Test plugin action hooks', function () {
       await checkHook('action:api.video.viewed')
     })
 
+    it('Should run action:api.video.duplicated', async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.enableMinimumTranscoding()
+      await servers[0].config.enableStudio()
+      await waitJobs(servers)
+
+      await servers[0].videoStudio.createEditionTasks({
+        videoId: videoUUID,
+        tasks: [ { name: 'cut', options: { start: 1 } } ],
+        saveAsNewVideo: true
+      })
+
+      await checkHook('action:api.video.duplicated')
+      await waitJobs(servers)
+
+      await servers[0].config.disableTranscoding()
+    })
+
     it('Should run action:api.video.file-updated', async function () {
       await servers[0].videos.replaceSourceFile({ videoId: videoUUID, fixture: 'video_short.mp4' })
 

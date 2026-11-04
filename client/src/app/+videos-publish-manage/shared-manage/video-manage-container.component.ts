@@ -156,7 +156,8 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
   async onWantToSaveAsNewVideo () {
     this.displayFormErrorsMsg = false
 
-    if (this.hasFormErrors()) {
+    // Other changes are not saved: only studio errors matter
+    if (this.manageController.hasStudioFormErrors()) {
       this.displayFormErrorsMsg = true
 
       window.scrollTo({ top: 0, behavior: 'instant' })
@@ -182,7 +183,8 @@ export class VideoManageContainerComponent implements OnInit, OnDestroy {
           this.notifier.success($localize`The new video is being created, you can now update its information.`)
 
           // Update information of the new video with the regular video form
-          this.router.navigateByUrl(Video.buildManageUrl(video))
+          // The user already confirmed that other unsaved changes of the current video are lost
+          this.router.navigateByUrl(Video.buildManageUrl(video), { state: { discardPendingChanges: true } })
         },
 
         error: (err: HttpErrorResponse) => {

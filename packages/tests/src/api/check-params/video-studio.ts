@@ -9,10 +9,13 @@ import {
   VideoStudioCommand,
   waitJobs
 } from '@peertube/peertube-server-commands'
+import { SQLCommand } from '@tests/shared/sql-command.js'
+import { expect } from 'chai'
 
 describe('Test video studio API validator', function () {
   let server: PeerTubeServer
   let command: VideoStudioCommand
+  let sqlCommand: SQLCommand
 
   let userAccessToken: string
   let editorToken: string
@@ -25,6 +28,7 @@ describe('Test video studio API validator', function () {
     this.timeout(120_000)
 
     server = await createSingleServer(1)
+    sqlCommand = new SQLCommand(server)
 
     await setAccessTokensToServers([ server ])
     userAccessToken = await server.users.generateUserAndToken('user1')
@@ -194,6 +198,59 @@ describe('Test video studio API validator', function () {
           videoId: videoUUID,
           tasks: [ { name: 'cut', options: { start: 1 } } ],
           saveAsNewVideo: 'hello' as any,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      })
+
+      it('Should fail to save a blocked video as a new video unless the user can manage blocks', async function () {
+        this.timeout(120_000)
+
+        const { uuid } = await server.videos.quickUpload({ token: userAccessToken, name: 'blocked video' })
+        await waitJobs([ server ])
+
+        await server.blacklist.add({ videoId: uuid })
+
+        const tasks: VideoStudioTask[] = [ { name: 'cut', options: { start: 1 } } ]
+
+        await command.createEditionTasks({
+          videoId: uuid,
+          token: userAccessToken,
+          tasks,
+          saveAsNewVideo: true,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+
+        // The edited video stays blocked
+        await command.createEditionTasks({ videoId: uuid, token: userAccessToken, tasks, expectedStatus: HttpStatusCode.NO_CONTENT_204 })
+        await waitJobs([ server ])
+
+        {
+          const video = await server.videos.getWithToken({ id: uuid })
+          expect(video.blacklisted).to.be.true
+        }
+
+        const { video: copy } = await command.createEditionTasks({ videoId: uuid, tasks, saveAsNewVideo: true })
+        await waitJobs([ server ])
+
+        // The copy is blocked like its source
+        for (const id of [ uuid, copy.uuid ]) {
+          const video = await server.videos.getWithToken({ id })
+          expect(video.blacklisted).to.be.true
+        }
+      })
+
+      it('Should fail to save a video without files as a new video', async function () {
+        this.timeout(120_000)
+
+        const { uuid } = await server.videos.quickUpload({ name: 'video without files' })
+        await waitJobs([ server ])
+
+        await sqlCommand.removeVideoFilesOf(uuid)
+
+        await command.createEditionTasks({
+          videoId: uuid,
+          tasks: [ { name: 'cut', options: { start: 1 } } ],
+          saveAsNewVideo: true,
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
       })
@@ -398,6 +455,38 @@ describe('Test video studio API validator', function () {
           await addIntroOutroByUser('add-outro', token, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
         }
       })
+
+      it('Should check quota of the source video size when saving as a new video', async function () {
+        this.timeout(360000)
+
+        const user = await server.users.create({ username: 'user_quota_2' })
+        const userToken = await server.login.getAccessToken('user_quota_2')
+        const editorToken = await server.channelCollaborators.createEditor('editor_quota_2', 'user_quota_2_channel')
+
+        const { uuid } = await server.videos.quickUpload({ token: userToken, name: 'video_quota_2', fixture: 'video_short.mp4' })
+        await waitJobs([ server ])
+
+        const cut = (token: string, saveAsNewVideo: boolean, expectedStatus: HttpStatusCodeType) => {
+          return command.createEditionTasks({
+            token,
+            videoId: uuid,
+            tasks: [ { name: 'cut', options: { start: 1 } } ],
+            saveAsNewVideo,
+            expectedStatus
+          })
+        }
+
+        // Enough quota to edit the video in place, but not to duplicate it
+        const { videoQuotaUsed } = await server.users.getMyQuotaUsed({ token: userToken })
+        await server.users.update({ userId: user.id, videoQuota: Math.round(videoQuotaUsed * 1.5) })
+
+        for (const token of [ userToken, editorToken ]) {
+          await cut(token, true, HttpStatusCode.PAYLOAD_TOO_LARGE_413)
+        }
+
+        await cut(userToken, false, HttpStatusCode.NO_CONTENT_204)
+        await waitJobs([ server ])
+      })
     })
 
     describe('Remove segments task', function () {
@@ -470,6 +559,7 @@ describe('Test video studio API validator', function () {
   })
 
   after(async function () {
+    await sqlCommand.cleanup()
     await cleanupTests([ server ])
   })
 })

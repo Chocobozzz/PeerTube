@@ -1,4 +1,4 @@
-import { HttpStatusCode, VideoStudioCreateEditionNewVideo, VideoStudioTask } from '@peertube/peertube-models'
+import { HttpStatusCode, VideoCreateResult, VideoStudioTask } from '@peertube/peertube-models'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class VideoStudioCommand extends AbstractCommand {
@@ -85,6 +85,6 @@ export class VideoStudioCommand extends AbstractCommand {
       defaultExpectedStatus: options.saveAsNewVideo === true
         ? HttpStatusCode.OK_200
         : HttpStatusCode.NO_CONTENT_204
-    }).then(res => res.body as VideoStudioCreateEditionNewVideo | undefined)
+    }).then(res => res.body as { video: VideoCreateResult } | undefined)
   }
 }

@@ -870,6 +870,30 @@ describe('Test plugin filter hooks', function () {
         expectEndWith(video.description, ' - filter:api.video.user-import.video-attribute.result')
       }
     })
+
+    it('Should run filter:api.video.duplicate.video-attribute.result', async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.enableMinimumTranscoding()
+      await servers[0].config.enableStudio()
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      await servers[0].videos.update({ id: uuid, attributes: { description: 'duplicate' } })
+
+      const { video } = await servers[0].videoStudio.createEditionTasks({
+        videoId: uuid,
+        tasks: [ { name: 'cut', options: { start: 1 } } ],
+        saveAsNewVideo: true
+      })
+
+      const duplicate = await servers[0].videos.getWithToken({ id: video.uuid })
+      expect(duplicate.description).to.equal('duplicate - filter:api.video.duplicate.video-attribute.result')
+
+      await waitJobs(servers)
+      await servers[0].config.disableTranscoding()
+    })
   })
 
   describe('Stats filters', function () {

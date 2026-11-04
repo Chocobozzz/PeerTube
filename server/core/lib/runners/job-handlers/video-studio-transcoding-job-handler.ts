@@ -24,10 +24,10 @@ import { loadRunnerVideo } from './shared/utils.js'
 const logger = createLogger('studio', 'transcoding')
 
 type CreateOptions = {
-  isNewVideo?: boolean
   video: MVideoWithFile
   tasks: VideoStudioTaskPayload[]
   taskFilesStaged: boolean
+  isDuplicate: boolean
   priority: number
 }
 
@@ -36,7 +36,7 @@ export class VideoStudioTranscodingJobHandler
   extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
 {
   async create (options: CreateOptions) {
-    const { video, priority, tasks, taskFilesStaged } = options
+    const { video, priority, tasks, taskFilesStaged, isDuplicate } = options
 
     const jobUUID = buildUUID()
     const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
@@ -82,9 +82,9 @@ export class VideoStudioTranscodingJobHandler
 
       const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
         videoUUID: video.uuid,
-        isNewVideo: options.isNewVideo,
         originalTasks: tasks,
-        taskFilesStaged
+        taskFilesStaged,
+        isDuplicate
       }
 
       const job = await this.createRunnerJob({
@@ -144,15 +144,13 @@ export class VideoStudioTranscodingJobHandler
           video,
           editionResultPath: videoFilePath,
           taskFiles,
-          isNewVideo: privatePayload.isNewVideo === true,
 
           // A shutdown can give the job back to the runners until then
           beforeIrreversibleChanges: () => commitPendingCompletion(runnerJob.uuid)
         })
       } catch (err) {
-        // The runner job has errored (and was not aborted by a shutdown): reset the video state or remove the incomplete new video
         if (!(err instanceof RunnerJobCompletionAbortedError)) {
-          await onVideoStudioFailed({ videoUUID: video.uuid, isNewVideo: privatePayload.isNewVideo === true })
+          await onVideoStudioFailed({ videoUUID: video.uuid, isDuplicate: privatePayload.isDuplicate === true })
           await safeCleanupStudioTMPFiles(taskFiles)
         }
 
@@ -187,8 +185,9 @@ export class VideoStudioTranscodingJobHandler
 
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
-    await onVideoStudioFailed({ videoUUID: payload.videoUUID, isNewVideo: payload.isNewVideo === true })
+    await onVideoStudioFailed({ videoUUID: payload.videoUUID, isDuplicate: payload.isDuplicate === true })
 
+    // The video may have been deleted
     await logger.withContext([ payload.videoUUID ], () => {
       return safeCleanupStudioTMPFiles({ tasks: payload.originalTasks, taskFilesStaged: payload.taskFilesStaged })
     })

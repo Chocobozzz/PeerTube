@@ -1,11 +1,11 @@
 import { canVideoFileBeEdited } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, ServerFilterHookName, VideoState, VideoStateType } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerErrorCode, ServerFilterHookName, UserRight, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { isVideoFileMimeTypeValid, isVideoFileSizeValid } from '@server/helpers/custom-validators/videos.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, VIDEO_STATES } from '@server/initializers/constants.js'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
-import { MUserId, MVideo } from '@server/types/models/index.js'
+import { MUser, MUserId, MVideo, MVideoWithBlacklistLight, MVideoWithFile } from '@server/types/models/index.js'
 import express from 'express'
 import { checkUserQuota } from '../../shared/index.js'
 
@@ -89,7 +89,6 @@ export function checkVideoFileCanBeEdited (video: MVideo, req: express.Request, 
   if (
     video.state === VideoState.TO_TRANSCODE ||
     video.state === VideoState.TO_EDIT ||
-    video.state === VideoState.TO_EDIT_AS_NEW_VIDEO ||
     video.state === VideoState.TO_DUPLICATE
   ) {
     res.fail({
@@ -104,6 +103,35 @@ export function checkVideoFileCanBeEdited (video: MVideo, req: express.Request, 
     res.fail({
       status: HttpStatusCode.BAD_REQUEST_400,
       message: req.t('Video state is not compatible with edition')
+    })
+
+    return false
+  }
+
+  return true
+}
+
+export function checkVideoCanBeDuplicated (options: {
+  video: MVideoWithBlacklistLight & MVideoWithFile
+  user: MUser
+  req: express.Request
+  res: express.Response
+}) {
+  const { video, user, req, res } = options
+
+  if (!video.getMaxQualityAudioAndVideoFiles().videoFile) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: req.t('Cannot duplicate a video without files')
+    })
+
+    return false
+  }
+
+  if (video.VideoBlacklist && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) !== true) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('Cannot duplicate a blocked video')
     })
 
     return false
@@ -143,7 +171,6 @@ export function checkVideoCanBeTranscribedOrTranscoded (options: {
   const incompatibleStates = new Set<VideoStateType>([
     VideoState.TO_IMPORT,
     VideoState.TO_EDIT,
-    VideoState.TO_EDIT_AS_NEW_VIDEO,
     VideoState.TO_DUPLICATE,
     VideoState.TO_DUPLICATE_FAILED,
     VideoState.TO_EDIT_FAILED,

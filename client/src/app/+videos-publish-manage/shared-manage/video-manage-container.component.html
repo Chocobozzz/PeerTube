@@ -21,7 +21,7 @@
           @if (canUpdate() && hasStudioTasks()) {
             <my-button
               theme="secondary" class="save-as-new-button"
-              icon="circle-tick"
+              icon="add"
               [disabled]="isUpdating"
               [loading]="isSavingAsNew"
               (click)="onWantToSaveAsNewVideo()"

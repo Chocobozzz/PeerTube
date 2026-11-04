@@ -83,6 +83,8 @@ export const serverFilterHookObject = {
   'filter:api.video.live.video-attribute.result': true,
   // PeerTube >= 6.1
   'filter:api.video.user-import.video-attribute.result': true,
+  // PeerTube >= 9.0
+  'filter:api.video.duplicate.video-attribute.result': true,
 
   // Filter params/result used to list threads of a specific video
   // (used by the video watch page)
@@ -198,6 +200,9 @@ export const serverActionHookObject = {
   'action:api.video.deleted': true,
   // Fired when a local video is uploaded
   'action:api.video.uploaded': true,
+  // Fired when a local video is duplicated (PeerTube >= 9.0)
+  // The duplicate is created without files: they are copied by a job
+  'action:api.video.duplicated': true,
   // Fired when a local video is viewed
   'action:api.video.viewed': true,
 

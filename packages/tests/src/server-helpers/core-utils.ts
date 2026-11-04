@@ -7,6 +7,7 @@ import {
   getResumableUploadChunkSize,
   parseChapters,
   redactSignedUrls,
+  sliceWithoutSplittingSurrogates,
   timeToInt
 } from '@peertube/peertube-core-utils'
 import { VideoResolution } from '@peertube/peertube-models'
@@ -250,6 +251,23 @@ describe('Truncate', function () {
     peertubeTruncate('hi-diddly-ho there, neighborino', { length: 24, separator })
 
     expect(separator.lastIndex).to.equal(0)
+  })
+})
+
+describe('Slice without splitting surrogates', function () {
+  it('Should slice like String.prototype.slice', function () {
+    expect(sliceWithoutSplittingSurrogates('hello world', 5)).to.equal('hello')
+    expect(sliceWithoutSplittingSurrogates('hello', 10)).to.equal('hello')
+    expect(sliceWithoutSplittingSurrogates('hello', 0)).to.equal('')
+    expect(sliceWithoutSplittingSurrogates('hello', -1)).to.equal('')
+  })
+
+  it('Should drop a surrogate pair that does not fit', function () {
+    // '😀' is 2 code units
+    expect(sliceWithoutSplittingSurrogates('a😀b', 1)).to.equal('a')
+    expect(sliceWithoutSplittingSurrogates('a😀b', 2)).to.equal('a')
+    expect(sliceWithoutSplittingSurrogates('a😀b', 3)).to.equal('a😀')
+    expect(sliceWithoutSplittingSurrogates('😀😀', 3)).to.equal('😀')
   })
 })
 

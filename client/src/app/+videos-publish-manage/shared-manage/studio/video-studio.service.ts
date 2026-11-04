@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { RestExtractor } from '@app/core'
 import { objectToFormData } from '@app/helpers'
-import { VideoStudioCreateEdition, VideoStudioCreateEditionNewVideo, VideoStudioTask } from '@peertube/peertube-models'
+import { VideoCreateResult, VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 
 @Injectable()
@@ -19,7 +19,7 @@ export class VideoStudioService {
   editVideoAsNewVideo (videoId: number | string, tasks: VideoStudioTask[]) {
     const body: VideoStudioCreateEdition = { tasks, saveAsNewVideo: true }
 
-    return this.authHttp.post<VideoStudioCreateEditionNewVideo>(this.buildUrl(videoId), objectToFormData(body))
+    return this.authHttp.post<{ video: VideoCreateResult }>(this.buildUrl(videoId), objectToFormData(body))
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
