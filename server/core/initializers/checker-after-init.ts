@@ -354,6 +354,15 @@ function checkSearchConfig () {
 }
 
 function checkLiveConfig () {
+  // Negated comparisons also reject NaN
+  if (!(CONFIG.LIVE.RTMP.PING >= 1)) {
+    throw new Error('live.rtmp.ping must be at least 1 second')
+  }
+
+  if (!(CONFIG.LIVE.RTMP.PING_TIMEOUT >= 5)) {
+    throw new Error('live.rtmp.ping_timeout must be at least 5 seconds')
+  }
+
   if (CONFIG.LIVE.ENABLED === true) {
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       throw new Error('Live allow replay cannot be enabled if transcoding is not enabled.')

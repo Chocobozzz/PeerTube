@@ -2277,14 +2277,14 @@
               "default": null
             },
             "ping": {
-              "description": "Interval (in seconds) between keepalive pings sent to the RTMP publisher",
-              "type": "integer",
-              "default": 60
+              "description": "Interval between keepalive pings sent to the publisher (minimum 1 second) Also applies to RTMPS connections",
+              "type": "string",
+              "default": "1 minute"
             },
             "ping_timeout": {
-              "description": "Time (in seconds) without activity after which an RTMP connection is considered dead Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...)",
-              "type": "integer",
-              "default": 30
+              "description": "Time without activity after which a connection is considered dead (minimum 5 seconds) Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...) Too low values may cut lives on network hiccups Also applies to RTMPS connections",
+              "type": "string",
+              "default": "30 seconds"
             }
           },
           "additionalProperties": false

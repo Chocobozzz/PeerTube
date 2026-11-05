@@ -879,12 +879,15 @@ live:
     # Use null to use the same value than `webserver.hostname`
     public_hostname: null
 
-    # Interval (in seconds) between keepalive pings sent to the RTMP publisher
-    ping: 60
+    # Interval between keepalive pings sent to the publisher (minimum 1 second)
+    # Also applies to RTMPS connections
+    ping: '1 minute'
 
-    # Time (in seconds) without activity after which an RTMP connection is considered dead
+    # Time without activity after which a connection is considered dead (minimum 5 seconds)
     # Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...)
-    ping_timeout: 30
+    # Too low values may cut lives on network hiccups
+    # Also applies to RTMPS connections
+    ping_timeout: '30 seconds'
 
   rtmps:
     enabled: false
