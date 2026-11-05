@@ -329,10 +329,11 @@ export class AdminConfigInformationComponent implements OnInit, OnDestroy, CanCo
   }
 
   private resetTranslations (translations: InstanceTranslation[]) {
-    this.translationsArray.clear()
-
+    // Reset errors before clearing the array: clear() triggers a status change that iterates on these errors
     this.getInstanceFormErrors().translations = []
     ;(this.validationMessages.instance as FormReactiveMessages).translations = []
+
+    this.translationsArray.clear()
 
     for (const translation of translations) {
       this.addTranslationControl(translation)

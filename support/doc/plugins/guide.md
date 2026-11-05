@@ -283,6 +283,22 @@ The `ping` route can be accessed using:
  * `/plugins/:pluginName/:pluginVersion/router/ping`
  * Or `/plugins/:pluginName/router/ping`
 
+**PeerTube >= 9.0**
+
+To add your public pages to the instance sitemap (`/sitemaps/pages.xml`), use the `filter:sitemap.pages.list.result` server hook.
+Each entry has a `url` (absolute, or relative to the instance URL) and optional `lastmod`, `changefreq` and `priority` fields:
+
+```js
+function register ({ registerHook }) {
+  registerHook({
+    target: 'filter:sitemap.pages.list.result',
+    handler: entries => entries.concat([ { url: '/plugins/my-plugin/router/my-page' } ])
+  })
+}
+```
+
+The sitemap is cached, so changes may take up to one day to appear.
+
 
 #### Add custom WebSocket handlers
 
@@ -618,6 +634,44 @@ How auto taggers work:
 To remove an auto tagger, pass the same options object (the `handler` reference is used for comparison) to `unregisterVideoAutoTagger` or `unregisterCommentAutoTagger`.
 
 You can read the automatic tags of an object using `peertubeHelpers.automaticTags.getServerVideoAutomaticTags({ videoId })`, `peertubeHelpers.automaticTags.getServerCommentAutomaticTags({ commentId })` or `peertubeHelpers.automaticTags.getAccountCommentAutomaticTags({ commentId, accountId })`.
+
+#### Provide a transcriber
+
+**PeerTube >= 8.4**
+
+Your plugin can generate video subtitles with its own ASR service or tool instead of the whisper engine shipped with PeerTube, using the `filter:transcription.transcriber.result` hook:
+
+```js
+async function register ({ registerHook }) {
+  registerHook({
+    target: 'filter:transcription.transcriber.result',
+
+    // Return `result` to let PeerTube (or another plugin) handle this video
+    // Only video.id, video.uuid, video.name, video.language, video.duration, video.privacy, video.channel and video.account are provided
+    handler: (result, { video }) => {
+      return {
+        name: 'my-asr',
+
+        // workingDirectory is an empty directory removed by PeerTube after the transcription
+        transcribe: async ({ mediaFilePath, language, workingDirectory, signal }) => {
+          const { vtt, detectedLanguage } = await callMyASRService(mediaFilePath, { language, signal })
+
+          // Return undefined to let PeerTube generate the subtitles with its whisper engine
+          if (!vtt) return undefined
+
+          return { language: detectedLanguage, content: vtt }
+        }
+      }
+    }
+  })
+}
+```
+
+How plugin transcribers work:
+ * The returned `language` must be a language code supported by PeerTube (`en`, `de`...). The transcription job fails otherwise
+ * The returned `content` must be WebVTT
+ * PeerTube only installs its whisper engine when a video is not transcribed by a plugin
+ * The hook is not used when transcription is processed by remote runners
 
 #### Server helpers
 

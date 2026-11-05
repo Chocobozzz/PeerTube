@@ -96,6 +96,11 @@ rates_limit:
     window: 5 minutes
     max: 60 # Requires at least 10 distinct IPs (`max / max_per_ip`) to lock an account
     max_per_ip: 6 # A single IP's contribution to the account lock is capped at 6 failures
+  password_confirmation: # Failed password confirmations of sensitive actions
+    enabled: true
+    # 10 failures in 10 minutes
+    window: 10 minutes
+    max: 10
 
 oauth2:
   token_lifetime:
@@ -407,8 +412,10 @@ open_telemetry:
     # If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary
     enabled: false
 
-    # Send traces to a Jaeger compatible endpoint
-    jaeger_exporter:
+    # Send traces to an OpenTelemetry (OTLP over HTTP) compatible endpoint, like Jaeger
+    otlp_exporter:
+      # For example 'http://127.0.0.1:4318/v1/traces'.
+      # If empty, use OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable or 'http://localhost:4318/v1/traces'
       endpoint: ''
 
 trending:
@@ -590,6 +597,10 @@ webadmin:
     edition:
       # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
+
+  # Ask administrators to type their password again before sensitive actions in the web interface or REST API
+  password_confirmation:
+    enabled: true
 
 # XML, Atom or JSON feeds
 feeds:
@@ -878,6 +889,16 @@ live:
     # Public hostname of your RTMP server
     # Use null to use the same value than `webserver.hostname`
     public_hostname: null
+
+    # Interval between keepalive pings sent to the publisher (minimum 1 second)
+    # Also applies to RTMPS connections
+    ping: '1 minute'
+
+    # Time without activity after which a connection is considered dead (minimum 5 seconds)
+    # Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...)
+    # Too low values may cut lives on network hiccups
+    # Also applies to RTMPS connections
+    ping_timeout: '30 seconds'
 
   rtmps:
     enabled: false

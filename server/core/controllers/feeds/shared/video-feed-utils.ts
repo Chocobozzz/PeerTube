@@ -8,7 +8,7 @@ import { getServerActor } from '@server/models/application/application.js'
 import { getCategoryLabel } from '@server/models/video/formatter/index.js'
 import { DisplayOnlyForFollowerOptions } from '@server/models/video/sql/video/index.js'
 import { VideoModel } from '@server/models/video/video.js'
-import { MChannelHostOnly, MUserDefault, MVideoPlaylist } from '@server/types/models/index.js'
+import { MChannelHostOnly, MUserDefault, MVideo, MVideoPlaylist } from '@server/types/models/index.js'
 
 export async function getVideosForFeeds (options: {
   sort: string
@@ -97,5 +97,16 @@ export function getPodcastPlaylistFeedUrlCustomTag (playlist: Pick<MVideoPlaylis
     },
     // TODO: use remote channel podcast feed URL
     value: getPlaylistPodcastFeed(WEBSERVER.URL, playlist)
+  }
+}
+
+// https://podcasting2.org/docs/podcast-namespace/tags/chapters
+export function getPodcastVideoChaptersCustomTag (video: Pick<MVideo, 'uuid'>) {
+  return {
+    name: 'podcast:chapters',
+    attributes: {
+      url: `${WEBSERVER.URL}/feeds/podcast/video-chapters.json?videoId=${video.uuid}`,
+      type: 'application/json+chapters'
+    }
   }
 }

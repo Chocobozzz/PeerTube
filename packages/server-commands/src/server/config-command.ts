@@ -609,6 +609,7 @@ export class ConfigCommand extends AbstractCommand {
   updateCustomConfig (
     options: OverrideCommandOptions & {
       newCustomConfig: CustomConfig
+      currentPassword?: string
     }
   ) {
     const path = '/api/v1/config/custom'
@@ -617,7 +618,7 @@ export class ConfigCommand extends AbstractCommand {
       ...options,
 
       path,
-      fields: options.newCustomConfig,
+      fields: { ...options.newCustomConfig, currentPassword: this.buildCurrentPassword(options) },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -638,6 +639,7 @@ export class ConfigCommand extends AbstractCommand {
   async updateExistingConfig (
     options: OverrideCommandOptions & {
       newConfig: DeepPartial<CustomConfig>
+      currentPassword?: string
     }
   ) {
     const existing = await this.getCustomConfig({ ...options, expectedStatus: HttpStatusCode.OK_200 })

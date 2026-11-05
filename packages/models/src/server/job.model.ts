@@ -31,6 +31,7 @@ export type JobType =
   | 'video-file-import'
   | 'video-files-lifecycle'
   | 'video-import'
+  | 'video-duplicate'
   | 'video-live-ending'
   | 'video-redundancy'
   | 'video-studio-edition'
@@ -335,6 +336,26 @@ export interface VideoStudioEditionPayload {
 
   // Task files are staged in object storage: their `file` option is a staging key instead of a local path
   taskFilesStaged?: boolean
+
+  isDuplicate?: boolean
+}
+
+export interface VideoDuplicatePayload {
+  videoUUID: string
+  sourceVideoUUID: string
+
+  // 'max-quality': the max quality files are copied as web video files, without torrent nor original file
+  // 'all': all the files are copied
+  filesToCopy: 'max-quality' | 'all'
+
+  // Additional job after duplication
+  studio?: {
+    tasks: VideoStudioTaskPayload[]
+    taskFilesStaged: boolean
+
+    // The studio tasks were validated against these files
+    sourceFilenames: string[]
+  }
 }
 
 // ---------------------------------------------------------------------------

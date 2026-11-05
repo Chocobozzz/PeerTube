@@ -3,6 +3,7 @@ import { HttpStatusCode, VideoFileStream, VideoInclude, VideoIncludeType } from 
 import { createLogger } from '@server/helpers/logger.js'
 import { mdToUnescapedPlainText } from '@server/helpers/markdown.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { MVideoSitemap } from '@server/types/models/index.js'
@@ -87,7 +88,7 @@ async function getSitemapIndex (req: express.Request, res: express.Response) {
   return sendSitemapStream(res, sitemapIndexStream, items)
 }
 
-function getPagesSitemap (req: express.Request, res: express.Response) {
+async function getPagesSitemap (req: express.Request, res: express.Response) {
   const paths = [
     '/',
     '/about/instance/home',
@@ -98,7 +99,12 @@ function getPagesSitemap (req: express.Request, res: express.Response) {
     paths.push('/home')
   }
 
-  return sendSitemapPage(res, paths.map(p => ({ url: WEBSERVER.URL + p })))
+  const urls = await Hooks.wrapObject(
+    paths.map(p => ({ url: WEBSERVER.URL + p })),
+    'filter:sitemap.pages.list.result'
+  )
+
+  return sendSitemapPage(res, urls)
 }
 
 async function getVideosSitemap (req: express.Request, res: express.Response) {

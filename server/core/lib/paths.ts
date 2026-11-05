@@ -17,12 +17,12 @@ import { isVideoInPrivateDirectory } from './video-privacy.js'
 
 // ################## Video file name ##################
 
-export function generateWebVideoFilename (resolution: number, extname: string) {
-  return buildUUID() + '-' + resolution + extname
+export function generateWebVideoFilename (resolution: number, extname: string, uuid = buildUUID()) {
+  return uuid + '-' + resolution + extname
 }
 
-export function generateHLSVideoFilename (resolution: number) {
-  return `${buildUUID()}-${resolution}-fragmented.mp4`
+export function generateHLSVideoFilename (resolution: number, uuid = buildUUID()) {
+  return `${uuid}-${resolution}-fragmented.mp4`
 }
 
 // ################## Streaming playlist ##################

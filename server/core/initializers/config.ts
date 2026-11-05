@@ -413,6 +413,11 @@ export const CONFIG = buildConfig({
       WINDOW_MS: staticKey('rates_limit.login_lockout.window', { transform: parseDurationToMs }),
       MAX: staticKey<number>('rates_limit.login_lockout.max'),
       MAX_PER_IP: staticKey<number>('rates_limit.login_lockout.max_per_ip')
+    },
+    PASSWORD_CONFIRMATION: {
+      ENABLED: staticKey<boolean>('rates_limit.password_confirmation.enabled'),
+      WINDOW_MS: staticKey('rates_limit.password_confirmation.window', { transform: parseDurationToMs }),
+      MAX: staticKey<number>('rates_limit.password_confirmation.max')
     }
   },
   TRUST_PROXY: staticKey<string[]>('trust_proxy'),
@@ -453,8 +458,8 @@ export const CONFIG = buildConfig({
     TRACING: {
       ENABLED: staticKey<boolean>('open_telemetry.tracing.enabled'),
 
-      JAEGER_EXPORTER: {
-        ENDPOINT: staticKey<string>('open_telemetry.tracing.jaeger_exporter.endpoint')
+      OTLP_EXPORTER: {
+        ENDPOINT: staticKey<string>('open_telemetry.tracing.otlp_exporter.endpoint')
       }
     }
   },
@@ -557,6 +562,9 @@ export const CONFIG = buildConfig({
       EDITION: {
         ALLOWED: staticKey<boolean>('webadmin.configuration.edition.allowed')
       }
+    },
+    PASSWORD_CONFIRMATION: {
+      ENABLED: staticKey<boolean>('webadmin.password_confirmation.enabled')
     }
   },
   FEEDS: {
@@ -706,15 +714,17 @@ export const CONFIG = buildConfig({
     RTMP: {
       ENABLED: dynamicKey<boolean>('live.rtmp.enabled'),
       PORT: dynamicKey<number>('live.rtmp.port'),
-      HOSTNAME: dynamicKey<number>('live.rtmp.hostname'),
-      PUBLIC_HOSTNAME: dynamicKey<number>('live.rtmp.public_hostname')
+      HOSTNAME: dynamicKey<string>('live.rtmp.hostname'),
+      PUBLIC_HOSTNAME: dynamicKey<string>('live.rtmp.public_hostname'),
+      PING: staticKey('live.rtmp.ping', { transform: parseDurationToSeconds }),
+      PING_TIMEOUT: staticKey('live.rtmp.ping_timeout', { transform: parseDurationToSeconds })
     },
 
     RTMPS: {
       ENABLED: dynamicKey<boolean>('live.rtmps.enabled'),
       PORT: dynamicKey<number>('live.rtmps.port'),
-      HOSTNAME: dynamicKey<number>('live.rtmps.hostname'),
-      PUBLIC_HOSTNAME: dynamicKey<number>('live.rtmps.public_hostname'),
+      HOSTNAME: dynamicKey<string>('live.rtmps.hostname'),
+      PUBLIC_HOSTNAME: dynamicKey<string>('live.rtmps.public_hostname'),
       KEY_FILE: dynamicKey<string>('live.rtmps.key_file'),
       CERT_FILE: dynamicKey<string>('live.rtmps.cert_file')
     },
@@ -1013,6 +1023,12 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
       minViews: obj.min_views
     })
   })
+}
+
+function parseDurationToSeconds (value: number | string) {
+  if (typeof value === 'number' || !isNaN(+value)) return +value
+
+  return parseDurationToMs(value) / 1000
 }
 
 function buildObjectStorageSectionWithBaseUrl (name: string) {

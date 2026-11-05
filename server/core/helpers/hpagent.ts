@@ -2,7 +2,7 @@
 
 import http from 'http'
 import https from 'https'
-import { Socket, TcpNetConnectOpts } from 'net'
+import { Duplex } from 'stream'
 import { URL } from 'url'
 
 type Options = {
@@ -30,7 +30,7 @@ export class HttpProxyAgent extends http.Agent {
       : proxy
   }
 
-  createConnection (options: TcpNetConnectOpts, callback?: (err: Error, socket: Socket) => void) {
+  createConnection (options: http.ClientRequestArgs, callback?: (err: Error, socket: Duplex) => void): undefined {
     const requestOptions = {
       method: 'CONNECT',
       host: this.proxy.hostname,
@@ -96,7 +96,7 @@ export class HttpsProxyAgent extends https.Agent {
       : proxy
   }
 
-  createConnection (options: TcpNetConnectOpts, callback?: (err: Error, socket: Socket) => void) {
+  createConnection (options: https.RequestOptions, callback?: (err: Error, socket: Duplex) => void): undefined {
     const requestOptions = {
       method: 'CONNECT',
       host: this.proxy.hostname,

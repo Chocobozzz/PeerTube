@@ -41,6 +41,7 @@ import { blacklistRouter } from './blacklist.js'
 import { videoCaptionsRouter } from './captions.js'
 import { videoChaptersRouter } from './chapters.js'
 import { videoCommentRouter } from './comment.js'
+import { duplicateRouter } from './duplicate.js'
 import { videoEmbedPrivacyRouter } from './embed-privacy.js'
 import { filesRouter } from './files.js'
 import { videoImportsRouter } from './import.js'
@@ -69,6 +70,7 @@ videosRouter.use('/', statsRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
 videosRouter.use('/', studioRouter)
+videosRouter.use('/', duplicateRouter)
 videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)

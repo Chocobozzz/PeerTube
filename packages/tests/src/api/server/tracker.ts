@@ -14,7 +14,7 @@ describe('Test tracker', function () {
   let server: PeerTubeServer
   let badMagnet: string
   let goodMagnet: string
-  let webtorrent: WebTorrent.Instance
+  let webtorrent: WebTorrent
 
   before(async function () {
     this.timeout(60000)

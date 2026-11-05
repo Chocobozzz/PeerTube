@@ -5,6 +5,7 @@ import { basename, join } from 'path'
 import { getHLSDirectory } from '../paths.js'
 import { VideoPathManager } from '../video-path-manager.js'
 import {
+  copyObjectOrFallback,
   copyObjectToCommonFile,
   getCommonFileReadStreamWithRes,
   makeCommonFileAvailableIn,
@@ -52,6 +53,27 @@ export function storeHLSFileFromPath (video: MVideoPrivacy, path: string, filena
     bucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
     isPrivate: video.hasPrivateStaticPath(),
     contentType: getObjectStorageContentType(filename)
+  })
+}
+
+export function copyHLSFile (options: {
+  sourceVideo: MVideoUUID
+  sourceFilename: string
+  sourceSize?: number
+
+  video: MVideoPrivacy
+  filename: string
+}) {
+  const { sourceVideo, sourceFilename, sourceSize, video, filename } = options
+
+  return copyObjectOrFallback({
+    sourceKey: generateHLSObjectStorageKey(sourceVideo, sourceFilename),
+    sourceBucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    sourceSize,
+
+    destinationKey: generateHLSObjectStorageKey(video, filename),
+    destinationBucketInfo: CONFIG.OBJECT_STORAGE.STREAMING_PLAYLISTS,
+    isPrivate: video.hasPrivateStaticPath()
   })
 }
 

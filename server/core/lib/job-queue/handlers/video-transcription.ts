@@ -1,5 +1,5 @@
 import { VideoTranscriptionPayload } from '@peertube/peertube-models'
-import { generateSubtitle } from '@server/lib/video-captions.js'
+import { runTranscription } from '@server/lib/transcription/video-transcription.js'
 import { Job } from 'bullmq'
 import { createLogger } from '../../../helpers/logger.js'
 import { VideoModel } from '../../../models/video/video.js'
@@ -22,7 +22,7 @@ export async function processVideoTranscription (job: Job, abortSignal?: AbortSi
         return
       }
 
-      return generateSubtitle({ video, signal: abortSignal })
+      return runTranscription({ video, signal: abortSignal })
     })
   }
 

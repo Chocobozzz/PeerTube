@@ -30,7 +30,7 @@
           class="by"
           [internalLink]="ownerRouterLink" [href]="ownerHref" [target]="ownerTarget" inheritParentStyle="true"
           >
-          {{ playlist().videoChannelBy }}
+          {{ playlist().videoChannelBy | displayHandle }}
         </my-link>
       }
 

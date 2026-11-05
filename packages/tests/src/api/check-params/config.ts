@@ -268,6 +268,56 @@ describe('Test config API validators', function () {
       })
     })
 
+    describe('Custom JavaScript and CSS', function () {
+      const customizationsToTest: object[] = [
+        { instance: { customizations: { javascript: 'alert("coucou")' } } },
+        { instance: { customizations: { css: 'body { color: red; }' } } },
+
+        // Keys merged into javascript/css by the snake_case conversion
+        { instance: { customizations: { Javascript: 'alert("coucou")' } } },
+        { instance: { customizations: { CSS: 'body { color: red; }' } } },
+        { instance: { Customizations: { javascript: 'alert("coucou")', css: '' } } }
+      ]
+
+      it('Should fail to update the custom JavaScript or CSS without the current password', async function () {
+        for (const toMerge of customizationsToTest) {
+          await makePutBodyRequest({
+            url: server.url,
+            path,
+            fields: merge({}, updateParams, toMerge),
+            token: server.accessToken,
+            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+          })
+        }
+      })
+
+      it('Should fail to update the custom JavaScript or CSS with an invalid current password', async function () {
+        for (const toMerge of customizationsToTest) {
+          await makePutBodyRequest({
+            url: server.url,
+            path,
+            fields: { ...merge({}, updateParams, toMerge), currentPassword: 'bad password' },
+            token: server.accessToken,
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
+          })
+        }
+      })
+
+      it('Should succeed to update the custom JavaScript or CSS with the current password', async function () {
+        for (const toMerge of customizationsToTest) {
+          for (const fields of [ merge({}, updateParams, toMerge), updateParams ]) {
+            await makePutBodyRequest({
+              url: server.url,
+              path,
+              fields: { ...fields, currentPassword: server.store.user.password },
+              token: server.accessToken,
+              expectedStatus: HttpStatusCode.OK_200
+            })
+          }
+        }
+      })
+    })
+
     describe('Browse videos section', function () {
       it('Should fail with an invalid default sort', async function () {
         const newUpdateParams: CustomConfig = merge({}, {}, updateParams, {

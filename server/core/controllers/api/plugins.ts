@@ -105,7 +105,7 @@ pluginRouter.post(
   primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
-  installOrUpdatePluginValidator,
+  asyncMiddleware(installOrUpdatePluginValidator),
   asyncMiddleware(installPlugin)
 )
 
@@ -115,7 +115,7 @@ pluginRouter.post(
   primaryOnly,
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
-  installOrUpdatePluginValidator,
+  asyncMiddleware(installOrUpdatePluginValidator),
   asyncMiddleware(updatePlugin)
 )
 

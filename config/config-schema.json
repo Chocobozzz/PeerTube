@@ -358,6 +358,26 @@
             }
           },
           "additionalProperties": false
+        },
+        "password_confirmation": {
+          "description": "Failed password confirmations of sensitive actions",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "window": {
+              "description": "10 failures in 10 minutes",
+              "type": "string",
+              "default": "10 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -1261,11 +1281,12 @@
               "type": "boolean",
               "default": false
             },
-            "jaeger_exporter": {
-              "description": "Send traces to a Jaeger compatible endpoint",
+            "otlp_exporter": {
+              "description": "Send traces to an OpenTelemetry (OTLP over HTTP) compatible endpoint, like Jaeger",
               "type": "object",
               "properties": {
                 "endpoint": {
+                  "description": "For example 'http://127.0.0.1:4318/v1/traces'. If empty, use OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable or 'http://localhost:4318/v1/traces'",
                   "type": "string",
                   "default": ""
                 }
@@ -1667,6 +1688,17 @@
                 }
               },
               "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "password_confirmation": {
+          "description": "Ask administrators to type their password again before sensitive actions in the web interface or REST API",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
             }
           },
           "additionalProperties": false
@@ -2275,6 +2307,16 @@
                 "string"
               ],
               "default": null
+            },
+            "ping": {
+              "description": "Interval between keepalive pings sent to the publisher (minimum 1 second) Also applies to RTMPS connections",
+              "type": "string",
+              "default": "1 minute"
+            },
+            "ping_timeout": {
+              "description": "Time without activity after which a connection is considered dead (minimum 5 seconds) Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...) Too low values may cut lives on network hiccups Also applies to RTMPS connections",
+              "type": "string",
+              "default": "30 seconds"
             }
           },
           "additionalProperties": false

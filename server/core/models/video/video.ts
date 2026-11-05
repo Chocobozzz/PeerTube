@@ -2488,7 +2488,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     this.state = newState
 
-    if (this.state === VideoState.PUBLISHED && !this.firstPublishedAt) {
+    // A private video is published for the first time when its privacy changes (see LocalVideoUpdater)
+    if (this.state === VideoState.PUBLISHED && !this.firstPublishedAt && this.privacy !== VideoPrivacy.PRIVATE) {
       if (!keepPublishedAt) this.publishedAt = new Date()
 
       this.firstPublishedAt = this.publishedAt

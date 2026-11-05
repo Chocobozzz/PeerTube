@@ -92,6 +92,32 @@ describe('Test id and pass auth plugins', function () {
     }
   })
 
+  it('Should login with a password longer than the bcrypt limit', async function () {
+    // The plugin validates the password itself, so it never reaches bcrypt and the
+    // 72 bytes bcrypt limit does not apply to it
+    const longPassword = 'lagoon ' + 'password'.repeat(20)
+
+    const accessToken = await server.login.getAccessToken({ username: 'lagoon', password: longPassword })
+
+    const body = await server.users.getMyInfo({ token: accessToken })
+    expect(body.username).to.equal('lagoon')
+  })
+
+  it('Should refuse a too long password on a local account', async function () {
+    // Local passwords are compared with bcrypt, that cannot handle more than 72 bytes
+    const longPassword = 'super'.repeat(61)
+
+    for (const username of [ 'root', 'unknown_user' ]) {
+      const { res } = await server.login.loginAndGetResponse({
+        user: { username, password: longPassword },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      // Same response for an unknown account: do not reveal if the account exists
+      expect(res.body.code, username).to.equal('too_long_password')
+    }
+  })
+
   it('Should refresh crash token, but not laguna token', async function () {
     {
       const resRefresh = await server.login.refreshToken({ refreshToken: crashRefreshToken })

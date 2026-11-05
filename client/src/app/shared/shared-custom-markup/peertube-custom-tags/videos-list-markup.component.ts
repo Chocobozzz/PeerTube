@@ -1,7 +1,9 @@
 import { NgStyle } from '@angular/common'
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, output } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, inject, input, output } from '@angular/core'
+import { Router } from '@angular/router'
 import { Notifier, ServerService, User, UserService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
+import { LinkComponent } from '@app/shared/shared-main/common/link.component'
 import { VideoListParams, VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoPlaylistService } from '@app/shared/shared-video-playlist/video-playlist.service'
 import { objectKeysTyped } from '@peertube/peertube-core-utils'
@@ -20,7 +22,7 @@ import { CustomMarkupComponent } from './shared'
   templateUrl: 'videos-list-markup.component.html',
   styleUrls: [ 'videos-list-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ NgStyle, VideoMiniatureComponent ]
+  imports: [ NgStyle, VideoMiniatureComponent, LinkComponent ]
 })
 export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit {
   private videoService = inject(VideoService)
@@ -28,6 +30,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   private notifier = inject(Notifier)
   private userService = inject(UserService)
   private serverService = inject(ServerService)
+  private router = inject(Router)
   private cd = inject(ChangeDetectorRef)
 
   readonly sort = input<string>(undefined)
@@ -42,8 +45,14 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   readonly accountHandle = input<string>(undefined)
   readonly playlistId = input<string>(undefined)
   readonly host = input<string>(undefined)
+  readonly moreHref = input<string>(undefined)
+  readonly morePath = input<string>(undefined)
+  readonly moreLabel = input<string>(undefined)
 
   readonly loaded = output<boolean>()
+
+  // Parse the path so the router keeps its query params and fragment
+  readonly morePathUrlTree = computed(() => this.morePath() ? this.router.parseUrl(this.morePath()) : undefined)
 
   videos: Video[]
   user: User
@@ -54,6 +63,10 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
     by: true,
     avatar: true,
     privacyLabel: false
+  }
+
+  getMoreLabel () {
+    return this.moreLabel() || $localize`More videos`
   }
 
   limitRowsStyle () {

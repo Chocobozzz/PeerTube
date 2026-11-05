@@ -2,6 +2,7 @@ import { NgClass, NgTemplateOutlet } from '@angular/common'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Component, DestroyRef, OnChanges, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { AuthService, Notifier, RedirectService } from '@app/core'
+import { getDisplayHandle } from '@app/helpers'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { FeedFormat, FeedType } from '@peertube/peertube-models'
 import { concat, forkJoin, merge } from 'rxjs'
@@ -184,8 +185,8 @@ export class SubscribeButtonComponent implements OnChanges {
           const account = this.account()
           this.notifier.success(
             account
-              ? $localize`Unsubscribed from all channels of ${account.nameWithHost}`
-              : $localize`Unsubscribed from ${this.videoChannels()[0].nameWithHost}`,
+              ? $localize`Unsubscribed from all channels of ${getDisplayHandle(account.nameWithHost)}`
+              : $localize`Unsubscribed from ${getDisplayHandle(this.videoChannels()[0].nameWithHost)}`,
             $localize`Unsubscribed`
           )
         },

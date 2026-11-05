@@ -29,6 +29,8 @@ import { AbuseDetailsComponent } from './abuse-details.component'
 import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { ProcessedAbuse } from './processed-abuse.model'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
+import { DisplayHostPipe } from '@app/shared/shared-main/common/display-host.pipe'
 
 const debugLogger = debug('peertube:moderation:AbuseListTableComponent')
 
@@ -51,7 +53,9 @@ type DataLoaderParameter = Parameters<AbuseListTableComponent['_dataLoader']>[0]
     PTDatePipe,
     TableComponent,
     NumberFormatterPipe,
-    AccountBlockBadgesComponent
+    AccountBlockBadgesComponent,
+    DisplayHandlePipe,
+    DisplayHostPipe
   ]
 })
 export class AbuseListTableComponent implements OnInit, OnDestroy {

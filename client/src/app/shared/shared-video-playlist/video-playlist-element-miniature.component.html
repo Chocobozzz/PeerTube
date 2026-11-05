@@ -53,13 +53,13 @@
         @if (accountLink()) {
           <a tabindex="-1" class="video-info-owner" [routerLink]="[ '/c', playlistElement().video.byVideoChannel ]">
             @if (getVideoOwnerDisplayType(playlistElement()) === 'account') {
-              {{ playlistElement().video.byAccount }}
+              {{ playlistElement().video.byAccount | displayHandle }}
             } @else if (getVideoOwnerDisplayType(playlistElement()) === 'videoChannel') {
-              {{ playlistElement().video.byVideoChannel }}
+              {{ playlistElement().video.byVideoChannel | displayHandle }}
             }
           </a>
         } @else {
-          <span tabindex="-1" class="video-info-owner">{{ playlistElement().video.byAccount }}</span>
+          <span tabindex="-1" class="video-info-owner">{{ playlistElement().video.byAccount | displayHandle }}</span>
         }
 
         <span tabindex="-1" class="video-info-timestamp">{{ formatTimestamp(playlistElement()) }}</span>

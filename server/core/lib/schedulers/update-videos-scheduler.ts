@@ -52,7 +52,17 @@ export class UpdateVideosScheduler extends AbstractScheduler {
     let published = false
 
     let video = await VideoModel.loadFull(schedule.videoId)
-    if (video.state === VideoState.TO_TRANSCODE) return { video, published: false }
+    // Wait for the end of the processing of the video
+    if (video.state === VideoState.TO_TRANSCODE || video.state === VideoState.TO_EDIT || video.state === VideoState.TO_DUPLICATE) {
+      return { video, published: false }
+    }
+
+    if (video.state === VideoState.TO_DUPLICATE_FAILED || video.state === VideoState.TO_EDIT_FAILED) {
+      logger.info('Remove scheduled update of video whose creation failed ' + video.uuid)
+
+      await schedule.destroy()
+      return { video, published: false }
+    }
 
     logger.info('Executing scheduled video update on ' + video.uuid)
 

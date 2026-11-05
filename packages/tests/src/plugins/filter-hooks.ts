@@ -713,6 +713,18 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Sitemap filters', function () {
+    it('Should run filter:sitemap.pages.list.result', async function () {
+      const res = await makeGetRequest({ url: servers[0].url, path: '/sitemaps/pages.xml', expectedStatus: HttpStatusCode.OK_200 })
+
+      expect(res.text).to.contain(`<loc>${servers[0].url}/about/instance/home</loc>`)
+      expect(res.text).to.not.contain(`<loc>${servers[0].url}/videos/browse</loc>`)
+      expect(res.text).to.contain(
+        `<loc>${servers[0].url}/plugins/test/router/sitemap-page</loc><lastmod>2026-01-01T00:00:00.000Z</lastmod>`
+      )
+    })
+  })
+
   describe('Search filters', function () {
     before(async function () {
       await servers[0].config.updateExistingConfig({
@@ -869,6 +881,30 @@ describe('Test plugin filter hooks', function () {
       for (const video of data) {
         expectEndWith(video.description, ' - filter:api.video.user-import.video-attribute.result')
       }
+    })
+
+    it('Should run filter:api.video.duplicate.video-attribute.result', async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.enableMinimumTranscoding()
+      await servers[0].config.enableStudio()
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      await servers[0].videos.update({ id: uuid, attributes: { description: 'duplicate' } })
+
+      const { video } = await servers[0].videoStudio.createEditionTasks({
+        videoId: uuid,
+        tasks: [ { name: 'cut', options: { start: 1 } } ],
+        saveAsNewVideo: true
+      })
+
+      const duplicate = await servers[0].videos.getWithToken({ id: video.uuid })
+      expect(duplicate.description).to.equal('duplicate - filter:api.video.duplicate.video-attribute.result')
+
+      await waitJobs(servers)
+      await servers[0].config.disableTranscoding()
     })
   })
 

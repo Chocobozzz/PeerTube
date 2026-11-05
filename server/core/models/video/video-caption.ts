@@ -269,8 +269,8 @@ export class VideoCaptionModel extends SequelizeModel<VideoCaptionModel> {
     return VIDEO_TEXT_LANGUAGES[language] || 'Unknown'
   }
 
-  static generateCaptionName (language: string) {
-    return `${buildUUID()}-${language}.vtt`
+  static generateCaptionName (language: string, uuid = buildUUID()) {
+    return `${uuid}-${language}.vtt`
   }
 
   static generateM3U8Filename (vttFilename: string) {

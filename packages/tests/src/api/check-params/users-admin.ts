@@ -305,6 +305,42 @@ describe('Test users admin API validators', function () {
       })
     })
 
+    it('Should fail to create an admin without the current password', async function () {
+      const fields = { ...baseCorrectParams, username: 'other_admin', email: 'other_admin@example.com', role: UserRole.ADMINISTRATOR }
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail to create an admin with an invalid current password', async function () {
+      const fields = {
+        ...baseCorrectParams,
+        username: 'other_admin',
+        email: 'other_admin@example.com',
+        role: UserRole.ADMINISTRATOR,
+        currentPassword: 'bad password'
+      }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should succeed to create an admin with the current password', async function () {
+      const fields = {
+        ...baseCorrectParams,
+        username: 'other_admin',
+        email: 'other_admin@example.com',
+        role: UserRole.ADMINISTRATOR,
+        currentPassword: server.store.user.password
+      }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, expectedStatus: HttpStatusCode.OK_200 })
+    })
+
     it('Should succeed with the correct params', async function () {
       await makePostBodyRequest({
         url: server.url,
@@ -490,6 +526,26 @@ describe('Test users admin API validators', function () {
         token: moderatorToken,
         fields,
         expectedStatus: HttpStatusCode.NO_CONTENT_204
+      })
+    })
+
+    it('Should fail to give the admin role without the current password', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + userId,
+        token: server.accessToken,
+        fields: { role: UserRole.ADMINISTRATOR },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
+    it('Should fail to give the admin role with an invalid current password', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + userId,
+        token: server.accessToken,
+        fields: { role: UserRole.ADMINISTRATOR, currentPassword: 'bad password' },
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
     })
 

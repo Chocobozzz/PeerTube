@@ -11,6 +11,7 @@ import {
   VideoCommentPolicy,
   VideoCreate,
   VideoCreateResult,
+  VideoDuplicate,
   VideoDetails,
   VideoFileMetadata,
   VideoInclude,
@@ -656,6 +657,25 @@ export class VideosCommand extends AbstractCommand {
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
     })
+  }
+
+  async duplicate (
+    options: OverrideCommandOptions & VideoDuplicate & {
+      id: number | string
+    }
+  ) {
+    const path = '/api/v1/videos/' + options.id + '/duplicate'
+
+    const body = await unwrapBody<{ video: VideoCreateResult }>(this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: pick(options, [ 'name' ]),
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    }))
+
+    return body?.video
   }
 
   runTranscoding (

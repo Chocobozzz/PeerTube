@@ -1,6 +1,6 @@
 import express from 'express'
 import { body, param } from 'express-validator'
-import { isIdOrUUIDValid } from '@server/helpers/custom-validators/misc.js'
+import { isBooleanValid, isIdOrUUIDValid, toBooleanOrNull } from '@server/helpers/custom-validators/misc.js'
 import {
   isStudioCutTaskValid,
   isStudioTaskAddIntroOutroValid,
@@ -14,7 +14,7 @@ import { approximateIntroOutroAdditionalSize, getTaskFileFromReq } from '@server
 import { isAudioFile } from '@peertube/peertube-ffmpeg'
 import { HttpStatusCode, UserRight, VideoStudioCreateEdition, VideoStudioTask } from '@peertube/peertube-models'
 import { areValidationErrors, checkCanManageVideo, checkUserQuota, doesVideoExist } from '../shared/index.js'
-import { checkVideoFileCanBeEdited } from './shared/index.js'
+import { checkVideoCanBeDuplicated, checkVideoFileCanBeEdited } from './shared/index.js'
 
 const videoStudioAddEditionValidator = [
   param('videoId')
@@ -22,6 +22,12 @@ const videoStudioAddEditionValidator = [
 
   body('tasks')
     .custom(isValidStudioTasksArray).withMessage('Should have a valid array of tasks'),
+
+  body('saveAsNewVideo')
+    .optional()
+    // Validate before sanitizing: `toBoolean` turns any non empty string into `true`
+    .custom(isBooleanValid).withMessage('Should have a valid saveAsNewVideo boolean')
+    .customSanitizer(toBooleanOrNull),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (CONFIG.VIDEO_STUDIO.ENABLED !== true) {
@@ -87,8 +93,14 @@ const videoStudioAddEditionValidator = [
       return cleanUpReqFiles(req)
     }
 
+    if (body.saveAsNewVideo === true && !checkVideoCanBeDuplicated({ video, user, req, res })) return cleanUpReqFiles(req)
+
     // Try to make an approximation of bytes added by the intro/outro
-    const additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)
+    let additionalBytes = await approximateIntroOutroAdditionalSize(video, body.tasks, i => getTaskFileFromReq(files, i).path)
+
+    // The source files are kept, so the result is extra usage: use the source size as an upper bound (cuts make it smaller)
+    if (body.saveAsNewVideo === true) additionalBytes += video.getMaxQualityBytes()
+
     const channelUser = { id: res.locals.videoFull.VideoChannel.Account.userId }
     if (await checkUserQuota({ channelUser, uploadSize: additionalBytes, req, res }) === false) return cleanUpReqFiles(req)
 

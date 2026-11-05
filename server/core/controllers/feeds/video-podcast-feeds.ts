@@ -1,7 +1,15 @@
 import { Feed } from '@peertube/feed'
 import { CustomTag, CustomXMLNS, LiveItemStatus } from '@peertube/feed/lib/typings/index.js'
 import { buildDownloadFilesUrl, getResolutionLabel, sortObjectComparator } from '@peertube/peertube-core-utils'
-import { ActorImageType, FeedEnclosurePreference, VideoFile, VideoInclude, VideoResolution, VideoState } from '@peertube/peertube-models'
+import {
+  ActorImageType,
+  FeedEnclosurePreference,
+  PodcastChapters,
+  VideoFile,
+  VideoInclude,
+  VideoResolution,
+  VideoState
+} from '@peertube/peertube-models'
 import { buildUUIDv5FromURL } from '@peertube/peertube-node-utils'
 import { buildNSFWFilters } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -16,12 +24,19 @@ import {
   videoFeedsPodcastSetCacheKey
 } from '@server/middlewares/index.js'
 import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
+import { VideoChapterModel } from '@server/models/video/video-chapter.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { MVideo, MVideoCaptionVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
 import { extname } from 'path'
 import { MIMETYPES, ROUTE_CACHE_LIFETIME, VIDEO_CATEGORIES, WEBSERVER } from '../../initializers/constants.js'
-import { asyncMiddleware, setFeedPodcastContentType, videoFeedsPodcastValidator } from '../../middlewares/index.js'
+import {
+  asyncMiddleware,
+  setFeedPodcastChaptersContentType,
+  setFeedPodcastContentType,
+  videoFeedsPodcastChaptersValidator,
+  videoFeedsPodcastValidator
+} from '../../middlewares/index.js'
 import { VideoCaptionModel } from '../../models/video/video-caption.js'
 import { VideoModel } from '../../models/video/video.js'
 import {
@@ -29,6 +44,7 @@ import {
   getCommonVideoFeedAttributes,
   getPodcastChannelFeedUrlCustomTag,
   getPodcastPlaylistFeedUrlCustomTag,
+  getPodcastVideoChaptersCustomTag,
   getVideosForFeeds,
   initFeed
 } from './shared/index.js'
@@ -43,7 +59,7 @@ const { middleware: podcastCacheRouteMiddleware, instance: podcastApiCache } = c
   headerBlacklist: [ 'Content-Type' ]
 })
 
-for (const event of ([ 'video-created', 'video-updated', 'video-deleted' ] as const)) {
+for (const event of ([ 'video-created', 'video-updated', 'video-deleted', 'chapters-updated' ] as const)) {
   InternalEventEmitter.Instance.on(event, async ({ video }) => {
     podcastApiCache.clearGroupSafe(buildPodcastChannelGroupsCache({ channelId: video.channelId }))
 
@@ -88,6 +104,13 @@ videoPodcastFeedsRouter.get(
   asyncMiddleware(allowReplicaReadsToController(generateVideoPodcastFeed))
 )
 
+videoPodcastFeedsRouter.get(
+  '/podcast/video-chapters.json',
+  setFeedPodcastChaptersContentType,
+  asyncMiddleware(videoFeedsPodcastChaptersValidator),
+  asyncMiddleware(allowReplicaReadsToController(getVideoPodcastChapters))
+)
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -95,6 +118,17 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function getVideoPodcastChapters (req: express.Request, res: express.Response) {
+  const chapters = await VideoChapterModel.listChaptersOfVideo(res.locals.videoWithBlacklist.id)
+
+  const result: PodcastChapters = {
+    version: '1.2.0',
+    chapters: chapters.map(c => c.toPodcastJSON())
+  }
+
+  return res.json(result)
+}
 
 async function generateVideoPodcastFeed (req: express.Request, res: express.Response) {
   const playlist = res.locals.videoPlaylistFull
@@ -263,11 +297,12 @@ async function generatePodcastItem (options: {
   video: VideoModel
   liveItem: boolean
   media: PodcastMedia[]
+  hasChapters?: boolean
 }) {
-  const { video, liveItem, media } = options
+  const { video, liveItem, media, hasChapters = false } = options
 
   const customTags: CustomTag[] = await Hooks.wrapObject(
-    [],
+    hasChapters ? [ getPodcastVideoChaptersCustomTag(video) ] : [],
     'filter:feed.podcast.video.create-custom-tags.result',
     { video, liveItem }
   )
@@ -318,11 +353,13 @@ function getPodcastMedium (enclosurePreference?: FeedEnclosurePreference) {
 }
 
 async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[], enclosurePreference?: FeedEnclosurePreference) {
-  const captionsGroup = await VideoCaptionModel.listCaptionsOfMultipleVideos(videos.map(v => v.id))
+  const videoIds = videos.map(v => v.id)
+  const captionsGroup = await VideoCaptionModel.listCaptionsOfMultipleVideos(videoIds)
+  const videoIdsWithChapters = await VideoChapterModel.listVideoIdsWithChapters(videoIds)
 
   for (const video of videos) {
     if (!video.isLive) {
-      await addVODPodcastItem({ feed, video, captionsGroup, enclosurePreference })
+      await addVODPodcastItem({ feed, video, captionsGroup, enclosurePreference, hasChapters: videoIdsWithChapters.has(video.id) })
     } else if (video.isLive && video.state !== VideoState.LIVE_ENDED) {
       await addLivePodcastItem({ feed, video })
     }
@@ -334,8 +371,9 @@ async function addVODPodcastItem (options: {
   video: VideoModel
   captionsGroup: { [id: number]: MVideoCaptionVideo[] }
   enclosurePreference?: FeedEnclosurePreference
+  hasChapters: boolean
 }) {
-  const { feed, video, captionsGroup, enclosurePreference } = options
+  const { feed, video, captionsGroup, enclosurePreference, hasChapters } = options
 
   const resolutionSortOrder = enclosurePreference === 'video'
     ? 'desc' as const
@@ -360,7 +398,7 @@ async function addVODPodcastItem (options: {
   if (media.length === 0) return
 
   const videoCaptions = buildVODCaptions(captionsGroup[video.id])
-  const item = await generatePodcastItem({ video, liveItem: false, media })
+  const item = await generatePodcastItem({ video, liveItem: false, media, hasChapters })
 
   feed.addPodcastItem({ ...item, subTitle: videoCaptions })
 }

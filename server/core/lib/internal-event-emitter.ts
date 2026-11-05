@@ -1,5 +1,5 @@
 import { TypedEventEmitter } from '@peertube/peertube-node-utils'
-import { MChannel, MVideo, MVideoImmutable, MVideoPlaylist, MVideoPlaylistElement } from '@server/types/models/index.js'
+import { MChannel, MVideo, MVideoPlaylist, MVideoPlaylistElement } from '@server/types/models/index.js'
 
 export interface PeerTubeInternalEvents {
   'video-created': (options: { video: MVideo }) => void
@@ -18,7 +18,7 @@ export interface PeerTubeInternalEvents {
   'playlist-element-updated': (options: { playlistElement: MVideoPlaylistElement }) => void
   'playlist-element-deleted': (options: { playlistElement: MVideoPlaylistElement }) => void
 
-  'chapters-updated': (options: { video: MVideoImmutable }) => void
+  'chapters-updated': (options: { video: MVideo }) => void
 }
 
 class InternalEventEmitter extends TypedEventEmitter<PeerTubeInternalEvents> {

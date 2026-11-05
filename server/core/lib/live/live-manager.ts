@@ -35,8 +35,8 @@ import { Notifier } from '../notifier/notifier.js'
 import { getLiveReplayBaseDirectory } from '../paths.js'
 import { PeerTubeSocket } from '../peertube-socket.js'
 import { Hooks } from '../plugins/hooks.js'
-import { RedisChannels } from '../redis/index.js'
 import type { LiveSessionStopPayload } from '../redis/index.js'
+import { RedisChannels } from '../redis/index.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
 import { isUserQuotaValid } from '../user.js'
 import { LiveQuotaStore } from './live-quota-store.js'
@@ -53,8 +53,8 @@ const config = {
     port: CONFIG.LIVE.RTMP.PORT,
     chunk_size: VIDEO_LIVE.RTMP.CHUNK_SIZE,
     gop_cache: VIDEO_LIVE.RTMP.GOP_CACHE,
-    ping: VIDEO_LIVE.RTMP.PING,
-    ping_timeout: VIDEO_LIVE.RTMP.PING_TIMEOUT
+    ping: CONFIG.LIVE.RTMP.PING,
+    ping_timeout: CONFIG.LIVE.RTMP.PING_TIMEOUT
   }
 }
 
@@ -64,7 +64,7 @@ class LiveManager {
   private readonly muxingSessions = new Map<string, MuxingSession>()
   private readonly videoSessions = new Map<string, string>()
 
-  // Video UUID -> cleanup of its current/last muxing session
+  // Video UUID -> cleanup of its current/last muxing session, or end of the setup of its current session
   // A permanent live can be streamed again before the previous session finished to write its files on disk
   private readonly sessionCleanups = new Map<string, { sessionId: string, cleanup: Promise<void> }>()
 
@@ -89,9 +89,10 @@ class LiveManager {
           return this.abortSession(sessionId)
         }
 
+        // Tag our readers with the publisher they are started for, so they can't read the stream of another publisher
         const session = this.getContext().sessions.get(sessionId)
-        const inputLocalUrl = session.inputOriginLocalUrl + streamPath
-        const inputPublicUrl = session.inputOriginPublicUrl + streamPath
+        const inputLocalUrl = session.inputOriginLocalUrl + streamPath + '?publisher=' + sessionId
+        const inputPublicUrl = session.inputOriginPublicUrl + streamPath + '?publisher=' + sessionId
 
         this.handleSession({ sessionId, inputPublicUrl, inputLocalUrl, streamKey: splittedPath[2] })
           .catch(err => logger.error('Cannot handle session', { err }))
@@ -102,9 +103,44 @@ class LiveManager {
       logger.withContext([ sessionId ], () => {
         logger.info('Live session ended.', { sessionId })
 
+        // The live is still being set up: release its video now, so the publisher can reconnect immediately
+        // The setup will stop by itself
+        if (!this.muxingSessions.has(sessionId)) {
+          for (const [ videoUUID, videoSessionId ] of this.videoSessions) {
+            if (videoSessionId === sessionId) this.videoSessions.delete(videoUUID)
+          }
+        }
+
         // Force session aborting, so we kill ffmpeg even if it still has data to process (slow CPU)
         setTimeout(() => this.abortSession(sessionId), VIDEO_LIVE.ABORT_DELAY_ON_RTMP_DISCONNECT)
       })
+    })
+
+    events.on('prePlay', (sessionId: string, streamPath: string, args: { publisher?: string }) => {
+      const publisherId = this.getContext().publishers.get(streamPath)
+      if (publisherId && args?.publisher === publisherId) return
+
+      logger.withContext([ sessionId ], () => {
+        logger.debug('RTMP player does not target the current publisher of the stream, rejecting it.')
+      })
+
+      this.getContext().sessions.get(sessionId)?.reject()
+    })
+
+    events.on('prePublish', (_sessionId: string, streamPath: string) => {
+      const context = this.getContext()
+
+      for (const playerId of context.idlePlayers) {
+        const player = context.sessions.get(playerId)
+        if (player?.playStreamPath !== streamPath) continue
+
+        logger.withContext([ playerId ], () => {
+          logger.debug('Dropping idle RTMP player of a previous publisher.')
+        })
+
+        context.idlePlayers.delete(playerId)
+        player.stop()
+      }
     })
 
     registerConfigChangedHandler(() => {
@@ -264,6 +300,29 @@ class LiveManager {
     this.sessionCleanups.delete(videoUUID)
   }
 
+  // A video is owned by an RTMP session only while videoSessions points to it
+  // donePublish or stopSessionOfVideo can release it while the live is set up, and a new session can then take it
+  private ownsVideo (videoUUID: string, sessionId: string) {
+    return this.videoSessions.get(videoUUID) === sessionId
+  }
+
+  private releaseSession (videoUUID: string, sessionId: string) {
+    if (this.ownsVideo(videoUUID, sessionId)) this.videoSessions.delete(videoUUID)
+
+    this.abortSession(sessionId)
+  }
+
+  // Check after slow setup steps, so we don't start a live nobody streams to anymore
+  private isSetupCancelled (videoUUID: string, sessionId: string) {
+    if (this.ownsVideo(videoUUID, sessionId)) return false
+
+    logger.info('RTMP session %s of video %s ended before its live started.', sessionId, videoUUID)
+
+    this.abortSession(sessionId)
+
+    return true
+  }
+
   private abortSession (sessionId: string) {
     const session = this.getContext().sessions.get(sessionId)
     if (session) {
@@ -318,6 +377,14 @@ class LiveManager {
 
       this.videoSessions.set(video.uuid, sessionId)
 
+      const previous = this.sessionCleanups.get(video.uuid)
+
+      let endSetupCleanup: () => void
+      const setupCleanup = new Promise<void>(res => {
+        endSetupCleanup = res
+      })
+      this.sessionCleanups.set(video.uuid, { sessionId, cleanup: setupCleanup })
+
       try {
         if (videoLive.saveReplay && await isUserQuotaValid({ channelUserId: user.id, uploadSize: 1000 }) !== true) {
           logger.warn('User quota exceeded. Refusing stream of video %s.', video.uuid)
@@ -328,13 +395,9 @@ class LiveManager {
             logger.error('Cannot save ending session of live with quota exceeded error.', { err })
           }
 
-          this.videoSessions.delete(video.uuid)
-          return this.abortSession(sessionId)
+          return this.releaseSession(video.uuid, sessionId)
         }
 
-        // A previous session of this permanent live may still be writing its last segments on disk
-        // Wait for it, so we don't cleanup/write the same files from two sessions at the same time
-        const previous = this.sessionCleanups.get(video.uuid)
         if (previous) {
           logger.info(
             'Waiting for the previous live session %s of video %s to be cleaned up.',
@@ -365,10 +428,16 @@ class LiveManager {
           await cleanupAndDestroyPermanentLive(video, oldStreamingPlaylist)
         }
       } catch (err) {
-        this.videoSessions.delete(video.uuid)
+        if (this.ownsVideo(video.uuid, sessionId)) this.videoSessions.delete(video.uuid)
 
         throw err
+      } finally {
+        // This session doesn't touch the live files anymore until its muxing session, that registers its own cleanup
+        endSetupCleanup()
+        this.deleteSessionCleanup(video.uuid, sessionId)
       }
+
+      if (this.isSetupCancelled(video.uuid, sessionId)) return
 
       logger.debug('Probing ' + inputLocalUrl)
 
@@ -380,8 +449,7 @@ class LiveManager {
       } catch (err) {
         logger.error('Cannot probe ' + inputLocalUrl, { err })
 
-        this.videoSessions.delete(video.uuid)
-        return this.abortSession(sessionId)
+        return this.releaseSession(video.uuid, sessionId)
       }
 
       const [ { resolution, ratio }, fps, bitrate, hasAudio, hasVideo ] = await Promise.all([
@@ -395,8 +463,7 @@ class LiveManager {
       if (!hasAudio && !hasVideo) {
         logger.warn('Not audio and video streams were found for video %s. Refusing stream %s.', video.uuid, streamKey)
 
-        this.videoSessions.delete(video.uuid)
-        return this.abortSession(sessionId)
+        return this.releaseSession(video.uuid, sessionId)
       }
 
       logger.info(
@@ -421,9 +488,10 @@ class LiveManager {
           streamKey
         )
 
-        this.videoSessions.delete(video.uuid)
-        return this.abortSession(sessionId)
+        return this.releaseSession(video.uuid, sessionId)
       }
+
+      if (this.isSetupCancelled(video.uuid, sessionId)) return
 
       logger.info('Handling live video of original resolution %d.', resolution, { allResolutions })
 
@@ -481,8 +549,14 @@ class LiveManager {
     } catch (err) {
       logger.error('Cannot save starting live session.', { err })
 
-      this.videoSessions.delete(videoUUID)
-      return this.abortSession(sessionId)
+      return this.releaseSession(videoUUID, sessionId)
+    }
+
+    if (this.isSetupCancelled(videoUUID, sessionId)) {
+      await liveSession.destroy()
+        .catch(err => logger.error('Cannot destroy unused live session of video %s.', videoUUID, { err }))
+
+      return
     }
 
     LiveQuotaStore.Instance.addNewLive(user.id, sessionId)
