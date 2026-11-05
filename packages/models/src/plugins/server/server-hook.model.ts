@@ -83,6 +83,8 @@ export const serverFilterHookObject = {
   'filter:api.video.live.video-attribute.result': true,
   // PeerTube >= 6.1
   'filter:api.video.user-import.video-attribute.result': true,
+  // PeerTube >= 9.0
+  'filter:api.video.duplicate.video-attribute.result': true,
 
   // Filter params/result used to list threads of a specific video
   // (used by the video watch page)
@@ -139,6 +141,12 @@ export const serverFilterHookObject = {
   'filter:transcoding.manual.resolutions-to-transcode.result': true,
   'filter:transcoding.auto.resolutions-to-transcode.result': true,
 
+  // Filter the transcriber used to generate the video subtitles (automatic or on demand transcription)
+  // A plugin can return its own transcriber (to use an external or self-hosted ASR service)
+  // Not used when transcription is processed by remote runners
+  // PeerTube >= 9.0
+  'filter:transcription.transcriber.result': true,
+
   'filter:activity-pub.remote-video-comment.create.accept.result': true,
 
   'filter:activity-pub.activity.context.build.result': true,
@@ -178,7 +186,10 @@ export const serverFilterHookObject = {
   'filter:feed.videos.list.result': true,
 
   // Peertube >= 9.0
-  'filter:api.account.get.result': true
+  'filter:api.account.get.result': true,
+
+  // Peertube >= 9.0
+  'filter:sitemap.pages.list.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject
@@ -198,6 +209,9 @@ export const serverActionHookObject = {
   'action:api.video.deleted': true,
   // Fired when a local video is uploaded
   'action:api.video.uploaded': true,
+  // Fired when a local video is duplicated (PeerTube >= 9.0)
+  // The duplicate is created without files: they are copied by a job
+  'action:api.video.duplicated': true,
   // Fired when a local video is viewed
   'action:api.video.viewed': true,
 

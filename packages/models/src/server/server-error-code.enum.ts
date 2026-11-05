@@ -64,7 +64,10 @@ export const ServerErrorCode = {
 
   MAX_USER_VIDEO_QUOTA_EXCEEDED_FOR_USER_EXPORT: 'max_user_video_quota_exceeded_for_user_export',
 
-  CURRENT_PASSWORD_IS_INVALID: 'current_password_is_invalid'
+  CURRENT_PASSWORD_IS_INVALID: 'current_password_is_invalid',
+  CURRENT_PASSWORD_IS_MISSING: 'current_password_is_missing',
+  // The user authenticates with an external auth plugin (OpenID, SAML...) so PeerTube cannot check their password
+  PASSWORD_CONFIRMATION_UNAVAILABLE: 'password_confirmation_unavailable'
 } as const
 
 /**

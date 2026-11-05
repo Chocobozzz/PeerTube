@@ -128,6 +128,66 @@ export async function checkVideoStudioEditionIsFinished (
   await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
 }
 
+export async function checkVideoStudioEditionError (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    checkType: CheckerType
+  }
+) {
+  const { videoName, shortUUID } = options
+  const notificationType = UserNotificationType.MY_VIDEO_STUDIO_EDITION_ERROR
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      checkVideo(notification.video, videoName, shortUUID)
+      checkActor(notification.video.channel)
+    } else {
+      expect(notification).to.satisfy(n => n === undefined || n.type !== notificationType || n.video.name !== videoName)
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text: string = email['text']
+    return text.includes(shortUUID) && text.includes('Edition of your video') && text.includes('has failed')
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
+export async function checkVideoDuplicationError (
+  options: CheckerBaseParams & {
+    videoName: string
+    shortUUID: string
+    checkType: CheckerType
+  }
+) {
+  const { videoName, shortUUID } = options
+  const notificationType = UserNotificationType.MY_VIDEO_DUPLICATION_ERROR
+
+  function notificationChecker (notification: UserNotification, checkType: CheckerType) {
+    if (checkType === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      checkVideo(notification.video, videoName, shortUUID)
+      checkActor(notification.video.channel)
+    } else {
+      expect(notification).to.satisfy(n => n === undefined || n.type !== notificationType || n.video.name !== videoName)
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text: string = email['text']
+    return text.includes(shortUUID) && text.includes('could not be created')
+  }
+
+  await checkNotification({ ...options, notificationChecker, emailNotificationFinder })
+}
+
 export async function checkMyVideoImportIsFinished (
   options: CheckerBaseParams & {
     videoName: string

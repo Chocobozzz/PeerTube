@@ -7,7 +7,7 @@ import { buildNonDuplicatedFederateVideoJob } from './activitypub/videos/federat
 import { buildNonDuplicatedVideoAutomaticTagsJob } from './automatic-tags/automatic-tags.js'
 import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from './job-queue/job-queue.js'
 import { VideoStoryboardJobHandler } from './runners/index.js'
-import { createTranscriptionTaskIfNeeded } from './video-captions.js'
+import { createTranscriptionTaskIfNeeded } from './transcription/video-transcription.js'
 
 export async function buildMoveVideoJob (options: {
   video: MVideoUUID

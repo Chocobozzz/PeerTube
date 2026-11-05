@@ -1,3 +1,5 @@
+import { sliceWithoutSplittingSurrogates } from '@peertube/peertube-core-utils'
+
 /**
  * Truncate a string to `length` characters, ending it with `omission` when it does not fit.
  *
@@ -18,7 +20,7 @@ export function peertubeTruncate (str: string, options: {
   const end = length - omission.length
   if (end < 1) return omission
 
-  let result = str.slice(0, avoidSurrogateSplit(str, end))
+  let result = sliceWithoutSplittingSurrogates(str, end)
 
   // Nothing to move back when the remainder already starts on a separator
   if (separator !== undefined) {
@@ -37,19 +39,6 @@ export function peertubeTruncate (str: string, options: {
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
-
-function avoidSurrogateSplit (str: string, end: number) {
-  // `end` is the length of the truncated string, so its last character is at `end - 1`
-  const last = str.charCodeAt(end - 1)
-  const next = str.charCodeAt(end)
-
-  const isHighSurrogate = last >= 0xD800 && last <= 0xDBFF
-  const isLowSurrogate = next >= 0xDC00 && next <= 0xDFFF
-
-  return isHighSurrogate && isLowSurrogate
-    ? end - 1
-    : end
-}
 
 function startsWithSeparator (rest: string, separator: RegExp) {
   return rest.search(separator) === 0

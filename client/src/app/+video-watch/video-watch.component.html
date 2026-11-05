@@ -77,10 +77,10 @@
                 <div class="video-info-channel-left-links ms-1">
                   @if (!isChannelDisplayNameGeneric()) {
                     <a [routerLink]="[ '/c', video.byVideoChannel ]" i18n-title title="Go to the channel page">{{ video.channel.displayName }}</a>
-                    <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Go to the account page"><span i18n>By {{ video.byAccount }}</span></a>
+                    <a [routerLink]="[ '/a', video.byAccount ]" i18n-title title="Go to the account page"><span i18n>By {{ video.byAccount | displayHandle }}</span></a>
                   } @else {
                     <a [routerLink]="[ '/a', video.byAccount ]" class="single-link" i18n-title title="Account page">
-                      <span i18n>{{ video.byAccount }}</span>
+                      <span i18n>{{ video.byAccount | displayHandle }}</span>
                     </a>
                   }
                 </div>

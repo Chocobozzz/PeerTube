@@ -2,7 +2,7 @@ import { CommonModule, NgTemplateOutlet } from '@angular/common'
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Router, RouterLink } from '@angular/router'
-import { AuthService, Notifier, ScreenService, ServerService } from '@app/core'
+import { AuthService, Notifier, PasswordConfirmationService, ScreenService, ServerService } from '@app/core'
 import { REQUIRED_EMAIL_VALIDATOR } from '@app/shared/form-validators/common-validators'
 import {
   USER_CHANNEL_NAME_VALIDATOR,
@@ -58,6 +58,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   protected auth = inject(AuthService)
   private router = inject(Router)
   private notifier = inject(Notifier)
+  private passwordConfirmation = inject(PasswordConfirmationService)
   private userAdminService = inject(UserAdminService)
 
   error: string
@@ -98,7 +99,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   formValidated () {
     this.error = undefined
 
-    const userCreate: UserCreate = this.form.value
+    const userCreate: UserCreate = { ...this.form.value }
 
     userCreate.adminFlags = this.buildAdminFlags(this.form.value)
 
@@ -106,17 +107,21 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     userCreate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
     userCreate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
-    this.userAdminService.addUser(userCreate)
-      .subscribe({
-        next: () => {
-          this.notifier.success($localize`User ${userCreate.username} created.`)
-          this.router.navigate([ '/admin/overview/users/list' ])
-        },
+    this.passwordConfirmation.runWithPassword({
+      title: $localize`Create an administrator`,
+      message: $localize`Administrators can install plugins, that execute any code on your platform.`,
+      required: parseInt(this.form.value['role'], 10) === UserRole.ADMINISTRATOR,
+      request: currentPassword => this.userAdminService.addUser({ ...userCreate, currentPassword })
+    }).subscribe({
+      next: () => {
+        this.notifier.success($localize`User ${userCreate.username} created.`)
+        this.router.navigate([ '/admin/overview/users/list' ])
+      },
 
-        error: err => {
-          this.error = err.message
-        }
-      })
+      error: err => {
+        this.error = this.passwordConfirmation.buildErrorMessage(err)
+      }
+    })
   }
 
   isCreation () {

@@ -1,4 +1,5 @@
 import { AuthUser } from '@app/core'
+import { getDisplayHost } from '@app/helpers'
 import { Actor } from '@app/shared/shared-main/account/actor.model'
 import {
   ChangeOwnershipState,
@@ -111,8 +112,8 @@ export class UserNotification {
         case UserNotificationType.NEW_INSTANCE_FOLLOWER: {
           const follower = payload.actorFollow.follower
           this.followerHandle = follower.name === 'peertube'
-            ? follower.host
-            : `${follower.name} @ ${follower.host}`
+            ? getDisplayHost(follower.host)
+            : `${follower.name} @ ${getDisplayHost(follower.host)}`
 
           this.url = '/admin/settings/follows/followers-list'
           break
@@ -122,8 +123,8 @@ export class UserNotification {
           const following = payload.actorFollow.following
 
           this.followingHandle = following.name === 'peertube'
-            ? following.host
-            : `${following.name} @ ${following.host}`
+            ? getDisplayHost(following.host)
+            : `${following.name} @ ${getDisplayHost(following.host)}`
 
           this.url = '/admin/settings/follows/following-list'
 
@@ -144,6 +145,8 @@ export class UserNotification {
           break
 
         case UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED:
+        case UserNotificationType.MY_VIDEO_STUDIO_EDITION_ERROR:
+        case UserNotificationType.MY_VIDEO_DUPLICATION_ERROR:
           this.url = this.buildVideoUrl(payload.video)
           break
 

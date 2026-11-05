@@ -1,5 +1,5 @@
 import { sortBy, uniqify, uuidRegex } from '@peertube/peertube-core-utils'
-import { ffprobePromise, getVideoStreamDimensionsInfo } from '@peertube/peertube-ffmpeg'
+import { ffprobePromise, getVideoStreamDimensionsInfo, hasAudioStream } from '@peertube/peertube-ffmpeg'
 import { FileStorage, VideoResolution } from '@peertube/peertube-models'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { ApplicationModel } from '@server/models/application/application.js'
@@ -7,6 +7,7 @@ import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import {
   MStreamingPlaylist,
   MStreamingPlaylistFilesVideo,
+  MStreamingPlaylistVideo,
   MVideo,
   MVideoCaption,
   MVideoFileStreamingPlaylistVideo
@@ -77,17 +78,49 @@ export type LocalHLSFiles = {
 
 export async function updateM3U8AndShaPlaylistUnderLock (video: MVideo, playlist: MStreamingPlaylist, localFiles: LocalHLSFiles = {}) {
   try {
-    let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist, localFiles)
-    playlistWithFiles = await updateSha256VODSegments(video, playlist, localFiles)
-
-    // Refresh playlist, operations can take some time
-    playlistWithFiles = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlist.id)
-    await playlistWithFiles.buildAndSetInfoHashes(video, playlistWithFiles.VideoFiles)
-    await playlistWithFiles.save()
-
-    video.setHLSPlaylist(playlistWithFiles)
+    await updateM3U8AndShaPlaylistUnderLockOrThrow(video, playlist, localFiles)
   } catch (err) {
     logger.warn('Cannot update playlist after file change. Maybe due to concurrent transcoding', { err })
+  }
+}
+
+export async function updateM3U8AndShaPlaylistUnderLockOrThrow (
+  video: MVideo,
+  playlist: MStreamingPlaylist,
+  localFiles: LocalHLSFiles = {}
+) {
+  let playlistWithFiles = await updateMasterHLSPlaylist(video, playlist, localFiles)
+  playlistWithFiles = await updateSha256VODSegments(video, playlist, localFiles)
+
+  // Refresh playlist, operations can take some time
+  playlistWithFiles = await VideoStreamingPlaylistModel.loadWithVideoAndFiles(playlist.id)
+  await playlistWithFiles.buildAndSetInfoHashes(video, playlistWithFiles.VideoFiles)
+  await playlistWithFiles.save()
+
+  video.setHLSPlaylist(playlistWithFiles)
+}
+
+export async function copySha256Segments (options: {
+  sourcePlaylist: MStreamingPlaylistVideo
+  playlist: MStreamingPlaylist
+  video: MVideo
+
+  // Source filename -> filename of the copy
+  filenames: Map<string, string>
+}) {
+  const { sourcePlaylist, playlist, video, filenames } = options
+
+  const sourceJSON = await readPreviousSha256Segments(sourcePlaylist)
+
+  const json: SegmentsSha256 = {}
+  for (const [ sourceFilename, filename ] of filenames) {
+    if (sourceJSON[sourceFilename]) json[filename] = sourceJSON[sourceFilename]
+  }
+
+  if (playlist.storage === FileStorage.OBJECT_STORAGE) {
+    await storeHLSFileFromContent({ video, pathOrFilename: playlist.segmentsSha256Filename, content: JSON.stringify(json) })
+  } else {
+    await outputJSON(VideoPathManager.Instance.getFSHLSOutputPath(video, playlist.segmentsSha256Filename), json)
   }
 }
 
@@ -144,12 +177,17 @@ function updateMasterHLSPlaylist (
         let line = `#EXT-X-STREAM-INF:${bandwidth}${resolution}`
         if (file.fps) line += ',FRAME-RATE=' + file.fps
 
-        const codecs = await Promise.all([
+        const [ videoCodec, audioCodec, hasAudio ] = await Promise.all([
           getVideoStreamCodec(path, probe),
-          separatedAudioCodec || getAudioStreamCodec(path, probe)
+          separatedAudioCodec || getAudioStreamCodec(path, probe),
+          splitAudioAndVideo || hasAudioStream(path, probe)
         ])
 
-        line += `,CODECS="${codecs.filter(c => !!c).join(',')}"`
+        // Omit CODECS it if one of the codec is unknown to not break players
+        const codecs = [ videoCodec, audioCodec ].filter(c => !!c)
+        if (codecs.length !== 0 && (audioCodec || !hasAudio)) {
+          line += `,CODECS="${codecs.join(',')}"`
+        }
 
         if (splitAudioAndVideo) line += `,AUDIO="audio"`
         if (extMediaSubtitle.length !== 0) line += `,SUBTITLES="subtitles"`
@@ -258,7 +296,7 @@ function updateSha256VODSegments (
 
 type SegmentsSha256 = { [filename: string]: { [range: string]: string } }
 
-async function readPreviousSha256Segments (playlist: MStreamingPlaylistFilesVideo): Promise<SegmentsSha256> {
+async function readPreviousSha256Segments (playlist: MStreamingPlaylistVideo): Promise<SegmentsSha256> {
   if (!playlist.segmentsSha256Filename) return {}
 
   try {

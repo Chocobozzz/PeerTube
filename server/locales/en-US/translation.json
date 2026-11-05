@@ -31,6 +31,7 @@
   "{nextOwner} rejected the ownership change request for channel {channelName}.": "{nextOwner} rejected the ownership change request for channel {channelName}.",
   "{username} does not exist on {instanceName}": "{username} does not exist on {instanceName}",
   "{videoName} - Comments feed": "{videoName} - Comments feed",
+  "{videoName} (Studio Edit)": "{videoName} (Studio Edit)",
   "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.": "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been accepted.",
   "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been rejected.": "<a href=\"{abuseUrl}\">Your abuse report #{abuseId}</a> on {instanceName} has been rejected.",
   "<a href=\"{accountUrl}\" title=\"{handle}\">{accountName}</a> added a comment on your video <a href=\"{videoUrl}\">{videoName}</a>:": "<a href=\"{accountUrl}\" title=\"{handle}\">{accountName}</a> added a comment on your video <a href=\"{videoUrl}\">{videoName}</a>:",

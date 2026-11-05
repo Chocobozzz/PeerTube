@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, input, v
 import { DomSanitizer } from '@angular/platform-browser'
 import { RouterLink } from '@angular/router'
 import { AuthService, ConfirmService, HooksService, MarkdownService, Notifier, PluginService } from '@app/core'
-import { formatICU } from '@app/helpers'
+import { formatICU, getDisplayHandle } from '@app/helpers'
 import { BulkService } from '@app/shared/shared-moderation/bulk.service'
 import { VideoCommentForAdminOrUser } from '@app/shared/shared-video-comment/video-comment.model'
 import { VideoCommentService } from '@app/shared/shared-video-comment/video-comment.service'
@@ -19,6 +19,7 @@ import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe
 import { AccountBlockBadgesComponent } from '../shared-moderation/account-block-badges.component'
 import { BlocklistService } from '../shared-moderation/blocklist.service'
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 type DataLoaderParameter = Parameters<VideoCommentListAdminOwnerComponent['_dataLoader']>[0]
 
@@ -43,7 +44,8 @@ type ColumnName =
     NumberFormatterPipe,
     GlobalIconComponent,
     CollaboratorStateComponent,
-    AccountBlockBadgesComponent
+    AccountBlockBadgesComponent,
+    DisplayHandlePipe
   ]
 })
 export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
@@ -407,7 +409,8 @@ export class VideoCommentListAdminOwnerComponent implements OnInit, OnDestroy {
   }
 
   private async removeCommentsOfAccount (comment: VideoCommentForAdminOrUser) {
-    const message = $localize`Do you really want to delete all comments of ${comment.by}? Comments are deleted after a few minutes.`
+    const handle = getDisplayHandle(comment.by)
+    const message = $localize`Do you really want to delete all comments of ${handle}? Comments are deleted after a few minutes.`
     const res = await this.confirmService.confirm(message, $localize`Delete`)
     if (res === false) return
 

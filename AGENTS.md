@@ -393,7 +393,7 @@ Configured in `server/core/lib/runners/` and managed through the
 ### OpenTelemetry
 
 Tracing and metrics are instrumented via `@opentelemetry/*` packages.
-Export to Jaeger (tracing) or Prometheus (metrics) is configurable in
+Export to an OTLP endpoint like Jaeger (tracing) or Prometheus (metrics) is configurable in
 `config/default.yaml` under the `open_telemetry` key.
 
 ## Further Reading

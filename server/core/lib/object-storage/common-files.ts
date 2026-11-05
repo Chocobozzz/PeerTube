@@ -1,5 +1,6 @@
 import { FileStorage, FileStorageType } from '@peertube/peertube-models'
 import { createReadStream } from 'fs'
+import { basename } from 'path'
 import { Readable } from 'stream'
 import { CommonObjectStorageType, getObjectStorageFileConfig } from './config.js'
 import { getObjectStorageContentType } from './content-type.js'
@@ -54,9 +55,6 @@ export function storeCommonFile (
   })
 }
 
-// Server side copy of an object of the same object storage (another section, staging...): the file doesn't go through this instance
-// Falls back to a download and an upload for providers that don't support it (big files need UploadPartCopy)
-// Other errors (missing object, access denied...) are thrown: the fallback would fail the same way, only slower
 export async function copyObjectToCommonFile (options: {
   sourceKey: string
   sourceBucketInfo: BucketInfo
@@ -66,10 +64,29 @@ export async function copyObjectToCommonFile (options: {
   filename: string
   isPrivate: boolean
 }) {
-  const { sourceKey, sourceBucketInfo, sourceSize, type, filename, isPrivate } = options
+  const { type, filename, ...rest } = options
 
-  const bucketInfo = getObjectStorageFileConfig(type)
-  const objectStorageKey = generateCommonFileObjectStorageKey(type, filename)
+  return copyObjectOrFallback({
+    ...rest,
+
+    destinationKey: generateCommonFileObjectStorageKey(type, filename),
+    destinationBucketInfo: getObjectStorageFileConfig(type)
+  })
+}
+
+// Copy object directly in object storage, and fallbacks to download -> reupload if not supported
+export async function copyObjectOrFallback (options: {
+  sourceKey: string
+  sourceBucketInfo: BucketInfo
+  sourceSize?: number
+
+  destinationKey: string
+  destinationBucketInfo: BucketInfo
+  isPrivate: boolean
+}) {
+  const { sourceKey, sourceBucketInfo, sourceSize, destinationKey, destinationBucketInfo, isPrivate } = options
+
+  const filename = basename(destinationKey)
   const contentType = getObjectStorageContentType(filename)
 
   try {
@@ -77,15 +94,15 @@ export async function copyObjectToCommonFile (options: {
       sourceKey,
       sourceBucketInfo,
       sourceSize,
-      destinationKey: objectStorageKey,
-      destinationBucketInfo: bucketInfo,
+      destinationKey,
+      destinationBucketInfo,
       isPrivate,
       contentType
     })
   } catch (err) {
     if (!isNotImplementedError(err)) throw err
 
-    logger.warn('Server side copy of object %s to %s is not supported, fallback to a download and an upload', sourceKey, objectStorageKey, {
+    logger.warn('Server side copy of object %s to %s is not supported, fallback to a download and an upload', sourceKey, destinationKey, {
       err
     })
 
@@ -93,7 +110,8 @@ export async function copyObjectToCommonFile (options: {
       key: sourceKey,
       bucketInfo: sourceBucketInfo,
       filename,
-      cb: inputPath => storeObject({ inputPath, objectStorageKey, bucketInfo, isPrivate, contentType })
+      cb: inputPath =>
+        storeObject({ inputPath, objectStorageKey: destinationKey, bucketInfo: destinationBucketInfo, isPrivate, contentType })
     })
   }
 }

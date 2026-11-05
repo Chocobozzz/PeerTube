@@ -1,21 +1,20 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdate, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid, isVideoAIUsageArrayValid } from '@server/helpers/custom-validators/videos.js'
-import { isExternalUserPasswordValid } from '@server/lib/auth/external-auth.js'
+import { isUserCurrentPasswordValid } from '@server/lib/auth/password-confirmation.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { MUser } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isThemeNameValid } from '../../../helpers/custom-validators/plugins.js'
 import {
   isUserAdminFlagsValid,
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
-  isUserVideoCategories,
-  isUserVideoLive,
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserFeatureInfo,
@@ -27,7 +26,9 @@ import {
   isUserPasswordValidOrEmpty,
   isUserRoleValid,
   isUserUsernameValid,
+  isUserVideoCategories,
   isUserVideoLanguages,
+  isUserVideoLive,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
@@ -41,6 +42,8 @@ import {
   areValidationErrors,
   checkCanModerate,
   checkEmailDoesNotAlreadyExist,
+  checkLocalPasswordLength,
+  checkPasswordConfirmation,
   checkUserEmailExistPermissive,
   checkUserIdExist,
   checkUsernameOrEmailDoNotAlreadyExist,
@@ -116,6 +119,8 @@ export const usersAddValidator = [
         })
       }
     }
+
+    if (req.body.role === UserRole.ADMINISTRATOR && !await checkPasswordConfirmation(req, res)) return
 
     return next()
   }
@@ -220,6 +225,8 @@ export const usersUpdateValidator = [
       !await checkEmailDoesNotAlreadyExist({ email: req.body.email, req, res })
     ) return
 
+    if (isAdminRoleOrCredentialsUpdate(user, req.body) && !await checkPasswordConfirmation(req, res)) return
+
     return next()
   }
 ]
@@ -233,7 +240,7 @@ export const usersUpdateMeValidator = [
     .custom(isUserDescriptionValid),
   body('currentPassword')
     .optional()
-    .custom(exists),
+    .isString(),
   body('password')
     .optional()
     .custom(isUserPasswordValid),
@@ -328,6 +335,13 @@ export const usersUpdateMeValidator = [
       if (!body.currentPassword) {
         return res.fail({ message: req.t('currentPassword parameter is missing') })
       }
+
+      // Validation errors are only checked below, so check the type before using the password
+      if (typeof body.currentPassword !== 'string') {
+        return res.fail({ message: req.t('currentPassword parameter is invalid') })
+      }
+
+      if (!checkLocalPasswordLength(body.currentPassword, req, res)) return
 
       if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
@@ -461,7 +475,7 @@ export const usersResetPasswordValidator = [
 
 export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Request) => number | string) => {
   return [
-    body('currentPassword').optional().custom(exists),
+    body('currentPassword').optional().isString(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
@@ -482,11 +496,10 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
         })
       }
 
-      const isPasswordValid = user.pluginAuth
-        ? await isExternalUserPasswordValid({ user, password: req.body.currentPassword })
-        : await user.isPasswordMatch(req.body.currentPassword)
+      // Plugin passwords are checked by the plugin, not by bcrypt
+      if (!user.pluginAuth && !checkLocalPasswordLength(req.body.currentPassword, req, res)) return
 
-      if (isPasswordValid !== true) {
+      if (await isUserCurrentPasswordValid(user, req.body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
           message: req.t('currentPassword is invalid.'),
@@ -519,6 +532,15 @@ export const usersNewFeatureInfoReadValidator = [
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+function isAdminRoleOrCredentialsUpdate (user: MUser, body: UserUpdate) {
+  if (body.role === UserRole.ADMINISTRATOR && user.role !== UserRole.ADMINISTRATOR) return true
+  if (user.role !== UserRole.ADMINISTRATOR) return false
+
+  return body.password !== undefined ||
+    (body.email !== undefined && body.email !== user.email) ||
+    (body.pluginAuth !== undefined && body.pluginAuth !== user.pluginAuth)
+}
 
 function checkCanSetRole (role: UserRoleType, res: express.Response) {
   const authUser = res.locals.oauth.token.User

@@ -145,6 +145,39 @@ export class VideoStateMessageService {
         }
       }
 
+      case VideoState.TO_DUPLICATE:
+        return {
+          title: $localize`Duplication in progress`,
+          manageMain: manageProcessed,
+          manageSecondary: manageFeaturesDisabled,
+          watchMain: watchNotPlayable,
+          watchSecondary: $localize`The files of the video are being copied.`
+        }
+
+      case VideoState.TO_DUPLICATE_FAILED: {
+        const details = $localize`The new video could not be created from the original video.`
+
+        return {
+          title: $localize`Duplication failed`,
+          manageMain: details + ' ' + $localize`You can delete this video and try again from the original video.`,
+          manageSecondary: '',
+          watchMain: watchNotPlayable,
+          watchSecondary: details
+        }
+      }
+
+      case VideoState.TO_EDIT_FAILED: {
+        const details = $localize`The studio edition of this new video failed.`
+
+        return {
+          title: $localize`Studio edition failed`,
+          manageMain: details + ' ' + $localize`You can delete this video and try again from the original video.`,
+          manageSecondary: '',
+          watchMain: watchNotPlayable,
+          watchSecondary: details
+        }
+      }
+
       case VideoState.TO_EDIT:
         return {
           title: $localize`Studio edition in progress`,

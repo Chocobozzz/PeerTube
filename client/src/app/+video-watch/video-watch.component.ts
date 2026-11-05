@@ -91,6 +91,7 @@ import { VideoDescriptionComponent } from './shared/metadata/video-description.c
 import { VideoTranscriptionComponent } from './shared/player-widgets/video-transcription.component'
 import { VideoWatchPlaylistComponent } from './shared/player-widgets/video-watch-playlist.component'
 import { RecommendedVideosComponent } from './shared/recommendations/recommended-videos.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 const debugLogger = debug('peertube:watch:VideoWatchComponent')
 
@@ -138,6 +139,7 @@ type URLOptions = {
     PlayerStylesComponent,
     VideoWatchPlaylistComponent,
     VideoTranscriptionComponent,
+    DisplayHandlePipe,
     VideoAIUsageBadgeComponent
   ]
 })

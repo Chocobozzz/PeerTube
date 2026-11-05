@@ -1,10 +1,13 @@
 import { ComponentRef, Injectable, inject } from '@angular/core'
 import { MarkdownService } from '@app/core'
+import { GlobalIconName } from '@app/shared/shared-icons/global-icon.component'
 import {
   ButtonMarkupData,
+  CardMarkupData,
   ChannelMiniatureMarkupData,
   ContainerMarkupData,
   EmbedMarkupData,
+  HeroMarkupData,
   InstanceAvatarMarkupData,
   PlaylistMiniatureMarkupData,
   VideoMiniatureMarkupData,
@@ -45,7 +48,9 @@ export class CustomMarkupService {
   }
 
   private htmlBuilders: { [selector: string]: HTMLBuilderFunction } = {
-    'peertube-container': el => this.containerBuilder(el)
+    'peertube-container': el => this.containerBuilder(el),
+    'peertube-hero': el => this.heroBuilder(el),
+    'peertube-card': el => this.cardBuilder(el)
   }
 
   private customMarkdownRenderer: (text: string) => Promise<HTMLElement>
@@ -172,8 +177,10 @@ export class CustomMarkupService {
     const model = {
       theme: data.theme ?? 'primary',
       href: data.href,
+      path: data.path,
       label: data.label,
-      blankTarget: this.buildBoolean(data.blankTarget) ?? false
+      blankTarget: this.buildBoolean(data.blankTarget) ?? false,
+      icon: (data.icon || undefined) as GlobalIconName
     }
     this.dynamicElementService.setModel(component, model)
 
@@ -235,7 +242,11 @@ export class CustomMarkupService {
 
       isLive: this.buildBoolean(data.isLive),
 
-      isLocal: this.buildBoolean(data.onlyLocal) ? true : undefined
+      isLocal: this.buildBoolean(data.onlyLocal) ? true : undefined,
+
+      moreHref: data.moreHref || undefined,
+      morePath: data.morePath || undefined,
+      moreLabel: data.moreLabel || undefined
     }
 
     this.dynamicElementService.setModel(component, model)
@@ -246,12 +257,7 @@ export class CustomMarkupService {
   private containerBuilder (el: HTMLElement) {
     const data = el.dataset as ContainerMarkupData
 
-    // Move inner HTML in the new element we'll create
-    const content = el.innerHTML
-    el.innerHTML = ''
-
-    const root = document.createElement('div')
-    root.innerHTML = content
+    const root = this.moveChildrenInNewElement(el)
 
     const layoutClass = data.layout
       ? 'layout-' + data.layout
@@ -269,19 +275,96 @@ export class CustomMarkupService {
       const headerElement = document.createElement('div')
       headerElement.classList.add('header')
 
+      const headerContentElement = document.createElement('div')
+      headerContentElement.classList.add('header-content')
+      headerElement.appendChild(headerContentElement)
+
       if (data.title) {
         const titleElement = document.createElement('h4')
         titleElement.innerText = data.title
-        headerElement.appendChild(titleElement)
+        headerContentElement.appendChild(titleElement)
       }
 
       if (data.description) {
         const descriptionElement = document.createElement('div')
+        descriptionElement.classList.add('description')
         descriptionElement.innerText = data.description
-        headerElement.append(descriptionElement)
+        headerContentElement.append(descriptionElement)
       }
 
       root.insertBefore(headerElement, root.firstChild)
+    }
+
+    return root
+  }
+
+  private heroBuilder (el: HTMLElement) {
+    const data = el.dataset as HeroMarkupData
+
+    const actions = this.moveChildrenInNewElement(el)
+    actions.classList.add('hero-actions')
+
+    const root = document.createElement('div')
+    root.classList.add('peertube-hero')
+
+    const content = document.createElement('div')
+    content.classList.add('hero-content')
+    root.appendChild(content)
+
+    if (data.title) {
+      const titleElement = document.createElement('h2')
+      titleElement.classList.add('hero-title')
+      titleElement.innerText = data.title
+      content.appendChild(titleElement)
+    }
+
+    if (data.description) {
+      const descriptionElement = document.createElement('div')
+      descriptionElement.classList.add('hero-description')
+      descriptionElement.innerText = data.description
+      content.appendChild(descriptionElement)
+    }
+
+    if (actions.childElementCount !== 0) root.appendChild(actions)
+
+    return root
+  }
+
+  private cardBuilder (el: HTMLElement) {
+    const data = el.dataset as CardMarkupData
+
+    const actions = this.moveChildrenInNewElement(el)
+    actions.classList.add('card-actions')
+
+    const root = document.createElement('div')
+    root.classList.add('peertube-card')
+
+    if (this.buildBoolean(data.bordered)) root.classList.add('bordered')
+
+    if (data.title) {
+      const titleElement = document.createElement('div')
+      titleElement.classList.add('card-title')
+      titleElement.innerText = data.title
+      root.appendChild(titleElement)
+    }
+
+    if (data.description) {
+      const descriptionElement = document.createElement('div')
+      descriptionElement.classList.add('card-description')
+      descriptionElement.innerText = data.description
+      root.appendChild(descriptionElement)
+    }
+
+    if (actions.childElementCount !== 0) root.appendChild(actions)
+
+    return root
+  }
+
+  private moveChildrenInNewElement (el: HTMLElement) {
+    const root = document.createElement('div')
+
+    while (el.firstChild) {
+      root.appendChild(el.firstChild)
     }
 
     return root

@@ -238,6 +238,14 @@ info:
 
     The current password is invalid.
 
+    ## current_password_is_missing
+
+    The action requires a [password confirmation](#section/Password-confirmation) but `currentPassword` is missing.
+
+    ## password_confirmation_unavailable
+
+    The action requires a [password confirmation](#section/Password-confirmation) but the user authenticates with an external auth plugin (OpenID Connect, SAML...), so PeerTube cannot check their password.
+
     # Rate limits
 
     We are rate-limiting all endpoints of PeerTube's API. Custom values can be set by administrators:
@@ -261,6 +269,19 @@ info:
     | `X-RateLimit-Remaining` | Number of remaining requests in the current time period    |
     | `X-RateLimit-Reset`     | Timestamp of end of current time period as UNIX timestamp  |
     | `Retry-After`           | Seconds to delay after the first `429` is received         |
+
+    # Password confirmation
+
+    If the `webadmin.password_confirmation.enabled` setting is enabled (default), sensitive administrator actions require
+    the user password in the `currentPassword` field of the request body:
+
+      - Install or update a plugin/theme
+      - Change the custom JavaScript or CSS of the instance (`instance.customizations` of the custom configuration)
+      - Create an administrator, or give the administrator role to a user
+      - Change the password, email or auth plugin (`pluginAuth`) of an administrator
+
+    After 10 failed password confirmations in 10 minutes (configurable), the user receives a `429 Too Many Requests` status code
+    until the end of the time frame, even with the correct password.
 
     # CORS
 
@@ -931,8 +952,7 @@ paths:
         - Video Feeds
       summary: Video chapters of podcast feeds
       description: |
-        **PeerTube >= 9.0** Chapters of a video in the Podcasting 2.0 JSON format,
-        referenced by the `podcast:chapters` tag of podcast feed items.
+        **PeerTube >= 9.0** Chapters of a video in the Podcasting 2.0 JSON format, referenced by the `podcast:chapters` tag of podcast feed items.
         See https://podcasting2.org/docs/podcast-namespace/tags/chapters
       operationId: getVideoPodcastChapters
       parameters:
@@ -1170,6 +1190,9 @@ paths:
                 $ref: '#/components/schemas/ServerConfigCustom'
     put:
       summary: Set instance runtime configuration
+      description: >
+        Changing `instance.customizations.javascript` or `instance.customizations.css` requires a
+        [password confirmation](#section/Password-confirmation): set `currentPassword` at the root of the request body.
       operationId: putCustomConfig
       tags:
         - Config
@@ -1185,6 +1208,11 @@ paths:
             Arises when:
               - the emailer is disabled and the instance is open to registrations
               - web videos and hls are disabled with transcoding enabled - you need at least one enabled
+              - the custom JavaScript or CSS changed and `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
     delete:
       summary: Delete instance runtime configuration
       operationId: delCustomConfig
@@ -3647,7 +3675,7 @@ paths:
       tags:
         - Video Transcoding
         - Video
-      description: Create a task to edit a video  (cut, add intro/outro etc)
+      description: Create a task to edit a video (cut, add intro/outro etc). By default the video is edited in place. Set `saveAsNewVideo` to keep it untouched and save the result in a new video.
       security:
         - OAuth2: []
       parameters:
@@ -3657,14 +3685,79 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/VideoStudioCreateTask'
+              type: object
+              required:
+                - tasks
+              properties:
+                tasks:
+                  $ref: '#/components/schemas/VideoStudioCreateTask'
+                saveAsNewVideo:
+                  type: boolean
+                  default: false
+                  description: >
+                    Keep the source video untouched: duplicate it, and edit the duplicate.
+                    The duplicate is created private, in the same channel as the source video, with the source video metadata.
+                    The size of the source video counts towards the user quota.
       responses:
+        '200':
+          description: successful operation, when `saveAsNewVideo` is `true`. Returns the identifiers of the new video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
         '204':
-          description: successful operation
+          description: successful operation, when the source video is edited in place
         '400':
           description: incorrect parameters
+        '403':
+          description: the user cannot manage this video, or `saveAsNewVideo` is `true` on a blocked video and the user cannot manage blocks
+        '409':
+          description: video is already being processed
         '404':
           description: video not found
+
+  /api/v1/videos/{id}/duplicate:
+    post:
+      summary: Duplicate a video
+      operationId: duplicateVideo
+      tags:
+        - Video
+      description: |
+        Create a copy of a local video, in the same channel.
+
+        The copy of a blocked video (that only moderators can duplicate) is blocked for the same reason.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 120
+                  description: Name of the copy. Defaults to the name of the source video followed by "(Copy)"
+      responses:
+        '200':
+          description: successful operation. Returns the identifiers of the new video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '400':
+          description: incorrect parameters
+        '403':
+          description: the user cannot manage this video, the video is not local, or the video is blocked and the user cannot manage blocks
+        '404':
+          description: video not found
+        '409':
+          description: video is already being processed
+        '413':
+          description: the user video quota is exceeded
 
   /api/v1/videos:
     get:
@@ -8038,6 +8131,8 @@ paths:
                     npmName:
                       type: string
                       example: peertube-plugin-auth-ldap
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - npmName
                   additionalProperties: false
@@ -8045,6 +8140,8 @@ paths:
                   properties:
                     path:
                       type: string
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - path
                   additionalProperties: false
@@ -8052,7 +8149,11 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: should have either `npmName` or `path` set
+          description: should have either `npmName` or `path` set, or `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
 
   /api/v1/plugins/update:
     post:
@@ -8073,6 +8174,8 @@ paths:
                     npmName:
                       type: string
                       example: peertube-plugin-auth-ldap
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - npmName
                   additionalProperties: false
@@ -8080,6 +8183,8 @@ paths:
                   properties:
                     path:
                       type: string
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - path
                   additionalProperties: false
@@ -8087,7 +8192,11 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: should have either `npmName` or `path` set
+          description: should have either `npmName` or `path` set, or `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
         '404':
           description: existing plugin not found
 
@@ -10530,6 +10639,10 @@ components:
       format: password
       minLength: 6
       maxLength: 50
+    currentPassword:
+      type: string
+      format: password
+      description: Password of the authenticated user, required if [password confirmation](#section/Password-confirmation) is enabled
 
     VideoCategorySet:
       type: integer
@@ -10823,6 +10936,12 @@ components:
             - 7
             - 8
             - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
           description: |
             The video state:
             - `1`: Published
@@ -10834,6 +10953,12 @@ components:
             - `7`: Transcoding failed
             - `8`: Moving to an external storage failed
             - `9`: To edit using studio edition feature
+            - `10`: To move to the file system
+            - `11`: Moving to the file system failed
+            - `12`: Import failed
+            - `13`: To duplicate, the files of another video are being copied
+            - `14`: Duplication failed, the files of the other video could not be copied
+            - `15`: The studio edition of a video saved as a new video failed
         label:
           type: string
 
@@ -13653,6 +13778,10 @@ components:
           $ref: '#/components/schemas/UserRole'
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
+        currentPassword:
+          description: Required to create an administrator, see [password confirmation](#section/Password-confirmation)
+          allOf:
+            - $ref: '#/components/schemas/currentPassword'
       required:
         - username
         - password
@@ -13684,6 +13813,11 @@ components:
           $ref: '#/components/schemas/UserAdminFlags'
         password:
           $ref: '#/components/schemas/password'
+        currentPassword:
+          description: >
+            Required to give the administrator role, or to change the password, email or auth plugin of an administrator, see [password confirmation](#section/Password-confirmation)
+          allOf:
+            - $ref: '#/components/schemas/currentPassword'
     UpdateMe:
       properties:
         password:
@@ -14501,6 +14635,7 @@ components:
         - 31
         - 32
         - 33
+        - 34
       description: >
         Notification type. One of the following values:
 
@@ -14567,6 +14702,10 @@ components:
           - `31` CHANNEL_OWNERSHIP_CHANGED_REJECTED
 
           - `32` AUTOMATIC_BLOCKLIST_UPDATE
+
+          - `33` MY_VIDEO_STUDIO_EDITION_ERROR
+
+          - `34` MY_VIDEO_DUPLICATION_ERROR
 
     NewFeatureInfoType:
       type: integer

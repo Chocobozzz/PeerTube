@@ -1,6 +1,7 @@
 import { AccessDeniedError, InvalidGrantError } from '@node-oauth/oauth2-server'
 import { pick } from '@peertube/peertube-core-utils'
 import { UserRegistrationState } from '@peertube/peertube-models'
+import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { isOTPValid } from '@server/helpers/otp.js'
 import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { AuthenticatedResultUpdaterFieldName, RegisterServerAuthenticatedResult } from '@server/types/index.js'
@@ -25,7 +26,8 @@ import {
   InvalidTwoFactorError,
   MissingTwoFactorError,
   RegistrationApprovalRejected,
-  RegistrationWaitingForApproval
+  RegistrationWaitingForApproval,
+  TooLongPasswordError
 } from './oauth-errors.js'
 
 const logger = createLogger()
@@ -50,6 +52,11 @@ export async function getUserOrThrow (options: {
     // Continue the password process if handleGetUserBypass returns undefined,
     // which means the user does not belong to the plugin and we should go through a regular login process
     if (user) return user
+  }
+
+  // Check before loading the user so the response does not reveal if the account exists
+  if (password && isUserPasswordTooLong(password)) {
+    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
   }
 
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')

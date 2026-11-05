@@ -15,7 +15,6 @@ import { ModelCache } from '@server/models/shared/model-cache.js'
 import express from 'express'
 import { remove, writeJSON } from 'fs-extra/esm'
 import { CONFIG, reloadConfig } from '../../initializers/config.js'
-import { convertCustomConfigBody } from '../../initializers/config/custom-config.js'
 import { auditLog, buildConfigAuditEntity, buildInstanceImageAuditEntity, getAuditActorFromRes } from '../../lib/audit-log/index.js'
 import { ClientHtml } from '../../lib/html/client-html.js'
 import {
@@ -62,7 +61,7 @@ configRouter.put(
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
   ensureConfigIsEditable,
-  customConfigUpdateValidator,
+  asyncMiddleware(customConfigUpdateValidator),
   asyncMiddleware(updateCustomConfig)
 )
 
@@ -217,10 +216,7 @@ async function deleteCustomConfig (req: express.Request, res: express.Response) 
 async function updateCustomConfig (req: express.Request, res: express.Response) {
   const oldConfigAuditEntity = auditLog.snapshot(() => buildConfigAuditEntity(customConfig()))
 
-  // camelCase to snake_case key + Force number conversion
-  const toUpdateJSON = convertCustomConfigBody(req.body)
-
-  await writeJSON(CONFIG.CUSTOM_FILE, toUpdateJSON, { spaces: 2 })
+  await writeJSON(CONFIG.CUSTOM_FILE, res.locals.customConfigFile, { spaces: 2 })
 
   await reloadConfig()
   ClientHtml.invalidateCache()

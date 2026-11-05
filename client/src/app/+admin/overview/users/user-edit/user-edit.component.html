@@ -270,7 +270,7 @@
 
       <div class="form-group">
         <div class="mb-1 fw-bold" i18n>Manually set the user password</div>
-        <my-user-password [userId]="user.id" [username]="user.username"></my-user-password>
+        <my-user-password [userId]="user.id" [username]="user.username" [userRole]="user.role.id"></my-user-password>
       </div>
 
       @if (user.twoFactorEnabled) {

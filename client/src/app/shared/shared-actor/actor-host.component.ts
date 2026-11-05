@@ -1,6 +1,7 @@
-import { Component, OnChanges, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { Component, OnChanges, inject, input, viewChild, ChangeDetectionStrategy, computed } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
+import { getDisplayHost } from '@app/helpers'
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { SearchTargetType } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
@@ -20,12 +21,13 @@ export class ActorHostComponent implements OnChanges {
   readonly dropdown = viewChild('dropdown')
 
   readonly host = input.required<string>()
+  readonly displayHost = computed(() => getDisplayHost(this.host()))
 
   title: string
   searchTarget: SearchTargetType
 
   ngOnChanges () {
-    this.title = $localize`Get more information on ${this.host()}`
+    this.title = $localize`Get more information on ${this.displayHost()}`
 
     const config = this.server.getHTMLConfig()
 

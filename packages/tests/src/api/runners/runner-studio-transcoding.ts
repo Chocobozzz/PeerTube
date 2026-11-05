@@ -3,17 +3,21 @@
 import { expect } from 'chai'
 import { readFile } from 'fs/promises'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
+import { getAllFiles } from '@peertube/peertube-core-utils'
 import {
+  HttpStatusCode,
   RunnerJobStudioTranscodingPayload,
-  VideoStudioTranscodingSuccess,
+  VideoPrivacy,
   VideoState,
   VideoStudioTask,
-  VideoStudioTaskIntro
+  VideoStudioTaskIntro,
+  VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
   doubleFollow,
+  makeRawRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultVideoChannel,
@@ -159,6 +163,66 @@ describe('Test runner video studio transcoding', function () {
     for (const server of servers) {
       await checkVideoDuration(server, videoUUID, 2)
     }
+
+    await checkPersistentTmpIsEmpty(servers[0])
+  })
+
+  it('Should only copy the studio input and not publish a duplicate whose edition failed', async function () {
+    this.timeout(240_000)
+
+    const source = await servers[0].videos.quickUpload({ name: 'source' })
+    await waitJobs(servers)
+
+    await servers[0].captions.add({ videoId: source.uuid, language: 'fr', fixture: 'subtitle-good.srt' })
+    await waitJobs(servers)
+
+    const sourceBefore = await servers[0].videos.getWithToken({ id: source.uuid })
+    const sourceFiles = getAllFiles(sourceBefore)
+
+    const { video: created } = await servers[0].videoStudio.createEditionTasks({
+      videoId: source.uuid,
+      tasks: [ { name: 'cut', options: { start: 1 } } ],
+      saveAsNewVideo: true
+    })
+    await waitJobs(servers)
+
+    // Only the max quality file is copied: the edition replaces all the files
+    {
+      const video = await servers[0].videos.getWithToken({ id: created.uuid })
+      expect(video.state.id).to.equal(VideoState.TO_EDIT)
+      expect(video.privacy.id).to.equal(VideoPrivacy.PRIVATE)
+      expect(video.streamingPlaylists).to.have.lengthOf(0)
+      expect(video.files).to.have.lengthOf(1)
+      expect(video.files[0].resolution.id).to.equal(Math.max(...sourceFiles.map(f => f.resolution.id)))
+      expect(sourceFiles.map(f => f.fileUrl)).to.not.include(video.files[0].fileUrl)
+
+      await makeRawRequest({ url: video.files[0].fileUrl, token: servers[0].accessToken, expectedStatus: HttpStatusCode.OK_200 })
+
+      const { data: captions } = await servers[0].captions.list({ videoId: created.uuid, token: servers[0].accessToken })
+      expect(captions).to.have.lengthOf(1)
+      expect(captions[0].language.id).to.equal('fr')
+    }
+
+    // Made public while it is processed
+    await servers[0].videos.update({ id: created.uuid, attributes: { privacy: VideoPrivacy.PUBLIC } })
+
+    const { availableJobs } = await servers[0].runnerJobs.request({ runnerToken })
+    expect(availableJobs).to.have.lengthOf(1)
+
+    await servers[0].runnerJobs.cancelByAdmin({ jobUUID: availableJobs[0].uuid })
+    await waitJobs(servers)
+
+    // The duplicate is not published with the content of the source video
+    const video = await servers[0].videos.getWithToken({ id: created.uuid })
+    expect(video.state.id).to.equal(VideoState.TO_EDIT_FAILED)
+    expect(video.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+
+    await servers[1].videos.get({ id: created.uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+    // The source video is untouched
+    const sourceAfter = await servers[0].videos.getWithToken({ id: source.uuid })
+    expect(sourceAfter.state.id).to.equal(VideoState.PUBLISHED)
+    expect(getAllFiles(sourceAfter).map(f => f.fileUrl)).to.deep.equal(sourceFiles.map(f => f.fileUrl))
 
     await checkPersistentTmpIsEmpty(servers[0])
   })

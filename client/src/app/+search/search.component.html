@@ -72,7 +72,7 @@
 
           <ng-template #aContent>
             <div class="video-channel-display-name me-2">{{ result.displayName }}</div>
-            <div class="video-channel-name">{{ result.nameWithHost }}</div>
+            <div class="video-channel-name">{{ result.nameWithHost | displayHandle }}</div>
           </ng-template>
 
           <div i18n class="video-channel-followers">{{ result.followersCount }} subscribers</div>

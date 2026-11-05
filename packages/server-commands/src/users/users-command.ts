@@ -176,6 +176,7 @@ export class UsersCommand extends AbstractCommand {
       role?: UserRoleType
       adminFlags?: UserAdminFlagType
       email?: string
+      currentPassword?: string
     }
   ) {
     const {
@@ -201,7 +202,8 @@ export class UsersCommand extends AbstractCommand {
         adminFlags,
         email,
         videoQuota,
-        videoQuotaDaily
+        videoQuotaDaily,
+        currentPassword: this.buildCurrentPassword(options)
       },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
@@ -414,6 +416,7 @@ export class UsersCommand extends AbstractCommand {
       adminFlags?: UserAdminFlagType
       pluginAuth?: string
       role?: UserRoleType
+      currentPassword?: string
     }
   ) {
     const path = '/api/v1/users/' + options.userId
@@ -427,6 +430,9 @@ export class UsersCommand extends AbstractCommand {
     if (options.role !== undefined && options.role !== null) toSend.role = options.role
     if (options.adminFlags !== undefined && options.adminFlags !== null) toSend.adminFlags = options.adminFlags
     if (options.pluginAuth !== undefined) toSend.pluginAuth = options.pluginAuth
+
+    const currentPassword = this.buildCurrentPassword(options)
+    if (currentPassword !== undefined) toSend.currentPassword = currentPassword
 
     return this.putBodyRequest({
       ...options,

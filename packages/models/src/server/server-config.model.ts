@@ -130,6 +130,10 @@ export interface ServerConfig {
         allowed: boolean
       }
     }
+
+    passwordConfirmation: {
+      enabled: boolean
+    }
   }
 
   instance: {

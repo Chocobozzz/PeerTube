@@ -59,13 +59,19 @@ export type VideosListMarkupData = {
   isLive?: string // number
 
   onlyLocal?: StringBoolean
+
+  moreHref?: string
+  morePath?: string // Client route
+  moreLabel?: string
 }
 
 export type ButtonMarkupData = {
   theme: 'primary' | 'secondary'
-  href: string
+  href?: string
+  path?: string // Client route
   label: string
   blankTarget?: StringBoolean
+  icon?: string // GlobalIconName of the client
 }
 
 export type ContainerMarkupData = {
@@ -79,4 +85,15 @@ export type ContainerMarkupData = {
 
 export type InstanceAvatarMarkupData = {
   size: string // size in pixels
+}
+
+export type HeroMarkupData = {
+  title?: string
+  description?: string
+}
+
+export type CardMarkupData = {
+  title?: string
+  description?: string
+  bordered?: StringBoolean
 }

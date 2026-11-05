@@ -190,6 +190,13 @@ function checkRemovedConfigKeys () {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
+  if (config.has('open_telemetry.tracing.jaeger_exporter')) {
+    logger.warn(
+      'open_telemetry.tracing.jaeger_exporter configuration has been replaced by open_telemetry.tracing.otlp_exporter ' +
+        '(Jaeger supports OTLP, for example on http://127.0.0.1:4318/v1/traces). Please update your configuration file.'
+    )
+  }
+
   if (config.has('transcoding.webtorrent.enabled')) {
     const localConfigPath = getLocalConfigFilePath()
 
@@ -377,6 +384,15 @@ function checkSearchConfig () {
 }
 
 function checkLiveConfig () {
+  // Negated comparisons also reject NaN
+  if (!(CONFIG.LIVE.RTMP.PING >= 1)) {
+    throw new Error('live.rtmp.ping must be at least 1 second')
+  }
+
+  if (!(CONFIG.LIVE.RTMP.PING_TIMEOUT >= 5)) {
+    throw new Error('live.rtmp.ping_timeout must be at least 5 seconds')
+  }
+
   if (CONFIG.LIVE.ENABLED === true) {
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       throw new Error('Live allow replay cannot be enabled if transcoding is not enabled.')

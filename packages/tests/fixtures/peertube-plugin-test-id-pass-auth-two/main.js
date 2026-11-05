@@ -48,6 +48,15 @@ async function register ({
         })
       }
 
+      if (body.id === 'lagoon' && body.password === 'lagoon ' + 'password'.repeat(20)) {
+        return Promise.resolve({
+          username: 'lagoon',
+          email: 'lagoon@example.com',
+          displayName: 'Lagoon',
+          adminFlags: 0
+        })
+      }
+
       return null
     }
   })

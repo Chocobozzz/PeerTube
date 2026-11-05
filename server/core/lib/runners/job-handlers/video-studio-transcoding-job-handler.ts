@@ -4,7 +4,6 @@ import {
   RunnerJobStudioTranscodingPayload,
   RunnerJobUpdatePayload,
   RunnerJobVideoStudioTranscodingPrivatePayload,
-  VideoState,
   VideoStudioTaskPayload,
   VideoStudioTranscodingSuccess,
   isVideoStudioTaskIntro,
@@ -13,14 +12,13 @@ import {
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
-import { runTransaction } from '@server/helpers/database-utils.js'
-import { onVideoStudioEnded, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
+import { onVideoStudioEnded, onVideoStudioFailed, safeCleanupStudioTMPFiles } from '@server/lib/video-studio.js'
 import { MVideoWithFile } from '@server/types/models/index.js'
 import { MRunnerJob } from '@server/types/models/runners/index.js'
 import { basename } from 'path'
 import { generateRunnerEditionTranscodingVideoInputFileUrl, generateRunnerTranscodingInputFileUrl } from '../runner-urls.js'
 import { AbstractJobHandler } from './abstract-job-handler.js'
-import { commitPendingCompletion } from './shared/pending-completions.js'
+import { commitPendingCompletion, RunnerJobCompletionAbortedError } from './shared/pending-completions.js'
 import { loadRunnerVideo } from './shared/utils.js'
 
 const logger = createLogger('studio', 'transcoding')
@@ -29,6 +27,7 @@ type CreateOptions = {
   video: MVideoWithFile
   tasks: VideoStudioTaskPayload[]
   taskFilesStaged: boolean
+  isDuplicate: boolean
   priority: number
 }
 
@@ -37,7 +36,7 @@ export class VideoStudioTranscodingJobHandler
   extends AbstractJobHandler<CreateOptions, RunnerJobUpdatePayload, VideoStudioTranscodingSuccess>
 {
   async create (options: CreateOptions) {
-    const { video, priority, tasks, taskFilesStaged } = options
+    const { video, priority, tasks, taskFilesStaged, isDuplicate } = options
 
     const jobUUID = buildUUID()
     const { separatedAudioFile } = video.getMaxQualityAudioAndVideoFiles()
@@ -84,7 +83,8 @@ export class VideoStudioTranscodingJobHandler
       const privatePayload: RunnerJobVideoStudioTranscodingPrivatePayload = {
         videoUUID: video.uuid,
         originalTasks: tasks,
-        taskFilesStaged
+        taskFilesStaged,
+        isDuplicate
       }
 
       const job = await this.createRunnerJob({
@@ -139,14 +139,23 @@ export class VideoStudioTranscodingJobHandler
     await logger.withContext([ video.uuid ], async () => {
       const videoFilePath = resultPayload.videoFile as string
 
-      await onVideoStudioEnded({
-        video,
-        editionResultPath: videoFilePath,
-        taskFiles,
+      try {
+        await onVideoStudioEnded({
+          video,
+          editionResultPath: videoFilePath,
+          taskFiles,
 
-        // A shutdown can give the job back to the runners until then
-        beforeIrreversibleChanges: () => commitPendingCompletion(runnerJob.uuid)
-      })
+          // A shutdown can give the job back to the runners until then
+          beforeIrreversibleChanges: () => commitPendingCompletion(runnerJob.uuid)
+        })
+      } catch (err) {
+        if (!(err instanceof RunnerJobCompletionAbortedError)) {
+          await onVideoStudioFailed({ videoUUID: video.uuid, isDuplicate: privatePayload.isDuplicate === true })
+          await safeCleanupStudioTMPFiles(taskFiles)
+        }
+
+        throw err
+      }
 
       logger.info('Runner video edition transcoding job %s for %s ended.', runnerJob.uuid, video.uuid)
     })
@@ -176,12 +185,7 @@ export class VideoStudioTranscodingJobHandler
 
     const payload = runnerJob.privatePayload as RunnerJobVideoStudioTranscodingPrivatePayload
 
-    await runTransaction(async transaction => {
-      const video = await loadRunnerVideo(options.runnerJob, transaction)
-      if (!video || video.state === VideoState.PUBLISHED) return
-
-      await video.setNewStateAndPublishedAt({ newState: VideoState.PUBLISHED, transaction })
-    })
+    await onVideoStudioFailed({ videoUUID: payload.videoUUID, isDuplicate: payload.isDuplicate === true })
 
     // The video may have been deleted
     await logger.withContext([ payload.videoUUID ], () => {

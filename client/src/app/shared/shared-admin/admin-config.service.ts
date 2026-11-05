@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
-import { Notifier, RestExtractor, ServerService } from '@app/core'
+import { Notifier, PasswordConfirmationService, RestExtractor, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { BuildFormValidator } from '@app/shared/form-validators/form-validator.model'
 import { CustomConfig } from '@peertube/peertube-models'
@@ -30,6 +30,7 @@ export class AdminConfigService {
   private authHttp = inject(HttpClient)
   private restExtractor = inject(RestExtractor)
   private notifier = inject(Notifier)
+  private passwordConfirmation = inject(PasswordConfirmationService)
   private serverService = inject(ServerService)
 
   private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/config'
@@ -102,10 +103,13 @@ export class AdminConfigService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
+  // Completes without emitting if the user cancelled the password confirmation
   updateCustomConfig (partialConfig: DeepPartial<CustomConfig>) {
     return this.getCustomConfig()
       .pipe(
         switchMap(customConfig => {
+          const { javascript: oldJavascript, css: oldCSS } = customConfig.instance.customizations
+
           const newConfig = mergeWith(customConfig, partialConfig, (objValue, srcValue) => {
             // We want to replace arrays, not merge them
             if (Array.isArray(srcValue)) return srcValue
@@ -113,10 +117,19 @@ export class AdminConfigService {
             return undefined
           })
 
-          return this.authHttp.put<CustomConfig>(AdminConfigService.BASE_APPLICATION_URL + '/custom', newConfig)
-            .pipe(map(() => newConfig))
-        }),
-        catchError(res => this.restExtractor.handleError(res))
+          const { javascript, css } = newConfig.instance.customizations
+          const customizationsChanged = (javascript || '') !== (oldJavascript || '') || (css || '') !== (oldCSS || '')
+
+          return this.passwordConfirmation.runWithPassword({
+            title: $localize`Update custom JavaScript/CSS`,
+            message: $localize`Custom JavaScript is executed in the web browser of all your users, including administrators.`,
+            required: customizationsChanged,
+            request: currentPassword => {
+              return this.authHttp.put<CustomConfig>(AdminConfigService.BASE_APPLICATION_URL + '/custom', { ...newConfig, currentPassword })
+                .pipe(catchError(res => this.restExtractor.handleError(res)))
+            }
+          }).pipe(map(() => newConfig))
+        })
       )
   }
 
@@ -147,7 +160,7 @@ export class AdminConfigService {
           this.notifier.success(success)
         },
 
-        error: err => this.notifier.handleError(err)
+        error: err => this.passwordConfirmation.handleError(err)
       })
   }
 

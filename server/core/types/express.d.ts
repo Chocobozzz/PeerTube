@@ -164,6 +164,8 @@ declare module 'express' {
 
       docUrl?: string
 
+      customConfigFile?: Record<string, any>
+
       ffprobe?: FfprobeData
 
       videoAPI?: MVideoFormattableDetails

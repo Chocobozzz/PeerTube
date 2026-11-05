@@ -7,13 +7,14 @@ import { GlobalIconComponent } from '../shared-icons/global-icon.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
 import { EmbedComponent } from '../shared-main/video/embed.component'
 import { ProcessedAbuse } from './processed-abuse.model'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   selector: 'my-abuse-details',
   templateUrl: './abuse-details.component.html',
   styleUrls: [ '../shared-moderation/moderation.scss', './abuse-details.component.scss' ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ RouterLink, ActorAvatarComponent, GlobalIconComponent, EmbedComponent, PTDatePipe ]
+  imports: [ RouterLink, ActorAvatarComponent, GlobalIconComponent, EmbedComponent, PTDatePipe, DisplayHandlePipe ]
 })
 export class AbuseDetailsComponent implements OnInit {
   readonly abuse = input<ProcessedAbuse>(undefined)

@@ -109,7 +109,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       abuseStateChange: $localize`One of your abuse reports has been accepted or rejected by moderators`,
       newPeerTubeVersion: $localize`A new PeerTube version is available`,
       newPluginVersion: $localize`One of your plugin/theme has a new available version`,
-      myVideoStudioEditionFinished: $localize`Processing of edits has finished`,
+      myVideoStudioEditionFinished:
+        $localize`Processing of studio edits has finished or failed, or a copy of your video could not be created`,
       myVideoTranscriptionGenerated: $localize`The transcription of your video has been generated`,
       automaticBlocklist: $localize`An account or server was automatically blocked/unblocked by a blocklist subscription`
     }

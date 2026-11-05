@@ -2,7 +2,7 @@ import { Meter, ObservableResult } from '@opentelemetry/api'
 import { AggregationType, InstrumentType, ViewOptions } from '@opentelemetry/sdk-metrics'
 import { createLogger } from '@server/helpers/logger.js'
 import { readdir } from 'fs/promises'
-import { constants, monitorEventLoopDelay, NodeGCPerformanceDetail, performance, PerformanceObserver } from 'perf_hooks'
+import { constants, monitorEventLoopDelay, NodeGCPerformanceDetail, performance, PerformanceEntry, PerformanceObserver } from 'perf_hooks'
 import * as process from 'process'
 
 const logger = createLogger()
@@ -106,9 +106,9 @@ export class NodeJSObserversBuilder {
     })
 
     const obs = new PerformanceObserver(list => {
-      const entry = list.getEntries()[0]
+      const entry = list.getEntries()[0] as PerformanceEntry & { detail: NodeGCPerformanceDetail }
 
-      const kind = kinds[(entry.detail as NodeGCPerformanceDetail).kind]
+      const kind = kinds[entry.detail.kind]
 
       // Convert duration from milliseconds to seconds
       histogram.record(entry.duration / 1000, {

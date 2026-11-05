@@ -8,6 +8,7 @@ import {
   setAccessTokensToServers,
   TwoFactorCommand
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 
 describe('Test two factor API validators', function () {
   let server: PeerTubeServer
@@ -108,6 +109,24 @@ describe('Test two factor API validators', function () {
         token: userToken,
         currentPassword: rootPassword,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail to request two factor with a too long current password', async function () {
+      const body = await server.twoFactor.request({
+        userId: rootId,
+        currentPassword: 'super'.repeat(61),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      expect((body as any).code).to.equal('too_long_password')
+    })
+
+    it('Should fail to request two factor with a non string current password', async function () {
+      await server.twoFactor.request({
+        userId: rootId,
+        currentPassword: 42 as any,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
     })
 

@@ -10,12 +10,20 @@ import { ActorAvatarComponent } from '../../shared/shared-actor-image/actor-avat
 import { AdvancedFilterDef, AdvancedInputFilterComponent } from '../../shared/shared-forms/advanced-input-filter.component'
 import { GlobalIconComponent } from '../../shared/shared-icons/global-icon.component'
 import { InfiniteScrollerDirective } from '../../shared/shared-main/common/infinite-scroller.directive'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   templateUrl: './my-followers.component.html',
   styleUrls: [ './my-followers.component.scss' ],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ GlobalIconComponent, AdvancedInputFilterComponent, InfiniteScrollerDirective, ActorAvatarComponent, SearchInputComponent ]
+  imports: [
+    GlobalIconComponent,
+    AdvancedInputFilterComponent,
+    InfiniteScrollerDirective,
+    ActorAvatarComponent,
+    SearchInputComponent,
+    DisplayHandlePipe
+  ]
 })
 export class MyFollowersComponent implements OnInit {
   private route = inject(ActivatedRoute)
