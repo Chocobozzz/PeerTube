@@ -40,7 +40,7 @@
               <h4>
                 <a class="text-decoration-none" [routerLink]="getAccountUrl()" title="View account" i18n-title>{{ ownerAccount.displayName }}</a>
               </h4>
-              <div class="actor-handle">&#64;{{ videoChannel.ownerBy }}</div>
+              <div class="actor-handle">&#64;{{ videoChannel.ownerBy | displayHandle }}</div>
               <my-account-block-badges [account]="ownerAccount"></my-account-block-badges>
             </div>
           </div>
@@ -67,7 +67,7 @@
               </div>
 
               <div class="actor-handle">
-                <span>&#64;{{ videoChannel.nameWithHost }}</span>
+                <span>&#64;{{ videoChannel.nameWithHost | displayHandle }}</span>
                 <my-copy-button
                   [value]="videoChannel.nameWithHostForced" i18n-notification notification="Handle copied"
                   title="Copy channel handle" i18n-title

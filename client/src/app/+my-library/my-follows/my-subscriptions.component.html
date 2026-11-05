@@ -18,13 +18,13 @@
       <div class="actor-info">
         <a [routerLink]="[ '/c', videoChannel.nameWithHost ]" class="actor-names" i18n-title title="Channel page">
           <div class="actor-display-name">{{ videoChannel.displayName }}</div>
-          <div class="actor-name">{{ videoChannel.nameWithHost }}</div>
+          <div class="actor-name">{{ videoChannel.nameWithHost | displayHandle }}</div>
         </a>
 
         <div i18n class="actor-followers">{{ videoChannel.followersCount }} subscribers</div>
 
         <a [routerLink]="[ '/a', videoChannel.ownerBy ]" i18n-title title="Owner account page" class="actor-owner">
-          <span i18n>Created by {{ videoChannel.ownerBy }}</span>
+          <span i18n>Created by {{ videoChannel.ownerBy | displayHandle }}</span>
           <my-actor-avatar [actor]="videoChannel.ownerAccount" actorType="account" size="18"></my-actor-avatar>
         </a>
       </div>

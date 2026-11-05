@@ -1,6 +1,7 @@
 import { Component, inject, input, viewChild, ChangeDetectionStrategy } from '@angular/core'
 import { AdvancedFilterDef } from '@app/shared/shared-forms/advanced-input-filter.component'
 import { Notifier } from '@app/core'
+import { getDisplayHandle } from '@app/helpers'
 import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { PTDatePipe } from '../shared-main/common/date.pipe'
@@ -9,6 +10,7 @@ import { PeerTubeBadgeService } from '../shared-main/common/peertube-badge.servi
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 type DataLoaderParameter = DataLoaderOptionsBase & {
   subscriptionName?: string
@@ -23,7 +25,8 @@ type DataLoaderParameter = DataLoaderOptionsBase & {
     NumberFormatterPipe,
     ActorAvatarComponent,
     PTDatePipe,
-    RouterLink
+    RouterLink,
+    DisplayHandlePipe
   ]
 })
 export class GenericAccountBlocklistComponent {
@@ -73,8 +76,8 @@ export class GenericAccountBlocklistComponent {
       () => {
         this.notifier.success(
           this.mode() === BlocklistComponentType.Account
-            ? $localize`Account ${blockedAccount.nameWithHost} unmuted.`
-            : $localize`Account ${blockedAccount.nameWithHost} unmuted by your platform.`
+            ? $localize`Account ${getDisplayHandle(blockedAccount.nameWithHost)} unmuted.`
+            : $localize`Account ${getDisplayHandle(blockedAccount.nameWithHost)} unmuted by your platform.`
         )
 
         this.table().loadData()

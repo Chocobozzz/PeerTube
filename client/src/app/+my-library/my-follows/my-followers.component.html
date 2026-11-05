@@ -21,7 +21,7 @@
 
       <div class="actor-info">
         <a [href]="follow.follower.url" class="actor-names" rel="noopener noreferrer" target="_blank" i18n-title title="Follower page">
-          <div class="actor-display-name">{{ follow.follower.name + '@' + follow.follower.host }}</div>
+          <div class="actor-display-name">{{ follow.follower.name + '@' + follow.follower.host | displayHandle }}</div>
           <my-global-icon iconName="external-link"></my-global-icon>
         </a>
 

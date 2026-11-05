@@ -23,7 +23,7 @@
   <ng-template #tableCells let-serverBlock>
     <td>
       <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
-        {{ serverBlock.blockedServer.host }}
+        {{ serverBlock.blockedServer.host | displayHost }}
         <my-global-icon iconName="external-link"></my-global-icon>
       </a>
     </td>

@@ -52,7 +52,7 @@
               <my-actor-avatar [actor]="comment.account" actorType="account" size="32"></my-actor-avatar>
               <div>
                 {{ comment.account.displayName }}
-                <span>{{ comment.by }}</span>
+                <span>{{ comment.by | displayHandle }}</span>
               </div>
             </div>
           </a>

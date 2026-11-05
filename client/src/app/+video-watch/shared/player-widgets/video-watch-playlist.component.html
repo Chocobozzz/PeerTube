@@ -17,7 +17,7 @@
         }
       </div>
       <div class="playlist-by-index">
-        <div class="playlist-by">{{ playlist().ownerBy }}</div>
+        <div class="playlist-by">{{ playlist().ownerBy | displayHandle }}</div>
         <div class="playlist-index">
           <span>{{ currentPlaylistPosition }}</span><span>{{ playlistPagination.totalItems }}</span>
         </div>
