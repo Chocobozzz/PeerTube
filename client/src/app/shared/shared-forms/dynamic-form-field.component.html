@@ -1,7 +1,7 @@
 @if (form()) {
   <div [formGroup]="form()" class="form-group">
     @if (setting().label && setting().type !== 'input-checkbox') {
-      <label [attr.for]="setting().name" [innerHTML]="setting().label"></label>
+      <label [attr.for]="setting().type === 'input-radio' ? null : setting().name" [id]="getLabelId()" [innerHTML]="setting().label"></label>
     }
 
     @if (setting().type === 'input-checkbox') {
@@ -29,6 +29,13 @@
             }
           </select>
         </div>
+      }
+
+      @case ('input-radio') {
+        <my-select-radio
+          [inputId]="setting().name" [items]="radioItems()" [formControlName]="setting().name"
+          [ariaLabelledby]="setting().label ? getLabelId() : undefined"
+        ></my-select-radio>
       }
 
       @case ('input-password') {

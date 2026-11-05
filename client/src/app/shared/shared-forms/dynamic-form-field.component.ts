@@ -1,10 +1,12 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core'
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core'
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RegisterClientFormFieldOptions } from '@peertube/peertube-models'
+import { SelectRadioItem } from '@pt-types'
 import { HelpComponent } from '../shared-main/buttons/help.component'
 import { InputTextComponent } from './input-text.component'
 import { MarkdownTextareaComponent } from './markdown-textarea.component'
 import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
+import { SelectRadioComponent } from './select/select-radio.component'
 
 @Component({
   selector: 'my-dynamic-form-field',
@@ -17,7 +19,8 @@ import { PeertubeCheckboxComponent } from './peertube-checkbox.component'
     PeertubeCheckboxComponent,
     InputTextComponent,
     HelpComponent,
-    MarkdownTextareaComponent
+    MarkdownTextareaComponent,
+    SelectRadioComponent
   ]
 })
 export class DynamicFormFieldComponent {
@@ -25,14 +28,23 @@ export class DynamicFormFieldComponent {
   readonly formErrors = input<any>(undefined)
   readonly setting = input<RegisterClientFormFieldOptions>(undefined)
 
+  readonly radioItems = computed<SelectRadioItem[]>(() => {
+    return (this.setting().options ?? []).map(o => ({ id: o.value, label: o.label }))
+  })
+
   hasDedicatedFormError () {
     const dedicated = new Set<RegisterClientFormFieldOptions['type']>([
       'input-checkbox',
       'input',
       'select',
+      'input-radio',
       'input-textarea'
     ])
 
     return dedicated.has(this.setting().type)
+  }
+
+  getLabelId () {
+    return this.setting().name + '-label'
   }
 }

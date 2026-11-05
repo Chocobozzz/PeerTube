@@ -1,6 +1,6 @@
-<div role="radiogroup">
+<div role="radiogroup" [attr.aria-labelledby]="getLabelledBy()">
   @if (label()) {
-    <label [for]="inputId()" [ngClass]="{ 'label-secondary': labelSecondary() }">{{ label() }}</label>
+    <label [for]="inputId()" [id]="getLabelId()" [ngClass]="{ 'label-secondary': labelSecondary() }">{{ label() }}</label>
   }
 
   <ng-content></ng-content>

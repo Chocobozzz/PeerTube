@@ -1,9 +1,18 @@
 export type RegisterClientFormFieldOptions = {
   name?: string
   label?: string
-  type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
+  type:
+    | 'input'
+    | 'input-checkbox'
+    | 'input-password'
+    | 'input-textarea'
+    | 'input-radio'
+    | 'markdown-text'
+    | 'markdown-enhanced'
+    | 'select'
+    | 'html'
 
-  // For select type
+  // For select and input-radio types
   options?: { value: string, label: string }[]
 
   // For html type

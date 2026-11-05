@@ -33,6 +33,17 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     })
 
     registerSetting({
+      name: 'radio-setting',
+      label: 'Radio setting',
+      type: 'input-radio',
+      options: [
+        { value: 'first', label: 'First' },
+        { value: 'second', label: 'Second' }
+      ],
+      default: 'second'
+    })
+
+    registerSetting({
       label: 'Unnamed 1',
       type: 'input'
     })

@@ -149,9 +149,10 @@ function register (...) {
     label: 'Admin name',
 
     type: 'input',
-    // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
+    // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'input-radio' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
 
-    // If type: 'select', give the select available options
+    // If type: 'select' or 'input-radio', give the available options
+    // /!\ With 'input-radio', the user cannot unselect an option: add an explicit option (like "None") if the field is optional
     options: [
       { label: 'Label 1', value: 'value1' },
       { label: 'Label 2', value: 'value2' }
@@ -920,7 +921,7 @@ async function register ({ registerVideoField, peertubeHelpers }) {
     label: 'My added field',
     descriptionHTML: 'Optional description',
 
-    // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
+    // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'input-radio' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
     // /!\ 'input-checkbox' could send "false" and "true" strings instead of boolean
     type: 'input-textarea',
 
