@@ -5,10 +5,12 @@ import { PluginsManager } from '@root-helpers/plugins-manager'
 import { TranslationsManager } from '@root-helpers/translations-manager'
 import { copyToClipboard } from '@root-helpers/utils'
 import { buildVideoOrPlaylistEmbed } from '@root-helpers/video'
-import { isMobile } from '@root-helpers/web-browser'
+import { hasUserActivation, isMobile } from '@root-helpers/web-browser'
 import videojs from 'video.js'
 import { saveAverageBandwidth } from './peertube-player-local-storage'
 import './shared/bezels/bezels-plugin'
+import './shared/commercial-content/peertube-commercial-content-info-component'
+import './shared/commercial-content/peertube-commercial-content-plugin'
 import './shared/context-menu'
 import './shared/control-bar/caption-toggle-button'
 import './shared/control-bar/chapters-plugin'
@@ -17,8 +19,6 @@ import './shared/control-bar/p2p-info-button'
 import './shared/control-bar/peertube-link-button'
 import './shared/control-bar/peertube-live-display'
 import './shared/control-bar/storyboard-plugin'
-import './shared/commercial-content/peertube-commercial-content-info-component'
-import './shared/commercial-content/peertube-commercial-content-plugin'
 import './shared/control-bar/theater-button'
 import './shared/control-bar/time-tooltip'
 import './shared/dock/peertube-dock-component'
@@ -492,9 +492,9 @@ export class PeerTubePlayer {
       poster: getPoster(),
       preload: 'none' as 'none',
 
-      // The poster is only worth prioritizing if we actually display it: on autoplay it's hidden as soon as playback
-      // starts, so eagerly fetching it would just compete with the video segments
-      mainContent: this.options.mainContent === true && autoplay === false,
+      // The main content flag determines whether the poster should be prioritized for fetching
+      // Fetch it the user doesn't have autoplay, or if we think autoplay will be blocked (unmuted autoplay for example)
+      mainContent: this.options.mainContent === true && (autoplay === false || (autoplay === 'play' && !hasUserActivation())),
 
       inactivityTimeout: this.options.inactivityTimeout,
       playbackRates: [ 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3 ],

@@ -5,8 +5,8 @@ export function isIOS () {
 
   // Detect iPad Desktop mode
   return !!(navigator.maxTouchPoints &&
-      navigator.maxTouchPoints > 2 &&
-      navigator.platform.includes('MacIntel'))
+    navigator.maxTouchPoints > 2 &&
+    navigator.platform.includes('MacIntel'))
 }
 
 export function isSafari () {
@@ -23,4 +23,8 @@ export function isIphone () {
 
 export function isAndroid () {
   return /Android/i.test(navigator.userAgent)
+}
+
+export function hasUserActivation () {
+  return navigator.userActivation?.hasBeenActive === true
 }
