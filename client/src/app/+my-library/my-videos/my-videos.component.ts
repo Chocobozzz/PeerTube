@@ -28,6 +28,7 @@ import {
   VideoActionsDropdownComponent
 } from '../../shared/shared-video-miniature/video-actions-dropdown.component'
 import { VideoAIUsageBadgeComponent } from '../../shared/shared-main/video/video-ai-usage-badge.component'
+import { VideoCaptionLanguagesComponent } from '../../shared/shared-main/video/video-caption-languages.component'
 import { BulkUpdateVideosModalComponent } from '../../shared/shared-video/bulk-update-videos-modal.component'
 import { PrivacyBadgeComponent } from '../../shared/shared-video/privacy-badge.component'
 import { VideoNSFWBadgeComponent } from '../../shared/shared-video/video-nsfw-badge.component'
@@ -38,6 +39,7 @@ type ColumnName =
   | 'name'
   | 'tags'
   | 'language'
+  | 'captions'
   | 'privacy'
   | 'sensitive'
   | 'playlists'
@@ -75,6 +77,7 @@ type DataLoaderParameter = Parameters<MyVideosComponent['_dataLoader']>[0]
     PTDatePipe,
     VideoNSFWBadgeComponent,
     VideoAIUsageBadgeComponent,
+    VideoCaptionLanguagesComponent,
     TableComponent,
     PrivacyBadgeComponent,
     BulkUpdateVideosInPlaylistModalComponent,
@@ -154,6 +157,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
       { id: 'state', label: $localize`State`, selected: true, sortable: false },
       { id: 'category', label: $localize`Category`, selected: false, sortable: false },
       { id: 'language', label: $localize`Language`, selected: false, sortable: false },
+      { id: 'captions', label: $localize`Captions`, selected: false, sortable: false },
       { id: 'licence', label: $localize`Licence`, selected: false, sortable: false },
       { id: 'aiUsage', label: $localize`Use of AI`, selected: false, sortable: false },
       { id: 'recommendationScope', label: $localize`Recommended videos`, selected: false, sortable: false },

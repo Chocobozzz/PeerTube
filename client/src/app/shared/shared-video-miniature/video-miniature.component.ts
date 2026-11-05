@@ -17,6 +17,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { HTMLServerConfig, VideoPlaylistType, VideoPrivacy } from '@peertube/peertube-models'
 import { first, switchMap } from 'rxjs/operators'
 import { VideoAIUsageBadgeComponent } from '../shared-main/video/video-ai-usage-badge.component'
+import { VideoCaptionsBadgeComponent } from '../shared-main/video/video-captions-badge.component'
 import { LinkType } from '../../../types/link.type'
 import { ActorAvatarComponent } from '../shared-actor-image/actor-avatar.component'
 import { ActorHostComponent } from '../shared-actor/actor-host.component'
@@ -57,7 +58,8 @@ export type MiniatureDisplayOptions = {
     GlobalIconComponent,
     NgbTooltipModule,
     NgTemplateOutlet,
-    VideoAIUsageBadgeComponent
+    VideoAIUsageBadgeComponent,
+    VideoCaptionsBadgeComponent
   ]
 })
 export class VideoMiniatureComponent implements OnInit {

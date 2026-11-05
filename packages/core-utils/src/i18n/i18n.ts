@@ -123,15 +123,17 @@ export function getShortLocale (locale: string) {
 }
 
 /**
- * Check if one of the language codes (like video captions languages) matches the language of the locale
+ * Check if one of the language codes (like video captions languages) matches one of the wanted languages or locales
  * Regions and scripts are ignored on both sides (`zh-Hans-CN` matches `zh` and `zh-Hans`, `pt-BR` matches `pt-PT`)
  */
-export function hasLanguageForLocale (languages: string[], locale: string) {
-  if (!locale || !Array.isArray(languages) || languages.length === 0) return false
+export function hasOneOfLanguages (languages: string[], wantedLanguages: string[]) {
+  if (!Array.isArray(languages) || languages.length === 0) return false
+  if (!Array.isArray(wantedLanguages) || wantedLanguages.length === 0) return false
 
-  const localeLanguage = getShortLocale(locale).toLowerCase()
+  const toLanguage = (l: string) => getShortLocale(l).toLowerCase()
+  const wanted = new Set(wantedLanguages.filter(l => !!l).map(toLanguage))
 
-  return languages.some(language => language && getShortLocale(language).toLowerCase() === localeLanguage)
+  return languages.some(language => language && wanted.has(toLanguage(language)))
 }
 
 export function buildFileLocale (locale: string) {

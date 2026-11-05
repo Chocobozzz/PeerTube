@@ -118,6 +118,12 @@
       </td>
     }
 
+    @if (table.isColumnDisplayed('captions')) {
+      <td>
+        <my-video-caption-languages [video]="video"></my-video-caption-languages>
+      </td>
+    }
+
     @if (table.isColumnDisplayed('licence')) {
       <td>
         @if (video.licence?.id) {
