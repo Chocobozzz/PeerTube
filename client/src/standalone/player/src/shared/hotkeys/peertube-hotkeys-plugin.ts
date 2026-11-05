@@ -1,3 +1,4 @@
+import { getLatinKey } from '@root-helpers/keyboard'
 import videojs from 'video.js'
 import { VideojsPlayer, VideojsPlugin } from '../../types'
 
@@ -236,34 +237,11 @@ class PeerTubeHotkeysPlugin extends Plugin {
   private isNaked (event: KeyboardEvent, key: string) {
     if (key.length === 1) key = key.toUpperCase()
 
-    return (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && this.getLatinKey(event.key, event.code) === key)
+    return (!event.ctrlKey && !event.altKey && !event.metaKey && !event.shiftKey && getLatinKey(event.key, event.code) === key)
   }
 
   private isNakedOrShift (event: KeyboardEvent, key: string) {
     return (!event.ctrlKey && !event.altKey && !event.metaKey && event.key === key)
-  }
-
-  // Thanks Maciej Krawczyk
-  // https://stackoverflow.com/questions/70211837/keyboard-shortcuts-commands-on-non-latin-alphabet-keyboards-javascript?rq=1
-  private getLatinKey (key: string, code: string) {
-    if (key.length !== 1) {
-      return key
-    }
-
-    const capitalHetaCode = 880
-    const isNonLatin = key.charCodeAt(0) >= capitalHetaCode
-
-    if (isNonLatin) {
-      if (code.startsWith('Key') && code.length === 4) { // i.e. 'KeyW'
-        return code.charAt(3)
-      }
-
-      if (code.startsWith('Digit') && code.length === 6) { // i.e. 'Digit7'
-        return code.charAt(5)
-      }
-    }
-
-    return key.toUpperCase()
   }
 
   private canSeek () {
