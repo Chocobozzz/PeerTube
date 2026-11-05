@@ -123,15 +123,15 @@ export function getShortLocale (locale: string) {
 }
 
 /**
- * Check if one of the language codes (ISO 639, like video captions languages) matches the language of the locale
- * Regions and scripts of the locale are ignored (`zh-Hans-CN` matches `zh`)
+ * Check if one of the language codes (like video captions languages) matches the language of the locale
+ * Regions and scripts are ignored on both sides (`zh-Hans-CN` matches `zh` and `zh-Hans`, `pt-BR` matches `pt-PT`)
  */
 export function hasLanguageForLocale (languages: string[], locale: string) {
   if (!locale || !Array.isArray(languages) || languages.length === 0) return false
 
   const localeLanguage = getShortLocale(locale).toLowerCase()
 
-  return languages.some(language => language?.toLowerCase() === localeLanguage)
+  return languages.some(language => language && getShortLocale(language).toLowerCase() === localeLanguage)
 }
 
 export function buildFileLocale (locale: string) {

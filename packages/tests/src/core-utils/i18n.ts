@@ -14,6 +14,15 @@ describe('Has language for locale', function () {
     expect(hasLanguageForLocale([ 'pt' ], 'pt-BR')).to.be.true
   })
 
+  it('Ignores the region and the script of the languages', function () {
+    expect(hasLanguageForLocale([ 'pt-BR' ], 'pt-BR')).to.be.true
+    expect(hasLanguageForLocale([ 'pt-PT' ], 'pt-BR')).to.be.true
+    expect(hasLanguageForLocale([ 'es-419' ], 'es-ES')).to.be.true
+    expect(hasLanguageForLocale([ 'zh-Hans' ], 'zh-Hans-CN')).to.be.true
+    expect(hasLanguageForLocale([ 'zh-Hant' ], 'zh-Hant-TW')).to.be.true
+    expect(hasLanguageForLocale([ 'pt-BR' ], 'es-ES')).to.be.false
+  })
+
   it('Supports three letters languages', function () {
     expect(hasLanguageForLocale([ 'kab' ], 'kab')).to.be.true
   })

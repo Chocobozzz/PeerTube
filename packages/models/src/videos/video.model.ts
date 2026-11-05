@@ -96,7 +96,7 @@ export interface Video extends Partial<VideoAdditionalAttributes> {
   }
 
   /**
-   * Languages (ISO 639 codes) of the video captions, only available in videos lists
+   * Languages of the video captions, only available in videos lists
    */
   captionLanguages?: string[]
 

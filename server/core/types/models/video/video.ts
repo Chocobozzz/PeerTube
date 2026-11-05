@@ -269,7 +269,6 @@ export type MVideoForRedundancyAPI =
 export type MVideoFormattable =
   & MVideoThumbnails
   & PickWithOpt<VideoModel, 'UserVideoHistories', MUserVideoHistoryTime[]>
-  & PickWithOpt<VideoModel, 'VideoCaptions', MVideoCaptionLanguage[]>
   & Use<'VideoChannel', MChannelAccountSummaryFormattable>
 
 export type MVideoFormattableAdditionalAttributes =

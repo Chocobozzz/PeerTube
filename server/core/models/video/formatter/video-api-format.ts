@@ -166,10 +166,8 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
 
     comments: video.comments,
 
-    // Only available when captions were loaded (videos list)
-    captionLanguages: isArray(video.VideoCaptions)
-      ? video.VideoCaptions.map(c => c.language)
-      : undefined,
+    // Only set when listing videos
+    captionLanguages: video.captionLanguages,
 
     // Can be added by external plugins
     pluginData: (video as any).pluginData,

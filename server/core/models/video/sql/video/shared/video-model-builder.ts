@@ -90,7 +90,7 @@ export class VideoModelBuilder {
 
       this.setUserHistory(row, videoModel)
       this.addThumbnail(row, videoModel)
-      this.addCaptionLanguages(row, videoModel)
+      this.setCaptionLanguages(row, videoModel)
       this.setLive(row, videoModel)
       this.addLiveSchedule(row, videoModel)
 
@@ -327,14 +327,11 @@ export class VideoModelBuilder {
     this.thumbnailsDone.add(videoModel.id)
   }
 
-  // Only the languages are available in list mode: build partial caption models so the API can expose them
-  private addCaptionLanguages (row: SQLRow, videoModel: VideoModel) {
+  private setCaptionLanguages (row: SQLRow, videoModel: VideoModel) {
     const key = 'CaptionLanguagesJSON'
-    if (!(key in row) || videoModel.VideoCaptions) return
+    if (!(key in row) || videoModel.captionLanguages) return
 
-    const languages = row[key] as any as string[] || []
-
-    videoModel.VideoCaptions = languages.map(language => new VideoCaptionModel({ language }, this.buildOpts))
+    videoModel.captionLanguages = row[key] as any as string[] || []
   }
 
   private addWebVideoFile (row: SQLRow, videoModel: VideoModel) {
