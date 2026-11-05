@@ -8,7 +8,7 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUser } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isThemeNameValid } from '../../../helpers/custom-validators/plugins.js'
 import {
   isUserAdminFlagsValid,
@@ -42,6 +42,7 @@ import {
   areValidationErrors,
   checkCanModerate,
   checkEmailDoesNotAlreadyExist,
+  checkLocalPasswordLength,
   checkPasswordConfirmation,
   checkUserEmailExistPermissive,
   checkUserIdExist,
@@ -239,7 +240,7 @@ export const usersUpdateMeValidator = [
     .custom(isUserDescriptionValid),
   body('currentPassword')
     .optional()
-    .custom(exists),
+    .isString(),
   body('password')
     .optional()
     .custom(isUserPasswordValid),
@@ -334,6 +335,13 @@ export const usersUpdateMeValidator = [
       if (!body.currentPassword) {
         return res.fail({ message: req.t('currentPassword parameter is missing') })
       }
+
+      // Validation errors are only checked below, so check the type before using the password
+      if (typeof body.currentPassword !== 'string') {
+        return res.fail({ message: req.t('currentPassword parameter is invalid') })
+      }
+
+      if (!checkLocalPasswordLength(body.currentPassword, req, res)) return
 
       if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
@@ -467,7 +475,7 @@ export const usersResetPasswordValidator = [
 
 export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Request) => number | string) => {
   return [
-    body('currentPassword').optional().custom(exists),
+    body('currentPassword').optional().isString(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
@@ -487,6 +495,9 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
           message: 'currentPassword is missing'
         })
       }
+
+      // Plugin passwords are checked by the plugin, not by bcrypt
+      if (!user.pluginAuth && !checkLocalPasswordLength(req.body.currentPassword, req, res)) return
 
       if (await isUserCurrentPasswordValid(user, req.body.currentPassword) !== true) {
         return res.fail({

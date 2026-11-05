@@ -1,4 +1,5 @@
 import { HttpStatusCode, ServerErrorCode } from '@peertube/peertube-models'
+import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import {
@@ -40,6 +41,9 @@ export async function checkPasswordConfirmation (req: express.Request, res: expr
     return false
   }
 
+  // Plugin passwords are checked by the plugin, not by bcrypt
+  if (!user.pluginAuth && !checkLocalPasswordLength(currentPassword, req, res)) return false
+
   if (!await consumePasswordConfirmationAttempt(user)) {
     res.fail({
       status: HttpStatusCode.TOO_MANY_REQUESTS_429,
@@ -62,4 +66,17 @@ export async function checkPasswordConfirmation (req: express.Request, res: expr
   await resetPasswordConfirmationFailures(user)
 
   return true
+}
+
+// Local passwords are compared with bcrypt, that cannot handle long passwords
+export function checkLocalPasswordLength (password: string, req: express.Request, res: express.Response) {
+  if (!isUserPasswordTooLong(password)) return true
+
+  res.fail({
+    status: HttpStatusCode.BAD_REQUEST_400,
+    message: req.t('Password is too long. Please reset it using the password reset procedure.'),
+    type: ServerErrorCode.TOO_LONG_PASSWORD
+  })
+
+  return false
 }

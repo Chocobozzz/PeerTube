@@ -111,6 +111,16 @@ describe('Test password confirmation of sensitive actions', function () {
       await server.users.create({ username: 'other_admin1', role: UserRole.ADMINISTRATOR })
     })
 
+    it('Should refuse a too long password confirmation', async function () {
+      const res = await server.plugins.install({
+        path: PluginsCommand.getPluginTestPath(),
+        currentPassword: 'super'.repeat(61),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      expect(res.body.code).to.equal(ServerErrorCode.TOO_LONG_PASSWORD)
+    })
+
     it('Should require the password to give the administrator role', async function () {
       const { userId } = await server.users.generate('moderator2', UserRole.MODERATOR)
 
