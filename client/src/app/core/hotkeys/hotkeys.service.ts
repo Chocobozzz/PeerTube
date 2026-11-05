@@ -1,7 +1,7 @@
 // Thanks to https://github.com/brtnshrdr/angular2-hotkeys
 
 import { Injectable, NgZone, inject } from '@angular/core'
-import { getLatinKey } from '@root-helpers/keyboard'
+import { getPhysicalLatinKey } from '@root-helpers/keyboard'
 import debug from 'debug'
 import { Subject } from 'rxjs'
 import { createKeybindingsHandler } from 'tinykeys'
@@ -21,9 +21,14 @@ export class HotkeysService {
 
   private disabled = false
 
-  private removeTinyKeysStore = new Map<Hotkey, (() => void)[]>()
+  private keybindingsHandlers = new Map<Hotkey, EventListener[]>()
+
+  // Keep the original event, to give it to hotkey callbacks instead of the remapped one
+  private readonly originalEvents = new WeakMap<object, KeyboardEvent>()
 
   constructor () {
+    this.zone.runOutsideAngular(() => window.addEventListener('keydown', event => this.onKeyDown(event)))
+
     this.initCheatSheet()
   }
 
@@ -58,39 +63,35 @@ export class HotkeysService {
     for (const combo of hotkey.combo) {
       debugLogger('Adding hotkey ' + hotkey.formatted)
 
-      this.zone.runOutsideAngular(() => {
-        const handler = createKeybindingsHandler({
-          [combo]: event => {
-            if (this.disabled) return
+      const handler = createKeybindingsHandler({
+        [combo]: tinyKeysEvent => {
+          if (this.disabled) return
 
-            const target = event.target as HTMLElement
-            const nodeName: string = target.nodeName.toUpperCase()
+          const event = this.originalEvents.get(tinyKeysEvent) ?? tinyKeysEvent
 
-            if (target.isContentEditable || this.preventInNode.has(nodeName) || this.preventInRole.has(target.getAttribute('role'))) {
-              return
-            }
+          const target = event.target as HTMLElement
+          const nodeName: string = target.nodeName.toUpperCase()
 
-            this.zone.run(() => {
-              const result = hotkey.callback.apply(this, [ event, combo ])
-
-              if (result === false) {
-                event.preventDefault()
-                event.stopPropagation()
-              }
-            })
+          if (target.isContentEditable || this.preventInNode.has(nodeName) || this.preventInRole.has(target.getAttribute('role'))) {
+            return
           }
-        })
 
-        const listener = (event: KeyboardEvent) => handler(this.withLatinKey(event))
-        window.addEventListener('keydown', listener)
-        const removeTinyKey = () => window.removeEventListener('keydown', listener)
+          this.zone.run(() => {
+            const result = hotkey.callback.apply(this, [ event, combo ])
 
-        if (!this.removeTinyKeysStore.has(hotkey)) {
-          this.removeTinyKeysStore.set(hotkey, [])
+            if (result === false) {
+              event.preventDefault()
+              event.stopPropagation()
+            }
+          })
         }
-
-        this.removeTinyKeysStore.get(hotkey).push(removeTinyKey)
       })
+
+      if (!this.keybindingsHandlers.has(hotkey)) {
+        this.keybindingsHandlers.set(hotkey, [])
+      }
+
+      this.keybindingsHandlers.get(hotkey).push(handler)
     }
 
     return hotkey
@@ -106,17 +107,10 @@ export class HotkeysService {
     }
 
     this.hotkeys = this.hotkeys.filter(h => h !== hotkey)
-    const removeHandlers = this.removeTinyKeysStore.get(hotkey)
 
-    if (removeHandlers) {
+    if (this.keybindingsHandlers.delete(hotkey)) {
       debugLogger('Removing hotkey ' + hotkey.formatted)
-
-      for (const removeHandler of removeHandlers) {
-        removeHandler()
-      }
     }
-
-    this.removeTinyKeysStore.delete(hotkey)
   }
 
   getHotkeys () {
@@ -131,24 +125,36 @@ export class HotkeysService {
     this.disabled = false
   }
 
+  private onKeyDown (event: KeyboardEvent) {
+    const tinyKeysEvent = this.buildTinyKeysEvent(event)
+
+    // Copy handlers, since a hotkey callback can add or remove hotkeys
+    for (const handler of Array.from(this.keybindingsHandlers.values()).flat()) {
+      handler(tinyKeysEvent)
+    }
+  }
+
   // tinykeys matches event.key, that is not a latin letter on non-latin keyboard layouts (cyrillic, greek...)
-  // So use the physical key instead in this case
-  private withLatinKey (event: KeyboardEvent): KeyboardEvent {
+  // So give it the physical key instead in this case
+  private buildTinyKeysEvent (event: KeyboardEvent): KeyboardEvent {
     if (!event.key || !event.code) return event
 
-    const latinKey = getLatinKey(event.key, event.code)
-    if (latinKey === event.key.toUpperCase()) return event
+    const latinKey = getPhysicalLatinKey(event.key, event.code)
+    if (!latinKey) return event
 
-    return new Proxy(event, {
-      get: (target, prop) => {
-        if (prop === 'key') return latinKey
+    // Only the properties read by tinykeys
+    const tinyKeysEvent = {
+      key: latinKey,
+      code: event.code,
+      repeat: event.repeat,
+      isComposing: event.isComposing,
+      target: event.target,
+      currentTarget: event.currentTarget,
+      getModifierState: (key: string) => event.getModifierState(key)
+    } as KeyboardEvent
 
-        const value = Reflect.get(target, prop)
+    this.originalEvents.set(tinyKeysEvent, event)
 
-        return typeof value === 'function'
-          ? value.bind(target)
-          : value
-      }
-    })
+    return tinyKeysEvent
   }
 }

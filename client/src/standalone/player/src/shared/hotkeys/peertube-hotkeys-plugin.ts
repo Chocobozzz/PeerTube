@@ -241,7 +241,7 @@ class PeerTubeHotkeysPlugin extends Plugin {
   }
 
   private isNakedOrShift (event: KeyboardEvent, key: string) {
-    return (!event.ctrlKey && !event.altKey && !event.metaKey && event.key === key)
+    return (!event.ctrlKey && !event.altKey && !event.metaKey && getLatinKey(event.key, event.code) === key)
   }
 
   private canSeek () {
