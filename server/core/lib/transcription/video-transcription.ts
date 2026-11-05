@@ -1,5 +1,6 @@
 import { VideoFileStream } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
+import { hasVTTCues } from '@server/helpers/captions-utils.js'
 import { isVideoCaptionLanguageValid } from '@server/helpers/custom-validators/video-captions.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -120,6 +121,12 @@ export async function onTranscriptionEnded (options: {
 
   if (!isVideoCaptionLanguageValid(language)) {
     logger.warn(`Invalid transcription language for video ${video.uuid}`)
+    return
+  }
+
+  // The transcriber may not detect any speech (music, etc.)
+  if (!await hasVTTCues(vttPath)) {
+    logger.info(`Do not create caption for video ${video.uuid}: the transcription is empty`)
     return
   }
 

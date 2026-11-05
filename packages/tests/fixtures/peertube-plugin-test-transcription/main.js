@@ -21,6 +21,10 @@ async function register ({ registerHook, peertubeHelpers }) {
             return { language: 'english', content: 'WEBVTT\n\n00:00:00.000 --> 00:00:01.000\nInvalid language\n' }
           }
 
+          if (video.name === 'empty') {
+            return { language: 'en', content: 'WEBVTT\n\n' }
+          }
+
           return {
             language: language || 'en',
 

@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { UserNotificationType } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -9,7 +10,7 @@ import {
   setDefaultVideoChannel,
   waitJobs
 } from '@peertube/peertube-server-commands'
-import { checkAutoCaption, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
+import { checkAutoCaption, checkLanguage, checkNoCaption, uploadForTranscription } from '@tests/shared/transcription.js'
 import { expect } from 'chai'
 
 describe('Test plugin transcription', function () {
@@ -44,6 +45,23 @@ describe('Test plugin transcription', function () {
     const logs = await server.servers.getLogContent()
 
     expect(logs.toString()).to.not.contain('Installing transcriber')
+  })
+
+  it('Should not create a caption nor notify if the transcription is empty', async function () {
+    this.timeout(60000)
+
+    const uuid = await uploadForTranscription(server, { name: 'empty' })
+    await waitJobs([ server ])
+
+    await server.servers.waitUntilLog(`Do not create caption for video ${uuid}: the transcription is empty`)
+    await checkNoCaption([ server ], uuid)
+    await checkLanguage([ server ], uuid, null)
+
+    const { data } = await server.notifications.list({ start: 0, count: 100 })
+    const transcriptionNotifications = data.filter(n => n.type === UserNotificationType.MY_VIDEO_TRANSCRIPTION_GENERATED)
+
+    expect(transcriptionNotifications).to.have.lengthOf(1)
+    expect(transcriptionNotifications[0].videoCaption.video.uuid).to.not.equal(uuid)
   })
 
   it('Should fail if the plugin transcriber returns an unsupported language', async function () {

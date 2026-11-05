@@ -1,4 +1,5 @@
 import { createReadStream, createWriteStream } from 'fs'
+import { readFile } from 'fs/promises'
 import { move, remove } from 'fs-extra/esm'
 import { Transform } from 'stream'
 import { MVideoCaption } from '@server/types/models/index.js'
@@ -18,6 +19,12 @@ export async function moveAndProcessCaptionFile (physicalFile: { filename?: stri
   // This is important in case if there is another attempt in the retry process
   if (physicalFile.filename) physicalFile.filename = videoCaption.filename
   physicalFile.path = destination
+}
+
+export async function hasVTTCues (path: string) {
+  const content = await readFile(path, 'utf8')
+
+  return content.includes('-->')
 }
 
 // ---------------------------------------------------------------------------
