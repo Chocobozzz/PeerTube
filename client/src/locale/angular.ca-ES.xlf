@@ -1587,7 +1587,7 @@
       </trans-unit>
       <trans-unit id="2126000025358835171" datatype="html">
         <source>Retry import requested for {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="new">Retry import requested for {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</target>
+        <target state="translated">S'ha sol·licitat tornar a intentar la importació de {count, plural, =1 {1 vídeo} other {<x id="count"/> vídeos}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">611</context>
@@ -2319,7 +2319,7 @@
       </trans-unit>
       <trans-unit id="6626477897309620236" datatype="html">
         <source>Retry video import of "<x id="PH" equiv-text="video.name"/>" requested.</source>
-        <target state="new">Retry video import of "<x id="PH" equiv-text="video.name"/>" requested.</target>
+        <target state="translated">S'ha sol·licitat tornar a intentar la importació del vídeo "<x id="PH" equiv-text="video.name"/>".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">531</context>
@@ -5534,7 +5534,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7761833209726865885" datatype="html">
         <source>Featured video</source>
-        <target state="new">Featured video</target>
+        <target state="translated">Vídeo destacat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">27,28</context>
@@ -6166,7 +6166,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8904960460092884203" datatype="html">
         <source>Video password</source>
-        <target state="new">Video password</target>
+        <target state="translated">Contrasenya del vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -6174,7 +6174,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="820349246776410615" datatype="html">
         <source>Video embed privacy</source>
-        <target state="new">Video embed privacy</target>
+        <target state="translated">Privacitat de la incrustació de vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -6406,7 +6406,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6172864563872578497" datatype="html">
         <source>Choose which videos can be recommended next to this video. Other applications displaying your video may not apply this preference.</source>
-        <target state="new"> Choose which videos can be recommended next to this video. Other applications displaying your video may not apply this preference. </target>
+        <target state="translated">Trieu quins vídeos surten recomanats després d'aquest vídeo. Pot ser que aquesta preferència no s'apliqui en altres aplicacions que mostrin el vostre vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/moderation/video-moderation.component.html</context>
           <context context-type="linenumber">52</context>
@@ -7699,7 +7699,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="898637641369730933" datatype="html">
         <source>Filter by banned users</source>
-        <target state="needs-translation">Filtra per usuaris bandejats</target>
+        <target state="translated">Filtra per usuaris bandejats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">43</context>
@@ -10158,7 +10158,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8601280736273162004" datatype="html">
         <source>Add a blocklist subscription</source>
-        <target state="new">Add a blocklist subscription</target>
+        <target state="translated">Afegeix una subscripció a la llista de bloqueig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
           <context context-type="linenumber">78,80</context>
@@ -10638,7 +10638,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4757338945782004083" datatype="html">
         <source>Auto-block by instance policy</source>
-        <target state="new">Auto-block by instance policy</target>
+        <target state="translated">Política de bloqueig automàtic per instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -10646,7 +10646,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8157426058291793346" datatype="html">
         <source>Auto-block by auto-tag policy</source>
-        <target state="new">Auto-block by auto-tag policy</target>
+        <target state="translated">Política de bloqueig automàtic per etiquetatge automàtic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -10894,7 +10894,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9098134874193744197" datatype="html">
         <source>Blocklist subscription</source>
-        <target state="new">Blocklist subscription</target>
+        <target state="translated">Subscripció a la llista de bloqueig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -10990,7 +10990,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1895957424873987405" datatype="html">
         <source>Job</source>
-        <target state="new">Job</target>
+        <target state="translated">Tasca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">88</context>
