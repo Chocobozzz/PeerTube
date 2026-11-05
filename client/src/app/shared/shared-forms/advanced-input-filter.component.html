@@ -63,6 +63,23 @@
                 small="true"
               ></my-peertube-checkbox>
             </div>
+          } @else if (def.type === 'checkboxes') {
+            @let key = def.key.toString();
+
+            <div class="mb-2">
+              <div class="filter-title">{{ def.title }}</div>
+
+              @for (item of def.items; track item.value) {
+                <my-peertube-checkbox
+                  class="d-block mb-1"
+                  [inputName]="'filter-checkboxes-' + key + '-' + $index"
+                  [labelText]="item.label"
+                  [checked]="isCheckboxesItemChecked(key, item.value)"
+                  (checkedChange)="setCheckboxesItemValue(key, item.value, $event)"
+                  small="true"
+                ></my-peertube-checkbox>
+              }
+            </div>
           } @else if (def.type === 'select') {
             @let key = def.key.toString();
 

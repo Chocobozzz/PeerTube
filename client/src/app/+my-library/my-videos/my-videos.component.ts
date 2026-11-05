@@ -178,11 +178,10 @@ export class MyVideosComponent implements OnInit, OnDestroy {
       },
 
       {
-        type: 'options',
+        type: 'checkboxes',
         key: 'privacyOneOf',
         title: $localize`Privacy`,
-        options: [
-          { value: 'all', label: $localize`All` },
+        items: [
           { value: VideoPrivacy.PUBLIC, label: $localize`Public videos` },
           { value: VideoPrivacy.INTERNAL, label: $localize`Internal videos` },
           { value: VideoPrivacy.UNLISTED, label: $localize`Unlisted videos` },
@@ -251,7 +250,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
     sort: SortMeta
     search?: string
     isLive?: boolean
-    privacyOneOf?: VideoPrivacyType
+    privacyOneOf?: VideoPrivacyType[]
     tagsOneOf?: string[]
   }) {
     const { pagination, sort, search, isLive, privacyOneOf, tagsOneOf } = options
@@ -270,9 +269,7 @@ export class MyVideosComponent implements OnInit, OnDestroy {
 
       isLive,
 
-      privacyOneOf: privacyOneOf !== undefined
-        ? [ privacyOneOf ]
-        : undefined,
+      privacyOneOf,
 
       tagsOneOf
     }).pipe(tap(({ data }) => this.fetchVideosContainedInPlaylists(data)))

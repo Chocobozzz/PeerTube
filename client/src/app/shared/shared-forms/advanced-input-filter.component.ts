@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, computed, inject, input, output, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
+import { arrayify } from '@peertube/peertube-core-utils'
 import { NgbDropdown, NgbDropdownMenu, NgbDropdownToggle } from '@ng-bootstrap/ng-bootstrap'
 import { Subscription } from 'rxjs'
 import { SelectOptionsItem } from '../../../types/select-options-item.model'
@@ -33,6 +34,15 @@ export type CheckboxFilterDef<ServiceParameters extends Record<string, any>> = {
   key: Extract<keyof ServiceParameters, string>
   label: string
 }
+
+export type CheckboxesFilterDef<ServiceParameters extends Record<string, any>> = {
+  [Key in Extract<keyof ServiceParameters, string>]-?: {
+    type: 'checkboxes'
+    key: Key
+    title: string
+    items: { label: string, value: NonNullable<ServiceParameters[Key]> extends (infer U)[] ? U : never }[]
+  }
+}[Extract<keyof ServiceParameters, string>]
 
 export type SelectFilterDef<ServiceParameters extends Record<string, any>> = {
   [Key in Extract<keyof ServiceParameters, string>]-?: {
@@ -68,6 +78,7 @@ export type AdvancedFilterDef<ServiceParameters extends Record<string, any> = an
   | OptionsFilterDef<ServiceParameters>
   | SelectFilterDef<ServiceParameters>
   | CheckboxFilterDef<ServiceParameters>
+  | CheckboxesFilterDef<ServiceParameters>
   | TagsFilterDef<ServiceParameters>
   | TextFilterDef<ServiceParameters>
 
@@ -100,6 +111,8 @@ export function parseQueryParamsToAdvancedFilters<ServiceParameters extends Reco
       result[key] = undefined
     } else if (def.type === 'checkbox') {
       result[key] = raw === 'true'
+    } else if (def.type === 'checkboxes') {
+      result[key] = arrayify(raw).map((v: string) => isNaN(+v) ? v : +v)
     } else if (def.type === 'tags') {
       // Handle tags as comma-separated values or array
       result[key] = Array.isArray(raw) ? raw : (raw ? raw.split(',').map((v: string) => v.trim()) : [])
@@ -228,6 +241,25 @@ export class AdvancedInputFilterComponent<ServiceParameters extends Record<strin
 
   setCheckboxValue (key: string, value: boolean) {
     this.filterState.update(s => ({ ...s, [key]: value || undefined }))
+  }
+
+  // ---------------------------------------------------------------------------
+  // Template helpers – checkboxes filters
+  // ---------------------------------------------------------------------------
+
+  isCheckboxesItemChecked (key: string, value: unknown): boolean {
+    const current: unknown[] = this.filterState()[key] || []
+
+    return current.includes(value)
+  }
+
+  setCheckboxesItemValue (key: string, value: unknown, checked: boolean) {
+    const current: unknown[] = this.filterState()[key] || []
+    const next = checked
+      ? [ ...current.filter(v => v !== value), value ]
+      : current.filter(v => v !== value)
+
+    this.filterState.update(s => ({ ...s, [key]: next.length > 0 ? next : undefined }))
   }
 
   // ---------------------------------------------------------------------------

@@ -4,7 +4,7 @@ import { RestExtractor, RestPagination, RestService } from '@app/core'
 import { Video } from '@app/shared/shared-main/video/video.model'
 import { VideoListParams, VideoService } from '@app/shared/shared-main/video/video.service'
 import { getAllPrivacies } from '@peertube/peertube-core-utils'
-import { ResultList, VideoInclude, VideoPrivacy } from '@peertube/peertube-models'
+import { ResultList, VideoInclude } from '@peertube/peertube-models'
 import { Observable } from 'rxjs'
 import { catchError, switchMap } from 'rxjs/operators'
 
@@ -20,13 +20,17 @@ export class VideoAdminService {
       pagination: RestPagination
       search?: string
       excludeMuted?: boolean
-      excludePublic?: boolean
     }
   ): Observable<ResultList<Video>> {
-    const { pagination, search, excludeMuted, excludePublic, ...listParamsOptions } = options
+    const { pagination, search, excludeMuted, ...listParamsOptions } = options
 
     let params = new HttpParams()
-    params = this.videoService.buildVideoListParams({ params, ...listParamsOptions })
+    params = this.videoService.buildVideoListParams({
+      params,
+      ...listParamsOptions,
+
+      privacyOneOf: listParamsOptions.privacyOneOf ?? getAllPrivacies()
+    })
 
     let include = VideoInclude.BLACKLISTED |
       VideoInclude.BLOCKED_OWNER |
@@ -35,19 +39,12 @@ export class VideoAdminService {
       VideoInclude.SOURCE |
       VideoInclude.AUTOMATIC_TAGS
 
-    let privacyOneOf = getAllPrivacies()
-
     if (excludeMuted) {
       include &= ~VideoInclude.BLOCKED_OWNER
     }
 
-    if (excludePublic) {
-      privacyOneOf = [ VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.INTERNAL, VideoPrivacy.PASSWORD_PROTECTED ]
-    }
-
     params = this.restService.addObjectParams(params, {
       include,
-      privacyOneOf,
       search,
       start: pagination.start,
       count: pagination.count

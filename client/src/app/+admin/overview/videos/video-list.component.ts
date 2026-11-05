@@ -22,6 +22,7 @@ import {
   NSFWFlag,
   UserRight,
   VideoFile,
+  VideoPrivacy,
   VideoState,
   VideoStateType,
   VideoStreamingPlaylistType
@@ -164,6 +165,19 @@ export class VideoListComponent implements OnInit {
       },
 
       {
+        type: 'checkboxes',
+        key: 'privacyOneOf',
+        title: $localize`Privacy`,
+        items: [
+          { value: VideoPrivacy.PUBLIC, label: $localize`Public videos` },
+          { value: VideoPrivacy.INTERNAL, label: $localize`Internal videos` },
+          { value: VideoPrivacy.UNLISTED, label: $localize`Unlisted videos` },
+          { value: VideoPrivacy.PASSWORD_PROTECTED, label: $localize`Password protected videos` },
+          { value: VideoPrivacy.PRIVATE, label: $localize`Private videos` }
+        ]
+      },
+
+      {
         type: 'title',
         title: $localize`Moderation`
       },
@@ -172,12 +186,6 @@ export class VideoListComponent implements OnInit {
         type: 'checkbox',
         key: 'excludeMuted',
         label: $localize`Exclude muted accounts`
-      },
-
-      {
-        type: 'checkbox',
-        key: 'excludePublic',
-        label: $localize`Exclude public videos`
       },
 
       {
