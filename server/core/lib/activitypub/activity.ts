@@ -39,9 +39,11 @@ export function buildAvailableActivities (): ActivityType[] {
 
 // ---------------------------------------------------------------------------
 
-export async function fetchAP <T> (url: string, moreOptions: PeerTubeRequestOptions = {}) {
+export async function fetchAP<T> (url: string, moreOptions: PeerTubeRequestOptions = {}) {
   const options = {
     activityPub: true,
+
+    preventCrossHostRedirect: true,
 
     httpSignature: CONFIG.FEDERATION.SIGN_FEDERATED_FETCHES
       ? await buildSignedRequestOptions({ hasPayload: false })
@@ -53,7 +55,7 @@ export async function fetchAP <T> (url: string, moreOptions: PeerTubeRequestOpti
   return doJSONRequest<T>(url, options)
 }
 
-export async function fetchAPObjectIfNeeded <T extends (ActivityObject | ActivityPubActor)> (object: APObjectId) {
+export async function fetchAPObjectIfNeeded<T extends (ActivityObject | ActivityPubActor)> (object: APObjectId) {
   if (typeof object === 'string') {
     const { body } = await fetchAP<Exclude<T, string>>(object)
 
@@ -68,7 +70,7 @@ export async function findLatestAPRedirection (url: string, iteration = 1) {
 
   const { headers } = await fetchAP(url, { followRedirect: false })
 
-  if (headers.location) return findLatestAPRedirection(headers.location, iteration + 1)
+  if (headers.location) return findLatestAPRedirection(new URL(headers.location, url).href, iteration + 1)
 
   return url
 }

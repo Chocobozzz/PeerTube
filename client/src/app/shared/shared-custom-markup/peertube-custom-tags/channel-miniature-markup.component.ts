@@ -1,12 +1,13 @@
 import { from } from 'rxjs'
 import { finalize, map, switchMap, tap } from 'rxjs/operators'
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input, output } from '@angular/core'
-import { MarkdownService, Notifier, UserService } from '@app/core'
+import { MarkdownService, Notifier, User, UserService } from '@app/core'
 import { VideoSortField } from '@peertube/peertube-models'
 import { CustomMarkupComponent } from './shared'
-import { VideoMiniatureMarkupComponent } from './video-miniature-markup.component'
 import { RouterLink } from '@angular/router'
 import { ActorAvatarComponent } from '../../shared-actor-image/actor-avatar.component'
+import { ActorHostComponent } from '../../shared-actor/actor-host.component'
+import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../../shared-video-miniature/video-miniature.component'
 
 import { VideoService } from '@app/shared/shared-main/video/video.service'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
@@ -22,7 +23,7 @@ import { FindInBulkService } from '@app/shared/shared-search/find-in-bulk.servic
   templateUrl: 'channel-miniature-markup.component.html',
   styleUrls: [ 'channel-miniature-markup.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ ActorAvatarComponent, RouterLink, VideoMiniatureMarkupComponent ]
+  imports: [ ActorAvatarComponent, ActorHostComponent, RouterLink, VideoMiniatureComponent ]
 })
 export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, OnInit {
   private markdown = inject(MarkdownService)
@@ -43,8 +44,20 @@ export class ChannelMiniatureMarkupComponent implements CustomMarkupComponent, O
   descriptionHTML: string
   totalVideos: number
   video: Video
+  user: User
+
+  videoDisplayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: false,
+    avatar: false,
+    privacyLabel: false
+  }
 
   ngOnInit () {
+    this.userService.getAnonymousOrLoggedUser()
+      .subscribe(user => this.user = user)
+
     this.findInBulk.getChannel(this.name())
       .pipe(
         tap(channel => {

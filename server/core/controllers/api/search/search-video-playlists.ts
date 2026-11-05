@@ -1,4 +1,4 @@
-import express from 'express'
+import { HttpStatusCode, ResultList, VideoPlaylist, VideoPlaylistsSearchQueryAfterSanitize } from '@peertube/peertube-models'
 import { sanitizeUrl } from '@peertube/peertube-node-utils'
 import { isUserAbleToSearchRemoteURI } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -11,15 +11,11 @@ import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { getOrCreateAPVideoPlaylist } from '@server/lib/activitypub/playlists/get.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
+import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import { MVideoPlaylistFullSummary } from '@server/types/models/index.js'
-import {
-  HttpStatusCode,
-  ResultList,
-  VideoPlaylist,
-  VideoPlaylistsSearchQueryAfterSanitize
-} from '@peertube/peertube-models'
+import express from 'express'
 import {
   asyncMiddleware,
   openapiOperationDoc,
@@ -65,7 +61,7 @@ function searchVideoPlaylists (req: express.Request, res: express.Response) {
     return searchVideoPlaylistsIndex(query, res)
   }
 
-  return searchVideoPlaylistsDB(query, res)
+  return withReplicaReadsFromRes(res, () => searchVideoPlaylistsDB(query, res))
 }
 
 async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQueryAfterSanitize, res: express.Response) {

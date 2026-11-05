@@ -1,4 +1,5 @@
 import { buildAspectRatio } from '@peertube/peertube-core-utils'
+import { auditLog, buildVideoSourceAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { HttpStatusCode, VideoChannelActivityAction, VideoState } from '@peertube/peertube-models'
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { buildNonDuplicatedFederateVideoJob } from '@server/lib/activitypub/videos/federate.js'
@@ -9,7 +10,7 @@ import { Redis } from '@server/lib/redis/index.js'
 import { regenerateLocalVideoThumbnailsFromVideoIfNeeded } from '@server/lib/thumbnail.js'
 import { getUploadXFileInput, safeUploadXCleanup, setupUploadResumableRoutes, videoUploadx } from '@server/lib/uploadx.js'
 import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
-import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/video-captions.js'
+import { regenerateTranscriptionTaskIfNeeded } from '@server/lib/transcription/video-transcription.js'
 import { buildNewFile, createVideoSource, storeNewWebVideoFile } from '@server/lib/video-file.js'
 import { addRemoteStoryboardJobIfNeeded, buildLocalStoryboardJobIfNeeded, buildMoveVideoJob } from '@server/lib/video-jobs.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -77,6 +78,8 @@ async function deleteVideoLatestSourceFile (req: express.Request, res: express.R
   videoSource.storage = null
 
   await videoSource.save()
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildVideoSourceAuditEntity({ video, inputFilename: videoSource.inputFilename }))
 
   await VideoChannelActivityModel.addVideoActivity({
     action: VideoChannelActivityAction.UPDATE_SOURCE_FILE,
@@ -204,6 +207,8 @@ async function doReplaceVideoSourceResumable (req: express.Request, res: express
     await video.VideoChannel.setAsUpdated()
 
     await addVideoJobsAfterUpload(video, videoFile.withVideoOrPlaylist(video))
+
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoSourceAuditEntity({ video, inputFilename: originalFilename }))
 
     logger.info('Replaced video file of video %s with uuid %s.', video.name, video.uuid)
 

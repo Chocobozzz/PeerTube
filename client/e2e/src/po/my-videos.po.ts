@@ -35,18 +35,20 @@ export class MyVideosPage {
     return (await deleteItem()).click()
   }
 
-  validRemove () {
-    return $('input[type=submit]').click()
+  async validRemove () {
+    const submit = $('.modal.show .modal-footer input[type=submit]')
+    await submit.waitForClickable()
+
+    return submit.click()
   }
 
   async countVideos (names: string[]) {
-    const elements = await $$('.video-cell-name .name').filter(async e => {
-      const t = await e.getText()
-
-      return names.some(n => t.includes(n))
+    // Get texts in a single call: the list can be rendered again while we iterate over the elements
+    const texts = await browser.execute(() => {
+      return Array.from(document.querySelectorAll('.video-cell-name .name')).map(e => e.textContent)
     })
 
-    return elements.length
+    return texts.filter(t => names.some(n => t.includes(n))).length
   }
 
   async getVideoRow (name: string) {

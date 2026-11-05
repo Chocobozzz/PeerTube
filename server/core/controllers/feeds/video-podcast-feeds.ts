@@ -15,6 +15,7 @@ import {
   cacheRouteFactory,
   videoFeedsPodcastSetCacheKey
 } from '@server/middlewares/index.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { MVideo, MVideoCaptionVideo, MVideoFull } from '@server/types/models/index.js'
 import express from 'express'
@@ -84,7 +85,7 @@ videoPodcastFeedsRouter.get(
   videoFeedsPodcastSetCacheKey,
   podcastCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   asyncMiddleware(videoFeedsPodcastValidator),
-  asyncMiddleware(generateVideoPodcastFeed)
+  asyncMiddleware(allowReplicaReadsToController(generateVideoPodcastFeed))
 )
 
 // ---------------------------------------------------------------------------
@@ -162,7 +163,7 @@ async function generateChannelPodcastFeed (req: express.Request, res: express.Re
     author: { name: CONFIG.INSTANCE.NAME, link: WEBSERVER.URL },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
-    medium: 'video',
+    medium: getPodcastMedium(req.query.enclosurePreference),
     customXMLNS,
     customTags
   })
@@ -233,7 +234,7 @@ async function generatePlaylistPodcastFeed (req: express.Request, res: express.R
     author: { name: channelName, link: ownerLink },
     resourceType: 'videos',
     queryString: new URL(WEBSERVER.URL + req.url).search,
-    medium: 'video',
+    medium: getPodcastMedium(req.query.enclosurePreference),
     customXMLNS,
     customTags
   })
@@ -308,6 +309,12 @@ async function generatePodcastItem (options: {
 
     customTags
   }
+}
+
+function getPodcastMedium (enclosurePreference?: FeedEnclosurePreference) {
+  return enclosurePreference === 'audio'
+    ? 'podcast'
+    : 'video'
 }
 
 async function addVideosToPodcastFeed (feed: Feed, videos: VideoModel[], enclosurePreference?: FeedEnclosurePreference) {

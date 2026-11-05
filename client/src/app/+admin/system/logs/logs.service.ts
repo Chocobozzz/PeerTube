@@ -13,29 +13,23 @@ export class LogsService {
   private restExtractor = inject(RestExtractor)
 
   private static BASE_LOG_URL = environment.apiUrl + '/api/v1/server/logs'
-  private static BASE_AUDIT_LOG_URL = environment.apiUrl + '/api/v1/server/audit-logs'
 
   getLogs (options: {
-    isAuditLog: boolean
     startDate: string
     tagsOneOf?: string[]
     level?: ServerLogLevel
     endDate?: string
   }) {
-    const { isAuditLog, startDate, endDate, tagsOneOf } = options
+    const { startDate, endDate, tagsOneOf } = options
 
     let params = new HttpParams()
     params = params.append('startDate', startDate)
 
-    if (!isAuditLog) params = params.append('level', options.level)
+    params = params.append('level', options.level)
     if (endDate) params = params.append('endDate', options.endDate)
     if (tagsOneOf) params = this.restService.addArrayParams(params, 'tagsOneOf', tagsOneOf)
 
-    const path = isAuditLog
-      ? LogsService.BASE_AUDIT_LOG_URL
-      : LogsService.BASE_LOG_URL
-
-    return this.authHttp.get<LogRow[]>(path, { params })
+    return this.authHttp.get<LogRow[]>(LogsService.BASE_LOG_URL, { params })
       .pipe(
         map(rows => rows.map(r => new LogRow(r))),
         catchError(err => this.restExtractor.handleError(err))

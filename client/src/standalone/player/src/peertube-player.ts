@@ -1,5 +1,5 @@
 import { buildVideoLink, decorateVideoLink, findAppropriateThumbnail, isDefaultLocale, pick } from '@peertube/peertube-core-utils'
-import { Thumbnail } from '@peertube/peertube-models'
+import { Thumbnail, VideoCommercialContent } from '@peertube/peertube-models'
 import { logger } from '@root-helpers/logger'
 import { PluginsManager } from '@root-helpers/plugins-manager'
 import { TranslationsManager } from '@root-helpers/translations-manager'
@@ -17,6 +17,8 @@ import './shared/control-bar/p2p-info-button'
 import './shared/control-bar/peertube-link-button'
 import './shared/control-bar/peertube-live-display'
 import './shared/control-bar/storyboard-plugin'
+import './shared/commercial-content/peertube-commercial-content-info-component'
+import './shared/commercial-content/peertube-commercial-content-plugin'
 import './shared/control-bar/theater-button'
 import './shared/control-bar/time-tooltip'
 import './shared/dock/peertube-dock-component'
@@ -43,6 +45,7 @@ import './shared/settings/settings-panel'
 import './shared/settings/settings-panel-child'
 import './shared/stats/stats-card'
 import './shared/stats/stats-plugin'
+import './shared/top-bar/peertube-top-bar-component'
 import './shared/upnext/end-card'
 import './shared/upnext/upnext-plugin'
 import './shared/video-filter/video-filter-menu-button'
@@ -290,6 +293,7 @@ export class PeerTubePlayer {
     if (this.player.usingPlugin('storyboard')) this.player.storyboard().dispose()
     if (this.player.usingPlugin('chapters')) this.player.chapters().dispose()
     if (this.player.usingPlugin('peertubeNSFW')) this.player.peertubeNSFW().dispose()
+    if (this.player.usingPlugin('peertubeCommercialContent')) this.player.peertubeCommercialContent().dispose()
 
     if (this.player.usingPlugin('peertubeDock')) this.player.peertubeDock().dispose()
 
@@ -350,6 +354,10 @@ export class PeerTubePlayer {
 
     if (this.currentLoadOptions.nsfwWarning) {
       this.player.peertubeNSFW(this.currentLoadOptions.nsfwWarning)
+    }
+
+    if (this.currentLoadOptions.commercialContent && this.currentLoadOptions.commercialContent !== VideoCommercialContent.NONE) {
+      this.player.peertubeCommercialContent({ commercialContent: this.currentLoadOptions.commercialContent })
     }
   }
 

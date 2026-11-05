@@ -1,5 +1,6 @@
 import videojs from 'video.js'
 import { PlaylistPluginOptions, VideojsPlayer, VideojsPlugin } from '../../types'
+import { getPlayerTopBar } from '../top-bar/peertube-top-bar-component'
 import { PlaylistButton } from './playlist-button'
 import { PlaylistMenu } from './playlist-menu'
 
@@ -19,6 +20,7 @@ class PlaylistPlugin extends Plugin {
 
     player.addChild(this.playlistMenu, options)
     player.addChild(this.playlistButton, options)
+    getPlayerTopBar(player).setEndItem(this.playlistButton)
   }
 
   dispose () {

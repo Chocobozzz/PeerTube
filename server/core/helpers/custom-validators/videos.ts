@@ -6,12 +6,15 @@ import validator from 'validator'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,
+  VIDEO_AI_USAGES,
   VIDEO_CATEGORIES,
+  VIDEO_COMMERCIAL_CONTENTS,
   VIDEO_COMMENTS_POLICY,
   VIDEO_LICENCES,
   VIDEO_LIVE,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES,
+  VIDEO_RECOMMENDATION_SCOPES,
   VIDEO_STATES
 } from '../../initializers/constants.js'
 import { exists, isArray, isDateValid, isFileValid } from './misc.js'
@@ -49,6 +52,22 @@ export function isVideoDescriptionValid (value: string) {
 
 export function isVideoCommentsPolicyValid (value: any) {
   return value === null || VIDEO_COMMENTS_POLICY[value] !== undefined
+}
+
+export function isVideoRecommendationScopeValid (value: any) {
+  return VIDEO_RECOMMENDATION_SCOPES[value] !== undefined
+}
+
+export function isVideoAIUsageValid (value: any) {
+  return VIDEO_AI_USAGES[value] !== undefined
+}
+
+export function isVideoAIUsageArrayValid (value: any) {
+  return isArray(value) && value.length <= Object.keys(VIDEO_AI_USAGES).length && value.every(v => isVideoAIUsageValid(v))
+}
+
+export function isVideoCommercialContentValid (value: any) {
+  return VIDEO_COMMERCIAL_CONTENTS[value] !== undefined
 }
 
 export function isVideoSupportValid (value: string) {

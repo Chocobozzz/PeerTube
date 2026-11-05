@@ -283,6 +283,7 @@ export class VideosListComponent implements OnInit {
 
   private loadUserSettings (user: User) {
     this.filters.setNSFWPolicy(user)
+    this.filters.setAIUsagesHidden(user)
 
     this.filters.setDefaultLanguages(user.videoLanguages)
     this.filters.setDefaultCategories(user.videoCategories)

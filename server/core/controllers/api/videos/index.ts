@@ -2,11 +2,12 @@ import { HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-m
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
 import { scheduleVideoRefreshIfNeeded } from '@server/lib/activitypub/videos/index.js'
 import { openapiOperationDoc } from '@server/middlewares/doc.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import express from 'express'
-import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger.js'
-import { buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
+import { runTransaction } from '../../../helpers/database-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters, getCountVideos } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
@@ -16,7 +17,7 @@ import {
   VIDEO_PRIVACIES,
   VIDEO_TEXT_LANGUAGES
 } from '../../../initializers/constants.js'
-import { runTransaction } from '../../../helpers/database-utils.js'
+import { auditLog, buildVideoAuditEntity, getAuditActorFromRes } from '../../../lib/audit-log/index.js'
 import { Hooks } from '../../../lib/plugins/hooks.js'
 import {
   apiRateLimiter,
@@ -40,6 +41,7 @@ import { blacklistRouter } from './blacklist.js'
 import { videoCaptionsRouter } from './captions.js'
 import { videoChaptersRouter } from './chapters.js'
 import { videoCommentRouter } from './comment.js'
+import { duplicateRouter } from './duplicate.js'
 import { videoEmbedPrivacyRouter } from './embed-privacy.js'
 import { filesRouter } from './files.js'
 import { videoImportsRouter } from './import.js'
@@ -59,7 +61,6 @@ import { viewRouter } from './view.js'
 
 const logger = createLogger()
 
-const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
 
 videosRouter.use(apiRateLimiter)
@@ -69,6 +70,7 @@ videosRouter.use('/', statsRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoCommentRouter)
 videosRouter.use('/', studioRouter)
+videosRouter.use('/', duplicateRouter)
 videosRouter.use('/', videoCaptionsRouter)
 videosRouter.use('/', videoImportsRouter)
 videosRouter.use('/', ownershipVideoRouter)
@@ -99,7 +101,7 @@ videosRouter.get(
   setDefaultPagination,
   optionalAuthenticate,
   commonVideosFiltersValidatorFactory(),
-  asyncMiddleware(listVideos)
+  asyncMiddleware(allowReplicaReadsToController(listVideos))
 )
 
 videosRouter.get(
@@ -171,6 +173,7 @@ async function listVideos (req: express.Request, res: express.Response) {
   const apiOptions = await Hooks.wrapObject({
     ...query,
     ...buildNSFWFilters({ req, res }),
+    ...buildAIUsageFilters({ req, res }),
 
     displayOnlyForFollower: {
       actorId: serverActor.id,
@@ -204,7 +207,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
     })
   })
 
-  auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
+  auditLog.delete(getAuditActorFromRes(res), () => buildVideoAuditEntity(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
 
   Hooks.runAction('action:api.video.deleted', { video: videoInstance, req, res })

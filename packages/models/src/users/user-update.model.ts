@@ -10,4 +10,7 @@ export interface UserUpdate {
   role?: UserRoleType
   adminFlags?: UserAdminFlagType
   pluginAuth?: string
+
+  // Required to give the administrator role, or to change the password, email or auth plugin of an administrator
+  currentPassword?: string
 }

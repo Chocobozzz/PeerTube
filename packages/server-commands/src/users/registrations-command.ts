@@ -20,7 +20,7 @@ export class RegistrationsCommand extends AbstractCommand {
 
       path,
       fields: {
-        ...pick(options, [ 'username', 'displayName', 'channel', 'registrationReason' ]),
+        ...pick(options, [ 'username', 'displayName', 'channel', 'registrationReason', 'signupClient' ]),
 
         password,
         email
@@ -41,7 +41,7 @@ export class RegistrationsCommand extends AbstractCommand {
 
       path,
       fields: {
-        ...pick(options, [ 'username', 'displayName', 'channel', 'registrationReason' ]),
+        ...pick(options, [ 'username', 'displayName', 'channel', 'registrationReason', 'signupClient' ]),
 
         password,
         email

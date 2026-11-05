@@ -66,10 +66,11 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
   }
 
   static async increaseOrCreate (videoUUID: string, column: VideoJobInfoColumnType, amountArg = 1): Promise<number> {
-    const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
+    // Not a SELECT query type, so it is not sent to a database read replica
+    const options = { type: QueryTypes.RAW as QueryTypes.RAW, bind: { videoUUID } }
     const amount = forceNumber(amountArg)
 
-    const [ result ] = await VideoJobInfoModel.sequelize.query(
+    const [ rows ] = await VideoJobInfoModel.sequelize.query(
       `
     INSERT INTO "videoJobInfo" ("videoId", "${column}", "createdAt", "updatedAt")
     SELECT
@@ -88,13 +89,13 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
       options
     )
 
-    return result[column]
+    return (rows as Record<string, number>[])[0][column]
   }
 
   static async decrease (videoUUID: string, column: VideoJobInfoColumnType): Promise<number> {
-    const options = { type: QueryTypes.SELECT as QueryTypes.SELECT, bind: { videoUUID } }
+    const options = { type: QueryTypes.RAW as QueryTypes.RAW, bind: { videoUUID } }
 
-    const result = await VideoJobInfoModel.sequelize.query(
+    const [ rows ] = await VideoJobInfoModel.sequelize.query(
       `
     UPDATE
       "videoJobInfo"
@@ -110,6 +111,7 @@ export class VideoJobInfoModel extends SequelizeModel<VideoJobInfoModel> {
       options
     )
 
+    const result = rows as Record<string, number>[]
     if (result.length === 0) return undefined
 
     return result[0][column]

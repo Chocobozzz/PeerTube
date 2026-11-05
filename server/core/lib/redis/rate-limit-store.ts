@@ -34,7 +34,8 @@ export class SharedRateLimitStore implements Store {
 
   private lastSyncError = 0 // Date.getTime()
 
-  private readonly counters = new LRUCache<string, LocalCounter>({ max: 100_000 })
+  // Use maxSize instead of max, that preallocates memory for max entries
+  private readonly counters = new LRUCache<string, LocalCounter>({ maxSize: 100_000, sizeCalculation: () => 1 })
 
   constructor (private readonly options: {
     // Namespace of the counters in Redis, must be unique per limiter

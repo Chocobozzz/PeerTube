@@ -30,6 +30,14 @@ export function areMockObjectStorageTestsDisabled () {
   return disabled
 }
 
+export function areDatabaseStreamingReplicaTestsDisabled () {
+  const disabled = process.env.ENABLE_DB_REPLICA_TESTS !== 'true'
+
+  if (disabled) console.log('ENABLE_DB_REPLICA_TESTS env is not set to "true" so database streaming replica tests are disabled')
+
+  return disabled
+}
+
 export function isTestInstance () {
   return process.env.NODE_ENV === 'test'
 }

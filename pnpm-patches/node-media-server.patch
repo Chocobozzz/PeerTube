@@ -1,0 +1,104 @@
+diff --git a/src/node_rtmp_session.js b/src/node_rtmp_session.js
+index 74cb068615cebb5854a111439ac5fde7e3ef944b..1a97d44d5258191e595ad28ab44efbb62d862447 100644
+--- a/src/node_rtmp_session.js
++++ b/src/node_rtmp_session.js
+@@ -203,11 +203,12 @@ class NodeRtmpSession {
+     if (this.isStarting) {
+       this.isStarting = false;
+ 
+-      if (this.playStreamId > 0) {
++      // Don't rely on stream ids: a client can play/publish on stream id 0
++      if (this.isPlaying || this.isIdling) {
+         this.onDeleteStream({ streamId: this.playStreamId });
+       }
+ 
+-      if (this.publishStreamId > 0) {
++      if (this.isPublishing) {
+         this.onDeleteStream({ streamId: this.publishStreamId });
+       }
+ 
+@@ -1112,6 +1113,12 @@ class NodeRtmpSession {
+     if (typeof invokeMessage.streamName !== 'string') {
+       return;
+     }
++    // Check before overwriting publish stream path/id, otherwise the current publisher can never be cleaned up
++    if (this.isPublishing) {
++      Logger.log(`[rtmp publish] NetConnection is publishing. id=${this.id} streamPath=${this.publishStreamPath} streamId=${this.publishStreamId}`);
++      this.sendStatusMessage(this.parserPacket.header.stream_id, 'error', 'NetStream.Publish.BadConnection', 'Connection already publishing');
++      return;
++    }
+     this.publishStreamPath = '/' + this.appname + '/' + invokeMessage.streamName.split('?')[0];
+     this.publishArgs = QueryString.parse(invokeMessage.streamName.split('?')[1]);
+     this.publishStreamId = this.parserPacket.header.stream_id;
+@@ -1133,9 +1140,6 @@ class NodeRtmpSession {
+       this.reject();
+       Logger.log(`[rtmp publish] Already has a stream. id=${this.id} streamPath=${this.publishStreamPath} streamId=${this.publishStreamId}`);
+       this.sendStatusMessage(this.publishStreamId, 'error', 'NetStream.Publish.BadName', 'Stream already publishing');
+-    } else if (this.isPublishing) {
+-      Logger.log(`[rtmp publish] NetConnection is publishing. id=${this.id} streamPath=${this.publishStreamPath} streamId=${this.publishStreamId}`);
+-      this.sendStatusMessage(this.publishStreamId, 'error', 'NetStream.Publish.BadConnection', 'Connection already publishing');
+     } else {
+       Logger.log(`[rtmp publish] New stream. id=${this.id} streamPath=${this.publishStreamPath} streamId=${this.publishStreamId}`);
+       context.publishers.set(this.publishStreamPath, this.id);
+@@ -1157,6 +1161,12 @@ class NodeRtmpSession {
+     if (typeof invokeMessage.streamName !== 'string') {
+       return;
+     }
++    // Check before overwriting play stream path/id, otherwise the current player can never be cleaned up
++    if (this.isPlaying || this.isIdling) {
++      Logger.log(`[rtmp play] NetConnection is playing. id=${this.id} streamPath=${this.playStreamPath} streamId=${this.playStreamId}`);
++      this.sendStatusMessage(this.parserPacket.header.stream_id, 'error', 'NetStream.Play.BadConnection', 'Connection already playing');
++      return;
++    }
+     this.playStreamPath = '/' + this.appname + '/' + invokeMessage.streamName.split('?')[0];
+     this.playArgs = QueryString.parse(invokeMessage.streamName.split('?')[1]);
+     this.playStreamId = this.parserPacket.header.stream_id;
+@@ -1175,12 +1185,7 @@ class NodeRtmpSession {
+       }
+     }
+ 
+-    if (this.isPlaying) {
+-      Logger.log(`[rtmp play] NetConnection is playing. id=${this.id} streamPath=${this.playStreamPath}  streamId=${this.playStreamId} `);
+-      this.sendStatusMessage(this.playStreamId, 'error', 'NetStream.Play.BadConnection', 'Connection already playing');
+-    } else {
+-      this.respondPlay();
+-    }
++    this.respondPlay();
+ 
+     if (context.publishers.has(this.playStreamPath)) {
+       this.onStartPlay();
+@@ -1194,6 +1199,9 @@ class NodeRtmpSession {
+   onStartPlay() {
+     let publisherId = context.publishers.get(this.playStreamPath);
+     let publisher = context.sessions.get(publisherId);
++    if (!publisher) {
++      return;
++    }
+     let players = publisher.players;
+     players.add(this.id);
+ 
+@@ -1305,7 +1313,7 @@ class NodeRtmpSession {
+   }
+ 
+   onDeleteStream(invokeMessage) {
+-    if (invokeMessage.streamId == this.playStreamId) {
++    if (invokeMessage.streamId == this.playStreamId && (this.isPlaying || this.isIdling)) {
+       if (this.isIdling) {
+         context.idlePlayers.delete(this.id);
+         this.isIdling = false;
+@@ -1335,6 +1343,7 @@ class NodeRtmpSession {
+ 
+         for (let playerId of this.players) {
+           let playerSession = context.sessions.get(playerId);
++          if (!playerSession) continue;
+           if (playerSession instanceof NodeRtmpSession) {
+             playerSession.sendStatusMessage(playerSession.playStreamId, 'status', 'NetStream.Play.UnpublishNotify', 'stream is now unpublished.');
+             playerSession.flush();
+@@ -1346,6 +1355,7 @@ class NodeRtmpSession {
+         //let the players to idlePlayers
+         for (let playerId of this.players) {
+           let playerSession = context.sessions.get(playerId);
++          if (!playerSession) continue;
+           context.idlePlayers.add(playerId);
+           playerSession.isPlaying = false;
+           playerSession.isIdling = true;

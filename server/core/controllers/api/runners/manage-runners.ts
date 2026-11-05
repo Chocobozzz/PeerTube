@@ -1,4 +1,5 @@
 import { HttpStatusCode, ListRunnersQuery, RegisterRunnerBody, UserRight } from '@peertube/peertube-models'
+import { auditLog, buildRunnerAuditEntity, getAuditActorFromRes, getAuditRunnerActor } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { generateRunnerToken } from '@server/helpers/token-generator.js'
 import {
@@ -84,6 +85,8 @@ async function registerRunner (req: express.Request, res: express.Response) {
 
     await runner.save()
 
+    auditLog.create(getAuditRunnerActor(runner, req), () => buildRunnerAuditEntity(runner))
+
     logger.info('Registered new runner %s', runner.name)
 
     return res.json({ id: runner.id, runnerToken })
@@ -94,6 +97,8 @@ async function unregisterRunner (req: express.Request, res: express.Response) {
 
   return logger.withContext([ runner.name ], async () => {
     await runner.destroy()
+
+    auditLog.delete(getAuditRunnerActor(runner, req), () => buildRunnerAuditEntity(runner))
 
     logger.info('Unregistered runner %s', runner.name)
 
@@ -106,6 +111,8 @@ async function deleteRunner (req: express.Request, res: express.Response) {
 
   return logger.withContext([ runner.name ], async () => {
     await runner.destroy()
+
+    auditLog.delete(getAuditActorFromRes(res), () => buildRunnerAuditEntity(runner))
 
     logger.info('Deleted runner %s', runner.name)
 

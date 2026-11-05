@@ -1,11 +1,12 @@
 import { ServerActionHookName, ServerFilterHookName } from '@peertube/peertube-models'
 import { createLogger } from '../../helpers/logger.js'
+import { runOutsideDbContext } from '../database-replicas/db-context.js'
 import { PluginManager } from './plugin-manager.js'
 
 const logger = createLogger()
 
-type PromiseFunction <U, T> = (params: U) => Promise<T>
-type RawFunction <U, T> = (params: U) => T
+type PromiseFunction<U, T> = (params: U) => Promise<T>
+type RawFunction<U, T> = (params: U) => T
 
 // Helpers to run hooks
 const Hooks = {
@@ -26,7 +27,8 @@ const Hooks = {
   },
 
   runAction: <T, U extends ServerActionHookName>(hookName: U, params?: T) => {
-    PluginManager.Instance.runHook(hookName, undefined, params)
+    // Plugin queries may run after the response, so they must not use the request database context
+    runOutsideDbContext(() => PluginManager.Instance.runHook(hookName, undefined, params))
       .catch(err => logger.error('Fatal hook error.', { err }))
   }
 }

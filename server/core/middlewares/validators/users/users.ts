@@ -1,10 +1,11 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdateMe } from '@peertube/peertube-models'
+import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdate, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
-import { isNSFWFlagsValid } from '@server/helpers/custom-validators/videos.js'
-import { isExternalUserPasswordValid } from '@server/lib/auth/external-auth.js'
+import { isNSFWFlagsValid, isVideoAIUsageArrayValid } from '@server/helpers/custom-validators/videos.js'
+import { isUserCurrentPasswordValid } from '@server/lib/auth/password-confirmation.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { MUser } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import { isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
@@ -14,8 +15,6 @@ import {
   isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
-  isUserVideoCategories,
-  isUserVideoLive,
   isUserDescriptionValid,
   isUserDisplayNameValid,
   isUserFeatureInfo,
@@ -23,12 +22,13 @@ import {
   isUserNoModal,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
-  isUserPasswordTooLong,
   isUserPasswordValid,
   isUserPasswordValidOrEmpty,
   isUserRoleValid,
   isUserUsernameValid,
+  isUserVideoCategories,
   isUserVideoLanguages,
+  isUserVideoLive,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
@@ -42,6 +42,8 @@ import {
   areValidationErrors,
   checkCanModerate,
   checkEmailDoesNotAlreadyExist,
+  checkLocalPasswordLength,
+  checkPasswordConfirmation,
   checkUserEmailExistPermissive,
   checkUserIdExist,
   checkUsernameOrEmailDoNotAlreadyExist,
@@ -117,6 +119,8 @@ export const usersAddValidator = [
         })
       }
     }
+
+    if (req.body.role === UserRole.ADMINISTRATOR && !await checkPasswordConfirmation(req, res)) return
 
     return next()
   }
@@ -221,6 +225,8 @@ export const usersUpdateValidator = [
       !await checkEmailDoesNotAlreadyExist({ email: req.body.email, req, res })
     ) return
 
+    if (isAdminRoleOrCredentialsUpdate(user, req.body) && !await checkPasswordConfirmation(req, res)) return
+
     return next()
   }
 ]
@@ -257,6 +263,9 @@ export const usersUpdateMeValidator = [
   body('nsfwFlagsBlurred')
     .optional()
     .custom(isNSFWFlagsValid),
+  body('aiUsagesHidden')
+    .optional()
+    .custom(isVideoAIUsageArrayValid).withMessage('Should have a valid aiUsagesHidden array'),
 
   body('autoPlayVideo')
     .optional()
@@ -490,11 +499,7 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
       // Plugin passwords are checked by the plugin, not by bcrypt
       if (!user.pluginAuth && !checkLocalPasswordLength(req.body.currentPassword, req, res)) return
 
-      const isPasswordValid = user.pluginAuth
-        ? await isExternalUserPasswordValid({ user, password: req.body.currentPassword })
-        : await user.isPasswordMatch(req.body.currentPassword)
-
-      if (isPasswordValid !== true) {
+      if (await isUserCurrentPasswordValid(user, req.body.currentPassword) !== true) {
         return res.fail({
           status: HttpStatusCode.FORBIDDEN_403,
           message: req.t('currentPassword is invalid.'),
@@ -528,6 +533,15 @@ export const usersNewFeatureInfoReadValidator = [
 // Private
 // ---------------------------------------------------------------------------
 
+function isAdminRoleOrCredentialsUpdate (user: MUser, body: UserUpdate) {
+  if (body.role === UserRole.ADMINISTRATOR && user.role !== UserRole.ADMINISTRATOR) return true
+  if (user.role !== UserRole.ADMINISTRATOR) return false
+
+  return body.password !== undefined ||
+    (body.email !== undefined && body.email !== user.email) ||
+    (body.pluginAuth !== undefined && body.pluginAuth !== user.pluginAuth)
+}
+
 function checkCanSetRole (role: UserRoleType, res: express.Response) {
   const authUser = res.locals.oauth.token.User
 
@@ -541,17 +555,4 @@ function checkCanSetRole (role: UserRoleType, res: express.Response) {
   }
 
   return true
-}
-
-// Local passwords are compared with bcrypt, that cannot handle long passwords
-function checkLocalPasswordLength (password: string, req: express.Request, res: express.Response) {
-  if (!isUserPasswordTooLong(password)) return true
-
-  res.fail({
-    status: HttpStatusCode.BAD_REQUEST_400,
-    message: req.t('Password is too long. Please reset it using the password reset procedure.'),
-    type: ServerErrorCode.TOO_LONG_PASSWORD
-  })
-
-  return false
 }

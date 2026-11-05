@@ -137,6 +137,10 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
       return
     }
 
+    if (snapshot.queryParams.username) {
+      this.form.patchValue({ username: snapshot.queryParams.username })
+    }
+
     const previousUrl = this.redirectService.getPreviousUrl()
     if (previousUrl && previousUrl !== '/') {
       this.storage.setItem(LoginComponent.SESSION_STORAGE_REDIRECT_URL_KEY, previousUrl)

@@ -19,7 +19,7 @@ import { formatChannelForSelect } from './select-channel-helpers'
   filter="true"
   resetFilterOnHide="true"
 
-  [(ngModel)]="selectedId"
+  [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
   (ngModelChange)="onModelChange()"
 
   [emptyFilterMessage]="getEmptyFilterMessage()"

@@ -7,6 +7,7 @@ import { UserInterfaceSettingsComponent } from '@app/shared/shared-user-settings
 import { UserContentPreferencesComponent } from '@app/shared/shared-user-settings/user-content-preferences.component'
 import { UserPlayerSettingsComponent } from '@app/shared/shared-user-settings/user-player-settings.component'
 import { UserSensitiveContentSettingsComponent } from '@app/shared/shared-user-settings/user-sensitive-content-settings.component'
+import { UserAIContentSettingsComponent } from '@app/shared/shared-user-settings/user-ai-content-settings.component'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ReplaySubject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
@@ -23,6 +24,7 @@ import { filter } from 'rxjs/operators'
   imports: [
     GlobalIconComponent,
     UserSensitiveContentSettingsComponent,
+    UserAIContentSettingsComponent,
     UserContentPreferencesComponent,
     UserPlayerSettingsComponent,
     UserInterfaceSettingsComponent,

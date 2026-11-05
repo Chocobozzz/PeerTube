@@ -5,6 +5,8 @@ import { CONFIG } from '@server/initializers/config.js'
 import express from 'express'
 import { body, query } from 'express-validator'
 import {
+  isValidAuditLogAction,
+  isValidAuditLogEntityType,
   isValidClientLogLevel,
   isValidClientLogMessage,
   isValidClientLogMeta,
@@ -12,7 +14,7 @@ import {
   isValidClientLogUserAgent,
   isValidLogLevel
 } from '../../helpers/custom-validators/logs.js'
-import { isDateValid, toArray } from '../../helpers/custom-validators/misc.js'
+import { exists, isDateValid, isIdValid, toArray } from '../../helpers/custom-validators/misc.js'
 import { areValidationErrors } from './shared/index.js'
 
 const createClientLogValidator = [
@@ -70,21 +72,33 @@ const getLogsValidator = [
 ]
 
 const getAuditLogsValidator = [
+  query('format')
+    .optional()
+    .isIn([ 'array', 'list' ]).withMessage('Should have a valid format (array, list)'),
+  query('search')
+    .optional()
+    .custom(exists),
+  query('entityType')
+    .optional()
+    .custom(isValidAuditLogEntityType),
+  query('entityId')
+    .optional()
+    .custom(isIdValid),
+  query('action')
+    .optional()
+    .custom(isValidAuditLogAction),
+  // Required by the default array format
   query('startDate')
+    .if((_value, { req }) => req.query.format !== 'list')
+    .custom(isDateValid).withMessage('Should have a start date that conforms to ISO 8601'),
+  query('startDate')
+    .optional()
     .custom(isDateValid).withMessage('Should have a start date that conforms to ISO 8601'),
   query('endDate')
     .optional()
     .custom(isDateValid).withMessage('Should have a end date that conforms to ISO 8601'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (CONFIG.LOG.AUDIT.ENABLED !== true) {
-      return res.sendStatus(HttpStatusCode.FORBIDDEN_403)
-    }
-
-    if (areValidationErrors(req, res)) return
-
-    return next()
-  }
+  ensureAuditLogIsEnabled
 ]
 
 // ---------------------------------------------------------------------------
@@ -93,4 +107,19 @@ export {
   createClientLogValidator,
   getAuditLogsValidator,
   getLogsValidator
+}
+
+// ---------------------------------------------------------------------------
+
+function ensureAuditLogIsEnabled (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (CONFIG.LOG.AUDIT.ENABLED !== true) {
+    return res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('Audit log is disabled on this instance')
+    })
+  }
+
+  if (areValidationErrors(req, res)) return
+
+  return next()
 }

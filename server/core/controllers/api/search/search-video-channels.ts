@@ -1,4 +1,4 @@
-import express from 'express'
+import { HttpStatusCode, ResultList, VideoChannel, VideoChannelsSearchQueryAfterSanitize } from '@peertube/peertube-models'
 import { sanitizeUrl } from '@peertube/peertube-node-utils'
 import { pickSearchChannelQuery } from '@server/helpers/query.js'
 import { doJSONRequest } from '@server/helpers/requests.js'
@@ -7,8 +7,9 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
+import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
-import { HttpStatusCode, ResultList, VideoChannel, VideoChannelsSearchQueryAfterSanitize } from '@peertube/peertube-models'
+import express from 'express'
 import { isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
@@ -68,7 +69,7 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
     return searchVideoChannelsIndex(query, res)
   }
 
-  return searchVideoChannelsDB(query, res)
+  return withReplicaReadsFromRes(res, () => searchVideoChannelsDB(query, res))
 }
 
 async function searchVideoChannelsIndex (query: VideoChannelsSearchQueryAfterSanitize, res: express.Response) {

@@ -24,11 +24,15 @@ export * from './thumbnail/index.js'
 
 export * from './video-create-update-common.model.js'
 export * from './video-create.model.js'
+export * from './video-duplicate.model.js'
 
 export * from './video-licence.enum.js'
 export * from './video-privacy.enum.js'
 export * from './video-include.enum.js'
 export * from './video-rate.type.js'
+export * from './video-recommendation-scope.enum.js'
+export * from './video-ai-usage.enum.js'
+export * from './video-commercial-content.enum.js'
 
 export * from './video-schedule-update.model.js'
 export * from './video-sort-field.type.js'

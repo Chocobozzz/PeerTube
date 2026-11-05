@@ -22,6 +22,7 @@ import { SubscribeButtonComponent } from '../shared/shared-user-subscription/sub
 import { MiniatureDisplayOptions, VideoMiniatureComponent } from '../shared/shared-video-miniature/video-miniature.component'
 import { VideoPlaylistMiniatureComponent } from '../shared/shared-video-playlist/video-playlist-miniature.component'
 import { SearchFiltersComponent } from './search-filters.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   selector: 'my-search',
@@ -40,7 +41,8 @@ import { SearchFiltersComponent } from './search-filters.component'
     VideoPlaylistMiniatureComponent,
     NumberFormatterPipe,
     AlertComponent,
-    GlobalIconComponent
+    GlobalIconComponent,
+    DisplayHandlePipe
   ]
 })
 export class SearchComponent implements OnInit, OnDestroy {

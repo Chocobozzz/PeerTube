@@ -12,7 +12,7 @@ import { SelectOptionsComponent } from '../select-options.component'
 
     [items]="items()"
 
-    [(ngModel)]="selectedId"
+    [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
 
     [filter]="items() && items().length > 5"

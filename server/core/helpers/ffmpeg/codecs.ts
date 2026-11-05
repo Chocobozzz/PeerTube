@@ -59,8 +59,12 @@ export async function getAudioStreamCodec (path: string, existingProbe?: Ffprobe
   if (audioCodecName === 'vorbis') return 'vorbis'
   if (audioCodecName === 'aac') return 'mp4a.40.2'
   if (audioCodecName === 'mp3') return 'mp4a.40.34'
+  if (audioCodecName === 'flac') return 'fLaC'
+  if (audioCodecName === 'ac3') return 'ac-3'
+  if (audioCodecName === 'eac3') return 'ec-3'
 
-  logger.warn('Cannot get audio codec of %s.', path, { audioStream })
+  logger.warn('Cannot get audio codec of %s, it will not be declared in the HLS playlist.', path, { audioStream })
 
-  return 'mp4a.40.2' // Fallback
+  // CODECS is optional in HLS: let the player detect the codec instead of declaring a wrong one
+  return ''
 }

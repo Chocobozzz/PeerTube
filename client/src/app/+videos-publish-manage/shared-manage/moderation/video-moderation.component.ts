@@ -68,6 +68,7 @@ export class VideoModerationComponent implements OnInit, OnDestroy {
 
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[] = []
   embedPrivacyPolicies: ConstantLabel<VideoEmbedPrivacyPolicyType>[] = []
+
   serverConfig: HTMLServerConfig
 
   private updatedSub: Subscription

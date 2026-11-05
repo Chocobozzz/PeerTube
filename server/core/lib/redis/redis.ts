@@ -1,9 +1,10 @@
-import { ActivityType } from '@peertube/peertube-models'
+import { ActivityType, UserSignupClientType } from '@peertube/peertube-models'
 import { RedisOptions } from 'ioredis'
 import * as actorFollowHealth from './actor-follow-health.js'
 import { ActorFollowHealthKind } from './actor-follow-health.js'
 import * as apUnavailability from './ap-unavailability.js'
 import * as contactForm from './contact-form.js'
+import * as dbRecentWrites from './db-recent-writes.js'
 import * as emailVerification from './email-verification.js'
 import * as externalAuthTokens from './external-auth-tokens.js'
 import * as forgotPassword from './forgot-password.js'
@@ -12,6 +13,8 @@ import * as locks from './locks.js'
 import * as localVideoStatCounters from './local-video-stat-counters.js'
 import * as loginFailures from './login-failures.js'
 import * as primaryRegisteredPlugins from './primary-registered-plugins.js'
+import * as processHeartbeats from './process-heartbeats.js'
+import { ProcessHeartbeat } from './process-heartbeats.js'
 import * as rateLimit from './rate-limit.js'
 import {
   buildLoggedRedisClientOptions,
@@ -27,6 +30,7 @@ import {
 } from './redis-client.js'
 import * as remoteVideoStats from './remote-video-stats.js'
 import * as sharedInstanceConfig from './shared-instance-config.js'
+import * as signupClient from './signup-client.js'
 import * as twoFactorRequest from './two-factor-request.js'
 import * as uploadSession from './upload-session.js'
 import * as videoStatCounters from './video-stat-counters.js'
@@ -162,6 +166,24 @@ export class Redis {
 
   deleteRegistrationVerifyEmailLink (registrationId: number) {
     return emailVerification.deleteRegistrationVerifyEmailLink(registrationId)
+  }
+
+  /* ************ Signup client ************ */
+
+  setUserSignupClient (userId: number, client: UserSignupClientType) {
+    return signupClient.setUserSignupClient(userId, client)
+  }
+
+  getUserSignupClient (userId: number) {
+    return signupClient.getUserSignupClient(userId)
+  }
+
+  setRegistrationSignupClient (registrationId: number, client: UserSignupClientType) {
+    return signupClient.setRegistrationSignupClient(registrationId, client)
+  }
+
+  getRegistrationSignupClient (registrationId: number) {
+    return signupClient.getRegistrationSignupClient(registrationId)
   }
 
   /* ************ Contact form per IP ************ */
@@ -356,6 +378,16 @@ export class Redis {
     return locks.releaseLock(lockKey, token)
   }
 
+  /* ************ Database recent writes ************ */
+
+  setUserRecentDbWrite (userId: number, ttlMs: number) {
+    return dbRecentWrites.setUserRecentDbWrite(userId, ttlMs)
+  }
+
+  hasUserRecentDbWrite (userId: number) {
+    return dbRecentWrites.hasUserRecentDbWrite(userId)
+  }
+
   /* ************ Actor follow health ************ */
 
   addActorFollowHealth (kind: ActorFollowHealthKind, values: string[]) {
@@ -404,6 +436,20 @@ export class Redis {
 
   getInboxWaiting (staleAfterMs: number) {
     return inboxStats.getInboxWaiting(staleAfterMs)
+  }
+
+  /* ************ Process heartbeats ************ */
+
+  setProcessHeartbeat (processId: string, heartbeat: ProcessHeartbeat) {
+    return processHeartbeats.setProcessHeartbeat(processId, heartbeat)
+  }
+
+  removeProcessHeartbeat (processId: string) {
+    return processHeartbeats.removeProcessHeartbeat(processId)
+  }
+
+  getProcessHeartbeats (staleAfterMs: number) {
+    return processHeartbeats.getProcessHeartbeats(staleAfterMs)
   }
 
   /* ************ Keys generation ************ */

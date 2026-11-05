@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, PluginService, resetCurrentPage } from '@app/core'
+import { ComponentPagination, hasMoreItems, Notifier, PasswordConfirmationService, PluginService, resetCurrentPage } from '@app/core'
 import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { PeerTubePluginIndex, PluginType, PluginType_Type } from '@peertube/peertube-models'
@@ -33,7 +33,7 @@ export class PluginSearchComponent implements OnInit {
   private pluginService = inject(PluginService)
   private pluginApiService = inject(PluginApiService)
   private notifier = inject(Notifier)
-  private confirmService = inject(ConfirmService)
+  private passwordConfirmation = inject(PasswordConfirmationService)
   private router = inject(Router)
   private route = inject(ActivatedRoute)
 
@@ -140,15 +140,16 @@ export class PluginSearchComponent implements OnInit {
   async install (plugin: PeerTubePluginIndex) {
     if (this.installing[plugin.npmName]) return
 
-    const res = await this.confirmService.confirm(
-      $localize`Please only install plugins or themes you trust, since they can execute any code on your platform.`,
-      $localize`Install ${plugin.name}?`
-    )
-    if (res === false) return
+    const { confirmed, currentPassword } = await this.passwordConfirmation.askPassword({
+      title: $localize`Install ${plugin.name}?`,
+      message: $localize`Please only install plugins or themes you trust, since they can execute any code on your platform.`,
+      confirmIfNotRequired: true
+    })
+    if (confirmed === false) return
 
     this.installing[plugin.npmName] = true
 
-    this.pluginApiService.install(plugin.npmName)
+    this.pluginApiService.install(plugin.npmName, currentPassword)
       .subscribe({
         next: () => {
           this.installing[plugin.npmName] = false
@@ -162,7 +163,7 @@ export class PluginSearchComponent implements OnInit {
         error: err => {
           this.installing[plugin.npmName] = false
 
-          this.notifier.handleError(err)
+          this.passwordConfirmation.handleError(err)
         }
       })
   }

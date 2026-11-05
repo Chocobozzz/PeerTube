@@ -9,7 +9,7 @@
     <input
       type="file"
       [name]="inputName()" [id]="inputName()" [accept]="extensions()"
-      (change)="fileChange($event)" [(ngModel)]="fileInputValue"
+      (change)="fileChange($event)" [(ngModel)]="fileInputValue" [ngModelOptions]="{ standalone: true }"
       />
   </div>
 

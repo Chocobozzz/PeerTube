@@ -1,7 +1,14 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { maxBy, promiseMap, wait } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoCommentPolicy, VideoCommentThreadTree, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  VideoCommentPolicy,
+  VideoCommentThreadTree,
+  VideoCommercialContent,
+  VideoPrivacy,
+  VideoRecommendationScope
+} from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   PeerTubeServer,
@@ -1040,7 +1047,8 @@ describe('Test multiple servers', function () {
 
       const attributes = {
         commentsPolicy: VideoCommentPolicy.DISABLED,
-        downloadEnabled: false
+        downloadEnabled: false,
+        recommendationScope: VideoRecommendationScope.LOCAL
       }
 
       await servers[0].videos.update({ id: videoUUID, attributes })
@@ -1052,6 +1060,12 @@ describe('Test multiple servers', function () {
         expect(video.commentsPolicy.id).to.equal(VideoCommentPolicy.DISABLED)
         expect(video.commentsPolicy.label).to.equal('Disabled')
         expect(video.downloadEnabled).to.be.false
+        expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.LOCAL)
+
+        const { data } = await server.videos.list()
+        const listedVideo = data.find(v => v.uuid === videoUUID)
+        expect(listedVideo.recommendationScope.id).to.equal(VideoRecommendationScope.LOCAL)
+        expect(listedVideo.recommendationScope.label).to.equal('Videos of the same platform')
 
         const text = 'my super forbidden comment'
         await server.comments.createThread({ videoId: videoUUID, text, expectedStatus: HttpStatusCode.CONFLICT_409 })
@@ -1138,6 +1152,90 @@ describe('Test multiple servers', function () {
           }
         })
       })
+    })
+  })
+
+  describe('Commercial content', function () {
+    it('Should default a new video to no commercial content', async function () {
+      this.timeout(60000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'none' })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+
+        expect(video.commercialContent.id).to.equal(VideoCommercialContent.NONE)
+        expect(video.commercialContent.label).to.equal('None')
+
+        const { data } = await server.videos.list()
+        const listedVideo = data.find(v => v.uuid === uuid)
+        expect(listedVideo.recommendationScope.id).to.equal(VideoRecommendationScope.ALL)
+        expect(listedVideo.recommendationScope.label).to.equal('All videos')
+      }
+    })
+
+    it('Should upload videos with commercial content and federate it', async function () {
+      this.timeout(60000)
+
+      const toUpload = [
+        { name: 'promotional', commercialContent: VideoCommercialContent.PROMOTIONAL, mode: 'legacy' as const },
+        { name: 'paid partnership', commercialContent: VideoCommercialContent.PAID_PARTNERSHIP, mode: 'resumable' as const }
+      ]
+
+      const uuids: string[] = []
+
+      for (const { mode, ...attributes } of toUpload) {
+        const { uuid } = await servers[0].videos.upload({ attributes, mode })
+        uuids.push(uuid)
+      }
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        for (let i = 0; i < toUpload.length; i++) {
+          const video = await server.videos.get({ id: uuids[i] })
+          expect(video.commercialContent.id).to.equal(toUpload[i].commercialContent)
+        }
+
+        const { data } = await server.videos.list()
+        const paidPartnership = data.find(v => v.uuid === uuids[1])
+
+        expect(paidPartnership.commercialContent.id).to.equal(VideoCommercialContent.PAID_PARTNERSHIP)
+        expect(paidPartnership.commercialContent.label).to.equal('Paid partnership')
+      }
+    })
+
+    it('Should update the commercial content and federate it', async function () {
+      this.timeout(60000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'to update' })
+
+      await servers[0].videos.update({ id: uuid, attributes: { commercialContent: VideoCommercialContent.PAID_PARTNERSHIP } })
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+        expect(video.commercialContent.id).to.equal(VideoCommercialContent.PAID_PARTNERSHIP)
+      }
+
+      // Updating another attribute doesn't reset the commercial content
+      await servers[0].videos.update({ id: uuid, attributes: { name: 'to update 2' } })
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+        expect(video.commercialContent.id).to.equal(VideoCommercialContent.PAID_PARTNERSHIP)
+      }
+
+      await servers[0].videos.update({ id: uuid, attributes: { commercialContent: VideoCommercialContent.NONE } })
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+        expect(video.commercialContent.id).to.equal(VideoCommercialContent.NONE)
+      }
     })
   })
 

@@ -1,4 +1,4 @@
 <p-autoComplete
   [inputId]="inputName()" [suggestions]="suggestions" (completeMethod)="completeMethod($event)" fluid="true"
-  [(ngModel)]="value" (ngModelChange)="propagateChange($event)"
+  [(ngModel)]="value" [ngModelOptions]="{ standalone: true }" (ngModelChange)="propagateChange($event)"
 ></p-autoComplete>

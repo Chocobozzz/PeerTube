@@ -24,7 +24,7 @@ export class PlaylistFetcher {
 
     if (!isResponseOk) {
       if (playlistResponse?.status === HttpStatusCode.NOT_FOUND_404) {
-        throw new Error('This playlist does not exist.')
+        throw new Error('This playlist does not exist')
       }
 
       throw new Error('We cannot fetch the playlist. Please try again later.')

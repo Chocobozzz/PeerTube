@@ -1,3 +1,13 @@
 @use '_variables' as *;
 @use '_mixins' as *;
+@use '_button-mixins' as *;
 
+:host ::ng-deep a.has-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: start;
+
+  @include button-with-icon(24px, 0, 0);
+}

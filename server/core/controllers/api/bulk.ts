@@ -1,8 +1,10 @@
-import express from 'express'
 import { BulkRemoveCommentsOfBody, HttpStatusCode } from '@peertube/peertube-models'
+import { auditLog, buildCommentAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { removeComment } from '@server/lib/video-comment.js'
 import { bulkRemoveCommentsOfValidator } from '@server/middlewares/validators/bulk.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
+import { MCommentFormattable } from '@server/types/models/index.js'
+import express from 'express'
 import { apiRateLimiter, asyncMiddleware, authenticate } from '../../middlewares/index.js'
 
 const bulkRouter = express.Router()
@@ -33,7 +35,13 @@ async function bulkRemoveCommentsOf (req: express.Request, res: express.Response
   // Don't wait result
   res.status(HttpStatusCode.NO_CONTENT_204).end()
 
+  const auditActor = getAuditActorFromRes(res)
+
   for (const comment of comments) {
-    await removeComment(comment, req, res)
+    const videoCommentInstanceBefore = await removeComment(comment, req, res)
+
+    // All the comments belong to this account
+    const commentWithAccount: MCommentFormattable = Object.assign(comment, { Account: account })
+    auditLog.delete(auditActor, () => buildCommentAuditEntity(commentWithAccount.toFormattedJSON(), videoCommentInstanceBefore.Video))
   }
 }

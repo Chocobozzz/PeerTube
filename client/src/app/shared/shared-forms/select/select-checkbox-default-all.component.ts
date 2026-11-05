@@ -9,7 +9,7 @@ import { SelectCheckboxComponent } from './select-checkbox.component'
   selector: 'my-select-checkbox-default-all',
   template: `
   <my-select-checkbox
-    [(ngModel)]="selectedItems"
+    [(ngModel)]="selectedItems" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
     [availableItems]="availableItems()"
     [placeholder]="placeholder()"

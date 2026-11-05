@@ -29,6 +29,10 @@ export function isShortUUID (value: string) {
   return value.length === translator.maxLength
 }
 
+export function buildUUIDv5 (name: string, namespace: string) {
+  return v5(name, namespace)
+}
+
 export function buildUUIDv5FromURL (url: string) {
   return v5(url, v5.URL)
 }

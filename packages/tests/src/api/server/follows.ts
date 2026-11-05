@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { Video, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import { wait } from '@peertube/peertube-core-utils'
+import { Video, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import { PeerTubeServer, cleanupTests, createMultipleServers, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { expectAccountFollows, expectChannelsFollows } from '@tests/shared/actors.js'
 import { testCaptionFile } from '@tests/shared/captions.js'
@@ -579,8 +579,6 @@ describe('Test follows', function () {
       })
 
       it('Should unfollow server 3 on server 1 and does not list server 3 videos', async function () {
-        this.timeout(5000)
-
         await servers[0].follows.unfollow({ target: servers[2] })
 
         await waitJobs(servers)

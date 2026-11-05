@@ -10,6 +10,7 @@ import { NumberFormatterPipe } from '../shared-main/common/number-formatter.pipe
 import { PeerTubeBadgeService } from '../shared-main/common/peertube-badge.service'
 import { DataLoaderOptionsBase, TableColumnInfo, TableComponent } from '../shared-tables/table.component'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
+import { DisplayHostPipe } from '@app/shared/shared-main/common/display-host.pipe'
 
 type DataLoaderParameter = DataLoaderOptionsBase & {
   subscriptionName?: string
@@ -25,7 +26,8 @@ type DataLoaderParameter = DataLoaderOptionsBase & {
     PTDatePipe,
     GlobalIconComponent,
     BatchDomainsModalComponent,
-    RouterLink
+    RouterLink,
+    DisplayHostPipe
   ]
 })
 export class GenericServerBlocklistComponent {

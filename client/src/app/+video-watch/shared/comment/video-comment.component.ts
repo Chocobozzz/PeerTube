@@ -37,6 +37,7 @@ import { User, UserRight } from '@peertube/peertube-models'
 import { Subscription } from 'rxjs'
 import { TimestampRouteTransformerDirective } from '../timestamp-route-transformer.directive'
 import { VideoCommentAddComponent } from './video-comment-add.component'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   selector: 'my-video-comment',
@@ -53,7 +54,8 @@ import { VideoCommentAddComponent } from './video-comment-add.component'
     CommentReportComponent,
     GlobalIconComponent,
     FromNowPipe,
-    LoaderComponent
+    LoaderComponent,
+    DisplayHandlePipe
   ]
 })
 export class VideoCommentComponent implements OnChanges, OnDestroy {

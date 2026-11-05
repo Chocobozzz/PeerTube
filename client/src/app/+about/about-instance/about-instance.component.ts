@@ -29,6 +29,7 @@ export class AboutInstanceComponent implements OnInit {
 
   ngOnInit () {
     const {
+      about,
       aboutHTML,
       serverStats,
       serverConfig
@@ -66,7 +67,7 @@ export class AboutInstanceComponent implements OnInit {
       routerLink: '/about/instance/tech'
     })
 
-    if (serverConfig.instance.support.text) {
+    if (about.instance.support.text) {
       this.menuEntries.push({
         label: $localize`Support`,
         routerLink: '/about/instance/support',

@@ -1,4 +1,11 @@
 import { PlayerChannelSettingsUpdate, PlayerVideoSettingsUpdate } from '@peertube/peertube-models'
+import {
+  auditLog,
+  buildChannelAuditSummary,
+  buildChannelPlayerSettingsAuditEntity,
+  buildVideoPlayerSettingsAuditEntity,
+  getAuditActorFromRes
+} from '@server/lib/audit-log/index.js'
 import { sendUpdateChannelPlayerSettings, sendUpdateVideoPlayerSettings } from '@server/lib/activitypub/send/send-update.js'
 import { upsertPlayerSettings } from '@server/lib/player-settings.js'
 import {
@@ -93,7 +100,15 @@ async function updateVideoPlayerSettings (req: express.Request, res: express.Res
   const body: PlayerVideoSettingsUpdate = req.body
   const video = res.locals.videoFull
 
+  const oldAuditEntity = await auditLog.snapshot(async () => {
+    const oldSetting = await PlayerSettingModel.loadByVideoId(video.id)
+
+    return buildVideoPlayerSettingsAuditEntity({ video, theme: oldSetting?.theme ?? null })
+  })
+
   const setting = await upsertPlayerSettings({ user: res.locals.oauth.token.User, settings: body, channel: undefined, video })
+
+  auditLog.update(getAuditActorFromRes(res), () => buildVideoPlayerSettingsAuditEntity({ video, theme: setting.theme }), oldAuditEntity)
 
   await sendUpdateVideoPlayerSettings(video, setting, undefined)
 
@@ -104,7 +119,19 @@ async function updateChannelPlayerSettings (req: express.Request, res: express.R
   const body: PlayerChannelSettingsUpdate = req.body
   const channel = res.locals.videoChannel
 
+  const oldAuditEntity = await auditLog.snapshot(async () => {
+    const oldSettings = await PlayerSettingModel.loadByChannelId(channel.id)
+
+    return buildChannelPlayerSettingsAuditEntity({ channel: buildChannelAuditSummary(channel), theme: oldSettings?.theme ?? null })
+  })
+
   const settings = await upsertPlayerSettings({ user: res.locals.oauth.token.User, settings: body, channel, video: undefined })
+
+  auditLog.update(
+    getAuditActorFromRes(res),
+    () => buildChannelPlayerSettingsAuditEntity({ channel: buildChannelAuditSummary(channel), theme: settings.theme }),
+    oldAuditEntity
+  )
 
   await sendUpdateChannelPlayerSettings(channel, settings, undefined)
 

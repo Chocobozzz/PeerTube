@@ -99,18 +99,20 @@ export class PluginApiService {
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  update (pluginName: string, pluginType: PluginType_Type) {
-    const body: ManagePlugin = {
-      npmName: this.pluginService.nameToNpmName(pluginName, pluginType)
+  update (pluginName: string, pluginType: PluginType_Type, currentPassword?: string) {
+    const body: InstallOrUpdatePlugin = {
+      npmName: this.pluginService.nameToNpmName(pluginName, pluginType),
+      currentPassword
     }
 
     return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/update', body)
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
-  install (npmName: string) {
+  install (npmName: string, currentPassword?: string) {
     const body: InstallOrUpdatePlugin = {
-      npmName
+      npmName,
+      currentPassword
     }
 
     return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/install', body)

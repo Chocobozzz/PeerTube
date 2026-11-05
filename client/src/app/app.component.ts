@@ -30,7 +30,6 @@ import { logger } from '@root-helpers/logger'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { SharedModule } from 'primeng/api'
 import { ToastModule } from 'primeng/toast'
-import { forkJoin } from 'rxjs'
 import { filter, first, map } from 'rxjs/operators'
 import { MenuService } from './core/menu/menu.service'
 import { HeaderComponent } from './header/header.component'
@@ -39,7 +38,6 @@ import { HotkeysCheatSheetComponent } from './hotkeys/hotkeys-cheat-sheet.compon
 import { MenuComponent } from './menu/menu.component'
 import { ConfirmComponent } from './modal/confirm.component'
 import { GlobalIconComponent, GlobalIconName } from './shared/shared-icons/global-icon.component'
-import { InstanceService } from './shared/shared-main/instance/instance.service'
 import { PeertubeModalService } from './shared/shared-main/peertube-modal/peertube-modal.service'
 
 @Component({
@@ -72,7 +70,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private serverService = inject(ServerService)
   private peertubeRouter = inject(PeerTubeRouterService)
   private pluginService = inject(PluginService)
-  private instanceService = inject(InstanceService)
   private domSanitizer = inject(DomSanitizer)
   private screenService = inject(ScreenService)
   private hotkeysService = inject(HotkeysService)
@@ -355,15 +352,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!instanceConfigWarningModal) return
     if (!instanceConfigWarningModal.canBeOpenByUser(user)) return
 
-    forkJoin([
-      this.serverService.getConfig().pipe(first()),
-      this.instanceService.getAboutWithCache().pipe(first())
-    ]).subscribe(([ config, about ]) => {
-      const instanceConfigWarningModalValue = this.instanceConfigWarningModal()
-      if (instanceConfigWarningModalValue.shouldAutoOpen(config, about)) {
-        instanceConfigWarningModalValue.show(about)
-      }
-    })
+    this.serverService.getConfig().pipe(first())
+      .subscribe(config => this.instanceConfigWarningModal().showIfNeeded(config))
   }
 
   private openAccountModalsIfNeeded (user: User) {

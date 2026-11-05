@@ -1,6 +1,14 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
-import { LiveVideoLatencyMode, VideoEmbedPrivacyPolicy, VideoExportJSON, VideoPrivacy, VideoState } from '@peertube/peertube-models'
+import {
+  LiveVideoLatencyMode,
+  VideoAIUsage,
+  VideoCommercialContent,
+  VideoEmbedPrivacyPolicy,
+  VideoExportJSON,
+  VideoPrivacy,
+  VideoState
+} from '@peertube/peertube-models'
 import { buildUUID, getFileSize } from '@peertube/peertube-node-utils'
 import { isArray, isBooleanValid, isUUIDValid } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerVideoThemeSettingValid } from '@server/helpers/custom-validators/player-settings.js'
@@ -20,6 +28,9 @@ import {
   isVideoNameValid,
   isVideoPrivacyValid,
   isVideoPublicationDateValid,
+  isVideoAIUsageValid,
+  isVideoCommercialContentValid,
+  isVideoRecommendationScopeValid,
   isVideoReplayPrivacyValid,
   isVideoSourceFilenameValid,
   isVideoSupportValid,
@@ -62,6 +73,9 @@ type SanitizedObject = Pick<
   | 'nsfw'
   | 'isLive'
   | 'commentsPolicy'
+  | 'recommendationScope'
+  | 'aiUsage'
+  | 'commercialContent'
   | 'downloadEnabled'
   | 'videoEmbedPrivacy'
   | 'waitTranscoding'
@@ -101,6 +115,13 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     if (!o.commentsPolicy || !isVideoCommentsPolicyValid(o.commentsPolicy)) {
       o.commentsPolicy = CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY
     }
+
+    if (!o.recommendationScope || !isVideoRecommendationScopeValid(o.recommendationScope)) {
+      o.recommendationScope = CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE
+    }
+
+    if (!isVideoAIUsageValid(o.aiUsage)) o.aiUsage = VideoAIUsage.NOT_SPECIFIED
+    if (!isVideoCommercialContentValid(o.commercialContent)) o.commercialContent = VideoCommercialContent.NONE
 
     if (!isVideoSourceFilenameValid(o.source?.inputFilename)) o.source = undefined
 
@@ -165,6 +186,9 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
       'nsfw',
       'isLive',
       'commentsPolicy',
+      'recommendationScope',
+      'aiUsage',
+      'commercialContent',
       'downloadEnabled',
       'videoEmbedPrivacy',
       'waitTranscoding',
@@ -244,6 +268,9 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
           'nsfw',
           'tags',
           'commentsPolicy',
+          'recommendationScope',
+          'aiUsage',
+          'commercialContent',
           'downloadEnabled',
           'waitTranscoding',
           'originallyPublishedAt'

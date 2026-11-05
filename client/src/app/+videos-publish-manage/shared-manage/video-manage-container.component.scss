@@ -63,7 +63,13 @@
 
   .watch-save {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
+    min-width: 0;
+
+    my-button {
+      max-width: 100%;
+    }
   }
 
   @media screen and (max-width: 1200px) {

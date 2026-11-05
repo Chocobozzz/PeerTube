@@ -2,7 +2,14 @@ import { inject } from '@angular/core'
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot, Routes } from '@angular/router'
 import { CanDeactivateGuard, ServerService, UserRightGuard } from '@app/core'
 import { CustomPageService } from '@app/shared/shared-main/custom-page/custom-page.service'
-import { CustomConfig, UserRight, VideoCommentPolicyType, ConstantLabel, VideoPrivacyType } from '@peertube/peertube-models'
+import {
+  CustomConfig,
+  UserRight,
+  VideoCommentPolicyType,
+  ConstantLabel,
+  VideoPrivacyType,
+  VideoRecommendationScopeType
+} from '@peertube/peertube-models'
 import { map } from 'rxjs'
 import { AdminConfigComponent } from './admin-config.component'
 import {
@@ -52,6 +59,13 @@ export const commentPoliciesResolver: ResolveFn<ConstantLabel<VideoCommentPolicy
   _state: RouterStateSnapshot
 ) => {
   return inject(ServerService).getCommentPolicies()
+}
+
+export const recommendationScopesResolver: ResolveFn<ConstantLabel<VideoRecommendationScopeType>[]> = (
+  _route: ActivatedRouteSnapshot,
+  _state: RouterStateSnapshot
+) => {
+  return inject(ServerService).getRecommendationScopes()
 }
 
 export const logosResolver: ResolveFn<ReturnType<InstanceLogoService['getAllLogos']>> = (
@@ -145,7 +159,8 @@ export const configRoutes: Routes = [
         resolve: {
           privacies: privaciesResolver,
           licences: licencesResolver,
-          commentPolicies: commentPoliciesResolver
+          commentPolicies: commentPoliciesResolver,
+          recommendationScopes: recommendationScopesResolver
         },
         data: {
           meta: {

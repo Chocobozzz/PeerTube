@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import { SignupService } from '@app/+signup/shared/signup.service'
 import { AuthService, Notifier, ServerService, UserService } from '@app/core'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
+import { UserSignupClient } from '@peertube/peertube-models'
 import { SignupSuccessAfterEmailComponent } from '../../shared/signup-success-after-email.component'
 
 @Component({
@@ -23,12 +24,12 @@ export class VerifyAccountEmailComponent implements OnInit {
   failed = false
   isPendingEmail = false
 
-  requiresApproval: boolean
-  loaded = false
-
   private userId: number
   private registrationId: number
   private verificationString: string
+
+  private signupClient: string
+  private username: string
 
   get instanceName () {
     return this.server.getHTMLConfig().instance.name
@@ -37,16 +38,12 @@ export class VerifyAccountEmailComponent implements OnInit {
   ngOnInit () {
     const queryParams = this.route.snapshot.queryParams
 
-    this.server.getConfig().subscribe(config => {
-      this.requiresApproval = config.signup.requiresApproval
-
-      this.loaded = true
-    })
-
     this.userId = queryParams['userId']
     this.registrationId = queryParams['registrationId']
     this.verificationString = queryParams['verificationString']
     this.isPendingEmail = queryParams['isPendingEmail'] === 'true'
+    this.signupClient = queryParams['signupClient']
+    this.username = queryParams['username']
 
     if (!this.verificationString) {
       this.notifier.error($localize`Unable to find verification string in URL query.`)
@@ -67,6 +64,13 @@ export class VerifyAccountEmailComponent implements OnInit {
 
   isRegistrationRequest () {
     return !!this.registrationId
+  }
+
+  getMobileAppUsername () {
+    if (!this.isRegistration() || this.isRegistrationRequest()) return undefined
+    if (this.signupClient !== UserSignupClient.PEERTUBE_APP) return undefined
+
+    return this.username
   }
 
   verifyEmail () {

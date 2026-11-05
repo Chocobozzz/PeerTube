@@ -49,15 +49,17 @@ export async function bumpUpdatedAt (options: {
 
   // We must not prevent concurrent updates, we need the real datetime of the last update. The query already handle concurrent updates
   // Dates are federated with a millisecond precision
-  const rows = await sequelize.query<{ updatedAt: Date }>(
+  // Not a SELECT query type, so it is never sent to a database read replica
+  const [ result ] = await sequelize.query(
     `UPDATE "${table}" SET "updatedAt" = GREATEST(:now, date_trunc('milliseconds', "updatedAt") + INTERVAL '1 millisecond') ` +
       `WHERE id = :id RETURNING "updatedAt"`,
     {
       replacements: { id, now: new Date() },
-      type: QueryTypes.SELECT,
+      type: QueryTypes.RAW,
       transaction
     }
   )
+  const rows = result as { updatedAt: Date }[]
 
   // Deleted in the meantime
   if (rows.length === 0) return new Date()

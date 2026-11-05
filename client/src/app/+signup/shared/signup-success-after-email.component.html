@@ -15,5 +15,11 @@
     <p i18n>
       If you need help using PeerTube, you can have a look at the <a class="link-primary" href="https://docs.joinpeertube.org/use/setup-account" target="_blank" rel="noopener noreferrer">documentation</a>.
     </p>
+
+    @if (mobileAppUrl()) {
+      <a class="peertube-button-link primary-button" [href]="mobileAppUrl()" (click)="onMobileAppClick()" i18n>Log in in the app</a>
+    } @else {
+      <a class="peertube-button-link primary-button" routerLink="/login" i18n>Log in</a>
+    }
   }
 </my-alert>

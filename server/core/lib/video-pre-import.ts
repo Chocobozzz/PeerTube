@@ -1,6 +1,8 @@
 import {
   NSFWFlag,
+  VideoAIUsage,
   VideoChannelActivityAction,
+  VideoCommercialContent,
   VideoEmbedPrivacyPolicy,
   VideoImportCreate,
   VideoImportPayload,
@@ -126,6 +128,9 @@ export async function buildVideoFromImport ({ channelId, importData, importDataO
     licence: importDataOverride.licence ?? importData.licence ?? CONFIG.DEFAULTS.PUBLISH.LICENCE,
     language: importDataOverride.language || importData.language,
     commentsPolicy: importDataOverride.commentsPolicy ?? CONFIG.DEFAULTS.PUBLISH.COMMENTS_POLICY,
+    recommendationScope: importDataOverride.recommendationScope ?? CONFIG.DEFAULTS.PUBLISH.RECOMMENDATION_SCOPE,
+    aiUsage: importDataOverride.aiUsage ?? VideoAIUsage.NOT_SPECIFIED,
+    commercialContent: importDataOverride.commercialContent ?? VideoCommercialContent.NONE,
     downloadEnabled: importDataOverride.downloadEnabled ?? CONFIG.DEFAULTS.PUBLISH.DOWNLOAD_ENABLED,
     waitTranscoding: importDataOverride.waitTranscoding ?? true,
     embedPrivacyPolicy: VideoEmbedPrivacyPolicy.ALL_ALLOWED,

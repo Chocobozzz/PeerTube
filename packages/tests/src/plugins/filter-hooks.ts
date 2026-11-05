@@ -135,6 +135,20 @@ describe('Test plugin filter hooks', function () {
       expect(total).to.equal(11)
     })
 
+    it('Should run filter:api.recommendations.videos.list.params', async function () {
+      const { data } = await servers[0].videos.listRecommendations({ videoId: videoUUID, count: 2 })
+
+      // 1 plugin do +1 to the count parameter
+      expect(data).to.have.lengthOf(3)
+    })
+
+    it('Should run filter:api.recommendations.videos.list.result', async function () {
+      const { data, total } = await servers[0].videos.listRecommendations({ videoId: videoUUID, count: 2 })
+
+      // Plugin do +1 to the total result
+      expect(total).to.equal(data.length + 1)
+    })
+
     it('Should run filter:api.accounts.videos.list.params', async function () {
       const { data } = await servers[0].videos.listByAccount({ handle: 'root', start: 0, count: 2 })
 
@@ -699,6 +713,18 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('Sitemap filters', function () {
+    it('Should run filter:sitemap.pages.list.result', async function () {
+      const res = await makeGetRequest({ url: servers[0].url, path: '/sitemaps/pages.xml', expectedStatus: HttpStatusCode.OK_200 })
+
+      expect(res.text).to.contain(`<loc>${servers[0].url}/about/instance/home</loc>`)
+      expect(res.text).to.not.contain(`<loc>${servers[0].url}/videos/browse</loc>`)
+      expect(res.text).to.contain(
+        `<loc>${servers[0].url}/plugins/test/router/sitemap-page</loc><lastmod>2026-01-01T00:00:00.000Z</lastmod>`
+      )
+    })
+  })
+
   describe('Search filters', function () {
     before(async function () {
       await servers[0].config.updateExistingConfig({
@@ -856,6 +882,30 @@ describe('Test plugin filter hooks', function () {
         expectEndWith(video.description, ' - filter:api.video.user-import.video-attribute.result')
       }
     })
+
+    it('Should run filter:api.video.duplicate.video-attribute.result', async function () {
+      this.timeout(120_000)
+
+      await servers[0].config.enableMinimumTranscoding()
+      await servers[0].config.enableStudio()
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
+      await waitJobs(servers)
+
+      await servers[0].videos.update({ id: uuid, attributes: { description: 'duplicate' } })
+
+      const { video } = await servers[0].videoStudio.createEditionTasks({
+        videoId: uuid,
+        tasks: [ { name: 'cut', options: { start: 1 } } ],
+        saveAsNewVideo: true
+      })
+
+      const duplicate = await servers[0].videos.getWithToken({ id: video.uuid })
+      expect(duplicate.description).to.equal('duplicate - filter:api.video.duplicate.video-attribute.result')
+
+      await waitJobs(servers)
+      await servers[0].config.disableTranscoding()
+    })
   })
 
   describe('Stats filters', function () {
@@ -863,6 +913,20 @@ describe('Test plugin filter hooks', function () {
       const data = await servers[0].stats.get()
 
       expect((data as any).customStats).to.equal(14)
+    })
+  })
+
+  describe('About filters', function () {
+    it('Should run filter:api.config.about.get.result', async function () {
+      {
+        const { instance } = await servers[0].config.getAbout({ language: 'fr' })
+        expect(instance.terms).to.equal('Terms in fr-FR')
+      }
+
+      {
+        const { instance } = await servers[0].config.getAbout({ acceptLanguage: 'es-ES' })
+        expect(instance.terms).to.equal('Terms in es-ES')
+      }
     })
   })
 

@@ -21,6 +21,7 @@ export function buildNextVideoState (currentState?: VideoStateType) {
 
   if (
     currentState !== VideoState.TO_EDIT &&
+    currentState !== VideoState.TO_DUPLICATE &&
     currentState !== VideoState.TO_TRANSCODE &&
     currentState !== VideoState.TO_MOVE_TO_EXTERNAL_STORAGE &&
     currentState !== VideoState.TO_MOVE_TO_FILE_SYSTEM &&
@@ -182,9 +183,9 @@ async function moveToPublishedState (options: {
 
   if (previousState === VideoState.TO_EDIT) {
     Notifier.Instance.notifyOfFinishedVideoStudioEdition(video)
-    return
   }
 
+  // A duplicate edited in studio is published for the first time after its edition
   if (isNewVideo) {
     Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)
 

@@ -3,6 +3,7 @@ import { createLogger } from '../helpers/logger.js'
 import { SHUTDOWN_TIMEOUTS } from '../initializers/constants.js'
 import { sequelizeTypescript } from '../initializers/database.js'
 import { InboxManager } from './activitypub/inbox-manager.js'
+import { closeDatabaseReadReplicas } from './database-replicas/database-replicas.js'
 import { HorizontalScalabilityStorage } from './horizontal-scalability-storage.js'
 import { JobQueue } from './job-queue/job-queue.js'
 import { LiveManager } from './live/live-manager.js'
@@ -10,6 +11,7 @@ import { PeerTubeSocket } from './peertube-socket.js'
 import { Redis } from './redis/index.js'
 import { abortAllPendingRunnerJobCompletions } from './runners/runner-job-completions.js'
 import { AbstractScheduler } from './schedulers/abstract-scheduler.js'
+import { ProcessHeartbeatScheduler } from './schedulers/process-heartbeat-scheduler.js'
 
 const logger = createLogger()
 
@@ -74,6 +76,9 @@ async function shutdown (server: HTTPServer, exitCode = 0) {
   await Promise.all([
     closeHTTPServer(server),
 
+    ProcessHeartbeatScheduler.Instance.unregister()
+      .catch(err => logger.error('Cannot remove the process heartbeat.', { err })),
+
     // Active jobs are not awaited: a transcoding job can run for hours. They are retried when detected as stalled
     JobQueue.Instance.closeWorkers({ force: true })
       .catch(err => logger.error('Cannot close job queue workers.', { err }))
@@ -93,6 +98,9 @@ async function shutdown (server: HTTPServer, exitCode = 0) {
   await Promise.all([
     sequelizeTypescript.close()
       .catch(err => logger.error('Cannot close database connection.', { err })),
+
+    closeDatabaseReadReplicas()
+      .catch(err => logger.error('Cannot close database read replica connections.', { err })),
 
     Redis.Instance.quit()
       .catch(err => logger.error('Cannot close redis connection.', { err }))

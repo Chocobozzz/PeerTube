@@ -28,6 +28,7 @@ import {
   VideoLiveEndingPayload,
   VideoRedundancyPayload,
   VideoStudioEditionPayload,
+  VideoDuplicatePayload,
   VideoTranscodingPayload,
   VideoTranscriptionPayload
 } from '@peertube/peertube-models'
@@ -49,7 +50,15 @@ import {
 } from 'bullmq'
 import { RedisOptions } from 'ioredis'
 import { createLogger } from '../../helpers/logger.js'
-import { JOB_ATTEMPTS, JOB_CONCURRENCY, JOB_REMOVAL_OPTIONS, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants.js'
+import {
+  JOB_ATTEMPTS,
+  JOB_CONCURRENCY,
+  JOB_REMOVAL_OPTIONS,
+  JOB_STALLED_DETECTION,
+  JOB_TTL,
+  REPEAT_JOBS,
+  WEBSERVER
+} from '../../initializers/constants.js'
 import { Hooks } from '../plugins/hooks.js'
 import { currentProcessId, Redis, RedisChannels } from '../redis/index.js'
 import { processActivityPubCleaner } from './handlers/activitypub-cleaner.js'
@@ -82,6 +91,7 @@ import { processVideoImport } from './handlers/video-import.js'
 import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideosStats } from './handlers/video-stats.js'
 import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
+import { processVideoDuplicate } from './handlers/video-duplicate.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
 import { processVideoTranscription } from './handlers/video-transcription.js'
 
@@ -108,6 +118,7 @@ export type CreateJobTypeAndPayload =
   | { type: 'actor-keys', payload: ActorKeysPayload }
   | { type: 'video-redundancy', payload: VideoRedundancyPayload }
   | { type: 'video-studio-edition', payload: VideoStudioEditionPayload }
+  | { type: 'video-duplicate', payload: VideoDuplicatePayload }
   | { type: 'manage-video-torrent', payload: ManageVideoTorrentPayload }
   | { type: 'move-to-object-storage', payload: MoveStoragePayload }
   | { type: 'move-to-file-system', payload: MoveStoragePayload }
@@ -158,6 +169,7 @@ const handlers: { [id in JobType]: (job: Job, signal?: AbortSignal) => Promise<a
   'video-live-ending': processVideoLiveEnding,
   'video-redundancy': processVideoRedundancy,
   'video-studio-edition': processVideoStudioEdition,
+  'video-duplicate': processVideoDuplicate,
   'video-transcoding': processVideoTranscoding,
   'videos-stats': processVideosStats,
   'generate-video-storyboard': processGenerateStoryboard,
@@ -198,6 +210,7 @@ const jobTypes: JobType[] = [
   'video-live-ending',
   'video-redundancy',
   'video-studio-edition',
+  'video-duplicate',
   'video-transcription',
   'videos-stats',
   'create-user-export',
@@ -305,7 +318,9 @@ class JobQueue {
       concurrency: this.getJobConcurrency(handlerName),
       prefix: this.jobRedisPrefix,
       connection: Redis.getRedisClientOptions('Worker', bullMQRedisOptions),
-      maxStalledCount: 10
+      maxStalledCount: 10,
+      lockDuration: JOB_STALLED_DETECTION.LOCK_DURATION,
+      stalledInterval: JOB_STALLED_DETECTION.STALLED_INTERVAL
     }
 
     const handler = function (options: { job: Job, signal: AbortSignal }) {

@@ -46,6 +46,8 @@ export class VideoOverviewComponent implements OnInit, OnDestroy, AfterViewCheck
 
   onDataSubject = new Subject<any>()
 
+  instanceName = this.server.getHTMLConfig().instance.name
+
   notResults = false
 
   userMiniature: User

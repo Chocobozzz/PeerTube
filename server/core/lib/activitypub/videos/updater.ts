@@ -169,6 +169,9 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
     this.video.nsfwSummary = videoData.nsfwSummary
     this.video.nsfwFlags = videoData.nsfwFlags
     this.video.commentsPolicy = videoData.commentsPolicy
+    this.video.recommendationScope = videoData.recommendationScope
+    this.video.aiUsage = videoData.aiUsage
+    this.video.commercialContent = videoData.commercialContent
     this.video.downloadEnabled = videoData.downloadEnabled
     this.video.waitTranscoding = videoData.waitTranscoding
     this.video.state = videoData.state

@@ -1,9 +1,10 @@
+import { isUserPasswordValid } from '@server/helpers/custom-validators/users.js'
+import { initDatabaseModels } from '@server/initializers/database.js'
+import { auditLog, awaitableAuditLog, buildUserAuditEntity, getAuditCLIActor } from '@server/lib/audit-log/index.js'
+import { UserModel } from '@server/models/user/user.js'
 import { program } from 'commander'
 import readline from 'readline'
 import { Writable } from 'stream'
-import { isUserPasswordValid } from '@server/helpers/custom-validators/users.js'
-import { initDatabaseModels } from '@server/initializers/database.js'
-import { UserModel } from '@server/models/user/user.js'
 
 program
   .option('-u, --user [user]', 'User')
@@ -44,9 +45,19 @@ initDatabaseModels(true)
         process.exit(-1)
       }
 
+      const oldUserAuditEntity = auditLog.snapshot(() => buildUserAuditEntity(user))
+
       user.password = password
 
       user.save()
+        .then(() => {
+          return awaitableAuditLog.update(
+            getAuditCLIActor(),
+            () => buildUserAuditEntity(user),
+            oldUserAuditEntity,
+            { secretChanges: [ 'password' ] }
+          )
+        })
         .then(() => console.log('User password updated.'))
         .catch(err => console.error(err))
         .finally(() => process.exit(0))

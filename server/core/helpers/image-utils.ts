@@ -1,4 +1,5 @@
 import { getSanitizeSVGOptions } from '@peertube/peertube-core-utils'
+import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildUUID, getLowercaseExtension } from '@peertube/peertube-node-utils'
 import { copy, remove } from 'fs-extra/esm'
 import { readFile, writeFile } from 'fs/promises'
@@ -7,6 +8,35 @@ import sharp, { type Metadata, type Sharp } from 'sharp'
 import { createLogger } from './logger.js'
 
 const logger = createLogger()
+// SVG files are sanitized by processSVG()
+const IMAGE_LOADERS: { [extension: string]: string } = {
+  '.jpg': 'VipsForeignLoadJpeg',
+  '.jpeg': 'VipsForeignLoadJpeg',
+  '.png': 'VipsForeignLoadPng',
+  '.gif': 'VipsForeignLoadNsgif',
+  '.webp': 'VipsForeignLoadWebp',
+  '.avif': 'VipsForeignLoadHeif',
+  '.heic': 'VipsForeignLoadHeif',
+  '.tif': 'VipsForeignLoadTiff',
+  '.tiff': 'VipsForeignLoadTiff',
+  '.jxl': 'VipsForeignLoadJxl'
+}
+
+sharp.block({ operation: [ 'VipsForeignLoad' ] })
+sharp.unblock({ operation: [ ...new Set(Object.values(IMAGE_LOADERS)) ] })
+
+export function isDecodableImageExtension (extension: string) {
+  return !!IMAGE_LOADERS[extension.toLowerCase()]
+}
+
+export class InvalidImageError extends Error {
+  status = HttpStatusCode.BAD_REQUEST_400
+
+  constructor (message: string) {
+    super(message)
+    this.name = 'InvalidImageError'
+  }
+}
 
 export function generateImageFilename (extension = '.jpg') {
   return buildUUID() + extension
@@ -61,8 +91,21 @@ export async function processImage (options: {
   logger.debug('Finished processing image %s to %s.', path, destination)
 }
 
+export async function processImagesOrCleanup<T> (tasks: { destination: string, process: () => Promise<T> }[]) {
+  const results = await Promise.allSettled(tasks.map(t => t.process()))
+
+  const failed = results.find((r): r is PromiseRejectedResult => r.status === 'rejected')
+  if (failed) {
+    await Promise.all(tasks.map(t => remove(t.destination)))
+
+    throw failed.reason as Error
+  }
+
+  return results.map(r => (r as PromiseFulfilledResult<T>).value)
+}
+
 export async function getImageSize (path: string) {
-  const metadata = await sharp(path).metadata()
+  const metadata = await getMetadata(sharp(path))
 
   return {
     width: metadata.width,
@@ -108,7 +151,7 @@ async function sharpProcessor (options: {
     animated
   })
 
-  const metadata = await sharpInstance.metadata()
+  const metadata = await getMetadata(sharpInstance)
 
   if (animated && metadata.pages > 200) {
     logger.info('Too much frames in animated image ' + path + ', skipping animation')
@@ -136,6 +179,14 @@ async function sharpProcessor (options: {
     await autoResize({ sharpInstance, metadata, newSize, destination })
   } else {
     await writeSharp({ sharpInstance, destination })
+  }
+}
+
+async function getMetadata (sharpInstance: Sharp) {
+  try {
+    return await sharpInstance.metadata()
+  } catch (err) {
+    throw new InvalidImageError('Cannot read image: ' + err.message)
   }
 }
 

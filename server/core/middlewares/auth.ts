@@ -1,5 +1,6 @@
 import { HttpStatusCode, HttpStatusCodeType, ServerErrorCodeType } from '@peertube/peertube-models'
 import { getAccessToken } from '@server/lib/auth/oauth-token.js'
+import { runInDbContextOfUser } from '@server/lib/database-replicas/db-context.js'
 import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
 import express from 'express'
@@ -25,7 +26,9 @@ export function authenticate (req: express.Request, res: express.Response, next:
       // A global middleware create the context
       if (CONFIG.LOG.TAG_REQUESTS) addLoggerContextTags(token.User.username)
 
-      return next()
+      // Database read replicas need the user
+      // allowReplica will be set to `true` in later middlewares/controllers, if needed (allow-list)
+      return runInDbContextOfUser(token.User.id, () => next())
     })
     .catch(err => {
       logger.info('Cannot authenticate.', { err })

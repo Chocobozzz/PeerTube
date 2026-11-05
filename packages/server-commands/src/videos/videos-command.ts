@@ -7,14 +7,17 @@ import {
   ResultList,
   UserVideoRateType,
   Video,
+  VideoAIUsageType,
   VideoCommentPolicy,
   VideoCreate,
   VideoCreateResult,
+  VideoDuplicate,
   VideoDetails,
   VideoFileMetadata,
   VideoInclude,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoRecommendationScopeType,
   VideosCommonQuery,
   VideoSource,
   VideoTranscodingCreate
@@ -266,6 +269,31 @@ export class VideosCommand extends AbstractCommand {
   }
 
   // ---------------------------------------------------------------------------
+
+  listRecommendations (
+    options: OverrideCommandOptions & {
+      scope?: VideoRecommendationScopeType
+      videoId?: number | string
+      videoPassword?: string
+      count?: number
+      excludeVideoIds?: number[]
+      nsfw?: boolean
+      aiUsageOneOf?: VideoAIUsageType[]
+    }
+  ) {
+    const { scope, videoId, videoPassword, count, excludeVideoIds, nsfw, aiUsageOneOf } = options
+    const path = '/api/v1/recommendations/videos'
+
+    return this.getRequestBody<ResultList<Video>>({
+      ...options,
+
+      path,
+      query: { scope, videoId, count, excludeVideoIds, nsfw, aiUsageOneOf },
+      headers: this.buildVideoPasswordHeader(videoPassword),
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
 
   list (options: OverrideCommandOptions & VideosCommonQuery = {}) {
     const path = '/api/v1/videos'
@@ -631,6 +659,25 @@ export class VideosCommand extends AbstractCommand {
     })
   }
 
+  async duplicate (
+    options: OverrideCommandOptions & VideoDuplicate & {
+      id: number | string
+    }
+  ) {
+    const path = '/api/v1/videos/' + options.id + '/duplicate'
+
+    const body = await unwrapBody<{ video: VideoCreateResult }>(this.postBodyRequest({
+      ...options,
+
+      path,
+      fields: pick(options, [ 'name' ]),
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    }))
+
+    return body?.video
+  }
+
   runTranscoding (
     options: OverrideCommandOptions & VideoTranscodingCreate & {
       videoId: number | string
@@ -662,6 +709,7 @@ export class VideosCommand extends AbstractCommand {
       'categoryOneOf',
       'licenceOneOf',
       'languageOneOf',
+      'aiUsageOneOf',
       'host',
       'privacyOneOf',
       'tagsOneOf',

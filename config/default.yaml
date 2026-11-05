@@ -98,6 +98,11 @@ rates_limit:
     window: 5 minutes
     max: 60 # Requires at least 10 distinct IPs (`max / max_per_ip`) to lock an account
     max_per_ip: 6 # A single IP's contribution to the account lock is capped at 6 failures
+  password_confirmation: # Failed password confirmations of sensitive actions
+    enabled: true
+    # 10 failures in 10 minutes
+    window: 10 minutes
+    max: 10
 
 oauth2:
   token_lifetime:
@@ -125,6 +130,17 @@ database:
   password: 'peertube'
   pool:
     max: 5
+
+  # Optional PostgreSQL streaming replicas (hot standbys of the database above)
+  # PeerTube uses them for some heavy read only requests: video lists, search, feeds...
+  # Database name, username, password, SSL settings and pool size are the same as the primary.
+  read_replicas:
+    # Don't use replicas lagging more than this duration behind the primary (minimum: 3 seconds)
+    max_lag: '5 seconds'
+
+    hosts:
+    # - hostname: '127.0.0.1'
+    #   port: 5433
 
 # Redis server for short time storage
 redis:
@@ -354,7 +370,10 @@ log:
     max_files: 20
 
   audit:
-    enabled: true # Log user, administration and moderation actions in a dedicated audit log file
+    enabled: true # Log user, administration and moderation actions in the database, viewable in the administration
+
+    # -1 means there is no limitations
+    max_age: '1 year'
 
   anonymize_ip: false
 
@@ -395,8 +414,10 @@ open_telemetry:
     # If tracing is enabled, you must provide --experimental-loader=@opentelemetry/instrumentation/hook.mjs flag to the node binary
     enabled: false
 
-    # Send traces to a Jaeger compatible endpoint
-    jaeger_exporter:
+    # Send traces to an OpenTelemetry (OTLP over HTTP) compatible endpoint, like Jaeger
+    otlp_exporter:
+      # For example 'http://127.0.0.1:4318/v1/traces'.
+      # If empty, use OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable or 'http://localhost:4318/v1/traces'
       endpoint: ''
 
 trending:
@@ -578,6 +599,10 @@ webadmin:
     edition:
       # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
+
+  # Ask administrators to type their password again before sensitive actions in the web interface or REST API
+  password_confirmation:
+    enabled: true
 
 # XML, Atom or JSON feeds
 feeds:
@@ -854,6 +879,16 @@ live:
     # Public hostname of your RTMP server
     # Use null to use the same value than `webserver.hostname`
     public_hostname: null
+
+    # Interval between keepalive pings sent to the publisher (minimum 1 second)
+    # Also applies to RTMPS connections
+    ping: '1 minute'
+
+    # Time without activity after which a connection is considered dead (minimum 5 seconds)
+    # Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...)
+    # Too low values may cut lives on network hiccups
+    # Also applies to RTMPS connections
+    ping_timeout: '30 seconds'
 
   rtmps:
     enabled: false
@@ -1138,6 +1173,23 @@ instance:
   # Example: '2 vCore, 2GB RAM...'
   hardware_information: '' # Supports Markdown
 
+  # Translations of the information above, displayed depending on the language of the visitor.
+  # Empty or missing fields fall back to the information above.
+  # "language" must be a locale supported by the web interface: 'fr-FR', 'pt-BR'...
+  translations:
+#    - language: 'fr-FR'
+#      short_description: ''
+#      description: '' # Supports Markdown
+#      terms: '' # Supports Markdown
+#      code_of_conduct: '' # Supports Markdown
+#      moderation_information: '' # Supports Markdown
+#      administrator: '' # Supports Markdown
+#      creation_reason: '' # Supports Markdown
+#      maintenance_lifetime: '' # Supports Markdown
+#      business_model: '' # Supports Markdown
+#      hardware_information: '' # Supports Markdown
+#      support_text: '' # Supports Markdown
+
   # Default language of your instance, used in emails for example
   # The web interface still uses the web browser preferred language
   default_language: 'en'
@@ -1400,6 +1452,9 @@ defaults:
 
     # enabled = 1, disabled = 2, requires_approval = 3
     comments_policy: 1
+
+    # Videos recommended next to a video: all = 1, same platform as the video = 2, same account = 3, same channel = 4
+    recommendation_scope: 1
 
     # public = 1, unlisted = 2, private = 3, internal = 4
     privacy: 1

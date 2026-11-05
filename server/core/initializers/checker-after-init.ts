@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync } from 'fs'
 import { basename } from 'path'
 import { URL } from 'url'
 import { getBrowseVideosDefaultScopeError, getBrowseVideosDefaultSortError } from '../helpers/custom-validators/browse-videos.js'
+import { areInstanceTranslationsValid, isInstanceTranslationValid } from '../helpers/custom-validators/config.js'
 import { isArray } from '../helpers/custom-validators/misc.js'
 import { createLogger } from '../helpers/logger.js'
 import {
@@ -19,7 +20,7 @@ import { ApplicationModel, getServerActor } from '../models/application/applicat
 import { OAuthClientModel } from '../models/oauth/oauth-client.js'
 import { UserModel } from '../models/user/user.js'
 import { CONFIG, getConfigModule, getLocalConfigFilePath, isEmailEnabled, reloadConfig } from './config.js'
-import { LOCAL_TRACKER_URLS_KEYWORD, OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
+import { DATABASE_READ_REPLICAS, LOCAL_TRACKER_URLS_KEYWORD, OBJECT_STORAGE_STAGING, WEBSERVER } from './constants.js'
 
 const logger = createLogger()
 
@@ -53,6 +54,7 @@ function checkConfig () {
   checkSecretsConfig()
   checkEmailConfig()
   checkNSFWPolicyConfig()
+  checkInstanceTranslationsConfig()
   checkLocalRedundancyConfig()
   checkRemoteRedundancyConfig()
   checkStorageConfig()
@@ -67,6 +69,7 @@ function checkConfig () {
   checkThumbnailsConfig()
   checkBrowseVideosConfig()
   checkTrackerConfig()
+  checkDatabaseReadReplicasConfig()
 }
 
 // We get db by param to not import it in this file (import orders)
@@ -187,6 +190,13 @@ function checkRemovedConfigKeys () {
     logger.warn('services.csp-logger configuration has been renamed to csp.report_uri. Please update your configuration file.')
   }
 
+  if (config.has('open_telemetry.tracing.jaeger_exporter')) {
+    logger.warn(
+      'open_telemetry.tracing.jaeger_exporter configuration has been replaced by open_telemetry.tracing.otlp_exporter ' +
+        '(Jaeger supports OTLP, for example on http://127.0.0.1:4318/v1/traces). Please update your configuration file.'
+    )
+  }
+
   if (config.has('transcoding.webtorrent.enabled')) {
     const localConfigPath = getLocalConfigFilePath()
 
@@ -241,6 +251,27 @@ function checkNSFWPolicyConfig () {
   const available = [ 'do_not_list', 'warn', 'blur', 'display' ]
   if (available.includes(defaultNSFWPolicy) === false) {
     throw new Error('NSFW policy setting should be ' + available.join(' or ') + ' instead of ' + defaultNSFWPolicy)
+  }
+}
+
+function checkInstanceTranslationsConfig () {
+  const translations = CONFIG.INSTANCE.TRANSLATIONS
+
+  if (!Array.isArray(translations)) {
+    throw new Error('instance.translations must be a list of translations')
+  }
+
+  translations.forEach((translation, index) => {
+    if (!isInstanceTranslationValid(translation)) {
+      throw new Error(
+        `instance.translations[${index}] has an invalid language "${translation.language}": ` +
+          'it must be a locale supported by the web interface (fr-FR, pt-BR...)'
+      )
+    }
+  })
+
+  if (!areInstanceTranslationsValid(translations)) {
+    throw new Error('instance.translations must have a unique language per translation')
   }
 }
 
@@ -353,6 +384,15 @@ function checkSearchConfig () {
 }
 
 function checkLiveConfig () {
+  // Negated comparisons also reject NaN
+  if (!(CONFIG.LIVE.RTMP.PING >= 1)) {
+    throw new Error('live.rtmp.ping must be at least 1 second')
+  }
+
+  if (!(CONFIG.LIVE.RTMP.PING_TIMEOUT >= 5)) {
+    throw new Error('live.rtmp.ping_timeout must be at least 5 seconds')
+  }
+
   if (CONFIG.LIVE.ENABLED === true) {
     if (CONFIG.LIVE.ALLOW_REPLAY === true && CONFIG.TRANSCODING.ENABLED === false) {
       throw new Error('Live allow replay cannot be enabled if transcoding is not enabled.')
@@ -429,6 +469,26 @@ function checkThumbnailsConfig () {
   const sizes = CONFIG.THUMBNAILS.SIZES.map(s => `${s.width}x${s.height}`)
   if (new Set(sizes).size !== sizes.length) {
     throw new Error('thumbnails.sizes must not contain multiple sizes with the same width and height')
+  }
+}
+
+function checkDatabaseReadReplicasConfig () {
+  const { HOSTS, MAX_LAG } = CONFIG.DATABASE.READ_REPLICAS
+
+  if (!isArray(HOSTS)) {
+    throw new Error('database.read_replicas.hosts must be an array')
+  }
+
+  for (const host of HOSTS) {
+    if (!host?.hostname || !host.port) {
+      throw new Error('Each database.read_replicas.hosts entry must have a hostname and a port')
+    }
+  }
+
+  const minMaxLag = DATABASE_READ_REPLICAS.MONITOR_INTERVAL_MS * 3
+
+  if (HOSTS.length !== 0 && (!MAX_LAG || MAX_LAG < minMaxLag)) {
+    throw new Error(`database.read_replicas.max_lag must be at least ${minMaxLag / 1000} seconds`)
   }
 }
 

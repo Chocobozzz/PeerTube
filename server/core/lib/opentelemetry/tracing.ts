@@ -13,25 +13,28 @@ async function registerOpentelemetryTracing () {
     return
   }
 
-  const { diag, DiagLogLevel, trace } = await import('@opentelemetry/api')
+  const { context, diag, DiagLogLevel, propagation, trace } = await import('@opentelemetry/api')
   tracer = trace.getTracer('peertube')
 
   const [
-    { JaegerExporter },
+    { AsyncLocalStorageContextManager },
+    { CompositePropagator, W3CBaggagePropagator, W3CTraceContextPropagator },
+    { OTLPTraceExporter },
     { registerInstrumentations },
-    DnsInstrumentation,
-    ExpressInstrumentation,
+    { DnsInstrumentation },
+    { ExpressInstrumentation },
     { FsInstrumentation },
     { HttpInstrumentation },
-    IORedisInstrumentation,
-    PgInstrumentation,
+    { IORedisInstrumentation },
+    { PgInstrumentation },
     { SequelizeInstrumentation },
-    Resource,
-    BatchSpanProcessor,
-    NodeTracerProvider,
-    SemanticResourceAttributes
+    { resourceFromAttributes },
+    { BatchSpanProcessor, TracerProvider },
+    { ATTR_SERVICE_NAME }
   ] = await Promise.all([
-    import('@opentelemetry/exporter-jaeger'),
+    import('@opentelemetry/context-async-hooks'),
+    import('@opentelemetry/core'),
+    import('@opentelemetry/exporter-trace-otlp-http'),
     import('@opentelemetry/instrumentation'),
     import('@opentelemetry/instrumentation-dns'),
     import('@opentelemetry/instrumentation-express'),
@@ -39,10 +42,9 @@ async function registerOpentelemetryTracing () {
     import('@opentelemetry/instrumentation-http'),
     import('@opentelemetry/instrumentation-ioredis'),
     import('@opentelemetry/instrumentation-pg'),
-    import('opentelemetry-instrumentation-sequelize'),
+    import('@opentelemetry/instrumentation-sequelize'),
     import('@opentelemetry/resources'),
-    import('@opentelemetry/sdk-trace-base'),
-    import('@opentelemetry/sdk-trace-node'),
+    import('@opentelemetry/sdk-trace'),
     import('@opentelemetry/semantic-conventions')
   ])
 
@@ -69,27 +71,28 @@ async function registerOpentelemetryTracing () {
     verbose: customLogger('verbose')
   }, DiagLogLevel.INFO)
 
-  const tracerProvider = new NodeTracerProvider.default.NodeTracerProvider({
+  const tracerProvider = new TracerProvider({
     spanProcessors: [
-      new BatchSpanProcessor.default.BatchSpanProcessor(
-        new JaegerExporter({ endpoint: CONFIG.OPEN_TELEMETRY.TRACING.JAEGER_EXPORTER.ENDPOINT })
-      )
+      new BatchSpanProcessor({
+        // Use the OTLP default endpoint (or OTEL_EXPORTER_OTLP_TRACES_ENDPOINT) if not set
+        exporter: new OTLPTraceExporter({ url: CONFIG.OPEN_TELEMETRY.TRACING.OTLP_EXPORTER.ENDPOINT || undefined })
+      })
     ],
-    resource: Resource.default.resourceFromAttributes({
-      [SemanticResourceAttributes.default.ATTR_SERVICE_NAME]: 'peertube'
+    resource: resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: 'peertube'
     })
   })
 
   registerInstrumentations({
     tracerProvider,
     instrumentations: [
-      new PgInstrumentation.default.PgInstrumentation({
+      new PgInstrumentation({
         enhancedDatabaseReporting: true
       }),
-      new DnsInstrumentation.default.DnsInstrumentation(),
+      new DnsInstrumentation(),
       new HttpInstrumentation(),
-      new ExpressInstrumentation.default.ExpressInstrumentation(),
-      new IORedisInstrumentation.default.IORedisInstrumentation({
+      new ExpressInstrumentation(),
+      new IORedisInstrumentation({
         dbStatementSerializer: function (cmdName, cmdArgs) {
           return [ cmdName, ...cmdArgs ].join(' ')
         }
@@ -99,7 +102,13 @@ async function registerOpentelemetryTracing () {
     ]
   })
 
-  tracerProvider.register()
+  context.setGlobalContextManager(new AsyncLocalStorageContextManager().enable())
+  propagation.setGlobalPropagator(
+    new CompositePropagator({
+      propagators: [ new W3CTraceContextPropagator(), new W3CBaggagePropagator() ]
+    })
+  )
+  trace.setGlobalTracerProvider(tracerProvider)
 }
 
 async function wrapWithSpanAndContext<T> (spanName: string, cb: () => Promise<T>) {

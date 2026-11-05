@@ -1,8 +1,8 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { findAppropriateImage } from '@peertube/peertube-core-utils'
-import { Account, HttpStatusCode, VideoPlaylistCreateResult } from '@peertube/peertube-models'
-import { cleanupTests, makeGetRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
+import { Account, HttpStatusCode, VideoPlaylistCreateResult, VideoPlaylistPrivacy } from '@peertube/peertube-models'
+import { cleanupTests, makeGetRequest, makeHTMLRequest, PeerTubeServer } from '@peertube/peertube-server-commands'
 import { getWatchPlaylistBasePaths, getWatchVideoBasePaths, prepareClientTests } from '@tests/shared/client.js'
 import { config, expect } from 'chai'
 
@@ -312,6 +312,38 @@ describe('Test <head> HTML tags', function () {
       await check('/', 'https://social.example.com/@username3')
       await check('/about', 'https://social.example.com/@username3', false)
     })
+
+    it('Should include Mastodon links of translated descriptions on homepage, whatever the language', async function () {
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          instance: {
+            translations: [
+              {
+                language: 'fr-FR',
+                description: 'Suivez-moi <a rel="me" href="https://social.example.com/@username4">sur Mastodon</a> ' +
+                  '<a rel="me" href="https://social.example.com/@username3">et ici</a>'
+              }
+            ]
+          }
+        }
+      })
+
+      for (const acceptLanguage of [ 'en-US', 'fr-FR' ]) {
+        const res = await makeGetRequest({
+          url: servers[0].url,
+          path: '/',
+          accept: 'text/html',
+          headers: { 'Accept-Language': acceptLanguage },
+          expectedStatus: HttpStatusCode.OK_200
+        })
+
+        for (const username of [ 'username3', 'username4' ]) {
+          const expected = `<link href="https://social.example.com/@${username}" rel="me">`
+
+          expect(res.text.split(expected)).to.have.lengthOf(2)
+        }
+      }
+    })
   })
 
   describe('RSS links', function () {
@@ -387,6 +419,33 @@ describe('Test <head> HTML tags', function () {
       await channelPageTest('/video-channels/' + servers[0].store.channel.name)
       await channelPageTest('/c/' + servers[0].store.channel.name)
       await channelPageTest('/@' + servers[0].store.channel.name)
+    })
+  })
+
+  describe('Description', function () {
+    it('Should not fallback on the instance description for objects without description', async function () {
+      const { uuid } = await servers[0].videos.upload({ attributes: { name: 'video without description', description: undefined } })
+      const { shortUUID } = await servers[0].playlists.create({
+        attributes: {
+          displayName: 'playlist without description',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: servers[0].store.channel.id
+        }
+      })
+      await servers[0].channels.create({ attributes: { name: 'channel_without_description', description: undefined } })
+
+      for (const path of [ '/w/' + uuid, '/w/p/' + shortUUID, '/c/channel_without_description' ]) {
+        const { text } = await makeHTMLRequest(servers[0].url, path)
+
+        expect(text, path).to.not.contain('<meta name="description"')
+        expect(text, path).to.not.contain('<meta property="og:description"')
+      }
+    })
+
+    it('Should use the instance description for other pages', async function () {
+      const { text } = await makeHTMLRequest(servers[0].url, '/videos/browse')
+
+      expect(text).to.contain(`<meta name="description" content="${instanceConfig.shortDescription}" />`)
     })
   })
 

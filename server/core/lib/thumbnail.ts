@@ -20,7 +20,7 @@ const logger = createLogger('thumbnail')
 type ImageSize = { height: number, width: number, aspectRatio: ThumbnailAspectRatio }
 type ThumbnailMetadata = ReturnType<typeof buildMetadataFromVideo>
 
-export function createLocalPlaylistThumbnailsFromImage (options: {
+export async function createLocalPlaylistThumbnailsFromImage (options: {
   inputPath: string
   playlist: MVideoPlaylistThumbnail
   automaticallyGenerated: boolean
@@ -31,18 +31,21 @@ export function createLocalPlaylistThumbnailsFromImage (options: {
   const extension = getImageExtension(inputPath)
   const metadata = CONFIG.THUMBNAILS.SIZES.map(size => buildMetadataFromPlaylist({ playlist, size, extension }))
 
-  return createThumbnailBatch({
-    metadata,
-    create: (metadata, i) => {
-      return _createLocalPlaylistThumbnailFromImage({
-        inputPath,
-        metadata,
-        automaticallyGenerated,
-        // Keep original image until the last thumbnail is generated
-        keepOriginal: keepOriginal || i !== CONFIG.THUMBNAILS.SIZES.length - 1
-      })
+  try {
+    return await createThumbnailBatch({
+      metadata,
+      // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
+      create: metadata => _createLocalPlaylistThumbnailFromImage({ inputPath, metadata, automaticallyGenerated, keepOriginal: true })
+    })
+  } finally {
+    if (!keepOriginal) {
+      try {
+        await remove(inputPath)
+      } catch (err) {
+        logger.error('Cannot remove original image after thumbnail generation.', { err })
+      }
     }
-  })
+  }
 }
 
 function _createLocalPlaylistThumbnailFromImage (options: {
@@ -127,21 +130,21 @@ export async function createLocalVideoThumbnailsFromImage (options: {
   const extension = getImageExtension(inputPath)
   const metadata = CONFIG.THUMBNAILS.SIZES.map(size => buildMetadataFromVideo({ video, size, extension }))
 
-  const thumbnails = await createThumbnailBatch({
-    metadata,
-    // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
-    create: metadata => _createLocalVideoThumbnailFromImage({ inputPath, metadata, automaticallyGenerated, keepOriginal: true })
-  })
-
-  if (!keepOriginal) {
-    try {
-      await remove(inputPath)
-    } catch (err) {
-      logger.error('Cannot remove original image after thumbnail generation.', { err })
+  try {
+    return await createThumbnailBatch({
+      metadata,
+      // We'll delete origin file ourselves after all thumbnails are generated, to avoid deleting it before generating all thumbnails
+      create: metadata => _createLocalVideoThumbnailFromImage({ inputPath, metadata, automaticallyGenerated, keepOriginal: true })
+    })
+  } finally {
+    if (!keepOriginal) {
+      try {
+        await remove(inputPath)
+      } catch (err) {
+        logger.error('Cannot remove original image after thumbnail generation.', { err })
+      }
     }
   }
-
-  return thumbnails
 }
 
 function _createLocalVideoThumbnailFromImage (options: {

@@ -502,7 +502,9 @@ async function checkHLSResolution (options: {
 
   const nameReg = `${uuidRegex}-${file.resolution.id}`
 
-  if (isOrigin && objectStorageBaseUrl) {
+  const torrentOnObjectStorage = isOrigin && !!objectStorageBaseUrl
+
+  if (torrentOnObjectStorage) {
     expect(file.torrentUrl).to.match(new RegExp(`^${getBucketBaseUrlFrom(objectStorageBaseUrl, 'torrents')}${nameReg}-hls.torrent$`))
   } else {
     expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}-hls.torrent`))
@@ -523,7 +525,7 @@ async function checkHLSResolution (options: {
   }
 
   await Promise.all([
-    makeRawRequest({ url: file.torrentUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+    makeRawRequest({ url: file.torrentUrl, token: torrentOnObjectStorage ? undefined : token, expectedStatus: HttpStatusCode.OK_200 }),
     makeRawRequest({ url: file.metadataUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
     makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 })
   ])

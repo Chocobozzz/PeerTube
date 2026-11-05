@@ -52,6 +52,8 @@ export async function completeWebVideoFilesCheck (options: {
 
   const transcodingEnabled = serverConfig.transcoding.web_videos.enabled
 
+  const torrentOnObjectStorage = !!objectStorageBaseUrl && server.internalServerNumber === originServer.internalServerNumber
+
   expect(files).to.have.lengthOf(files.length)
 
   for (const attributeFile of files) {
@@ -85,7 +87,7 @@ export async function completeWebVideoFilesCheck (options: {
 
       expect(file.torrentDownloadUrl).to.match(new RegExp(`${server.url}/download/torrents/${nameReg}.torrent`))
 
-      if (objectStorageBaseUrl && server.internalServerNumber === originServer.internalServerNumber) {
+      if (torrentOnObjectStorage) {
         expect(file.torrentUrl).to.match(new RegExp(`^${getBucketBaseUrlFrom(objectStorageBaseUrl, 'torrents')}${nameReg}.torrent$`))
       } else {
         expect(file.torrentUrl).to.match(new RegExp(`${server.url}/lazy-static/torrents/${nameReg}.torrent`))
@@ -109,7 +111,7 @@ export async function completeWebVideoFilesCheck (options: {
         : undefined
 
       await Promise.all([
-        makeRawRequest({ url: file.torrentUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
+        makeRawRequest({ url: file.torrentUrl, token: torrentOnObjectStorage ? undefined : token, expectedStatus: HttpStatusCode.OK_200 }),
         makeRawRequest({ url: file.metadataUrl, token, expectedStatus: HttpStatusCode.OK_200 }),
         makeRawRequest({ url: file.fileUrl, token, expectedStatus: HttpStatusCode.OK_200 })
       ])

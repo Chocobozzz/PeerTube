@@ -52,7 +52,7 @@
 
 <!-- Duration, live state and watch progress are only rendered inside the (hidden) link, so expose them to screen readers here -->
 @if (ariaHidden()) {
-  <span class="visually-hidden">{{ a11yOverlaysSummary }}</span>
+  <span class="visually-hidden" data-nosnippet>{{ a11yOverlaysSummary }}</span>
 }
 
 <ng-template #aContent>
@@ -75,7 +75,7 @@
       }
     </div>
   } @else if (getDurationLabel()) {
-    <div class="duration-overlay">{{ getDurationLabel() }}</div>
+    <div class="duration-overlay" data-nosnippet>{{ getDurationLabel() }}</div>
   }
 
   @if (playOverlay()) {

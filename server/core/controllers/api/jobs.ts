@@ -1,4 +1,5 @@
 import { HttpStatusCode, Job, JobState, JobType, ResultList, UserRight } from '@peertube/peertube-models'
+import { auditLog, buildJobAuditEntity, buildJobQueueAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { Job as BullJob } from 'bullmq'
 import express from 'express'
 import { isArray } from '../../helpers/custom-validators/misc.js'
@@ -71,11 +72,23 @@ export {
 async function pauseJobQueue (req: express.Request, res: express.Response) {
   await JobQueue.Instance.pause({ processRoles: req.body.processRoles })
 
+  auditLog.update(
+    getAuditActorFromRes(res),
+    () => buildJobQueueAuditEntity({ paused: true, processRoles: req.body.processRoles }),
+    auditLog.snapshot(() => buildJobQueueAuditEntity({ paused: false, processRoles: req.body.processRoles }))
+  )
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function resumeJobQueue (req: express.Request, res: express.Response) {
   await JobQueue.Instance.resume({ processRoles: req.body.processRoles })
+
+  auditLog.update(
+    getAuditActorFromRes(res),
+    () => buildJobQueueAuditEntity({ paused: false, processRoles: req.body.processRoles }),
+    auditLog.snapshot(() => buildJobQueueAuditEntity({ paused: true, processRoles: req.body.processRoles }))
+  )
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -84,6 +97,8 @@ async function cancelJob (req: express.Request, res: express.Response) {
   const job = res.locals.job
 
   await JobQueue.Instance.cancelJob(job.queueName as JobType, job)
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildJobAuditEntity({ id: job.id, type: job.queueName }))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

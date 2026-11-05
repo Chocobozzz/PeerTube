@@ -95,6 +95,48 @@ describe('Test index HTML generation', function () {
       })
       const res = await makeHTMLRequest(servers[0].url, '/videos/browse')
       expect(res.text).to.contain('\\u003c/script\\u003e\\u003cimg src=x onerror=alert(1)\\u003e')
+      expect(res.text).to.contain('<h1>&lt;&#x2F;script&gt;&lt;img src&#x3D;x onerror&#x3D;alert(1)&gt;</h1>')
+    })
+  })
+
+  describe('Server rendered content', function () {
+    it('Should render the instance name and short description', async function () {
+      await servers[0].config.updateExistingConfig({
+        newConfig: {
+          instance: { name: 'PeerTube & co', shortDescription: 'my **short** description' }
+        }
+      })
+
+      const { text } = await makeHTMLRequest(servers[0].url, '/videos/browse')
+
+      expect(text).to.contain('<h1>PeerTube &amp; co</h1><p>my <strong>short</strong> description</p>')
+    })
+
+    it('Should render the video name and description', async function () {
+      for (const basePath of getWatchVideoBasePaths()) {
+        for (const id of videoIds) {
+          const { text } = await makeHTMLRequest(servers[0].url, basePath + id)
+
+          expect(text).to.contain('<h1>my super name for server 1</h1>')
+          expect(text).to.contain('<strong>description</strong>')
+        }
+      }
+    })
+
+    it('Should render the playlist name and description', async function () {
+      for (const basePath of getWatchPlaylistBasePaths()) {
+        for (const id of playlistIds) {
+          const { text } = await makeHTMLRequest(servers[0].url, basePath + id)
+
+          expect(text).to.contain('<h1>super playlist name</h1><p>super playlist description</p>')
+        }
+      }
+    })
+
+    it('Should render the channel name and description', async function () {
+      const { text } = await makeHTMLRequest(servers[0].url, '/c/root_channel')
+
+      expect(text).to.contain('<h1>Main root channel</h1><p>my super channel description</p>')
     })
   })
 
@@ -135,6 +177,12 @@ describe('Test index HTML generation', function () {
       channelURLtests(await makeHTMLRequest(servers[0].url, '/video-channels/root_channel@' + servers[0].host))
       channelURLtests(await makeHTMLRequest(servers[0].url, '/c/root_channel@' + servers[0].host))
       channelURLtests(await makeHTMLRequest(servers[0].url, '/@root_channel@' + servers[0].host))
+    })
+
+    it('Should not include query parameters in the canonical tag of client pages', async function () {
+      const res = await makeHTMLRequest(servers[0].url, '/videos/browse?scope=local&sort=-views')
+
+      expect(res.text).to.contain(`<link rel="canonical" href="${servers[0].url}/videos/browse" />`)
     })
 
     it('Should escape canonical tag URL', async function () {
@@ -207,6 +255,21 @@ describe('Test index HTML generation', function () {
           const { text } = await makeHTMLRequest(servers[0].url, path + handle)
           expect(text).to.not.contain('<meta name="robots" content="noindex" />')
         }
+      }
+    })
+
+    it('Should add noindex meta tag for private client pages and search results', async function () {
+      for (const path of [ '/login', '/signup', '/my-library/videos', '/admin/overview/users', '/search?search=toto' ]) {
+        const { text } = await makeHTMLRequest(servers[0].url, path)
+
+        expect(text, path).to.contain('<meta name="robots" content="noindex" />')
+        expect(text, path).to.not.contain('rel="canonical"')
+      }
+
+      for (const path of [ '/', '/videos/browse', '/about/instance/home' ]) {
+        const { text } = await makeHTMLRequest(servers[0].url, path)
+
+        expect(text, path).to.not.contain('<meta name="robots" content="noindex" />')
       }
     })
 

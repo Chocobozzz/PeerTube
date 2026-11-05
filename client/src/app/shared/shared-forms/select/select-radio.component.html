@@ -11,7 +11,7 @@
         <input
           type="radio" [name]="inputId()" [id]="getRadioId(item)" [value]="item.id"
           class="btn-check"
-          autocomplete="off" [(ngModel)]="value" (ngModelChange)="update()"
+          autocomplete="off" [(ngModel)]="value" [ngModelOptions]="{ standalone: true }" (ngModelChange)="update()"
           />
 
         <label class="btn btn-outline-primary" [for]="getRadioId(item)" [attr.data-label]="item.label" i18n>{{ item.label }}</label>
@@ -22,7 +22,7 @@
       <div class="peertube-radio-container">
         <input
           type="radio" [name]="inputId()" [id]="getRadioId(item)" [value]="item.id"
-          autocomplete="off" [(ngModel)]="value" (ngModelChange)="update()"
+          autocomplete="off" [(ngModel)]="value" [ngModelOptions]="{ standalone: true }" (ngModelChange)="update()"
           />
 
         <label [for]="getRadioId(item)" i18n>{{ item.label }}</label>

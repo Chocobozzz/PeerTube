@@ -9,9 +9,15 @@ import {
   HTMLServerConfig,
   Thumbnail,
   UserRight,
+  VideoAIUsage,
+  VideoAIUsageType,
+  VideoCommercialContent,
+  VideoCommercialContentType,
   VideoFile,
   VideoPrivacy,
   VideoPrivacyType,
+  VideoRecommendationScope,
+  VideoRecommendationScopeType,
   VideoScheduleUpdate,
   Video as VideoServerModel,
   VideoSource,
@@ -79,6 +85,10 @@ export class Video implements VideoServerModel {
   nsfw: boolean
   nsfwFlags: number
   nsfwSummary: string
+
+  aiUsage: ConstantLabel<VideoAIUsageType>
+  commercialContent: ConstantLabel<VideoCommercialContentType>
+  recommendationScope: ConstantLabel<VideoRecommendationScopeType>
 
   originInstanceUrl: string
   originInstanceHost: string
@@ -185,6 +195,19 @@ export class Video implements VideoServerModel {
     this.nsfw = hash.nsfw
     this.nsfwFlags = hash.nsfwFlags
     this.nsfwSummary = hash.nsfwSummary
+
+    // Search indexes may not provide this attribute
+    this.aiUsage = hash.aiUsage
+      ? { ...hash.aiUsage, label: peertubeTranslate(hash.aiUsage.label, translations) }
+      : { id: VideoAIUsage.NOT_SPECIFIED, label: $localize`Not specified` }
+
+    this.commercialContent = hash.commercialContent
+      ? { ...hash.commercialContent, label: peertubeTranslate(hash.commercialContent.label, translations) }
+      : { id: VideoCommercialContent.NONE, label: $localize`None` }
+
+    this.recommendationScope = hash.recommendationScope
+      ? { ...hash.recommendationScope, label: peertubeTranslate(hash.recommendationScope.label, translations) }
+      : { id: VideoRecommendationScope.ALL, label: $localize`All videos` }
 
     this.account = hash.account
     this.channel = hash.channel
@@ -370,6 +393,9 @@ export class Video implements VideoServerModel {
       VideoState.TO_IMPORT,
       VideoState.TO_IMPORT_FAILED,
       VideoState.TO_EDIT,
+      VideoState.TO_EDIT_FAILED,
+      VideoState.TO_DUPLICATE,
+      VideoState.TO_DUPLICATE_FAILED,
       VideoState.TO_MOVE_TO_EXTERNAL_STORAGE,
       VideoState.TO_MOVE_TO_FILE_SYSTEM
     ])

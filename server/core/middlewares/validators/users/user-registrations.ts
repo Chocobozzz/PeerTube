@@ -12,7 +12,12 @@ import { Hooks } from '@server/lib/plugins/hooks.js'
 import { asyncMiddleware } from '@server/middlewares/async.js'
 import express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
-import { isUserDisplayNameValid, isUserPasswordValid, isUserUsernameValid } from '../../../helpers/custom-validators/users.js'
+import {
+  isUserDisplayNameValid,
+  isUserPasswordValid,
+  isUserSignupClientValid,
+  isUserUsernameValid
+} from '../../../helpers/custom-validators/users.js'
 import { isVideoChannelDisplayNameValid, isVideoChannelUsernameValid } from '../../../helpers/custom-validators/video-channels.js'
 import { isSignupAllowed, isSignupAllowedForCurrentIP, SignupMode } from '../../../lib/signup.js'
 import { areValidationErrors, checkUsernameOrEmailDoNotAlreadyExist } from '../shared/index.js'
@@ -213,6 +218,10 @@ function usersCommonRegistrationValidatorFactory (additionalValidationChain: Val
     body('channel.displayName')
       .optional()
       .custom(isVideoChannelDisplayNameValid),
+
+    body('signupClient')
+      .optional()
+      .custom(isUserSignupClientValid),
 
     ...additionalValidationChain,
 

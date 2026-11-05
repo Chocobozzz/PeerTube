@@ -62,6 +62,7 @@ export class SearchService {
     }
 
     params = this.videoService.buildNSFWParams(params, {})
+    params = this.videoService.buildAIUsageParams(params)
 
     return this.authHttp
       .get<ResultList<VideoServerModel>>(url, { params })

@@ -1,5 +1,4 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
-import { expect } from 'chai'
 import { omit } from '@peertube/peertube-core-utils'
 import { ActorImageType, CustomConfig, HttpStatusCode, LogoType } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -13,6 +12,7 @@ import {
   PeerTubeServer,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
+import { expect } from 'chai'
 import merge from 'lodash-es/merge.js'
 import { DeepPartial } from '../../../../typescript-utils/src/types.js'
 
@@ -108,6 +108,31 @@ describe('Test config API validators', function () {
       })
     })
 
+    it('Should fail with bad instance translations', async function () {
+      const translation = { language: 'fr-FR', terms: 'Conditions' }
+
+      const badTranslations = [
+        'hello',
+        [ 'hello' ],
+        [ null ],
+        [ { terms: 'Conditions' } ],
+        [ { ...translation, language: 'xx-XX' } ],
+        [ { ...translation, terms: 42 } ],
+        [ { ...translation, supportText: [ 'support' ] } ],
+        [ translation, { ...translation, language: 'fr' } ]
+      ]
+
+      for (const translations of badTranslations) {
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: { ...updateParams, instance: { ...updateParams.instance, translations } },
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
+    })
+
     it('Should fail with a bad default comment policy', async function () {
       const newUpdateParams = merge({}, updateParams, {
         defaults: {
@@ -124,6 +149,26 @@ describe('Test config API validators', function () {
         token: server.accessToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
+    })
+
+    it('Should fail with a bad default recommendation scope', async function () {
+      for (const recommendationScope of [ 11, null ]) {
+        const newUpdateParams = merge({}, updateParams, {
+          defaults: {
+            publish: {
+              recommendationScope
+            }
+          }
+        })
+
+        await makePutBodyRequest({
+          url: server.url,
+          path,
+          fields: newUpdateParams,
+          token: server.accessToken,
+          expectedStatus: HttpStatusCode.BAD_REQUEST_400
+        })
+      }
     })
 
     it('Should fail if email disabled and signup requires email verification', async function () {
@@ -220,6 +265,56 @@ describe('Test config API validators', function () {
         fields: updateParams,
         token: server.accessToken,
         expectedStatus: HttpStatusCode.OK_200
+      })
+    })
+
+    describe('Custom JavaScript and CSS', function () {
+      const customizationsToTest: object[] = [
+        { instance: { customizations: { javascript: 'alert("coucou")' } } },
+        { instance: { customizations: { css: 'body { color: red; }' } } },
+
+        // Keys merged into javascript/css by the snake_case conversion
+        { instance: { customizations: { Javascript: 'alert("coucou")' } } },
+        { instance: { customizations: { CSS: 'body { color: red; }' } } },
+        { instance: { Customizations: { javascript: 'alert("coucou")', css: '' } } }
+      ]
+
+      it('Should fail to update the custom JavaScript or CSS without the current password', async function () {
+        for (const toMerge of customizationsToTest) {
+          await makePutBodyRequest({
+            url: server.url,
+            path,
+            fields: merge({}, updateParams, toMerge),
+            token: server.accessToken,
+            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+          })
+        }
+      })
+
+      it('Should fail to update the custom JavaScript or CSS with an invalid current password', async function () {
+        for (const toMerge of customizationsToTest) {
+          await makePutBodyRequest({
+            url: server.url,
+            path,
+            fields: { ...merge({}, updateParams, toMerge), currentPassword: 'bad password' },
+            token: server.accessToken,
+            expectedStatus: HttpStatusCode.FORBIDDEN_403
+          })
+        }
+      })
+
+      it('Should succeed to update the custom JavaScript or CSS with the current password', async function () {
+        for (const toMerge of customizationsToTest) {
+          for (const fields of [ merge({}, updateParams, toMerge), updateParams ]) {
+            await makePutBodyRequest({
+              url: server.url,
+              path,
+              fields: { ...fields, currentPassword: server.store.user.password },
+              token: server.accessToken,
+              expectedStatus: HttpStatusCode.OK_200
+            })
+          }
+        }
       })
     })
 

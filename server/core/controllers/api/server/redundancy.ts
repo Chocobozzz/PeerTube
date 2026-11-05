@@ -1,4 +1,10 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import {
+  auditLog,
+  buildServerRedundancyAuditEntity,
+  buildVideoRedundancyAuditEntity,
+  getAuditActorFromRes
+} from '@server/lib/audit-log/index.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { VideoRedundancyModel } from '@server/models/redundancy/video-redundancy.js'
 import express from 'express'
@@ -95,21 +101,33 @@ async function addVideoRedundancy (req: express.Request, res: express.Response) 
     payload
   })
 
+  auditLog.create(
+    getAuditActorFromRes(res),
+    () => buildVideoRedundancyAuditEntity({ video: res.locals.videoWithBlacklist, redundancy: null })
+  )
+
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function removeVideoRedundancyController (req: express.Request, res: express.Response) {
-  await removeVideoRedundancy(res.locals.videoRedundancy)
+  const redundancy = res.locals.videoRedundancy
+
+  await removeVideoRedundancy(redundancy)
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildVideoRedundancyAuditEntity({ video: redundancy.getVideo(), redundancy }))
 
   return res.status(HttpStatusCode.NO_CONTENT_204).end()
 }
 
 async function updateRedundancy (req: express.Request, res: express.Response) {
   const server = res.locals.server
+  const oldServerAuditEntity = auditLog.snapshot(() => buildServerRedundancyAuditEntity(server))
 
   server.redundancyAllowed = req.body.redundancyAllowed
 
   await server.save()
+
+  auditLog.update(getAuditActorFromRes(res), () => buildServerRedundancyAuditEntity(server), oldServerAuditEntity)
 
   if (server.redundancyAllowed !== true) {
     // Async, could be long

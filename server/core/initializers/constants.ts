@@ -24,6 +24,8 @@ import {
   UserImportStateType,
   UserRegistrationState,
   UserRegistrationStateType,
+  VideoAIUsage,
+  VideoAIUsageType,
   VideoChannelActivityAction,
   VideoChannelActivityActionType,
   VideoChannelActivityTarget,
@@ -32,6 +34,8 @@ import {
   VideoChannelCollaboratorStateType,
   VideoCommentPolicy,
   VideoCommentPolicyType,
+  VideoCommercialContent,
+  VideoCommercialContentType,
   VideoEmbedPrivacyPolicy,
   VideoEmbedPrivacyPolicyType,
   VideoImportState,
@@ -45,6 +49,8 @@ import {
   VideoPrivacy,
   VideoPrivacyType,
   VideoRateType,
+  VideoRecommendationScope,
+  VideoRecommendationScopeType,
   VideoResolution,
   VideoState,
   VideoStateType
@@ -62,7 +68,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1160
+export const LAST_MIGRATION_VERSION = 1180
 
 // ---------------------------------------------------------------------------
 
@@ -80,6 +86,16 @@ export const PAGINATION = {
     COUNT: {
       MAX: 50
     }
+  }
+}
+
+export const VIDEO_RECOMMENDATIONS = {
+  COUNT: {
+    DEFAULT: 10,
+    MAX: 30
+  },
+  EXCLUDE_VIDEO_IDS: {
+    MAX: 50
   }
 }
 
@@ -143,6 +159,8 @@ export const SORTABLE_COLUMNS = {
 
   USER_REGISTRATIONS: [ 'createdAt', 'state' ],
 
+  AUDIT_LOGS: [ 'createdAt' ],
+
   TOKEN_SESSIONS: [ 'createdAt' ],
 
   RUNNERS: [ 'createdAt' ],
@@ -192,6 +210,15 @@ export const SORTABLE_COLUMNS = {
   VIDEO_CHANNEL_ACTIVITIES: [ 'createdAt' ],
 
   LIVE_SESSIONS: [ 'startDate' ]
+}
+
+// Search engines limit a sitemap file to 50,000 URLs and 50MB
+export const SITEMAP = {
+  // A video entry can reach ~12KB
+  VIDEOS_PER_PAGE: 2000,
+  ACTORS_PER_PAGE: 50000,
+
+  MAX_PAGE: 2_000_000
 }
 
 export const ROUTE_CACHE_LIFETIME = {
@@ -250,6 +277,7 @@ export const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'video-redundancy': 1,
   'video-live-ending': 1,
   'video-studio-edition': 1,
+  'video-duplicate': 1,
   'video-files-lifecycle': 1,
   'manage-video-torrent': 1,
   'video-channel-import': 1,
@@ -283,6 +311,7 @@ export const JOB_CONCURRENCY: { [id in Exclude<JobType, 'video-transcoding' | 'v
   'video-redundancy': 1,
   'video-live-ending': 10,
   'video-studio-edition': 1,
+  'video-duplicate': 3,
   'video-files-lifecycle': 1, // Keep it to 1 so we don't delete/move many files at the same time
   'manage-video-torrent': 1, // Keep it to 1 to prevent concurrency issues
   'move-to-object-storage': 1,
@@ -309,6 +338,7 @@ export const JOB_TTL: { [id in JobType]: number } = {
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-studio-edition': 1000 * 3600 * 10, // 10 hours
+  'video-duplicate': 1000 * 60 * 60 * 3, // 3 hours
   'video-files-lifecycle': 1000 * 3600, // 1 hour
   'video-import': CONFIG.IMPORT.VIDEOS.TIMEOUT,
   'email': 60000 * 10, // 10 minutes
@@ -363,6 +393,11 @@ export const JOB_REMOVAL_OPTIONS = {
   FAILURE: { // Failed job
     DEFAULT: parseDurationToMs('7 days')
   }
+}
+
+export const JOB_STALLED_DETECTION = {
+  LOCK_DURATION: 30000, // BullMQ default
+  STALLED_INTERVAL: 30000 // BullMQ default
 }
 
 export const VIDEO_IMPORT_TIMEOUT = Math.floor(JOB_TTL['video-import'] * 0.9)
@@ -429,8 +464,10 @@ export const SCHEDULER_INTERVALS_MS = {
   AUTO_FOLLOW_INDEX_INSTANCES: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_STATS: 60000 * 60 * 24, // 1 day
   REMOVE_OLD_HISTORY: 60000 * 60 * 24, // 1 day
+  REMOVE_OLD_AUDIT_LOGS: 60000 * 60 * 24, // 1 day
   REMOVE_EXPIRED_USER_EXPORTS: 1000 * 3600, // 1 hour
   UPDATE_INBOX_STATS: 1000 * 60, // 1 minute
+  PROCESS_HEARTBEAT: 1000 * 30, // 30 seconds
   REMOVE_DANGLING_RESUMABLE_UPLOADS: 60000 * 60, // 1 hour
   REMOVE_DANGLING_STAGING_FILES: 60000 * 60, // 1 hour
   CHANNEL_SYNC_CHECK_INTERVAL: CONFIG.IMPORT.VIDEO_CHANNEL_SYNCHRONIZATION.CHECK_INTERVAL,
@@ -438,6 +475,12 @@ export const SCHEDULER_INTERVALS_MS = {
   WATCHED_WORDS_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
   REMOVE_OLD_USER_LOGIN_DEVICES: 60000 * 60 * 24, // 1 day
   CHECK_MANUAL_MIGRATION_SCRIPTS: 60000 * 60 * 12 // 12 hours
+}
+
+export const DATABASE_READ_REPLICAS = {
+  MONITOR_INTERVAL_MS: 1000,
+  ACQUIRE_TIMEOUT_MS: 2000,
+  REDIS_TIMEOUT_MS: 1000
 }
 
 export const MANUAL_MIGRATION_SCRIPTS = [
@@ -729,6 +772,26 @@ export const VIDEO_PRIVACIES: { [id in VideoPrivacyType]: string } = {
   [VideoPrivacy.PASSWORD_PROTECTED]: 'Password protected'
 }
 
+export const VIDEO_RECOMMENDATION_SCOPES: { [id in VideoRecommendationScopeType]: string } = {
+  [VideoRecommendationScope.ALL]: 'All videos',
+  [VideoRecommendationScope.LOCAL]: 'Videos of the same platform',
+  [VideoRecommendationScope.ACCOUNT]: 'Videos of the same account',
+  [VideoRecommendationScope.CHANNEL]: 'Videos of the same channel'
+}
+
+export const VIDEO_AI_USAGES: { [id in VideoAIUsageType]: string } = {
+  [VideoAIUsage.NOT_SPECIFIED]: 'Not specified',
+  [VideoAIUsage.NO_AI]: 'No AI-generated content',
+  [VideoAIUsage.CONTAINS_AI]: 'Contains AI-generated content',
+  [VideoAIUsage.AI_GENERATED]: 'AI-generated'
+}
+
+export const VIDEO_COMMERCIAL_CONTENTS: { [id in VideoCommercialContentType]: string } = {
+  [VideoCommercialContent.NONE]: 'None',
+  [VideoCommercialContent.PROMOTIONAL]: 'Promotional content',
+  [VideoCommercialContent.PAID_PARTNERSHIP]: 'Paid partnership'
+}
+
 export const VIDEO_STATES: { [id in VideoStateType]: string } = {
   [VideoState.PUBLISHED]: 'Published',
   [VideoState.TO_TRANSCODE]: 'To transcode',
@@ -739,6 +802,9 @@ export const VIDEO_STATES: { [id in VideoStateType]: string } = {
   [VideoState.TRANSCODING_FAILED]: 'Transcoding failed',
   [VideoState.TO_MOVE_TO_EXTERNAL_STORAGE_FAILED]: 'External storage move failed',
   [VideoState.TO_EDIT]: 'To edit',
+  [VideoState.TO_DUPLICATE]: 'To duplicate',
+  [VideoState.TO_DUPLICATE_FAILED]: 'Duplication failed',
+  [VideoState.TO_EDIT_FAILED]: 'Studio edition failed',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM]: 'To move to file system',
   [VideoState.TO_MOVE_TO_FILE_SYSTEM_FAILED]: 'Move to file system failed',
   [VideoState.TO_IMPORT_FAILED]: 'Import failed'
@@ -1037,6 +1103,7 @@ export const TWO_FACTOR_AUTH_REQUEST_TOKEN_LIFETIME = 60000 * 10 // 10 minutes
 export let JWT_TOKEN_USER_EXPORT_FILE_LIFETIME: `${number} minutes` | `${number} seconds` = '15 minutes'
 
 export const EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
+export const SIGNUP_CLIENT_LIFETIME = 60000 * 60 * 24 * 30 // 30 days
 
 export const NSFW_POLICY_TYPES: { [id: string]: NSFWPolicyType } = {
   DO_NOT_LIST: 'do_not_list',
@@ -1312,8 +1379,6 @@ export const VIDEO_LIVE = {
   RTMP: {
     CHUNK_SIZE: 60000,
     GOP_CACHE: true,
-    PING: 60,
-    PING_TIMEOUT: 30,
     BASE_PATH: 'live'
   }
 }
@@ -1382,12 +1447,13 @@ export const CUSTOM_HTML_TAG_COMMENTS = {
   DESCRIPTION: '<!-- description tag -->',
   CUSTOM_CSS: '<!-- custom css tag -->',
   META_TAGS: '<!-- meta tags -->',
-  SERVER_CONFIG: '<!-- server config -->'
+  SERVER_CONFIG: '<!-- server config -->',
+  SERVER_RENDERED_CONTENT: '<!-- server rendered content -->'
 }
 
 export const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
+export const MAX_AUDIT_LOGS_OUTPUT = 10000
 export const LOG_FILENAME = 'peertube.log'
-export const AUDIT_LOG_FILENAME = 'peertube-audit.log'
 
 // ---------------------------------------------------------------------------
 
@@ -1443,10 +1509,12 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
 
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_JOBS = 10000
     SCHEDULER_INTERVALS_MS.REMOVE_OLD_HISTORY = 5000
+    SCHEDULER_INTERVALS_MS.REMOVE_OLD_AUDIT_LOGS = 5000
     SCHEDULER_INTERVALS_MS.UPDATE_VIDEOS = 5000
     SCHEDULER_INTERVALS_MS.AUTO_FOLLOW_INDEX_INSTANCES = 5000
 
     SCHEDULER_INTERVALS_MS.UPDATE_INBOX_STATS = 5000
+    SCHEDULER_INTERVALS_MS.PROCESS_HEARTBEAT = 2000
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
     SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000
 
@@ -1460,6 +1528,10 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     CONTACT_FORM_LIFETIME = 1000 // 1 second
 
     JOB_ATTEMPTS['email'] = 1
+
+    // Tests restart servers while they process jobs
+    JOB_STALLED_DETECTION.LOCK_DURATION = 10000
+    JOB_STALLED_DETECTION.STALLED_INTERVAL = 5000
 
     MEMOIZE_TTL.OVERVIEWS_SAMPLE = 3000
     MEMOIZE_TTL.LIVE_ABLE_TO_UPLOAD = 3000
@@ -1482,6 +1554,9 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
     ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
     ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
+
+    SITEMAP.VIDEOS_PER_PAGE = 2
+    SITEMAP.ACTORS_PER_PAGE = 2
 
     CONSTRAINTS_FIELDS.ACTORS.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB
     CONSTRAINTS_FIELDS.LOGO.IMAGE.FILE_SIZE.max = 100 * 1024 // 100KB

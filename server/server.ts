@@ -142,6 +142,10 @@ app.use(cacheRequestIp)
 import { requestLoggerContext } from './core/middlewares/logger-context.js'
 app.use(requestLoggerContext)
 
+// Database context shared by the middlewares and the controller of a request
+import { requestDbContext } from './core/middlewares/replica-reads.js'
+app.use(requestDbContext)
+
 app.use((_req, res, next) => {
   // OpenTelemetry
   res.locals.requestStart = Date.now()
@@ -205,6 +209,7 @@ import { isHTTPSignatureDigestValid } from './core/helpers/peertube-crypto.js'
 import { ConfigDistribution } from './core/initializers/config/config-distribution.js'
 import { installPrimary, installSecondary } from './core/initializers/installer.js'
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
+import { initDatabaseReadReplicas } from './core/lib/database-replicas/database-replicas.js'
 import { Emailer } from './core/lib/emailer.js'
 import { resetFilesCacheOfOtherStorage } from './core/lib/files-cache/reset-files-cache.js'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './core/lib/hls.js'
@@ -225,8 +230,10 @@ import { LocalVideoStatsBufferScheduler } from './core/lib/schedulers/local-vide
 import { ManualMigrationScriptsScheduler } from './core/lib/schedulers/manual-migration-scripts-scheduler.js'
 import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
+import { ProcessHeartbeatScheduler } from './core/lib/schedulers/process-heartbeat-scheduler.js'
 import { RemoveDanglingResumableUploadsScheduler } from './core/lib/schedulers/remove-dangling-resumable-uploads-scheduler.js'
 import { RemoveDanglingStagingFilesScheduler } from './core/lib/schedulers/remove-dangling-staging-files-scheduler.js'
+import { RemoveOldAuditLogsScheduler } from './core/lib/schedulers/remove-old-audit-logs-scheduler.js'
 import { RemoveOldHistoryScheduler } from './core/lib/schedulers/remove-old-history-scheduler.js'
 import { RemoveOldStatsScheduler } from './core/lib/schedulers/remove-old-stats-scheduler.js'
 import { RemoveOldUserLoginDevicesScheduler } from './core/lib/schedulers/remove-old-user-login-devices-scheduler.js'
@@ -411,6 +418,9 @@ async function startApplication () {
 
   Redis.Instance.init()
 
+  // Needs Redis, to know the last write position of users
+  initDatabaseReadReplicas()
+
   // The primary publishes its configuration here, a secondary subscribes to the changes
   // Secondary already fetched it while the module graph was loading
   await ConfigDistribution.Instance.init()
@@ -452,6 +462,7 @@ async function startApplication () {
     UpdateVideosScheduler.Instance.enable()
     VideosRedundancyScheduler.Instance.enable()
     RemoveOldHistoryScheduler.Instance.enable()
+    RemoveOldAuditLogsScheduler.Instance.enable()
     RemoveOldStatsScheduler.Instance.enable()
     PluginsCheckScheduler.Instance.enable()
     PeerTubeVersionCheckScheduler.Instance.enable()
@@ -561,6 +572,9 @@ async function startApplication () {
         logger.error('Cannot start job queue.', { err })
         process.exit(-1)
       })
+
+    // Once the process is ready to serve requests
+    await ProcessHeartbeatScheduler.Instance.register()
 
     logger.info('HTTP server listening on %s:%d as %s process', hostname, port, getProcessRole())
     logger.info('Web server: %s', WEBSERVER.URL)

@@ -172,7 +172,7 @@ describe('Test JSONLD HTML tags', function () {
             'url': server.url
           },
 
-          'uploadDate': video.createdAt,
+          'uploadDate': video.publishedAt,
           'datePublished': video.publishedAt,
           'dateModified': video.updatedAt
         })
@@ -221,6 +221,19 @@ describe('Test JSONLD HTML tags', function () {
           'tag2'
         ])
       }
+    })
+
+    it('Should not HTML escape JSONLD values', async function () {
+      const name = `Fish & "chips" it's <great>`
+
+      const { uuid } = await servers[0].videos.upload({
+        attributes: { name, description: '**Fish** & <i>chips</i> < 2' }
+      })
+
+      const jsonld = await getJSONLD(servers[0], getWatchVideoBasePaths()[0] + uuid)
+
+      expect(jsonld.name).to.equal(name)
+      expect(jsonld.description).to.equal('Fish & chips < 2')
     })
 
     it('Should prefer the 720p web video file as content URL', async function () {

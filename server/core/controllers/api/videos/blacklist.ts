@@ -1,5 +1,6 @@
 import { HttpStatusCode, UserRight, VideoBlacklistCreate, VideoBlacklistUpdate } from '@peertube/peertube-models'
 import { blacklistVideo, unblacklistVideo } from '@server/lib/video-blacklist.js'
+import { auditLog, buildVideoBlockAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import express from 'express'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
@@ -76,7 +77,9 @@ async function addVideoToBlacklistController (req: express.Request, res: express
   const body: VideoBlacklistCreate = req.body
 
   await logger.withContext([ videoInstance.uuid ], async () => {
-    await blacklistVideo(videoInstance, body)
+    const videoBlock = await blacklistVideo(videoInstance, body)
+
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoBlockAuditEntity({ video: videoInstance, videoBlock }))
 
     logger.info('Video %s blacklisted.', videoInstance.uuid)
 
@@ -86,7 +89,10 @@ async function addVideoToBlacklistController (req: express.Request, res: express
 
 async function updateVideoBlacklistController (req: express.Request, res: express.Response) {
   const videoBlacklist = res.locals.videoBlacklist
+  const video = res.locals.videoWithRights
   const body: VideoBlacklistUpdate = req.body
+
+  const oldVideoBlockAuditEntity = auditLog.snapshot(() => buildVideoBlockAuditEntity({ video, videoBlock: videoBlacklist }))
 
   if (body.reason !== undefined) videoBlacklist.reason = body.reason
   if (body.internalNote !== undefined) videoBlacklist.internalNote = body.internalNote
@@ -94,6 +100,12 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
   await runTransaction(t => {
     return videoBlacklist.save({ transaction: t })
   })
+
+  auditLog.update(
+    getAuditActorFromRes(res),
+    () => buildVideoBlockAuditEntity({ video, videoBlock: videoBlacklist }),
+    oldVideoBlockAuditEntity
+  )
 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
 }
@@ -115,6 +127,8 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
   const video = res.locals.videoWithRights
 
   await unblacklistVideo(videoBlacklist, video)
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildVideoBlockAuditEntity({ video, videoBlock: videoBlacklist }))
 
   logger.info('Video %s removed from blacklist.', video.uuid)
 

@@ -1,5 +1,5 @@
 import { HttpStatusCode, VideoChannelActivityAction, StreamSyncState } from '@peertube/peertube-models'
-import { auditLoggerFactory, getAuditIdFromRes, VideoChannelSyncAuditView } from '@server/helpers/audit-logger.js'
+import { auditLog, buildChannelSyncAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { runTransaction } from '@server/helpers/database-utils.js'
 import {
@@ -19,7 +19,6 @@ import express from 'express'
 const logger = createLogger()
 
 const videoChannelSyncRouter = express.Router()
-const auditLogger = auditLoggerFactory('channel-syncs')
 
 videoChannelSyncRouter.use(apiRateLimiter)
 
@@ -63,7 +62,7 @@ async function createVideoChannelSync (req: express.Request, res: express.Respon
     })
   })
 
-  auditLogger.create(getAuditIdFromRes(res), new VideoChannelSyncAuditView(syncCreated.toFormattedJSON()))
+  auditLog.create(getAuditActorFromRes(res), () => buildChannelSyncAuditEntity(syncCreated.toFormattedJSON()))
 
   logger.info(
     'Video synchronization for channel "%s" with external channel "%s" created.',
@@ -91,7 +90,7 @@ async function removeVideoChannelSync (req: express.Request, res: express.Respon
     })
   })
 
-  auditLogger.delete(getAuditIdFromRes(res), new VideoChannelSyncAuditView(syncInstance.toFormattedJSON()))
+  auditLog.delete(getAuditActorFromRes(res), () => buildChannelSyncAuditEntity(syncInstance.toFormattedJSON()))
 
   logger.info(
     'Video synchronization for channel "%s" with external channel "%s" deleted.',

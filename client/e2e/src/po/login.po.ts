@@ -11,9 +11,7 @@ export class LoginPage {
 
     await go(url)
 
-    await browser.execute(`window.localStorage.setItem('no_account_setup_warning_modal', 'true')`)
-    await browser.execute(`window.localStorage.setItem('no_instance_config_warning_modal', 'true')`)
-    await browser.execute(`window.localStorage.setItem('no_welcome_modal', 'true')`)
+    await this.disableModals()
 
     await $('input#username').setValue(username)
     await $('input#password').setValue(password)
@@ -44,6 +42,25 @@ export class LoginPage {
     await $('form input[type=submit]').click()
 
     return $('.alert-danger').getText()
+  }
+
+  async loginWithPrefilledUsername (options: {
+    password: string
+    displayName: string
+  }) {
+    await this.disableModals()
+
+    await $('input#password').setValue(options.password)
+
+    await browserSleep(1000)
+
+    await $('.login-form-and-externals > form input[type=submit]').click()
+
+    await this.ensureIsLoggedInAs(options.displayName)
+  }
+
+  getUsernameValue () {
+    return $('input#username').getValue()
   }
 
   loginAsRootUser () {
@@ -84,6 +101,12 @@ export class LoginPage {
 
   private getLoggedInInfoElem (displayName: string) {
     return $('.logged-in-info').$('.display-name*=' + displayName)
+  }
+
+  private async disableModals () {
+    await browser.execute(`window.localStorage.setItem('no_account_setup_warning_modal', 'true')`)
+    await browser.execute(`window.localStorage.setItem('no_instance_config_warning_modal', 'true')`)
+    await browser.execute(`window.localStorage.setItem('no_welcome_modal', 'true')`)
   }
 
   private getSuffix () {

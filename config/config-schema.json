@@ -358,6 +358,26 @@
             }
           },
           "additionalProperties": false
+        },
+        "password_confirmation": {
+          "description": "Failed password confirmations of sensitive actions",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "window": {
+              "description": "10 failures in 10 minutes",
+              "type": "string",
+              "default": "10 minutes"
+            },
+            "max": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false
@@ -461,6 +481,26 @@
             "max": {
               "type": "integer",
               "default": 5
+            }
+          },
+          "additionalProperties": false
+        },
+        "read_replicas": {
+          "description": "Optional PostgreSQL streaming replicas (hot standbys of the database above) PeerTube uses them for some heavy read only requests: video lists, search, feeds... Database name, username, password, SSL settings and pool size are the same as the primary.",
+          "type": "object",
+          "properties": {
+            "max_lag": {
+              "description": "Don't use replicas lagging more than this duration behind the primary (minimum: 3 seconds)",
+              "type": "string",
+              "default": "5 seconds"
+            },
+            "hosts": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "default": null,
+              "items": {}
             }
           },
           "additionalProperties": false
@@ -1142,9 +1182,14 @@
           "type": "object",
           "properties": {
             "enabled": {
-              "description": "Log user, administration and moderation actions in a dedicated audit log file",
+              "description": "Log user, administration and moderation actions in the database, viewable in the administration",
               "type": "boolean",
               "default": true
+            },
+            "max_age": {
+              "description": "-1 means there is no limitations",
+              "type": "string",
+              "default": "1 year"
             }
           },
           "additionalProperties": false
@@ -1236,11 +1281,12 @@
               "type": "boolean",
               "default": false
             },
-            "jaeger_exporter": {
-              "description": "Send traces to a Jaeger compatible endpoint",
+            "otlp_exporter": {
+              "description": "Send traces to an OpenTelemetry (OTLP over HTTP) compatible endpoint, like Jaeger",
               "type": "object",
               "properties": {
                 "endpoint": {
+                  "description": "For example 'http://127.0.0.1:4318/v1/traces'. If empty, use OTEL_EXPORTER_OTLP_TRACES_ENDPOINT environment variable or 'http://localhost:4318/v1/traces'",
                   "type": "string",
                   "default": ""
                 }
@@ -1642,6 +1688,17 @@
                 }
               },
               "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "password_confirmation": {
+          "description": "Ask administrators to type their password again before sensitive actions in the web interface or REST API",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
             }
           },
           "additionalProperties": false
@@ -2250,6 +2307,16 @@
                 "string"
               ],
               "default": null
+            },
+            "ping": {
+              "description": "Interval between keepalive pings sent to the publisher (minimum 1 second) Also applies to RTMPS connections",
+              "type": "string",
+              "default": "1 minute"
+            },
+            "ping_timeout": {
+              "description": "Time without activity after which a connection is considered dead (minimum 5 seconds) Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...) Too low values may cut lives on network hiccups Also applies to RTMPS connections",
+              "type": "string",
+              "default": "30 seconds"
             }
           },
           "additionalProperties": false
@@ -2574,9 +2641,10 @@
                   "description": "By default PeerTube uses HTTP_PROXY and HTTPS_PROXY environment variables But you can specify custom proxies for youtube-dl because remote websites (like YouTube) may block your server IP address PeerTube will randomly select a proxy from the following list You may need to use a standalone youtube-dl binary (see `url` key comment above) to use this feature",
                   "type": [
                     "null",
-                    "string"
+                    "array"
                   ],
-                  "default": null
+                  "default": null,
+                  "items": {}
                 },
                 "cookies": {
                   "type": "object",
@@ -2758,6 +2826,15 @@
           "type": "string",
           "default": ""
         },
+        "translations": {
+          "description": "Translations of the information above, displayed depending on the language of the visitor. Empty or missing fields fall back to the information above. \"language\" must be a locale supported by the web interface: 'fr-FR', 'pt-BR'...",
+          "type": [
+            "null",
+            "array"
+          ],
+          "default": null,
+          "items": {}
+        },
         "default_language": {
           "description": "Default language of your instance, used in emails for example The web interface still uses the web browser preferred language",
           "type": "string",
@@ -2767,17 +2844,19 @@
           "description": "Describe the languages spoken on your instance, to interact with your users for example Uncomment or add the languages you want List of supported languages: https://peertube.cpy.re/api/v1/videos/languages PeerTube plugins can add additional languages to the official list of supported languages",
           "type": [
             "null",
-            "string"
+            "array"
           ],
-          "default": null
+          "default": null,
+          "items": {}
         },
         "categories": {
           "description": "Describe the main categories of your instance (to explain for example that your instance is dedicated to music, gaming, etc.) Uncomment categories you want List of supported categories: https://peertube.cpy.re/api/v1/videos/categories PeerTube plugins can add additional categories to the official list of supported categories",
           "type": [
             "null",
-            "string"
+            "array"
           ],
-          "default": null
+          "default": null,
+          "items": {}
         },
         "default_client_route": {
           "type": "string",
@@ -3340,6 +3419,11 @@
             },
             "comments_policy": {
               "description": "enabled = 1, disabled = 2, requires_approval = 3",
+              "type": "integer",
+              "default": 1
+            },
+            "recommendation_scope": {
+              "description": "Videos recommended next to a video: all = 1, same platform as the video = 2, same account = 3, same channel = 4",
               "type": "integer",
               "default": 1
             },

@@ -1,0 +1,19 @@
+@use "_variables" as *;
+@use "_mixins" as *;
+@use "./_player-variables" as *;
+
+.video-js.vjs-peertube-skin {
+  .commercial-content-info {
+    order: 3;
+    flex: 0 1 auto;
+    max-width: 100%;
+    padding: 0.5rem 0.75rem;
+
+    background-color: pvar(--pt-player-overlay-secondary-bg);
+    color: pvar(--pt-player-overlay-secondary-fg);
+    font-size: $font-size;
+    font-weight: $font-semibold;
+    border-radius: 4px;
+    pointer-events: none;
+  }
+}

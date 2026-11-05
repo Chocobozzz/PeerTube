@@ -33,23 +33,25 @@
   <body id="custom-css">
 
     <noscript class="alert alert-light">
-      <h2 class="mb-3">JavaScript required</h2>
+      <div data-nosnippet>
+        <h2 class="mb-3">JavaScript required</h2>
 
-      <p>It seems JavaScript is either blocked or disabled in your web browser. We totally get that. However, this page will not work without it.</p>
-      <p>If you are concerned about the security and privacy (or lack thereof) of JavaScript web applications, you might want to review the source code of the instance you are trying to access, or look for security audits.</p>
+        <p>It seems JavaScript is either blocked or disabled in your web browser. We totally get that. However, this page will not work without it.</p>
+        <p>If you are concerned about the security and privacy (or lack thereof) of JavaScript web applications, you might want to review the source code of the instance you are trying to access, or look for security audits.</p>
 
-      <hr>
+        <hr>
 
-      <h2 class="mb-3">Your options</h2>
+        <h2 class="mb-3">Your options</h2>
 
-      <ul>
-        <li>Allow JavaScript in your browser</li>
-        <li>Use one of the <a class="link-primary" href="https://docs.joinpeertube.org/use/third-party-application" target="_blank">third-party applications</a> to browse this instance</li>
-        <li>Review the source code on <a class="link-primary" href="https://github.com/Chocobozzz/PeerTube" target="_blank">GitHub</a> or <a class="link-primary" href="https://framagit.org/framasoft/peertube/PeerTube" target="_blank">Framasoft's GitLab</a>, and ask for modifications from the instance owner.
-      </ul>
+        <ul>
+          <li>Allow JavaScript in your browser</li>
+          <li>Use one of the <a class="link-primary" href="https://docs.joinpeertube.org/use/third-party-application" target="_blank">third-party applications</a> to browse this instance</li>
+          <li>Review the source code on <a class="link-primary" href="https://github.com/Chocobozzz/PeerTube" target="_blank">GitHub</a> or <a class="link-primary" href="https://framagit.org/framasoft/peertube/PeerTube" target="_blank">Framasoft's GitLab</a>, and ask for modifications from the instance owner.</li>
+        </ul>
+      </div>
     </noscript>
 
-    <div id="incompatible-browser" class="alert alert-light" role="alert" style="display: none">
+    <div id="incompatible-browser" class="alert alert-light" role="alert" style="display: none" data-nosnippet>
       <h2 class="mb-3">Incompatible browser</h2>
 
       <p>We are sorry but it seems that PeerTube is not compatible with your web browser.</p>
@@ -86,6 +88,7 @@
     </script>
 
     <my-app>
+      <!-- server rendered content -->
     </my-app>
 
   </body>

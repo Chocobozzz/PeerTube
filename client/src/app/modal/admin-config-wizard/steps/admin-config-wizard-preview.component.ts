@@ -2,7 +2,7 @@ import { CdkStepperModule } from '@angular/cdk/stepper'
 
 import { booleanAttribute, Component, inject, input, numberAttribute, OnChanges, output, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { HtmlRendererService, Notifier, ServerService } from '@app/core'
+import { HtmlRendererService, PasswordConfirmationService, ServerService } from '@app/core'
 import { AdminConfigService } from '@app/shared/shared-admin/admin-config.service'
 import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
 import { CustomConfig } from '@peertube/peertube-models'
@@ -32,7 +32,7 @@ import { InstanceLogoService } from '@app/shared/shared-instance/instance-logo.s
 export class AdminConfigWizardPreviewComponent implements OnChanges {
   private adminConfig = inject(AdminConfigService)
   private pluginAPI = inject(PluginApiService)
-  private notifier = inject(Notifier)
+  private passwordConfirmation = inject(PasswordConfirmationService)
   private html = inject(HtmlRendererService)
   private server = inject(ServerService)
   private instanceLogo = inject(InstanceLogoService)
@@ -78,9 +78,21 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
     }
   }
 
-  confirm () {
+  async confirm () {
     if (this.dryRun()) {
       return this.next.emit()
+    }
+
+    let currentPassword: string
+
+    if (this.plugins.length !== 0) {
+      const res = await this.passwordConfirmation.askPassword({
+        title: $localize`Install plugins`,
+        message: $localize`The following plugins will be installed on your platform: ${this.plugins.join(', ')}.`
+      })
+      if (res.confirmed === false) return
+
+      currentPassword = res.currentPassword
     }
 
     this.updating = true
@@ -97,7 +109,7 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
         switchMap(() => {
           return from(this.plugins)
             .pipe(
-              concatMap(plugin => this.pluginAPI.install(plugin)),
+              concatMap(plugin => this.pluginAPI.install(plugin, currentPassword)),
               toArray()
             )
         })
@@ -109,7 +121,7 @@ export class AdminConfigWizardPreviewComponent implements OnChanges {
         },
 
         error: err => {
-          this.notifier.handleError(err)
+          this.passwordConfirmation.handleError(err)
           this.updating = false
         }
       })

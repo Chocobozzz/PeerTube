@@ -13,7 +13,7 @@ import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid } from '../.
 import { CONFIG } from '../../initializers/config.js'
 import { PluginManager } from '../../lib/plugins/plugin-manager.js'
 import { PluginModel } from '../../models/server/plugin.js'
-import { areValidationErrors } from './shared/index.js'
+import { areValidationErrors, checkPasswordConfirmation } from './shared/index.js'
 
 export const getPluginValidator = (pluginType: PluginType_Type, withVersion = true) => {
   const validators: (ValidationChain | express.Handler)[] = [
@@ -123,7 +123,7 @@ export const installOrUpdatePluginValidator = [
     .optional()
     .custom(isSafePath),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
     const body: InstallOrUpdatePlugin = req.body
@@ -133,6 +133,8 @@ export const installOrUpdatePluginValidator = [
     if (body.pluginVersion && !body.npmName) {
       return res.fail({ message: 'Should have a npmName when specifying a pluginVersion' })
     }
+
+    if (!await checkPasswordConfirmation(req, res)) return
 
     return next()
   }

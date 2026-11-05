@@ -194,6 +194,8 @@ describe('Test syndication feeds', () => {
             await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: servers[0].store.channel.id })
           )
 
+          expect(xmlDoc.rss.channel['podcast:medium']).to.equal('video')
+
           const itemGuid = xmlDoc.rss.channel.item.guid
           expect(itemGuid).to.exist
           expect(itemGuid['@_isPermaLink']).to.equal(true)
@@ -450,6 +452,15 @@ describe('Test syndication feeds', () => {
 
           const channel = xmlDoc.rss.channel
           expect(channel.title).to.equal('Podcast playlist')
+          expect(channel['podcast:medium']).to.equal('video')
+        })
+
+        it('Should set podcast medium with audio enclosure preference', async function () {
+          const xmlDoc = parseXMLFeed(
+            await servers[0].feed.getPodcastXML({ ignoreCache: false, playlistId: podcastPlaylistId, enclosurePreference: 'audio' })
+          )
+
+          expect(xmlDoc.rss.channel['podcast:medium']).to.equal('podcast')
         })
 
         it('Should not contain private video', function () {
@@ -601,6 +612,8 @@ describe('Test syndication feeds', () => {
             })
           )
 
+          expect(xmlDoc.rss.channel['podcast:medium']).to.equal('video')
+
           const enclosure = xmlDoc.rss.channel.item.enclosure
           expectEndWith(enclosure['@_url'], '-720.mp4')
           expect(enclosure['@_type']).to.equal('video/mp4')
@@ -615,6 +628,8 @@ describe('Test syndication feeds', () => {
             })
           )
 
+          expect(xmlDoc.rss.channel['podcast:medium']).to.equal('podcast')
+
           const enclosure = xmlDoc.rss.channel.item.enclosure
           expectEndWith(enclosure['@_url'], '-0.mp4')
           expect(enclosure['@_type']).to.equal('audio/x-m4a')
@@ -628,6 +643,8 @@ describe('Test syndication feeds', () => {
               enclosurePreference: 'm3u8'
             })
           )
+
+          expect(xmlDoc.rss.channel['podcast:medium']).to.equal('video')
 
           const enclosure = xmlDoc.rss.channel.item.enclosure
           expectEndWith(enclosure['@_url'], '-master.m3u8')

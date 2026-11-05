@@ -5,13 +5,14 @@ import { LinkType } from '@pt-types'
 import { LinkComponent } from '../shared-main/common/link.component'
 import { FromNowPipe } from '../shared-main/date/from-now.pipe'
 import { VideoPlaylist } from './video-playlist.model'
+import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
 
 @Component({
   selector: 'my-video-playlist-miniature',
   styleUrls: [ './video-playlist-miniature.component.scss' ],
   templateUrl: './video-playlist-miniature.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [ NgClass, LinkComponent, FromNowPipe ]
+  imports: [ NgClass, LinkComponent, FromNowPipe, DisplayHandlePipe ]
 })
 export class VideoPlaylistMiniatureComponent implements OnInit {
   private markdownService = inject(MarkdownService)

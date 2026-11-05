@@ -31,6 +31,8 @@ export function checkMissedConfig () {
     'database.ssl_settings.ca',
     'database.ssl_settings.cert',
     'database.ssl_settings.key',
+    'database.read_replicas.max_lag',
+    'database.read_replicas.hosts',
     'smtp.hostname',
     'smtp.port',
     'smtp.username',
@@ -57,6 +59,7 @@ export function checkMissedConfig () {
     'log.rotation.max_file_size',
     'log.rotation.max_files',
     'log.audit.enabled',
+    'log.audit.max_age',
     'log.anonymize_ip',
     'log.tag_requests',
     'log.log_ping_requests',
@@ -68,7 +71,7 @@ export function checkMissedConfig () {
     'open_telemetry.metrics.prometheus_exporter.hostname',
     'open_telemetry.metrics.prometheus_exporter.port',
     'open_telemetry.tracing.enabled',
-    'open_telemetry.tracing.jaeger_exporter.endpoint',
+    'open_telemetry.tracing.otlp_exporter.endpoint',
     'open_telemetry.metrics.http_request_duration.enabled',
     'user.history.videos.enabled',
     'user.disable_root_auth',
@@ -147,6 +150,7 @@ export function checkMissedConfig () {
     'client.header.hide_instance_name',
     'defaults.publish.download_enabled',
     'defaults.publish.comments_policy',
+    'defaults.publish.recommendation_scope',
     'defaults.publish.privacy',
     'defaults.publish.licence',
     'defaults.player.auto_play',
@@ -278,6 +282,8 @@ export function checkMissedConfig () {
     'live.rtmp.port',
     'live.rtmp.hostname',
     'live.rtmp.public_hostname',
+    'live.rtmp.ping',
+    'live.rtmp.ping_timeout',
     'live.rtmps.enabled',
     'live.rtmps.port',
     'live.rtmps.hostname',
@@ -383,7 +389,7 @@ export function checkNodeVersion () {
     throw new Error(`Your NodeJS version ${v} is not supported. Please upgrade to NodeJS 22 or NodeJS 24`)
   }
 
-  if (major === 22 && minor < 12) {
-    throw new Error(`NodeJS >= v22.12 or NodeJS 24 is required`)
+  if (major === 22 && minor < 22) {
+    throw new Error(`NodeJS >= v22.22 or NodeJS 24 is required`)
   }
 }

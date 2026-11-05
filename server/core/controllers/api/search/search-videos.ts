@@ -8,9 +8,10 @@ import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
+import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
-import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
@@ -65,7 +66,7 @@ function searchVideos (req: express.Request, res: express.Response) {
     return searchVideosIndex(query, res)
   }
 
-  return searchVideosDB(query, req, res)
+  return withReplicaReadsFromRes(res, () => searchVideosDB(query, req, res))
 }
 
 async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: express.Response) {
@@ -82,6 +83,10 @@ async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: ex
     body.nsfw = nsfwPolicy === 'do_not_list'
       ? 'false'
       : 'both'
+  }
+
+  if (!body.aiUsageOneOf) {
+    body.aiUsageOneOf = buildAIUsageFilters({ res }).aiUsageOneOf
   }
 
   body = await Hooks.wrapObject(body, 'filter:api.search.videos.index.list.params')
@@ -112,6 +117,7 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, req: expre
     {
       ...query,
       ...buildNSFWFilters({ req, res }),
+      ...buildAIUsageFilters({ req, res }),
 
       displayOnlyForFollower: {
         actorId: serverActor.id,

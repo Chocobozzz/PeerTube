@@ -2,10 +2,11 @@ import { Feed } from '@peertube/feed'
 import { buildDownloadFilesUrl } from '@peertube/peertube-core-utils'
 import { VideoInclude, VideoResolution } from '@peertube/peertube-models'
 import { getVideoFileMimeType } from '@server/lib/video-file.js'
+import { allowReplicaReadsToController } from '@server/middlewares/replica-reads.js'
 import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { extname } from 'path'
-import { buildNSFWFilters } from '../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters } from '../../helpers/express-utils.js'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants.js'
 import {
   asyncMiddleware,
@@ -42,7 +43,7 @@ videoFeedsRouter.get(
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   commonVideosFiltersValidatorFactory(),
   asyncMiddleware(feedsAccountOrChannelFiltersValidator),
-  asyncMiddleware(generateVideoFeed)
+  asyncMiddleware(allowReplicaReadsToController(generateVideoFeed))
 )
 
 videoFeedsRouter.get(
@@ -53,7 +54,7 @@ videoFeedsRouter.get(
   cacheRouteMiddleware(ROUTE_CACHE_LIFETIME.FEEDS),
   commonVideosFiltersValidatorFactory(),
   asyncMiddleware(videoSubscriptionFeedsValidator),
-  asyncMiddleware(generateVideoFeedForSubscriptions)
+  asyncMiddleware(allowReplicaReadsToController(generateVideoFeedForSubscriptions))
 )
 
 // ---------------------------------------------------------------------------
@@ -93,6 +94,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
 
   const data = await getVideosForFeeds({
     ...buildNSFWFilters({ req, res }),
+    ...buildAIUsageFilters({ req, res }),
 
     sort: req.query.sort || '-originallyPublishedAt',
     isLocal: req.query.isLocal,
@@ -123,6 +125,7 @@ async function generateVideoFeedForSubscriptions (req: express.Request, res: exp
 
   const data = await getVideosForFeeds({
     ...buildNSFWFilters({ req, res }),
+    ...buildAIUsageFilters({ req, res }),
 
     sort: req.query.sort || '-publishedAt',
     isLocal: req.query.isLocal,
