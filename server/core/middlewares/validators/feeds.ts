@@ -60,6 +60,12 @@ export function setFeedPodcastContentType (req: express.Request, res: express.Re
   return feedContentTypeResponse(req, res, next, acceptableContentTypes)
 }
 
+export function setFeedPodcastChaptersContentType (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const acceptableContentTypes = [ 'application/json+chapters', 'application/json' ]
+
+  return feedContentTypeResponse(req, res, next, acceptableContentTypes)
+}
+
 export function feedContentTypeResponse (
   req: express.Request,
   res: express.Response,
@@ -163,6 +169,21 @@ export const videoFeedsPodcastValidator = [
         return res.fail({ message: req.t('The channel associated with this playlist could not be found.') })
       }
     }
+
+    return next()
+  }
+]
+
+export const videoFeedsPodcastChaptersValidator = [
+  query('videoId')
+    .customSanitizer(toCompleteUUID)
+    .custom(isIdOrUUIDValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    if (!await doesVideoExist(req.query.videoId, res, 'with-blacklist')) return
+    if (!await checkCanSeeVideo({ req, res, paramId: req.query.videoId, video: res.locals.videoWithBlacklist })) return
 
     return next()
   }

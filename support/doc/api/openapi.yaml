@@ -946,6 +946,37 @@ paths:
         '404':
           description: video channel or playlist not found
 
+  '/feeds/podcast/video-chapters.json':
+    get:
+      tags:
+        - Video Feeds
+      summary: Video chapters of podcast feeds
+      description: |
+        **PeerTube >= 9.0** Chapters of a video in the Podcasting 2.0 JSON format, referenced by the `podcast:chapters` tag of podcast feed items.
+        See https://podcasting2.org/docs/podcast-namespace/tags/chapters
+      operationId: getVideoPodcastChapters
+      parameters:
+        - name: videoId
+          in: query
+          description: 'The video id, uuid or short uuid'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json+chapters:
+              schema:
+                $ref: '#/components/schemas/PodcastChapters'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastChapters'
+        '404':
+          description: video not found
+        '406':
+          description: accept header unsupported
+
   '/api/v1/accounts/{name}':
     get:
       tags:
@@ -12046,6 +12077,24 @@ components:
               type: string
             timecode:
               type: integer
+    PodcastChapters:
+      type: object
+      description: Podcasting 2.0 JSON chapters, see https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/examples/chapters/jsonChapters.md
+      properties:
+        version:
+          type: string
+          example: '1.2.0'
+        chapters:
+          type: array
+          items:
+            type: object
+            properties:
+              startTime:
+                type: integer
+                description: Start of the chapter, in seconds
+              title:
+                type: string
+
     VideoSource:
       properties:
         inputFilename:

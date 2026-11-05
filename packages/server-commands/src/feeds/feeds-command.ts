@@ -1,4 +1,4 @@
-import { FeedEnclosurePreference, HttpStatusCode } from '@peertube/peertube-models'
+import { FeedEnclosurePreference, HttpStatusCode, PodcastChapters } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
@@ -81,6 +81,22 @@ export class FeedCommand extends AbstractCommand {
       path,
       query: { ...query, ...cacheQuery },
       accept: 'application/json',
+      implicitToken: false,
+      defaultExpectedStatus: HttpStatusCode.OK_200
+    })
+  }
+
+  getPodcastChapters (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
+    return this.getRequestBody<PodcastChapters>({
+      ...options,
+
+      path: '/feeds/podcast/video-chapters.json',
+      query: { videoId: options.videoId },
+      accept: 'application/json+chapters',
       implicitToken: false,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
