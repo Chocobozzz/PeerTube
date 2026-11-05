@@ -152,6 +152,7 @@ function register (...) {
     // type: 'input' | 'input-checkbox' | 'input-password' | 'input-textarea' | 'input-radio' | 'markdown-text' | 'markdown-enhanced' | 'select' | 'html'
 
     // If type: 'select' or 'input-radio', give the available options
+    // /!\ With 'input-radio', the user cannot unselect an option: add an explicit option (like "None") if the field is optional
     options: [
       { label: 'Label 1', value: 'value1' },
       { label: 'Label 2', value: 'value2' }

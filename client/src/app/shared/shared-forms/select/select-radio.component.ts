@@ -28,6 +28,9 @@ export class SelectRadioComponent implements ControlValueAccessor {
   readonly isGroup = input(false, { transform: booleanAttribute })
   readonly labelSecondary = input(false, { transform: booleanAttribute })
 
+  // Id of an external element labelling the radio group, if the label input is not used
+  readonly ariaLabelledby = input<string>()
+
   private readonly screenService = inject(ScreenService)
 
   readonly value = model('')
@@ -61,7 +64,19 @@ export class SelectRadioComponent implements ControlValueAccessor {
   }
 
   getRadioId (item: SelectRadioItem) {
-    return this.inputId() + '-' + item.id
+    // Item ids may come from plugins and contain characters that are invalid in an HTML id
+    return this.inputId() + '-' + String(item.id).replace(/[^\w-]/g, '_')
+  }
+
+  getLabelId () {
+    return this.inputId() + '-label'
+  }
+
+  getLabelledBy () {
+    if (this.ariaLabelledby()) return this.ariaLabelledby()
+    if (this.label()) return this.getLabelId()
+
+    return null
   }
 
   isInMobileView () {

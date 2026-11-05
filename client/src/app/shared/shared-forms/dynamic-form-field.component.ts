@@ -43,4 +43,8 @@ export class DynamicFormFieldComponent {
 
     return dedicated.has(this.setting().type)
   }
+
+  getLabelId () {
+    return this.setting().name + '-label'
+  }
 }
