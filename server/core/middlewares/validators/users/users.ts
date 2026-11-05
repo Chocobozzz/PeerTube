@@ -7,7 +7,7 @@ import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isIdValid, toArray, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { isThemeNameValid } from '../../../helpers/custom-validators/plugins.js'
 import {
   isUserAdminFlagsValid,
@@ -234,7 +234,7 @@ export const usersUpdateMeValidator = [
     .custom(isUserDescriptionValid),
   body('currentPassword')
     .optional()
-    .custom(exists),
+    .isString(),
   body('password')
     .optional()
     .custom(isUserPasswordValid),
@@ -327,13 +327,12 @@ export const usersUpdateMeValidator = [
         return res.fail({ message: req.t('currentPassword parameter is missing') })
       }
 
-      if (isUserPasswordTooLong(body.currentPassword)) {
-        return res.fail({
-          status: HttpStatusCode.BAD_REQUEST_400,
-          message: req.t('Password is too long. Please reset it using the password reset procedure.'),
-          type: ServerErrorCode.TOO_LONG_PASSWORD
-        })
+      // Validation errors are only checked below, so check the type before using the password
+      if (typeof body.currentPassword !== 'string') {
+        return res.fail({ message: req.t('currentPassword parameter is invalid') })
       }
+
+      if (!checkLocalPasswordLength(body.currentPassword, req, res)) return
 
       if (await user.isPasswordMatch(body.currentPassword) !== true) {
         return res.fail({
@@ -467,7 +466,7 @@ export const usersResetPasswordValidator = [
 
 export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: express.Request) => number | string) => {
   return [
-    body('currentPassword').optional().custom(exists),
+    body('currentPassword').optional().isString(),
 
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (areValidationErrors(req, res)) return
@@ -488,13 +487,8 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
         })
       }
 
-      if (!user.pluginAuth && isUserPasswordTooLong(req.body.currentPassword)) {
-        return res.fail({
-          status: HttpStatusCode.BAD_REQUEST_400,
-          message: req.t('Password is too long. Please reset it using the password reset procedure.'),
-          type: ServerErrorCode.TOO_LONG_PASSWORD
-        })
-      }
+      // Plugin passwords are checked by the plugin, not by bcrypt
+      if (!user.pluginAuth && !checkLocalPasswordLength(req.body.currentPassword, req, res)) return
 
       const isPasswordValid = user.pluginAuth
         ? await isExternalUserPasswordValid({ user, password: req.body.currentPassword })
@@ -547,4 +541,17 @@ function checkCanSetRole (role: UserRoleType, res: express.Response) {
   }
 
   return true
+}
+
+// Local passwords are compared with bcrypt, that cannot handle long passwords
+function checkLocalPasswordLength (password: string, req: express.Request, res: express.Response) {
+  if (!isUserPasswordTooLong(password)) return true
+
+  res.fail({
+    status: HttpStatusCode.BAD_REQUEST_400,
+    message: req.t('Password is too long. Please reset it using the password reset procedure.'),
+    type: ServerErrorCode.TOO_LONG_PASSWORD
+  })
+
+  return false
 }

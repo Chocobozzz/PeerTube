@@ -54,6 +54,11 @@ export async function getUserOrThrow (options: {
     if (user) return user
   }
 
+  // Check before loading the user so the response does not reveal if the account exists
+  if (password && isUserPasswordTooLong(password)) {
+    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
+  }
+
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
   const users = await UserModel.listByUsernameOrEmailCaseInsensitive(usernameOrEmail)
@@ -81,14 +86,6 @@ export async function getUserOrThrow (options: {
   if (isRootAuthDisabled(user)) throwInvalidGrantError()
 
   await checkLoginNotLockedOrThrow(user, req)
-
-  // bcrypt silently truncates its input to 72 bytes, so a longer password could authenticate
-  // against a shorter one that shares the same 72 first bytes. Only passwords we hash
-  // ourselves can hit that, so the check belongs here and not at the password grant entry:
-  // passwords validated by an auth plugin never go through bcrypt.
-  if (isUserPasswordTooLong(password)) {
-    throw new TooLongPasswordError(req.t('Password is too long. Please reset it using the password reset procedure.'))
-  }
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) {

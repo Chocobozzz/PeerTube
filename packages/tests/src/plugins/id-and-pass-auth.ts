@@ -104,16 +104,18 @@ describe('Test id and pass auth plugins', function () {
   })
 
   it('Should refuse a too long password on a local account', async function () {
-    // We hash local passwords with bcrypt, which truncates to 72 bytes: without the check,
-    // the stored password + padding would authenticate against its 72 first bytes
+    // Local passwords are compared with bcrypt, that cannot handle more than 72 bytes
     const longPassword = 'super'.repeat(61)
 
-    const { res } = await server.login.loginAndGetResponse({
-      user: { username: 'root', password: longPassword },
-      expectedStatus: HttpStatusCode.BAD_REQUEST_400
-    })
+    for (const username of [ 'root', 'unknown_user' ]) {
+      const { res } = await server.login.loginAndGetResponse({
+        user: { username, password: longPassword },
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
 
-    expect(res.body.code).to.equal('too_long_password')
+      // Same response for an unknown account: do not reveal if the account exists
+      expect(res.body.code, username).to.equal('too_long_password')
+    }
   })
 
   it('Should refresh crash token, but not laguna token', async function () {

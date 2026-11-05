@@ -147,6 +147,18 @@ describe('Test my user API validators', function () {
       expect(res.body.code).to.equal('too_long_password')
     })
 
+    it('Should fail with a non string current password', async function () {
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + 'me',
+        token: userToken,
+        fields: {
+          currentPassword: 42,
+          password: 'a valid new password 1!'
+        }
+      })
+    })
+
     it('Should fail without the current password', async function () {
       const fields = {
         currentPassword: 'password',
