@@ -1,5 +1,6 @@
 import { createLogger } from '@server/helpers/logger.js'
 import { YoutubeDLCLI } from '@server/helpers/youtube-dl/index.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants.js'
 import { AbstractScheduler } from './abstract-scheduler.js'
 
@@ -15,6 +16,11 @@ export class YoutubeDlUpdateScheduler extends AbstractScheduler {
   }
 
   protected internalExecute () {
+    if (!CONFIG.IMPORT.VIDEOS.HTTP.ENABLED) {
+      logger.debug('Discard youtube-dl update as HTTP video import is disabled')
+      return
+    }
+
     logger.info('Running youtube-dl updated scheduler')
 
     return YoutubeDLCLI.updateYoutubeDLBinary()
