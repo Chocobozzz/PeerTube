@@ -1,6 +1,6 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Table, UpdatedAt } from 'sequelize-typescript'
 import { MVideo, MVideoChapter } from '@server/types/models/index.js'
-import { VideoChapter, VideoChapterObject } from '@peertube/peertube-models'
+import { PodcastChapter, VideoChapter, VideoChapterObject } from '@peertube/peertube-models'
 import { VideoModel } from './video.js'
 import { Op, Transaction } from 'sequelize'
 import { getSort } from '../shared/sort.js'
@@ -102,7 +102,7 @@ export class VideoChapterModel extends SequelizeModel<VideoChapterModel> {
     }
   }
 
-  toPodcastingJSON (this: MVideoChapter): { startTime: number, title: string } {
+  toPodcastJSON (this: MVideoChapter): PodcastChapter {
     return {
       startTime: this.timecode,
       title: this.title

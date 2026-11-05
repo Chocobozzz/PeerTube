@@ -4,16 +4,14 @@ import { afterCommitIfTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
-import { MVideo, MVideoImmutable } from '@server/types/models/index.js'
+import { MVideo } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { InternalEventEmitter } from './internal-event-emitter.js'
-
-type MVideoImmutableWithChannel = MVideoImmutable & Pick<MVideo, 'channelId'>
 
 const logger = createLogger('video', 'chapter')
 
 export async function replaceChapters (options: {
-  video: MVideoImmutableWithChannel
+  video: MVideo
   chapters: VideoChapter[]
   transaction: Transaction
 }) {
@@ -29,7 +27,7 @@ export async function replaceChapters (options: {
 }
 
 export async function replaceChaptersIfNotExist (options: {
-  video: MVideoImmutableWithChannel
+  video: MVideo
   chapters: VideoChapter[]
   transaction: Transaction
 }) {
@@ -47,7 +45,7 @@ export async function replaceChaptersIfNotExist (options: {
 export async function replaceChaptersFromDescriptionIfNeeded (options: {
   oldDescription?: string
   newDescription: string
-  video: MVideoImmutableWithChannel
+  video: MVideo
   transaction: Transaction
 }) {
   const { transaction, video, newDescription, oldDescription = '' } = options

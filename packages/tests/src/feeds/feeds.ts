@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoCommentPolicy, VideoCreateResult, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
@@ -36,6 +37,18 @@ function parseXMLFeed (rss: string) {
   return parser.parse(rss)
 }
 
+// Chapters updates clear the feed cache asynchronously, after the transaction commit
+async function waitForPodcastChaptersTag (getItem: () => Promise<any>, shouldExist: boolean) {
+  for (let i = 0; i < 20; i++) {
+    const chaptersTag = (await getItem())['podcast:chapters']
+    if (!!chaptersTag === shouldExist) return chaptersTag
+
+    await wait(100)
+  }
+
+  return (await getItem())['podcast:chapters']
+}
+
 describe('Test syndication feeds', () => {
   let servers: PeerTubeServer[] = []
   let serverHLSOnly: PeerTubeServer
@@ -52,6 +65,7 @@ describe('Test syndication feeds', () => {
   let videoIdWithoutComments: string
   let liveId: string
   let podcastPlaylistId: number
+  let privateVideoId: string
 
   before(async function () {
     this.timeout(120000)
@@ -112,6 +126,7 @@ describe('Test syndication feeds', () => {
 
       const privateVideo = await servers[0].videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE })
       await servers[0].playlists.addElement({ playlistId: podcastPlaylistId, attributes: { videoId: privateVideo.id } })
+      privateVideoId = privateVideo.uuid
     }
 
     {
@@ -187,6 +202,14 @@ describe('Test syndication feeds', () => {
   describe('Videos feed', function () {
     describe('Podcast feed', function () {
       describe('Channel podcast feed', function () {
+        async function getUserChannelItem () {
+          const xmlDoc = parseXMLFeed(
+            await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: userChannelId })
+          )
+
+          return xmlDoc.rss.channel.item
+        }
+
         it('Should contain a valid podcast enclosures', async function () {
           // Since podcast feeds should only work on the server they originate on,
           // only test the first server where the videos reside
@@ -277,31 +300,8 @@ describe('Test syndication feeds', () => {
           expect(socialInteract['@_accountUrl']).to.exist
         })
 
-        it('Should contain podcast:chapters only when the video has chapters, and refresh it on update', async function () {
-          const getItem = async () => {
-            const xmlDoc = parseXMLFeed(
-              await servers[0].feed.getPodcastXML({ ignoreCache: false, channelId: userChannelId })
-            )
-
-            return xmlDoc.rss.channel.item
-          }
-
-          // The cache is cleared asynchronously (Redis) after the chapters update, so we retry a few times
-          const waitForChaptersTag = async (shouldExist: boolean) => {
-            let item: any
-
-            for (let i = 0; i < 20; i++) {
-              item = await getItem()
-              if (!!item['podcast:chapters'] === shouldExist) break
-
-              await new Promise(resolve => setTimeout(resolve, 100))
-            }
-
-            return item['podcast:chapters']
-          }
-
-          // Fill the feed cache
-          expect((await getItem())['podcast:chapters']).to.not.exist
+        it('Should add podcast:chapters and invalidate the cache when chapters are updated', async function () {
+          expect((await getUserChannelItem())['podcast:chapters']).to.not.exist
 
           await servers[0].chapters.update({
             token: userAccessToken,
@@ -312,16 +312,14 @@ describe('Test syndication feeds', () => {
             ]
           })
 
-          const chaptersTag = await waitForChaptersTag(true)
+          const chaptersTag = await waitForPodcastChaptersTag(getUserChannelItem, true)
           expect(chaptersTag).to.exist
           expect(chaptersTag['@_type']).to.equal('application/json+chapters')
-          expect(chaptersTag['@_url']).to.equal(`${servers[0].url}/api/v1/videos/${videoIdWithoutComments}/podcasting-chapters`)
+          expect(chaptersTag['@_url']).to.equal(`${servers[0].url}/feeds/podcast/video-chapters.json?videoId=${videoIdWithoutComments}`)
+        })
 
-          const { body } = await makeGetRequest({
-            url: servers[0].url,
-            path: new URL(chaptersTag['@_url']).pathname,
-            expectedStatus: HttpStatusCode.OK_200
-          })
+        it('Should get video chapters in the Podcasting 2.0 JSON format', async function () {
+          const body = await servers[0].feed.getPodcastChapters({ videoId: videoIdWithoutComments })
 
           expect(body).to.deep.equal({
             version: '1.2.0',
@@ -331,17 +329,42 @@ describe('Test syndication feeds', () => {
             ]
           })
 
-          // Removing chapters removes the tag
-          await servers[0].chapters.update({ token: userAccessToken, videoId: videoIdWithoutComments, chapters: [] })
-          expect(await waitForChaptersTag(false)).to.not.exist
+          const res = await makeGetRequest({
+            url: servers[0].url,
+            path: '/feeds/podcast/video-chapters.json',
+            query: { videoId: videoIdWithoutComments },
+            accept: '*/*',
+            expectedStatus: HttpStatusCode.OK_200
+          })
+
+          expectStartWith(res.headers['content-type'], 'application/json+chapters')
         })
 
-        it('Should return a 404 on podcasting chapters of an unknown video', async function () {
+        it('Should fail to get video chapters with invalid parameters', async function () {
+          const options = { url: servers[0].url, path: '/feeds/podcast/video-chapters.json', accept: 'application/json+chapters' }
+
+          await makeGetRequest({ ...options, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
           await makeGetRequest({
-            url: servers[0].url,
-            path: '/api/v1/videos/00000000-0000-4000-8000-000000000000/podcasting-chapters',
+            ...options,
+            query: { videoId: '00000000-0000-4000-8000-000000000000' },
             expectedStatus: HttpStatusCode.NOT_FOUND_404
           })
+
+          await makeGetRequest({ ...options, query: { videoId: privateVideoId }, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+
+          await makeGetRequest({
+            ...options,
+            accept: 'application/xml',
+            query: { videoId: videoIdWithoutComments },
+            expectedStatus: HttpStatusCode.NOT_ACCEPTABLE_406
+          })
+        })
+
+        it('Should remove podcast:chapters when chapters are removed', async function () {
+          await servers[0].chapters.update({ token: userAccessToken, videoId: videoIdWithoutComments, chapters: [] })
+
+          expect(await waitForPodcastChaptersTag(getUserChannelItem, false)).to.not.exist
         })
 
         it('Should contain a valid support custom tags for plugins', async function () {
@@ -641,6 +664,23 @@ describe('Test syndication feeds', () => {
 
           await servers[0].videos.update({ id: newVideo.id, attributes: { name: 'updated name for new video' } })
           expect((await getItem()).title).to.equal('updated name for new video')
+        })
+
+        it('Should invalidate the podcast cache if chapters of an element are updated', async function () {
+          const getItem = async () => {
+            const xmlDoc = parseXMLFeed(
+              await servers[0].feed.getPodcastXML({ ignoreCache: false, playlistId: podcastPlaylistId })
+            )
+
+            return xmlDoc.rss.channel.item[1]
+          }
+
+          expect((await getItem())['podcast:chapters']).to.not.exist
+
+          await servers[0].chapters.update({ videoId: newVideo.id, chapters: [ { timecode: 0, title: 'Intro' } ] })
+
+          const chaptersTag = await waitForPodcastChaptersTag(getItem, true)
+          expect(chaptersTag['@_url']).to.equal(`${servers[0].url}/feeds/podcast/video-chapters.json?videoId=${newVideo.uuid}`)
         })
 
         after(async function () {

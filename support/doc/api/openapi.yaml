@@ -925,6 +925,38 @@ paths:
         '404':
           description: video channel or playlist not found
 
+  '/feeds/podcast/video-chapters.json':
+    get:
+      tags:
+        - Video Feeds
+      summary: Video chapters of podcast feeds
+      description: |
+        **PeerTube >= 9.0** Chapters of a video in the Podcasting 2.0 JSON format,
+        referenced by the `podcast:chapters` tag of podcast feed items.
+        See https://podcasting2.org/docs/podcast-namespace/tags/chapters
+      operationId: getVideoPodcastChapters
+      parameters:
+        - name: videoId
+          in: query
+          description: 'The video id, uuid or short uuid'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json+chapters:
+              schema:
+                $ref: '#/components/schemas/PodcastChapters'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PodcastChapters'
+        '404':
+          description: video not found
+        '406':
+          description: accept header unsupported
+
   '/api/v1/accounts/{name}':
     get:
       tags:
@@ -5332,26 +5364,6 @@ paths:
       responses:
         '204':
           description: successful operation
-        '404':
-          description: video not found
-
-  /api/v1/videos/{id}/podcasting-chapters:
-    get:
-      summary: Get chapters of a video in the Podcasting 2.0 JSON format
-      description: "**PeerTube >= 8.4** Chapters are referenced by the podcast RSS feeds using the `podcast:chapters` tag. See https://podcasting2.org/docs/podcast-namespace/tags/chapters"
-      operationId: getVideoPodcastingChapters
-      tags:
-        - Video Chapters
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
-        - $ref: '#/components/parameters/videoPasswordHeader'
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VideoPodcastingChapters'
         '404':
           description: video not found
 
@@ -11940,7 +11952,9 @@ components:
               type: string
             timecode:
               type: integer
-    VideoPodcastingChapters:
+    PodcastChapters:
+      type: object
+      description: Podcasting 2.0 JSON chapters, see https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/examples/chapters/jsonChapters.md
       properties:
         version:
           type: string

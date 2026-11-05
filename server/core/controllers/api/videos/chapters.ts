@@ -20,14 +20,6 @@ videoChaptersRouter.get(
   asyncMiddleware(listVideoChapters)
 )
 
-// Podcasting 2.0 JSON chapters format, referenced by the podcast RSS feeds
-// https://github.com/Podcastindex-org/podcast-namespace/blob/main/docs/examples/chapters/jsonChapters.md
-videoChaptersRouter.get(
-  '/:id/podcasting-chapters',
-  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
-  asyncMiddleware(listVideoPodcastingChapters)
-)
-
 videoChaptersRouter.put(
   '/:videoId/chapters',
   authenticate,
@@ -47,15 +39,6 @@ async function listVideoChapters (req: express.Request, res: express.Response) {
   const chapters = await VideoChapterModel.listChaptersOfVideo(res.locals.videoWithBlacklist.id)
 
   return res.json({ chapters: chapters.map(c => c.toFormattedJSON()) })
-}
-
-async function listVideoPodcastingChapters (req: express.Request, res: express.Response) {
-  const chapters = await VideoChapterModel.listChaptersOfVideo(res.locals.videoWithBlacklist.id)
-
-  return res.json({
-    version: '1.2.0',
-    chapters: chapters.map(c => c.toPodcastingJSON())
-  })
 }
 
 async function replaceVideoChapters (req: express.Request, res: express.Response) {
