@@ -865,6 +865,9 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   })
   declare Storyboard: Awaited<StoryboardModel>
 
+  // Not a column: languages of the video captions, only set when listing videos
+  declare captionLanguages?: string[]
+
   @AfterCreate
   static notifyCreate (video: MVideo) {
     InternalEventEmitter.Instance.emit('video-created', { video })

@@ -122,6 +122,25 @@ export function getShortLocale (locale: string) {
   return locale.split('-')[0]
 }
 
+/**
+ * Check if one of the language codes (like video captions languages) matches one of the wanted languages or locales
+ * Regions and scripts are ignored on both sides (`zh-Hans-CN` matches `zh` and `zh-Hans`, `pt-BR` matches `pt-PT`)
+ */
+export function hasOneOfLanguages (languages: string[], wantedLanguages: string[]) {
+  return filterWantedLanguages(languages, wantedLanguages).length !== 0
+}
+
+// Same matching rules as `hasOneOfLanguages`, but return the language codes of `languages` that match
+export function filterWantedLanguages (languages: string[], wantedLanguages: string[]) {
+  if (!Array.isArray(languages) || languages.length === 0) return []
+  if (!Array.isArray(wantedLanguages) || wantedLanguages.length === 0) return []
+
+  const toLanguage = (l: string) => getShortLocale(l).toLowerCase()
+  const wanted = new Set(wantedLanguages.filter(l => !!l).map(toLanguage))
+
+  return languages.filter(language => language && wanted.has(toLanguage(language)))
+}
+
 export function buildFileLocale (locale: string) {
   return getCompleteLocale(locale)
 }

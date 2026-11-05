@@ -166,6 +166,9 @@ export function videoModelToFormattedJSON (video: MVideoFormattable, options: Vi
 
     comments: video.comments,
 
+    // Only set when listing videos
+    captionLanguages: video.captionLanguages,
+
     // Can be added by external plugins
     pluginData: (video as any).pluginData,
 

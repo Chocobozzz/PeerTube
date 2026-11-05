@@ -127,6 +127,8 @@ export class Video implements VideoServerModel {
     currentTime: number
   }
 
+  captionLanguages?: string[]
+
   pluginData?: any
 
   streamingPlaylists?: VideoStreamingPlaylist[]
@@ -240,6 +242,8 @@ export class Video implements VideoServerModel {
     this.videoSource = hash.videoSource
 
     this.userHistory = hash.userHistory
+
+    this.captionLanguages = hash.captionLanguages
 
     this.originInstanceHost = this.account.host
     this.originInstanceUrl = 'https://' + this.originInstanceHost

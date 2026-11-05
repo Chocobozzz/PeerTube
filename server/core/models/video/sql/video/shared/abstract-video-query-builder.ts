@@ -116,6 +116,20 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
     }
   }
 
+  protected includeCaptionLanguagesJSON () {
+    this.addJoin(
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg("language" ORDER BY "language") AS "languages" FROM "videoCaption" WHERE "videoId" = "video"."id"` +
+        `) AS "CaptionLanguagesJSON" ON TRUE`
+    )
+
+    this.attributes = {
+      ...this.attributes,
+
+      '"CaptionLanguagesJSON"."languages"': '"CaptionLanguagesJSON"'
+    }
+  }
+
   protected includeWebVideoFiles (includeInfohashes: boolean) {
     this.addJoin('LEFT JOIN "videoFile" AS "VideoFiles" ON "VideoFiles"."videoId" = "video"."id"')
 

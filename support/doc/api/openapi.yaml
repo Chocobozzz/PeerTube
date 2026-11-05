@@ -11395,6 +11395,12 @@ components:
           properties:
             currentTime:
               type: integer
+        captionLanguages:
+          description: "**PeerTube >= 9.0** Languages of the video captions. Only returned by video lists"
+          type: array
+          items:
+            type: string
+            example: fr
     ServerError:
       properties:
         type:

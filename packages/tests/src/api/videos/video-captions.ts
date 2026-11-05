@@ -50,6 +50,15 @@ describe('Test video captions', function () {
       }
     })
 
+    it('Should expose an empty captions languages list in the videos list', async function () {
+      for (const server of servers) {
+        const { data } = await server.videos.list()
+        const video = data.find(v => v.uuid === videoUUID)
+
+        expect(video.captionLanguages).to.deep.equal([])
+      }
+    })
+
     it('Should create two new captions', async function () {
       this.timeout(30000)
 
@@ -88,6 +97,27 @@ describe('Test video captions', function () {
         expect(caption2.fileUrl).to.match(new RegExp(`^${server.url}/lazy-static/video-captions/${uuidRegex}-zh.vtt$`))
         expect(caption1.automaticallyGenerated).to.be.false
         await testCaptionFile(caption2.fileUrl, 'Subtitle good 2.')
+      }
+    })
+
+    it('Should expose the captions languages in the videos lists', async function () {
+      for (const server of servers) {
+        const { data: videos } = await server.videos.list()
+        expect(videos.find(v => v.uuid === videoUUID).captionLanguages).to.have.members([ 'ar', 'zh' ])
+
+        const { data: channelVideos } = await server.videos.listByChannel({ handle: 'root_channel@' + servers[0].host })
+        expect(channelVideos.find(v => v.uuid === videoUUID).captionLanguages).to.have.members([ 'ar', 'zh' ])
+      }
+
+      const { data: myVideos } = await servers[0].videos.listMyVideos()
+      expect(myVideos.find(v => v.uuid === videoUUID).captionLanguages).to.have.members([ 'ar', 'zh' ])
+    })
+
+    it('Should not expose the captions languages when getting a single video', async function () {
+      for (const server of servers) {
+        const video = await server.videos.get({ id: videoUUID })
+
+        expect(video.captionLanguages).to.not.exist
       }
     })
 
@@ -180,6 +210,15 @@ describe('Test video captions', function () {
         expect(caption.language.label).to.equal('Chinese')
         expect(caption.fileUrl).to.match(new RegExp(`^${server.url}/lazy-static/video-captions/${uuidRegex}-zh.vtt$`))
         await testCaptionFile(caption.fileUrl, 'Subtitle good 2.')
+      }
+    })
+
+    it('Should not expose the removed caption language in the videos list', async function () {
+      for (const server of servers) {
+        const { data } = await server.videos.list()
+        const video = data.find(v => v.uuid === videoUUID)
+
+        expect(video.captionLanguages).to.deep.equal([ 'zh' ])
       }
     })
 

@@ -153,8 +153,9 @@ elif [ "$1" = "client" ]; then
     # Use TS tests directly because we import server files
     helperFiles=$(findTestFiles ./packages/tests/src/server-helpers)
     libFiles=$(findTestFiles ./packages/tests/src/server-lib)
+    coreUtilsFiles=$(findTestFiles ./packages/tests/src/core-utils)
 
-    npm run mocha -- --timeout 30000 -c --exit --bail $libFiles $helperFiles
+    npm run mocha -- --timeout 30000 -c --exit --bail $libFiles $helperFiles $coreUtilsFiles
 elif [ "$1" = "cli-plugin" ]; then
     # Simulate HTML
     mkdir -p "./client/dist/en-US/"

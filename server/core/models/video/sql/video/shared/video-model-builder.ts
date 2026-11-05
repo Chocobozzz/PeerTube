@@ -90,6 +90,7 @@ export class VideoModelBuilder {
 
       this.setUserHistory(row, videoModel)
       this.addThumbnail(row, videoModel)
+      this.setCaptionLanguages(row, videoModel)
       this.setLive(row, videoModel)
       this.addLiveSchedule(row, videoModel)
 
@@ -324,6 +325,13 @@ export class VideoModelBuilder {
     }
 
     this.thumbnailsDone.add(videoModel.id)
+  }
+
+  private setCaptionLanguages (row: SQLRow, videoModel: VideoModel) {
+    const key = 'CaptionLanguagesJSON'
+    if (!(key in row) || videoModel.captionLanguages) return
+
+    videoModel.captionLanguages = row[key] as any as string[] || []
   }
 
   private addWebVideoFile (row: SQLRow, videoModel: VideoModel) {
