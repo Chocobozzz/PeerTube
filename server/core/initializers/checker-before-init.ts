@@ -282,6 +282,8 @@ export function checkMissedConfig () {
     'live.rtmp.port',
     'live.rtmp.hostname',
     'live.rtmp.public_hostname',
+    'live.rtmp.ping',
+    'live.rtmp.ping_timeout',
     'live.rtmps.enabled',
     'live.rtmps.port',
     'live.rtmps.hostname',

@@ -53,8 +53,8 @@ const config = {
     port: CONFIG.LIVE.RTMP.PORT,
     chunk_size: VIDEO_LIVE.RTMP.CHUNK_SIZE,
     gop_cache: VIDEO_LIVE.RTMP.GOP_CACHE,
-    ping: VIDEO_LIVE.RTMP.PING,
-    ping_timeout: VIDEO_LIVE.RTMP.PING_TIMEOUT
+    ping: CONFIG.LIVE.RTMP.PING,
+    ping_timeout: CONFIG.LIVE.RTMP.PING_TIMEOUT
   }
 }
 

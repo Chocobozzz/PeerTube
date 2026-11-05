@@ -714,15 +714,17 @@ export const CONFIG = buildConfig({
     RTMP: {
       ENABLED: dynamicKey<boolean>('live.rtmp.enabled'),
       PORT: dynamicKey<number>('live.rtmp.port'),
-      HOSTNAME: dynamicKey<number>('live.rtmp.hostname'),
-      PUBLIC_HOSTNAME: dynamicKey<number>('live.rtmp.public_hostname')
+      HOSTNAME: dynamicKey<string>('live.rtmp.hostname'),
+      PUBLIC_HOSTNAME: dynamicKey<string>('live.rtmp.public_hostname'),
+      PING: staticKey('live.rtmp.ping', { transform: parseDurationToSeconds }),
+      PING_TIMEOUT: staticKey('live.rtmp.ping_timeout', { transform: parseDurationToSeconds })
     },
 
     RTMPS: {
       ENABLED: dynamicKey<boolean>('live.rtmps.enabled'),
       PORT: dynamicKey<number>('live.rtmps.port'),
-      HOSTNAME: dynamicKey<number>('live.rtmps.hostname'),
-      PUBLIC_HOSTNAME: dynamicKey<number>('live.rtmps.public_hostname'),
+      HOSTNAME: dynamicKey<string>('live.rtmps.hostname'),
+      PUBLIC_HOSTNAME: dynamicKey<string>('live.rtmps.public_hostname'),
       KEY_FILE: dynamicKey<string>('live.rtmps.key_file'),
       CERT_FILE: dynamicKey<string>('live.rtmps.cert_file')
     },
@@ -1021,6 +1023,12 @@ function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
       minViews: obj.min_views
     })
   })
+}
+
+function parseDurationToSeconds (value: number | string) {
+  if (typeof value === 'number' || !isNaN(+value)) return +value
+
+  return parseDurationToMs(value) / 1000
 }
 
 function buildObjectStorageSectionWithBaseUrl (name: string) {

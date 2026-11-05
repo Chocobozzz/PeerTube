@@ -795,6 +795,8 @@ live:
       __format: json
     hostname: PEERTUBE_LIVE_RTMP_HOSTNAME
     public_hostname: PEERTUBE_LIVE_RTMP_PUBLIC_HOSTNAME
+    ping: PEERTUBE_LIVE_RTMP_PING
+    ping_timeout: PEERTUBE_LIVE_RTMP_PING_TIMEOUT
   rtmps:
     enabled:
       __name: PEERTUBE_LIVE_RTMPS_ENABLED

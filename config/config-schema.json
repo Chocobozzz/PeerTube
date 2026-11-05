@@ -2307,6 +2307,16 @@
                 "string"
               ],
               "default": null
+            },
+            "ping": {
+              "description": "Interval between keepalive pings sent to the publisher (minimum 1 second) Also applies to RTMPS connections",
+              "type": "string",
+              "default": "1 minute"
+            },
+            "ping_timeout": {
+              "description": "Time without activity after which a connection is considered dead (minimum 5 seconds) Lower it to free the publisher slot faster when an encoder reconnects on a new connection (mobile network switch...) Too low values may cut lives on network hiccups Also applies to RTMPS connections",
+              "type": "string",
+              "default": "30 seconds"
             }
           },
           "additionalProperties": false
