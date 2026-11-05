@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions */
 
-import { hasOneOfLanguages } from '@peertube/peertube-core-utils'
+import { filterWantedLanguages, hasOneOfLanguages } from '@peertube/peertube-core-utils'
 import { expect } from 'chai'
 
 describe('Has one of languages', function () {
@@ -57,5 +57,17 @@ describe('Has one of languages', function () {
     expect(hasOneOfLanguages([ 'fr' ], undefined)).to.be.false
     expect(hasOneOfLanguages([ 'fr' ], [])).to.be.false
     expect(hasOneOfLanguages([ 'fr' ], [ undefined, '' ])).to.be.false
+  })
+})
+
+describe('Filter wanted languages', function () {
+  it('Returns the matching languages, keeping their order and their original code', function () {
+    expect(filterWantedLanguages([ 'zh-Hans', 'de', 'FR', 'en' ], [ 'fr-FR', 'zh-Hant-TW' ])).to.deep.equal([ 'zh-Hans', 'FR' ])
+  })
+
+  it('Returns an empty array when nothing matches', function () {
+    expect(filterWantedLanguages([ 'fil' ], [ 'fi-FI' ])).to.deep.equal([])
+    expect(filterWantedLanguages(undefined, [ 'fr' ])).to.deep.equal([])
+    expect(filterWantedLanguages([ 'fr' ], undefined)).to.deep.equal([])
   })
 })

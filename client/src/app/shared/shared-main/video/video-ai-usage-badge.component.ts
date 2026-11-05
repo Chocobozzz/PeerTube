@@ -7,6 +7,10 @@ import { Video } from './video.model'
   selector: 'my-video-ai-usage-badge',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgbTooltipModule ],
+  host: {
+    // Don't apply margins set by the parent on an empty element
+    '[hidden]': '!badge()'
+  },
   template: `
     @if (badge(); as badge) {
       <span class="pt-badge" [class]="badge.class" [ngbTooltip]="badge.tooltip" tabindex="0" [attr.aria-label]="badge.tooltip">

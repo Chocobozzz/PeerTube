@@ -1,19 +1,25 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, LOCALE_ID } from '@angular/core'
+import { ChangeDetectionStrategy, Component, computed, inject, input, LOCALE_ID, OnInit, signal } from '@angular/core'
+import { ServerService } from '@app/core'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { hasOneOfLanguages } from '@peertube/peertube-core-utils'
+import { filterWantedLanguages } from '@peertube/peertube-core-utils'
 import { Video } from './video.model'
 
 @Component({
   selector: 'my-video-captions-badge',
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ NgbTooltipModule ],
+  host: {
+    // Don't apply margins set by the parent on an empty element
+    '[hidden]': 'matchingLanguages().length === 0'
+  },
   template: `
-    @if (hasCaptions()) {
-      <span class="pt-badge badge-grey" [ngbTooltip]="tooltip" tabindex="0" [attr.aria-label]="tooltip" i18n>CC</span>
+    @if (matchingLanguages().length !== 0) {
+      <span class="pt-badge badge-grey" [ngbTooltip]="tooltip()" tabindex="0" [attr.aria-label]="tooltip()" i18n>CC</span>
     }
   `
 })
-export class VideoCaptionsBadgeComponent {
+export class VideoCaptionsBadgeComponent implements OnInit {
+  private server = inject(ServerService)
   private localeId = inject(LOCALE_ID)
 
   readonly video = input.required<Pick<Video, 'captionLanguages'>>()
@@ -21,9 +27,21 @@ export class VideoCaptionsBadgeComponent {
   // Video languages configured by the user, checked in addition to the interface language
   readonly userVideoLanguages = input<string[]>([])
 
-  readonly hasCaptions = computed(() => {
-    return hasOneOfLanguages(this.video().captionLanguages, [ this.localeId, ...(this.userVideoLanguages() || []) ])
+  private readonly labels = signal(new Map<string, string>())
+
+  readonly matchingLanguages = computed(() => {
+    return filterWantedLanguages(this.video().captionLanguages, [ this.localeId, ...(this.userVideoLanguages() || []) ])
   })
 
-  readonly tooltip = $localize`Captions available in one of your languages`
+  readonly tooltip = computed(() => {
+    const labels = this.labels()
+    const languages = this.matchingLanguages().map(l => labels.get(l) || l).join(', ')
+
+    return $localize`Captions available in ${languages}:languages:`
+  })
+
+  ngOnInit () {
+    this.server.getVideoTextLanguages()
+      .subscribe(languages => this.labels.set(new Map(languages.map(l => [ l.id, l.label ]))))
+  }
 }

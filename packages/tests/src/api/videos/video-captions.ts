@@ -108,6 +108,17 @@ describe('Test video captions', function () {
         const { data: channelVideos } = await server.videos.listByChannel({ handle: 'root_channel@' + servers[0].host })
         expect(channelVideos.find(v => v.uuid === videoUUID).captionLanguages).to.have.members([ 'ar', 'zh' ])
       }
+
+      const { data: myVideos } = await servers[0].videos.listMyVideos()
+      expect(myVideos.find(v => v.uuid === videoUUID).captionLanguages).to.have.members([ 'ar', 'zh' ])
+    })
+
+    it('Should not expose the captions languages when getting a single video', async function () {
+      for (const server of servers) {
+        const video = await server.videos.get({ id: videoUUID })
+
+        expect(video.captionLanguages).to.not.exist
+      }
     })
 
     it('Should replace an existing caption', async function () {
