@@ -270,6 +270,12 @@ describe('Test my user API validators', function () {
       }
     })
 
+    it('Should fail with an invalid aiUsagesHidden attribute', async function () {
+      for (const aiUsagesHidden of [ 'toto', [ 'toto' ], [ 42 ], [ 0 ], null, new Array(10).fill(1) ]) {
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields: { aiUsagesHidden } })
+      }
+    })
+
     it('Should fail with an invalid videoLive attribute', async function () {
       for (const videoLive of [ 'toto', true, null ]) {
         await makePutBodyRequest({ url: server.url, path: path + 'me', token: userToken, fields: { videoLive } })

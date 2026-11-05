@@ -1,4 +1,5 @@
 import { HttpStatusCode, UserRight, VideoState, VideoTranscodingCreate } from '@peertube/peertube-models'
+import { auditLog, buildVideoTranscodingAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -71,6 +72,11 @@ function createTranscoding (req: express.Request, res: express.Response) {
       transcodingType: body.transcodingType,
       user: null // Don't specify priority since these transcoding jobs are fired by the admin
     })
+
+    auditLog.create(
+      getAuditActorFromRes(res),
+      () => buildVideoTranscodingAuditEntity({ video, transcodingType: body.transcodingType, resolutions })
+    )
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
   })

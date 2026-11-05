@@ -174,6 +174,7 @@ export class PluginsCommand extends AbstractCommand {
       path?: string
       npmName?: string
       pluginVersion?: string
+      currentPassword?: string
     }
   ) {
     const { npmName, path, pluginVersion } = options
@@ -183,7 +184,7 @@ export class PluginsCommand extends AbstractCommand {
       ...options,
 
       path: apiPath,
-      fields: { npmName, path, pluginVersion },
+      fields: { npmName, path, pluginVersion, currentPassword: this.buildCurrentPassword(options) },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })
@@ -193,6 +194,7 @@ export class PluginsCommand extends AbstractCommand {
     options: OverrideCommandOptions & {
       path?: string
       npmName?: string
+      currentPassword?: string
     }
   ) {
     const { npmName, path } = options
@@ -202,7 +204,7 @@ export class PluginsCommand extends AbstractCommand {
       ...options,
 
       path: apiPath,
-      fields: { npmName, path },
+      fields: { npmName, path, currentPassword: this.buildCurrentPassword(options) },
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     })

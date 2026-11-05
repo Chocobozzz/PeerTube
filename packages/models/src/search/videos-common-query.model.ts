@@ -1,3 +1,4 @@
+import { VideoAIUsageType } from '../videos/video-ai-usage.enum.js'
 import { VideoIncludeType } from '../videos/video-include.enum.js'
 import { VideoPrivacyType } from '../videos/video-privacy.enum.js'
 import { VideoStateType } from '../videos/video-state.enum.js'
@@ -24,6 +25,8 @@ export interface VideosCommonQuery {
   licenceOneOf?: number[]
 
   languageOneOf?: string[]
+
+  aiUsageOneOf?: VideoAIUsageType[]
 
   tagsOneOf?: string[]
   tagsAllOf?: string[]

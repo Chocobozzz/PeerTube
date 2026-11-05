@@ -3,7 +3,14 @@ import { ChangeDetectionStrategy, Component, inject, LOCALE_ID, OnDestroy, OnIni
 import { NavigationEnd, Router, RouterLink } from '@angular/router'
 import { AuthService, AuthStatus, AuthUser, HotkeysService, MenuService, RedirectService, ScreenService, ServerService } from '@app/core'
 import { NotificationDropdownComponent } from '@app/header/notification-dropdown.component'
-import { getDevLocale, isOnDevLocale } from '@app/helpers'
+import {
+  buildMobileAppLoginPath,
+  buildMobileAppUrl,
+  canOpenMobileApp,
+  getDevLocale,
+  isOnDevLocale,
+  openMobileAppFallbackOnIOS
+} from '@app/helpers'
 import { QuickSettingsModalComponent } from '@app/menu/quick-settings-modal.component'
 import { ActorAvatarComponent } from '@app/shared/shared-actor-image/actor-avatar.component'
 import { PeertubeModalService } from '@app/shared/shared-main/peertube-modal/peertube-modal.service'
@@ -12,9 +19,8 @@ import { LoginLinkComponent } from '@app/shared/shared-main/users/login-link.com
 import { SignupLabelComponent } from '@app/shared/shared-main/users/signup-label.component'
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 import { findAppropriateImage, getCompleteLocale, I18N_LOCALES } from '@peertube/peertube-core-utils'
-import { HTMLServerConfig, ServerConfig } from '@peertube/peertube-models'
+import { HTMLServerConfig, ServerConfig, UserSignupClient } from '@peertube/peertube-models'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
-import { isAndroid, isIOS, isIphone } from '@root-helpers/web-browser'
 import { Subscription } from 'rxjs'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { ButtonComponent } from '../shared/shared-main/buttons/button.component'
@@ -66,8 +72,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   hotkeysHelpVisible = false
 
   mobileMsg = false
-  androidAppUrl = ''
-  iosAppUrl = ''
+  // Propose to log in in the app instead of opening the current page in the app
+  mobileMsgLogin = false
+  // Displayed even if the user hid the message
+  mobileMsgForced = false
+  mobileAppUrl = ''
 
   searchHidden = false
 
@@ -181,19 +190,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private setupMobileMsg () {
     if (!this.isInMobileView()) return
-    if (peertubeLocalStorage.getItem(HeaderComponent.LS_HIDE_MOBILE_MSG) === 'true') return
 
-    if (!isAndroid() && !isIphone()) return
+    const openInAppConfig = this.htmlConfig.client.openInApp
+    if (!canOpenMobileApp(openInAppConfig)) return
 
     const host = window.location.host
-    const intentConfig = this.htmlConfig.client.openInApp.android.intent
-    const iosConfig = this.htmlConfig.client.openInApp.ios
-
-    if (isAndroid() && intentConfig.enabled === false) return
-    if (isIphone() && iosConfig.enabled === false) return
-
-    this.mobileMsg = true
-    document.documentElement.classList.add('mobile-app-msg')
 
     const getVideoId = (url: string) => {
       const matches = url.match(/^\/w\/([^/?;]+)/)
@@ -207,60 +208,63 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (matches) return matches[1]
     }
 
+    // "Registration accepted" email link sent after a signup from the app
+    const isSignupFromApp = (url: string) => {
+      const { queryParams } = this.router.parseUrl(url)
+
+      return queryParams.signupClient === UserSignupClient.PEERTUBE_APP && !!queryParams.username
+    }
+
+    // Pages where we propose to log in in the app instead of opening the current page
+    // The email verification page has its own call to action after a successful verification
+    const getLoginAppPath = (url: string) => {
+      if (url !== '/login' && !url.startsWith('/login?')) return undefined
+
+      return buildMobileAppLoginPath({ afterSignup: false, username: this.router.parseUrl(url).queryParams.username })
+    }
+
+    const getAppPath = (url: string) => {
+      const videoId = getVideoId(url)
+      if (videoId) return `/video/${videoId}?host=${host}`
+
+      const channelId = getChannelId(url)
+      if (channelId) return `/video-channel/${channelId}?host=${host}`
+
+      return `/?host=${host}`
+    }
+
     this.router.events.subscribe(event => {
       if (!(event instanceof NavigationEnd)) return
 
       const url = event.url
 
-      const baseAndroid = `intent://${intentConfig.host}`
-      const fallbackAndroid = `#Intent;scheme=${intentConfig.scheme};S.browser_fallback_url=${intentConfig.fallbackUrl};end`
+      const loginAppPath = getLoginAppPath(url)
+      const appPath = loginAppPath ?? getAppPath(url)
 
-      const baseIOS = `peertube://${iosConfig.host}`
+      this.mobileMsgLogin = !!loginAppPath
+      this.mobileAppUrl = buildMobileAppUrl(openInAppConfig, appPath)
 
-      const videoId = getVideoId(url)
-      const channelId = getChannelId(url)
-
-      if (videoId) {
-        if (isAndroid()) {
-          this.androidAppUrl = `${baseAndroid}/video/${videoId}?host=${host}${fallbackAndroid}`
-        } else {
-          this.iosAppUrl = `${baseIOS}/video/${videoId}?host=${host}`
-        }
-
-        return
-      }
-
-      if (channelId) {
-        if (isAndroid()) {
-          this.androidAppUrl = `${baseAndroid}/video-channel/${channelId}?host=${host}${fallbackAndroid}`
-        } else {
-          this.iosAppUrl = `${baseIOS}/video-channel/${channelId}?host=${host}`
-        }
-
-        return
-      }
-
-      if (isAndroid()) {
-        this.androidAppUrl = `${baseAndroid}/?host=${host}${fallbackAndroid}`
-      } else {
-        this.iosAppUrl = `${baseIOS}/?host=${host}`
-      }
+      // Always propose to log in in the app after a signup from the app, even if the user hid the message
+      this.mobileMsgForced = this.mobileMsgLogin && isSignupFromApp(url)
+      this.setMobileMsgDisplayed(this.mobileMsgForced || peertubeLocalStorage.getItem(HeaderComponent.LS_HIDE_MOBILE_MSG) !== 'true')
     })
   }
 
-  hideMobileMsg () {
-    this.mobileMsg = false
-    document.documentElement.classList.remove('mobile-app-msg')
+  private setMobileMsgDisplayed (displayed: boolean) {
+    this.mobileMsg = displayed
 
-    peertubeLocalStorage.setItem(HeaderComponent.LS_HIDE_MOBILE_MSG, 'true')
+    if (displayed) document.documentElement.classList.add('mobile-app-msg')
+    else document.documentElement.classList.remove('mobile-app-msg')
+  }
+
+  hideMobileMsg () {
+    this.setMobileMsgDisplayed(false)
+
+    if (!this.mobileMsgForced) peertubeLocalStorage.setItem(HeaderComponent.LS_HIDE_MOBILE_MSG, 'true')
   }
 
   onOpenClientClick () {
-    if (!isIOS()) return
-
-    setTimeout(() => {
-      window.location.href = this.htmlConfig.client.openInApp.ios.fallbackUrl
-    }, 2500)
+    openMobileAppFallbackOnIOS(this.htmlConfig.client.openInApp)
   }
 
   // ---------------------------------------------------------------------------

@@ -1,7 +1,16 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { pick } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, HttpStatusCodeType, UserRole, VideoInclude, VideoPrivacy, VideoState, VideosCommonQuery } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  HttpStatusCodeType,
+  UserRole,
+  VideoAIUsage,
+  VideoInclude,
+  VideoPrivacy,
+  VideoState,
+  VideosCommonQuery
+} from '@peertube/peertube-models'
 import {
   cleanupTests,
   createSingleServer,
@@ -56,6 +65,7 @@ describe('Test video filters validators', function () {
         | 'nsfw'
         | 'nsfwFlagsExcluded'
         | 'nsfwFlagsIncluded'
+        | 'aiUsageOneOf'
       >
       & {
         token?: string
@@ -95,7 +105,8 @@ describe('Test video filters validators', function () {
           'filter',
           'nsfw',
           'nsfwFlagsExcluded',
-          'nsfwFlagsIncluded'
+          'nsfwFlagsIncluded',
+          'aiUsageOneOf'
         ]),
         expectedStatus: options.expectedStatus
       })
@@ -276,6 +287,18 @@ describe('Test video filters validators', function () {
         nsfwFlagsExcluded: 1,
         expectedStatus: HttpStatusCode.OK_200
       })
+    })
+  })
+
+  describe('AI usage', function () {
+    it('Should fail with an invalid aiUsageOneOf', async function () {
+      for (const aiUsageOneOf of [ 'hello', [ 42 ], [ VideoAIUsage.NO_AI, 0 ], new Array(10).fill(VideoAIUsage.NO_AI) ]) {
+        await testEndpoints({ aiUsageOneOf: aiUsageOneOf as any, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      }
+    })
+
+    it('Should succeed with a valid aiUsageOneOf', async function () {
+      await testEndpoints({ aiUsageOneOf: [ VideoAIUsage.NO_AI, VideoAIUsage.NOT_SPECIFIED ], expectedStatus: HttpStatusCode.OK_200 })
     })
   })
 

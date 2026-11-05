@@ -1,5 +1,12 @@
 import { AutoMuteList, BlocklistLogAction, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import {
+  auditLog,
+  buildAccountBlockAuditEntity,
+  buildBlocklistSubscriptionAuditEntity,
+  buildServerBlockAuditEntity,
+  getAuditActorFromRes
+} from '@server/lib/audit-log/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { fetchAndValidateAutoMuteList } from '@server/lib/blocklist-subscriptions.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -168,6 +175,15 @@ async function blockAccount (req: express.Request, res: express.Response) {
     removeNotificationOfUserId: null
   })
 
+  auditLog.create(
+    getAuditActorFromRes(res),
+    () =>
+      buildAccountBlockAuditEntity({
+        byAccountId: serverActor.Account.id,
+        targetAccount: { id: accountToBlock.id, handle: accountToBlock.Actor.getFullIdentifier() }
+      })
+  )
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
@@ -175,6 +191,15 @@ async function unblockAccount (req: express.Request, res: express.Response) {
   const accountBlock = res.locals.accountBlock
 
   await removeAccountFromBlocklist(accountBlock)
+
+  auditLog.delete(
+    getAuditActorFromRes(res),
+    () =>
+      buildAccountBlockAuditEntity({
+        byAccountId: accountBlock.accountId,
+        targetAccount: { id: accountBlock.targetAccountId, handle: res.locals.account.Actor.getFullIdentifier() }
+      })
+  )
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -204,6 +229,11 @@ async function blockServer (req: express.Request, res: express.Response) {
     removeNotificationOfUserId: null
   })
 
+  auditLog.create(
+    getAuditActorFromRes(res),
+    () => buildServerBlockAuditEntity({ byAccountId: serverActor.Account.id, targetServer: serverToBlock })
+  )
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
@@ -211,6 +241,15 @@ async function unblockServer (req: express.Request, res: express.Response) {
   const serverBlock = res.locals.serverBlock
 
   await removeServerFromBlocklist(serverBlock)
+
+  auditLog.delete(
+    getAuditActorFromRes(res),
+    () =>
+      buildServerBlockAuditEntity({
+        byAccountId: serverBlock.accountId,
+        targetServer: { id: serverBlock.targetServerId, host: req.params.host }
+      })
+  )
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -242,6 +281,8 @@ async function addBlocklistSubscription (req: express.Request, res: express.Resp
       lastSyncAt: null
     })
 
+    auditLog.create(getAuditActorFromRes(res), () => buildBlocklistSubscriptionAuditEntity(subscription))
+
     return res.json(subscription.toFormattedJSON())
   } catch (err) {
     logger.warn('Failed to fetch or parse auto mute list URL when adding blocklist subscription.', { url: req.body.url, err })
@@ -257,6 +298,8 @@ async function deleteBlocklistSubscription (req: express.Request, res: express.R
   const subscription = res.locals.blocklistSubscription
 
   await subscription.destroy()
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildBlocklistSubscriptionAuditEntity(subscription))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

@@ -16,6 +16,7 @@ import { oauthClientsRouter } from './oauth-clients.js'
 import { overviewsRouter } from './overviews.js'
 import { playerSettingsRouter } from './player-settings.js'
 import { pluginRouter } from './plugins.js'
+import { recommendationsRouter } from './recommendations/index.js'
 import { runnersRouter } from './runners/index.js'
 import { searchRouter } from './search/index.js'
 import { serverRouter } from './server/index.js'
@@ -50,6 +51,7 @@ apiRouter.use('/jobs', jobsRouter)
 apiRouter.use('/metrics', metricsRouter)
 apiRouter.use('/search', searchRouter)
 apiRouter.use('/overviews', overviewsRouter)
+apiRouter.use('/recommendations', recommendationsRouter)
 apiRouter.use('/player-settings', playerSettingsRouter)
 apiRouter.use('/plugins', pluginRouter)
 apiRouter.use('/custom-pages', customPageRouter)

@@ -85,6 +85,8 @@ async function execPNPM (commands: string[]) {
   try {
     return await runCommand()
   } catch (result) {
+    // Only thrown by PNPM < 12, newer versions relink packages from the new store by themselves
+    // TODO: remove this block if PNPM >= 12 is guaranteed to be used
     if (isPNPMUnexpectedStoreError(result)) {
       logger.warn('Cannot exec pnpm because of an unexpected store location. Running pnpm install and retrying command.', { commands })
 

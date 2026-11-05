@@ -7,6 +7,7 @@ import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoShareModel } from '@server/models/video/video-share.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo } from '@server/types/models/index.js'
+import validator from 'validator'
 import { fetchAP } from '../../activity.js'
 import { crawlCollectionPage } from '../../crawl.js'
 import { addVideoShares } from '../../share.js'
@@ -24,13 +25,18 @@ export type SyncParam = {
 export function syncVideoExternalAttributes (
   video: MVideo,
   fetchedVideo: VideoObject,
-  syncParam: Pick<SyncParam, 'rates' | 'shares' | 'comments'>
+  syncParam: Pick<SyncParam, 'rates' | 'shares' | 'comments'>,
+  options: {
+    skipRates?: boolean
+  } = {}
 ) {
   return logger.withContext([ video.uuid, video.url ], async () => {
     logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
-    const ratePromise = updateVideoRates(video, fetchedVideo)
-    if (syncParam.rates) await ratePromise
+    if (options.skipRates !== true) {
+      const ratePromise = updateVideoRates(video, fetchedVideo)
+      if (syncParam.rates) await ratePromise
+    }
 
     await syncShares(video, fetchedVideo, syncParam.shares)
 
@@ -38,16 +44,24 @@ export function syncVideoExternalAttributes (
   })
 }
 
+// Never throws: rates are not essential, so a remote error must not fail the video creation/update
 export async function updateVideoRates (video: MVideo, fetchedVideo: VideoObject) {
-  const [ likes, dislikes ] = await Promise.all([
-    getRatesCount('like', video, fetchedVideo),
-    getRatesCount('dislike', video, fetchedVideo)
-  ])
+  try {
+    const [ likes, dislikes ] = await Promise.all([
+      getRatesCount('like', video, fetchedVideo),
+      getRatesCount('dislike', video, fetchedVideo)
+    ])
 
-  return runInReadCommittedTransaction(async t => {
-    await VideoModel.updateRatesOf(video.id, 'like', likes, t)
-    await VideoModel.updateRatesOf(video.id, 'dislike', dislikes, t)
-  })
+    // Remote video may not provide likes/dislikes collections
+    if (likes === undefined && dislikes === undefined) return
+
+    await runInReadCommittedTransaction(async t => {
+      if (likes !== undefined) await VideoModel.updateRatesOf(video.id, 'like', likes, t)
+      if (dislikes !== undefined) await VideoModel.updateRatesOf(video.id, 'dislike', dislikes, t)
+    })
+  } catch (err) {
+    logger.warn('Cannot sync rates of video %s.', video.url, { err })
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -63,14 +77,14 @@ async function getRatesCount (type: 'like' | 'dislike', video: MVideo, fetchedVi
 
   logger.info('Sync %s of video %s', type, video.url)
 
-  const { body } = await fetchAP<ActivityPubOrderedCollection<any>>(uri)
+  const { body } = await fetchAP<ActivityPubOrderedCollection<any>>(uri, { preventCrossHostRedirect: false })
 
-  if (isNaN(body.totalItems)) {
-    logger.error('Cannot sync %s of video %s, totalItems is not a number', type, video.url, { body })
+  if (!validator.default.isInt(body?.totalItems + '', { min: 0 })) {
+    logger.warn('Cannot sync %s of video %s, totalItems is not a positive integer', type, video.url, { body })
     return
   }
 
-  return body.totalItems
+  return parseInt(body.totalItems + '', 10)
 }
 
 function syncShares (video: MVideo, fetchedVideo: VideoObject, isSync: boolean) {

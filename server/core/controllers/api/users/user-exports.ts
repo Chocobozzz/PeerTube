@@ -1,4 +1,5 @@
 import express from 'express'
+import { auditLog, buildUserExportAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { FileStorage, HttpStatusCode, UserExportRequest, UserExportState } from '@peertube/peertube-models'
 import {
   asyncMiddleware,
@@ -59,6 +60,8 @@ async function requestExport (req: express.Request, res: express.Response) {
     await exportModel.save({ transaction })
   })
 
+  auditLog.create(getAuditActorFromRes(res), () => buildUserExportAuditEntity({ user: res.locals.user, userExport: exportModel }))
+
   await JobQueue.Instance.createJob({ type: 'create-user-export', payload: { userExportId: exportModel.id } })
 
   return res.json({
@@ -94,6 +97,8 @@ async function deleteUserExport (req: express.Request, res: express.Response) {
     return true
   })
   if (!result) return
+
+  auditLog.delete(getAuditActorFromRes(res), () => buildUserExportAuditEntity({ user: res.locals.user, userExport }))
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

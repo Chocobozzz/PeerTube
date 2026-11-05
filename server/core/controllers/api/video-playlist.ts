@@ -1,5 +1,12 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import {
+  auditLog,
+  buildPlaylistAuditEntity,
+  buildPlaylistElementAuditEntity,
+  buildPlaylistElementsOrderAuditEntity,
+  getAuditActorFromRes
+} from '@server/lib/audit-log/index.js'
+import {
   HttpStatusCode,
   VideoChannelActivityAction,
   VideoPlaylistCreate,
@@ -241,6 +248,8 @@ async function createVideoPlaylist (req: express.Request, res: express.Response)
       })
     })
 
+    auditLog.create(getAuditActorFromRes(res), () => buildPlaylistAuditEntity(videoPlaylistCreated))
+
     logger.info('Video playlist with uuid %s created.', videoPlaylist.uuid)
 
     return res.json({
@@ -261,6 +270,8 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   const wasNotPrivatePlaylist = playlist.privacy !== VideoPlaylistPrivacy.PRIVATE
 
   const thumbnailField = req.files?.['thumbnailfile']
+
+  const oldPlaylistAuditEntity = auditLog.snapshot(() => buildPlaylistAuditEntity(playlist))
 
   await logger.withContext([ playlist.uuid ], async () => {
     try {
@@ -342,6 +353,10 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
           const playlistUpdated = await playlist.save({ transaction: t })
 
+          auditLog.update(getAuditActorFromRes(res), () => buildPlaylistAuditEntity(playlistUpdated), oldPlaylistAuditEntity, {
+            transaction: t
+          })
+
           if (thumbnailModels) {
             await playlistUpdated.replaceAndSaveThumbnails(thumbnailModels, t)
           }
@@ -390,6 +405,8 @@ async function removeVideoPlaylist (req: express.Request, res: express.Response)
   await logger.withContext([ videoPlaylistInstance.uuid ], async () => {
     await runTransaction(async t => {
       await videoPlaylistInstance.destroy({ transaction: t })
+
+      auditLog.delete(getAuditActorFromRes(res), () => buildPlaylistAuditEntity(videoPlaylistInstance), { transaction: t })
 
       if (videoPlaylistInstance.privacy !== VideoPlaylistPrivacy.PRIVATE) {
         await sendDeleteVideoPlaylist(videoPlaylistInstance, t)
@@ -468,6 +485,8 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
   sendUpdateVideoPlaylist(videoPlaylist, undefined)
     .catch(err => logger.error('Cannot send video playlist update.', { err }))
 
+  auditLog.create(getAuditActorFromRes(res), () => buildPlaylistElementAuditEntity({ playlist: videoPlaylist, element: playlistElement }))
+
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
 
   Hooks.runAction('action:api.video-playlist-element.created', { playlistElement, req, res })
@@ -483,6 +502,10 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
   const body: VideoPlaylistElementUpdate = req.body
   const videoPlaylist = res.locals.videoPlaylistFull
   const videoPlaylistElement = res.locals.videoPlaylistElement
+
+  const oldElementAuditEntity = auditLog.snapshot(() =>
+    buildPlaylistElementAuditEntity({ playlist: videoPlaylist, element: videoPlaylistElement })
+  )
 
   const playlistElement: VideoPlaylistElementModel = await runTransaction(async t => {
     if (body.startTimestamp !== undefined) videoPlaylistElement.startTimestamp = body.startTimestamp
@@ -508,6 +531,12 @@ async function updateVideoPlaylistElement (req: express.Request, res: express.Re
     return element
   })
 
+  auditLog.update(
+    getAuditActorFromRes(res),
+    () => buildPlaylistElementAuditEntity({ playlist: videoPlaylist, element: playlistElement }),
+    oldElementAuditEntity
+  )
+
   logger.info('Element of position %d of playlist %s updated.', playlistElement.position, videoPlaylist.uuid)
 
   return res.type('json').status(HttpStatusCode.NO_CONTENT_204).end()
@@ -520,6 +549,12 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
 
   await runTransaction(async t => {
     await videoPlaylistElement.destroy({ transaction: t })
+
+    auditLog.delete(
+      getAuditActorFromRes(res),
+      () => buildPlaylistElementAuditEntity({ playlist: videoPlaylist, element: videoPlaylistElement }),
+      { transaction: t }
+    )
 
     // Decrease position of the next elements
     await VideoPlaylistElementModel.increasePositionOf({
@@ -580,6 +615,13 @@ async function reorderVideosOfPlaylist (req: express.Request, res: express.Respo
 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
+
+    auditLog.update(
+      getAuditActorFromRes(res),
+      () => buildPlaylistElementsOrderAuditEntity({ playlist: videoPlaylist, position: insertAfter, reorderLength }),
+      auditLog.snapshot(() => buildPlaylistElementsOrderAuditEntity({ playlist: videoPlaylist, position: start, reorderLength })),
+      { transaction: t }
+    )
   })
 
   // The first element changed

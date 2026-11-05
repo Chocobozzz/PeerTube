@@ -40,7 +40,7 @@ export class BulkUpdatePage {
   }
 
   async clickNext () {
-    const btn = await this.getButtonByLabel('Next')
+    const btn = this.getButtonByLabel('Next')
     await btn.waitForClickable()
     await btn.click()
   }
@@ -52,18 +52,18 @@ export class BulkUpdatePage {
   }
 
   async clickUpdate () {
-    const btn = await this.getButtonByLabel('Update')
+    const btn = this.getButtonByLabel('Update')
     await btn.waitForClickable()
     await btn.click()
   }
 
   async waitForConfigureStep () {
-    const nextBtn = await this.getButtonByLabel('Next')
+    const nextBtn = this.getButtonByLabel('Next')
     await nextBtn.waitForDisplayed()
   }
 
   async waitForConfirmStep () {
-    const updateBtn = await this.getButtonByLabel('Update')
+    const updateBtn = this.getButtonByLabel('Update')
     await updateBtn.waitForDisplayed()
 
     const backBtn = $('input[value="Back"]')
@@ -85,14 +85,8 @@ export class BulkUpdatePage {
 
   // ---------------------------------------------------------------------------
 
-  private async getButtonByLabel (label: string) {
-    const buttons = await $$('my-button button.action-button').filter(async b => {
-      const text = await b.getText()
-
-      return text.trim() === label
-    })
-
-    return buttons[0]
+  private getButtonByLabel (label: string) {
+    return $('.modal-content').$(`button.action-button=${label}`)
   }
 
   private async getActionItem (label: string) {

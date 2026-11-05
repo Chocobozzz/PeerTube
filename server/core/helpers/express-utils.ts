@@ -1,5 +1,5 @@
-import { forceNumber } from '@peertube/peertube-core-utils'
-import { NSFWFlag, VideosCommonQuery } from '@peertube/peertube-models'
+import { forceNumber, getAllAIUsages } from '@peertube/peertube-core-utils'
+import { NSFWFlag, VideoAIUsageType, VideosCommonQuery } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import express, { RequestHandler } from 'express'
 import multer, { diskStorage } from 'multer'
@@ -85,6 +85,23 @@ function buildNSFWFlagsExcluded (options: {
   if (user) return user.nsfwFlagsHidden
 
   return undefined
+}
+
+// ---------------------------------------------------------------------------
+// Extract AI usage filter to list videos
+// ---------------------------------------------------------------------------
+
+export function buildAIUsageFilters (options: {
+  req?: express.Request
+  res?: express.Response
+} = {}): { aiUsageOneOf: VideoAIUsageType[] } {
+  const query = options.req?.query.aiUsageOneOf as VideosCommonQuery['aiUsageOneOf']
+  if (query && query.length !== 0) return { aiUsageOneOf: query }
+
+  const hidden = options.res?.locals.oauth?.token.User.aiUsagesHidden
+  if (!hidden || hidden.length === 0) return { aiUsageOneOf: undefined }
+
+  return { aiUsageOneOf: getAllAIUsages().filter(v => !hidden.includes(v)) }
 }
 
 // ---------------------------------------------------------------------------

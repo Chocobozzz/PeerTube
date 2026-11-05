@@ -8,11 +8,14 @@ import {
   UserExport,
   UserNotificationSettingValue,
   VideoCommentObject,
+  VideoAIUsage,
+  VideoCommercialContent,
   VideoCommentPolicy,
   VideoEmbedPrivacyPolicy,
   VideoObject,
   VideoPlaylistPrivacy,
-  VideoPrivacy
+  VideoPrivacy,
+  VideoRecommendationScope
 } from '@peertube/peertube-models'
 import { getFilenameFromUrl } from '@peertube/peertube-node-utils'
 import {
@@ -236,6 +239,9 @@ export async function prepareImportExportTests (options: {
       category: 12,
       tags: [ 'tag1', 'tag2' ],
       commentsPolicy: VideoCommentPolicy.DISABLED,
+      recommendationScope: VideoRecommendationScope.CHANNEL,
+      aiUsage: VideoAIUsage.AI_GENERATED,
+      commercialContent: VideoCommercialContent.PROMOTIONAL,
       description: 'video description',
       downloadEnabled: false,
       language: 'fr',
@@ -277,7 +283,9 @@ export async function prepareImportExportTests (options: {
     language: 'fr',
     videoLanguages: [ 'fr', 'en' ],
     videoCategories: [ 13, 15 ],
-    videoLive: 'false'
+    videoLive: 'false',
+    // Don't hide noah videos
+    aiUsagesHidden: [ VideoAIUsage.CONTAINS_AI ]
   })
 
   // My notification settings

@@ -1,6 +1,12 @@
 name: "Reusable prepare PeerTube run"
 description: "Reusable prepare PeerTube run"
 
+inputs:
+  ffmpeg-version:
+    required: false
+    default: 'n5.1.6-11-gcde3c5fc0c-linux64-gpl-5.1'
+    description: 'Version of the FFmpeg build downloaded from download.cpy.re'
+
 runs:
   using: "composite"
 
@@ -9,15 +15,28 @@ runs:
       shell: bash
       run: |
         sudo apt-get update
-        # nscd: this static FFmpeg build links glibc statically and crashes (SIGSEGV) when resolving a host name
-        # With nscd running, it asks the daemon instead
-        sudo apt-get install postgresql-client-common redis-tools parallel libimage-exiftool-perl nscd
-        # The pip version of Ubuntu 22.04 (22.0.2) crashes in its resolver (AssertionError in get_topological_weights)
-        # when installing whisper dependencies
-        # --ignore-installed: on Ubuntu 24.04 (ubuntu-latest), pip is installed by Debian and cannot be uninstalled
+        sudo apt-get install postgresql-client-common redis-tools parallel libimage-exiftool-perl
+        # The pip version of Ubuntu 22.04 (22.0.2) crashes in its resolver
         sudo python3 -m pip install --upgrade --ignore-installed pip
-        wget --quiet --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.3.1-64bit-static.tar.xz"
-        tar xf ffmpeg-release-4.3.1-64bit-static.tar.xz
+
+    - name: Cache FFmpeg
+      id: ffmpeg-cache
+      uses: actions/cache@v5
+      with:
+        path: ~/ffmpeg
+        key: ffmpeg-${{ inputs.ffmpeg-version }}
+
+    - name: Download FFmpeg
+      if: steps.ffmpeg-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        mkdir -p $HOME/ffmpeg
+        wget --quiet -O - "https://download.cpy.re/ffmpeg/ffmpeg-${{ inputs.ffmpeg-version }}.tar.xz" | \
+          tar xJ -C $HOME/ffmpeg --strip-components 2 --wildcards '*/bin/ffmpeg' '*/bin/ffprobe'
+
+    - name: Install FFmpeg
+      shell: bash
+      run: |
         mkdir -p $HOME/bin
-        cp ffmpeg-*/{ffmpeg,ffprobe} $HOME/bin
+        cp $HOME/ffmpeg/{ffmpeg,ffprobe} $HOME/bin
         echo "$HOME/bin" >> $GITHUB_PATH

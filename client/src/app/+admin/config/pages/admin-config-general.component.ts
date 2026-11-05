@@ -24,7 +24,14 @@ import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@a
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
-import { BroadcastMessageLevel, ConstantLabel, CustomConfig, VideoCommentPolicyType, VideoPrivacyType } from '@peertube/peertube-models'
+import {
+  BroadcastMessageLevel,
+  ConstantLabel,
+  CustomConfig,
+  VideoCommentPolicyType,
+  VideoPrivacyType,
+  VideoRecommendationScopeType
+} from '@peertube/peertube-models'
 import { SelectOptionsItem } from '@pt-types'
 import merge from 'lodash-es/merge'
 import { Subscription } from 'rxjs'
@@ -203,6 +210,7 @@ type Form = {
     publish: FormGroup<{
       downloadPolicy: FormControl<DownloadPolicy>
       commentsPolicy: FormControl<VideoCommentPolicyType>
+      recommendationScope: FormControl<VideoRecommendationScopeType>
       privacy: FormControl<VideoPrivacyType>
       licence: FormControl<number>
     }>
@@ -268,6 +276,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
 
   privacyOptions: SelectOptionsItem[] = []
   commentPoliciesOptions: SelectOptionsItem[] = []
+  recommendationScopesOptions: SelectOptionsItem[] = []
   downloadPoliciesOptions: SelectOptionsItem<DownloadPolicy>[] = [
     { id: 'allowed', label: $localize`Allowed` },
     { id: 'disabled', label: $localize`Disabled` }
@@ -284,12 +293,14 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
       licences: ConstantLabel<number>[]
       privacies: ConstantLabel<VideoPrivacyType>[]
       commentPolicies: ConstantLabel<VideoCommentPolicyType>[]
+      recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[]
     }
 
     this.privacyOptions = this.videoService.explainedPrivacyLabels(data.privacies).videoPrivacies
     this.licenceOptions = data.licences
 
     this.commentPoliciesOptions = data.commentPolicies
+    this.recommendationScopesOptions = data.recommendationScopes
 
     this.buildLandingPageOptions()
 
@@ -459,6 +470,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
         publish: {
           downloadPolicy: null,
           commentsPolicy: null,
+          recommendationScope: null,
           privacy: null,
           licence: null
         },

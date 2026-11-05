@@ -6,7 +6,17 @@ import { AuthService, Notifier, ServerService } from '@app/core'
 import { formatICU } from '@app/helpers'
 import { listChannelsForSelect } from '@app/shared/shared-forms/select/channel/select-channel-helpers'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal'
-import { ConstantLabel, Video, VideoCommentPolicyType, VideoPrivacy, VideoPrivacyType, VideoUpdate } from '@peertube/peertube-models'
+import {
+  ConstantLabel,
+  Video,
+  VideoAIUsageType,
+  VideoCommentPolicyType,
+  VideoCommercialContentType,
+  VideoPrivacy,
+  VideoPrivacyType,
+  VideoRecommendationScopeType,
+  VideoUpdate
+} from '@peertube/peertube-models'
 import { SelectChannelItem } from '@pt-types'
 import { concatMap, from, toArray } from 'rxjs'
 import { videoSupportValidator } from '../form-validators/video-validators'
@@ -28,6 +38,9 @@ type BulkVideoUpdateModel = {
   licence: number | null
   downloadEnabled: boolean
   commentsPolicy: VideoCommentPolicyType | null
+  recommendationScope: VideoRecommendationScopeType | null
+  aiUsage: VideoAIUsageType | null
+  commercialContent: VideoCommercialContentType | null
 }
 
 type FieldName = keyof BulkVideoUpdateModel
@@ -82,13 +95,25 @@ export class BulkUpdateVideosModalComponent {
     privacy: null,
     licence: null,
     downloadEnabled: true,
-    commentsPolicy: null
+    commentsPolicy: null,
+    recommendationScope: null,
+    aiUsage: null,
+    commercialContent: null
   })
 
   readonly bulkUpdateForm = form(this.bulkUpdateModel, f => {
     required(f.channelId, { when: () => this.activeFields().has('channelId'), message: $localize`Channel is required.` })
     required(f.privacy, { when: () => this.activeFields().has('privacy'), message: $localize`Privacy is required.` })
     required(f.commentsPolicy, { when: () => this.activeFields().has('commentsPolicy'), message: $localize`Comments policy is required.` })
+    required(f.aiUsage, { when: () => this.activeFields().has('aiUsage'), message: $localize`Use of AI is required.` })
+    required(f.commercialContent, {
+      when: () => this.activeFields().has('commercialContent'),
+      message: $localize`Commercial content is required.`
+    })
+    required(f.recommendationScope, {
+      when: () => this.activeFields().has('recommendationScope'),
+      message: $localize`Recommended videos setting is required.`
+    })
 
     videoSupportValidator(f.support)
   })
@@ -101,7 +126,10 @@ export class BulkUpdateVideosModalComponent {
     { key: 'language', label: $localize`Language` },
     { key: 'licence', label: $localize`Licence` },
     { key: 'privacy', label: $localize`Privacy` },
-    { key: 'support', label: $localize`Support` }
+    { key: 'recommendationScope', label: $localize`Recommended videos` },
+    { key: 'support', label: $localize`Support` },
+    { key: 'aiUsage', label: $localize`Use of AI` },
+    { key: 'commercialContent', label: $localize`Commercial content` }
   ]
 
   readonly activeAvailableFields = computed(() => this.allFields.filter(f => !this.activeFields().has(f.key)))
@@ -115,6 +143,9 @@ export class BulkUpdateVideosModalComponent {
   videoLanguages: ConstantLabel<string>[] = []
   videoPrivacies: ConstantLabel<VideoPrivacyType>[] = []
   commentPolicies: ConstantLabel<VideoCommentPolicyType>[]
+  recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[]
+  aiUsages: ConstantLabel<VideoAIUsageType>[]
+  commercialContents: ConstantLabel<VideoCommercialContentType>[]
 
   get authUser () {
     return this.authService.getUser()
@@ -135,6 +166,9 @@ export class BulkUpdateVideosModalComponent {
     this.server.getVideoLicences().subscribe(licences => this.videoLicences = licences)
     this.server.getVideoLanguages().subscribe(languages => this.videoLanguages = languages)
     this.server.getCommentPolicies().subscribe(policies => this.commentPolicies = policies)
+    this.server.getRecommendationScopes().subscribe(scopes => this.recommendationScopes = scopes)
+    this.server.getVideoAIUsages().subscribe(aiUsages => this.aiUsages = aiUsages)
+    this.server.getVideoCommercialContents().subscribe(commercialContents => this.commercialContents = commercialContents)
 
     this.server.getVideoPrivacies().subscribe(privacies => {
       this.videoPrivacies = privacies.filter(p => !BULK_PRIVACY_EXCLUDE.has(p.id))
@@ -181,6 +215,12 @@ export class BulkUpdateVideosModalComponent {
         return this.videoPrivacies
       case 'commentsPolicy':
         return this.commentPolicies
+      case 'recommendationScope':
+        return this.recommendationScopes
+      case 'aiUsage':
+        return this.aiUsages
+      case 'commercialContent':
+        return this.commercialContents
       default:
         return []
     }
@@ -211,6 +251,15 @@ export class BulkUpdateVideosModalComponent {
       case 'commentsPolicy':
         return this.commentPolicies?.find(p => p.id === value)?.label
 
+      case 'recommendationScope':
+        return this.recommendationScopes?.find(s => s.id === value)?.label
+
+      case 'aiUsage':
+        return this.aiUsages?.find(a => a.id === value)?.label
+
+      case 'commercialContent':
+        return this.commercialContents?.find(c => c.id === value)?.label
+
       case 'downloadEnabled':
         return value ? $localize`Yes` : $localize`No`
 
@@ -240,6 +289,9 @@ export class BulkUpdateVideosModalComponent {
       if (active.has('licence')) update.licence = model.licence
       if (active.has('downloadEnabled')) update.downloadEnabled = model.downloadEnabled
       if (active.has('commentsPolicy')) update.commentsPolicy = model.commentsPolicy
+      if (active.has('recommendationScope')) update.recommendationScope = model.recommendationScope
+      if (active.has('aiUsage')) update.aiUsage = model.aiUsage
+      if (active.has('commercialContent')) update.commercialContent = model.commercialContent
 
       return update
     }

@@ -169,6 +169,21 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@id': 'pt:commentsPolicy'
     },
 
+    recommendationScope: {
+      '@type': 'sc:Number',
+      '@id': 'pt:recommendationScope'
+    },
+
+    aiUsage: {
+      '@type': 'sc:Number',
+      '@id': 'pt:aiUsage'
+    },
+
+    commercialContent: {
+      '@type': 'sc:Number',
+      '@id': 'pt:commercialContent'
+    },
+
     downloadEnabled: {
       '@type': 'sc:Boolean',
       '@id': 'pt:downloadEnabled'

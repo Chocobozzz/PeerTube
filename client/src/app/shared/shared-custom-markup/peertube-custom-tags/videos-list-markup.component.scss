@@ -5,3 +5,8 @@
 .root {
   @include grid-videos-miniature-layout();
 }
+
+.more {
+  display: flex;
+  justify-content: center;
+}

@@ -101,6 +101,10 @@ export class PlaylistHtml {
 
     let htmlResult = TagsHtml.addTitleTag(html, playlist.name)
     htmlResult = TagsHtml.addDescriptionTag(htmlResult, escapedTruncatedDescription)
+    htmlResult = TagsHtml.addServerRenderedContent(htmlResult, {
+      escapedTitle: escapeHTML(playlist.name),
+      markdownDescription: playlist.description
+    })
 
     return TagsHtml.addTags(htmlResult, {
       url: WEBSERVER.URL + playlist.getWatchStaticPath(),

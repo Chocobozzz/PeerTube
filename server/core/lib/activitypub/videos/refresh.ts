@@ -72,7 +72,8 @@ export async function refreshVideoIfNeeded (options: {
 
     // Outside the lock, crawling comments, shares and rates can take a long time
     if (video && updated && videoObject) {
-      await syncVideoExternalAttributes(video, videoObject, options.syncParam)
+      // Rates have already been updated by the updater
+      await syncVideoExternalAttributes(video, videoObject, options.syncParam, { skipRates: true })
     }
 
     return video

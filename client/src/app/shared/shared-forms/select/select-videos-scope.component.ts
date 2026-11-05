@@ -11,7 +11,7 @@ import { SelectOptionsComponent } from './select-options.component'
 
     [items]="scopeItems"
 
-    [(ngModel)]="selectedId"
+    [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
   ></my-select-options>
   `,

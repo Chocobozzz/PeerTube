@@ -14,12 +14,18 @@ import {
   VideoObject,
   VideoPrivacy,
   VideoRateType,
+  VideoAIUsage,
+  VideoCommercialContent,
+  VideoRecommendationScope,
   VideoState,
   VideoStreamingPlaylistType,
   VideoSummary,
+  type VideoAIUsageType,
+  type VideoCommercialContentType,
   type VideoCommentPolicyType,
   type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
+  type VideoRecommendationScopeType,
   type VideoStateType
 } from '@peertube/peertube-models'
 import { peertubeTruncate, uuidToShort } from '@peertube/peertube-node-utils'
@@ -581,6 +587,21 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   @AllowNull(false)
   @Column
   declare embedPrivacyPolicy: VideoEmbedPrivacyPolicyType
+
+  @AllowNull(false)
+  @Default(VideoRecommendationScope.ALL)
+  @Column
+  declare recommendationScope: VideoRecommendationScopeType
+
+  @AllowNull(false)
+  @Default(VideoAIUsage.NOT_SPECIFIED)
+  @Column
+  declare aiUsage: VideoAIUsageType
+
+  @AllowNull(false)
+  @Default(VideoCommercialContent.NONE)
+  @Column
+  declare commercialContent: VideoCommercialContentType
 
   @AllowNull(false)
   @Column
@@ -1175,6 +1196,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         | 'categoryOneOf'
         | 'licenceOneOf'
         | 'languageOneOf'
+        | 'aiUsageOneOf'
         | 'host'
         | 'autoTagOneOf'
         | 'stateOneOf'
@@ -1197,11 +1219,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         | 'hasWebVideoFiles'
         | 'search'
         | 'excludeAlreadyWatched'
+        | 'excludeVideoIds'
         | 'hasRedundancy'
         | 'redundancyStrategy'
         | 'includeRedundancy'
         | 'localRedundancy'
         | 'tableAttributes'
+        | 'idRange'
       >
   ) {
     if (options.skipPrivateIncludeCheck !== true) {
@@ -1223,6 +1247,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'categoryOneOf',
         'licenceOneOf',
         'languageOneOf',
+        'aiUsageOneOf',
         'host',
         'autoTagOneOf',
         'stateOneOf',
@@ -1245,11 +1270,13 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'hasWebVideoFiles',
         'search',
         'excludeAlreadyWatched',
+        'excludeVideoIds',
         'redundancyStrategy',
         'hasRedundancy',
         'localRedundancy',
         'includeRedundancy',
-        'tableAttributes'
+        'tableAttributes',
+        'idRange'
       ]),
 
       serverAccountIdForBlock: serverActor.Account.id,
@@ -1275,6 +1302,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     categoryOneOf?: number[]
     licenceOneOf?: number[]
     languageOneOf?: string[]
+    aiUsageOneOf?: VideoAIUsageType[]
     tagsOneOf?: string[]
     tagsAllOf?: string[]
     privacyOneOf?: VideoPrivacyType[]
@@ -1322,6 +1350,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'categoryOneOf',
         'licenceOneOf',
         'languageOneOf',
+        'aiUsageOneOf',
         'autoTagOneOf',
         'tagsOneOf',
         'tagsAllOf',
@@ -1778,6 +1807,43 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     return queryBuilder.queryVideoIds(queryOptions)
       .then(rows => rows.map(r => r[field]))
+  }
+
+  // Group available videos by ranges of idsPerPage ids, so pages don't shift when a video is deleted
+  static async listIdRangePages (
+    options:
+      & Pick<BuildVideosListQueryOptions, 'nsfw' | 'nsfwFlagsIncluded' | 'nsfwFlagsExcluded' | 'isLocal' | 'displayOnlyForFollower'>
+      & {
+        idsPerPage: number
+      }
+  ): Promise<{ page: number, lastUpdatedAt: Date }[]> {
+    const serverActor = await getServerActor()
+    const idsPerPage = forceNumber(options.idsPerPage)
+
+    const queryOptions: BuildVideosListQueryOptions = {
+      ...pick(options, [ 'nsfw', 'nsfwFlagsIncluded', 'nsfwFlagsExcluded', 'isLocal', 'displayOnlyForFollower' ]),
+
+      attributes: [
+        `("video"."id" - 1) / ${idsPerPage} + 1 AS "page"`,
+        `MAX(COALESCE("video"."sitemapContentUpdatedAt", "video"."publishedAt")) AS "lastUpdatedAt"`
+      ],
+      group: 'GROUP BY "page"',
+      // Aggregate on all videos: no sort/pagination, and use the follower filter adapted to aggregations
+      isCount: true,
+      start: undefined,
+      count: undefined,
+      sort: undefined,
+      serverAccountIdForBlock: serverActor.Account.id,
+      trendingDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+    }
+
+    const queryBuilder = new VideosIdListQueryBuilder(VideoModel.sequelize)
+
+    const rows = await queryBuilder.queryVideoIds(queryOptions)
+
+    return rows
+      .map(r => ({ page: forceNumber(r.page), lastUpdatedAt: new Date(r.lastUpdatedAt) }))
+      .sort((a, b) => a.page - b.page)
   }
 
   static buildTrendingQuery (trendingDays: number) {
@@ -2419,7 +2485,8 @@ export class VideoModel extends SequelizeModel<VideoModel> {
 
     this.state = newState
 
-    if (this.state === VideoState.PUBLISHED && !this.firstPublishedAt) {
+    // A private video is published for the first time when its privacy changes (see LocalVideoUpdater)
+    if (this.state === VideoState.PUBLISHED && !this.firstPublishedAt && this.privacy !== VideoPrivacy.PRIVATE) {
       if (!keepPublishedAt) this.publishedAt = new Date()
 
       this.firstPublishedAt = this.publishedAt

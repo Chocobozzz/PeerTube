@@ -1,6 +1,6 @@
 import { Component, HostListener, inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { CanComponentDeactivate, Notifier, ServerService } from '@app/core'
 import { VideoManageContainerComponent } from '../shared-manage/video-manage-container.component'
 import { VideoManageController } from '../shared-manage/video-manage-controller.service'
@@ -18,6 +18,7 @@ import { VideoManageResolverData } from './video-manage.resolver'
 })
 export class VideoManageComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   private route = inject(ActivatedRoute)
+  private router = inject(Router)
   private serverService = inject(ServerService)
   private notifier = inject(Notifier)
 
@@ -26,6 +27,8 @@ export class VideoManageComponent implements OnInit, OnDestroy, CanComponentDeac
   ngOnInit () {
     const data = this.route.snapshot.data.resolverData as VideoManageResolverData
     const { userChannels, userQuota, privacies, videoEdit } = data
+
+    this.manageController.reset()
 
     this.manageController.setStore({
       videoEdit,
@@ -56,6 +59,9 @@ export class VideoManageComponent implements OnInit, OnDestroy, CanComponentDeac
   }
 
   canDeactivate (): { canDeactivate: boolean, text?: string } {
+    // When saving studio tasks as a new video
+    if (this.router.currentNavigation()?.extras.state?.discardPendingChanges === true) return { canDeactivate: true }
+
     return {
       canDeactivate: !this.manageController.hasPendingChanges(),
       text: $localize`You have unsaved changes. Are you sure you want to leave?`

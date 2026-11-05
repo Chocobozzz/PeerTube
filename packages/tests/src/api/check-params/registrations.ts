@@ -139,6 +139,12 @@ describe('Test registrations API validators', function () {
         await check(fields)
       })
 
+      it('Should fail with a bad signup client', async function () {
+        const fields = { ...baseCorrectParams, signupClient: 'my-app' }
+
+        await check(fields)
+      })
+
       it('Should fail with a channel name that is the same as username', async function () {
         const source = { username: 'super_user', channel: { name: 'super_user', displayName: 'display name' } }
         const fields = { ...baseCorrectParams, ...source }

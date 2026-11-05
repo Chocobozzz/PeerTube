@@ -1,12 +1,19 @@
+import { omit } from '@peertube/peertube-core-utils'
 import { CustomConfig, HttpStatusCode } from '@peertube/peertube-models'
-import { isConfigLogoTypeValid, isLogoImageFile } from '@server/helpers/custom-validators/config.js'
+import { areInstanceTranslationsValid, isConfigLogoTypeValid, isLogoImageFile } from '@server/helpers/custom-validators/config.js'
 import { isIntOrNull } from '@server/helpers/custom-validators/misc.js'
 import { isPlayerThemeValid } from '@server/helpers/custom-validators/player-settings.js'
 import { isNumberArray, isStringArray } from '@server/helpers/custom-validators/search.js'
-import { isVideoCommentsPolicyValid, isVideoLicenceValid, isVideoPrivacyValid } from '@server/helpers/custom-validators/videos.js'
+import {
+  isVideoCommentsPolicyValid,
+  isVideoLicenceValid,
+  isVideoPrivacyValid,
+  isVideoRecommendationScopeValid
+} from '@server/helpers/custom-validators/videos.js'
 import { cleanUpReqFiles } from '@server/helpers/express-utils.js'
 import { guessLanguageFromReq } from '@server/helpers/i18n.js'
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
+import { convertCustomConfigBody } from '@server/initializers/config/custom-config.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import express from 'express'
 import { body, param } from 'express-validator'
@@ -14,7 +21,7 @@ import { getBrowseVideosDefaultScopeError, getBrowseVideosDefaultSortError } fro
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins.js'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users.js'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils.js'
-import { areValidationErrors } from './shared/index.js'
+import { areValidationErrors, checkPasswordConfirmation } from './shared/index.js'
 
 export const customConfigUpdateValidator = [
   body('instance.name').exists(),
@@ -29,6 +36,10 @@ export const customConfigUpdateValidator = [
   body('instance.maintenanceLifetime').exists(),
   body('instance.businessModel').exists(),
   body('instance.hardwareInformation').exists(),
+  body('instance.translations')
+    .optional()
+    .custom(areInstanceTranslationsValid)
+    .withMessage('Should have valid instance translations, with a unique language supported by the web interface'),
   body('instance.serverCountry').exists(),
   body('instance.support.text').exists(),
   body('instance.social.externalLink').exists(),
@@ -143,6 +154,7 @@ export const customConfigUpdateValidator = [
   body('search.searchIndex.isDefaultSearch').isBoolean(),
 
   body('defaults.publish.commentsPolicy').custom(isVideoCommentsPolicyValid),
+  body('defaults.publish.recommendationScope').custom(isVideoRecommendationScopeValid),
   body('defaults.publish.privacy').custom(isVideoPrivacyValid),
   body('defaults.publish.licence').optional().custom(isVideoLicenceValid),
   body('defaults.p2p.webapp.enabled').isBoolean(),
@@ -157,7 +169,7 @@ export const customConfigUpdateValidator = [
 
   body('client.browseVideos.includeScheduledLive').isBoolean(),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body, req, res)) return
     if (!checkInvalidTranscodingConfig(req.body, req, res)) return
@@ -166,6 +178,13 @@ export const customConfigUpdateValidator = [
     if (!checkInvalidVideoStudioConfig(req.body, req, res)) return
     if (!checkInvalidSearchConfig(req.body, req, res)) return
     if (!checkInvalidBrowseVideosConfig(req.body, req, res)) return
+
+    res.locals.customConfigFile = convertCustomConfigBody(
+      omit(req.body as CustomConfig & { currentPassword?: string }, [ 'currentPassword' ])
+    )
+
+    // Custom JavaScript runs in the browser of every user, including administrators
+    if (hasCustomizationsChanged(res.locals.customConfigFile) && !await checkPasswordConfirmation(req, res)) return
 
     return next()
   }
@@ -209,6 +228,13 @@ export const updateInstanceLogoValidator = [
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+function hasCustomizationsChanged (customConfigFile: Record<string, any>) {
+  const { javascript, css } = customConfigFile.instance?.customizations || {}
+
+  return (javascript || '') !== (CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT || '') ||
+    (css || '') !== (CONFIG.INSTANCE.CUSTOMIZATIONS.CSS || '')
+}
 
 function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, req: express.Request, res: express.Response) {
   if (isEmailEnabled()) return true

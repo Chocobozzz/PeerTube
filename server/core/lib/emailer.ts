@@ -6,7 +6,8 @@ import {
   MailFrom,
   MailTo,
   UserExportState,
-  UserRegistrationState
+  UserRegistrationState,
+  UserSignupClientType
 } from '@peertube/peertube-models'
 import { getFilenameWithoutExt, isTestOrDevInstance, root } from '@peertube/peertube-node-utils'
 import { t } from '@server/helpers/i18n.js'
@@ -22,7 +23,7 @@ import { bunyanLogger, createLogger } from '../helpers/logger.js'
 import { CONFIG, isEmailEnabled } from '../initializers/config.js'
 import { WEBSERVER } from '../initializers/constants.js'
 import { MRegistration, MUserExport, MUserImport } from '../types/models/index.js'
-import { loginUrl, myAccountImportExportUrl } from './client-urls.js'
+import { addSignupClientQuery, loginUrl, myAccountImportExportUrl } from './client-urls.js'
 import { JobQueue } from './job-queue/index.js'
 import { Hooks } from './plugins/hooks.js'
 import { ServerConfigManager } from './server-config-manager.js'
@@ -317,7 +318,8 @@ export class Emailer {
   }
 
   addUserRegistrationRequestProcessedJob (
-    registration: Pick<MRegistration, 'username' | 'state' | 'email' | 'moderationResponse'>
+    registration: Pick<MRegistration, 'username' | 'state' | 'email' | 'moderationResponse'>,
+    signupClient?: UserSignupClientType
   ) {
     const language = CONFIG.INSTANCE.DEFAULT_LANGUAGE
 
@@ -329,7 +331,10 @@ export class Emailer {
       template = 'user-registration-request-accepted'
       subject = t('Your registration request for {username} has been accepted', language, { username: registration.username })
 
-      action = { text: t('Login to your account', language), url: loginUrl }
+      action = {
+        text: t('Login to your account', language),
+        url: addSignupClientQuery(loginUrl, { signupClient, username: registration.username })
+      }
     } else {
       template = 'user-registration-request-rejected'
       subject = t('Your registration request for {username} has been rejected', language, { username: registration.username })

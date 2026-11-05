@@ -5,7 +5,8 @@ import { BuildFormArgumentTyped } from '@app/shared/form-validators/form-validat
 import { VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR } from '@app/shared/form-validators/video-validators'
 import { FormReactiveErrors, FormReactiveMessages, FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { SelectPlayerThemeComponent } from '@app/shared/shared-forms/select/select-player-theme.component'
-import { HTMLServerConfig, PlayerVideoSettings, VideoChannel } from '@peertube/peertube-models'
+import { SelectRadioComponent } from '@app/shared/shared-forms/select/select-radio.component'
+import { ConstantLabel, HTMLServerConfig, PlayerVideoSettings, VideoChannel, VideoRecommendationScopeType } from '@peertube/peertube-models'
 import debug from 'debug'
 import { DatePickerModule } from 'primeng/datepicker'
 import { Subscription } from 'rxjs'
@@ -19,6 +20,7 @@ const debugLogger = debug('peertube:video-manage')
 type Form = {
   downloadEnabled: FormControl<boolean>
   originallyPublishedAt: FormControl<Date>
+  recommendationScope: FormControl<VideoRecommendationScopeType>
 
   playerSettings: FormGroup<{
     theme: FormControl<PlayerVideoSettings['theme']>
@@ -38,7 +40,8 @@ type Form = {
     DatePickerModule,
     PeertubeCheckboxComponent,
     GlobalIconComponent,
-    SelectPlayerThemeComponent
+    SelectPlayerThemeComponent,
+    SelectRadioComponent
   ]
 })
 export class VideoCustomizationComponent implements OnInit, OnDestroy {
@@ -53,6 +56,8 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
 
   videoEdit: VideoEdit
   videoChannel: Pick<VideoChannel, 'name' | 'displayName'>
+
+  recommendationScopes: ConstantLabel<VideoRecommendationScopeType>[] = []
 
   calendarDateFormat: string
 
@@ -77,6 +82,9 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
     }
 
     this.buildForm()
+
+    this.serverService.getRecommendationScopes()
+      .subscribe(res => this.recommendationScopes = res)
   }
 
   private buildForm () {
@@ -85,6 +93,7 @@ export class VideoCustomizationComponent implements OnInit, OnDestroy {
     const obj: BuildFormArgumentTyped<Form> = {
       downloadEnabled: null,
       originallyPublishedAt: VIDEO_ORIGINALLY_PUBLISHED_AT_VALIDATOR,
+      recommendationScope: null,
       playerSettings: {
         theme: null
       }

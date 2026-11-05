@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import {
   cleanupTests,
@@ -9,7 +10,7 @@ import {
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
 import { expectLogContain, expectLogDoesNotContain } from '@tests/shared/checks.js'
-import { MockHTTP } from '@tests/shared/mock-servers/mock-http.js'
+import { MockOTLPCollector } from '@tests/shared/mock-servers/mock-otlp-collector.js'
 import { expect } from 'chai'
 
 describe('Open Telemetry', function () {
@@ -228,12 +229,12 @@ describe('Open Telemetry', function () {
   })
 
   describe('Tracing', function () {
-    let mockHTTP: MockHTTP
+    let mockCollector: MockOTLPCollector
     let mockPort: number
 
     before(async function () {
-      mockHTTP = new MockHTTP()
-      mockPort = await mockHTTP.initialize()
+      mockCollector = new MockOTLPCollector()
+      mockPort = await mockCollector.initialize()
     })
 
     it('Should enable open telemetry tracing', async function () {
@@ -249,8 +250,8 @@ describe('Open Telemetry', function () {
         open_telemetry: {
           tracing: {
             enabled: true,
-            jaeger_exporter: {
-              endpoint: 'http://127.0.0.1:' + mockPort
+            otlp_exporter: {
+              endpoint: 'http://127.0.0.1:' + mockPort + '/v1/traces'
             }
           }
         }
@@ -269,8 +270,20 @@ describe('Open Telemetry', function () {
       expect(video.name).to.equal('video')
     })
 
+    it('Should have exported traces to the OTLP endpoint', async function () {
+      this.timeout(30000)
+
+      for (let i = 0; i < 40; i++) {
+        if (mockCollector.getSpanNames().includes('peertube.VideoModel.toFormattedDetailsJSON')) break
+
+        await wait(500)
+      }
+
+      expect(mockCollector.getSpanNames()).to.include('peertube.VideoModel.toFormattedDetailsJSON')
+    })
+
     after(async function () {
-      await mockHTTP.terminate()
+      await mockCollector.terminate()
     })
   })
 

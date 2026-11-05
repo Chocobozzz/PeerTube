@@ -12,16 +12,18 @@ export function getDevLocale () {
 
 // ---------------------------------------------------------------------------
 
-const icuCache = new Map<string, IntlMessageFormat>()
+type ICUContext = { [id: string]: number | string }
+
+const icuCache = new Map<string, IntlMessageFormat<ICUContext>>()
 const icuWarnings = new Set<string>()
 const fallback = 'String translation error'
 
-export function formatICU (icu: string, context: { [id: string]: number | string }) {
+export function formatICU (icu: string, context: ICUContext) {
   try {
     let msg = icuCache.get(icu)
 
     if (!msg) {
-      msg = new IntlMessageFormat(icu, $localize.locale)
+      msg = new IntlMessageFormat<ICUContext>(icu, $localize.locale)
       icuCache.set(icu, msg)
     }
 

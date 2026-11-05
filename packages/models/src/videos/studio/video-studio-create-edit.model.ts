@@ -1,5 +1,6 @@
 export interface VideoStudioCreateEdition {
   tasks: VideoStudioTask[]
+  saveAsNewVideo?: boolean
 }
 
 export type VideoStudioTask =

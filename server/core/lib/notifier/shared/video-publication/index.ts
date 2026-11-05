@@ -1,3 +1,4 @@
+export * from './duplication-failed-for-owner.js'
 export * from './new-video-or-live-for-subscribers.js'
 export * from './import-finished-for-owner.js'
 export * from './owned-publication-after-auto-unblacklist.js'

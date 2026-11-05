@@ -331,6 +331,18 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
     return RunnerJobModel.update({ state: RunnerJobState.PENDING }, { where })
   }
 
+  static async hasNonFinishedJobOfVideo (options: { type: RunnerJobType, videoUUID: string }) {
+    const where = {
+      type: options.type,
+      privatePayload: { videoUUID: options.videoUUID },
+      state: {
+        [Op.in]: [ RunnerJobState.COMPLETING, RunnerJobState.PENDING, RunnerJobState.PROCESSING, RunnerJobState.WAITING_FOR_PARENT_JOB ]
+      }
+    } as WhereOptions
+
+    return await RunnerJobModel.count({ where }) !== 0
+  }
+
   static cancelAllNonFinishedJobs (options: { type: RunnerJobType }) {
     const where = {
       type: options.type,

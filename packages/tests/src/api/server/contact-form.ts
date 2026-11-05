@@ -1,6 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { expect } from 'chai'
+import { readFile } from 'fs/promises'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
@@ -45,7 +46,8 @@ describe('Test contact form', function () {
     const email = emails[0]
 
     expect(email['from'][0]['address']).equal('test-admin@127.0.0.1')
-    expect(email['replyTo'][0]['address']).equal('toto@example.com')
+    // Reply-To is not parsed by maildev
+    expect(await readFile(email['source'], 'utf-8')).to.match(/^Reply-To: .*toto@example\.com/m)
     expect(email['to'][0]['address']).equal('admin' + server.internalServerNumber + '@example.com')
     expect(email['subject']).contains('my subject')
     expect(email['text']).contains('my super message')

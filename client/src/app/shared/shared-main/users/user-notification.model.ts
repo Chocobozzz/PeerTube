@@ -145,6 +145,8 @@ export class UserNotification {
           break
 
         case UserNotificationType.MY_VIDEO_STUDIO_EDITION_FINISHED:
+        case UserNotificationType.MY_VIDEO_STUDIO_EDITION_ERROR:
+        case UserNotificationType.MY_VIDEO_DUPLICATION_ERROR:
           this.url = this.buildVideoUrl(payload.video)
           break
 

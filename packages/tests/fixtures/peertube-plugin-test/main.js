@@ -49,6 +49,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       'action:api.video.updated',
       'action:api.video.deleted',
       'action:api.video.uploaded',
+      'action:api.video.duplicated',
       'action:api.video.viewed',
 
       'action:api.video.file-updated',
@@ -112,6 +113,16 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.video-playlist.videos.list.result',
+    handler: obj => addToTotal(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.recommendations.videos.list.params',
+    handler: obj => addToCount(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.recommendations.videos.list.result',
     handler: obj => addToTotal(obj)
   })
 
@@ -451,9 +462,27 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   // ---------------------------------------------------------------------------
 
   registerHook({
+    target: 'filter:sitemap.pages.list.result',
+    handler: entries => {
+      return entries
+        .filter(entry => !entry.url.endsWith('/videos/browse'))
+        .concat({ url: '/plugins/test/router/sitemap-page', lastmod: '2026-01-01' })
+    }
+  })
+
+  // ---------------------------------------------------------------------------
+
+  registerHook({
     target: 'filter:api.server.stats.get.result',
     handler: (result) => {
       return { ...result, customStats: 14 }
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.config.about.get.result',
+    handler: (result, { language }) => {
+      return { ...result, instance: { ...result.instance, terms: 'Terms in ' + language } }
     }
   })
 
@@ -515,7 +544,8 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     'filter:api.video.import-url.video-attribute.result',
     'filter:api.video.import-torrent.video-attribute.result',
     'filter:api.video.live.video-attribute.result',
-    'filter:api.video.user-import.video-attribute.result'
+    'filter:api.video.user-import.video-attribute.result',
+    'filter:api.video.duplicate.video-attribute.result'
   ]) {
     registerHook({
       target,

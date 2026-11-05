@@ -9,6 +9,7 @@ import { VideoAutomaticTagModel } from '@server/models/automatic-tag/video-autom
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
 import { RunnerModel } from '@server/models/runner/runner.js'
+import { AuditLogModel } from '@server/models/server/audit-log.js'
 import { TrackerModel } from '@server/models/server/tracker.js'
 import { VideoTrackerModel } from '@server/models/server/video-tracker.js'
 import { LocalVideoViewerWatchSectionModel } from '@server/models/stat/local-video-viewer-watch-section.js'
@@ -195,6 +196,7 @@ export async function initDatabaseModels (silent: boolean) {
     ServerBlocklistModel,
     BlocklistSubscriptionModel,
     BlocklistLogModel,
+    AuditLogModel,
     UserNotificationModel,
     UserNotificationSettingModel,
     UserLoginDeviceModel,

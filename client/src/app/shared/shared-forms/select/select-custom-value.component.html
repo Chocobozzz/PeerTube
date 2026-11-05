@@ -6,13 +6,13 @@
     [disabled]="disabled"
 
     [items]="itemsWithCustom"
-    [(ngModel)]="selectedId"
+    [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
   ></my-select-options>
 
   @if (isCustomValue()) {
     <input
-      [attr.aria-labelledby]="labelId()" [(ngModel)]="customValue" (ngModelChange)="onModelChange()"
+      [attr.aria-labelledby]="labelId()" [(ngModel)]="customValue" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onModelChange()"
       [type]="inputType()" class="ms-2 form-control pt-input-text"
       />
 

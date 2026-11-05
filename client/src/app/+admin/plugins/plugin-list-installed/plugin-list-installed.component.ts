@@ -1,6 +1,14 @@
 import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { ComponentPagination, ConfirmService, hasMoreItems, Notifier, resetCurrentPage, updatePaginationOnDelete } from '@app/core'
+import {
+  ComponentPagination,
+  ConfirmService,
+  hasMoreItems,
+  Notifier,
+  PasswordConfirmationService,
+  resetCurrentPage,
+  updatePaginationOnDelete
+} from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { PluginApiService } from '@app/shared/shared-admin/plugin-api.service'
 import { compareSemVer } from '@peertube/peertube-core-utils'
@@ -28,6 +36,7 @@ export class PluginListInstalledComponent implements OnInit {
   private pluginApiService = inject(PluginApiService)
   private notifier = inject(Notifier)
   private confirmService = inject(ConfirmService)
+  private passwordConfirmation = inject(PasswordConfirmationService)
   private router = inject(Router)
   private route = inject(ActivatedRoute)
 
@@ -163,9 +172,15 @@ export class PluginListInstalledComponent implements OnInit {
       if (res === false) return
     }
 
+    const { confirmed, currentPassword } = await this.passwordConfirmation.askPassword({
+      title: $localize`Update ${plugin.name}?`,
+      message: $localize`Updating a plugin or a theme executes its new code on your platform.`
+    })
+    if (confirmed === false) return
+
     this.updating[pluginKey] = true
 
-    this.pluginApiService.update(plugin.name, plugin.type)
+    this.pluginApiService.update(plugin.name, plugin.type, currentPassword)
       .pipe()
       .subscribe({
         next: res => {
@@ -177,7 +192,7 @@ export class PluginListInstalledComponent implements OnInit {
         },
 
         error: err => {
-          this.notifier.handleError(err)
+          this.passwordConfirmation.handleError(err)
           this.updating[pluginKey] = false
         }
       })

@@ -27,6 +27,9 @@ $filters-background: pvar(--bg-secondary-400);
 
 .section {
   min-width: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .section-title {

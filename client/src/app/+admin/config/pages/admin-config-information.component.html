@@ -355,6 +355,91 @@
       </div>
     </div>
 
+    <div class="pt-two-cols mt-4">
+      <div class="title-col">
+        <h2 i18n>TRANSLATIONS</h2>
+        <div i18n class="inner-form-description">
+          Translate your platform information for users browsing the interface in another language.
+          Empty fields fall back to the information above.
+        </div>
+      </div>
+
+      <div class="content-col">
+
+        @if (translationsArray.length !== 0) {
+          <div class="form-group">
+            <label i18n for="instanceEditedTranslation">Translation to edit</label>
+
+            <div class="d-flex flex-wrap gap-2 align-items-center">
+              <my-select-options
+                inputId="instanceEditedTranslation" [items]="translationItems"
+                [(ngModel)]="editedTranslationLanguage" [ngModelOptions]="{ standalone: true }"
+              ></my-select-options>
+
+              <my-button theme="secondary" icon="delete" (click)="removeEditedTranslation()" i18n>Remove this translation</my-button>
+            </div>
+          </div>
+        }
+
+        <ng-container formArrayName="translations">
+          @for (translationGroup of translationsArray.controls; track translationGroup; let i = $index) {
+            @if (translationGroup.value.language === editedTranslationLanguage) {
+              <div class="translation" [formGroupName]="i">
+                <div class="form-group">
+                  <label i18n for="instanceTranslationShortDescription">Short description</label>
+
+                  <textarea
+                    id="instanceTranslationShortDescription" formControlName="shortDescription" class="form-control small"
+                    [ngClass]="{ 'input-error': getTranslationFormErrors(i).shortDescription }"
+                  ></textarea>
+
+                  @if (getTranslationFormErrors(i).shortDescription) {
+                    <div class="form-error" role="alert">{{ getTranslationFormErrors(i).shortDescription }}</div>
+                  }
+                </div>
+
+                <div class="form-group">
+                  <label i18n for="instanceTranslationDescription">Description</label>
+                  <div class="form-group-description">
+                    <my-custom-markup-help supportRelMe="true"></my-custom-markup-help>
+                  </div>
+
+                  <my-markdown-textarea
+                    inputId="instanceTranslationDescription" formControlName="description"
+                    [customMarkdownRenderer]="getCustomMarkdownRenderer()" [debounceTime]="500"
+                  ></my-markdown-textarea>
+                </div>
+
+                @for (field of translationMarkdownFields; track field.id) {
+                  <div class="form-group">
+                    <label [for]="'instanceTranslation-' + field.id">{{ field.label }}</label><my-help helpType="markdownText"></my-help>
+
+                    <my-markdown-textarea
+                      [inputId]="'instanceTranslation-' + field.id" [formControlName]="field.id" markdownType="enhanced"
+                    ></my-markdown-textarea>
+                  </div>
+                }
+              </div>
+            }
+          }
+        </ng-container>
+
+        <div class="form-group">
+          <label i18n for="instanceNewTranslation">Add a translation</label>
+
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <my-select-options
+              inputId="instanceNewTranslation" [items]="newTranslationItems" filter="true"
+              [(ngModel)]="newTranslationLanguage" [ngModelOptions]="{ standalone: true }"
+            ></my-select-options>
+
+            <my-button theme="secondary" icon="add" [disabled]="!newTranslationLanguage" (click)="addTranslation()" i18n>Add</my-button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </ng-container>
 
 </form>

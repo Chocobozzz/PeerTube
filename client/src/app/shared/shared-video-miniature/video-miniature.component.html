@@ -135,6 +135,8 @@
           <my-video-views-counter [isLive]="video().isLive" [viewers]="video().viewers" [views]="video().views"></my-video-views-counter>
         }
       </span>
+
+      <my-video-ai-usage-badge class="ms-1" compact="true" [video]="video()"></my-video-ai-usage-badge>
     </div>
   </div>
 </div>

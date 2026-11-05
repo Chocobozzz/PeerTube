@@ -115,7 +115,7 @@ async function updateObjectIfNeeded<T> (options: {
         return on404OrTombstone()
       }
 
-      logger.debug('Remote AP object %s is unavailable.', url)
+      logger.debug('Remote AP object %s is unavailable.', url, { err })
 
       const unavailability = await Redis.Instance.addAPUnavailability(url)
       if (unavailability >= AP_CLEANER.UNAVAILABLE_TRESHOLD) {

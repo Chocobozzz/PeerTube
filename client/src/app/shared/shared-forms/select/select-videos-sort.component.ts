@@ -13,7 +13,7 @@ import { HTMLServerConfig } from '@peertube/peertube-models'
 
     [items]="sortItems"
 
-    [(ngModel)]="selectedId"
+    [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
   ></my-select-options>
   `,

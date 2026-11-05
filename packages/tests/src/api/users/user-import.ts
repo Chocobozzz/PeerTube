@@ -5,12 +5,15 @@ import {
   LiveVideoLatencyMode,
   UserImportState,
   UserNotificationSettingValue,
+  VideoAIUsage,
+  VideoCommercialContent,
   VideoCommentPolicy,
   VideoCreateResult,
   VideoEmbedPrivacyPolicy,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
   VideoPrivacy,
+  VideoRecommendationScope,
   VideoResolution,
   VideoState
 } from '@peertube/peertube-models'
@@ -192,6 +195,7 @@ function runTest (withObjectStorage: boolean) {
         expect(me.videoLanguages).to.deep.equal([ 'fr', 'en' ])
         expect(me.videoCategories).to.deep.equal([ 13, 15 ])
         expect(me.videoLive).to.equal('false')
+        expect(me.aiUsagesHidden).to.deep.equal([ VideoAIUsage.CONTAINS_AI ])
 
         const settings = me.notificationSettings
 
@@ -395,7 +399,7 @@ function runTest (withObjectStorage: boolean) {
       // We observe weird behaviour in the CI, so re-wait jobs here just to be sure
       await waitJobs([ remoteServer, server ])
 
-      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken, sort: '-publishedAt' })
+      const { data } = await remoteServer.videos.listMyVideos({ token: remoteNoahToken, sort: '-createdAt' })
       expect(data).to.have.lengthOf(5)
 
       // Correct order
@@ -503,6 +507,11 @@ function runTest (withObjectStorage: boolean) {
               thumbnails: [ 'custom-thumbnail-user-import-280x157.jpg', 'custom-thumbnail-user-import-850x480.jpg' ]
             }
           })
+
+          const video = await checkServer.videos.get({ id: otherVideo.uuid })
+          expect(video.recommendationScope.id).to.equal(VideoRecommendationScope.CHANNEL)
+          expect(video.aiUsage.id).to.equal(VideoAIUsage.AI_GENERATED)
+          expect(video.commercialContent.id).to.equal(VideoCommercialContent.PROMOTIONAL)
         }
 
         const { data: captions } = await remoteServer.captions.list({ videoId: otherVideo.uuid })

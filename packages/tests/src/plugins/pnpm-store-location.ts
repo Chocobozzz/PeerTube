@@ -2,6 +2,7 @@
 
 import { cleanupTests, createSingleServer, PeerTubeServer, setAccessTokensToServers } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
+import { execa } from 'execa'
 import { remove } from 'fs-extra/esm'
 import { tmpdir } from 'os'
 import { join } from 'path'
@@ -28,7 +29,7 @@ describe('Test plugin installation when pnpm store changes', function () {
     await setAccessTokensToServers([ server ])
   })
 
-  it('Should run pnpm install and retry command if store location changed', async function () {
+  it('Should still install plugins if store location changed', async function () {
     this.timeout(90000)
 
     await server.plugins.install({ npmName: 'peertube-theme-dark' })
@@ -46,11 +47,18 @@ describe('Test plugin installation when pnpm store changes', function () {
 
     await server.plugins.install({ npmName: 'peertube-plugin-hello-world' })
 
-    await server.servers.waitUntilLog('Cannot exec pnpm because of an unexpected store location.')
+    // PNPM < 12 throws ERR_PNPM_UNEXPECTED_STORE so PeerTube runs pnpm install and retries the command
+    // PNPM >= 12 relinks the packages from the new store by itself
+    const { stdout } = await execa('pnpm', [ '--version' ], { cwd: server.servers.buildDirectory('plugins') })
+    if (parseInt(stdout.split('.')[0]) < 12) {
+      await server.servers.waitUntilLog('Cannot exec pnpm because of an unexpected store location.')
+    }
 
-    const packageJSON = await server.plugins.getPackageJSON('peertube-plugin-hello-world')
+    for (const npmName of [ 'peertube-theme-dark', 'peertube-plugin-hello-world' ]) {
+      const packageJSON = await server.plugins.getPackageJSON(npmName)
 
-    expect(packageJSON.name).to.equal('peertube-plugin-hello-world')
+      expect(packageJSON.name).to.equal(npmName)
+    }
   })
 
   after(async function () {

@@ -238,6 +238,14 @@ info:
 
     The current password is invalid.
 
+    ## current_password_is_missing
+
+    The action requires a [password confirmation](#section/Password-confirmation) but `currentPassword` is missing.
+
+    ## password_confirmation_unavailable
+
+    The action requires a [password confirmation](#section/Password-confirmation) but the user authenticates with an external auth plugin (OpenID Connect, SAML...), so PeerTube cannot check their password.
+
     # Rate limits
 
     We are rate-limiting all endpoints of PeerTube's API. Custom values can be set by administrators:
@@ -261,6 +269,19 @@ info:
     | `X-RateLimit-Remaining` | Number of remaining requests in the current time period    |
     | `X-RateLimit-Reset`     | Timestamp of end of current time period as UNIX timestamp  |
     | `Retry-After`           | Seconds to delay after the first `429` is received         |
+
+    # Password confirmation
+
+    If the `webadmin.password_confirmation.enabled` setting is enabled (default), sensitive administrator actions require
+    the user password in the `currentPassword` field of the request body:
+
+      - Install or update a plugin/theme
+      - Change the custom JavaScript or CSS of the instance (`instance.customizations` of the custom configuration)
+      - Create an administrator, or give the administrator role to a user
+      - Change the password, email or auth plugin (`pluginAuth`) of an administrator
+
+    After 10 failed password confirmations in 10 minutes (configurable), the user receives a `429 Too Many Requests` status code
+    until the end of the time frame, even with the correct password.
 
     # CORS
 
@@ -960,6 +981,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -1095,9 +1117,19 @@ paths:
   /api/v1/config/about:
     get:
       summary: Get instance "About" information
+      description: |
+        Translatable information is returned in the language of the request, using the `x-peertube-language` header
+        or the `Accept-Language` header. If the instance has no translation for this language, the default information is returned.
       operationId: getAbout
       tags:
         - Config
+      parameters:
+        - name: x-peertube-language
+          in: header
+          required: false
+          description: Locale of the web interface (`fr-FR`, `pt-BR`...) used to translate the instance information
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -1127,6 +1159,9 @@ paths:
                 $ref: '#/components/schemas/ServerConfigCustom'
     put:
       summary: Set instance runtime configuration
+      description: >
+        Changing `instance.customizations.javascript` or `instance.customizations.css` requires a
+        [password confirmation](#section/Password-confirmation): set `currentPassword` at the root of the request body.
       operationId: putCustomConfig
       tags:
         - Config
@@ -1142,6 +1177,11 @@ paths:
             Arises when:
               - the emailer is disabled and the instance is open to registrations
               - web videos and hls are disabled with transcoding enabled - you need at least one enabled
+              - the custom JavaScript or CSS changed and `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
     delete:
       summary: Delete instance runtime configuration
       operationId: delCustomConfig
@@ -2657,6 +2697,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -2765,6 +2806,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -3602,7 +3644,7 @@ paths:
       tags:
         - Video Transcoding
         - Video
-      description: Create a task to edit a video  (cut, add intro/outro etc)
+      description: Create a task to edit a video (cut, add intro/outro etc). By default the video is edited in place. Set `saveAsNewVideo` to keep it untouched and save the result in a new video.
       security:
         - OAuth2: []
       parameters:
@@ -3612,14 +3654,79 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/VideoStudioCreateTask'
+              type: object
+              required:
+                - tasks
+              properties:
+                tasks:
+                  $ref: '#/components/schemas/VideoStudioCreateTask'
+                saveAsNewVideo:
+                  type: boolean
+                  default: false
+                  description: >
+                    Keep the source video untouched: duplicate it, and edit the duplicate.
+                    The duplicate is created private, in the same channel as the source video, with the source video metadata.
+                    The size of the source video counts towards the user quota.
       responses:
+        '200':
+          description: successful operation, when `saveAsNewVideo` is `true`. Returns the identifiers of the new video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
         '204':
-          description: successful operation
+          description: successful operation, when the source video is edited in place
         '400':
           description: incorrect parameters
+        '403':
+          description: the user cannot manage this video, or `saveAsNewVideo` is `true` on a blocked video and the user cannot manage blocks
+        '409':
+          description: video is already being processed
         '404':
           description: video not found
+
+  /api/v1/videos/{id}/duplicate:
+    post:
+      summary: Duplicate a video
+      operationId: duplicateVideo
+      tags:
+        - Video
+      description: |
+        Create a copy of a local video, in the same channel.
+
+        The copy of a blocked video (that only moderators can duplicate) is blocked for the same reason.
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 120
+                  description: Name of the copy. Defaults to the name of the source video followed by "(Copy)"
+      responses:
+        '200':
+          description: successful operation. Returns the identifiers of the new video
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '400':
+          description: incorrect parameters
+        '403':
+          description: the user cannot manage this video, the video is not local, or the video is blocked and the user cannot manage blocks
+        '404':
+          description: video not found
+        '409':
+          description: video is already being processed
+        '413':
+          description: the user video quota is exceeded
 
   /api/v1/videos:
     get:
@@ -3636,6 +3743,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -3660,6 +3768,76 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
+  /api/v1/recommendations/videos:
+    get:
+      summary: List recommended videos
+      description: |
+        Return videos recommended next to a reference video (or general recommendations if no reference video is given).
+
+        PeerTube decides the recommendation algorithm: it currently lists videos sharing tags with the reference video
+        (excluding videos already watched by the authenticated user), then the latest videos.
+        All returned videos are restricted to the `scope`, which defaults to the `recommendationScope` of the reference video.
+      operationId: getRecommendationVideos
+      tags:
+        - Video
+      parameters:
+        - name: scope
+          in: query
+          required: false
+          description: |
+            Restrict recommended videos. Defaults to the `recommendationScope` of the reference video, or to `1` (all videos) if no reference video is given
+          schema:
+            $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        - name: videoId
+          in: query
+          required: false
+          description: Reference video. Required if `scope` is `3` or `4`
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/id'
+              - $ref: '#/components/schemas/UUIDv4'
+              - $ref: '#/components/schemas/shortUUID'
+        - name: count
+          in: query
+          required: false
+          description: Number of videos to return
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 30
+            default: 10
+        - name: excludeVideoIds
+          in: query
+          required: false
+          description: Videos that must not be recommended (the reference video is always excluded)
+          style: form
+          explode: true
+          schema:
+            type: array
+            maxItems: 50
+            items:
+              $ref: '#/components/schemas/id'
+        - $ref: '#/components/parameters/videoPasswordHeader'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/nsfwFlagsIncluded'
+        - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+        '400':
+          description: invalid parameters or missing `videoId`
+        '401':
+          description: reference video requires authentication or a password
+        '403':
+          description: reference video is not visible by the user or the password is invalid
+        '404':
+          description: reference video not found
 
   /api/v1/videos/categories:
     get:
@@ -3820,6 +3998,12 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
+                aiUsage:
+                  $ref: '#/components/schemas/VideoAIUsageSet'
+                commercialContent:
+                  $ref: '#/components/schemas/VideoCommercialContentSet'
                 downloadEnabled:
                   description: Enable or disable downloading for this video
                   type: boolean
@@ -4395,6 +4579,12 @@ paths:
                     maxLength: 30
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
+                aiUsage:
+                  $ref: '#/components/schemas/VideoAIUsageSet'
+                commercialContent:
+                  $ref: '#/components/schemas/VideoCommercialContentSet'
                 downloadEnabled:
                   description: Enable or disable downloading for the replay of this live video
                   type: boolean
@@ -5538,6 +5728,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -6811,6 +7002,7 @@ paths:
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/nsfwFlagsIncluded'
         - $ref: '#/components/parameters/nsfwFlagsExcluded'
+        - $ref: '#/components/parameters/aiUsageOneOf'
         - $ref: '#/components/parameters/isLive'
         - $ref: '#/components/parameters/includeScheduledLive'
         - $ref: '#/components/parameters/categoryOneOf'
@@ -7618,6 +7810,35 @@ paths:
                     type: string
                   activityPubMessagesWaiting:
                     type: integer
+                  secondariesUp:
+                    type: integer
+                    description: Number of secondary processes that recently sent a heartbeat
+                  processes:
+                    type: array
+                    description: Processes of the platform that recently sent a heartbeat, the primary first
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        role:
+                          type: string
+                          enum:
+                            - primary
+                            - secondary
+                        hostname:
+                          type: string
+                        pid:
+                          type: integer
+                        version:
+                          type: string
+                        startedAt:
+                          type: string
+                          format: date-time
+                          description: When the process started to serve requests
+                        lastSeenAt:
+                          type: string
+                          format: date-time
 
   /api/v1/server/debug/run-command:
     post:
@@ -7707,19 +7928,94 @@ paths:
       tags:
         - Logs
       summary: Get instance audit logs
+      description: |
+        User, administration and moderation actions recorded by all the PeerTube processes of the instance.
+
+        By default (`format=array`), returns an array of at most the 10,000 most recent entries of the requested date range, oldest first.
+        `startDate` is then required and pagination parameters are ignored.
+
+        With `format=list`, returns a paginated list.
       operationId: getInstanceAuditLogs
       security:
         - OAuth2:
           - admin
+      parameters:
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            default: array
+            enum:
+            - array
+            - list
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+            - -createdAt
+            - createdAt
+        - name: search
+          in: query
+          required: false
+          description: Search in usernames, IP addresses and audited entities
+          schema:
+            type: string
+        - name: entityType
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditLogEntityType'
+        - name: entityId
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: action
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/AuditLogAction'
+        - name: startDate
+          in: query
+          required: false
+          description: Required with the default `array` format
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                oneOf:
+                  - type: array
+                    description: Default `array` format
+                    items:
+                      $ref: '#/components/schemas/AuditLog'
+                  - type: object
+                    description: '`list` format'
+                    properties:
+                      total:
+                        type: integer
+                        example: 1
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AuditLog'
+        '403':
+          description: audit log is disabled
 
   /api/v1/plugins:
     get:
@@ -7804,6 +8100,8 @@ paths:
                     npmName:
                       type: string
                       example: peertube-plugin-auth-ldap
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - npmName
                   additionalProperties: false
@@ -7811,6 +8109,8 @@ paths:
                   properties:
                     path:
                       type: string
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - path
                   additionalProperties: false
@@ -7818,7 +8118,11 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: should have either `npmName` or `path` set
+          description: should have either `npmName` or `path` set, or `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
 
   /api/v1/plugins/update:
     post:
@@ -7839,6 +8143,8 @@ paths:
                     npmName:
                       type: string
                       example: peertube-plugin-auth-ldap
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - npmName
                   additionalProperties: false
@@ -7846,6 +8152,8 @@ paths:
                   properties:
                     path:
                       type: string
+                    currentPassword:
+                      $ref: '#/components/schemas/currentPassword'
                   required:
                     - path
                   additionalProperties: false
@@ -7853,7 +8161,11 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: should have either `npmName` or `path` set
+          description: should have either `npmName` or `path` set, or `currentPassword` is missing
+        '403':
+          description: invalid `currentPassword`, or password confirmation unavailable for this user
+        '429':
+          description: too many failed password confirmations
         '404':
           description: existing plugin not found
 
@@ -9908,6 +10220,21 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/NSFWFlag'
+    aiUsageOneOf:
+      name: aiUsageOneOf
+      in: query
+      required: false
+      description: |
+        **PeerTube >= 9.0** Only list videos with one of these AI usages, declared by video creators.
+        If not provided, the preference of the authenticated user (`aiUsagesHidden`) is used
+      schema:
+        oneOf:
+        - $ref: '#/components/schemas/VideoAIUsageSet'
+        - type: array
+          items:
+            $ref: '#/components/schemas/VideoAIUsageSet'
+      style: form
+      explode: true
     isLocal:
       name: isLocal
       in: query
@@ -10281,6 +10608,10 @@ components:
       format: password
       minLength: 6
       maxLength: 50
+    currentPassword:
+      type: string
+      format: password
+      description: Password of the authenticated user, required if [password confirmation](#section/Password-confirmation) is enabled
 
     VideoCategorySet:
       type: integer
@@ -10372,6 +10703,65 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
+        label:
+          type: string
+
+    VideoRecommendationScopeSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        Videos that can be recommended next to a video:
+          - `1` All videos
+          - `2` Only videos of the platform that owns the reference video (or of the current platform if no video is given)
+          - `3` Only videos of the account that owns the reference video
+          - `4` Only videos of the channel of the reference video
+
+        This is a preference of the video owner: applications displaying recommendations may not apply it
+    VideoRecommendationScopeConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        label:
+          type: string
+
+    VideoAIUsageSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+      description: |
+        **PeerTube >= 9.0** Use of AI in the video, declared by the video creator:
+          - `1` Not specified
+          - `2` No AI-generated content: nothing seen or heard in the video has been generated by AI
+          - `3` Contains AI-generated content: some parts of the video have been generated by AI
+          - `4` AI-generated: the whole video, or most of it, has been generated by AI
+    VideoAIUsageConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoAIUsageSet'
+        label:
+          type: string
+    VideoCommercialContentSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: |
+        **PeerTube >= 9.0** Commercial content in the video, declared by the video creator:
+          - `1` None
+          - `2` Promotional content: the creator promotes their own products, services or business
+          - `3` Paid partnership: a third party paid, or provided goods or services, in exchange for the promotion
+    VideoCommercialContentConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoCommercialContentSet'
         label:
           type: string
 
@@ -10515,6 +10905,12 @@ components:
             - 7
             - 8
             - 9
+            - 10
+            - 11
+            - 12
+            - 13
+            - 14
+            - 15
           description: |
             The video state:
             - `1`: Published
@@ -10526,6 +10922,12 @@ components:
             - `7`: Transcoding failed
             - `8`: Moving to an external storage failed
             - `9`: To edit using studio edition feature
+            - `10`: To move to the file system
+            - `11`: Moving to the file system failed
+            - `12`: Import failed
+            - `13`: To duplicate, the files of another video are being copied
+            - `14`: Duplication failed, the files of the other video could not be copied
+            - `15`: The studio edition of a video saved as a new video failed
         label:
           type: string
 
@@ -10929,6 +11331,12 @@ components:
         nsfwSummary:
           type: string
           description: "**PeerTube >= 7.2** More information about the sensitive content of the video"
+        aiUsage:
+          $ref: '#/components/schemas/VideoAIUsageConstant'
+        commercialContent:
+          $ref: '#/components/schemas/VideoCommercialContentConstant'
+        recommendationScope:
+          $ref: '#/components/schemas/VideoRecommendationScopeConstant'
         waitTranscoding:
           type: boolean
           nullable: true
@@ -12346,6 +12754,11 @@ components:
               type: string
             businessModel:
               type: string
+            support:
+              type: object
+              properties:
+                text:
+                  type: string
             languages:
               type: array
               items:
@@ -12362,6 +12775,34 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/ActorImage'
+    InstanceTranslation:
+      properties:
+        language:
+          type: string
+          description: Locale of the web interface
+          example: fr-FR
+        shortDescription:
+          type: string
+        description:
+          type: string
+        terms:
+          type: string
+        codeOfConduct:
+          type: string
+        moderationInformation:
+          type: string
+        administrator:
+          type: string
+        creationReason:
+          type: string
+        maintenanceLifetime:
+          type: string
+        businessModel:
+          type: string
+        hardwareInformation:
+          type: string
+        supportText:
+          type: string
     ServerConfigCustom:
       properties:
         instance:
@@ -12389,6 +12830,11 @@ components:
               type: string
             hardwareInformation:
               type: string
+            translations:
+              type: array
+              description: Translations of the instance information. Empty fields fall back to the default instance information
+              items:
+                $ref: '#/components/schemas/InstanceTranslation'
             languages:
               type: array
               items:
@@ -12614,6 +13060,8 @@ components:
                   type: boolean
                 commentsPolicy:
                   $ref: '#/components/schemas/VideoCommentsPolicySet'
+                recommendationScope:
+                  $ref: '#/components/schemas/VideoRecommendationScopeSet'
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 licence:
@@ -12819,6 +13267,12 @@ components:
             maxLength: 30
         commentsPolicy:
           $ref: '#/components/schemas/VideoCommentsPolicySet'
+        recommendationScope:
+          $ref: '#/components/schemas/VideoRecommendationScopeSet'
+        aiUsage:
+          $ref: '#/components/schemas/VideoAIUsageSet'
+        commercialContent:
+          $ref: '#/components/schemas/VideoCommercialContentSet'
         downloadEnabled:
           description: Enable or disable downloading for this video
           type: boolean
@@ -13116,6 +13570,11 @@ components:
           $ref: '#/components/schemas/NSFWFlag'
         nsfwFlagsBlurred:
           $ref: '#/components/schemas/NSFWFlag'
+        aiUsagesHidden:
+          type: array
+          description: "**PeerTube >= 9.0** Videos with these AI usages are hidden from video lists"
+          items:
+            $ref: '#/components/schemas/VideoAIUsageSet'
 
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
@@ -13270,6 +13729,10 @@ components:
           $ref: '#/components/schemas/UserRole'
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
+        currentPassword:
+          description: Required to create an administrator, see [password confirmation](#section/Password-confirmation)
+          allOf:
+            - $ref: '#/components/schemas/currentPassword'
       required:
         - username
         - password
@@ -13301,6 +13764,11 @@ components:
           $ref: '#/components/schemas/UserAdminFlags'
         password:
           $ref: '#/components/schemas/password'
+        currentPassword:
+          description: >
+            Required to give the administrator role, or to change the password, email or auth plugin of an administrator, see [password confirmation](#section/Password-confirmation)
+          allOf:
+            - $ref: '#/components/schemas/currentPassword'
     UpdateMe:
       properties:
         password:
@@ -13331,6 +13799,11 @@ components:
           $ref: '#/components/schemas/NSFWFlag'
         nsfwFlagsBlurred:
           $ref: '#/components/schemas/NSFWFlag'
+        aiUsagesHidden:
+          type: array
+          description: "**PeerTube >= 9.0** Videos with these AI usages are hidden from video lists"
+          items:
+            $ref: '#/components/schemas/VideoAIUsageSet'
         p2pEnabled:
           type: boolean
           description: whether to enable P2P in the player or not
@@ -13429,6 +13902,13 @@ components:
               $ref: '#/components/schemas/usernameChannel'
             displayName:
               type: string
+        signupClient:
+          type: string
+          enum:
+            - peertube-app
+          description: |
+            **PeerTube >= 9.0** Client used to sign up. If set, links of the verification and registration accepted emails
+            make the web client propose to open this client
       required:
         - username
         - password
@@ -13456,6 +13936,133 @@ components:
           description: Set it to true if you don't want PeerTube to send an email to the user
       required:
         - moderationResponse
+
+    AuditLogAction:
+      type: string
+      enum:
+        - create
+        - update
+        - delete
+
+    AuditLogEntityType:
+      type: string
+      enum:
+        - video
+        - video-import
+        - video-live
+        - video-source
+        - video-file
+        - video-caption
+        - video-chapters
+        - video-password
+        - video-embed-privacy
+        - video-transcoding
+        - video-transcription
+        - video-studio-edition
+        - video-player-settings
+        - ownership-change
+        - comment
+        - channel
+        - channel-sync
+        - channel-videos-import
+        - channel-collaborator
+        - channel-player-settings
+        - channel-playlists-order
+        - playlist
+        - playlist-element
+        - playlist-elements-order
+        - user
+        - registration
+        - password-reset
+        - token-session
+        - failed-login
+        - scoped-token
+        - user-export
+        - user-import
+        - abuse
+        - abuse-message
+        - video-block
+        - account-block
+        - server-block
+        - blocklist-subscription
+        - watched-words-list
+        - watched-words-subscription
+        - automatic-tag-policy
+        - config
+        - instance-image
+        - instance-homepage
+        - instance-host
+        - plugin
+        - follow
+        - server-redundancy
+        - video-redundancy
+        - job-queue
+        - job
+        - runner
+        - runner-registration-token
+        - debug-command
+        - storage-prune
+
+    AuditLog:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/id'
+        action:
+          $ref: '#/components/schemas/AuditLogAction'
+        entityType:
+          $ref: '#/components/schemas/AuditLogEntityType'
+        entityId:
+          type: integer
+          nullable: true
+          description: Id of the audited entity, `null` for the instance configuration
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              nullable: true
+              description: '`null` if the user has been deleted, for remote actors or for entries imported from the legacy audit log files'
+            username:
+              type: string
+              description: Username at the time of the action, or the actor handle for remote actors
+        ip:
+          type: string
+          nullable: true
+          description: IP address of the request, anonymized if `log.anonymize_ip` is enabled
+        entity:
+          type: object
+          additionalProperties: true
+          description: Snapshot of the entity after the action (before the action for deletions)
+        changes:
+          type: object
+          nullable: true
+          description: Only for updates. Keys are dot-separated paths of the changed entity attributes
+          additionalProperties:
+            type: object
+            properties:
+              old: {}
+              new: {}
+        createdAt:
+          type: string
+          format: date-time
+        timestamp:
+          type: string
+          format: date-time
+          deprecated: true
+          description: Same as `createdAt`. Field of the format used before audit logs were stored in the database
+        level:
+          type: string
+          deprecated: true
+          enum:
+            - audit
+          description: Field of the format used before audit logs were stored in the database
+        message:
+          type: string
+          deprecated: true
+          description: |
+            JSON string containing the `user`, `domain` (entity type), `action`, `entityId`, `ip` and `changes` of the entry, and the properties of the audited entity.
+            Field of the format used before audit logs were stored in the database
 
     UserRegistrationState:
       type: integer
@@ -13979,6 +14586,7 @@ components:
         - 31
         - 32
         - 33
+        - 34
       description: >
         Notification type. One of the following values:
 
@@ -14045,6 +14653,10 @@ components:
           - `31` CHANNEL_OWNERSHIP_CHANGED_REJECTED
 
           - `32` AUTOMATIC_BLOCKLIST_UPDATE
+
+          - `33` MY_VIDEO_STUDIO_EDITION_ERROR
+
+          - `34` MY_VIDEO_DUPLICATION_ERROR
 
     NewFeatureInfoType:
       type: integer

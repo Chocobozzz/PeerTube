@@ -5,8 +5,11 @@ import {
   ActivityTrackerUrlObject,
   ActivityVideoFileMetadataUrlObject,
   LiveVideoLatencyMode,
+  VideoAIUsage,
   VideoCommentPolicy,
+  VideoCommercialContent,
   VideoObject,
+  VideoRecommendationScope,
   VideoState
 } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@peertube/peertube-node-utils'
@@ -19,10 +22,13 @@ import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../mi
 import { isTrackerUrlValid } from '../urls.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
+  isVideoAIUsageValid,
   isVideoCommentsPolicyValid,
+  isVideoCommercialContentValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
+  isVideoRecommendationScopeValid,
   isVideoStateValid,
   isVideoTagValid,
   isVideoViewsValid
@@ -76,6 +82,12 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   } else {
     video.commentsPolicy = VideoCommentPolicy.DISABLED
   }
+
+  // Use defaults values for remote instances that don't send these fields
+  if (!isVideoRecommendationScopeValid(video.recommendationScope)) video.recommendationScope = VideoRecommendationScope.ALL
+  // Remote platforms that don't send this field don't declare AI usage
+  if (!isVideoAIUsageValid(video.aiUsage)) video.aiUsage = VideoAIUsage.NOT_SPECIFIED
+  if (!isVideoCommercialContentValid(video.commercialContent)) video.commercialContent = VideoCommercialContent.NONE
 
   if (!isActivityPubUrlValid(video.id)) return fail('id')
   if (!isVideoNameValid(video.name)) return fail('name')

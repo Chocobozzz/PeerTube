@@ -2,6 +2,7 @@ import { HttpStatusCode, VideoChannelActivityAction, VideoChapterUpdate } from '
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
+import { auditLog, buildVideoChaptersAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { replaceChapters } from '@server/lib/video-chapters.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoChapterModel } from '@server/models/video/video-chapter.js'
@@ -45,9 +46,20 @@ async function replaceVideoChapters (req: express.Request, res: express.Response
   const video = res.locals.videoFull
 
   await logger.withContext([ video.uuid ], async () => {
+    const oldChaptersAuditEntity = await auditLog.snapshot(async () => {
+      return buildVideoChaptersAuditEntity({ video, chapters: await VideoChapterModel.listChaptersOfVideo(video.id) })
+    })
+
     await retryTransactionWrapper(() => {
       return runTransaction(async t => {
         await replaceChapters({ video, chapters: body.chapters, transaction: t })
+
+        auditLog.update(
+          getAuditActorFromRes(res),
+          () => buildVideoChaptersAuditEntity({ video, chapters: body.chapters }),
+          oldChaptersAuditEntity,
+          { transaction: t }
+        )
 
         await VideoChannelActivityModel.addVideoActivity({
           action: VideoChannelActivityAction.UPDATE_CHAPTERS,

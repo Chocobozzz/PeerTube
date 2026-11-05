@@ -27,6 +27,10 @@ import { PeerTubeDockPlugin, PeerTubeDockPluginOptions } from '../shared/dock/pe
 import { HotkeysOptions, PeerTubeHotkeysPlugin } from '../shared/hotkeys/peertube-hotkeys-plugin'
 import { PeerTubeMobilePlugin } from '../shared/mobile/peertube-mobile-plugin'
 import { PeerTubeNSFWPlugin, PeerTubeNSFWPluginOptions } from '../shared/nsfw/peertube-nsfw-plugin'
+import {
+  PeerTubeCommercialContentPlugin,
+  PeerTubeCommercialContentPluginOptions
+} from '../shared/commercial-content/peertube-commercial-content-plugin'
 import { Html5Hlsjs } from '../shared/p2p-media-loader/hls-plugin'
 import { P2pMediaLoaderPlugin } from '../shared/p2p-media-loader/p2p-media-loader-plugin'
 import { RedundancyUrlManager } from '../shared/p2p-media-loader/redundancy-url-manager'
@@ -358,6 +362,7 @@ export type VideojsPlayer = ReturnType<typeof videojs.getPlayer> & {
 
   peertubeDock(options?: PeerTubeDockPluginOptions): PeerTubeDockPlugin
   peertubeNSFW(options?: PeerTubeNSFWPluginOptions): PeerTubeNSFWPlugin
+  peertubeCommercialContent(options?: PeerTubeCommercialContentPluginOptions): PeerTubeCommercialContentPlugin
 
   chapters(options?: ChaptersOptions): ChaptersPlugin
 

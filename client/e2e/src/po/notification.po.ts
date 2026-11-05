@@ -20,7 +20,8 @@ export class NotificationPage {
       return url.includes('/video-channels/manage/')
     })
 
-    await $('.header-block').$('*=' + channelDisplayName).waitForDisplayed()
+    // Use a tag: "*=" alone is a partial link text selector in Firefox, that only matches links
+    await $('.header-block').$('h2*=' + channelDisplayName).waitForDisplayed()
   }
 
   private async getNotification (channelDisplayName: string) {

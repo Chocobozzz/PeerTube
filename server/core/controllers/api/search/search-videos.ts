@@ -11,7 +11,7 @@ import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@ser
 import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
-import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
@@ -85,6 +85,10 @@ async function searchVideosIndex (query: VideosSearchQueryAfterSanitize, res: ex
       : 'both'
   }
 
+  if (!body.aiUsageOneOf) {
+    body.aiUsageOneOf = buildAIUsageFilters({ res }).aiUsageOneOf
+  }
+
   body = await Hooks.wrapObject(body, 'filter:api.search.videos.index.list.params')
 
   const url = sanitizeUrl(CONFIG.SEARCH.SEARCH_INDEX.URL) + '/api/v1/search/videos'
@@ -113,6 +117,7 @@ async function searchVideosDB (query: VideosSearchQueryAfterSanitize, req: expre
     {
       ...query,
       ...buildNSFWFilters({ req, res }),
+      ...buildAIUsageFilters({ req, res }),
 
       displayOnlyForFollower: {
         actorId: serverActor.id,

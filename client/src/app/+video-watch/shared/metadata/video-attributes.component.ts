@@ -5,6 +5,7 @@ import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.compon
 import { PTDatePipe } from '@app/shared/shared-main/common/date.pipe'
 import { TimeDurationFormatterPipe } from '@app/shared/shared-main/date/time-duration-formatter.pipe'
 import { VideoDetails } from '@app/shared/shared-main/video/video-details.model'
+import { VideoAIUsage, VideoCommercialContent } from '@peertube/peertube-models'
 
 type PluginMetadata = {
   label: string
@@ -21,6 +22,9 @@ type PluginMetadata = {
   imports: [ RouterLink, GlobalIconComponent, TimeDurationFormatterPipe, PTDatePipe ]
 })
 export class VideoAttributesComponent implements OnChanges {
+  protected readonly VideoAIUsage = VideoAIUsage
+  protected readonly VideoCommercialContent = VideoCommercialContent
+
   private hooks = inject(HooksService)
 
   readonly video = input<VideoDetails>(undefined)

@@ -129,7 +129,12 @@ async function installPluginCLI (options: CommonProgramOptions & { path?: string
   const server = buildServer(url)
   await assignToken(server, username, password)
 
-  await server.plugins.install({ npmName: options.npmName, path: options.path, pluginVersion: options.pluginVersion })
+  await server.plugins.install({
+    npmName: options.npmName,
+    path: options.path,
+    pluginVersion: options.pluginVersion,
+    currentPassword: password
+  })
 
   console.log('Plugin installed.')
 }
@@ -147,7 +152,7 @@ async function updatePluginCLI (options: CommonProgramOptions & { path?: string,
   const server = buildServer(url)
   await assignToken(server, username, password)
 
-  await server.plugins.update({ npmName: options.npmName, path: options.path })
+  await server.plugins.update({ npmName: options.npmName, path: options.path, currentPassword: password })
 
   console.log('Plugin updated.')
 }

@@ -22,7 +22,7 @@ import { SelectChannelUserComponent } from './select-channel-user.component'
     <my-select-channel-admin
       [inputId]="inputId()"
       [ownerAccountName]="ownerAccount().name"
-      [(ngModel)]="selectedId"
+      [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
       (ngModelChange)="onModelChange()"
       (channelChanged)="channelChanged.emit($event)"
     ></my-select-channel-admin>
@@ -30,7 +30,7 @@ import { SelectChannelUserComponent } from './select-channel-user.component'
     <my-select-channel-user
       [inputId]="inputId()"
       [items]="userChannels"
-      [(ngModel)]="selectedId"
+      [(ngModel)]="selectedId" [ngModelOptions]="{ standalone: true }"
       (ngModelChange)="onModelChange()"
       (channelChanged)="channelChanged.emit($event)"
     ></my-select-channel-user>

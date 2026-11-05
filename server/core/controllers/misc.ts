@@ -4,7 +4,7 @@ import { HttpNodeinfoDiasporaSoftwareNsSchema20, HttpStatusCode } from '@peertub
 import { CONFIG, isEmailEnabled } from '@server/initializers/config.js'
 import { serveIndexHTML } from '@server/lib/html/client-html.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
-import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, ROUTE_CACHE_LIFETIME } from '../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION, ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants.js'
 import { getThemeOrDefault } from '../lib/plugins/theme-utils.js'
 import { cacheRoute } from '../middlewares/cache/cache.js'
 import { apiRateLimiter, asyncMiddleware } from '../middlewares/index.js'
@@ -22,7 +22,7 @@ miscRouter.use('/nodeinfo/:version.json', apiRateLimiter, cacheRoute(ROUTE_CACHE
 miscRouter.get('/robots.txt', apiRateLimiter, cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS), (_, res: express.Response) => {
   res.type('text/plain')
 
-  return res.send(CONFIG.INSTANCE.ROBOTS)
+  return res.send(buildRobotsTxt())
 })
 
 miscRouter.all('/teapot', apiRateLimiter, getCup, asyncMiddleware(serveIndexHTML))
@@ -36,6 +36,20 @@ miscRouter.get('/security.txt', apiRateLimiter, (_, res: express.Response) => {
 
 export {
   miscRouter
+}
+
+// ---------------------------------------------------------------------------
+
+function buildRobotsTxt () {
+  const robots = CONFIG.INSTANCE.ROBOTS || ''
+
+  // Let crawlers discover our sitemap, unless the admin already set one
+  if (/^\s*sitemap\s*:/im.test(robots)) return robots
+
+  const sitemap = `Sitemap: ${WEBSERVER.URL}/sitemap.xml\n`
+  if (!robots.trim()) return sitemap
+
+  return robots.trimEnd() + '\n\n' + sitemap
 }
 
 // ---------------------------------------------------------------------------

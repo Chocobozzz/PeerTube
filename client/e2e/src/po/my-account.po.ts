@@ -1,13 +1,13 @@
 import { NSFWPolicyType } from '@peertube/peertube-models'
-import { getCheckbox, go, selectCustomSelect } from '../utils'
+import { browserSleep, getCheckbox, go, selectCustomSelect } from '../utils'
 
 export class MyAccountPage {
   navigateToMyPlaylists () {
-    return $('a[href="/my-library/video-playlists"]').click()
+    return this.clickOnMenuLink('/my-library/video-playlists')
   }
 
   navigateToMyHistory () {
-    return $('a[href="/my-library/history/videos"]').click()
+    return this.clickOnMenuLink('/my-library/history/videos')
   }
 
   // ---------------------------------------------------------------------------
@@ -15,7 +15,7 @@ export class MyAccountPage {
   // ---------------------------------------------------------------------------
 
   navigateToMySettings () {
-    return $('a[href="/my-account"]').click()
+    return this.clickOnMenuLink('/my-account')
   }
 
   async updateNSFW (newValue: NSFWPolicyType) {
@@ -27,7 +27,7 @@ export class MyAccountPage {
 
     await nsfw.click()
 
-    await this.submitVideoSettings()
+    await this.submitSettings('my-user-sensitive-content-settings')
   }
 
   async updateViolentFlag (newValue: NSFWPolicyType) {
@@ -39,7 +39,7 @@ export class MyAccountPage {
 
     await nsfw.click()
 
-    await this.submitVideoSettings()
+    await this.submitSettings('my-user-sensitive-content-settings')
   }
 
   async clickOnP2PCheckbox () {
@@ -50,11 +50,11 @@ export class MyAccountPage {
 
     await p2p.click()
 
-    await this.submitVideoSettings()
+    await this.submitSettings('my-user-player-settings')
   }
 
-  private async submitVideoSettings () {
-    const submit = $('my-user-video-settings input[type=submit]')
+  private async submitSettings (componentSelector: string) {
+    const submit = $(componentSelector + ' input[type=submit]')
 
     await submit.waitForClickable()
     await submit.scrollIntoView({ block: 'center' }) // Avoid issues with fixed header
@@ -127,6 +127,20 @@ export class MyAccountPage {
     return browser.waitUntil(async () => {
       return (await browser.getUrl()).includes('my-library/video-playlists')
     })
+  }
+
+  private async clickOnMenuLink (href: string) {
+    const link = $(`a[href="${href}"]`)
+
+    // A pending redirect (home page) can override our navigation, so click again if needed
+    await browser.waitUntil(async () => {
+      await link.waitForClickable()
+      await link.click()
+
+      await browserSleep(500)
+
+      return (await browser.getUrl()).includes(href)
+    }, { timeout: 10000 })
   }
 
   private async getPlaylist (name: string) {

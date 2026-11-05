@@ -8,7 +8,7 @@
   <div class="buttons">
     <my-reactive-file
       #reactiveFile
-      [(ngModel)]="file"
+      [(ngModel)]="file" [ngModelOptions]="{ standalone: true }"
       [inputName]="inputName()"
       [inputLabel]="inputLabel()"
       [extensions]="imageExtensions"

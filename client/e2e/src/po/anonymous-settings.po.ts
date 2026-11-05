@@ -7,7 +7,7 @@ export class AnonymousSettingsPage {
     await link.waitForClickable()
     await link.click()
 
-    await $('my-user-video-settings').waitForDisplayed()
+    await $('my-user-sensitive-content-settings').waitForDisplayed()
   }
 
   async closeSettings () {

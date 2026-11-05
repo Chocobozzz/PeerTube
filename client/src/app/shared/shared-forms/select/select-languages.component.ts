@@ -10,7 +10,7 @@ import { SelectCheckboxDefaultAllComponent } from './select-checkbox-default-all
 @if (availableLanguages) {
   <my-select-checkbox-default-all
     [availableItems]="availableLanguages"
-    [(ngModel)]="selectedLanguages"
+    [(ngModel)]="selectedLanguages" [ngModelOptions]="{ standalone: true }"
     (ngModelChange)="onModelChange()"
     [inputId]="inputId()"
     [maxIndividualItems]="maxLanguages()"

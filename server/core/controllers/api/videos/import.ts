@@ -20,7 +20,7 @@ import { readFile } from 'fs/promises'
 import { decode } from 'magnet-uri'
 import parseTorrent from 'parse-torrent'
 import { join } from 'path'
-import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger.js'
+import { auditLog, buildVideoImportAuditEntity, getAuditActorFromRes } from '../../../lib/audit-log/index.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import { cleanUpReqFiles, createReqFiles } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
@@ -39,7 +39,6 @@ import {
 
 const logger = createLogger()
 
-const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
 
 const reqVideoFileImport = createReqFiles(
@@ -91,14 +90,19 @@ async function deleteVideoImport (req: express.Request, res: express.Response) {
 
   await videoImport.destroy()
 
+  auditLog.delete(getAuditActorFromRes(res), () => buildVideoImportAuditEntity(videoImport.toFormattedJSON()))
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 
 async function cancelVideoImport (req: express.Request, res: express.Response) {
   const videoImport = res.locals.videoImport
+  const oldVideoImportAuditEntity = auditLog.snapshot(() => buildVideoImportAuditEntity(videoImport.toFormattedJSON()))
 
   videoImport.state = VideoImportState.CANCELLED
   await videoImport.save()
+
+  auditLog.update(getAuditActorFromRes(res), () => buildVideoImportAuditEntity(videoImport.toFormattedJSON()), oldVideoImportAuditEntity)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -106,7 +110,11 @@ async function cancelVideoImport (req: express.Request, res: express.Response) {
 async function retryVideoImport (req: express.Request, res: express.Response) {
   const videoImport = res.locals.videoImport
 
+  const oldVideoImportAuditEntity = auditLog.snapshot(() => buildVideoImportAuditEntity(videoImport.toFormattedJSON()))
+
   await JobQueue.Instance.createJob(await buildRetryImportJob(videoImport))
+
+  auditLog.update(getAuditActorFromRes(res), () => buildVideoImportAuditEntity(videoImport.toFormattedJSON()), oldVideoImportAuditEntity)
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
@@ -183,7 +191,7 @@ async function handleTorrentImport (req: express.Request, res: express.Response,
 
     await JobQueue.Instance.createJob({ type: 'video-import', payload })
 
-    auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoImportAuditEntity(videoImport.toFormattedJSON()))
 
     return res.json(videoImport.toFormattedJSON()).end()
   })
@@ -220,7 +228,7 @@ async function handleYoutubeDlImport (req: express.Request, res: express.Respons
     })
     await JobQueue.Instance.createJob(job)
 
-    auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
+    auditLog.create(getAuditActorFromRes(res), () => buildVideoImportAuditEntity(videoImport.toFormattedJSON()))
 
     return res.json(videoImport.toFormattedJSON()).end()
   } catch (err) {

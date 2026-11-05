@@ -64,6 +64,7 @@ export class JobsComponent {
     'notify',
     'transcoding-job-builder',
     'video-channel-import',
+    'video-duplicate',
     'video-file-import',
     'video-files-lifecycle',
     'video-import',

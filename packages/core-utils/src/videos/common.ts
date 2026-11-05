@@ -1,14 +1,25 @@
-import { VideoDetails, VideoPrivacy, VideoResolution, VideoStreamingPlaylistType } from '@peertube/peertube-models'
+import {
+  VideoAIUsage,
+  VideoAIUsageType,
+  VideoDetails,
+  VideoPrivacy,
+  VideoResolution,
+  VideoStreamingPlaylistType
+} from '@peertube/peertube-models'
 
 export function getAllPrivacies () {
   return [ VideoPrivacy.PUBLIC, VideoPrivacy.INTERNAL, VideoPrivacy.PRIVATE, VideoPrivacy.UNLISTED, VideoPrivacy.PASSWORD_PROTECTED ]
+}
+
+export function getAllAIUsages (): VideoAIUsageType[] {
+  return Object.values(VideoAIUsage)
 }
 
 export function getAllFiles (video: Partial<Pick<VideoDetails, 'files' | 'streamingPlaylists'>>) {
   const files = video.files || []
 
   const hls = getHLS(video)
-  if (hls && Array.isArray(hls.files))  return files.concat(hls.files)
+  if (hls && Array.isArray(hls.files)) return files.concat(hls.files)
 
   return files
 }

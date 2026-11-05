@@ -1,12 +1,14 @@
 import { guessAspectRatio, sortBy } from '@peertube/peertube-core-utils'
 import {
   BroadcastMessageLevel,
+  InstanceTranslation,
   NSFWPolicyType,
   PlayerTheme,
   ThumbnailAspectRatio,
   VideoCommentPolicyType,
   VideoLifecyclePolicy,
   VideoPrivacyType,
+  VideoRecommendationScopeType,
   VideoRedundancyConfigFilter,
   VideosRedundancyStrategy
 } from '@peertube/peertube-models'
@@ -243,6 +245,7 @@ export const CONFIG = buildConfig({
     PUBLISH: {
       DOWNLOAD_ENABLED: dynamicKey<boolean>('defaults.publish.download_enabled'),
       COMMENTS_POLICY: dynamicKey<VideoCommentPolicyType>('defaults.publish.comments_policy'),
+      RECOMMENDATION_SCOPE: dynamicKey<VideoRecommendationScopeType>('defaults.publish.recommendation_scope'),
       PRIVACY: dynamicKey<VideoPrivacyType>('defaults.publish.privacy'),
       LICENCE: dynamicKey<number>('defaults.publish.licence')
     },
@@ -410,6 +413,11 @@ export const CONFIG = buildConfig({
       WINDOW_MS: staticKey('rates_limit.login_lockout.window', { transform: parseDurationToMs }),
       MAX: staticKey<number>('rates_limit.login_lockout.max'),
       MAX_PER_IP: staticKey<number>('rates_limit.login_lockout.max_per_ip')
+    },
+    PASSWORD_CONFIRMATION: {
+      ENABLED: staticKey<boolean>('rates_limit.password_confirmation.enabled'),
+      WINDOW_MS: staticKey('rates_limit.password_confirmation.window', { transform: parseDurationToMs }),
+      MAX: staticKey<number>('rates_limit.password_confirmation.max')
     }
   },
   TRUST_PROXY: staticKey<string[]>('trust_proxy'),
@@ -421,7 +429,8 @@ export const CONFIG = buildConfig({
       MAX_FILES: staticKey<number>('log.rotation.max_files')
     },
     AUDIT: {
-      ENABLED: staticKey<boolean>('log.audit.enabled')
+      ENABLED: staticKey<boolean>('log.audit.enabled'),
+      MAX_AGE: staticKey('log.audit.max_age', { transform: parseDurationToMs })
     },
     ANONYMIZE_IP: staticKey<boolean>('log.anonymize_ip'),
     TAG_REQUESTS: staticKey<boolean>('log.tag_requests'),
@@ -449,8 +458,8 @@ export const CONFIG = buildConfig({
     TRACING: {
       ENABLED: staticKey<boolean>('open_telemetry.tracing.enabled'),
 
-      JAEGER_EXPORTER: {
-        ENDPOINT: staticKey<string>('open_telemetry.tracing.jaeger_exporter.endpoint')
+      OTLP_EXPORTER: {
+        ENDPOINT: staticKey<string>('open_telemetry.tracing.otlp_exporter.endpoint')
       }
     }
   },
@@ -553,6 +562,9 @@ export const CONFIG = buildConfig({
       EDITION: {
         ALLOWED: staticKey<boolean>('webadmin.configuration.edition.allowed')
       }
+    },
+    PASSWORD_CONFIRMATION: {
+      ENABLED: staticKey<boolean>('webadmin.password_confirmation.enabled')
     }
   },
   FEEDS: {
@@ -839,6 +851,8 @@ export const CONFIG = buildConfig({
     BUSINESS_MODEL: dynamicKey<string>('instance.business_model'),
     HARDWARE_INFORMATION: dynamicKey<string>('instance.hardware_information'),
 
+    TRANSLATIONS: dynamicKey<InstanceTranslation[]>('instance.translations', { transform: buildInstanceTranslations }),
+
     DEFAULT_LANGUAGE: dynamicKey<string>('instance.default_language'),
     LANGUAGES: dynamicComputed([ 'instance.languages' ], () => config.get<string[]>('instance.languages') || []),
     CATEGORIES: dynamicComputed([ 'instance.categories' ], () => config.get<number[]>('instance.categories') || []),
@@ -964,12 +978,35 @@ function getLocalConfigDir () {
   return dirname(configSources[0].name)
 }
 
-// `checkVideoFilesLifecycleConfig` is in charge of the validation
-// Return the value as is when it's not an array, so it can complain about a policy list that is not correctly uncommented
 function buildVideoFileLifecyclePolicies (objs: any[]): VideoLifecyclePolicy[] {
   if (!objs) return []
 
   return objs
+}
+
+function buildInstanceTranslations (objs: any[]): InstanceTranslation[] {
+  if (!objs) return []
+
+  if (!Array.isArray(objs)) return objs
+
+  // Values written as numbers in the YAML file must be strings
+  const toString = (value: any) => (value ?? '') + ''
+
+  return objs.map(obj => ({
+    language: obj?.language,
+
+    shortDescription: toString(obj?.short_description),
+    description: toString(obj?.description),
+    terms: toString(obj?.terms),
+    codeOfConduct: toString(obj?.code_of_conduct),
+    moderationInformation: toString(obj?.moderation_information),
+    administrator: toString(obj?.administrator),
+    creationReason: toString(obj?.creation_reason),
+    maintenanceLifetime: toString(obj?.maintenance_lifetime),
+    businessModel: toString(obj?.business_model),
+    hardwareInformation: toString(obj?.hardware_information),
+    supportText: toString(obj?.support_text)
+  }))
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {

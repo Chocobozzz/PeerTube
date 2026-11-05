@@ -1,5 +1,6 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
 import {
+  VideoAIUsageType,
   VideoChannelCollaboratorState,
   VideoInclude,
   VideoIncludeType,
@@ -67,6 +68,8 @@ export type BuildVideosListQueryOptions = {
   licenceOneOf?: number[]
   languageOneOf?: string[]
 
+  aiUsageOneOf?: VideoAIUsageType[]
+
   tagsOneOf?: string[]
   tagsAllOf?: string[]
 
@@ -77,6 +80,10 @@ export type BuildVideosListQueryOptions = {
   stateOneOf?: VideoStateType[]
 
   uuids?: string[]
+  excludeVideoIds?: number[]
+
+  // Inclusive
+  idRange?: { min: number, max: number }
 
   hasFiles?: boolean
   hasHLSFiles?: boolean
@@ -317,6 +324,14 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereUUIDs(options.uuids)
     }
 
+    if (options.excludeVideoIds && options.excludeVideoIds.length !== 0) {
+      this.whereExcludeVideoIds(options.excludeVideoIds)
+    }
+
+    if (options.idRange) {
+      this.whereIdRange(options.idRange)
+    }
+
     if (options.nsfw === true) {
       this.whereNSFW(options.nsfwFlagsExcluded)
     } else if (options.nsfw === false) {
@@ -341,6 +356,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     if (options.languageOneOf) {
       this.whereLanguageOneOf(options.languageOneOf)
+    }
+
+    if (options.aiUsageOneOf && options.aiUsageOneOf.length !== 0) {
+      this.whereAIUsageOneOf(options.aiUsageOneOf)
     }
 
     if (options.historyOfUser) {
@@ -676,8 +695,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     const tagsOneOfLower = tagsOneOf.map(t => t.toLowerCase())
 
     this.cte.push(
+      // DISTINCT so a video matching multiple tags is not listed multiple times
       '"tagsOneOf" AS (' +
-        '  SELECT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
+        '  SELECT DISTINCT "videoTag"."videoId" AS "videoId" FROM "videoTag" ' +
         '  INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
         '  WHERE lower("tag"."name") IN (' + createSafeIn(this.sequelize, tagsOneOfLower) + ') ' +
         ')'
@@ -729,6 +749,17 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     this.and.push('"video"."uuid" IN (' + createSafeIn(this.sequelize, uuids) + ')')
   }
 
+  private whereExcludeVideoIds (excludeVideoIds: number[]) {
+    this.and.push('"video"."id" NOT IN (:excludeVideoIds)')
+    this.replacements.excludeVideoIds = excludeVideoIds
+  }
+
+  private whereIdRange (idRange: { min: number, max: number }) {
+    this.and.push('"video"."id" BETWEEN :idRangeMin AND :idRangeMax')
+    this.replacements.idRangeMin = idRange.min
+    this.replacements.idRangeMax = idRange.max
+  }
+
   private whereCategoryOneOf (categoryOneOf: number[]) {
     this.and.push('"video"."category" IN (:categoryOneOf)')
     this.replacements.categoryOneOf = categoryOneOf
@@ -737,6 +768,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   private whereLicenceOneOf (licenceOneOf: number[]) {
     this.and.push('"video"."licence" IN (:licenceOneOf)')
     this.replacements.licenceOneOf = licenceOneOf
+  }
+
+  private whereAIUsageOneOf (aiUsageOneOf: VideoAIUsageType[]) {
+    this.and.push('"video"."aiUsage" IN (:aiUsageOneOf)')
+    this.replacements.aiUsageOneOf = aiUsageOneOf
   }
 
   private whereLanguageOneOf (languageOneOf: string[]) {

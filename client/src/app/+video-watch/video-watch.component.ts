@@ -85,6 +85,7 @@ import { ActionButtonsComponent, VideoWatchModalName } from './shared/action-but
 import { VideoCommentsComponent } from './shared/comment/video-comments.component'
 import { PrivacyConcernsComponent } from './shared/information/privacy-concerns.component'
 import { VideoAlertComponent } from './shared/information/video-alert.component'
+import { VideoAIUsageBadgeComponent } from '@app/shared/shared-main/video/video-ai-usage-badge.component'
 import { VideoAttributesComponent } from './shared/metadata/video-attributes.component'
 import { VideoDescriptionComponent } from './shared/metadata/video-description.component'
 import { VideoTranscriptionComponent } from './shared/player-widgets/video-transcription.component'
@@ -138,7 +139,8 @@ type URLOptions = {
     PlayerStylesComponent,
     VideoWatchPlaylistComponent,
     VideoTranscriptionComponent,
-    DisplayHandlePipe
+    DisplayHandlePipe,
+    VideoAIUsageBadgeComponent
   ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
@@ -1034,6 +1036,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         }
         : undefined,
 
+      commercialContent: video.commercialContent.id,
+
       videoCaptions: playerCaptions,
       videoChapters,
       storyboard,
@@ -1190,9 +1194,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setMetaTags (video: Video) {
+    // Don't update the description: crawlers load this page directly and must keep the plain text one set by the server
     this.metaService.setTitle(video.name)
-
-    this.metaService.setDescription(video.description)
 
     if (this.playlist?.isLocal) {
       this.metaService.setRSSFeeds(

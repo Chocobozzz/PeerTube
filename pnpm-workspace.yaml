@@ -7,46 +7,27 @@ packages:
   - client/src/standalone/player
 
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  '@swc/core': set this to true or false
-  bcrypt: set this to true or false
-  bufferutil: set this to true or false
-  core-js: set this to true or false
-  edgedriver: set this to true or false
-  es5-ext: set this to true or false
-  esbuild: set this to true or false
-  geckodriver: set this to true or false
-  ip-set: set this to true or false
-  lmdb: set this to true or false
-  msgpackr-extract: set this to true or false
-  node-datachannel: set this to true or false
-  protobufjs: set this to true or false
-  utf-8-validate: set this to true or false
-  utp-native: set this to true or false
+  '@parcel/watcher': true
+  '@swc/core': true
+  bcrypt: true
+  bufferutil: true
+  core-js: true
+  edgedriver: true
+  es5-ext: true
+  esbuild: true
+  geckodriver: true
+  ip-set: false
+  lmdb: true
+  msgpackr-extract: true
+  node-datachannel: true
+  protobufjs: true
+  sharp: false
+  utf-8-validate: true
+  utp-native: true
 
 blockExoticSubdeps: false
 
-ignoredBuiltDependencies:
-  - sharp
-
 minimumReleaseAge: 1440
-
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@swc/core'
-  - bcrypt
-  - bufferutil
-  - core-js
-  - edgedriver
-  - es5-ext
-  - esbuild
-  - geckodriver
-  - lmdb
-  - msgpackr-extract
-  - node-datachannel
-  - protobufjs
-  - utf-8-validate
-  - utp-native
 
 overrides:
   '@types/express': 4.17.9

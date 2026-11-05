@@ -10,7 +10,10 @@ export const VideoState = {
   TO_EDIT: 9,
   TO_MOVE_TO_FILE_SYSTEM: 10,
   TO_MOVE_TO_FILE_SYSTEM_FAILED: 11,
-  TO_IMPORT_FAILED: 12
+  TO_IMPORT_FAILED: 12,
+  TO_DUPLICATE: 13,
+  TO_DUPLICATE_FAILED: 14,
+  TO_EDIT_FAILED: 15
 } as const
 
 export type VideoStateType = typeof VideoState[keyof typeof VideoState]

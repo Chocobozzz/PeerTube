@@ -10,6 +10,7 @@ import { UserInterfaceSettingsComponent } from '../../shared/shared-user-setting
 import { UserContentPreferencesComponent } from '../../shared/shared-user-settings/user-content-preferences.component'
 import { UserPlayerSettingsComponent } from '../../shared/shared-user-settings/user-player-settings.component'
 import { UserSensitiveContentSettingsComponent } from '../../shared/shared-user-settings/user-sensitive-content-settings.component'
+import { UserAIContentSettingsComponent } from '../../shared/shared-user-settings/user-ai-content-settings.component'
 import { AccountTokenSessionsComponent } from '../../shared/shared-users/account-token-sessions.component'
 import { MyAccountChangeEmailComponent } from './my-account-change-email/my-account-change-email.component'
 import { MyAccountChangePasswordComponent } from './my-account-change-password/my-account-change-password.component'
@@ -31,6 +32,7 @@ import { MyAccountTwoFactorButtonComponent } from './my-account-two-factor/my-ac
     MyAccountProfileComponent,
     UserInterfaceSettingsComponent,
     UserSensitiveContentSettingsComponent,
+    UserAIContentSettingsComponent,
     UserContentPreferencesComponent,
     UserPlayerSettingsComponent,
     MyAccountNotificationPreferencesComponent,

@@ -1,4 +1,5 @@
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { auditLog, buildVideoFileAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
 import { removeAllWebVideoFiles, removeHLSFiles, removeHLSPlaylist, removeWebVideoFile } from '@server/lib/video-file.js'
@@ -81,6 +82,8 @@ async function removeHLSPlaylistController (req: express.Request, res: express.R
     logger.info('Deleting HLS playlist of %s.', video.url)
     await removeHLSPlaylist(video)
 
+    auditLog.delete(getAuditActorFromRes(res), () => buildVideoFileAuditEntity({ video, type: 'hls', videoFileId: null }))
+
     scheduleVideoFederation({ video })
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
@@ -95,6 +98,8 @@ async function removeHLSFileController (req: express.Request, res: express.Respo
     logger.info('Deleting HLS file %d of %s.', videoFileId, video.url)
 
     await removeHLSFiles(video, [ videoFileId ])
+
+    auditLog.delete(getAuditActorFromRes(res), () => buildVideoFileAuditEntity({ video, type: 'hls', videoFileId }))
 
     scheduleVideoFederation({ video })
 
@@ -111,6 +116,8 @@ async function removeAllWebVideoFilesController (req: express.Request, res: expr
     logger.info('Deleting Web Video files of %s.', video.url)
 
     await removeAllWebVideoFiles(video)
+
+    auditLog.delete(getAuditActorFromRes(res), () => buildVideoFileAuditEntity({ video, type: 'web-video', videoFileId: null }))
     scheduleVideoFederation({ video })
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
@@ -125,6 +132,8 @@ async function removeWebVideoFileController (req: express.Request, res: express.
     logger.info('Deleting Web Video file %d of %s.', videoFileId, video.url)
 
     await removeWebVideoFile(video, videoFileId)
+
+    auditLog.delete(getAuditActorFromRes(res), () => buildVideoFileAuditEntity({ video, type: 'web-video', videoFileId }))
     scheduleVideoFederation({ video })
 
     return res.sendStatus(HttpStatusCode.NO_CONTENT_204)

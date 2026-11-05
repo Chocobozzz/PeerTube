@@ -1,7 +1,16 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { ActorImageType, CustomConfig, HttpStatusCode, LogoType, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  About,
+  ActorImageType,
+  CustomConfig,
+  HttpStatusCode,
+  LogoType,
+  VideoCommentPolicy,
+  VideoPrivacy,
+  VideoRecommendationScope
+} from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -12,8 +21,8 @@ import {
   makeRawRequest,
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
-import { convertCustomConfigBody } from '@peertube/peertube-server/core/initializers/config/custom-config.js'
 import { CONFIG_TIERS } from '@peertube/peertube-server/core/initializers/config.js'
+import { convertCustomConfigBody } from '@peertube/peertube-server/core/initializers/config/custom-config.js'
 import { testAvatarSize, testFileExistsOnFSOrNot, testImage } from '@tests/shared/checks.js'
 import { expect } from 'chai'
 import { basename } from 'path'
@@ -33,6 +42,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
   expect(data.instance.maintenanceLifetime).to.be.empty
   expect(data.instance.businessModel).to.be.empty
   expect(data.instance.hardwareInformation).to.be.empty
+  expect(data.instance.translations).to.deep.equal([])
   expect(data.instance.serverCountry).to.be.empty
   expect(data.instance.support.text).to.be.empty
   expect(data.instance.defaultLanguage).to.equal('en')
@@ -157,6 +167,7 @@ function checkInitialConfig (server: PeerTubeServer, data: CustomConfig) {
 
   expect(data.defaults.publish.commentsPolicy).to.equal(VideoCommentPolicy.ENABLED)
   expect(data.defaults.publish.downloadEnabled).to.be.true
+  expect(data.defaults.publish.recommendationScope).to.equal(VideoRecommendationScope.ALL)
   expect(data.defaults.publish.licence).to.be.null
   expect(data.defaults.publish.privacy).to.equal(VideoPrivacy.PUBLIC)
   expect(data.defaults.live.saveReplay).to.be.false
@@ -183,9 +194,54 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       creationReason: 'my super creation reason',
       moderationInformation: 'my super moderation information',
       administrator: 'Kuja',
-      maintenanceLifetime: 'forever',
+      maintenanceLifetime: 'maintenance lifetime',
       businessModel: 'my super business model',
       hardwareInformation: '2vCore 3GB RAM',
+
+      translations: [
+        {
+          language: 'es-ES',
+          shortDescription: 'mi descripción corta',
+          description: 'mi súper descripción',
+          terms: 'mis súper condiciones',
+          codeOfConduct: 'mi súper código de conducta',
+          moderationInformation: 'mi súper información de moderación',
+          administrator: 'Kuja ES',
+          creationReason: 'mi súper razón de creación',
+          maintenanceLifetime: 'para siempre',
+          businessModel: 'mi súper modelo de negocio',
+          hardwareInformation: 'hardware information',
+          supportText: 'mi texto de soporte'
+        },
+        {
+          language: 'pt-BR',
+          shortDescription: '',
+          description: '',
+          terms: 'meus super termos',
+          codeOfConduct: '',
+          moderationInformation: '',
+          administrator: '',
+          creationReason: '',
+          maintenanceLifetime: '',
+          businessModel: '',
+          hardwareInformation: '',
+          supportText: ''
+        },
+        {
+          language: 'zh-Hans-CN',
+          shortDescription: '',
+          description: '',
+          terms: '我的超级条款',
+          codeOfConduct: '',
+          moderationInformation: '',
+          administrator: '',
+          creationReason: '',
+          maintenanceLifetime: '',
+          businessModel: '',
+          hardwareInformation: '',
+          supportText: ''
+        }
+      ],
 
       languages: [ 'en', 'es' ],
       categories: [ 1, 2 ],
@@ -462,6 +518,7 @@ function buildNewCustomConfig (server: PeerTubeServer): CustomConfig {
       publish: {
         commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL,
         downloadEnabled: false,
+        recommendationScope: VideoRecommendationScope.CHANNEL,
         licence: 2,
         privacy: VideoPrivacy.INTERNAL
       },
@@ -639,14 +696,99 @@ describe('Test config', function () {
       expect(instance.creationReason).to.equal('my super creation reason')
       expect(instance.moderationInformation).to.equal('my super moderation information')
       expect(instance.administrator).to.equal('Kuja')
-      expect(instance.maintenanceLifetime).to.equal('forever')
+      expect(instance.maintenanceLifetime).to.equal('maintenance lifetime')
       expect(instance.businessModel).to.equal('my super business model')
       expect(instance.hardwareInformation).to.equal('2vCore 3GB RAM')
+
+      expect(instance.support.text).to.equal('My support text')
 
       expect(instance.languages).to.deep.equal([ 'en', 'es' ])
       expect(instance.categories).to.deep.equal([ 1, 2 ])
 
       expect(instance.banners).to.have.lengthOf(0)
+    })
+
+    it('Should fetch the about information in another language', async function () {
+      const checkSpanish = (instance: About['instance']) => {
+        expect(instance.name).to.equal('PeerTube updated')
+        expect(instance.shortDescription).to.equal('mi descripción corta')
+        expect(instance.description).to.equal('mi súper descripción')
+        expect(instance.terms).to.equal('mis súper condiciones')
+        expect(instance.codeOfConduct).to.equal('mi súper código de conducta')
+        expect(instance.creationReason).to.equal('mi súper razón de creación')
+        expect(instance.moderationInformation).to.equal('mi súper información de moderación')
+        expect(instance.administrator).to.equal('Kuja ES')
+        expect(instance.maintenanceLifetime).to.equal('para siempre')
+        expect(instance.businessModel).to.equal('mi súper modelo de negocio')
+        expect(instance.hardwareInformation).to.equal('hardware information')
+        expect(instance.support.text).to.equal('mi texto de soporte')
+      }
+
+      checkSpanish((await server.config.getAbout({ language: 'es-ES' })).instance)
+      checkSpanish((await server.config.getAbout({ language: 'es' })).instance)
+      checkSpanish((await server.config.getAbout({ acceptLanguage: 'es-ES,es;q=0.9' })).instance)
+
+      // The header takes precedence over Accept-Language
+      {
+        const { instance } = await server.config.getAbout({ language: 'de-DE', acceptLanguage: 'es-ES' })
+        expect(instance.terms).to.equal('my super terms')
+      }
+    })
+
+    it('Should fall back to the default information when a field is not translated', async function () {
+      // pt-PT falls back on the pt-BR translation
+      for (const language of [ 'pt-BR', 'pt-PT' ]) {
+        const { instance } = await server.config.getAbout({ language })
+
+        expect(instance.terms).to.equal('meus super termos')
+
+        expect(instance.shortDescription).to.equal('my short description')
+        expect(instance.description).to.equal('my super description')
+        expect(instance.codeOfConduct).to.equal('my super coc')
+        expect(instance.support.text).to.equal('My support text')
+      }
+
+      {
+        const { instance } = await server.config.getAbout({ language: 'de-DE' })
+
+        expect(instance.terms).to.equal('my super terms')
+        expect(instance.shortDescription).to.equal('my short description')
+      }
+
+      {
+        const { instance } = await server.config.getAbout({ language: 'zh-CN' })
+        expect(instance.terms).to.equal('我的超级条款')
+      }
+
+      {
+        const { instance } = await server.config.getAbout({ language: 'zh-Hant-TW' })
+        expect(instance.terms).to.equal('my super terms')
+      }
+    })
+
+    it('Should translate the instance information of the server config', async function () {
+      {
+        const config = await server.config.getConfig({ language: 'es-ES' })
+
+        expect(config.instance.shortDescription).to.equal('mi descripción corta')
+        expect(config.instance.support.text).to.equal('mi texto de soporte')
+      }
+
+      {
+        const config = await server.config.getConfig({ language: 'de-DE' })
+
+        expect(config.instance.shortDescription).to.equal('my short description')
+        expect(config.instance.support.text).to.equal('My support text')
+      }
+    })
+
+    it('Should set the Vary header on translated config endpoints', async function () {
+      for (const path of [ '/api/v1/config', '/api/v1/config/about' ]) {
+        const res = await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.OK_200 })
+
+        expect(res.headers['vary']).to.contain('x-peertube-language')
+        expect(res.headers['vary']).to.contain('Accept-Language')
+      }
     })
 
     it('Should remove the custom configuration', async function () {

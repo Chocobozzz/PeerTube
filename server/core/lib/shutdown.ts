@@ -11,6 +11,7 @@ import { PeerTubeSocket } from './peertube-socket.js'
 import { Redis } from './redis/index.js'
 import { abortAllPendingRunnerJobCompletions } from './runners/runner-job-completions.js'
 import { AbstractScheduler } from './schedulers/abstract-scheduler.js'
+import { ProcessHeartbeatScheduler } from './schedulers/process-heartbeat-scheduler.js'
 
 const logger = createLogger()
 
@@ -74,6 +75,9 @@ async function shutdown (server: HTTPServer, exitCode = 0) {
 
   await Promise.all([
     closeHTTPServer(server),
+
+    ProcessHeartbeatScheduler.Instance.unregister()
+      .catch(err => logger.error('Cannot remove the process heartbeat.', { err })),
 
     // Active jobs are not awaited: a transcoding job can run for hours. They are retried when detected as stalled
     JobQueue.Instance.closeWorkers({ force: true })

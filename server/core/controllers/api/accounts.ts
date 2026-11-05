@@ -6,7 +6,7 @@ import { ActorFollowModel } from '@server/models/actor/actor-follow.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoChannelSyncModel } from '@server/models/video/video-channel-sync.js'
 import express from 'express'
-import { buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
+import { buildAIUsageFilters, buildNSFWFilters, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../helpers/utils.js'
 import { Hooks } from '../../lib/plugins/hooks.js'
 import {
@@ -248,6 +248,7 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
   const apiOptions = await Hooks.wrapObject({
     ...query,
     ...buildNSFWFilters({ req, res }),
+    ...buildAIUsageFilters({ req, res }),
 
     displayOnlyForFollower,
     accountId: account.id,

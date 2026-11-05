@@ -7,7 +7,7 @@ import {
   VideoPrivacyType,
   VideoUpdate
 } from '@peertube/peertube-models'
-import { auditLoggerFactory, getAuditIdFromUser, VideoAuditView } from '@server/helpers/audit-logger.js'
+import { auditLog, AuditLogActor, AuditLogSnapshot, buildVideoAuditEntity } from '@server/lib/audit-log/index.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { runTransaction } from '@server/helpers/database-utils.js'
 import { ScheduleVideoUpdateModel } from '@server/models/video/schedule-video-update.js'
@@ -19,16 +19,16 @@ import { FilteredModelAttributes } from '@server/types/sequelize.js'
 import { Transaction } from 'sequelize'
 import { sendDeleteVideo } from './activitypub/send/send-delete.js'
 import { changeVideoChannelShare } from './activitypub/share.js'
-import { buildNonDuplicatedFederateVideoJob, isPrivacyForFederation } from './activitypub/videos/index.js'
+import { buildNonDuplicatedFederateVideoJob, isPrivacyForFederation, isStateForFederation } from './activitypub/videos/index.js'
 import { createVideoAutomaticTagsJob } from './automatic-tags/automatic-tags.js'
+import { acquireDistributedLock } from './distributed-lock.js'
 import { CreateJobTypeAndPayload, JobQueue } from './job-queue/job-queue.js'
 import { autoBlacklistVideoIfNeeded } from './video-blacklist.js'
 import { replaceChaptersFromDescriptionIfNeeded } from './video-chapters.js'
 import { VideoPathManager } from './video-path-manager.js'
-import { isNewVideoForSubscription, moveFilesIfPrivacyChanged } from './video-privacy.js'
+import { isNewVideoForSubscription, isVideoInPrivateDirectory, moveFilesIfPrivacyChanged } from './video-privacy.js'
 import { setVideoTags } from './video.js'
 
-const auditLogger = auditLoggerFactory('videos')
 const logger = createLogger('video')
 
 export class LocalVideoUpdater {
@@ -38,19 +38,23 @@ export class LocalVideoUpdater {
   private readonly oldPrivacy: VideoPrivacyType
   private readonly hadPrivacyForFederation: boolean
 
-  private readonly oldVideoAuditView: VideoAuditView
+  private readonly auditActor: AuditLogActor | null
+  private readonly oldVideoAuditEntity: AuditLogSnapshot
 
   constructor (options: {
     video: MVideoFull
     user: MUserAccountUrl | null
+    // Null if the update doesn't come from a user action
+    auditActor: AuditLogActor | null
   }) {
     this.user = options.user
+    this.auditActor = options.auditActor
     this.oldVideo = options.video
 
     this.hadPrivacyForFederation = isPrivacyForFederation(this.oldVideo.privacy)
     this.oldPrivacy = this.oldVideo.privacy
 
-    this.oldVideoAuditView = new VideoAuditView(this.oldVideo.toFormattedDetailsJSON())
+    this.oldVideoAuditEntity = auditLog.snapshot(() => buildVideoAuditEntity(this.oldVideo.toFormattedDetailsJSON()))
   }
 
   update (options: Omit<VideoUpdate, 'thumbnailfile' | 'previewfile'> & {
@@ -64,7 +68,11 @@ export class LocalVideoUpdater {
     thumbnails?: MThumbnail[]
     channel?: MChannelBannerAccountDefault
   }) {
-    const videoFileLockReleaser = await VideoPathManager.Instance.lockFiles(this.oldVideo.uuid)
+    const videoUpdateLockReleaser = await acquireDistributedLock('video-update-' + this.oldVideo.uuid)
+
+    const videoFileLockReleaser = this.isFilesMoveNeeded(options.privacy)
+      ? await VideoPathManager.Instance.lockFiles(this.oldVideo.uuid)
+      : undefined
 
     try {
       const { video, newVideoForSubscription } = await runTransaction(async t => {
@@ -87,7 +95,10 @@ export class LocalVideoUpdater {
           'support',
           'description',
           'downloadEnabled',
-          'commentsPolicy'
+          'commentsPolicy',
+          'recommendationScope',
+          'aiUsage',
+          'commercialContent'
         ]
 
         for (const key of keysToUpdate) {
@@ -217,11 +228,12 @@ export class LocalVideoUpdater {
           createVideoAutomaticTagsJob({ video, moderation: 'apply', transaction: t })
         }
 
-        if (this.user) {
-          auditLogger.update(
-            getAuditIdFromUser(this.user),
-            new VideoAuditView(video.toFormattedDetailsJSON()),
-            this.oldVideoAuditView
+        if (this.auditActor) {
+          auditLog.update(
+            this.auditActor,
+            () => buildVideoAuditEntity(video.toFormattedDetailsJSON()),
+            this.oldVideoAuditEntity,
+            { transaction: t }
           )
         }
 
@@ -248,7 +260,9 @@ export class LocalVideoUpdater {
 
       return video
     } finally {
-      videoFileLockReleaser()
+      if (videoFileLockReleaser) videoFileLockReleaser()
+
+      await videoUpdateLockReleaser()
     }
   }
 
@@ -317,12 +331,20 @@ export class LocalVideoUpdater {
     if (video.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
       video.publishedAt = new Date()
 
-      if (!video.firstPublishedAt) {
+      // A video that is still processed (transcoding, import, duplication...) is published at the end of its processing
+      // Don't set its first publication date now, or it would not be considered as a new video then
+      if (!video.firstPublishedAt && isStateForFederation(video.state)) {
         video.firstPublishedAt = video.publishedAt
       }
     }
 
     video.privacy = newPrivacy
+  }
+
+  private isFilesMoveNeeded (privacy: VideoUpdate['privacy']) {
+    if (privacy === undefined || !exists(this.oldPrivacy)) return false
+
+    return isVideoInPrivateDirectory(forceNumber(privacy) as VideoPrivacyType) !== isVideoInPrivateDirectory(this.oldPrivacy)
   }
 
   private async rebuildHLSInfoHashesIfNeeded (options: {

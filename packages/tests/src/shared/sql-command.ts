@@ -1,5 +1,5 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { FileStorageType, RunnerJobPayload, VideoImportStateType } from '@peertube/peertube-models'
+import { FileStorageType, RunnerJobPayload, VideoImportStateType, VideoState } from '@peertube/peertube-models'
 import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { QueryTypes, Sequelize } from 'sequelize'
 
@@ -36,6 +36,12 @@ export class SQLCommand {
   async getInternalFileUrl (fileId: number) {
     return this.selectQuery<{ fileUrl: string }>(`SELECT "fileUrl" FROM "videoFile" WHERE id = :fileId`, { fileId })
       .then(rows => rows[0].fileUrl)
+  }
+
+  async countActorsByUrl (url: string) {
+    const [ { total } ] = await this.selectQuery<{ total: string }>(`SELECT COUNT(*) AS total FROM "actor" WHERE "url" = :url`, { url })
+
+    return parseInt(total, 10)
   }
 
   setActorField (to: string, field: string, value: string) {
@@ -103,6 +109,25 @@ export class SQLCommand {
       `UPDATE "videoSource" SET storage = :storage WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid)`,
       { storage, uuid }
     )
+  }
+
+  async removeVideoFilesOf (uuid: string) {
+    await this.updateQuery(
+      `DELETE FROM "videoFile" ` +
+        `WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid) OR ` +
+        `"videoStreamingPlaylistId" IN (` +
+        `SELECT "videoStreamingPlaylist".id FROM "videoStreamingPlaylist" ` +
+        `INNER JOIN video ON video.id = "videoStreamingPlaylist"."videoId" AND "video".uuid = :uuid` +
+        `)`,
+      { uuid }
+    )
+
+    await this.updateQuery(
+      `DELETE FROM "videoStreamingPlaylist" WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid)`,
+      { uuid }
+    )
+
+    await this.setVideoField(uuid, 'state', VideoState.TRANSCODING_FAILED + '')
   }
 
   async setUserExportStorageOf (userId: number, storage: FileStorageType) {

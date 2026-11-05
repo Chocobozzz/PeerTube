@@ -362,6 +362,15 @@ describe('Test plugin helpers', function () {
         expect(data).to.have.lengthOf(2)
       }
     })
+
+    it('Should have recorded moderation actions of the plugin in the audit log', async function () {
+      for (const entityType of [ 'server-block', 'account-block', 'video-block' ] as const) {
+        const logs = await servers[0].logs.waitAuditLogs({ search: 'plugin:peertube-plugin-test-four', entityType, total: 2 })
+
+        // Entries are inserted asynchronously, so their order is not guaranteed
+        expect(logs.map(l => l.action), entityType).to.have.members([ 'create', 'delete' ])
+      }
+    })
   })
 
   describe('Videos', function () {
@@ -530,6 +539,13 @@ describe('Test plugin helpers', function () {
       }
 
       await checkVideoFilesWereRemoved({ server: servers[0], video })
+    })
+
+    it('Should have recorded video actions of the plugin in the audit log', async function () {
+      const logs = await servers[0].logs.waitAuditLogs({ search: 'plugin:peertube-plugin-test-four', entityType: 'video', total: 2 })
+
+      // Entries are inserted asynchronously, so their order is not guaranteed
+      expect(logs.map(l => l.action)).to.have.members([ 'update', 'delete' ])
     })
 
     it('Should have fetched the video by URL', async function () {
