@@ -266,8 +266,11 @@ describe('Test video transcription', function () {
       await servers[0].videos.replaceSourceFile({ videoId: uuid, fixture: 'video_short_360p.mp4' })
       await waitJobs(servers)
 
+      // The new video does not contain speech: the transcription runs but the previous caption is kept
+      await servers[0].servers.waitUntilLog(`Do not create caption for video ${uuid}: the transcription is empty`)
+
       const newContent = await getCaptionContent(servers[0], uuid, 'en')
-      expect(oldContent).to.not.equal(newContent)
+      expect(oldContent).to.equal(newContent)
     })
 
     it('Should not run transcription after video replacement if the subtitle has not been auto generated', async function () {
