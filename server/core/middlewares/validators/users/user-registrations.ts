@@ -85,6 +85,7 @@ function ensureUserRegistrationAllowedFactory (sm?: SignupMode) {
     const signupMode = sm || res.locals.signupMode // sm is provided by /registrations/request endpoint
     const allowedParams = {
       body: req.body,
+      headers: req.headers,
       ip: req.ip,
       signupMode
     }

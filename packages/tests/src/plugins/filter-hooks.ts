@@ -554,6 +554,16 @@ describe('Test plugin filter hooks', function () {
 
       expect((body as unknown as PeerTubeProblemDocument).detail).to.equal('No jma 1')
     })
+
+    it('Should provide request headers to the hook', async function () {
+      const body = await servers[0].registrations.register({
+        username: 'john_bad_agent_1',
+        headers: { 'User-Agent': 'bad agent 1' },
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+
+      expect((body as unknown as PeerTubeProblemDocument).detail).to.equal('No bad agent 1')
+    })
   })
 
   describe('Should run filter:api.user.request-signup.allowed.result', function () {
@@ -578,6 +588,17 @@ describe('Test plugin filter hooks', function () {
       })
 
       expect((body as unknown as PeerTubeProblemDocument).detail).to.equal('No jma 2')
+    })
+
+    it('Should provide request headers to the hook', async function () {
+      const body = await servers[0].registrations.requestRegistration({
+        username: 'john_bad_agent_2',
+        registrationReason: 'tt',
+        headers: { 'User-Agent': 'bad agent 2' },
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+
+      expect((body as unknown as PeerTubeProblemDocument).detail).to.equal('No bad agent 2')
     })
   })
 

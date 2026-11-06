@@ -392,6 +392,10 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
           return { allowed: false, errorMessage: 'No jma 1' }
         }
 
+        if (params && params.headers && params.headers['user-agent'] === 'bad agent 1') {
+          return { allowed: false, errorMessage: 'No bad agent 1' }
+        }
+
         return result
       }
     })
@@ -401,6 +405,10 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       handler: (result, params) => {
         if (params && params.body && params.body.email && params.body.email.includes('jma 2')) {
           return { allowed: false, errorMessage: 'No jma 2' }
+        }
+
+        if (params && params.headers && params.headers['user-agent'] === 'bad agent 2') {
+          return { allowed: false, errorMessage: 'No bad agent 2' }
         }
 
         return result

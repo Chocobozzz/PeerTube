@@ -11,7 +11,13 @@ import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
 export class RegistrationsCommand extends AbstractCommand {
-  register (options: OverrideCommandOptions & Partial<UserRegistrationRequest> & Pick<UserRegistrationRequest, 'username'>) {
+  register (
+    options:
+      & OverrideCommandOptions
+      & Partial<UserRegistrationRequest>
+      & Pick<UserRegistrationRequest, 'username'>
+      & { headers?: { [name: string]: string } }
+  ) {
     const { password = 'password', email = options.username + '@example.com' } = options
     const path = '/api/v1/users/register'
 
@@ -31,7 +37,11 @@ export class RegistrationsCommand extends AbstractCommand {
   }
 
   requestRegistration (
-    options: OverrideCommandOptions & Partial<UserRegistrationRequest> & Pick<UserRegistrationRequest, 'username' | 'registrationReason'>
+    options:
+      & OverrideCommandOptions
+      & Partial<UserRegistrationRequest>
+      & Pick<UserRegistrationRequest, 'username' | 'registrationReason'>
+      & { headers?: { [name: string]: string } }
   ) {
     const { password = 'password', email = options.username + '@example.com' } = options
     const path = '/api/v1/users/registrations/request'

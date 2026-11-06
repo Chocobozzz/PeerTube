@@ -1,4 +1,5 @@
 import ipaddr from 'ipaddr.js'
+import { IncomingHttpHeaders } from 'node:http'
 import { CONFIG } from '../initializers/config.js'
 import { UserModel } from '../models/user/user.js'
 
@@ -7,8 +8,10 @@ export type SignupMode = 'direct-registration' | 'request-registration'
 export async function isSignupAllowed (options: {
   signupMode: SignupMode
 
-  ip: string // For plugins
+  // For plugins
+  ip: string
   body?: any
+  headers?: IncomingHttpHeaders
 }): Promise<{ allowed: boolean, errorMessage?: string }> {
   const { signupMode } = options
 
