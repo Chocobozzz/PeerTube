@@ -23,8 +23,7 @@ export class BittorrentTrackerObserversBuilder {
       const counters = {
         activeInfohashes: 0,
         inactiveInfohashes: 0,
-        peers: 0,
-        uncompletedPeers: 0
+        peers: 0
       }
 
       for (const infohash of infohashes) {
