@@ -10,10 +10,11 @@ import {
   ServerService,
   UserService
 } from '@app/core'
-import { objectToFormData } from '@app/helpers'
+import { formatICU, objectToFormData } from '@app/helpers'
 import { arrayify, buildDownloadFilesUrl, exists, getAllAIUsages } from '@peertube/peertube-core-utils'
 import {
   BooleanBothQuery,
+  ConstantLabel,
   FeedFormat,
   FeedFormatType,
   FeedType,
@@ -26,13 +27,12 @@ import {
   UserVideoRate,
   UserVideoRateType,
   UserVideoRateUpdate,
+  VideoAIUsageType,
   VideoChannel as VideoChannelServerModel,
-  ConstantLabel,
   VideoDetails as VideoDetailsServerModel,
   VideoFile,
   VideoFileMetadata,
   VideoLicence,
-  VideoAIUsageType,
   VideoLicenceType,
   VideoPrivacy,
   VideoPrivacyType,
@@ -45,7 +45,7 @@ import {
   VideoUpdate
 } from '@peertube/peertube-models'
 import { SortMeta } from 'primeng/api'
-import { from, Observable, of, throwError } from 'rxjs'
+import { from, Observable, of } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
 import { Account } from '../account/account.model'
@@ -53,6 +53,7 @@ import { AccountService } from '../account/account.service'
 import { VideoChannel } from '../channel/video-channel.model'
 import { VideoChannelService } from '../channel/video-channel.service'
 import { VideoDetails } from './video-details.model'
+import { confirmVideosForce, countVideoForceRunOutcomes, getVideoForceRunFailures, runOnVideosWithForceConfirm } from './video-force-run'
 import { VideoPasswordService } from './video-password.service'
 import { Video } from './video.model'
 
@@ -450,45 +451,55 @@ export class VideoService {
   runTranscoding (options: {
     videos: Video[]
     type: 'hls' | 'web-video'
-    forceTranscoding?: boolean
-  }): Observable<any> {
-    const { videos, type, forceTranscoding } = options
+  }): Observable<{ success: number, skipped: number, failures: { video: Video, error: Error }[] }> {
+    const { videos, type } = options
 
-    const body: VideoTranscodingCreate = { transcodingType: type, forceTranscoding }
+    return runOnVideosWithForceConfirm({
+      videos,
 
-    return from(videos)
-      .pipe(
-        concatMap(video => {
-          return this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + video.uuid + '/transcoding', body)
-            .pipe(
-              catchError(err => {
-                if (err.error?.code === ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED && !forceTranscoding) {
-                  const message = $localize`PeerTube considers video "${video.name}" is already being transcoded.` +
-                    // eslint-disable-next-line max-len
-                    $localize` If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.` +
-                    ` Do you still want to run transcoding?`
+      run: (video, forceTranscoding) => {
+        const body: VideoTranscodingCreate = { transcodingType: type, forceTranscoding }
 
-                  return from(this.confirmService.confirm(message, $localize`Force transcoding`))
-                    .pipe(
-                      switchMap(res => {
-                        if (res === false) return throwError(() => err)
+        return this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + video.uuid + '/transcoding', body)
+          .pipe(
+            map(() => 'success' as const),
+            catchError(err => {
+              if (err.error?.code === ServerErrorCode.VIDEO_ALREADY_BEING_TRANSCODED) return of('conflict' as const)
 
-                        return this.runTranscoding({
-                          videos: [ video ],
-                          type,
-                          forceTranscoding: true
-                        })
-                      })
-                    )
-                }
+              return this.restExtractor.handleError(err)
+            })
+          )
+      },
 
-                return throwError(() => err)
-              })
-            )
-        }),
-        toArray(),
-        catchError(err => this.restExtractor.handleError(err))
-      )
+      confirmForce: conflicts => this.confirmForceTranscoding(conflicts)
+    }).pipe(
+      map(outcomes => ({
+        success: countVideoForceRunOutcomes(outcomes, 'success'),
+        skipped: countVideoForceRunOutcomes(outcomes, 'skipped'),
+        failures: getVideoForceRunFailures(outcomes)
+      }))
+    )
+  }
+
+  private confirmForceTranscoding (videos: Video[]) {
+    return confirmVideosForce({
+      confirmService: this.confirmService,
+      videos,
+      action: $localize`Force transcoding`,
+
+      singleVideoMessage: name =>
+        $localize`PeerTube considers video "${name}" is already being transcoded.` +
+        $localize` If you think PeerTube is wrong (video in broken state after a crash etc.), you can force transcoding on this video.` +
+        $localize` Do you still want to run transcoding?`,
+
+      multipleVideosMessage: count =>
+        formatICU(
+          $localize`PeerTube considers {count, plural, =1 {1 video is} other {{count} videos are}} already being transcoded.`,
+          { count }
+        ) +
+        $localize` If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.` +
+        $localize` Otherwise they will be skipped. Do you want to force transcoding?`
+    })
   }
 
   // ---------------------------------------------------------------------------

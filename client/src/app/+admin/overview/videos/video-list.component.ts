@@ -563,13 +563,36 @@ export class VideoListComponent implements OnInit {
   private runTranscoding (videos: Video[], type: 'hls' | 'web-video') {
     this.videoService.runTranscoding({ videos, type })
       .subscribe({
-        next: () => {
-          this.notifier.success($localize`Transcoding jobs created.`)
+        next: result => {
+          if (result.success) {
+            this.notifier.success(
+              formatICU(
+                $localize`{count, plural, =1 {1 transcoding job created.} other {{count} transcoding jobs created.}}`,
+                { count: result.success }
+              )
+            )
+          }
 
-          this.table().loadData()
+          if (result.skipped) {
+            this.notifier.info(
+              formatICU(
+                // eslint-disable-next-line max-len
+                $localize`{count, plural, =1 {1 video skipped because it is already being transcoded.} other {{count} videos skipped because they are already being transcoded.}}`,
+                { count: result.skipped }
+              )
+            )
+          }
+
+          this.notifyBulkFailures(result.failures)
+
+          if (result.success) this.table().loadData()
         },
 
-        error: err => this.notifier.handleError(err)
+        // Errors aborting the whole batch
+        error: err => {
+          this.notifier.handleError(err)
+          this.table().loadData()
+        }
       })
   }
 
@@ -599,15 +622,34 @@ export class VideoListComponent implements OnInit {
             this.notifier.info(
               formatICU(
                 // eslint-disable-next-line max-len
-                $localize`{count, plural, =1 {1 video is already being transcribed.} other {{count} videos are already being transcribed.}}`,
+                $localize`{count, plural, =1 {1 video skipped because it is already being transcribed.} other {{count} videos skipped because they are already being transcribed.}}`,
                 { count: result.alreadyBeingTranscribed }
               )
             )
           }
+
+          this.notifyBulkFailures(result.failures)
         },
 
+        // Errors aborting the whole batch
         error: err => this.notifier.handleError(err)
       })
+  }
+
+  // Errors requiring a special treatment (server unavailable, reconnection required etc.) abort the batch
+  // We only have video errors here
+  private notifyBulkFailures (failures: { video: { name: string }, error: Error }[]) {
+    if (failures.length === 0) return
+
+    const { video, error } = failures[0]
+
+    this.notifier.error(
+      formatICU(
+        // eslint-disable-next-line max-len
+        $localize`{count, plural, =1 {Failed on video "{name}": {message}} other {Failed on {count} videos. First error on video "{name}": {message}}}`,
+        { count: failures.length, name: video.name, message: error.message }
+      )
+    )
   }
 
   private retryImport (videos: Video[]) {
