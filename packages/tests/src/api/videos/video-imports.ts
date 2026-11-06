@@ -715,6 +715,39 @@ describe('Test video imports', function () {
       }
     })
 
+    it('Should retry by video another user import that reached the maximum number of attempts as admin', async function () {
+      this.timeout(60_000)
+
+      const userToken = await server.users.generateUserAndToken('import_user')
+
+      await server.jobs.pauseJobQueue()
+
+      const { id: importId, video } = await server.videoImports.quickImport({
+        name: 'user import to retry',
+        targetUrl: FIXTURE_URLS.goodVideo,
+        token: userToken
+      })
+
+      await sqlCommand.setImportUrl(importId, FIXTURE_URLS.badVideo)
+      await server.jobs.resumeJobQueue()
+      await waitJobs([ server ])
+
+      await sqlCommand.setImportAttempts(importId, 1000)
+      await sqlCommand.setImportUrl(importId, FIXTURE_URLS.goodVideo)
+
+      await server.videoImports.retryByVideo({ videoId: video.uuid, token: userToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+
+      await server.videoImports.retryByVideo({ videoId: video.uuid })
+      await waitJobs([ server ])
+
+      const { data } = await server.videoImports.listMyVideoImports({ id: importId, token: userToken })
+      expect(data[0].state.id).to.equal(VideoImportState.SUCCESS)
+      expect(data[0].attempts).to.equal(1001)
+
+      const videoDetails = await server.videos.getWithToken({ id: video.uuid })
+      expect(videoDetails.state.id).to.equal(VideoState.PUBLISHED)
+    })
+
     after(async function () {
       await sqlCommand?.cleanup()
 

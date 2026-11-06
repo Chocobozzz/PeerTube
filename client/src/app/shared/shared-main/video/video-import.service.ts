@@ -8,6 +8,7 @@ import { SortMeta } from 'primeng/api'
 import { from, Observable } from 'rxjs'
 import { catchError, concatMap, map, switchMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../../environments/environment'
+import { VideoService } from './video.service'
 
 @Injectable()
 export class VideoImportService {
@@ -66,22 +67,10 @@ export class VideoImportService {
       .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  retryVideoImportByVideos (videos: Pick<Video, 'id'>[]) {
-    const pagination = { start: 0, count: 1 }
-    const sort = { field: 'createdAt', order: -1 }
-
+  retryVideoImportByVideos (videos: Pick<Video, 'uuid'>[]) {
     return from(videos)
       .pipe(
-        concatMap(video => {
-          return this.listMyVideoImports({ pagination, sort, includeCollaborations: true, videoId: video.id })
-            .pipe(switchMap(({ data }) => {
-              if (data.length === 0) {
-                throw new Error('No video import found for this video')
-              }
-
-              return this.authHttp.post(VideoImportService.BASE_VIDEO_IMPORT_URL + data[0].id + '/retry', {})
-            }))
-        }),
+        concatMap(video => this.authHttp.post(VideoService.BASE_VIDEO_URL + '/' + video.uuid + '/import/retry', {})),
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )

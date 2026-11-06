@@ -2,6 +2,7 @@ import { forceNumber } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, RETRYABLE_VIDEO_IMPORT_STATES, UserRight, VideoImportCreate, VideoImportState } from '@peertube/peertube-models'
 import { isResolvingToUnicastOnly } from '@server/helpers/dns.js'
 import { isPreImportVideoAccepted } from '@server/lib/moderation.js'
+import { canIgnoreImportMaxAttempts } from '@server/lib/video-post-import.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUserAccountId, MVideoImportDefault } from '@server/types/models/index.js'
 import express from 'express'
@@ -17,7 +18,15 @@ import { cleanUpReqFiles } from '../../../helpers/express-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
-import { areValidationErrors, checkCanManageVideo, doesChannelIdExist, doesVideoImportExist } from '../shared/index.js'
+import {
+  areValidationErrors,
+  checkCanManageVideo,
+  doesChannelIdExist,
+  doesVideoExist,
+  doesVideoImportExist,
+  doesVideoImportOfVideoExist,
+  isValidVideoIdParam
+} from '../shared/index.js'
 import { areErrorsInNSFW, getCommonVideoEditAttributes } from './videos.js'
 
 const logger = createLogger()
@@ -183,28 +192,21 @@ export const videoImportRetryValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoImportExist(forceNumber(req.params.id), res)) return
-    if (!await checkCanManageImport({ user: res.locals.oauth.token.User, videoImport: res.locals.videoImport, req, res })) return
+    if (!await checkVideoImportCanBeRetried(req, res)) return
 
-    if (!RETRYABLE_VIDEO_IMPORT_STATES.includes(res.locals.videoImport.state)) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('Cannot retry a non failed or cancelled video import')
-      })
-    }
+    return next()
+  }
+]
 
-    if (!res.locals.videoImport.Video) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('Cannot retry video import because the associated video metadata has been deleted')
-      })
-    }
+export const videoImportRetryByVideoValidator = [
+  isValidVideoIdParam('videoId'),
 
-    if (res.locals.videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
-      return res.fail({
-        status: HttpStatusCode.BAD_REQUEST_400,
-        message: req.t('Cannot retry video import since it has reached the maximum number of attempts')
-      })
-    }
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
+    if (!await doesVideoImportOfVideoExist(res.locals.videoId.id, res)) return
+    if (!await checkVideoImportCanBeRetried(req, res)) return
 
     return next()
   }
@@ -244,6 +246,39 @@ async function isImportAccepted (req: express.Request, res: express.Response) {
   return true
 }
 
+async function checkVideoImportCanBeRetried (req: express.Request, res: express.Response) {
+  const user = res.locals.oauth.token.User
+  const videoImport = res.locals.videoImport
+
+  if (!await checkCanManageImport({ user, videoImport, req, res })) return false
+
+  if (!RETRYABLE_VIDEO_IMPORT_STATES.includes(videoImport.state)) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: req.t('Cannot retry a non failed or cancelled video import')
+    })
+    return false
+  }
+
+  if (!videoImport.Video) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: req.t('Cannot retry video import because the associated video metadata has been deleted')
+    })
+    return false
+  }
+
+  if (!canIgnoreImportMaxAttempts(user) && videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: req.t('Cannot retry video import since it has reached the maximum number of attempts')
+    })
+    return false
+  }
+
+  return true
+}
+
 async function checkCanManageImport (options: {
   user: MUserAccountId
   videoImport: MVideoImportDefault
@@ -260,7 +295,8 @@ async function checkCanManageImport (options: {
       user,
       video: videoImport.Video,
       req,
-      res,
+      // We send the response below
+      res: null,
       right: UserRight.MANAGE_VIDEO_IMPORTS,
       checkIsLocal: true,
       checkIsOwner: false

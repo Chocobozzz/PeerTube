@@ -1,10 +1,19 @@
 import express from 'express'
 import { VideoImportModel } from '@server/models/video/video-import.js'
 import { HttpStatusCode } from '@peertube/peertube-models'
+import { MVideoImportDefault } from '@server/types/models/index.js'
 
-async function doesVideoImportExist (id: number, res: express.Response) {
-  const videoImport = await VideoImportModel.loadAndPopulateVideo(id)
+export async function doesVideoImportExist (id: number, res: express.Response) {
+  return checkVideoImportExists(await VideoImportModel.loadAndPopulateVideo(id), res)
+}
 
+export async function doesVideoImportOfVideoExist (videoId: number, res: express.Response) {
+  return checkVideoImportExists(await VideoImportModel.loadByVideoIdAndPopulateVideo(videoId), res)
+}
+
+// ---------------------------------------------------------------------------
+
+function checkVideoImportExists (videoImport: MVideoImportDefault, res: express.Response) {
   if (!videoImport) {
     res.fail({
       status: HttpStatusCode.NOT_FOUND_404,
@@ -15,8 +24,4 @@ async function doesVideoImportExist (id: number, res: express.Response) {
 
   res.locals.videoImport = videoImport
   return true
-}
-
-export {
-  doesVideoImportExist
 }

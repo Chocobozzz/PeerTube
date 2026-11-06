@@ -4488,7 +4488,8 @@ paths:
   /api/v1/videos/imports/{id}/retry:
     post:
       summary: Retry video import
-      description: "**PeerTube >= 8.0** Retry a failed or cancelled (**PeerTube >= 8.3**) video import"
+      description: |
+        **PeerTube >= 8.0** Retry a failed or cancelled (**PeerTube >= 8.3**) video import.
       security:
         - OAuth2: []
       tags:
@@ -4498,6 +4499,27 @@ paths:
       responses:
         '204':
           description: successful operation
+
+  '/api/v1/videos/{id}/import/retry':
+    post:
+      summary: Retry the import of a video
+      description: |
+        **PeerTube >= 9.0** Retry the failed or cancelled import of a video, without having to know the video import id.
+      security:
+        - OAuth2: []
+      tags:
+        - Video Imports
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: the import is not failed or cancelled, or has reached the maximum number of attempts
+        '403':
+          description: the user cannot manage this video import
+        '404':
+          description: the video does not exist or has not been imported
 
   /api/v1/videos/imports/{id}:
     delete:

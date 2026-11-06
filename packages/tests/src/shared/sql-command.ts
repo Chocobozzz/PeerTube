@@ -176,6 +176,13 @@ export class SQLCommand {
     )
   }
 
+  async setImportAttempts (videoImportId: number, attempts: number) {
+    await this.updateQuery(
+      `UPDATE "videoImport" SET "attempts" = :attempts WHERE id = :videoImportId`,
+      { attempts, videoImportId }
+    )
+  }
+
   async setImportState (videoImportId: number, state: VideoImportStateType) {
     await this.updateQuery(
       `UPDATE "videoImport" SET "state" = :state WHERE id = :videoImportId`,

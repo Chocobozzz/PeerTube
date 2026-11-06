@@ -64,7 +64,7 @@ export async function processVideoImport (job: Job): Promise<VideoImportPreventE
       return { resultType: 'success' }
     }
 
-    if (videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
+    if (payload.ignoreMaxAttempts !== true && videoImport.attempts >= CONFIG.IMPORT.VIDEOS.MAX_ATTEMPTS) {
       logger.info('Do not process import since it has reached the maximum number of attempts', { payload, attempts: videoImport.attempts })
 
       return { resultType: 'error' }

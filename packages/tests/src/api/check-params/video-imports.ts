@@ -612,6 +612,98 @@ describe('Test video imports API validator', function () {
     })
   })
 
+  describe('Retrying a video import by video', function () {
+    let sqlCommand: SQLCommand
+    let userImportId: number
+    let userVideoUUID: string
+    let successVideoUUID: string
+    let uploadedVideoUUID: string
+
+    before(async function () {
+      this.timeout(60000)
+
+      sqlCommand = new SQLCommand(server)
+
+      await server.jobs.pauseJobQueue()
+
+      {
+        const res = await server.videoImports.quickImport({
+          name: 'User to retry',
+          targetUrl: FIXTURE_URLS.goodVideo,
+          token: userAccessToken
+        })
+        userImportId = res.id
+        userVideoUUID = res.video.uuid
+      }
+
+      await sqlCommand.setImportUrl(userImportId, FIXTURE_URLS.badVideo)
+      await server.jobs.resumeJobQueue()
+
+      {
+        const res = await server.videoImports.quickImport({ name: 'Success by video', targetUrl: FIXTURE_URLS.goodVideo })
+        successVideoUUID = res.video.uuid
+      }
+
+      {
+        const res = await server.videos.quickUpload({ name: 'Not imported' })
+        uploadedVideoUUID = res.uuid
+      }
+
+      await waitJobs([ server ])
+    })
+
+    it('Should fail with an invalid video id', async function () {
+      await server.videoImports.retryByVideo({ videoId: 'artyom', expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail with an unknown video', async function () {
+      await server.videoImports.retryByVideo({ videoId: 424242, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail with a video that has not been imported', async function () {
+      await server.videoImports.retryByVideo({ videoId: uploadedVideoUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fail without token', async function () {
+      await server.videoImports.retryByVideo({ videoId: userVideoUUID, token: null, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    })
+
+    it('Should fail with another user token', async function () {
+      await server.videoImports.retryByVideo({ videoId: userVideoUUID, token: editorToken, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    it('Should fail with non failed import', async function () {
+      await server.videoImports.retryByVideo({ videoId: successVideoUUID, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should fail to retry as the owner when the maximum number of attempts has been reached', async function () {
+      await sqlCommand.setImportAttempts(userImportId, 1000)
+
+      await server.videoImports.retryByVideo({
+        videoId: userVideoUUID,
+        token: userAccessToken,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+      await server.videoImports.retry({ importId: userImportId, token: userAccessToken, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed to retry another user import as admin even if the maximum number of attempts has been reached', async function () {
+      await server.videoImports.retryByVideo({ videoId: userVideoUUID })
+    })
+
+    it('Should succeed to retry as the owner', async function () {
+      await waitJobs([ server ])
+      await sqlCommand.setImportAttempts(userImportId, 1)
+
+      await server.videoImports.retryByVideo({ videoId: userVideoUUID, token: userAccessToken })
+    })
+
+    after(async function () {
+      await waitJobs([ server ])
+      await sqlCommand?.cleanup()
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

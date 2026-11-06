@@ -114,6 +114,8 @@ interface VideoImportAbstractPayload {
   generateTranscription: boolean
 
   fromChannelImport?: boolean
+
+  ignoreMaxAttempts?: boolean
 }
 
 export interface VideoImportYoutubeDLPayload extends VideoImportAbstractPayload {

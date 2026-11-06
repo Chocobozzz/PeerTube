@@ -1,4 +1,11 @@
-import { HttpStatusCode, ResultList, VideoImport, VideoImportCreate, VideoImportState, VideoImportStateType } from '@peertube/peertube-models'
+import {
+  HttpStatusCode,
+  ResultList,
+  VideoImport,
+  VideoImportCreate,
+  VideoImportState,
+  VideoImportStateType
+} from '@peertube/peertube-models'
 import { unwrapBody } from '../requests/index.js'
 import { AbstractCommand, OverrideCommandOptions } from '../shared/index.js'
 
@@ -99,6 +106,22 @@ export class VideoImportsCommand extends AbstractCommand {
     }
   ) {
     const path = '/api/v1/videos/imports/' + options.importId + '/retry'
+
+    return this.postBodyRequest({
+      ...options,
+
+      path,
+      implicitToken: true,
+      defaultExpectedStatus: HttpStatusCode.NO_CONTENT_204
+    })
+  }
+
+  retryByVideo (
+    options: OverrideCommandOptions & {
+      videoId: number | string
+    }
+  ) {
+    const path = '/api/v1/videos/' + options.videoId + '/import/retry'
 
     return this.postBodyRequest({
       ...options,

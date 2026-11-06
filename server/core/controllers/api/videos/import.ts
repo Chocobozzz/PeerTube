@@ -11,7 +11,7 @@ import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { YoutubeDlImportError, YoutubeDlImportErrorCode } from '@server/helpers/youtube-dl/youtube-dl-wrapper.js'
 import { buildStagingKey, removeStagingObject, storeStagingObject } from '@server/lib/object-storage/staging.js'
 import { createLocalVideoThumbnailsFromImage } from '@server/lib/thumbnail.js'
-import { buildRetryImportJob } from '@server/lib/video-post-import.js'
+import { buildRetryImportJob, canIgnoreImportMaxAttempts } from '@server/lib/video-post-import.js'
 import { buildVideoFromImport, buildYoutubeDLImport, insertFromImportIntoDB } from '@server/lib/video-pre-import.js'
 import { MVideoThumbnails } from '@server/types/models/index.js'
 import express from 'express'
@@ -34,6 +34,7 @@ import {
   videoImportAddValidator,
   videoImportCancelValidator,
   videoImportDeleteValidator,
+  videoImportRetryByVideoValidator,
   videoImportRetryValidator
 } from '../../../middlewares/index.js'
 
@@ -67,6 +68,13 @@ videoImportsRouter.post(
   '/imports/:id/retry',
   authenticate,
   asyncMiddleware(videoImportRetryValidator),
+  asyncRetryTransactionMiddleware(retryVideoImport)
+)
+
+videoImportsRouter.post(
+  '/:videoId/import/retry',
+  authenticate,
+  asyncMiddleware(videoImportRetryByVideoValidator),
   asyncRetryTransactionMiddleware(retryVideoImport)
 )
 
@@ -112,7 +120,8 @@ async function retryVideoImport (req: express.Request, res: express.Response) {
 
   const oldVideoImportAuditEntity = auditLog.snapshot(() => buildVideoImportAuditEntity(videoImport.toFormattedJSON()))
 
-  await JobQueue.Instance.createJob(await buildRetryImportJob(videoImport))
+  const ignoreMaxAttempts = canIgnoreImportMaxAttempts(res.locals.oauth.token.User)
+  await JobQueue.Instance.createJob(await buildRetryImportJob(videoImport, { ignoreMaxAttempts }))
 
   auditLog.update(getAuditActorFromRes(res), () => buildVideoImportAuditEntity(videoImport.toFormattedJSON()), oldVideoImportAuditEntity)
 
