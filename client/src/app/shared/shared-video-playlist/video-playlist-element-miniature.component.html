@@ -22,7 +22,7 @@
       @if (playlistElement().video) {
         <div class="video-info-header">
           <a
-            tabindex="-1" class="video-info-name" [ariaLabel]="getVideoAriaLabel()" [attr.title]="playlistElement().video.name"
+            tabindex="-1" class="video-info-name ellipsis-multiline-2" [ariaLabel]="getVideoAriaLabel()" [attr.title]="playlistElement().video.name"
             [routerLink]="buildRouterLink()" [queryParams]="buildRouterQuery()"
           >{{ playlistElement().video.name }}</a>
 

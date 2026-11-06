@@ -118,9 +118,8 @@ my-video-thumbnail,
 .video-info-name {
   font-size: 18px;
   font-weight: $font-semibold;
-  display: inline-block;
 
-  @include ellipsis;
+  @include peertube-word-wrap(false);
 }
 
 .video-info {
