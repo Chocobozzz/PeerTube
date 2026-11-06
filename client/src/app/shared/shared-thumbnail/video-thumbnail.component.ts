@@ -1,6 +1,7 @@
 import { CommonModule, getLocaleDirection } from '@angular/common'
 import { booleanAttribute, ChangeDetectionStrategy, Component, inject, input, LOCALE_ID, OnChanges, output, viewChild } from '@angular/core'
 import { RouterLink } from '@angular/router'
+import { dateTimeToHuman } from '@app/helpers'
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap'
 import { Video as VideoServerModel, VideoState } from '@peertube/peertube-models'
 import { GlobalIconComponent } from '../shared-icons/global-icon.component'
@@ -158,7 +159,7 @@ export class VideoThumbnailComponent implements OnChanges {
   getLiveOverlayLabel () {
     if (this.isLiveStreaming()) return $localize`Live`
     if (this.isEndedLive()) return $localize`Live ended`
-    if (this.isScheduledLive()) return $localize`Scheduled live ${this.scheduledLiveDate().toLocaleString()}`
+    if (this.isScheduledLive()) return $localize`Scheduled live ${dateTimeToHuman(this.localeId, this.scheduledLiveDate())}`
 
     return $localize`Waiting for live`
   }

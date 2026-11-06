@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, LOCALE_ID, OnInit, inject } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute, RouterLink } from '@angular/router'
 import {
@@ -12,7 +12,7 @@ import {
   resetCurrentPage,
   updatePaginationOnDelete
 } from '@app/core'
-import { formatICU } from '@app/helpers'
+import { formatICU, getDateLocale } from '@app/helpers'
 import { SelectOptionsComponent } from '@app/shared/shared-forms/select/select-options.component'
 import { CollaboratorStateComponent } from '@app/shared/shared-main/channel/collaborator-state.component'
 import { VideoChannel } from '@app/shared/shared-main/channel/video-channel.model'
@@ -67,6 +67,7 @@ type DisplayFilter = 'all' | 'owned'
 export class MyVideoChannelsComponent implements OnInit {
   private authService = inject(AuthService)
   private notifier = inject(Notifier)
+  private localeId = inject(LOCALE_ID)
   private videoChannelService = inject(VideoChannelService)
   private screenService = inject(ScreenService)
   private route = inject(ActivatedRoute)
@@ -304,23 +305,23 @@ export class MyVideoChannelsComponent implements OnInit {
 
   private formatStatsAxisLabel (date: Date, groupInterval: VideoChannelStatsGroupInterval) {
     if (groupInterval === 'month') {
-      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+      return date.toLocaleDateString(getDateLocale(this.localeId), { year: 'numeric', month: 'short' })
     }
 
-    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+    return date.toLocaleDateString(getDateLocale(this.localeId), { month: 'short', day: 'numeric' })
   }
 
   private formatStatsTooltipTitle (date: Date, groupInterval: VideoChannelStatsGroupInterval) {
     if (groupInterval === 'month') {
-      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+      return date.toLocaleDateString(getDateLocale(this.localeId), { year: 'numeric', month: 'short' })
     }
 
     if (groupInterval === 'week') {
-      const weekStart = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+      const weekStart = date.toLocaleDateString(getDateLocale(this.localeId), { month: 'short', day: 'numeric' })
       return $localize`Week of ${weekStart}`
     }
 
-    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })
+    return date.toLocaleDateString(getDateLocale(this.localeId), { year: 'numeric', month: 'short', day: 'numeric' })
   }
 
   private buildChartOptions () {

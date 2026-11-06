@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable, inject } from '@angular/core'
+import { Injectable, LOCALE_ID, inject } from '@angular/core'
 import { RestExtractor, RestService } from '@app/core'
 import { ServerLogLevel } from '@peertube/peertube-models'
 import { catchError, map } from 'rxjs/operators'
@@ -11,6 +11,7 @@ export class LogsService {
   private authHttp = inject(HttpClient)
   private restService = inject(RestService)
   private restExtractor = inject(RestExtractor)
+  private localeId = inject(LOCALE_ID)
 
   private static BASE_LOG_URL = environment.apiUrl + '/api/v1/server/logs'
 
@@ -31,7 +32,7 @@ export class LogsService {
 
     return this.authHttp.get<LogRow[]>(LogsService.BASE_LOG_URL, { params })
       .pipe(
-        map(rows => rows.map(r => new LogRow(r))),
+        map(rows => rows.map(r => new LogRow(r, this.localeId))),
         catchError(err => this.restExtractor.handleError(err))
       )
   }

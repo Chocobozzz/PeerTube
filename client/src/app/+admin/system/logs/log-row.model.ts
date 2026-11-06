@@ -1,3 +1,4 @@
+import { getDateLocale } from '@app/helpers'
 import omit from 'lodash-es/omit'
 import { ServerLogLevel } from '@peertube/peertube-models'
 
@@ -8,9 +9,9 @@ export class LogRow {
   message: string
   meta: string
 
-  constructor (row: any) {
+  constructor (row: any, localeId: string) {
     this.date = new Date(row.timestamp)
-    this.localeDate = this.date.toLocaleString()
+    this.localeDate = this.date.toLocaleString(getDateLocale(localeId))
     this.level = row.level
     this.message = row.message
 

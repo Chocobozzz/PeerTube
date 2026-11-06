@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { booleanAttribute, Component, inject, input, LOCALE_ID, OnChanges, ChangeDetectionStrategy } from '@angular/core'
+import { dateTimeToHuman } from '@app/helpers'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { Video, VideoPlaylistPrivacy, VideoPlaylistPrivacyType, VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 import { VideoPlaylist } from '../shared-video-playlist/video-playlist.model'
@@ -68,7 +69,7 @@ export class PrivacyBadgeComponent implements OnChanges {
 
   private buildTooltip () {
     if (this.video()?.scheduledUpdate) {
-      const updateAt = new Date(this.video().scheduledUpdate.updateAt.toString()).toLocaleString(this.localeId)
+      const updateAt = dateTimeToHuman(this.localeId, this.video().scheduledUpdate.updateAt)
       return $localize`Scheduled on ${updateAt}`
     }
 

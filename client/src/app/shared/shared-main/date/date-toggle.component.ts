@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnChanges, inject, input, model } from '@angular/core'
+import { ChangeDetectionStrategy, Component, LOCALE_ID, OnChanges, inject, input, model } from '@angular/core'
+import { dateTimeToHuman } from '@app/helpers'
 import { FromNowPipe } from './from-now.pipe'
 
 @Component({
@@ -10,6 +11,7 @@ import { FromNowPipe } from './from-now.pipe'
 })
 export class DateToggleComponent implements OnChanges {
   private fromNowPipe = inject(FromNowPipe)
+  private localeId = inject(LOCALE_ID)
 
   readonly date = input<Date>(undefined)
   readonly toggled = model(false)
@@ -41,6 +43,6 @@ export class DateToggleComponent implements OnChanges {
 
   private updateDates () {
     this.dateRelative = this.fromNowPipe.transform(this.date())
-    this.dateAbsolute = this.date().toLocaleString()
+    this.dateAbsolute = dateTimeToHuman(this.localeId, this.date())
   }
 }

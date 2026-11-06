@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, LOCALE_ID, OnInit, inject } from '@
 import { FormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { Notifier, PeerTubeRouterService, ServerService } from '@app/core'
+import { getDateLocale } from '@app/helpers'
 import { GlobalIconComponent } from '@app/shared/shared-icons/global-icon.component'
 import { NumberFormatterPipe } from '@app/shared/shared-main/common/number-formatter.pipe'
 import { LiveVideoService } from '@app/shared/shared-video-live/live-video.service'
@@ -744,18 +745,18 @@ export class VideoStatsComponent implements OnInit {
     const date = new Date(label)
 
     if (data.groupInterval.match(/ months?$/)) {
-      return date.toLocaleDateString([], { year: '2-digit', month: 'numeric' })
+      return date.toLocaleDateString(getDateLocale(this.localeId), { year: '2-digit', month: 'numeric' })
     }
 
     if (data.groupInterval.match(/ days?$/)) {
-      return date.toLocaleDateString([], { month: 'numeric', day: 'numeric' })
+      return date.toLocaleDateString(getDateLocale(this.localeId), { month: 'numeric', day: 'numeric' })
     }
 
     if (data.groupInterval.match(/ hours?$/)) {
-      return date.toLocaleTimeString([], { month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+      return date.toLocaleTimeString(getDateLocale(this.localeId), { month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
     }
 
-    return date.toLocaleTimeString([], { hour: 'numeric', minute: 'numeric' })
+    return date.toLocaleTimeString(getDateLocale(this.localeId), { hour: 'numeric', minute: 'numeric' })
   }
 
   private formatYTick (options: {
@@ -814,7 +815,7 @@ export class VideoStatsComponent implements OnInit {
   }
 
   private toMediumDate (d: Date) {
-    return new Date(d).toLocaleString(this.localeId, {
+    return new Date(d).toLocaleString(getDateLocale(this.localeId), {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
