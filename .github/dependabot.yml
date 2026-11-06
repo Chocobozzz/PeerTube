@@ -1,0 +1,16 @@
+version: 2
+
+updates:
+  # Actions are pinned by commit SHA: Dependabot updates the SHA and the version comment
+  - package-ecosystem: github-actions
+    directories:
+      - '/'
+      - '/.github/actions/*'
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14
+    groups:
+      github-actions:
+        patterns:
+          - '*'

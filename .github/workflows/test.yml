@@ -88,7 +88,9 @@ jobs:
       YOUTUBE_DL_PROXY: ${{ secrets.YOUTUBE_DL_PROXY }}
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
 
       - uses: './.github/actions/reusable-prepare-peertube-build'
         with:
@@ -97,7 +99,7 @@ jobs:
       - uses: './.github/actions/reusable-prepare-peertube-run'
 
       - name: Cache fixtures
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             fixtures
@@ -108,14 +110,14 @@ jobs:
             ${{ runner.OS }}-
 
       - name: Cache PeerTube pip directory
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             ~/.cache/pip
           key: ${{ runner.OS }}-${{ matrix.test_suite }}-pip-v1
 
       - name: Cache Hugging Face models
-        uses: actions/cache@v5
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             ~/.cache/huggingface
@@ -151,7 +153,8 @@ jobs:
         if: github.event_name == 'schedule' || matrix.test_suite != 'external-plugins'
         env:
           AKISMET_KEY: ${{ secrets.AKISMET_KEY }}
-        run: npm run ci -- ${{ matrix.test_suite }}
+          TEST_SUITE: ${{ matrix.test_suite }}
+        run: npm run ci -- "$TEST_SUITE"
 
       - name: Display errors
         if: ${{ always() }}
@@ -173,7 +176,7 @@ jobs:
           done
 
       - name: Upload logs and database
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: ${{ failure() || hashFiles('artifacts/failed-attempts/*') != '' }}
         with:
           name: test-storages-${{ matrix.test_suite }}

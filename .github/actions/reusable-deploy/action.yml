@@ -29,18 +29,30 @@ runs:
   steps:
     - name: "Deploy"
       shell: bash
+      env:
+        SOURCE: ${{ inputs.source }}
+        DESTINATION: ${{ inputs.destination }}
+        KNOWN_HOSTS: ${{ inputs.knownHosts }}
+        DEPLOY_KEY: ${{ inputs.deployKey }}
+        DEPLOY_USER: ${{ inputs.deployUser }}
+        DEPLOY_HOST: ${{ inputs.deployHost }}
       run: |
+        set -euo pipefail
+
         mkdir -p ~/.ssh
-        chmod 700  ~/.ssh
+        chmod 700 ~/.ssh
 
         echo "Adding ssh key to known hosts"
-        echo -e "${{ inputs.knownHosts }}" > ~/.ssh/known_hosts;
+        echo -e "$KNOWN_HOSTS" > ~/.ssh/known_hosts
 
-        eval `ssh-agent -s`
+        eval "$(ssh-agent -s)"
+        trap 'ssh-agent -k > /dev/null' EXIT
 
         echo "Adding ssh deploy key"
-        ssh-add <(echo "${{ inputs.deployKey }}");
+        ssh-add <(echo "$DEPLOY_KEY")
 
         echo "Uploading files"
 
-        scp ${{ inputs.source }} ${{ inputs.deployUser }}@${{ inputs.deployHost }}:../../web/${{ inputs.destination }};
+        # SOURCE is intentionally unquoted: it can contain several space separated paths and globs
+        # shellcheck disable=SC2086
+        scp $SOURCE "$DEPLOY_USER@$DEPLOY_HOST:../../web/$DESTINATION"
