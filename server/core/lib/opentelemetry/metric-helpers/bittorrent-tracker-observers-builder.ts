@@ -36,7 +36,7 @@ export class BittorrentTrackerObserversBuilder {
 
         for (const peerId of peers.keys) {
           const peer = peers.peek(peerId)
-          if (peer == null) return
+          if (peer == null) continue
 
           counters.peers++
         }
