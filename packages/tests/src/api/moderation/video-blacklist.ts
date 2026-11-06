@@ -1,7 +1,18 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { sortObjectComparator } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, UserAdminFlag, UserRole, VideoBlacklist, VideoBlacklistType, VideoPrivacy } from '@peertube/peertube-models'
+import {
+  AuditLogEntityType,
+  HttpStatusCode,
+  UserAdminFlag,
+  UserNotificationType,
+  UserNotificationType_Type,
+  UserRole,
+  VideoBlacklist,
+  VideoBlacklistType,
+  VideoBlacklistType_Type,
+  VideoPrivacy
+} from '@peertube/peertube-models'
 import {
   BlacklistCommand,
   cleanupTests,
@@ -476,6 +487,143 @@ describe('Test video blacklist', function () {
 
       const body = await command.list({ type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY })
       expect(body.total).to.equal(5)
+    })
+
+    describe('When changing the ownership of an auto blacklisted video', function () {
+      type NextOwner = { username: string, token: string, channelId: number, channelName: string }
+
+      let trusted: NextOwner
+      let untrusted: NextOwner
+      let root: NextOwner
+
+      async function giveVideo (videoId: string, fromToken: string, to: NextOwner) {
+        await servers[0].changeOwnership.createVideo({ token: fromToken, videoId, username: to.username })
+
+        const { data } = await servers[0].changeOwnership.listVideos({ token: to.token, sort: '-createdAt' })
+        await servers[0].changeOwnership.acceptVideo({ token: to.token, ownershipId: data[0].id, channelId: to.channelId })
+
+        await waitJobs(servers)
+      }
+
+      // No type: the video is not blocked, so it is federated
+      async function checkBlock (videoUUID: string, type?: VideoBlacklistType_Type) {
+        const { data } = await command.list({ sort: '-createdAt', count: 100 })
+        expect(data.find(b => b.video.uuid === videoUUID)?.type).to.equal(type)
+
+        const { data: remoteVideos } = await servers[1].videos.list({ count: 100 })
+        expect(remoteVideos.some(v => v.uuid === videoUUID)).to.equal(!type)
+      }
+
+      async function hasNotification (token: string, videoUUID: string, type: UserNotificationType_Type) {
+        const { data } = await servers[0].notifications.list({ token, count: 100, typeOneOf: [ type ] })
+
+        return data.some(n => n.video?.uuid === videoUUID)
+      }
+
+      async function checkReleaseSideEffects (options: {
+        videoUUID: string
+        owner: NextOwner
+        subscriberToken: string
+        released: boolean
+      }) {
+        const { videoUUID, owner, subscriberToken, released } = options
+
+        const auditLogQuery = { entityType: AuditLogEntityType.VIDEO_BLOCK, action: 'delete' as const, search: videoUUID }
+
+        if (released) {
+          const [ auditLog ] = await servers[0].logs.waitAuditLogs({ ...auditLogQuery, total: 1 })
+          expect(auditLog.user.username).to.equal(owner.username)
+          expect(auditLog.entity.video.uuid).to.equal(videoUUID)
+        } else {
+          const { total } = await servers[0].logs.listAuditLogs(auditLogQuery)
+          expect(total).to.equal(0)
+        }
+
+        expect(await hasNotification(owner.token, videoUUID, UserNotificationType.MY_VIDEO_PUBLISHED)).to.equal(released)
+        expect(await hasNotification(subscriberToken, videoUUID, UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION)).to.equal(released)
+      }
+
+      before(async function () {
+        const getChannel = async (token: string) => {
+          const { id, name } = (await servers[0].users.getMyInfo({ token })).videoChannels[0]
+
+          return { channelId: id, channelName: name }
+        }
+
+        trusted = { username: 'user_with_flag', token: userWithFlag, ...await getChannel(userWithFlag) }
+        root = { username: 'root', token: servers[0].accessToken, ...await getChannel(servers[0].accessToken) }
+
+        const { token } = await servers[0].users.generate('other_user_without_flag')
+        untrusted = { username: 'other_user_without_flag', token, ...await getChannel(token) }
+
+        // Subscribe to the channels receiving the videos, to check new video notifications
+        for (const owner of [ trusted, untrusted ]) {
+          await servers[0].subscriptions.add({ targetUri: owner.channelName + '@' + servers[0].host })
+        }
+      })
+
+      it('Should keep the auto block if the next owner does not bypass auto blacklist', async function () {
+        const { uuid } = await servers[0].videos.quickUpload({ token: userWithoutFlag, name: 'transfer to untrusted' })
+        await giveVideo(uuid, userWithoutFlag, untrusted)
+
+        await checkBlock(uuid, VideoBlacklistType.AUTO_BY_INSTANCE_POLICY)
+        await checkReleaseSideEffects({ videoUUID: uuid, owner: untrusted, subscriberToken: servers[0].accessToken, released: false })
+      })
+
+      it('Should release the auto block if the next owner bypasses auto blacklist', async function () {
+        const { uuid } = await servers[0].videos.quickUpload({ token: userWithoutFlag, name: 'transfer to trusted' })
+        await giveVideo(uuid, userWithoutFlag, trusted)
+
+        await checkBlock(uuid)
+
+        const remoteVideo = await servers[1].videos.get({ id: uuid })
+        expect(remoteVideo.account.name).to.equal('user_with_flag')
+
+        await checkReleaseSideEffects({ videoUUID: uuid, owner: trusted, subscriberToken: servers[0].accessToken, released: true })
+      })
+
+      it('Should keep a manual block', async function () {
+        const { uuid } = await servers[0].videos.quickUpload({ token: userWithFlag, name: 'transfer manually blocked' })
+        await command.add({ videoId: uuid, reason: 'manual', unfederate: true })
+        await giveVideo(uuid, userWithFlag, root)
+
+        await checkBlock(uuid, VideoBlacklistType.MANUAL)
+      })
+
+      it('Should keep an auto tag policy block', async function () {
+        await servers[0].autoTags.updateServerVideoPolicies({ autoBlock: [ 'external-link' ] })
+
+        try {
+          const { uuid } = await servers[0].videos.upload({
+            token: userWithFlag,
+            attributes: { name: 'transfer auto tag blocked', description: 'Check example.com' }
+          })
+          await waitJobs(servers)
+
+          await giveVideo(uuid, userWithFlag, root)
+
+          await checkBlock(uuid, VideoBlacklistType.AUTO_BY_AUTO_TAG_POLICY)
+        } finally {
+          await servers[0].autoTags.updateServerVideoPolicies({ autoBlock: [] })
+        }
+      })
+
+      it('Should release the auto blocked videos of a channel if the next owner bypasses auto blacklist', async function () {
+        const channelName = 'channel_to_transfer'
+        const { id: channelId } = await servers[0].channels.create({ token: userWithoutFlag, attributes: { name: channelName } })
+        const { uuid } = await servers[0].videos.quickUpload({ token: userWithoutFlag, name: 'channel transfer', channelId })
+
+        await servers[0].subscriptions.add({ token: untrusted.token, targetUri: channelName + '@' + servers[0].host })
+
+        await servers[0].changeOwnership.createChannel({ token: userWithoutFlag, channelName, username: trusted.username })
+
+        const { data } = await servers[0].changeOwnership.listChannels({ token: trusted.token, sort: '-createdAt' })
+        await servers[0].changeOwnership.acceptChannel({ token: trusted.token, ownershipId: data[0].id })
+        await waitJobs(servers)
+
+        await checkBlock(uuid)
+        await checkReleaseSideEffects({ videoUUID: uuid, owner: trusted, subscriberToken: untrusted.token, released: true })
+      })
     })
   })
 

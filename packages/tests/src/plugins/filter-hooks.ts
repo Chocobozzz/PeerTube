@@ -495,6 +495,78 @@ describe('Test plugin filter hooks', function () {
     })
   })
 
+  describe('filter:video.ownership-change.release-auto-blacklist.result', function () {
+    const names = [ 'video please keep me blocked', 'video release me' ]
+
+    let token: string
+    let userId: number
+    const videoUUIDs: string[] = []
+    let channelId: number
+
+    async function checkBlocked (uuid: string, name: string) {
+      const video = await servers[0].videos.getWithToken({ id: uuid })
+      expect(video.blacklisted, name).to.equal(name.includes('keep me blocked'))
+    }
+
+    before(async function () {
+      await servers[0].config.enableAutoBlacklist()
+
+      const res = await servers[0].users.generate('ownership_from')
+      token = res.token
+      userId = res.userId
+    })
+
+    it('Should keep the auto block of a video given to a user bypassing auto blacklist', async function () {
+      for (const name of names) {
+        const { uuid } = await servers[0].videos.quickUpload({ token, name })
+        videoUUIDs.push(uuid)
+
+        await servers[0].changeOwnership.createVideo({ token, videoId: uuid, username: 'root' })
+
+        const { data } = await servers[0].changeOwnership.listVideos({ sort: '-createdAt' })
+        await servers[0].changeOwnership.acceptVideo({ ownershipId: data[0].id, channelId: servers[0].store.channel.id })
+
+        await checkBlocked(uuid, name)
+      }
+    })
+
+    it('Should keep the auto block of a video of a channel given to a user bypassing auto blacklist', async function () {
+      const channelName = 'ownership_from_channel_to_give'
+
+      const channel = await servers[0].channels.create({ token, attributes: { name: channelName } })
+      channelId = channel.id
+
+      const uuids: string[] = []
+      for (const name of names) {
+        const { uuid } = await servers[0].videos.quickUpload({ token, name, channelId })
+        uuids.push(uuid)
+        videoUUIDs.push(uuid)
+      }
+
+      await servers[0].changeOwnership.createChannel({ token, channelName, username: 'root' })
+
+      const { data } = await servers[0].changeOwnership.listChannels({ sort: '-createdAt' })
+      await servers[0].changeOwnership.acceptChannel({ ownershipId: data[0].id })
+
+      for (let i = 0; i < names.length; i++) {
+        await checkBlocked(uuids[i], names[i])
+      }
+    })
+
+    after(async function () {
+      await servers[0].config.disableAutoBlacklist()
+
+      // These videos and channels would change the results of the next tests
+      for (const uuid of videoUUIDs) {
+        await servers[0].videos.remove({ id: uuid })
+      }
+
+      if (channelId) await servers[0].channels.delete({ channelName: 'ownership_from_channel_to_give' })
+
+      await servers[0].users.remove({ userId })
+    })
+  })
+
   describe('Accounts', function () {
     it('Should run filter:api.account.get.result', async function () {
       const result = await servers[0].accounts.get({ accountName: 'root' })

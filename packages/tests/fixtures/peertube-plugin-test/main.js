@@ -375,6 +375,15 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
+    target: 'filter:video.ownership-change.release-auto-blacklist.result',
+    handler: (release, { video }) => {
+      if (video.name.includes('please keep me blocked')) return false
+
+      return release
+    }
+  })
+
+  registerHook({
     target: 'filter:api.user.signup.requires-approval.result',
     handler: ({ requiresApproval, registrationReason }, { body, headers, ip }) => {
       return {

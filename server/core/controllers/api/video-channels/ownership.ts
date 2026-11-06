@@ -1,13 +1,22 @@
-import { ChangeOwnershipState, ChangeOwnershipStateType, HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
-import { auditLog, buildOwnershipChangeAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
+import {
+  ChangeOwnershipState,
+  ChangeOwnershipStateType,
+  HttpStatusCode,
+  VideoBlacklistType,
+  VideoChannelActivityAction
+} from '@peertube/peertube-models'
 import { getAuthUser } from '@server/helpers/express-utils.js'
+import { auditLog, buildOwnershipChangeAuditEntity, buildVideoBlockAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
+import { releaseAutoBlacklistOnOwnershipChangeIfNeeded } from '@server/lib/video-blacklist.js'
+import { UserModel } from '@server/models/user/user.js'
+import { VideoBlacklistModel } from '@server/models/video/video-blacklist.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
 import express from 'express'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { runTransaction } from '../../../helpers/database-utils.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
 import { Notifier } from '../../../lib/notifier/notifier.js'
 import {
@@ -25,6 +34,7 @@ import {
 } from '../../../middlewares/index.js'
 import { ChangeOwnershipModel } from '../../../models/video/change-ownership.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
+import { VideoModel } from '../../../models/video/video.js'
 
 const logger = createLogger()
 
@@ -181,6 +191,24 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
 
     const channelFull = await VideoChannelModel.loadAndPopulateAccount(channel.id, t)
     await sendUpdateActor(channelFull, t)
+
+    const nextOwnerUser = await UserModel.loadByAccountId(changeOwnership.NextOwner.id, t)
+    const blockedVideoIds = await VideoBlacklistModel.listVideoIdsOfChannel({
+      channelId: channel.id,
+      type: VideoBlacklistType.AUTO_BY_INSTANCE_POLICY,
+      transaction: t
+    })
+
+    for (const videoId of blockedVideoIds) {
+      const video = await VideoModel.loadWithRights(videoId, t)
+      const releasedBlock = await releaseAutoBlacklistOnOwnershipChangeIfNeeded({ video, nextOwner: nextOwnerUser, transaction: t })
+
+      if (releasedBlock) {
+        auditLog.delete(getAuditActorFromRes(res), () => buildVideoBlockAuditEntity({ video, videoBlock: releasedBlock }), {
+          transaction: t
+        })
+      }
+    }
 
     changeOwnership.state = ChangeOwnershipState.ACCEPTED
     await changeOwnership.save({ transaction: t })

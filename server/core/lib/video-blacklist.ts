@@ -152,6 +152,47 @@ export async function resolvePendingAutoTagBlacklist (options: {
   logger.info('Removed auto-blocking of video %s: its automatic tags do not match any auto block policy.', video.uuid)
 }
 
+// ---------------------------------------------------------------------------
+
+export async function releaseAutoBlacklistOnOwnershipChangeIfNeeded (options: {
+  // Video with its new channel
+  video: MVideoWithRights
+  nextOwner: MUser
+  transaction: Transaction
+}): Promise<MVideoBlacklist> {
+  const { video, nextOwner, transaction } = options
+
+  if (!video.VideoBlacklist || !nextOwner || !video.isLocal()) return undefined
+
+  // The blacklist loaded with the video does not have its type
+  const videoBlacklist = await VideoBlacklistModel.loadByVideoId(video.id, transaction)
+  if (videoBlacklist?.type !== VideoBlacklistType.AUTO_BY_INSTANCE_POLICY) return undefined
+
+  const release = await Hooks.wrapFun(
+    _releaseAutoBlacklistOnOwnershipChangeNeeded,
+    { video, videoBlacklist, nextOwner },
+    'filter:video.ownership-change.release-auto-blacklist.result'
+  )
+  if (!release) return undefined
+
+  await _removeBlacklist(videoBlacklist, video, transaction)
+  await _notifyVideoReleasedFromAutoBlacklist(video, transaction)
+
+  logger.info('Removed auto-blocking of video %s after its ownership change to %s.', video.uuid, nextOwner.username)
+
+  return videoBlacklist
+}
+
+function _releaseAutoBlacklistOnOwnershipChangeNeeded (options: {
+  video: MVideoWithRights
+  videoBlacklist: MVideoBlacklist
+  nextOwner: MUser
+}) {
+  return _canBypassInstanceAutoBlacklist(options.nextOwner)
+}
+
+// ---------------------------------------------------------------------------
+
 async function _autoBlacklist (options: {
   video: MVideoWithBlacklistLight
   notify: boolean
@@ -197,9 +238,13 @@ function _autoBlacklistByInstancePolicyNeeded (parameters: {
   if (!CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED || !user) return false
   if (isRemote || (isNew === false && isNewFile === false)) return false
 
-  if (user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) || user.hasAdminFlag(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)) return false
+  if (_canBypassInstanceAutoBlacklist(user)) return false
 
   return true
+}
+
+function _canBypassInstanceAutoBlacklist (user: MUser) {
+  return user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) || user.hasAdminFlag(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
 }
 
 async function _shouldHoldForAutoTagPolicy (options: {

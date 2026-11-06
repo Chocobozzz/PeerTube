@@ -1,12 +1,14 @@
 import { ChangeOwnershipState, ChangeOwnershipStateType, HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
-import { auditLog, buildOwnershipChangeAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { canVideoBeFederated, scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
+import { auditLog, buildOwnershipChangeAuditEntity, buildVideoBlockAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
+import { releaseAutoBlacklistOnOwnershipChangeIfNeeded } from '@server/lib/video-blacklist.js'
+import { UserModel } from '@server/models/user/user.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
 import { MVideoWithRights } from '@server/types/models/index.js'
 import express from 'express'
+import { runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { runTransaction } from '../../../helpers/database-utils.js'
 import { changeVideoChannelShare } from '../../../lib/activitypub/share.js'
 import { Notifier } from '../../../lib/notifier/notifier.js'
 import {
@@ -175,6 +177,23 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
 
       // Send the update on behalf of the previous owner so its followers are also notified
       scheduleVideoFederation({ video: targetVideoUpdated, overriddenBy: oldVideoChannel.Account.Actor, transaction: t })
+    }
+
+    const nextOwnerUser = await UserModel.loadByAccountId(changeOwnership.NextOwner.id, t)
+
+    // The function will federate the video if needed
+    const releasedBlock = await releaseAutoBlacklistOnOwnershipChangeIfNeeded({
+      video: targetVideoUpdated,
+      nextOwner: nextOwnerUser,
+      transaction: t
+    })
+
+    if (releasedBlock) {
+      auditLog.delete(
+        getAuditActorFromRes(res),
+        () => buildVideoBlockAuditEntity({ video: targetVideoUpdated, videoBlock: releasedBlock }),
+        { transaction: t }
+      )
     }
 
     changeOwnership.state = ChangeOwnershipState.ACCEPTED

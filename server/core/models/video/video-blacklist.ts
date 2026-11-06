@@ -116,6 +116,30 @@ export class VideoBlacklistModel extends SequelizeModel<VideoBlacklistModel> {
     })
   }
 
+  static async listVideoIdsOfChannel (options: {
+    channelId: number
+    type: VideoBlacklistType_Type
+    transaction?: Transaction
+  }): Promise<number[]> {
+    const { channelId, type, transaction } = options
+
+    const rows = await VideoBlacklistModel.findAll({
+      attributes: [ 'videoId' ],
+      where: { type },
+      include: [
+        {
+          attributes: [],
+          model: VideoModel.unscoped(),
+          required: true,
+          where: { channelId }
+        }
+      ],
+      transaction
+    })
+
+    return rows.map(r => r.videoId)
+  }
+
   static loadByVideoId (id: number, transaction?: Transaction): Promise<MVideoBlacklist> {
     const query = {
       where: {

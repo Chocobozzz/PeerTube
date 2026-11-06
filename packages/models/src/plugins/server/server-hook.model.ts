@@ -112,6 +112,11 @@ export const serverFilterHookObject = {
   // (fired when a local or remote video is created or updated)
   'filter:video.auto-blacklist.result': true,
 
+  // Filter result used to check if we need to release a video blocked by the instance auto blacklist policy
+  // when its ownership (or the ownership of its channel) changes
+  // PeerTube >= 9.0
+  'filter:video.ownership-change.release-auto-blacklist.result': true,
+
   // Filter result used to check if a user can register on the instance
   'filter:api.user.signup.allowed.result': true,
 

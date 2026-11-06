@@ -61,13 +61,15 @@ export class BlacklistCommand extends AbstractCommand {
   }
 
   list (options: OverrideCommandOptions & {
+    start?: number
+    count?: number
     sort?: string
     type?: VideoBlacklistType_Type
   } = {}) {
-    const { sort, type } = options
+    const { start, count, sort, type } = options
     const path = '/api/v1/videos/blacklist/'
 
-    const query = { sort, type }
+    const query = { start, count, sort, type }
 
     return this.getRequestBody<ResultList<VideoBlacklist>>({
       ...options,

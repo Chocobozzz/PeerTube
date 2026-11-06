@@ -1433,6 +1433,7 @@ If you want to create an antispam/moderation plugin, you could use the following
  * `filter:api.video-thread-comments.list.result`: to change/hide the text of replies. Since PeerTube 8.3 this hook only receives a truncated view of the thread, and its `total` is the number of direct replies of the root comment
  * `filter:api.video-comment-replies.list.result`: to change/hide the text of the replies loaded after the thread (PeerTube >= 8.3)
  * `filter:video.auto-blacklist.result`: to automatically blacklist local or remote videos
+ * `filter:video.ownership-change.release-auto-blacklist.result`: to keep or release a video blocked by the instance auto blacklist policy when its ownership (or the ownership of its channel) changes (PeerTube >= 9.0). The result is `true` by default if the next owner bypasses the auto blacklist, `false` otherwise. Params are `{ video, videoBlacklist, nextOwner }`, `nextOwner` being the next owner user (use `nextOwner.hasRight()` or `nextOwner.hasAdminFlag()` to check its permissions). Manual blocks and blocks of auto tag policies are never released
  * `filter:admin-users-list.bulk-actions.create.result`: to add bulk actions in the admin users list
  * `filter:admin-video-comments-list.actions.create.result`: to add actions in the admin video comments list
  * `filter:admin-video-comments-list.bulk-actions.create.result`: to add bulk actions in the admin video comments list
