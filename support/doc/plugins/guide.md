@@ -638,7 +638,7 @@ You can read the automatic tags of an object using `peertubeHelpers.automaticTag
 
 #### Provide a transcriber
 
-**PeerTube >= 8.4**
+**PeerTube >= 9.0**
 
 Your plugin can generate video subtitles with its own ASR service or tool instead of the whisper engine shipped with PeerTube, using the `filter:transcription.transcriber.result` hook:
 
