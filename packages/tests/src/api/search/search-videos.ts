@@ -282,8 +282,8 @@ describe('Test videos search', function () {
     {
       const body = await command.advancedVideoSearch({ search: query })
       expect(body.total).to.equal(2)
-      expect(body.data[0].name).to.equal('3333 4444 5555')
-      expect(body.data[1].name).to.equal('3333 4444 5555 duplicate')
+      expect(body.data[0].name).to.equal('3333 4444 5555 duplicate')
+      expect(body.data[1].name).to.equal('3333 4444 5555')
     }
 
     {
@@ -301,16 +301,16 @@ describe('Test videos search', function () {
     {
       const body = await command.advancedVideoSearch({ search: query })
       expect(body.total).to.equal(2)
-      expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
-      expect(body.data[1].name).to.equal('1111 2222 3333 - 4')
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 4')
+      expect(body.data[1].name).to.equal('1111 2222 3333 - 3')
     }
 
     {
       const body = await command.advancedVideoSearch({ search: { ...query, languageOneOf: [ 'pl', 'en', '_unknown' ] } })
       expect(body.total).to.equal(3)
-      expect(body.data[0].name).to.equal('1111 2222 3333 - 3')
+      expect(body.data[0].name).to.equal('1111 2222 3333 - 5')
       expect(body.data[1].name).to.equal('1111 2222 3333 - 4')
-      expect(body.data[2].name).to.equal('1111 2222 3333 - 5')
+      expect(body.data[2].name).to.equal('1111 2222 3333 - 3')
     }
 
     {
@@ -329,10 +329,10 @@ describe('Test videos search', function () {
     expect(body.total).to.equal(4)
 
     const videos = body.data
-    expect(videos[0].name).to.equal('1111 2222 3333 - 5')
-    expect(videos[1].name).to.equal('1111 2222 3333 - 6')
-    expect(videos[2].name).to.equal('1111 2222 3333 - 7')
-    expect(videos[3].name).to.equal('1111 2222 3333 - 8')
+    expect(videos[0].name).to.equal('1111 2222 3333 - 8')
+    expect(videos[1].name).to.equal('1111 2222 3333 - 7')
+    expect(videos[2].name).to.equal('1111 2222 3333 - 6')
+    expect(videos[3].name).to.equal('1111 2222 3333 - 5')
   })
 
   it('Should make an advanced search', async function () {
@@ -348,10 +348,10 @@ describe('Test videos search', function () {
     expect(body.total).to.equal(4)
 
     const videos = body.data
-    expect(videos[0].name).to.equal('1111 2222 3333')
-    expect(videos[1].name).to.equal('1111 2222 3333 - 6')
-    expect(videos[2].name).to.equal('1111 2222 3333 - 7')
-    expect(videos[3].name).to.equal('1111 2222 3333 - 8')
+    expect(videos[0].name).to.equal('1111 2222 3333 - 8')
+    expect(videos[1].name).to.equal('1111 2222 3333 - 7')
+    expect(videos[2].name).to.equal('1111 2222 3333 - 6')
+    expect(videos[3].name).to.equal('1111 2222 3333')
   })
 
   it('Should make an advanced search and sort results', async function () {
@@ -660,6 +660,56 @@ describe('Test videos search', function () {
       const body = await command.searchVideos({ search: 'bouillabaisse' })
 
       expect(body.total).to.equal(0)
+    })
+  })
+
+  describe('Search relevance secondary sort', function () {
+    it('Should keep relevance first and use publication date to break ties', async function () {
+      this.timeout(120000)
+
+      const term = 'sorttie7843'
+      const attributes = {
+        name: term,
+        fixture: 'video_short.mp4',
+        description: 'Neutral fixture content.',
+        tags: [],
+        privacy: VideoPrivacy.PUBLIC,
+        nsfw: false
+      }
+
+      // Same searchable content, but different publication dates.
+      const olderVideo = await server.videos.upload({ attributes })
+
+      await wait(1000)
+
+      const newerVideo = await server.videos.upload({ attributes })
+
+      await wait(1000)
+
+      // This video is newer, but the term only occurs in its description.
+      const lessRelevantVideo = await server.videos.upload({
+        attributes: {
+          ...attributes,
+          name: 'Unrelated heading',
+          description: `A guide about ${term}.`
+        }
+      })
+
+      const body = await command.advancedVideoSearch({
+        search: {
+          search: term,
+          searchTarget: 'local',
+          sort: '-match',
+          count: 10
+        }
+      })
+
+      expect(body.total).to.equal(3)
+      expect(body.data.map(video => video.id)).to.deep.equal([
+        newerVideo.id,
+        olderVideo.id,
+        lessRelevantVideo.id
+      ])
     })
   })
 

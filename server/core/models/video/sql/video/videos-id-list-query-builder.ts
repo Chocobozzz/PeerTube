@@ -1076,7 +1076,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.attributes.push(attribute)
       videoAttributesForSort = [ '"likes"', '"dislikes"', '"views"', '"comments"', '"publishedAt"' ]
     } else if (column === 'match') {
-      videoAttributesForSort = []
+      videoAttributesForSort = [ '"publishedAt"' ]
     } else {
       videoAttributesForSort = [ `"${column}"` ]
     }
@@ -1119,7 +1119,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       firstSort = `"video"."${column}"`
     }
 
-    this.sort = `ORDER BY ${firstSort} ${direction}, "video"."id" ASC`
+    const secondarySort = column === 'match'
+      ? '"video"."publishedAt" DESC, '
+      : ''
+
+    this.sort = `ORDER BY ${firstSort} ${direction}, ${secondarySort}"video"."id" ASC`
   }
 
   private setLimit (countArg: number) {
