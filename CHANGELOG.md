@@ -1,5 +1,119 @@
 # Changelog
 
+## v9.0.0-rc.1
+
+### IMPORTANT NOTES
+
+  * PeerTube REST API and the web admin require admin password confirmation for sensitive admin actions (plugin installation, user role change, etc.). This can be disabled in YAML config: `security.password_confirmation.enabled`
+  * PeerTube now uses `pnpm` 12. Your `pnpm` version should automatically download the latest version when `pnpm install` is run, but if you see an error please upgrade `pnpm`
+  * Many new object storage sections were added to support more object types: `object_storage.avatars`, `object_storage.thumbnails`, `object_storage.storyboards`, `object_storage.torrents`, `object_storage.uploads`, `object_storage.staging`, `object_storage.cache` and `object_storage.redundancy`.
+  If you use object storage, you must configure them (bucket name, prefix, base URL) before running v9.0.
+  Existing local files can then be moved to object storage using `npm run create-move-file-storage-job -- --to-object-storage --all`
+
+
+### Configuration
+
+*This section is not exhaustive*
+
+  * `database.read_replicas` to configure PostgreSQL read replicas (see *Features*)
+  * New `object_storage` sections (see *IMPORTANT NOTES*)
+  * `video_file.lifecycle` to automatically prune video files
+  * `tracker.urls` to configure an external remote tracker to handle large amount of viewers using P2P
+  * `redundancy.videos.timeout` to configure max redundancy timeout https://github.com/Chocobozzz/PeerTube/pull/7778
+  * `log.audit.enabled` to disable audit log https://github.com/Chocobozzz/PeerTube/pull/7777 and `log.audit.max_age` to configure audit log retention
+  * `security.password_confirmation.enabled` and `rates_limit.password_confirmation` to configure admin password confirmation
+  * `live.ping` and `live.ping_timeout` to configure ping and ping timeout of RTMP streams https://github.com/Chocobozzz/PeerTube/pull/7846
+
+
+### Plugins/Themes/Embed API
+
+  * **Important** With the introduction of horizontal scalability in PeerTube, your plugin can be instantiated on multiple independent processes.
+  You must take this into account when you develop your plugin. For example, don't store things in process memory between HTTP requests, since a request can be handled by another process.
+  * **Important** When object storage is enabled, uploaded video files are staged in object storage. If a plugin uses `filter:api.video.upload.accept.result`, PeerTube downloads the staged file on the local disk during the upload request so the plugin can read it, which may time out for big files.
+  This behavior is deprecated: in PeerTube v10, plugins will have to fetch the remote file themselves if they need it
+  * Add server plugin hooks (https://docs.joinpeertube.org/api/plugins):
+    * `filter:api.account.get.result`
+    * `filter:api.config.about.get.result`
+    * `filter:api.recommendations.videos.list.params` & `filter:api.recommendations.videos.list.result` https://github.com/Chocobozzz/PeerTube/pull/7633
+    * `filter:api.video.duplicate.video-attribute.result` & `action:api.video.duplicated` https://github.com/Chocobozzz/PeerTube/pull/7813
+    * `filter:video.ownership-change.release-auto-blacklist.result`
+    * `filter:transcription.transcriber.result` to provide a custom transcriber https://github.com/Chocobozzz/PeerTube/pull/7808
+    * `filter:sitemap.pages.list.result` https://github.com/Chocobozzz/PeerTube/pull/7848
+  * Add request headers to `filter:api.user.signup.allowed.result` and `filter:api.user.request-signup.allowed.result` hook params
+  * Add server plugin helpers:
+    * `peertubeHelpers.user.removeUser` to delete a user
+  * Add new client plugin id selectors:
+    * `#plugin-selector-profile-form-username-field-group` & `#plugin-selector-profile-form-description-field-group` https://github.com/Chocobozzz/PeerTube/pull/7769
+  * Add `input-radio` type to plugin form fields https://github.com/Chocobozzz/PeerTube/pull/7849
+
+### Custom markup API
+
+*Documentation: https://docs.joinpeertube.org/api/custom-client-markup*
+
+  * Add `<peertube-hero>` element to inject a large banner with a title and a description
+  * Add `peertube-card` element to inject a block with a title and a description
+  * Add support for `data-playlist-id` filter for `<peertube-videos-list>` element https://github.com/Chocobozzz/PeerTube/pull/7822
+  * Add `data-more-href`, `data-more-path`, `data-more-label` to `<peertube-videos-list>` to display a "More" button below the list
+  * Add `data-path` to `<peertube-button>` to reference a local link
+
+
+### Features
+
+  * :tada: Introduce horizontal scalability :tada:
+    * Secondary nodes can be run on the same server or on a remote server to take most of the HTTP traffic off the main process
+    * PostgreSQL replicas can be configured so PeerTube uses them for routes that consume PostgreSQL CPU (video listing, search, etc.)
+    * See the dedicated documentation for more information: https://docs.joinpeertube.org/horizontal-scalability
+  * :tada: Object storage support for actor images (avatars/banners), thumbnails, storyboards, torrents and uploads :tada:
+  * :tada: Add video files lifecycle management so PeerTube can automatically prune video files depending on criteria ("no views since 6 months for example") :tada:
+  * :tada: Allow video makers to save the result of the Studio into a new video :tada: https://github.com/Chocobozzz/PeerTube/pull/7813
+  * Audit log system re-architecture:
+    * Log entries are now written in the database to support horizontal scalability
+    * Audit system now logs almost all available actions users can make on a PeerTube platform
+    * Admins can easily filter audit logs in the UI, using the dedicated *Audit logs* page
+  * Allow video makers to decide what videos are recommended when viewers watch their video: (any/same instance/same channel) https://github.com/Chocobozzz/PeerTube/pull/7633
+  * Add *AI usage* information that video makers can fill to specify if the video was generated using AI
+    * Multiple nuances: *Generated by AI* / *Containing AI-generated content* / *No AI-generated content*
+    * A badge is displayed in video miniatures and video watch page if the video has been generated by AI
+    * Users can automatically filter videos that declare AI usage
+  * Add *Commercial content* metadata to videos that video makers can fill
+    * Multiple nuances: *Paid partnership* / *Promotional content* / *None*
+    * A text is displayed in the video player for a few seconds if the video declares a paid partnership or a promotional content
+  * Require admin password confirmation for sensitive admin actions
+  * Add default user filters for categories and video types (VOD/lives) so they are applied in all pages that list videos (like we already do with video languages)
+  * Admins can choose to display scheduled lives in *Browse videos* page https://github.com/Chocobozzz/PeerTube/pull/7825
+  * Add ability for admins to translate their instance metadata (terms, description, code of conduct, etc.)
+  * Add a captions badge on video miniatures if the video contains a subtitle in the user's language
+  * Add *Captions* column when listing *My videos* (hidden by default)
+  * Improve SEO
+    * Improve content seen by crawlers by rendering important content in server
+    * Split sitemap to reference all available URLs on big instances
+    * Do not lazy load the video poster for crawlers
+  * Support Internationalized Domain Name for instance hosts https://github.com/Chocobozzz/PeerTube/pull/7834
+  * Add Podcasting 2.0 chapters support to podcast feeds https://github.com/Chocobozzz/PeerTube/pull/7850
+  * Support 2FA for authentication plugins that use username/password (LDAP for example) https://github.com/Chocobozzz/PeerTube/pull/7773
+  * Allow filtering comments feed on local videos and local comments https://github.com/Chocobozzz/PeerTube/pull/7827
+  * Allow admins to filter videos by privacy in *Admin Videos Overview*
+  * Display minimum duration before counting a view configured by the instance https://github.com/Chocobozzz/PeerTube/pull/7821
+
+### Bug fixes
+
+  * Fix broken HLS playlist FLAC and unknown audio codecs https://github.com/Chocobozzz/PeerTube/pull/7852
+  * Keep the 3D packing of videos that declare it in their container https://github.com/Chocobozzz/PeerTube/pull/7816
+  * Keep the order of imported videos with channel synchronization
+  * Fix crash when handling broken RTMP stream
+  * Fix RTMP crash with stream id = 0
+  * Fix peers metric
+  * Fix desync audio for some live replays
+  * Fix studio edition with latest ffmpeg versions
+  * Fix zombie live streams
+  * Skip the too long password check of auth plugins that support username/password https://github.com/Chocobozzz/PeerTube/pull/7828
+  * Fix keyboard shortcut with non latin keys
+  * Don't notify on empty generated subtitle
+  * Format dates using the appropriate locale region
+  * Fix retrying video import by admin
+  * Don't run youtube-dl auto update if HTTP video import is disabled https://github.com/Chocobozzz/PeerTube/pull/7838
+
+
 ## v8.3.2
 
 ### SECURITY
