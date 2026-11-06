@@ -495,6 +495,9 @@ export const CONFIG = buildConfig({
     },
     POWERED_BY_HEADER: {
       ENABLED: staticKey<boolean>('security.powered_by_header.enabled')
+    },
+    PASSWORD_CONFIRMATION: {
+      ENABLED: staticKey<boolean>('security.password_confirmation.enabled')
     }
   },
   TRACKER: {
@@ -562,9 +565,6 @@ export const CONFIG = buildConfig({
       EDITION: {
         ALLOWED: staticKey<boolean>('webadmin.configuration.edition.allowed')
       }
-    },
-    PASSWORD_CONFIRMATION: {
-      ENABLED: staticKey<boolean>('webadmin.password_confirmation.enabled')
     }
   },
   FEEDS: {

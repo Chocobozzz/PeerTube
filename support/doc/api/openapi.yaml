@@ -272,7 +272,7 @@ info:
 
     # Password confirmation
 
-    If the `webadmin.password_confirmation.enabled` setting is enabled (default), sensitive administrator actions require
+    If the `security.password_confirmation.enabled` setting is enabled (default), sensitive administrator actions require
     the user password in the `currentPassword` field of the request body:
 
       - Install or update a plugin/theme

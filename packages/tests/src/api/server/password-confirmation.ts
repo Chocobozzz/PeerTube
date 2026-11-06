@@ -35,7 +35,7 @@ describe('Test password confirmation of sensitive actions', function () {
     it('Should expose password confirmation in the server config', async function () {
       const config = await server.config.getConfig()
 
-      expect(config.webadmin.passwordConfirmation.enabled).to.be.true
+      expect(config.security.passwordConfirmation.enabled).to.be.true
     })
 
     it('Should require the password to install or update a plugin', async function () {
@@ -282,7 +282,7 @@ describe('Test password confirmation of sensitive actions', function () {
 
       await server.kill()
       await server.run({
-        webadmin: {
+        security: {
           password_confirmation: {
             enabled: false
           }
@@ -293,7 +293,7 @@ describe('Test password confirmation of sensitive actions', function () {
     it('Should expose password confirmation in the server config', async function () {
       const config = await server.config.getConfig()
 
-      expect(config.webadmin.passwordConfirmation.enabled).to.be.false
+      expect(config.security.passwordConfirmation.enabled).to.be.false
     })
 
     it('Should run sensitive actions without the password', async function () {

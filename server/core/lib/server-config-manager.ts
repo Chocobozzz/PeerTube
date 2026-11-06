@@ -151,9 +151,12 @@ class ServerConfigManager {
           edition: {
             allowed: CONFIG.WEBADMIN.CONFIGURATION.EDITION.ALLOWED
           }
-        },
+        }
+      },
+
+      security: {
         passwordConfirmation: {
-          enabled: CONFIG.WEBADMIN.PASSWORD_CONFIRMATION.ENABLED
+          enabled: CONFIG.SECURITY.PASSWORD_CONFIRMATION.ENABLED
         }
       },
 

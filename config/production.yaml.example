@@ -481,6 +481,10 @@ security:
   powered_by_header:
     enabled: true
 
+  # Ask administrators to type their password again before sensitive actions in the web interface or REST API
+  password_confirmation:
+    enabled: true
+
 tracker:
   # If you disable the tracker, you disable the P2P on your PeerTube instance
   enabled: true
@@ -597,10 +601,6 @@ webadmin:
     edition:
       # Set this to false if you don't want to allow config edition in the web interface by instance admins
       allowed: true
-
-  # Ask administrators to type their password again before sensitive actions in the web interface or REST API
-  password_confirmation:
-    enabled: true
 
 # XML, Atom or JSON feeds
 feeds:

@@ -475,6 +475,10 @@ security:
     enabled:
       __name: PEERTUBE_SECURITY_POWERED_BY_HEADER_ENABLED
       __format: json
+  password_confirmation:
+    enabled:
+      __name: PEERTUBE_SECURITY_PASSWORD_CONFIRMATION_ENABLED
+      __format: json
 
 tracker:
   enabled:

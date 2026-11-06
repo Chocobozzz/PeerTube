@@ -130,7 +130,9 @@ export interface ServerConfig {
         allowed: boolean
       }
     }
+  }
 
+  security: {
     passwordConfirmation: {
       enabled: boolean
     }

@@ -32,7 +32,7 @@ export class PasswordConfirmationService {
     if (!this.canConfirmPassword()) {
       this.notifier.error(
         // eslint-disable-next-line max-len
-        $localize`This action requires a password confirmation, but your account uses an external authentication. Ask your system administrator to disable webadmin.password_confirmation in the configuration file.`
+        $localize`This action requires a password confirmation, but your account uses an external authentication. Ask your system administrator to disable security.password_confirmation in the configuration file.`
       )
 
       return { confirmed: false }
@@ -92,7 +92,7 @@ export class PasswordConfirmationService {
   }
 
   private isRequired () {
-    return this.server.getHTMLConfig().webadmin.passwordConfirmation.enabled
+    return this.server.getHTMLConfig().security.passwordConfirmation.enabled
   }
 
   // Users of an external auth plugin (OpenID, SAML...) don't have a password PeerTube can check

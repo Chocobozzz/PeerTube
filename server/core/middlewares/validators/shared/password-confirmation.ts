@@ -15,7 +15,7 @@ const logger = createLogger()
 // Sensitive admin actions require the user to type their password again
 // Password must be in `currentPassword` body field
 export async function checkPasswordConfirmation (req: express.Request, res: express.Response) {
-  if (CONFIG.WEBADMIN.PASSWORD_CONFIRMATION.ENABLED !== true) return true
+  if (CONFIG.SECURITY.PASSWORD_CONFIRMATION.ENABLED !== true) return true
 
   const user = res.locals.oauth.token.User
 
@@ -25,7 +25,7 @@ export async function checkPasswordConfirmation (req: express.Request, res: expr
       type: ServerErrorCode.PASSWORD_CONFIRMATION_UNAVAILABLE,
       message: req.t(
         'This action requires a password confirmation, but your account uses an external authentication. ' +
-          'Ask your system administrator to disable webadmin.password_confirmation in the configuration file.'
+          'Ask your system administrator to disable security.password_confirmation in the configuration file.'
       )
     })
     return false
