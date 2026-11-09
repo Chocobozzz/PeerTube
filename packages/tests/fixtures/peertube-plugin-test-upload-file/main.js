@@ -1,6 +1,6 @@
 const { stat } = require('fs/promises')
 
-async function register ({ registerHook }) {
+async function register ({ registerHook, peertubeHelpers }) {
   for (const hook of [ 'filter:api.video.upload.accept.result', 'filter:api.video.update-file.accept.result' ]) {
     registerHook({
       target: hook,
@@ -22,6 +22,19 @@ async function register ({ registerHook }) {
         // uploadx sets originalname to the video name: use the original name sent by the client
         if (videoFile.metadata?.originalName?.includes('rejected-by-plugin')) {
           return { accepted: false, errorMessage: 'Rejected by plugin' }
+        }
+
+        if (videoFile.url) {
+          const res = await fetch(videoFile.url)
+          const remoteSize = res.ok
+            ? (await res.arrayBuffer()).byteLength
+            : -1
+
+          if (remoteSize !== videoFile.size) {
+            return { accepted: false, errorMessage: `Remote uploaded file has ${remoteSize} bytes instead of ${videoFile.size}` }
+          }
+
+          peertubeHelpers.logger.info(`Uploaded file of ${hook} is available at its URL`)
         }
 
         return { accepted: true }

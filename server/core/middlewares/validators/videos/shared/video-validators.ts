@@ -1,4 +1,4 @@
-import { canVideoFileBeEdited } from '@peertube/peertube-core-utils'
+import { canVideoFileBeEdited, omit } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, ServerErrorCode, ServerFilterHookName, UserRight, VideoState, VideoStateType } from '@peertube/peertube-models'
 import { isVideoFileMimeTypeValid, isVideoFileSizeValid } from '@server/helpers/custom-validators/videos.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -63,7 +63,12 @@ export async function isVideoFileAccepted (options: {
   const acceptedResult = await Hooks.wrapFun(isLocalVideoFileAccepted, acceptParameters, hook)
 
   if (acceptedResult?.accepted !== true) {
-    logger.info('Refused local video file.', { acceptedResult, acceptParameters })
+    logger.info('Refused local video file.', {
+      acceptedResult,
+      videoBody,
+      // Don't log presigned URLs of staged uploads
+      videoFile: omit(uploadFile, [ 'url', 'ffmpegInput' ])
+    })
 
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,

@@ -29,8 +29,8 @@
 
   * **Important** With the introduction of horizontal scalability in PeerTube, your plugin can be instantiated on multiple independent processes.
   You must take this into account when you develop your plugin. For example, don't store things in process memory between HTTP requests, since a request can be handled by another process.
-  * **Important** When object storage is enabled, uploaded video files are staged in object storage. If a plugin uses `filter:api.video.upload.accept.result`, PeerTube downloads the staged file on the local disk during the upload request so the plugin can read it, which may time out for big files.
-  This behavior is deprecated: in PeerTube v10, plugins will have to fetch the remote file themselves if they need it
+  * **Important** When object storage is enabled, uploaded video files are staged in object storage. If a plugin uses `filter:api.video.upload.accept.result` or `filter:api.video.update-file.accept.result`, PeerTube downloads the staged file on the local disk (`videoFile.path`) during the upload request so the plugin can read it, which may time out for big files.
+  This behavior is deprecated: in PeerTube v10, `videoFile.path` will not be available anymore for staged files. Plugins that need the file content must read it from `videoFile.url`, a temporary URL of the staged file set when the upload is staged in object storage
   * Add server plugin hooks (https://docs.joinpeertube.org/api/plugins):
     * `filter:api.account.get.result`
     * `filter:api.config.about.get.result`

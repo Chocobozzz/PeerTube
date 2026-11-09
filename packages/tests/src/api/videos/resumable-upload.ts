@@ -617,7 +617,7 @@ describe('Test resumable upload', function () {
         await server.config.enableFileUpdate()
       })
 
-      it('Should give the plugin a local copy of an uploaded file', async function () {
+      it('Should give the plugin a local copy and the URL of an uploaded file', async function () {
         this.timeout(60000)
 
         const before = await countResumableUploads()
@@ -628,6 +628,7 @@ describe('Test resumable upload', function () {
         })
 
         expect(await countResumableUploads()).to.equal(before)
+        await server.servers.waitUntilLog('Uploaded file of filter:api.video.upload.accept.result is available at its URL')
       })
 
       it('Should let the plugin refuse an uploaded file and remove its local copy', async function () {
@@ -642,7 +643,7 @@ describe('Test resumable upload', function () {
         expect(await listStagingKeysOf(uploadId, 2000)).to.have.lengthOf(0)
       })
 
-      it('Should give the plugin a local copy of a replaced file', async function () {
+      it('Should give the plugin a local copy and the URL of a replaced file', async function () {
         this.timeout(120000)
 
         const { uuid } = await server.videos.quickUpload({ name: 'video with a replaced file' })
@@ -654,6 +655,7 @@ describe('Test resumable upload', function () {
         await waitJobs([ server ])
 
         expect(await countResumableUploads(2000)).to.equal(before)
+        await server.servers.waitUntilLog('Uploaded file of filter:api.video.update-file.accept.result is available at its URL')
       })
 
       after(async function () {

@@ -145,12 +145,15 @@ export function safeUploadXCleanup (file: CleanableUploadXFile, uploadxInstance:
 export async function buildVideoUploadXFile<T extends UploadXMetadata> (reqBody: T) {
   const file = await videoUploadx.buildFile(reqBody)
 
+  const url = file.stagingKey
+    ? await generateStagingObjectPresignedUrl(file.stagingKey)
+    : undefined
+
   return {
     ...file,
 
-    ffmpegInput: file.stagingKey
-      ? await generateStagingObjectPresignedUrl(file.stagingKey)
-      : file.path
+    url,
+    ffmpegInput: url ?? file.path
   }
 }
 
@@ -164,7 +167,7 @@ export function getUploadXFileInput (
 }
 
 // Plugins of this hook expect the uploaded file on the local disk: download a staged upload to its local `path`
-// TODO: Remove in PeerTube V10, where plugins will have to fetch the remote file if needed
+// TODO: Remove in PeerTube V10, where plugins will have to fetch the staged file using `videoFile.url` if needed
 export async function makeUploadXFileAvailableForHookIfNeeded (file: VideoUploadMetadata & { size: number },
   hookName: ServerFilterHookName)
 {

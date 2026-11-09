@@ -1426,7 +1426,7 @@ This way, older PeerTube versions will still use your old plugin, and new PeerTu
 ### Spam/moderation plugin
 
 If you want to create an antispam/moderation plugin, you could use the following hooks:
- * `filter:api.video.upload.accept.result`: to accept or not local uploads
+ * `filter:api.video.upload.accept.result`: to accept or not local uploads. See [Read the uploaded video file](#read-the-uploaded-video-file) if you need the file content
  * `filter:api.video-thread.create.accept.result`: to accept or not local thread
  * `filter:api.video-comment-reply.create.accept.result`: to accept or not local replies
  * `filter:api.video-threads.list.result`: to change/hide the text of threads
@@ -1439,6 +1439,30 @@ If you want to create an antispam/moderation plugin, you could use the following
  * `filter:admin-video-comments-list.bulk-actions.create.result`: to add bulk actions in the admin video comments list
  * `filter:user-moderation.actions.create.result`: to add actions in the user moderation dropdown (available in multiple views)
  * `filter:admin-abuse-list.actions.create.result`: to add actions in the admin abuse list
+
+### Read the uploaded video file
+
+`filter:api.video.upload.accept.result` and `filter:api.video.update-file.accept.result` receive the uploaded file in the `videoFile` parameter.
+
+When object storage is enabled, resumable uploads are staged in object storage and the file is not on the local disk of the PeerTube process. Since PeerTube 9.0, `videoFile.url` is then set to a temporary URL (valid one hour) of the staged file: read it using HTTP (range requests are supported) or give it to `ffprobe`/`ffmpeg`.
+
+For compatibility, PeerTube still downloads the staged file to `videoFile.path` if a plugin uses one of these hooks. This download happens in the upload request and may time out for big files: it will be removed in PeerTube 10.0, so don't rely on `videoFile.path` when `videoFile.url` is set.
+
+```js
+registerHook({
+  target: 'filter:api.video.upload.accept.result',
+  handler: async ({ accepted }, { videoFile }) => {
+    if (!accepted) return { accepted: false }
+
+    // videoFile.url is set if the upload is staged in object storage, videoFile.path otherwise
+    const input = videoFile.url ?? videoFile.path
+
+    // ... check the file content (using ffprobe for example)
+
+    return { accepted: true }
+  }
+})
+```
 
 ### Other plugin examples
 

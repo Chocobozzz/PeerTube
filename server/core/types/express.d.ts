@@ -105,6 +105,9 @@ declare module 'express' {
     // Resumable uploads streamed to object storage staging
     stagingKey?: string
     ffmpegInput?: string
+
+    // Presigned URL of the staged upload, given to plugins of upload accept hooks
+    url?: string
   }
 
   // Upload file with a duration added by our middleware
