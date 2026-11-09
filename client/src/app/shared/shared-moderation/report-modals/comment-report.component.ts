@@ -36,6 +36,8 @@ export class CommentReportComponent extends FormReactive implements OnInit {
   private notifier = inject(Notifier)
 
   readonly comment = input<VideoComment>(null)
+  readonly videoUUID = input<string>(undefined)
+  readonly videoPassword = input<string>(undefined)
 
   readonly modal = viewChild<NgbModal>('modal')
 
@@ -85,9 +87,10 @@ export class CommentReportComponent extends FormReactive implements OnInit {
       reason,
       predefinedReasons,
       comment: {
-        id: this.comment().id
+        id: this.comment().id,
+        videoUUID: this.videoUUID()
       }
-    }).subscribe({
+    }, { videoPassword: this.videoPassword() }).subscribe({
       next: () => {
         this.notifier.success($localize`Comment reported.`)
         this.hide()

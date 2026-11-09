@@ -5030,6 +5030,8 @@ paths:
         - OAuth2: []
       tags:
         - Abuses
+      parameters:
+        - $ref: '#/components/parameters/videoPasswordHeader'
       requestBody:
         required: true
         content:
@@ -5068,6 +5070,10 @@ paths:
                       description: Comment id to report
                       allOf:
                         - $ref: '#/components/schemas/VideoComment/properties/id'
+                    videoUUID:
+                      description: UUID of the video of the comment, required to report a comment of an unlisted video
+                      type: string
+                      format: uuid
                 account:
                   type: object
                   properties:

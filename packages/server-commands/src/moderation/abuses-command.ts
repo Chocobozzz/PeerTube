@@ -22,6 +22,8 @@ export class AbusesCommand extends AbstractCommand {
     accountId?: number
     videoId?: number | string
     commentId?: number
+    commentVideoUUID?: string
+    videoPassword?: string
 
     predefinedReasons?: AbusePredefinedReasonsString[]
 
@@ -39,7 +41,7 @@ export class AbusesCommand extends AbstractCommand {
       : undefined
 
     const comment = options.commentId
-      ? { id: options.commentId }
+      ? { id: options.commentId, videoUUID: options.commentVideoUUID }
       : undefined
 
     const account = options.accountId
@@ -60,6 +62,7 @@ export class AbusesCommand extends AbstractCommand {
 
       path,
       fields: body,
+      headers: this.buildVideoPasswordHeader(options.videoPassword),
       implicitToken: true,
       defaultExpectedStatus: HttpStatusCode.OK_200
     }))

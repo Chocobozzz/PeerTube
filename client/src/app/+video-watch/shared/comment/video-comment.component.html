@@ -136,7 +136,7 @@
 }
 
 @defer (when showCommentReportModal) {
-  <my-comment-report #commentReportModal [comment]="comment()"></my-comment-report>
+  <my-comment-report #commentReportModal [comment]="comment()" [videoUUID]="video()?.uuid" [videoPassword]="videoPassword()"></my-comment-report>
 }
 
 <ng-template #commentReplyModal>

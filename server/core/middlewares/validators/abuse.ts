@@ -1,5 +1,3 @@
-import express from 'express'
-import { body, param, query } from 'express-validator'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { AbuseCreate, HttpStatusCode, UserRight, VideoPrivacy } from '@peertube/peertube-models'
 import {
@@ -18,7 +16,10 @@ import { exists, isIdOrUUIDValid, isIdValid, isUUIDValid, toCompleteUUID, toIntO
 import { createLogger } from '@server/helpers/logger.js'
 import { AbuseMessageModel } from '@server/models/abuse/abuse-message.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
-import { MUserAccountId, MVideoFull } from '@server/types/models/index.js'
+import { VideoModel } from '@server/models/video/video.js'
+import { MComment, MUserAccountId, MVideoFull } from '@server/types/models/index.js'
+import express from 'express'
+import { body, param, query } from 'express-validator'
 import {
   areValidationErrors,
   checkCanSeeVideo,
@@ -54,6 +55,10 @@ const abuseReportValidator = [
   body('comment.id')
     .optional()
     .custom(isIdValid),
+  body('comment.videoUUID')
+    .optional()
+    .customSanitizer(toCompleteUUID)
+    .custom(isUUIDValid),
 
   body('reason')
     .custom(isAbuseReasonValid),
@@ -81,6 +86,18 @@ const abuseReportValidator = [
 
       if (!await checkUserCanSeeReportedVideo({ video, paramId: body.video.id + '', req, res })) return
       if (!await checkUserCanReportVideo({ user: res.locals.oauth.token.User, video, req, res })) return
+    }
+
+    if (body.comment?.id) {
+      const comment = res.locals.videoCommentFull
+      const video = await VideoModel.loadFull(comment.videoId)
+
+      const paramId = body.comment.videoUUID === video.uuid
+        ? video.uuid
+        : video.id + ''
+
+      if (!await checkCanSeeVideo({ req, res, video, paramId })) return
+      if (!checkUserCanSeeReportedComment({ user: res.locals.oauth.token.User, comment, video, req, res })) return
     }
 
     return next()
@@ -282,6 +299,31 @@ async function checkUserCanSeeReportedVideo (options: {
   return checkCanSeeVideo({ req, res, video, paramId })
 }
 
+// Same rule as the comment lists: held comments are only visible to their author, the video owner and moderators
+function checkUserCanSeeReportedComment (options: {
+  user: MUserAccountId
+  comment: MComment
+  video: MVideoFull
+  req: express.Request
+  res: express.Response
+}) {
+  const { user, comment, video, req, res } = options
+
+  if (comment.heldForReview !== true) return true
+
+  const accountId = user.Account.id
+  if (comment.accountId === accountId || video.VideoChannel.accountId === accountId || user.hasRight(UserRight.SEE_ALL_COMMENTS)) {
+    return true
+  }
+
+  res.fail({
+    status: HttpStatusCode.NOT_FOUND_404,
+    message: req.t('Video comment thread not found')
+  })
+
+  return false
+}
+
 async function checkUserCanReportVideo (options: {
   user: MUserAccountId
   video: MVideoFull
@@ -310,13 +352,13 @@ async function checkUserCanReportVideo (options: {
 // ---------------------------------------------------------------------------
 
 export {
-  abuseListForAdminsValidator,
-  abuseReportValidator,
   abuseGetValidator,
+  abuseListForAdminsValidator,
+  abuseListForUserValidator,
+  abuseReportValidator,
+  abuseUpdateValidator,
   addAbuseMessageValidator,
   checkAbuseValidForMessagesValidator,
-  abuseUpdateValidator,
   deleteAbuseMessageValidator,
-  abuseListForUserValidator,
   getAbuseValidator
 }

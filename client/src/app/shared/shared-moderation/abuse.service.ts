@@ -15,6 +15,7 @@ import {
 import { arrayify } from '@peertube/peertube-core-utils'
 import { omit } from 'lodash-es'
 import { SortMeta } from 'primeng/api'
+import { VideoPasswordService } from '../shared-main/video/video-password.service'
 import { Observable, from } from 'rxjs'
 import { catchError, concatMap, toArray } from 'rxjs/operators'
 import { environment } from '../../../environments/environment'
@@ -77,12 +78,13 @@ export class AbuseService {
 
   // ---------------------------------------------------------------------------
 
-  reportVideo (parameters: AbuseCreate) {
+  reportVideo (parameters: AbuseCreate, options: { videoPassword?: string } = {}) {
     const url = AbuseService.BASE_ABUSE_URL
 
     const body = omit(parameters, [ 'id' ])
+    const headers = VideoPasswordService.buildVideoPasswordHeader(options.videoPassword)
 
-    return this.authHttp.post(url, body)
+    return this.authHttp.post(url, body, { headers })
       .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 

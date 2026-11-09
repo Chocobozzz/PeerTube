@@ -17,5 +17,6 @@ export interface AbuseCreate {
 
   comment?: {
     id: number
+    videoUUID?: string
   }
 }

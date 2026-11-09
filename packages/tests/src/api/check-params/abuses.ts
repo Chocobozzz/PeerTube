@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
-import { AbuseCreate, AbuseState, HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { AbuseCreate, AbuseState, HttpStatusCode, VideoCommentPolicy, VideoPrivacy } from '@peertube/peertube-models'
 import {
   AbusesCommand,
   cleanupTests,
@@ -190,6 +190,77 @@ describe('Test abuses API validators', function () {
         fields,
         expectedStatus: HttpStatusCode.NOT_FOUND_404
       })
+    })
+
+    it('Should fail with a wrong comment video UUID', async function () {
+      const fields = { comment: { id: 42, videoUUID: 'blabla' }, reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
+    })
+
+    it('Should fail to report a comment of a video the user cannot see', async function () {
+      const privateVideo = await server.videos.quickUpload({ name: 'private', privacy: VideoPrivacy.PRIVATE })
+      const privateComment = await server.comments.createThread({ videoId: privateVideo.uuid, text: 'private comment' })
+
+      const options = { token: userToken, reason: 'my super reason', expectedStatus: HttpStatusCode.FORBIDDEN_403 }
+
+      await command.report({ ...options, commentId: privateComment.id })
+      await command.report({ ...options, commentId: privateComment.id, commentVideoUUID: privateVideo.uuid })
+    })
+
+    it('Should require the video UUID to report a comment of an unlisted video', async function () {
+      const otherVideo = await server.videos.quickUpload({ name: 'other', privacy: VideoPrivacy.PUBLIC })
+      const unlistedVideo = await server.videos.quickUpload({ name: 'unlisted', privacy: VideoPrivacy.UNLISTED })
+
+      const { id: commentId } = await server.comments.createThread({ videoId: unlistedVideo.uuid, text: 'comment' })
+
+      const options = { token: userToken, reason: 'my super reason', commentId }
+
+      await command.report({ ...options, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.report({ ...options, commentVideoUUID: otherVideo.uuid, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.report({ ...options, commentVideoUUID: unlistedVideo.uuid })
+    })
+
+    it('Should require the video password to report a comment of a password protected video', async function () {
+      const videoPassword = 'super password'
+      const video = await server.videos.quickUpload({
+        name: 'password',
+        privacy: VideoPrivacy.PASSWORD_PROTECTED,
+        videoPasswords: [ videoPassword ]
+      })
+
+      const { id: commentId } = await server.comments.createThread({ videoId: video.uuid, text: 'comment', token: server.accessToken })
+
+      const options = { token: userToken, reason: 'my super reason', commentId, commentVideoUUID: video.uuid }
+
+      await command.report({ ...options, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.report({ ...options, videoPassword: 'bad password', expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      await command.report({ ...options, videoPassword })
+    })
+
+    it('Should only report a held comment if the user can see it', async function () {
+      const otherUserToken = await server.users.generateUserAndToken('user_3')
+
+      const { uuid } = await server.videos.upload({
+        token: userToken,
+        attributes: { name: 'held comments', commentsPolicy: VideoCommentPolicy.REQUIRES_APPROVAL }
+      })
+
+      const { id: commentId } = await server.comments.createThread({ videoId: uuid, text: 'held comment', token: userToken2 })
+
+      const reason = 'my super reason'
+
+      await command.report({ token: otherUserToken, reason, commentId, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+      await command.report({ token: userToken2, reason, commentId })
+      await command.report({ token: userToken, reason, commentId })
+      await command.report({ token: server.accessToken, reason, commentId })
+    })
+
+    it('Should succeed to report a comment of a public video without the video UUID', async function () {
+      const video = await server.videos.quickUpload({ name: 'public', privacy: VideoPrivacy.PUBLIC })
+      const { id: commentId } = await server.comments.createThread({ videoId: video.uuid, text: 'comment' })
+
+      await command.report({ token: userToken, reason: 'my super reason', commentId })
     })
 
     it('Should fail with a wrong account', async function () {
