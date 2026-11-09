@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
-import { HttpStatusCode, UserSignupClient } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRole, UserSignupClient } from '@peertube/peertube-models'
 import {
   cleanupTests,
   ConfigCommand,
@@ -203,6 +203,52 @@ describe('Test users email verification', function () {
     })
 
     await server.login.getAccessToken(user2)
+  })
+
+  describe('Administrators', function () {
+    const adminUser = { username: 'user_admin', password: 'super password' }
+    let adminUserId: number
+    let adminUserToken: string
+
+    before(async function () {
+      await server.registrations.register(adminUser)
+      await waitJobs(server)
+      expectedEmailsLength++
+
+      const { data } = await server.users.list({ search: adminUser.username })
+      adminUserId = data[0].id
+      expect(data[0].emailVerified).to.be.false
+
+      await server.login.login({ user: adminUser, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should allow login of an administrator with an unverified email', async function () {
+      await server.users.update({ userId: adminUserId, role: UserRole.ADMINISTRATOR })
+
+      adminUserToken = await server.login.getAccessToken(adminUser)
+    })
+
+    it('Should update the administrator email without verification', async function () {
+      await server.users.updateMe({
+        token: adminUserToken,
+        email: 'admin-updated@example.com',
+        currentPassword: adminUser.password
+      })
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(expectedEmailsLength)
+
+      const me = await server.users.getMyInfo({ token: adminUserToken })
+      expect(me.email).to.equal('admin-updated@example.com')
+      expect(me.pendingEmail).to.be.null
+    })
+
+    it('Should require verification again once the user is not an administrator anymore', async function () {
+      await server.users.update({ userId: adminUserId, role: UserRole.USER })
+
+      const { code } = await server.login.login({ user: adminUser, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      expect(code).to.equal('email_not_verified')
+    })
   })
 
   describe('Signup client', function () {

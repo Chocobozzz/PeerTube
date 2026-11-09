@@ -17,7 +17,7 @@ import { Emailer } from '../emailer.js'
 import { findAvailableLocalActorName } from '../local-actor.js'
 import { Redis } from '../redis/index.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist, getByEmailPermissive } from '../user.js'
-import { isRootAuthDisabled } from './auth-utils.js'
+import { hasUnverifiedEmail, isRootAuthDisabled } from './auth-utils.js'
 import { BypassLogin, UserUpdaterResults } from './bypass-login.model.js'
 import { ExternalUser } from './external-user.model.js'
 import {
@@ -99,7 +99,7 @@ export async function getUserOrThrow (options: {
 
   checkUserNotBlockedOrThrow(user, req)
 
-  if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION && user.emailVerified === false) {
+  if (hasUnverifiedEmail(user)) {
     throw new EmailNotVerifiedError(req.t('User email is not verified.'))
   }
 

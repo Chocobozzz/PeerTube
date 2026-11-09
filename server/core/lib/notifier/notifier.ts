@@ -2,7 +2,7 @@ import { UserNotificationSettingValue, UserNotificationSettingValueType } from '
 import { MRegistration, MUser, MUserDefault, MUserWithNotificationSetting } from '@server/types/models/user/index.js'
 import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist.js'
 import { createLogger } from '../../helpers/logger.js'
-import { CONFIG } from '../../initializers/config.js'
+import { hasUnverifiedEmail } from '../auth/auth-utils.js'
 import {
   MAbuseFull,
   MAbuseMessage,
@@ -510,7 +510,7 @@ class Notifier {
   }
 
   private isEmailEnabled (user: MUser, value: UserNotificationSettingValueType) {
-    if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION === true && user.emailVerified === false) return false
+    if (hasUnverifiedEmail(user)) return false
 
     return (value & UserNotificationSettingValue.EMAIL) === UserNotificationSettingValue.EMAIL
   }

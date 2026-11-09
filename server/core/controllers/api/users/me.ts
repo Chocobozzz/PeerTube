@@ -20,7 +20,7 @@ import express from 'express'
 import 'multer'
 import { createReqFiles, getCountVideos } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { CONFIG } from '../../../initializers/config.js'
+import { isEmailVerificationRequiredFor } from '../../../lib/auth/auth-utils.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor.js'
@@ -331,11 +331,12 @@ async function updateMe (req: express.Request, res: express.Response) {
   }
 
   if (body.email !== undefined) {
-    if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
+    if (isEmailVerificationRequiredFor(user)) {
       user.pendingEmail = body.email
       sendVerificationEmail = true
     } else {
       user.email = body.email
+      user.pendingEmail = null
     }
   }
 

@@ -7,7 +7,7 @@ import { LOGIN_PASSWORD_VALIDATOR } from '@app/shared/form-validators/login-vali
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
-import { HttpStatusCode, User } from '@peertube/peertube-models'
+import { HttpStatusCode, User, UserRole } from '@peertube/peertube-models'
 import { forkJoin } from 'rxjs'
 import { tap } from 'rxjs/operators'
 import { InputTextComponent } from '../../../shared/shared-forms/input-text.component'
@@ -54,7 +54,8 @@ export class MyAccountChangeEmailComponent extends FormReactive implements OnIni
         next: ([ config ]) => {
           this.form.reset()
 
-          if (config.signup.requiresEmailVerification) {
+          // Administrators bypass email verification
+          if (config.signup.requiresEmailVerification && this.user.role.id !== UserRole.ADMINISTRATOR) {
             this.success = $localize`Please check your emails to verify your new email.`
           } else {
             this.success = $localize`Email updated.`
