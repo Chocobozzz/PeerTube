@@ -168,6 +168,17 @@ export class RunnerJobModel extends SequelizeModel<RunnerJobModel> {
     return true
   }
 
+  static doesUUIDExist (uuid: string) {
+    const query = {
+      attributes: [ 'id' ],
+      where: { uuid },
+      raw: true
+    }
+
+    return RunnerJobModel.findOne(query)
+      .then(e => !!e)
+  }
+
   static loadWithRunner (uuid: string) {
     const query = {
       where: { uuid }

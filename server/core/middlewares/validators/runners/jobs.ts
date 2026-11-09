@@ -162,6 +162,24 @@ export const runnerJobGetValidator = [
   }
 ]
 
+export const runnerJobExistsValidator = [
+  param('jobUUID').custom(isUUIDValid),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res, { tags })) return
+
+    if (await RunnerJobModel.doesUUIDExist(req.params.jobUUID) !== true) {
+      return res.fail({
+        status: HttpStatusCode.NOT_FOUND_404,
+        message: 'Unknown runner job',
+        tags
+      })
+    }
+
+    return next()
+  }
+]
+
 export function jobOfRunnerGetValidatorFactory (allowedStates: RunnerJobStateType[]) {
   return [
     param('jobUUID').custom(isUUIDValid),
