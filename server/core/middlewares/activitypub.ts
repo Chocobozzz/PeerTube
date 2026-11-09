@@ -1,13 +1,15 @@
 import { ParsedDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
-import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor.js'
-import { isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/peertube-crypto.js'
+import { isTestInstance } from '@peertube/peertube-node-utils'
+import { isActorDeleteActivityValid, isActorTypeValid } from '@server/helpers/custom-validators/activitypub/actor.js'
+import { isHTTPSignatureDigestValid, isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/peertube-crypto.js'
 import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
 import { NextFunction, Request, Response } from 'express'
 import { createLogger } from '../helpers/logger.js'
-import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants.js'
+import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE, WEBSERVER } from '../initializers/constants.js'
 import { getOrCreateAPActor, loadActorUrlOrGetFromWebfinger } from '../lib/activitypub/actors/index.js'
 
 const logger = createLogger('ap')
@@ -63,6 +65,8 @@ export function executeIfActivityPub (req: Request, res: Response, next: NextFun
 
 async function checkHttpSignature (req: Request, res: Response) {
   return wrapWithSpanAndContext('peertube.activitypub.checkHTTPSignature', async () => {
+    if (checkInboxRequest(req, res) !== true) return false
+
     // Compatibility with http-signature < v1.3
     const sig = req.headers['signature'] as string
     if (sig?.startsWith('Signature ') === true) req.headers['signature'] = sig.replace(/^Signature /, '')
@@ -77,6 +81,18 @@ async function checkHttpSignature (req: Request, res: Response) {
       res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: req.t('Cannot parse HTTP signature')
+      })
+      return false
+    }
+
+    // The digest is signed, but we have to ensure it's the digest of the body we received
+    const digest = req.headers['digest'] as string
+    if (!digest || !req.rawBody || isHTTPSignatureDigestValid(req.rawBody, digest) !== true) {
+      logger.warn('Invalid digest in HTTP signature of %s', parsed.value?.keyId)
+
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: req.t('Invalid digest')
       })
       return false
     }
@@ -123,6 +139,46 @@ async function checkHttpSignature (req: Request, res: Response) {
   })
 }
 
+function checkInboxRequest (req: Request, res: Response) {
+  if (isRequestForThisInstance(req) !== true) {
+    logger.warn('Rejecting inbox request for host %s, expected %s.', req.headers['host'], WEBSERVER.HOST)
+
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('Host of the request is not this instance')
+    })
+    return false
+  }
+
+  // Only JSON bodies go through the parser that gives us the raw body to check the digest
+  if (!req.is(ACTIVITY_PUB.INBOX_CONTENT_TYPES)) {
+    res.fail({
+      status: HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415,
+      message: req.t('Unsupported content type')
+    })
+    return false
+  }
+
+  // The signature parser reads this header in priority: only support the Signature header
+  if (req.headers['authorization']?.toLowerCase().startsWith('signature')) {
+    res.fail({
+      status: HttpStatusCode.FORBIDDEN_403,
+      message: req.t('HTTP signature must be sent in the Signature header')
+    })
+    return false
+  }
+
+  return true
+}
+
+function isRequestForThisInstance (req: Request) {
+  // Compare the raw header, because this is the one used by the signature
+  const host = req.headers['host']?.toLowerCase()
+  if (host === WEBSERVER.HOST.toLowerCase()) return true
+
+  return isTestInstance() && host === `${WEBSERVER.HOSTNAME}:${CONFIG.LISTEN.PORT}`.toLowerCase()
+}
+
 async function checkJsonLDSignature (req: Request, res: Response) {
   // Lazy load the module as it's quite big with json.ld dependency
   const { compactJSONLDAndCheckSignature } = await import('../helpers/peertube-jsonld.js')
@@ -134,6 +190,16 @@ async function checkJsonLDSignature (req: Request, res: Response) {
       res.fail({
         status: HttpStatusCode.FORBIDDEN_403,
         message: 'Object and creator signature do not match'
+      })
+      return false
+    }
+
+    if (isJsonLDSignatureDateValid(signatureObject.created) !== true) {
+      logger.warn('JSON-LD signature of %s has an invalid or too old date.', signatureObject.creator, { created: signatureObject.created })
+
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Signature date is invalid or too old'
       })
       return false
     }
@@ -155,7 +221,28 @@ async function checkJsonLDSignature (req: Request, res: Response) {
       return false
     }
 
+    // Prevent replaying an old profile
+    if (req.body.type === 'Update' && isActorTypeValid(req.body.object?.type)) {
+      logger.warn('Rejecting forwarded update of actor %s.', creator)
+
+      res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: 'Actor updates cannot be forwarded'
+      })
+      return false
+    }
+
     res.locals.signature = { actor }
     return true
   })
+}
+
+function isJsonLDSignatureDateValid (created: Date) {
+  const createdAt = new Date(created).getTime()
+  if (isNaN(createdAt)) return false
+
+  const now = new Date().getTime()
+
+  return createdAt >= now - ACTIVITY_PUB.CHECK_JSON_LD_SIGNATURE.MAX_AGE &&
+    createdAt <= now + HTTP_SIGNATURE.CLOCK_SKEW_SECONDS * 1000
 }

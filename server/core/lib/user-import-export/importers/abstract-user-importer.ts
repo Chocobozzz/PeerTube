@@ -3,7 +3,7 @@ import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { MUserDefault } from '@server/types/models/user/user.js'
 import { pathExists, readJSON, remove } from 'fs-extra/esm'
-import { dirname, resolve } from 'path'
+import { dirname, resolve, sep } from 'path'
 
 const logger = createLogger()
 
@@ -36,7 +36,7 @@ export abstract class AbstractUserImporter<
     if (!path) return undefined
 
     const resolved = resolve(dirname(this.jsonFilePath), path)
-    if (resolved.startsWith(this.extractedDirectory) !== true) {
+    if (resolved.startsWith(this.extractedDirectory + sep) !== true) {
       throw new Error(`Static file path ${resolved} is outside the archive directory ${this.extractedDirectory}`)
     }
 

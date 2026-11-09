@@ -1,5 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
+import { signAsDraftToRequest } from '@misskey-dev/node-http-message-signatures'
 import { wait } from '@peertube/peertube-core-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
@@ -15,7 +16,9 @@ import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/core/ini
 import { fakeContextFilter, makePOSTAPRequest, makeSignedPOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
+import { createSign } from 'crypto'
 import { readJsonSync } from 'fs-extra/esm'
+import { request } from 'http'
 
 function signJsonLDObjectWithoutAssertion (options: Parameters<typeof signJsonLDObject>[0]) {
   return signJsonLDObject({
@@ -89,15 +92,91 @@ describe('Test ActivityPub security', function () {
     headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
   })
 
-  async function postActivity (activity: any) {
+  async function buildRawBody () {
+    return JSON.stringify(await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter()))
+  }
+
+  // Our HTTP client always sets the host of the URL and the signature in the Signature header, so we need to build the request ourselves
+  async function postRawRequest (options: {
+    body: string
+    host?: string
+    contentType?: string
+    signatureInAuthorization?: boolean
+  }) {
+    const { body, host = servers[0].host, contentType = 'application/activity+json', signatureInAuthorization = false } = options
+
+    const headers: Record<string, string> = {
+      'host': host,
+      'date': new Date().toUTCString(),
+      'digest': buildDigest(body),
+      'content-type': contentType
+    }
+
+    await signAsDraftToRequest(
+      { headers, method: 'POST', url: '/inbox' },
+      { keyId: baseHttpSignature().keyId, privateKeyPem: keys.privateKey },
+      HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD
+    )
+
+    if (signatureInAuthorization) {
+      headers['authorization'] = 'Signature ' + headers['Signature']
+      delete headers['Signature']
+    }
+
+    return sendRawRequest(body, headers)
+  }
+
+  // Sign with the (created) parameter, that is not supported by our HTTP client
+  async function postRequestSignedWithCreated (createdAt: Date | undefined) {
+    const body = await buildRawBody()
+    const created = createdAt ? Math.floor(createdAt.getTime() / 1000) : undefined
+    const digest = buildDigest(body)
+
+    const signingString = `(request-target): post /inbox\n(created): ${created}\nhost: ${servers[0].host}\ndigest: ${digest}`
+    const signature = createSign('RSA-SHA256').update(signingString).sign(keys.privateKey, 'base64')
+
+    const params = [
+      `keyId="${baseHttpSignature().keyId}"`,
+      `algorithm="rsa-sha256"`,
+      `headers="(request-target) (created) host digest"`,
+      // The signature parser truncates unquoted values
+      created ? `created="${created}"` : undefined,
+      `signature="${signature}"`
+    ]
+
+    return sendRawRequest(body, {
+      'host': servers[0].host,
+      'digest': digest,
+      'content-type': 'application/activity+json',
+      'signature': params.filter(p => !!p).join(',')
+    })
+  }
+
+  function sendRawRequest (body: string, headers: Record<string, string>) {
+    return new Promise<number>((resolve, reject) => {
+      const { hostname, port } = new URL(url)
+
+      const req = request({ hostname, port, path: '/inbox', method: 'POST', headers }, res => {
+        res.resume()
+        res.on('end', () => resolve(res.statusCode))
+      })
+
+      req.on('error', reject)
+      req.end(body)
+    })
+  }
+
+  async function postActivity (activity: any, created?: Date, alterSignedBody?: (body: any) => void) {
     const signer: any = { privateKey: keys.privateKey, url: servers[2].url + '/accounts/peertube' }
     const signedBody: any = await signAndContextify({
       byActor: signer,
       data: activity,
       contextType: 'Announce',
       contextFilter: fakeContextFilter(),
-      signerFunction: signJsonLDObjectWithoutAssertion
+      signerFunction: (options: Parameters<typeof signJsonLDObject>[0]) => signJsonLDObjectWithoutAssertion({ ...options, created })
     })
+
+    alterSignedBody?.(signedBody)
 
     const headers = buildGlobalHTTPHeaders(signedBody, buildDigest)
 
@@ -106,7 +185,7 @@ describe('Test ActivityPub security', function () {
 
       return { fail: false }
     } catch (err) {
-      return { fail: true, statusCode: err.statusCode }
+      return { fail: true, statusCode: err.statusCode, message: JSON.stringify(err.responseBody) }
     }
   }
 
@@ -199,14 +278,17 @@ describe('Test ActivityPub security', function () {
     })
 
     it('Should succeed with a valid HTTP signature draft 11 (without date but with (created))', async function () {
-      const body = await activityPubContextify(getAnnounceWithoutContext(servers[1]), 'Announce', fakeContextFilter())
-      const headers = buildGlobalHTTPHeaders(body, buildDigest)
+      expect(await postRequestSignedWithCreated(new Date())).to.equal(HttpStatusCode.NO_CONTENT_204)
+    })
 
-      const signatureOptions = baseHttpSignature()
-      signatureOptions.headers = [ '(request-target)', '(created)', 'host', 'digest' ]
+    it('Should fail with a too old (created) value', async function () {
+      const createdAt = new Date(new Date().getTime() - (HTTP_SIGNATURE.CLOCK_SKEW_SECONDS + 60) * 1000)
 
-      const { statusCode } = await makePOSTAPRequest(url, body, signatureOptions, headers)
-      expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
+      expect(await postRequestSignedWithCreated(createdAt)).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should fail with a signed (created) without value', async function () {
+      expect(await postRequestSignedWithCreated(undefined)).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
 
     it('Should succeed with a valid HTTP signature', async function () {
@@ -215,6 +297,28 @@ describe('Test ActivityPub security', function () {
 
       const { statusCode } = await makePOSTAPRequest(url, body, baseHttpSignature(), headers)
       expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
+    })
+
+    it('Should succeed with a raw request for this instance', async function () {
+      expect(await postRawRequest({ body: await buildRawBody() })).to.equal(HttpStatusCode.NO_CONTENT_204)
+    })
+
+    it('Should fail with a request signed for another host', async function () {
+      const statusCode = await postRawRequest({ body: await buildRawBody(), host: 'other-instance.example.com' })
+
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should fail with a signature in the Authorization header', async function () {
+      const statusCode = await postRawRequest({ body: await buildRawBody(), signatureInAuthorization: true })
+
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should fail with a non JSON content type', async function () {
+      const statusCode = await postRawRequest({ body: await buildRawBody(), contentType: 'application/x-www-form-urlencoded' })
+
+      expect(statusCode).to.equal(HttpStatusCode.UNSUPPORTED_MEDIA_TYPE_415)
     })
 
     it('Should reject a Collection with too many activities', async function () {
@@ -229,13 +333,17 @@ describe('Test ActivityPub security', function () {
         })
       }
 
-      const body = await activityPubContextify({
-        type: 'OrderedCollection',
-        // Matches the HTTP-signature actor so the forwarded (JSON-LD signature) codepath is not triggered
-        actor: servers[1].url + '/accounts/peertube',
-        totalItems: items.length,
-        orderedItems: items
-      }, 'Collection', fakeContextFilter())
+      const body = await activityPubContextify(
+        {
+          type: 'OrderedCollection',
+          // Matches the HTTP-signature actor so the forwarded (JSON-LD signature) codepath is not triggered
+          actor: servers[1].url + '/accounts/peertube',
+          totalItems: items.length,
+          orderedItems: items
+        },
+        'Collection',
+        fakeContextFilter()
+      )
 
       const headers = buildGlobalHTTPHeaders(body, buildDigest)
 
@@ -504,6 +612,56 @@ describe('Test ActivityPub security', function () {
         const { fail } = await postActivity(activity)
         expect(fail).to.be.false
       }
+    })
+
+    it('Should fail with a too old signature', async function () {
+      const created = new Date(new Date().getTime() - ACTIVITY_PUB.CHECK_JSON_LD_SIGNATURE.MAX_AGE - 60000)
+
+      const activity = getAnnounceWithoutContext(servers[1])
+      activity.actor = servers[2].url + '/accounts/peertube'
+
+      const { fail, statusCode, message } = await postActivity(activity, created)
+
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      expect(message).to.contain('too old')
+    })
+
+    it('Should fail with a too old signature hidden by a custom signature context', async function () {
+      const created = new Date(new Date().getTime() - ACTIVITY_PUB.CHECK_JSON_LD_SIGNATURE.MAX_AGE - 60000)
+
+      const activity = getAnnounceWithoutContext(servers[1])
+      activity.actor = servers[2].url + '/accounts/peertube'
+
+      const { fail, statusCode } = await postActivity(activity, created, body => {
+        body.signature = {
+          'type': body.signature.type,
+          '@context': [ 'https://w3id.org/security/v1', { created: '@index' } ],
+          'creator': body.signature.creator,
+          'created': new Date().toISOString(),
+          'http://purl.org/dc/terms/created': { '@value': created.toISOString(), '@type': 'http://www.w3.org/2001/XMLSchema#dateTime' },
+          'signatureValue': body.signature.signatureValue
+        }
+      })
+
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should fail with a forwarded actor update', async function () {
+      const actor = servers[2].url + '/accounts/peertube'
+
+      const { fail, statusCode, message } = await postActivity({
+        type: 'Update',
+        id: actor + '/updates/1',
+        actor,
+        to: [ 'https://www.w3.org/ns/activitystreams#Public' ],
+        object: { type: 'Application', id: actor, preferredUsername: 'peertube' }
+      })
+
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+      expect(message).to.contain('cannot be forwarded')
     })
 
     it('Should fail with a body bigger than the JSON-LD signature check limit', async function () {

@@ -205,7 +205,6 @@ import {
   trackerRouter,
   wellKnownRouter
 } from './core/controllers/index.js'
-import { isHTTPSignatureDigestValid } from './core/helpers/peertube-crypto.js'
 import { ConfigDistribution } from './core/initializers/config/config-distribution.js'
 import { installPrimary, installSecondary } from './core/initializers/installer.js'
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
@@ -287,16 +286,8 @@ app.use(express.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb',
   verify: (req: express.Request, res: express.Response, buf: Buffer) => {
-    const valid = isHTTPSignatureDigestValid(buf, req)
-
-    if (valid !== true) {
-      const err: Error & { status?: number } = new Error('Invalid digest')
-      err.status = HttpStatusCode.FORBIDDEN_403
-
-      throw err
-    }
-
-    if (req.originalUrl.startsWith('/plugins/')) {
+    // Plugin routes can access the raw body, and ActivityPub inboxes check its digest
+    if (req.originalUrl.startsWith('/plugins/') || req.headers['digest']) {
       req.rawBody = buf
     }
   }

@@ -1,4 +1,4 @@
-import { omit } from '@peertube/peertube-core-utils'
+import { omit, pick } from '@peertube/peertube-core-utils'
 import { sha256 } from '@peertube/peertube-node-utils'
 import { createSign, createVerify } from 'crypto'
 import cloneDeep from 'lodash-es/cloneDeep.js'
@@ -124,15 +124,16 @@ export async function signJsonLDObject<T> (options: {
   byActor: { url: string, privateKey: string }
   data: T
   disableWorkerThreadAssertion?: boolean
+  created?: Date
 }) {
-  const { byActor, data, disableWorkerThreadAssertion = false } = options
+  const { byActor, data, disableWorkerThreadAssertion = false, created = new Date() } = options
 
   if (!disableWorkerThreadAssertion) assertIsInWorkerThread()
 
   const signature = {
     type: 'RsaSignature2017',
     creator: byActor.url,
-    created: new Date().toISOString()
+    created: created.toISOString()
   }
 
   const [ documentHash, optionsHash ] = await Promise.all([
@@ -181,6 +182,7 @@ function jsonldNormalize (obj: any) {
 
 // ---------------------------------------------------------------------------
 
+// Only hash known options: the signature must not be able to provide its own JSON-LD context or terms
 function createSignatureHash (signature: any) {
   return hashObject({
     '@context': [
@@ -188,7 +190,7 @@ function createSignatureHash (signature: any) {
       { RsaSignature2017: 'https://w3id.org/security#RsaSignature2017' }
     ],
 
-    ...omit(signature, [ 'type', 'id', 'signatureValue' ])
+    ...pick(signature, [ 'creator', 'created', 'domain', 'nonce' ])
   })
 }
 

@@ -4,7 +4,7 @@ import { generateRSAKeyPairPromise, sha256 } from '@peertube/peertube-node-utils
 import { timingSafeEqual } from 'crypto'
 import { Request } from 'express'
 import PQueue from 'p-queue'
-import { BCRYPT_SALT_SIZE, CRYPTO_QUEUE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
+import { BCRYPT_SALT_SIZE, CRYPTO_QUEUE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants.js'
 import { MActor } from '../types/models/index.js'
 import { decrypt, encrypt } from './encryption.js'
 import { createLogger } from './logger.js'
@@ -100,12 +100,8 @@ function isSecretEqual (a: string, b: string) {
 // HTTP Signature
 // ---------------------------------------------------------------------------
 
-function isHTTPSignatureDigestValid (rawBody: Buffer, req: Request): boolean {
-  if (req.headers['signature'] && req.headers['digest']) {
-    return buildDigest(rawBody.toString()) === req.headers['digest']
-  }
-
-  return true
+function isHTTPSignatureDigestValid (rawBody: Buffer, digest: string): boolean {
+  return buildDigest(rawBody) === digest
 }
 
 async function isHTTPSignatureVerified (httpSignatureParsed: ParsedDraftSignature, actor: MActor): Promise<boolean> {
@@ -118,14 +114,12 @@ async function isHTTPSignatureVerified (httpSignatureParsed: ParsedDraftSignatur
   return result === true
 }
 
-function parseHTTPSignature (req: Request, clockSkewSeconds?: number): ParsedDraftSignature {
+function parseHTTPSignature (req: Request, clockSkewSeconds = HTTP_SIGNATURE.CLOCK_SKEW_SECONDS): ParsedDraftSignature {
   const requiredHeaders = req.method === 'POST'
     ? [ '(request-target)', 'host', 'digest' ]
     : [ '(request-target)', 'host' ]
 
-  const clockSkew = clockSkewSeconds
-    ? clockSkewSeconds * 1000
-    : undefined
+  const clockSkew = clockSkewSeconds * 1000
 
   const parsed = parseRequestSignature(req, {
     requiredComponents: {
@@ -145,13 +139,24 @@ function parseHTTPSignature (req: Request, clockSkewSeconds?: number): ParsedDra
     throw new Error(`date or (created) must be included in signature`)
   }
 
+  // The library only checks the age of the Date header, that can be unsigned
+  const signedAt = parsedHeaders.includes('date')
+    ? new Date(req.headers['date'] ?? req.headers['x-date'] as string).getTime()
+    : parseInt((parsed.value.params as { created?: string }).created) * 1000
+
+  if (isNaN(signedAt) || signedAt < new Date().getTime() - clockSkew) {
+    throw new Error(`Signature date is missing or too old`)
+  }
+
   return parsed
 }
 
 // ---------------------------------------------------------------------------
 
 function buildDigest (body: any) {
-  const rawBody = typeof body === 'string' ? body : JSON.stringify(body)
+  const rawBody = typeof body === 'string' || Buffer.isBuffer(body)
+    ? body
+    : JSON.stringify(body)
 
   return 'SHA-256=' + sha256(rawBody, 'base64')
 }
