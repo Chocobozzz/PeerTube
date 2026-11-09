@@ -83,12 +83,12 @@
           </div>
         </div>
       }
+    </div>
 
-      <div class="text-center">
-        @if (canLoadMoreFollowers()) {
-          <my-button class="mt-3 mx-auto" (click)="loadMoreFollowers()" theme="secondary" i18n>Show more followers</my-button>
-        }
-      </div>
+    <div class="text-center">
+      @if (canLoadMoreFollowers()) {
+        <my-button class="mt-3 mx-auto" (click)="loadMoreFollowers()" theme="secondary" i18n>Show more followers</my-button>
+      }
     </div>
   </div>
 </div>
