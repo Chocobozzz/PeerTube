@@ -6,9 +6,16 @@ export class MockCoreBlocklist {
   private server: Server
 
   private actions: { type: 'block' | 'unblock', target: string, createdAt: string }[] = []
+  private readonly requestedPaths: string[] = []
 
   async initialize () {
     const app = express()
+
+    app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+      this.requestedPaths.push(req.path)
+
+      return next()
+    })
 
     app.get('/list.json', (req: express.Request, res: express.Response) => {
       return res.json({
@@ -39,6 +46,10 @@ export class MockCoreBlocklist {
 
   setActions (actions: { type: 'block' | 'unblock', target: string, createdAt: string }[]) {
     this.actions = actions
+  }
+
+  countRequests (path: string) {
+    return this.requestedPaths.filter(p => p === path).length
   }
 
   terminate () {

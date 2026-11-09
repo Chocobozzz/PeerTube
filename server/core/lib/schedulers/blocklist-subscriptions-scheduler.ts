@@ -65,7 +65,11 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
 
     const newLastSyncAt = new Date()
 
-    const body: AutoMuteList = await fetchAndValidateAutoMuteList(subscription.url, subscription.lastActionCreatedAt)
+    const body: AutoMuteList = await fetchAndValidateAutoMuteList({
+      url: subscription.url,
+      startDate: subscription.lastActionCreatedAt,
+      createdByAdmin: subscription.createdByAdmin
+    })
 
     logger.debug('Fetched blocklist subscription data.', {
       subscriptionUrl: subscription.url,

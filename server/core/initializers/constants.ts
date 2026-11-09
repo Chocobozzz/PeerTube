@@ -68,7 +68,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1180
+export const LAST_MIGRATION_VERSION = 1185
 
 // ---------------------------------------------------------------------------
 
@@ -1059,7 +1059,10 @@ export const ACTIVITY_PUB = {
   MAX_VIDEO_URLS: 100,
   MAX_VIDEO_TAGS: 100,
   MAX_PLAYLIST_ELEMENTS: 1000,
+  INBOX_CONTENT_TYPES: [ 'application/json', 'application/*+json' ],
   CHECK_JSON_LD_SIGNATURE: {
+    // A forwarded activity can be delivered late because of retries, but it must not be replayable forever
+    MAX_AGE: 3600 * 24 * 7 * 1000, // 7 days
     // Max body size (bytes) we accept to canonicalize for a LD signature check
     MAX_BODY_SIZE: 256 * 1024,
     CANONIZE_TIMEOUT: 1000 * 5 // 5 seconds

@@ -33,6 +33,11 @@ export class BlocklistSubscriptionModel extends SequelizeModel<BlocklistSubscrip
   @Column
   declare url: string
 
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  declare createdByAdmin: boolean
+
   @Column
   declare lastSyncAt: Date | null
 

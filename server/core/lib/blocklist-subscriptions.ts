@@ -1,12 +1,23 @@
 import { AutoMuteAction, AutoMuteList } from '@peertube/peertube-models'
 import { doJSONRequest } from '@server/helpers/requests.js'
 
-export async function fetchAndValidateAutoMuteList (url: string, startDate?: Date): Promise<AutoMuteList> {
+export async function fetchAndValidateAutoMuteList (options: {
+  url: string
+  startDate?: Date
+  createdByAdmin: boolean
+}): Promise<AutoMuteList> {
+  const { url, startDate, createdByAdmin } = options
+
   const searchParams = startDate
     ? { startDate: startDate.toISOString() }
     : undefined
 
-  const { body } = await doJSONRequest<AutoMuteList>(url, { searchParams, preventSSRF: false })
+  const { body } = await doJSONRequest<AutoMuteList>(url, {
+    searchParams,
+
+    // Only administrators can subscribe to a list of their internal network
+    preventSSRF: createdByAdmin ? false : undefined
+  })
 
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
     throw new Error('Invalid auto mute list payload: expected an object')

@@ -1,4 +1,4 @@
-import { AutoMuteList, BlocklistLogAction, HttpStatusCode, UserRight } from '@peertube/peertube-models'
+import { AutoMuteList, BlocklistLogAction, HttpStatusCode, UserRight, UserRole } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import {
   auditLog,
@@ -270,15 +270,17 @@ async function listBlocklistSubscriptions (req: express.Request, res: express.Re
 
 async function addBlocklistSubscription (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
+  const createdByAdmin = res.locals.oauth.token.User.role === UserRole.ADMINISTRATOR
 
   try {
-    const { name: listName } = await fetchAndValidateAutoMuteList(req.body.url)
+    const { name: listName } = await fetchAndValidateAutoMuteList({ url: req.body.url, createdByAdmin })
 
     const subscription = await BlocklistSubscriptionModel.create({
       accountId: serverActor.Account.id,
       name: listName,
       url: req.body.url,
-      lastSyncAt: null
+      lastSyncAt: null,
+      createdByAdmin
     })
 
     auditLog.create(getAuditActorFromRes(res), () => buildBlocklistSubscriptionAuditEntity(subscription))
