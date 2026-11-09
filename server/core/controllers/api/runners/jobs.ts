@@ -119,6 +119,7 @@ runnerJobsRouter.post(
 runnerJobsRouter.post(
   '/jobs/:jobUUID/update',
   primaryOnly, // Live updates move the segments into the live directory of the primary, watched by its live session
+  asyncMiddleware(runnerJobGetValidator), // Refuse unknown jobs before storing the files
   runnerJobUpdateVideoFiles,
   apiRateLimiter, // Has to be after multer middleware to parse runner token
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING, RunnerJobState.COMPLETING, RunnerJobState.COMPLETED ])),
@@ -136,6 +137,7 @@ runnerJobsRouter.post(
 // The process receiving the result files completes the job
 runnerJobsRouter.post(
   '/jobs/:jobUUID/success',
+  asyncMiddleware(runnerJobGetValidator), // Refuse unknown jobs before storing the files
   postRunnerJobSuccessVideoFiles,
   apiRateLimiter, // Has to be after multer middleware to parse runner token
   asyncMiddleware(jobOfRunnerGetValidatorFactory([ RunnerJobState.PROCESSING ])),

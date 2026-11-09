@@ -24,6 +24,8 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { checkBadCountPagination, checkBadSort, checkBadStartPagination } from '@tests/shared/checks.js'
+import { expect } from 'chai'
+import { request } from 'http'
 import { basename } from 'path'
 
 const badUUID = '910ec12a-d9e6-458b-a274-0abb655f9464'
@@ -801,6 +803,29 @@ describe('Test managing runners', function () {
       let vodJobToken: string
 
       describe('Common', function () {
+        it('Should refuse files of an unknown job before reading them', async function () {
+          for (const action of [ 'success', 'update' ]) {
+            const statusCode = await new Promise<number>((resolve, reject) => {
+              const req = request({
+                host: server.hostname,
+                port: server.port,
+                path: `/api/v1/runners/jobs/${badUUID}/${action}`,
+                method: 'POST',
+                headers: { 'Content-Type': 'multipart/form-data; boundary=boundary' }
+              }, res => {
+                resolve(res.statusCode)
+
+                req.destroy()
+              })
+
+              req.on('error', reject)
+              req.write('--boundary\r\nContent-Disposition: form-data; name="payload[videoFile]"; filename="video.mp4"\r\n\r\n')
+            })
+
+            expect(statusCode).to.equal(HttpStatusCode.NOT_FOUND_404)
+          }
+        })
+
         it('Should fail with a job not in processing state', async function () {
           await server.runnerJobs.success({
             jobUUID: completedJobUUID,
