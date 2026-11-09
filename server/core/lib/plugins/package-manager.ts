@@ -85,10 +85,8 @@ async function execPNPM (commands: string[]) {
   try {
     return await runCommand()
   } catch (result) {
-    // Only thrown by PNPM < 12, newer versions relink packages from the new store by themselves
-    // TODO: remove this block if PNPM >= 12 is guaranteed to be used
-    if (isPNPMUnexpectedStoreError(result)) {
-      logger.warn('Cannot exec pnpm because of an unexpected store location. Running pnpm install and retrying command.', { commands })
+    if (isPNPMIncompatibleModulesDirError(result)) {
+      logger.warn('Cannot exec pnpm because of an incompatible modules directory. Running pnpm install and retrying command.', { commands })
 
       const nodeModulesPath = join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules')
       const nodeModulesBackupPath = join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules.bak')
@@ -137,7 +135,7 @@ function getErrorFromExecaResult (result: unknown): Error {
   return new Error(message)
 }
 
-function isPNPMUnexpectedStoreError (result: unknown) {
+function isPNPMIncompatibleModulesDirError (result: unknown) {
   const execaResult = result as any
 
   const output = [
@@ -147,6 +145,11 @@ function isPNPMUnexpectedStoreError (result: unknown) {
     execaResult?.message
   ].filter(value => typeof value === 'string').join('\n')
 
+  // Thrown by PNPM >= 12.16 when node_modules was created with another node linker
+  if (output.includes('ERR_PNPM_NODE_LINKER_DIFF')) return true
+
+  // Only thrown by PNPM < 12, newer versions relink packages from the new store by themselves
+  // TODO: remove this check if PNPM >= 12 is guaranteed to be used
   return output.includes('ERR_PNPM_UNEXPECTED_STORE') || output.includes('Unexpected store location')
 }
 
