@@ -943,26 +943,25 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     return blockerAccountIds
   }
 
-  private static buildBlockerAccountIdsAndCanSeeHeldForReview (options: {
+  static async canSeeHeldForReview (options: {
     video: MVideo
     user: MUserAccountId
   }) {
     const { video, user } = options
-    const blockerAccountIdsPromise = this.buildBlockerAccountIds(options)
 
-    let canSeeHeldForReviewPromise: Promise<boolean>
-    if (user) {
-      if (user.hasRight(UserRight.SEE_ALL_COMMENTS)) {
-        canSeeHeldForReviewPromise = Promise.resolve(true)
-      } else {
-        canSeeHeldForReviewPromise = VideoChannelModel.loadAndPopulateAccount(video.channelId)
-          .then(c => c.accountId === user.Account.id)
-      }
-    } else {
-      canSeeHeldForReviewPromise = Promise.resolve(false)
-    }
+    if (!user) return false
+    if (user.hasRight(UserRight.SEE_ALL_COMMENTS)) return true
 
-    return Promise.all([ blockerAccountIdsPromise, canSeeHeldForReviewPromise ])
+    const channel = await VideoChannelModel.loadAndPopulateAccount(video.channelId)
+
+    return channel.accountId === user.Account.id
+  }
+
+  private static buildBlockerAccountIdsAndCanSeeHeldForReview (options: {
+    video: MVideo
+    user: MUserAccountId
+  }) {
+    return Promise.all([ this.buildBlockerAccountIds(options), this.canSeeHeldForReview(options) ])
       .then(([ blockerAccountIds, canSeeHeldForReview ]) => ({ blockerAccountIds, canSeeHeldForReview }))
   }
 }
