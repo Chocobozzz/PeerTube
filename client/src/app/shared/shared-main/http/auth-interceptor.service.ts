@@ -11,7 +11,7 @@ import {
   ServerErrorCode,
   ServerErrorCodeType
 } from '@peertube/peertube-models'
-import { isSameOrigin } from '@root-helpers/url'
+import { isBackendRequest } from '@root-helpers/url'
 import { Observable, throwError as observableThrowError, of } from 'rxjs'
 import { catchError, switchMap } from 'rxjs/operators'
 
@@ -75,7 +75,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private cloneRequestWithAuth (req: HttpRequest<any>) {
     const authHeaderValue = this.authService.getRequestHeaderValue()
 
-    const sameOrigin = req.url.startsWith('/') || isSameOrigin(getBackendUrl(), req.url)
+    const sameOrigin = isBackendRequest(getBackendUrl(), req.url)
 
     if (authHeaderValue === null || !sameOrigin) {
       return req

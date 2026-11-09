@@ -28,6 +28,20 @@ export function objectToUrlEncoded (obj: any) {
   return str.join('&')
 }
 
+export function isBackendRequest (backendUrl: string, requestUrl: string) {
+  let resolved: URL
+
+  try {
+    resolved = new URL(requestUrl, window.location.origin)
+  } catch {
+    return false
+  }
+
+  if (requestUrl.startsWith('/') && resolved.origin === window.location.origin) return true
+
+  return isSameOrigin(backendUrl, resolved.href)
+}
+
 export function isSameOrigin (current: string, target: string) {
   const currentUrl = new URL(current)
   const targetUrl = new URL(target)
