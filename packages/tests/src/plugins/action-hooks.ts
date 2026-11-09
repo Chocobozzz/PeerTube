@@ -158,6 +158,7 @@ describe('Test plugin action hooks', function () {
       await waitJobs(servers)
 
       await checkHook('action:live.video.state.updated', true, 1)
+      await checkHook('action:live.video.segment.created', false, 1)
 
       await stopFfmpeg(ffmpegCommand)
       await servers[0].live.waitUntilEnded({ videoId: liveVideoId })

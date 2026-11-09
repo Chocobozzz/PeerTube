@@ -235,6 +235,10 @@ export const serverActionHookObject = {
   // Fired when a live video starts or ends
   // Peertube >= 5.2
   'action:live.video.state.updated': true,
+  // Fired when a local live segment (`.ts` file) is complete and stored on the local filesystem, for each live playlist
+  // The segment file is removed by PeerTube when it leaves the live playlist window, so process it (or copy it) quickly
+  // Peertube >= 9.0
+  'action:live.video.segment.created': true,
 
   // Fired when a thread is created
   'action:api.video-thread.created': true,

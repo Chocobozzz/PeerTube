@@ -71,6 +71,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
       'action:api.live-video.created',
       'action:live.video.state.updated',
+      'action:live.video.segment.created',
 
       'action:api.video-thread.created',
       'action:api.video-comment-reply.created',

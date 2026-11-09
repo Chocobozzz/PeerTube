@@ -21,6 +21,7 @@ import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MEMOIZE_TTL, P2P_MEDIA_LOADER_PEER_VERSION, VIDEO_LIVE } from '@server/initializers/constants.js'
 import { removeHLSFileObjectStorageByPath, storeHLSFileFromContent, storeHLSFileFromPath } from '@server/lib/object-storage/index.js'
+import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist.js'
 import { MStreamingPlaylistVideo, MUserId, MVideoLiveVideo } from '@server/types/models/index.js'
@@ -515,6 +516,12 @@ class MuxingSession extends TypedEventEmitter<MuxingSessionEvents> {
 
       throw err
     }
+
+    Hooks.runAction('action:live.video.segment.created', {
+      video: this.videoLive.Video,
+      segmentPath,
+      playlistId: getLivePlaylistIdFromSegmentPath(segmentPath)
+    })
 
     // Master playlist and segment JSON file are created, live is ready
     // Unless the session is already ending (segments processed by the cleanup)

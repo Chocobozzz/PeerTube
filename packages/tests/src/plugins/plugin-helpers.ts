@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, VideoPrivacy } from '@peertube/peertube-models'
+import { HttpStatusCode, LiveVideoError, VideoPrivacy } from '@peertube/peertube-models'
 import { areMockObjectStorageTestsDisabled } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -16,6 +16,8 @@ import {
   PeerTubeServer,
   PluginsCommand,
   setAccessTokensToServers,
+  setDefaultVideoChannel,
+  testFfmpegStreamError,
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
@@ -550,6 +552,35 @@ describe('Test plugin helpers', function () {
 
     it('Should have fetched the video by URL', async function () {
       await servers[0].servers.waitUntilLog(`video from DB uuid is ${videoUUID}`)
+    })
+  })
+
+  describe('Live', function () {
+    before(async function () {
+      await setDefaultVideoChannel([ servers[0] ])
+      await servers[0].config.enableLive({ allowReplay: false, transcoding: false })
+    })
+
+    it('Should provide live segments to a plugin, that can blacklist the live', async function () {
+      this.timeout(120000)
+
+      const { video } = await servers[0].live.quickCreate({ name: 'live to blacklist by plugin', permanentLive: false, saveReplay: false })
+      const ffmpegCommand = await servers[0].live.sendRTMPStreamInVideo({ videoId: video.uuid })
+
+      await testFfmpegStreamError(ffmpegCommand, true)
+
+      await servers[0].servers.waitUntilLog(`of ${video.uuid} has a `)
+      await waitJobs(servers)
+
+      const { data } = await servers[0].blacklist.list()
+      const blacklist = data.find(b => b.video.uuid === video.uuid)
+
+      expect(blacklist).to.exist
+      expect(blacklist.reason).to.equal('forbidden live content')
+      expect(blacklist.unfederated).to.be.true
+
+      const session = await servers[0].live.findLatestSession({ videoId: video.uuid })
+      expect(session.error).to.equal(LiveVideoError.BLACKLISTED)
     })
   })
 

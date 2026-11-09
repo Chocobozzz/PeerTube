@@ -47,6 +47,38 @@ async function register ({
   }
 
   {
+    // Simulate a live moderation plugin, that analyzes live segments and blacklists the live if needed
+    const blacklistedLives = new Set()
+
+    registerHook({
+      target: 'action:live.video.segment.created',
+      handler: async ({ video, segmentPath, playlistId }) => {
+        if (video.name !== 'live to blacklist by plugin') return
+        if (blacklistedLives.has(video.uuid)) return
+
+        const probe = await peertubeHelpers.videos.ffprobe(segmentPath)
+        const videoStream = probe.streams.find(s => s.codec_type === 'video')
+        if (!videoStream) return
+
+        blacklistedLives.add(video.uuid)
+
+        logger.info(
+          'Live segment of playlist %s of %s has a %dx%d video stream, blacklisting it.',
+          playlistId,
+          video.uuid,
+          videoStream.width,
+          videoStream.height
+        )
+
+        await peertubeHelpers.moderation.blacklistVideo({
+          videoIdOrUUID: video.uuid,
+          createOptions: { reason: 'forbidden live content', unfederate: true }
+        })
+      }
+    })
+  }
+
+  {
     const serverActor = await peertubeHelpers.server.getServerActor()
     logger.info('server actor name is %s', serverActor.preferredUsername)
   }
