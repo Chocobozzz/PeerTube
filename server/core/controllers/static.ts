@@ -14,7 +14,7 @@ import cors from 'cors'
 import express from 'express'
 import { readJSON } from 'fs-extra/esm'
 import { readFile } from 'fs/promises'
-import { basename, join } from 'path'
+import { basename, join, normalize, sep } from 'path'
 import { CONFIG } from '../initializers/config.js'
 import { DIRECTORIES, STATIC_PATHS } from '../initializers/constants.js'
 import { buildReinjectVideoFileTokenQuery, doReinjectVideoFileToken } from './shared/m3u8-playlist.js'
@@ -40,6 +40,7 @@ staticRouter.use(
 )
 staticRouter.use(
   [ STATIC_PATHS.WEB_VIDEOS, STATIC_PATHS.LEGACY_WEB_VIDEOS ],
+  refusePrivateDirectory,
   express.static(DIRECTORIES.WEB_VIDEOS.PUBLIC, { fallthrough: false }),
   handleStaticError
 )
@@ -97,6 +98,7 @@ staticRouter.use(
 
 staticRouter.use(
   STATIC_PATHS.STREAMING_PLAYLISTS.HLS,
+  refusePrivateDirectory,
   express.static(DIRECTORIES.HLS_STREAMING_PLAYLIST.PUBLIC, { fallthrough: false }),
   handleStaticError
 )
@@ -126,6 +128,21 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function refusePrivateDirectory (req: express.Request, res: express.Response, next: express.NextFunction) {
+  let path: string
+
+  try {
+    path = decodeURIComponent(req.path)
+  } catch {
+    return next() // express.static refuses malformed URLs
+  }
+
+  // Forbid /%70rivate/, //private/, /x/../private/), etc.: resolve the path the same way express.static does
+  if (normalize('.' + sep + path).split(sep)[0] !== 'private') return next()
+
+  return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+}
 
 // Our instance doesn't serve upload images stored in object storage,
 // but URLs published before they were moved there must keep working

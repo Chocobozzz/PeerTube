@@ -26,6 +26,7 @@ import { expectStartWith } from '@tests/shared/checks.js'
 import { magnetUriDecode, parseTorrentVideo } from '@tests/shared/p2p.js'
 import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
 import { expect } from 'chai'
+import { get } from 'http'
 
 describe('Test video static file privacy', function () {
   let server: PeerTubeServer
@@ -597,6 +598,41 @@ describe('Test video static file privacy', function () {
       const replay = await server.videos.getWithToken({ id: replayFromList.id })
 
       await checkReplay(replay)
+    })
+  })
+
+  describe('Alternative spellings of private paths', function () {
+    // Use a raw request: URL parsers normalize some of these paths
+    function getStatus (path: string) {
+      return new Promise<number>((resolve, reject) => {
+        get({ host: server.hostname, port: server.port, path }, res => {
+          res.resume()
+          resolve(res.statusCode)
+        }).on('error', reject)
+      })
+    }
+
+    it('Should not serve private files through the public static routes', async function () {
+      this.timeout(120000)
+
+      await server.config.enableMinimumTranscoding()
+
+      const { uuid } = await server.videos.quickUpload({ name: 'video', privacy: VideoPrivacy.PRIVATE })
+      await waitJobs([ server ])
+
+      const video = await server.videos.getWithToken({ id: uuid })
+
+      const fileUrls = [ video.files[0].fileUrl, video.streamingPlaylists[0].files[0].fileUrl ]
+
+      for (const fileUrl of fileUrls) {
+        const path = new URL(fileUrl).pathname
+
+        expect(await getStatus(path)).to.equal(HttpStatusCode.UNAUTHORIZED_401)
+
+        for (const spelling of [ '%70rivate', '/private', '%2Fprivate', 'x/../private', 'x/%2e%2e/private', 'x/..%2Fprivate' ]) {
+          expect(await getStatus(path.replace('private', spelling)), spelling).to.equal(HttpStatusCode.NOT_FOUND_404)
+        }
+      }
     })
   })
 
