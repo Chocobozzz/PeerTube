@@ -34,12 +34,24 @@ function getOrCreateAPActor (
   updateCollections?: boolean
 ): Promise<MActorAccountChannelId>
 
-async function getOrCreateAPActor (
+function getOrCreateAPActor (
   activityActor: string | ActivityPubActor,
   fetchType: ActorLoadByUrlType = 'association-ids',
   recurseIfNeeded = true,
   updateCollections = false
 ): Promise<MActorFullActor | MActorAccountChannelId> {
+  return getOrCreateAPActorInternal({ activityActor, fetchType, recurseIfNeeded, updateCollections, idRedirected: false })
+}
+
+async function getOrCreateAPActorInternal (options: {
+  activityActor: string | ActivityPubActor
+  fetchType: ActorLoadByUrlType
+  recurseIfNeeded: boolean
+  updateCollections: boolean
+  idRedirected: boolean
+}): Promise<MActorFullActor | MActorAccountChannelId> {
+  const { activityActor, fetchType, recurseIfNeeded, updateCollections, idRedirected } = options
+
   const actorUrl = getAPId(activityActor)
   let actor = await loadActorByUrl(actorUrl, fetchType)
 
@@ -52,7 +64,11 @@ async function getOrCreateAPActor (
     if (actorObject === undefined) throw new Error(`Cannot fetch remote actor ${actorUrl}`)
 
     // actorUrl is just an alias/redirection, so process object id instead
-    if (actorObject.id !== actorUrl) return getOrCreateAPActor(actorObject, 'all', recurseIfNeeded, updateCollections)
+    if (actorObject.id !== actorUrl) {
+      if (idRedirected) throw new Error(`Too many id redirections when fetching remote actor ${actorUrl}`)
+
+      return getOrCreateAPActorInternal({ ...options, activityActor: actorObject, fetchType: 'all', idRedirected: true })
+    }
 
     await runWithAPObjectLock(actorUrl, async () => {
       // Created by another activity while we were fetching the actor or waiting for the lock

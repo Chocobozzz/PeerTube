@@ -9,6 +9,10 @@ import { fetchRemoteVideoPlaylist } from './shared/index.js'
 const logger = createLogger('ap', 'playlist')
 
 export function getOrCreateAPVideoPlaylist (playlistUrl: string): Promise<MVideoPlaylistFullSummary> {
+  return getOrCreateAPVideoPlaylistInternal(playlistUrl, false)
+}
+
+function getOrCreateAPVideoPlaylistInternal (playlistUrl: string, idRedirected: boolean): Promise<MVideoPlaylistFullSummary> {
   return logger.withContext([ playlistUrl ], async () => {
     const playlistFromDatabase = await VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(playlistUrl)
 
@@ -22,7 +26,11 @@ export function getOrCreateAPVideoPlaylist (playlistUrl: string): Promise<MVideo
     if (!playlistObject) throw new Error('Cannot fetch remote playlist with url: ' + playlistUrl)
 
     // playlistUrl is just an alias/redirection, so process object id instead
-    if (playlistObject.id !== playlistUrl) return getOrCreateAPVideoPlaylist(getAPId(playlistObject))
+    if (playlistObject.id !== playlistUrl) {
+      if (idRedirected) throw new Error('Too many id redirections when fetching remote playlist with url: ' + playlistUrl)
+
+      return getOrCreateAPVideoPlaylistInternal(getAPId(playlistObject), true)
+    }
 
     const playlistCreated = await createOrUpdateVideoPlaylist({ playlistObject, contextUrl: playlistUrl })
 

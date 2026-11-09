@@ -46,11 +46,12 @@ export function getOrCreateAPVideo (
 export async function getOrCreateAPVideo (
   options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
 ): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoWithBlacklist | MVideoImmutable> {
-  return getOrCreateAPVideoInternal(options, { alreadyRetried: false })
+  return getOrCreateAPVideoInternal(options, { alreadyRetried: false, idRedirected: false })
 }
 
 type GetVideoContext = {
   alreadyRetried: boolean
+  idRedirected: boolean
 }
 
 async function getOrCreateAPVideoInternal (
@@ -87,7 +88,11 @@ async function getOrCreateAPVideoInternal (
     if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
     // videoUrl is just an alias/redirection, so process object id instead
-    if (videoObject.id !== videoUrl) return getOrCreateAPVideoInternal({ ...options, fetchType: 'full', videoObject }, context)
+    if (videoObject.id !== videoUrl) {
+      if (context.idRedirected) throw new Error('Too many id redirections when fetching remote video with url: ' + videoUrl)
+
+      return getOrCreateAPVideoInternal({ ...options, fetchType: 'full', videoObject }, { ...context, idRedirected: true })
+    }
 
     try {
       const result = await runWithAPObjectLock(videoUrl, async () => {

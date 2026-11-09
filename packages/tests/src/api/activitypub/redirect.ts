@@ -20,6 +20,7 @@ describe('Test ActivityPub fetch redirections', function () {
   let attackerServer: Server
   let originUrl: string
   let attackerUrl: string
+  let idLoopRequests = 0
 
   const keys = readJsonSync(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
 
@@ -87,6 +88,20 @@ describe('Test ActivityPub fetch redirections', function () {
     app.get('/actors/alias', (req, res) => res.redirect(originUrl + '/actors/real'))
     app.get('/actors/real', (req, res) => res.type('application/activity+json').send(buildActor(originUrl + '/actors/real')))
 
+    app.get('/actors/id-alias', (req, res) => {
+      return res.type('application/activity+json').send(buildActor(originUrl + '/actors/id-target'))
+    })
+    app.get('/actors/id-target', (req, res) => {
+      return res.type('application/activity+json').send(buildActor(originUrl + '/actors/id-target'))
+    })
+
+    // Every fetched object has an id different from its URL
+    app.get('/actors/id-loop/:index', (req, res) => {
+      idLoopRequests++
+
+      return res.type('application/activity+json').send(buildActor(originUrl + '/actors/id-loop/' + (parseInt(req.params.index) + 1)))
+    })
+
     originServer = await randomListen(app)
     attackerServer = await randomListen(app)
 
@@ -118,6 +133,31 @@ describe('Test ActivityPub fetch redirections', function () {
     await waitJobs([ server ])
 
     expect(await sqlCommand.countActorsByUrl(actorUrl)).to.equal(1)
+  })
+
+  it('Should follow one id redirection', async function () {
+    this.timeout(30000)
+
+    const actorUrl = originUrl + '/actors/id-target'
+
+    const statusCode = await sendActorUpdate({ keyId: originUrl + '/actors/id-alias', actorUrl })
+    expect(statusCode).to.equal(HttpStatusCode.NO_CONTENT_204)
+
+    await waitJobs([ server ])
+
+    expect(await sqlCommand.countActorsByUrl(actorUrl)).to.equal(1)
+  })
+
+  it('Should not follow more than one id redirection', async function () {
+    this.timeout(30000)
+
+    const actorUrl = originUrl + '/actors/id-loop/1'
+
+    const statusCode = await sendActorUpdate({ keyId: actorUrl, actorUrl })
+    expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+
+    expect(idLoopRequests).to.equal(2)
+    expect(await sqlCommand.countActorsByUrl(actorUrl)).to.equal(0)
   })
 
   after(async function () {
