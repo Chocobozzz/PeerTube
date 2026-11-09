@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRole } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -22,6 +22,7 @@ describe('Test video channel collaborators API validators', function () {
   let unrelatedCollaboratorId: number
 
   let userToken: string
+  let moderatorToken: string
 
   before(async function () {
     this.timeout(60000)
@@ -46,6 +47,9 @@ describe('Test video channel collaborators API validators', function () {
     userToken = await server.users.generateUserAndToken('user1')
 
     await server.users.generateUserAndToken('user2')
+
+    moderatorToken = await server.users.generateUserAndToken('moderator', UserRole.MODERATOR)
+    await server.users.generateUserAndToken('moderator2', UserRole.MODERATOR)
 
     const { id } = await server.channelCollaborators.invite({ channel: 'user1_channel', target: 'user2' })
     unrelatedCollaboratorId = id
@@ -117,6 +121,23 @@ describe('Test video channel collaborators API validators', function () {
         target: 'collaborator2',
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+
+    it('Should fail for a moderator to invite on a channel of an administrator or another moderator', async function () {
+      for (const channel of [ 'root_channel', 'moderator2_channel' ]) {
+        await server.channelCollaborators.invite({
+          token: moderatorToken,
+          channel,
+          target: 'collaborator',
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
+    it('Should succeed for a moderator to invite on a channel of a regular user or on their own channel', async function () {
+      for (const channel of [ 'user1_channel', 'moderator_channel' ]) {
+        await server.channelCollaborators.invite({ token: moderatorToken, channel, target: 'collaborator' })
+      }
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -384,6 +405,23 @@ describe('Test video channel collaborators API validators', function () {
         channel: 'root_channel',
         id: collaboratorId2,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail for a moderator to remove a collaborator of a channel of an administrator', async function () {
+      await server.channelCollaborators.remove({
+        token: moderatorToken,
+        channel: 'root_channel',
+        id: collaboratorId,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed for a moderator to remove a collaborator of a channel of a regular user', async function () {
+      await server.channelCollaborators.remove({
+        token: moderatorToken,
+        channel: 'user1_channel',
+        id: unrelatedCollaboratorId
       })
     })
 

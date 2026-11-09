@@ -1,9 +1,10 @@
 import { HttpStatusCode, UserRight, UserRightType } from '@peertube/peertube-models'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
+import { UserModel } from '@server/models/user/user.js'
 import { MChannelBannerAccountDefault, MChannelUserId, MUserAccountId } from '@server/types/models/index.js'
 import express from 'express'
-import { checkCanManageAccount } from './users.js'
+import { checkCanManageAccount, checkCanModerate } from './users.js'
 
 type CommonOptions = {
   checkCanManage: boolean // Also check the user can manage the account
@@ -93,6 +94,37 @@ export async function checkCanManageChannel (
   }
 
   return true
+}
+
+// Moderators must not manage a channel of an administrator or another moderator, unless it is their own
+export async function checkCanModerateChannelOwner (options: {
+  authUser: MUserAccountId
+  channel: { accountId: number }
+  req: express.Request
+  res: express.Response
+}) {
+  const { authUser, channel, req, res } = options
+
+  if (channel.accountId === authUser.Account.id) return true
+
+  const ownerUser = await UserModel.loadByAccountId(channel.accountId)
+  if (!ownerUser) return true
+
+  return checkCanModerate({ authUser, onUser: ownerUser, req, res })
+}
+
+// Unlike channels, the ownership of a video can be managed by the collaborators of its channel, whatever their role
+export async function checkCanModerateVideoOwner (options: {
+  authUser: MUserAccountId
+  channel: MChannelUserId
+  req: express.Request
+  res: express.Response
+}) {
+  const { authUser, channel, req, res } = options
+
+  if (await VideoChannelCollaboratorModel.isCollaborator({ user: authUser, channel })) return true
+
+  return checkCanModerateChannelOwner({ authUser, channel, req, res })
 }
 
 // ---------------------------------------------------------------------------

@@ -3,7 +3,13 @@ import { isIdValid } from '@server/helpers/custom-validators/misc.js'
 import { VideoChannelCollaboratorModel } from '@server/models/video/video-channel-collaborator.js'
 import express from 'express'
 import { body, param } from 'express-validator'
-import { areValidationErrors, checkCanManageAccount, doesAccountHandleExist, doesChannelHandleExist } from '../shared/index.js'
+import {
+  areValidationErrors,
+  checkCanManageAccount,
+  checkCanModerateChannelOwner,
+  doesAccountHandleExist,
+  doesChannelHandleExist
+} from '../shared/index.js'
 import { CONFIG } from '@server/initializers/config.js'
 
 export const channelListCollaboratorsValidator = [
@@ -34,9 +40,13 @@ export const channelInviteCollaboratorsValidator = [
       return
     }
 
+    const user = res.locals.oauth.token.User
+
+    // Collaborators can manage the videos of the channel: moderators must not be able to choose them for an administrator
+    if (!await checkCanModerateChannelOwner({ authUser: user, channel: res.locals.videoChannel, req, res })) return
+
     if (!await doesAccountHandleExist({ handle: req.body.accountHandle, req, res, checkIsLocal: true, checkCanManage: false })) return
 
-    const user = res.locals.oauth.token.User
     if (user.Account.id === res.locals.account.id) {
       res.fail({
         message: req.t('Cannot invite the account owner of the channel to collaborate'),
@@ -136,6 +146,14 @@ export const channelDeleteCollaboratorsValidator = [
 
     if (
       !await doesChannelHandleExist({ handle: req.params.handle, checkCanManage: true, checkIsLocal: true, checkIsOwner, req, res })
+    ) {
+      return
+    }
+
+    // A collaborator can always leave the channel
+    if (
+      user.Account.id !== res.locals.channelCollaborator.accountId &&
+      !await checkCanModerateChannelOwner({ authUser: user, channel: res.locals.videoChannel, req, res })
     ) {
       return
     }

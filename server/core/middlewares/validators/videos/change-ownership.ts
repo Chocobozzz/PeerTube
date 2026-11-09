@@ -15,7 +15,6 @@ import { ChangeOwnershipModel } from '@server/models/video/change-ownership.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { UserModel } from '@server/models/user/user.js'
-import { MUserAccountId } from '@server/types/models/index.js'
 import express from 'express'
 import { body, param, query } from 'express-validator'
 import {
@@ -24,6 +23,8 @@ import {
   checkCanManageChannel,
   checkCanManageVideo,
   checkCanModerate,
+  checkCanModerateChannelOwner,
+  checkCanModerateVideoOwner,
   checkUserQuota,
   doesChangeOwnershipExist,
   doesChannelHandleExist,
@@ -109,6 +110,15 @@ export const changeVideoOwnershipValidator = [
         right: UserRight.CHANGE_VIDEO_OWNERSHIP,
         checkIsOwner: false,
         checkIsLocal: true,
+        req,
+        res
+      })
+    ) return
+
+    if (
+      !await checkCanModerateVideoOwner({
+        authUser: res.locals.oauth.token.User,
+        channel: res.locals.videoWithRights.VideoChannel,
         req,
         res
       })
@@ -245,6 +255,8 @@ export const deleteChangeVideoOwnershipValidator = [
         res
       })
     ) return
+
+    if (!await checkCanModerateVideoOwner({ authUser: res.locals.oauth.token.User, channel: video.VideoChannel, req, res })) return
 
     return next()
   }
@@ -436,23 +448,6 @@ async function loadNextOwnerUserOrFail (options: {
   }
 
   return nextOwnerUser
-}
-
-// Moderators must not manage the ownership of an administrator or another moderator's channel, unless it is their own
-async function checkCanModerateChannelOwner (options: {
-  authUser: MUserAccountId
-  channel: { accountId: number }
-  req: express.Request
-  res: express.Response
-}) {
-  const { authUser, channel, req, res } = options
-
-  if (channel.accountId === authUser.Account.id) return true
-
-  const ownerUser = await UserModel.loadByAccountId(channel.accountId)
-  if (!ownerUser) return true
-
-  return checkCanModerate({ authUser, onUser: ownerUser, req, res })
 }
 
 function isOwnershipChangeStateValid (value: any): value is ChangeOwnershipStateType {

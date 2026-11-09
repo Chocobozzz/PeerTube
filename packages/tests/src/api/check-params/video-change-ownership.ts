@@ -12,6 +12,7 @@ describe('Test video change ownership API validator', function () {
   let rootEditorToken: string
   let userEditorToken: string
   let moderatorToken: string
+  let moderator2Token: string
   let ownershipChangeId: number
 
   let userVideo: VideoCreateResult
@@ -32,6 +33,7 @@ describe('Test video change ownership API validator', function () {
     rootEditorToken = await server.channelCollaborators.createEditor('root_editor', 'root_channel')
     userEditorToken = await server.channelCollaborators.createEditor('user_editor', 'user_channel')
     moderatorToken = await server.users.generateUserAndToken('moderator', UserRole.MODERATOR)
+    moderator2Token = await server.users.generateUserAndToken('moderator2', UserRole.MODERATOR)
 
     rootVideo = await server.videos.quickUpload({ name: 'root video' })
     rootVideo2 = await server.videos.quickUpload({ name: 'root video 2' })
@@ -85,6 +87,36 @@ describe('Test video change ownership API validator', function () {
       })
     })
 
+    it('Should fail to create a request for a video of an administrator with a moderator', async function () {
+      for (const username of [ 'moderator', 'user' ]) {
+        await server.changeOwnership.createVideo({
+          videoId: rootVideo.id,
+          username,
+          token: moderatorToken,
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
+    it('Should fail to create a request for a video of another moderator with a moderator', async function () {
+      const { id: videoId } = await server.videos.quickUpload({ name: 'moderator2 video', token: moderator2Token })
+
+      await server.changeOwnership.createVideo({
+        videoId,
+        username: 'moderator',
+        token: moderatorToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed to create a request for a video of a regular user or their own video with a moderator', async function () {
+      const { id: regularUserVideoId } = await server.videos.quickUpload({ name: 'regular user video', token: userToken })
+      await server.changeOwnership.createVideo({ videoId: regularUserVideoId, username: 'moderator', token: moderatorToken })
+
+      const { id: moderatorVideoId } = await server.videos.quickUpload({ name: 'moderator video', token: moderatorToken })
+      await server.changeOwnership.createVideo({ videoId: moderatorVideoId, username: 'user', token: moderatorToken })
+    })
+
     it('Should succeed with valid params', async function () {
       await server.changeOwnership.createVideo({ videoId: rootVideo2.id, username: 'user', token: rootEditorToken })
       await server.changeOwnership.createVideo({ videoId: rootVideo.id, username: 'user' })
@@ -97,6 +129,42 @@ describe('Test video change ownership API validator', function () {
         token: rootEditorToken,
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
+    })
+  })
+
+  describe('Move a video to a channel of another account', function () {
+    let moderatorChannelId: number
+    let rootEditorChannelId: number
+
+    before(async function () {
+      moderatorChannelId = (await server.users.getMyInfo({ token: moderatorToken })).videoChannels[0].id
+      rootEditorChannelId = (await server.users.getMyInfo({ token: rootEditorToken })).videoChannels[0].id
+    })
+
+    it('Should fail to move a video of an administrator or another moderator with a moderator', async function () {
+      const { id: moderator2VideoId } = await server.videos.quickUpload({ name: 'moderator2 video to move', token: moderator2Token })
+      const { id: rootVideoId } = await server.videos.quickUpload({ name: 'root video to move' })
+
+      for (const id of [ rootVideoId, moderator2VideoId ]) {
+        await server.videos.update({
+          id,
+          token: moderatorToken,
+          attributes: { channelId: moderatorChannelId },
+          expectedStatus: HttpStatusCode.FORBIDDEN_403
+        })
+      }
+    })
+
+    it('Should succeed to move a video of a regular user with a moderator', async function () {
+      const { id } = await server.videos.quickUpload({ name: 'regular user video to move', token: userToken })
+
+      await server.videos.update({ id, token: moderatorToken, attributes: { channelId: moderatorChannelId } })
+    })
+
+    it('Should succeed to move a video of an administrator with a collaborator of the channel', async function () {
+      const { id } = await server.videos.quickUpload({ name: 'root video to move by editor' })
+
+      await server.videos.update({ id, token: rootEditorToken, attributes: { channelId: rootEditorChannelId } })
     })
   })
 
@@ -306,7 +374,6 @@ describe('Test video change ownership API validator', function () {
   })
 
   describe('Accept ownership change request on behalf of the next owner', function () {
-    let moderator2Token: string
     let quotaLimitedToken: string
 
     let videoForRegularUser: VideoCreateResult
@@ -315,8 +382,6 @@ describe('Test video change ownership API validator', function () {
 
     before(async function () {
       this.timeout(120000)
-
-      moderator2Token = await server.users.generateUserAndToken('moderator2', UserRole.MODERATOR)
 
       await server.users.create({ username: 'quota_limited_video_target', videoQuota: 0 })
       quotaLimitedToken = await server.login.getAccessToken({ username: 'quota_limited_video_target', password: 'password' })
@@ -408,6 +473,41 @@ describe('Test video change ownership API validator', function () {
         token: anotherUserToken,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+
+    it('Should fail to delete a request for a video of an administrator with a moderator', async function () {
+      const { uuid } = await server.videos.quickUpload({ name: 'root video for moderator delete' })
+      await server.changeOwnership.createVideo({ videoId: uuid, username: 'user' })
+
+      const { data } = await server.changeOwnership.listOfVideo({ videoId: uuid })
+
+      await server.changeOwnership.deleteVideo({
+        ownershipId: data[0].id,
+        token: moderatorToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should fail to delete a request for a video of another moderator with a moderator', async function () {
+      const { uuid } = await server.videos.quickUpload({ name: 'moderator2 video for moderator delete', token: moderator2Token })
+      await server.changeOwnership.createVideo({ videoId: uuid, username: 'user', token: moderator2Token })
+
+      const { data } = await server.changeOwnership.listOfVideo({ videoId: uuid, token: moderator2Token })
+
+      await server.changeOwnership.deleteVideo({
+        ownershipId: data[0].id,
+        token: moderatorToken,
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    })
+
+    it('Should succeed to delete a request for a video of a regular user with a moderator', async function () {
+      const { uuid } = await server.videos.quickUpload({ name: 'regular user video for moderator delete', token: userToken })
+      await server.changeOwnership.createVideo({ videoId: uuid, username: 'another_user', token: userToken })
+
+      const { data } = await server.changeOwnership.listOfVideo({ videoId: uuid, token: userToken })
+
+      await server.changeOwnership.deleteVideo({ ownershipId: data[0].id, token: moderatorToken })
     })
 
     it('Should succeed with valid params', async function () {

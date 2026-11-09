@@ -70,6 +70,7 @@ import {
   areValidationErrors,
   checkCanAccessVideoStaticFiles,
   checkCanManageVideo,
+  checkCanModerateVideoOwner,
   checkCanSeeVideo,
   checkUserQuota,
   doesChannelIdExist,
@@ -270,6 +271,10 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     // Not the same account as original video channel
     if (targetChannel && targetChannel.accountId !== video.VideoChannel.accountId) {
+      if (!await checkCanModerateVideoOwner({ authUser: user, channel: video.VideoChannel, req, res })) {
+        return cleanUpReqFiles(req)
+      }
+
       const ownershipChange = await ChangeOwnershipModel.loadPendingByVideo(video.id)
 
       if (ownershipChange) {
