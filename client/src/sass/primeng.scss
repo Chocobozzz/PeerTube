@@ -51,9 +51,9 @@ p-multiselect-item {
 // ---------------------------------------------------------------------------
 
 p-toast {
-  .p-toast {
+  &.p-toast {
     width: auto;
-    max-width: 300px;
+    max-width: min(300px, calc(100vw - 40px)); // PrimeNG positions the toast 20px away from the viewport edge
     min-width: 200px;
 
     .p-toast-icon-close {
