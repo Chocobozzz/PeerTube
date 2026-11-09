@@ -54,7 +54,7 @@ export class AboutInstanceComponent implements OnInit {
       })
     }
 
-    if (aboutHTML.moderationInformation || aboutHTML.codeOfConduct) {
+    if (aboutHTML.moderationInformation || aboutHTML.codeOfConduct || serverConfig.blocklist.publicLog.enabled) {
       this.menuEntries.push({
         label: $localize`Moderation and code of conduct`,
         routerLink: '/about/instance/moderation'
