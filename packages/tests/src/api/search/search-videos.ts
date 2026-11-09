@@ -12,7 +12,9 @@ import {
   setDefaultAccountAvatar,
   setDefaultChannelAvatar,
   setDefaultVideoChannel,
-  stopFfmpeg
+  stopFfmpeg,
+  VideoEdit,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
@@ -24,6 +26,14 @@ describe('Test videos search', function () {
   let videoShortUUID: string
 
   let command: SearchCommand
+
+  // publishedAt is set when transcoding ends and breaks relevance ties: wait for it to get a predictable order
+  async function uploadAndWaitJobs (attributes: VideoEdit) {
+    const video = await server.videos.upload({ attributes })
+    await waitJobs([ server ])
+
+    return video
+  }
 
   before(async function () {
     this.timeout(360000)
@@ -49,14 +59,14 @@ describe('Test videos search', function () {
         nsfw: false,
         language: 'fr'
       }
-      await server.videos.upload({ attributes: attributes1 })
+      await uploadAndWaitJobs(attributes1)
 
       const attributes2 = { ...attributes1, name: attributes1.name + ' - 2', fixture: 'video_short.mp4' }
-      await server.videos.upload({ attributes: attributes2 })
+      await uploadAndWaitJobs(attributes2)
 
       {
         const attributes3 = { ...attributes1, name: attributes1.name + ' - 3', language: undefined }
-        const { id, uuid, shortUUID } = await server.videos.upload({ attributes: attributes3 })
+        const { id, uuid, shortUUID } = await uploadAndWaitJobs(attributes3)
         videoUUID = uuid
         videoShortUUID = shortUUID
 
@@ -76,23 +86,23 @@ describe('Test videos search', function () {
       }
 
       const attributes4 = { ...attributes1, name: attributes1.name + ' - 4', language: 'pl', nsfw: true }
-      await server.videos.upload({ attributes: attributes4 })
+      await uploadAndWaitJobs(attributes4)
 
       await wait(1000)
 
       startDate = new Date().toISOString()
 
       const attributes5 = { ...attributes1, name: attributes1.name + ' - 5', licence: 2, language: undefined }
-      await server.videos.upload({ attributes: attributes5 })
+      await uploadAndWaitJobs(attributes5)
 
       const attributes6 = { ...attributes1, name: attributes1.name + ' - 6', tags: [ 't1', 't2' ] }
-      await server.videos.upload({ attributes: attributes6 })
+      await uploadAndWaitJobs(attributes6)
 
       const attributes7 = { ...attributes1, name: attributes1.name + ' - 7', originallyPublishedAt: '2019-02-12T09:58:08.286Z' }
-      await server.videos.upload({ attributes: attributes7 })
+      await uploadAndWaitJobs(attributes7)
 
       const attributes8 = { ...attributes1, name: attributes1.name + ' - 8', licence: 4 }
-      await server.videos.upload({ attributes: attributes8 })
+      await uploadAndWaitJobs(attributes8)
     }
 
     {
@@ -103,9 +113,9 @@ describe('Test videos search', function () {
         licence: 2,
         language: 'en'
       }
-      await server.videos.upload({ attributes })
+      await uploadAndWaitJobs(attributes)
 
-      await server.videos.upload({ attributes: { ...attributes, name: attributes.name + ' duplicate' } })
+      await uploadAndWaitJobs({ ...attributes, name: attributes.name + ' duplicate' })
     }
 
     {
@@ -664,51 +674,66 @@ describe('Test videos search', function () {
   })
 
   describe('Search relevance secondary sort', function () {
-    it('Should keep relevance first and use publication date to break ties', async function () {
-      this.timeout(120000)
+    const baseAttributes = {
+      fixture: 'video_short.mp4',
+      description: 'Neutral fixture content.',
+      tags: [],
+      privacy: VideoPrivacy.PUBLIC,
+      nsfw: false
+    }
 
-      const term = 'sorttie7843'
-      const attributes = {
-        name: term,
-        fixture: 'video_short.mp4',
-        description: 'Neutral fixture content.',
-        tags: [],
-        privacy: VideoPrivacy.PUBLIC,
-        nsfw: false
-      }
-
-      // Same searchable content, but different publication dates.
-      const olderVideo = await server.videos.upload({ attributes })
-
-      await wait(1000)
-
-      const newerVideo = await server.videos.upload({ attributes })
-
-      await wait(1000)
-
-      // This video is newer, but the term only occurs in its description.
-      const lessRelevantVideo = await server.videos.upload({
-        attributes: {
-          ...attributes,
-          name: 'Unrelated heading',
-          description: `A guide about ${term}.`
-        }
-      })
-
+    async function searchByRelevance (search: string) {
       const body = await command.advancedVideoSearch({
         search: {
-          search: term,
+          search,
           searchTarget: 'local',
           sort: '-match',
           count: 10
         }
       })
 
-      expect(body.total).to.equal(3)
-      expect(body.data.map(video => video.id)).to.deep.equal([
-        newerVideo.id,
-        olderVideo.id,
-        lessRelevantVideo.id
+      return body.data.map(video => video.id)
+    }
+
+    it('Should keep relevance first and use publication date to break ties', async function () {
+      this.timeout(120000)
+
+      const term = 'sorttie7843'
+      const attributes = { ...baseAttributes, name: term }
+
+      // Same searchable content, but different publication dates.
+      const olderVideo = await uploadAndWaitJobs(attributes)
+      const newerVideo = await uploadAndWaitJobs(attributes)
+
+      // This video is newer, but the term only occurs in its description.
+      const lessRelevantVideo = await uploadAndWaitJobs({
+        ...attributes,
+        name: 'Unrelated heading',
+        description: `A guide about ${term}.`
+      })
+
+      const expectedIds = [ newerVideo.id, olderVideo.id, lessRelevantVideo.id ]
+
+      expect(await searchByRelevance(term)).to.deep.equal(expectedIds)
+
+      // This list relies on another SQL query
+      const { data } = await server.videos.listMyVideos({ search: term, sort: '-match', includeCollaborations: true })
+      expect(data.map(video => video.id)).to.deep.equal(expectedIds)
+    })
+
+    it('Should use publication date for close relevance scores but keep full matches first', async function () {
+      this.timeout(120000)
+
+      const fullMatch = await uploadAndWaitJobs({ ...baseAttributes, name: 'closetie7843' })
+
+      // Both are close matches, and the older video has the better score
+      const olderCloseMatch = await uploadAndWaitJobs({ ...baseAttributes, name: 'closetie7' })
+      const newerCloseMatch = await uploadAndWaitJobs({ ...baseAttributes, name: 'clsetie7843' })
+
+      expect(await searchByRelevance('closetie7843')).to.deep.equal([
+        fullMatch.id,
+        newerCloseMatch.id,
+        olderCloseMatch.id
       ])
     })
   })

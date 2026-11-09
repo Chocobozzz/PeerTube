@@ -26,6 +26,9 @@ import { createSafeIn, parseRowCountResult } from '../../../shared/index.js'
 // Used to normalize ts_rank() into the [0, 1] range of word_similarity()
 const TS_RANK_NAME_MATCH = 0.61
 
+// Relevance scores are compared by steps of 0.1, so videos with close scores are sorted by publication date
+const SIMILARITY_STEPS = 10
+
 // to_tsquery() parses its argument as a tsquery expression: `&`, `|`, `!`, `<->`, parentheses and `:` weight markers
 // So raw user input like "rock & roll", "hello!" or "12:30" makes it throw a syntax error
 // Returns '' when the search holds no lexeme at all
@@ -931,7 +934,8 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     if (this.group) attribute = `AVG(${attribute})`
 
     if (!isCount) {
-      this.attributes.push(`${attribute} as similarity`)
+      // Floor instead of round, so a close match cannot tie with a full match (score of 1)
+      this.attributes.push(`FLOOR(${attribute} * ${SIMILARITY_STEPS}) as similarity`)
     }
   }
 
@@ -1104,9 +1108,11 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     }
 
     let firstSort: string
+    let secondarySort = ''
 
     if (column === 'match') { // Search
       firstSort = '"similarity"'
+      secondarySort = '"video"."publishedAt" DESC, '
     } else if (column === 'originallyPublishedAt') {
       firstSort = '"publishedAtForOrder"'
     } else if (column === 'localVideoFilesSize') {
@@ -1118,10 +1124,6 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     } else {
       firstSort = `"video"."${column}"`
     }
-
-    const secondarySort = column === 'match'
-      ? '"video"."publishedAt" DESC, '
-      : ''
 
     this.sort = `ORDER BY ${firstSort} ${direction}, ${secondarySort}"video"."id" ASC`
   }
