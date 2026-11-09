@@ -7,6 +7,7 @@ export class MockCoreBlocklist {
 
   private actions: { type: 'block' | 'unblock', target: string, createdAt: string }[] = []
   private readonly requestedPaths: string[] = []
+  private failing = false
 
   async initialize () {
     const app = express()
@@ -18,6 +19,8 @@ export class MockCoreBlocklist {
     })
 
     app.get('/list.json', (req: express.Request, res: express.Response) => {
+      if (this.failing) return res.sendStatus(404)
+
       return res.json({
         name: 'Test subscription',
         actions: this.actions
@@ -46,6 +49,10 @@ export class MockCoreBlocklist {
 
   setActions (actions: { type: 'block' | 'unblock', target: string, createdAt: string }[]) {
     this.actions = actions
+  }
+
+  setFailing (failing: boolean) {
+    this.failing = failing
   }
 
   countRequests (path: string) {

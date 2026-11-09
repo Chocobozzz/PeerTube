@@ -334,6 +334,19 @@ describe('Test blocklist subscriptions', function () {
       }
     })
 
+    it('Should mark a subscription as failed when it cannot be synchronized', async function () {
+      this.timeout(30000)
+
+      mockServer.setFailing(true)
+      await wait(8000)
+
+      const { data } = await server.blocklist.listServerBlocklistSubscriptions({ search: 'Test subscription' })
+      expect(data).to.have.lengthOf(1)
+      expect(data[0].state.label).to.equal('Failed')
+
+      mockServer.setFailing(false)
+    })
+
     it('Should delete a subscription', async function () {
       await server.blocklist.removeServerBlocklistSubscription({ id: subscriptionId })
 

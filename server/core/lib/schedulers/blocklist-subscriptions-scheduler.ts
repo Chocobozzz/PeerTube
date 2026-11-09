@@ -40,7 +40,7 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
       try {
         await this.syncSubscription({ subscription, serverAccountId: serverActor.Account.id })
       } catch (err) {
-        subscription.update({ state: StreamSyncState.PROCESSING })
+        subscription.update({ state: StreamSyncState.FAILED })
           .catch(err =>
             logger.error('Cannot update blocklist subscription state after failed synchronization.', {
               err,
