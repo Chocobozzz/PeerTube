@@ -6,6 +6,7 @@ import { getAPId } from '../../../lib/activitypub/activity.js'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
+import { loadRateOfActivity } from '../video-rates.js'
 import { canVideoBeFederated, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
 const logger = createLogger()
@@ -41,7 +42,7 @@ async function processLikeVideo (byActor: MActorSignature, activity: ActivityLik
   return runTransaction(async t => {
     const video = await VideoModel.load(onlyVideo.id, t)
 
-    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, activity.id, t)
+    const existingRate = await loadRateOfActivity({ byActor, account: byAccount, video, activityId: activity.id, transaction: t })
     if (existingRate?.type === 'like') return
 
     if (existingRate?.type === 'dislike') {

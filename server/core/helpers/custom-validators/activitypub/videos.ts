@@ -155,7 +155,8 @@ export function isRemoteVideoUrlValid (url: any) {
 export function isAPVideoFileUrlMetadataObject (url: any): url is ActivityVideoFileMetadataUrlObject {
   return url?.type === 'Link' &&
     url.mediaType === 'application/json' &&
-    isArray(url.rel) && url.rel.includes('metadata')
+    isArray(url.rel) && url.rel.includes('metadata') &&
+    isActivityPubUrlValid(url.href)
 }
 
 export function isAPVideoTrackerUrlObject (url: any): url is ActivityTrackerUrlObject {

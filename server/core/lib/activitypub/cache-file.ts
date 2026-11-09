@@ -1,17 +1,22 @@
 import { CacheFileObject, VideoStreamingPlaylistType } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
-import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models/index.js'
+import { MActorId, MActorUrl, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy.js'
+import { checkUrlsSameHost } from './url.js'
 
 const logger = createLogger()
 
 export async function createOrUpdateCacheFile (
   cacheFileObject: CacheFileObject,
   video: MVideoWithAllFiles,
-  byActor: MActorId,
+  byActor: MActorId & MActorUrl,
   t: Transaction
 ) {
+  if (checkUrlsSameHost(cacheFileObject.id, byActor.url) !== true) {
+    throw new Error(`Cache file ${cacheFileObject.id} is not on the same host than actor ${byActor.url}`)
+  }
+
   const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
 
   if (redundancyModel) {

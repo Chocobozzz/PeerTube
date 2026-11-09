@@ -115,9 +115,10 @@ async function rejectIfInstanceFollowDisabled (byActor: MActorSignature, activit
 
 async function rejectIfMuted (byActor: MActorSignature, activityId: string, targetActor: MActorFull) {
   const followerAccount = await AccountModel.load(byActor.Account.id)
-  const followingAccountId = targetActor.Account
+  // A followed channel has no account: use the mutes of its owner
+  const followingAccount = targetActor.Account ?? targetActor.VideoChannel?.Account
 
-  if (followerAccount && await isBlockedByServerOrAccount(followerAccount, followingAccountId)) {
+  if (followerAccount && await isBlockedByServerOrAccount(followerAccount, followingAccount)) {
     logger.info('Rejecting %s because follower is muted.', byActor.url)
 
     sendReject(activityId, byActor, targetActor)

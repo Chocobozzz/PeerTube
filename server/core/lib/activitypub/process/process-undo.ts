@@ -11,7 +11,6 @@ import {
 import { VideoModel } from '@server/models/video/video.js'
 import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
-import { AccountVideoRateModel } from '../../../models/account/account-video-rate.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy.js'
@@ -21,6 +20,7 @@ import { MActorSignature } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded, getAPId } from '../activity.js'
 import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
+import { loadRateOfActivity } from '../video-rates.js'
 import { getOrCreateAPVideo, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
 const logger = createLogger()
@@ -56,7 +56,7 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo<Act
   }
 
   if (activityToUndo.type === 'Announce') {
-    return retryTransactionWrapper(() => processUndoAnnounce(byActor, activityToUndo))
+    return retryTransactionWrapper(() => processUndoAnnounce(byActor, activity as ActivityUndo<ActivityAnnounce>))
   }
 
   logger.warn('Unknown activity object type %s -> %s when undo activity.', activityToUndo.type, { activity: activity.id })
@@ -82,7 +82,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
     const video = await VideoModel.load(onlyVideo.id, t)
-    const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
+    const rate = await loadRateOfActivity({ byActor, account: byActor.Account, video, activityId: likeActivity.id, transaction: t })
     if (rate?.type !== 'like') {
       logger.warn('Unknown like by account %d for video %d.', byActor.Account.id, video.id)
       return
@@ -106,7 +106,7 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
     const video = await VideoModel.load(onlyVideo.id, t)
-    const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislikeActivity.id, t)
+    const rate = await loadRateOfActivity({ byActor, account: byActor.Account, video, activityId: dislikeActivity.id, transaction: t })
     if (rate?.type !== 'dislike') {
       logger.warn(`Unknown dislike by account %d for video %d.`, byActor.Account.id, video.id)
       return
@@ -149,7 +149,9 @@ async function processUndoCacheFile (
   })
 }
 
-function processUndoAnnounce (byActor: MActorSignature, announceActivity: ActivityAnnounce) {
+function processUndoAnnounce (byActor: MActorSignature, activity: ActivityUndo<ActivityAnnounce>) {
+  const announceActivity = activity.object
+
   return runTransaction(async t => {
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
     if (!share) {
@@ -166,7 +168,7 @@ function processUndoAnnounce (byActor: MActorSignature, announceActivity: Activi
       const exceptions = [ byActor ]
 
       await forwardVideoRelatedActivity({
-        activity: announceActivity,
+        activity,
         transaction: t,
         followersException: exceptions,
         video: share.Video,

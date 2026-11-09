@@ -1,9 +1,10 @@
 import { VideoRateType } from '@peertube/peertube-models'
 import { Transaction } from 'sequelize'
-import { MAccountActor, MActorUrl, MVideoAccountLight, MVideoId } from '../../types/models/index.js'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate.js'
+import { MAccountActor, MAccountId, MActorUrl, MVideoAccountLight, MVideoId } from '../../types/models/index.js'
 import { sendLike, sendUndoDislike, sendUndoLike } from './send/index.js'
 import { sendDislike } from './send/send-dislike.js'
-import { getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from './url.js'
+import { checkUrlsSameHost, getVideoDislikeActivityPubUrlByLocalActor, getVideoLikeActivityPubUrlByLocalActor } from './url.js'
 import { scheduleVideoFederation } from './videos/index.js'
 
 async function sendVideoRateChange (
@@ -24,10 +25,33 @@ function getLocalRateUrl (rateType: VideoRateType, actor: MActorUrl, video: MVid
     : getVideoDislikeActivityPubUrlByLocalActor(actor, video)
 }
 
+async function loadRateOfActivity (options: {
+  byActor: MActorUrl
+  account: MAccountId
+  video: MVideoId
+  activityId: string
+  transaction: Transaction
+}) {
+  const { byActor, account, video, activityId, transaction } = options
+
+  if (checkUrlsSameHost(activityId, byActor.url) !== true) {
+    throw new Error(`Rate activity ${activityId} is not on the same host than actor ${byActor.url}`)
+  }
+
+  const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(account.id, video.id, activityId, transaction)
+
+  if (rate && (rate.accountId !== account.id || rate.videoId !== video.id)) {
+    throw new Error(`Rate ${rate.url} is not a rate of account ${account.id} on video ${video.id}`)
+  }
+
+  return rate
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getLocalRateUrl,
+  loadRateOfActivity,
   sendVideoRateChange
 }
 

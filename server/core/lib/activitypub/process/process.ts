@@ -25,23 +25,25 @@ import { processDownloadActivity } from './process-download.js'
 
 const logger = createLogger('ap')
 
-const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
-  Create: processCreateActivity,
-  Update: processUpdateActivity,
-  Delete: processDeleteActivity,
-  Follow: processFollowActivity,
-  Accept: processAcceptActivity,
-  Reject: processRejectActivity,
-  Announce: processAnnounceActivity,
-  Undo: processUndoActivity,
-  Like: processLikeActivity,
-  Dislike: processDislikeActivity,
-  Flag: processFlagActivity,
-  View: processViewActivity,
-  Download: processDownloadActivity,
-  ApproveReply: processReplyApprovalFactory('ApproveReply'),
-  RejectReply: processReplyApprovalFactory('RejectReply')
-}
+const processActivity = new Map<string, (options: APProcessorOptions<Activity>) => Promise<any>>(Object.entries(
+  {
+    Create: processCreateActivity,
+    Update: processUpdateActivity,
+    Delete: processDeleteActivity,
+    Follow: processFollowActivity,
+    Accept: processAcceptActivity,
+    Reject: processRejectActivity,
+    Announce: processAnnounceActivity,
+    Undo: processUndoActivity,
+    Like: processLikeActivity,
+    Dislike: processDislikeActivity,
+    Flag: processFlagActivity,
+    View: processViewActivity,
+    Download: processDownloadActivity,
+    ApproveReply: processReplyApprovalFactory('ApproveReply'),
+    RejectReply: processReplyApprovalFactory('RejectReply')
+  } satisfies { [P in ActivityType]: (options: APProcessorOptions<Activity>) => Promise<any> }
+))
 
 export async function processActivities (
   activities: Activity[],
@@ -60,7 +62,7 @@ export async function processActivities (
     activities = activities.slice(0, ACTIVITY_PUB.MAX_ACTIVITIES_PER_REQUEST)
   }
 
-  const actorsCache: { [ url: string ]: MActorSignature } = {}
+  const actorsCache: { [url: string]: MActorSignature } = {}
 
   for (const activity of activities) {
     if (!activity || typeof activity !== 'object') {
@@ -98,7 +100,7 @@ export async function processActivities (
       continue
     }
 
-    const activityProcessor = processActivity[activity.type]
+    const activityProcessor = processActivity.get(activity.type)
     if (activityProcessor === undefined) {
       logger.warn('Unknown activity type %s.', activity.type, { activityId: activity.id })
       continue

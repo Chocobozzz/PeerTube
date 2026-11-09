@@ -40,26 +40,28 @@ function isActivity (activity: any) {
 
 // ---------------------------------------------------------------------------
 
-const activityCheckers: { [P in ActivityType]: (activity: Activity) => boolean } = {
-  Create: isCreateActivityValid,
-  Update: isUpdateActivityValid,
-  Delete: isDeleteActivityValid,
-  Follow: isFollowActivityValid,
-  Accept: isAcceptActivityValid,
-  Reject: isRejectActivityValid,
-  Announce: isAnnounceActivityValid,
-  Undo: isUndoActivityValid,
-  Like: isLikeActivityValid,
-  View: isViewActivityValid,
-  Flag: isFlagActivityValid,
-  Dislike: isDislikeActivityValid,
-  ApproveReply: isApproveReplyActivityValid,
-  RejectReply: isRejectReplyActivityValid,
-  Download: isDownloadActivityValid
-}
+const activityCheckers = new Map<string, (activity: Activity) => boolean>(Object.entries(
+  {
+    Create: isCreateActivityValid,
+    Update: isUpdateActivityValid,
+    Delete: isDeleteActivityValid,
+    Follow: isFollowActivityValid,
+    Accept: isAcceptActivityValid,
+    Reject: isRejectActivityValid,
+    Announce: isAnnounceActivityValid,
+    Undo: isUndoActivityValid,
+    Like: isLikeActivityValid,
+    View: isViewActivityValid,
+    Flag: isFlagActivityValid,
+    Dislike: isDislikeActivityValid,
+    ApproveReply: isApproveReplyActivityValid,
+    RejectReply: isRejectReplyActivityValid,
+    Download: isDownloadActivityValid
+  } satisfies { [P in ActivityType]: (activity: Activity) => boolean }
+))
 
 export function isActivityValid (activity: any) {
-  const checker = activityCheckers[activity.type]
+  const checker = activityCheckers.get(activity.type)
   // Unknown activity type
   if (!checker) return false
 

@@ -7,6 +7,7 @@ export function isCacheFileObjectValid (object: CacheFileObject) {
   if (object?.type !== 'CacheFile') return false
 
   return (!object.expires || isDateValid(object.expires)) &&
+    isActivityPubUrlValid(object.id) &&
     isActivityPubUrlValid(object.object) &&
     (isRedundancyUrlVideoValid(object.url) || isPlaylistRedundancyUrlValid(object.url))
 }
