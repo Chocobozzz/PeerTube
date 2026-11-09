@@ -57,6 +57,19 @@ describe('Test users admin API validators', function () {
     }
   })
 
+  describe('When autocompleting users', function () {
+    const path = '/api/v1/users/autocomplete'
+
+    it('Should fail without a search', async function () {
+      await makeGetRequest({ url: server.url, path, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+      await makeGetRequest({ url: server.url, path, query: { search: '' }, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url: server.url, path, query: { search: 'root' }, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
   describe('When listing users', function () {
     it('Should fail with a bad start pagination', async function () {
       await checkBadStartPagination(server.url, path, server.accessToken)

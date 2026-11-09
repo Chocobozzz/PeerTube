@@ -513,9 +513,15 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
 }
 
 export const userAutocompleteValidator = [
-  param('search')
+  query('search')
     .isString()
-    .not().isEmpty()
+    .not().isEmpty(),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
 ]
 
 export const usersNewFeatureInfoReadValidator = [
