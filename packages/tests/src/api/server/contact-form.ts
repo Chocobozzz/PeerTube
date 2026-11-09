@@ -90,6 +90,26 @@ describe('Test contact form', function () {
     })
   })
 
+  it('Should escape HTML of user values in the email', async function () {
+    await wait(1000)
+
+    const fromName = 'Tom & <a href="https://evil.example.com">Jerry</a>'
+
+    await command.send({
+      fromEmail: 'toto@example.com',
+      fromName,
+      subject: 'my subject',
+      body: 'my super message'
+    })
+
+    await waitJobs(server)
+
+    const email = emails[emails.length - 1]
+
+    expect(email['html']).to.not.match(/<a[^>]+evil\.example\.com/)
+    expect(email['text']).to.contain(fromName)
+  })
+
   it('Should not have the manage preferences link in the email', async function () {
     const email = emails[0]
     expect(email['text']).to.not.contain('Manage your notification preferences')

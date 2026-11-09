@@ -1,4 +1,4 @@
-import { arrayify } from '@peertube/peertube-core-utils'
+import { arrayify, escapeHTML } from '@peertube/peertube-core-utils'
 import {
   EmailPayload,
   MailAction,
@@ -607,9 +607,13 @@ export class Emailer {
     }
 
     handlebars.registerHelper('t', function (key: string, options: HelperOptions) {
-      const result = t(key, this.language, options.hash)
+      // Espace hash values
+      const escapedHash = Object.fromEntries(
+        Object.entries(options.hash).map(([ name, value ]) => [ name, typeof value === 'string' ? escapeHTML(value) : value ])
+      )
 
-      return toSafeMailHtml(result)
+      // The result is already escaped
+      return new handlebars.SafeString(toSafeMailHtml(t(key, this.language, escapedHash)))
     })
   }
 
