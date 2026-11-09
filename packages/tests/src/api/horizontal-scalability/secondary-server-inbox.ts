@@ -22,7 +22,7 @@ import { SQLCommand } from '@tests/shared/sql-command.js'
 import { processViewsBuffer } from '@tests/shared/views.js'
 import { expect } from 'chai'
 import express from 'express'
-import { Server } from 'http'
+import { createServer, request, Server } from 'http'
 
 describe('Test the inbox of a secondary server process', function () {
   if (areMockObjectStorageTestsDisabled()) return
@@ -35,8 +35,35 @@ describe('Test the inbox of a secondary server process', function () {
 
   let remoteSQL: SQLCommand
 
+  // Like in production, the reverse proxy owns the public port of the instance, keeps the Host header and picks the process
+  let reverseProxy: Server
+  let primaryListenPort: number
+  let inboxPort: number
+
   let localVideo: { id: number, uuid: string }
   let remoteVideoUUID: string
+
+  function createReverseProxy (port: number) {
+    return new Promise<Server>(resolve => {
+      const server = createServer((req, res) => {
+        const proxied = request({
+          hostname: '127.0.0.1',
+          port: req.method === 'POST' && req.url.endsWith('/inbox') ? inboxPort : primaryListenPort,
+          path: req.url,
+          method: req.method,
+          headers: req.headers
+        }, proxiedRes => {
+          res.writeHead(proxiedRes.statusCode, proxiedRes.headers)
+          proxiedRes.pipe(res)
+        })
+
+        proxied.on('error', () => res.destroy())
+        req.pipe(proxied)
+      })
+
+      server.listen(port, () => resolve(server))
+    })
+  }
 
   async function countInboxRequests (server: PeerTubeServer) {
     const content = await server.servers.getLogContent()
@@ -62,8 +89,12 @@ describe('Test the inbox of a secondary server process', function () {
     for (const server of servers) {
       const body = await activityPubContextify(activity, activity.type, data => Promise.resolve(data))
 
-      await makePOSTAPRequest(server.url + '/inbox', body, httpSignature, buildGlobalHTTPHeaders(body, buildDigest))
+      inboxPort = server === primary ? primaryListenPort : server.port
+
+      await makePOSTAPRequest(primary.url + '/inbox', body, httpSignature, buildGlobalHTTPHeaders(body, buildDigest))
     }
+
+    inboxPort = secondary.port
   }
 
   async function sendToBothProcesses (activity: { type: 'View' | 'Download', id: string, actor: string, object: string }) {
@@ -78,7 +109,15 @@ describe('Test the inbox of a secondary server process', function () {
 
     await objectStorage.prepareDefaultMockBuckets()
 
-    primary = await createSingleServer(1, objectStorage.getDefaultMockConfig())
+    primary = new PeerTubeServer({ serverNumber: 1 })
+
+    // In the port block reserved for the secondaries of this server
+    primaryListenPort = primary.port + 10001
+    inboxPort = primaryListenPort
+
+    reverseProxy = await createReverseProxy(primary.port)
+    await primary.flushAndRun({ ...objectStorage.getDefaultMockConfig(), listen: { port: primaryListenPort } })
+
     remote = await createSingleServer(2)
 
     await setAccessTokensToServers([ primary, remote ])
@@ -91,17 +130,10 @@ describe('Test the inbox of a secondary server process', function () {
     localVideo = await primary.videos.quickUpload({ name: 'local video' })
     await waitJobs([ primary, remote ])
 
-    // The remote server now delivers its activities to the inbox of the secondary
-    // Also prevent the remote server from refreshing these actors, that would restore their inbox URL
     remoteSQL = new SQLCommand(remote)
-    await remoteSQL.updateQuery(
-      `UPDATE actor SET ` +
-        `"inboxUrl" = replace("inboxUrl", :primaryUrl, :secondaryUrl), ` +
-        `"sharedInboxUrl" = replace("sharedInboxUrl", :primaryUrl, :secondaryUrl), ` +
-        `"createdAt" = :future, "updatedAt" = :future ` +
-        `WHERE url LIKE :primaryActors`,
-      { primaryUrl: primary.url, secondaryUrl: secondary.url, future: '2100-01-01T00:00:00Z', primaryActors: primary.url + '/%' }
-    )
+
+    // The remote server now delivers its activities to the inbox of the secondary
+    inboxPort = secondary.port
   })
 
   it('Should process the creation of a remote video on the secondary', async function () {
@@ -282,5 +314,7 @@ describe('Test the inbox of a secondary server process', function () {
     await objectStorage.cleanupMock()
 
     await cleanupTests([ secondary, primary, remote ])
+
+    await terminateServer(reverseProxy)
   })
 })

@@ -1,10 +1,8 @@
 import { ParsedDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
-import { isTestInstance } from '@peertube/peertube-node-utils'
 import { isActorDeleteActivityValid, isActorTypeValid } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { isHTTPSignatureDigestValid, isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/peertube-crypto.js'
 import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
-import { CONFIG } from '@server/initializers/config.js'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
 import { NextFunction, Request, Response } from 'express'
@@ -74,7 +72,7 @@ async function checkHttpSignature (req: Request, res: Response) {
     let parsed: ParsedDraftSignature
 
     try {
-      parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
+      parsed = parseHTTPSignature(req)
     } catch (err) {
       logger.warn('Invalid signature because of exception in signature parser', { reqBody: req.body, err })
 
@@ -173,10 +171,7 @@ function checkInboxRequest (req: Request, res: Response) {
 
 function isRequestForThisInstance (req: Request) {
   // Compare the raw header, because this is the one used by the signature
-  const host = req.headers['host']?.toLowerCase()
-  if (host === WEBSERVER.HOST.toLowerCase()) return true
-
-  return isTestInstance() && host === `${WEBSERVER.HOSTNAME}:${CONFIG.LISTEN.PORT}`.toLowerCase()
+  return req.headers['host']?.toLowerCase() === WEBSERVER.HOST.toLowerCase()
 }
 
 async function checkJsonLDSignature (req: Request, res: Response) {

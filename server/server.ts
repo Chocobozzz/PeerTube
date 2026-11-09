@@ -57,7 +57,7 @@ import { checkFFmpeg, checkMissedConfig, checkNodeVersion } from './core/initial
 import { initI18n, useI18n } from '@server/helpers/i18n.js'
 import { createLogger, flushLogs } from './core/helpers/logger.js'
 import { CONFIG } from './core/initializers/config.js'
-import { API_VERSION, WEBSERVER, loadLanguages } from './core/initializers/constants.js'
+import { ACTIVITY_PUB, API_VERSION, WEBSERVER, loadLanguages } from './core/initializers/constants.js'
 
 const logger = createLogger()
 
@@ -283,7 +283,7 @@ app.use(apiFailMiddleware)
 // For body requests
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json({
-  type: [ 'application/json', 'application/*+json' ],
+  type: ACTIVITY_PUB.INBOX_CONTENT_TYPES,
   limit: '500kb',
   verify: (req: express.Request, res: express.Response, buf: Buffer) => {
     // Plugin routes can access the raw body, and ActivityPub inboxes check its digest
