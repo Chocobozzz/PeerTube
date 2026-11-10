@@ -393,6 +393,14 @@ export type ForAPIOptions = {
         { name: 'id', order: 'ASC' }
       ]
     },
+    {
+      // Must match the "-originallyPublishedAt" sort expression of VideosIdListQueryBuilder
+      name: 'video_published_at_for_order',
+      fields: [
+        Sequelize.literal('(COALESCE("originallyPublishedAt", "publishedAt")) DESC') as any,
+        { name: 'id', order: 'ASC' }
+      ]
+    },
     { fields: [ 'duration' ] },
     {
       fields: [

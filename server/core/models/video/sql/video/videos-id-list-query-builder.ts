@@ -996,6 +996,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     let videoAttributesForSort: string[] = []
 
     if (column === 'originallyPublishedAt') {
+      // Keep in sync with the "video_published_at_for_order" index of VideoModel
       this.attributes.push(
         `COALESCE("video"."originallyPublishedAt", "video"."publishedAt") AS "publishedAtForOrder"`
       )
