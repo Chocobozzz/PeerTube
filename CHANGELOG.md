@@ -9,12 +9,18 @@
   * Many new object storage sections were added to support more object types: `object_storage.avatars`, `object_storage.thumbnails`, `object_storage.storyboards`, `object_storage.torrents`, `object_storage.uploads`, `object_storage.staging`, `object_storage.cache` and `object_storage.redundancy`.
   If you use object storage, you must configure them (bucket name, prefix, base URL) before running v9.0.
   Existing local files can then be moved to object storage using `npm run create-move-file-storage-job -- --to-object-storage --all`
+  * nginx template has been
+
+### NGINX
+
+ * We updated the NGINX template to support horizontal scalability. Update your configuration as [stated in the upgrade documentation](https://docs.joinpeertube.org/install/any-os#update-nginx-configuration
 
 
 ### Configuration
 
 *This section is not exhaustive*
 
+  * `open_telemetry.tracing.jeager_exporter` has been changed to `open_telemetry.tracing.otlp_exporter`
   * `database.read_replicas` to configure PostgreSQL read replicas (see *Features*)
   * New `object_storage` sections (see *IMPORTANT NOTES*)
   * `video_file.lifecycle` to automatically prune video files
