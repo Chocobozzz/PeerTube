@@ -9,12 +9,10 @@
   * Many new object storage sections were added to support more object types: `object_storage.avatars`, `object_storage.thumbnails`, `object_storage.storyboards`, `object_storage.torrents`, `object_storage.uploads`, `object_storage.staging`, `object_storage.cache` and `object_storage.redundancy`.
   If you use object storage, you must configure them (bucket name, prefix, base URL) before running v9.0.
   Existing local files can then be moved to object storage using `npm run create-move-file-storage-job -- --to-object-storage --all`
-  * nginx template has been
 
 ### NGINX
 
- * We updated the NGINX template to support horizontal scalability. Update your configuration as [stated in the upgrade documentation](https://docs.joinpeertube.org/install/any-os#update-nginx-configuration
-
+ * NGINX template has been updated to support horizontal scalability. Update your configuration as [stated in the upgrade documentation](https://docs.joinpeertube.org/install/any-os#update-nginx-configuration
 
 ### Configuration
 
@@ -62,7 +60,6 @@
   * Add support for `data-playlist-id` filter for `<peertube-videos-list>` element https://github.com/Chocobozzz/PeerTube/pull/7822
   * Add `data-more-href`, `data-more-path`, `data-more-label` to `<peertube-videos-list>` to display a "More" button below the list
   * Add `data-path` to `<peertube-button>` to reference a local link
-
 
 ### Features
 
