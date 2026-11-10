@@ -5623,12 +5623,12 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6096602245926393232" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {<x id="username"/> registration request?} other {<x id="count"/> registration requests?}}</source>
-        <target state="translated">Você quer realmente excluir {count, plural, =1 {<x id="username"/> pedido de inscrição?} outros {<x id="count"/> pedidos de inscrição?}}</target>
+        <target state="translated">Você quer realmente excluir {count, plural, =1 {<x id="username"/> pedido de inscrição?} other {<x id="count"/> pedidos de inscrição?}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">171</context></context-group></trans-unit>
       <trans-unit id="9152096266184328708" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="translated">Excluído {count, plural, =1 {<x id="username"/> pedido de inscrição} outros {<x id="count"/> pedidos de inscrição}}</target>
+        <target state="translated">Excluído {count, plural, =1 {<x id="username"/> pedido de inscrição} other {<x id="count"/> pedidos de inscrição}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">182</context></context-group></trans-unit>
       <trans-unit id="9012879216268259096">

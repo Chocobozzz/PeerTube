@@ -861,7 +861,7 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context><context context-type="linenumber">488</context></context-group></trans-unit>
       <trans-unit id="4873265433447388314" datatype="html" xml:space="preserve">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{espectadores, plural, =0 {Nenhum espectador} =1 {1 espectador} other {<x id="viewers"/> espectadores}}</target>
+        <target state="translated">{viewers, plural, =0 {Nenhum espectador} =1 {1 espectador} other {<x id="viewers"/> espectadores}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -1475,13 +1475,13 @@
       </trans-unit>
       <trans-unit id="5779580280418408097" datatype="html" xml:space="preserve">
         <source>Deleted {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Excluído {contagem, plural, =1 {1 vídeo} other {<x id="count"/> vídeos}}.</target>
+        <target state="translated">Excluído {count, plural, =1 {1 vídeo} other {<x id="count"/> vídeos}}.</target>
         
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">504</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">306</context></context-group></trans-unit>
       <trans-unit id="9164541937317586242" datatype="html" xml:space="preserve">
         <source>Unblocked {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Desbloqueado {contagem, plural, =1 {1 vídeo} other {<x id="count"/> vídeos}}.</target>
+        <target state="translated">Desbloqueado {count, plural, =1 {1 vídeo} other {<x id="count"/> vídeos}}.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">522</context></context-group></trans-unit>
       <trans-unit id="6228449077605046873" datatype="html" xml:space="preserve">
@@ -1546,7 +1546,7 @@
       </trans-unit>
       <trans-unit id="2126000025358835171" datatype="html" xml:space="preserve">
         <source>Retry import requested for {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Pedido de nova tentativa de importação para {count, plural, =1 {1 vídeo} outro {<x id="count"/> vídeos}}.</target>
+        <target state="translated">Pedido de nova tentativa de importação para {count, plural, =1 {1 vídeo} other {<x id="count"/> vídeos}}.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">661</context></context-group></trans-unit>
       <trans-unit id="3044142083883783523">
@@ -1692,7 +1692,7 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context><context context-type="linenumber">233</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context><context context-type="linenumber">267</context></context-group></trans-unit>
       <trans-unit id="7920422780199126266" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {1 video updated} other {<x id="count"/> videos updated}}</source>
-        <target state="translated">{contagem, plural, =1 {1 vídeo atualizado} other {<x id="count"/> vídeos atualizados}}</target>
+        <target state="translated">{count, plural, =1 {1 vídeo atualizado} other {<x id="count"/> vídeos atualizados}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context><context context-type="linenumber">325</context></context-group></trans-unit>
       <trans-unit id="7391051635981764507" datatype="html" xml:space="preserve">
@@ -5733,7 +5733,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="9152096266184328708" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="username"/> registration request} other {<x id="count"/> registration requests}}</source>
-        <target state="translated">Removido {contagem, plural, =1 {<x id="username"/> solicitação de registro} other {<x id="count"/> solicitações de registro}}</target>
+        <target state="translated">Removido {count, plural, =1 {<x id="username"/> solicitação de registro} other {<x id="count"/> solicitações de registro}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
           <context context-type="linenumber">182</context>
@@ -10091,7 +10091,7 @@ A ligação expira no prazo de 1 hora.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">110</context></context-group></trans-unit>
       <trans-unit id="1764978878891351511" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Delete comment} other {Delete comments}}</source>
-        <target state="translated">{contagem, plural, =1 {Apagar comentário} other {Apagar comentários}}</target>
+        <target state="translated">{count, plural, =1 {Apagar comentário} other {Apagar comentários}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">118</context></context-group></trans-unit>
       <trans-unit id="8098332505860203521" datatype="html" xml:space="preserve">
@@ -10150,7 +10150,7 @@ A ligação expira no prazo de 1 hora.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">371</context></context-group></trans-unit>
       <trans-unit id="341804802839774363" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this comment} other {<x id="count"/> comments}}?</source>
-        <target state="translated">Deseja realmente remover {count, plural, =1 {este comentário} outro {<x id="count"/> comentários}}?</target>
+        <target state="translated">Deseja realmente remover {count, plural, =1 {este comentário} other {<x id="count"/> comentários}}?</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">385</context></context-group></trans-unit>
       <trans-unit id="1420624050293070194" datatype="html" xml:space="preserve">
@@ -11203,7 +11203,7 @@ A ligação expira no prazo de 1 hora.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">176</context></context-group></trans-unit>
       <trans-unit id="801645841650679815" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Mute platform} other {Mute platforms}}</source>
-        <target state="translated">{contável, plural, =1 {Silenciar plataforma} outras {Silenciar plataformas}}</target>
+        <target state="translated">{count, plural, =1 {Silenciar plataforma} other {Silenciar plataformas}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">192</context></context-group></trans-unit>
       <trans-unit id="4348940379154678550" datatype="html" xml:space="preserve">
@@ -17614,7 +17614,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="5921284055608402352" datatype="html" xml:space="preserve">
         <source>{value, plural, =1 {thread} other {threads}}</source>
-        <target state="translated">{valor, plural, =1 {thread} other {threads}}</target>
+        <target state="translated">{value, plural, =1 {thread} other {threads}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-admin/admin-config.service.ts</context><context context-type="linenumber">218</context></context-group></trans-unit>
       <trans-unit id="3072354262521481761" datatype="html" xml:space="preserve">
@@ -17792,7 +17792,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="5328830884001308231" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Account muted} other {<x id="count"/> accounts muted}}</source>
-        <target state="translated">{contagem, plural, =1 {Conta silenciada} other {<x id="count"/> contas silenciadas}}</target>
+        <target state="translated">{count, plural, =1 {Conta silenciada} other {<x id="count"/> contas silenciadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/blocklist.service.ts</context>
           <context context-type="linenumber">177</context>
@@ -17800,7 +17800,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="4407621544946779419" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Account unmuted} other {<x id="count"/> accounts unmuted}}</source>
-        <target state="translated">{contagem, plural, =1 {Conta não silenciada} other {<x id="count"/> contas desativadas}}</target>
+        <target state="translated">{count, plural, =1 {Conta não silenciada} other {<x id="count"/> contas desativadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/blocklist.service.ts</context>
           <context context-type="linenumber">206</context>
@@ -18137,7 +18137,7 @@ A ligação expira no prazo de 1 hora.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">72</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">132</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">64</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context><context context-type="linenumber">63</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">175</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">234</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">144</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">251</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">253</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">496</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">549</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context><context context-type="linenumber">100</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context><context context-type="linenumber">170</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">76</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">146</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">146</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">298</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">337</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">306</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context><context context-type="linenumber">246</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context><context context-type="linenumber">526</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">518</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">678</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">705</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/channel/video-channel.service.ts</context><context context-type="linenumber">111</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">414</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">644</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.ts</context><context context-type="linenumber">86</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">50</context></context-group></trans-unit>
       <trans-unit id="3145156821099755377" datatype="html" xml:space="preserve">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Aceito {contagem, plural, =1 {<x id="followerName"/> seguir solicitação} other {<x id="count"/> seguir solicitações}}</target>
+        <target state="translated">Aceito {count, plural, =1 {<x id="followerName"/> seguir solicitação} other {<x id="count"/> seguir solicitações}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">84</context>
@@ -18145,7 +18145,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="8823680466537853782" datatype="html" xml:space="preserve">
         <source>Do you really want to reject {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Quer mesmo rejeitar {count, plural, =1 {<x id="followerName"/> seguir pedido?} outro {<x id="count"/> seguir pedidos?}}</target>
+        <target state="translated">Quer mesmo rejeitar {count, plural, =1 {<x id="followerName"/> seguir pedido?} other {<x id="count"/> seguir pedidos?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">98</context>
@@ -18153,7 +18153,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="7182104881582756649" datatype="html" xml:space="preserve">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Rejeitado {contável, plural, =1 {<x id="followerName"/> seguir pedido} outro {<x id="count"/> seguir pedidos}}</target>
+        <target state="translated">Rejeitado {count, plural, =1 {<x id="followerName"/> seguir pedido} other {<x id="count"/> seguir pedidos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -18169,7 +18169,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="4187075675930483010" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {<x id="followerName"/> follow request?} other {<x id="count"/> follow requests?}}</source>
-        <target state="translated">Deseja realmente eliminar {count, plural, =1 {<x id="followerName"/> seguir pedido?} outro {<x id="count"/> seguir pedidos?}}</target>
+        <target state="translated">Deseja realmente eliminar {count, plural, =1 {<x id="followerName"/> seguir pedido?} other {<x id="count"/> seguir pedidos?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">128</context>
@@ -18177,7 +18177,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="805843790553313750" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Removido {contagem, plural, =1 {<x id="followerName"/> seguir pedido} outro {<x id="count"/> seguir pedidos}}</target>
+        <target state="translated">Removido {count, plural, =1 {<x id="followerName"/> seguir pedido} other {<x id="count"/> seguir pedidos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -18528,12 +18528,12 @@ A ligação expira no prazo de 1 hora.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">504</context></context-group></trans-unit>
       <trans-unit id="7822423019936222997" datatype="html" xml:space="preserve">
         <source>Send a message to the reporter (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</source>
-        <target state="translated">Enviar uma mensagem ao repórter (atualmente {count, plural, =1 {<x id="count"/> mensagem} outro {<x id="count"/> mensagens}})</target>
+        <target state="translated">Enviar uma mensagem ao repórter (atualmente {count, plural, =1 {<x id="count"/> mensagem} other {<x id="count"/> mensagens}})</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">252</context></context-group></trans-unit>
       <trans-unit id="4116081436059310531" datatype="html" xml:space="preserve">
         <source>Send a message to the admins/moderators (currently {count, plural, =1 {<x id="count"/> message} other {<x id="count"/> messages}})</source>
-        <target state="translated">Enviar uma mensagem aos administradores/moderadores (atualmente {count, plural, =1 {<x id="count"/> mensagem} outro {<x id="count"/> mensagens}})</target>
+        <target state="translated">Enviar uma mensagem aos administradores/moderadores (atualmente {count, plural, =1 {<x id="count"/> mensagem} other {<x id="count"/> mensagens}})</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">258</context></context-group></trans-unit>
       <trans-unit id="6282990098351939529" datatype="html" xml:space="preserve">
@@ -18574,7 +18574,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="8583413527299223090" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Internal note updated} other {<x id="count"/> internal notes updated}}</source>
-        <target state="translated">{contagem, plural, =1 {Nota interna atualizada} other {<x id="count"/> Notas internas atualizadas}}</target>
+        <target state="translated">{count, plural, =1 {Nota interna atualizada} other {<x id="count"/> Notas internas atualizadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block-internal-note-modal.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -18641,7 +18641,7 @@ A ligação expira no prazo de 1 hora.</target>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">188</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">660</context></context-group></trans-unit>
       <trans-unit id="1828494663226140635" datatype="html" xml:space="preserve">
         <source>Switch {count, plural, =1 {this auto block to manual?} other {<x id="count"/> auto blocks to manual?}}</source>
-        <target state="translated">Alternar {contagem, plural, =1 {este bloqueio automático para manual?} outro {<x id="count"/> Bloqueio automático para manual?}}</target>
+        <target state="translated">Alternar {count, plural, =1 {este bloqueio automático para manual?} other {<x id="count"/> Bloqueio automático para manual?}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">202</context>
@@ -18665,7 +18665,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="4506177846215251976" datatype="html" xml:space="preserve">
         <source>Do you really want to delete {count, plural, =1 {this video?} other {<x id="count"/> videos?}}</source>
-        <target state="translated">Deseja realmente eliminar {count, plural, =1 {este vídeo?} outro {<x id="count"/> vídeos?}}</target>
+        <target state="translated">Deseja realmente eliminar {count, plural, =1 {este vídeo?} other {<x id="count"/> vídeos?}}</target>
         
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">231</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">675</context></context-group></trans-unit>
@@ -19461,7 +19461,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="693664545987486839" datatype="html" xml:space="preserve">
         <source>Do you really want to cancel {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be cancelled.</source>
-        <target state="translated">Deseja realmente cancelar {count, plural, =1 {este trabalho} outro {<x id="count"/> empregos}}? Empregos infantis também serão cancelados.</target>
+        <target state="translated">Deseja realmente cancelar {count, plural, =1 {este trabalho} other {<x id="count"/> empregos}}? Empregos infantis também serão cancelados.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">125</context>
@@ -19469,7 +19469,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="6494788464560085904" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</source>
-        <target state="translated">{contagem, plural, =1 {trabalho anulado} other {<x id="count"/> Empregos cancelados}}</target>
+        <target state="translated">{count, plural, =1 {trabalho anulado} other {<x id="count"/> Empregos cancelados}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">140</context>
@@ -19477,7 +19477,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="2175266358082397536" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this job} other {<x id="count"/> jobs}}? Children jobs will also be removed.</source>
-        <target state="translated">Deseja realmente remover {count, plural, =1 {este trabalho} outro {<x id="count"/> empregos}}? Os empregos infantis também serão removidos.</target>
+        <target state="translated">Deseja realmente remover {count, plural, =1 {este trabalho} other {<x id="count"/> empregos}}? Os empregos infantis também serão removidos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">152</context>
@@ -19677,7 +19677,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="1072149050517623514" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {<x id="username"/> account created} other {<x id="count"/> accounts created}}</source>
-        <target state="translated">{contável, plural, =1 {<x id="username"/> conta criada} outro {<x id="count"/> contas criadas}}</target>
+        <target state="translated">{count, plural, =1 {<x id="username"/> conta criada} other {<x id="count"/> contas criadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">144</context>
@@ -19685,7 +19685,7 @@ A ligação expira no prazo de 1 hora.</target>
       </trans-unit>
       <trans-unit id="6376954178222267147" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {<x id="username"/> registration rejected} other {<x id="count"/> registrations rejected}}</source>
-        <target state="translated">{contável, plural, =1 {<x id="username"/> registo rejeitado} outro {<x id="count"/> Inscrições rejeitadas}}</target>
+        <target state="translated">{count, plural, =1 {<x id="username"/> registo rejeitado} other {<x id="count"/> Inscrições rejeitadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.ts</context>
           <context context-type="linenumber">176</context>
@@ -22727,7 +22727,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="8489397598480880903" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 year ago} other {<x id="interval"/> years ago}}</source>
-        <target state="translated">{intervalo, plural, =1 {há 1 ano} other {<x id="interval"/> anos atrás}}</target>
+        <target state="translated">{interval, plural, =1 {há 1 ano} other {<x id="interval"/> anos atrás}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">19</context>
@@ -22743,7 +22743,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="599762045687999334" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 month ago} other {<x id="interval"/> months ago}}</source>
-        <target state="translated">{intervalo, plural, =1 {há 1 mês} other {<x id="interval"/> meses antes}}</target>
+        <target state="translated">{interval, plural, =1 {há 1 mês} other {<x id="interval"/> meses antes}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">36</context>
@@ -22759,7 +22759,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="4951459525104027759" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 week ago} other {<x id="interval"/> weeks ago}}</source>
-        <target state="translated">{intervalo, plural, =1 {1 semana atrás} other {<x id="interval"/> semanas atrás}}</target>
+        <target state="translated">{interval, plural, =1 {1 semana atrás} other {<x id="interval"/> semanas atrás}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">52</context>
@@ -22775,7 +22775,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="2471141982657856893" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 day ago} other {<x id="interval"/> days ago}}</source>
-        <target state="translated">{intervalo, plural, =1 {há 1 dia} other {<x id="interval"/> dias atrás}}</target>
+        <target state="translated">{interval, plural, =1 {há 1 dia} other {<x id="interval"/> dias atrás}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">63</context>
@@ -22791,7 +22791,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="8562677309401914974" datatype="html" xml:space="preserve">
         <source>{interval, plural, =1 {1 hour ago} other {<x id="interval"/> hours ago}}</source>
-        <target state="translated">{intervalo, plural, =1 {há 1 hora} other {<x id="interval"/> horas atrás}}</target>
+        <target state="translated">{interval, plural, =1 {há 1 hora} other {<x id="interval"/> horas atrás}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/date/from-now.pipe.ts</context>
           <context context-type="linenumber">74</context>
@@ -24394,7 +24394,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html" xml:space="preserve">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="translated">Não pode selecionar mais do que {maxItems, plural, =1 {1 item} outro {<x id="maxItems"/> artigos}}</target>
+        <target state="translated">Não pode selecionar mais do que {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> artigos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-default-all.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -25092,7 +25092,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="3911025298999036211" datatype="html" xml:space="preserve">
         <source>~ {hours, plural, =1 {1 hour} other {<x id="hours"/> hours}}</source>
-        <target state="translated">~ {horas, plural, =1 {1 hora} outro {<x id="hours"/> horas}}</target>
+        <target state="translated">~ {hours, plural, =1 {1 hora} other {<x id="hours"/> horas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">102</context>
@@ -25100,7 +25100,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="2819927377059070056" datatype="html" xml:space="preserve">
         <source>~ {minutes, plural, =1 {1 minute} other {<x id="minutes"/> minutes}}</source>
-        <target state="translated">~ {minutos, plural, =1 {1 minuto} outro {<x id="minutes"/> minutos}}</target>
+        <target state="translated">~ {minutes, plural, =1 {1 minuto} other {<x id="minutes"/> minutos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">110</context>
@@ -25449,7 +25449,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html" xml:space="preserve">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="translated">Banir {contagem, plural, =1 {1 utilizador} outro {<x id="count"/> Utilizadores}}</target>
+        <target state="translated">Banir {count, plural, =1 {1 utilizador} other {<x id="count"/> Utilizadores}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">94</context>
@@ -26159,7 +26159,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">514</context></context-group></trans-unit>
       <trans-unit id="7400236202912485768" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Abuse deleted.} other {<x id="count"/> abuses deleted.}}</source>
-        <target state="translated">{contável, plural, =1 {Abuso eliminado.} other {<x id="count"/> Abusos eliminados.}}</target>
+        <target state="translated">{count, plural, =1 {Abuso eliminado.} other {<x id="count"/> Abusos eliminados.}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">526</context></context-group></trans-unit>
       <trans-unit id="4991784943314587973" datatype="html" xml:space="preserve">
@@ -26194,7 +26194,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">702</context></context-group></trans-unit>
       <trans-unit id="3036032783101046738" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="translated">{contável, plural, =1 {Comentário excluído.} outro {<x id="count"/> comentários eliminados.}}</target>
+        <target state="translated">{count, plural, =1 {Comentário excluído.} other {<x id="count"/> comentários eliminados.}}</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">719</context></context-group></trans-unit>
       <trans-unit id="6747218355168080191" datatype="html" xml:space="preserve">
@@ -26980,7 +26980,7 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">140</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.ts</context><context context-type="linenumber">167</context></context-group></trans-unit>
       <trans-unit id="7896600179187469316" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job removed} other {<x id="count"/> jobs removed}}</source>
-        <target state="translated">{contagem, plural, =1 {Emprego removido} other {<x id="count"/> empregos removidos}}</target>
+        <target state="translated">{count, plural, =1 {Emprego removido} other {<x id="count"/> empregos removidos}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">167</context>

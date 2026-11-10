@@ -1623,7 +1623,7 @@
       </trans-unit>
       <trans-unit id="2126000025358835171" datatype="html" xml:space="preserve">
         <source>Retry import requested for {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Se ha solicitado volver a intentar la importación de {count, plural, =1 {1 video} otros {<x id="count"/> vídeos}}.</target>
+        <target state="translated">Se ha solicitado volver a intentar la importación de {count, plural, =1 {1 video} other {<x id="count"/> vídeos}}.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">661</context></context-group></trans-unit>
       <trans-unit id="3044142083883783523" datatype="html">
@@ -10247,7 +10247,7 @@ The link will expire within 1 hour.</source>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">371</context></context-group></trans-unit>
       <trans-unit id="341804802839774363" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this comment} other {<x id="count"/> comments}}?</source>
-        <target state="translated">Realmente quieres eliminar {count, plural, =1 {this comment} otros {<x id="count"/> comentarios}}?</target>
+        <target state="translated">Realmente quieres eliminar {count, plural, =1 {this comment} other {<x id="count"/> comentarios}}?</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">385</context></context-group></trans-unit>
       <trans-unit id="1420624050293070194" datatype="html">
@@ -10985,7 +10985,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9645096038052385" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No subscription} =1 {1 subscription} other {<x id="INTERPOLATION"/> subscriptions}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Sin suscripciones} =1 {1 suscripción} otro {<x id="INTERPOLATION"/> suscripciones}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Sin suscripciones} =1 {1 suscripción} other {<x id="INTERPOLATION"/> suscripciones}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -18582,7 +18582,7 @@ color: red;
       </trans-unit>
       <trans-unit id="7182104881582756649" datatype="html" xml:space="preserve">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Solicitud de seguimiento {recuento, plural, =1 {<x id="followerName"/> rechazada } other {<x id="count"/> rechazadas}}</target>
+        <target state="translated">Solicitud de seguimiento {count, plural, =1 {<x id="followerName"/> rechazada } other {<x id="count"/> rechazadas}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">109</context>
@@ -18606,7 +18606,7 @@ color: red;
       </trans-unit>
       <trans-unit id="805843790553313750" datatype="html" xml:space="preserve">
         <source>Removed {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Se eliminó {recuento, plural, =1 {<x id="followerName"/> la solicitud de seguimiento} otro {<x id="count"/>las solicitudes de seguimiento}}</target>
+        <target state="translated">Se eliminó {count, plural, =1 {<x id="followerName"/> la solicitud de seguimiento} other {<x id="count"/>las solicitudes de seguimiento}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">139</context>
@@ -19181,7 +19181,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5282309200310978109" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Video switched to manual block.} other {<x id="count"/> videos switched to manual block.}}</source>
-        <target state="translated">{count, plural, =1 {El vídeo pasó al modo de bloqueo manual}. other {<x id="count"/> Los vídeos pasaron al modo de bloqueo manual.}}</target>
+        <target state="translated">{count, plural, =1 {El vídeo pasó al modo de bloqueo manual.} other {<x id="count"/> Los vídeos pasaron al modo de bloqueo manual.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">217</context>
@@ -20221,7 +20221,7 @@ color: red;
       </trans-unit>
       <trans-unit id="616706496397696409" datatype="html" xml:space="preserve">
         <source><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> An email will be sent to each user explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> An email will be sent to <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> explaining its registration request has been <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>rejected<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> with the moderation response you'll write below. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></source>
-        <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>sido <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>denegada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> junto con la respuesta de moderación que escribirás a continuación. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Se enviará un correo electrónico a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>explicando que su solicitud de registro ha sido <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>denegada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> junto con la respuesta de moderación que escribirás a continuación. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
+        <target state="translated"><x id="START_BLOCK_IF" equiv-text="@if (hasMultipleRegistrations()) {"/> Se enviará un correo electrónico a cada usuario explicando que su solicitud de registro ha sido <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>denegada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> junto con la respuesta de moderación que escribirás a continuación. <x id="CLOSE_BLOCK_IF" equiv-text="}"/><x id="START_BLOCK_ELSE" equiv-text="@else {"/> Se enviará un correo electrónico a <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/><x id="INTERPOLATION" equiv-text="{{ registration.email }}"/><x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/>explicando que su solicitud de registro ha sido <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>denegada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> junto con la respuesta de moderación que escribirás a continuación. <x id="CLOSE_BLOCK_ELSE" equiv-text="}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/registration-list/process-registration-modal.component.html</context>
           <context context-type="linenumber">60</context>
@@ -26476,7 +26476,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="1625695500739106522" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Update this comment} other {Update all comments}}</source>
-        <target state="translated">El FPS máximo de transcodificación debe ser mayor o igual a 1.</target>
+        <target state="translated">{count, plural, =1 {Actualizar este comentario} other {Actualizar todos los comentarios}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-abuse-list/moderation-comment-modal.component.ts</context>
           <context context-type="linenumber">63</context>

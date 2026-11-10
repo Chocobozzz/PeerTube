@@ -75,16 +75,13 @@ describe('Page crash', () => {
         })
 
         it('Should change the language', async function () {
-          await go('/')
-
-          await $('.settings-button').waitForClickable()
-          await $('.settings-button').click()
+          await go('/my-account/settings')
 
           await selectCustomSelect('language', language)
 
           // The client reloads the page to apply the new language: mark the current page to detect the reload
           await browser.execute(() => {
-            (window as any).beforeLanguageChange = true
+            ;(window as any).beforeLanguageChange = true
           })
 
           await $('my-user-interface-settings .primary-button').waitForClickable()
@@ -119,7 +116,10 @@ describe('Page crash', () => {
           // All tests
           await go('/home')
 
-          await $('*=My custom homepage content').waitForDisplayed()
+          // Don't use the "*=" text selector: Firefox doesn't find the element with it
+          const homepage = $('my-custom-markup-container')
+          await homepage.waitForDisplayed()
+          await expect(homepage).toHaveText(expect.stringContaining('My custom homepage content'))
         })
 
         it('Should go on overview page and not crash', async function () {

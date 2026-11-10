@@ -16329,7 +16329,7 @@ Link będzie ważny przez 1 godzinę.</target>
       </trans-unit>
       <trans-unit id="7766488542631150871" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION"/> videos}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Brak filmów} =1 {1 film} few {<x id="INTERPOLATION"/> filmy} many {<x id="INTERPOLATION"/> filmów}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Brak filmów} =1 {1 film} few {<x id="INTERPOLATION"/> filmy} many {<x id="INTERPOLATION"/> filmów} other {<x id="INTERPOLATION"/> filmów}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">32</context>
@@ -27779,7 +27779,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="7319525983375433281" datatype="html" xml:space="preserve">
         <source>{VAR_PLURAL, plural, =0 {No playlist} =1 {1 playlist} other {<x id="INTERPOLATION"/> playlists}}</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Brak playlist} =1 {1 playlista} few {<x id="INTERPOLATION"/> playlisty} many {<x id="INTERPOLATION"/> playlist}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Brak playlist} =1 {1 playlista} few {<x id="INTERPOLATION"/> playlisty} many {<x id="INTERPOLATION"/> playlist} other {<x id="INTERPOLATION"/> playlist}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.html</context>
           <context context-type="linenumber">33</context>
@@ -27867,7 +27867,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">399</context></context-group></trans-unit>
       <trans-unit id="1314383205093440631" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {this video} other {these <x id="count"/> videos}}?</source>
-        <target state="translated">Czy na pewno chcesz usunąć {count, plural, =1 {wybrany film} few {<x id="count"/> filmy} many {<x id="count"/> filmów}}?</target>
+        <target state="translated">Czy na pewno chcesz usunąć {count, plural, =1 {wybrany film} few {<x id="count"/> filmy} many {<x id="count"/> filmów} other {<x id="count"/> filmów}}?</target>
         
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">492</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">294</context></context-group></trans-unit>

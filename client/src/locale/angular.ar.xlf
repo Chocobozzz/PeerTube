@@ -22932,7 +22932,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="5032453707232754344" datatype="html">
         <source>Playlist <x id="PH"/> created.</source>
-        <target>أُنشئت القائمة <x id="PH"/>}.</target>
+        <target>أُنشئت القائمة <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-create.component.ts</context>
           <context context-type="linenumber">114</context>
@@ -23032,7 +23032,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1431617394009162547" datatype="html">
         <source>Playlist <x id="PH"/> updated.</source>
-        <target>حُدثت قائمة <x id="PH"/>}.</target>
+        <target>حُدثت قائمة <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-update.component.ts</context>
           <context context-type="linenumber">136</context>
@@ -23056,7 +23056,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="3380608219513805292" datatype="html">
         <source>Playlist <x id="PH"/> deleted.</source>
-        <target>حُذفت قائمة <x id="PH"/>}.</target>
+        <target>حُذفت قائمة <x id="PH"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context>
           <context context-type="linenumber">154</context>

@@ -1187,7 +1187,7 @@
       </trans-unit>
       <trans-unit id="1080230904501320275" datatype="html">
         <source>{count, plural, =1 {1 user banned.} other {<x id="count"/> users banned.}}</source>
-        <target state="translated">{count, plural, =1 {1 user banned.} {<x id="count"/> andre brukere utestengt.}}</target>
+        <target state="translated">{count, plural, =1 {1 user banned.} other {<x id="count"/> andre brukere utestengt.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -20571,7 +20571,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7634059432691079352" datatype="html">
         <source>Do you really want to unban {count, plural, =1 {1 user} other {<x id="count"/> users}}?</source>
-        <target state="translated">Vil du virkelig oppheve utestengelsen av {count, plural, =1 {1 user} andre {<x id="count"/> brukere}}?</target>
+        <target state="translated">Vil du virkelig oppheve utestengelsen av {count, plural, =1 {1 user} other {<x id="count"/> brukere}}?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">217</context>
@@ -26200,7 +26200,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="2836537219160375057" datatype="html">
         <source>Ban {count, plural, =1 {1 user} other {<x id="count"/> users}}</source>
-        <target state="translated">Utesteng {count, plural, =1 {1 user} andre {<x id="count"/> users}}</target>
+        <target state="translated">Utesteng {count, plural, =1 {1 user} other {<x id="count"/> users}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">94</context>

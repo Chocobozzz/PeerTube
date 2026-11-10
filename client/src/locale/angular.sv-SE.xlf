@@ -926,7 +926,7 @@
       </trans-unit>
       <trans-unit id="4873265433447388314" datatype="html">
         <source>{viewers, plural, =0 {No viewers} =1 {1 viewer} other {<x id="viewers"/> viewers}}</source>
-        <target state="translated">{tittare, plural, =0 {Inga tittare} =1 {1 tittare} other {<x id="viewers"/> tittare}}</target>
+        <target state="translated">{viewers, plural, =0 {Inga tittare} =1 {1 tittare} other {<x id="viewers"/> tittare}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.ts</context>
           <context context-type="linenumber">18</context>
@@ -25787,7 +25787,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="8280589137189201687" datatype="html" xml:space="preserve">
         <source>You can't select more than {maxItems, plural, =1 {1 item} other {<x id="maxItems"/> items}}</source>
-        <target state="translated">Du kan inte välja mer än {maxItems, plural, =1 {1 objekt} andra {<x id="maxItems"/> objekt}}</target>
+        <target state="translated">Du kan inte välja mer än {maxItems, plural, =1 {1 objekt} other {<x id="maxItems"/> objekt}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-checkbox-default-all.component.ts</context>
           <context context-type="linenumber">114</context>

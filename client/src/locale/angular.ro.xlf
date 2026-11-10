@@ -15645,7 +15645,7 @@ The link will expire within 1 hour.</source>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.html</context><context context-type="linenumber">80</context></context-group></trans-unit>
       <trans-unit id="8556648414940559453" datatype="html" xml:space="preserve">
         <source>This video is not available on <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Do you want to be redirected on the origin platform: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</source>
-        <target state="translated">Acest videoclip nu este disponibil pe &lt;x id="PH" equiv-text="this.serverConfig.instance.name"/&gt;. Vrei să fii redirecționat către platforma de origine: &lt;a href="&lt;x id="PH_1" equiv-text="originUrl"/&gt;"&gt;&lt;x id="PH_2" equiv-text="originUrl"/&gt;&lt;/a&gt;?</target>
+        <target state="translated">Acest videoclip nu este disponibil pe <x id="PH" equiv-text="this.serverConfig.instance.name"/>. Vrei să fii redirecționat către platforma de origine: &lt;a href="<x id="PH_1" equiv-text="originUrl"/>"&gt;<x id="PH_2" equiv-text="originUrl"/>&lt;/a&gt;?</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/video-watch.component.ts</context><context context-type="linenumber">602</context></context-group></trans-unit>
       <trans-unit id="5761611056224181752" datatype="html" xml:space="preserve">

@@ -260,7 +260,7 @@
           <x id="INTERPOLATION" equiv-text="sible.    */   "/>
         </source>
         <target state="translated">
-          <x id="INTERPOLASI" equiv-text="sible.    */ "/>
+          <x id="INTERPOLATION" equiv-text="sible.    */ "/>
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context>
@@ -920,7 +920,7 @@
       </trans-unit>
       <trans-unit id="403587185492002456" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION"/> subscribers}}</source>
-        <target state="translated">{VAR_PLURAL, jamak, =1 {1 pelanggan} other {<x id="INTERPOLASI"/> pelanggan}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 pelanggan} other {<x id="INTERPOLATION"/> pelanggan}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">25</context>

@@ -8814,7 +8814,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4036338619293319383" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 reply} other {<x id="INTERPOLATION"/> replies}}</source>
-        <target state="translated">{var_plural، plural، = 1 {1 پاسخ} other {<x id="INTERPOLATION"/> پاسخ}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 پاسخ} other {<x id="INTERPOLATION"/> پاسخ}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comment.component.html</context>
           <context context-type="linenumber">120</context>

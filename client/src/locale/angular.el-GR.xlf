@@ -1557,12 +1557,12 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">522</context></context-group></trans-unit>
       <trans-unit id="6228449077605046873" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Σίγουρα θέλετε να διαγράψετε {count, πληθυντικός, =1 {1 λίστα αναπαραγωγής ροής HLS} άλλες {<x id="count"/> λίστες αναπαραγωγής ροής HLS}};</target>
+        <target state="translated">Σίγουρα θέλετε να διαγράψετε {count, plural, =1 {1 λίστα αναπαραγωγής ροής HLS} other {<x id="count"/> λίστες αναπαραγωγής ροής HLS}};</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">539</context></context-group></trans-unit>
       <trans-unit id="4435640428611044716" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="translated">Σίγουρα θέλετε να διαγράψετε τα αρχεία Βίντεο Ιστού από {count, πληθυντικός, =1 {1 βίντεο} άλλα {<x id="count"/> βίντεο}};</target>
+        <target state="translated">Σίγουρα θέλετε να διαγράψετε τα αρχεία Βίντεο Ιστού από {count, plural, =1 {1 βίντεο} other {<x id="count"/> βίντεο}};</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">544</context></context-group></trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">
@@ -1617,7 +1617,7 @@
       </trans-unit>
       <trans-unit id="2126000025358835171" datatype="html" xml:space="preserve">
         <source>Retry import requested for {count, plural, =1 {1 video} other {<x id="count"/> videos}}.</source>
-        <target state="translated">Ζητήθηκε επανάληψη εισαγωγής για {count, plural, =1 {1 βίντεο} άλλα {<x id="count"/> βίντεο}}.</target>
+        <target state="translated">Ζητήθηκε επανάληψη εισαγωγής για {count, plural, =1 {1 βίντεο} other {<x id="count"/> βίντεο}}.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">661</context></context-group></trans-unit>
       <trans-unit id="3044142083883783523">
@@ -7257,7 +7257,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="9106564905888443672" datatype="html" xml:space="preserve">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance.</source>
-        <target state="translated">Σας συνιστούμε να μην χρησιμοποιείτε τον χρήστη <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>root<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>για τη δημοσίευση των βίντεό σας, καθώς πρόκειται για τον λογαριασμό του διαχειριστή-υπεύθυνου της οντότητας σας.</target>
+        <target state="translated">Σας συνιστούμε να μην χρησιμοποιείτε τον χρήστη <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> για τη δημοσίευση των βίντεό σας, καθώς πρόκειται για τον λογαριασμό του διαχειριστή-υπεύθυνου της οντότητας σας.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/+video-publish/video-publish.component.html</context>
           <context context-type="linenumber">20</context>
@@ -10417,7 +10417,7 @@ The link will expire within 1 hour.</source>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">371</context></context-group></trans-unit>
       <trans-unit id="341804802839774363" datatype="html" xml:space="preserve">
         <source>Do you really want to remove {count, plural, =1 {this comment} other {<x id="count"/> comments}}?</source>
-        <target state="translated">Θέλετε πραγματικά να διαγράψετε {count, plural, =1 {αυτό το σχόλιο} και άλλα {<x id="count"/> σχόλια}};</target>
+        <target state="translated">Θέλετε πραγματικά να διαγράψετε {count, plural, =1 {αυτό το σχόλιο} other {<x id="count"/> σχόλια}};</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">385</context></context-group></trans-unit>
       <trans-unit id="1420624050293070194" datatype="html" xml:space="preserve">

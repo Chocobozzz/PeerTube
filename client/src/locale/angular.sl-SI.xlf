@@ -260,7 +260,7 @@
       </trans-unit>
       <trans-unit id="906167214730624194" datatype="html">
         <source>{views, plural, =0 {No view} =1 {1 view} other {<x id="views"/> views}}</source>
-        <target state="translated">{ogledov, plural, =0 {ni ogledov} =1 {1 ogled} =2 {2 ogleda} =3 {3 ogledi} =4 {4 ogledi} other {<x id="views"/> ogledov}}</target>
+        <target state="translated">{views, plural, =0 {ni ogledov} =1 {1 ogled} =2 {2 ogleda} =3 {3 ogledi} =4 {4 ogledi} other {<x id="views"/> ogledov}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-views-counter.component.ts</context>
           <context context-type="linenumber">21</context>

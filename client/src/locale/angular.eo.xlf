@@ -1502,12 +1502,12 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">522</context></context-group></trans-unit>
       <trans-unit id="6228449077605046873" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS streaming playlists}}?</source>
-        <target state="translated">Ĉu vi certas, ke vi volas forigi {count, plural, =1 {1 HLS streaming playlist} aliajn {<x id="count"/> HLS fluoludlistojn}}?</target>
+        <target state="translated">Ĉu vi certas, ke vi volas forigi {count, plural, =1 {1 HLS streaming playlist} other {<x id="count"/> HLS fluoludlistojn}}?</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">539</context></context-group></trans-unit>
       <trans-unit id="4435640428611044716" datatype="html" xml:space="preserve">
         <source>Are you sure you want to delete Web Video files of {count, plural, =1 {1 video} other {<x id="count"/> videos}}?</source>
-        <target state="translated">Ĉu vi certas, ke vi volas forigi Retajn Videodosierojn de {count, plural, =1 {1 video} aliaj {<x id="count"/> videoj}}?</target>
+        <target state="translated">Ĉu vi certas, ke vi volas forigi Retajn Videodosierojn de {count, plural, =1 {1 video} other {<x id="count"/> videoj}}?</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">544</context></context-group></trans-unit>
       <trans-unit id="1571742433738679426" datatype="html">

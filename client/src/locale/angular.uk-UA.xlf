@@ -19500,7 +19500,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="7182104881582756649" datatype="html">
         <source>Rejected {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
-        <target state="translated">Відхилено {count, plural, =1 {запит на стеження від <x id="followerName"/>} {<x id="count"/> запити на стеження} many {<x id="count"/> запитів на стеження} other {<x id="count"/> запит на стеження}}</target>
+        <target state="translated">Відхилено {count, plural, =1 {запит на стеження від <x id="followerName"/>} few {<x id="count"/> запити на стеження} many {<x id="count"/> запитів на стеження} other {<x id="count"/> запит на стеження}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">109</context>

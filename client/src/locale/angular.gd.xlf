@@ -24008,7 +24008,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="4876327655498234453" datatype="html" xml:space="preserve">
         <source>As a reminder, the following tasks will be executed: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</source>
-        <target state="translated">Mar chuimhneachan, seo na saothraichean a thèid a dhèanamh: &lt;ol&gt;�&lt;/ol&gt;</target>
+        <target state="translated">Mar chuimhneachan, seo na saothraichean a thèid a dhèanamh: &lt;ol&gt;<x id="PH" equiv-text="listHTML"/>&lt;/ol&gt;</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context><context context-type="linenumber">435</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context><context context-type="linenumber">454</context></context-group></trans-unit>
       <trans-unit id="6572051274923971959" datatype="html">
@@ -27527,7 +27527,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       </trans-unit>
       <trans-unit id="4350392487994839749" datatype="html" xml:space="preserve">
         <source>If you remove this user, you won't be able to create another user or channel with &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; username!</source>
-        <target state="translated">Ma bheir thu air falbh an cleachdaiche seo, chan urrainn dhut cleachdaiche no seanail eile air a bheil an t-ainm &lt;strong&gt;�&lt;/strong&gt; a chruthachadh an uairsin!</target>
+        <target state="translated">Ma bheir thu air falbh an cleachdaiche seo, chan urrainn dhut cleachdaiche no seanail eile air a bheil an t-ainm &lt;strong&gt;<x id="PH" equiv-text="user.username"/>&lt;/strong&gt; a chruthachadh an uairsin!</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">108</context></context-group></trans-unit>
       <trans-unit id="6307826440781941134" datatype="html">

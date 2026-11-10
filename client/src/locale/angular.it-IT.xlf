@@ -11525,7 +11525,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="1271241007621398467" datatype="html">
         <source>{count, plural, =1 {1 comment deleted.} other {<x id="count"/> comments deleted.}}</source>
-        <target state="translated">{conto, plural, =1 {1 commento cancellato.} other {<x id="count"/> commenti cancellati.}}</target>
+        <target state="translated">{count, plural, =1 {1 commento cancellato.} other {<x id="count"/> commenti cancellati.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
           <context context-type="linenumber">399</context>
@@ -20301,7 +20301,7 @@ The link will expire within 1 hour.</source>
       </trans-unit>
       <trans-unit id="6494788464560085904" datatype="html" xml:space="preserve">
         <source>{count, plural, =1 {Job cancelled} other {<x id="count"/> jobs cancelled}}</source>
-        <target state="translated">{conto, plurale, =1 {lavoro annullato} other {<x id="count"/> lavori annullati}}</target>
+        <target state="translated">{count, plural, =1 {lavoro annullato} other {<x id="count"/> lavori annullati}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
           <context context-type="linenumber">140</context>
