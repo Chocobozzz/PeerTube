@@ -68,6 +68,9 @@ export class AdminConfigPage {
     }
 
     await button.click()
-    await button.waitForClickable({ reverse: true })
+
+    // The button is disabled when the form is marked as pristine, after a successful save
+    // Don't use waitForClickable({ reverse: true }): the button may not be considered clickable while the request is pending
+    await $('my-admin-save-bar .save-button > button[disabled]').waitForExist()
   }
 }

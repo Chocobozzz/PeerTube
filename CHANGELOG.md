@@ -39,6 +39,7 @@
     * `filter:video.ownership-change.release-auto-blacklist.result`
     * `filter:transcription.transcriber.result` to provide a custom transcriber https://github.com/Chocobozzz/PeerTube/pull/7808
     * `filter:sitemap.pages.list.result` https://github.com/Chocobozzz/PeerTube/pull/7848
+    * `action:live.video.segment.created`
   * Add request headers to `filter:api.user.signup.allowed.result` and `filter:api.user.request-signup.allowed.result` hook params
   * Add server plugin helpers:
     * `peertubeHelpers.user.removeUser` to delete a user
