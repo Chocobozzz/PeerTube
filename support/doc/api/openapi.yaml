@@ -240,11 +240,11 @@ info:
 
     ## current_password_is_missing
 
-    The action requires a [password confirmation](#section/Password-confirmation) but `currentPassword` is missing.
+    The action requires a [password confirmation](https://docs.joinpeertube.org/api-rest-reference/api.html#password-confirmation) but `currentPassword` is missing.
 
     ## password_confirmation_unavailable
 
-    The action requires a [password confirmation](#section/Password-confirmation) but the user authenticates with an external auth plugin (OpenID Connect, SAML...), so PeerTube cannot check their password.
+    The action requires a [password confirmation](https://docs.joinpeertube.org/api-rest-reference/api.html#password-confirmation) but the user authenticates with an external auth plugin (OpenID Connect, SAML...), so PeerTube cannot check their password.
 
     # Rate limits
 
@@ -303,7 +303,7 @@ tags:
     description: |
       As a visitor, you can use this API to open an account (if registrations are open on
       that PeerTube instance). As an admin, you should use the dedicated [User creation
-      API](#operation/addUser) instead.
+      API](https://docs.joinpeertube.org/api-rest-reference/api/operations/adduser.html) instead.
   - name: Session
     x-displayName: Login/Logout
     description: |
@@ -364,7 +364,7 @@ tags:
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
       Manage the list of instances you wish to help by seeding their videos according
       to the policy of video selection of your choice. Note that you have a similar functionality
-      to mirror individual videos, see [video mirroring](#tag/Video-Mirroring).
+      to mirror individual videos, see [video mirroring](https://docs.joinpeertube.org/api-rest-reference/api.html#tag-video-mirroring).
     externalDocs:
       url: https://docs.joinpeertube.org/admin/following-instances#instances-redundancy
   - name: Plugins
@@ -384,8 +384,8 @@ tags:
 
       ### Upload
 
-      - [_legacy_](#operation/uploadLegacy), where the video file is sent in a single request
-      - [_resumable_](#operation/uploadResumableInit), where the video file is sent in chunks
+      - [_legacy_](https://docs.joinpeertube.org/api-rest-reference/api/operations/uploadlegacy.html), where the video file is sent in a single request
+      - [_resumable_](https://docs.joinpeertube.org/api-rest-reference/api/operations/uploadresumableinit.html), where the video file is sent in chunks
 
       You can upload videos more reliably by using the resumable variant. Its protocol lets
       you resume an upload operation after a network interruption or other transmission failure,
@@ -458,7 +458,7 @@ tags:
     description: |
       PeerTube instances can mirror videos from one another, and help distribute some videos.
 
-      For importing videos as your own, refer to [video imports](#operation/importVideo).
+      For importing videos as your own, refer to [video imports](https://docs.joinpeertube.org/api-rest-reference/api/operations/importvideo.html).
   - name: Stats
     description: |
       Statistics
@@ -553,6 +553,7 @@ x-tagGroups:
 paths:
   '/static/web-videos/{filename}':
     get:
+      operationId: getStaticWebVideoFile
       tags:
         - Static Video Files
       summary: Get public Web Video file
@@ -566,6 +567,7 @@ paths:
           description: not found
   '/static/web-videos/private/{filename}':
     get:
+      operationId: getStaticPrivateWebVideoFile
       tags:
         - Static Video Files
       summary: Get private Web Video file
@@ -585,6 +587,7 @@ paths:
 
   '/static/streaming-playlists/hls/{filename}':
     get:
+      operationId: getStaticHLSFile
       tags:
         - Static Video Files
       summary: Get public HLS video file
@@ -601,6 +604,7 @@ paths:
           description: not found
   '/static/streaming-playlists/hls/private/{filename}':
     get:
+      operationId: getStaticPrivateHLSFile
       tags:
         - Static Video Files
       summary: Get private HLS video file
@@ -620,6 +624,7 @@ paths:
 
   '/download/videos/generate/{videoIdOrUUID}':
     get:
+      operationId: downloadVideoFile
       tags:
         - Video Download
       summary: Download video file
@@ -1192,7 +1197,7 @@ paths:
       summary: Set instance runtime configuration
       description: >
         Changing `instance.customizations.javascript` or `instance.customizations.css` requires a
-        [password confirmation](#section/Password-confirmation): set `currentPassword` at the root of the request body.
+        [password confirmation](https://docs.joinpeertube.org/api-rest-reference/api.html#password-confirmation): set `currentPassword` at the root of the request body.
       operationId: putCustomConfig
       tags:
         - Config
@@ -1228,6 +1233,7 @@ paths:
   /api/v1/config/instance-banner/pick:
     post:
       summary: Update instance banner
+      operationId: updateInstanceBanner
       security:
         - OAuth2:
           - admin
@@ -1261,6 +1267,7 @@ paths:
   '/api/v1/config/instance-banner':
     delete:
       summary: Delete instance banner
+      operationId: deleteInstanceBanner
       security:
         - OAuth2:
           - admin
@@ -1273,6 +1280,7 @@ paths:
   /api/v1/config/instance-avatar/pick:
     post:
       summary: Update instance avatar
+      operationId: updateInstanceAvatar
       security:
         - OAuth2:
           - admin
@@ -1306,6 +1314,7 @@ paths:
   '/api/v1/config/instance-avatar':
     delete:
       summary: Delete instance avatar
+      operationId: deleteInstanceAvatar
       security:
         - OAuth2:
           - admin
@@ -1318,6 +1327,7 @@ paths:
   '/api/v1/config/instance-logo/{logoType}/pick':
     post:
       summary: Update instance logo
+      operationId: updateInstanceLogo
       security:
         - OAuth2:
           - admin
@@ -1353,6 +1363,7 @@ paths:
   '/api/v1/config/instance-logo/{logoType}':
     delete:
       summary: Delete instance logo
+      operationId: deleteInstanceLogo
       security:
         - OAuth2:
           - admin
@@ -1367,6 +1378,7 @@ paths:
   /api/v1/custom-pages/homepage/instance:
     get:
       summary: Get instance custom homepage
+      operationId: getInstanceHomepage
       tags:
         - Homepage
       responses:
@@ -1380,6 +1392,7 @@ paths:
                 $ref: '#/components/schemas/CustomHomepage'
     put:
       summary: Set instance custom homepage
+      operationId: updateInstanceHomepage
       tags:
         - Homepage
       security:
@@ -1401,6 +1414,7 @@ paths:
   /api/v1/jobs/pause:
     post:
       summary: Pause job queue
+      operationId: pauseJobQueue
       security:
         - OAuth2:
           - admin
@@ -1431,6 +1445,7 @@ paths:
   /api/v1/jobs/resume:
     post:
       summary: Resume job queue
+      operationId: resumeJobQueue
       security:
         - OAuth2:
           - admin
@@ -1535,6 +1550,7 @@ paths:
 
   /api/v1/server/followers:
     get:
+      operationId: listInstanceFollowers
       tags:
         - Instance Follows
       summary: List instances following the server
@@ -1563,6 +1579,7 @@ paths:
   '/api/v1/server/followers/{handle}':
     delete:
       summary: Remove or reject a follower to your server
+      operationId: removeInstanceFollower
       security:
         - OAuth2:
           - admin
@@ -1585,6 +1602,7 @@ paths:
   '/api/v1/server/followers/{handle}/reject':
     post:
       summary: Reject a pending follower to your server
+      operationId: rejectInstanceFollower
       security:
         - OAuth2:
           - admin
@@ -1607,6 +1625,7 @@ paths:
   '/api/v1/server/followers/{handle}/accept':
     post:
       summary: Accept a pending follower to your server
+      operationId: acceptInstanceFollower
       security:
         - OAuth2:
           - admin
@@ -1628,6 +1647,7 @@ paths:
 
   /api/v1/server/following:
     get:
+      operationId: listInstanceFollowing
       tags:
         - Instance Follows
       summary: List instances followed by the server
@@ -1653,6 +1673,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Follow'
     post:
+      operationId: followActors
       security:
         - OAuth2:
           - admin
@@ -1685,6 +1706,7 @@ paths:
   '/api/v1/server/following/{hostOrHandle}':
     delete:
       summary: Unfollow an actor (PeerTube instance, channel or account)
+      operationId: unfollowActor
       security:
         - OAuth2:
           - admin
@@ -1830,6 +1852,7 @@ paths:
   /api/v1/users/{id}/block:
     post:
       summary: Block a user
+      operationId: blockUser
       description: Prevent a user from logging in and interacting with the instance
       security:
         - OAuth2:
@@ -1862,6 +1885,7 @@ paths:
   /api/v1/users/{id}/unblock:
     post:
       summary: Unblock a user
+      operationId: unblockUser
       description: Allow a previously blocked user to login and interact with the instance
       security:
         - OAuth2:
@@ -1883,7 +1907,7 @@ paths:
   /api/v1/oauth-clients/local:
     get:
       summary: Login prerequisite
-      description: You need to retrieve a client id and secret before [logging in](#operation/getOAuthToken).
+      description: You need to retrieve a client id and secret before [logging in](https://docs.joinpeertube.org/api-rest-reference/api/operations/getoauthtoken.html).
       operationId: getOAuthClient
       tags:
         - Session
@@ -1912,7 +1936,7 @@ paths:
     post:
       summary: Login
       operationId: getOAuthToken
-      description: With your [client id and secret](#operation/getOAuthClient), you can retrieve an access and refresh tokens.
+      description: With your [client id and secret](https://docs.joinpeertube.org/api-rest-reference/api/operations/getoauthclient.html), you can retrieve an access and refresh tokens.
       tags:
         - Session
       parameters:
@@ -2009,6 +2033,7 @@ paths:
   /api/v1/users/{id}/token-sessions:
     get:
       summary: List token sessions
+      operationId: listUserTokenSessions
       parameters:
         - $ref: '#/components/parameters/id'
       tags:
@@ -2032,8 +2057,9 @@ paths:
                       $ref: '#/components/schemas/TokenSession'
 
   /api/v1/users/{id}/token-sessions/{tokenSessionId}/revoke:
-    get:
-      summary: List token sessions
+    post:
+      summary: Revoke a token session
+      operationId: revokeUserTokenSession
       parameters:
         - $ref: '#/components/parameters/id'
         - $ref: '#/components/parameters/tokenSessionId'
@@ -2155,6 +2181,7 @@ paths:
   /api/v1/users/ask-reset-password:
     post:
       summary: Ask to reset password
+      operationId: askResetPassword
       description: An email containing a reset password link
       tags:
         - Users
@@ -2176,6 +2203,7 @@ paths:
   /api/v1/users/{id}/reset-password:
     post:
       summary: Reset password
+      operationId: resetPassword
       tags:
         - Users
       parameters:
@@ -2577,6 +2605,7 @@ paths:
   '/api/v1/users/me/videos/comments':
     get:
       summary: List comments on user's videos
+      operationId: listMyVideosComments
       description: "**PeerTube >= 6.2**"
       security:
         - OAuth2: []
@@ -2610,6 +2639,7 @@ paths:
   /api/v1/users/me/videos/imports:
     get:
       summary: Get video imports of my user
+      operationId: getMyVideoImports
       security:
         - OAuth2:
           - user
@@ -2669,6 +2699,7 @@ paths:
   /api/v1/users/me/video-quota-used:
     get:
       summary: Get my user used quota
+      operationId: getMyVideoQuotaUsed
       security:
         - OAuth2:
           - user
@@ -2694,6 +2725,7 @@ paths:
   '/api/v1/users/me/videos/{videoIdOrUUID}/rating':
     get:
       summary: Get rate of my user for a video
+      operationId: getMyVideoRating
       security:
         - OAuth2: []
       tags:
@@ -2712,6 +2744,7 @@ paths:
   /api/v1/users/me/videos:
     get:
       summary: List videos of my user
+      operationId: listMyVideos
       security:
         - OAuth2:
           - user
@@ -2758,6 +2791,7 @@ paths:
   /api/v1/users/me/subscriptions:
     get:
       summary: List my user subscriptions
+      operationId: listMySubscriptions
       security:
         - OAuth2:
           - user
@@ -2775,6 +2809,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoChannelList'
     post:
+      operationId: addMySubscription
       tags:
         - My Subscriptions
       summary: Add subscription to my user
@@ -2804,6 +2839,7 @@ paths:
   /api/v1/users/me/subscriptions/exist:
     get:
       summary: Get if subscriptions exist for my user
+      operationId: getMySubscriptionsExist
       security:
         - OAuth2:
           - user
@@ -2822,6 +2858,7 @@ paths:
   /api/v1/users/me/subscriptions/videos:
     get:
       summary: List videos of subscriptions of my user
+      operationId: listMySubscriptionsVideos
       security:
         - OAuth2:
           - user
@@ -2866,6 +2903,7 @@ paths:
   '/api/v1/users/me/subscriptions/{subscriptionHandle}':
     get:
       summary: Get subscription of my user
+      operationId: getMySubscription
       security:
         - OAuth2:
           - user
@@ -2882,6 +2920,7 @@ paths:
                 $ref: '#/components/schemas/VideoChannel'
     delete:
       summary: Delete subscription of my user
+      operationId: deleteMySubscription
       security:
         - OAuth2:
           - user
@@ -2896,6 +2935,7 @@ paths:
   /api/v1/users/me/notifications:
     get:
       summary: List my notifications
+      operationId: listMyNotifications
       security:
         - OAuth2: []
       tags:
@@ -2927,6 +2967,7 @@ paths:
   /api/v1/users/me/notifications/read:
     post:
       summary: Mark notifications as read by their id
+      operationId: markMyNotificationsAsRead
       security:
         - OAuth2: []
       tags:
@@ -2951,6 +2992,7 @@ paths:
   /api/v1/users/me/notifications/read-all:
     post:
       summary: Mark all my notification as read
+      operationId: markAllMyNotificationsAsRead
       security:
         - OAuth2: []
       tags:
@@ -2962,6 +3004,7 @@ paths:
   /api/v1/users/me/notification-settings:
     put:
       summary: Update my notification settings
+      operationId: updateMyNotificationSettings
       security:
         - OAuth2: []
       tags:
@@ -2978,6 +3021,7 @@ paths:
 
   /api/v1/users/me/new-feature-info/read:
     post:
+      operationId: markMyNewFeatureInfoAsRead
       tags:
         - My User
       summary: Mark feature info as read
@@ -3002,6 +3046,7 @@ paths:
   /api/v1/users/me/history/videos:
     get:
       summary: List watched videos history
+      operationId: listMyVideoHistory
       security:
         - OAuth2: []
       tags:
@@ -3021,6 +3066,7 @@ paths:
   /api/v1/users/me/history/videos/{videoIdOrUUID}:
     delete:
       summary: Delete history element
+      operationId: deleteMyVideoHistoryElement
       security:
         - OAuth2: []
       tags:
@@ -3034,6 +3080,7 @@ paths:
   /api/v1/users/me/history/videos/remove:
     post:
       summary: Clear video history
+      operationId: clearMyVideoHistory
       security:
         - OAuth2: []
       tags:
@@ -3055,6 +3102,7 @@ paths:
   /api/v1/users/me/avatar/pick:
     post:
       summary: Update my user avatar
+      operationId: updateMyAvatar
       security:
         - OAuth2: []
       tags:
@@ -3096,6 +3144,7 @@ paths:
   /api/v1/users/me/avatar:
     delete:
       summary: Delete my avatar
+      operationId: deleteMyAvatar
       security:
         - OAuth2: []
       tags:
@@ -3286,6 +3335,7 @@ paths:
   /api/v1/videos/ownership:
     get:
       summary: List video ownership changes
+      operationId: listVideoOwnershipChanges
       description: List ownership change requests received by the authenticated user and requests sent by a channel managed by the authenticated user
       tags:
         - Ownership Change
@@ -3323,6 +3373,7 @@ paths:
   '/api/v1/videos/ownership/{id}/accept':
     post:
       summary: Accept ownership change request
+      operationId: acceptVideoOwnershipChange
       tags:
         - Ownership Change
       security:
@@ -3356,6 +3407,7 @@ paths:
   '/api/v1/videos/ownership/{id}/refuse':
     post:
       summary: Refuse ownership change request
+      operationId: refuseVideoOwnershipChange
       tags:
         - Ownership Change
       security:
@@ -3375,6 +3427,7 @@ paths:
   '/api/v1/videos/ownership/{id}':
     delete:
       summary: Delete ownership change request
+      operationId: deleteVideoOwnershipChange
       description: Delete an ownership change request. Only users who can manage the video can delete the request.
       tags:
         - Ownership Change
@@ -3395,6 +3448,7 @@ paths:
   '/api/v1/videos/{videoIdOrUUID}/ownership':
     get:
       summary: List ownership change requests for a video
+      operationId: listOwnershipChangesOfVideo
       description: List all ownership change requests for a specific video. The authenticated user must be able to manage the video.
       tags:
         - Ownership Change
@@ -3441,6 +3495,7 @@ paths:
   '/api/v1/videos/{videoIdOrUUID}/give-ownership':
     post:
       summary: Request ownership change
+      operationId: requestVideoOwnershipChange
       tags:
         - Ownership Change
       security:
@@ -3471,6 +3526,7 @@ paths:
   /api/v1/video-channels/ownership:
     get:
       summary: List channel ownership changes
+      operationId: listChannelOwnershipChanges
       description: List ownership change requests received by the authenticated user and requests sent by channels managed by the authenticated user
       tags:
         - Ownership Change
@@ -3508,6 +3564,7 @@ paths:
   '/api/v1/video-channels/ownership/{id}/accept':
     post:
       summary: Accept channel ownership change request
+      operationId: acceptChannelOwnershipChange
       tags:
         - Ownership Change
       security:
@@ -3531,6 +3588,7 @@ paths:
   '/api/v1/video-channels/ownership/{id}/refuse':
     post:
       summary: Refuse channel ownership change request
+      operationId: refuseChannelOwnershipChange
       tags:
         - Ownership Change
       security:
@@ -3550,6 +3608,7 @@ paths:
   '/api/v1/video-channels/ownership/{id}':
     delete:
       summary: Delete channel ownership change request
+      operationId: deleteChannelOwnershipChange
       description: Delete a channel ownership change request. Only channel owners can delete the request.
       tags:
         - Ownership Change
@@ -3570,6 +3629,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/ownership':
     get:
       summary: List ownership change requests for a channel
+      operationId: listOwnershipChangesOfChannel
       description: List all ownership change requests for a specific channel. The authenticated user must be able to manage the channel.
       tags:
         - Ownership Change
@@ -3618,6 +3678,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/give-ownership':
     post:
       summary: Request channel ownership change
+      operationId: requestChannelOwnershipChange
       tags:
         - Ownership Change
       security:
@@ -3672,6 +3733,7 @@ paths:
   /api/v1/videos/{id}/studio/edit:
     post:
       summary: Create a studio task
+      operationId: createVideoStudioTask
       tags:
         - Video Transcoding
         - Video
@@ -4117,6 +4179,7 @@ paths:
   '/api/v1/videos/{id}/stats/overall':
     get:
       summary: Get overall stats of a video
+      operationId: getVideoOverallStats
       tags:
         - Video Stats
       security:
@@ -4146,6 +4209,7 @@ paths:
   '/api/v1/videos/{id}/stats/user-agent':
     get:
       summary: Get user agent stats of a video
+      operationId: getVideoUserAgentStats
       tags:
         - Video Stats
       security:
@@ -4175,6 +4239,7 @@ paths:
   '/api/v1/videos/{id}/stats/retention':
     get:
       summary: Get retention stats of a video
+      operationId: getVideoRetentionStats
       tags:
         - Video Stats
       security:
@@ -4192,6 +4257,7 @@ paths:
   '/api/v1/videos/{id}/stats/timeseries/{metric}':
     get:
       summary: Get timeserie stats of a video
+      operationId: getVideoTimeserieStats
       tags:
         - Video Stats
       security:
@@ -4474,6 +4540,7 @@ paths:
   /api/v1/videos/imports/{id}/cancel:
     post:
       summary: Cancel video import
+      operationId: cancelVideoImport
       description: Cancel a pending video import
       security:
         - OAuth2: []
@@ -4488,6 +4555,7 @@ paths:
   /api/v1/videos/imports/{id}/retry:
     post:
       summary: Retry video import
+      operationId: retryVideoImport
       description: |
         **PeerTube >= 8.0** Retry a failed or cancelled (**PeerTube >= 8.3**) video import.
       security:
@@ -4503,6 +4571,7 @@ paths:
   '/api/v1/videos/{id}/import/retry':
     post:
       summary: Retry the import of a video
+      operationId: retryImportOfVideo
       description: |
         **PeerTube >= 9.0** Retry the failed or cancelled import of a video, without having to know the video import id.
       security:
@@ -4524,6 +4593,7 @@ paths:
   /api/v1/videos/imports/{id}:
     delete:
       summary: Delete video import
+      operationId: deleteVideoImport
       description: Delete ended video import
       security:
         - OAuth2: []
@@ -4697,6 +4767,7 @@ paths:
   /api/v1/videos/live/{id}/sessions:
     get:
       summary: List live sessions
+      operationId: listLiveSessions
       description: List all sessions created in a particular live
       security:
         - OAuth2: []
@@ -4723,6 +4794,7 @@ paths:
   /api/v1/videos/{id}/live-session:
     get:
       summary: Get live session of a replay
+      operationId: getReplayLiveSession
       description: If the video is a replay of a live, you can find the associated live session using this endpoint
       security:
         - OAuth2: []
@@ -5024,6 +5096,7 @@ paths:
                       $ref: '#/components/schemas/Abuse'
     post:
       summary: Report an abuse
+      operationId: reportAbuse
       description: >
         You cannot report a video that you own or on which you are a collaborator (video channel editor).
       security:
@@ -5103,6 +5176,7 @@ paths:
   '/api/v1/abuses/{abuseId}':
     put:
       summary: Update an abuse
+      operationId: updateAbuse
       security:
         - OAuth2:
           - admin
@@ -5130,6 +5204,7 @@ paths:
         '404':
           description: abuse not found
     delete:
+      operationId: deleteAbuse
       tags:
         - Abuses
       summary: Delete an abuse
@@ -5148,6 +5223,7 @@ paths:
   '/api/v1/abuses/{abuseId}/messages':
     get:
       summary: List messages of an abuse
+      operationId: listAbuseMessages
       security:
         - OAuth2: []
       tags:
@@ -5171,6 +5247,7 @@ paths:
                       $ref: '#/components/schemas/AbuseMessage'
     post:
       summary: Add message to an abuse
+      operationId: addAbuseMessage
       security:
         - OAuth2: []
       tags:
@@ -5200,6 +5277,7 @@ paths:
   '/api/v1/abuses/{abuseId}/messages/{abuseMessageId}':
     delete:
       summary: Delete an abuse message
+      operationId: deleteAbuseMessage
       security:
         - OAuth2: []
       tags:
@@ -5836,6 +5914,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/video-playlists':
     get:
       summary: List playlists of a channel
+      operationId: getVideoChannelPlaylists
       tags:
         - Video Playlists
         - Video Channels
@@ -5930,6 +6009,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/avatar/pick':
     post:
       summary: Update channel avatar
+      operationId: updateVideoChannelAvatar
       security:
         - OAuth2: []
       tags:
@@ -5973,6 +6053,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/avatar':
     delete:
       summary: Delete channel avatar
+      operationId: deleteVideoChannelAvatar
       security:
         - OAuth2: []
       tags:
@@ -5986,6 +6067,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/banner/pick':
     post:
       summary: Update channel banner
+      operationId: updateVideoChannelBanner
       security:
         - OAuth2: []
       tags:
@@ -6029,6 +6111,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/banner':
     delete:
       summary: Delete channel banner
+      operationId: deleteVideoChannelBanner
       security:
         - OAuth2: []
       tags:
@@ -6042,6 +6125,7 @@ paths:
   '/api/v1/video-channels/{channelHandle}/import-videos':
     post:
       summary: Import videos in channel
+      operationId: importVideosInChannel
       description: Import a remote channel/playlist videos into a channel
       security:
         - OAuth2: []
@@ -6318,6 +6402,7 @@ paths:
   /api/v1/video-playlists/{playlistId}:
     get:
       summary: Get a video playlist
+      operationId: getVideoPlaylist
       tags:
         - Video Playlists
       parameters:
@@ -6331,6 +6416,7 @@ paths:
                 $ref: '#/components/schemas/VideoPlaylist'
     put:
       summary: Update a video playlist
+      operationId: updateVideoPlaylist
       description: 'If the video playlist is set as public, the playlist must have a assigned channel.'
       security:
         - OAuth2: []
@@ -6370,6 +6456,7 @@ paths:
                 contentType: image/jpeg
     delete:
       summary: Delete a video playlist
+      operationId: deleteVideoPlaylist
       security:
         - OAuth2: []
       tags:
@@ -6553,6 +6640,7 @@ paths:
   '/api/v1/users/me/video-playlists/videos-exist':
     get:
       summary: Check video exists in my playlists
+      operationId: getMyPlaylistsVideosExist
       security:
         - OAuth2: []
       tags:
@@ -6595,6 +6683,7 @@ paths:
   '/api/v1/accounts/{name}/video-playlists':
     get:
       summary: List playlists of an account
+      operationId: getAccountPlaylists
       tags:
         - Video Playlists
         - Accounts
@@ -6637,6 +6726,7 @@ paths:
   '/api/v1/accounts/{name}/video-channels':
     get:
       summary: List video channels of an account
+      operationId: getAccountVideoChannels
       tags:
         - Video Channels
         - Accounts
@@ -6678,6 +6768,7 @@ paths:
   '/api/v1/accounts/{name}/video-channel-syncs':
     get:
       summary: List the synchronizations of video channels of an account
+      operationId: getAccountVideoChannelSyncs
       tags:
         - Video Channels
         - Channels Sync
@@ -6699,6 +6790,7 @@ paths:
   '/api/v1/accounts/{name}/ratings':
     get:
       summary: List ratings of an account
+      operationId: getAccountRatings
       security:
         - OAuth2: []
       tags:
@@ -6730,6 +6822,7 @@ paths:
   '/api/v1/videos/{id}/comment-threads':
     get:
       summary: List threads of a video
+      operationId: listVideoCommentThreads
       tags:
         - Video Comments
       parameters:
@@ -6747,6 +6840,7 @@ paths:
                 $ref: '#/components/schemas/CommentThreadResponse'
     post:
       summary: Create a thread
+      operationId: addVideoCommentThread
       security:
         - OAuth2: []
       tags:
@@ -6779,6 +6873,7 @@ paths:
   '/api/v1/videos/{id}/comment-threads/{threadId}':
     get:
       summary: Get a thread
+      operationId: getVideoCommentThread
       description: >
         Since PeerTube 8.3 the returned tree is truncated: only the first replies of each comment are included, and only
         down to `maxDepth` nesting levels. Use `GET /api/v1/videos/{id}/comments/{commentId}/replies` to fetch the
@@ -6802,6 +6897,7 @@ paths:
   '/api/v1/videos/{id}/comments/{commentId}/replies':
     get:
       summary: List replies of a comment
+      operationId: listVideoCommentReplies
       description: >
         **PeerTube >= 8.3** List the direct replies of a comment, each of them nested up to `maxDepth` levels. Used to unfold the parts of a
         thread that `GET /api/v1/videos/{id}/comment-threads/{threadId}` truncated.
@@ -6836,6 +6932,7 @@ paths:
   '/api/v1/videos/comments':
     get:
       summary: List instance comments
+      operationId: listInstanceComments
       security:
         - OAuth2:
           - admin
@@ -6872,6 +6969,7 @@ paths:
   '/api/v1/videos/{id}/comments/{commentId}':
     post:
       summary: Reply to a thread of a video
+      operationId: replyVideoComment
       security:
         - OAuth2: []
       tags:
@@ -6904,6 +7002,7 @@ paths:
                 - text
     delete:
       summary: Delete a comment or a reply
+      operationId: deleteVideoComment
       security:
         - OAuth2: []
       tags:
@@ -6924,6 +7023,7 @@ paths:
   '/api/v1/videos/{id}/comments/{commentId}/approve':
     post:
       summary: Approve a comment
+      operationId: approveVideoComment
       description: "**PeerTube >= 6.2** Approve a comment that requires a review"
       security:
         - OAuth2: []
@@ -6939,6 +7039,7 @@ paths:
   '/api/v1/videos/{id}/rate':
     put:
       summary: Like/dislike a video
+      operationId: rateVideo
       security:
         - OAuth2: []
       tags:
@@ -7198,6 +7299,7 @@ paths:
 
   /api/v1/blocklist/status:
     get:
+      operationId: getBlocklistStatus
       tags:
         - Account Blocklist
         - Server Blocklist
@@ -7425,6 +7527,7 @@ paths:
 
   /api/v1/server/blocklist/accounts:
     get:
+      operationId: getServerBlockedAccounts
       tags:
         - Server Blocklist
       summary: List blocked accounts by server
@@ -7457,6 +7560,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/AccountBlock'
     post:
+      operationId: blockAccountByServer
       tags:
         - Server Blocklist
       summary: Block an account by server
@@ -7483,6 +7587,7 @@ paths:
 
   '/api/v1/server/blocklist/accounts/{accountName}':
     delete:
+      operationId: unblockAccountByServer
       tags:
         - Server Blocklist
       summary: Unblock an account by server
@@ -7504,6 +7609,7 @@ paths:
 
   /api/v1/server/blocklist/servers:
     get:
+      operationId: getServerBlockedServers
       tags:
         - Server Blocklist
       summary: List blocked servers by server
@@ -7536,6 +7642,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/ServerBlock'
     post:
+      operationId: blockServerByServer
       tags:
         - Server Blocklist
       summary: Block a server by server
@@ -7562,6 +7669,7 @@ paths:
 
   '/api/v1/server/blocklist/servers/{host}':
     delete:
+      operationId: unblockServerByServer
       tags:
         - Server Blocklist
       summary: Unblock a server by server
@@ -7584,6 +7692,7 @@ paths:
 
   /api/v1/server/blocklist/subscriptions:
     get:
+      operationId: listServerBlocklistSubscriptions
       tags:
         - Server Blocklist
       summary: List server blocklist subscriptions
@@ -7611,6 +7720,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/BlocklistSubscription'
     post:
+      operationId: addServerBlocklistSubscription
       tags:
         - Server Blocklist
       summary: Add a server blocklist subscription
@@ -7640,6 +7750,7 @@ paths:
 
   '/api/v1/server/blocklist/subscriptions/{id}':
     delete:
+      operationId: deleteServerBlocklistSubscription
       tags:
         - Server Blocklist
       summary: Delete a server blocklist subscription
@@ -7660,6 +7771,7 @@ paths:
 
   /api/v1/server/blocklist/public-log:
     get:
+      operationId: listServerBlocklistPublicLog
       tags:
         - Server Blocklist
       summary: List publicly shared server blocklist log entries
@@ -7682,6 +7794,7 @@ paths:
 
   /api/v1/server/redundancy/{host}:
     put:
+      operationId: updateServerRedundancy
       tags:
         - Instance Redundancy
       summary: Update a server redundancy policy
@@ -8278,6 +8391,7 @@ paths:
 
   /api/v1/plugins/{npmName}/settings:
     put:
+      operationId: updatePluginSettings
       tags:
         - Plugins
       summary: Set a plugin's settings
@@ -8303,6 +8417,7 @@ paths:
 
   /api/v1/plugins/{npmName}/public-settings:
     get:
+      operationId: getPluginPublicSettings
       tags:
         - Plugins
       summary: Get a plugin's public settings
@@ -8321,6 +8436,7 @@ paths:
 
   /api/v1/plugins/{npmName}/registered-settings:
     get:
+      operationId: getPluginRegisteredSettings
       tags:
         - Plugins
       summary: Get a plugin's registered settings
@@ -8343,6 +8459,7 @@ paths:
   /api/v1/metrics/playback:
     post:
       summary: Create playback metrics
+      operationId: createPlaybackMetrics
       description: These metrics are exposed by OpenTelemetry metrics exporter if enabled.
       tags:
         - Stats
@@ -8358,6 +8475,7 @@ paths:
   /api/v1/runners/registration-tokens/generate:
     post:
       summary: Generate registration token
+      operationId: generateRunnerRegistrationToken
       description: Generate a new runner registration token
       security:
         - OAuth2:
@@ -8371,6 +8489,7 @@ paths:
   /api/v1/runners/registration-tokens/{registrationTokenId}:
     delete:
       summary: Remove registration token
+      operationId: deleteRunnerRegistrationToken
       description: Remove a registration token. Runners that used this token for their registration are automatically removed.
       security:
         - OAuth2:
@@ -8386,6 +8505,7 @@ paths:
   /api/v1/runners/registration-tokens:
     get:
       summary: List registration tokens
+      operationId: listRunnerRegistrationTokens
       security:
         - OAuth2:
           - admin
@@ -8414,6 +8534,7 @@ paths:
   /api/v1/runners/register:
     post:
       summary: Register a new runner
+      operationId: registerRunner
       description: API used by PeerTube runners
       tags:
         - Runners
@@ -8449,6 +8570,7 @@ paths:
   /api/v1/runners/unregister:
     post:
       summary: Unregister a runner
+      operationId: unregisterRunner
       description: API used by PeerTube runners
       tags:
         - Runners
@@ -8469,6 +8591,7 @@ paths:
   /api/v1/runners/{runnerId}:
     delete:
       summary: Delete a runner
+      operationId: deleteRunner
       security:
         - OAuth2:
           - admin
@@ -8493,6 +8616,7 @@ paths:
   /api/v1/runners:
     get:
       summary: List runners
+      operationId: listRunners
       security:
         - OAuth2:
           - admin
@@ -8522,6 +8646,7 @@ paths:
   /api/v1/runners/jobs/request:
     post:
       summary: Request a new job
+      operationId: requestRunnerJob
       description: API used by PeerTube runners
       tags:
         - Runner Jobs
@@ -8563,6 +8688,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/accept:
     post:
       summary: Accept job
+      operationId: acceptRunnerJob
       description: API used by PeerTube runners
       tags:
         - Runner Jobs
@@ -8597,6 +8723,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/abort:
     post:
       summary: Abort job
+      operationId: abortRunnerJob
       description: API used by PeerTube runners
       tags:
         - Runner Jobs
@@ -8626,6 +8753,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/update:
     post:
       summary: Update job
+      operationId: updateRunnerJob
       description: API used by PeerTube runners
       tags:
         - Runner Jobs
@@ -8677,6 +8805,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/error:
     post:
       summary: Post job error
+      operationId: errorRunnerJob
       description: API used by PeerTube runners
       tags:
         - Runner Jobs
@@ -8706,6 +8835,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/success:
     post:
       summary: Post job success
+      operationId: successRunnerJob
       description: API used by PeerTube runners
       tags:
         - Runner Jobs
@@ -8757,6 +8887,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/max-quality/audio:
     post:
       summary: Download the max-quality audio file for a job video
+      operationId: downloadRunnerJobMaxQualityAudio
       description: API used by PeerTube runners.
       tags:
         - Runner Jobs
@@ -8791,6 +8922,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/max-quality:
     post:
       summary: Download the max-quality video file for a job video
+      operationId: downloadRunnerJobMaxQualityVideo
       description: API used by PeerTube runners.
       tags:
         - Runner Jobs
@@ -8825,6 +8957,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/thumbnails/max-quality:
     post:
       summary: Download the max-quality thumbnail for a job video
+      operationId: downloadRunnerJobMaxQualityThumbnail
       description: API used by PeerTube runners.
       tags:
         - Runner Jobs
@@ -8859,6 +8992,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/previews/max-quality:
     post:
       summary: Download the max-quality preview for a job video
+      operationId: downloadRunnerJobMaxQualityPreview
       description: API used by PeerTube runners.
       tags:
         - Runner Jobs
@@ -8893,6 +9027,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/files/videos/{videoIdOrUUID}/studio/task-files/{filename}:
     post:
       summary: Download a video studio task file for a job video
+      operationId: downloadRunnerJobStudioTaskFile
       description: API used by PeerTube runners.
       tags:
         - Runner Jobs
@@ -8935,6 +9070,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}/cancel:
     post:
       summary: Cancel a job
+      operationId: cancelRunnerJob
       security:
         - OAuth2:
           - admin
@@ -8949,6 +9085,7 @@ paths:
   /api/v1/runners/jobs/{jobUUID}:
     delete:
       summary: Delete a job
+      operationId: deleteRunnerJob
       description: The endpoint will first cancel the job if needed, and then remove it from the database. Children jobs will also be removed
       security:
         - OAuth2:
@@ -8964,6 +9101,7 @@ paths:
   /api/v1/runners/jobs:
     get:
       summary: List jobs
+      operationId: listRunnerJobs
       security:
         - OAuth2:
           - admin
@@ -9006,6 +9144,7 @@ paths:
 
   /api/v1/automatic-tags/policies/accounts/{accountName}/comments:
     get:
+      operationId: getAccountCommentAutoTagPolicies
       tags:
         - Automatic Tags
       summary: Get account auto tag policies on comments
@@ -9027,6 +9166,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommentAutoTagPolicies'
     put:
+      operationId: updateAccountCommentAutoTagPolicies
       tags:
         - Automatic Tags
       summary: Update account auto tag policies on comments
@@ -9057,6 +9197,7 @@ paths:
 
   /api/v1/automatic-tags/accounts/{accountName}/available:
     get:
+      operationId: getAccountAvailableAutoTags
       tags:
         - Automatic Tags
       summary: Get account available auto tags
@@ -9079,6 +9220,7 @@ paths:
                 $ref: '#/components/schemas/AutomaticTagAvailable'
   /api/v1/automatic-tags/server/available:
     get:
+      operationId: getServerAvailableAutoTags
       tags:
         - Automatic Tags
       summary: Get server available auto tags
@@ -9097,6 +9239,7 @@ paths:
 
   /api/v1/automatic-tags/policies/server/videos:
     get:
+      operationId: getServerVideoAutoTagPolicies
       tags:
         - Automatic Tags
       summary: Get server auto tag policies for videos
@@ -9113,6 +9256,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoAutoTagPolicies'
     put:
+      operationId: updateServerVideoAutoTagPolicies
       tags:
         - Automatic Tags
       summary: Update server auto tag policies for videos
@@ -9138,6 +9282,7 @@ paths:
 
   /api/v1/watched-words/accounts/{accountName}/lists:
     get:
+      operationId: listAccountWatchedWords
       tags:
         - Watched Words
       summary: List account watched words
@@ -9166,6 +9311,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/WatchedWordsLists'
     post:
+      operationId: addAccountWatchedWords
       tags:
         - Watched Words
       summary: Add account watched words
@@ -9206,6 +9352,7 @@ paths:
 
   /api/v1/watched-words/accounts/{accountName}/lists/{listId}:
     put:
+      operationId: updateAccountWatchedWords
       tags:
         - Watched Words
       summary: Update account watched words
@@ -9240,6 +9387,7 @@ paths:
         '204':
           description: successful operation
     delete:
+      operationId: deleteAccountWatchedWords
       tags:
         - Watched Words
       summary: Delete account watched words
@@ -9264,6 +9412,7 @@ paths:
 
   /api/v1/watched-words/server/lists:
     get:
+      operationId: listServerWatchedWords
       tags:
         - Watched Words
       summary: List server watched words
@@ -9287,6 +9436,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/WatchedWordsLists'
     post:
+      operationId: addServerWatchedWords
       tags:
         - Watched Words
       summary: Add server watched words
@@ -9323,6 +9473,7 @@ paths:
 
   /api/v1/watched-words/server/lists/{listId}:
     put:
+      operationId: updateServerWatchedWords
       tags:
         - Watched Words
       summary: Update server watched words
@@ -9354,6 +9505,7 @@ paths:
         '204':
           description: successful operation
     delete:
+      operationId: deleteServerWatchedWords
       tags:
         - Watched Words
       summary: Delete server watched words
@@ -9375,6 +9527,7 @@ paths:
 
   /api/v1/watched-words/accounts/{accountName}/subscriptions:
     get:
+      operationId: listAccountWatchedWordsSubscriptions
       tags:
         - Watched Words
       summary: List account watched words subscriptions
@@ -9407,6 +9560,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/WatchedWordsSubscription'
     post:
+      operationId: addAccountWatchedWordsSubscription
       tags:
         - Watched Words
       summary: Add account watched words subscription
@@ -9443,6 +9597,7 @@ paths:
 
   /api/v1/watched-words/accounts/{accountName}/subscriptions/{id}:
     delete:
+      operationId: deleteAccountWatchedWordsSubscription
       tags:
         - Watched Words
       summary: Delete account watched words subscription
@@ -9467,6 +9622,7 @@ paths:
 
   /api/v1/watched-words/server/subscriptions:
     get:
+      operationId: listServerWatchedWordsSubscriptions
       tags:
         - Watched Words
       summary: List server watched words subscriptions
@@ -9495,6 +9651,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/WatchedWordsSubscription'
     post:
+      operationId: addServerWatchedWordsSubscription
       tags:
         - Watched Words
       summary: Add server watched words subscription
@@ -9527,6 +9684,7 @@ paths:
 
   /api/v1/watched-words/server/subscriptions/{id}:
     delete:
+      operationId: deleteServerWatchedWordsSubscription
       tags:
         - Watched Words
       summary: Delete server watched words subscription
@@ -10125,7 +10283,7 @@ components:
       name: categoryOneOf
       in: query
       required: false
-      description: category id of the video (see [/videos/categories](#operation/getCategories))
+      description: category id of the video (see [/videos/categories](https://docs.joinpeertube.org/api-rest-reference/api/operations/getcategories.html))
       schema:
         oneOf:
         - $ref: '#/components/schemas/VideoCategorySet'
@@ -10165,7 +10323,7 @@ components:
       name: languageOneOf
       in: query
       required: false
-      description: language id of the video (see [/videos/languages](#operation/getLanguages)). Use `_unknown` to filter on videos that don't have a video language
+      description: language id of the video (see [/videos/languages](https://docs.joinpeertube.org/api-rest-reference/api/operations/getlanguages.html)). Use `_unknown` to filter on videos that don't have a video language
       schema:
         oneOf:
         - $ref: '#/components/schemas/VideoLanguageSet'
@@ -10237,7 +10395,7 @@ components:
       name: licenceOneOf
       in: query
       required: false
-      description: licence id of the video (see [/videos/licences](#operation/getLicences))
+      description: licence id of the video (see [/videos/licences](https://docs.joinpeertube.org/api-rest-reference/api/operations/getlicences.html))
       schema:
         oneOf:
         - $ref: '#/components/schemas/VideoLicenceSet'
@@ -10439,7 +10597,7 @@ components:
       name: videoFileToken
       in: query
       required: false
-      description: Video file token [generated](#operation/requestVideoToken) by PeerTube so you don't need to provide an OAuth token in the request header.
+      description: Video file token [generated](https://docs.joinpeertube.org/api-rest-reference/api/operations/requestvideotoken.html) by PeerTube so you don't need to provide an OAuth token in the request header.
       schema:
         type: string
     reinjectVideoFileToken:
@@ -10670,11 +10828,11 @@ components:
     currentPassword:
       type: string
       format: password
-      description: Password of the authenticated user, required if [password confirmation](#section/Password-confirmation) is enabled
+      description: Password of the authenticated user, required if [password confirmation](https://docs.joinpeertube.org/api-rest-reference/api.html#password-confirmation) is enabled
 
     VideoCategorySet:
       type: integer
-      description: category id of the video (see [/videos/categories](#operation/getCategories))
+      description: category id of the video (see [/videos/categories](https://docs.joinpeertube.org/api-rest-reference/api/operations/getcategories.html))
       example: 15
     VideoConstantNumber-Category:
       properties:
@@ -10686,7 +10844,7 @@ components:
 
     VideoLicenceSet:
       type: integer
-      description: licence id of the video (see [/videos/licences](#operation/getLicences))
+      description: licence id of the video (see [/videos/licences](https://docs.joinpeertube.org/api-rest-reference/api/operations/getlicences.html))
       example: 2
     VideoConstantNumber-Licence:
       properties:
@@ -10698,7 +10856,7 @@ components:
 
     VideoLanguageSet:
       type: string
-      description: language id of the video (see [/videos/languages](#operation/getLanguages))
+      description: language id of the video (see [/videos/languages](https://docs.joinpeertube.org/api-rest-reference/api/operations/getlanguages.html))
       example: en
     VideoConstantString-Language:
       properties:
@@ -10714,7 +10872,7 @@ components:
         - 1
         - 2
         - 3
-      description: Video playlist privacy policy (see [/video-playlists/privacies](#operation/getPlaylistPrivacyPolicies))
+      description: Video playlist privacy policy (see [/video-playlists/privacies](https://docs.joinpeertube.org/api-rest-reference/api/operations/getplaylistprivacypolicies.html))
     VideoPlaylistPrivacyConstant:
       properties:
         id:
@@ -10743,7 +10901,7 @@ components:
         - 3
         - 4
         - 5
-      description: privacy id of the video (see [/videos/privacies](#operation/getVideoPrivacyPolicies))
+      description: privacy id of the video (see [/videos/privacies](https://docs.joinpeertube.org/api-rest-reference/api/operations/getvideoprivacypolicies.html))
     VideoPrivacyConstant:
       properties:
         id:
@@ -11436,7 +11594,7 @@ components:
           format: uri-reference
           description: >
             URI identifying the error type. `about:blank` when the error has no specific type.
-            Otherwise it links to the corresponding section of the [Errors](#section/Errors) documentation;
+            Otherwise it links to the corresponding section of the [Errors](https://docs.joinpeertube.org/api-rest-reference/api.html#errors) documentation;
             the type name itself is also available in `code`.
           example: 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/video_requires_password'
         detail:
@@ -13813,7 +13971,7 @@ components:
         adminFlags:
           $ref: '#/components/schemas/UserAdminFlags'
         currentPassword:
-          description: Required to create an administrator, see [password confirmation](#section/Password-confirmation)
+          description: Required to create an administrator, see [password confirmation](https://docs.joinpeertube.org/api-rest-reference/api.html#password-confirmation)
           allOf:
             - $ref: '#/components/schemas/currentPassword'
       required:
@@ -13849,7 +14007,7 @@ components:
           $ref: '#/components/schemas/password'
         currentPassword:
           description: >
-            Required to give the administrator role, or to change the password, email or auth plugin of an administrator, see [password confirmation](#section/Password-confirmation)
+            Required to give the administrator role, or to change the password, email or auth plugin of an administrator, see [password confirmation](https://docs.joinpeertube.org/api-rest-reference/api.html#password-confirmation)
           allOf:
             - $ref: '#/components/schemas/currentPassword'
     UpdateMe:
