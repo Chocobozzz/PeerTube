@@ -905,7 +905,7 @@
       </trans-unit>
       <trans-unit id="4729525992281375617" datatype="html">
         <source>PeerTube considers {count, plural, =1 {1 video is} other {<x id="count"/> videos are}} already being transcoded.</source>
-        <target state="translated">PeerTube upošteva, da se {count, plural, one {{count} video že transkodira} two {<x id="count"/> {count} videa že transkodirata} few {<x id="count"/> {count} videi že transkodirajo} other {<x id="count"/> {count} videov že transkodira}}.</target>
+        <target state="translated">PeerTube upošteva, da se {count, plural, one {{count} video že transkodira} two {{count} videa že transkodirata} few {{count} videi že transkodirajo} other {{count} videov že transkodira}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">497</context>

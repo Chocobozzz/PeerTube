@@ -4,7 +4,7 @@ import { AdminConfigPage } from '../po/admin-config.po'
 import { LoginPage } from '../po/login.po'
 import { VideoPublishPage } from '../po/video-publish.po'
 import { VideoWatchPage } from '../po/video-watch.po'
-import { getScreenshotPath, go, isSafari, prepareWebBrowser, selectCustomSelect, waitServerUp } from '../utils'
+import { browserSleep, getScreenshotPath, go, isSafari, prepareWebBrowser, selectCustomSelect, waitServerUp } from '../utils'
 
 // These tests help to notice crash with invalid translated strings
 describe('Page crash', () => {
@@ -148,8 +148,17 @@ describe('Page crash', () => {
         })
 
         it('Should go on signup page', async function () {
-          await $('.create-account-button').waitForClickable()
-          await $('.create-account-button').click()
+          const button = $('.create-account-button')
+
+          // A pending redirection (home page) can override our navigation, so click again if needed
+          await browser.waitUntil(async () => {
+            await button.waitForClickable()
+            await button.click()
+
+            await browserSleep(500)
+
+            return (await browser.getUrl()).includes('/signup')
+          }, { timeout: 10000 })
 
           await $('.callout-content > h4').waitForExist()
         })
