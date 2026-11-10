@@ -168,6 +168,7 @@ overrides:
 
 patchedDependencies:
   node-media-server: 44332d754691bc46768006541f90c923cd34ddf847c6f7ed2736890ae3ab4e0a
+  sequelize: 7411497075cefacd79dd57019257e2d0fc22bd11d070711305dd7ba77f6a429d
   tinykeys: 286ec06b460cf7b02035c2e64f11f165dcc17e4141d0c185bbee2a5a9d3b35b9
   video.js: 66459642658d85da52b45ff0472242e9daade1ff3dd765974103db72a7c55377
 
@@ -468,13 +469,13 @@ importers:
         version: 2.18.1
       sequelize:
         specifier: ~6.37.8
-        version: 6.37.8(pg@8.23.1)(supports-color@8.1.1)
+        version: 6.37.8(patch_hash=7411497075cefacd79dd57019257e2d0fc22bd11d070711305dd7ba77f6a429d)(pg@8.23.1)(supports-color@8.1.1)
       sequelize-pool:
         specifier: ^8.0.1
         version: 8.0.1
       sequelize-typescript:
         specifier: ^2.1.6
-        version: 2.1.6(@types/node@22.20.5)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(pg@8.23.1)(supports-color@8.1.1))
+        version: 2.1.6(@types/node@22.20.5)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(patch_hash=7411497075cefacd79dd57019257e2d0fc22bd11d070711305dd7ba77f6a429d)(pg@8.23.1)(supports-color@8.1.1))
       sharp:
         specifier: ^0.35.5
         version: 0.35.5(@types/node@22.20.5)
@@ -21575,15 +21576,15 @@ snapshots:
 
   sequelize-pool@8.0.1: {}
 
-  sequelize-typescript@2.1.6(@types/node@22.20.5)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(pg@8.23.1)(supports-color@8.1.1)):
+  sequelize-typescript@2.1.6(@types/node@22.20.5)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.37.8(patch_hash=7411497075cefacd79dd57019257e2d0fc22bd11d070711305dd7ba77f6a429d)(pg@8.23.1)(supports-color@8.1.1)):
     dependencies:
       '@types/node': 22.20.5
       '@types/validator': 13.15.10
       glob: 7.2.0
       reflect-metadata: 0.2.2
-      sequelize: 6.37.8(pg@8.23.1)(supports-color@8.1.1)
+      sequelize: 6.37.8(patch_hash=7411497075cefacd79dd57019257e2d0fc22bd11d070711305dd7ba77f6a429d)(pg@8.23.1)(supports-color@8.1.1)
 
-  sequelize@6.37.8(pg@8.23.1)(supports-color@8.1.1):
+  sequelize@6.37.8(patch_hash=7411497075cefacd79dd57019257e2d0fc22bd11d070711305dd7ba77f6a429d)(pg@8.23.1)(supports-color@8.1.1):
     dependencies:
       '@types/debug': 4.1.13
       '@types/validator': 13.15.10

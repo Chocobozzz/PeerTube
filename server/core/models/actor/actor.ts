@@ -165,7 +165,9 @@ export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] =
       fields: [ 'followersUrl' ]
     },
     {
-      fields: [ 'accountId' ],
+      // Covering index to increase performance of video list queries that join actors to check follows/blocklist
+      name: 'actor_account_id',
+      fields: [ literal('"accountId") INCLUDE ("id", "serverId"') as any ],
       unique: true
     },
     {

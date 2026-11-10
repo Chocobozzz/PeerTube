@@ -1,0 +1,25 @@
+diff --git a/lib/dialects/postgres/query.js b/lib/dialects/postgres/query.js
+index 88a4a11010e77d5fea88b6cf182cad8c5cd689f0..7f60e22f6a4049963dc22ec60fa93e453cf02d67 100644
+--- a/lib/dialects/postgres/query.js
++++ b/lib/dialects/postgres/query.js
+@@ -94,7 +94,9 @@ class Query extends AbstractQuery {
+     }
+     if (this.isShowIndexesQuery()) {
+       for (const row of rows) {
+-        const attributes = /ON .*? (?:USING .*?\s)?\(([^]*)\)/gi.exec(row.definition)[1].split(",");
++        // PeerTube patch: covering indexes list their INCLUDE columns in indkey but they are not key attributes
++        const keyDefinition = row.definition.replace(/ INCLUDE \([^]*$/, "");
++        const attributes = /ON .*? (?:USING .*?\s)?\(([^]*)\)/gi.exec(keyDefinition)[1].split(",");
+         const columns = _.zipObject(row.column_indexes, this.sequelize.getQueryInterface().queryGenerator.fromArray(row.column_names));
+         delete row.column_indexes;
+         delete row.column_names;
+@@ -106,6 +108,9 @@ class Query extends AbstractQuery {
+             return null;
+           }
+           attribute = attributes[index];
++          if (attribute === void 0) {
++            return null;
++          }
+           return {
+             attribute: field,
+             collate: attribute.match(/COLLATE "(.*?)"/) ? /COLLATE "(.*?)"/.exec(attribute)[1] : void 0,

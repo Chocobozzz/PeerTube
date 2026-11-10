@@ -35,5 +35,6 @@ overrides:
 
 patchedDependencies:
   node-media-server: pnpm-patches/node-media-server.patch
+  sequelize: pnpm-patches/sequelize.patch
   tinykeys: pnpm-patches/tinykeys.patch
   video.js: pnpm-patches/video.js.patch
