@@ -107,7 +107,7 @@ export class VideoSourceModel extends SequelizeModel<VideoSourceModel> {
 
   static async doesOwnedFileExist (filename: string, storage: FileStorageType) {
     const query = 'SELECT 1 FROM "videoSource" ' +
-      'INNER JOIN "video" ON "video"."id" = "videoSource"."videoId" AND "video"."remote" IS FALSE ' +
+      'INNER JOIN "video" ON "video"."id" = "videoSource"."videoId" AND "video"."remote" = false ' +
       `WHERE "keptOriginalFilename" = $filename AND "storage" = $storage LIMIT 1`
 
     return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })

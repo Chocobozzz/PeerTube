@@ -170,7 +170,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     if (this.options.onLocalVideo === true) {
       this.buildVideoJoin()
 
-      where.push('"Video"."remote" IS FALSE')
+      where.push('"Video"."remote" = false')
     } else if (this.options.onLocalVideo === false) {
       this.buildVideoJoin()
 

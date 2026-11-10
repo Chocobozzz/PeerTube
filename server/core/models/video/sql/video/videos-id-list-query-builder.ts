@@ -623,7 +623,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
         `  WHERE "accountActor"."id" IN (${targetActorIdQuery}) `
 
       if (options.orLocalVideos) {
-        cteQuery += 'UNION SELECT "video"."id" FROM "video" WHERE "remote" IS FALSE'
+        cteQuery += 'UNION SELECT "video"."id" FROM "video" WHERE "remote" = false'
       }
 
       cteQuery += ')'
@@ -656,7 +656,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
         '  )'
 
       if (options.orLocalVideos) {
-        query += '  OR "video"."remote" IS FALSE'
+        query += '  OR "video"."remote" = false'
       }
 
       query += ')'
@@ -805,7 +805,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereNSFW (nsfwFlagsExcluded?: number) {
-    let filter = '"video"."nsfw" IS TRUE'
+    let filter = '"video"."nsfw" = true'
 
     if (nsfwFlagsExcluded) {
       filter += ' AND "video"."nsfwFlags" & :nsfwFlagsExcluded = 0'
@@ -832,7 +832,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereLive () {
-    this.and.push('"video"."isLive" IS TRUE')
+    this.and.push('"video"."isLive" = true')
   }
 
   private whereVOD () {

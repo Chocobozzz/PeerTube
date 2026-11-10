@@ -259,9 +259,9 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
 
   static async doesOwnedTorrentFileExist (filename: string, storage: FileStorageType) {
     const query = 'SELECT 1 FROM "videoFile" ' +
-      'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
+      'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" = false ' +
       'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
-      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
+      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" = false ' +
       'WHERE "torrentFilename" = $filename AND "torrentStorage" = $storage ' +
       'AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) LIMIT 1'
 
@@ -273,9 +273,9 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
     batchSize: number
   }): Promise<{ id: number, videoId: number | null, videoStreamingPlaylistId: number | null }[]> {
     const query = 'SELECT "videoFile"."id", "videoFile"."videoId", "videoFile"."videoStreamingPlaylistId" FROM "videoFile" ' +
-      'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" IS FALSE ' +
+      'LEFT JOIN "video" "webvideo" ON "webvideo"."id" = "videoFile"."videoId" AND "webvideo"."remote" = false ' +
       'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
-      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
+      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" = false ' +
       'WHERE "videoFile"."id" > $lastId AND "videoFile"."torrentFilename" IS NOT NULL ' +
       'AND ("hlsVideo"."id" IS NOT NULL OR "webvideo"."id" IS NOT NULL) ' +
       'ORDER BY "videoFile"."id" ASC LIMIT $batchSize'
@@ -294,7 +294,7 @@ export class VideoFileModel extends SequelizeModel<VideoFileModel> {
   }
 
   static async doesOwnedWebVideoFileExist (filename: string, storage: FileStorageType) {
-    const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" IS FALSE ' +
+    const query = 'SELECT 1 FROM "videoFile" INNER JOIN "video" ON "video"."id" = "videoFile"."videoId" AND "video"."remote" = false ' +
       `WHERE "filename" = $filename AND "storage" = $storage LIMIT 1`
 
     return doesExist({ sequelize: this.sequelize, query, bind: { filename, storage } })

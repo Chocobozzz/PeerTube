@@ -274,7 +274,7 @@ export class VideoStreamingPlaylistModel extends SequelizeModel<VideoStreamingPl
   static doesOwnedVideoUUIDExist (videoUUID: string, storage: FileStorageType) {
     const query = `SELECT 1 FROM "videoStreamingPlaylist" ` +
       `INNER JOIN "video" ON "video"."id" = "videoStreamingPlaylist"."videoId" ` +
-      `AND "video"."remote" IS FALSE AND "video"."uuid" = $videoUUID ` +
+      `AND "video"."remote" = false AND "video"."uuid" = $videoUUID ` +
       `AND "storage" = $storage LIMIT 1`
 
     return doesExist({ sequelize: this.sequelize, query, bind: { videoUUID, storage } })

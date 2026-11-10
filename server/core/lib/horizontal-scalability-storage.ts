@@ -17,7 +17,7 @@ type Section = {
   query: string
 }
 
-const localVideoJoin = (table: string) => `INNER JOIN "video" "video" ON "video"."id" = "${table}"."videoId" AND "video"."remote" IS FALSE`
+const localVideoJoin = (table: string) => `INNER JOIN "video" "video" ON "video"."id" = "${table}"."videoId" AND "video"."remote" = false`
 
 // Exclude redundancy, the redundancy scheduler will remove invalid files if needed
 const sections: { [id in Exclude<PrunableObjectStorageSection, 'redundancy'>]: Section } = {
@@ -39,9 +39,9 @@ const sections: { [id in Exclude<PrunableObjectStorageSection, 'redundancy'>]: S
   torrents: {
     label: 'torrents',
     query: 'SELECT 1 FROM "videoFile" ' +
-      'LEFT JOIN "video" "webVideo" ON "webVideo"."id" = "videoFile"."videoId" AND "webVideo"."remote" IS FALSE ' +
+      'LEFT JOIN "video" "webVideo" ON "webVideo"."id" = "videoFile"."videoId" AND "webVideo"."remote" = false ' +
       'LEFT JOIN "videoStreamingPlaylist" ON "videoStreamingPlaylist"."id" = "videoFile"."videoStreamingPlaylistId" ' +
-      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" IS FALSE ' +
+      'LEFT JOIN "video" "hlsVideo" ON "hlsVideo"."id" = "videoStreamingPlaylist"."videoId" AND "hlsVideo"."remote" = false ' +
       'WHERE "videoFile"."torrentFilename" IS NOT NULL AND "videoFile"."torrentStorage" = $storage ' +
       'AND ("hlsVideo"."id" IS NOT NULL OR "webVideo"."id" IS NOT NULL) LIMIT 1'
   },

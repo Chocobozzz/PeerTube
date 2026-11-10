@@ -1899,7 +1899,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   }
 
   static channelHasNSFWContent (channelId: number) {
-    const query = 'SELECT 1 FROM "video" WHERE "nsfw" IS TRUE AND "channelId" = $channelId AND privacy = $privacy LIMIT 1'
+    const query = 'SELECT 1 FROM "video" WHERE "nsfw" = true AND "channelId" = $channelId AND privacy = $privacy LIMIT 1'
 
     return doesExist({ sequelize: this.sequelize, query, bind: { channelId, privacy: VideoPrivacy.PUBLIC } })
   }
@@ -1907,7 +1907,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
   static playlistHasPublicNSFWContent (playlistId: number) {
     const query = 'SELECT 1 FROM "video" ' +
       'INNER JOIN "videoPlaylistElement" ON "videoPlaylistElement"."videoId" = "video"."id" ' +
-      'WHERE "video"."nsfw" IS TRUE AND "videoPlaylistElement"."videoPlaylistId" = $playlistId AND privacy = $privacy ' +
+      'WHERE "video"."nsfw" = true AND "videoPlaylistElement"."videoPlaylistId" = $playlistId AND privacy = $privacy ' +
       'LIMIT 1'
 
     return doesExist({ sequelize: this.sequelize, query, bind: { playlistId, privacy: VideoPrivacy.PUBLIC } })

@@ -19,7 +19,7 @@ export class VideoFilesLifecycleQueryBuilder extends AbstractRunQuery {
 
     const where: string[] = [
       // We only own the files of our videos
-      `"video"."remote" IS FALSE`,
+      `"video"."remote" = false`,
 
       // Files of a live are handled by the live manager
       `"video"."isLive" IS FALSE`,

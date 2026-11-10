@@ -86,7 +86,7 @@ export class VideoStatModel extends SequelizeModel<VideoStatModel> {
           },
           videoId: {
             [Op.in]: literal(
-              '(SELECT "id" FROM "video" WHERE "remote" IS FALSE)'
+              '(SELECT "id" FROM "video" WHERE "remote" = false)'
             )
           }
         },
@@ -97,7 +97,7 @@ export class VideoStatModel extends SequelizeModel<VideoStatModel> {
 
   static async getOldestLocalStatDate (): Promise<Date> {
     const query = `SELECT "videoStat"."startDate" FROM "videoStat" ` +
-      `INNER JOIN "video" ON "video"."id" = "videoStat"."videoId" AND "video"."remote" IS FALSE ` +
+      `INNER JOIN "video" ON "video"."id" = "videoStat"."videoId" AND "video"."remote" = false ` +
       `ORDER BY "videoStat"."startDate" ASC LIMIT 1`
 
     const rows = await VideoStatModel.sequelize.query<{ startDate: Date }>(query, { type: QueryTypes.SELECT })
