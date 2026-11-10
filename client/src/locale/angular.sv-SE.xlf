@@ -1639,7 +1639,7 @@
       </trans-unit>
       <trans-unit id="8533955271153325348" datatype="html">
         <source>{count, plural, =1 {1 video skipped because it is already being transcribed.} other {<x id="count"/> videos skipped because they are already being transcribed.}}</source>
-        <target state="new">{count, plural, =1 {1 video skipped because it is already being transcribed.} other {<x id="count"/> videos skipped because they are already being transcribed.}}</target>
+        <target state="translated">{count, plural, =1 {1 video har hoppats över eftersom den redan transkiberas.} other {<x id="count"/> videor har hoppats över eftersom de redan transkriberas.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">625</context>
@@ -1647,7 +1647,7 @@
       </trans-unit>
       <trans-unit id="1800714362868088312" datatype="html">
         <source>{count, plural, =1 {Failed on video "<x id="name"/>": <x id="message"/>} other {Failed on <x id="count"/> videos. First error on video "<x id="name"/>": <x id="message"/>}}</source>
-        <target state="new">{count, plural, =1 {Failed on video "<x id="name"/>": <x id="message"/>} other {Failed on <x id="count"/> videos. First error on video "<x id="name"/>": <x id="message"/>}}</target>
+        <target state="translated">{count, plural, =1 {Fel uppstod i videon ”<x id="name"/> ”: <x id="message"/>} other {Fel uppstod i <x id="count"/> videor. Första felet uppstod i videon ”<x id="name"/> ”: <x id="message"/>}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">649</context>
@@ -1775,7 +1775,7 @@
       </trans-unit>
       <trans-unit id="3255203254266798889" datatype="html">
         <source>Use of AI is required.</source>
-        <target state="new">Use of AI is required.</target>
+        <target state="translated">Användning av AI krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -1783,7 +1783,7 @@
       </trans-unit>
       <trans-unit id="4053044562013092133" datatype="html">
         <source>Commercial content is required.</source>
-        <target state="new">Commercial content is required.</target>
+        <target state="translated">Kommersiellt material krävs.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -2251,7 +2251,7 @@
       </trans-unit>
       <trans-unit id="4216959698439022587" datatype="html">
         <source>File replacement is not available while the video is being duplicated.</source>
-        <target state="new">File replacement is not available while the video is being duplicated.</target>
+        <target state="translated">Filersättning är inte tillgänglig medan videon dupliceras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">18</context>
@@ -2259,7 +2259,7 @@
       </trans-unit>
       <trans-unit id="2063903262907970040" datatype="html">
         <source>File replacement is not available on a video whose creation failed.</source>
-        <target state="new">File replacement is not available on a video whose creation failed.</target>
+        <target state="translated">Det går inte att ersätta filen för en video vars skapande misslyckades.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">20</context>
@@ -2315,7 +2315,7 @@
       </trans-unit>
       <trans-unit id="4163606422627203987" datatype="html">
         <source>Studio is not available while the video is being duplicated.</source>
-        <target state="new">Studio is not available while the video is being duplicated.</target>
+        <target state="translated">Studion är inte tillgänglig medan videon dupliceras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">47</context>
@@ -2323,7 +2323,7 @@
       </trans-unit>
       <trans-unit id="1947476160394208371" datatype="html">
         <source>Studio is not available on a video whose creation failed.</source>
-        <target state="new">Studio is not available on a video whose creation failed.</target>
+        <target state="translated">Studion är inte tillgänglig för en video vars skapande misslyckades.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">49</context>
@@ -3845,7 +3845,7 @@
       </trans-unit>
       <trans-unit id="8950709169629037139" datatype="html">
         <source>Install plugins</source>
-        <target state="new">Install plugins</target>
+        <target state="translated">Installera tillägg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -3853,7 +3853,7 @@
       </trans-unit>
       <trans-unit id="8726084754949366831" datatype="html">
         <source>The following plugins will be installed on your platform: <x id="PH" equiv-text="this.plugins.join(', ')"/>.</source>
-        <target state="new">The following plugins will be installed on your platform: <x id="PH" equiv-text="this.plugins.join(', ')"/>.</target>
+        <target state="translated">Följande tillägg kommer att installeras på din plattform: <x id="PH" equiv-text="this.plugins.join(', ')"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -5272,7 +5272,7 @@
       </trans-unit>
       <trans-unit id="6063296243676908514" datatype="html">
         <source>Use of AI</source>
-        <target state="new">Use of AI</target>
+        <target state="translated">Användning av AI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">162</context>
@@ -5716,7 +5716,7 @@
       </trans-unit>
       <trans-unit id="2520326224708936904" datatype="html">
         <source>More videos</source>
-        <target state="new">More videos</target>
+        <target state="translated">Fler videor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">69</context>
