@@ -71,7 +71,7 @@ module.exports = {
       },
       {
         browserName: 'Firefox',
-        browserVersion: '79', // Oldest supported version
+        browserVersion: '102', // Oldest supported version
 
         ...buildBStackDesktopOptions({ sessionName: 'Firefox ESR Desktop', resolution: '1280x1024', os: 'Windows', osVersion: '8' })
       },
