@@ -12,14 +12,23 @@ export abstract class AbstractScheduler {
   private firstRunTimeout: NodeJS.Timeout
   private isRunning = false
 
+  // Incremented on each enable/disable, so a pending first run knows if it still belongs to the current activation
+  private generation = 0
+
   private readonly randomRunOnEnable: boolean
+  private readonly firstRunDelayMs: number
 
   constructor (options: {
+    // Run at a random time in the first half of the interval
     randomRunOnEnable?: boolean
+    // Or run after this delay
+    firstRunDelayMs?: number
   }) {
     if (options?.randomRunOnEnable === true) {
       this.randomRunOnEnable = true
     }
+
+    this.firstRunDelayMs = options?.firstRunDelayMs
   }
 
   static disableAll () {
@@ -32,18 +41,26 @@ export abstract class AbstractScheduler {
     if (!this.schedulerIntervalMs) throw new Error('Interval is not correctly set.')
 
     AbstractScheduler.enabledSchedulers.add(this)
+    const generation = ++this.generation
 
-    if (this.randomRunOnEnable === true) {
-      const randomDelay = randomInt(0, Math.floor(this.schedulerIntervalMs / 2))
+    const firstRunDelay = this.randomRunOnEnable === true
+      ? randomInt(0, Math.floor(this.schedulerIntervalMs / 2))
+      : this.firstRunDelayMs
 
+    if (firstRunDelay !== undefined) {
       this.firstRunTimeout = setTimeout(async () => {
+        this.firstRunTimeout = undefined
+
         try {
           // execute() already handles errors
           await this.execute()
         } finally {
-          this.interval = setInterval(() => this.execute(), this.schedulerIntervalMs)
+          // The scheduler may have been disabled (and re-enabled) during the first run
+          if (this.generation === generation) {
+            this.interval = setInterval(() => this.execute(), this.schedulerIntervalMs)
+          }
         }
-      }, randomDelay)
+      }, firstRunDelay)
 
       return
     }
@@ -53,6 +70,7 @@ export abstract class AbstractScheduler {
 
   disable () {
     AbstractScheduler.enabledSchedulers.delete(this)
+    this.generation++
 
     if (this.firstRunTimeout) {
       clearTimeout(this.firstRunTimeout)

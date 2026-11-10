@@ -362,6 +362,7 @@ export type StaticLoggerTag =
   | 'lazy-load'
   | 'live'
   | 'local-files'
+  | 'migration-scripts'
   | 'move-file-system'
   | 'move-object-storage'
   | 'muxing'

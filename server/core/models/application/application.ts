@@ -105,18 +105,13 @@ export class ApplicationModel extends SequelizeModel<ApplicationModel> {
     return previousUrls.join('\n') !== CONFIG.TRACKER.URLS.join('\n')
   }
 
-  static async hasManualMigrationScriptRun (scriptName: string) {
-    const application = await this.load()
-
-    return application.manualMigrationScriptsRun.includes(scriptName)
-  }
-
   static async setManualMigrationScriptRun (scriptName: string) {
-    const application = await this.load()
-    if (application.manualMigrationScriptsRun.includes(scriptName)) return
-
-    application.manualMigrationScriptsRun = [ ...application.manualMigrationScriptsRun, scriptName ]
-    await application.save()
+    // Atomic: the script may be run by the server and by the CLI at the same time
+    await ApplicationModel.sequelize.query(
+      `UPDATE "application" SET "manualMigrationScriptsRun" = array_append("manualMigrationScriptsRun", :scriptName) ` +
+        `WHERE NOT (:scriptName = ANY("manualMigrationScriptsRun"))`,
+      { type: QueryTypes.UPDATE, replacements: { scriptName } }
+    )
   }
 
   static async updateConfigPart () {

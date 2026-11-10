@@ -226,7 +226,7 @@ import { AutoFollowIndexInstances } from './core/lib/schedulers/auto-follow-inde
 import { BlocklistSubscriptionsScheduler } from './core/lib/schedulers/blocklist-subscriptions-scheduler.js'
 import { GeoIPUpdateScheduler } from './core/lib/schedulers/geo-ip-update-scheduler.js'
 import { LocalVideoStatsBufferScheduler } from './core/lib/schedulers/local-video-stats-buffer-scheduler.js'
-import { ManualMigrationScriptsScheduler } from './core/lib/schedulers/manual-migration-scripts-scheduler.js'
+import { MigrationScriptsScheduler } from './core/lib/schedulers/migration-scripts-scheduler.js'
 import { PeerTubeVersionCheckScheduler } from './core/lib/schedulers/peertube-version-check-scheduler.js'
 import { PluginsCheckScheduler } from './core/lib/schedulers/plugins-check-scheduler.js'
 import { ProcessHeartbeatScheduler } from './core/lib/schedulers/process-heartbeat-scheduler.js'
@@ -466,6 +466,7 @@ async function startApplication () {
     LocalVideoStatsBufferScheduler.Instance.enable()
     RunnerJobWatchDogScheduler.Instance.enable()
     RemoveExpiredUserExportsScheduler.Instance.enable()
+    MigrationScriptsScheduler.Instance.enable()
   }
 
   // These ones must also be run on the secondary
@@ -473,7 +474,6 @@ async function startApplication () {
   YoutubeDlUpdateScheduler.Instance.enable() // Each process has its own binary, used by video imports
   UpdateTokenSessionScheduler.Instance.enable()
   RemoveOldUserLoginDevicesScheduler.Instance.enable()
-  ManualMigrationScriptsScheduler.Instance.enable()
   VideoFilesLifecycleScheduler.Instance.enable()
 
   OpenTelemetryMetrics.Instance.registerMetrics({ trackerServer })

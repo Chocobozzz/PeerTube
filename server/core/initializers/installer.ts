@@ -1,6 +1,7 @@
 import { UserRole } from '@peertube/peertube-models'
 import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { generateRunnerRegistrationToken } from '@server/helpers/token-generator.js'
+import { MIGRATION_SCRIPT_NAMES } from '@server/lib/migration-scripts/migration-scripts.js'
 import { initPNPM } from '@server/lib/plugins/package-manager.js'
 import { RunnerRegistrationTokenModel } from '@server/models/runner/runner-registration-token.js'
 import { ensureDir, remove } from 'fs-extra/esm'
@@ -161,16 +162,7 @@ async function createApplicationIfNotExist () {
 
   const application = await ApplicationModel.create({
     migrationVersion: LAST_MIGRATION_VERSION,
-    // Scripts that existed before the manual migration tracking system was introduced: assume already run
-    manualMigrationScriptsRun: [
-      'peertube-4.0',
-      'peertube-4.2',
-      'peertube-5.0',
-      'peertube-6.3',
-      'peertube-7.2',
-      'peertube-8.0',
-      'peertube-8.1'
-    ]
+    manualMigrationScriptsRun: MIGRATION_SCRIPT_NAMES
   })
 
   return createApplicationActor(application.id)

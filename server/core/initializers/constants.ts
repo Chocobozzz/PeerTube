@@ -474,7 +474,7 @@ export const SCHEDULER_INTERVALS_MS = {
   BLOCKLIST_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
   WATCHED_WORDS_SUBSCRIPTIONS_SYNC: 60000 * 60, // 1 hour
   REMOVE_OLD_USER_LOGIN_DEVICES: 60000 * 60 * 24, // 1 day
-  CHECK_MANUAL_MIGRATION_SCRIPTS: 60000 * 60 * 12 // 12 hours
+  RUN_MIGRATION_SCRIPTS: 60000 * 60 * 12 // 12 hours
 }
 
 export const DATABASE_READ_REPLICAS = {
@@ -483,16 +483,9 @@ export const DATABASE_READ_REPLICAS = {
   REDIS_TIMEOUT_MS: 1000
 }
 
-export const MANUAL_MIGRATION_SCRIPTS = [
-  'peertube-4.0',
-  'peertube-4.2',
-  'peertube-5.0',
-  'peertube-6.3',
-  'peertube-7.2',
-  'peertube-8.0',
-  'peertube-8.1',
-  'peertube-8.3'
-]
+export const MIGRATION_SCRIPTS = {
+  FIRST_RUN_DELAY_MS: 10000
+}
 
 // Devices not seen again after this delay are forgotten, so a login from that IP/user-agent pair will be treated as new again
 export const USER_LOGIN_DEVICE_MAX_AGE = 60000 * 60 * 24 * 365 // 1 year
@@ -1520,6 +1513,8 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     SCHEDULER_INTERVALS_MS.PROCESS_HEARTBEAT = 2000
     SCHEDULER_INTERVALS_MS.CHECK_PEERTUBE_VERSION = 2000
     SCHEDULER_INTERVALS_MS.UPDATE_TOKEN_SESSION = 2000
+
+    MIGRATION_SCRIPTS.FIRST_RUN_DELAY_MS = 1000
 
     REPEAT_JOBS['videos-stats'] = { every: 5000 }
 
