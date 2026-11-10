@@ -815,7 +815,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereSFW (nsfwFlagsIncluded?: number) {
-    let filter = '"video"."nsfw" IS FALSE'
+    let filter = '"video"."nsfw" = false'
 
     if (nsfwFlagsIncluded) {
       filter = `(${filter} OR "video"."nsfwFlags" & :nsfwFlagsIncluded != 0)`
@@ -835,7 +835,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereVOD () {
-    this.and.push('"video"."isLive" IS FALSE')
+    this.and.push('"video"."isLive" = false')
   }
 
   private whereNotBlocked (serverAccountId: number, user?: MUserAccountId) {
@@ -872,74 +872,85 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     const escapedSearch = this.sequelize.escape(search)
     const escapedLikeSearch = this.sequelize.escape('%' + search + '%')
 
-    // A search made only of punctuation ("!!!", "...") has no lexeme to look for: skip the full text search
     const tsQueryTerms = buildTSQueryTerms(search)
+    // A search made only of punctuation ("!!!", "...") has no lexeme to look for: skip the full text search
     const hasFTS = tsQueryTerms !== ''
+
+    const searchExpr = `lower(immutable_unaccent(${escapedSearch}))`
+    const nameExpr = 'lower(immutable_unaccent("video"."name"))'
+    const nameLikeMatch = `${nameExpr} LIKE lower(immutable_unaccent(${escapedLikeSearch}))`
+
+    const trigramMatch = `${searchExpr} <% ${nameExpr} OR ${nameLikeMatch}`
+
+    /**
+     * Every match is a condition on the video row itself so PG can combine indexes (BitmapOr)
+     * Don't use LEFT JOIN that would force full scan of video table
+     * Don't use a join on a list of matching ids that would force PG to compute this list even for broad searches
+     */
+    const matchConditions: string[] = []
+
+    if (validator.default.isUUID(search)) {
+      matchConditions.push(`"video"."uuid" = ${escapedSearch}`)
+    }
+
+    matchConditions.push(trigramMatch)
 
     if (hasFTS) {
       this.cte.push(
         // Build the tsquery once instead of once per referencing expression
-        `"tsQuery" AS (SELECT to_tsquery('simple', immutable_unaccent(${this.sequelize.escape(tsQueryTerms)})) AS "query")`,
-        '"ftsSearch" AS (' +
-          '  SELECT "videoSearch"."videoId" AS "id", ' +
-          // ts_rank tops out at ~0.61 for a name-only match while word_similarity returns 1 for the same match.
-          // Normalize by that constant so both CTE similarities share a [0, 1]
-          // A description-only match scores ~0.4, i.e. below any name match
-          `  LEAST(ts_rank("videoSearch"."searchVector", "tsQuery"."query") / ${TS_RANK_NAME_MATCH}, 1) AS similarity ` +
-          '  FROM "videoSearch", "tsQuery" ' +
-          '  WHERE "videoSearch"."searchVector" @@ "tsQuery"."query"' +
-          ')'
+        `"tsQuery" AS (SELECT to_tsquery('simple', immutable_unaccent(${this.sequelize.escape(tsQueryTerms)})) AS "query")`
       )
 
-      this.joins.push('LEFT JOIN "ftsSearch" ON "video"."id" = "ftsSearch"."id"')
+      matchConditions.push(
+        '"video"."id" = ANY(ARRAY(' +
+          'SELECT "videoSearch"."videoId" FROM "videoSearch", "tsQuery" WHERE "videoSearch"."searchVector" @@ "tsQuery"."query"' +
+          '))'
+      )
     }
 
-    this.cte.push(
-      '"trigramSearch" AS (' +
-        '  SELECT "video"."id", ' +
-        `  word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("video"."name"))) AS similarity ` +
-        '  FROM "video" ' +
-        '  WHERE lower(immutable_unaccent(' + escapedSearch + ')) <% lower(immutable_unaccent("video"."name")) OR ' +
-        '        lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
-        ')'
+    matchConditions.push(
+      '"video"."id" = ANY(ARRAY(' +
+        'SELECT "videoTag"."videoId" FROM "videoTag" INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+        `WHERE lower("tag"."name") = lower(${escapedSearch})` +
+        '))'
     )
 
-    this.joins.push('LEFT JOIN "trigramSearch" ON "video"."id" = "trigramSearch"."id"')
+    this.and.push('(' + matchConditions.join(' OR ') + ')')
 
-    let base = '(' +
-      (hasFTS
-        ? '  "ftsSearch"."id" IS NOT NULL OR '
-        : '') +
-      '  "trigramSearch"."id" IS NOT NULL OR ' +
-      '  EXISTS (' +
-      '    SELECT 1 FROM "videoTag" ' +
-      '    INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-      `    WHERE lower("tag"."name") = lower(${escapedSearch}) ` +
-      '    AND "video"."id" = "videoTag"."videoId"' +
-      '  )'
+    if (isCount) return
 
-    if (validator.default.isUUID(search)) {
-      base += ` OR "video"."uuid" = ${escapedSearch}`
+    // Only rows matched by the trigram condition get the trigram similarity: exact tag and UUID matches don't add similarity
+    // Computing word_similarity once in a scalar subquery doesn't save much on broad searches: not worth the complexity
+    const trigramSimilarity = `CASE WHEN ${trigramMatch} THEN word_similarity(${searchExpr}, ${nameExpr}) ELSE 0 END`
+
+    let attribute: string
+
+    if (hasFTS) {
+      this.joins.push(
+        'LEFT JOIN "videoSearch" ON "videoSearch"."videoId" = "video"."id" ' +
+          'AND "videoSearch"."searchVector" @@ (SELECT "query" FROM "tsQuery")'
+      )
+
+      // ts_rank tops out at ~0.61 for a name-only match while word_similarity returns 1 for the same match.
+      // Normalize by that constant so both similarities share a [0, 1]
+      // A description-only match scores ~0.4, so below any name match
+      // COALESCE before LEAST, which ignores NULL arguments: a video without full text match must get 0, not 1
+      const ftsSimilarity =
+        `LEAST(COALESCE(ts_rank("videoSearch"."searchVector", (SELECT "query" FROM "tsQuery")), 0) / ${TS_RANK_NAME_MATCH}, 1)`
+
+      attribute = `GREATEST(${ftsSimilarity}, ${trigramSimilarity})`
+    } else {
+      attribute = trigramSimilarity
     }
-
-    base += ')'
-
-    this.and.push(base)
-
-    let attribute = hasFTS
-      ? 'GREATEST(COALESCE("ftsSearch"."similarity", 0), COALESCE("trigramSearch"."similarity", 0))'
-      : 'COALESCE("trigramSearch"."similarity", 0)'
 
     if (this.group) attribute = `AVG(${attribute})`
 
-    if (!isCount) {
-      // Floor instead of round, so a close match cannot tie with a full match (score of 1)
-      this.attributes.push(`FLOOR(${attribute} * ${SIMILARITY_STEPS}) as similarity`)
-    }
+    // Floor instead of round, so a close match cannot tie with a full match (score of 1)
+    this.attributes.push(`FLOOR(${attribute} * ${SIMILARITY_STEPS}) as similarity`)
   }
 
   private whereNotBlacklisted () {
-    this.and.push('"video"."id" NOT IN (SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")')
+    this.and.push('NOT EXISTS (SELECT 1 FROM "videoBlacklist" WHERE "videoBlacklist"."videoId" = "video"."id")')
   }
 
   private whereStartDate (startDate: string) {
@@ -1005,7 +1016,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.attributes.push(
         '(' +
           'CASE ' +
-          `  WHEN "video"."remote" IS TRUE THEN 0 ` + // Consider remote videos with size of 0
+          `  WHEN "video"."remote" = true THEN 0 ` + // Consider remote videos with size of 0
           '  ELSE (' +
           `    (SELECT COALESCE(SUM(size), 0) FROM "videoFile" WHERE "videoFile"."videoId" = "video"."id")` +
           '    + ' +

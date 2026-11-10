@@ -219,7 +219,7 @@ export class AccountVideoRateModel extends SequelizeModel<AccountVideoRateModel>
     const query = `SELECT "accountVideoRate".url FROM "accountVideoRate" ` +
       `INNER JOIN account ON account.id = "accountVideoRate"."accountId" ` +
       `INNER JOIN actor ON "actor"."accountId" = account."id" AND actor."serverId" IS NOT NULL ` +
-      `INNER JOIN video ON video.id = "accountVideoRate"."videoId" AND video.remote IS FALSE`
+      `INNER JOIN video ON video.id = "accountVideoRate"."videoId" AND video.remote = false`
 
     return AccountVideoRateModel.sequelize.query<{ url: string }>(query, {
       type: QueryTypes.SELECT,

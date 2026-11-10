@@ -95,6 +95,7 @@
   * Allow filtering comments feed on local videos and local comments https://github.com/Chocobozzz/PeerTube/pull/7827
   * Allow admins to filter videos by privacy in *Admin Videos Overview*
   * Display minimum duration before counting a view configured by the instance https://github.com/Chocobozzz/PeerTube/pull/7821
+  * SQL and index optimizations
 
 ### Bug fixes
 

@@ -60,14 +60,14 @@ import {
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
-  isUserVideoCategories,
-  isUserVideoLive,
   isUserEmailVerifiedValid,
   isUserNoModal,
   isUserNSFWPolicyValid,
   isUserP2PEnabledValid,
   isUserRoleValid,
+  isUserVideoCategories,
   isUserVideoLanguages,
+  isUserVideoLive,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
@@ -247,6 +247,14 @@ type WhereUserIdScopeOptions = { whereUserId?: '$userId' | '"UserModel"."id"' }
 @Table({
   tableName: 'user',
   indexes: [
+    {
+      name: 'user_lower_username',
+      fields: [ fn('lower', col('username')) ]
+    },
+    {
+      name: 'user_lower_email',
+      fields: [ fn('lower', col('email')) ]
+    },
     {
       fields: [ 'username' ],
       unique: true
@@ -1004,12 +1012,12 @@ export class UserModel extends SequelizeModel<UserModel> {
       `WHERE "account"."userId" = ${whereUserId} ${andWhere}`
 
     const webVideoFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
-      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" AND "video"."isLive" IS FALSE ' +
+      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" AND "video"."isLive" = false ' +
       videoChannelJoin
 
     const hlsFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
       'INNER JOIN "videoStreamingPlaylist" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
-      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" AND "video"."isLive" IS FALSE ' +
+      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" AND "video"."isLive" = false ' +
       videoChannelJoin
 
     const sizeSelect = onlyMaxResolution

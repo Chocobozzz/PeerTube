@@ -331,7 +331,13 @@ export class AccountModel extends SequelizeModel<AccountModel> {
           {
             model: ActorModel,
             required: true,
-            where: ActorModel.wherePreferredUsername(name)
+            // serverId filter allows PostgreSQL to use the local lower(preferredUsername) index
+            where: {
+              [Op.and]: [
+                ActorModel.wherePreferredUsername(name),
+                { serverId: null }
+              ]
+            }
           }
         ]
       }

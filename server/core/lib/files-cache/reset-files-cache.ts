@@ -22,7 +22,7 @@ export async function resetFilesCacheOfOtherStorage () {
 
   for (const table of cachedFileTables) {
     const [ , affectedCount ] = await sequelizeTypescript.query(
-      `UPDATE "${table}" SET "cached" = false WHERE "cached" IS TRUE AND "fileUrl" IS NOT NULL AND "storage" = $storage`,
+      `UPDATE "${table}" SET "cached" = false WHERE "cached" = true AND "fileUrl" IS NOT NULL AND "storage" = $storage`,
       { type: QueryTypes.UPDATE, bind: { storage: otherStorage } }
     )
 

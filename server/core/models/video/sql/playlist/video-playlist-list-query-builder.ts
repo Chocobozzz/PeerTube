@@ -132,7 +132,7 @@ export class VideoPlaylistListQueryBuilder extends AbstractListQuery {
     }
 
     if (this.options.withVideos === true) {
-      where.push(`(${this.getTotalVideosQuery()}) != 0`)
+      where.push(`EXISTS (SELECT 1 FROM "videoPlaylistElement" WHERE "videoPlaylistId" = "VideoPlaylistModel"."id")`)
     }
 
     if (this.options.search) {

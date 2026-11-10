@@ -110,6 +110,7 @@ import type {
   MVideoFull,
   MVideoId,
   MVideoImmutable,
+  MVideoOutbox,
   MVideoOwned,
   MVideoSeo,
   MVideoSummary,
@@ -408,7 +409,11 @@ export type ForAPIOptions = {
         { name: 'id', order: 'ASC' }
       ]
     },
-    { fields: [ 'channelId' ] },
+    {
+      // Channel videos are sorted by publishedAt by default (with id tie-break)
+      name: 'video_channel_id_published_at_id',
+      fields: [ 'channelId', { name: 'publishedAt', order: 'DESC' }, { name: 'id', order: 'ASC' } ]
+    },
     {
       fields: [ 'originallyPublishedAt' ],
       where: {
@@ -1050,7 +1055,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return rows.map(r => r.id)
   }
 
-  static listAllAndSharedByActorForOutbox (actorIdArg: number, start: number, count: number) {
+  // Returns partially loaded videos: only what is needed to build outbox activities
+  static listAllAndSharedByActorForOutbox (
+    actorIdArg: number,
+    start: number,
+    count: number
+  ): Promise<{ data: MVideoOutbox[], total: number }> {
     const actorId = forceNumber(actorIdArg)
 
     function getRawQuery (select: string) {
@@ -1063,33 +1073,25 @@ export class VideoModel extends SequelizeModel<VideoModel> {
         'INNER JOIN "video" AS "Video" ON "Video"."id" = "VideoShare"."videoId" ' +
         'WHERE "VideoShare"."actorId" = ' + actorId
 
-      return `(${queryVideo}) UNION (${queryVideoShare})`
+      return { queryVideo, queryVideoShare }
     }
 
     const rawQuery = getRawQuery('"Video"."id"')
     const rawCountQuery = getRawQuery('COUNT("Video"."id") as "total"')
 
+    // Outbox activities only reference the video URL: only include what is needed to build them (audience, actor, share URL)
     const query = {
       distinct: true,
       offset: start,
       limit: count,
-      order: getVideoSort('-createdAt', [ 'Tags', 'name', 'ASC' ]),
+      order: getVideoSort('-createdAt'),
       where: {
         id: {
-          [Op.in]: Sequelize.literal('(' + rawQuery + ')')
+          [Op.in]: Sequelize.literal(`((${rawQuery.queryVideo}) UNION (${rawQuery.queryVideoShare}))`)
         },
         [Op.or]: getPrivaciesForFederation()
       },
       include: [
-        {
-          attributes: [ 'filename', 'language', 'storage', 'fileUrl' ],
-          model: VideoCaptionModel.unscoped(),
-          required: false
-        },
-        {
-          model: StoryboardModel.unscoped(),
-          required: false
-        },
         {
           attributes: [ 'id', 'url' ],
           model: VideoShareModel.unscoped(),
@@ -1106,13 +1108,7 @@ export class VideoModel extends SequelizeModel<VideoModel> {
                 actorId
               }
             ]
-          },
-          include: [
-            {
-              attributes: [ 'id', 'url' ],
-              model: ActorModel.unscoped()
-            }
-          ]
+          }
         },
         {
           model: VideoChannelModel.unscoped(),
@@ -1136,34 +1132,21 @@ export class VideoModel extends SequelizeModel<VideoModel> {
               required: true
             }
           ]
-        },
-        {
-          model: VideoStreamingPlaylistModel.unscoped(),
-          required: false,
-          include: [
-            {
-              model: VideoFileModel,
-              required: false
-            }
-          ]
-        },
-        VideoLiveModel.unscoped(),
-        VideoFileModel,
-        TagModel
+        }
       ]
     }
 
     return Promise.all([
-      VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findAll(query),
-      VideoModel.sequelize.query<{ total: string }>(rawCountQuery, { type: QueryTypes.SELECT })
+      VideoModel.findAll(query),
+      // UNION ALL to not merge the 2 count rows if they have the same total
+      VideoModel.sequelize.query<{ total: string }>(
+        `(${rawCountQuery.queryVideo}) UNION ALL (${rawCountQuery.queryVideoShare})`,
+        { type: QueryTypes.SELECT }
+      )
     ]).then(([ rows, totals ]) => {
-      // totals: totalVideos + totalVideoShares
-      let totalVideos = 0
-      let totalVideoShares = 0
-      if (totals[0]) totalVideos = parseInt(totals[0].total, 10)
-      if (totals[1]) totalVideoShares = parseInt(totals[1].total, 10)
+      // Sum of the videos and video shares counts
+      const total = totals.reduce((acc, r) => acc + parseInt(r.total, 10), 0)
 
-      const total = totalVideos + totalVideoShares
       return {
         data: rows,
         total

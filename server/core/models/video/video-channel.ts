@@ -343,12 +343,12 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
   static async getChannelQuota (channelId: number) {
     const webVideoFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
       'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-      'AND "video"."isLive" IS FALSE AND "video"."channelId" = $channelId'
+      'AND "video"."isLive" = false AND "video"."channelId" = $channelId'
 
     const hlsFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
       'INNER JOIN "videoStreamingPlaylist" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
       'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" ' +
-      'AND "video"."isLive" IS FALSE AND "video"."channelId" = $channelId'
+      'AND "video"."isLive" = false AND "video"."channelId" = $channelId'
 
     const sql = 'SELECT COALESCE(SUM("size"), 0) AS "total" ' +
       'FROM (' +

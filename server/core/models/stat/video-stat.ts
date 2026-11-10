@@ -68,7 +68,7 @@ export class VideoStatModel extends SequelizeModel<VideoStatModel> {
           },
           videoId: {
             [Op.in]: literal(
-              '(SELECT "id" FROM "video" WHERE "remote" IS TRUE)'
+              '(SELECT "id" FROM "video" WHERE "remote" = true)'
             )
           }
         },

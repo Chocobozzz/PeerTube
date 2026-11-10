@@ -84,12 +84,14 @@ export enum ScopeNames {
           ],
           [
             // we don't care about this count for deleted videos, so there are not included
+            // Only number the reports of the abuse video: computing the window on the whole table is very slow
             literal(
               '(' +
                 'SELECT t.nth ' +
                 'FROM ( ' +
-                'SELECT id, "abuseId", row_number() OVER (PARTITION BY "videoId" ORDER BY "createdAt") AS nth ' +
+                'SELECT id, "abuseId", row_number() OVER (ORDER BY "createdAt") AS nth ' +
                 'FROM "videoAbuse" ' +
+                'WHERE "videoId" = (SELECT "videoId" FROM "videoAbuse" WHERE "abuseId" = "AbuseModel"."id") ' +
                 ') t ' +
                 'WHERE t."abuseId" = "AbuseModel"."id" ' +
                 ')'

@@ -64,6 +64,21 @@ const logger = createLogger()
       fields: [ 'actorId', 'targetActorId' ],
       unique: true
     },
+    // Used to count followers/following of local actors
+    {
+      name: 'actor_follow_actor_id_accepted',
+      fields: [ 'actorId' ],
+      where: {
+        state: 'accepted'
+      }
+    },
+    {
+      name: 'actor_follow_target_actor_id_accepted',
+      fields: [ 'targetActorId' ],
+      where: {
+        state: 'accepted'
+      }
+    },
     {
       fields: [ 'score' ]
     },
@@ -561,8 +576,9 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
       actorIds,
       t,
       columnUrl: 'sharedInboxUrl',
-      distinct: true
-    }).then(({ data, total }) => ({ total, data: data.map(d => d.selectionUrl) }))
+      distinct: true,
+      selectTotal: false
+    }).then(({ data }) => ({ data: data.map(d => d.selectionUrl) }))
   }
 
   static async listAcceptedFollowersForExport (targetActorId: number) {

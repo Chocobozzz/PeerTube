@@ -75,7 +75,7 @@ const sections: { [id in Exclude<PrunableObjectStorageSection, 'redundancy'>]: S
     // Live streams are ignored: only the primary process writes their files during the live
     // And it removes them if a secondary deletes the video
     query: 'SELECT 1 FROM "videoStreamingPlaylist" ' + localVideoJoin('videoStreamingPlaylist') + ' ' +
-      'WHERE "video"."isLive" IS FALSE AND (' +
+      'WHERE "video"."isLive" = false AND (' +
       '"videoStreamingPlaylist"."storage" = $storage OR EXISTS (' +
       'SELECT 1 FROM "videoFile" WHERE "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist"."id" ' +
       'AND "videoFile"."storage" = $storage' +

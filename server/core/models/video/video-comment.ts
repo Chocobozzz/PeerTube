@@ -119,7 +119,9 @@ export enum ScopeNames {
   tableName: 'videoComment',
   indexes: [
     {
-      fields: [ 'videoId' ]
+      // Comment threads of a video are sorted by createdAt (with id tie-break)
+      name: 'video_comment_video_id_created_at_id',
+      fields: [ 'videoId', { name: 'createdAt', order: 'DESC' }, { name: 'id', order: 'ASC' } ]
     },
     {
       fields: [ 'videoId', 'originCommentId' ]
@@ -760,7 +762,7 @@ export class VideoCommentModel extends SequelizeModel<VideoCommentModel> {
     const query = `SELECT "videoComment".url FROM "videoComment" ` +
       `INNER JOIN account ON account.id = "videoComment"."accountId" ` +
       `INNER JOIN actor ON actor."accountId" = "account"."id" AND actor."serverId" IS NOT NULL ` +
-      `INNER JOIN video ON video.id = "videoComment"."videoId" AND video.remote IS FALSE`
+      `INNER JOIN video ON video.id = "videoComment"."videoId" AND video.remote = false`
 
     return VideoCommentModel.sequelize.query<{ url: string }>(query, {
       type: QueryTypes.SELECT,

@@ -3,6 +3,7 @@ import { VideoChannelModel } from '../../../models/video/video-channel.js'
 import {
   MAccountAPI,
   MAccountActor,
+  MAccountAudience,
   MAccountDefault,
   MAccountFormattable,
   MAccountId,
@@ -69,6 +70,9 @@ export type MChannelActor =
 
 export type MChannelUrl = Use<'Actor', MActorUrl>
 export type MChannelAudience = Use<'Actor', MActorAudience>
+export type MChannelAccountAudience =
+  & MChannelAudience
+  & Use<'Account', MAccountAudience>
 
 // Default scope
 export type MChannelDefault =

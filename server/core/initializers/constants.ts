@@ -68,7 +68,7 @@ import { buildInstanceHost, buildRemoteHttpScheme, buildRemoteWsScheme } from '.
 
 // ---------------------------------------------------------------------------
 
-export const LAST_MIGRATION_VERSION = 1195
+export const LAST_MIGRATION_VERSION = 1200
 
 // ---------------------------------------------------------------------------
 

@@ -174,7 +174,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     } else if (this.options.onLocalVideo === false) {
       this.buildVideoJoin()
 
-      where.push('"Video"."remote" IS TRUE')
+      where.push('"Video"."remote" = true')
     }
 
     if (this.options.onPublicVideo === true) {
@@ -527,11 +527,11 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
 
   private getHeldForReviewWhere (commentTableName: string) {
     if (this.options.heldForReview === true) {
-      return [ `"${commentTableName}"."heldForReview" IS TRUE` ]
+      return [ `"${commentTableName}"."heldForReview" = true` ]
     }
 
     if (this.options.heldForReview === false) {
-      const base = `"${commentTableName}"."heldForReview" IS FALSE`
+      const base = `"${commentTableName}"."heldForReview" = false`
 
       if (this.options.heldForReviewAccountIdException) {
         this.replacements.heldForReviewAccountIdException = this.options.heldForReviewAccountIdException

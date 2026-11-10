@@ -579,8 +579,11 @@ export class ActorModel extends SequelizeModel<ActorModel> {
             url
           },
           {
-            serverId,
-            preferredUsername
+            // Use lower() to match the unique (lower(preferredUsername), serverId) index
+            [Op.and]: [
+              { serverId },
+              ActorModel.wherePreferredUsername(preferredUsername)
+            ]
           }
         ]
       },
@@ -597,6 +600,9 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     transaction?: Transaction
   }) {
     const { transaction, ofId, type, by } = options
+
+    // The number of accepted follows did not change
+    if (!by) return
 
     const sanitizedOfId = forceNumber(ofId)
     const where = { id: sanitizedOfId }
@@ -617,8 +623,6 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     // Remote actor where we don't store all the actor follows
     // So we just increment the counter
     if (actor.serverId) {
-      if (!by) return
-
       return ActorModel.increment(columnToUpdate, {
         by,
         where,

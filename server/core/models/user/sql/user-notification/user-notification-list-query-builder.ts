@@ -21,9 +21,9 @@ export class UserNotificationListQueryBuilder extends AbstractListQuery {
     this.replacements.userId = this.options.userId
 
     if (this.options.unread === true) {
-      this.subQueryWhere += 'AND "UserNotificationModel"."read" IS FALSE '
+      this.subQueryWhere += 'AND "UserNotificationModel"."read" = false '
     } else if (this.options.unread === false) {
-      this.subQueryWhere += 'AND "UserNotificationModel"."read" IS TRUE '
+      this.subQueryWhere += 'AND "UserNotificationModel"."read" = true '
     }
 
     if (this.options.typeOneOf) {

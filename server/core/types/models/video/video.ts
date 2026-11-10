@@ -9,7 +9,9 @@ import { MTag } from './tag.js'
 import { MThumbnail } from './thumbnail.js'
 import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist.js'
 import { MVideoCaptionLanguage, MVideoCaptionLanguageUrl } from './video-caption.js'
+import { MVideoShare } from './video-share.js'
 import {
+  MChannelAccountAudience,
   MChannelAccountDefault,
   MChannelAccountIdUrl,
   MChannelAccountLight,
@@ -225,6 +227,12 @@ export type MVideoFull =
 // ############################################################################
 
 // API
+
+// Only what is needed to build outbox activities, that reference the video by its URL
+export type MVideoOutbox =
+  & Pick<MVideo, 'id' | 'url' | 'privacy' | 'createdAt'>
+  & Use<'VideoChannel', MChannelAccountAudience>
+  & Use<'VideoShares', Pick<MVideoShare, 'id' | 'url'>[]>
 
 export type MVideoAP =
   & MVideo

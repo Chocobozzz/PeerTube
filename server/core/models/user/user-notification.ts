@@ -28,7 +28,17 @@ import { UserModel } from './user.js'
   tableName: 'userNotification',
   indexes: [
     {
-      fields: [ 'userId' ]
+      // Notification list is sorted by createdAt (with id tie-break)
+      name: 'user_notification_user_id_created_at_id',
+      fields: [ 'userId', { name: 'createdAt', order: 'DESC' }, { name: 'id', order: 'ASC' } ]
+    },
+    {
+      // Unread notifications count & list
+      name: 'user_notification_user_id_created_at_id_unread',
+      fields: [ 'userId', { name: 'createdAt', order: 'DESC' }, { name: 'id', order: 'ASC' } ],
+      where: {
+        read: false
+      }
     },
     {
       fields: [ 'videoId' ],
@@ -417,14 +427,6 @@ export class UserNotificationModel extends SequelizeModel<UserNotificationModel>
       ),
 
       // Remove notifications from muted accounts that followed ours
-      buildAccountWhereQuery(
-        `SELECT "userNotification"."id" FROM "userNotification" ` +
-          `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +
-          `INNER JOIN actor ON actor.id = "actorFollow"."actorId" ` +
-          `INNER JOIN account ON account."id" = actor."accountId" `
-      ),
-
-      // Remove notifications from muted accounts that commented something
       buildAccountWhereQuery(
         `SELECT "userNotification"."id" FROM "userNotification" ` +
           `INNER JOIN "actorFollow" ON "actorFollow".id = "userNotification"."actorFollowId" ` +

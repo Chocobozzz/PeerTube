@@ -14,6 +14,7 @@ import { Transaction } from 'sequelize'
 import { createLogger } from '../../../helpers/logger.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import {
+  MActorAudience,
   MActorLight,
   MCommentOwnerVideoReply,
   MLocalVideoViewerWithWatchSections,
@@ -199,7 +200,7 @@ export async function sendCreateVideoCommentIfNeeded (comment: MCommentOwnerVide
 
 export function buildCreateActivity<T extends ActivityCreateObject> (
   url: string,
-  byActor: MActorLight,
+  byActor: MActorAudience,
   object: T,
   audience?: ActivityAudience
 ): ActivityCreate<T> {

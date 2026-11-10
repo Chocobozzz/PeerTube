@@ -68,6 +68,11 @@ enum ScopeNames {
       fields: [ 'dependsOnRunnerJobId' ]
     },
     {
+      // Stalled jobs watchdog
+      name: 'runner_job_state_type_updated_at',
+      fields: [ 'state', 'type', 'updatedAt' ]
+    },
+    {
       // Polled by runners to list available jobs
       name: 'runner_job_pending_priority',
       fields: [ 'priority', 'id' ],

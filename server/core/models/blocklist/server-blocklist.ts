@@ -16,6 +16,15 @@ import { BlocklistSubscriptionModel } from './blocklist-subscription.js'
     },
     {
       fields: [ 'targetServerId' ]
+    },
+    {
+      // Count/delete entries of a blocklist subscription
+      fields: [ 'blocklistSubscriptionId' ],
+      where: {
+        blocklistSubscriptionId: {
+          [Op.ne]: null
+        }
+      }
     }
   ]
 })

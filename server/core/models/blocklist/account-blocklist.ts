@@ -19,6 +19,15 @@ import { AccountModel } from '../account/account.js'
     },
     {
       fields: [ 'targetAccountId' ]
+    },
+    {
+      // Count/delete entries of a blocklist subscription
+      fields: [ 'blocklistSubscriptionId' ],
+      where: {
+        blocklistSubscriptionId: {
+          [Op.ne]: null
+        }
+      }
     }
   ]
 })

@@ -195,7 +195,7 @@ export class VideoShareModel extends SequelizeModel<VideoShareModel> {
   static listRemoteShareUrlsOfLocalVideos () {
     const query = `SELECT "videoShare".url FROM "videoShare" ` +
       `INNER JOIN actor ON actor.id = "videoShare"."actorId" AND actor."serverId" IS NOT NULL ` +
-      `INNER JOIN video ON video.id = "videoShare"."videoId" AND video.remote IS FALSE`
+      `INNER JOIN video ON video.id = "videoShare"."videoId" AND video.remote = false`
 
     return VideoShareModel.sequelize.query<{ url: string }>(query, {
       type: QueryTypes.SELECT,

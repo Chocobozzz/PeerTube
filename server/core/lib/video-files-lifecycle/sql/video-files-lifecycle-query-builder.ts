@@ -22,7 +22,7 @@ export class VideoFilesLifecycleQueryBuilder extends AbstractRunQuery {
       `"video"."remote" = false`,
 
       // Files of a live are handled by the live manager
-      `"video"."isLive" IS FALSE`,
+      `"video"."isLive" = false`,
 
       // Don't interfere with a video that is being transcoded, moved, imported or edited
       `"video"."state" = :lifecyclePublishedState`,

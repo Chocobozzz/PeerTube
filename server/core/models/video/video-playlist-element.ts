@@ -41,7 +41,9 @@ import { ForAPIOptions, VideoModel, ScopeNames as VideoScopeNames } from './vide
   tableName: 'videoPlaylistElement',
   indexes: [
     {
-      fields: [ 'videoPlaylistId' ]
+      // Playlist elements are sorted by position (with id tie-break)
+      name: 'video_playlist_element_video_playlist_id_position_id',
+      fields: [ 'videoPlaylistId', 'position', 'id' ]
     },
     {
       fields: [ 'videoId' ]
