@@ -14,8 +14,11 @@
         <source>Slide <x id="INTERPOLATION" equiv-text="get wrap("/> of <x id="INTERPOLATION_1" equiv-text=".value; }"/> </source>
         <target state="translated">Prikaz <x id="INTERPOLATION" equiv-text="get wrap("/> od <x id="INTERPOLATION_1" equiv-text=".value; }"/> </target>
         <note priority="1" from="description">Currently selected slide number read by screen reader</note>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/carousel/carousel.ts</context><context context-type="linenumber">608</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/carousel/carousel.ts</context>
+          <context context-type="linenumber">608</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
         <target state="translated">Prejšnje</target>
@@ -35,15 +38,27 @@
       <trans-unit id="ngb.datepicker.select-month" datatype="html" xml:space="preserve">
         <source>Select month</source>
         <target state="translated">Izberite mesec</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">52</context></context-group><context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">52</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html" xml:space="preserve">
         <source>Select year</source>
         <target state="translated">Izberite leto</target>
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">52</context></context-group><context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context><context context-type="linenumber">52</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/datepicker/datepicker-navigation-select.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
         <target state="translated">Prejšnji mesec</target>
@@ -71,23 +86,35 @@
       <trans-unit id="ngb.pagination.first" datatype="html" xml:space="preserve">
         <source>««</source>
         <target state="translated">««</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">277</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="linenumber">277</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html" xml:space="preserve">
         <source>«</source>
         <target state="translated">«</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">277</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="linenumber">277</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html" xml:space="preserve">
         <source>»</source>
         <target state="translated">»</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">277</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="linenumber">277</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html" xml:space="preserve">
         <source>»»</source>
         <target state="translated">»»</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context><context context-type="linenumber">277</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/pagination/pagination.ts</context>
+          <context context-type="linenumber">277</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
         <target state="translated">Prva</target>
@@ -121,9 +148,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
         <target state="new">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
@@ -167,23 +192,35 @@
       <trans-unit id="ngb.timepicker.increment-hours" datatype="html" xml:space="preserve">
         <source>Increment hours</source>
         <target state="translated">Povečaj ure</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">442</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">442</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-hours" datatype="html" xml:space="preserve">
         <source>Decrement hours</source>
         <target state="translated">Zmanjšaj ure</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">442</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">442</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes" datatype="html" xml:space="preserve">
         <source>Increment minutes</source>
         <target state="translated">Povečaj minute</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">442</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">442</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes" datatype="html" xml:space="preserve">
         <source>Decrement minutes</source>
         <target state="translated">Zmanjšaj minute</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">442</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">442</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.SS" datatype="html">
         <source>SS</source>
         <target state="translated">SS</target>
@@ -203,17 +240,21 @@
       <trans-unit id="ngb.timepicker.increment-seconds" datatype="html" xml:space="preserve">
         <source>Increment seconds</source>
         <target state="translated">Povečaj sekunde</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">442</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">442</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds" datatype="html" xml:space="preserve">
         <source>Decrement seconds</source>
         <target state="translated">Zmanjšaj sekunde</target>
-        
-      <context-group purpose="location"><context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context><context context-type="linenumber">442</context></context-group></trans-unit>
+        <context-group purpose="location">
+          <context context-type="sourcefile">../node_modules/.pnpm/@ng-bootstrap+ng-bootstrap@21.0.0_@angular+common@22.2.4_@angular+core@22.2.4_@angular+_6c9d31dc825009b85b1a6e126f661172/node_modules/src/timepicker/timepicker.ts</context>
+          <context context-type="linenumber">442</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source>
-          <x id="INTERPOLATION"/>
-        </source>
+        <source><x id="INTERPOLATION"/> </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -855,7 +896,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="7156954400387104530" datatype="html">
-        <source> Do you still want to run transcoding?</source>
+        <source>Do you still want to run transcoding?</source>
         <target state="new"> Do you still want to run transcoding?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
@@ -864,14 +905,14 @@
       </trans-unit>
       <trans-unit id="4729525992281375617" datatype="html">
         <source>PeerTube considers {count, plural, =1 {1 video is} other {<x id="count"/> videos are}} already being transcoded.</source>
-        <target state="new">PeerTube considers {count, plural, =1 {1 video is} other {<x id="count"/> videos are}} already being transcoded.</target>
+        <target state="translated">PeerTube upošteva, da se {count, plural, one {{count} video že transkodira} two {<x id="count"/> {count} videa že transkodirata} few {<x id="count"/> {count} videi že transkodirajo} other {<x id="count"/> {count} videov že transkodira}}.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">497</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8286107468499221380" datatype="html">
-        <source> If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.</source>
+        <source>If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.</source>
         <target state="new"> If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
@@ -879,7 +920,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="76759851359794182" datatype="html">
-        <source> Otherwise they will be skipped. Do you want to force transcoding?</source>
+        <source>Otherwise they will be skipped. Do you want to force transcoding?</source>
         <target state="new"> Otherwise they will be skipped. Do you want to force transcoding?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
@@ -3344,8 +3385,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
-The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
         <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
 The link will expire within 1 hour.</target>
         <context-group purpose="location">
@@ -5804,7 +5844,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="7988741822114586725" datatype="html">
-        <source> Help viewers understand whether this video has been generated by AI. Only generated content counts: AI tools that improve sound, picture or subtitles do not. </source>
+        <source>Help viewers understand whether this video has been generated by AI. Only generated content counts: AI tools that improve sound, picture or subtitles do not.</source>
         <target state="new"> Help viewers understand whether this video has been generated by AI. Only generated content counts: AI tools that improve sound, picture or subtitles do not. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
@@ -5812,7 +5852,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="498973779180783414" datatype="html">
-        <source> Tell viewers whether this video promotes products, services or brands. </source>
+        <source>Tell viewers whether this video promotes products, services or brands.</source>
         <target state="new"> Tell viewers whether this video promotes products, services or brands. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
@@ -6174,7 +6214,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="4784303436041135088" datatype="html">
-        <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</source>
+        <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</source>
         <target state="new">Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
@@ -7012,7 +7052,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="4115211950830019481" datatype="html">
-        <source> The use of AI is declared by video creators. Other platforms may not provide this information. </source>
+        <source>The use of AI is declared by video creators. Other platforms may not provide this information.</source>
         <target state="new"> The use of AI is declared by video creators. Other platforms may not provide this information. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
@@ -12899,7 +12939,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="4428885966259390062" datatype="html">
-        <source> Translate your platform information for users browsing the interface in another language. Empty fields fall back to the information above. </source>
+        <source>Translate your platform information for users browsing the interface in another language. Empty fields fall back to the information above.</source>
         <target state="new"> Translate your platform information for users browsing the interface in another language. Empty fields fall back to the information above. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
@@ -14963,13 +15003,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="7396819983420487866" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
-  color: red;
-  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
-  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
         <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
   color: red;
   <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
@@ -17516,9 +17550,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source>
-          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
-        </source>
+        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
         <target state="new">
           <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/>
         </target>
@@ -18558,7 +18590,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="8660932609413672707" datatype="html">
-        <source> Update your preferences in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;ai-content-settings&quot; (click)=&quot;onAccountSettingsClick($event)&quot;               &gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
+        <source>Update your preferences in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;ai-content-settings&quot; (click)=&quot;onAccountSettingsClick($event)&quot;               &gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
         <target state="new"> Update your preferences in <x id="START_LINK" ctype="x-a" equiv-text="&lt;a routerLink=&quot;/my-account/settings&quot; fragment=&quot;ai-content-settings&quot; (click)=&quot;onAccountSettingsClick($event)&quot;               &gt;"/>your settings<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
@@ -24676,8 +24708,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
-Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
         <context-group purpose="location">
@@ -25122,10 +25153,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
-          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
         <target state="new">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/>
@@ -27910,7 +27938,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="8379380784906714196" datatype="html">
-        <source> Do you still want to run transcription?</source>
+        <source>Do you still want to run transcription?</source>
         <target state="new"> Do you still want to run transcription?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
@@ -27926,7 +27954,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="2831315428666739691" datatype="html">
-        <source> If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcription on these videos.</source>
+        <source>If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcription on these videos.</source>
         <target state="new"> If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcription on these videos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
@@ -27934,7 +27962,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="2147574738360566548" datatype="html">
-        <source> Otherwise they will be skipped. Do you want to force transcription?</source>
+        <source>Otherwise they will be skipped. Do you want to force transcription?</source>
         <target state="new"> Otherwise they will be skipped. Do you want to force transcription?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
@@ -30852,9 +30880,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source>
-          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
-        </source>
+        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
         <target state="new">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>
