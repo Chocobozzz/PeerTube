@@ -90,7 +90,7 @@ videosRouter.use('/', videoEmbedPrivacyRouter)
 videosRouter.get('/categories', openapiOperationDoc({ operationId: 'getCategories' }), listVideoCategories)
 videosRouter.get('/licences', openapiOperationDoc({ operationId: 'getLicences' }), listVideoLicences)
 videosRouter.get('/languages', openapiOperationDoc({ operationId: 'getLanguages' }), videoLanguagesScopeValidator, listVideoLanguages)
-videosRouter.get('/privacies', openapiOperationDoc({ operationId: 'getPrivacies' }), listVideoPrivacies)
+videosRouter.get('/privacies', openapiOperationDoc({ operationId: 'getVideoPrivacyPolicies' }), listVideoPrivacies)
 
 videosRouter.get(
   '/',

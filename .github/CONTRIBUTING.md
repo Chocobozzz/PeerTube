@@ -32,11 +32,12 @@ You can update it by writing markdown files in the following repository: https:/
 
 ### REST API documentation
 
-The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference.html) is generated from `support/doc/api/openapi.yaml` file.
-To quickly get a preview of your changes, you can generate the documentation *on the fly* using the following command:
+The [REST API documentation](https://docs.joinpeertube.org/api-rest-reference/api.html) is generated from `support/doc/api/openapi.yaml` file.
+To quickly get a preview of your changes, you can generate the documentation using [Sourcey](https://github.com/sourcey/sourcey) and serve it locally:
 
 ```sh
-npx @redocly/cli preview-docs ./support/doc/api/openapi.yaml
+npx sourcey build ./support/doc/api/openapi.yaml --output /tmp/peertube-rest-api-doc
+npx serve /tmp/peertube-rest-api-doc
 ```
 
 Some hints:

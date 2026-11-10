@@ -4,7 +4,7 @@
 
 ## Remote PeerTube CLI
 
-`peertube-cli` is a tool that communicates with a PeerTube instance using its [REST API](https://docs.joinpeertube.org/api-rest-reference.html).
+`peertube-cli` is a tool that communicates with a PeerTube instance using its [REST API](https://docs.joinpeertube.org/api-rest-reference/api.html).
 It can be launched from a remote server/computer to easily upload videos, manage plugins, redundancies etc.
 
 ### Installation

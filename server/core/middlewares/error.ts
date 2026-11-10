@@ -24,7 +24,7 @@ function apiFailMiddleware (req: express.Request, res: express.Response, next: e
       detail: message,
 
       type: type
-        ? `https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/${type}`
+        ? `https://docs.joinpeertube.org/api-rest-reference/api.html#${type.replace(/_/g, '-')}`
         : undefined
     }, extension)
 

@@ -5,7 +5,8 @@ function openapiOperationDoc (options: {
   operationId?: string
 }) {
   return (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.locals.docUrl = options.url || 'https://docs.joinpeertube.org/api-rest-reference.html#operation/' + options.operationId
+    // Permanent address of the operation in the REST API reference (lowercased operationId)
+    res.locals.docUrl = options.url || 'https://docs.joinpeertube.org/api-rest-reference/api/operations/' + options.operationId.toLowerCase() + '.html'
 
     if (next) return next()
   }

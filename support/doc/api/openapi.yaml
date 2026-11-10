@@ -40,7 +40,7 @@ info:
 
     {
       "detail": "Video not found",
-      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference/api/operations/getvideo.html",
       "status": 404,
       "title": "Not Found",
       "type": "about:blank"
@@ -57,10 +57,10 @@ info:
 
     {
       "detail": "Cannot get this video regarding follow constraints",
-      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference/api/operations/getvideo.html",
       "status": 403,
       "title": "Forbidden",
-      "type": "https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/does_not_respect_follow_constraints"
+      "type": "https://docs.joinpeertube.org/api-rest-reference/api.html#does-not-respect-follow-constraints"
     }
     ```
 
@@ -76,7 +76,7 @@ info:
 
     {
       "detail": "Incorrect request parameters: id",
-      "docs": "https://docs.joinpeertube.org/api-rest-reference.html#operation/getVideo",
+      "docs": "https://docs.joinpeertube.org/api-rest-reference/api/operations/getvideo.html",
       "instance": "/api/v1/videos/9c9de5e8-0a1e-484a-b099-e80766180",
       "invalid-params": {
         "id": {
@@ -297,7 +297,7 @@ info:
 
     In addition, all routes serving ActivityPub are CORS-enabled for all origins.
 externalDocs:
-  url: https://docs.joinpeertube.org/api-rest-reference.html
+  url: https://docs.joinpeertube.org/api-rest-reference/api.html
 tags:
   - name: Register
     description: |
@@ -364,7 +364,7 @@ tags:
       Redundancy is part of the inter-server solidarity that PeerTube fosters.
       Manage the list of instances you wish to help by seeding their videos according
       to the policy of video selection of your choice. Note that you have a similar functionality
-      to mirror individual videos, see [video mirroring](https://docs.joinpeertube.org/api-rest-reference/api.html#tag-video-mirroring).
+      to mirror individual videos, see [video mirroring](https://docs.joinpeertube.org/api-rest-reference/api/video-mirroring.html).
     externalDocs:
       url: https://docs.joinpeertube.org/admin/following-instances#instances-redundancy
   - name: Plugins
@@ -11596,7 +11596,7 @@ components:
             URI identifying the error type. `about:blank` when the error has no specific type.
             Otherwise it links to the corresponding section of the [Errors](https://docs.joinpeertube.org/api-rest-reference/api.html#errors) documentation;
             the type name itself is also available in `code`.
-          example: 'https://docs.joinpeertube.org/api-rest-reference.html#section/Errors/video_requires_password'
+          example: 'https://docs.joinpeertube.org/api-rest-reference/api.html#video-requires-password'
         detail:
           type: string
           example: 'Please provide a password to access this password protected video'
