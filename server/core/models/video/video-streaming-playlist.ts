@@ -8,9 +8,9 @@ import {
   type VideoStreamingPlaylistType_Type
 } from '@peertube/peertube-models'
 import { generateP2PMediaLoaderHash } from '@peertube/peertube-node-utils'
+import { runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { runTransaction } from '@server/helpers/database-utils.js'
 import {
   buildObjectStorageHLSPrivateFileUrl,
   buildObjectStoragePublicFileUrl,
@@ -42,9 +42,6 @@ const logger = createLogger()
 @Table({
   tableName: 'videoStreamingPlaylist',
   indexes: [
-    {
-      fields: [ 'videoId' ]
-    },
     {
       fields: [ 'videoId', 'type' ],
       unique: true

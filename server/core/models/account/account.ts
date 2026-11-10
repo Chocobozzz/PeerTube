@@ -42,7 +42,7 @@ import { VideoAutomaticTagModel } from '../automatic-tag/video-automatic-tag.js'
 import { AccountBlocklistModel } from '../blocklist/account-blocklist.js'
 import { ServerBlocklistModel } from '../blocklist/server-blocklist.js'
 import { ServerModel, serverSummaryAttributes } from '../server/server.js'
-import { SequelizeModel, buildSQLAttributes, getSort, throwIfNotValid } from '../shared/index.js'
+import { SequelizeModel, buildSQLAttributes, buildTrigramSearchIndex, getSort, throwIfNotValid } from '../shared/index.js'
 import { UserModel } from '../user/user.js'
 import { VideoChannelCollaboratorModel } from '../video/video-channel-collaborator.js'
 import { VideoChannelModel } from '../video/video-channel.js'
@@ -140,6 +140,8 @@ export type SummaryOptions = {
 @Table({
   tableName: 'account',
   indexes: [
+    buildTrigramSearchIndex('account_name_trigram', 'name'),
+
     {
       fields: [ 'applicationId' ]
     },

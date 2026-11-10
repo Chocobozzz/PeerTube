@@ -66,6 +66,14 @@ enum ScopeNames {
     },
     {
       fields: [ 'dependsOnRunnerJobId' ]
+    },
+    {
+      // Polled by runners to list available jobs
+      name: 'runner_job_pending_priority',
+      fields: [ 'priority', 'id' ],
+      where: {
+        state: RunnerJobState.PENDING
+      }
     }
   ]
 })

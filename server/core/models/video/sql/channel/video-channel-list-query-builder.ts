@@ -114,8 +114,6 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
     }
 
     if (this.options.search) {
-      this.buildAccountJoin()
-
       const escapedSearch = this.sequelize.escape(this.options.search)
       const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
 
@@ -123,11 +121,17 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
         `word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("VideoChannelModel"."name"))) as similarity`
       )
 
+      // Use a UNION instead of an OR across the channel and account tables,
+      // so each branch can use the trigram index of its table
       where.push(
-        `(` +
-          `lower(immutable_unaccent(${escapedSearch})) <% lower(immutable_unaccent("VideoChannelModel"."name")) OR ` +
-          `lower(immutable_unaccent("VideoChannelModel"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch})) OR ` +
-          `lower(immutable_unaccent("Account"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch}))` +
+        `"VideoChannelModel"."id" IN (` +
+          `SELECT "videoChannel"."id" FROM "videoChannel" ` +
+          `WHERE lower(immutable_unaccent(${escapedSearch})) <% lower(immutable_unaccent("videoChannel"."name")) ` +
+          `OR lower(immutable_unaccent("videoChannel"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch})) ` +
+          `UNION ` +
+          `SELECT "videoChannel"."id" FROM "videoChannel" ` +
+          `INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ` +
+          `WHERE lower(immutable_unaccent("account"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch}))` +
           `)`
       )
     } else {

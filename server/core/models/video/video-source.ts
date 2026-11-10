@@ -16,9 +16,6 @@ import { VideoModel } from './video.js'
       fields: [ 'videoId' ]
     },
     {
-      fields: [ { name: 'createdAt', order: 'DESC' } ]
-    },
-    {
       fields: [ 'keptOriginalFilename' ],
       unique: true
     }
