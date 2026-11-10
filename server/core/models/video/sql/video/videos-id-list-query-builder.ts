@@ -288,7 +288,10 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       this.whereChannelOneOf(options.channelNameOneOf)
     }
 
-    if (options.displayOnlyForFollower) {
+    // Every local video is displayed when the follower also accepts local videos: skip the costly follow constraint
+    const followConstraintIsNoop = options.isLocal === true && options.displayOnlyForFollower?.orLocalVideos === true
+
+    if (options.displayOnlyForFollower && !followConstraintIsNoop) {
       this.whereFollowerActorId({ ...options.displayOnlyForFollower, isCount: options.isCount === true, sortColumn })
     }
 
@@ -546,9 +549,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
   }
 
   private whereLocal (isLocal: boolean) {
-    const isRemote = isLocal ? 'FALSE' : 'TRUE'
+    const isRemote = isLocal ? 'false' : 'true'
 
-    this.and.push('"video"."remote" IS ' + isRemote)
+    this.and.push('"video"."remote" = ' + isRemote)
   }
 
   private whereHost (host: string) {
@@ -634,9 +637,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     } else {
       this.joinChannel()
 
-      let query = ''
-
-      query = '(' +
+      // PostgreSQL evaluates OR operands in order: check the cheap local condition first to skip the EXISTS subquery for local videos
+      const query = '(' +
+        (options.orLocalVideos ? '"video"."remote" = false OR ' : '') +
         '  EXISTS (' + // Videos shared by actors (instances, channels) we follow
         '    SELECT 1 FROM "videoShare" ' +
         '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
@@ -653,13 +656,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
         '    AND "actorFollow"."actorId" = :followerActorId ' +
         '    AND "actorFollow"."state" = \'accepted\'' +
         '    LIMIT 1' +
-        '  )'
+        '  )' +
+        ')'
 
-      if (options.orLocalVideos) {
-        query += '  OR "video"."remote" = false'
-      }
-
-      query += ')'
       this.and.push(query)
     }
 
