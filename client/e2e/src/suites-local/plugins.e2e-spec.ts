@@ -36,7 +36,7 @@ describe('Plugins', () => {
 
     await adminPluginPage.navigateToPluginSearch()
     await adminPluginPage.search('hello-world')
-    await adminPluginPage.installHelloWorld()
+    await adminPluginPage.installHelloWorld(loginPage.getRootPassword())
     await browser.refresh()
   })
 

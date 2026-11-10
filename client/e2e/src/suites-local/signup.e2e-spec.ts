@@ -42,16 +42,18 @@ async function registerFromApp (options: {
 
 // The mobile app message is displayed in the header for mobile user agents with a mobile screen size
 async function withMobileBrowser (userAgent: string, fn: () => Promise<void>) {
-  const windowSize = await browser.getWindowSize()
+  const context = await browser.getWindowHandle()
 
   const restoreUserAgent = await browser.emulate('userAgent', userAgent)
-  await browser.setWindowSize(400, 900)
+
+  // Set the viewport instead of the window size: Firefox doesn't support windows smaller than 500px
+  await browser.browsingContextSetViewport({ context, viewport: { width: 400, height: 900 } })
 
   try {
     await fn()
   } finally {
     await restoreUserAgent()
-    await browser.setWindowSize(windowSize.width, windowSize.height)
+    await browser.browsingContextSetViewport({ context, viewport: null })
   }
 }
 

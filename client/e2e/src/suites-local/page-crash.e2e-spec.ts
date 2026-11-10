@@ -82,8 +82,25 @@ describe('Page crash', () => {
 
           await selectCustomSelect('language', language)
 
+          // The client reloads the page to apply the new language: mark the current page to detect the reload
+          await browser.execute(() => {
+            (window as any).beforeLanguageChange = true
+          })
+
           await $('my-user-interface-settings .primary-button').waitForClickable()
           await $('my-user-interface-settings .primary-button').click()
+
+          // Taking a screenshot in the middle of the reload hangs the browser, so wait for the new page
+          await browser.waitUntil(async () => {
+            try {
+              const reloaded = await browser.execute(() => (window as any).beforeLanguageChange !== true)
+              if (!reloaded) return false
+
+              return await $('my-user-interface-settings').isDisplayed()
+            } catch {
+              return false
+            }
+          }, { timeout: 20000 })
         })
 
         it('Should upload and watch a video', async function () {

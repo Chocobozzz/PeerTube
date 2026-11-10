@@ -1,7 +1,6 @@
 import { browserSleep, go } from '../utils'
 
 export class AdminPluginPage {
-
   async navigateToPluginSearch () {
     await go('/admin/settings/plugins/search')
 
@@ -17,10 +16,14 @@ export class AdminPluginPage {
     await browserSleep(1000)
   }
 
-  async installHelloWorld () {
-    $('.plugin-name=hello-world').waitForDisplayed()
+  async installHelloWorld (password: string) {
+    await $('.plugin-name=hello-world').waitForDisplayed()
 
     await $('.card-body my-button[icon=cloud-download]').click()
+
+    const passwordInput = $('.modal-content #confirmInput')
+    await passwordInput.waitForDisplayed()
+    await passwordInput.setValue(password)
 
     const submitModalButton = $('.modal-content input[type=submit]')
     await submitModalButton.waitForClickable()

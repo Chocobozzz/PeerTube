@@ -14,7 +14,7 @@ import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { NgbAccordionDirective, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { getCompleteLocale, getExternalAuthHref } from '@peertube/peertube-core-utils'
 import { RegisteredExternalAuthConfig, ServerConfig, ServerErrorCode } from '@peertube/peertube-models'
-import { of, switchMap } from 'rxjs'
+import { first, of, switchMap } from 'rxjs'
 import { environment } from '../../environments/environment'
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
 import { InstanceBannerComponent } from '../shared/shared-instance/instance-banner.component'
@@ -176,7 +176,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
     this.authService.login(options)
       .pipe(
-        switchMap(() => this.authService.userInformationLoaded),
+        // userInformationLoaded emits on every user refresh: only redirect once after the login
+        switchMap(() => this.authService.userInformationLoaded.pipe(first())),
         switchMap(() => this.updateUserLanguageIfNeeded())
       )
       .subscribe({
@@ -220,7 +221,8 @@ The link will expire within 1 hour.`
 
     this.authService.login({ username, password: null, token })
       .pipe(
-        switchMap(() => this.authService.userInformationLoaded),
+        // userInformationLoaded emits on every user refresh: only redirect once after the login
+        switchMap(() => this.authService.userInformationLoaded.pipe(first())),
         switchMap(() => this.updateUserLanguageIfNeeded())
       )
       .subscribe({
