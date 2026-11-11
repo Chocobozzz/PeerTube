@@ -1807,7 +1807,7 @@
       </trans-unit>
       <trans-unit id="2085611136494552870" datatype="html" xml:space="preserve">
         <source>Not set</source>
-        <target state="translated">Ej angivet</target>
+        <target state="translated">Ej konfigurerat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">233</context>
@@ -7024,7 +7024,7 @@
       </trans-unit>
       <trans-unit id="5987505270202736232" datatype="html">
         <source>Containing AI-generated content</source>
-        <target state="translated">Innehåller AI-genererat innehåll</target>
+        <target state="translated">Har AI-genererat innehåll</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
           <context context-type="linenumber">16</context>
@@ -12740,7 +12740,7 @@
       </trans-unit>
       <trans-unit id="5310287618682440004" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> publicly shares <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/api/v1/server/blocklist/public-log&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>its blocklist<x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;external-link&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> tillgängliggör <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/api/v1/server/blocklist/public-log&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>sin blockeringslista för instanser <x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;external-link&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> . </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> tillgängliggör <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/api/v1/server/blocklist/public-log&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>sin blockeringslista för instanser<x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;external-link&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> . </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-moderation.component.html</context>
           <context context-type="linenumber">22,24</context>
@@ -18789,7 +18789,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6932827116419207972" datatype="html">
         <source>videos containing AI-generated content</source>
-        <target state="translated">videor som innehåller AI-genererat innehåll</target>
+        <target state="translated">videor som har AI-genererat innehåll</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">426</context>
@@ -21091,7 +21091,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6826695322343439784" datatype="html">
         <source>Contains AI-generated content</source>
-        <target state="translated">Innehåller AI-genererat innehåll</target>
+        <target state="translated">Har AI-genererat innehåll</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/server/server.service.ts</context>
           <context context-type="linenumber">195</context>
@@ -24265,7 +24265,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1409494252899167616" datatype="html">
         <source>Set new end to current player time</source>
-        <target state="new">Set new end to current player time</target>
+        <target state="translated">Ställ in tiden för ”nytt slut” till den aktuella spelares tid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">49,50</context>
@@ -24381,7 +24381,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4940262541006217757" datatype="html">
         <source>Set start of segment <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> to current player time</source>
-        <target state="new">Set start of segment <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> to current player time</target>
+        <target state="translated">Ställ in segmentets starttid <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> till aktuell speltid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">138,139</context>
@@ -24401,7 +24401,7 @@ color: red;
       </trans-unit>
       <trans-unit id="43307321701415637" datatype="html">
         <source>Set end of segment <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> to current player time</source>
-        <target state="new">Set end of segment <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> to current player time</target>
+        <target state="translated">Ställ in segmentets slut <x id="INTERPOLATION" equiv-text="{{ i + 1 }}"/> till aktuell speltid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">157,158</context>
@@ -24485,7 +24485,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6572051274923971959" datatype="html">
         <source>Are you sure you want to save the result of studio tasks as a new video?</source>
-        <target state="new">Are you sure you want to save the result of studio tasks as a new video?</target>
+        <target state="translated">Är du säker på att du vill spara resultatet av studiouppgifterna som en ny video?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">445</context>
@@ -24493,7 +24493,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8453874206617267843" datatype="html">
         <source>The current video will &lt;strong&gt;not&lt;/strong&gt; be modified.</source>
-        <target state="new">The current video will &lt;strong&gt;not&lt;/strong&gt; be modified.</target>
+        <target state="translated">Den aktuella videon kommer &lt;strong&gt;inte&lt;/strong&gt; ändras.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">448</context>
@@ -24501,7 +24501,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8643899971719109269" datatype="html">
         <source>A new private video will be created in the same channel.</source>
-        <target state="new">A new private video will be created in the same channel.</target>
+        <target state="translated">En ny privat video kommer att skapas i samma kanal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">449</context>
@@ -24509,7 +24509,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4641226239245439868" datatype="html">
         <source>You will be able to update its information while it is processed.</source>
-        <target state="new">You will be able to update its information while it is processed.</target>
+        <target state="translated">Du kommer att kunna uppdatera uppgifterna om videon medan den behandlas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">450</context>
@@ -24517,7 +24517,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8912664940344172140" datatype="html">
         <source>Other unsaved changes of the current video will not be saved.</source>
-        <target state="new">Other unsaved changes of the current video will not be saved.</target>
+        <target state="translated">Övriga osparade ändringar i den aktuella videon kommer inte att sparas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-controller.service.ts</context>
           <context context-type="linenumber">452</context>
@@ -27846,7 +27846,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8379380784906714196" datatype="html">
         <source>Do you still want to run transcription?</source>
-        <target state="new"> Do you still want to run transcription?</target>
+        <target state="translated">Vill du fortfarande köra transkriberingen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">134</context>
@@ -27854,7 +27854,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5712473970701095814" datatype="html">
         <source>PeerTube considers {count, plural, =1 {1 video is} other {<x id="count"/> videos are}} already being transcribed.</source>
-        <target state="new">PeerTube considers {count, plural, =1 {1 video is} other {<x id="count"/> videos are}} already being transcribed.</target>
+        <target state="translated">PeerTube anser att {count, plural, =1 {1 video} other {<x id="count"/> videor}} redan håller på att transkriberas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">138</context>
@@ -27862,7 +27862,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2831315428666739691" datatype="html">
         <source>If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcription on these videos.</source>
-        <target state="new"> If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcription on these videos.</target>
+        <target state="translated">Om du tycker att PeerTube är fel ute (videor i trasigt tillstånd efter en krasch etcetera) kan du tvinga fram transkription av de här videorna.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">142</context>
@@ -27870,7 +27870,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2147574738360566548" datatype="html">
         <source>Otherwise they will be skipped. Do you want to force transcription?</source>
-        <target state="new"> Otherwise they will be skipped. Do you want to force transcription?</target>
+        <target state="translated">Annars kommer de att hoppas över. Vill du tvinga fram transkribering?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">143</context>
@@ -27878,7 +27878,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3484984238852181071" datatype="html">
         <source>AI</source>
-        <target state="new">AI</target>
+        <target state="translated">AI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-ai-usage-badge.component.ts</context>
           <context context-type="linenumber">36</context>
@@ -27886,7 +27886,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5875015671164268956" datatype="html">
         <source>The creator declared that the whole video, or most of it, has been generated by AI</source>
-        <target state="new">The creator declared that the whole video, or most of it, has been generated by AI</target>
+        <target state="translated">Kreatören uppgav att hela videon, eller åtminstone större delen av den, har skapats av AI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-ai-usage-badge.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -27894,7 +27894,7 @@ color: red;
       </trans-unit>
       <trans-unit id="8740508814489544146" datatype="html">
         <source>Partly AI</source>
-        <target state="new">Partly AI</target>
+        <target state="translated">Delvis AI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-ai-usage-badge.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -27902,7 +27902,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4065023204929746800" datatype="html">
         <source>The creator declared that some parts of the video have been generated by AI</source>
-        <target state="new">The creator declared that some parts of the video have been generated by AI</target>
+        <target state="translated">Kreatören uppgav att vissa delar av videon har skapats med hjälp av AI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-ai-usage-badge.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -27910,7 +27910,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4705964363362167238" datatype="html">
         <source>The creator declared that nothing seen or heard in the video has been generated by AI</source>
-        <target state="new">The creator declared that nothing seen or heard in the video has been generated by AI</target>
+        <target state="translated">Kreatören uppger att ingenting av det som syns eller hörs i videon har skapats av AI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-ai-usage-badge.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -27918,7 +27918,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2587240527868724590" datatype="html">
         <source>CC</source>
-        <target state="new">CC</target>
+        <target state="translated">CC</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-captions-badge.component.ts</context>
           <context context-type="linenumber">17,18</context>
@@ -27926,7 +27926,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6392911899705433609" datatype="html">
         <source>Captions available in <x id="languages" equiv-text="languages"/></source>
-        <target state="new">Captions available in <x id="languages" equiv-text="languages"/></target>
+        <target state="translated">Undertexter finns tillgängliga på <x id="languages" equiv-text="languages"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-captions-badge.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -27934,7 +27934,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4563965495368336177" datatype="html">
         <source>Skip</source>
-        <target state="new">Skip</target>
+        <target state="translated">Hoppa över</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video-force-run.ts</context>
           <context context-type="linenumber">98</context>
@@ -27950,7 +27950,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5946627470714514885" datatype="html">
         <source>PeerTube considers video "<x id="PH" equiv-text="name"/>" is already being transcribed.</source>
-        <target state="new">PeerTube considers video "<x id="PH" equiv-text="name"/>" is already being transcribed.</target>
+        <target state="translated">PeerTube anser att videon "<x id="PH" equiv-text="video.name"/>" redan håller på att transkriberas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video-caption/video-caption.service.ts</context>
           <context context-type="linenumber">132</context>
@@ -30406,7 +30406,7 @@ color: red;
       </trans-unit>
       <trans-unit id="82338406735577449" datatype="html">
         <source>Duplicating</source>
-        <target state="new">Duplicating</target>
+        <target state="translated">Duplicera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-utils.ts</context>
           <context context-type="linenumber">19</context>
@@ -30562,7 +30562,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5536175379135961951" datatype="html">
         <source>Duplication in progress</source>
-        <target state="new">Duplication in progress</target>
+        <target state="translated">Duplicering pågår</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">150</context>
@@ -30570,7 +30570,7 @@ color: red;
       </trans-unit>
       <trans-unit id="2906388625855527548" datatype="html">
         <source>The files of the video are being copied.</source>
-        <target state="new">The files of the video are being copied.</target>
+        <target state="translated">Videofilerna kopieras just nu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">154</context>
@@ -30578,7 +30578,7 @@ color: red;
       </trans-unit>
       <trans-unit id="6228033289931574622" datatype="html">
         <source>The new video could not be created from the original video.</source>
-        <target state="new">The new video could not be created from the original video.</target>
+        <target state="translated">Den nya videon kunde inte skapas utifrån den ursprungliga videon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">158</context>
@@ -30586,7 +30586,7 @@ color: red;
       </trans-unit>
       <trans-unit id="4502476289696523729" datatype="html">
         <source>Duplication failed</source>
-        <target state="new">Duplication failed</target>
+        <target state="translated">Dupliceringen misslyckades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">161</context>
@@ -30598,7 +30598,7 @@ color: red;
       </trans-unit>
       <trans-unit id="3808174616241683179" datatype="html">
         <source>You can delete this video and try again from the original video.</source>
-        <target state="new">You can delete this video and try again from the original video.</target>
+        <target state="translated">Du kan radera den här videon och försöka igen med den ursprungliga videon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">162</context>
@@ -30610,7 +30610,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5144764123559749263" datatype="html">
         <source>The studio edition of this new video failed.</source>
-        <target state="new">The studio edition of this new video failed.</target>
+        <target state="translated">Studio-utgåvan av den här nya videon kunde inte skapas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">170</context>
@@ -30618,7 +30618,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5232517332423392516" datatype="html">
         <source>Studio edition failed</source>
-        <target state="new">Studio edition failed</target>
+        <target state="translated">Studio-utgåvan kunde inte skapas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/video-state-message.service.ts</context>
           <context context-type="linenumber">173</context>
@@ -31158,7 +31158,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1767863762268695496" datatype="html">
         <source>Could not read the current player time.</source>
-        <target state="new">Could not read the current player time.</target>
+        <target state="translated">Det gick inte att läsa av den aktuella speltiden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.ts</context>
           <context context-type="linenumber">308</context>
@@ -31174,7 +31174,7 @@ color: red;
       </trans-unit>
       <trans-unit id="5387459279916035290" datatype="html">
         <source>Save as new video</source>
-        <target state="new">Save as new video</target>
+        <target state="translated">Spara som ny video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.html</context>
           <context context-type="linenumber">29</context>
@@ -31198,7 +31198,7 @@ color: red;
       </trans-unit>
       <trans-unit id="1967987004592502703" datatype="html">
         <source>The new video is being created, you can now update its information.</source>
-        <target state="new">The new video is being created, you can now update its information.</target>
+        <target state="translated">Den nya videon håller på att skapas. Du kan redan nu uppdatera informationen om den.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/video-manage-container.component.ts</context>
           <context context-type="linenumber">183</context>
