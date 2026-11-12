@@ -1,5 +1,4 @@
 import { pick } from '@peertube/peertube-core-utils'
-import { auditLog, buildVideoAuditEntity, buildVideoLiveAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import {
   HttpStatusCode,
   LiveVideoCreate,
@@ -16,6 +15,7 @@ import { getFormattedObjects } from '@server/helpers/utils.js'
 import { getVideoThumbnailFile } from '@server/helpers/video.js'
 import { ASSETS_PATH, MIMETYPES } from '@server/initializers/constants.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
+import { auditLog, buildVideoAuditEntity, buildVideoLiveAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { checkCanManageVideo } from '@server/middlewares/validators/shared/videos.js'
@@ -140,8 +140,14 @@ async function updateLiveVideo (req: express.Request, res: express.Response) {
   return logger.withContext([ video.uuid ], async () => {
     const oldLiveAuditEntity = auditLog.snapshot(() => buildLiveAuditEntity(video, videoLive, videoLive.ReplaySetting?.privacy))
 
+    // A retried transaction must start from the DB state, not from the values set by the rolled back attempt
+    const { replaySettingId: oldReplaySettingId, saveReplay: oldSaveReplay } = videoLive
+
     await retryTransactionWrapper(() => {
       return runTransaction(async t => {
+        videoLive.replaySettingId = oldReplaySettingId
+        videoLive.saveReplay = oldSaveReplay
+
         const newReplaySettingModel = await updateReplaySettings(videoLive, body, t)
 
         if (newReplaySettingModel) videoLive.replaySettingId = newReplaySettingModel.id
