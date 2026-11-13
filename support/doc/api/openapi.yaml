@@ -14482,7 +14482,9 @@ components:
                 - month
             totalViews:
               type: integer
-              description: lifetime views of all the channel videos, only included when `withStats` is true
+              description: >
+                lifetime views of the channel videos. Included when `withStats` is true (all videos of the channel)
+                and on `GET /video-channels/{channelHandle}` (public videos only)
 
     VideoChannelEdit:
       properties:

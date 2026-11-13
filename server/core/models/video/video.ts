@@ -1889,6 +1889,16 @@ export class VideoModel extends SequelizeModel<VideoModel> {
       })
   }
 
+  // Lifetime views of the public videos of a channel, displayed on the channel page
+  static async getChannelPublicViews (channelId: number) {
+    const rows = await VideoModel.sequelize.query<{ total: string }>(
+      'SELECT COALESCE(SUM("views"), 0) AS "total" FROM "video" WHERE "channelId" = :channelId AND "privacy" = :privacy',
+      { replacements: { channelId, privacy: VideoPrivacy.PUBLIC }, type: QueryTypes.SELECT }
+    )
+
+    return parseInt(rows[0].total, 10)
+  }
+
   static channelHasNSFWContent (channelId: number) {
     const query = 'SELECT 1 FROM "video" WHERE "nsfw" = true AND "channelId" = $channelId AND privacy = $privacy LIMIT 1'
 
