@@ -80,6 +80,12 @@
                 @if (channelVideosCount !== undefined) {
                   <span class="videos-count" i18n>{channelVideosCount, plural, =0 {No videos} =1 {1 video} other {{{ channelVideosCount }} videos}}</span>
                 }
+
+                @if (videoChannel.totalViews !== undefined) {
+                  <span class="views-count" i18n>{videoChannel.totalViews, plural, =0 {No views} =1 {1 view} other {{{ videoChannel.totalViews | myNumberFormatter }} views}}</span>
+                }
+
+                <span class="created-at" i18n>Created {{ videoChannel.createdAt | date: 'mediumDate' }}</span>
               </div>
             </div>
             <div class="channel-buttons right">
