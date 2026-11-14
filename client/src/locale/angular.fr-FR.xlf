@@ -849,7 +849,7 @@
       </trans-unit>
       <trans-unit id="8603548033711274304" datatype="html">
         <source>The edits to your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> could not be applied</source>
-        <target state="new">The edits to your video <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> could not be applied</target>
+        <target state="translated">Les modifications apportées à votre vidéo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> n'ont pas pu être appliquées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">362,365</context>
@@ -857,7 +857,7 @@
       </trans-unit>
       <trans-unit id="5256131349397104974" datatype="html">
         <source>The copy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of your video could not be created</source>
-        <target state="new">The copy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> of your video could not be created</target>
+        <target state="translated">La copie <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ n.payload.video.name }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> de votre vidéo n'a pas pu être créée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">368,371</context>
@@ -897,7 +897,7 @@
       </trans-unit>
       <trans-unit id="7156954400387104530" datatype="html">
         <source>Do you still want to run transcoding?</source>
-        <target state="new"> Do you still want to run transcoding?</target>
+        <target state="translated">Voulez-vous toujours lancer le transcodage ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">493</context>
@@ -905,7 +905,7 @@
       </trans-unit>
       <trans-unit id="4729525992281375617" datatype="html">
         <source>PeerTube considers {count, plural, =1 {1 video is} other {<x id="count"/> videos are}} already being transcoded.</source>
-        <target state="new">PeerTube considers {count, plural, =1 {1 video is} other {<x id="count"/> videos are}} already being transcoded.</target>
+        <target state="translated">PeerTube considère que {count, plural, =1 {1 vidéo est} other {<x id="count"/> vidéos sont}} déjà en cours de transcodage.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">497</context>
@@ -913,7 +913,7 @@
       </trans-unit>
       <trans-unit id="8286107468499221380" datatype="html">
         <source>If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.</source>
-        <target state="new"> If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.</target>
+        <target state="translated">Si vous pensez que PeerTube fait erreur (vidéos dans un état corrompu après un plantage, etc.), vous pouvez forcer le transcodage de ces vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">500</context>
@@ -921,7 +921,7 @@
       </trans-unit>
       <trans-unit id="76759851359794182" datatype="html">
         <source>Otherwise they will be skipped. Do you want to force transcoding?</source>
-        <target state="new"> Otherwise they will be skipped. Do you want to force transcoding?</target>
+        <target state="translated">Sinon, elles seront ignorées. Voulez-vous forcer le transcodage ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">501</context>
@@ -1607,7 +1607,7 @@
       </trans-unit>
       <trans-unit id="1491840370838385662" datatype="html">
         <source>{count, plural, =1 {1 transcoding job created.} other {<x id="count"/> transcoding jobs created.}}</source>
-        <target state="new">{count, plural, =1 {1 transcoding job created.} other {<x id="count"/> transcoding jobs created.}}</target>
+        <target state="translated">{count, plural, =1 {1 tâche de transcodage créée.} other {<x id="count"/> tâches de transcodage créées.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">570</context>
@@ -1615,7 +1615,7 @@
       </trans-unit>
       <trans-unit id="7831114154851263791" datatype="html">
         <source>{count, plural, =1 {1 video skipped because it is already being transcoded.} other {<x id="count"/> videos skipped because they are already being transcoded.}}</source>
-        <target state="new">{count, plural, =1 {1 video skipped because it is already being transcoded.} other {<x id="count"/> videos skipped because they are already being transcoded.}}</target>
+        <target state="translated">{count, plural, =1 {1 vidéo ignorée car elle est déjà en cours de transcodage.} other {<x id="count"/> vidéos ignorées car elles sont déjà en cours de transcodage.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">580</context>
@@ -1639,7 +1639,7 @@
       </trans-unit>
       <trans-unit id="8533955271153325348" datatype="html">
         <source>{count, plural, =1 {1 video skipped because it is already being transcribed.} other {<x id="count"/> videos skipped because they are already being transcribed.}}</source>
-        <target state="new">{count, plural, =1 {1 video skipped because it is already being transcribed.} other {<x id="count"/> videos skipped because they are already being transcribed.}}</target>
+        <target state="translated">{count, plural, =1 {1 vidéo ignorée car elle est déjà en cours de transcription.} other {<x id="count"/> vidéos ignorées car elles sont déjà en cours de transcription.}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">625</context>
@@ -1647,7 +1647,7 @@
       </trans-unit>
       <trans-unit id="1800714362868088312" datatype="html">
         <source>{count, plural, =1 {Failed on video "<x id="name"/>": <x id="message"/>} other {Failed on <x id="count"/> videos. First error on video "<x id="name"/>": <x id="message"/>}}</source>
-        <target state="new">{count, plural, =1 {Failed on video "<x id="name"/>": <x id="message"/>} other {Failed on <x id="count"/> videos. First error on video "<x id="name"/>": <x id="message"/>}}</target>
+        <target state="translated">{count, plural, =1 {Échec sur la vidéo « <x id="name"/> » : <x id="message"/>} other {Échec sur <x id="count"/> vidéos. Première erreur sur la vidéo « <x id="name"/> » : <x id="message"/>}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">649</context>
@@ -1775,7 +1775,7 @@
       </trans-unit>
       <trans-unit id="3255203254266798889" datatype="html">
         <source>Use of AI is required.</source>
-        <target state="new">Use of AI is required.</target>
+        <target state="translated">L'utilisation de l'IA est requise.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -1783,7 +1783,7 @@
       </trans-unit>
       <trans-unit id="4053044562013092133" datatype="html">
         <source>Commercial content is required.</source>
-        <target state="new">Commercial content is required.</target>
+        <target state="translated">La mention de contenu commercial est requise.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -1791,7 +1791,7 @@
       </trans-unit>
       <trans-unit id="5837937742957978798" datatype="html">
         <source>Recommended videos setting is required.</source>
-        <target state="new">Recommended videos setting is required.</target>
+        <target state="translated">Le paramètre des vidéos recommandées est requis.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">115</context>
@@ -2251,7 +2251,7 @@
       </trans-unit>
       <trans-unit id="4216959698439022587" datatype="html">
         <source>File replacement is not available while the video is being duplicated.</source>
-        <target state="new">File replacement is not available while the video is being duplicated.</target>
+        <target state="translated">Le remplacement du fichier n'est pas disponible pendant que la vidéo est en cours de duplication.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">18</context>
@@ -2259,7 +2259,7 @@
       </trans-unit>
       <trans-unit id="2063903262907970040" datatype="html">
         <source>File replacement is not available on a video whose creation failed.</source>
-        <target state="new">File replacement is not available on a video whose creation failed.</target>
+        <target state="translated">Le remplacement du fichier n'est pas disponible sur une vidéo dont la création a échoué.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">20</context>
@@ -2315,7 +2315,7 @@
       </trans-unit>
       <trans-unit id="4163606422627203987" datatype="html">
         <source>Studio is not available while the video is being duplicated.</source>
-        <target state="new">Studio is not available while the video is being duplicated.</target>
+        <target state="translated">Le studio n'est pas disponible pendant que la vidéo est en cours de duplication.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">47</context>
@@ -2323,7 +2323,7 @@
       </trans-unit>
       <trans-unit id="1947476160394208371" datatype="html">
         <source>Studio is not available on a video whose creation failed.</source>
-        <target state="new">Studio is not available on a video whose creation failed.</target>
+        <target state="translated">Le studio n'est pas disponible sur une vidéo dont la création a échoué.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">49</context>
@@ -3841,7 +3841,7 @@
       </trans-unit>
       <trans-unit id="8950709169629037139" datatype="html">
         <source>Install plugins</source>
-        <target state="new">Install plugins</target>
+        <target state="translated">Installer des greffons</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -3849,7 +3849,7 @@
       </trans-unit>
       <trans-unit id="8726084754949366831" datatype="html">
         <source>The following plugins will be installed on your platform: <x id="PH" equiv-text="this.plugins.join(', ')"/>.</source>
-        <target state="new">The following plugins will be installed on your platform: <x id="PH" equiv-text="this.plugins.join(', ')"/>.</target>
+        <target state="translated">Les greffons suivants seront installés sur votre plateforme : <x id="PH" equiv-text="this.plugins.join(', ')"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -5268,7 +5268,7 @@
       </trans-unit>
       <trans-unit id="6063296243676908514" datatype="html">
         <source>Use of AI</source>
-        <target state="new">Use of AI</target>
+        <target state="translated">Utilisation de l'IA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">162</context>
@@ -5682,7 +5682,7 @@
       </trans-unit>
       <trans-unit id="7761833209726865885" datatype="html">
         <source>Featured video</source>
-        <target state="new">Featured video</target>
+        <target state="translated">Vidéo mise en avant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/channel-miniature-markup.component.html</context>
           <context context-type="linenumber">40</context>
@@ -5714,7 +5714,7 @@
       </trans-unit>
       <trans-unit id="2520326224708936904" datatype="html">
         <source>More videos</source>
-        <target state="new">More videos</target>
+        <target state="translated">Plus de vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -5730,7 +5730,7 @@
       </trans-unit>
       <trans-unit id="760957797157374239" datatype="html">
         <source>data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></source>
-        <target state="new">data-playlist-id cannot be used with <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></target>
+        <target state="translated">data-playlist-id ne peut pas être utilisé avec <x id="PH" equiv-text="incompatibleAttributes.join(', ')"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-custom-markup/peertube-custom-tags/videos-list-markup.component.ts</context>
           <context context-type="linenumber">148</context>
@@ -5810,7 +5810,7 @@
       </trans-unit>
       <trans-unit id="7988741822114586725" datatype="html">
         <source>Help viewers understand whether this video has been generated by AI. Only generated content counts: AI tools that improve sound, picture or subtitles do not.</source>
-        <target state="new"> Help viewers understand whether this video has been generated by AI. Only generated content counts: AI tools that improve sound, picture or subtitles do not. </target>
+        <target state="translated">Aidez les spectateurs à savoir si cette vidéo a été générée par IA. Seul le contenu généré compte : les outils d'IA qui améliorent le son, l'image ou les sous-titres ne sont pas concernés.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">190</context>
@@ -5818,7 +5818,7 @@
       </trans-unit>
       <trans-unit id="498973779180783414" datatype="html">
         <source>Tell viewers whether this video promotes products, services or brands.</source>
-        <target state="new"> Tell viewers whether this video promotes products, services or brands. </target>
+        <target state="translated">Indiquez aux spectateurs si cette vidéo fait la promotion de produits, de services ou de marques.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
           <context context-type="linenumber">198</context>
@@ -6312,7 +6312,7 @@
       </trans-unit>
       <trans-unit id="5885647893975820500" datatype="html">
         <source>Video source file</source>
-        <target state="new">Video source file</target>
+        <target state="translated">Fichier source de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">37</context>
@@ -6320,7 +6320,7 @@
       </trans-unit>
       <trans-unit id="944677751881832102" datatype="html">
         <source>Video file</source>
-        <target state="new">Video file</target>
+        <target state="translated">Fichier vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">38</context>
@@ -6328,7 +6328,7 @@
       </trans-unit>
       <trans-unit id="6366382678145139905" datatype="html">
         <source>Video caption</source>
-        <target state="new">Video caption</target>
+        <target state="translated">Sous-titre de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">39</context>
@@ -6336,7 +6336,7 @@
       </trans-unit>
       <trans-unit id="6399209945765397658" datatype="html">
         <source>Video chapters</source>
-        <target state="new">Video chapters</target>
+        <target state="translated">Chapitres de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -6344,7 +6344,7 @@
       </trans-unit>
       <trans-unit id="8904960460092884203" datatype="html">
         <source>Video password</source>
-        <target state="new">Video password</target>
+        <target state="translated">Mot de passe de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">41</context>
@@ -6352,7 +6352,7 @@
       </trans-unit>
       <trans-unit id="820349246776410615" datatype="html">
         <source>Video embed privacy</source>
-        <target state="new">Video embed privacy</target>
+        <target state="translated">Confidentialité de l'intégration de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">42</context>
@@ -6360,7 +6360,7 @@
       </trans-unit>
       <trans-unit id="3617023035573084133" datatype="html">
         <source>Video transcoding</source>
-        <target state="new">Video transcoding</target>
+        <target state="translated">Transcodage de la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">43</context>
@@ -6572,7 +6572,7 @@
       </trans-unit>
       <trans-unit id="6753098121361475708" datatype="html">
         <source>Recommended videos</source>
-        <target state="new">Recommended videos</target>
+        <target state="translated">Vidéos recommandées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">163</context>
@@ -6588,7 +6588,7 @@
       </trans-unit>
       <trans-unit id="7016413312378125047" datatype="html">
         <source>Commercial content</source>
-        <target state="new">Commercial content</target>
+        <target state="translated">Contenu commercial</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
           <context context-type="linenumber">164</context>
@@ -6608,7 +6608,7 @@
       </trans-unit>
       <trans-unit id="6172864563872578497" datatype="html">
         <source>Choose which videos can be recommended next to this video. Other applications displaying your video may not apply this preference.</source>
-        <target state="new"> Choose which videos can be recommended next to this video. Other applications displaying your video may not apply this preference. </target>
+        <target state="translated">Choisissez les vidéos qui peuvent être recommandées à côté de cette vidéo. Les autres applications affichant votre vidéo peuvent ne pas appliquer cette préférence.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/customization/video-customization.component.html</context>
           <context context-type="linenumber">62</context>
@@ -7000,7 +7000,7 @@
       </trans-unit>
       <trans-unit id="2640045324864510886" datatype="html">
         <source>Hide videos</source>
-        <target state="new">Hide videos</target>
+        <target state="translated">Masquer les vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
           <context context-type="linenumber">5,7</context>
@@ -7008,7 +7008,7 @@
       </trans-unit>
       <trans-unit id="4115211950830019481" datatype="html">
         <source>The use of AI is declared by video creators. Other platforms may not provide this information.</source>
-        <target state="new"> The use of AI is declared by video creators. Other platforms may not provide this information. </target>
+        <target state="translated">L'utilisation de l'IA est déclarée par les créateurs des vidéos. D'autres plateformes peuvent ne pas fournir cette information.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
           <context context-type="linenumber">8,9</context>
@@ -7016,7 +7016,7 @@
       </trans-unit>
       <trans-unit id="6249967485590132607" datatype="html">
         <source>Generated by AI</source>
-        <target state="new">Generated by AI</target>
+        <target state="translated">Généré par IA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
           <context context-type="linenumber">12</context>
@@ -7024,7 +7024,7 @@
       </trans-unit>
       <trans-unit id="5987505270202736232" datatype="html">
         <source>Containing AI-generated content</source>
-        <target state="new">Containing AI-generated content</target>
+        <target state="translated">Contient du contenu généré par IA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
           <context context-type="linenumber">16</context>
@@ -7032,7 +7032,7 @@
       </trans-unit>
       <trans-unit id="6802321987561321580" datatype="html">
         <source>Not specifying whether AI has been used</source>
-        <target state="new">Not specifying whether AI has been used</target>
+        <target state="translated">Ne précise pas si l'IA a été utilisée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
           <context context-type="linenumber">21,22</context>
@@ -7040,7 +7040,7 @@
       </trans-unit>
       <trans-unit id="5169292474846527528" datatype="html">
         <source>Save AI-generated content settings</source>
-        <target state="new">Save AI-generated content settings</target>
+        <target state="translated">Enregistrer les paramètres de contenu généré par IA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.html</context>
           <context context-type="linenumber">27</context>
@@ -7048,7 +7048,7 @@
       </trans-unit>
       <trans-unit id="3837133549086971154" datatype="html">
         <source>AI-generated content settings updated.</source>
-        <target state="new">AI-generated content settings updated.</target>
+        <target state="translated">Paramètres de contenu généré par IA mis à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-ai-content-settings.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -7273,7 +7273,7 @@
       </trans-unit>
       <trans-unit id="3212629476561103950" datatype="html">
         <source>However, the auto-tagging policies will not affect existing videos:</source>
-        <target state="new">However, the auto-tagging policies will not affect existing videos:</target>
+        <target state="translated">Cependant, les politiques d'étiquetage automatique n'affecteront pas les vidéos existantes :</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">80,82</context>
@@ -7281,7 +7281,7 @@
       </trans-unit>
       <trans-unit id="9069205412472719482" datatype="html">
         <source>Only new videos can be blocked by a new word added to the list</source>
-        <target state="new">Only new videos can be blocked by a new word added to the list</target>
+        <target state="translated">Seules les nouvelles vidéos peuvent être bloquées par un nouveau mot ajouté à la liste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">83,84</context>
@@ -7289,7 +7289,7 @@
       </trans-unit>
       <trans-unit id="7471441043625129428" datatype="html">
         <source>If a word is removed from the list, any videos that are currently blacklisted will not be affected</source>
-        <target state="new">If a word is removed from the list, any videos that are currently blacklisted will not be affected</target>
+        <target state="translated">Si un mot est retiré de la liste, les vidéos actuellement sur liste noire ne seront pas affectées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
           <context context-type="linenumber">84,85</context>
@@ -8009,7 +8009,7 @@
       </trans-unit>
       <trans-unit id="7989254487121769088" datatype="html">
         <source>Video studio edition</source>
-        <target state="new">Video studio edition</target>
+        <target state="translated">Édition dans le studio vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -8017,7 +8017,7 @@
       </trans-unit>
       <trans-unit id="8684644623876839783" datatype="html">
         <source>Video player settings</source>
-        <target state="new">Video player settings</target>
+        <target state="translated">Paramètres du lecteur vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">46</context>
@@ -8025,7 +8025,7 @@
       </trans-unit>
       <trans-unit id="116372526259554106" datatype="html">
         <source>Ownership change</source>
-        <target state="new">Ownership change</target>
+        <target state="translated">Changement de propriétaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">47</context>
@@ -8303,7 +8303,7 @@
       </trans-unit>
       <trans-unit id="7441473480860312458" datatype="html">
         <source>&lt;strong&gt;Only recommend videos of your platform&lt;/strong&gt; by default next to new videos</source>
-        <target state="new">&lt;strong&gt;Only recommend videos of your platform&lt;/strong&gt; by default next to new videos</target>
+        <target state="translated">&lt;strong&gt;Recommander uniquement les vidéos de votre plateforme&lt;/strong&gt; par défaut à côté des nouvelles vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/usage-type/usage-type.model.ts</context>
           <context context-type="linenumber">341</context>
@@ -9968,7 +9968,7 @@
       </trans-unit>
       <trans-unit id="5073124402363062801" datatype="html">
         <source>Update the password of <x id="PH" equiv-text="this.username()"/></source>
-        <target state="new">Update the password of <x id="PH" equiv-text="this.username()"/></target>
+        <target state="translated">Mettre à jour le mot de passe de <x id="PH" equiv-text="this.username()"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">44</context>
@@ -9976,7 +9976,7 @@
       </trans-unit>
       <trans-unit id="4499539404526542498" datatype="html">
         <source><x id="PH" equiv-text="this.username()"/> is an administrator.</source>
-        <target state="new"><x id="PH" equiv-text="this.username()"/> is an administrator.</target>
+        <target state="translated"><x id="PH" equiv-text="this.username()"/> est un administrateur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -10992,7 +10992,7 @@
       </trans-unit>
       <trans-unit id="5115867744933923483" datatype="html">
         <source>Channel synchronization</source>
-        <target state="new">Channel synchronization</target>
+        <target state="translated">Synchronisation de la chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">51</context>
@@ -11000,7 +11000,7 @@
       </trans-unit>
       <trans-unit id="3716078862516198785" datatype="html">
         <source>Channel videos import</source>
-        <target state="new">Channel videos import</target>
+        <target state="translated">Importation des vidéos de la chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">52</context>
@@ -11008,7 +11008,7 @@
       </trans-unit>
       <trans-unit id="1116156446586993227" datatype="html">
         <source>Channel collaborator</source>
-        <target state="new">Channel collaborator</target>
+        <target state="translated">Collaborateur de la chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">53</context>
@@ -11016,7 +11016,7 @@
       </trans-unit>
       <trans-unit id="3515431346551474480" datatype="html">
         <source>Channel player settings</source>
-        <target state="new">Channel player settings</target>
+        <target state="translated">Paramètres du lecteur de la chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">54</context>
@@ -11024,7 +11024,7 @@
       </trans-unit>
       <trans-unit id="7595000774670746941" datatype="html">
         <source>Channel playlists order</source>
-        <target state="new">Channel playlists order</target>
+        <target state="translated">Ordre des listes de lecture de la chaîne</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">55</context>
@@ -11032,7 +11032,7 @@
       </trans-unit>
       <trans-unit id="5344791164491756179" datatype="html">
         <source>Playlist</source>
-        <target state="new">Playlist</target>
+        <target state="translated">Liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">56</context>
@@ -11040,7 +11040,7 @@
       </trans-unit>
       <trans-unit id="2593394684821903865" datatype="html">
         <source>Playlist element</source>
-        <target state="new">Playlist element</target>
+        <target state="translated">Élément de la liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">57</context>
@@ -11048,7 +11048,7 @@
       </trans-unit>
       <trans-unit id="959734269659247344" datatype="html">
         <source>Playlist elements order</source>
-        <target state="new">Playlist elements order</target>
+        <target state="translated">Ordre des éléments de la liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -11056,7 +11056,7 @@
       </trans-unit>
       <trans-unit id="1795209702226263984" datatype="html">
         <source>Registration request</source>
-        <target state="new">Registration request</target>
+        <target state="translated">Demande d'inscription</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">61</context>
@@ -11064,7 +11064,7 @@
       </trans-unit>
       <trans-unit id="3731138383017594666" datatype="html">
         <source>Password reset request</source>
-        <target state="new">Password reset request</target>
+        <target state="translated">Demande de réinitialisation du mot de passe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">62</context>
@@ -11072,7 +11072,7 @@
       </trans-unit>
       <trans-unit id="8278867930540753765" datatype="html">
         <source>Login session</source>
-        <target state="new">Login session</target>
+        <target state="translated">Session de connexion</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">63</context>
@@ -11080,7 +11080,7 @@
       </trans-unit>
       <trans-unit id="3087041799555785636" datatype="html">
         <source>Failed login</source>
-        <target state="new">Failed login</target>
+        <target state="translated">Échec de connexion</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">64</context>
@@ -11088,7 +11088,7 @@
       </trans-unit>
       <trans-unit id="6271694097392260677" datatype="html">
         <source>Scoped token</source>
-        <target state="new">Scoped token</target>
+        <target state="translated">Jeton à portée limitée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -11096,7 +11096,7 @@
       </trans-unit>
       <trans-unit id="9004948288516709730" datatype="html">
         <source>User export</source>
-        <target state="new">User export</target>
+        <target state="translated">Exportation des données utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">66</context>
@@ -11104,7 +11104,7 @@
       </trans-unit>
       <trans-unit id="1674542451187778327" datatype="html">
         <source>User import</source>
-        <target state="new">User import</target>
+        <target state="translated">Importation utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">67</context>
@@ -11112,7 +11112,7 @@
       </trans-unit>
       <trans-unit id="1570575029487446253" datatype="html">
         <source>Abuse report</source>
-        <target state="new">Abuse report</target>
+        <target state="translated">Signalement d'abus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">69</context>
@@ -11120,7 +11120,7 @@
       </trans-unit>
       <trans-unit id="5938187881228362946" datatype="html">
         <source>Abuse message</source>
-        <target state="new">Abuse message</target>
+        <target state="translated">Message de signalement d'abus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">70</context>
@@ -11128,7 +11128,7 @@
       </trans-unit>
       <trans-unit id="6273276327864872621" datatype="html">
         <source>Video block</source>
-        <target state="new">Video block</target>
+        <target state="translated">Blocage de vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">71</context>
