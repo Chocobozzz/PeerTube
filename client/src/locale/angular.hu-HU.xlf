@@ -2065,7 +2065,7 @@
       </trans-unit>
       <trans-unit id="7116189699742808060" datatype="html">
         <source>Browse <x id="PH" equiv-text="channelName"/> channel</source>
-        <target state="new">Browse <x id="PH" equiv-text="channelName"/> channel</target>
+        <target state="translated">„<x id="PH" equiv-text="channelName"/>” csatorna böngészése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-list/overview/video-overview.component.ts</context>
           <context context-type="linenumber">182</context>
@@ -9223,7 +9223,7 @@
       </trans-unit>
       <trans-unit id="3245220240937722814" datatype="html">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">Saját csatornáim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.html</context>
           <context context-type="linenumber">6</context>
@@ -9231,7 +9231,7 @@
       </trans-unit>
       <trans-unit id="913810105049472842" datatype="html">
         <source>Manage my channels</source>
-        <target state="new">Manage my channels</target>
+        <target state="translated">Saját csatornáim kezelése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
           <context context-type="linenumber">32</context>
@@ -15281,7 +15281,7 @@
       </trans-unit>
       <trans-unit id="4101055224952526966" datatype="html">
         <source>ACCOUNT SESSIONS</source>
-        <target state="new">ACCOUNT SESSIONS</target>
+        <target state="translated">AKTÍV BEJELENTKEZÉSEK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">118</context>
@@ -15289,7 +15289,7 @@
       </trans-unit>
       <trans-unit id="5931890111155614195" datatype="html">
         <source>These are the devices currently logged in to your account.</source>
-        <target state="new">These are the devices currently logged in to your account.</target>
+        <target state="translated">Ezek az eszközök be vannak jelentkezve az Ön fiókjába</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">122</context>
@@ -15569,7 +15569,7 @@
       </trans-unit>
       <trans-unit id="1218302359178184742" datatype="html">
         <source>Sort by:</source>
-        <target state="new">Sort by:</target>
+        <target state="translated">Rendezés:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters-header.component.html</context>
           <context context-type="linenumber">65</context>
@@ -15637,7 +15637,7 @@
       </trans-unit>
       <trans-unit id="6234119003440125809" datatype="html">
         <source>Recently Added</source>
-        <target state="new">Recently Added</target>
+        <target state="translated">Nemrég hozzáadott</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-videos-sort.component.ts</context>
           <context context-type="linenumber">48</context>
@@ -15645,7 +15645,7 @@
       </trans-unit>
       <trans-unit id="2925767298386605760" datatype="html">
         <source>Original Publication Date</source>
-        <target state="new">Original Publication Date</target>
+        <target state="translated">Eredeti közzététel dátuma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-videos-sort.component.ts</context>
           <context context-type="linenumber">49</context>
@@ -15661,7 +15661,7 @@
       </trans-unit>
       <trans-unit id="676860092433275829" datatype="html">
         <source>Hot</source>
-        <target state="new">Hot</target>
+        <target state="translated">Felkapott</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-videos-sort.component.ts</context>
           <context context-type="linenumber">58</context>
@@ -15669,7 +15669,7 @@
       </trans-unit>
       <trans-unit id="3456598716931498601" datatype="html">
         <source>Global Views</source>
-        <target state="new">Global Views</target>
+        <target state="translated">Globális megtekintések</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-videos-sort.component.ts</context>
           <context context-type="linenumber">65</context>
@@ -16165,7 +16165,7 @@
       </trans-unit>
       <trans-unit id="3169881590124056773" datatype="html">
         <source>Video channel</source>
-        <target state="new">Video channel</target>
+        <target state="translated">Videócsatorna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/video-channel-sync-edit/video-channel-sync-edit.component.html</context>
           <context context-type="linenumber">35</context>
@@ -17700,7 +17700,7 @@
       </trans-unit>
       <trans-unit id="6439365426343089851" datatype="html">
         <source>General</source>
-        <target state="new">General</target>
+        <target state="translated">Általános</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">45</context>
@@ -23083,7 +23083,7 @@
       </trans-unit>
       <trans-unit id="1426719913849129925" datatype="html">
         <source>Create a new channel</source>
-        <target state="new">Create a new channel</target>
+        <target state="translated">Új csatorna készítése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -23965,7 +23965,7 @@
       </trans-unit>
       <trans-unit id="8598024962747497095" datatype="html">
         <source>Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="new"> Your current email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
+        <target state="translated">Az Ön jelenlegi email címe <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">28</context>
@@ -24077,7 +24077,7 @@
       </trans-unit>
       <trans-unit id="7731752234233950482" datatype="html">
         <source>Synchronizations</source>
-        <target state="new">Synchronizations</target>
+        <target state="translated">Szinkronizációk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/my-channel-space.component.ts</context>
           <context context-type="linenumber">40</context>
@@ -24605,7 +24605,7 @@
       </trans-unit>
       <trans-unit id="3545929198870894557" datatype="html">
         <source>Go to my playlists</source>
-        <target state="new">Go to my playlists</target>
+        <target state="translated">Ugrás a lejátszási listáimhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">77</context>
@@ -24733,7 +24733,7 @@
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html">
         <source>Your current password is too long. Please reset it.</source>
-        <target state="new">Your current password is too long. Please reset it.</target>
+        <target state="translated">Az Ön jelszava túl hosszú. Kérjük használja a jelszó visszaállítás funkciót.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">282</context>
@@ -27327,7 +27327,7 @@
       </trans-unit>
       <trans-unit id="1212827186952717848" datatype="html">
         <source>General channel configuration</source>
-        <target state="new">General channel configuration</target>
+        <target state="translated">Általános csatornabeállítások</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/video-channel-edit.routes.ts</context>
           <context context-type="linenumber">18</context>
@@ -27359,7 +27359,7 @@
       </trans-unit>
       <trans-unit id="3242444609132964678" datatype="html">
         <source>Search a channel</source>
-        <target state="new">Search a channel</target>
+        <target state="translated">Csatorna keresése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/my-video-channels.component.html</context>
           <context context-type="linenumber">8</context>
@@ -28692,7 +28692,7 @@
       </trans-unit>
       <trans-unit id="7292902857194439444" datatype="html">
         <source>Device</source>
-        <target state="new">Device</target>
+        <target state="translated">Eszköz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">5,6</context>
@@ -28700,7 +28700,7 @@
       </trans-unit>
       <trans-unit id="3176435734033906593" datatype="html">
         <source>Last Active</source>
-        <target state="new">Last Active</target>
+        <target state="translated">Utoljára aktív</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">7,8</context>
@@ -28716,7 +28716,7 @@
       </trans-unit>
       <trans-unit id="4972213921522701981" datatype="html">
         <source>Current Session</source>
-        <target state="new">Current Session</target>
+        <target state="translated">Jelenlegi munkamenet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-users/account-token-sessions.component.html</context>
           <context context-type="linenumber">26</context>
