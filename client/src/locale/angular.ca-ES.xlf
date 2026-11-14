@@ -18798,7 +18798,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="4888709993830401000" datatype="html">
         <source>All videos are displayed, whatever their use of AI.</source>
-        <target state="new">All videos are displayed, whatever their use of AI.</target>
+        <target state="translated">Es mostren tots els vídeos, sigui quin sigui el seu ús de la IA.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">434</context>
@@ -18806,7 +18806,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="8592509720639730521" datatype="html">
         <source>Hidden: <x id="PH" equiv-text="hidden.join(', ')"/>.</source>
-        <target state="new">Hidden: <x id="PH" equiv-text="hidden.join(', ')"/>.</target>
+        <target state="translated">Amagat: <x id="PH" equiv-text="hidden.join(', ')"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-filters.model.ts</context>
           <context context-type="linenumber">436</context>
