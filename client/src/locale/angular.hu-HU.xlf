@@ -4835,7 +4835,7 @@
       </trans-unit>
       <trans-unit id="2734780694152757859" datatype="html">
         <source>View all</source>
-        <target state="new">View all</target>
+        <target state="translated">Összes megtekintése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/notification-dropdown.component.html</context>
           <context context-type="linenumber">97</context>
@@ -12991,7 +12991,7 @@
       </trans-unit>
       <trans-unit id="6787748814515031203" datatype="html">
         <source>Player Theme</source>
-        <target state="new">Player Theme</target>
+        <target state="translated">Lejátszó témája</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">32</context>
@@ -13007,7 +13007,7 @@
       </trans-unit>
       <trans-unit id="8239083179530818601" datatype="html">
         <source>Only used by the web player</source>
-        <target state="new">Only used by the web player</target>
+        <target state="translated">Csak a webes lejátszó használja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.html</context>
           <context context-type="linenumber">33</context>
@@ -15133,7 +15133,7 @@
       </trans-unit>
       <trans-unit id="52101650994758228" datatype="html">
         <source>Original theme</source>
-        <target state="new">Original theme</target>
+        <target state="translated">Eredeti téma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">181</context>
@@ -15157,7 +15157,7 @@
       </trans-unit>
       <trans-unit id="2084331848321952851" datatype="html">
         <source>A clean and modern theme</source>
-        <target state="new">A clean and modern theme</target>
+        <target state="translated">Egy letisztult, modern téma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-customization.component.ts</context>
           <context context-type="linenumber">182</context>
@@ -22747,7 +22747,7 @@
       </trans-unit>
       <trans-unit id="7567105424101611852" datatype="html">
         <source><x id="PH" equiv-text="instanceName"/> setting (<x id="PH_1" equiv-text="instancePlayerTheme"/>)</source>
-        <target state="new"><x id="PH" equiv-text="instanceName"/> setting (<x id="PH_1" equiv-text="instancePlayerTheme"/>)</target>
+        <target state="translated"><x id="PH" equiv-text="instanceName"/> beállítása (<x id="PH_1" equiv-text="instancePlayerTheme"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/select/select-player-theme.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -23925,7 +23925,7 @@
       </trans-unit>
       <trans-unit id="3333895277843282593" datatype="html">
         <source>IMAGES</source>
-        <target state="new">IMAGES</target>
+        <target state="translated">KÉPEK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">10,11</context>
@@ -23933,7 +23933,7 @@
       </trans-unit>
       <trans-unit id="78618503822933431" datatype="html">
         <source>INFORMATION</source>
-        <target state="new">INFORMATION</target>
+        <target state="translated">INFORMÁCIÓ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
           <context context-type="linenumber">37,38</context>
@@ -24421,7 +24421,7 @@
       </trans-unit>
       <trans-unit id="8504752363237381923" datatype="html">
         <source>Original video</source>
-        <target state="new">Original video</target>
+        <target state="translated">Eredeti videó</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/studio/video-studio.component.html</context>
           <context context-type="linenumber">179</context>
@@ -29356,7 +29356,7 @@
       </trans-unit>
       <trans-unit id="8091877262136797101" datatype="html">
         <source>Show preview</source>
-        <target state="new">Show preview</target>
+        <target state="translated">Előnézet mutatása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">30</context>
@@ -29380,7 +29380,7 @@
       </trans-unit>
       <trans-unit id="5828663111777947237" datatype="html">
         <source>Full-screen editor</source>
-        <target state="new">Full-screen editor</target>
+        <target state="translated">Teljesképernyős szerkesztő</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">40</context>
