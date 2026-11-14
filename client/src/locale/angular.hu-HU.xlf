@@ -15273,7 +15273,7 @@
       </trans-unit>
       <trans-unit id="4543888618160534551" datatype="html">
         <source>TWO-FACTOR AUTHENTICATION</source>
-        <target state="new">TWO-FACTOR AUTHENTICATION</target>
+        <target state="translated">KÉTFAKTOROS HITELESÍTÉS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">108</context>
