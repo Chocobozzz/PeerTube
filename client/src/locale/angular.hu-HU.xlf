@@ -29120,7 +29120,7 @@
       </trans-unit>
       <trans-unit id="2611126741793124345" datatype="html">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">IMPORTÁLÁS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-import-export/my-account-import.component.html</context>
           <context context-type="linenumber">4</context>
