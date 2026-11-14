@@ -16662,7 +16662,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="1156913594298737082" datatype="html">
         <source>See more menu items</source>
-        <target state="new">See more menu items</target>
+        <target state="translated">Mostra més elements del menú</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/menu/list-overflow.component.html</context>
           <context context-type="linenumber">16</context>
@@ -16990,7 +16990,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="7481574586191936140" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>to <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></source>
-        <target state="new"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Welcome<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>to <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Us donem la benvinguda<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>a <x id="INTERPOLATION" equiv-text="{{ instanceName() }}"/><x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success-before-email.component.html</context>
           <context context-type="linenumber">6,8</context>
@@ -17046,7 +17046,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9040361513231775562" datatype="html">
         <source>Downloads</source>
-        <target state="new">Downloads</target>
+        <target state="translated">Baixades</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">151</context>
@@ -17078,7 +17078,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="9186529157286281693" datatype="html">
         <source>Last 24 hours</source>
-        <target state="new">Last 24 hours</target>
+        <target state="translated">Últimes 24 hores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">342</context>
@@ -17102,7 +17102,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6902066221893318076" datatype="html">
         <source>VIEWS</source>
-        <target state="new">VIEWS</target>
+        <target state="translated">VISUALITZACIONS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">378</context>
@@ -17110,7 +17110,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="5411116568190223417" datatype="html">
         <source>A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</source>
-        <target state="new">A view means that someone watched the video for at least <x id="seconds" equiv-text="countViewAfterSeconds"/> seconds</target>
+        <target state="translated">Una visualització significa que algú ha vist el vídeo durant almenys <x id="seconds" equiv-text="countViewAfterSeconds"/> segons</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">380</context>
@@ -17118,7 +17118,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6241152435233737914" datatype="html">
         <source>DOWNLOADS</source>
-        <target state="new">DOWNLOADS</target>
+        <target state="translated">BAIXADES</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">383</context>
@@ -17126,7 +17126,7 @@ L'enllaç caducarà al cap d'una hora.</target>
       </trans-unit>
       <trans-unit id="6837594486982933976" datatype="html">
         <source>LIKES</source>
-        <target state="new">LIKES</target>
+        <target state="translated">M'AGRADA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/stats/video-stats.component.ts</context>
           <context context-type="linenumber">387</context>
