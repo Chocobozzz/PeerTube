@@ -769,7 +769,7 @@
       </trans-unit>
       <trans-unit id="6376001235231740985" datatype="html">
         <source>Request declined</source>
-        <target state="new">Request declined</target>
+        <target state="translated">Kérés elutasítva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">308,309</context>
@@ -777,7 +777,7 @@
       </trans-unit>
       <trans-unit id="7685379141909714548" datatype="html">
         <source>Request accepted</source>
-        <target state="new">Request accepted</target>
+        <target state="translated">Kérés elfogadva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-notifications/user-notification-content.component.html</context>
           <context context-type="linenumber">319,320</context>
@@ -1693,7 +1693,7 @@
       </trans-unit>
       <trans-unit id="8801202056963655948" datatype="html">
         <source>Remove this field</source>
-        <target state="new">Remove this field</target>
+        <target state="translated">Mező eltávolítása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
           <context context-type="linenumber">32,33</context>
@@ -1701,7 +1701,7 @@
       </trans-unit>
       <trans-unit id="8246543299161932823" datatype="html">
         <source>Remove the language</source>
-        <target state="new">Remove the language</target>
+        <target state="translated">Nyelv eltávolítása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
           <context context-type="linenumber">61,62</context>
@@ -1709,7 +1709,7 @@
       </trans-unit>
       <trans-unit id="4629449147054812250" datatype="html">
         <source>Remove the category</source>
-        <target state="new">Remove the category</target>
+        <target state="translated">Kategória eltávolítása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
           <context context-type="linenumber">71,72</context>
@@ -1717,7 +1717,7 @@
       </trans-unit>
       <trans-unit id="2654857983483034266" datatype="html">
         <source>Remove the licence</source>
-        <target state="new">Remove the licence</target>
+        <target state="translated">Licensz eltávolítása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
           <context context-type="linenumber">81,82</context>
@@ -1725,7 +1725,7 @@
       </trans-unit>
       <trans-unit id="3885497195825665706" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Következő</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.html</context>
           <context context-type="linenumber">104</context>
@@ -1765,7 +1765,7 @@
       </trans-unit>
       <trans-unit id="4933210538840626810" datatype="html">
         <source>Comments policy is required.</source>
-        <target state="new">Comments policy is required.</target>
+        <target state="translated">A hozzászólási szabályzatot kötelező kitölteni.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">107</context>
