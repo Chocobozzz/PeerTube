@@ -11136,7 +11136,7 @@
       </trans-unit>
       <trans-unit id="1547455266629178601" datatype="html">
         <source>Account mute</source>
-        <target state="new">Account mute</target>
+        <target state="translated">Mise en sourdine du compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -11144,7 +11144,7 @@
       </trans-unit>
       <trans-unit id="327915996170847189" datatype="html">
         <source>Server mute</source>
-        <target state="new">Server mute</target>
+        <target state="translated">Mise en sourdine du serveur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -11152,7 +11152,7 @@
       </trans-unit>
       <trans-unit id="9098134874193744197" datatype="html">
         <source>Blocklist subscription</source>
-        <target state="new">Blocklist subscription</target>
+        <target state="translated">Abonnement à une liste de blocage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">74</context>
@@ -11160,7 +11160,7 @@
       </trans-unit>
       <trans-unit id="7772026812316405493" datatype="html">
         <source>Watched words list</source>
-        <target state="new">Watched words list</target>
+        <target state="translated">Liste de mots surveillés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">75</context>
@@ -11168,7 +11168,7 @@
       </trans-unit>
       <trans-unit id="6553028739335153683" datatype="html">
         <source>Watched words subscription</source>
-        <target state="new">Watched words subscription</target>
+        <target state="translated">Abonnement à une liste de mots surveillés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">76</context>
@@ -11176,7 +11176,7 @@
       </trans-unit>
       <trans-unit id="3249621195779537062" datatype="html">
         <source>Automatic tag policy</source>
-        <target state="new">Automatic tag policy</target>
+        <target state="translated">Politique d'étiquetage automatique</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">77</context>
@@ -11184,7 +11184,7 @@
       </trans-unit>
       <trans-unit id="9218994438129306852" datatype="html">
         <source>Instance configuration</source>
-        <target state="new">Instance configuration</target>
+        <target state="translated">Configuration de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">79</context>
@@ -11192,7 +11192,7 @@
       </trans-unit>
       <trans-unit id="2655184267144582011" datatype="html">
         <source>Instance image</source>
-        <target state="new">Instance image</target>
+        <target state="translated">Image de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">80</context>
@@ -11200,7 +11200,7 @@
       </trans-unit>
       <trans-unit id="6409891194258344393" datatype="html">
         <source>Instance homepage</source>
-        <target state="new">Instance homepage</target>
+        <target state="translated">Page d'accueil de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">81</context>
@@ -11208,7 +11208,7 @@
       </trans-unit>
       <trans-unit id="139976802650778603" datatype="html">
         <source>Instance host</source>
-        <target state="new">Instance host</target>
+        <target state="translated">Hôte de l'instance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">82</context>
@@ -11216,7 +11216,7 @@
       </trans-unit>
       <trans-unit id="6944772343529365140" datatype="html">
         <source>Plugin or theme</source>
-        <target state="new">Plugin or theme</target>
+        <target state="translated">Plugin ou thème</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">83</context>
@@ -11224,7 +11224,7 @@
       </trans-unit>
       <trans-unit id="6739459399674606457" datatype="html">
         <source>Server redundancy</source>
-        <target state="new">Server redundancy</target>
+        <target state="translated">Redondance du serveur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">85</context>
@@ -11232,7 +11232,7 @@
       </trans-unit>
       <trans-unit id="8986777419550560431" datatype="html">
         <source>Video redundancy</source>
-        <target state="new">Video redundancy</target>
+        <target state="translated">Redondance de vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">86</context>
@@ -11240,7 +11240,7 @@
       </trans-unit>
       <trans-unit id="6362661861630729641" datatype="html">
         <source>Job queue</source>
-        <target state="new">Job queue</target>
+        <target state="translated">File d'attente des tâches</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">87</context>
@@ -11248,7 +11248,7 @@
       </trans-unit>
       <trans-unit id="1895957424873987405" datatype="html">
         <source>Job</source>
-        <target state="new">Job</target>
+        <target state="translated">Tâche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">88</context>
