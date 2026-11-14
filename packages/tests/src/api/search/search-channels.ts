@@ -166,6 +166,19 @@ describe('Test channels search', function () {
     }
   })
 
+  it('Should sort channels by display name', async function () {
+    for (const sort of [ 'displayName', '-displayName' ]) {
+      const body = await command.advancedChannelSearch({ search: { sort } })
+      const names = body.data.map(c => c.displayName)
+
+      const expected = [ ...names ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+      if (sort.startsWith('-')) expected.reverse()
+
+      expect(names).to.have.length.above(2)
+      expect(names).to.deep.equal(expected)
+    }
+  })
+
   after(async function () {
     await cleanupTests([ server, remoteServer ])
   })
