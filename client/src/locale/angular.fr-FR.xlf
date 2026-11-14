@@ -1775,7 +1775,7 @@
       </trans-unit>
       <trans-unit id="3255203254266798889" datatype="html">
         <source>Use of AI is required.</source>
-        <target state="translated">L'utilisation de l'IA est requise.</target>
+        <target state="translated">La mention d'utilisation de l'IA est requise.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -3841,7 +3841,7 @@
       </trans-unit>
       <trans-unit id="8950709169629037139" datatype="html">
         <source>Install plugins</source>
-        <target state="translated">Installer des greffons</target>
+        <target state="translated">Installer des plugins</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -3849,7 +3849,7 @@
       </trans-unit>
       <trans-unit id="8726084754949366831" datatype="html">
         <source>The following plugins will be installed on your platform: <x id="PH" equiv-text="this.plugins.join(', ')"/>.</source>
-        <target state="translated">Les greffons suivants seront installés sur votre plateforme : <x id="PH" equiv-text="this.plugins.join(', ')"/>.</target>
+        <target state="translated">Les plugins suivants seront installés sur votre plateforme : <x id="PH" equiv-text="this.plugins.join(', ')"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -11136,7 +11136,7 @@
       </trans-unit>
       <trans-unit id="1547455266629178601" datatype="html">
         <source>Account mute</source>
-        <target state="translated">Mise en sourdine du compte</target>
+        <target state="translated">Masquer le compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">72</context>
@@ -11144,7 +11144,7 @@
       </trans-unit>
       <trans-unit id="327915996170847189" datatype="html">
         <source>Server mute</source>
-        <target state="translated">Mise en sourdine du serveur</target>
+        <target state="translated">Masquer le serveur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">73</context>
@@ -11256,7 +11256,7 @@
       </trans-unit>
       <trans-unit id="1607659813099506795" datatype="html">
         <source>Remote runner</source>
-        <target state="new">Remote runner</target>
+        <target state="translated">Runner (transcodeur) distant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">89</context>
@@ -11264,7 +11264,7 @@
       </trans-unit>
       <trans-unit id="419317103351341491" datatype="html">
         <source>Runner registration token</source>
-        <target state="new">Runner registration token</target>
+        <target state="translated">Jeton d'enregistrement du runner</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">90</context>
@@ -11272,7 +11272,7 @@
       </trans-unit>
       <trans-unit id="102326508230089402" datatype="html">
         <source>Debug command</source>
-        <target state="new">Debug command</target>
+        <target state="translated">Commande de débogage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">91</context>
@@ -11280,7 +11280,7 @@
       </trans-unit>
       <trans-unit id="5046373286319271287" datatype="html">
         <source>Storage prune</source>
-        <target state="new">Storage prune</target>
+        <target state="translated">Nettoyage du stockage</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
           <context context-type="linenumber">92</context>
@@ -12124,7 +12124,7 @@
       </trans-unit>
       <trans-unit id="2398422581918975504" datatype="html">
         <source>These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </source>
-        <target state="new"> These logs only come from the primary PeerTube process: <x id="ICU" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}" xid="4109582258601121399"/> also running, and their logs are not displayed here. Check the log files of each secondary process to get their logs. </target>
+        <target state="translated">Ces journaux proviennent uniquement du processus principal de PeerTube : <x id="ICU" xid="4109582258601121399" equiv-text="{secondariesUp, plural, =1 {1 secondary process is} other {{{ secondariesUp }} secondary processes are}}"/> également en cours d'exécution, et leurs journaux ne sont pas affichés ici. Consultez les fichiers journaux de chaque processus secondaire pour obtenir leurs journaux. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3,8</context>
@@ -12132,7 +12132,7 @@
       </trans-unit>
       <trans-unit id="2468359540835782741" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 secondary process is} other {<x id="INTERPOLATION"/> secondary processes are}}</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 processus secondaire est} other {<x id="INTERPOLATION"/> processus secondaires sont}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">3</context>
@@ -12564,7 +12564,7 @@
       </trans-unit>
       <trans-unit id="8866329773573088545" datatype="html">
         <source>Save player settings</source>
-        <target state="new">Save player settings</target>
+        <target state="translated">Enregistrer les paramètres du lecteur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.html</context>
           <context context-type="linenumber">35</context>
@@ -12572,7 +12572,7 @@
       </trans-unit>
       <trans-unit id="7148806470329294902" datatype="html">
         <source>Player settings updated.</source>
-        <target state="new">Player settings updated.</target>
+        <target state="translated">Paramètres du lecteur mis à jour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-settings/user-player-settings.component.ts</context>
           <context context-type="linenumber">27</context>
@@ -12668,7 +12668,7 @@
       </trans-unit>
       <trans-unit id="2559713568463637712" datatype="html">
         <source><x id="PH" equiv-text="label"/> (has errors)</source>
-        <target state="new"><x id="PH" equiv-text="label"/> (has errors)</target>
+        <target state="translated"><x id="PH" equiv-text="label"/> (comporte des erreurs)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.ts</context>
           <context context-type="linenumber">373</context>
@@ -12740,7 +12740,7 @@
       </trans-unit>
       <trans-unit id="5310287618682440004" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> publicly shares <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/api/v1/server/blocklist/public-log&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>its blocklist<x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;external-link&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> publicly shares <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/api/v1/server/blocklist/public-log&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>its blocklist<x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;external-link&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> partage publiquement <x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;/api/v1/server/blocklist/public-log&quot; target=&quot;_blank&quot; rel=&quot;noopener noreferrer&quot;&gt;"/>sa liste de blocage<x id="START_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;my-global-icon iconName=&quot;external-link&quot;&gt;"/><x id="CLOSE_TAG_MY_GLOBAL_ICON" ctype="x-my_global_icon" equiv-text="&lt;/my-global-icon&gt;"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/children/about-instance-moderation.component.html</context>
           <context context-type="linenumber">22,24</context>
@@ -12884,7 +12884,7 @@
       </trans-unit>
       <trans-unit id="7241334920908044247" datatype="html">
         <source>TRANSLATIONS</source>
-        <target state="new">TRANSLATIONS</target>
+        <target state="translated">TRADUCTIONS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">360,361</context>
@@ -12892,7 +12892,7 @@
       </trans-unit>
       <trans-unit id="4428885966259390062" datatype="html">
         <source>Translate your platform information for users browsing the interface in another language. Empty fields fall back to the information above.</source>
-        <target state="new"> Translate your platform information for users browsing the interface in another language. Empty fields fall back to the information above. </target>
+        <target state="translated">Traduisez les informations de votre plateforme pour les utilisateurs naviguant sur l'interface dans une autre langue. Les champs vides reprennent les informations ci-dessus.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">362,363</context>
@@ -12900,7 +12900,7 @@
       </trans-unit>
       <trans-unit id="2253823859529870113" datatype="html">
         <source>Translation to edit</source>
-        <target state="new">Translation to edit</target>
+        <target state="translated">Traduction à modifier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">371,373</context>
@@ -12908,7 +12908,7 @@
       </trans-unit>
       <trans-unit id="7846715430473982826" datatype="html">
         <source>Remove this translation</source>
-        <target state="new">Remove this translation</target>
+        <target state="translated">Supprimer cette traduction</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">379</context>
@@ -12916,7 +12916,7 @@
       </trans-unit>
       <trans-unit id="695212221070721243" datatype="html">
         <source>Add a translation</source>
-        <target state="new">Add a translation</target>
+        <target state="translated">Ajouter une traduction</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">428,430</context>
@@ -12924,7 +12924,7 @@
       </trans-unit>
       <trans-unit id="3249513483374643425" datatype="html">
         <source>Add</source>
-        <target state="new">Add</target>
+        <target state="translated">Ajouter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-information.component.html</context>
           <context context-type="linenumber">436</context>
@@ -13508,7 +13508,7 @@
       </trans-unit>
       <trans-unit id="7343456225783046295" datatype="html">
         <source>Display scheduled lives</source>
-        <target state="new">Display scheduled lives</target>
+        <target state="translated">Afficher les directs programmés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -13652,7 +13652,7 @@
       </trans-unit>
       <trans-unit id="1747993932679092589" datatype="html">
         <source>Default recommended videos</source>
-        <target state="new">Default recommended videos</target>
+        <target state="translated">Vidéos recommandées par défaut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/pages/admin-config-general.component.html</context>
           <context context-type="linenumber">556,558</context>
