@@ -4311,7 +4311,7 @@
       </trans-unit>
       <trans-unit id="1698989071064321491" datatype="html">
         <source>Set up</source>
-        <target state="new">Set up</target>
+        <target state="translated">Beállítom most</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">42,43</context>
@@ -4859,7 +4859,7 @@
       </trans-unit>
       <trans-unit id="8821712929823045567" datatype="html">
         <source>It's time to set up your account profile!</source>
-        <target state="translated">Érdemes most beállítania a fiókját!</target>
+        <target state="translated">Érdemes most beállítania profilját!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">13</context>
@@ -4867,7 +4867,7 @@
       </trans-unit>
       <trans-unit id="7239874680342223476" datatype="html">
         <source>Help moderators and other users to know <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> by:</source>
-        <target state="translated">Segítsen a moderátoroknak és a felhasználóknak <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>megismerni önt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> ezáltal:</target>
+        <target state="translated">Segítsen a moderátoroknak és a felhasználóknak <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>megismerni önt<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -4875,7 +4875,7 @@
       </trans-unit>
       <trans-unit id="5856432243446401016" datatype="html">
         <source>Uploading an <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>avatar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Egy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>profilkép<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> feltöltésével</target>
+        <target state="translated">Töltön fel egy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>profilképet<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">19</context>
@@ -4883,7 +4883,7 @@
       </trans-unit>
       <trans-unit id="3221645359464920754" datatype="html">
         <source>Writing a <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
-        <target state="translated">Egy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>leírás<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> megadásával</target>
+        <target state="translated">Adjon meg egy <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>leírást<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/account-setup-warning-modal.component.html</context>
           <context context-type="linenumber">23</context>
