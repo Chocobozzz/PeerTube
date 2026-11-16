@@ -913,7 +913,7 @@
       </trans-unit>
       <trans-unit id="8286107468499221380" datatype="html">
         <source>If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.</source>
-        <target state="new"> If you think PeerTube is wrong (videos in broken state after a crash etc.), you can force transcoding on these videos.</target>
+        <target state="translated">若您認為 PeerTube 出現了問題（例如系統當機後影片無法正常播放等），您可以對這些影片強制進行轉換編碼。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">500</context>
@@ -921,7 +921,7 @@
       </trans-unit>
       <trans-unit id="76759851359794182" datatype="html">
         <source>Otherwise they will be skipped. Do you want to force transcoding?</source>
-        <target state="new"> Otherwise they will be skipped. Do you want to force transcoding?</target>
+        <target state="translated">否則這些檔案將會被跳過。您要強制進行轉換編碼嗎？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/video/video.service.ts</context>
           <context context-type="linenumber">501</context>
