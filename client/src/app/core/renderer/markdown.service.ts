@@ -105,17 +105,54 @@ export class MarkdownService {
   // ---------------------------------------------------------------------------
 
   processVideoTimestamps (videoShortUUID: string, html: string) {
-    return html.replace(/\b((\d{1,2}):)?(\d{1,2}):(\d{1,2})\b/g, function (str, _, h, m, s) {
-      const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
+    if (!html) return html
 
-      const url = decorateVideoLink({
-        url: buildVideoLink({ shortUUID: videoShortUUID }),
-        startTime: t
-      })
+    const template = document.createElement('template')
+    template.innerHTML = html
 
-      // Sync class name with timestamp-route-transformer directive
-      return `<a class="video-timestamp" href="${url}">${str}</a>`
-    })
+    const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_TEXT)
+    const textNodes: Text[] = []
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode as Text
+
+      // Don't create nested links
+      if (node.parentElement?.closest('a')) continue
+
+      textNodes.push(node)
+    }
+
+    for (const node of textNodes) {
+      const text = node.data
+      const fragment = document.createDocumentFragment()
+      let lastIndex = 0
+
+      for (const match of text.matchAll(/\b((\d{1,2}):)?(\d{1,2}):(\d{1,2})\b/g)) {
+        const [ str, , h, m, s ] = match
+        const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
+
+        const url = decorateVideoLink({
+          url: buildVideoLink({ shortUUID: videoShortUUID }),
+          startTime: t
+        })
+
+        const link = document.createElement('a')
+        // Sync class name with timestamp-route-transformer directive
+        link.className = 'video-timestamp'
+        link.setAttribute('href', url)
+        link.textContent = str
+
+        fragment.append(text.slice(lastIndex, match.index), link)
+        lastIndex = match.index + str.length
+      }
+
+      if (lastIndex === 0) continue
+
+      fragment.append(text.slice(lastIndex))
+      node.replaceWith(fragment)
+    }
+
+    return template.innerHTML
   }
 
   private async render (options: {
