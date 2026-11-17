@@ -1607,7 +1607,7 @@
       </trans-unit>
       <trans-unit id="1491840370838385662" datatype="html">
         <source>{count, plural, =1 {1 transcoding job created.} other {<x id="count"/> transcoding jobs created.}}</source>
-        <target state="new">{count, plural, =1 {1 transcoding job created.} other {<x id="count"/> transcoding jobs created.}}</target>
+        <target state="translated">{count, plural, =1 {已建立 1 個轉換編碼工作。} other {已建立 <x id="count"/> 個轉換編碼工作。}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">570</context>
@@ -1615,7 +1615,7 @@
       </trans-unit>
       <trans-unit id="7831114154851263791" datatype="html">
         <source>{count, plural, =1 {1 video skipped because it is already being transcoded.} other {<x id="count"/> videos skipped because they are already being transcoded.}}</source>
-        <target state="new">{count, plural, =1 {1 video skipped because it is already being transcoded.} other {<x id="count"/> videos skipped because they are already being transcoded.}}</target>
+        <target state="translated">{count, plural, =1 {因已轉換編碼，已略過 1 部影片。} other {因已轉換編碼，已略過 <x id="count"/> 部影片。}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">580</context>
@@ -1639,7 +1639,7 @@
       </trans-unit>
       <trans-unit id="8533955271153325348" datatype="html">
         <source>{count, plural, =1 {1 video skipped because it is already being transcribed.} other {<x id="count"/> videos skipped because they are already being transcribed.}}</source>
-        <target state="new">{count, plural, =1 {1 video skipped because it is already being transcribed.} other {<x id="count"/> videos skipped because they are already being transcribed.}}</target>
+        <target state="translated">{count, plural, =1 {因已轉錄，略過 1 部影片。} other {因已轉錄，略過 <x id="count"/> 部影片。}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">625</context>
@@ -1647,7 +1647,7 @@
       </trans-unit>
       <trans-unit id="1800714362868088312" datatype="html">
         <source>{count, plural, =1 {Failed on video "<x id="name"/>": <x id="message"/>} other {Failed on <x id="count"/> videos. First error on video "<x id="name"/>": <x id="message"/>}}</source>
-        <target state="new">{count, plural, =1 {Failed on video "<x id="name"/>": <x id="message"/>} other {Failed on <x id="count"/> videos. First error on video "<x id="name"/>": <x id="message"/>}}</target>
+        <target state="translated">{count, plural, =1 {失敗於影片「<x id="name"/>」：<x id="message"/>} other {失敗於 <x id="count"/> 部影片。第一個錯誤於影片「<x id="name"/>」：<x id="message"/>}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
           <context context-type="linenumber">649</context>
@@ -1775,7 +1775,7 @@
       </trans-unit>
       <trans-unit id="3255203254266798889" datatype="html">
         <source>Use of AI is required.</source>
-        <target state="new">Use of AI is required.</target>
+        <target state="translated">使用人工智慧為必填。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">108</context>
@@ -1783,7 +1783,7 @@
       </trans-unit>
       <trans-unit id="4053044562013092133" datatype="html">
         <source>Commercial content is required.</source>
-        <target state="new">Commercial content is required.</target>
+        <target state="translated">商業內容為必填。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video/bulk-update-videos-modal.component.ts</context>
           <context context-type="linenumber">111</context>
@@ -2251,7 +2251,7 @@
       </trans-unit>
       <trans-unit id="4216959698439022587" datatype="html">
         <source>File replacement is not available while the video is being duplicated.</source>
-        <target state="new">File replacement is not available while the video is being duplicated.</target>
+        <target state="translated">在複製影片期間，無法進行檔案替換。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">18</context>
@@ -2259,7 +2259,7 @@
       </trans-unit>
       <trans-unit id="2063903262907970040" datatype="html">
         <source>File replacement is not available on a video whose creation failed.</source>
-        <target state="new">File replacement is not available on a video whose creation failed.</target>
+        <target state="translated">對於建立失敗的影片，無法執行檔案替換。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">20</context>
@@ -2315,7 +2315,7 @@
       </trans-unit>
       <trans-unit id="4163606422627203987" datatype="html">
         <source>Studio is not available while the video is being duplicated.</source>
-        <target state="new">Studio is not available while the video is being duplicated.</target>
+        <target state="translated">在複製影片期間無法使用工作室。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">47</context>
@@ -2323,7 +2323,7 @@
       </trans-unit>
       <trans-unit id="1947476160394208371" datatype="html">
         <source>Studio is not available on a video whose creation failed.</source>
-        <target state="new">Studio is not available on a video whose creation failed.</target>
+        <target state="translated">若影片建立失敗，則無法對該影片使用工作室。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/common/unavailable-features.ts</context>
           <context context-type="linenumber">49</context>
@@ -3843,7 +3843,7 @@
       </trans-unit>
       <trans-unit id="8950709169629037139" datatype="html">
         <source>Install plugins</source>
-        <target state="new">Install plugins</target>
+        <target state="translated">安裝外掛程式</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/admin-config-wizard/steps/admin-config-wizard-preview.component.ts</context>
           <context context-type="linenumber">90</context>
