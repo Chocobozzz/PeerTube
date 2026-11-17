@@ -7,7 +7,7 @@ import {
 } from '@peertube/peertube-models'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
-import { buildServerIdsFollowedBy } from '@server/models/shared/index.js'
+import { buildServerIdsFollowedBy, getChannelSort } from '@server/models/shared/index.js'
 import { Sequelize } from 'sequelize'
 import { VideoChannelTableAttributes } from './video-channel-table-attributes.js'
 
@@ -339,6 +339,10 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
       this.tableAttributes.getAccountActorAttributes(),
       this.tableAttributes.getAccountServerAttributes()
     ]
+  }
+
+  protected getSort (sort: string) {
+    return getChannelSort(sort)
   }
 
   protected getCalculatedAttributes () {

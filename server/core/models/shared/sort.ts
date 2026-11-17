@@ -37,7 +37,19 @@ export function getAdminUsersSort (value: string): OrderItem[] {
 export function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
-  if (field.toLowerCase() === 'name') {
+  // The display name of a playlist is stored in the "name" column
+  if (field.toLowerCase() === 'name' || field === 'displayName') {
+    return [ [ 'name', direction ], lastSort ]
+  }
+
+  return getSort(value, lastSort)
+}
+
+export function getChannelSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildSortDirectionAndField(value)
+
+  // The display name of a channel is stored in the "name" column
+  if (field === 'displayName') {
     return [ [ 'name', direction ], lastSort ]
   }
 

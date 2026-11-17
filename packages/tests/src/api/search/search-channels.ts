@@ -166,6 +166,20 @@ describe('Test channels search', function () {
     }
   })
 
+  it('Should sort by display name', async function () {
+    const handles = [ 'squall_channel', 'zell_channel@' + remoteServer.host ]
+
+    {
+      const body = await command.advancedChannelSearch({ search: { handles, sort: 'displayName' } })
+      expect(body.data.map(c => c.displayName)).to.deep.equal([ 'Squall channel', 'Zell channel' ])
+    }
+
+    {
+      const body = await command.advancedChannelSearch({ search: { handles, sort: '-displayName' } })
+      expect(body.data.map(c => c.displayName)).to.deep.equal([ 'Zell channel', 'Squall channel' ])
+    }
+  })
+
   after(async function () {
     await cleanupTests([ server, remoteServer ])
   })

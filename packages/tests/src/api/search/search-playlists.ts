@@ -163,6 +163,19 @@ describe('Test playlists search', function () {
     }
   })
 
+  it('Should sort playlists by display name', async function () {
+    for (const sort of [ 'displayName', '-displayName' ]) {
+      const body = await server.playlists.list({ sort })
+      const names = body.data.map(p => p.displayName)
+
+      const expected = [ ...names ].sort()
+      if (sort.startsWith('-')) expected.reverse()
+
+      expect(names).to.have.length.above(1)
+      expect(names).to.deep.equal(expected)
+    }
+  })
+
   it('Should not display playlists without videos', async function () {
     const search = {
       search: 'Lunge',
