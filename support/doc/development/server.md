@@ -14,16 +14,16 @@ Here's a list of all the parts of the server to update if you want to add a new 
 Some of these may be optional (for example your new endpoint may not need to send notifications) but this guide tries to be exhaustive.
 
  * Configuration:
-   - Add you new configuration key in `config/default.yaml` and `config/production.yaml`
-   - If you configuration needs to be different in dev or tests environments, also update `config/dev.yaml` and `config/test.yaml`
+   - Add your new configuration key in `config/default.yaml` and `config/production.yaml.example`
+   - If your configuration needs to be different in dev or tests environments, also update `config/dev.yaml` and `config/test.yaml`
    - Load your configuration in `server/core/initializers/config.ts`
    - Check new configuration keys are set in `server/core/initializers/checker-before-init.ts`
    - You can also ensure configuration consistency in `server/core/initializers/checker-after-init.ts`
    - If you want your configuration to be available in the client:
-     + Add your field in `packages/models/src/server/core/server-config.model.ts`
+     + Add your field in `packages/models/src/server/server-config.model.ts`
      + Update `server/core/lib/server-config-manager.ts` to include your new configuration
    - If you want your configuration to be updatable by the web admin in the client:
-     + Add your field in `packages/models/src/server/core/custom-config.model.ts`
+     + Add your field in `packages/models/src/server/custom-config.model.ts`
      + Add the configuration to the config object in the `server/core/controllers/api/config.ts` controller
  * Controllers:
    - Create the controller file and fill it with your REST API routes
@@ -55,7 +55,7 @@ Some of these may be optional (for example your new endpoint may not need to sen
    - If updating database schema (adding/removing/renaming a column):
      + Update the sequelize models in `server/core/models/`
      + Add migrations:
-       * Create the migration file in `initializers/migrations` using Sequelize Query Interface (`.addColumn`, `.dropTable`, `.changeColumn`)
+       * Create the migration file in `server/core/initializers/migrations` using Sequelize Query Interface (`.addColumn`, `.dropTable`, `.changeColumn`)
        * Update `LAST_MIGRATION_VERSION` in `server/core/initializers/constants.ts`
  * Notifications:
    - Create the new notification model in `packages/models/src/users/user-notification.model.ts`
@@ -74,10 +74,10 @@ Some of these may be optional (for example your new endpoint may not need to sen
  * Tests:
    - Create your command class in `packages/server-commands/` that will wrap HTTP requests to your new endpoint
    - Add your command file in `index.ts` of current directory
-   - Instantiate your command class in `packages/server-commands/src/server/core.ts`
-   - Create your test file in `server/core/tests/api/check-params` to test middleware validators/authentification/user rights (offensive tests)
-   - Create your test file in `server/core/tests/api` to test your new endpoints
-   - Add your notification test in `server/core/tests/api/notifications`
+   - Instantiate your command class in `packages/server-commands/src/server/server.ts`
+   - Create your test file in `packages/tests/src/api/check-params` to test middleware validators/authentication/user rights (offensive tests)
+   - Create your test file in `packages/tests/src/api` to test your new endpoints
+   - Add your notification test in `packages/tests/src/api/notifications`
  * Update REST API documentation in `support/doc/api/openapi.yaml`
 
 ## Configuration JSON schema
