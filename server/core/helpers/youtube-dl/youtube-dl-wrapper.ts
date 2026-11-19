@@ -206,8 +206,9 @@ export class YoutubeDLWrapper {
     fileExt: string
     timeout: number
     userLanguage: string
+    maxFileSize?: number // In bytes
   }): Promise<string> {
-    const { fileExt, timeout, userLanguage } = options
+    const { fileExt, timeout, userLanguage, maxFileSize } = options
 
     await this.checkUnicastOrThrow(userLanguage)
 
@@ -224,6 +225,7 @@ export class YoutubeDLWrapper {
         format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
         output: pathWithoutExtension,
         timeout,
+        maxFileSize,
         processOptions
       })
 

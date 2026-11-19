@@ -268,12 +268,36 @@ export async function getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
   return base + LiveQuotaStore.Instance.getLiveQuotaOfUser(user.id)
 }
 
+// Remaining bytes the user can upload, Infinity if the user has no quota
+export async function getUserRemainingQuota (options: {
+  userId: number
+  checkDaily?: boolean // default true
+}) {
+  const { userId, checkDaily = true } = options
+  const user = await UserModel.loadById(userId)
+
+  let remaining = Infinity
+
+  if (user.videoQuota !== -1) {
+    remaining = Math.min(remaining, user.videoQuota - await getOriginalVideoFileTotalFromUser(user))
+  }
+
+  if (checkDaily && user.videoQuotaDaily !== -1) {
+    remaining = Math.min(remaining, user.videoQuotaDaily - await getOriginalVideoFileTotalDailyFromUser(user))
+  }
+
+  return Math.max(0, remaining)
+}
+
 export async function isUserQuotaValid (options: {
   channelUserId: number
   uploadSize: number // In bytes
   checkDaily?: boolean // default true
 }) {
   const { channelUserId, uploadSize, checkDaily = true } = options
+
+  if (typeof uploadSize !== 'number' || !Number.isFinite(uploadSize) || uploadSize < 0) return false
+
   const user = await UserModel.loadById(channelUserId)
 
   if (user.videoQuota === -1 && user.videoQuotaDaily === -1) return Promise.resolve(true)

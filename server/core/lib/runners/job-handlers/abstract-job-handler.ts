@@ -21,8 +21,9 @@ import {
   RunnerJobVideoStudioTranscodingPrivatePayload
 } from '@peertube/peertube-models'
 import { saveInTransactionWithRetries } from '@server/helpers/database-utils.js'
-import { deleteFileAndCatch } from '@server/helpers/fs.js'
+import { deleteFileAndCatch, isFileInsideDirectory } from '@server/helpers/fs.js'
 import { createLogger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import { RUNNER_JOBS } from '@server/initializers/constants.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { PeerTubeSocket } from '@server/lib/peertube-socket.js'
@@ -214,6 +215,12 @@ export abstract class AbstractJobHandler<C, UpdatePayload extends RunnerJobUpdat
     for (const key of resultPayloadFileKeys) {
       const value = (resultPayload as Record<string, unknown>)?.[key]
       if (typeof value !== 'string') continue
+
+      // Uploaded files are stored by multer in the temporary directory: never delete anything else
+      if (!isFileInsideDirectory(value, CONFIG.STORAGE.TMP_DIR)) {
+        logger.error('Refusing to delete result payload file %s that is not in the temporary directory.', value)
+        continue
+      }
 
       deleteFileAndCatch(value)
     }

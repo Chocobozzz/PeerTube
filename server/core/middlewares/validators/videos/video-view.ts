@@ -5,26 +5,27 @@ import {
   isVideoViewUAInfo,
   toVideoViewUADeviceOrNull
 } from '@server/helpers/custom-validators/video-view.js'
+import { createLogger } from '@server/helpers/logger.js'
+import { getLocalVideoViewerActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { getCachedVideoDuration } from '@server/lib/video.js'
 import { LocalVideoViewerModel } from '@server/models/stat/local-video-viewer.js'
 import express from 'express'
 import { body, param } from 'express-validator'
-import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
+import { isUUIDValid, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
 import { areValidationErrors, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
-import { createLogger } from '@server/helpers/logger.js'
 
 const logger = createLogger()
 
 const tags = [ 'views' ]
 
 export const getVideoLocalViewerValidator = [
-  param('localViewerId')
-    .custom(isIdValid),
+  param('localViewerUUID')
+    .custom(isUUIDValid),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res, { tags })) return
 
-    const localViewer = await LocalVideoViewerModel.loadFullById(+req.params.localViewerId)
+    const localViewer = await LocalVideoViewerModel.loadFullByUrl(getLocalVideoViewerActivityPubUrl({ uuid: req.params.localViewerUUID }))
 
     // Viewer stats are only federated to the origin server for remote videos
     // Don't leak viewer stats of local videos (URL of unlisted/private videos, viewer location etc.)

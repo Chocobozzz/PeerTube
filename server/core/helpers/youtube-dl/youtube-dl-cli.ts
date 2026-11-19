@@ -119,10 +119,15 @@ export class YoutubeDLCLI {
     output: string
     processOptions: ProcessOptions
     timeout?: number
+    maxFileSize?: number // In bytes
     additionalYoutubeDLArgs?: string[]
   }) {
     let args = options.additionalYoutubeDLArgs || []
     args = args.concat([ '--merge-output-format', 'mp4', '-f', options.format, '-o', options.output ])
+
+    if (Number.isFinite(options.maxFileSize)) {
+      args = args.concat([ '--max-filesize', Math.max(0, Math.floor(options.maxFileSize)) + '' ])
+    }
 
     return this.run({
       url: options.url,

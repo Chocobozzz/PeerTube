@@ -28,7 +28,13 @@ import { CONFIG } from '../initializers/config.js'
 
 const logger = createLogger()
 
-export async function downloadWebTorrentVideo (target: { uri: string, torrentPath: string | null }, timeout: number) {
+export async function downloadWebTorrentVideo (
+  target: { uri: string, torrentPath: string | null },
+  timeout: number,
+  limits: {
+    maxFileSize?: number // In bytes
+  } = {}
+) {
   const torrentId = target.uri || target.torrentPath
   let timer
 
@@ -75,6 +81,16 @@ export async function downloadWebTorrentVideo (target: { uri: string, torrentPat
       logger.debug('Got torrent from webtorrent %s.', torrentId, { infoHash: torrent.infoHash })
 
       file = torrent.files[0]
+
+      if (Number.isFinite(limits.maxFileSize) && file.length > limits.maxFileSize) {
+        if (timer) clearTimeout(timer)
+
+        return safeWebtorrentDestroy({
+          webtorrent,
+          downloadedFile: { directoryPath, filepath: file.path },
+          torrentPath: target.torrentPath
+        }).then(() => rej(new Error(`Cannot import torrent ${torrentId}: its file (${file.length} bytes) exceeds the user video quota`)))
+      }
 
       // FIXME: avoid creating another stream when https://github.com/webtorrent/webtorrent/issues/1517 is fixed
       const writeStream = createWriteStream(path)

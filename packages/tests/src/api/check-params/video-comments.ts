@@ -695,6 +695,12 @@ describe('Test video comments API validator', function () {
       await server.comments.listCommentsOnMyVideos(base)
       await server.comments.listCommentsOnMyVideos({ ...base, token: editorToken })
     })
+
+    it('Should succeed without a sort', async function () {
+      for (const path of paths) {
+        await makeGetRequest({ url: server.url, path, token: server.accessToken, expectedStatus: HttpStatusCode.OK_200 })
+      }
+    })
   })
 
   describe('When approving a comment', function () {

@@ -108,7 +108,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
     })
   }
 
-  static loadFullById (id: number): Promise<MLocalVideoViewerWithWatchSections> {
+  static loadFullByUrl (url: string): Promise<MLocalVideoViewerWithWatchSections> {
     return this.findOne({
       include: [
         {
@@ -121,7 +121,7 @@ export class LocalVideoViewerModel extends SequelizeModel<LocalVideoViewerModel>
         }
       ],
       where: {
-        id
+        url
       }
     })
   }

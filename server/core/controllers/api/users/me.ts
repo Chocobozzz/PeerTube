@@ -44,6 +44,7 @@ import {
   listMyVideoImportsValidator,
   listMyVideosValidator,
   usersNewFeatureInfoReadValidator,
+  videoCommentsValidator,
   videoImportsSortValidator,
   videosSortValidator
 } from '../../../middlewares/validators/index.js'
@@ -106,8 +107,8 @@ meRouter.get(
   '/me/videos/comments',
   authenticate,
   paginationValidator,
-  videosSortValidator,
-  setDefaultVideosSort,
+  videoCommentsValidator,
+  setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listCommentsOnUserVideosValidator),
   asyncMiddleware(listCommentsOnUserVideos)

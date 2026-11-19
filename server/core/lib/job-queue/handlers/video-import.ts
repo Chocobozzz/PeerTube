@@ -21,9 +21,9 @@ import { downloadStagingObject, removeStagingObject } from '@server/lib/object-s
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { ServerConfigManager } from '@server/lib/server-config-manager.js'
 import { createOptimizeOrMergeAudioJobs } from '@server/lib/transcoding/create-transcoding-job.js'
-import { isUserQuotaValid } from '@server/lib/user.js'
-import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { createTranscriptionTaskIfNeeded } from '@server/lib/transcription/video-transcription.js'
+import { getUserRemainingQuota, isUserQuotaValid } from '@server/lib/user.js'
+import { autoBlacklistVideoIfNeeded } from '@server/lib/video-blacklist.js'
 import { replaceChaptersIfNotExist } from '@server/lib/video-chapters.js'
 import { buildNewFile, storeNewWebVideoFile } from '@server/lib/video-file.js'
 import { addLocalOrRemoteStoryboardJobIfNeeded, buildMoveVideoJob } from '@server/lib/video-jobs.js'
@@ -109,11 +109,11 @@ async function processTorrentImport (job: Job, videoImport: MVideoImportDefault,
 
   try {
     await processFile({
-      downloader: async () => {
+      downloader: async ({ maxFileSize }) => {
         // In the downloader, so a staging error marks the import as failed
         if (payload.torrentStagingKey) await downloadStagedTorrent(payload.torrentStagingKey, torrentPath)
 
-        return downloadWebTorrentVideo({ torrentPath, uri: videoImport.magnetUri }, JOB_TTL['video-import'])
+        return downloadWebTorrentVideo({ torrentPath, uri: videoImport.magnetUri }, JOB_TTL['video-import'], { maxFileSize })
       },
       videoImport,
       type: payload.type,
@@ -160,8 +160,13 @@ async function processYoutubeDLImport (job: Job, videoImport: MVideoImportDefaul
   if (!user) throw new Error('Video does not exist anymore')
 
   return processFile({
-    downloader: () => {
-      return youtubeDL.downloadVideo({ fileExt: payload.fileExt, timeout: JOB_TTL['video-import'], userLanguage: user.getLanguage() })
+    downloader: ({ maxFileSize }) => {
+      return youtubeDL.downloadVideo({
+        fileExt: payload.fileExt,
+        timeout: JOB_TTL['video-import'],
+        userLanguage: user.getLanguage(),
+        maxFileSize
+      })
     },
     videoImport,
     type: payload.type,
@@ -188,7 +193,8 @@ async function getVideoImportOrDie (payload: VideoImportPayload) {
 }
 
 async function processFile (options: {
-  downloader: () => Promise<string>
+  // maxFileSize is Infinity if the user has no quota
+  downloader: (options: { maxFileSize: number }) => Promise<string>
   videoImport: MVideoImportDefault
   user: MUserId
   type: VideoImportYoutubeDLPayloadType | VideoImportTorrentPayloadType
@@ -201,12 +207,18 @@ async function processFile (options: {
   let rollbackNewVideoFile: () => Promise<void>
 
   try {
+    if (!user) throw new Error('Video does not exist anymore')
+
+    const remainingQuota = await getUserRemainingQuota({ userId: user.id })
+    if (remainingQuota <= 0) {
+      throw new Error('The user video quota is exceeded: cannot import a new video.')
+    }
+
     // Download video
-    tmpVideoPath = await downloader()
+    tmpVideoPath = await downloader({ maxFileSize: remainingQuota })
 
     // Get information about this video
     const stats = await stat(tmpVideoPath)
-    if (!user) throw new Error('Video does not exist anymore')
 
     const isAble = await isUserQuotaValid({ channelUserId: user.id, uploadSize: stats.size })
     if (isAble === false) {

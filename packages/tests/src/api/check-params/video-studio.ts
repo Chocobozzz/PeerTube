@@ -1,9 +1,11 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { HttpStatusCode, HttpStatusCodeType, VideoStudioTask } from '@peertube/peertube-models'
+import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
   createSingleServer,
+  makeUploadRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   VideoStudioCommand,
@@ -172,6 +174,22 @@ describe('Test video studio API validator', function () {
           tasks: [],
           expectedStatus: HttpStatusCode.BAD_REQUEST_400
         })
+      })
+
+      it('Should fail with a task file and tasks that are not an array, without crashing the server', async function () {
+        for (const tasks of [ 'not an array', '' ]) {
+          await makeUploadRequest({
+            url: server.url,
+            path: '/api/v1/videos/' + videoUUID + '/studio/edit',
+            token: server.accessToken,
+            fields: { tasks },
+            attaches: { 'tasks[0][options][file]': buildAbsoluteFixturePath('video_short.mp4') },
+            expectedStatus: HttpStatusCode.BAD_REQUEST_400
+          })
+        }
+
+        // Still alive
+        await server.videos.get({ id: videoUUID })
       })
 
       it('Should fail with too many tasks', async function () {

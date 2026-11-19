@@ -220,9 +220,33 @@ function checkRemovedConfigKeys () {
   }
 }
 
+// Values published in the PeerTube repository (development and test configurations, docker placeholder)
+const PUBLIC_SECRETS = new Set([ 'my super dev secret', 'my super secret', '<MY PEERTUBE SECRET>' ])
+const SECRET_MIN_LENGTH = 32
+
 function checkSecretsConfig () {
-  if (!CONFIG.SECRETS.PEERTUBE) {
+  const secret = CONFIG.SECRETS.PEERTUBE
+
+  if (!secret) {
     throw new Error('secrets.peertube is missing in config. Generate one using `openssl rand -hex 32`')
+  }
+
+  if (!isProdInstance()) return
+
+  if (PUBLIC_SECRETS.has(secret)) {
+    logger.error(
+      'secrets.peertube is a public value from the PeerTube repository: anyone can use it. ' +
+        'Generate a new one using `openssl rand -hex 32`.'
+    )
+
+    return
+  }
+
+  if (secret.length < SECRET_MIN_LENGTH) {
+    logger.warn(
+      `secrets.peertube is too short (${secret.length} characters, ${SECRET_MIN_LENGTH} minimum). ` +
+        'Generate a new one using `openssl rand -hex 32`.'
+    )
   }
 }
 

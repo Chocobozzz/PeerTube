@@ -316,12 +316,29 @@ async function errorRunnerJob (req: express.Request, res: express.Response) {
 
 // ---------------------------------------------------------------------------
 
+const UPLOADED_FILE_PAYLOAD_KEYS = new Set([
+  'videoFile',
+  'resolutionPlaylistFile',
+  'vttFile',
+  'storyboardFile',
+  'masterPlaylistFile',
+  'videoChunkFile'
+])
+
+function withoutUploadedFileKeys<T> (payload: T): T {
+  if (!payload || typeof payload !== 'object') return {} as T
+
+  return Object.fromEntries(
+    Object.entries(payload).filter(([ key ]) => !UPLOADED_FILE_PAYLOAD_KEYS.has(key))
+  ) as T
+}
+
 const jobUpdateBuilders: {
   [id in RunnerJobType]?: (payload: RunnerJobUpdatePayload, files?: UploadFiles) => RunnerJobUpdatePayload
 } = {
   'live-rtmp-hls-transcoding': (payload: LiveRTMPHLSTranscodingUpdatePayload, files) => {
     return {
-      ...payload,
+      ...withoutUploadedFileKeys(payload),
 
       masterPlaylistFile: files['payload[masterPlaylistFile]']?.[0].path,
       resolutionPlaylistFile: files['payload[resolutionPlaylistFile]']?.[0].path,
@@ -376,7 +393,7 @@ const jobSuccessPayloadBuilders: {
 } = {
   'vod-web-video-transcoding': (payload: VODWebVideoTranscodingSuccess, files) => {
     return {
-      ...payload,
+      ...withoutUploadedFileKeys(payload),
 
       videoFile: files['payload[videoFile]'][0].path
     }
@@ -384,7 +401,7 @@ const jobSuccessPayloadBuilders: {
 
   'vod-hls-transcoding': (payload: VODHLSTranscodingSuccess, files) => {
     return {
-      ...payload,
+      ...withoutUploadedFileKeys(payload),
 
       videoFile: files['payload[videoFile]'][0].path,
       resolutionPlaylistFile: files['payload[resolutionPlaylistFile]'][0].path
@@ -393,7 +410,7 @@ const jobSuccessPayloadBuilders: {
 
   'vod-audio-merge-transcoding': (payload: VODAudioMergeTranscodingSuccess, files) => {
     return {
-      ...payload,
+      ...withoutUploadedFileKeys(payload),
 
       videoFile: files['payload[videoFile]'][0].path
     }
@@ -401,7 +418,7 @@ const jobSuccessPayloadBuilders: {
 
   'video-studio-transcoding': (payload: VideoStudioTranscodingSuccess, files) => {
     return {
-      ...payload,
+      ...withoutUploadedFileKeys(payload),
 
       videoFile: files['payload[videoFile]'][0].path
     }
@@ -411,7 +428,7 @@ const jobSuccessPayloadBuilders: {
 
   'video-transcription': (payload: TranscriptionSuccess, files) => {
     return {
-      ...payload,
+      ...withoutUploadedFileKeys(payload),
 
       vttFile: files['payload[vttFile]'][0].path
     }
@@ -419,7 +436,7 @@ const jobSuccessPayloadBuilders: {
 
   'generate-video-storyboard': (payload: GenerateStoryboardSuccess, files) => {
     return {
-      ...payload,
+      ...withoutUploadedFileKeys(payload),
 
       storyboardFile: files['payload[storyboardFile]'][0].path
     }

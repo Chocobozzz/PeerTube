@@ -58,7 +58,7 @@ export function getLocalVideoViewActivityPubUrl (byActor: MActorUrl, video: MVid
   return byActor.url + '/views/videos/' + video.id + '/' + viewerIdentifier
 }
 
-export function getLocalVideoViewerActivityPubUrl (stats: MLocalVideoViewer) {
+export function getLocalVideoViewerActivityPubUrl (stats: Pick<MLocalVideoViewer, 'uuid'>) {
   return WEBSERVER.URL + '/videos/local-viewer/' + stats.uuid
 }
 

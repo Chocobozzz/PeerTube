@@ -80,9 +80,23 @@ export function sanitizeAndCheckActorObject (actor: ActivityPubActor) {
     (!actor.outbox || isActivityPubUrlValid(actor.outbox)) &&
     (!actor.following || isActivityPubUrlValid(actor.following)) &&
     (!actor.followers || isActivityPubUrlValid(actor.followers)) &&
+    areActorUrlsOnActorHost(actor) &&
     // If this is a group (a channel), it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
     (actor.type !== 'Group' || actor.attributedTo.length !== 0)
+}
+
+function areActorUrlsOnActorHost (actor: ActivityPubActor) {
+  const urls = [ actor.inbox, actor.endpoints?.sharedInbox, actor.outbox, actor.following, actor.followers ]
+    .filter(url => !!url)
+
+  try {
+    const actorHost = new URL(actor.id).host.toLowerCase()
+
+    return urls.every(url => new URL(url).host.toLowerCase() === actorHost)
+  } catch {
+    return false
+  }
 }
 
 export function isValidActorHandle (handle: string) {

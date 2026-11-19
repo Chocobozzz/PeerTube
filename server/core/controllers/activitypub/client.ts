@@ -270,7 +270,7 @@ activityPubClientRouter.get(
 )
 
 activityPubClientRouter.get(
-  '/videos/local-viewer/:localViewerId',
+  '/videos/local-viewer/:localViewerUUID',
   executeIfActivityPub,
   activityPubRateLimiter,
   asyncMiddleware(getVideoLocalViewerValidator),

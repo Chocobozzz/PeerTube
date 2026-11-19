@@ -1,5 +1,5 @@
 import { forceNumber, getAllAIUsages } from '@peertube/peertube-core-utils'
-import { NSFWFlag, VideoAIUsageType, VideosCommonQuery } from '@peertube/peertube-models'
+import { HttpStatusCode, NSFWFlag, VideoAIUsageType, VideosCommonQuery } from '@peertube/peertube-models'
 import { getLowercaseExtension } from '@peertube/peertube-node-utils'
 import express, { RequestHandler } from 'express'
 import multer, { diskStorage } from 'multer'
@@ -160,7 +160,7 @@ export function createReqFiles (
     })
   }
 
-  return multer({ storage, fileFilter, defParamCharset: 'utf8' }).fields(fields)
+  return multer({ storage, fileFilter: wrapFileFilter(fileFilter), defParamCharset: 'utf8' }).fields(fields)
 }
 
 export function createAnyReqFiles (
@@ -177,7 +177,38 @@ export function createAnyReqFiles (
     }
   })
 
-  return multer({ storage, fileFilter }).any()
+  return multer({ storage, fileFilter: wrapFileFilter(fileFilter) }).any()
+}
+
+// Multer calls the file filter outside of any try/catch
+function wrapFileFilter (
+  fileFilter: (
+    req: express.Request,
+    file: Express.Multer.File,
+    cb: (err: Error, result: boolean) => void
+  ) => void
+) {
+  if (!fileFilter) return undefined
+
+  return (req: express.Request, file: Express.Multer.File, cb: (err: Error, result?: boolean) => void) => {
+    let called = false
+
+    const callbackOnce = (err: Error, result?: boolean) => {
+      if (called) return
+      called = true
+
+      cb(err, result)
+    }
+
+    try {
+      fileFilter(req, file, callbackOnce)
+    } catch (err) {
+      // Most likely an invalid request body
+      if (err && !err.status) err.status = HttpStatusCode.BAD_REQUEST_400
+
+      callbackOnce(err, false)
+    }
+  }
 }
 
 export function isUserAbleToSearchRemoteURI (res: express.Response) {

@@ -1,4 +1,3 @@
-import { uuidToShort } from '@peertube/peertube-node-utils'
 import {
   HttpStatusCode,
   VideoChannelActivityAction,
@@ -14,11 +13,12 @@ import {
   VideoStudioTaskRemoveSegments,
   VideoStudioTaskWatermark
 } from '@peertube/peertube-models'
-import { auditLog, buildVideoStudioEditionAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
+import { uuidToShort } from '@peertube/peertube-node-utils'
 import { createAnyReqFiles } from '@server/helpers/express-utils.js'
 import { guessLanguageFromReq } from '@server/helpers/i18n.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { MIMETYPES, VIDEO_FILTERS } from '@server/initializers/constants.js'
+import { auditLog, buildVideoStudioEditionAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { createVideoDuplicate } from '@server/lib/video-duplicate/index.js'
 import {
   buildStudioNewVideoName,
@@ -42,12 +42,16 @@ const tasksFiles = createAnyReqFiles(
 
     // Fetch array element
     const matches = file.fieldname.match(/tasks\[(\d+)\]/)
-    if (!matches) return cb(new Error('Cannot find array element indice for ' + file.fieldname))
+    if (!matches) return cb(buildBadRequestError('Cannot find array element indice for ' + file.fieldname))
 
     const indice = parseInt(matches[1])
-    const task = body.tasks[indice]
+    const task = Array.isArray(body?.tasks)
+      ? body.tasks[indice]
+      : undefined
 
-    if (!task) return cb(new Error('Cannot find array element of indice ' + indice + ' for ' + file.fieldname))
+    if (!task || typeof task !== 'object') {
+      return cb(buildBadRequestError('Cannot find array element of indice ' + indice + ' for ' + file.fieldname))
+    }
 
     if (
       [ 'add-intro', 'add-outro', 'add-watermark' ].includes(task.name) &&
@@ -253,4 +257,10 @@ function buildRemoveSegmentsTask ({ task }: TaskPayloadBuilderOptions<VideoStudi
 
 function handleTaskFile (options: TaskPayloadBuilderOptions) {
   return handleStudioTaskFile({ file: getTaskFileFromReq(options.files, options.indice), staged: options.taskFilesStaged })
+}
+
+// ---------------------------------------------------------------------------
+
+function buildBadRequestError (message: string) {
+  return Object.assign(new Error(message), { status: HttpStatusCode.BAD_REQUEST_400 })
 }

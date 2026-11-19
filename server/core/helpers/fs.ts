@@ -1,5 +1,6 @@
 import { move, remove } from 'fs-extra/esm'
 import { readdir, rename } from 'fs/promises'
+import { isAbsolute, relative, resolve, sep } from 'path'
 import { createLogger } from './logger.js'
 
 const logger = createLogger()
@@ -17,6 +18,12 @@ export async function tryAtomicMove (src: string, destination: string) {
 export function deleteFileAndCatch (path: string) {
   remove(path)
     .catch(err => logger.error('Cannot delete the file %s asynchronously.', path, { err }))
+}
+
+export function isFileInsideDirectory (path: string, directory: string) {
+  const rel = relative(resolve(directory), resolve(path))
+
+  return rel !== '' && rel !== '..' && !rel.startsWith('..' + sep) && !isAbsolute(rel)
 }
 
 export async function readdirNonHidden (path: string) {
