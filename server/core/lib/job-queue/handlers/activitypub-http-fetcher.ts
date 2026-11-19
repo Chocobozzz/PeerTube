@@ -1,6 +1,7 @@
 import { ActivitypubHttpFetcherPayload, FetchType } from '@peertube/peertube-models'
 import { AccountModel } from '@server/models/account/account.js'
 import { Job } from 'bullmq'
+import { isActivityValid } from '../../../helpers/custom-validators/activitypub/activity.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { VideoCommentModel } from '../../../models/video/video-comment.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
@@ -28,7 +29,7 @@ async function processActivityPubHttpFetcher (job: Job) {
   const context = [ video?.url, video?.uuid, account?.Actor.url ].filter(Boolean)
 
   const fetcherType: { [id in FetchType]: (items: any[]) => Promise<any> } = {
-    'activity': items => processActivities(items, { outboxUrl: payload.uri, fromFetch: true }),
+    'activity': items => processActivities(items.filter(i => isActivityValid(i)), { outboxUrl: payload.uri, fromFetch: true }),
     'video-shares': items => logger.withContext([ video.uuid ], () => addVideoShares(items, video)),
     'video-comments': items => addVideoComments(items),
     'account-playlists': items => logger.withContext([ account.Actor.url ], () => createAccountPlaylists(items, account))

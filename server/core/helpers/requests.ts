@@ -72,14 +72,12 @@ const unsafeSSRFGot = got.extend({
       const bodyKBLimit = options.context?.bodyKBLimit as number
       if (!bodyKBLimit) throw new Error('No KB limit for this request')
 
-      let controller: AbortController
-      let { signal } = options
+      // Always use our own controller to enforce the body limit, combined with the caller signal if any
+      const controller = new AbortController()
 
-      if (!signal) {
-        controller = new AbortController()
-        signal = controller.signal
-        options.signal = signal
-      }
+      options.signal = options.signal
+        ? AbortSignal.any([ options.signal, controller.signal ])
+        : controller.signal
 
       const promiseOrStream = next(options)
       const bodyLimit = bodyKBLimit * 1000
@@ -93,7 +91,7 @@ const unsafeSSRFGot = got.extend({
           if (options.isStream) {
             ;(promiseOrStream as Request).destroy(error)
           } else {
-            controller?.abort(error)
+            controller.abort(error)
           }
         }
       })

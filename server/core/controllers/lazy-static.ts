@@ -1,8 +1,8 @@
 import { FileStorage, HttpStatusCode } from '@peertube/peertube-models'
 import { parseDurationToMs } from '@peertube/peertube-node-utils'
 import { pipelineToResponse } from '@server/helpers/express-utils.js'
-import { generateRequestStream } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { proxifyRemoteTorrent } from '@server/lib/remote-torrent-proxy.js'
 import { isObjectNotFoundError } from '@server/lib/object-storage/object-storage-helpers.js'
 import { getCommonFileReadStream } from '@server/lib/object-storage/common-files.js'
 import { VideoFileModel } from '@server/models/video/video-file.js'
@@ -142,7 +142,5 @@ async function getTorrent (req: express.Request, res: express.Response) {
     return res.sendFile(join(CONFIG.STORAGE.TORRENTS_DIR, file.torrentFilename), { maxAge: STATIC_MAX_AGE.LAZY_SERVER })
   }
 
-  const remoteUrl = file.getRemoteTorrentUrl(file.getVideo())
-
-  await pipelineToResponse({ streams: [ generateRequestStream(remoteUrl) ], res, logLabel: `torrent download of ${remoteUrl}` })
+  return proxifyRemoteTorrent({ res, remoteUrl: file.getRemoteTorrentUrl(file.getVideo()), downloadFilename: file.torrentFilename })
 }

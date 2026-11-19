@@ -23,6 +23,31 @@ describe('Request helpers', function () {
     throw new Error('No error thrown by do request')
   })
 
+  it('Should throw an error when the bytes limit is exceeded for request with an abort signal', async function () {
+    const controller = new AbortController()
+
+    try {
+      await doRequest(FIXTURE_URLS.file4K, { bodyKBLimit: 3, signal: controller.signal })
+    } catch {
+      return
+    }
+
+    throw new Error('No error thrown by do request')
+  })
+
+  it('Should still abort a request with an abort signal', async function () {
+    const controller = new AbortController()
+    controller.abort()
+
+    try {
+      await doRequest(FIXTURE_URLS.file4K, { bodyKBLimit: 5, signal: controller.signal })
+    } catch {
+      return
+    }
+
+    throw new Error('No error thrown by do request')
+  })
+
   it('Should throw an error when the bytes limit is exceeded for request and save file', async function () {
     try {
       await doRequestAndSaveToFile(FIXTURE_URLS.file4K, destPath1, { bodyKBLimit: 3 })

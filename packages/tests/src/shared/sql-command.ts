@@ -44,6 +44,58 @@ export class SQLCommand {
     return parseInt(total, 10)
   }
 
+  async getActorPrivateKey (actorUrl: string) {
+    const rows = await this.selectQuery<{ privateKey: string }>(`SELECT "privateKey" FROM "actor" WHERE "url" = :actorUrl`, { actorUrl })
+
+    return rows[0]?.privateKey
+  }
+
+  // ---------------------------------------------------------------------------
+
+  listVideoRates () {
+    return this.selectQuery<{ url: string, accountId: number }>(`SELECT "url", "accountId" FROM "accountVideoRate"`)
+  }
+
+  async listVideoRedundancyUrls () {
+    const rows = await this.selectQuery<{ url: string }>(`SELECT "url" FROM "videoRedundancy"`)
+
+    return rows.map(r => r.url)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  async listVideoShareUrlsOf (uuid: string) {
+    const rows = await this.selectQuery<{ url: string }>(
+      `SELECT "videoShare"."url" FROM "videoShare" INNER JOIN "video" ON "video"."id" = "videoShare"."videoId" ` +
+        `WHERE "video"."uuid" = :uuid`,
+      { uuid }
+    )
+
+    return rows.map(r => r.url)
+  }
+
+  async countVideoSharesByUrl (url: string) {
+    const [ { total } ] = await this.selectQuery<{ total: string }>(`SELECT COUNT(*) AS total FROM "videoShare" WHERE "url" = :url`, {
+      url
+    })
+
+    return parseInt(total, 10)
+  }
+
+  createVideoShare (options: {
+    url: string
+    actorUrl: string
+    videoUUID: string
+  }) {
+    const { url, actorUrl, videoUUID } = options
+
+    return this.updateQuery(
+      `INSERT INTO "videoShare" ("url", "actorId", "videoId", "createdAt", "updatedAt") VALUES (` +
+        `:url, (SELECT "id" FROM "actor" WHERE "url" = :actorUrl), (SELECT "id" FROM "video" WHERE "uuid" = :videoUUID), NOW(), NOW())`,
+      { url, actorUrl, videoUUID }
+    )
+  }
+
   setActorField (to: string, field: string, value: string) {
     return this.updateQuery(`UPDATE actor SET ${this.escapeColumnName(field)} = :value WHERE url = :to`, { value, to })
   }
@@ -69,6 +121,15 @@ export class SQLCommand {
 
   setPlaylistField (uuid: string, field: string, value: string) {
     return this.updateQuery(`UPDATE "videoPlaylist" SET ${this.escapeColumnName(field)} = :value WHERE uuid = :uuid`, { value, uuid })
+  }
+
+  async countPlaylistsByUUID (uuid: string) {
+    const [ { total } ] = await this.selectQuery<{ total: string }>(
+      `SELECT COUNT(*) AS total FROM "videoPlaylist" WHERE "uuid" = :uuid`,
+      { uuid }
+    )
+
+    return parseInt(total, 10)
   }
 
   async countVideoViewsOf (uuid: string) {
@@ -143,6 +204,18 @@ export class SQLCommand {
 
   async setImageStorageOf (table: 'actorImage' | 'thumbnail' | 'storyboard' | 'uploadImage', filename: string, storage: FileStorageType) {
     await this.updateQuery(`UPDATE "${table}" SET storage = :storage WHERE filename = :filename`, { storage, filename })
+  }
+
+  async setVideoFileTorrentUrlOf (uuid: string, torrentUrl: string) {
+    await this.updateQuery(
+      `UPDATE "videoFile" SET "torrentUrl" = :torrentUrl ` +
+        `WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid) OR ` +
+        `"videoStreamingPlaylistId" IN (` +
+        `SELECT "videoStreamingPlaylist".id FROM "videoStreamingPlaylist" ` +
+        `INNER JOIN video ON video.id = "videoStreamingPlaylist"."videoId" AND "video".uuid = :uuid` +
+        `)`,
+      { torrentUrl, uuid }
+    )
   }
 
   async setTorrentStorageOf (torrentFilename: string, storage: FileStorageType) {

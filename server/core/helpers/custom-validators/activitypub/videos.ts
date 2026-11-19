@@ -20,6 +20,7 @@ import validator from 'validator'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc.js'
 import { isTrackerUrlValid } from '../urls.js'
+import { isVideoCaptionLanguageValid } from '../video-captions.js'
 import { isLiveDvrWindowValid, isLiveLatencyModeValid } from '../video-lives.js'
 import {
   isVideoAIUsageValid,
@@ -219,7 +220,7 @@ function setValidRemoteCaptions (video: VideoObject) {
       caption.url = arrayify(caption.url).filter(u => setAPCaptionUrlObject(u))
     }
 
-    return caption.url.length > 0 && isRemoteStringIdentifierValid(caption)
+    return caption.url.length > 0 && isRemoteStringIdentifierValid(caption) && isVideoCaptionLanguageValid(caption.identifier)
   })
 
   return true

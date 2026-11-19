@@ -61,6 +61,8 @@ const activityCheckers = new Map<string, (activity: Activity) => boolean>(Object
 ))
 
 export function isActivityValid (activity: any) {
+  if (!activity || typeof activity !== 'object') return false
+
   const checker = activityCheckers.get(activity.type)
   // Unknown activity type
   if (!checker) return false

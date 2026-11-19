@@ -5,7 +5,7 @@ import { Transaction } from 'sequelize'
 import { createLogger } from '../../helpers/logger.js'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants.js'
 import { VideoShareModel } from '../../models/video/video-share.js'
-import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video/index.js'
+import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoIdUrl } from '../../types/models/video/index.js'
 import { fetchAP, getAPId } from './activity.js'
 import { getOrCreateAPActor } from './actors/index.js'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send/index.js'
@@ -25,7 +25,7 @@ export async function changeVideoChannelShare (
   await shareByVideoChannelIfNeeded({ video, skipFederation: false, transaction: t })
 }
 
-export async function addVideoShares (shareUrls: string[], video: MVideoId) {
+export async function addVideoShares (shareUrls: string[], video: MVideoIdUrl) {
   await promiseMap(shareUrls, async shareUrl => {
     try {
       await addVideoShare(shareUrl, video)
@@ -107,9 +107,14 @@ export async function shareByVideoChannelIfNeeded (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function addVideoShare (shareUrl: string, video: MVideoId) {
+async function addVideoShare (shareUrl: string, video: MVideoIdUrl) {
   const { body } = await fetchAP<any>(shareUrl)
-  if (!body?.actor) throw new Error('Body or body actor is invalid')
+  if (!body?.actor || !body.object) throw new Error('Body, body actor or body object is invalid')
+
+  const objectUrl = getAPId(body.object)
+  if (objectUrl !== video.url) {
+    throw new Error(`Object ${objectUrl} of share ${shareUrl} is not the video ${video.url}`)
+  }
 
   const actorUrl = getAPId(body.actor)
   if (checkUrlsSameHost(shareUrl, actorUrl) !== true) {
@@ -124,7 +129,19 @@ async function addVideoShare (shareUrl: string, video: MVideoId) {
     url: shareUrl
   }
 
-  await VideoShareModel.upsert(entry)
+  const [ share, created ] = await VideoShareModel.findOrCreate({
+    where: { url: shareUrl },
+    defaults: entry
+  })
+  if (created) return
+
+  if (share.videoId !== video.id || share.actorId !== actor.id) {
+    throw new Error(`Share ${shareUrl} already exists for another video or actor`)
+  }
+
+  // Bump updatedAt so the share is not removed by the cleaner of old shares
+  share.changed('updatedAt', true)
+  await share.save()
 }
 
 async function undoShareByVideoChannel (video: MVideo, oldVideoChannel: MChannelActorLight, t: Transaction) {

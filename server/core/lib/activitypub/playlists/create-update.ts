@@ -88,6 +88,12 @@ export async function createOrUpdateVideoPlaylist (options: {
     logger.debug(`Creating or updating playlist ${playlistObject.id}`)
 
     const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
+
+    // Remote playlists provide their UUID: don't let them reuse the UUID of another (local or remote) playlist
+    if (await VideoPlaylistModel.isUUIDUsedByAnotherPlaylist({ uuid: playlistAttributes.uuid, url: playlistAttributes.url })) {
+      throw new Error(`Playlist ${playlistObject.id} uses UUID ${playlistAttributes.uuid} that already exists for another playlist`)
+    }
+
     playlistAttributes.videoChannelId = channel.id
     playlistAttributes.ownerAccountId = channel.accountId
 

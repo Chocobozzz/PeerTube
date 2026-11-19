@@ -1,8 +1,9 @@
 import jsonld from 'jsonld'
+import { LRUCache } from 'lru-cache'
+import { REQUEST_TIMEOUTS } from '../initializers/constants.js'
 import { ACTIVITY_STREAMS_CONTEXT } from './jsonld-contexts/activitystreams-context.js'
 import { createLogger } from './logger.js'
 import { doJSONRequest } from './requests.js'
-import { REQUEST_TIMEOUTS } from '../initializers/constants.js'
 
 const logger = createLogger()
 
@@ -61,8 +62,10 @@ const STATIC_CACHE = {
   }
 }
 
-const REMOTE_CONTEXT_CACHE_MAX_ENTRIES = 100
-const remoteContextCache = new Map<string, any>()
+const remoteContextCache = new LRUCache<string, any>({
+  max: 100,
+  ttl: 3600 * 1000 // 1 hour
+})
 ;(jsonld as any).documentLoader = async (url: string) => {
   if (url in STATIC_CACHE) {
     return {
@@ -84,9 +87,7 @@ const remoteContextCache = new Map<string, any>()
 
   const remoteDoc = { contextUrl: null, document: body, documentUrl: url }
 
-  if (remoteContextCache.size < REMOTE_CONTEXT_CACHE_MAX_ENTRIES) {
-    remoteContextCache.set(url, remoteDoc)
-  }
+  remoteContextCache.set(url, remoteDoc)
 
   return remoteDoc
 }

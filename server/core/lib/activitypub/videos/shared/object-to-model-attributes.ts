@@ -21,6 +21,7 @@ import {
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { hasAPPublic } from '@server/helpers/activity-pub-utils.js'
+import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
 import { isAPVideoFileUrlMetadataObject } from '@server/helpers/custom-validators/activitypub/videos.js'
 import { exists, isArray } from '@server/helpers/custom-validators/misc.js'
 import { isVideoFileInfoHashValid } from '@server/helpers/custom-validators/videos.js'
@@ -431,9 +432,13 @@ function getTorrentRelatedInfo (options: {
     throw new Error('Info hash is not valid in magnet URI ' + magnet.href)
   }
 
-  const torrentUrl = Array.isArray(magnetParsed.xs)
+  const xs = Array.isArray(magnetParsed.xs)
     ? magnetParsed.xs[0]
     : magnetParsed.xs
+
+  const torrentUrl = isActivityPubUrlValid(xs)
+    ? xs
+    : null
 
   return {
     torrentUrl,

@@ -154,6 +154,10 @@ function getVideoLengthSelect () {
     {
       fields: [ 'url' ],
       unique: true
+    },
+    {
+      fields: [ 'uuid' ],
+      unique: true
     }
   ]
 })
@@ -439,6 +443,23 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
       attributes: [ 'id' ],
       where: {
         url
+      }
+    }
+
+    return VideoPlaylistModel
+      .findOne(query)
+      .then(e => !!e)
+  }
+
+  static isUUIDUsedByAnotherPlaylist (options: {
+    uuid: string
+    url: string
+  }) {
+    const query = {
+      attributes: [ 'id' ],
+      where: {
+        uuid: options.uuid,
+        url: { [Op.ne]: options.url }
       }
     }
 

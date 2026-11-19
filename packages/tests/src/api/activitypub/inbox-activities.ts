@@ -29,15 +29,6 @@ describe('Test the checks on incoming ActivityPub activities', function () {
   let videoUUID: string
   let videoUrl: string
 
-  async function getPrivateKey (serverIndex: number, actorUrl: string) {
-    const [ { privateKey } ] = await sqlCommands[serverIndex].selectQuery<{ privateKey: string }>(
-      `SELECT "privateKey" FROM actor WHERE url = :actorUrl`,
-      { actorUrl }
-    )
-
-    return privateKey
-  }
-
   async function sendActivity (options: {
     fromServerIndex: number
     actorUrl: string
@@ -47,7 +38,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
   }) {
     const { fromServerIndex, actorUrl, activity, contextType, ldSigned = false } = options
 
-    const privateKey = await getPrivateKey(fromServerIndex, actorUrl)
+    const privateKey = await sqlCommands[fromServerIndex].getActorPrivateKey(actorUrl)
 
     const body = ldSigned
       ? await signAndContextify({
@@ -63,10 +54,6 @@ describe('Test the checks on incoming ActivityPub activities', function () {
 
     await makePOSTAPRequest(servers[0].url + '/inbox', body, httpSignature, buildGlobalHTTPHeaders(body, buildDigest))
     await waitJobs(servers)
-  }
-
-  async function getRates () {
-    return sqlCommands[0].selectQuery<{ url: string, accountId: number }>(`SELECT url, "accountId" FROM "accountVideoRate"`)
   }
 
   before(async function () {
@@ -101,7 +88,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
     }
 
     async function expectVictimRateUntouched () {
-      const rates = await getRates()
+      const rates = await sqlCommands[0].listVideoRates()
 
       expect(rates).to.have.lengthOf(1)
       expect(rates[0].url).to.equal(victimRateUrl)
@@ -117,7 +104,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       await servers[1].videos.rate({ id: videoUUID, rating: 'like' })
       await waitJobs(servers)
 
-      const rates = await getRates()
+      const rates = await sqlCommands[0].listVideoRates()
       expect(rates).to.have.lengthOf(1)
 
       victimRateUrl = rates[0].url
@@ -171,7 +158,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       await servers[1].videos.rate({ id: videoUUID, rating: 'none' })
       await waitJobs(servers)
 
-      expect(await getRates()).to.have.lengthOf(0)
+      expect(await sqlCommands[0].listVideoRates()).to.have.lengthOf(0)
     })
   })
 
@@ -203,8 +190,6 @@ describe('Test the checks on incoming ActivityPub activities', function () {
   })
 
   describe('Cache files', function () {
-    const cacheFiles = () => sqlCommands[0].selectQuery<{ url: string }>(`SELECT url FROM "videoRedundancy"`)
-
     function buildCreate (id: string, actor: string) {
       return {
         type: 'Create',
@@ -233,7 +218,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
         activity: buildCreate(servers[1].url + '/redundancy/spoofed', actor)
       })
 
-      expect(await cacheFiles()).to.have.lengthOf(0)
+      expect(await sqlCommands[0].listVideoRedundancyUrls()).to.have.lengthOf(0)
     })
 
     it('Should create a cache file whose id is on the host of the actor', async function () {
@@ -244,7 +229,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
 
       await sendActivity({ fromServerIndex: 2, actorUrl: actor, contextType: 'CacheFile', activity: buildCreate(id, actor) })
 
-      expect((await cacheFiles()).map(c => c.url)).to.deep.equal([ id ])
+      expect(await sqlCommands[0].listVideoRedundancyUrls()).to.deep.equal([ id ])
     })
   })
 

@@ -3,7 +3,6 @@ import { FileStorage, HttpStatusCode, UserRight, VideoResolution, VideoStreaming
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { getAuthUser, parseRangeHeader, pipelineToResponse } from '@server/helpers/express-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { generateRequestStream } from '@server/helpers/requests.js'
 import { ThrottleStream } from '@server/helpers/stream-throttle.js'
 import { CONFIG } from '@server/initializers/config.js'
 import {
@@ -15,6 +14,7 @@ import {
 } from '@server/lib/object-storage/index.js'
 import { getFSUserExportFilePath } from '@server/lib/paths.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { proxifyRemoteTorrent } from '@server/lib/remote-torrent-proxy.js'
 import { VideoStatsManager } from '@server/lib/stats/video-stats-manager.js'
 import { VideoDownload } from '@server/lib/video-download.js'
 import { VideoPathManager } from '@server/lib/video-path-manager.js'
@@ -147,12 +147,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   }
 
   // Proxify remote request without cache
-  res.type('application/x-bittorrent')
-  res.setHeader('Content-disposition', createContentDisposition(downloadFilename))
-
-  const remoteUrl = file.getRemoteTorrentUrl(video)
-
-  await pipelineToResponse({ streams: [ generateRequestStream(remoteUrl) ], res, logLabel: `torrent download of ${remoteUrl}` })
+  return proxifyRemoteTorrent({ res, remoteUrl: file.getRemoteTorrentUrl(video), downloadFilename })
 }
 
 // ---------------------------------------------------------------------------
