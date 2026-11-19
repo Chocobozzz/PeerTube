@@ -1,3 +1,4 @@
+import { buildLikeSearch } from '@server/models/shared/query.js'
 import { forceNumber, hasUserRight, sortBy, USER_ROLE_LABELS } from '@peertube/peertube-core-utils'
 import {
   AbuseState,
@@ -576,12 +577,12 @@ export class UserModel extends SequelizeModel<UserModel> {
         [Op.or]: [
           {
             email: {
-              [Op.iLike]: '%' + search + '%'
+              [Op.iLike]: buildLikeSearch(search)
             }
           },
           {
             username: {
-              [Op.iLike]: '%' + search + '%'
+              [Op.iLike]: buildLikeSearch(search)
             }
           }
         ]
@@ -1081,7 +1082,7 @@ export class UserModel extends SequelizeModel<UserModel> {
     const query = {
       where: {
         username: {
-          [Op.like]: `%${search}%`
+          [Op.like]: buildLikeSearch(search)
         }
       },
       limit: 10

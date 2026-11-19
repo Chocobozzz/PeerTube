@@ -12,6 +12,7 @@ import {
 import { exists } from '@server/helpers/custom-validators/misc.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { buildSortDirectionAndField, throwOnInvalidSortColumnName } from '@server/models/shared/index.js'
+import { buildLikeSearch, canUseLikeSearch, hasTrigramChars, truncateSearch } from '@server/models/shared/query.js'
 import { MUserAccountId, MUserId } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
 import validator from 'validator'
@@ -29,15 +30,29 @@ const TS_RANK_NAME_MATCH = 0.61
 // Relevance scores are compared by steps of 0.1, so videos with close scores are sorted by publication date
 const SIMILARITY_STEPS = 10
 
-// to_tsquery() parses its argument as a tsquery expression: `&`, `|`, `!`, `<->`, parentheses and `:` weight markers
-// So raw user input like "rock & roll", "hello!" or "12:30" makes it throw a syntax error
-// Returns '' when the search holds no lexeme at all
+/**
+ * to_tsquery() parses its argument as a tsquery expression: `&`, `|`, `!`, `<->`, parentheses and `:` weight markers
+ * So raw user input like "rock & roll", "hello!" or "12:30" makes it throw a syntax error
+ * Returns '' when the search holds no lexeme at all
+ */
+
+// Each term is a GIN lookup, and a short prefix term (`a:*`) matches a large part of the lexemes: keep a limited number of distinct terms
+const TS_QUERY_MAX_TERMS = 10
+// And only use a prefix match on terms long enough to be selective
+const TS_QUERY_MIN_PREFIX_LENGTH = 3
+
 function buildTSQueryTerms (search: string) {
-  return search
-    .replace(/[^\p{L}\p{N}_]/gu, ' ')
-    .split(/\s+/)
-    .filter(term => term.length !== 0)
-    .map(term => `${term}:*`)
+  const terms = new Set<string>()
+
+  for (const term of search.replace(/[^\p{L}\p{N}_]/gu, ' ').split(/\s+/)) {
+    if (term.length === 0) continue
+
+    terms.add(term.toLowerCase())
+    if (terms.size >= TS_QUERY_MAX_TERMS) break
+  }
+
+  return Array.from(terms)
+    .map(term => term.length >= TS_QUERY_MIN_PREFIX_LENGTH ? `${term}:*` : term)
     .join(' & ')
 }
 
@@ -861,16 +876,17 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
     isCount?: boolean
     search?: string
   }) {
-    const { search, isCount } = options
+    const { isCount } = options
 
-    if (!search) {
+    if (!options.search) {
       if (!isCount) this.attributes.push('0 as similarity')
 
       return
     }
 
+    const search = truncateSearch(options.search)
+
     const escapedSearch = this.sequelize.escape(search)
-    const escapedLikeSearch = this.sequelize.escape('%' + search + '%')
 
     const tsQueryTerms = buildTSQueryTerms(search)
     // A search made only of punctuation ("!!!", "...") has no lexeme to look for: skip the full text search
@@ -878,9 +894,21 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     const searchExpr = `lower(immutable_unaccent(${escapedSearch}))`
     const nameExpr = 'lower(immutable_unaccent("video"."name"))'
-    const nameLikeMatch = `${nameExpr} LIKE lower(immutable_unaccent(${escapedLikeSearch}))`
 
-    const trigramMatch = `${searchExpr} <% ${nameExpr} OR ${nameLikeMatch}`
+    // Trigrams are only extracted from letters and digits: without them, the trigram index cannot be used and PG would scan all videos
+    let trigramMatch: string
+
+    if (hasTrigramChars(search)) {
+      trigramMatch = `${searchExpr} <% ${nameExpr}`
+
+      if (canUseLikeSearch(search)) {
+        const escapedLikeSearch = this.sequelize.escape(buildLikeSearch(search))
+
+        trigramMatch += ` OR ${nameExpr} LIKE lower(immutable_unaccent(${escapedLikeSearch}))`
+      }
+
+      trigramMatch = `(${trigramMatch})`
+    }
 
     /**
      * Every match is a condition on the video row itself so PG can combine indexes (BitmapOr)
@@ -893,7 +921,7 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
       matchConditions.push(`"video"."uuid" = ${escapedSearch}`)
     }
 
-    matchConditions.push(trigramMatch)
+    if (trigramMatch) matchConditions.push(trigramMatch)
 
     if (hasFTS) {
       this.cte.push(
@@ -921,7 +949,9 @@ export class VideosIdListQueryBuilder extends AbstractRunQuery {
 
     // Only rows matched by the trigram condition get the trigram similarity: exact tag and UUID matches don't add similarity
     // Computing word_similarity once in a scalar subquery doesn't save much on broad searches: not worth the complexity
-    const trigramSimilarity = `CASE WHEN ${trigramMatch} THEN word_similarity(${searchExpr}, ${nameExpr}) ELSE 0 END`
+    const trigramSimilarity = trigramMatch
+      ? `CASE WHEN ${trigramMatch} THEN word_similarity(${searchExpr}, ${nameExpr}) ELSE 0 END`
+      : '0'
 
     let attribute: string
 

@@ -65,19 +65,49 @@ function searchAttribute (sourceField?: string, targetField?: string) {
   return {
     [targetField]: {
       // FIXME: ts error
-      [Op.iLike as any]: `%${sourceField}%`
+      [Op.iLike as any]: buildLikeSearch(sourceField)
     }
   }
 }
 
+// ---------------------------------------------------------------------------
+
+const SEARCH_MAX_LENGTH = 250 // Word similarity and LIKE costs grow with the search length
+function truncateSearch (search: string) {
+  return (search + '').slice(0, SEARCH_MAX_LENGTH)
+}
+
+function buildLikeSearch (search: string) {
+  const escaped = (search + '').replace(/[\\%_]/g, '\\$&')
+
+  return '%' + escaped + '%'
+}
+
+// pg_trgm only extracts trigrams from letters and digits: without any, a trigram index cannot filter and PG would scan all rows
+function hasTrigramChars (search: string) {
+  return /[\p{L}\p{N}]/u.test(search)
+}
+
+// Minimum length to use the trigram index
+const LIKE_SEARCH_MIN_LENGTH = 3
+
+function canUseLikeSearch (search: string) {
+  return hasTrigramChars(search) && search.trim().length >= LIKE_SEARCH_MIN_LENGTH
+}
+
 export {
+  buildLikeSearch,
   buildWhereIdOrUUID,
+  canUseLikeSearch,
   createSafeIn,
   createSimilarityAttribute,
   doesExist,
+  hasTrigramChars,
   parseAggregateResult,
   parseRowCountResult,
-  searchAttribute
+  SEARCH_MAX_LENGTH,
+  searchAttribute,
+  truncateSearch
 }
 
 // ---------------------------------------------------------------------------

@@ -1,3 +1,4 @@
+import { buildLikeSearch } from '@server/models/shared/query.js'
 import { VideoChannelCollaboratorState, VideoImportStateType } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { getAvatarsJoin, getChannelJoin } from '@server/models/shared/sql/actor-helpers.js'
@@ -97,7 +98,7 @@ export class VideoImportListQueryBuilder extends AbstractListQuery {
     }
 
     if (this.options.search) {
-      const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
+      const escapedLikeSearch = this.sequelize.escape(buildLikeSearch(this.options.search))
 
       where.push(
         `(` +

@@ -1,3 +1,4 @@
+import { buildLikeSearch } from '@server/models/shared/query.js'
 import { VideoChannelCollaboratorState, VideoPrivacy } from '@peertube/peertube-models'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { buildSortDirectionAndField } from '@server/models/shared/sort.js'
@@ -234,7 +235,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
       this.buildAccountJoin()
       this.buildAccountActorJoin()
 
-      const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
+      const escapedLikeSearch = this.sequelize.escape(buildLikeSearch(this.options.search))
 
       where.push(
         `(` +
@@ -250,7 +251,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
       this.buildAccountJoin()
       this.buildAccountActorJoin()
 
-      const escapedLikeSearch = this.sequelize.escape('%' + this.options.searchAccount + '%')
+      const escapedLikeSearch = this.sequelize.escape(buildLikeSearch(this.options.searchAccount))
 
       where.push(
         `(` +
@@ -263,7 +264,7 @@ export class VideoCommentListQueryBuilder extends AbstractListQuery {
     if (this.options.searchVideo) {
       this.buildVideoJoin()
 
-      const escapedLikeSearch = this.sequelize.escape('%' + this.options.searchVideo + '%')
+      const escapedLikeSearch = this.sequelize.escape(buildLikeSearch(this.options.searchVideo))
 
       where.push(`"Video"."name" ILIKE ${escapedLikeSearch}`)
     }

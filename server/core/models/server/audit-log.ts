@@ -1,3 +1,4 @@
+import { buildLikeSearch } from '@server/models/shared/query.js'
 import { AuditLog, type AuditLogActionType, type AuditLogChange, type AuditLogEntityTypeType } from '@peertube/peertube-models'
 import { MAX_SQL_DELETE_ITEMS } from '@server/initializers/constants.js'
 import { MAuditLog } from '@server/types/models/index.js'
@@ -98,7 +99,7 @@ export class AuditLogModel extends SequelizeModel<AuditLogModel> {
     }
 
     if (search) {
-      const iLike = '%' + search + '%'
+      const iLike = buildLikeSearch(search)
 
       Object.assign(where, {
         [Op.or]: [

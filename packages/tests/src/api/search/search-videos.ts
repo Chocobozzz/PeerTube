@@ -653,6 +653,29 @@ describe('Test videos search', function () {
       }
     })
 
+    it('Should match LIKE wildcards literally', async function () {
+      for (const search of [ '%', '%%%', '_%_', '\\%' ]) {
+        const body = await command.searchVideos({ search })
+
+        expect(body.total).to.equal(0, search)
+      }
+    })
+
+    it('Should ignore repeated terms of a search', async function () {
+      const body = await command.searchVideos({ search: 'kryptonite '.repeat(50) })
+
+      expect(body.total).to.equal(1)
+      expect(body.data[0].name).to.equal('kryptonite harmonica')
+    })
+
+    it('Should not fail on a very long search', async function () {
+      for (const search of [ 'a '.repeat(2000), 'kryptonite ' + 'x'.repeat(4000) ]) {
+        const body = await command.searchVideos({ search })
+
+        expect(body.total).to.be.at.least(0)
+      }
+    })
+
     it('Should still find a video with an accented and prefixed search', async function () {
       const body = await command.searchVideos({ search: 'pämplemoussé' })
 

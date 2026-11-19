@@ -1,3 +1,4 @@
+import { buildLikeSearch } from '@server/models/shared/query.js'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { AbuseFilter, AbuseStateType, AbuseVideoIs } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
@@ -71,18 +72,18 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
       '"flaggedAccount"."name" ILIKE :search'
     ]
 
-    replacements.search = `%${options.search}%`
+    replacements.search = buildLikeSearch(options.search)
     whereAnd.push('(' + searchWhereOr.join(' OR ') + ')')
   }
 
   if (options.searchVideo) {
     whereAnd.push('"video"."name" ILIKE :searchVideo')
-    replacements.searchVideo = `%${options.searchVideo}%`
+    replacements.searchVideo = buildLikeSearch(options.searchVideo)
   }
 
   if (options.searchVideoChannel) {
     whereAnd.push('"videoChannel"."name" ILIKE :searchVideoChannel')
-    replacements.searchVideoChannel = `%${options.searchVideoChannel}%`
+    replacements.searchVideoChannel = buildLikeSearch(options.searchVideoChannel)
   }
 
   if (options.id) {
@@ -116,12 +117,12 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
 
   if (options.searchReporter) {
     whereAnd.push('"reporterAccount"."name" ILIKE :searchReporter')
-    replacements.searchReporter = `%${options.searchReporter}%`
+    replacements.searchReporter = buildLikeSearch(options.searchReporter)
   }
 
   if (options.searchReportee) {
     whereAnd.push('"flaggedAccount"."name" ILIKE :searchReportee')
-    replacements.searchReportee = `%${options.searchReportee}%`
+    replacements.searchReportee = buildLikeSearch(options.searchReportee)
   }
 
   const prefix = type === 'count'

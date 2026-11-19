@@ -1,3 +1,4 @@
+import { buildLikeSearch } from '@server/models/shared/query.js'
 import { ActivityPubActorType, FollowState } from '@peertube/peertube-models'
 import { AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { InstanceListFollowsQueryBuilder } from './shared/instance-list-follows-query-builder.js'
@@ -22,7 +23,7 @@ export class InstanceListFollowingQueryBuilder extends InstanceListFollowsQueryB
     }
 
     if (this.options.search) {
-      const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
+      const escapedLikeSearch = this.sequelize.escape(buildLikeSearch(this.options.search))
 
       this.subQueryWhere += `AND (` +
         `"ActorFollowing->Server"."host" ILIKE ${escapedLikeSearch} ` +

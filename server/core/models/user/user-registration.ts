@@ -1,3 +1,4 @@
+import { buildLikeSearch } from '@server/models/shared/query.js'
 import { forceNumber } from '@peertube/peertube-core-utils'
 import { UserRegistration, UserRegistrationState, type UserRegistrationStateType } from '@peertube/peertube-models'
 import {
@@ -209,12 +210,12 @@ export class UserRegistrationModel extends SequelizeModel<UserRegistrationModel>
         [Op.or]: [
           {
             email: {
-              [Op.iLike]: '%' + search + '%'
+              [Op.iLike]: buildLikeSearch(search)
             }
           },
           {
             username: {
-              [Op.iLike]: '%' + search + '%'
+              [Op.iLike]: buildLikeSearch(search)
             }
           }
         ]

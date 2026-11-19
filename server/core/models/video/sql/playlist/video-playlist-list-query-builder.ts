@@ -2,6 +2,7 @@ import { ActorImageType, VideoChannelCollaboratorState, VideoPlaylistPrivacy, Vi
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { buildServerIdsFollowedBy, getPlaylistSort } from '@server/models/shared/index.js'
+import { buildLikeSearch, canUseLikeSearch, truncateSearch } from '@server/models/shared/query.js'
 import { Sequelize } from 'sequelize'
 import { VideoPlaylistTableAttributes } from './video-playlist-table-attributes.js'
 
@@ -136,19 +137,22 @@ export class VideoPlaylistListQueryBuilder extends AbstractListQuery {
     }
 
     if (this.options.search) {
-      const escapedSearch = this.sequelize.escape(this.options.search)
-      const escapedLikeSearch = this.sequelize.escape('%' + this.options.search + '%')
+      const search = truncateSearch(this.options.search)
+      const escapedSearch = this.sequelize.escape(search)
 
       this.subQueryAttributes.push(
         `word_similarity(lower(immutable_unaccent(${escapedSearch})), lower(immutable_unaccent("VideoPlaylistModel"."name"))) as similarity`
       )
 
-      where.push(
-        `(` +
-          `lower(immutable_unaccent(${escapedSearch})) <% lower(immutable_unaccent("VideoPlaylistModel"."name")) OR ` +
-          `lower(immutable_unaccent("VideoPlaylistModel"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch}))` +
-          `)`
-      )
+      let match = `lower(immutable_unaccent(${escapedSearch})) <% lower(immutable_unaccent("VideoPlaylistModel"."name"))`
+
+      if (canUseLikeSearch(search)) {
+        const escapedLikeSearch = this.sequelize.escape(buildLikeSearch(search))
+
+        match += ` OR lower(immutable_unaccent("VideoPlaylistModel"."name")) LIKE lower(immutable_unaccent(${escapedLikeSearch}))`
+      }
+
+      where.push(`(${match})`)
     } else {
       this.subQueryAttributes.push('0 as similarity')
     }
