@@ -63,14 +63,22 @@ export class VideoPlaylistService {
   private myAccountPlaylistCacheRunning: Observable<ResultList<CachedPlaylist>>
   private myAccountPlaylistCacheSubject = new Subject<ResultList<CachedPlaylist>>()
 
+  // Caches belong to the logged in user: a response of a request made for another user must not fill them
+  private cacheGeneration = 0
+
   constructor () {
+    this.auth.loginChangedSource.subscribe(() => this.resetCaches())
+
     this.videoExistsInPlaylistObservable = merge(
       buildBulkObservable({
         time: 200,
         bulkGet: (videoIds: number[]) => {
           // We added a delay to the request, so ensure the user is still logged in
           if (this.auth.isLoggedIn()) {
+            const generation = this.cacheGeneration
+
             return this.doVideosExistInPlaylist(videoIds)
+              .pipe(map(result => generation === this.cacheGeneration ? result : {}))
           }
 
           return of({})
@@ -152,7 +160,8 @@ export class VideoPlaylistService {
       search
     }).pipe(
       tap(result => {
-        if (!search) {
+        // The cache may have been reset during the request
+        if (!search && this.myAccountPlaylistCacheRunning === obs) {
           this.myAccountPlaylistCacheRunning = undefined
           this.myAccountPlaylistCache = result
         }
@@ -449,6 +458,15 @@ export class VideoPlaylistService {
           return { total, data: elements }
         })
       )
+  }
+
+  private resetCaches () {
+    this.cacheGeneration++
+
+    this.videoExistsCache = {}
+
+    this.myAccountPlaylistCache = undefined
+    this.myAccountPlaylistCacheRunning = undefined
   }
 
   doVideosExistInPlaylist (videoIds: number[]): Observable<VideosExistInPlaylists> {

@@ -50,7 +50,7 @@ describe('Test oauth', function () {
       expect(body.code).to.equal(OAuth2ErrorCode.INVALID_CLIENT)
       expect(body.detail).to.contain('client is invalid')
       expect(body.type.startsWith('https://')).to.be.true
-      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_CLIENT)
+      expect(body.type).to.contain('#' + OAuth2ErrorCode.INVALID_CLIENT.replace(/_/g, '-'))
     }
 
     it('Should create a new client')
@@ -79,7 +79,7 @@ describe('Test oauth', function () {
       expect(body.code).to.equal(OAuth2ErrorCode.INVALID_GRANT)
       expect(body.detail).to.contain('credentials are invalid')
       expect(body.type.startsWith('https://')).to.be.true
-      expect(body.type).to.contain(OAuth2ErrorCode.INVALID_GRANT)
+      expect(body.type).to.contain('#' + OAuth2ErrorCode.INVALID_GRANT.replace(/_/g, '-'))
     }
 
     it('Should not login with an invalid username', async function () {

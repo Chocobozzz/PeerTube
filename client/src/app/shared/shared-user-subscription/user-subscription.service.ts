@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
-import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
+import { AuthService, ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
 import { buildBulkObservable } from '@app/helpers'
 import { ActorFollow, ResultList, VideoChannel as VideoChannelServer, VideoSortField } from '@peertube/peertube-models'
 import debug from 'debug'
@@ -23,6 +23,7 @@ export class UserSubscriptionService {
   private restExtractor = inject(RestExtractor)
   private videoService = inject(VideoService)
   private restService = inject(RestService)
+  private auth = inject(AuthService)
 
   static BASE_USER_SUBSCRIPTIONS_URL = environment.apiUrl + '/api/v1/users/me/subscriptions'
   static BASE_VIDEO_CHANNELS_URL = environment.apiUrl + '/api/v1/video-channels'
@@ -36,7 +37,15 @@ export class UserSubscriptionService {
   private myAccountSubscriptionCacheObservable: SubscriptionExistResultObservable = {}
   private myAccountSubscriptionCacheSubject = new Subject<SubscriptionExistResult>()
 
+  // The cache belongs to the logged in user: a response of a request made for another user must not fill it
+  private cacheGeneration = 0
+
   constructor () {
+    this.auth.loginChangedSource.subscribe(() => {
+      this.cacheGeneration++
+      this.myAccountSubscriptionCache = {}
+    })
+
     this.existsObservable = merge(
       buildBulkObservable({
         time: 200,
@@ -179,11 +188,15 @@ export class UserSubscriptionService {
 
     this.existsSubject.next(nameWithHost)
 
+    const generation = this.cacheGeneration
+
     debugLogger('Fetching from network for ' + nameWithHost)
     return this.existsObservable.pipe(
       filter(existsResult => existsResult[nameWithHost] !== undefined),
       map(existsResult => existsResult[nameWithHost]),
-      tap(result => this.myAccountSubscriptionCache[nameWithHost] = result)
+      tap(result => {
+        if (generation === this.cacheGeneration) this.myAccountSubscriptionCache[nameWithHost] = result
+      })
     )
   }
 
@@ -193,8 +206,11 @@ export class UserSubscriptionService {
 
     params = this.restService.addObjectParams(params, { uris })
 
+    const generation = this.cacheGeneration
+
     return this.authHttp.get<SubscriptionExistResult>(url, { params })
       .pipe(
+        map(res => generation === this.cacheGeneration ? res : {}),
         tap(res => {
           this.myAccountSubscriptionCache = {
             ...this.myAccountSubscriptionCache,

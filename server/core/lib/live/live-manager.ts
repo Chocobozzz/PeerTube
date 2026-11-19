@@ -40,7 +40,12 @@ import { RedisChannels } from '../redis/index.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
 import { isUserQuotaValid } from '../user.js'
 import { LiveQuotaStore } from './live-quota-store.js'
-import { cleanupAndDestroyPermanentLive, getLiveSegmentTime, removeLiveDirectoriesOfDeletedVideo } from './live-utils.js'
+import {
+  cleanupAndDestroyPermanentLive,
+  getLiveSegmentTime,
+  redactLiveStreamKey,
+  removeLiveDirectoriesOfDeletedVideo
+} from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
 
 const logger = createLogger('live')
@@ -439,7 +444,7 @@ class LiveManager {
 
       if (this.isSetupCancelled(video.uuid, sessionId)) return
 
-      logger.debug('Probing ' + inputLocalUrl)
+      logger.debug('Probing live input of video %s', video.uuid)
 
       const now = Date.now()
       let probe: FfprobeData
@@ -447,7 +452,9 @@ class LiveManager {
       try {
         probe = await ffprobePromise(inputLocalUrl)
       } catch (err) {
-        logger.error('Cannot probe ' + inputLocalUrl, { err })
+        // The error contains the input URL
+        if (typeof err?.message === 'string') err.message = redactLiveStreamKey(err.message)
+        logger.error('Cannot probe live input of video %s', video.uuid, { err })
 
         return this.releaseSession(video.uuid, sessionId)
       }
@@ -461,14 +468,14 @@ class LiveManager {
       ])
 
       if (!hasAudio && !hasVideo) {
-        logger.warn('Not audio and video streams were found for video %s. Refusing stream %s.', video.uuid, streamKey)
+        logger.warn('Not audio and video streams were found for video %s. Refusing stream of session %s.', video.uuid, sessionId)
 
         return this.releaseSession(video.uuid, sessionId)
       }
 
       logger.info(
-        '%s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
-        inputLocalUrl,
+        'Live input of video %s probing took %d ms (bitrate: %d, fps: %d, resolution: %d)',
+        video.uuid,
         Date.now() - now,
         bitrate,
         fps,
@@ -483,9 +490,9 @@ class LiveManager {
 
       if (!hasAudio && allResolutions.length === 1 && allResolutions[0] === VideoResolution.H_NOVIDEO) {
         logger.warn(
-          'Cannot stream live to audio only because no video stream is available for video %s. Refusing stream %s.',
+          'Cannot stream live to audio only because no video stream is available for video %s. Refusing stream of session %s.',
           video.uuid,
-          streamKey
+          sessionId
         )
 
         return this.releaseSession(video.uuid, sessionId)

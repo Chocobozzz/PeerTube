@@ -5,8 +5,8 @@ import { getByEmailPermissive } from '@server/lib/user.js'
 import { UserModel } from '@server/models/user/user.js'
 import express from 'express'
 import { body, param } from 'express-validator'
-import { isSecretEqual } from '../../../helpers/peertube-crypto.js'
 import { createLogger } from '../../../helpers/logger.js'
+import { isSecretEqual } from '../../../helpers/peertube-crypto.js'
 import { Redis } from '../../../lib/redis/index.js'
 import { areValidationErrors, checkUserIdExist } from '../shared/index.js'
 import { checkRegistrationEmailExistPermissive, checkRegistrationIdExist } from './shared/user-registrations.js'
@@ -96,10 +96,16 @@ export const usersVerifyEmailValidator = [
     if (!await checkUserIdExist(req.params.id, res)) return
 
     const user = res.locals.user
-    const redisVerificationString = await Redis.Instance.getUserVerifyEmailLink(user.id, req.body.isPendingEmail === true)
+    const isPendingEmail = req.body.isPendingEmail === true
+    const stored = await Redis.Instance.getUserVerifyEmailLink(user.id, isPendingEmail)
 
-    if (!isSecretEqual(redisVerificationString, req.body.verificationString)) {
+    if (!isSecretEqual(stored?.verificationString, req.body.verificationString)) {
       return res.fail({ status: HttpStatusCode.FORBIDDEN_403, message: 'Invalid verification string.' })
+    }
+
+    const currentEmail = isPendingEmail ? user.pendingEmail : user.email
+    if (!currentEmail || stored.email !== currentEmail) {
+      return res.fail({ status: HttpStatusCode.FORBIDDEN_403, message: 'Verification string was sent to another email.' })
     }
 
     return next()

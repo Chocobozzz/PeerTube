@@ -172,6 +172,32 @@ describe('Test users email verification', function () {
     expect(me.pendingEmail).to.equal('attacker-target@example.com')
   })
 
+  it('Should not verify an email with a verification string sent to another email', async function () {
+    this.timeout(30000)
+
+    await server.registrations.register({ username: 'user_email_changed', password: 'super password' })
+
+    await waitJobs(server)
+    expectedEmailsLength++
+    expect(emails).to.have.lengthOf(expectedEmailsLength)
+
+    const text = emails[expectedEmailsLength - 1]['text'] as string
+    const [ , changedUserId, changedVerificationString ] = /userId=(\d+)&verificationString=([a-z0-9]+)/.exec(text)
+
+    // The email of the user changes before the link is used: the link must not verify the new email
+    await server.users.update({ userId: +changedUserId, email: 'user_email_changed_new@example.com' })
+
+    await server.users.verifyEmail({
+      userId: +changedUserId,
+      verificationString: changedVerificationString,
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+
+    const user = await server.users.get({ userId: +changedUserId })
+    expect(user.email).to.equal('user_email_changed_new@example.com')
+    expect(user.emailVerified).to.be.false
+  })
+
   it('Should register user not requiring email verification if setting not enabled', async function () {
     this.timeout(5000)
     await server.config.updateExistingConfig({

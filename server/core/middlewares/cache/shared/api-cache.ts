@@ -42,6 +42,9 @@ export class ApiCache {
 
     return asyncMiddleware(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        // Don't use cache if there are credentials
+        if (hasRequestCredentials(req)) return next()
+
         const key = this.getCacheKey(req)
         const redis = Redis.Instance.getClient()
 
@@ -275,4 +278,12 @@ export class ApiCache {
 
     return response.end(data, cacheObject.encoding)
   }
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function hasRequestCredentials (req: express.Request) {
+  return !!req.headers['authorization'] || !!req.headers['x-peertube-video-password']
 }

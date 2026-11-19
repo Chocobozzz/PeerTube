@@ -138,6 +138,23 @@ describe('Test index HTML generation', function () {
 
       expect(text).to.contain('<h1>Main root channel</h1><p>my super channel description</p>')
     })
+
+    it('Should not interpret replacement patterns in the video name and description', async function () {
+      const name = `name $' $\` $& $$`
+      const description = `description $' $\` $& $$`
+
+      const { uuid } = await servers[0].videos.upload({ attributes: { name, description } })
+
+      const { text } = await makeHTMLRequest(servers[0].url, '/w/' + uuid)
+
+      // $& would re-inject the placeholder, $' and $` the end and the beginning of the page
+      expect(text).to.not.contain('<!-- title tag -->')
+      expect(text).to.not.contain('<!-- description tag -->')
+      expect(text).to.not.contain('<!-- meta tags -->')
+      expect(text).to.not.contain('<!-- server rendered content -->')
+      expect(text.match(/<html/g)).to.have.lengthOf(1)
+      expect(text.match(/<\/html>/g)).to.have.lengthOf(1)
+    })
   })
 
   describe('Canonical tags', function () {

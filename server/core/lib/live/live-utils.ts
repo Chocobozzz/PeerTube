@@ -12,6 +12,14 @@ import { getLiveDirectory, getLiveReplayBaseDirectory } from '../paths.js'
 
 const logger = createLogger()
 
+const streamKeyRegex = new RegExp('(rtmps?://[^/\\s]+/' + VIDEO_LIVE.RTMP.BASE_PATH + '/)[^/?:\\s\'"]+', 'g')
+
+export function redactLiveStreamKey (str: string) {
+  if (typeof str !== 'string') return str
+
+  return str.replace(streamKeyRegex, '$1<stream key>')
+}
+
 export function buildConcatenatedName (segmentOrPlaylistPath: string) {
   const num = basename(segmentOrPlaylistPath).match(/^(\d+)(-|\.)/)
 

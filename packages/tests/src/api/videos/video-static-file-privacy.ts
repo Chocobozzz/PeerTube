@@ -27,6 +27,7 @@ import { magnetUriDecode, parseTorrentVideo } from '@tests/shared/p2p.js'
 import { checkVideoFileTokenReinjection } from '@tests/shared/streaming-playlists.js'
 import { expect } from 'chai'
 import { get } from 'http'
+import { basename } from 'path'
 
 describe('Test video static file privacy', function () {
   let server: PeerTubeServer
@@ -336,6 +337,34 @@ describe('Test video static file privacy', function () {
       await checkVideoFiles({ id: uuid, expectedStatus: HttpStatusCode.OK_200, token: editorToken, videoFileToken, videoPassword })
     })
 
+    it('Should not reuse the access check of a public web video file for a private HLS file', async function () {
+      this.timeout(120000)
+
+      const { uuid: publicUUID } = await server.videos.quickUpload({ name: 'public video' })
+      const { uuid: privateUUID } = await server.videos.quickUpload({ name: 'private video', privacy: VideoPrivacy.PRIVATE })
+      await waitJobs([ server ])
+
+      const publicVideo = await server.videos.get({ id: publicUUID })
+      const privateVideo = await server.videos.getWithToken({ id: privateUUID })
+
+      const publicFilename = basename(publicVideo.files[0].fileUrl)
+      const privateHLSPath = new URL(privateVideo.streamingPlaylists[0].playlistUrl).pathname
+
+      const webVideoPath = '/static/web-videos/private/' + publicFilename
+      await makeRawRequest({
+        url: server.url + webVideoPath,
+        query: { a: 'x-' + privateUUID },
+        headers: { 'x-peertube-video-password': 'x' },
+        expectedStatus: HttpStatusCode.NOT_FOUND_404
+      })
+
+      await makeRawRequest({
+        url: server.url + privateHLSPath,
+        headers: { 'x-peertube-video-password': 'x-' + webVideoPath + '?a=x' },
+        expectedStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+    })
+
     it('Should reinject video file token', async function () {
       this.timeout(120000)
 
@@ -392,8 +421,64 @@ describe('Test video static file privacy', function () {
 
       await server.users.update({ userId, role: UserRole.USER })
 
-      // Another URL, so the access decision cached for a few seconds per URL does not answer the request
-      await makeRawRequest({ url, query: { videoFileToken, afterDemotion: 'true' }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+      // Wait for the expiration of the access decision cached for a few seconds
+      await wait(11000)
+
+      await makeRawRequest({ url, query: { videoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+    })
+
+    describe('Revoked user tokens', function () {
+      let url: string
+      let uuid: string
+
+      before(async function () {
+        this.timeout(120000)
+
+        // Any logged in user can see an internal video
+        const video = await server.videos.quickUpload({ name: 'internal video', privacy: VideoPrivacy.INTERNAL })
+        uuid = video.uuid
+
+        await waitJobs([ server ])
+
+        url = (await server.videos.getWithToken({ id: uuid })).files[0].fileUrl
+      })
+
+      it('Should refuse the file tokens of a blocked user or generated before a password change', async function () {
+        this.timeout(120000)
+
+        const { token: blockedToken, userId: blockedUserId } = await server.users.generate('user_to_block')
+        const { token: passwordToken } = await server.users.generate('user_changing_password')
+
+        const blockedFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: blockedToken })
+        const passwordFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: passwordToken })
+
+        for (const videoFileToken of [ blockedFileToken, passwordFileToken ]) {
+          await makeRawRequest({ url, query: { videoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+        }
+
+        await server.users.banUser({ userId: blockedUserId })
+        await server.users.updateMe({ token: passwordToken, currentPassword: 'password', password: 'new password' })
+
+        await wait(11000)
+
+        for (const videoFileToken of [ blockedFileToken, passwordFileToken ]) {
+          await makeRawRequest({ url, query: { videoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        }
+
+        {
+          await server.users.unbanUser({ userId: blockedUserId })
+          await makeRawRequest({ url, query: { videoFileToken: blockedFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+
+          const newToken = await server.login.getAccessToken({ username: 'user_to_block', password: 'password' })
+          const newVideoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: newToken })
+          await makeRawRequest({ url, query: { videoFileToken: newVideoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+        }
+
+        {
+          const newVideoFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: passwordToken })
+          await makeRawRequest({ url, query: { videoFileToken: newVideoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
+        }
+      })
     })
   })
 

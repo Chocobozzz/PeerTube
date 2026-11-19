@@ -196,7 +196,11 @@ export async function createApplicationActor (applicationId: number) {
 // ---------------------------------------------------------------------------
 
 export async function buildUserVerifyEmail (user: MUser, isPendingEmail: boolean) {
-  const verificationString = await Redis.Instance.setUserVerifyEmailVerificationString(user.id, isPendingEmail)
+  const verificationString = await Redis.Instance.setUserVerifyEmailVerificationString(
+    user.id,
+    isPendingEmail,
+    isPendingEmail ? user.pendingEmail : user.email
+  )
 
   const verifyEmailUrl = `${WEBSERVER.URL}/verify-account/email?userId=${user.id}&verificationString=${verificationString}`
 

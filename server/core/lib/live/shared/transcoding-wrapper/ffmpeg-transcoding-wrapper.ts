@@ -5,7 +5,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { getLiveSegmentTime } from '../../live-utils.js'
+import { getLiveSegmentTime, redactLiveStreamKey } from '../../live-utils.js'
 import { AbstractTranscodingWrapper } from './abstract-transcoding-wrapper.js'
 
 const logger = createLogger('live', 'transcoding', 'ffmpeg')
@@ -63,7 +63,7 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
 
     let ffmpegShellCommand: string
     this.ffmpegCommand.on('start', cmdline => {
-      ffmpegShellCommand = cmdline
+      ffmpegShellCommand = redactLiveStreamKey(cmdline)
 
       logger.debug('Running ffmpeg command for live', { ffmpegShellCommand })
     })
@@ -114,7 +114,11 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
     stderr: string
     ffmpegShellCommand: string
   }) {
-    const { err, stdout, stderr, ffmpegShellCommand } = options
+    const { err, ffmpegShellCommand } = options
+
+    const stdout = redactLiveStreamKey(options.stdout)
+    const stderr = redactLiveStreamKey(options.stderr)
+    if (typeof err?.message === 'string') err.message = redactLiveStreamKey(err.message)
 
     // We killed ffmpeg ourselves: it exits in error but has flushed its last segments, so this is a normal end for us
     if (this.aborted) {

@@ -14,6 +14,9 @@ export type VideoTokenPayload = {
 
   // Timestamp in milliseconds, so a process can keep the resolved token in memory until it expires
   expires: number
+
+  // TODO: Remove `?` in v10
+  createdAt?: number
 }
 
 export function setVideoToken (token: string, payload: VideoTokenPayload) {
@@ -34,6 +37,18 @@ export async function getVideoToken (token: string): Promise<VideoTokenPayload> 
   }
 }
 
+// Video file tokens generated before this date are invalid
+export function setUserVideoTokensRevokedAt (userId: number, date: number) {
+  return setValue(generateUserVideoTokensRevokedAtKey(userId), date + '', VIDEO_FILE_TOKEN_LIFETIME)
+}
+
+export async function getUserVideoTokensRevokedAt (userId: number) {
+  const value = await getValue(generateUserVideoTokensRevokedAtKey(userId))
+  if (!value) return undefined
+
+  return parseInt(value, 10)
+}
+
 // Remaining lifetime of a token in milliseconds, never longer than the lifetime of a new token
 export function getVideoTokenTTL (expires: number) {
   return Math.min(expires - Date.now(), VIDEO_FILE_TOKEN_LIFETIME)
@@ -43,4 +58,8 @@ export function getVideoTokenTTL (expires: number) {
 
 function generateVideoTokenKey (token: string) {
   return 'video-token-' + token
+}
+
+function generateUserVideoTokensRevokedAtKey (userId: number) {
+  return 'video-tokens-revoked-at-' + userId
 }

@@ -144,8 +144,8 @@ export class Redis {
 
   /* ************ Email verification ************ */
 
-  setUserVerifyEmailVerificationString (userId: number, isPendingEmail: boolean) {
-    return emailVerification.setUserVerifyEmailVerificationString(userId, isPendingEmail)
+  setUserVerifyEmailVerificationString (userId: number, isPendingEmail: boolean, email: string) {
+    return emailVerification.setUserVerifyEmailVerificationString(userId, isPendingEmail, email)
   }
 
   getUserVerifyEmailLink (userId: number, isPendingEmail: boolean) {
@@ -362,6 +362,14 @@ export class Redis {
 
   getVideoToken (token: string) {
     return videoTokens.getVideoToken(token)
+  }
+
+  setUserVideoTokensRevokedAt (userId: number, date: number) {
+    return videoTokens.setUserVideoTokensRevokedAt(userId, date)
+  }
+
+  getUserVideoTokensRevokedAt (userId: number) {
+    return videoTokens.getUserVideoTokensRevokedAt(userId)
   }
 
   /* ************ Locks shared by the processes ************ */

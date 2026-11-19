@@ -18,6 +18,7 @@ import {
   createMultipleServers,
   doubleFollow,
   makeActivityPubGetRequest,
+  makeGetRequest,
   PeerTubeServer,
   setAccessTokensToServers,
   setDefaultAccountAvatar,
@@ -293,6 +294,33 @@ describe('Test ActivityPub', function () {
   it('Should not return private video or private playlist', async function () {
     await makeActivityPubGetRequest(servers[0].url, '/videos/watch/' + privateVideo.uuid, HttpStatusCode.UNAUTHORIZED_401)
     await makeActivityPubGetRequest(servers[0].url, '/video-playlists/' + privatePlaylist.uuid, HttpStatusCode.UNAUTHORIZED_401)
+  })
+
+  it('Should not replay a cached response of an authenticated request to an anonymous user', async function () {
+    const accept = 'application/activity+json,text/html;q=0.9,*/*;q=0.8'
+
+    for (const path of [ '/videos/watch/' + unlistedVideo.id, '/w/' + unlistedVideo.id ]) {
+      await makeGetRequest({ url: servers[0].url, path, accept, token: servers[0].accessToken, expectedStatus: HttpStatusCode.OK_200 })
+
+      await makeActivityPubGetRequest(servers[0].url, path, HttpStatusCode.UNAUTHORIZED_401)
+    }
+
+    {
+      const path = '/feeds/video-comments.json'
+      const query = { videoId: unlistedVideo.id }
+
+      await makeGetRequest({ url: servers[0].url, path, query, token: servers[0].accessToken, expectedStatus: HttpStatusCode.OK_200 })
+
+      await makeGetRequest({ url: servers[0].url, path, query, expectedStatus: HttpStatusCode.UNAUTHORIZED_401 })
+    }
+  })
+
+  it('Should not replay a cached unauthorized response to an authenticated user', async function () {
+    const path = '/videos/watch/' + unlistedVideo.id
+    const accept = 'application/activity+json,text/html;q=0.9,*/*;q=0.8'
+
+    await makeActivityPubGetRequest(servers[0].url, path, HttpStatusCode.UNAUTHORIZED_401)
+    await makeGetRequest({ url: servers[0].url, path, accept, token: servers[0].accessToken, expectedStatus: HttpStatusCode.OK_200 })
   })
 
   it('Should not leak the URL of a private video that is a member of a public playlist', async function () {

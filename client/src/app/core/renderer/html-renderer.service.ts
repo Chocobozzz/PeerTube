@@ -68,7 +68,9 @@ export class HtmlRendererService {
       : []
 
     return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [ ...additionalAllowed, 'br' ]
+      ALLOWED_TAGS: [ ...additionalAllowed, 'br' ],
+      // No attribute: the text may come from a remote user (captions...)
+      ALLOWED_ATTR: []
     })
   }
 
@@ -81,7 +83,7 @@ export class HtmlRendererService {
     return this.classDomPurify.sanitize(html, {
       ALLOWED_TAGS: [ ...getDefaultSanitizedTags(), ...additionalTags ],
       ALLOWED_ATTR: [ ...getDefaultSanitizedHrefAttributes(), ...additionalAttributes ].filter(a => a !== 'class'),
-      ALLOW_DATA_ATTR: true
+      ALLOW_DATA_ATTR: false
     })
   }
 
@@ -118,7 +120,8 @@ export class HtmlRendererService {
 
     return this.sanitize(this.enhancedDomPurify, html, {
       additionalTags: [ ...enhancedTags, ...additionalAllowedTags ],
-      additionalAttributes: [ 'src', 'alt', 'style' ]
+      additionalAttributes: [ 'src', 'alt', 'style' ],
+      allowDataAttributes: true
     })
   }
 
@@ -126,13 +129,14 @@ export class HtmlRendererService {
     additionalTags?: string[]
     additionalAttributes?: string[]
     excludeAttributes?: string[]
+    allowDataAttributes?: boolean // default false, only for admin content
   } = {}) {
-    const { additionalTags = [], additionalAttributes = [], excludeAttributes = [] } = options
+    const { additionalTags = [], additionalAttributes = [], excludeAttributes = [], allowDataAttributes = false } = options
 
     return domPurify.sanitize(html, {
       ALLOWED_TAGS: [ ...getDefaultSanitizedTags(), ...additionalTags ],
       ALLOWED_ATTR: [ ...getDefaultSanitizedHrefAttributes(), ...additionalAttributes ].filter(a => !excludeAttributes.includes(a)),
-      ALLOW_DATA_ATTR: true
+      ALLOW_DATA_ATTR: allowDataAttributes
     })
   }
 }

@@ -22,7 +22,7 @@ class VideoTokensManager {
   private static instance: VideoTokensManager
 
   // A player requests many files with the same token, so resolve it once per process
-  // The payload of a token never changes: an entry lives as long as its token, unless its user is updated or deleted
+  // The payload of a token never changes: an entry lives as long as its token, unless its user is updated, deleted or its tokens revoked
   private readonly resolvedTokens = new LRUCache<string, ResolvedToken>({
     max: LRU_CACHE.VIDEO_TOKENS.MAX_SIZE,
     ttl: VIDEO_FILE_TOKEN_LIFETIME,
@@ -67,12 +67,12 @@ class VideoTokensManager {
     videoUUID: string
   }) {
     const { user, videoUUID } = options
-    const { token, expires } = this.generateVideoToken()
+    const { token, expires, createdAt } = this.generateVideoToken()
 
     // The user may be invalidated while we write the token, prevent caching it if that happens
     const invalidationsBefore = this.userInvalidations
 
-    await Redis.Instance.setVideoToken(token, { videoUUID, userId: user?.id, expires: expires.getTime() })
+    await Redis.Instance.setVideoToken(token, { videoUUID, userId: user?.id, expires: expires.getTime(), createdAt: createdAt.getTime() })
 
     const ttl = getVideoTokenTTL(expires.getTime())
     if (ttl > 0 && invalidationsBefore === this.userInvalidations) {
@@ -127,11 +127,26 @@ class VideoTokensManager {
     let user: MUserAccountUrl
 
     if (payload.userId) {
+      const revokedAt = await Redis.Instance.getUserVideoTokensRevokedAt(payload.userId)
+      const createdAt = payload.createdAt ?? payload.expires - VIDEO_FILE_TOKEN_LIFETIME
+
+      if (revokedAt && createdAt <= revokedAt) {
+        logger.debug('Video file token of user %d generated before the revocation of its tokens.', payload.userId)
+
+        return undefined
+      }
+
       // The user may have been deleted since the token was generated
       user = await UserModel.loadByIdWithAccountUrl(payload.userId)
 
       if (!user) {
         logger.debug('Video file token of user %d that does not exist anymore.', payload.userId)
+
+        return undefined
+      }
+
+      if (user.blocked) {
+        logger.debug('Video file token of blocked user %d.', payload.userId)
 
         return undefined
       }
@@ -159,9 +174,10 @@ class VideoTokensManager {
 
   private generateVideoToken () {
     const token = buildUUID()
-    const expires = new Date(new Date().getTime() + VIDEO_FILE_TOKEN_LIFETIME)
+    const createdAt = new Date()
+    const expires = new Date(createdAt.getTime() + VIDEO_FILE_TOKEN_LIFETIME)
 
-    return { token, expires }
+    return { token, expires, createdAt }
   }
 }
 

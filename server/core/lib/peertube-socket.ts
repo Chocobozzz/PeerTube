@@ -59,19 +59,25 @@ class PeerTubeSocket {
 
     this.liveVideosNamespace = io.of('/live-videos')
       .on('connection', socket => {
-        socket.on('subscribe', params => {
-          const videoId = params.videoId + ''
-          if (!isIdValid(videoId)) return
+        socket.on(
+          'subscribe',
+          safeSocketHandler('subscribe', params => {
+            const videoId = getLiveVideoRoom(params)
+            if (!videoId) return
 
-          void socket.join(videoId)
-        })
+            void socket.join(videoId)
+          })
+        )
 
-        socket.on('unsubscribe', params => {
-          const videoId = params.videoId + ''
-          if (!isIdValid(videoId)) return
+        socket.on(
+          'unsubscribe',
+          safeSocketHandler('unsubscribe', params => {
+            const videoId = getLiveVideoRoom(params)
+            if (!videoId) return
 
-          void socket.leave(videoId)
-        })
+            void socket.leave(videoId)
+          })
+        )
       })
 
     this.runnersNamespace = io.of('/runners')
@@ -170,6 +176,31 @@ class PeerTubeSocket {
 
   static get Instance () {
     return this.instance || (this.instance = new this())
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function getLiveVideoRoom (params: any) {
+  // Anonymous clients can send anything
+  if (!params || typeof params !== 'object') return undefined
+
+  const videoId = params.videoId + ''
+  if (!isIdValid(videoId)) return undefined
+
+  return videoId
+}
+
+// Don't crash the process
+function safeSocketHandler<T extends any[]> (event: string, handler: (...args: T) => void) {
+  return (...args: T) => {
+    try {
+      handler(...args)
+    } catch (err) {
+      logger.warn(`Error in socket.io ${event} handler`, { err })
+    }
   }
 }
 

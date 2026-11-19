@@ -4,6 +4,7 @@ import { ApiCache, APICacheOptions } from './shared/index.js'
 
 const defaultOptions: APICacheOptions = {
   excludeStatus: [
+    HttpStatusCode.UNAUTHORIZED_401,
     HttpStatusCode.FORBIDDEN_403,
     HttpStatusCode.NOT_FOUND_404
   ]

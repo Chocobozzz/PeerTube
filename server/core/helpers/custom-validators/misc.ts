@@ -190,20 +190,12 @@ export function toIntArray (value: any) {
 export function isStableVersionValid (value: string) {
   if (!exists(value)) return false
 
-  const parts = (value + '').split('.')
-
-  return parts.length === 3 && parts.every(p => validator.default.isInt(p))
+  return /^\d+\.\d+\.\d+$/.test(value + '')
 }
 
 export function isStableOrUnstableVersionValid (value: string) {
   if (!exists(value)) return false
 
-  // suffix is beta.x or alpha.x
-  const [ stable, suffix ] = value.split('-')
-  if (!isStableVersionValid(stable)) return false
-
-  const suffixRegex = /^(rc|alpha|beta)\.\d+$/
-  if (suffix && !suffixRegex.test(suffix)) return false
-
-  return true
+  // suffix is rc.x, beta.x or alpha.x
+  return /^\d+\.\d+\.\d+(-(rc|alpha|beta)\.\d+)?$/.test(value + '')
 }

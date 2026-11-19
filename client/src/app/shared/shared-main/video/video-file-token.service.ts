@@ -1,7 +1,7 @@
 import { catchError, map, of, tap } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
-import { RestExtractor } from '@app/core'
+import { AuthService, RestExtractor } from '@app/core'
 import { VideoToken } from '@peertube/peertube-models'
 import { VideoService } from './video.service'
 import { VideoPasswordService } from './video-password.service'
@@ -10,15 +10,29 @@ import { VideoPasswordService } from './video-password.service'
 export class VideoFileTokenService {
   private authHttp = inject(HttpClient)
   private restExtractor = inject(RestExtractor)
+  private auth = inject(AuthService)
 
+  // Tokens belong to the logged in user
   private readonly store = new Map<string, { token: string, expires: Date }>()
+  private storeGeneration = 0
+
+  constructor () {
+    this.auth.loginChangedSource.subscribe(() => {
+      this.storeGeneration++
+      this.store.clear()
+    })
+  }
 
   getVideoFileToken ({ videoUUID, videoPassword }: { videoUUID: string, videoPassword?: string }) {
     const existing = this.store.get(videoUUID)
     if (existing) return of(existing)
 
+    const generation = this.storeGeneration
+
     return this.createVideoFileToken(videoUUID, videoPassword)
-      .pipe(tap(result => this.store.set(videoUUID, { token: result.token, expires: new Date(result.expires) })))
+      .pipe(tap(result => {
+        if (generation === this.storeGeneration) this.store.set(videoUUID, { token: result.token, expires: new Date(result.expires) })
+      }))
   }
 
   private createVideoFileToken (videoUUID: string, videoPassword?: string) {

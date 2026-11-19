@@ -25,7 +25,12 @@ type LRUValue = {
   file?: MVideoFile
 }
 
-const staticFileTokenBypass = new LRUCache<string, LRUValue>({
+const webVideoFileAccessCache = new LRUCache<string, LRUValue>({
+  max: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.MAX_SIZE,
+  ttl: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.TTL
+})
+
+const hlsFileAccessCache = new LRUCache<string, LRUValue>({
   max: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.MAX_SIZE,
   ttl: LRU_CACHE.STATIC_VIDEO_FILES_RIGHTS_CHECK.TTL
 })
@@ -38,13 +43,13 @@ export const ensureCanAccessVideoPrivateWebVideoFiles = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
 
-    const token = extractTokenOrDie(req, res)
-    if (!token) return
+    if (!checkHasCredentialsOrDie(req, res)) return
 
-    const cacheKey = token + '-' + req.originalUrl
+    // Don't use the query string in the key: it is controlled by the client
+    const cacheKey = buildCacheKey(req, res, basename(req.path))
 
-    if (staticFileTokenBypass.has(cacheKey)) {
-      const { allowed, file, video } = staticFileTokenBypass.get(cacheKey)
+    if (webVideoFileAccessCache.has(cacheKey)) {
+      const { allowed, file, video } = webVideoFileAccessCache.get(cacheKey)
 
       if (allowed === true) {
         res.locals.videoWithBlacklist = video
@@ -58,7 +63,7 @@ export const ensureCanAccessVideoPrivateWebVideoFiles = [
 
     const result = await isWebVideoAllowed(req, res)
 
-    staticFileTokenBypass.set(cacheKey, result)
+    webVideoFileAccessCache.set(cacheKey, result)
 
     if (result.allowed !== true) return
 
@@ -125,13 +130,12 @@ export const ensureCanAccessPrivateVideoHLSFiles = [
 
     const videoUUID = req.params.videoUUID
 
-    const token = extractTokenOrDie(req, res)
-    if (!token) return
+    if (!checkHasCredentialsOrDie(req, res)) return
 
-    const cacheKey = token + '-' + videoUUID
+    const cacheKey = buildCacheKey(req, res, videoUUID)
 
-    if (staticFileTokenBypass.has(cacheKey)) {
-      const { allowed, file, video } = staticFileTokenBypass.get(cacheKey)
+    if (hlsFileAccessCache.has(cacheKey)) {
+      const { allowed, file, video } = hlsFileAccessCache.get(cacheKey)
 
       if (allowed === true) {
         res.locals.videoWithBlacklist = video
@@ -145,7 +149,7 @@ export const ensureCanAccessPrivateVideoHLSFiles = [
 
     const result = await isHLSAllowed(req, res, videoUUID)
 
-    staticFileTokenBypass.set(cacheKey, result)
+    hlsFileAccessCache.set(cacheKey, result)
 
     if (result.allowed !== true) return
 
@@ -199,15 +203,31 @@ async function isHLSAllowed (req: express.Request, res: express.Response, videoU
   }
 }
 
-function extractTokenOrDie (req: express.Request, res: express.Response) {
-  const token = req.header('x-peertube-video-password') || req.query.videoFileToken || res.locals.oauth?.token.accessToken
+function getCredentials (req: express.Request, res: express.Response) {
+  return {
+    videoPassword: req.header('x-peertube-video-password') || null,
+    videoFileToken: req.query.videoFileToken as string || null,
+    accessToken: res.locals.oauth?.token.accessToken || null
+  }
+}
 
-  if (!token) {
-    return res.fail({
+function checkHasCredentialsOrDie (req: express.Request, res: express.Response) {
+  const { videoPassword, videoFileToken, accessToken } = getCredentials(req, res)
+
+  if (!videoPassword && !videoFileToken && !accessToken) {
+    res.fail({
       message: 'Video password header, video file token query parameter and bearer token are all missing', //
       status: HttpStatusCode.UNAUTHORIZED_401
     })
+
+    return false
   }
 
-  return token
+  return true
+}
+
+function buildCacheKey (req: express.Request, res: express.Response, resource: string) {
+  const { videoPassword, videoFileToken, accessToken } = getCredentials(req, res)
+
+  return JSON.stringify([ resource, videoPassword, videoFileToken, accessToken ])
 }

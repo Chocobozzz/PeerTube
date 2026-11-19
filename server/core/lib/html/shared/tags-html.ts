@@ -140,7 +140,7 @@ export class TagsHtml {
 
     const titleTag = `<title>${escapeHTML(text)}</title>`
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.TITLE, titleTag)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.TITLE, () => titleTag)
   }
 
   static addDescriptionTag (htmlStringPage: string, escapedTruncatedDescription: string) {
@@ -150,7 +150,7 @@ export class TagsHtml {
       ? `<meta name="description" content="${escapeAttribute(escapedTruncatedDescription)}" />`
       : ''
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, descriptionTag)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.DESCRIPTION, () => descriptionTag)
   }
 
   // Give the main content of the page to crawlers that don't execute JavaScript
@@ -165,7 +165,7 @@ export class TagsHtml {
     const style = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap'
     const content = `<div style="${style}"><h1>${escapedTitle}</h1>${toSafeHtml(markdownDescription)}</div>`
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_RENDERED_CONTENT, content)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_RENDERED_CONTENT, () => content)
   }
 
   static findRelMe (content: string) {
@@ -242,7 +242,7 @@ export class TagsHtml {
 
     tagsStr += `<link rel="apple-touch-icon" href="${iconHref}" />`
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsStr)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, () => tagsStr)
   }
 
   // ---------------------------------------------------------------------------

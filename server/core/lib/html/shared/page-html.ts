@@ -192,7 +192,7 @@ export class PageHtml {
   static addCustomCSS (htmlStringPage: string) {
     const styleTag = `<style class="custom-css-style">${CONFIG.INSTANCE.CUSTOMIZATIONS.CSS}</style>`
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, styleTag)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, () => styleTag)
   }
 
   static addServerConfig (htmlStringPage: string, serverConfig: HTMLServerConfig) {
@@ -202,7 +202,7 @@ export class PageHtml {
       `window.PeerTubeServerConfig = ${escapeHtmlJSONStr(serverConfigString)}` +
       `</script>`
 
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_CONFIG, configScriptTag)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.SERVER_CONFIG, () => configScriptTag)
   }
 
   static async addAsyncPluginCSS (htmlStringPage: string) {
@@ -225,7 +225,7 @@ export class PageHtml {
     const fileHash = sha256(globalCSSContent)
     const linkTag = `<link rel="stylesheet" href="/plugins/global.css?hash=${fileHash}" />`
 
-    return htmlStringPage.replace('</head>', linkTag + '</head>')
+    return htmlStringPage.replace('</head>', () => linkTag + '</head>')
   }
 
   private static addManifestContentHash (htmlStringPage: string) {
