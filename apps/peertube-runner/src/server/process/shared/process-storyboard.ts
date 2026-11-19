@@ -24,11 +24,11 @@ export async function processGenerateStoryboard (options: ProcessOptions<RunnerJ
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for storyboard job ${job.jobToken}`)
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for storyboard job ${job.uuid}`)
 
-    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+    videoInputPath = await downloadInputFile({ server, url: payload.input.videoFileUrl, runnerToken, job })
 
-    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Generating storyboard.`)
+    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.uuid}. Generating storyboard.`)
 
     const ffmpegImage = buildFFmpegImage()
 

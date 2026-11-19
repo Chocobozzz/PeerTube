@@ -253,7 +253,7 @@ export class RunnerServer {
         }
 
         if (code === ServerErrorCode.UNKNOWN_RUNNER_TOKEN) {
-          logger.error({ err }, `Unregistering ${server.url} as the runner token ${server.runnerToken} is invalid`)
+          logger.error({ err }, `Unregistering ${server.url} as the runner token is invalid`)
 
           await this.unregisterRunner({ url: server.url, runnerName: server.runnerName })
           continue

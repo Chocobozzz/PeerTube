@@ -1,10 +1,10 @@
-import { parse, stringify } from 'smol-toml'
 import { TranscriptionEngineName, WhisperBuiltinModelName } from '@peertube/peertube-transcription'
 import envPaths from 'env-paths'
 import { ensureDir, pathExists } from 'fs-extra/esm'
-import { readFile, writeFile } from 'fs/promises'
+import { chmod, readFile, writeFile } from 'fs/promises'
 import merge from 'lodash-es/merge.js'
 import { dirname, join } from 'path'
+import { parse, stringify } from 'smol-toml'
 import { logger } from '../shared/index.js'
 
 const paths = envPaths('peertube-runner')
@@ -82,8 +82,12 @@ export class ConfigManager {
     this.config = merge(this.config, parse(file))
   }
 
-  save () {
-    return writeFile(this.configFilePath, stringify(this.config))
+  async save () {
+    // The file contains runner tokens: only readable by the runner user
+    await writeFile(this.configFilePath, stringify(this.config), { mode: 0o600 })
+
+    // The mode of writeFile is only used when creating the file
+    await chmod(this.configFilePath, 0o600)
   }
 
   // ---------------------------------------------------------------------------

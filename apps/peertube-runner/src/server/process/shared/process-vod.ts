@@ -39,12 +39,17 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for web video transcoding job ${job.jobToken}`)
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for web video transcoding job ${job.uuid}`)
 
-    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
-    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+    videoInputPath = await downloadInputFile({ server, url: payload.input.videoFileUrl, runnerToken, job })
+    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({
+      server,
+      urls: payload.input.separatedAudioFileUrl,
+      runnerToken,
+      job
+    })
 
-    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running web video transcoding.`)
+    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.uuid}. Running web video transcoding.`)
 
     const ffmpegVod = buildFFmpegVOD({
       onJobProgress: progress => {
@@ -106,10 +111,15 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for HLS transcoding job ${job.jobToken}`)
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for HLS transcoding job ${job.uuid}`)
 
-    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
-    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+    videoInputPath = await downloadInputFile({ server, url: payload.input.videoFileUrl, runnerToken, job })
+    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({
+      server,
+      urls: payload.input.separatedAudioFileUrl,
+      runnerToken,
+      job
+    })
 
     const copyCodecs = await canCopyForHLS({
       fps: payload.output.fps,
@@ -117,7 +127,7 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
       path: videoInputPath
     })
 
-    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running HLS transcoding.`)
+    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.uuid}. Running HLS transcoding.`)
 
     const ffmpegVod = buildFFmpegVOD({
       onJobProgress: progress => {
@@ -183,15 +193,15 @@ export async function processAudioMergeTranscoding (options: ProcessOptions<Runn
   try {
     logger.info(
       `Downloading input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
-        `for audio merge transcoding job ${job.jobToken}`
+        `for audio merge transcoding job ${job.uuid}`
     )
 
-    audioPath = await downloadInputFile({ url: payload.input.audioFileUrl, runnerToken, job })
-    thumbnailPath = await downloadInputFile({ url: payload.input.previewFileUrl, runnerToken, job })
+    audioPath = await downloadInputFile({ server, url: payload.input.audioFileUrl, runnerToken, job })
+    thumbnailPath = await downloadInputFile({ server, url: payload.input.previewFileUrl, runnerToken, job })
 
     logger.info(
       `Downloaded input files ${payload.input.audioFileUrl} and ${payload.input.previewFileUrl} ` +
-        `for job ${job.jobToken}. Running audio merge transcoding.`
+        `for job ${job.uuid}. Running audio merge transcoding.`
     )
 
     const ffmpegVod = buildFFmpegVOD({

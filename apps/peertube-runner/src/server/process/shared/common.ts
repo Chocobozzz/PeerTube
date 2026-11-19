@@ -24,15 +24,16 @@ export type ProcessOptions<T extends RunnerJobPayload = RunnerJobPayload> = {
 }
 
 export async function downloadInputFile (options: {
+  server: PeerTubeServer
   url: string
   job: JobWithToken
   runnerToken: string
 }) {
-  const { url, job, runnerToken } = options
+  const { server, url, job, runnerToken } = options
   const destination = join(ConfigManager.Instance.getTranscodingDirectory(), buildUUID())
 
   try {
-    await downloadFile({ url, jobToken: job.jobToken, runnerToken, destination })
+    await downloadFile({ url: buildSafeJobFileUrl({ server, url, job }), jobToken: job.jobToken, runnerToken, destination })
   } catch (err) {
     remove(destination)
       .catch(err => logger.error({ err }, `Cannot remove ${destination}`))
@@ -44,6 +45,7 @@ export async function downloadInputFile (options: {
 }
 
 export async function downloadSeparatedAudioFileIfNeeded (options: {
+  server: PeerTubeServer
   urls: string[]
   job: JobWithToken
   runnerToken: string
@@ -52,7 +54,24 @@ export async function downloadSeparatedAudioFileIfNeeded (options: {
 
   if (!urls || urls.length === 0) return undefined
 
-  return downloadInputFile({ url: urls[0], ...pick(options, [ 'job', 'runnerToken' ]) })
+  return downloadInputFile({ url: urls[0], ...pick(options, [ 'server', 'job', 'runnerToken' ]) })
+}
+
+function buildSafeJobFileUrl (options: {
+  server: PeerTubeServer
+  url: string
+  job: JobWithToken
+}) {
+  const { server, url, job } = options
+
+  const { pathname } = new URL(url)
+  const expectedPrefix = '/api/v1/runners/jobs/' + job.uuid + '/files/'
+
+  if (!pathname.startsWith(expectedPrefix) || pathname.includes('/../') || pathname.includes('/./')) {
+    throw new Error(`Refusing to download ${url} that is not a file of job ${job.uuid}`)
+  }
+
+  return new URL(pathname, server.url).toString()
 }
 
 export function scheduleTranscodingProgress (options: {

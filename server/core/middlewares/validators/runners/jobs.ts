@@ -19,6 +19,7 @@ import {
 } from '@server/helpers/custom-validators/runners/jobs.js'
 import { isRunnerTokenValid } from '@server/helpers/custom-validators/runners/runners.js'
 import { cleanUpReqFiles } from '@server/helpers/express-utils.js'
+import { createLogger } from '@server/helpers/logger.js'
 import { runnerJobCanBeCancelled } from '@server/lib/runners/index.js'
 import { RunnerJobModel } from '@server/models/runner/runner-job.js'
 import express from 'express'
@@ -26,6 +27,7 @@ import { body, param, query } from 'express-validator'
 import { areValidationErrors } from '../shared/index.js'
 
 const tags = [ 'runner' ]
+const logger = createLogger('api', 'runner')
 
 export const acceptRunnerJobValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -179,6 +181,38 @@ export const runnerJobExistsValidator = [
     return next()
   }
 ]
+
+// Multer file filter: don't store files of a request that is not authenticated by its runner and job tokens
+const runnerJobOfFilesRequest = new WeakMap<express.Request, Promise<boolean>>()
+
+export function runnerJobFilesFilter (
+  req: express.Request,
+  file: Express.Multer.File,
+  cb: (err: Error, result: boolean) => void
+) {
+  let promise: Promise<boolean>
+
+  if (runnerJobOfFilesRequest.has(req)) {
+    promise = runnerJobOfFilesRequest.get(req)
+  } else {
+    const { runnerToken, jobToken } = req.body || {}
+    const { jobUUID } = req.params
+
+    promise = isRunnerTokenValid(runnerToken) && isRunnerJobTokenValid(jobToken) && isUUIDValid(jobUUID)
+      ? RunnerJobModel.loadByRunnerAndJobTokensWithRunner({ uuid: jobUUID, runnerToken, jobToken }).then(job => !!job)
+      : Promise.resolve(false)
+
+    runnerJobOfFilesRequest.set(req, promise)
+  }
+
+  promise
+    .then(allowed => {
+      if (!allowed) logger.debug('Discarding file %s of an unauthenticated runner job request.', file.fieldname)
+
+      cb(null, allowed)
+    })
+    .catch(err => cb(err, false))
+}
 
 export function jobOfRunnerGetValidatorFactory (allowedStates: RunnerJobStateType[]) {
   return [

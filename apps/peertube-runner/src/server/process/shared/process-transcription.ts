@@ -34,11 +34,11 @@ export async function processVideoTranscription (options: ProcessOptions<RunnerJ
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for transcription job ${job.jobToken}`)
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for transcription job ${job.uuid}`)
 
-    inputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
+    inputPath = await downloadInputFile({ server, url: payload.input.videoFileUrl, runnerToken, job })
 
-    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.jobToken}. Running transcription.`)
+    logger.info(`Downloaded input file ${payload.input.videoFileUrl} for job ${job.uuid}. Running transcription.`)
 
     if (await hasAudioStream(inputPath) !== true) {
       await server.runnerJobs.error({

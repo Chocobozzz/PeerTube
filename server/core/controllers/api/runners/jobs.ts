@@ -49,6 +49,7 @@ import {
   listRunnerJobsValidator,
   requestRunnerJobValidator,
   runnerJobExistsValidator,
+  runnerJobFilesFilter,
   runnerJobGetValidator,
   successRunnerJobValidator,
   updateRunnerJobValidator
@@ -66,12 +67,16 @@ const postRunnerJobSuccessVideoFiles = createReqFiles(
     ...MIMETYPES.M3U8.MIMETYPE_EXT,
     ...MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT,
     ...MIMETYPES.IMAGE.MIMETYPE_EXT
-  }
+  },
+  undefined,
+  runnerJobFilesFilter
 )
 
 const runnerJobUpdateVideoFiles = createReqFiles(
   [ 'payload[videoChunkFile]', 'payload[resolutionPlaylistFile]', 'payload[masterPlaylistFile]' ],
-  { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.M3U8.MIMETYPE_EXT }
+  { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.M3U8.MIMETYPE_EXT },
+  undefined,
+  runnerJobFilesFilter
 )
 
 const runnerJobsRouter = express.Router()

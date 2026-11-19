@@ -11,6 +11,7 @@ import {
   VideoStudioTranscodingSuccess
 } from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
+import { PeerTubeServer } from '@peertube/peertube-server-commands'
 import { remove } from 'fs-extra/esm'
 import { join } from 'path'
 import { ConfigManager } from '../../../shared/config-manager.js'
@@ -46,15 +47,20 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
   })
 
   try {
-    logger.info(`Downloading input file ${payload.input.videoFileUrl} for job ${job.jobToken}`)
+    logger.info(`Downloading input file ${payload.input.videoFileUrl} for job ${job.uuid}`)
 
-    videoInputPath = await downloadInputFile({ url: payload.input.videoFileUrl, runnerToken, job })
-    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({ urls: payload.input.separatedAudioFileUrl, runnerToken, job })
+    videoInputPath = await downloadInputFile({ server, url: payload.input.videoFileUrl, runnerToken, job })
+    separatedAudioInputPath = await downloadSeparatedAudioFileIfNeeded({
+      server,
+      urls: payload.input.separatedAudioFileUrl,
+      runnerToken,
+      job
+    })
 
     tmpVideoInputFilePath = videoInputPath
     tmpSeparatedAudioInputFilePath = separatedAudioInputPath
 
-    logger.info(`Input file ${payload.input.videoFileUrl} downloaded for job ${job.jobToken}. Running studio transcoding tasks.`)
+    logger.info(`Input file ${payload.input.videoFileUrl} downloaded for job ${job.uuid}. Running studio transcoding tasks.`)
 
     for (const task of payload.tasks) {
       const outputFilename = 'output-edition-' + buildUUID() + '.mp4'
@@ -66,6 +72,7 @@ export async function processStudioTranscoding (options: ProcessOptions<RunnerJo
         outputPath,
         task,
         job,
+        server,
         runnerToken
       })
 
@@ -111,6 +118,7 @@ type TaskProcessorOptions<T extends VideoStudioTaskPayload = VideoStudioTaskPayl
   task: T
   runnerToken: string
   job: JobWithToken
+  server: PeerTubeServer
 }
 
 const taskProcessors: { [id in VideoStudioTask['name']]: (options: TaskProcessorOptions) => Promise<any> } = {
@@ -131,11 +139,11 @@ async function processTask (options: TaskProcessorOptions) {
 }
 
 async function processAddIntroOutro (options: TaskProcessorOptions<VideoStudioTaskIntroPayload | VideoStudioTaskOutroPayload>) {
-  const { videoInputPath, task, runnerToken, job } = options
+  const { videoInputPath, task, runnerToken, job, server } = options
 
   logger.debug(`Adding intro/outro to ${videoInputPath}`)
 
-  const introOutroPath = await downloadInputFile({ url: task.options.file, runnerToken, job })
+  const introOutroPath = await downloadInputFile({ server, url: task.options.file, runnerToken, job })
 
   try {
     await buildFFmpegEdition().addIntroOutro({
@@ -177,11 +185,11 @@ function processRemoveSegments (options: TaskProcessorOptions<VideoStudioTaskRem
 }
 
 async function processAddWatermark (options: TaskProcessorOptions<VideoStudioTaskWatermarkPayload>) {
-  const { videoInputPath, task, runnerToken, job } = options
+  const { videoInputPath, task, runnerToken, job, server } = options
 
   logger.debug(`Adding watermark to ${videoInputPath}`)
 
-  const watermarkPath = await downloadInputFile({ url: task.options.file, runnerToken, job })
+  const watermarkPath = await downloadInputFile({ server, url: task.options.file, runnerToken, job })
 
   try {
     await buildFFmpegEdition().addWatermark({

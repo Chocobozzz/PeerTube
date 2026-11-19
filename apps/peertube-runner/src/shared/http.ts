@@ -30,8 +30,14 @@ export function downloadFile (options: {
       headers: {
         'Content-Type': 'application/json',
         'Content-Length': Buffer.byteLength(body, 'utf-8')
+      },
+      // Our tokens are in the body, that is sent again on 307/308 redirects
+      beforeRedirect: (redirectOptions: RequestOptions & { protocol?: string }) => {
+        if (redirectOptions.hostname !== parsed.hostname || (redirectOptions.protocol && redirectOptions.protocol !== parsed.protocol)) {
+          throw new Error(`Refusing to follow the redirection of ${url} to another origin`)
+        }
       }
-    }
+    } as RequestOptions
 
     const request = getRequest(url)(getOptions, response => {
       const code = response.statusCode ?? 0

@@ -138,7 +138,9 @@ export function getHostWithPort (host: string) {
 export function createReqFiles (
   fieldNames: string[],
   mimeTypes: { [id: string]: string | string[] },
-  destination = CONFIG.STORAGE.TMP_DIR
+  destination = CONFIG.STORAGE.TMP_DIR,
+  // Called before storing each file, with the text fields sent before it in req.body
+  fileFilter?: (req: express.Request, file: Express.Multer.File, cb: (err: Error, result: boolean) => void) => void
 ): RequestHandler {
   const storage = diskStorage({
     destination: (req, file, cb) => {
@@ -158,7 +160,7 @@ export function createReqFiles (
     })
   }
 
-  return multer({ storage, defParamCharset: 'utf8' }).fields(fields)
+  return multer({ storage, fileFilter, defParamCharset: 'utf8' }).fields(fields)
 }
 
 export function createAnyReqFiles (
