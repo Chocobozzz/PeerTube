@@ -4,6 +4,7 @@ import { FfmpegCommand } from 'fluent-ffmpeg'
 import { readFile, writeFile } from 'fs/promises'
 import { dirname } from 'path'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
+import { checkTranscodingOutputOrThrow } from './ffmpeg-utils.js'
 import { ffprobePromise, getVideoStreamDimensionsInfo } from './ffprobe.js'
 import { presetCopy, presetVOD } from './shared/presets.js'
 
@@ -76,6 +77,8 @@ export class FFmpegVOD {
   }
 
   async transcode (options: TranscodeVODOptions) {
+    checkTranscodingOutputOrThrow(options)
+
     const builders: {
       [type in TranscodeVODOptionsType]: (options: TranscodeVODOptions) => Promise<void> | void
     } = {

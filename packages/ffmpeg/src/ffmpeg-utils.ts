@@ -18,9 +18,38 @@ export function getScaleFilter (options: EncoderOptions): string {
 
 // ---------------------------------------------------------------------------
 
+export function checkTranscodingOutputOrThrow (options: { resolution?: unknown, fps?: unknown }) {
+  const { resolution, fps } = options
+
+  if (resolution !== undefined && resolution !== null) {
+    const num = toNumber(resolution)
+
+    if (!Number.isInteger(num) || num < 0) {
+      throw new Error(`Invalid transcoding output resolution ${resolution}`)
+    }
+  }
+
+  if (fps !== undefined && fps !== null) {
+    const num = toNumber(fps)
+
+    if (!Number.isFinite(num) || num < 0) {
+      throw new Error(`Invalid transcoding output fps ${fps}`)
+    }
+  }
+}
+
+function toNumber (value: unknown) {
+  if (typeof value === 'number') return value
+  if (typeof value === 'string' && value.trim() !== '') return Number(value)
+
+  return NaN
+}
+
+// ---------------------------------------------------------------------------
+
 // Demuxers of the video and audio formats PeerTube accepts
-// None of them opens the URLs a file may reference
-const REMOTE_INPUT_FORMAT_WHITELIST = [
+// None of them opens the URLs or files a file may reference
+const MEDIA_INPUT_FORMATS = [
   'mov', // mov,mp4,m4a,3gp,3g2,mj2
   'matroska', // matroska,webm
   'ogg',
@@ -41,14 +70,41 @@ const REMOTE_INPUT_FORMAT_WHITELIST = [
   'aac',
   'ac3',
   'eac3'
-].join(',')
+]
+
+// Images PeerTube gives to FFmpeg (watermark, audio cover, animated avatar...)
+const IMAGE_INPUT_FORMATS = [
+  'image2',
+  'png_pipe',
+  'jpeg_pipe',
+  'webp_pipe',
+  'gif',
+  'gif_pipe',
+  'apng',
+  'bmp_pipe'
+]
+
+const INPUT_FORMAT_WHITELIST = [ ...MEDIA_INPUT_FORMATS, ...IMAGE_INPUT_FORMATS ].join(',')
 
 // Prevent SSRF
 // A remote input (pre-signed URL...) lets nested demuxers of FFmpeg open any HTTP, TCP or UDP URL, unlike a local file
 // Some of them (dash, hls, concat, sdp...) detect the format from the content and then open the URLs the file references
 export function buildRemoteInputOptions (input: unknown, options: { disableFormatWhitelist?: boolean } = {}): string[] {
   if (options.disableFormatWhitelist === true) return []
-  if (typeof input !== 'string' || !/^https?:\/\//i.test(input)) return []
+  if (typeof input !== 'string') return []
 
-  return [ '-format_whitelist', REMOTE_INPUT_FORMAT_WHITELIST ]
+  if (/^https?:\/\//i.test(input) || isLocalFileInput(input)) {
+    return [ '-format_whitelist', INPUT_FORMAT_WHITELIST ]
+  }
+
+  return []
+}
+
+function isLocalFileInput (input: string) {
+  if (/^file:/i.test(input)) return true
+  // Windows drive letter
+  if (/^[a-z]:[\\/]/i.test(input)) return true
+
+  // No protocol
+  return !/^[a-z][a-z0-9+.-]*:/i.test(input)
 }

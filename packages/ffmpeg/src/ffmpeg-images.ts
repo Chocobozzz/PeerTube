@@ -98,6 +98,11 @@ export class FFmpegImage {
   }) {
     const { path, destination, inputFileMutexReleaser, sprites } = options
 
+    const spriteValues = [ sprites?.size?.width, sprites?.size?.height, sprites?.count?.width, sprites?.count?.height, sprites?.duration ]
+    if (spriteValues.some(v => typeof v !== 'number' || !Number.isFinite(v) || v < 0)) {
+      throw new Error('Invalid storyboard sprites options')
+    }
+
     const command = this.commandWrapper.buildCommand(path, inputFileMutexReleaser)
 
     const filter = [

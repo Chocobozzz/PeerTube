@@ -6,7 +6,7 @@ import { getPort, randomListen, terminateServer } from '@tests/shared/mock-serve
 import { expect } from 'chai'
 import express from 'express'
 import { pathExists, remove } from 'fs-extra/esm'
-import { mkdtemp } from 'fs/promises'
+import { mkdtemp, writeFile } from 'fs/promises'
 import { Server } from 'http'
 import { tmpdir } from 'os'
 import { join } from 'path'
@@ -113,6 +113,62 @@ describe('FFmpeg remote input', function () {
     await buildFFmpegImage().generateThumbnailFromVideo({ fromInput: baseUrl + '/files/video_short.mp4', output, framesToAnalyze: 2 })
 
     expect(await pathExists(output)).to.be.true
+  })
+
+  describe('Local input', function () {
+    it('Should probe local video, audio and image files', async function () {
+      this.timeout(60000)
+
+      const filenames = [
+        'video_short.mp4',
+        'video_short.webm',
+        'video_short.mkv',
+        'video_short.ogv',
+        'video_short.avi',
+        'video_short.ts',
+        'sample.ogg',
+        'video_short.mp4.jpg',
+        'avatar-big.png',
+        'animated.gif',
+        'animated.webp'
+      ]
+
+      for (const filename of filenames) {
+        const probe = await ffprobePromise(buildAbsoluteFixturePath(filename))
+
+        expect(probe.streams, filename).to.have.length.above(0)
+      }
+    })
+
+    it('Should not read the local files referenced by a local DASH manifest', async function () {
+      this.timeout(30000)
+
+      // An uploaded file with a video extension but containing a manifest referencing another file of the server
+      const manifestPath = join(tmpDirectory, 'local-dash.mp4')
+      await writeFile(manifestPath, buildDASHManifest('file://' + buildAbsoluteFixturePath('video_short.mp4')))
+
+      let error: Error
+
+      try {
+        await ffprobePromise(manifestPath)
+      } catch (err) {
+        error = err
+      }
+
+      expect(error).to.exist
+
+      error = undefined
+      const output = join(tmpDirectory, 'local-dash.jpg')
+
+      try {
+        await buildFFmpegImage().generateThumbnailFromVideo({ fromInput: manifestPath, output, framesToAnalyze: 2 })
+      } catch (err) {
+        error = err
+      }
+
+      expect(error).to.exist
+      expect(await pathExists(output)).to.be.false
+    })
   })
 
   after(async function () {

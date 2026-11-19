@@ -9,7 +9,7 @@ import {
 import { MutexInterface } from 'async-mutex'
 import ffmpeg, { FfmpegCommand } from 'fluent-ffmpeg'
 import { Readable } from 'node:stream'
-import { buildRemoteInputOptions } from './ffmpeg-utils.js'
+import { buildInputFormatWhitelistOptions } from './ffmpeg-utils.js'
 
 export interface FFmpegCommandWrapperOptions {
   availableEncoders?: AvailableEncoders
@@ -115,7 +115,7 @@ export class FFmpegCommandWrapper {
 
     for (const input of arrayify(inputs)) {
       this.command.input(input)
-        .inputOptions(buildRemoteInputOptions(input))
+        .inputOptions(buildInputFormatWhitelistOptions(input))
     }
 
     if (this.threads > 0) {

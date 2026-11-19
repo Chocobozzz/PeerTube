@@ -30,6 +30,8 @@ export class FFmpegEdition {
   ) {
     const { videoInputPath, separatedAudioInputPath, outputPath, inputFileMutexReleaser } = options
 
+    checkOptionalNumbersOrThrow('cut', [ options.start, options.end ])
+
     const mainProbe = await ffprobePromise(videoInputPath)
     const fps = await getVideoStreamFPS(videoInputPath, mainProbe)
     const { resolution } = await getVideoStreamDimensionsInfo(videoInputPath, mainProbe)
@@ -75,6 +77,12 @@ export class FFmpegEdition {
     }
   ) {
     const { watermarkPath, videoInputPath, separatedAudioInputPath, outputPath, videoFilters, inputFileMutexReleaser } = options
+
+    checkOptionalNumbersOrThrow('watermark', [
+      videoFilters?.watermarkSizeRatio,
+      videoFilters?.horizontalMarginRatio,
+      videoFilters?.verticalMarginRatio
+    ], { required: true })
 
     const videoProbe = await ffprobePromise(videoInputPath)
     const fps = await getVideoStreamFPS(videoInputPath, videoProbe)
@@ -295,7 +303,12 @@ export class FFmpegEdition {
       segments: { start: number, end: number }[]
     }
   ) {
-    const { videoInputPath, separatedAudioInputPath, outputPath, inputFileMutexReleaser, segments } = options
+    const { videoInputPath, separatedAudioInputPath, outputPath, inputFileMutexReleaser } = options
+
+    const segments = (options.segments || []).map(s => ({
+      start: toPositiveNumberOrThrow('remove segments', s?.start),
+      end: toPositiveNumberOrThrow('remove segments', s?.end)
+    }))
 
     const mainProbe = await ffprobePromise(videoInputPath)
     const fps = await getVideoStreamFPS(videoInputPath, mainProbe)
@@ -411,5 +424,27 @@ export class FFmpegEdition {
     separatedAudioInputPath?: string
   }) {
     return [ options.videoInputPath, options.separatedAudioInputPath ].filter(i => !!i)
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+function toPositiveNumberOrThrow (name: string, value: unknown) {
+  const num = typeof value === 'string' && value.trim() !== ''
+    ? Number(value)
+    : value
+
+  if (typeof num !== 'number' || !Number.isFinite(num) || num < 0) {
+    throw new Error(`Invalid ${name} option ${value}`)
+  }
+
+  return num
+}
+
+function checkOptionalNumbersOrThrow (name: string, values: unknown[], options: { required?: boolean } = {}) {
+  for (const value of values) {
+    if ((value === undefined || value === null) && options.required !== true) continue
+
+    toPositiveNumberOrThrow(name, value)
   }
 }

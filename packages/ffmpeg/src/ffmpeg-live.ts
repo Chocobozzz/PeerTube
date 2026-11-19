@@ -3,7 +3,7 @@ import { EncoderOptions, VideoResolution } from '@peertube/peertube-models'
 import { FfmpegCommand, FfprobeData, FilterSpecification } from 'fluent-ffmpeg'
 import { join } from 'path'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
-import { StreamType, buildStreamSuffix, getScaleFilter } from './ffmpeg-utils.js'
+import { StreamType, buildStreamSuffix, checkTranscodingOutputOrThrow, getScaleFilter } from './ffmpeg-utils.js'
 import { addDefaultEncoderGlobalParams, addDefaultEncoderParams, applyEncoderOptions } from './shared/index.js'
 
 type LiveTranscodingOptions = {
@@ -39,6 +39,10 @@ export class FFmpegLive {
 
   async getLiveTranscodingCommand (options: LiveTranscodingOptions) {
     this.commandWrapper.debugLog('Building live transcoding command', options)
+
+    for (const output of options.toTranscode) {
+      checkTranscodingOutputOrThrow(output)
+    }
 
     const {
       inputUrl,

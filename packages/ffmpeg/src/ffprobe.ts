@@ -1,7 +1,7 @@
 import { buildAspectRatio, forceNumber, redactSignedUrls } from '@peertube/peertube-core-utils'
 import { VideoResolution, VideoStereo3D } from '@peertube/peertube-models'
 import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
-import { buildRemoteInputOptions } from './ffmpeg-utils.js'
+import { buildInputFormatWhitelistOptions } from './ffmpeg-utils.js'
 
 /**
  * Helpers to run ffprobe and extract data from the JSON output
@@ -15,7 +15,7 @@ export function ffprobePromise (
   } = {}
 ) {
   return new Promise<FfprobeData>((res, rej) => {
-    const remoteInputOptions = buildRemoteInputOptions(input, { disableFormatWhitelist: options.disableRemoteFormatWhitelist })
+    const remoteInputOptions = buildInputFormatWhitelistOptions(input, { disableFormatWhitelist: options.disableRemoteFormatWhitelist })
 
     ffmpeg.ffprobe(input, [ '-show_chapters', ...remoteInputOptions ], (err, data) => {
       if (err) {

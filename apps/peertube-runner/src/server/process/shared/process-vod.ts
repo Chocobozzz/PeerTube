@@ -1,4 +1,4 @@
-import { canCopyForHLS } from '@peertube/peertube-ffmpeg'
+import { canCopyForHLS, checkTranscodingOutputOrThrow } from '@peertube/peertube-ffmpeg'
 import {
   RunnerJobVODAudioMergeTranscodingPayload,
   RunnerJobVODHLSTranscodingPayload,
@@ -24,6 +24,8 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
   const { server, job, runnerToken } = options
 
   const payload = job.payload
+
+  checkTranscodingOutputOrThrow(payload.output)
 
   let ffmpegProgress: number
   let videoInputPath: string
@@ -93,6 +95,8 @@ export async function processWebVideoTranscoding (options: ProcessOptions<Runner
 export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVODHLSTranscodingPayload>) {
   const { server, job, runnerToken } = options
   const payload = job.payload
+
+  checkTranscodingOutputOrThrow(payload.output)
 
   let ffmpegProgress: number
   let videoInputPath: string
@@ -176,6 +180,8 @@ export async function processHLSTranscoding (options: ProcessOptions<RunnerJobVO
 export async function processAudioMergeTranscoding (options: ProcessOptions<RunnerJobVODAudioMergeTranscodingPayload>) {
   const { server, job, runnerToken } = options
   const payload = job.payload
+
+  checkTranscodingOutputOrThrow(payload.output)
 
   let ffmpegProgress: number
   let audioPath: string
