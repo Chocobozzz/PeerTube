@@ -250,11 +250,17 @@ describe('Test video change ownership - nominal', function () {
   })
 
   it('Should accept a live ownership change', async function () {
+    const { streamKey: oldStreamKey } = await servers[0].live.get({ token: firstUserToken, videoId: liveId })
+
     await command.createVideo({ token: firstUserToken, videoId: liveId, username: secondUser })
     const body = await command.listVideos({ token: secondUserToken })
     lastRequestId = body.data[0].id
 
     await command.acceptVideo({ token: secondUserToken, ownershipId: lastRequestId, channelId: secondUserChannelId })
+
+    const { streamKey: newStreamKey } = await servers[0].live.get({ token: secondUserToken, videoId: liveId })
+    expect(newStreamKey).to.exist
+    expect(newStreamKey).to.not.equal(oldStreamKey)
 
     await waitJobs(servers)
 

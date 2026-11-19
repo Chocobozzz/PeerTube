@@ -1,6 +1,8 @@
 import { ChangeOwnershipState, ChangeOwnershipStateType, HttpStatusCode, VideoChannelActivityAction } from '@peertube/peertube-models'
 import { canVideoBeFederated, scheduleVideoFederation } from '@server/lib/activitypub/videos/federate.js'
 import { auditLog, buildOwnershipChangeAuditEntity, buildVideoBlockAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
+import { buildUUID } from '@peertube/peertube-node-utils'
+import { LiveManager } from '@server/lib/live/live-manager.js'
 import { releaseAutoBlacklistOnOwnershipChangeIfNeeded } from '@server/lib/video-blacklist.js'
 import { UserModel } from '@server/models/user/user.js'
 import { VideoChannelActivityModel } from '@server/models/video/video-channel-activity.js'
@@ -26,6 +28,7 @@ import {
 } from '../../../middlewares/index.js'
 import { ChangeOwnershipModel } from '../../../models/video/change-ownership.js'
 import { VideoChannelModel } from '../../../models/video/video-channel.js'
+import { VideoLiveModel } from '../../../models/video/video-live.js'
 import { VideoModel } from '../../../models/video/video.js'
 
 const logger = createLogger()
@@ -158,7 +161,7 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
     buildOwnershipChangeAuditEntity(res.locals.changeOwnership.toFormattedJSON())
   )
 
-  await runTransaction(async t => {
+  const { isLive, videoUUID } = await runTransaction(async t => {
     const changeOwnership = res.locals.changeOwnership
     const channel = res.locals.videoChannel
 
@@ -171,6 +174,16 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
 
     const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoWithRights
     targetVideoUpdated.VideoChannel = channel
+
+    // The previous owner knows the stream key: it must not be able to stream on the channel of the new owner
+    if (targetVideoUpdated.isLive) {
+      const videoLive = await VideoLiveModel.loadByVideoId(targetVideoUpdated.id, t)
+
+      if (videoLive) {
+        videoLive.streamKey = buildUUID()
+        await videoLive.save({ transaction: t })
+      }
+    }
 
     if (canVideoBeFederated(targetVideoUpdated)) {
       await changeVideoChannelShare(targetVideoUpdated, oldVideoChannel, t)
@@ -218,7 +231,14 @@ async function acceptOwnershipChange (req: express.Request, res: express.Respons
     }
 
     Notifier.Instance.notifyOfAcceptedVideoOwnershipChange(changeOwnership)
+
+    return { isLive: targetVideoUpdated.isLive, videoUUID: targetVideoUpdated.uuid }
   })
+
+  // Stop the session the previous owner may be streaming with the previous stream key
+  if (isLive) {
+    await LiveManager.Instance.stopSessionOfVideo({ videoUUID, error: null })
+  }
 
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }

@@ -127,11 +127,12 @@ export class VideoLiveModel extends SequelizeModel<VideoLiveModel> {
     return VideoLiveModel.findOne<MVideoLiveVideoWithSetting>(query)
   }
 
-  static loadByVideoId (videoId: number) {
+  static loadByVideoId (videoId: number, transaction?: Transaction) {
     const query = {
       where: {
         videoId
-      }
+      },
+      transaction
     }
 
     return VideoLiveModel.findOne<MVideoLiveWithSettingSchedules>(query)
