@@ -1,8 +1,8 @@
 import { arrayify, uniqify } from '@peertube/peertube-core-utils'
-import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { ActivityPubActor, APObjectId } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
+import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { ActorLoadByUrlType, loadActorByUrl } from '@server/lib/model-loaders/index.js'
 import {
@@ -105,7 +105,7 @@ async function getOrCreateAPActorInternal (options: {
 }
 
 async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorId: string) {
-  const accountAttributedTo = await findOwner({ rootUrl: actorId, attributedTo: actorObject.attributedTo, type: 'Person' })
+  const accountAttributedTo = await findOwnerUrl({ rootUrl: actorId, attributedTo: actorObject.attributedTo, type: 'Person' })
   if (!accountAttributedTo) {
     throw new Error(`Cannot find account attributed to video channel ${actorId}`)
   }
@@ -122,7 +122,7 @@ async function getOrCreateAPOwner (actorObject: ActivityPubActor, actorId: strin
   }
 }
 
-async function findOwner (options: {
+async function findOwnerUrl (options: {
   rootUrl: string
   attributedTo: APObjectId[] | APObjectId
   audience?: string
@@ -135,7 +135,7 @@ async function findOwner (options: {
     .filter(a => !!a)
     .map(a => getAPId(a))
 
-  // Only fetch actors on the host of the object, so a remote object cannot make us request other hosts
+  // Fetch actors owned by the root URL host
   const actorUrlsToCheck = uniqify(candidateUrls.filter(url => isOnSameHost(url, rootUrl)))
     .slice(0, ACTIVITY_PUB.MAX_OWNER_CANDIDATES)
 
@@ -144,6 +144,13 @@ async function findOwner (options: {
   }
 
   for (const actorToCheck of actorUrlsToCheck) {
+    const knownActor = await loadActorByUrl(actorToCheck, 'association-ids')
+    if (knownActor) {
+      if (knownActor.type === type) return knownActor.url
+
+      continue
+    }
+
     const actorObject = await fetchAPObjectIfNeeded<ActivityPubActor>(actorToCheck)
 
     if (!actorObject) {
@@ -156,7 +163,7 @@ async function findOwner (options: {
       continue
     }
 
-    if (actorObject.type === type) return actorObject
+    if (actorObject.type === type) return actorObject.id
   }
 
   return undefined
@@ -175,7 +182,7 @@ function isOnSameHost (url: string, rootUrl: string) {
 // ---------------------------------------------------------------------------
 
 export {
-  findOwner,
+  findOwnerUrl,
   getOrCreateAPActor,
   getOrCreateAPOwner
 }

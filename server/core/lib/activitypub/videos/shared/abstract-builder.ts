@@ -26,7 +26,7 @@ import {
 } from '@server/types/models/index.js'
 import { CreationAttributes, Transaction } from 'sequelize'
 import { fetchAP } from '../../activity.js'
-import { findOwner, getOrCreateAPActor } from '../../actors/index.js'
+import { findOwnerUrl, getOrCreateAPActor } from '../../actors/index.js'
 import { upsertAPPlayerSettings } from '../../player-settings.js'
 import {
   getCaptionAttributesFromObject,
@@ -45,16 +45,16 @@ export abstract class APVideoAbstractBuilder {
   protected abstract videoObject: VideoObject
 
   protected async getOrCreateVideoChannelFromVideoObject () {
-    const channel = await findOwner({
+    const channelUrl = await findOwnerUrl({
       rootUrl: this.videoObject.id,
       attributedTo: this.videoObject.attributedTo,
       audience: this.videoObject.audience,
       type: 'Group'
     })
 
-    if (!channel) throw new Error('Cannot find associated video channel to video ' + this.videoObject.id)
+    if (!channelUrl) throw new Error('Cannot find associated video channel to video ' + this.videoObject.id)
 
-    return getOrCreateAPActor(channel.id, 'all')
+    return getOrCreateAPActor(channelUrl, 'all')
   }
 
   protected async setThumbnails (video: MVideoThumbnails, t?: Transaction) {
