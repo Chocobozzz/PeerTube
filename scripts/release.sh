@@ -24,7 +24,8 @@ if [ -z "$GITHUB_TOKEN" ]; then
   exit -1
 fi
 
-maintainer_public_key=${MAINTAINER_GPG:-"583A612D890159BE"}
+# PeerTube release key (support/security/peertube-release-key.asc)
+release_key=${RELEASE_GPG_KEY:-"0336DF981C56F77851CC4FB73BEF14A3B1574BA7"}
 
 peertube_directory=$(basename $(pwd))
 
@@ -106,9 +107,9 @@ find dist/ packages/core-utils/dist/ \
 
   # archive creation + signing
   zip -9 -r "$peertube_directory/$zip_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u "$maintainer_public_key" "$peertube_directory/$zip_name"
+  gpg --armor --detach-sign -u "$release_key" "$peertube_directory/$zip_name"
   XZ_OPT="-e9 -T0" tar cfJ "$peertube_directory/$tar_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u "$maintainer_public_key" "$peertube_directory/$tar_name"
+  gpg --armor --detach-sign -u "$release_key" "$peertube_directory/$tar_name"
 
   # temporary setup destruction
   rm "$directory_name"

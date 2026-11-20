@@ -4,6 +4,112 @@ set -eu
 
 PEERTUBE_PATH=${1:-/var/www/peertube}
 
+# Fingerprint: 0336 DF98 1C56 F778 51CC  4FB7 3BEF 14A3 B157 4BA7
+RELEASE_KEY_FINGERPRINT="0336DF981C56F77851CC4FB73BEF14A3B1574BA7"
+RELEASE_PUBLIC_KEY_BASE64="
+mDMEawBUvxYJKwYBBAHaRw8BAQdAglsnEi2i6DweKVGkzdjbYdk4Wgro4dmry2M8BkAF52K0M1Bl
+ZXJUdWJlIHJlbGVhc2VzIDxwZWVydHViZS1zZWN1cml0eUBmcmFtYXNvZnQub3JnPoiQBBMWCgA4
+FiEEAzbfmBxW93hRzE+3O+8Uo7FXS6cFAmsAVL8CGwEFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AA
+CgkQO+8Uo7FXS6dwFAEAvB5Tm8X4vMXQLLkCGdEo9G8gkuw0bNUTteY+kBTF/R4A/i+Xn1Rp9DKh
+8pCuNyPIN6n78Ivl3OKm6SJalcBHp4cEuDMEawBXoRYJKwYBBAHaRw8BAQdAtzXgToimzzYbANCR
+OcD8NqyR8TaS2WsQivpQoswiK6mI7wQYFgoAIBYhBAM235gcVvd4UcxPtzvvFKOxV0unBQJrAFeh
+AhsCAIEJEDvvFKOxV0undiAEGRYKAB0WIQRlvV2i70NHZA44i5Mk6sflehbWVgUCawBXoQAKCRAk
+6sflehbWVnkKAP98AENEdVgNRHiasjXJPWMKhEPjLg4Tdm9jbKdz4eF3DgEAr0r9JjkGQA+9Dgqe
+k+o+3eH/d2qivzn6IUoY6mVWFgklqAD+I+pLooiGadg7g10sbdHUTeTfD/F5OIzpRDEjEY9Ly0cB
+AO7GMpwbyAJqosIjCj2sYsHHAK0wtMXhSUeoBKW9PQQD
+"
+
+# PEERTUBE_UPGRADE_SIGNATURE_CHECK:
+#   * warn (default): check the release signature, but only display a warning if the check fails
+#   * require: refuse to install a release that is not signed by the PeerTube release key (future default)
+#   * skip: do not check the release signature
+SIGNATURE_CHECK_MODE="${PEERTUBE_UPGRADE_SIGNATURE_CHECK:-warn}"
+
+case "$SIGNATURE_CHECK_MODE" in
+  warn|require|skip) ;;
+  *)
+    echo "Error - invalid PEERTUBE_UPGRADE_SIGNATURE_CHECK value \"$SIGNATURE_CHECK_MODE\" (expected warn, require or skip)"
+    exit 1
+    ;;
+esac
+
+signature_check_failed() {
+  message="$1"
+  file_path="$2"
+  signature_path="$3"
+
+  if [ "$SIGNATURE_CHECK_MODE" = "require" ]; then
+    echo "Error - $message"
+    echo ""
+    echo "Do not install it. Retry later, or check the release on https://github.com/Chocobozzz/PeerTube/releases"
+    rm -f "$file_path" "$signature_path"
+    exit 1
+  fi
+
+  echo "Warning - $message"
+  echo "Continuing anyway. Set PEERTUBE_UPGRADE_SIGNATURE_CHECK=require to refuse unsigned releases"
+}
+
+cleanup_gpg_tmp_dir() {
+  if [ -n "${gpg_tmp_dir:-}" ]; then
+    rm -rf "$gpg_tmp_dir"
+    gpg_tmp_dir=""
+  fi
+
+  trap - EXIT INT TERM
+}
+
+verify_release_signature() {
+  file_path="$1"
+  signature_path="$2"
+
+  if [ "$SIGNATURE_CHECK_MODE" = "skip" ]; then
+    echo "Warning - skipping the signature check of the release (PEERTUBE_UPGRADE_SIGNATURE_CHECK=skip)"
+    return 0
+  fi
+
+  if [ ! -s "$signature_path" ]; then
+    signature_check_failed "cannot download the signature of the release" "$file_path" "$signature_path"
+    return 0
+  fi
+
+  if [ ! -x "$(command -v gpgv)" ]; then
+    signature_check_failed "gpgv not found: cannot check the signature of the release (install the gpgv package, or gnupg)" "$file_path" "$signature_path"
+    return 0
+  fi
+
+  # Remove the temporary directory even if the script is interrupted
+  trap cleanup_gpg_tmp_dir EXIT
+  trap 'exit 1' INT TERM
+
+  if ! gpg_tmp_dir=$(mktemp -d); then
+    cleanup_gpg_tmp_dir
+    signature_check_failed "cannot create a temporary directory to check the signature of the release" "$file_path" "$signature_path"
+    return 0
+  fi
+
+  keyring_path="$gpg_tmp_dir/peertube-release.gpg"
+  gpg_log_path="$gpg_tmp_dir/gpg.log"
+
+  if ! echo "$RELEASE_PUBLIC_KEY_BASE64" | base64 -d > "$keyring_path" 2>/dev/null || [ ! -s "$keyring_path" ]; then
+    cleanup_gpg_tmp_dir
+    signature_check_failed "cannot decode the PeerTube release key: is the base64 command available?" "$file_path" "$signature_path"
+    return 0
+  fi
+
+  if gpgv --homedir "$gpg_tmp_dir" --keyring "$keyring_path" "$signature_path" "$file_path" > "$gpg_log_path" 2>&1; then
+    cleanup_gpg_tmp_dir
+    echo "Release signature verified"
+    return 0
+  fi
+
+  echo "Output of gpgv:"
+  sed 's/^/    /' "$gpg_log_path"
+  cleanup_gpg_tmp_dir
+
+  signature_check_failed "the release signature is invalid or was not made by the PeerTube release key ($RELEASE_KEY_FINGERPRINT)" "$file_path" "$signature_path"
+}
+
 if [ ! -e "$PEERTUBE_PATH" ]; then
   echo "Error - path \"$PEERTUBE_PATH\" wasn't found"
   echo ""
@@ -35,6 +141,7 @@ fi
 # Backup database
 if [ -x "$(command -v pg_dump)" ]; then
   mkdir -p "$PEERTUBE_PATH/backup"
+  chmod 700 "$PEERTUBE_PATH/backup"
 
   SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak"
 
@@ -63,7 +170,10 @@ $(node -e "
 EOF
 
   pg_dump_cmd() {
-    pg_dump -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH" "$@"
+    (
+      umask 077
+      pg_dump -F c "${DB_NAME:-peertube${DB_SUFFIX}}" -f "$SQL_BACKUP_PATH" "$@"
+    )
   }
 
   # Empty hostname means that we should connect using default postgres socket using peer auth
@@ -104,7 +214,17 @@ if [ -z "$VERSION" ]; then
 fi
 
 echo "Installing Peertube version $VERSION"
-wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" -O "$PEERTUBE_PATH/versions/peertube-${VERSION}.zip"
+
+ZIP_PATH="$PEERTUBE_PATH/versions/peertube-${VERSION}.zip"
+RELEASE_DOWNLOAD_URL="https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip"
+
+wget -q "$RELEASE_DOWNLOAD_URL" -O "$ZIP_PATH"
+# Do not stop the script if the signature is missing: verify_release_signature handles it
+wget -q "$RELEASE_DOWNLOAD_URL.asc" -O "$ZIP_PATH.asc" || true
+
+verify_release_signature "$ZIP_PATH" "$ZIP_PATH.asc"
+rm -f "$ZIP_PATH.asc"
+
 cd "$PEERTUBE_PATH/versions"
 unzip -o "peertube-${VERSION}.zip"
 rm -f "peertube-${VERSION}.zip"

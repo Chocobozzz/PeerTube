@@ -68,4 +68,28 @@ If you think you have found a vulnerability, please include the following detail
 
 If you would like to encrypt the information, please use our GPG key.
 
+This key is only used to encrypt reports. It does not sign PeerTube releases (see below).
+
 We may modify the terms of this program or terminate this program at any time. We will not apply any changes we make to these program terms retroactively.
+
+## Release signatures
+
+PeerTube release archives (`.zip` and `.tar.xz`, on [GitHub releases](https://github.com/Chocobozzz/PeerTube/releases) and https://builds.joinpeertube.org/release) are signed by the PeerTube release key. Each archive has a detached signature next to it (`.asc` file).
+
+The canonical copy of the release key is [support/security/peertube-release-key.asc](support/security/peertube-release-key.asc) in this repository (https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/support/security/peertube-release-key.asc). Its fingerprint is:
+
+```
+0336 DF98 1C56 F778 51CC  4FB7 3BEF 14A3 B157 4BA7
+```
+
+Releases are signed by a subkey of this key. To verify a release:
+
+```bash
+curl -sO https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/support/security/peertube-release-key.asc
+gpg --import peertube-release-key.asc
+gpg --verify peertube-vX.Y.Z.zip.asc peertube-vX.Y.Z.zip
+```
+
+The output must say `Good signature` and mention the primary key fingerprint above. A `This key is not certified with a trusted signature!` warning is expected: it only means you did not certify the key yourself in your local GPG keyring.
+
+Releases up to v8.3.2 and v9.0.0-rc.1 were signed with the maintainer's personal key (fingerprint `C44A AD63 8367 912C A93E  DD57 583A 612D 8901 59BE`, available on https://github.com/Chocobozzz.gpg).
