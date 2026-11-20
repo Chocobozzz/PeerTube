@@ -277,6 +277,29 @@ export class ActorFollowModel extends SequelizeModel<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
+  static loadByUrl (url: string, t?: Transaction): Promise<MActorFollowActorsDefault> {
+    const query = {
+      where: {
+        url
+      },
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          as: 'ActorFollower'
+        },
+        {
+          model: ActorModel,
+          required: true,
+          as: 'ActorFollowing'
+        }
+      ],
+      transaction: t
+    }
+
+    return ActorFollowModel.findOne(query)
+  }
+
   static loadByActorAndTargetNameAndHostForAPI (options: {
     actorId: number
     targetName: string

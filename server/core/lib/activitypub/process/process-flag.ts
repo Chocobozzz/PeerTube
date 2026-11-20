@@ -1,8 +1,11 @@
 import { abusePredefinedReasonsMap, arrayify, uniqify } from '@peertube/peertube-core-utils'
 import { AbuseState, ActivityFlag } from '@peertube/peertube-models'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
+import { isAbuseReasonValid } from '@server/helpers/custom-validators/abuses.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, REMOTE_ABUSE_DEFAULT_REASON } from '@server/initializers/constants.js'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation.js'
-import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { AccountModel } from '@server/models/account/account.js'
+import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
@@ -43,6 +46,8 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
   const predefinedReasons = tags.map(tag => abusePredefinedReasonsMap[tag.name])
     .filter(v => !isNaN(v))
 
+  const reason = getFlagReason(flag)
+
   const startAt = flag.startAt
   const endAt = flag.endAt
 
@@ -56,7 +61,11 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
         let flaggedAccount: MAccountDefault
 
         if (!video) videoComment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(uri, t)
-        if (!videoComment) flaggedAccount = await AccountModel.loadByUrl(uri, t)
+        if (!video && !videoComment) flaggedAccount = await AccountModel.loadByUrl(uri, t)
+        // We don't have channel abuses: report the account owning the channel
+        if (!video && !videoComment && !flaggedAccount) {
+          flaggedAccount = (await VideoChannelModel.loadByUrlAndPopulateAccount(uri, t))?.Account
+        }
 
         if (!video && !videoComment && !flaggedAccount) {
           logger.warn('Cannot flag unknown entity %s.', uri)
@@ -65,7 +74,7 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
 
         const baseAbuse = {
           reporterAccountId: reporterAccount.id,
-          reason: flag.content,
+          reason,
           state: AbuseState.PENDING,
           predefinedReasons
         }
@@ -104,4 +113,13 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
       logger.debug('Cannot process report of %s', uri, { err })
     }
   }
+}
+
+function getFlagReason (flag: ActivityFlag) {
+  const reason = [ flag.content, flag.summary ]
+    .filter(r => typeof r === 'string')
+    .map(r => peertubeTruncate(r.trim(), { length: CONSTRAINTS_FIELDS.ABUSES.REASON.max }))
+    .find(r => isAbuseReasonValid(r))
+
+  return reason ?? REMOTE_ABUSE_DEFAULT_REASON
 }

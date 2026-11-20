@@ -25,10 +25,11 @@ function getLocalRateUrl (rateType: VideoRateType, actor: MActorUrl, video: MVid
     : getVideoDislikeActivityPubUrlByLocalActor(actor, video)
 }
 
+// Without video, the rate is only loaded by the activity URL
 async function loadRateOfActivity (options: {
   byActor: MActorUrl
   account: MAccountId
-  video: MVideoId
+  video?: MVideoId
   activityId: string
   transaction: Transaction
 }) {
@@ -38,10 +39,12 @@ async function loadRateOfActivity (options: {
     throw new Error(`Rate activity ${activityId} is not on the same host than actor ${byActor.url}`)
   }
 
-  const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(account.id, video.id, activityId, transaction)
+  const rate = video
+    ? await AccountVideoRateModel.loadByAccountAndVideoOrUrl(account.id, video.id, activityId, transaction)
+    : await AccountVideoRateModel.loadByUrl(activityId, transaction)
 
-  if (rate && (rate.accountId !== account.id || rate.videoId !== video.id)) {
-    throw new Error(`Rate ${rate.url} is not a rate of account ${account.id} on video ${video.id}`)
+  if (rate && (rate.accountId !== account.id || (video && rate.videoId !== video.id))) {
+    throw new Error(`Rate ${rate.url} is not a rate of account ${account.id}` + (video ? ` on video ${video.id}` : ''))
   }
 
   return rate

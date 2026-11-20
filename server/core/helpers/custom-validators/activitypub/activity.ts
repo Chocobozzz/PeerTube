@@ -1,7 +1,6 @@
 import { Activity, ActivityType } from '@peertube/peertube-models'
 import { VIEW_LIFETIME } from '@server/initializers/constants.js'
 import validator from 'validator'
-import { isAbuseReasonValid } from '../abuses.js'
 import { exists, isDateValid } from '../misc.js'
 import { sanitizeAndCheckActorObject } from './actor.js'
 import { isCacheFileObjectValid } from './cache-file.js'
@@ -75,8 +74,8 @@ export function isActivityValid (activity: any) {
 }
 
 export function isFlagActivityValid (activity: any) {
+  // The reason is sanitized when processing the activity
   return isBaseActivityValid(activity, 'Flag') &&
-    isAbuseReasonValid(activity.content) &&
     isFlagObjectValid(activity.object)
 }
 
@@ -159,16 +158,25 @@ export function isFollowActivityValid (activity: any) {
 }
 
 export function isAcceptActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Accept')
+  return isBaseActivityValid(activity, 'Accept') &&
+    isAcceptOrRejectObjectValid(activity.object)
 }
 
 export function isRejectActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Reject')
+  return isBaseActivityValid(activity, 'Reject') &&
+    isAcceptOrRejectObjectValid(activity.object)
+}
+
+function isAcceptOrRejectObjectValid (object: any) {
+  return isActivityPubUrlValid(object) ||
+    (!!object && typeof object === 'object' && !Array.isArray(object))
 }
 
 export function isUndoActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Undo') &&
     (
+      // Some implementations (Pleroma...) only reference the activity to undo by its id
+      isActivityPubUrlValid(activity.object) ||
       isFollowActivityValid(activity.object) ||
       isLikeActivityValid(activity.object) ||
       isDislikeActivityValid(activity.object) ||

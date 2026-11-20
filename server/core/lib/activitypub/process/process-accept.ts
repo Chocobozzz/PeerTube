@@ -7,6 +7,7 @@ import { MActorDefault, MActorSignature } from '../../../types/models/index.js'
 import { getAPId } from '../activity.js'
 import { tryToFetchActorFollowersCount } from '../actors/shared/index.js'
 import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
+import { isActivityObjectTheFollow } from '../follow.js'
 import { addFetchOutboxJob } from '../outbox.js'
 import { sendUndoFollow } from '../send/index.js'
 import { getLocalActorFollowActivityPubUrl } from '../url.js'
@@ -32,16 +33,14 @@ export {
 
 async function processAccept (activity: ActivityAccept, actor: MActorDefault, targetActor: MActorSignature) {
   const follow = await ActorFollowModel.loadByActorAndTarget(actor.id, targetActor.id)
+  const followUrl = follow?.url ?? getLocalActorFollowActivityPubUrl(actor, targetActor)
+
+  if (!isActivityObjectTheFollow({ object: activity.object, followUrl, follower: actor, following: targetActor })) {
+    logger.warn('Ignoring accept %s of %s that does not answer the follow %s.', activity.id, getAPId(activity.object), followUrl)
+    return
+  }
 
   if (!follow) {
-    const followUrl = getLocalActorFollowActivityPubUrl(actor, targetActor)
-
-    // Not a follow we sent: nothing to undo
-    if (getAPId(activity.object) !== followUrl) {
-      logger.warn('Cannot find the follow of %s by %s accepted by %s.', targetActor.url, actor.url, getAPId(activity.object))
-      return
-    }
-
     // Re-send the undo, just in case the remote server did not process it correctly
     logger.info('Accepted follow of %s by %s does not exist anymore, sending an undo follow.', targetActor.url, actor.url)
 

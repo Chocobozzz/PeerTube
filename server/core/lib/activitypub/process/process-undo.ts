@@ -2,13 +2,13 @@ import {
   ActivityAnnounce,
   ActivityCreate,
   ActivityDislike,
-  ActivityFollow,
   ActivityLike,
   ActivityUndo,
   ActivityUndoObject,
   CacheFileObject
 } from '@peertube/peertube-models'
 import { VideoModel } from '@server/models/video/video.js'
+import { Transaction } from 'sequelize'
 import { retryTransactionWrapper, runTransaction } from '../../../helpers/database-utils.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
@@ -16,10 +16,11 @@ import { ActorModel } from '../../../models/actor/actor.js'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy.js'
 import { VideoShareModel } from '../../../models/video/video-share.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
-import { MActorSignature } from '../../../types/models/index.js'
+import { MAccountVideoRate, MActorSignature, MVideo, MVideoShareFull } from '../../../types/models/index.js'
 import { fetchAPObjectIfNeeded, getAPId } from '../activity.js'
 import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
+import { checkUrlsSameHost } from '../url.js'
 import { loadRateOfActivity } from '../video-rates.js'
 import { getOrCreateAPVideo, maybeGetOrCreateAPVideo, scheduleVideoFederation } from '../videos/index.js'
 
@@ -28,6 +29,10 @@ const logger = createLogger()
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo<ActivityUndoObject>>) {
   const { activity, byActor } = options
   const activityToUndo = activity.object
+
+  if (typeof activityToUndo === 'string') {
+    return processUndoByUrl(byActor, activity as ActivityUndo<string>)
+  }
 
   if (activityToUndo.type === 'Like') {
     return retryTransactionWrapper(() => processUndoLike(byActor, activity as ActivityUndo<ActivityLike>))
@@ -51,7 +56,7 @@ async function processUndoActivity (options: APProcessorOptions<ActivityUndo<Act
 
   if (activityToUndo.type === 'Follow') {
     return runWithAPObjectLock(buildAPFollowLockKey(byActor.url, getAPId(activityToUndo.object)), () => {
-      return retryTransactionWrapper(() => processUndoFollow(byActor, activityToUndo))
+      return retryTransactionWrapper(() => processUndoFollow({ follower: byActor, followingUrl: getAPId(activityToUndo.object) }))
     })
   }
 
@@ -88,11 +93,7 @@ async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo
       return
     }
 
-    await rate.destroy({ transaction: t })
-    await video.decrement('likes', { transaction: t })
-
-    video.likes--
-    scheduleVideoFederation({ video, transaction: t })
+    await destroyRate(rate, video, t)
   })
 }
 
@@ -112,11 +113,75 @@ async function processUndoDislike (byActor: MActorSignature, activity: ActivityU
       return
     }
 
-    await rate.destroy({ transaction: t })
+    await destroyRate(rate, video, t)
+  })
+}
+
+async function destroyRate (rate: MAccountVideoRate, video: MVideo, t: Transaction) {
+  await rate.destroy({ transaction: t })
+
+  if (rate.type === 'like') {
+    await video.decrement('likes', { transaction: t })
+    video.likes--
+  } else {
     await video.decrement('dislikes', { transaction: t })
     video.dislikes--
+  }
 
-    scheduleVideoFederation({ video, transaction: t })
+  scheduleVideoFederation({ video, transaction: t })
+}
+
+// ---------------------------------------------------------------------------
+
+// Some implementations (Pleroma...) only reference the activity to undo by its id: find it in our database
+async function processUndoByUrl (byActor: MActorSignature, activity: ActivityUndo<string>) {
+  const activityUrl = activity.object
+
+  // Only the actor that sent the activity can undo it
+  if (checkUrlsSameHost(activityUrl, byActor.url) !== true) {
+    logger.warn('Ignoring undo of %s that is not on the same host than actor %s.', activityUrl, byActor.url)
+    return
+  }
+
+  const undone = await retryTransactionWrapper(() => processUndoRateOrAnnounceByUrl(byActor, activity))
+  if (undone) return
+
+  // Follows are processed under their lock, that needs the follow target
+  const follow = await ActorFollowModel.loadByUrl(activityUrl)
+  if (follow) {
+    const followingUrl = follow.ActorFollowing.url
+
+    return runWithAPObjectLock(buildAPFollowLockKey(byActor.url, followingUrl), () => {
+      return retryTransactionWrapper(() => processUndoFollow({ follower: byActor, followingUrl, followUrl: activityUrl }))
+    })
+  }
+
+  logger.debug('Unknown activity %s to undo by %s.', activityUrl, byActor.url)
+}
+
+function processUndoRateOrAnnounceByUrl (byActor: MActorSignature, activity: ActivityUndo<string>) {
+  const activityUrl = activity.object
+
+  return runTransaction(async t => {
+    if (byActor.Account) {
+      const rate = await loadRateOfActivity({ byActor, account: byActor.Account, activityId: activityUrl, transaction: t })
+
+      if (rate) {
+        const video = await VideoModel.load(rate.videoId, t)
+        await destroyRate(rate, video, t)
+
+        return true
+      }
+    }
+
+    const share = await VideoShareModel.loadByUrl(activityUrl, t)
+    if (share) {
+      await destroyShare(byActor, activity, share, t)
+
+      return true
+    }
+
+    return false
   })
 }
 
@@ -150,41 +215,57 @@ async function processUndoCacheFile (
 }
 
 function processUndoAnnounce (byActor: MActorSignature, activity: ActivityUndo<ActivityAnnounce>) {
-  const announceActivity = activity.object
+  const shareUrl = activity.object.id
 
   return runTransaction(async t => {
-    const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
+    const share = await VideoShareModel.loadByUrl(shareUrl, t)
     if (!share) {
-      logger.warn(`Unknown video share ${announceActivity.id}`)
+      logger.warn(`Unknown video share ${shareUrl}`)
       return
     }
 
-    if (share.actorId !== byActor.id) throw new Error(`${share.url} is not shared by ${byActor.url}.`)
-
-    await share.destroy({ transaction: t })
-
-    if (share.Video.isLocal()) {
-      // Don't resend the activity to the sender
-      const exceptions = [ byActor ]
-
-      await forwardVideoRelatedActivity({
-        activity,
-        transaction: t,
-        followersException: exceptions,
-        video: share.Video,
-        parallelizable: false
-      })
-    }
+    await destroyShare(byActor, activity, share, t)
   })
+}
+
+async function destroyShare (
+  byActor: MActorSignature,
+  activity: ActivityUndo<ActivityAnnounce | string>,
+  share: MVideoShareFull,
+  t: Transaction
+) {
+  if (share.actorId !== byActor.id) throw new Error(`${share.url} is not shared by ${byActor.url}.`)
+
+  await share.destroy({ transaction: t })
+
+  if (share.Video.isLocal()) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byActor ]
+
+    await forwardVideoRelatedActivity({
+      activity,
+      transaction: t,
+      followersException: exceptions,
+      video: share.Video,
+      parallelizable: false
+    })
+  }
 }
 
 // ---------------------------------------------------------------------------
 
-function processUndoFollow (follower: MActorSignature, followActivity: ActivityFollow) {
+function processUndoFollow (options: {
+  follower: MActorSignature
+  followingUrl: string
+  // Only undo the follow if it has this URL
+  followUrl?: string
+}) {
+  const { follower, followingUrl, followUrl } = options
+
   return runTransaction(async t => {
-    const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
+    const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followingUrl, t)
     if (!following) {
-      logger.warn('Unknown actor %s to undo the follow of %s.', followActivity.object, follower.url)
+      logger.warn('Unknown actor %s to undo the follow of %s.', followingUrl, follower.url)
       return
     }
 
@@ -192,6 +273,11 @@ function processUndoFollow (follower: MActorSignature, followActivity: ActivityF
 
     if (!actorFollow) {
       logger.warn('Unknown actor follow %d -> %d.', follower.id, following.id)
+      return
+    }
+
+    if (followUrl && actorFollow.url !== followUrl) {
+      logger.warn('Ignoring undo of follow %s that does not match the follow %s.', followUrl, actorFollow.url)
       return
     }
 

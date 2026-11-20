@@ -23,6 +23,7 @@ export type ActivityUndoObject =
   | ActivityDislike
   | ActivityCreate<CacheFileObject | string>
   | ActivityAnnounce
+  | string
 
 export type ActivityCreateObject = Extract<
   ActivityObject,
@@ -100,7 +101,7 @@ export interface ActivityFollow extends BaseActivity {
 
 export interface ActivityAccept extends BaseActivity {
   type: 'Accept'
-  object: ActivityFollow
+  object: ActivityFollow | string
 }
 
 export interface ActivityApproveReply extends BaseActivity {
@@ -117,7 +118,7 @@ export interface ActivityRejectReply extends BaseActivity {
 
 export interface ActivityReject extends BaseActivity {
   type: 'Reject'
-  object: ActivityFollow
+  object: ActivityFollow | string
 }
 
 export interface ActivityAnnounce extends BaseActivity {
@@ -159,6 +160,7 @@ export interface ActivityDislike extends BaseActivity {
 export interface ActivityFlag extends BaseActivity {
   type: 'Flag'
   content: string
+  summary?: string
   object: APObjectId | APObjectId[]
   tag?: ActivityFlagReasonObject[]
   startAt?: number

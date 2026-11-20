@@ -482,8 +482,9 @@ export class VideoChannelModel extends SequelizeModel<VideoChannelModel> {
       .findByPk(id, { transaction })
   }
 
-  static loadByUrlAndPopulateAccount (url: string): Promise<MChannelBannerAccountDefault> {
+  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Promise<MChannelBannerAccountDefault> {
     const query = {
+      transaction,
       include: [
         {
           model: ActorModel,

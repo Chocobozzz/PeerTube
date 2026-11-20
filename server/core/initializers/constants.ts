@@ -838,6 +838,9 @@ export const ABUSE_STATES: { [id in AbuseStateType]: string } = {
   [AbuseState.ACCEPTED]: 'Accepted'
 }
 
+// Reason of a remote abuse without a valid report comment
+export const REMOTE_ABUSE_DEFAULT_REASON = 'No reason provided'
+
 export const USER_REGISTRATION_STATES: { [id in UserRegistrationStateType]: string } = {
   [UserRegistrationState.PENDING]: 'Pending',
   [UserRegistrationState.REJECTED]: 'Rejected',

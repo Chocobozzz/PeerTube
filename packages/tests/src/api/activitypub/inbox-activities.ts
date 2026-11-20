@@ -18,7 +18,7 @@ import {
 } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
 import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 import { signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
-import { HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
+import { HTTP_SIGNATURE, REMOTE_ABUSE_DEFAULT_REASON } from '@peertube/peertube-server/core/initializers/constants.js'
 import { getPort, randomListen, terminateServer } from '@tests/shared/mock-servers/shared.js'
 import { fakeContextFilter, makePOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
@@ -39,8 +39,9 @@ describe('Test the checks on incoming ActivityPub activities', function () {
     activity: any
     contextType: ContextType
     ldSigned?: boolean
+    inboxPath?: string
   }) {
-    const { fromServerIndex, actorUrl, activity, contextType, ldSigned = false } = options
+    const { fromServerIndex, actorUrl, activity, contextType, ldSigned = false, inboxPath = '/inbox' } = options
 
     const privateKey = await sqlCommands[fromServerIndex].getActorPrivateKey(actorUrl)
 
@@ -56,7 +57,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
 
     const httpSignature = { keyId: actorUrl, key: privateKey, headers: HTTP_SIGNATURE.HEADERS_TO_SIGN_WITH_PAYLOAD }
 
-    await makePOSTAPRequest(servers[0].url + '/inbox', body, httpSignature, buildGlobalHTTPHeaders(body, buildDigest))
+    await makePOSTAPRequest(servers[0].url + inboxPath, body, httpSignature, buildGlobalHTTPHeaders(body, buildDigest))
     await waitJobs(servers)
   }
 
@@ -504,6 +505,167 @@ describe('Test the checks on incoming ActivityPub activities', function () {
 
       const { total } = await servers[0].abuses.getAdminList()
       expect(total - totalBefore).to.equal(20)
+    })
+
+    async function sendFlag (id: string, attributes: { content?: string, summary?: string, object: string }) {
+      const actor = servers[2].url + '/accounts/peertube'
+
+      await sendActivity({
+        fromServerIndex: 2,
+        actorUrl: actor,
+        contextType: 'Flag',
+        activity: { type: 'Flag', id: actor + '/flags/' + id, actor, to: [ servers[0].url + '/accounts/peertube' ], ...attributes }
+      })
+    }
+
+    async function getLastAbuse () {
+      const { data } = await servers[0].abuses.getAdminList({ sort: '-createdAt', count: 1 })
+
+      return data[0]
+    }
+
+    it('Should use the summary of a flag without content', async function () {
+      this.timeout(30000)
+
+      await sendFlag('summary', { summary: 'reason in summary', object: videoUrl })
+
+      const abuse = await getLastAbuse()
+      expect(abuse.reason).to.equal('reason in summary')
+      expect(abuse.video.uuid).to.equal(videoUUID)
+    })
+
+    it('Should use a default reason for a flag without a valid reason', async function () {
+      this.timeout(30000)
+
+      await sendFlag('no-reason', { content: 'a', object: videoUrl })
+
+      const abuse = await getLastAbuse()
+      expect(abuse.reason).to.equal(REMOTE_ABUSE_DEFAULT_REASON)
+      expect(abuse.video.uuid).to.equal(videoUUID)
+    })
+
+    it('Should report the owner account of a flagged channel', async function () {
+      this.timeout(30000)
+
+      await sendFlag('channel', { content: 'bad channel', object: servers[0].url + '/video-channels/root_channel' })
+
+      const abuse = await getLastAbuse()
+      expect(abuse.reason).to.equal('bad channel')
+      expect(abuse.video).to.not.exist
+      expect(abuse.flaggedAccount.name).to.equal('root')
+    })
+  })
+
+  describe('Undo by activity URL', function () {
+    let rateUrl: string
+
+    before(async function () {
+      this.timeout(60000)
+
+      await servers[1].videos.rate({ id: videoUUID, rating: 'like' })
+      await waitJobs(servers)
+
+      const rates = await sqlCommands[0].listVideoRates()
+      expect(rates).to.have.lengthOf(1)
+
+      rateUrl = rates[0].url
+    })
+
+    function buildUndo (actor: string, object: string) {
+      return { type: 'Undo', id: actor + '/undo/' + encodeURIComponent(object), actor, to: [ getAPPublicValue() ], object }
+    }
+
+    it('Should not undo an activity of another host', async function () {
+      this.timeout(30000)
+
+      const actor = servers[2].url + '/accounts/peertube'
+
+      await sendActivity({ fromServerIndex: 2, actorUrl: actor, contextType: 'Rate', activity: buildUndo(actor, rateUrl) })
+
+      expect(await sqlCommands[0].listVideoRates()).to.have.lengthOf(1)
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.likes).to.equal(1)
+    })
+
+    it('Should undo a like referenced by its URL', async function () {
+      this.timeout(30000)
+
+      const actor = servers[1].url + '/accounts/root'
+
+      await sendActivity({ fromServerIndex: 1, actorUrl: actor, contextType: 'Rate', activity: buildUndo(actor, rateUrl) })
+
+      expect(await sqlCommands[0].listVideoRates()).to.have.lengthOf(0)
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.likes).to.equal(0)
+    })
+
+    it('Should undo an announce referenced by its URL', async function () {
+      this.timeout(30000)
+
+      const actor = servers[1].url + '/accounts/peertube'
+      const announce = { type: 'Announce', id: actor + '/announces/by-url', actor, object: videoUrl, to: [ getAPPublicValue() ] }
+
+      const sharesBefore = await sqlCommands[0].getVideoShareCount()
+
+      await sendActivity({ fromServerIndex: 1, actorUrl: actor, contextType: 'Announce', activity: announce, ldSigned: true })
+      expect(await sqlCommands[0].getVideoShareCount()).to.equal(sharesBefore + 1)
+
+      await sendActivity({
+        fromServerIndex: 1,
+        actorUrl: actor,
+        contextType: 'Announce',
+        activity: buildUndo(actor, announce.id),
+        ldSigned: true
+      })
+      expect(await sqlCommands[0].getVideoShareCount()).to.equal(sharesBefore)
+    })
+  })
+
+  describe('Accept and reject of a follow', function () {
+    const actor = () => servers[2].url + '/accounts/peertube'
+
+    async function sendReject (object: any) {
+      await sendActivity({
+        fromServerIndex: 2,
+        actorUrl: actor(),
+        contextType: 'Follow',
+        inboxPath: '/accounts/peertube/inbox',
+        activity: { type: 'Reject', id: actor() + '/rejects/' + Math.random(), actor: actor(), object }
+      })
+    }
+
+    async function getFollowState () {
+      const { data } = await servers[0].follows.getFollowings()
+
+      return data.find(f => f.following.host === servers[2].host).state
+    }
+
+    it('Should ignore a reject that does not answer the follow', async function () {
+      this.timeout(30000)
+
+      expect(await getFollowState()).to.equal('accepted')
+
+      // GoToSocial rejects interactions (replies, likes...) with Reject activities
+      await sendReject(servers[2].url + '/users/peertube/statuses/1')
+      await sendReject({ type: 'Note', id: servers[2].url + '/users/peertube/statuses/2' })
+
+      expect(await getFollowState()).to.equal('accepted')
+    })
+
+    it('Should reject the follow when the reject references it', async function () {
+      this.timeout(30000)
+
+      const [ { url: followUrl } ] = await sqlCommands[0].selectQuery<{ url: string }>(
+        'SELECT "actorFollow"."url" FROM "actorFollow" ' +
+          'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" WHERE "actor"."url" = :url',
+        { url: actor() }
+      )
+
+      await sendReject(followUrl)
+
+      expect(await getFollowState()).to.equal('rejected')
     })
   })
 
