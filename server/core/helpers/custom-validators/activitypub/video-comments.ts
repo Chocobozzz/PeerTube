@@ -1,5 +1,7 @@
 import { ActivityTombstoneObject, VideoCommentObject } from '@peertube/peertube-models'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { hasAPPublic } from '@server/helpers/activity-pub-utils.js'
+import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import validator from 'validator'
 import { exists, isDateValid } from '../misc.js'
 import { isActivityPubUrlValid } from './misc.js'
@@ -41,6 +43,10 @@ function isCommentContentValid (content: any) {
 
 function normalizeComment (comment: any) {
   if (!comment) return
+
+  if (typeof comment.content === 'string') {
+    comment.content = peertubeTruncate(comment.content, { length: ACTIVITY_PUB.MAX_COMMENT_TEXT_LENGTH })
+  }
 
   if (typeof comment.url !== 'string') {
     if (typeof comment.url === 'object') comment.url = comment.url.href || comment.url.url

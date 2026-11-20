@@ -2,7 +2,7 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityPubActor } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import validator from 'validator'
-import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../../initializers/constants.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, WEBSERVER } from '../../../initializers/constants.js'
 import { exists, isArray, isDateValid } from '../misc.js'
 import { isHostValid } from '../servers.js'
 import { isActivityPubHTMLUrlValid, isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
@@ -132,6 +132,8 @@ function normalizeActor (actor: ActivityPubActor) {
 
   setValidUrls(actor)
   setValidAttributedTo(actor)
+  setValidActorImages(actor, 'icon')
+  setValidActorImages(actor, 'image')
   setValidDescription(actor)
   setValidEmail(actor)
 
@@ -153,6 +155,36 @@ function setValidDescription (actor: ActivityPubActor) {
 function setValidEmail (actor: ActivityPubActor) {
   if (!actor.email) actor.email = null
   else if (!validator.default.isEmail(actor.email)) actor.email = null
+}
+
+function setValidActorImages (actor: any, field: 'icon' | 'image') {
+  if (!actor[field]) {
+    actor[field] = []
+    return
+  }
+
+  const dimensionOptions = { min: 0, max: ACTIVITY_PUB.MAX_ICON_DIMENSION }
+  const isDimensionValid = (value: any) => !exists(value) || validator.default.isInt(value + '', dimensionOptions)
+
+  // We store at most one image per width (or one image without width)
+  const existingWidths = new Set<string>()
+
+  actor[field] = arrayify(actor[field])
+    .slice(0, ACTIVITY_PUB.MAX_ACTOR_IMAGES)
+    .filter(image => {
+      const isValid = image?.type === 'Image' &&
+        isActivityPubUrlValid(image.url) &&
+        isDimensionValid(image.width) &&
+        isDimensionValid(image.height)
+
+      if (!isValid) return false
+
+      const widthKey = image.width ? image.width + '' : 'none'
+      if (existingWidths.has(widthKey)) return false
+      existingWidths.add(widthKey)
+
+      return true
+    })
 }
 
 function setValidUrls (actor: any) {

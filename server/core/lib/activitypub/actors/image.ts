@@ -30,9 +30,11 @@ async function updateActorImages (actor: MActorImages, type: ActorImageType_Type
     await deleteActorImages(actor, type, t)
   }
 
-  // Cleanup old images that did not have a width
+  const newWidths = new Set(imagesInfo.map(i => i.width).filter(w => !!w))
+
+  // Cleanup old images that did not have a width, or whose size is not sent anymore
   for (const oldImageModel of getAvatarsOrBanners()) {
-    if (oldImageModel.width) continue
+    if (oldImageModel.width && newWidths.has(oldImageModel.width)) continue
 
     await safeDeleteActorImage(actor, oldImageModel, type, t)
   }

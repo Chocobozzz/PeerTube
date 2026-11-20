@@ -77,7 +77,14 @@ export function isActivityValid (activity: any) {
 export function isFlagActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Flag') &&
     isAbuseReasonValid(activity.content) &&
-    isActivityPubUrlValid(activity.object)
+    isFlagObjectValid(activity.object)
+}
+
+// Mastodon sends an array with the flagged account and statuses
+function isFlagObjectValid (object: any) {
+  if (Array.isArray(object)) return object.length !== 0 && object.every(o => isObjectValid(o))
+
+  return isObjectValid(object)
 }
 
 export function isLikeActivityValid (activity: any) {

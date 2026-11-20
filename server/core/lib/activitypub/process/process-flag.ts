@@ -1,6 +1,7 @@
-import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
+import { abusePredefinedReasonsMap, arrayify, uniqify } from '@peertube/peertube-core-utils'
 import { AbuseState, ActivityFlag } from '@peertube/peertube-models'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation.js'
+import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -32,7 +33,11 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
 
   const reporterAccount = await AccountModel.load(account.id)
 
-  const objects = Array.isArray(flag.object) ? flag.object : [ flag.object ]
+  // Each object creates an abuse and notifies moderators
+  const objectUrls = uniqify(arrayify(flag.object).map(o => getAPId(o)))
+  if (objectUrls.length > ACTIVITY_PUB.MAX_FLAG_OBJECTS) {
+    logger.info(`Flag ${flag.id} has more than ${ACTIVITY_PUB.MAX_FLAG_OBJECTS} objects, only processing the first ones`)
+  }
 
   const tags = Array.isArray(flag.tag) ? flag.tag : []
   const predefinedReasons = tags.map(tag => abusePredefinedReasonsMap[tag.name])
@@ -41,10 +46,8 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
   const startAt = flag.startAt
   const endAt = flag.endAt
 
-  for (const object of objects) {
+  for (const uri of objectUrls.slice(0, ACTIVITY_PUB.MAX_FLAG_OBJECTS)) {
     try {
-      const uri = getAPId(object)
-
       logger.debug('Reporting remote abuse for object %s.', uri)
 
       await runTransaction(async t => {
@@ -56,7 +59,7 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
         if (!videoComment) flaggedAccount = await AccountModel.loadByUrl(uri, t)
 
         if (!video && !videoComment && !flaggedAccount) {
-          logger.warn('Cannot flag unknown entity %s.', object)
+          logger.warn('Cannot flag unknown entity %s.', uri)
           return
         }
 
@@ -98,7 +101,7 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
         })
       })
     } catch (err) {
-      logger.debug('Cannot process report of %s', getAPId(object), { err })
+      logger.debug('Cannot process report of %s', uri, { err })
     }
   }
 }

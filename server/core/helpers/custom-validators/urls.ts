@@ -1,4 +1,3 @@
-import { exists } from '@peertube/peertube-core-utils'
 import { CONFIG } from '@server/initializers/config.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import validator from 'validator'
@@ -34,5 +33,5 @@ function isUrlWithProtocolsValid (url: string, protocols: string[]) {
     isURLOptions.require_tld = false
   }
 
-  return exists(url) && validator.default.isURL('' + url, isURLOptions)
+  return typeof url === 'string' && validator.default.isURL(url, isURLOptions)
 }

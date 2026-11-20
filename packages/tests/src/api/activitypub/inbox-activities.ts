@@ -19,9 +19,12 @@ import {
 import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 import { signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
 import { HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
+import { getPort, randomListen, terminateServer } from '@tests/shared/mock-servers/shared.js'
 import { fakeContextFilter, makePOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
+import express from 'express'
+import { Server } from 'http'
 
 describe('Test the checks on incoming ActivityPub activities', function () {
   let servers: PeerTubeServer[]
@@ -366,6 +369,141 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       const video = await servers[0].videos.get({ id: uuid })
       expect(video.thumbnails).to.have.lengthOf(20)
       expect(video.thumbnails.map(t => t.width)).to.include.members([ 100, 119 ])
+    })
+  })
+
+  describe('Remote object owners', function () {
+    let mockServer: Server
+    let mockRequests = 0
+
+    before(async function () {
+      const app = express()
+      app.use((_req, res) => {
+        mockRequests++
+        res.sendStatus(404)
+      })
+
+      mockServer = await randomListen(app)
+    })
+
+    it('Should not fetch attributed to actors on another host', async function () {
+      this.timeout(60000)
+
+      // Server 1 follows server 3
+      const { uuid } = await servers[2].videos.quickUpload({ name: 'video with many owners' })
+      await waitJobs(servers)
+
+      const { body } = await makeActivityPubGetRequest(servers[2].url, '/videos/watch/' + uuid)
+      const videoObject = { ...body, name: 'video with many owners updated' }
+      delete videoObject['@context']
+
+      const mockUrl = 'http://127.0.0.1:' + getPort(mockServer)
+      const otherHostActors = Array.from({ length: 20 }, (_, i) => mockUrl + '/actors/' + i)
+      videoObject.attributedTo = [ ...otherHostActors, ...videoObject.attributedTo ]
+      videoObject.audience = mockUrl + '/actors/audience'
+
+      const actor = servers[2].url + '/accounts/peertube'
+
+      await sendActivity({
+        fromServerIndex: 2,
+        actorUrl: actor,
+        contextType: 'Video',
+        activity: { type: 'Update', id: actor + '/updates/owners', actor, to: [ getAPPublicValue() ], object: videoObject }
+      })
+
+      const video = await servers[0].videos.get({ id: uuid })
+      expect(video.name).to.equal('video with many owners updated')
+      expect(mockRequests).to.equal(0)
+    })
+
+    after(async function () {
+      await terminateServer(mockServer)
+    })
+  })
+
+  describe('Remote actor images', function () {
+    const accountName = 'peertube'
+
+    async function sendAccountUpdate (icon: any[], suffix: string) {
+      const actor = servers[2].url + '/accounts/' + accountName
+
+      const { body } = await makeActivityPubGetRequest(servers[2].url, '/accounts/' + accountName)
+      const actorObject = { ...body, icon }
+      delete actorObject['@context']
+
+      await sendActivity({
+        fromServerIndex: 2,
+        actorUrl: actor,
+        contextType: 'Actor',
+        activity: { type: 'Update', id: actor + '/updates/' + suffix, actor, to: [ getAPPublicValue() ], object: actorObject }
+      })
+    }
+
+    function buildIcons (widths: number[], suffix: string) {
+      return widths.map(width => ({
+        type: 'Image',
+        url: `${servers[2].url}/lazy-static/avatars/fake-${suffix}-${width}.png`,
+        mediaType: 'image/png',
+        width,
+        height: width
+      }))
+    }
+
+    async function getAvatarWidths () {
+      const account = await servers[0].accounts.get({ accountName: accountName + '@' + servers[2].host })
+
+      return account.avatars.map(a => a.width).sort((a, b) => a - b)
+    }
+
+    it('Should truncate the avatars of a remote actor', async function () {
+      this.timeout(60000)
+
+      const widths = Array.from({ length: 50 }, (_, i) => 100 + i)
+      await sendAccountUpdate(buildIcons(widths, '1'), '1')
+
+      expect(await getAvatarWidths()).to.deep.equal(widths.slice(0, 10))
+    })
+
+    it('Should remove avatars that are not sent anymore', async function () {
+      this.timeout(60000)
+
+      await sendAccountUpdate(buildIcons([ 100, 500 ], '2'), '2')
+
+      expect(await getAvatarWidths()).to.deep.equal([ 100, 500 ])
+    })
+  })
+
+  describe('Remote flags', function () {
+    it('Should dedupe and truncate the objects of a flag', async function () {
+      this.timeout(120000)
+
+      const commentUrls: string[] = []
+      for (let i = 0; i < 25; i++) {
+        const comment = await servers[0].comments.createThread({ videoId: videoUUID, text: 'comment ' + i })
+        commentUrls.push(comment.url)
+      }
+
+      const { total: totalBefore } = await servers[0].abuses.getAdminList()
+
+      const actor = servers[2].url + '/accounts/peertube'
+
+      await sendActivity({
+        fromServerIndex: 2,
+        actorUrl: actor,
+        contextType: 'Flag',
+        activity: {
+          type: 'Flag',
+          id: actor + '/flags/many-objects',
+          actor,
+          to: [ servers[0].url + '/accounts/peertube' ],
+          content: 'many objects',
+          // Duplicates are processed once
+          object: [ commentUrls[0], commentUrls[0], ...commentUrls ]
+        }
+      })
+
+      const { total } = await servers[0].abuses.getAdminList()
+      expect(total - totalBefore).to.equal(20)
     })
   })
 

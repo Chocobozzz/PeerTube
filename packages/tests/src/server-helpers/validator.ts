@@ -6,8 +6,12 @@ import {
   isActorPublicKeyObjectValid,
   sanitizeAndCheckActorObject
 } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/actor.js'
-import { setValidRemoteIcon } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/misc.js'
-import { ACTIVITY_PUB, WEBSERVER } from '@peertube/peertube-server/core/initializers/constants.js'
+import { isActivityPubUrlValid, setValidRemoteIcon } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/misc.js'
+import { sanitizeAndCheckVideoChaptersObject } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/video-chapters.js'
+import { sanitizeAndCheckVideoCommentObject } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/video-comments.js'
+import { isUrlValid } from '@peertube/peertube-server/core/helpers/custom-validators/urls.js'
+import { areVideoChaptersValid } from '@peertube/peertube-server/core/helpers/custom-validators/video-chapters.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, WEBSERVER } from '@peertube/peertube-server/core/initializers/constants.js'
 import { expect } from 'chai'
 
 describe('Validators', function () {
@@ -156,6 +160,112 @@ describe('Validators', function () {
       expect(setValidRemoteIcon(entity)).to.be.true
       expect(entity.icon).to.have.lengthOf(1)
       expect(entity.icon[0].width).to.equal(ACTIVITY_PUB.MAX_ICON_DIMENSION)
+    })
+  })
+
+  describe('ActivityPub actor image validator', function () {
+    function buildActor (field: 'icon' | 'image', images: any): any {
+      return {
+        type: 'Person',
+        id: 'https://example.com/users/user',
+        inbox: 'https://example.com/users/user/inbox',
+        preferredUsername: 'user',
+        publicKey: {
+          id: 'https://example.com/users/user#main-key',
+          owner: 'https://example.com/users/user',
+          publicKeyPem: '-----BEGIN PUBLIC KEY-----\nMIIBIjANB...fake...key\n-----END PUBLIC KEY-----'
+        },
+        [field]: images
+      }
+    }
+
+    function buildImage (width?: number) {
+      return { type: 'Image', url: `https://example.com/avatars/${width ?? 'none'}.png`, mediaType: 'image/png', width, height: width }
+    }
+
+    for (const field of [ 'icon', 'image' ] as const) {
+      it(`Should truncate and dedupe ${field} entries`, async function () {
+        const actor = buildActor(field, Array.from({ length: 1000 }, (_, i) => buildImage(i + 1)))
+        expect(sanitizeAndCheckActorObject(actor)).to.be.true
+        expect(actor[field]).to.have.lengthOf(ACTIVITY_PUB.MAX_ACTOR_IMAGES)
+
+        const actor2 = buildActor(field, [ buildImage(), buildImage(), buildImage(120), buildImage(120), buildImage(600) ])
+        expect(sanitizeAndCheckActorObject(actor2)).to.be.true
+        expect(actor2[field].map(i => i.width)).to.deep.equal([ undefined, 120, 600 ])
+      })
+
+      it(`Should ignore invalid ${field} entries`, async function () {
+        const actor = buildActor(field, [
+          null,
+          'https://example.com/avatar.png',
+          { ...buildImage(120), type: 'Link' },
+          { ...buildImage(120), url: 'not a url' },
+          buildImage(ACTIVITY_PUB.MAX_ICON_DIMENSION + 1),
+          { ...buildImage(120), width: 'abc' },
+          buildImage(600)
+        ])
+
+        expect(sanitizeAndCheckActorObject(actor)).to.be.true
+        expect(actor[field].map(i => i.width)).to.deep.equal([ 600 ])
+      })
+
+      it(`Should accept a single ${field} object without size`, async function () {
+        const actor = buildActor(field, buildImage())
+
+        expect(sanitizeAndCheckActorObject(actor)).to.be.true
+        expect(actor[field]).to.have.lengthOf(1)
+      })
+    }
+  })
+
+  describe('URL validators', function () {
+    it('Should not accept arrays of URLs', async function () {
+      const urls = [ 'https://example.com/videos/watch/1', 'https://example.com/videos/watch/2' ]
+
+      expect(isUrlValid(urls[0])).to.be.true
+      expect(isActivityPubUrlValid(urls[0])).to.be.true
+
+      for (const value of [ urls, [ urls[0] ], { toString: () => urls[0] } ]) {
+        expect(isUrlValid(value as any)).to.be.false
+        expect(isActivityPubUrlValid(value as any)).to.be.false
+      }
+    })
+  })
+
+  describe('Video chapters validators', function () {
+    function buildChapters (length: number) {
+      return Array.from({ length }, (_, i) => ({ name: 'chapter ' + i, title: 'chapter ' + i, startOffset: i, timecode: i }))
+    }
+
+    it('Should limit the number of local chapters', async function () {
+      const max = CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max
+
+      expect(areVideoChaptersValid(buildChapters(max))).to.be.true
+      expect(areVideoChaptersValid(buildChapters(max + 1))).to.be.false
+    })
+
+    it('Should truncate remote chapters', async function () {
+      const object: any = { id: 'https://example.com/videos/watch/1/chapters', hasPart: buildChapters(5000) }
+
+      expect(sanitizeAndCheckVideoChaptersObject(object)).to.be.true
+      expect(object.hasPart).to.have.lengthOf(CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max)
+    })
+  })
+
+  describe('ActivityPub comment validator', function () {
+    it('Should truncate remote comment content', async function () {
+      const comment: any = {
+        type: 'Note',
+        id: 'https://example.com/videos/watch/1/comments/1',
+        url: 'https://example.com/videos/watch/1/comments/1',
+        inReplyTo: 'https://example.org/videos/watch/1',
+        published: new Date().toISOString(),
+        to: [ 'https://www.w3.org/ns/activitystreams#Public' ],
+        content: 'a'.repeat(ACTIVITY_PUB.MAX_COMMENT_TEXT_LENGTH * 2)
+      }
+
+      expect(sanitizeAndCheckVideoCommentObject(comment)).to.be.true
+      expect(comment.content).to.have.lengthOf(ACTIVITY_PUB.MAX_COMMENT_TEXT_LENGTH)
     })
   })
 })

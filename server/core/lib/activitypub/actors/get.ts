@@ -1,4 +1,5 @@
-import { arrayify } from '@peertube/peertube-core-utils'
+import { arrayify, uniqify } from '@peertube/peertube-core-utils'
+import { ACTIVITY_PUB } from '@server/initializers/constants.js'
 import { ActivityPubActor, APObjectId } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -129,12 +130,21 @@ async function findOwner (options: {
 }) {
   const { rootUrl, attributedTo, audience, type } = options
 
-  const actorsToCheck = arrayify(attributedTo)
-  // Priority to audience
-  if (audience) actorsToCheck.unshift(audience) // fep-1b12
+  // Priority to audience (fep-1b12)
+  const candidateUrls = [ audience, ...arrayify(attributedTo) ]
+    .filter(a => !!a)
+    .map(a => getAPId(a))
 
-  for (const actorToCheck of actorsToCheck) {
-    const actorObject = await fetchAPObjectIfNeeded<ActivityPubActor>(getAPId(actorToCheck))
+  // Only fetch actors on the host of the object, so a remote object cannot make us request other hosts
+  const actorUrlsToCheck = uniqify(candidateUrls.filter(url => isOnSameHost(url, rootUrl)))
+    .slice(0, ACTIVITY_PUB.MAX_OWNER_CANDIDATES)
+
+  if (actorUrlsToCheck.length !== candidateUrls.length) {
+    logger.debug(`Ignoring some attributed to actors of ${rootUrl}`, { candidateUrls, actorUrlsToCheck })
+  }
+
+  for (const actorToCheck of actorUrlsToCheck) {
+    const actorObject = await fetchAPObjectIfNeeded<ActivityPubActor>(actorToCheck)
 
     if (!actorObject) {
       logger.warn(`Unknown attributed to actor ${actorToCheck} for owner ${rootUrl}`)
@@ -150,6 +160,16 @@ async function findOwner (options: {
   }
 
   return undefined
+}
+
+function isOnSameHost (url: string, rootUrl: string) {
+  if (typeof url !== 'string') return false
+
+  try {
+    return checkUrlsSameHost(url, rootUrl)
+  } catch {
+    return false
+  }
 }
 
 // ---------------------------------------------------------------------------
