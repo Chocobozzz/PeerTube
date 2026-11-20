@@ -422,7 +422,7 @@ export function downloadPlaylistSegments (playlistUrl: string, destinationDir: s
 
     const urls = body.split('\n')
       .map(line => {
-        if (!line.startsWith('#EXT-X-MEDIA:TYPE=AUDIO')) return line
+        if (!line.startsWith('#EXT-X-MEDIA:') || !line.includes('TYPE=AUDIO')) return line
 
         // With split audio/video, the audio playlist is only referenced in #EXT-X-MEDIA:TYPE=AUDIO
         return line.match(/URI="([^"]+)"/)?.[1] ?? ''

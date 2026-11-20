@@ -1,7 +1,13 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { wait } from '@peertube/peertube-core-utils'
-import { VideoDetails, VideoPrivacy, VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '@peertube/peertube-models'
+import {
+  VideoDetails,
+  VideoPrivacy,
+  VideoRedundancyStrategy,
+  VideoRedundancyStrategyWithManual,
+  VideoResolution
+} from '@peertube/peertube-models'
 import { buildUUID } from '@peertube/peertube-node-utils'
 import {
   cleanupTests,
@@ -22,7 +28,16 @@ import { basename, join } from 'path'
 let servers: PeerTubeServer[] = []
 let video1Server2: VideoDetails
 
-async function createServers (strategy: VideoRedundancyStrategy | null, additionalParams: any = {}, withWebVideo = true) {
+async function createServers (
+  strategy: VideoRedundancyStrategy | null,
+  additionalParams: any = {},
+  options: {
+    withWebVideo?: boolean // default true
+    splitAudioAndVideo?: boolean // default false
+  } = {}
+) {
+  const { withWebVideo = true, splitAudioAndVideo = false } = options
+
   const strategies: any[] = []
 
   if (strategy !== null) {
@@ -43,7 +58,8 @@ async function createServers (strategy: VideoRedundancyStrategy | null, addition
         enabled: withWebVideo
       },
       hls: {
-        enabled: true
+        enabled: true,
+        split_audio_and_video: splitAudioAndVideo
       }
     },
     redundancy: {
@@ -129,7 +145,7 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
   const video = await servers[0].videos.get({ id: videoUUID })
   const hlsPlaylist = video.streamingPlaylists[0]
 
-  for (const resolution of [ 240, 360, 480, 720 ]) {
+  for (const resolution of hlsPlaylist.files.map(f => f.resolution.id)) {
     await checkSegmentHash({ server: servers[1], baseUrlPlaylist, baseUrlSegment, resolution, hlsPlaylist })
   }
 
@@ -144,8 +160,10 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
     const files = await readdir(join(directory, videoUUID))
     expect(files).to.have.length.at.least(4)
 
-    // Ensure we files exist on disk
-    expect(files.find(f => hlsFilenames.includes(f))).to.exist
+    // Ensure all files exist on disk
+    for (const hlsFilename of hlsFilenames) {
+      expect(files, `${hlsFilename} is missing in ${directory}`).to.include(hlsFilename)
+    }
   }
 }
 
@@ -168,11 +186,11 @@ async function checkStatsGlobal (strategy: VideoRedundancyStrategyWithManual) {
   return stat
 }
 
-async function checkStatsWith1Redundancy (strategy: VideoRedundancyStrategyWithManual) {
+async function checkStatsWith1Redundancy (strategy: VideoRedundancyStrategyWithManual, totalVideoFiles = 4) {
   const stat = await checkStatsGlobal(strategy)
 
   expect(stat.totalUsed).to.be.at.least(1).and.below(204801)
-  expect(stat.totalVideoFiles).to.equal(4)
+  expect(stat.totalVideoFiles).to.equal(totalVideoFiles)
   expect(stat.totalVideos).to.equal(1)
 }
 
@@ -398,7 +416,7 @@ describe('Test videos redundancy', function () {
     before(async function () {
       this.timeout(240000)
 
-      await createServers(strategy, { min_views: 3 }, false)
+      await createServers(strategy, { min_views: 3 }, { withWebVideo: false })
     })
 
     it('Should have 0 playlist redundancy on the first video', async function () {
@@ -530,6 +548,37 @@ describe('Test videos redundancy', function () {
       await check0PlaylistRedundancies()
 
       await checkVideoFilesWereRemoved({ server: servers[0], video: video1Server2, onlyVideoFiles: true })
+    })
+
+    after(async function () {
+      await cleanupTests(servers)
+    })
+  })
+
+  describe('With split audio and video', function () {
+    before(function () {
+      this.timeout(240000)
+
+      return createServers(null, {}, { withWebVideo: false, splitAudioAndVideo: true })
+    })
+
+    it('Should have an audio only file', async function () {
+      const video = await servers[1].videos.get({ id: video1Server2.uuid })
+
+      expect(video.streamingPlaylists[0].files.map(f => f.resolution.id)).to.include(VideoResolution.H_NOVIDEO)
+    })
+
+    it('Should create a redundancy including the audio files', async function () {
+      this.timeout(80000)
+
+      await servers[0].redundancy.addVideo({ videoId: video1Server2.id })
+
+      await waitJobs(servers)
+      await servers[0].servers.waitUntilLog('Duplicated playlist ', 1)
+      await waitJobs(servers)
+
+      await check1PlaylistRedundancies()
+      await checkStatsWith1Redundancy('manual', 5)
     })
 
     after(async function () {
