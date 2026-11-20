@@ -134,6 +134,87 @@ describe('Test external auth plugins with a stable external id', function () {
     expect(me.id).to.equal(terraId)
   })
 
+  describe('Accounts created without an external id', function () {
+    let sqlCommand: SQLCommand
+
+    before(async function () {
+      sqlCommand = new SQLCommand(server)
+
+      // Account created before external ids existed
+      await loginExternal({
+        server,
+        authName: 'external-auth-id-2',
+        npmName: 'test-external-auth-four',
+        username: 'nova',
+        query: {
+          username: 'nova',
+          email: 'nova@example.com'
+        }
+      })
+
+      expect(await sqlCommand.getUserExternalId('nova')).to.not.exist
+    })
+
+    it('Should not link the account to an identity with another username', async function () {
+      await loginExternal({
+        server,
+        authName: 'external-auth-id-2',
+        npmName: 'test-external-auth-four',
+        username: 'mallory',
+        query: {
+          username: 'mallory',
+          email: 'nova@example.com',
+          externalId: 'mallory-external-id'
+        },
+        expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      expect(await sqlCommand.getUserExternalId('nova')).to.not.exist
+    })
+
+    it('Should not link the account when the identity provider did not verify the email', async function () {
+      await loginExternal({
+        server,
+        authName: 'external-auth-id-2',
+        npmName: 'test-external-auth-four',
+        username: 'nova',
+        query: {
+          username: 'nova',
+          email: 'nova@example.com',
+          externalId: 'nova-external-id',
+          emailVerified: 'false'
+        },
+        expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
+      })
+
+      expect(await sqlCommand.getUserExternalId('nova')).to.not.exist
+    })
+
+    it('Should link the account when the username matches and the email is verified', async function () {
+      const body = await loginExternal({
+        server,
+        authName: 'external-auth-id-2',
+        npmName: 'test-external-auth-four',
+        username: 'nova',
+        query: {
+          username: 'nova',
+          email: 'nova@example.com',
+          externalId: 'nova-external-id',
+          emailVerified: 'true'
+        }
+      })
+
+      const me = await server.users.getMyInfo({ token: body.access_token })
+      expect(me.username).to.equal('nova')
+
+      expect(await sqlCommand.getUserExternalId('nova')).to.equal('nova-external-id')
+    })
+
+    after(async function () {
+      await sqlCommand.cleanup()
+    })
+  })
+
   after(async function () {
     await cleanupTests([ server ])
   })

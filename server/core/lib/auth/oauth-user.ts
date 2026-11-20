@@ -7,10 +7,10 @@ import { UserRegistrationModel } from '@server/models/user/user-registration.js'
 import { AuthenticatedResultUpdaterFieldName, RegisterServerAuthenticatedResult } from '@server/types/index.js'
 import { MUser, MUserDefault } from '@server/types/models/user/user.js'
 import express from 'express'
+import { runTransaction } from '../../helpers/database-utils.js'
 import { createLogger } from '../../helpers/logger.js'
 import { CONFIG } from '../../initializers/config.js'
 import { OTP } from '../../initializers/constants.js'
-import { runTransaction } from '../../helpers/database-utils.js'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token.js'
 import { UserModel } from '../../models/user/user.js'
 import { Emailer } from '../emailer.js'
@@ -166,6 +166,8 @@ async function handleGetUserBypass (options: {
   // If the user does not belongs to a plugin, then we just go through a regular login process
   if (user.pluginAuth === null) return undefined
 
+  if (matchedBy === 'email') checkEmailMatchIsTrustedOrThrow({ user, pluginName, externalUser, req })
+
   if (matchedBy === 'email' && user.pluginAuth === pluginName && externalUser.externalId && user.pluginAuthExternalId !== null) {
     // This account is already linked to a different external id for this plugin
     // Refuse to silently relink (identity provider email reuse, or a possible hijack attempt)
@@ -227,6 +229,66 @@ async function handleGetUserBypass (options: {
   await Redis.Instance.deleteLoginFailures(user.id)
 
   return user
+}
+
+// The account was found by email only: make sure this email identifies the user of the identity provider
+function checkEmailMatchIsTrustedOrThrow (options: {
+  user: MUserDefault
+  pluginName: string
+  externalUser: ExternalUser
+  req: express.Request
+}) {
+  const { user, pluginName, externalUser, req } = options
+
+  // The identity provider says the user may not own this email
+  if (externalUser.emailVerified === false) {
+    logger.warn(
+      'Refusing external auth bypass of plugin %s for user %s: the email %s matching the account is not verified by the identity provider.',
+      pluginName,
+      user.username,
+      externalUser.email
+    )
+
+    throw new AccessDeniedError(
+      req.t('Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.', { pluginName })
+    )
+  }
+
+  // Accounts created before external ids (PeerTube < 8.3) are linked to the external id on their next login
+  const isLinkingAccountWithoutExternalId = user.pluginAuth === pluginName &&
+    user.pluginAuthExternalId === null &&
+    !!externalUser.externalId
+
+  //  The email alone is not enough to link them: some identity providers let users set any email: also use username
+  if (isLinkingAccountWithoutExternalId && !isAccountCreatedFromUsername(user.username, externalUser.username)) {
+    logger.warn(
+      'Refusing to link account %s to external id %s of plugin %s: the email matches but the username %s does not. ' +
+        'Check this user at the identity provider before linking the account manually.',
+      user.username,
+      externalUser.externalId,
+      pluginName,
+      externalUser.username
+    )
+
+    throw new AccessDeniedError(
+      req.t(
+        'Refusing external auth bypass for plugin {pluginName}: {email} belongs to an account that does not match your username.',
+        { pluginName, email: externalUser.email }
+      )
+    )
+  }
+}
+
+// The account username is the plugin username, or the plugin username with a suffix if the name was already taken
+function isAccountCreatedFromUsername (accountUsername: string, pluginUsername: string) {
+  const account = accountUsername.toLowerCase()
+  const base = (pluginUsername || '').toLowerCase()
+
+  if (!base) return false
+  if (account === base) return true
+  if (!account.startsWith(base + '-')) return false
+
+  return /^\d+$/.test(account.slice(base.length + 1))
 }
 
 // ---------------------------------------------------------------------------

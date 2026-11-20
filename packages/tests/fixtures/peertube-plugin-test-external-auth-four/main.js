@@ -11,7 +11,10 @@ async function register ({
           res,
           username: req.query.username,
           email: req.query.email,
-          externalId: req.query.externalId || undefined
+          externalId: req.query.externalId || undefined,
+          emailVerified: req.query.emailVerified === undefined
+            ? undefined
+            : req.query.emailVerified === 'true'
         })
       }
     })
@@ -27,7 +30,10 @@ async function register ({
           res,
           username: req.query.username,
           email: req.query.email,
-          externalId: req.query.externalId || undefined
+          externalId: req.query.externalId || undefined,
+          emailVerified: req.query.emailVerified === undefined
+            ? undefined
+            : req.query.emailVerified === 'true'
         })
       }
     })

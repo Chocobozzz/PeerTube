@@ -278,6 +278,7 @@ function isAuthResultValid (npmName: string, authName: string, result: RegisterS
 
   if (!isUserUsernameValid(result.username)) return returnError('username')
   if (!result.email) return returnError('email')
+  if (exists(result.emailVerified) && typeof result.emailVerified !== 'boolean') return returnError('emailVerified')
 
   // Following fields are optional
   // Empty string values are considered as not provided by the plugin: buildUserResult() falls back to a default
@@ -316,7 +317,9 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
 
     language: pluginResult.language || null,
 
-    externalId: pluginResult.externalId || undefined
+    externalId: pluginResult.externalId || undefined,
+
+    emailVerified: pluginResult.emailVerified
   }
 }
 

@@ -28,6 +28,10 @@ export interface RegisterServerAuthenticatedResult {
   // PeerTube >= 8.3
   externalId?: string
 
+  // Set to false if the identity provider did not verify that the user owns this email
+  // PeerTube >= 9.0
+  emailVerified?: boolean
+
   // PeerTube >= 5.1
   adminFlags?: UserAdminFlagType
 
