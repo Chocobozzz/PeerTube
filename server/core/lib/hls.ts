@@ -421,6 +421,12 @@ export function downloadPlaylistSegments (playlistUrl: string, destinationDir: s
     if (!body) return []
 
     const urls = body.split('\n')
+      .map(line => {
+        if (!line.startsWith('#EXT-X-MEDIA:') || !line.includes('TYPE=AUDIO')) return line
+
+        // With split audio/video, the audio playlist is only referenced in #EXT-X-MEDIA:TYPE=AUDIO
+        return line.match(/URI="([^"]+)"/)?.[1] ?? ''
+      })
       .filter(line => line.endsWith('.m3u8') || line.endsWith('.mp4'))
       .map(url => {
         if (url.startsWith('http://') || url.startsWith('https://')) return url
