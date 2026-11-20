@@ -4622,10 +4622,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoUploadResponse'
         '400':
-          x-summary: validation error, or conflicting `saveReplay` and `permanentLive` parameter set
+          x-summary: validation error (including a `dvrWindow` higher than the max DVR window of the instance), or conflicting `saveReplay` and `permanentLive` parameter set
           description: |
             Disambiguate via `code`:
-            - default type for a validation error
+            - default type for a validation error, including a `dvrWindow` higher than the max DVR window of the instance
             - `live_conflicting_permanent_and_save_replay` for conflicting parameters set
         '403':
           x-summary: live is not enabled, allow replay is not enabled, or max instance/user live videos limit is exceeded
@@ -4655,6 +4655,10 @@ paths:
                   description: User can select live latency mode if enabled by the instance
                   allOf:
                     - $ref: '#/components/schemas/LiveVideoLatencyMode'
+                dvrWindow:
+                  description: Defaults to the max DVR window of the instance (`live.dvr.maxWindow` in `GET /api/v1/config`), so DVR is enabled by default if the instance allows it
+                  allOf:
+                    - $ref: '#/components/schemas/LiveVideoDVRWindow'
                 thumbnailfile:
                   description: Live video/replay thumbnail file
                   type: string
@@ -4761,7 +4765,8 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: bad parameters or trying to update a live that has already started
+          description: >
+            bad parameters (including a `dvrWindow` higher than the max DVR window of the instance) or trying to update a live that has already started
         '403':
           description: trying to save replay of the live but saving replay is not enabled on the instance
   /api/v1/videos/live/{id}/sessions:
@@ -8553,6 +8558,8 @@ paths:
                   type: string
                 description:
                   type: string
+                version:
+                  $ref: '#/components/schemas/RunnerVersion'
               required:
                 - registrationToken
                 - name
@@ -8666,6 +8673,8 @@ paths:
                   description: Filter jobs depending on their types
                   items:
                     type: string
+                version:
+                  $ref: '#/components/schemas/RunnerVersion'
               required:
                 - runnerToken
       responses:
@@ -12109,7 +12118,7 @@ components:
           maxLength: 120
         isLocal:
           type: boolean
-        videoLength:
+        videosLength:
           type: integer
           minimum: 0
         thumbnailPath:
@@ -12655,6 +12664,49 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/VideoResolutionSet'
+        live:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+            allowReplay:
+              type: boolean
+            dvr:
+              type: object
+              properties:
+                maxWindow:
+                  type: integer
+                  minimum: 0
+                  description: >
+                    **PeerTube >= 8.2** Max DVR window of a live, in seconds. `0` means DVR is disabled on the instance
+            latencySetting:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+            maxDuration:
+              type: integer
+              description: Max duration of a live, in milliseconds. `-1` means no limit
+            maxInstanceLives:
+              type: integer
+              description: Max number of concurrent lives on the instance. `-1` means no limit
+            maxUserLives:
+              type: integer
+              description: Max number of concurrent lives per user. `-1` means no limit
+            transcoding:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                enabledResolutions:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/VideoResolutionSet'
+            rtmp:
+              type: object
+              properties:
+                port:
+                  type: integer
         import:
           type: object
           properties:
@@ -15093,6 +15145,8 @@ components:
           description: User can select live latency mode if enabled by the instance
           allOf:
             - $ref: '#/components/schemas/LiveVideoLatencyMode'
+        dvrWindow:
+          $ref: '#/components/schemas/LiveVideoDVRWindow'
         schedules:
           type: array
           items:
@@ -15120,10 +15174,22 @@ components:
           description: User can select live latency mode if enabled by the instance
           allOf:
             - $ref: '#/components/schemas/LiveVideoLatencyMode'
+        dvrWindow:
+          type: integer
+          minimum: 0
+          description: >
+            **PeerTube >= 8.2** How far back viewers can rewind the live, in seconds. `0` means DVR is disabled.
         schedules:
           type: array
           items:
             $ref: '#/components/schemas/LiveSchedule'
+
+    LiveVideoDVRWindow:
+      type: integer
+      minimum: 0
+      description: >
+        **PeerTube >= 8.2** How far back viewers can rewind the live, in seconds. `0` disables DVR.
+        Cannot be higher than the max DVR window of the instance
 
     LiveSchedule:
       properties:
@@ -15392,6 +15458,17 @@ components:
         lastContact:
           type: string
           format: date-time
+        version:
+          type: string
+          nullable: true
+          example: 0.4.0
+          description: Version of the runner, sent when it registers or requests jobs. `null` if the runner never sent its version
+
+    RunnerVersion:
+      type: string
+      pattern: '^\d+\.\d+\.\d+(-(rc|alpha|beta)\.\d+)?$'
+      example: 0.4.0
+      description: Version of the runner, updated on the runner model if provided
 
     RunnerJobType:
       type: string
