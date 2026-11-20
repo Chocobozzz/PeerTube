@@ -64,7 +64,7 @@ peertube-cli auth list
 You can now use that account to execute sub-commands without feeding the `--url`, `--username` and `--password` parameters:
 
 ```bash
-peertube-cli upload <videoFile>
+peertube-cli upload --file /absolute/path/to/video.mp4 --video-name 'My video'
 ```
 
 ```bash
@@ -75,7 +75,7 @@ peertube-cli plugins list
 
 #### peertube-cli upload
 
-You can use this script to upload videos directly from the CLI.
+You can use this script to upload videos directly from the CLI. `--file` (the video file path, which must be absolute) and `--video-name` are required.
 
 Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
