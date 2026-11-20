@@ -8,7 +8,7 @@
     "@peertube/peertube-transcription-devtools": "workspace:*",
     "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.1",
-    "fast-xml-parser": "^5.11.2",
+    "fast-xml-parser": "^5.12.1",
     "fast-xml-validator": "^1.4.1",
     "supertest": "^7.3.1"
   },
