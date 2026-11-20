@@ -9,8 +9,8 @@ import {
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { buildBlockedAccountSQL } from '@server/models/shared/sql/common-helpers.js'
-import { buildServerIdsFollowedBy, buildSortDirectionAndField } from '@server/models/shared/index.js'
-import { OrderItem, Sequelize } from 'sequelize'
+import { buildServerIdsFollowedBy, getChannelSort } from '@server/models/shared/index.js'
+import { Sequelize } from 'sequelize'
 import { VideoChannelTableAttributes } from './video-channel-table-attributes.js'
 
 export interface ListVideoChannelsOptions extends AbstractListQueryOptions {
@@ -363,12 +363,7 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
     return [ 'similarity' ]
   }
 
-  protected getSort (sort: string): OrderItem[] {
-    const { direction, field } = buildSortDirectionAndField(sort)
-
-    // The channel display name is stored in the "name" column
-    if (field === 'displayName') return [ [ 'name', direction ], [ 'id', 'ASC' ] ]
-
-    return super.getSort(sort)
+  protected getSort (sort: string) {
+    return getChannelSort(sort)
   }
 }

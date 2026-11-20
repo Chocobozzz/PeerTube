@@ -167,15 +167,17 @@ describe('Test channels search', function () {
   })
 
   it('Should sort channels by display name', async function () {
-    for (const sort of [ 'displayName', '-displayName' ]) {
-      const body = await command.advancedChannelSearch({ search: { sort } })
-      const names = body.data.map(c => c.displayName)
+    const handles = [ 'zell_channel@' + remoteServer.host, 'root_channel', 'squall_channel' ]
+    const expected = [ 'Main root channel', 'Squall channel', 'Zell channel' ]
 
-      const expected = [ ...names ].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-      if (sort.startsWith('-')) expected.reverse()
+    {
+      const body = await command.advancedChannelSearch({ search: { handles, sort: 'displayName' } })
+      expect(body.data.map(c => c.displayName)).to.deep.equal(expected)
+    }
 
-      expect(names).to.have.length.above(2)
-      expect(names).to.deep.equal(expected)
+    {
+      const body = await command.advancedChannelSearch({ search: { handles, sort: '-displayName' } })
+      expect(body.data.map(c => c.displayName)).to.deep.equal([ ...expected ].reverse())
     }
   })
 
