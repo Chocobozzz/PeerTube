@@ -122,6 +122,16 @@ describe('Test videos chapters API validator', function () {
       })
     })
 
+    it('Should fail with too many chapters', async function () {
+      const chapters = Array.from({ length: 501 }, (_, i) => ({ title: 'chapter ' + i, timecode: i }))
+
+      await server.chapters.update({
+        videoId: video.id,
+        chapters,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
+    })
+
     it('Should fail to create chapters on a live', async function () {
       await server.chapters.update({
         videoId: live.id,

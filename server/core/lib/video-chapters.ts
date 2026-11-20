@@ -50,7 +50,7 @@ export async function replaceChaptersFromDescriptionIfNeeded (options: {
 }) {
   const { transaction, video, newDescription, oldDescription = '' } = options
 
-  const chaptersFromOldDescription = sortBy(parseChapters(oldDescription, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max), 'timecode')
+  const chaptersFromOldDescription = parseChaptersFromDescription(oldDescription)
   const existingChapters = await VideoChapterModel.listChaptersOfVideo(video.id, transaction)
 
   logger.debug('Check if we replace chapters from description', {
@@ -62,7 +62,7 @@ export async function replaceChaptersFromDescriptionIfNeeded (options: {
 
   // Then we can update chapters from the new description
   if (areSameChapters(chaptersFromOldDescription, existingChapters)) {
-    const chaptersFromNewDescription = sortBy(parseChapters(newDescription, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max), 'timecode')
+    const chaptersFromNewDescription = parseChaptersFromDescription(newDescription)
     if (chaptersFromOldDescription.length === 0 && chaptersFromNewDescription.length === 0) return false
 
     await replaceChapters({ video, chapters: chaptersFromNewDescription, transaction })
@@ -89,6 +89,11 @@ async function createChapters (options: {
   const existingTimecode = new Set<number>()
 
   for (const chapter of chapters) {
+    if (existingTimecode.size >= CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max) {
+      logger.warn(`Ignoring chapters of video ${videoId} above the limit of ${CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max} chapters`)
+      break
+    }
+
     if (existingTimecode.has(chapter.timecode)) continue
 
     await VideoChapterModel.create({
@@ -99,6 +104,11 @@ async function createChapters (options: {
 
     existingTimecode.add(chapter.timecode)
   }
+}
+
+function parseChaptersFromDescription (description: string) {
+  return sortBy(parseChapters(description, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.TITLE.max), 'timecode')
+    .slice(0, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max)
 }
 
 function areSameChapters (chapters1: VideoChapter[], chapters2: VideoChapter[]) {

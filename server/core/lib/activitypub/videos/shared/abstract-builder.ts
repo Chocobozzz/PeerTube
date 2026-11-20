@@ -1,6 +1,6 @@
 import { guessAspectRatio } from '@peertube/peertube-core-utils'
 import { ActivityTagObject, VideoChaptersObject, VideoObject, VideoStreamingPlaylistType_Type } from '@peertube/peertube-models'
-import { isVideoChaptersObjectValid } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
+import { sanitizeAndCheckVideoChaptersObject } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
 import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
@@ -150,7 +150,7 @@ export abstract class APVideoAbstractBuilder {
     if (!this.videoObject.hasParts || typeof this.videoObject.hasParts !== 'string') return
 
     const { body } = await fetchAP<VideoChaptersObject>(this.videoObject.hasParts, { preventCrossHostRedirect: false })
-    if (!isVideoChaptersObjectValid(body)) {
+    if (!sanitizeAndCheckVideoChaptersObject(body)) {
       logger.warn('Chapters AP object is not valid, skipping', { body })
       return
     }

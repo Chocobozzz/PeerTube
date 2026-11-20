@@ -5553,6 +5553,7 @@ paths:
               properties:
                 chapters:
                   type: array
+                  maxItems: 500
                   items:
                     type: object
                     properties:
@@ -5563,6 +5564,8 @@ paths:
       responses:
         '204':
           description: successful operation
+        '400':
+          description: invalid chapters (invalid title or timecode, duplicate timecode or more than 500 chapters)
         '404':
           description: video not found
 

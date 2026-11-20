@@ -671,7 +671,8 @@ export const CONSTRAINTS_FIELDS = {
     PROGRESS: { min: 0, max: 100 } // Value
   },
   VIDEO_CHAPTERS: {
-    TITLE: { min: 1, max: 100 } // Length
+    TITLE: { min: 1, max: 100 }, // Length
+    CHAPTERS: { min: 0, max: 500 } // Number of chapters of a video
   },
   WATCHED_WORDS: {
     LIST_NAME: { min: 1, max: 100 }, // Length
@@ -1066,6 +1067,13 @@ export const ACTIVITY_PUB = {
   MAX_VIDEO_TAGS: 100,
   MAX_ICONS: 20,
   MAX_ICON_DIMENSION: 10_000,
+  // Actor avatars/banners: PeerTube federates one image per configured size
+  MAX_ACTOR_IMAGES: 10,
+  // Max attributedTo/audience actors we fetch to find the owner of an object
+  MAX_OWNER_CANDIDATES: 5,
+  MAX_FLAG_OBJECTS: 20,
+  // Remote platforms may allow longer notes than PeerTube
+  MAX_COMMENT_TEXT_LENGTH: 100_000,
   MAX_PLAYLIST_ELEMENTS: 1000,
   INBOX_CONTENT_TYPES: [ 'application/json', 'application/*+json' ],
   CHECK_JSON_LD_SIGNATURE: {

@@ -3,13 +3,17 @@ import { body } from 'express-validator'
 import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { areValidationErrors, checkCanManageVideo, doesVideoExist, isValidVideoIdParam } from '../shared/index.js'
 import { areVideoChaptersValid } from '@server/helpers/custom-validators/video-chapters.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 
 export const updateVideoChaptersValidator = [
   isValidVideoIdParam('videoId'),
 
   body('chapters')
     .custom(areVideoChaptersValid)
-    .withMessage('Chapters must have a valid title and timecode, and each timecode must be unique'),
+    .withMessage(
+      'Chapters must have a valid title and timecode, each timecode must be unique ' +
+        `and there must be at most ${CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max} chapters`
+    ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

@@ -6,6 +6,7 @@ import validator from 'validator'
 
 export function areVideoChaptersValid (value: VideoChapter[]) {
   if (!isArray(value)) return false
+  if (value.length > CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max) return false
   if (!value.every(v => isVideoChapterValid(v))) return false
 
   const timecodes = value.map(c => c.timecode)
