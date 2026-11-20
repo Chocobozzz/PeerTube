@@ -1,7 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { VideoRateType } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
-import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
 import { userRateVideo } from '@server/lib/rate.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { AbstractUserImporter } from './abstract-user-importer.js'
@@ -17,7 +16,7 @@ export abstract class AbstractRatesImporter<ROOT_OBJECT, OBJECT> extends Abstrac
 
   protected async importRate (data: SanitizedRateObject, rateType: VideoRateType) {
     const videoUrl = data.videoUrl
-    const videoImmutable = await loadOrCreateVideoIfAllowedForUser(videoUrl)
+    const videoImmutable = await this.loadOrCreateVideoIfAllowed(videoUrl)
 
     if (!videoImmutable) {
       throw new Error(`Cannot get or create video ${videoUrl} to import user ${rateType}`)

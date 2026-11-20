@@ -1,7 +1,7 @@
 import { AutoMuteAction, AutoMuteList, StreamSyncState } from '@peertube/peertube-models'
 import { handleToNameAndHost } from '@server/helpers/actors.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { SCHEDULER_INTERVALS_MS } from '@server/initializers/constants.js'
+import { SCHEDULER_INTERVALS_MS, WEBSERVER } from '@server/initializers/constants.js'
 import { fetchAndValidateAutoMuteList } from '@server/lib/blocklist-subscriptions.js'
 import {
   addAccountInBlocklist,
@@ -162,12 +162,20 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
   }) {
     const { action, serverAccountId, subscription } = options
 
-    const { name, host } = handleToNameAndHost(action.target)
+    const { name, host: rawHost } = handleToNameAndHost(action.target)
+
+    const host = rawHost?.toLowerCase()
+    const isLocalTarget = !host || host === WEBSERVER.HOST.toLowerCase()
+
+    if (isLocalTarget && action.type === 'block') {
+      logger.info('Ignoring local account %s of blocklist subscription %s.', action.target, subscription.url)
+      return null
+    }
 
     // TODO: handle actors that are not yet federated
-    const account = host
-      ? await AccountModel.loadByNameAndHost(name, host)
-      : await AccountModel.loadLocalByName(name)
+    const account = isLocalTarget
+      ? await AccountModel.loadLocalByName(name)
+      : await AccountModel.loadByNameAndHost(name, host)
 
     if (!account) return null
 
@@ -201,10 +209,18 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
   }) {
     const { action, serverAccountId, subscription } = options
 
-    const server = await ServerModel.loadOrCreateByHost(action.target)
+    // Hosts are stored in lowercase: don't create another server for a host in another case
+    const host = action.target.toLowerCase()
+
+    if (action.type === 'block' && host === WEBSERVER.HOST.toLowerCase()) {
+      logger.info('Ignoring our own host in blocklist subscription %s.', subscription.url)
+      return null
+    }
+
+    const server = await ServerModel.loadOrCreateByHost(host)
 
     if (action.type === 'block') {
-      const existing = await ServerBlocklistModel.loadByAccountAndHost(serverAccountId, action.target)
+      const existing = await ServerBlocklistModel.loadByAccountAndHost(serverAccountId, host)
       if (existing) return null
 
       await addServerInBlocklist({
@@ -214,7 +230,7 @@ export class BlocklistSubscriptionsScheduler extends AbstractScheduler {
         removeNotificationOfUserId: null
       })
     } else if (action.type === 'unblock') {
-      const block = await ServerBlocklistModel.loadByAccountAndHost(serverAccountId, action.target)
+      const block = await ServerBlocklistModel.loadByAccountAndHost(serverAccountId, host)
       if (!block || block.blocklistSubscriptionId !== subscription.id) return null
 
       await removeServerFromBlocklist(block)

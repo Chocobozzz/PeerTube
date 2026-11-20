@@ -1,6 +1,11 @@
+import { VideoPrivacy, VideoPrivacyType } from '@peertube/peertube-models'
 import { getFileSize } from '@peertube/peertube-node-utils'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { createLogger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { getOrCreateAPVideo } from '@server/lib/activitypub/videos/get.js'
+import { VideoModel } from '@server/models/video/video.js'
+import { MVideoImmutable } from '@server/types/models/index.js'
 import { MUserDefault } from '@server/types/models/user/user.js'
 import { pathExists, readJSON, remove } from 'fs-extra/esm'
 import { dirname, resolve, sep } from 'path'
@@ -78,6 +83,42 @@ export abstract class AbstractUserImporter<
     }
 
     return true
+  }
+
+  // Load a video referenced by the archive (rates, playlists, history...)
+  // The archive can contain any URL: only return videos the user is allowed to see
+  protected async loadOrCreateVideoIfAllowed (videoUrl: string): Promise<MVideoImmutable> {
+    const video = await this.loadOrCreateVideoWithRights(videoUrl)
+    if (!video) return undefined
+
+    // Owners can see their videos, whatever their privacy or blacklist state
+    if (video.VideoChannel?.Account?.id === this.user.Account.id) return video
+
+    if (video.isBlacklisted()) return undefined
+
+    const allowedPrivacies = new Set<VideoPrivacyType>([ VideoPrivacy.PUBLIC, VideoPrivacy.UNLISTED, VideoPrivacy.INTERNAL ])
+    if (!allowedPrivacies.has(video.privacy)) return undefined
+
+    return video
+  }
+
+  private async loadOrCreateVideoWithRights (videoUrl: string) {
+    // Most videos of the archive are already known: load them and their rights with a single query
+    const video = await VideoModel.loadByUrlWithRights(videoUrl)
+    if (video || !CONFIG.SEARCH.REMOTE_URI.USERS) return video
+
+    try {
+      const res = await getOrCreateAPVideo({
+        videoObject: videoUrl,
+        fetchType: 'unsafe-immutable-only',
+        allowRefresh: false
+      })
+      if (!res?.video) return undefined
+
+      return VideoModel.loadWithRights(res.video.id)
+    } catch {
+      return undefined
+    }
   }
 
   async import () {

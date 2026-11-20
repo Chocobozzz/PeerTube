@@ -6,7 +6,8 @@ import {
   createSingleServer,
   doubleFollow,
   PeerTubeServer,
-  setAccessTokensToServers
+  setAccessTokensToServers,
+  waitJobs
 } from '@peertube/peertube-server-commands'
 import { MockCoreBlocklist } from '@tests/shared/mock-servers/mock-core-blocklist.js'
 import { expect } from 'chai'
@@ -112,24 +113,37 @@ describe('Test blocklist subscriptions', function () {
 
   describe('When synchronizing a subscription', function () {
     let server2: PeerTubeServer
+    // Hosts the muted accounts: lists cannot mute local accounts
+    let server3: PeerTubeServer
     let mutedHandle1: string
     let mutedHandle2: string
+    let localHandle: string
     const mutedHost = 'example.com'
 
     before(async function () {
+      this.timeout(120_000)
+
       server2 = await createSingleServer(2)
-      await setAccessTokensToServers([ server2 ])
-
-      const tokenMuted1 = await server.users.generateUserAndToken('muted1')
-      const tokenMuted2 = await server.users.generateUserAndToken('muted2')
-
-      mutedHandle1 = `muted1@${server.host}`
-      mutedHandle2 = `muted2@${server.host}`
-
-      await server.videos.quickUpload({ name: 'muted video', token: tokenMuted1 })
-      await server.videos.quickUpload({ name: 'muted video', token: tokenMuted2 })
+      server3 = await createSingleServer(3)
+      await setAccessTokensToServers([ server2, server3 ])
 
       await doubleFollow(server, server2)
+      await doubleFollow(server, server3)
+      await doubleFollow(server2, server3)
+
+      const tokenMuted1 = await server3.users.generateUserAndToken('muted1')
+      const tokenMuted2 = await server3.users.generateUserAndToken('muted2')
+
+      mutedHandle1 = `muted1@${server3.host}`
+      mutedHandle2 = `muted2@${server3.host}`
+
+      await server3.videos.quickUpload({ name: 'muted video', token: tokenMuted1 })
+      await server3.videos.quickUpload({ name: 'muted video', token: tokenMuted2 })
+
+      await server.users.generateUserAndToken('local_user')
+      localHandle = `local_user@${server.host}`
+
+      await waitJobs([ server, server2, server3 ])
     })
 
     it('Should automatically block and unblock from subscription actions', async function () {
@@ -179,6 +193,22 @@ describe('Test blocklist subscriptions', function () {
         expect(body.accounts[mutedHandle1].blockedByServer).to.be.false
         expect(body.accounts[mutedHandle1].blockedByServerSubscription).to.be.null
       }
+    })
+
+    it('Should not mute local accounts or our own server', async function () {
+      this.timeout(60_000)
+
+      mockServer.setActions([
+        { type: 'block', target: localHandle, createdAt: new Date().toISOString() },
+        { type: 'block', target: server.host, createdAt: new Date().toISOString() }
+      ])
+
+      await wait(8000)
+
+      const body = await server.blocklist.getStatus({ accounts: [ localHandle ], hosts: [ server.host ] })
+
+      expect(body.accounts[localHandle].blockedByServer).to.be.false
+      expect(body.hosts[server.host].blockedByServer).to.be.false
     })
 
     it('Should only check new block status on next run', async function () {
@@ -361,7 +391,7 @@ describe('Test blocklist subscriptions', function () {
     })
 
     after(async function () {
-      await cleanupTests([ server2 ])
+      await cleanupTests([ server2, server3 ])
     })
   })
 

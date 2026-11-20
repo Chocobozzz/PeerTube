@@ -8,11 +8,15 @@ import {
 } from '@peertube/peertube-models'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
+import { buildBlockedAccountSQL } from '@server/models/shared/sql/common-helpers.js'
 import { buildServerIdsFollowedBy } from '@server/models/shared/index.js'
 import { Sequelize } from 'sequelize'
 import { VideoChannelTableAttributes } from './video-channel-table-attributes.js'
 
 export interface ListVideoChannelsOptions extends AbstractListQueryOptions {
+  // Exclude accounts muted by these accounts (and accounts of servers they muted)
+  blockerAccountIds?: number[]
+
   actorId?: number
   search?: string
   host?: string
@@ -145,6 +149,11 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
       }
     } else {
       this.subQueryAttributes.push('0 as similarity')
+    }
+
+    // Accounts muted by the platform or by the user, and accounts of muted servers
+    if (this.options.blockerAccountIds && this.options.blockerAccountIds.length !== 0) {
+      where.push(`"VideoChannelModel"."accountId" NOT IN (${buildBlockedAccountSQL(this.options.blockerAccountIds)})`)
     }
 
     if (where.length !== 0) {

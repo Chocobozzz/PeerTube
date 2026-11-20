@@ -299,7 +299,10 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
   }
 
   static searchForApi (
-    options: Pick<ListVideoPlaylistsOptions, 'followerActorId' | 'search' | 'host' | 'uuids' | 'start' | 'count' | 'sort'>
+    options: Pick<
+      ListVideoPlaylistsOptions,
+      'followerActorId' | 'search' | 'host' | 'uuids' | 'start' | 'count' | 'sort' | 'blockerAccountIds'
+    >
   ) {
     return VideoPlaylistModel.listForApi({
       ...options,
@@ -507,6 +510,16 @@ export class VideoPlaylistModel extends SequelizeModel<VideoPlaylistModel> {
     return VideoPlaylistModel
       .scope([ ScopeNames.WITH_ACCOUNT_AND_CHANNEL, ScopeNames.WITH_VIDEOS_LENGTH, ScopeNames.WITH_THUMBNAIL ])
       .findOne(query)
+  }
+
+  static loadByUrl (url: string): Promise<MVideoPlaylist> {
+    const query = {
+      where: {
+        url
+      }
+    }
+
+    return VideoPlaylistModel.findOne(query)
   }
 
   static loadByUrlAndPopulateAccount (url: string): Promise<MVideoPlaylistAccountThumbnail> {

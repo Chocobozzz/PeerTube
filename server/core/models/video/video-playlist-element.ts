@@ -392,15 +392,21 @@ export class VideoPlaylistElementModel extends SequelizeModel<VideoPlaylistEleme
     // Owned video, don't filter it
     if (accountId && video.VideoChannel.Account.id === accountId) return VideoPlaylistElementType.REGULAR
 
-    // Internal video?
-    if (video.privacy === VideoPrivacy.INTERNAL && accountId) return VideoPlaylistElementType.REGULAR
+    const isUnavailable = video.isBlacklisted() || video.isBlocked()
+
+    // Internal video? A blocked internal video must not be visible to logged in users
+    if (video.privacy === VideoPrivacy.INTERNAL && accountId) {
+      return isUnavailable
+        ? VideoPlaylistElementType.UNAVAILABLE
+        : VideoPlaylistElementType.REGULAR
+    }
 
     // Private, internal and password protected videos cannot be read without appropriate access (ownership, internal)
     if (PROTECTED_VIDEO_PRIVACIES.has(video.privacy)) {
       return VideoPlaylistElementType.PRIVATE
     }
 
-    if (video.isBlacklisted() || video.isBlocked()) return VideoPlaylistElementType.UNAVAILABLE
+    if (isUnavailable) return VideoPlaylistElementType.UNAVAILABLE
 
     return VideoPlaylistElementType.REGULAR
   }

@@ -90,9 +90,12 @@ async function searchVideoPlaylistsIndex (query: VideoPlaylistsSearchQueryAfterS
 
 async function searchVideoPlaylistsDB (query: VideoPlaylistsSearchQueryAfterSanitize, res: express.Response) {
   const serverActor = await getServerActor()
+  const user = res.locals.oauth?.token.User
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
+
+    blockerAccountIds: [ serverActor.Account.id, user?.Account.id ].filter(id => !!id),
 
     followerActorId: serverActor.id
   }, 'filter:api.search.video-playlists.local.list.params')

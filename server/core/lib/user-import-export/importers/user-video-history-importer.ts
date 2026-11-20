@@ -1,7 +1,6 @@
 import { pick } from '@peertube/peertube-core-utils'
 import { UserVideoHistoryExportJSON } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
-import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
 import { UserVideoHistoryModel } from '@server/models/user/user-video-history.js'
 import { AbstractUserImporter } from './abstract-user-importer.js'
 
@@ -25,7 +24,7 @@ export class UserVideoHistoryImporter
     if (!this.user.videosHistoryEnabled) return { duplicate: false }
 
     const videoUrl = data.videoUrl
-    const videoImmutable = await loadOrCreateVideoIfAllowedForUser(videoUrl)
+    const videoImmutable = await this.loadOrCreateVideoIfAllowed(videoUrl)
 
     if (!videoImmutable) {
       throw new Error(`Cannot get or create video ${videoUrl} to import user history`)

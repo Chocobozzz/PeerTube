@@ -1,4 +1,3 @@
-import { CONFIG } from '@server/initializers/config.js'
 import { VideoModel } from '@server/models/video/video.js'
 import {
   MVideoAP,
@@ -11,7 +10,6 @@ import {
   MVideoWithBlacklist,
   MVideoWithRights
 } from '@server/types/models/index.js'
-import { getOrCreateAPVideo } from '../activitypub/videos/get.js'
 
 type VideoLoadType =
   | 'for-api'
@@ -79,26 +77,7 @@ function loadVideoByUrl (
   if (fetchType === 'with-blacklist') return VideoModel.loadByUrlWithBlacklist(url)
 }
 
-async function loadOrCreateVideoIfAllowedForUser (videoUrl: string) {
-  if (CONFIG.SEARCH.REMOTE_URI.USERS) {
-    try {
-      const res = await getOrCreateAPVideo({
-        videoObject: videoUrl,
-        fetchType: 'unsafe-immutable-only',
-        allowRefresh: false
-      })
-
-      return res?.video
-    } catch {
-      return undefined
-    }
-  }
-
-  return VideoModel.loadByUrlImmutableAttributes(videoUrl)
-}
-
 export {
-  loadOrCreateVideoIfAllowedForUser,
   loadVideo,
   loadVideoByUrl,
   type VideoLoadByUrlType,

@@ -1,12 +1,16 @@
 import { ActorImageType, VideoChannelCollaboratorState, VideoPlaylistPrivacy, VideoPlaylistType_Type } from '@peertube/peertube-models'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
+import { buildBlockedAccountSQL } from '@server/models/shared/sql/common-helpers.js'
 import { buildServerIdsFollowedBy, getPlaylistSort } from '@server/models/shared/index.js'
 import { buildLikeSearch, canUseLikeSearch, truncateSearch } from '@server/models/shared/query.js'
 import { Sequelize } from 'sequelize'
 import { VideoPlaylistTableAttributes } from './video-playlist-table-attributes.js'
 
 export interface ListVideoPlaylistsOptions extends AbstractListQueryOptions {
+  // Exclude accounts muted by these accounts (and accounts of servers they muted)
+  blockerAccountIds?: number[]
+
   followerActorId?: number
   type?: VideoPlaylistType_Type
 
@@ -155,6 +159,11 @@ export class VideoPlaylistListQueryBuilder extends AbstractListQuery {
       where.push(`(${match})`)
     } else {
       this.subQueryAttributes.push('0 as similarity')
+    }
+
+    // Accounts muted by the platform or by the user, and accounts of muted servers
+    if (this.options.blockerAccountIds && this.options.blockerAccountIds.length !== 0) {
+      where.push(`"VideoPlaylistModel"."ownerAccountId" NOT IN (${buildBlockedAccountSQL(this.options.blockerAccountIds)})`)
     }
 
     if (where.length !== 0) {

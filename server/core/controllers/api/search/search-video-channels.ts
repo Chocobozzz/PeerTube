@@ -98,9 +98,12 @@ async function searchVideoChannelsIndex (query: VideoChannelsSearchQueryAfterSan
 
 async function searchVideoChannelsDB (query: VideoChannelsSearchQueryAfterSanitize, res: express.Response) {
   const serverActor = await getServerActor()
+  const user = res.locals.oauth?.token.User
 
   const apiOptions = await Hooks.wrapObject({
     ...query,
+
+    blockerAccountIds: [ serverActor.Account.id, user?.Account.id ].filter(id => !!id),
 
     actorId: serverActor.id
   }, 'filter:api.search.video-channels.local.list.params')

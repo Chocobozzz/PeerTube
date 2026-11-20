@@ -16,7 +16,6 @@ import { createLogger } from '@server/helpers/logger.js'
 import { CONSTRAINTS_FIELDS, USER_IMPORT } from '@server/initializers/constants.js'
 import { sendCreateVideoPlaylist } from '@server/lib/activitypub/send/send-create.js'
 import { getLocalVideoPlaylistActivityPubUrl, getLocalVideoPlaylistElementActivityPubUrl } from '@server/lib/activitypub/url.js'
-import { loadOrCreateVideoIfAllowedForUser } from '@server/lib/model-loaders/video.js'
 import { createLocalPlaylistThumbnailsFromImage } from '@server/lib/thumbnail.js'
 import { generateThumbnailForPlaylistIfNeeded } from '@server/lib/video-playlist.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
@@ -134,7 +133,7 @@ export class VideoPlaylistsImporter extends AbstractUserImporter<VideoPlaylistsE
     const elementsToCreate: { videoId: number, startTimestamp: number, stopTimestamp: number }[] = []
 
     for (const element of playlistImportData.elements.slice(0, USER_IMPORT.MAX_PLAYLIST_ELEMENTS)) {
-      const video = await loadOrCreateVideoIfAllowedForUser(element.videoUrl)
+      const video = await this.loadOrCreateVideoIfAllowed(element.videoUrl)
 
       if (!video) {
         logger.debug(`Cannot get or create video ${element.videoUrl} to create playlist element in user import`)
