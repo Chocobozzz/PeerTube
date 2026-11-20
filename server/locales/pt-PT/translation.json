@@ -236,6 +236,7 @@
   "Refused local video file": "Ficheiro de vídeo local recusado",
   "Refused to import video": "Recusaram-se a importar o vídeo",
   "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.": "A recusar bypass de autenticação externa para plugin {pluginName}: {email} já está vinculado a um id externo diferente.",
+  "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.": "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.",
   "Refusing external auth bypass: {email} is already used by another account.": "Recusa de contorno de autenticação externa: {email} já está a ser utilizado por outra conta.",
   "Registration approval for this account has been rejected": "Aprovação rejeitada para o registo desta conta",
   "Registration for this account is awaiting approval": "O registo desta conta está a aguardar aprovação",

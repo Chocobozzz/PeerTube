@@ -252,7 +252,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/> </source>
+        <source>
+          <x id="INTERPOLATION"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -1416,11 +1418,8 @@
       <trans-unit id="3267631941074558910" datatype="html" xml:space="preserve">
         <source>Cannot fetch information of this remote account</source>
         <target state="translated">No es pot recuperar la informació d'aquest compte remot</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">67</context></context-group></trans-unit>
       <trans-unit id="9081463435738465430" datatype="html" xml:space="preserve">
         <source>Blocked</source>
         <target state="translated">Blocat</target>
@@ -3366,11 +3365,8 @@
 The link will expire within 1 hour.</source>
         <target state="translated">S'enviarà un correu amb les instruccions per restablir la contrasenya a <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
 L'enllaç caducarà al cap d'una hora.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">195</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">196</context></context-group></trans-unit>
       <trans-unit id="4768749765465246664" xml:space="preserve">
         <source>Email</source>
         <target state="translated">Adreça electrònica</target>
@@ -24691,51 +24687,36 @@ Assegureu-vos que heu configurat correctament PeerTube (directori config/), en p
       <trans-unit id="1266887509445371246" datatype="html" xml:space="preserve">
         <source>Incorrect username or password.</source>
         <target state="translated">Identificador o contrasenya incorrectes.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">259</context></context-group></trans-unit>
       <trans-unit id="6974874606619467663" datatype="html" xml:space="preserve">
         <source>Your account is blocked.</source>
         <target state="translated">El vostre compte està blocat.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">262</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">264</context></context-group></trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">Aquest compte està pendent d'aprovació de la moderació.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">267</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">269</context></context-group></trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">S'ha rebutjat l'aprovació del registre per a aquest compte.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">272</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">274</context></context-group></trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
         <source>Invalid two-factor authentication token.</source>
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html" xml:space="preserve">
         <source>Your current password is too long. Please reset it.</source>
         <target state="translated">La contrasenya actual és massa llarga. Si us plau, restabliu-la.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">282</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">284</context></context-group></trans-unit>
       <trans-unit id="4467323362722952678" datatype="html" xml:space="preserve">
         <source>Unknown</source>
         <target state="translated">Desconegut</target>

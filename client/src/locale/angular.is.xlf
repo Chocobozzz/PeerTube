@@ -9939,7 +9939,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Tölvupóstur var sendur með leiðbeiningum varðandi endurstillingu lykilorðs var sendur til <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Tengillinn rennur út innan 1 klukkustundar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1266887509445371246" datatype="html">
@@ -9947,7 +9947,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Rangt notandanafn eða lykilorð.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -9955,7 +9955,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Aðgangurinn þinn er útilokaður.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
@@ -9963,7 +9963,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Þessi aðgangur bíður samþykkis umsjónaraðila.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
@@ -9971,7 +9971,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Samþykkt skráningar hefur verið hafnað fyrir þennan aðgang.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
@@ -9979,7 +9979,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html">
@@ -9987,7 +9987,7 @@ The link will expire within 1 hour.</source>
         <target state="new">Your current password is too long. Please reset it.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">284</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7418836785553125957" datatype="html">
@@ -28383,7 +28383,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Tekst ekki að sækja upplýsingar af þessum fjartengda aðgangi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1144407473317535723" datatype="html">

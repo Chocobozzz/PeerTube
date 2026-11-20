@@ -1349,7 +1349,7 @@
         <source>Cannot fetch information of this remote account</source>
         <target state="translated">원격 계정의 정보를 불러올 수 없습니다</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">67</context></context-group></trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
         <source>Blocked</source>
         <target state="translated">차단함</target>
@@ -3108,7 +3108,7 @@
 The link will expire within 1 hour.</source>
         <target state="translated">비밀번호 재설정 안내 이메일이 <x id="PH" equiv-text="this.forgotPasswordEmail"/> 으로 발송되며 해당 링크는 1시간 이내에 만료됩니다</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">195</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">196</context></context-group></trans-unit>
       <trans-unit id="4768749765465246664">
         <source>Email</source>
         <target>이메일</target>
@@ -19485,35 +19485,35 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Incorrect username or password.</source>
         <target state="translated">유저명 또는 비밀번호가 올바르지 않습니다</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">257</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">259</context></context-group></trans-unit>
       <trans-unit id="6974874606619467663" datatype="html" xml:space="preserve">
         <source>Your account is blocked.</source>
         <target state="translated">계정이 차단되었습니다</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">262</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">264</context></context-group></trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">이 계정은 모더레이터의 승인을 기다리고 있습니다</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">267</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">269</context></context-group></trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">이 계정의 가입 승인이 거부되었습니다</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">272</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">274</context></context-group></trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
         <source>Invalid two-factor authentication token.</source>
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html" xml:space="preserve">
         <source>Your current password is too long. Please reset it.</source>
         <target state="translated">현재 비밀번호가 너무 깁니다. 비밀번호를 재설정해 주세요.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">282</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">284</context></context-group></trans-unit>
       <trans-unit id="4467323362722952678" datatype="html" xml:space="preserve">
         <source>Unknown</source>
         <target state="translated">알 수 없음</target>

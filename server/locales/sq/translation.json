@@ -236,6 +236,7 @@
   "Refused local video file": "U hodh poshtë kartelë videoje vendore",
   "Refused to import video": "S’pranoi të importojë video",
   "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.": "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.",
+  "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.": "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.",
   "Refusing external auth bypass: {email} is already used by another account.": "Refusing external auth bypass: {email} is already used by another account.",
   "Registration approval for this account has been rejected": "Regjistrimi për këtë llogari është hedhur poshtë",
   "Registration for this account is awaiting approval": "Regjistrimi për këtë llogari po pret miratimin",

@@ -4766,41 +4766,142 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
           <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7022070615528435141" datatype="html"><source>Delete</source><target/>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">72</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context><context context-type="linenumber">132</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context><context context-type="linenumber">64</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context><context context-type="linenumber">63</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context><context context-type="linenumber">175</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context><context context-type="linenumber">234</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">144</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context><context context-type="linenumber">251</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">253</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">496</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context><context context-type="linenumber">549</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context><context context-type="linenumber">100</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context><context context-type="linenumber">110</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context><context context-type="linenumber">170</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context><context context-type="linenumber">67</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context><context context-type="linenumber">76</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context><context context-type="linenumber">146</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context><context context-type="linenumber">146</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">298</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context><context context-type="linenumber">337</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context><context context-type="linenumber">306</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context><context context-type="linenumber">246</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context><context context-type="linenumber">526</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">518</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">678</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context><context context-type="linenumber">705</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-main/channel/video-channel.service.ts</context><context context-type="linenumber">111</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context><context context-type="linenumber">414</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context><context context-type="linenumber">644</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.ts</context><context context-type="linenumber">86</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context><context context-type="linenumber">50</context></context-group></trans-unit>
+      <trans-unit id="7022070615528435141" datatype="html">
+        <source>Delete</source>
+        <target/>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
+          <context context-type="linenumber">64</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-blocklist-subscriptions.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/registration-list/registration-list.component.ts</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
+          <context context-type="linenumber">234</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
+          <context context-type="linenumber">144</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/overview/users/user-list/user-list.component.ts</context>
+          <context context-type="linenumber">251</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
+          <context context-type="linenumber">253</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
+          <context context-type="linenumber">496</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/overview/videos/video-list.component.ts</context>
+          <context context-type="linenumber">549</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/audit-logs/audit-log-list.component.ts</context>
+          <context context-type="linenumber">100</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/system/runners/runner-job-list/runner-job-list.component.ts</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-edit-general.component.html</context>
+          <context context-type="linenumber">170</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/+my-video-channels/edit/pages/video-channel-editors.component.ts</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-channel-syncs/my-video-channel-syncs.component.ts</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlist-elements.component.ts</context>
+          <context context-type="linenumber">146</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-video-playlists/my-video-playlists.component.ts</context>
+          <context context-type="linenumber">146</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
+          <context context-type="linenumber">298</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+my-library/my-videos/my-videos.component.ts</context>
+          <context context-type="linenumber">337</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+video-watch/shared/comment/video-comments.component.ts</context>
+          <context context-type="linenumber">306</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.html</context>
+          <context context-type="linenumber">246</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/main-info/video-main-info.component.ts</context>
+          <context context-type="linenumber">526</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">518</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">678</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-abuse-list/abuse-list-table.component.ts</context>
+          <context context-type="linenumber">705</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/buttons/delete-button.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-main/channel/video-channel.service.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-comment/video-comment-list-admin-owner.component.ts</context>
+          <context context-type="linenumber">414</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
+          <context context-type="linenumber">644</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-list-admin-owner.component.ts</context>
+          <context context-type="linenumber">86</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/shared-watched-words/watched-words-subscriptions-admin-owner.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3145156821099755377" datatype="html">
         <source>Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</source>
         <target state="new">Accepted {count, plural, =1 {<x id="followerName"/> follow request} other {<x id="count"/> follow requests}}</target>
@@ -8602,7 +8703,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Cannot fetch information of this remote account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1000724328916033777" datatype="html">
@@ -8893,7 +8994,7 @@ The link will expire within 1 hour.</source>
 The link will expire within 1 hour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1266887509445371246" datatype="html">
@@ -8901,7 +9002,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Incorrect username or password.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -8909,7 +9010,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Your account is blocked.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
@@ -8917,7 +9018,7 @@ The link will expire within 1 hour.</target>
         <target state="new">This account is awaiting approval by moderators.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
@@ -8925,7 +9026,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Registration approval has been rejected for this account.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
@@ -8933,7 +9034,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html">
@@ -8941,7 +9042,7 @@ The link will expire within 1 hour.</target>
         <target state="new">Your current password is too long. Please reset it.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">284</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5302915360176176604" datatype="html">

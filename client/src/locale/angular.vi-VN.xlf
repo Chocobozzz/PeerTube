@@ -252,7 +252,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/> </source>
+        <source>
+          <x id="INTERPOLATION"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -1418,7 +1420,7 @@
         <target state="translated">Không thể lấy thông tin của tài khoản liên hợp này</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
@@ -3368,11 +3370,8 @@
 The link will expire within 1 hour.</source>
         <target state="translated">Một email có link đặt lại mật khẩu sẽ được gửi đến <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
 Link hết hạn sau 1 giờ.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">195</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">196</context></context-group></trans-unit>
       <trans-unit id="4768749765465246664">
         <source>Email</source>
         <target>Email</target>
@@ -17483,7 +17482,9 @@ Link hết hạn sau 1 giờ.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
+        <source>
+          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
+        </source>
         <target state="translated">
           <x id="ICU" xid="8553183884518584864" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} video}}"/>
         </target>
@@ -24577,7 +24578,8 @@ Link hết hạn sau 1 giờ.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="translated">Không thể truy xuất thông tin đăng nhập ứng dụng khách OAuth: <x id="PH" equiv-text="err.text"/>. Hãy chắc rằng bạn đã cấu hình đúng PeerTube (config/ directory), đặc biệt là phần "webserver".</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -24661,7 +24663,7 @@ Link hết hạn sau 1 giờ.</target>
         <target state="translated">Sai tên hoặc mật khẩu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -24669,7 +24671,7 @@ Link hết hạn sau 1 giờ.</target>
         <target state="translated">Tài khoản của bạn đã bị khóa.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
@@ -24677,7 +24679,7 @@ Link hết hạn sau 1 giờ.</target>
         <target state="translated">Tài khoản này đang chờ phê duyệt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
@@ -24685,7 +24687,7 @@ Link hết hạn sau 1 giờ.</target>
         <target state="translated">Phê duyệt đăng ký đã bị từ chối cho tài khoản này.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
@@ -24693,17 +24695,14 @@ Link hết hạn sau 1 giờ.</target>
         <target state="translated">Mã xác thực hai yếu tố không hợp lệ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html" xml:space="preserve">
         <source>Your current password is too long. Please reset it.</source>
         <target state="translated">Mật khẩu hiện tại của bạn quá dài. Vui lòng đặt lại mật khẩu.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">282</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">284</context></context-group></trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
         <source>Unknown</source>
         <target state="translated">—</target>
@@ -25021,7 +25020,10 @@ Link hết hạn sau 1 giờ.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
+          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" xid="3148804384763272950" equiv-text="{pagination.totalItems, plural, =1 {kết quả} other {kết quả}}"/>
@@ -30707,7 +30709,9 @@ Link hết hạn sau 1 giờ.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>

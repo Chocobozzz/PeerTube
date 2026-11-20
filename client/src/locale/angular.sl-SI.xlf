@@ -148,7 +148,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="nd so on.    *"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
+        </source>
         <target state="new">
           <x id="INTERPOLATION" equiv-text="nd so on.    *"/>
         </target>
@@ -254,7 +256,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM" datatype="html">
-        <source><x id="INTERPOLATION"/> </source>
+        <source>
+          <x id="INTERPOLATION"/>
+        </source>
         <target state="translated">
           <x id="INTERPOLATION"/>
         </target>
@@ -1426,7 +1430,7 @@
         <target state="new">Cannot fetch information of this remote account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
@@ -3385,12 +3389,13 @@
         </context-group>
       </trans-unit>
       <trans-unit id="1190256911880544559" datatype="html">
-        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>. The link will expire within 1 hour.</source>
+        <source>An email with the reset password instructions will be sent to <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
+The link will expire within 1 hour.</source>
         <target state="new">An email with the reset password instructions will be sent to <x id="PH"/>.
 The link will expire within 1 hour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
@@ -6214,7 +6219,7 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="4784303436041135088" datatype="html">
-        <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/> ✔</source>
+        <source>Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</source>
         <target state="new">Uploaded on <x id="INTERPOLATION" equiv-text="{{ videoCaption.updatedAt | ptDate }}"/>	✔</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+videos-publish-manage/shared-manage/captions/video-captions.component.html</context>
@@ -15003,7 +15008,13 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="7396819983420487866" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/> #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/> color: red; <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/> <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
+        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Prepend with <x id="START_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;em&gt;"/>#custom-css<x id="CLOSE_EMPHASISED_TEXT" ctype="x-em" equiv-text="&lt;/em&gt;"/> to override styles. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css .logged-in-email <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
+  color: red;
+  <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
+  <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/></source>
         <target state="new"><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p class=&quot;mb-2&quot;&gt;"/>Write CSS code directly. Example:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>  #custom-css <x id="INTERPOLATION" equiv-text="{{ '{' }}"/>
   color: red;
   <x id="INTERPOLATION_1" equiv-text="{{ '}' }}"/>
@@ -17550,7 +17561,9 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="8856905278208146821" datatype="html">
-        <source><x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/> </source>
+        <source>
+          <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =0 {No videos} =1 {1 video} other {{{ getTotalVideosOf(videoChannel) }} videos}}" xid="1730926218636655979"/>
+        </source>
         <target state="new">
           <x id="ICU" equiv-text="{getTotalVideosOf(videoChannel), plural, =1 {1 videos} other {{{ getTotalVideosOf(videoChannel) }} videos}}"/>
         </target>
@@ -24708,7 +24721,8 @@ The link will expire within 1 hour.</target>
         </context-group>
       </trans-unit>
       <trans-unit id="2013324644839511073" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>. Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
+        <source>Cannot retrieve OAuth Client credentials: <x id="PH" equiv-text="err.message"/>.
+Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
         <target state="new">Cannot retrieve OAuth Client credentials: <x id="PH"/>.
 Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
         <context-group purpose="location">
@@ -24793,7 +24807,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Incorrect username or password.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -24801,7 +24815,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Your account is blocked.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
@@ -24809,7 +24823,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">This account is awaiting approval by moderators.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
@@ -24817,7 +24831,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Registration approval has been rejected for this account.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
@@ -24825,7 +24839,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html">
@@ -24833,7 +24847,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Your current password is too long. Please reset it.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">284</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
@@ -25153,7 +25167,10 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="7804724824750282316" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/> <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ subscriptionsPagination.totalItems }}"/>
+          <x id="ICU" equiv-text="{subscriptionsPagination.totalItems, plural, =1 {subscription} other {subscriptions}}" xid="2781455366919684095"/>
+        </source>
         <target state="new">
           <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/>
           <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {result} other {results}}"/>
@@ -30880,7 +30897,9 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         </context-group>
       </trans-unit>
       <trans-unit id="187187500641108332" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/> </source>
+        <source>
+          <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
+        </source>
         <target state="new">
           <x id="INTERPOLATION" equiv-text="{{ noResultMessage }}"/>
         </target>

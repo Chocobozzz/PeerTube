@@ -236,6 +236,7 @@
   "Refused local video file": "Απορρίφθηκε το τοπικό αρχείο βίντεο",
   "Refused to import video": "Απορρίφθηκε η εισαγωγή βίντεο",
   "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.": "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.",
+  "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.": "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.",
   "Refusing external auth bypass: {email} is already used by another account.": "Refusing external auth bypass: {email} is already used by another account.",
   "Registration approval for this account has been rejected": "Η αίτηση εγγραφής για αυτόν τον λογαριασμό απορρίφθηκε",
   "Registration for this account is awaiting approval": "Η εγγραφή αυτού του λογαριασμού βρίσκεται σε αναμονή έγκρισης",

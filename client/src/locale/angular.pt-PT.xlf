@@ -1334,7 +1334,7 @@
         <target state="translated">Não foi possível obter informação desta conta externa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
@@ -3151,7 +3151,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">Será enviado um e-mail com as instruções de redefinição da palavra-passe para <x id="PH" equiv-text="this.forgotPasswordEmail"/>.
 A ligação expira no prazo de 1 hora.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">195</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">196</context></context-group></trans-unit>
       <trans-unit id="4768749765465246664">
         <source>Email</source>
         <target>Correio eletrónico</target>
@@ -22326,34 +22326,34 @@ Certifique-se de ter configurado corretamente o PeerTube (pasta config/), em par
         <target>Nome de usuário ou senha incorretos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html" xml:space="preserve">
         <source>Your account is blocked.</source>
         <target state="translated">A sua conta está bloqueada.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">262</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">264</context></context-group></trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">Esta conta aguarda aprovação dos moderadores.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">267</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">269</context></context-group></trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">A aprovação do registo para esta conta foi rejeitada.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">272</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">274</context></context-group></trans-unit>
       <trans-unit id="4130181333601357805" datatype="html" xml:space="preserve">
         <source>Invalid two-factor authentication token.</source>
         <target state="translated">Token de autenticação de dois fatores inválido.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">277</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">279</context></context-group></trans-unit>
       <trans-unit id="5768110395382587657" datatype="html" xml:space="preserve">
         <source>Your current password is too long. Please reset it.</source>
         <target state="translated">A sua senha atual é muito longa. Por favor, redefina-a.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">282</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">284</context></context-group></trans-unit>
       <trans-unit id="4467323362722952678" datatype="html" xml:space="preserve">
         <source>Unknown</source>
         <target state="translated">Desconhecido</target>

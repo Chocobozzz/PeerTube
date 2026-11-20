@@ -236,6 +236,7 @@
   "Refused local video file": "Отказанный локальный файл видео",
   "Refused to import video": "Отказанные к импорту видео",
   "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.": "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.",
+  "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.": "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.",
   "Refusing external auth bypass: {email} is already used by another account.": "Refusing external auth bypass: {email} is already used by another account.",
   "Registration approval for this account has been rejected": "Подтверждение регистрации данной учетной записи отклонено",
   "Registration for this account is awaiting approval": "Регистрация этой учетной записи ожидает подтверждения",

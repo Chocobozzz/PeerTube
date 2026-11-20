@@ -236,6 +236,7 @@
   "Refused local video file": "Bideo-fitxategi lokala baztertu da",
   "Refused to import video": "Bideoa inportatzeari uko egin zaio",
   "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.": "{pluginName} pluginaren kanpoko autentifikazioaren saihesbidea baztertu da: {email} beste kanpoko ID bati lotuta dago jada.",
+  "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.": "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.",
   "Refusing external auth bypass: {email} is already used by another account.": "Kanpoko autentifikazioaren saihesbidea baztertu da: {email} beste kontu batek erabiltzen du jada.",
   "Registration approval for this account has been rejected": "Kontu honen izen-ematearen onarpena baztertu da",
   "Registration for this account is awaiting approval": "Kontu honen izen-ematea onarpenaren zain dago",

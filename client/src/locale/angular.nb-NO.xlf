@@ -1361,7 +1361,7 @@
         <target state="translated">Kan ikke hente informasjon om denne eksterne kontoen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
@@ -3025,7 +3025,7 @@ The link will expire within 1 hour.</source>
         <target state="translated">En e-post med instruksjonene for tilbakestilling av passord vil bli sendt til <x id="PH" equiv-text="this.forgotPasswordEmail"/>. Lenken utløper innen 1 time.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664" datatype="html">
@@ -23083,7 +23083,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Feil brukernavn eller passord.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -23091,25 +23091,25 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="translated">Kontoen din er blokkert.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">Denne kontoen venter på godkjenning fra moderatorer.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">267</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">269</context></context-group></trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">Registreringsgodkjenning er avvist for denne kontoen.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">272</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">274</context></context-group></trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
         <source>Invalid two-factor authentication token.</source>
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html">
@@ -23117,7 +23117,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Your current password is too long. Please reset it.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">284</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">

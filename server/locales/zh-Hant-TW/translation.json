@@ -236,6 +236,7 @@
   "Refused local video file": "拒絕本機影片檔",
   "Refused to import video": "拒絕匯入影片",
   "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.": "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.",
+  "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.": "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.",
   "Refusing external auth bypass: {email} is already used by another account.": "Refusing external auth bypass: {email} is already used by another account.",
   "Registration approval for this account has been rejected": "此帳號的註冊申請已被拒絕",
   "Registration for this account is awaiting approval": "此帳號的註冊申請正在等待核准",

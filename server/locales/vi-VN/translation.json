@@ -236,6 +236,7 @@
   "Refused local video file": "Tệp video cục bộ bị từ chối",
   "Refused to import video": "Từ chối nhập video",
   "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.": "Refusing external auth bypass for plugin {pluginName}: {email} is already linked to a different external id.",
+  "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.": "Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.",
   "Refusing external auth bypass: {email} is already used by another account.": "Refusing external auth bypass: {email} is already used by another account.",
   "Registration approval for this account has been rejected": "Yêu cầu đăng ký tài khoản này đã bị từ chối",
   "Registration for this account is awaiting approval": "Việc đăng ký tài khoản này đang chờ được phê duyệt",

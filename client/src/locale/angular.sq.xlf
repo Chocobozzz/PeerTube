@@ -7163,7 +7163,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <source>Cannot fetch information of this remote account</source>
         <target state="translated">Nuk sillet dot informacion i kësaj llogarie të largët</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context><context context-type="linenumber">67</context></context-group></trans-unit>
       <trans-unit id="1000724328916033777" datatype="html" xml:space="preserve">
         <source>Multiple ways to subscribe to the current channel</source>
         <target state="translated">Rrugë të shumta për t’u pajtuar te kanali i tanishëm</target>
@@ -7405,40 +7405,40 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 The link will expire within 1 hour.</source>
         <target state="translated">Te <x id="PH" equiv-text="this.forgotPasswordEmail"/> do të dërgohet një email me udhëzime ricaktimi fjalëkalimi. Lidhja do të skadojë pas 1 ore.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">195</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">196</context></context-group></trans-unit>
       <trans-unit id="1266887509445371246" datatype="html" xml:space="preserve">
         <source>Incorrect username or password.</source>
         <target state="translated">Emër përdoruesi ose fjalëkalim i pasaktë.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">257</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">259</context></context-group></trans-unit>
       <trans-unit id="6974874606619467663" datatype="html" xml:space="preserve">
         <source>Your account is blocked.</source>
         <target state="translated">Llogaria juaj u bllokua.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">262</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">264</context></context-group></trans-unit>
       <trans-unit id="4713046508117369963" datatype="html" xml:space="preserve">
         <source>This account is awaiting approval by moderators.</source>
         <target state="translated">Kjo llogari po pret miratimin nga moderatorët.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">267</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">269</context></context-group></trans-unit>
       <trans-unit id="5751810538002251535" datatype="html" xml:space="preserve">
         <source>Registration approval has been rejected for this account.</source>
         <target state="translated">Për këtë llogari është hedhur poshtë miratimi i regjistrimit.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">272</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">274</context></context-group></trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
         <source>Invalid two-factor authentication token.</source>
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html" xml:space="preserve">
         <source>Your current password is too long. Please reset it.</source>
         <target state="translated">Fjalëkalimi juaj i tanishëm është shumë i gjatë. Ju lutemi, ricaktoheni.</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">282</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.ts</context><context context-type="linenumber">284</context></context-group></trans-unit>
       <trans-unit id="5302915360176176604" datatype="html" xml:space="preserve">
         <source>SUBSCRIPTION FEED</source>
         <target state="translated">PRURJE PAJTIMI</target>

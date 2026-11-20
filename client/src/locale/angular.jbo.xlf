@@ -1432,7 +1432,7 @@
         <target state="new">Cannot fetch information of this remote account</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/remote-subscribe.component.ts</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9081463435738465430" datatype="html">
@@ -3401,7 +3401,7 @@ The link will expire within 1 hour.</source>
 The link will expire within 1 hour.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4768749765465246664">
@@ -24854,7 +24854,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Incorrect username or password.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">257</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6974874606619467663" datatype="html">
@@ -24862,7 +24862,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Your account is blocked.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">262</context>
+          <context context-type="linenumber">264</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4713046508117369963" datatype="html">
@@ -24870,7 +24870,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">This account is awaiting approval by moderators.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">267</context>
+          <context context-type="linenumber">269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5751810538002251535" datatype="html">
@@ -24878,7 +24878,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Registration approval has been rejected for this account.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">272</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4130181333601357805" datatype="html">
@@ -24886,7 +24886,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Invalid two-factor authentication token.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">277</context>
+          <context context-type="linenumber">279</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5768110395382587657" datatype="html">
@@ -24894,7 +24894,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
         <target state="new">Your current password is too long. Please reset it.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
-          <context context-type="linenumber">282</context>
+          <context context-type="linenumber">284</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4467323362722952678" datatype="html">
