@@ -259,6 +259,10 @@ export const videoCommentGetValidator = [
     if (!await doesVideoExist(req.params.videoId, res, 'with-blacklist')) return
 
     if (!canVideoBeFederated(res.locals.videoWithBlacklist)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    // Numeric ids can be enumerated: they must not reveal the URL of an unlisted video
+    if (res.locals.videoWithBlacklist.requiresUserAuth({ urlParamId: req.params.videoId, checkBlacklist: false })) {
+      return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    }
 
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.videoWithBlacklist, res)) return
 

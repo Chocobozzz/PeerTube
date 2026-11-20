@@ -8,7 +8,7 @@ import { MActorSignature } from '../../../types/models/index.js'
 import { Notifier } from '../../notifier/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { checkUrlsSameHost } from '../url.js'
-import { maybeGetOrCreateAPVideo } from '../videos/index.js'
+import { canVideoBeFederated, maybeGetOrCreateAPVideo } from '../videos/index.js'
 
 const logger = createLogger()
 
@@ -42,6 +42,12 @@ async function processVideoShare (actorAnnouncer: MActorSignature, activity: Act
 
   const { video, created: videoCreated } = await maybeGetOrCreateAPVideo({ videoObject: objectUri })
   if (!video) return
+
+  // Private, unlisted (if not federated) or blacklisted local videos are not known by remote instances
+  if (video.isLocal() && !canVideoBeFederated(video)) {
+    logger.debug('Ignoring announce %s of local video %s that cannot be federated.', activity.id, video.url)
+    return
+  }
 
   await runTransaction(async t => {
     // Add share entry

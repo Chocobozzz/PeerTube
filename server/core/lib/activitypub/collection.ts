@@ -1,8 +1,8 @@
-import validator from 'validator'
+import { forceNumber } from '@peertube/peertube-core-utils'
+import { ResultList } from '@peertube/peertube-models'
 import { pageToStartAndCount } from '@peertube/peertube-node-utils'
 import { ACTIVITY_PUB } from '@server/initializers/constants.js'
-import { ResultList } from '@peertube/peertube-models'
-import { forceNumber } from '@peertube/peertube-core-utils'
+import validator from 'validator'
 
 type ActivityPubCollectionPaginationHandler = (start: number, count: number) => Promise<ResultList<any>>
 
@@ -12,7 +12,7 @@ export async function activityPubCollectionPagination (
   page?: any,
   size = ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE
 ) {
-  if (!page || !validator.default.isInt(page)) {
+  if (!page || !validator.default.isInt(page + '', { min: 1, max: ACTIVITY_PUB.COLLECTION_MAX_PAGE })) {
     // We just display the first page URL, we only need the total items
     const result = await handler(0, 1)
 
@@ -55,7 +55,7 @@ export async function activityPubCollectionPagination (
   }
 }
 
-export function activityPubCollection <T> (baseUrl: string, items: T[]) {
+export function activityPubCollection<T> (baseUrl: string, items: T[]) {
   return {
     id: baseUrl,
     type: 'OrderedCollection' as 'OrderedCollection',

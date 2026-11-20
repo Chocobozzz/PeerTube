@@ -10,7 +10,9 @@ import {
   VideoObject,
   WatchActionObject
 } from '@peertube/peertube-models'
+import { isCreateActivityValid } from '@server/helpers/custom-validators/activitypub/activity.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import { isBlockedByServerOrAccount } from '@server/lib/blocklist.js'
 import { isRedundancyAccepted } from '@server/lib/redundancy.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
@@ -38,7 +40,29 @@ async function processCreateActivity (options: APProcessorOptions<ActivityCreate
 
   // Only notify if it is not from a fetcher job
   const notify = options.fromFetch !== true
+
+  if (typeof activity.object === 'string') {
+    // Known video: no need to fetch the object, getOrCreateAPVideo refreshes it if needed
+    if (await loadVideoByUrl(activity.object, 'unsafe-immutable-only')) {
+      return processCreateVideo(activity.object, notify)
+    }
+  }
+
   const activityObject = await fetchAPObjectIfNeeded<Exclude<ActivityObject, AbuseObject>>(activity.object)
+
+  // The object can be referenced by URL: check the fetched object
+  if (typeof activity.object === 'string') {
+    if (!isCreateActivityValid({ ...activity, object: activityObject })) {
+      logger.warn('Fetched object %s of create activity %s is invalid, skipping.', activity.object, activity.id)
+      return
+    }
+
+    if (checkUrlsSameHost(activityObject.id, activity.object) !== true) {
+      logger.warn('Fetched object id %s is not on the same host as URL %s, skipping.', activityObject.id, activity.object)
+      return
+    }
+  }
+
   const activityType = activityObject.type
 
   if (activityType === 'Video') {
@@ -89,7 +113,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateVideo (videoToCreateData: VideoObject, notify: boolean) {
+async function processCreateVideo (videoToCreateData: VideoObject | string, notify: boolean) {
   const syncParam = { rates: false, shares: false, comments: false, refreshVideo: false }
   const { video, created } = await getOrCreateAPVideo({ videoObject: videoToCreateData, syncParam })
 
@@ -131,8 +155,14 @@ async function processCreateWatchAction (watchAction: WatchActionObject, byActor
     return
   }
 
-  const video = await VideoModel.loadByUrl(watchAction.object)
+  const video = await VideoModel.loadByUrlWithBlacklist(watchAction.object)
   if (!video || video.remote) return
+
+  // Private, unlisted (if not federated) or blacklisted local videos are not known by remote instances
+  if (!canVideoBeFederated(video)) {
+    logger.debug('Ignoring watch action %s of local video %s that cannot be federated.', watchAction.id, video.url)
+    return
+  }
 
   await runTransaction(async t => {
     return createOrUpdateLocalVideoViewer(watchAction, video, t)

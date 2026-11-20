@@ -6,7 +6,7 @@ import { APProcessorOptions } from '../../../types/activitypub-processor.model.j
 import { MActorSignature, MVideo } from '../../../types/models/index.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { checkUrlsSameHost } from '../url.js'
-import { getOrCreateAPVideo } from '../videos/index.js'
+import { canVideoBeFederated, getOrCreateAPVideo } from '../videos/index.js'
 
 const logger = createLogger('ap', 'view')
 
@@ -38,6 +38,11 @@ async function processCreateView (activity: ActivityView, byActor: MActorSignatu
     fetchType: 'with-blacklist',
     allowRefresh: false
   })
+
+  if (video.isLocal() && !canVideoBeFederated(video)) {
+    logger.debug('Ignoring view %s of local video %s that cannot be federated.', activity.id, video.url)
+    return
+  }
 
   const isNew = await VideoStatsManager.Instance.processRemoteView({
     video,

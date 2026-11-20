@@ -25,6 +25,7 @@ import {
   setDefaultChannelAvatar,
   setDefaultVideoChannel
 } from '@peertube/peertube-server-commands'
+import { SQLCommand } from '@tests/shared/sql-command.js'
 import { processViewersStats } from '@tests/shared/views.js'
 import { expect } from 'chai'
 
@@ -256,7 +257,11 @@ describe('Test ActivityPub', function () {
     await servers[1].views.simulateViewer({ id: video.uuid, currentTimes: [ 0, 2 ] })
     await processViewersStats(servers)
 
-    const res = await makeActivityPubGetRequest(servers[1].url, '/videos/local-viewer/1', HttpStatusCode.OK_200)
+    const sqlCommand = new SQLCommand(servers[1])
+    const [ viewerUrl ] = await sqlCommand.listLocalVideoViewerUrls()
+    await sqlCommand.cleanup()
+
+    const res = await makeActivityPubGetRequest(servers[1].url, new URL(viewerUrl).pathname, HttpStatusCode.OK_200)
 
     const object: WatchActionObject = res.body
     expect(object.type).to.equal('WatchAction')
@@ -275,9 +280,19 @@ describe('Test ActivityPub', function () {
     await processViewersStats(servers)
 
     // servers[0] has stats received from servers[1] and stats of its local viewer
-    for (const id of [ 1, 2 ]) {
-      await makeActivityPubGetRequest(servers[0].url, '/videos/local-viewer/' + id, HttpStatusCode.NOT_FOUND_404)
+    const sqlCommand = new SQLCommand(servers[0])
+    const viewerUrls = await sqlCommand.listLocalVideoViewerUrls()
+    await sqlCommand.cleanup()
+
+    expect(viewerUrls).to.have.length.above(0)
+
+    for (const url of viewerUrls) {
+      await makeActivityPubGetRequest(servers[0].url, new URL(url).pathname, HttpStatusCode.NOT_FOUND_404)
     }
+  })
+
+  it('Should not return a watch action by its numeric id', async function () {
+    await makeActivityPubGetRequest(servers[1].url, '/videos/local-viewer/1', HttpStatusCode.BAD_REQUEST_400)
   })
 
   it('Should only return rates of public videos', async function () {
@@ -289,6 +304,21 @@ describe('Test ActivityPub', function () {
 
     await makeActivityPubGetRequest(servers[0].url, '/accounts/root/likes/' + privateVideo.id, HttpStatusCode.NOT_FOUND_404)
     await makeActivityPubGetRequest(servers[0].url, '/accounts/root/likes/' + unlistedVideo.id, HttpStatusCode.NOT_FOUND_404)
+  })
+
+  it('Should not expose announces and comments of a non public video by its numeric id', async function () {
+    const { id: commentId } = await servers[0].comments.createThread({ videoId: unlistedVideo.uuid, text: 'unlisted comment' })
+
+    await makeActivityPubGetRequest(servers[0].url, `/videos/watch/${unlistedVideo.uuid}/comments/${commentId}`, HttpStatusCode.OK_200)
+    await makeActivityPubGetRequest(servers[0].url, `/videos/watch/${unlistedVideo.id}/comments/${commentId}`, HttpStatusCode.NOT_FOUND_404)
+  })
+
+  it('Should return the first page of a collection with an invalid page', async function () {
+    for (const page of [ '-1', '0', '1e21', '99999999999' ]) {
+      const { body } = await makeActivityPubGetRequest(servers[0].url, '/accounts/root/followers?page=' + page, HttpStatusCode.OK_200)
+
+      expect(body.type).to.equal('OrderedCollection')
+    }
   })
 
   it('Should not return private video or private playlist', async function () {

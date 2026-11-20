@@ -67,6 +67,10 @@ export function isActivityValid (activity: any) {
   // Unknown activity type
   if (!checker) return false
 
+  if (activity.type === 'Create' && typeof activity.object === 'string') {
+    return isBaseActivityValid(activity, 'Create') && isActivityPubUrlValid(activity.object)
+  }
+
   return checker(activity)
 }
 

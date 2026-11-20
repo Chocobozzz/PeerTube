@@ -1,9 +1,12 @@
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityHtmlUrlObject } from '@peertube/peertube-models'
 import validator from 'validator'
-import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
+import { createLogger } from '@server/helpers/logger.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { exists, isArray } from '../misc.js'
 import { isUrlValid } from '../urls.js'
+
+const logger = createLogger()
 
 export function isActivityPubUrlValid (url: string) {
   return isUrlValid(url) && validator.default.isLength('' + url, CONSTRAINTS_FIELDS.ACTORS.URL)
@@ -49,14 +52,22 @@ export function setValidRemoteIcon (entity: any) {
   if (entity.icon && !isArray(entity.icon)) entity.icon = [ entity.icon ]
   if (!entity.icon) entity.icon = []
 
+  // Each icon is stored as a thumbnail row, and all thumbnails are returned in the REST API
+  if (entity.icon.length > ACTIVITY_PUB.MAX_ICONS) {
+    logger.debug('Truncating remote icon array from %d to %d entries.', entity.icon.length, ACTIVITY_PUB.MAX_ICONS)
+
+    entity.icon = entity.icon.slice(0, ACTIVITY_PUB.MAX_ICONS)
+  }
+
   const existingSizes = new Set<string>()
+  const dimensionOptions = { min: 0, max: ACTIVITY_PUB.MAX_ICON_DIMENSION }
 
   entity.icon = entity.icon.filter(icon => {
-    const isValid = icon.type === 'Image' &&
+    const isValid = icon?.type === 'Image' &&
       isActivityPubUrlValid(icon.url) &&
       !!MIMETYPES.IMAGE.MIMETYPE_EXT[icon.mediaType] &&
-      validator.default.isInt(icon.width + '', { min: 0 }) &&
-      validator.default.isInt(icon.height + '', { min: 0 })
+      validator.default.isInt(icon.width + '', dimensionOptions) &&
+      validator.default.isInt(icon.height + '', dimensionOptions)
 
     if (!isValid) return false
 

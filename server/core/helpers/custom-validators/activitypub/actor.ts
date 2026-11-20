@@ -2,7 +2,7 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityPubActor } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants.js'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../../initializers/constants.js'
 import { exists, isArray, isDateValid } from '../misc.js'
 import { isHostValid } from '../servers.js'
 import { isActivityPubHTMLUrlValid, isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
@@ -87,16 +87,27 @@ export function sanitizeAndCheckActorObject (actor: ActivityPubActor) {
 }
 
 function areActorUrlsOnActorHost (actor: ActivityPubActor) {
-  const urls = [ actor.inbox, actor.endpoints?.sharedInbox, actor.outbox, actor.following, actor.followers ]
-    .filter(url => !!url)
+  // Collections describe the actor: they must be served by its host
+  const collectionUrls = [ actor.outbox, actor.following, actor.followers ].filter(url => !!url)
+
+  // Inboxes may be served by another host (shared inbox on a dedicated host, bridges like Bridgy Fed...)
+  const inboxUrls = [ actor.inbox, actor.endpoints?.sharedInbox ].filter(url => !!url)
 
   try {
-    const actorHost = new URL(actor.id).host.toLowerCase()
+    const actorHost = getUrlHost(actor.id)
+    const localHost = WEBSERVER.HOST.toLowerCase()
 
-    return urls.every(url => new URL(url).host.toLowerCase() === actorHost)
+    if (actorHost === localHost) return false
+
+    return collectionUrls.every(url => getUrlHost(url) === actorHost) &&
+      inboxUrls.every(url => getUrlHost(url) !== localHost)
   } catch {
     return false
   }
+}
+
+function getUrlHost (url: string) {
+  return new URL(url).host.toLowerCase()
 }
 
 export function isValidActorHandle (handle: string) {

@@ -8,7 +8,8 @@ import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '@server/initializers/co
 import { updateRemotePlaylistThumbnailFromUrl } from '@server/lib/thumbnail.js'
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
-import { MAccountHost, MVideoId, MVideoPlaylist, MVideoPlaylistFull, MVideoPlaylistVideosLength } from '@server/types/models/index.js'
+import { MAccountHost, MVideoId, MVideoPlaylist, MVideoPlaylistFull } from '@server/types/models/index.js'
+import { Transaction } from 'sequelize'
 import { getAPId } from '../activity.js'
 import { getOrCreateAPActor } from '../actors/index.js'
 import { runWithAPObjectLock } from '../ap-object-lock.js'
@@ -73,19 +74,19 @@ export async function createOrUpdateVideoPlaylist (options: {
   }
 
   // Don't fetch the elements of a stale object
-  const storedPlaylist = await loadPlaylistIfStaleObject(playlistObject)
-  if (storedPlaylist) return storedPlaylist
+  const existingPlaylist = await VideoPlaylistModel.loadByUrl(playlistObject.id)
+  if (isStaleObject(existingPlaylist, playlistObject)) return VideoPlaylistModel.loadWithAccountAndChannel(existingPlaylist.id, null)
 
   // Outside the lock: fetching the elements and creating their videos can take a long time
   const channel = await getRemotePlaylistChannel(playlistObject)
   const elements = await fetchElements(playlistObject)
 
   return runWithAPObjectLock(playlistObject.id, async () => {
-    // Check again now we have the lock: a newer object may have been processed while we were fetching the elements
-    const storedPlaylist = await loadPlaylistIfStaleObject(playlistObject)
-    if (storedPlaylist) return storedPlaylist
+    // Load again now we have the lock: the playlist may have been created, or a newer object processed, while we were fetching the elements
+    const existingPlaylist = await VideoPlaylistModel.loadByUrl(playlistObject.id)
+    if (isStaleObject(existingPlaylist, playlistObject)) return VideoPlaylistModel.loadWithAccountAndChannel(existingPlaylist.id, null)
 
-    logger.debug(`Creating or updating playlist ${playlistObject.id}`)
+    logger.debug(`${existingPlaylist ? 'Updating' : 'Creating'} playlist ${playlistObject.id}`)
 
     const playlistAttributes = playlistObjectToDBAttributes(playlistObject, to || playlistObject.to)
 
@@ -97,15 +98,13 @@ export async function createOrUpdateVideoPlaylist (options: {
     playlistAttributes.videoChannelId = channel.id
     playlistAttributes.ownerAccountId = channel.accountId
 
-    const [ upsertPlaylist ] = await VideoPlaylistModel.upsert<MVideoPlaylistVideosLength>(playlistAttributes, { returning: true })
+    const { playlistId, elementsLength } = await savePlaylistAndElements({ existingPlaylist, playlistAttributes, elements })
 
     // Load the associations
-    const playlist = await VideoPlaylistModel.loadWithAccountAndChannel(upsertPlaylist.id, null)
+    const playlist = await VideoPlaylistModel.loadWithAccountAndChannel(playlistId, null)
+    playlist.setVideosLength(elementsLength)
 
     await updatePlaylistThumbnail(playlistObject, playlist)
-
-    const elementsLength = await rebuildVideoPlaylistElements(elements, playlist)
-    playlist.setVideosLength(elementsLength)
 
     return playlist
   })
@@ -115,9 +114,8 @@ export async function createOrUpdateVideoPlaylist (options: {
 // Private
 // ---------------------------------------------------------------------------
 
-async function loadPlaylistIfStaleObject (playlistObject: PlaylistObject) {
-  const existingPlaylist = await VideoPlaylistModel.loadByUrlAndPopulateAccount(playlistObject.id)
-  if (!existingPlaylist?.remoteUpdatedAt || new Date(playlistObject.updated) >= existingPlaylist.remoteUpdatedAt) return undefined
+function isStaleObject (existingPlaylist: MVideoPlaylist, playlistObject: PlaylistObject) {
+  if (!existingPlaylist?.remoteUpdatedAt || new Date(playlistObject.updated) >= existingPlaylist.remoteUpdatedAt) return false
 
   logger.info(
     'Skip update of remote playlist %s with an object older than the stored one.',
@@ -125,7 +123,41 @@ async function loadPlaylistIfStaleObject (playlistObject: PlaylistObject) {
     { updated: playlistObject.updated, remoteUpdatedAt: existingPlaylist.remoteUpdatedAt }
   )
 
-  return VideoPlaylistModel.loadWithAccountAndChannel(existingPlaylist.id, null)
+  return true
+}
+
+async function savePlaylistAndElements (options: {
+  existingPlaylist: MVideoPlaylist
+  playlistAttributes: ReturnType<typeof playlistObjectToDBAttributes>
+  elements: FetchedElement[]
+}) {
+  const { existingPlaylist, playlistAttributes, elements } = options
+
+  const result = await retryTransactionWrapper(() =>
+    runTransaction(async transaction => {
+      let playlistId: number
+
+      if (existingPlaylist) {
+        playlistId = existingPlaylist.id
+
+        // Static create/update rather than instance save in case of transaction rollback
+        // Keep the creation date we stored the first time
+        const { createdAt: _createdAt, ...updateAttributes } = playlistAttributes
+        await VideoPlaylistModel.update(updateAttributes, { where: { id: playlistId }, transaction, silent: true })
+      } else {
+        const created = await VideoPlaylistModel.create(playlistAttributes, { transaction, silent: true })
+        playlistId = created.id
+      }
+
+      const elementsLength = await rebuildVideoPlaylistElements({ elements, playlistId, transaction })
+
+      return { playlistId, elementsLength }
+    })
+  )
+
+  logger.info('%s playlist %s with %d elements.', existingPlaylist ? 'Updated' : 'Created', playlistAttributes.url, result.elementsLength)
+
+  return result
 }
 
 async function getRemotePlaylistChannel (playlistObject: PlaylistObject) {
@@ -243,20 +275,22 @@ async function fetchElements (playlistObject: PlaylistObject) {
   return elements
 }
 
-async function rebuildVideoPlaylistElements (elements: FetchedElement[], playlist: MVideoPlaylist) {
-  const elementsToCreate = elements.map(({ elementObject, video }) => playlistElementObjectToDBAttributes(elementObject, playlist, video))
+async function rebuildVideoPlaylistElements (options: {
+  elements: FetchedElement[]
+  playlistId: number
+  transaction: Transaction
+}) {
+  const { elements, playlistId, transaction } = options
 
-  await retryTransactionWrapper(() =>
-    runTransaction(async t => {
-      await VideoPlaylistElementModel.deleteAllOf(playlist.id, t)
-
-      for (const element of elementsToCreate) {
-        await VideoPlaylistElementModel.create(element, { transaction: t })
-      }
-    })
+  const elementsToCreate = elements.map(({ elementObject, video }) =>
+    playlistElementObjectToDBAttributes(elementObject, { id: playlistId }, video)
   )
 
-  logger.info('Rebuilt playlist %s with %s elements.', playlist.url, elementsToCreate.length)
+  await VideoPlaylistElementModel.deleteAllOf(playlistId, transaction)
+
+  for (const element of elementsToCreate) {
+    await VideoPlaylistElementModel.create(element, { transaction })
+  }
 
   return elementsToCreate.length
 }

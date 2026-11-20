@@ -1,10 +1,11 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { ContextType } from '@peertube/peertube-models'
+import { ContextType, HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
   createMultipleServers,
+  makeActivityPubGetRequest,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   waitJobs
@@ -254,6 +255,117 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       })
 
       expect(await sqlCommands[2].getVideoShareCount()).to.equal(sharesBefore)
+    })
+  })
+
+  describe('Create with an object URL', function () {
+    let playlistUUID: string
+    let playlistUrl: string
+
+    function buildCreate (objectUrl: string, actor: string) {
+      return {
+        type: 'Create',
+        id: actor + '/create/' + encodeURIComponent(objectUrl),
+        actor,
+        to: [ getAPPublicValue() ],
+        object: objectUrl
+      }
+    }
+
+    before(async function () {
+      this.timeout(60000)
+
+      const playlist = await servers[1].playlists.create({
+        attributes: {
+          displayName: 'playlist by URL',
+          privacy: VideoPlaylistPrivacy.PUBLIC,
+          videoChannelId: servers[1].store.channel.id
+        }
+      })
+      playlistUUID = playlist.uuid
+      playlistUrl = servers[1].url + '/video-playlists/' + playlistUUID
+
+      await waitJobs(servers)
+
+      // Server 1 does not follow server 2
+      await servers[0].playlists.get({ playlistId: playlistUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should not create a fetched playlist that is not on the host of the actor', async function () {
+      this.timeout(30000)
+
+      const actor = servers[2].url + '/accounts/peertube'
+
+      await sendActivity({ fromServerIndex: 2, actorUrl: actor, contextType: 'Playlist', activity: buildCreate(playlistUrl, actor) })
+
+      await servers[0].playlists.get({ playlistId: playlistUUID, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should fetch and create the playlist', async function () {
+      this.timeout(30000)
+
+      const actor = servers[1].url + '/accounts/peertube'
+
+      await sendActivity({ fromServerIndex: 1, actorUrl: actor, contextType: 'Playlist', activity: buildCreate(playlistUrl, actor) })
+
+      const playlist = await servers[0].playlists.get({ playlistId: playlistUUID })
+      expect(playlist.displayName).to.equal('playlist by URL')
+    })
+
+    it('Should fetch and create the video', async function () {
+      this.timeout(60000)
+
+      const { uuid } = await servers[1].videos.quickUpload({ name: 'video by URL' })
+      await waitJobs(servers)
+
+      await servers[0].videos.getWithToken({ id: uuid, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+
+      const actor = servers[1].url + '/accounts/peertube'
+
+      await sendActivity({
+        fromServerIndex: 1,
+        actorUrl: actor,
+        contextType: 'Video',
+        activity: buildCreate(servers[1].url + '/videos/watch/' + uuid, actor)
+      })
+
+      const video = await servers[0].videos.getWithToken({ id: uuid })
+      expect(video.name).to.equal('video by URL')
+    })
+  })
+
+  describe('Remote video icons', function () {
+    it('Should truncate the icons of a remote video', async function () {
+      this.timeout(60000)
+
+      // Server 1 follows server 3
+      const { uuid } = await servers[2].videos.quickUpload({ name: 'video with many icons' })
+      await waitJobs(servers)
+
+      const { body } = await makeActivityPubGetRequest(servers[2].url, '/videos/watch/' + uuid)
+      const videoObject = { ...body }
+      delete videoObject['@context']
+
+      const icon = Array.from({ length: 50 }, (_, i) => ({
+        type: 'Image',
+        url: `${servers[2].url}/lazy-static/thumbnails/fake-${i}.jpg`,
+        mediaType: 'image/jpeg',
+        width: 100 + i,
+        height: 100 + i
+      }))
+
+      const actor = servers[2].url + '/accounts/peertube'
+
+      await sendActivity({
+        fromServerIndex: 2,
+        actorUrl: actor,
+        contextType: 'Video',
+        activity: { type: 'Update', id: actor + '/updates/icons', actor, to: [ getAPPublicValue() ], object: { ...videoObject, icon } }
+      })
+
+      const video = await servers[0].videos.get({ id: uuid })
+      expect(video.thumbnails).to.have.lengthOf(20)
+      expect(video.thumbnails.map(t => t.width)).to.include.members([ 100, 119 ])
     })
   })
 

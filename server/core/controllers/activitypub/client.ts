@@ -140,9 +140,8 @@ activityPubClientRouter.get(
   [ '/videos/watch/:id', '/w/:id' ],
   executeIfActivityPub,
   activityPubRateLimiter,
-  // Check video rights before using the cache: a hit must not skip them
-  asyncMiddleware(videoGetValidatorFactory('ap')),
   cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
+  asyncMiddleware(videoGetValidatorFactory('ap')),
   asyncMiddleware(videoController)
 )
 activityPubClientRouter.get(
@@ -203,8 +202,8 @@ activityPubClientRouter.get(
   executeIfActivityPub,
   activityPubRateLimiter,
   apVideoChaptersSetCacheKey,
-  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   chaptersCacheRouteMiddleware(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS),
+  asyncMiddleware(videoGetValidatorFactory('with-blacklist')),
   asyncMiddleware(videoChaptersController)
 )
 

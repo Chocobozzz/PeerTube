@@ -18,6 +18,8 @@ export const videosShareValidator = [
 
     const video = res.locals.videoWithBlacklist
     if (!canVideoBeFederated(video)) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
+    // Numeric ids can be enumerated: they must not reveal the URL of an unlisted video
+    if (video.requiresUserAuth({ urlParamId: req.params.id, checkBlacklist: false })) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)
 
     const share = await VideoShareModel.load(req.params.actorId, video.id)
     if (!share) return res.sendStatus(HttpStatusCode.NOT_FOUND_404)

@@ -8,6 +8,7 @@ import { createLogger } from '../../../helpers/logger.js'
 import { CONFIG } from '../../../initializers/config.js'
 import { getAPId } from '../../../lib/activitypub/activity.js'
 import { buildAPFollowLockKey, runWithAPObjectLock } from '../ap-object-lock.js'
+import { checkUrlsSameHost } from '../url.js'
 import { ActorFollowModel } from '../../../models/actor/actor-follow.js'
 import { ActorModel } from '../../../models/actor/actor.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
@@ -23,6 +24,12 @@ async function processFollowActivity (options: APProcessorOptions<ActivityFollow
 
   const activityId = activity.id
   const objectId = getAPId(activity.object)
+
+  // The follow URL is stored and used to find the follow (Undo, Accept...): it must belong to the follower
+  if (!checkUrlsSameHost(activityId, byActor.url)) {
+    logger.warn('Refusing follow %s of actor %s: the follow URL is not on the actor host.', activityId, byActor.url)
+    return
+  }
 
   return runWithAPObjectLock(buildAPFollowLockKey(byActor.url, objectId), () => {
     return retryTransactionWrapper(() => processFollow(byActor, activityId, objectId))

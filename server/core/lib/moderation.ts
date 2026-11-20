@@ -233,7 +233,8 @@ async function createAbuse (options: {
 
   const { isLocal } = await associateFun(abuseInstance)
 
-  if (isLocal === false) {
+  // Only forward reports of our users: we cannot sign an activity on behalf of a remote reporter
+  if (isLocal === false && reporterAccount.Actor.isLocal()) {
     sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
   }
 

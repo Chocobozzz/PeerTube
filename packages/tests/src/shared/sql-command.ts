@@ -62,6 +62,12 @@ export class SQLCommand {
     return rows.map(r => r.url)
   }
 
+  async listLocalVideoViewerUrls () {
+    const rows = await this.selectQuery<{ url: string }>(`SELECT "url" FROM "localVideoViewer" ORDER BY "id" ASC`)
+
+    return rows.map(r => r.url)
+  }
+
   // ---------------------------------------------------------------------------
 
   async listVideoShareUrlsOf (uuid: string) {
