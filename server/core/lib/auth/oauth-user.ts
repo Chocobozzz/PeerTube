@@ -347,18 +347,25 @@ async function updateUserFromExternal (options: {
     user.set('pluginAuthExternalId', userOptions.externalId)
   }
 
+  let emailChanged = false
+
   if (syncEmail && userOptions.email && user.email !== userOptions.email) {
     await checkExternalEmailIsFreeOrThrow(user, userOptions.email, req)
 
     logger.info('Updating email of user %s to %s after successful external auth.', user.email, userOptions.email)
     user.email = userOptions.email
+    emailChanged = true
   }
 
-  return runTransaction(async transaction => {
+  const savedUser = await runTransaction(async transaction => {
     user.Account = await user.Account.save({ transaction })
 
     return user.save({ transaction })
   })
+
+  if (emailChanged) await Redis.Instance.removePasswordVerificationString(user.id)
+
+  return savedUser
 }
 
 // The fields a plugin userUpdater function decides of

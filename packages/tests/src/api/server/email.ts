@@ -42,7 +42,12 @@ describe('Test emails', function () {
     this.timeout(120000)
 
     const emailPort = await MockSmtpServer.Instance.collectEmails(emails)
-    server = await createSingleServer(1, ConfigCommand.getEmailOverrideConfig(emailPort))
+    server = await createSingleServer(1, {
+      ...ConfigCommand.getEmailOverrideConfig(emailPort),
+
+      // Reset password links are asked many times
+      rates_limit: { ask_send_email: { max: 50 } }
+    })
 
     await setAccessTokensToServers([ server ])
     await server.config.enableSignup(true)
@@ -407,6 +412,104 @@ describe('Test emails', function () {
         verificationString,
         expectedStatus: HttpStatusCode.FORBIDDEN_403
       })
+    })
+  })
+
+  describe('When the email or the password of a user changes', function () {
+    const resetUser = {
+      username: 'reset_link_user',
+      password: 'reset_link_password'
+    }
+    let resetUserId: number
+    let resetUserToken: string
+    let resetUserEmail = 'reset_link_user@example.com'
+
+    async function getLastVerificationString (to: string) {
+      await waitJobs(server)
+
+      const email = emails[emails.length - 1]
+      expect(email['to'][0]['address']).to.equal(to)
+
+      return /verificationString=([a-z0-9]+)/.exec(email['text'])[1]
+    }
+
+    async function askResetPassword () {
+      await server.users.askResetPassword({ email: resetUserEmail })
+
+      return getLastVerificationString(resetUserEmail)
+    }
+
+    async function expectRevoked (verificationString: string, userId = resetUserId) {
+      await server.users.resetPassword({
+        userId,
+        verificationString,
+        password: 'should_not_be_set',
+        expectedStatus: HttpStatusCode.FORBIDDEN_403
+      })
+    }
+
+    before(async function () {
+      const created = await server.users.create({ ...resetUser })
+      resetUserId = created.id
+
+      resetUserToken = await server.login.getAccessToken(resetUser)
+    })
+
+    it('Should revoke the reset password link when the user changes their email', async function () {
+      const verificationString = await askResetPassword()
+
+      resetUserEmail = 'reset_link_user_2@example.com'
+      await server.users.updateMe({ token: resetUserToken, email: resetUserEmail, currentPassword: resetUser.password })
+
+      await expectRevoked(verificationString)
+    })
+
+    it('Should revoke the reset password link when the user changes their password', async function () {
+      const verificationString = await askResetPassword()
+
+      await server.users.updateMe({ token: resetUserToken, password: 'reset_link_password_2', currentPassword: resetUser.password })
+      resetUser.password = 'reset_link_password_2'
+
+      await expectRevoked(verificationString)
+    })
+
+    it('Should keep the reset password link when the user updates other fields', async function () {
+      const verificationString = await askResetPassword()
+
+      await server.users.updateMe({ token: resetUserToken, displayName: 'reset link user' })
+      await server.users.updateMe({ token: resetUserToken, email: resetUserEmail, currentPassword: resetUser.password })
+
+      await server.users.resetPassword({ userId: resetUserId, verificationString, password: 'reset_link_password_3' })
+      resetUser.password = 'reset_link_password_3'
+    })
+
+    it('Should revoke the reset password link when an admin changes the user email', async function () {
+      const verificationString = await askResetPassword()
+
+      resetUserEmail = 'reset_link_user_3@example.com'
+      await server.users.update({ userId: resetUserId, email: resetUserEmail })
+
+      await expectRevoked(verificationString)
+    })
+
+    it('Should revoke the reset password link when an admin changes the user password', async function () {
+      const verificationString = await askResetPassword()
+
+      resetUser.password = 'reset_link_password_4'
+      await server.users.update({ userId: resetUserId, password: resetUser.password })
+
+      await expectRevoked(verificationString)
+
+      await server.login.getAccessToken(resetUser)
+    })
+
+    it('Should revoke the create password link when an admin changes the user email', async function () {
+      const { id } = await server.users.create({ username: 'create_password_revoked', password: '' })
+      const verificationString = await getLastVerificationString('create_password_revoked@example.com')
+
+      await server.users.update({ userId: id, email: 'create_password_revoked_2@example.com' })
+
+      await expectRevoked(verificationString, id)
     })
   })
 

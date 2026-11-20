@@ -9,10 +9,11 @@ import {
   VideoInclude
 } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
-import { auditLog, buildUserAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { pickCommonVideoQuery } from '@server/helpers/query.js'
+import { auditLog, buildUserAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token.js'
 import { guessAdditionalAttributesFromQuery } from '@server/models/video/formatter/video-api-format.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
@@ -20,9 +21,9 @@ import express from 'express'
 import 'multer'
 import { createReqFiles, getCountVideos } from '../../../helpers/express-utils.js'
 import { getFormattedObjects } from '../../../helpers/utils.js'
-import { isEmailVerificationRequiredFor } from '../../../lib/auth/auth-utils.js'
 import { MIMETYPES } from '../../../initializers/constants.js'
 import { sendUpdateActor } from '../../../lib/activitypub/send/index.js'
+import { isEmailVerificationRequiredFor } from '../../../lib/auth/auth-utils.js'
 import { deleteLocalActorImageFile, updateLocalActorImageFiles } from '../../../lib/local-actor.js'
 import { getOriginalVideoFileTotalDailyFromUser, getOriginalVideoFileTotalFromUser, sendVerifyUserChangeEmail } from '../../../lib/user.js'
 import {
@@ -377,6 +378,10 @@ async function updateMe (req: express.Request, res: express.Response) {
       throw err
     }
   })
+
+  if (body.password !== undefined || changedKeys.includes('email')) {
+    await Redis.Instance.removePasswordVerificationString(user.id)
+  }
 
   auditLog.update(getAuditActorFromRes(res), () => loadUserAuditEntity(user.id), oldUserAuditEntity, {
     secretChanges: body.password !== undefined

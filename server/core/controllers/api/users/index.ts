@@ -324,11 +324,17 @@ async function updateUser (req: express.Request, res: express.Response) {
       if (body[key] !== undefined) userToUpdate.set(key, body[key])
     }
 
+    const emailChanged = userToUpdate.changed('email') === true
+
     const user = await userToUpdate.save()
 
     // Destroy user token to refresh rights
     if (roleChanged || body.password !== undefined) {
       await OAuthTokenModel.deleteUserToken({ userId: userToUpdate.id })
+    }
+
+    if (emailChanged || body.password !== undefined) {
+      await Redis.Instance.removePasswordVerificationString(user.id)
     }
 
     auditLog.update(getAuditActorFromRes(res), () => buildUserAuditEntity(user), oldUserAuditEntity, {

@@ -85,6 +85,10 @@ async function verifyUserEmail (req: express.Request, res: express.Response) {
 
   await user.save()
 
+  if (req.body.isPendingEmail === true) {
+    await Redis.Instance.removePasswordVerificationString(user.id)
+  }
+
   return res.sendStatus(HttpStatusCode.NO_CONTENT_204)
 }
 

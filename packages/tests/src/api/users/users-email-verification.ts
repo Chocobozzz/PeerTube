@@ -172,6 +172,48 @@ describe('Test users email verification', function () {
     expect(me.pendingEmail).to.equal('attacker-target@example.com')
   })
 
+  it('Should revoke a reset password link sent to the previous email once the pending email is verified', async function () {
+    this.timeout(30000)
+
+    let resetVerificationString: string
+    let changeVerificationString: string
+
+    {
+      await server.users.askResetPassword({ email: 'updated@example.com' })
+
+      await waitJobs(server)
+      expectedEmailsLength++
+      expect(emails).to.have.lengthOf(expectedEmailsLength)
+
+      resetVerificationString = /verificationString=([a-z0-9]+)/.exec(emails[expectedEmailsLength - 1]['text'])[1]
+    }
+
+    {
+      await server.users.updateMe({
+        token: userAccessToken,
+        email: 'reset-link-revoked@example.com',
+        currentPassword: user1.password
+      })
+
+      await waitJobs(server)
+      expectedEmailsLength++
+      expect(emails).to.have.lengthOf(expectedEmailsLength)
+
+      changeVerificationString = /verificationString=([a-z0-9]+)/.exec(emails[expectedEmailsLength - 1]['text'])[1]
+    }
+
+    await server.users.verifyEmail({ userId, verificationString: changeVerificationString, isPendingEmail: true })
+
+    await server.users.resetPassword({
+      userId,
+      verificationString: resetVerificationString,
+      password: 'super_password_reset',
+      expectedStatus: HttpStatusCode.FORBIDDEN_403
+    })
+
+    await server.login.login({ user: user1 })
+  })
+
   it('Should not verify an email with a verification string sent to another email', async function () {
     this.timeout(30000)
 
