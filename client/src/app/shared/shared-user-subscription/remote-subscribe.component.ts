@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, input, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, OnInit, inject, input } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { Notifier } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms/form-reactive'
@@ -52,6 +52,10 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
       .then(url => {
         // Ensure the URL is valid
         const parsed = new URL(url)
+
+        if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
+          throw new Error('Invalid subscribe template protocol ' + parsed.protocol)
+        }
 
         if (isIOS()) return window.location.href = parsed.toString()
 

@@ -201,6 +201,8 @@ export class UserSubscriptionService {
   }
 
   private doSubscriptionsExist (uris: string[]): Observable<SubscriptionExistResult> {
+    if (!this.auth.isLoggedIn()) return of({})
+
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/exist'
     let params = new HttpParams()
 
@@ -210,7 +212,8 @@ export class UserSubscriptionService {
 
     return this.authHttp.get<SubscriptionExistResult>(url, { params })
       .pipe(
-        map(res => generation === this.cacheGeneration ? res : {}),
+        // The logged in user changed during the request: its response belongs to the previous user, so ask again
+        switchMap(res => generation === this.cacheGeneration ? of(res) : this.doSubscriptionsExist(uris)),
         tap(res => {
           this.myAccountSubscriptionCache = {
             ...this.myAccountSubscriptionCache,

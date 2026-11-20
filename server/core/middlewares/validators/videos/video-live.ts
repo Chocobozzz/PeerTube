@@ -1,3 +1,4 @@
+import { uniqify } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   LiveVideoCreate,
@@ -164,9 +165,11 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
     if (CONFIG.LIVE.MAX_USER_LIVES !== -1) {
       const user = res.locals.oauth.token.User
 
-      const totalUserLives = await VideoModel.countLivesOfAccount(user.Account.id)
+      // Lives are counted on the account that owns the channel: a collaborator must not bypass the limit of the channel owner
+      const accountIds = uniqify([ user.Account.id, res.locals.videoChannel.accountId ])
+      const totals = await Promise.all(accountIds.map(accountId => VideoModel.countLivesOfAccount(accountId)))
 
-      if (totalUserLives >= CONFIG.LIVE.MAX_USER_LIVES) {
+      if (totals.some(total => total >= CONFIG.LIVE.MAX_USER_LIVES)) {
         cleanUpReqFiles(req)
 
         return res.fail({

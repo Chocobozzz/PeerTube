@@ -5,6 +5,8 @@ import {
   ThumbnailAspectRatio,
   UserRight,
   Video,
+  VideoAIUsage,
+  VideoCommercialContent,
   VideoDetails,
   VideoFile,
   VideoFileStream,
@@ -14,15 +16,13 @@ import {
   VideoObject,
   VideoPrivacy,
   VideoRateType,
-  VideoAIUsage,
-  VideoCommercialContent,
   VideoRecommendationScope,
   VideoState,
   VideoStreamingPlaylistType,
   VideoSummary,
   type VideoAIUsageType,
-  type VideoCommercialContentType,
   type VideoCommentPolicyType,
+  type VideoCommercialContentType,
   type VideoEmbedPrivacyPolicyType,
   type VideoPrivacyType,
   type VideoRecommendationScopeType,
@@ -1169,6 +1169,33 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     return result.map(v => v.uuid)
   }
 
+  static async listStreamableLiveUUIDsOfAccount (accountId: number) {
+    const options = {
+      attributes: [ 'uuid' ],
+      where: {
+        isLive: true,
+        remote: false,
+        state: {
+          [Op.in]: [ VideoState.WAITING_FOR_LIVE, VideoState.PUBLISHED ]
+        }
+      },
+      include: [
+        {
+          attributes: [],
+          required: true,
+          model: VideoChannelModel.unscoped(),
+          where: {
+            accountId
+          }
+        }
+      ]
+    }
+
+    const result = await VideoModel.unscoped().findAll(options)
+
+    return result.map(v => v.uuid)
+  }
+
   static async listForApi (
     options:
       & {
@@ -1574,6 +1601,12 @@ export class VideoModel extends SequelizeModel<VideoModel> {
     const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
 
     return queryBuilder.queryVideo({ id, transaction: t, type: 'account-blacklist', userId })
+  }
+
+  static loadByUrlWithRights (url: string, t?: Transaction): Promise<MVideoWithRights> {
+    const queryBuilder = new VideoModelGetQueryBuilder(VideoModel.sequelize)
+
+    return queryBuilder.queryVideo({ url, transaction: t, type: 'account-blacklist' })
   }
 
   static loadForGetAPI (parameters: {

@@ -25,6 +25,10 @@ export function buildRateLimiter (options: {
   // Key the counter on the authenticated user instead of the source IP
   perUserKey?: boolean
 
+  // Registered runners and admins/moderators bypass the limit by default
+  // Set to true for limiters that protect credentials (login, password checks...) so a leaked token must not allow unlimited guesses
+  noBypass?: boolean
+
   // Rate limit counters are shared by every PeerTube process using Redis
   // If true, wait for Redis to count the hit and reject the request if it is unavailable
   // If false, count hits locally and sync them with Redis in the background: other processes may slightly exceed the limit
@@ -51,15 +55,18 @@ export function buildRateLimiter (options: {
       }
       : undefined,
 
-    handler: (req, res, next, options) => {
-      // Bypass rate limit for registered runners
-      if (req.body?.runnerToken) {
+    handler: (req, res, next, handlerOptions) => {
+      if (options.noBypass === true) return sendRateLimited(req, res, handlerOptions)
+
+      // Bypass rate limit for registered runners, only on the routes they use
+      if (req.body?.runnerToken && isRunnerAPIRoute(req)) {
         return RunnerModel.loadByToken(req.body.runnerToken)
           .then(runner => {
             if (runner) return next()
 
-            return sendRateLimited(req, res, options)
+            return sendRateLimited(req, res, handlerOptions)
           })
+          .catch(err => next(err))
       }
 
       // Bypass rate limit for admins/moderators
@@ -68,7 +75,7 @@ export function buildRateLimiter (options: {
           return next()
         }
 
-        return sendRateLimited(req, res, options)
+        return sendRateLimited(req, res, handlerOptions)
       })
     }
   })
@@ -87,7 +94,8 @@ export const confirmTokenRateLimiter = buildRateLimiter({
   name: 'confirm-token',
   windowMs: CONFIG.RATES_LIMIT.CONFIRM_TOKEN.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.CONFIRM_TOKEN.MAX,
-  failOnUnavailableRedis: true
+  failOnUnavailableRedis: true,
+  noBypass: true
 })
 
 export const activityPubRateLimiter = buildRateLimiter({
@@ -100,6 +108,10 @@ export const activityPubRateLimiter = buildRateLimiter({
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------
+
+function isRunnerAPIRoute (req: express.Request) {
+  return req.originalUrl.startsWith('/api/v1/runners/')
+}
 
 function sendRateLimited (req: express.Request, res: express.Response, options: RateLimitHandlerOptions) {
   logger.debug('Rate limit exceeded for route ' + req.originalUrl, { route: req.originalUrl, ip: req.ip })

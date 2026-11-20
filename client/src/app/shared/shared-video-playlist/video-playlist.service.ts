@@ -8,8 +8,8 @@ import {
   CachedVideoExistInPlaylist,
   CachedVideosExistInPlaylists,
   ResultList,
-  Video,
   VideoPlaylistElement as ServerVideoPlaylistElement,
+  Video,
   VideoChannelSummary,
   VideoExistInPlaylist,
   VideoPlaylistCreate,
@@ -72,17 +72,7 @@ export class VideoPlaylistService {
     this.videoExistsInPlaylistObservable = merge(
       buildBulkObservable({
         time: 200,
-        bulkGet: (videoIds: number[]) => {
-          // We added a delay to the request, so ensure the user is still logged in
-          if (this.auth.isLoggedIn()) {
-            const generation = this.cacheGeneration
-
-            return this.doVideosExistInPlaylist(videoIds)
-              .pipe(map(result => generation === this.cacheGeneration ? result : {}))
-          }
-
-          return of({})
-        },
+        bulkGet: (videoIds: number[]) => this.doVideosExistInPlaylistOfCurrentUser(videoIds),
         notifierObservable: this.videoExistsInPlaylistNotifier
       }).pipe(map(({ response }) => response)),
       this.videoExistsInPlaylistCacheSubject
@@ -477,5 +467,16 @@ export class VideoPlaylistService {
 
     return this.authHttp.get<VideoExistInPlaylist>(url, { params, context: new HttpContext().set(NGX_LOADING_BAR_IGNORED, true) })
       .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  private doVideosExistInPlaylistOfCurrentUser (videoIds: number[]): Observable<VideosExistInPlaylists> {
+    if (!this.auth.isLoggedIn()) return of({})
+
+    const generation = this.cacheGeneration
+
+    return this.doVideosExistInPlaylist(videoIds)
+      .pipe(
+        switchMap(result => generation === this.cacheGeneration ? of(result) : this.doVideosExistInPlaylistOfCurrentUser(videoIds))
+      )
   }
 }

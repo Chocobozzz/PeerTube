@@ -253,42 +253,6 @@ function checkEmailMatchIsTrustedOrThrow (options: {
       req.t('Refusing external auth bypass for plugin {pluginName}: your email is not verified by the identity provider.', { pluginName })
     )
   }
-
-  // Accounts created before external ids (PeerTube < 8.3) are linked to the external id on their next login
-  const isLinkingAccountWithoutExternalId = user.pluginAuth === pluginName &&
-    user.pluginAuthExternalId === null &&
-    !!externalUser.externalId
-
-  //  The email alone is not enough to link them: some identity providers let users set any email: also use username
-  if (isLinkingAccountWithoutExternalId && !isAccountCreatedFromUsername(user.username, externalUser.username)) {
-    logger.warn(
-      'Refusing to link account %s to external id %s of plugin %s: the email matches but the username %s does not. ' +
-        'Check this user at the identity provider before linking the account manually.',
-      user.username,
-      externalUser.externalId,
-      pluginName,
-      externalUser.username
-    )
-
-    throw new AccessDeniedError(
-      req.t(
-        'Refusing external auth bypass for plugin {pluginName}: {email} belongs to an account that does not match your username.',
-        { pluginName, email: externalUser.email }
-      )
-    )
-  }
-}
-
-// The account username is the plugin username, or the plugin username with a suffix if the name was already taken
-function isAccountCreatedFromUsername (accountUsername: string, pluginUsername: string) {
-  const account = accountUsername.toLowerCase()
-  const base = (pluginUsername || '').toLowerCase()
-
-  if (!base) return false
-  if (account === base) return true
-  if (!account.startsWith(base + '-')) return false
-
-  return /^\d+$/.test(account.slice(base.length + 1))
 }
 
 // ---------------------------------------------------------------------------

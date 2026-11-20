@@ -19,6 +19,7 @@ import {
   getAuditAnonymousActor
 } from '../../../lib/audit-log/index.js'
 import { Emailer } from '../../../lib/emailer.js'
+import { LiveManager } from '../../../lib/live/live-manager.js'
 import { Redis } from '../../../lib/redis/index.js'
 import { buildUser, createUserAccountAndChannelAndPlaylist } from '../../../lib/user.js'
 import {
@@ -46,6 +47,7 @@ import {
   usersResetPasswordValidator
 } from '../../../middlewares/validators/index.js'
 import { UserModel } from '../../../models/user/user.js'
+import { VideoModel } from '../../../models/video/video.js'
 import { emailVerificationRouter } from './email-verification.js'
 import { meRouter } from './me.js'
 import { myAbusesRouter } from './my-abuses.js'
@@ -66,7 +68,8 @@ const askResetPasswordRateLimiter = buildRateLimiter({
   name: 'ask-reset-password',
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX,
-  failOnUnavailableRedis: true
+  failOnUnavailableRedis: true,
+  noBypass: true
 })
 
 const usersRouter = express.Router()
@@ -399,6 +402,12 @@ async function changeUserBlock (res: express.Response, user: MUserAccountDefault
 
     await user.save({ transaction })
   })
+
+  if (block) {
+    for (const videoUUID of await VideoModel.listStreamableLiveUUIDsOfAccount(user.Account.id)) {
+      await LiveManager.Instance.stopSessionOfVideo({ videoUUID, error: null })
+    }
+  }
 
   Emailer.Instance.addUserBlockJob({ username: user.username, email: user.email, language: user.getLanguage(), blocked: block, reason })
 

@@ -1181,6 +1181,13 @@ describe('Test syndication feeds', () => {
       await servers[0].feed.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403, ignoreCache: true })
     })
 
+    it('Should fail with the account of the platform, that has no user', async function () {
+      const { id: accountId } = await servers[0].accounts.get({ accountName: 'peertube' })
+      const query = { accountId, token: 'not a token' }
+
+      await servers[0].feed.getJSON({ feed: 'subscriptions', query, expectedStatus: HttpStatusCode.FORBIDDEN_403, ignoreCache: true })
+    })
+
     it('Should list no videos for a user with videos but no subscriptions', async function () {
       const body = await servers[0].videos.listMySubscriptionVideos({ token: userAccessToken })
       expect(body.total).to.equal(0)

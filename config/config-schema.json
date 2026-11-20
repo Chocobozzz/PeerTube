@@ -360,7 +360,7 @@
           "additionalProperties": false
         },
         "password_confirmation": {
-          "description": "Failed password confirmations of sensitive actions",
+          "description": "Failed current password checks of a user (sensitive actions, password/email update, 2FA settings...)",
           "type": "object",
           "properties": {
             "enabled": {

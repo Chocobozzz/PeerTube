@@ -27,7 +27,11 @@ async function generateToken (req: express.Request, res: express.Response) {
 
   return res.json(
     {
-      files: await VideoTokensManager.Instance.create({ videoUUID: video.uuid, user: getAuthUser(res) })
+      files: await VideoTokensManager.Instance.create({
+        videoUUID: video.uuid,
+        user: getAuthUser(res),
+        accessToken: res.locals.oauth?.token?.accessToken
+      })
     } satisfies VideoToken
   )
 }

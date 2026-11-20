@@ -443,16 +443,18 @@ describe('Test video static file privacy', function () {
         url = (await server.videos.getWithToken({ id: uuid })).files[0].fileUrl
       })
 
-      it('Should refuse the file tokens of a blocked user or generated before a password change', async function () {
+      it('Should refuse the file tokens of a blocked user or of the sessions revoked by a password change', async function () {
         this.timeout(120000)
 
         const { token: blockedToken, userId: blockedUserId } = await server.users.generate('user_to_block')
         const { token: passwordToken } = await server.users.generate('user_changing_password')
+        const otherSessionToken = await server.login.getAccessToken({ username: 'user_changing_password', password: 'password' })
 
         const blockedFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: blockedToken })
         const passwordFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: passwordToken })
+        const otherSessionFileToken = await server.videoToken.getVideoFileToken({ videoId: uuid, token: otherSessionToken })
 
-        for (const videoFileToken of [ blockedFileToken, passwordFileToken ]) {
+        for (const videoFileToken of [ blockedFileToken, passwordFileToken, otherSessionFileToken ]) {
           await makeRawRequest({ url, query: { videoFileToken }, expectedStatus: HttpStatusCode.OK_200 })
         }
 
@@ -461,9 +463,12 @@ describe('Test video static file privacy', function () {
 
         await wait(11000)
 
-        for (const videoFileToken of [ blockedFileToken, passwordFileToken ]) {
+        for (const videoFileToken of [ blockedFileToken, otherSessionFileToken ]) {
           await makeRawRequest({ url, query: { videoFileToken }, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
         }
+
+        // The session that changed the password is kept, and so are its file tokens
+        await makeRawRequest({ url, query: { videoFileToken: passwordFileToken }, expectedStatus: HttpStatusCode.OK_200 })
 
         {
           await server.users.unbanUser({ userId: blockedUserId })

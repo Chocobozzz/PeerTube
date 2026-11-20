@@ -166,9 +166,13 @@ export async function doesUserFeedTokenCorrespond (options: {
   res: express.Response
 }) {
   const { id, token, req, res } = options
-  const user = await UserModel.loadByIdWithChannels(forceNumber(id))
 
-  if (token !== user.feedToken) {
+  // The account may not belong to a user (account of the platform...)
+  const user = id
+    ? await UserModel.loadByIdWithChannels(forceNumber(id))
+    : undefined
+
+  if (!user || typeof token !== 'string' || token !== user.feedToken) {
     res.fail({
       status: HttpStatusCode.FORBIDDEN_403,
       message: req.t('User and token mismatch')

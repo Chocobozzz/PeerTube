@@ -58,7 +58,8 @@ const registrationRateLimiter = buildRateLimiter({
   windowMs: CONFIG.RATES_LIMIT.SIGNUP.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.SIGNUP.MAX,
   skipFailedRequests: true,
-  failOnUnavailableRedis: true
+  failOnUnavailableRedis: true,
+  noBypass: true
 })
 
 const registrationsRouter = express.Router()

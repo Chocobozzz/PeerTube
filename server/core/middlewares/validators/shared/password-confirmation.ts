@@ -1,4 +1,4 @@
-import { HttpStatusCode, ServerErrorCode } from '@peertube/peertube-models'
+import { HttpStatusCode, HttpStatusCodeType, ServerErrorCode } from '@peertube/peertube-models'
 import { isUserPasswordTooLong } from '@server/helpers/custom-validators/users.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
@@ -8,6 +8,7 @@ import {
   isUserCurrentPasswordValid,
   resetPasswordConfirmationFailures
 } from '@server/lib/auth/password-confirmation.js'
+import { MUser } from '@server/types/models/index.js'
 import express from 'express'
 
 const logger = createLogger()
@@ -41,6 +42,19 @@ export async function checkPasswordConfirmation (req: express.Request, res: expr
     return false
   }
 
+  return checkUserCurrentPassword({ user, currentPassword, req, res })
+}
+
+// Check the current password of the user, with a per-user limit of consecutive failures
+export async function checkUserCurrentPassword (options: {
+  user: MUser
+  currentPassword: string
+  req: express.Request
+  res: express.Response
+  invalidStatus?: HttpStatusCodeType // default 403
+}) {
+  const { user, currentPassword, req, res, invalidStatus = HttpStatusCode.FORBIDDEN_403 } = options
+
   // Plugin passwords are checked by the plugin, not by bcrypt
   if (!user.pluginAuth && !checkLocalPasswordLength(currentPassword, req, res)) return false
 
@@ -53,10 +67,10 @@ export async function checkPasswordConfirmation (req: express.Request, res: expr
   }
 
   if (await isUserCurrentPasswordValid(user, currentPassword) !== true) {
-    logger.warn(`Invalid password confirmation of user ${user.username}`, { userId: user.id, ip: req.ip, path: req.originalUrl })
+    logger.warn(`Invalid current password of user ${user.username}`, { userId: user.id, ip: req.ip, path: req.originalUrl })
 
     res.fail({
-      status: HttpStatusCode.FORBIDDEN_403,
+      status: invalidStatus,
       type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID,
       message: req.t('currentPassword is invalid.')
     })

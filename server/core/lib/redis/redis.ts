@@ -364,12 +364,12 @@ export class Redis {
     return videoTokens.getVideoToken(token)
   }
 
-  setUserVideoTokensRevokedAt (userId: number, date: number) {
-    return videoTokens.setUserVideoTokensRevokedAt(userId, date)
+  setUserVideoTokensRevocation (userId: number, revocation: videoTokens.UserVideoTokensRevocation) {
+    return videoTokens.setUserVideoTokensRevocation(userId, revocation)
   }
 
-  getUserVideoTokensRevokedAt (userId: number) {
-    return videoTokens.getUserVideoTokensRevokedAt(userId)
+  getUserVideoTokensRevocation (userId: number) {
+    return videoTokens.getUserVideoTokensRevocation(userId)
   }
 
   /* ************ Locks shared by the processes ************ */

@@ -155,23 +155,6 @@ describe('Test external auth plugins with a stable external id', function () {
       expect(await sqlCommand.getUserExternalId('nova')).to.not.exist
     })
 
-    it('Should not link the account to an identity with another username', async function () {
-      await loginExternal({
-        server,
-        authName: 'external-auth-id-2',
-        npmName: 'test-external-auth-four',
-        username: 'mallory',
-        query: {
-          username: 'mallory',
-          email: 'nova@example.com',
-          externalId: 'mallory-external-id'
-        },
-        expectedStatusStep2: HttpStatusCode.BAD_REQUEST_400
-      })
-
-      expect(await sqlCommand.getUserExternalId('nova')).to.not.exist
-    })
-
     it('Should not link the account when the identity provider did not verify the email', async function () {
       await loginExternal({
         server,
@@ -190,7 +173,7 @@ describe('Test external auth plugins with a stable external id', function () {
       expect(await sqlCommand.getUserExternalId('nova')).to.not.exist
     })
 
-    it('Should link the account when the username matches and the email is verified', async function () {
+    it('Should link the account when the email is verified', async function () {
       const body = await loginExternal({
         server,
         authName: 'external-auth-id-2',

@@ -11,6 +11,6 @@ export type {
   TokenInvalidationPayload,
   WatchedWordsInvalidationPayload
 } from './redis-channels.js'
-export type { VideoTokenPayload } from './video-tokens.js'
-export { getVideoTokenTTL } from './video-tokens.js'
+export type { UserVideoTokensRevocation, VideoTokenPayload } from './video-tokens.js'
+export { getVideoTokenTTL, hashVideoTokenAccessToken, isVideoTokenRevoked } from './video-tokens.js'
 export type { LocalVideoViewer } from './video-viewer-stats.js'

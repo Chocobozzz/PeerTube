@@ -43,7 +43,8 @@ const loginRateLimiter = buildRateLimiter({
   name: 'login',
   windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.LOGIN.MAX,
-  failOnUnavailableRedis: true
+  failOnUnavailableRedis: true,
+  noBypass: true
 })
 
 tokensRouter.post(

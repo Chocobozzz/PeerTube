@@ -1,8 +1,7 @@
 import { forceNumber } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, ServerErrorCode, UserRole, UserRoleType, UserUpdate, UserUpdateMe } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRole, UserRoleType, UserUpdate, UserUpdateMe } from '@peertube/peertube-models'
 import { isStringArray } from '@server/helpers/custom-validators/search.js'
 import { isNSFWFlagsValid, isVideoAIUsageArrayValid } from '@server/helpers/custom-validators/videos.js'
-import { isUserCurrentPasswordValid } from '@server/lib/auth/password-confirmation.js'
 import { loadReservedActorName } from '@server/lib/local-actor.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { MUser } from '@server/types/models/index.js'
@@ -42,8 +41,8 @@ import {
   areValidationErrors,
   checkCanModerate,
   checkEmailDoesNotAlreadyExist,
-  checkLocalPasswordLength,
   checkPasswordConfirmation,
+  checkUserCurrentPassword,
   checkUserEmailExistPermissive,
   checkUserIdExist,
   checkUsernameOrEmailDoNotAlreadyExist,
@@ -341,15 +340,14 @@ export const usersUpdateMeValidator = [
         return res.fail({ message: req.t('currentPassword parameter is invalid') })
       }
 
-      if (!checkLocalPasswordLength(body.currentPassword, req, res)) return
-
-      if (await user.isPasswordMatch(body.currentPassword) !== true) {
-        return res.fail({
-          status: HttpStatusCode.UNAUTHORIZED_401,
-          message: req.t('currentPassword is invalid.'),
-          type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
-        })
-      }
+      const passwordValid = await checkUserCurrentPassword({
+        user,
+        currentPassword: body.currentPassword,
+        req,
+        res,
+        invalidStatus: HttpStatusCode.UNAUTHORIZED_401
+      })
+      if (!passwordValid) return
     }
 
     if (areValidationErrors(req, res, { omitBodyLog: true })) return
@@ -496,16 +494,7 @@ export const usersCheckCurrentPasswordFactory = (targetUserIdGetter: (req: expre
         })
       }
 
-      // Plugin passwords are checked by the plugin, not by bcrypt
-      if (!user.pluginAuth && !checkLocalPasswordLength(req.body.currentPassword, req, res)) return
-
-      if (await isUserCurrentPasswordValid(user, req.body.currentPassword) !== true) {
-        return res.fail({
-          status: HttpStatusCode.FORBIDDEN_403,
-          message: req.t('currentPassword is invalid.'),
-          type: ServerErrorCode.CURRENT_PASSWORD_IS_INVALID
-        })
-      }
+      if (!await checkUserCurrentPassword({ user, currentPassword: req.body.currentPassword, req, res })) return
 
       return next()
     }

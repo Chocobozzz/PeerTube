@@ -16,7 +16,8 @@ const askSendEmailLimiter = buildRateLimiter({
   name: 'ask-send-email',
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX,
-  failOnUnavailableRedis: true
+  failOnUnavailableRedis: true,
+  noBypass: true
 })
 
 const emailVerificationRouter = express.Router()

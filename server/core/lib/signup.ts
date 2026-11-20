@@ -37,7 +37,8 @@ export async function isSignupAllowed (options: {
 export function isSignupAllowedForCurrentIP (ip: string) {
   if (!ip) return false
 
-  const addr = ipaddr.parse(ip)
+  // Converts IPv4-mapped IPv6 addresses (::ffff:1.2.3.4, used by dual stack sockets) to IPv4 so they are checked against the IPv4 lists
+  const addr = ipaddr.process(ip)
   const excludeList = [ 'blacklist' ]
   let matched = ''
 
@@ -47,7 +48,7 @@ export function isSignupAllowedForCurrentIP (ip: string) {
   }
 
   if (addr.kind() === 'ipv4') {
-    const addrV4 = ipaddr.IPv4.parse(ip)
+    const addrV4 = addr as ipaddr.IPv4
     const rangeList = {
       whitelist: CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isIPV4Cidr(cidr))
         .map(cidr => ipaddr.IPv4.parseCIDR(cidr)),
@@ -56,7 +57,7 @@ export function isSignupAllowedForCurrentIP (ip: string) {
     }
     matched = ipaddr.subnetMatch(addrV4, rangeList, 'unknown')
   } else if (addr.kind() === 'ipv6') {
-    const addrV6 = ipaddr.IPv6.parse(ip)
+    const addrV6 = addr as ipaddr.IPv6
     const rangeList = {
       whitelist: CONFIG.SIGNUP.FILTERS.CIDR.WHITELIST.filter(cidr => isIPV6Cidr(cidr))
         .map(cidr => ipaddr.IPv6.parseCIDR(cidr)),
