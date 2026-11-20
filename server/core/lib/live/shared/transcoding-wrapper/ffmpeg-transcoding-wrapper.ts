@@ -1,3 +1,4 @@
+import { redactRTMPStreamKeys } from '@peertube/peertube-core-utils'
 import { FFmpegLive } from '@peertube/peertube-ffmpeg'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/index.js'
 import { createLogger } from '@server/helpers/logger.js'
@@ -5,7 +6,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { VIDEO_LIVE } from '@server/initializers/constants.js'
 import { VideoTranscodingProfilesManager } from '@server/lib/transcoding/default-transcoding-profiles.js'
 import { FfmpegCommand } from 'fluent-ffmpeg'
-import { getLiveSegmentTime, redactLiveStreamKey } from '../../live-utils.js'
+import { getLiveSegmentTime } from '../../live-utils.js'
 import { AbstractTranscodingWrapper } from './abstract-transcoding-wrapper.js'
 
 const logger = createLogger('live', 'transcoding', 'ffmpeg')
@@ -63,7 +64,7 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
 
     let ffmpegShellCommand: string
     this.ffmpegCommand.on('start', cmdline => {
-      ffmpegShellCommand = redactLiveStreamKey(cmdline)
+      ffmpegShellCommand = redactRTMPStreamKeys(cmdline)
 
       logger.debug('Running ffmpeg command for live', { ffmpegShellCommand })
     })
@@ -116,9 +117,9 @@ export class FFmpegTranscodingWrapper extends AbstractTranscodingWrapper {
   }) {
     const { err, ffmpegShellCommand } = options
 
-    const stdout = redactLiveStreamKey(options.stdout)
-    const stderr = redactLiveStreamKey(options.stderr)
-    if (typeof err?.message === 'string') err.message = redactLiveStreamKey(err.message)
+    const stdout = redactRTMPStreamKeys(options.stdout)
+    const stderr = redactRTMPStreamKeys(options.stderr)
+    if (typeof err?.message === 'string') err.message = redactRTMPStreamKeys(err.message)
 
     // We killed ffmpeg ourselves: it exits in error but has flushed its last segments, so this is a normal end for us
     if (this.aborted) {

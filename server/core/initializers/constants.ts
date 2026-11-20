@@ -408,7 +408,19 @@ export const RUNNER_JOBS = {
   LAST_CONTACT_UPDATE_INTERVAL: 30000,
   SUCCESS_REQUEST_MAX_COMPLETION_WAIT: 30000,
   // A job still in COMPLETING after that is considered lost and is errored
-  STALLED_COMPLETING_JOB_MS: 1000 * 3600 * 6 // 6 hours
+  STALLED_COMPLETING_JOB_MS: 1000 * 3600 * 6, // 6 hours
+  // Runners upload the result files of their jobs: transcoded videos can be big
+  MAX_UPLOAD_FILE_SIZE: 50 * 1024 * 1024 * 1024, // 50GB
+  MAX_UPLOAD_FIELDS: 100,
+  // Keys of the payloads sent by runners that are paths of uploaded files
+  UPLOADED_FILE_PAYLOAD_KEYS: [
+    'videoFile',
+    'resolutionPlaylistFile',
+    'vttFile',
+    'storyboardFile',
+    'masterPlaylistFile',
+    'videoChunkFile'
+  ] as const
 }
 
 // ---------------------------------------------------------------------------
@@ -1046,11 +1058,14 @@ export const ACTIVITY_PUB = {
   ],
   ACCEPT_HEADER: 'application/activity+json, application/ld+json',
   COLLECTION_ITEMS_PER_PAGE: 10,
+  COLLECTION_MAX_PAGE: 100_000,
   FETCH_PAGE_LIMIT: 2000,
   MAX_RECURSION_COMMENTS: 100,
   MAX_ACTIVITIES_PER_REQUEST: 100,
   MAX_VIDEO_URLS: 100,
   MAX_VIDEO_TAGS: 100,
+  MAX_ICONS: 20,
+  MAX_ICON_DIMENSION: 10_000,
   MAX_PLAYLIST_ELEMENTS: 1000,
   INBOX_CONTENT_TYPES: [ 'application/json', 'application/*+json' ],
   CHECK_JSON_LD_SIGNATURE: {

@@ -209,10 +209,7 @@ export abstract class AbstractJobHandler<C, UpdatePayload extends RunnerJobUpdat
   }
 
   private cleanupResultPayloadFiles (resultPayload: SuccessPayload) {
-    // Possible uploaded file paths across all RunnerJobSuccessPayload variants
-    const resultPayloadFileKeys = [ 'videoFile', 'resolutionPlaylistFile', 'vttFile', 'storyboardFile' ] as const
-
-    for (const key of resultPayloadFileKeys) {
+    for (const key of RUNNER_JOBS.UPLOADED_FILE_PAYLOAD_KEYS) {
       const value = (resultPayload as Record<string, unknown>)?.[key]
       if (typeof value !== 'string') continue
 

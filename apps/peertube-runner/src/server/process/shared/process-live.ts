@@ -4,6 +4,7 @@ import {
   getLivePlaylistNameFromSegmentPath,
   isLivePlaylistPath,
   isLiveSegmentPath,
+  redactRTMPStreamKeys,
   wait
 } from '@peertube/peertube-core-utils'
 import {
@@ -69,9 +70,12 @@ export class ProcessLiveRTMPHLSTranscoding {
       try {
         await ensureDir(this.outputPath)
 
-        logger.info(`Probing ${this.payload.input.rtmpUrl}`)
+        logger.info(`Probing ${redactRTMPStreamKeys(this.payload.input.rtmpUrl)}`)
         const probe = await ffprobePromise(this.payload.input.rtmpUrl)
-        logger.info({ probe }, `Probed ${this.payload.input.rtmpUrl}`)
+        logger.info(
+          { probe: { ...probe, format: { ...probe.format, filename: redactRTMPStreamKeys(probe.format?.filename) } } },
+          `Probed ${redactRTMPStreamKeys(this.payload.input.rtmpUrl)}`
+        )
 
         const hasAudio = await hasAudioStream(this.payload.input.rtmpUrl, probe)
         const hasVideo = await hasVideoStream(this.payload.input.rtmpUrl, probe)
@@ -155,7 +159,7 @@ export class ProcessLiveRTMPHLSTranscoding {
           probe
         })
 
-        logger.info(`Running live transcoding for ${this.payload.input.rtmpUrl}`)
+        logger.info(`Running live transcoding for ${redactRTMPStreamKeys(this.payload.input.rtmpUrl)}`)
 
         this.ffmpegCommand.on('error', (err, stdout, stderr) => {
           this.onFFmpegError({ err, stdout, stderr })
@@ -229,7 +233,10 @@ export class ProcessLiveRTMPHLSTranscoding {
 
     this.errored = true
 
-    logger.error({ err, stdout, stderr }, 'FFmpeg transcoding error.')
+    // The RTMP input URL contains the stream key
+    if (typeof err?.message === 'string') err.message = redactRTMPStreamKeys(err.message)
+
+    logger.error({ err, stdout: redactRTMPStreamKeys(stdout), stderr: redactRTMPStreamKeys(stderr) }, 'FFmpeg transcoding error.')
 
     this.sendError(err)
       .catch(subErr => logger.error({ err: subErr }, 'Cannot send error'))

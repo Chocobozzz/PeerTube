@@ -89,7 +89,9 @@ export async function downloadWebTorrentVideo (
           webtorrent,
           downloadedFile: { directoryPath, filepath: file.path },
           torrentPath: target.torrentPath
-        }).then(() => rej(new Error(`Cannot import torrent ${torrentId}: its file (${file.length} bytes) exceeds the user video quota`)))
+        }).then(() =>
+          rej(new Error(`The user video quota is exceeded: the torrent file is larger than the ${limits.maxFileSize} remaining bytes`))
+        )
       }
 
       // FIXME: avoid creating another stream when https://github.com/webtorrent/webtorrent/issues/1517 is fixed

@@ -1,4 +1,4 @@
-import { pick, timeoutPromise, wait } from '@peertube/peertube-core-utils'
+import { pick, redactRTMPStreamKeys, timeoutPromise, wait } from '@peertube/peertube-core-utils'
 import {
   ffprobePromise,
   getVideoStreamBitrate,
@@ -40,12 +40,7 @@ import { RedisChannels } from '../redis/index.js'
 import { computeResolutionsToTranscode } from '../transcoding/transcoding-resolutions.js'
 import { isUserQuotaValid } from '../user.js'
 import { LiveQuotaStore } from './live-quota-store.js'
-import {
-  cleanupAndDestroyPermanentLive,
-  getLiveSegmentTime,
-  redactLiveStreamKey,
-  removeLiveDirectoriesOfDeletedVideo
-} from './live-utils.js'
+import { cleanupAndDestroyPermanentLive, getLiveSegmentTime, removeLiveDirectoriesOfDeletedVideo } from './live-utils.js'
 import { MuxingSession } from './shared/index.js'
 
 const logger = createLogger('live')
@@ -453,7 +448,7 @@ class LiveManager {
         probe = await ffprobePromise(inputLocalUrl)
       } catch (err) {
         // The error contains the input URL
-        if (typeof err?.message === 'string') err.message = redactLiveStreamKey(err.message)
+        if (typeof err?.message === 'string') err.message = redactRTMPStreamKeys(err.message)
         logger.error('Cannot probe live input of video %s', video.uuid, { err })
 
         return this.releaseSession(video.uuid, sessionId)

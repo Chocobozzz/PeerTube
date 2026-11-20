@@ -24,6 +24,7 @@ import {
 } from '@peertube/peertube-models'
 import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { cleanUpReqFiles, createReqFiles } from '@server/helpers/express-utils.js'
+import { deleteFileAndCatch } from '@server/helpers/fs.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { generateRunnerJobToken } from '@server/helpers/token-generator.js'
 import { MIMETYPES, RUNNER_JOBS } from '@server/initializers/constants.js'
@@ -69,14 +70,16 @@ const postRunnerJobSuccessVideoFiles = createReqFiles(
     ...MIMETYPES.IMAGE.MIMETYPE_EXT
   },
   undefined,
-  runnerJobFilesFilter
+  runnerJobFilesFilter,
+  { fileSize: RUNNER_JOBS.MAX_UPLOAD_FILE_SIZE, fields: RUNNER_JOBS.MAX_UPLOAD_FIELDS }
 )
 
 const runnerJobUpdateVideoFiles = createReqFiles(
   [ 'payload[videoChunkFile]', 'payload[resolutionPlaylistFile]', 'payload[masterPlaylistFile]' ],
   { ...MIMETYPES.VIDEO.MIMETYPE_EXT, ...MIMETYPES.M3U8.MIMETYPE_EXT },
   undefined,
-  runnerJobFilesFilter
+  runnerJobFilesFilter,
+  { fileSize: RUNNER_JOBS.MAX_UPLOAD_FILE_SIZE, fields: RUNNER_JOBS.MAX_UPLOAD_FIELDS }
 )
 
 const runnerJobsRouter = express.Router()
@@ -316,14 +319,7 @@ async function errorRunnerJob (req: express.Request, res: express.Response) {
 
 // ---------------------------------------------------------------------------
 
-const UPLOADED_FILE_PAYLOAD_KEYS = new Set([
-  'videoFile',
-  'resolutionPlaylistFile',
-  'vttFile',
-  'storyboardFile',
-  'masterPlaylistFile',
-  'videoChunkFile'
-])
+const UPLOADED_FILE_PAYLOAD_KEYS = new Set<string>(RUNNER_JOBS.UPLOADED_FILE_PAYLOAD_KEYS)
 
 function withoutUploadedFileKeys<T> (payload: T): T {
   if (!payload || typeof payload !== 'object') return {} as T
@@ -331,6 +327,18 @@ function withoutUploadedFileKeys<T> (payload: T): T {
   return Object.fromEntries(
     Object.entries(payload).filter(([ key ]) => !UPLOADED_FILE_PAYLOAD_KEYS.has(key))
   ) as T
+}
+
+function cleanUpUnusedReqFiles (req: express.Request, payload: object) {
+  const usedPaths = new Set(Object.values(payload ?? {}).filter(v => typeof v === 'string'))
+  const filesObject = req.files as UploadFiles
+  if (!filesObject) return
+
+  for (const files of Object.values(filesObject)) {
+    for (const file of files) {
+      if (!usedPaths.has(file.path)) deleteFileAndCatch(file.path)
+    }
+  }
 }
 
 const jobUpdateBuilders: {
@@ -364,6 +372,8 @@ async function updateRunnerJobController (req: express.Request, res: express.Res
     const updatePayload = payloadBuilder
       ? payloadBuilder(body.payload, req.files)
       : undefined
+
+    cleanUpUnusedReqFiles(req, updatePayload)
 
     logger.debug(
       'Remote runner %s is updating job %s (%s)',
@@ -452,6 +462,7 @@ async function postRunnerJobSuccess (req: express.Request, res: express.Response
 
     // Built before set processing state so it's retried if this throws
     const resultPayload = jobSuccessPayloadBuilders[runnerJob.type](body.payload, req.files)
+    cleanUpUnusedReqFiles(req, resultPayload)
 
     if (await RunnerJobModel.setAsCompletingIfProcessing(runnerJob) !== true) {
       cleanUpReqFiles(req)

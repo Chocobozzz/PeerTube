@@ -114,7 +114,11 @@ async function run (options: ReturnType<typeof program.opts>) {
     if (message.includes('413')) {
       console.error('Aborted: user quota is exceeded or video file is too big for this PeerTube instance.')
     } else {
-      console.error(inspect(err))
+      console.error('Cannot upload video: ' + message)
+
+      // Don't log the headers that can contain secrets
+      const response = err.response
+      if (response) console.error(inspect({ status: response.status, body: response.body }))
     }
 
     process.exit(-1)

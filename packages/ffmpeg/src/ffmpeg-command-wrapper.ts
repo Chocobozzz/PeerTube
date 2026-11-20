@@ -1,4 +1,4 @@
-import { arrayify, exists, pick, promisify0, redactSignedUrls } from '@peertube/peertube-core-utils'
+import { arrayify, exists, pick, promisify0, redactUrlSecrets } from '@peertube/peertube-core-utils'
 import {
   AvailableEncoders,
   EncoderOptionsBuilder,
@@ -142,24 +142,24 @@ export class FFmpegCommandWrapper {
 
       // The input can be a pre-signed URL: don't leak it in logs
       this.command.on('start', cmdline => {
-        shellCommand = redactSignedUrls(cmdline)
+        shellCommand = redactUrlSecrets(cmdline)
       })
 
       this.command.on('error', (err: Error & { stdout?: string, stderr?: string }, stdout, stderr) => {
-        err.message = redactSignedUrls(err.message)
+        err.message = redactUrlSecrets(err.message)
 
         if (silent !== true) {
           this.logger.error('Error in ffmpeg.', {
             err,
-            stdout: redactSignedUrls(stdout),
-            stderr: redactSignedUrls(stderr),
+            stdout: redactUrlSecrets(stdout),
+            stderr: redactUrlSecrets(stderr),
             shellCommand,
             ...this.lTags
           })
         }
 
-        err.stdout = redactSignedUrls(stdout)
-        err.stderr = redactSignedUrls(stderr)
+        err.stdout = redactUrlSecrets(stdout)
+        err.stderr = redactUrlSecrets(stderr)
 
         if (this.onError) this.onError(err)
 
@@ -168,8 +168,8 @@ export class FFmpegCommandWrapper {
 
       this.command.on('end', (stdout, stderr) => {
         this.logger.debug('FFmpeg command ended.', {
-          stdout: redactSignedUrls(stdout),
-          stderr: redactSignedUrls(stderr),
+          stdout: redactUrlSecrets(stdout),
+          stderr: redactUrlSecrets(stderr),
           shellCommand,
           ...this.lTags
         })

@@ -1,4 +1,4 @@
-import { buildAspectRatio, forceNumber, redactSignedUrls } from '@peertube/peertube-core-utils'
+import { buildAspectRatio, forceNumber, pick, redactUrlSecrets } from '@peertube/peertube-core-utils'
 import { VideoResolution, VideoStereo3D } from '@peertube/peertube-models'
 import ffmpeg, { FfprobeData } from 'fluent-ffmpeg'
 import { buildInputFormatWhitelistOptions } from './ffmpeg-utils.js'
@@ -10,17 +10,17 @@ import { buildInputFormatWhitelistOptions } from './ffmpeg-utils.js'
 export function ffprobePromise (
   input: string,
   options: {
-    // Only for tests that probe HLS playlists of the instance: remote inputs are restricted to some formats otherwise
-    disableRemoteFormatWhitelist?: boolean
+    // Only for tests that probe HLS playlists of the instance: inputs are restricted to some formats otherwise
+    disableFormatWhitelist?: boolean
   } = {}
 ) {
   return new Promise<FfprobeData>((res, rej) => {
-    const remoteInputOptions = buildInputFormatWhitelistOptions(input, { disableFormatWhitelist: options.disableRemoteFormatWhitelist })
+    const formatWhitelistOptions = buildInputFormatWhitelistOptions(input, pick(options, [ 'disableFormatWhitelist' ]))
 
-    ffmpeg.ffprobe(input, [ '-show_chapters', ...remoteInputOptions ], (err, data) => {
+    ffmpeg.ffprobe(input, [ '-show_chapters', ...formatWhitelistOptions ], (err, data) => {
       if (err) {
-        // The input can be a pre-signed URL: don't leak it in logs
-        err.message = redactSignedUrls(err.message)
+        // The input can be a pre-signed URL or a RTMP URL containing the stream key: don't leak them in logs
+        err.message = redactUrlSecrets(err.message)
 
         return rej(err)
       }

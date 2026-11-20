@@ -596,6 +596,20 @@ describe('Test live', function () {
       await testFfmpegStreamError(command, true)
     })
 
+    it('Should stop the stream of the owner when blocking them', async function () {
+      this.timeout(120000)
+
+      const { token, userId, userChannelId } = await servers[0].users.generate('user_streaming_blocked')
+      liveVideo = await createLiveWrapper(token, userChannelId)
+
+      const command = sendRTMPStream({ rtmpBaseUrl: rtmpUrl + '/live', streamKey: liveVideo.streamKey })
+      await commands[0].waitUntilPublished({ videoId: liveVideo.uuid })
+
+      await servers[0].users.banUser({ userId })
+
+      await testFfmpegStreamError(command, true)
+    })
+
     it('Should not allow a stream on a live that was deleted', async function () {
       this.timeout(60000)
 
@@ -701,7 +715,7 @@ describe('Test live', function () {
       const video = await servers[0].videos.get({ id: liveVideoId })
 
       const masterPlaylist = video.streamingPlaylists[0].playlistUrl
-      const probe = await ffprobePromise(masterPlaylist, { disableRemoteFormatWhitelist: true })
+      const probe = await ffprobePromise(masterPlaylist, { disableFormatWhitelist: true })
 
       const bitrates = probe.streams.map(s => parseInt(s.tags.variant_bitrate))
       for (const bitrate of bitrates) {

@@ -18,6 +18,13 @@ describe('DNS helpers', function () {
     expect(await isResolvingToUnicastOnly('127.0.0.1.cpy.re')).to.be.false
   })
 
+  it('Should accept IPv6 hostnames of URLs, enclosed in brackets', async function () {
+    expect(await isResolvingToUnicastOnly(new URL('http://[2001:4860:4860::8888]/').hostname)).to.be.true
+
+    expect(await isResolvingToUnicastOnly(new URL('http://[::1]/').hostname)).to.be.false
+    expect(await isResolvingToUnicastOnly(new URL('http://[::ffff:127.0.0.1]/').hostname)).to.be.false
+  })
+
   it('Should detect non unicast IPs', async function () {
     for (const ip of [ '8.8.8.8', '2001:4860:4860::8888', '::ffff:8.8.8.8' ]) {
       expect(isUnicastIP(ip), ip).to.be.true
@@ -43,6 +50,10 @@ describe('DNS helpers', function () {
     for (const ip of nonUnicast) {
       expect(isUnicastIP(ip), ip).to.be.false
     }
+  })
+
+  it('Should not consider an empty hostname as unicast only', async function () {
+    expect(await isResolvingToUnicastOnly('')).to.be.false
   })
 
   describe('Unicast only lookup', function () {

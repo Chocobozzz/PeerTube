@@ -6,6 +6,7 @@ import {
   getMaxTheoreticalBitrate,
   getResumableUploadChunkSize,
   parseChapters,
+  redactRTMPStreamKeys,
   redactSignedUrls,
   sliceWithoutSplittingSurrogates,
   timeToInt
@@ -362,6 +363,20 @@ describe('Extract chapters', function () {
       { timecode: 90, title: 'cha' },
       { timecode: 95, title: 'cha' }
     ])
+  })
+})
+
+describe('Redact RTMP stream keys', function () {
+  it('Should redact the stream key of RTMP URLs', function () {
+    expect(redactRTMPStreamKeys('ffmpeg -i rtmp://127.0.0.1:1936/live/2b4c-key -c copy'))
+      .to.equal('ffmpeg -i rtmp://127.0.0.1:1936/live/REDACTED -c copy')
+
+    expect(redactRTMPStreamKeys(`rtmps://example.com:1937/live/2b4c-key: Input/output error`))
+      .to.equal(`rtmps://example.com:1937/live/REDACTED: Input/output error`)
+  })
+
+  it('Should not change a text without RTMP URLs', function () {
+    expect(redactRTMPStreamKeys('https://example.com/live/2b4c')).to.equal('https://example.com/live/2b4c')
   })
 })
 

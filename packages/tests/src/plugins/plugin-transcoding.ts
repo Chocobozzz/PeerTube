@@ -74,7 +74,7 @@ function updateConf (server: PeerTubeServer, vodProfile: string, liveProfile: st
 
 // The HLS playlists of the instance are not in the formats allowed for remote inputs
 function probeHLSPlaylist (playlistUrl: string) {
-  return ffprobePromise(playlistUrl, { disableRemoteFormatWhitelist: true })
+  return ffprobePromise(playlistUrl, { disableFormatWhitelist: true })
 }
 
 describe('Test transcoding plugins', function () {

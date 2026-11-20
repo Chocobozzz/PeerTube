@@ -226,7 +226,7 @@ export class YoutubeDLCLI {
     completeArgs = this.wrapWithFFmpegOptions(completeArgs)
 
     const subProcessBinary = CONFIG.IMPORT.VIDEOS.HTTP.YOUTUBE_DL_RELEASE.PYTHON_PATH || youtubeDLBinaryPath
-    const subProcessArgs = [ ...completeArgs, url ]
+    const subProcessArgs = [ ...completeArgs, '--', url ]
     if (subProcessBinary !== youtubeDLBinaryPath) subProcessArgs.unshift(youtubeDLBinaryPath)
 
     const subProcess = execa(subProcessBinary, subProcessArgs, processOptions)

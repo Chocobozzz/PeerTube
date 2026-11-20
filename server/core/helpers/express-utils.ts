@@ -140,7 +140,8 @@ export function createReqFiles (
   mimeTypes: { [id: string]: string | string[] },
   destination = CONFIG.STORAGE.TMP_DIR,
   // Called before storing each file, with the text fields sent before it in req.body
-  fileFilter?: (req: express.Request, file: Express.Multer.File, cb: (err: Error, result: boolean) => void) => void
+  fileFilter?: (req: express.Request, file: Express.Multer.File, cb: (err: Error, result: boolean) => void) => void,
+  limits?: multer.Options['limits']
 ): RequestHandler {
   const storage = diskStorage({
     destination: (req, file, cb) => {
@@ -160,7 +161,15 @@ export function createReqFiles (
     })
   }
 
-  return multer({ storage, fileFilter: wrapFileFilter(fileFilter), defParamCharset: 'utf8' }).fields(fields)
+  return multer({ storage, fileFilter: wrapFileFilter(fileFilter), limits, defParamCharset: 'utf8' }).fields(fields)
+}
+
+export function getMulterErrorStatus (err: unknown) {
+  if (!(err instanceof multer.MulterError)) return undefined
+
+  if (err.code === 'LIMIT_FILE_SIZE') return HttpStatusCode.PAYLOAD_TOO_LARGE_413
+
+  return HttpStatusCode.BAD_REQUEST_400
 }
 
 export function createAnyReqFiles (

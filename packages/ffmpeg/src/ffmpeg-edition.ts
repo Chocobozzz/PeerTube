@@ -2,6 +2,7 @@ import { MutexInterface } from 'async-mutex'
 import { FilterSpecification } from 'fluent-ffmpeg'
 import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-command-wrapper.js'
 import { ffprobePromise, getVideoStreamDimensionsInfo, getVideoStreamDuration, getVideoStreamFPS, hasAudioStream } from './ffprobe.js'
+import { toNumber } from './ffmpeg-utils.js'
 import { presetVOD } from './shared/presets.js'
 
 type BaseStudioOptions = {
@@ -430,11 +431,9 @@ export class FFmpegEdition {
 // ---------------------------------------------------------------------------
 
 function toPositiveNumberOrThrow (name: string, value: unknown) {
-  const num = typeof value === 'string' && value.trim() !== ''
-    ? Number(value)
-    : value
+  const num = toNumber(value)
 
-  if (typeof num !== 'number' || !Number.isFinite(num) || num < 0) {
+  if (!Number.isFinite(num) || num < 0) {
     throw new Error(`Invalid ${name} option ${value}`)
   }
 

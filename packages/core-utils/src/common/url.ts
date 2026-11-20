@@ -1,7 +1,7 @@
 import { Video, VideoPlaylist } from '@peertube/peertube-models'
 import { secondsToTime } from './date.js'
 
-function addQueryParams (url: string, params: { [ id: string ]: string }, baseUrl?: string) {
+function addQueryParams (url: string, params: { [id: string]: string }, baseUrl?: string) {
   const objUrl = new URL(url, baseUrl)
 
   for (const key of Object.keys(params)) {
@@ -26,8 +26,18 @@ function redactSignedUrls (text: string) {
   return text.replace(/(X-Amz-(?:Signature|Credential|Security-Token)=)[^&\s'"]+/gi, '$1REDACTED')
 }
 
+function redactRTMPStreamKeys (text: string) {
+  if (!text) return text
+
+  return text.replace(/(rtmps?:\/\/[^/\s'"]+\/[^/\s'"]+\/)[^\s'"?/:]+/gi, '$1REDACTED')
+}
+
+function redactUrlSecrets (text: string) {
+  return redactRTMPStreamKeys(redactSignedUrls(text))
+}
+
 function queryParamsToObject (entries: URLSearchParams) {
-  const result: { [ id: string ]: string | number | boolean } = {}
+  const result: { [id: string]: string | number | boolean } = {}
 
   for (const [ key, value ] of entries) {
     result[key] = value
@@ -164,31 +174,29 @@ function decoratePlaylistLink (options: {
 
 export {
   addQueryParams,
-  removeQueryParams,
-  queryParamsToObject,
-  redactSignedUrls,
-
   buildDownloadFilesUrl,
-
-  buildPlaylistLink,
-  buildVideoLink,
-
-  buildVideoWatchPath,
-  buildPlaylistWatchPath,
-
-  buildPlaylistEmbedPath,
-  buildVideoEmbedPath,
-
   buildPlaylistEmbedLink,
+  buildPlaylistEmbedPath,
+  buildPlaylistLink,
+  buildPlaylistWatchPath,
   buildVideoEmbedLink,
-
+  buildVideoEmbedPath,
+  buildVideoLink,
+  buildVideoWatchPath,
+  decoratePlaylistLink,
   decorateVideoLink,
-  decoratePlaylistLink
+  queryParamsToObject,
+  redactRTMPStreamKeys,
+  redactSignedUrls,
+  redactUrlSecrets,
+  removeQueryParams
 }
 
 function buildUrl (url: string, params: URLSearchParams) {
   let hasParams = false
-  params.forEach(() => { hasParams = true })
+  params.forEach(() => {
+    hasParams = true
+  })
 
   if (hasParams) return url + '?' + params.toString()
 

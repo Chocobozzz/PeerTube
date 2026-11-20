@@ -61,4 +61,5 @@ getSettings()
       )
       .parse(process.argv)
   })
-  .catch(err => console.error(err))
+  // Don't print the whole error: it may contain the request with the access token
+  .catch(err => console.error(err?.message || err))

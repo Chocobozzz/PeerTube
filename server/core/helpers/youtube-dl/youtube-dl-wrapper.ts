@@ -2,8 +2,7 @@ import { VideoResolutionType } from '@peertube/peertube-models'
 import { CONFIG } from '@server/initializers/config.js'
 import { ExecaError } from 'execa'
 import { move, pathExists, remove } from 'fs-extra/esm'
-import { readdir } from 'fs/promises'
-import { dirname, join } from 'path'
+import { join } from 'path'
 import { inspect } from 'util'
 import { isVideoFileExtnameValid } from '../custom-validators/videos.js'
 import { isResolvingToUnicastOnly } from '../dns.js'
@@ -220,7 +219,7 @@ export class YoutubeDLWrapper {
     const youtubeDL = await YoutubeDLCLI.safeGet({ cookiesPath: this.cookiesPath })
 
     try {
-      await youtubeDL.download({
+      const output = await youtubeDL.download({
         url: this.url,
         format: YoutubeDLCLI.getYoutubeDLVideoFormat(this.enabledResolutions, this.useBestFormat),
         output: pathWithoutExtension,
@@ -236,9 +235,14 @@ export class YoutubeDLWrapper {
 
       const path = await this.guessVideoPathWithExtension(pathWithoutExtension, fileExt)
       if (!path) {
-        const directoryContent = await readdir(dirname(pathWithoutExtension))
+        // youtube-dl exits successfully without downloading anything when the file exceeds --max-filesize
+        if (Number.isFinite(maxFileSize) && (output || []).some(line => line.includes('max-filesize'))) {
+          throw new Error(`The user video quota is exceeded: the file of ${this.url} is larger than the ${maxFileSize} remaining bytes`)
+        }
 
-        throw new Error(`Cannot guess path of ${pathWithoutExtension}. Directory content: ${directoryContent.join(', ')}`)
+        logger.debug('youtube-dl did not create the file %s.', pathWithoutExtension, { output })
+
+        throw new Error(`Cannot find the file downloaded by youtube-dl for ${this.url}`)
       }
 
       return path
@@ -272,9 +276,15 @@ export class YoutubeDLWrapper {
   }
 
   private async checkUnicastOrThrow (userLanguage: string) {
-    const host = new URL(this.url).hostname
+    let host: string
 
-    if (!await isResolvingToUnicastOnly(host)) {
+    try {
+      host = new URL(this.url).hostname
+    } catch {
+      host = undefined
+    }
+
+    if (!host || !await isResolvingToUnicastOnly(host)) {
       throw new YoutubeDlImportError({
         message: t(`URL {targetUrl} is not a unicast URL.`, userLanguage, { targetUrl: this.url }),
         code: YoutubeDlImportErrorCode.NOT_ONLY_UNICAST_URL

@@ -55,6 +55,7 @@ import { checkFFmpeg, checkMissedConfig, checkNodeVersion } from './core/initial
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { initI18n, useI18n } from '@server/helpers/i18n.js'
+import { getMulterErrorStatus } from './core/helpers/express-utils.js'
 import { createLogger, flushLogs } from './core/helpers/logger.js'
 import { CONFIG } from './core/initializers/config.js'
 import { ACTIVITY_PUB, API_VERSION, WEBSERVER, loadLanguages } from './core/initializers/constants.js'
@@ -123,10 +124,11 @@ Promise.all([
 ]).catch(err => logger.error('Cannot load i18n/languages', { err }))
 
 // Express configuration
+import { buildUUID, isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import { frameguard, xContentTypeOptions } from 'helmet'
+import { frameguard, referrerPolicy, xContentTypeOptions } from 'helmet'
 import anonymize from 'ip-anonymize'
 import morgan, { token } from 'morgan'
 
@@ -168,6 +170,9 @@ if (CONFIG.CSP.ENABLED) {
 
 app.use(xContentTypeOptions())
 
+// Don't leak the full URL of the page to other websites in `Referer` header
+app.use(referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
+
 if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
   app.use(frameguard({
     action: 'deny' // we only allow it for /videos/embed, see server/controllers/client.ts
@@ -176,7 +181,6 @@ if (CONFIG.SECURITY.FRAMEGUARD.ENABLED) {
 
 // ----------- PeerTube modules -----------
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { OpenTelemetryMetrics } from '@server/lib/opentelemetry/metrics.js'
 import { RemoveExpiredUserExportsScheduler } from '@server/lib/schedulers/remove-expired-user-exports-scheduler.js'
 import { UpdateTokenSessionScheduler } from '@server/lib/schedulers/update-token-session-scheduler.js'
@@ -358,12 +362,23 @@ app.use((err, req, res: express.Response, _next) => {
   // Remove too big metadata and alter original error to keep type
   err.body = undefined
 
-  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl })
+  const status = err.status || getMulterErrorStatus(err) || HttpStatusCode.INTERNAL_SERVER_ERROR_500
+
+  // Internal errors can contain SQL queries, paths... Only send an id that admins can find in the logs
+  const hideDetails = status >= HttpStatusCode.INTERNAL_SERVER_ERROR_500 && !isTestOrDevInstance()
+  // Also in the logger context of the request
+  const errorId = res.getHeader('X-Request-Id') as string || buildUUID()
+
+  logger.error('Error in controller.', { err, sql, activeRequests, url: req.originalUrl, errorId })
 
   return res.fail({
-    status: err.status || HttpStatusCode.INTERNAL_SERVER_ERROR_500,
-    message: err.message,
-    type: err.name
+    status,
+    message: hideDetails
+      ? `Internal server error (error id: ${errorId})`
+      : err.message,
+    type: hideDetails
+      ? undefined
+      : err.name
   })
 })
 

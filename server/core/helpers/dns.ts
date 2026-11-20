@@ -3,9 +3,11 @@ import ipaddr from 'ipaddr.js'
 import { isIP, LookupFunction } from 'net'
 
 export async function isResolvingToUnicastOnly (hostname: string) {
-  const addresses = await dnsLookupAll(hostname)
+  if (!hostname) return false
 
-  return addresses.every(a => isUnicastIP(a))
+  const addresses = await dnsLookupAll(getIPFromURLHostname(hostname) ?? hostname)
+
+  return addresses.length !== 0 && addresses.every(a => isUnicastIP(a))
 }
 
 export function isUnicastIP (address: string) {
@@ -19,8 +21,8 @@ export function isUnicastIP (address: string) {
   return true
 }
 
-// Hostname of a WHATWG URL: IPv6 addresses are enclosed in brackets
 export function getIPFromURLHostname (hostname: string) {
+  // Hostname of a WHATWG URL: IPv6 addresses are enclosed in brackets
   const host = hostname.startsWith('[') && hostname.endsWith(']')
     ? hostname.slice(1, -1)
     : hostname
