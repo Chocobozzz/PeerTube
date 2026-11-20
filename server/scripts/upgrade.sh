@@ -226,7 +226,7 @@ verify_release_signature "$ZIP_PATH" "$ZIP_PATH.asc"
 rm -f "$ZIP_PATH.asc"
 
 cd "$PEERTUBE_PATH/versions"
-unzip -o "peertube-${VERSION}.zip"
+unzip -q -o "peertube-${VERSION}.zip"
 rm -f "peertube-${VERSION}.zip"
 
 RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/releases/tag/${VERSION}"
