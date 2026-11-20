@@ -6,6 +6,7 @@ import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { isLocalUrl } from '@server/lib/activitypub/url.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
 import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -136,7 +137,8 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
     if (!uri) return res.json({ total: 0, data: [] })
   }
 
-  if (canSearchRemoteURI) {
+  // Local URLs are resolved from the database: federation refuses to fetch local actors
+  if (canSearchRemoteURI && !isLocalUrl(uri)) {
     try {
       const latestUri = await findLatestAPRedirection(uri)
 

@@ -10,6 +10,7 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { getOrCreateAPVideoPlaylist } from '@server/lib/activitypub/playlists/get.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { isLocalUrl } from '@server/lib/activitypub/url.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
 import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -112,7 +113,8 @@ async function searchVideoPlaylistsDB (query: VideoPlaylistsSearchQueryAfterSani
 async function searchVideoPlaylistsURI (search: string, req: express.Request, res: express.Response) {
   let videoPlaylist: MVideoPlaylistFullSummary
 
-  if (isUserAbleToSearchRemoteURI(res)) {
+  // Local URLs are resolved from the database: federation refuses to fetch local playlists
+  if (isUserAbleToSearchRemoteURI(res) && !isLocalUrl(search)) {
     try {
       const url = await findLatestAPRedirection(search)
 

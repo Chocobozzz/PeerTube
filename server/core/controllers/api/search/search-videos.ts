@@ -7,6 +7,7 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
+import { isLocalUrl } from '@server/lib/activitypub/url.js'
 import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
 import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
@@ -147,7 +148,8 @@ async function searchVideoURI (url: string, req: express.Request, res: express.R
   let video: MVideoAccountLightBlacklistAllFiles
 
   // Check if we can fetch a remote video with the URL
-  if (isUserAbleToSearchRemoteURI(res)) {
+  // Local URLs are resolved from the database: federation refuses to fetch local videos
+  if (isUserAbleToSearchRemoteURI(res) && !isLocalUrl(url)) {
     try {
       const syncParam = {
         rates: false,
