@@ -7,7 +7,7 @@ export interface Runner {
   ip: string
   lastContact: Date | string
 
-  version: string
+  version: string | null
 
   createdAt: Date | string
   updatedAt: Date | string
