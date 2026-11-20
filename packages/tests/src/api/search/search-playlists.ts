@@ -174,6 +174,20 @@ describe('Test playlists search', function () {
     expect(body.data).to.have.lengthOf(0)
   })
 
+  it('Should sort playlists by display name', async function () {
+    const expected = [ 'Dr. Kenzo Tenma hospital videos', 'Johan & Anna Libert music videos' ]
+
+    {
+      const body = await command.advancedPlaylistSearch({ search: { sort: 'displayName' } })
+      expect(body.data.map(p => p.displayName)).to.deep.equal(expected)
+    }
+
+    {
+      const body = await command.advancedPlaylistSearch({ search: { sort: '-displayName' } })
+      expect(body.data.map(p => p.displayName)).to.deep.equal([ ...expected ].reverse())
+    }
+  })
+
   after(async function () {
     await cleanupTests([ server, remoteServer ])
   })

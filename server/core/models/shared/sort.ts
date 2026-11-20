@@ -34,10 +34,20 @@ export function getAdminUsersSort (value: string): OrderItem[] {
   return [ [ finalField as any, direction, nullPolicy ], [ 'id', 'ASC' ] ]
 }
 
+export function getChannelSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildSortDirectionAndField(value)
+
+  if (field === 'displayName') {
+    return [ [ 'name', direction ], lastSort ]
+  }
+
+  return getSort(value, lastSort)
+}
+
 export function getPlaylistSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildSortDirectionAndField(value)
 
-  if (field.toLowerCase() === 'name') {
+  if (field.toLowerCase() === 'name' || field === 'displayName') {
     return [ [ 'name', direction ], lastSort ]
   }
 

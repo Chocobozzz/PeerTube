@@ -9,7 +9,7 @@ import {
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { AbstractListQuery, AbstractListQueryOptions } from '@server/models/shared/abstract-list-query.js'
 import { buildBlockedAccountSQL } from '@server/models/shared/sql/common-helpers.js'
-import { buildServerIdsFollowedBy } from '@server/models/shared/index.js'
+import { buildServerIdsFollowedBy, getChannelSort } from '@server/models/shared/index.js'
 import { Sequelize } from 'sequelize'
 import { VideoChannelTableAttributes } from './video-channel-table-attributes.js'
 
@@ -361,5 +361,9 @@ export class VideoChannelListQueryBuilder extends AbstractListQuery {
 
   protected getCalculatedAttributes () {
     return [ 'similarity' ]
+  }
+
+  protected getSort (sort: string) {
+    return getChannelSort(sort)
   }
 }
