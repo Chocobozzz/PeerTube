@@ -108,7 +108,7 @@ describe('Test Live transcoding in peertube-runner program', function () {
         liveVideoId: video.uuid,
         resolutions: [ 720, 480, 360, 240, 144 ],
         framerates: {
-          720: 60,
+          720: 48,
           480: 30,
           360: 30,
           240: 30,

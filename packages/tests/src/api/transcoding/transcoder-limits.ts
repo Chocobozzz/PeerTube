@@ -139,7 +139,47 @@ describe('Test video transcoding limits', function () {
       const { uuid } = await servers[1].videos.upload({ attributes })
 
       await waitJobs(servers)
-      await testFPS({ uuid, originFPS: 60, averageFPS: 15 })
+      await testFPS({ uuid, originFPS: 15, averageFPS: 15 })
+    })
+
+    it('Should cap the max resolution file FPS when it is not the input resolution', async function () {
+      this.timeout(120_000)
+
+      await servers[1].config.enableTranscoding({
+        alwaysTranscodeOriginalResolution: false,
+        hls: true,
+        webVideo: true,
+        resolutions: [ VideoResolution.H_720P ],
+        maxFPS: 25
+      })
+
+      const attributes = { name: 'capped 25fps 720p only', fixture: '1080p_60fps.mp4' }
+      const { uuid } = await servers[1].videos.upload({ attributes })
+
+      await waitJobs(servers)
+
+      for (const server of servers) {
+        const video = await server.videos.get({ id: uuid })
+
+        const files = getAllFiles(video)
+        expect(files).to.have.lengthOf(2)
+
+        for (const file of files) {
+          expect(file.resolution.id).to.equal(VideoResolution.H_720P)
+          expect(file.fps).to.be.closeTo(25, 2)
+        }
+
+        const path = servers[1].servers.buildWebVideoFilePath(video.files[0].fileUrl)
+        expect(await getVideoStreamFPS(path)).to.be.closeTo(25, 2)
+      }
+
+      await servers[1].config.enableTranscoding({
+        alwaysTranscodeOriginalResolution: true,
+        hls: true,
+        webVideo: true,
+        resolutions: 'max',
+        with0p: false
+      })
     })
 
     it('Should not duplicate resolution on re-transcoding', async function () {
@@ -151,7 +191,7 @@ describe('Test video transcoding limits', function () {
       const { uuid } = await servers[1].videos.upload({ attributes })
 
       await waitJobs(servers)
-      await testFPS({ uuid, originFPS: 60, averageFPS: 30, highFPS: 50 })
+      await testFPS({ uuid, originFPS: 50, averageFPS: 25, highFPS: 50 })
 
       await servers[1].videos.runTranscoding({ transcodingType: 'web-video', videoId: uuid })
       await waitJobs(servers)
@@ -159,7 +199,7 @@ describe('Test video transcoding limits', function () {
       const video = await servers[1].videos.get({ id: uuid })
       expect(video.files.map(f => f.resolution.id)).to.deep.equal([ 1080, 720, 480, 360, 240, 144 ])
 
-      await testFPS({ uuid, originFPS: 60, averageFPS: 30, highFPS: 50 })
+      await testFPS({ uuid, originFPS: 50, averageFPS: 25, highFPS: 50 })
     })
 
     after(async function () {

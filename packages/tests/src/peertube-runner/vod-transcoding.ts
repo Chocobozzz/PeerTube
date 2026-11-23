@@ -393,7 +393,7 @@ describe('Test VOD transcoding in peertube-runner program', function () {
         const file480p = files.find(f => f.resolution.id === VideoResolution.H_480P)
         const file240p = files.find(f => f.resolution.id === VideoResolution.H_240P)
 
-        expect(file720p.fps).to.at.least(22)
+        expect(file720p.fps).to.be.at.most(15)
         expect(file480p.fps).to.be.at.most(15)
         expect(file240p.fps).to.be.at.most(15)
       })

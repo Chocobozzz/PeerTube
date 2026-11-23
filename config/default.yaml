@@ -811,8 +811,7 @@ transcoding:
   always_transcode_podcast_optimized_audio: true
 
   fps:
-    # Cap transcoded video FPS
-    # Max resolution file still keeps the original FPS
+    # Cap transcoded video FPS, including the max resolution file
     max: 60
 
   # Generate videos in a web compatible format
@@ -940,8 +939,7 @@ live:
     always_transcode_original_resolution: true
 
     fps:
-      # Cap transcoded live FPS
-      # Max resolution stream still keeps the original FPS
+      # Cap transcoded live FPS, including the max resolution stream
       max: 60
 
 video_studio:

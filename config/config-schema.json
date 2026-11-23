@@ -2193,7 +2193,7 @@
           "type": "object",
           "properties": {
             "max": {
-              "description": "Cap transcoded video FPS Max resolution file still keeps the original FPS",
+              "description": "Cap transcoded video FPS, including the max resolution file",
               "type": "integer",
               "default": 60
             }
@@ -2441,7 +2441,7 @@
               "type": "object",
               "properties": {
                 "max": {
-                  "description": "Cap transcoded live FPS Max resolution stream still keeps the original FPS",
+                  "description": "Cap transcoded live FPS, including the max resolution stream",
                   "type": "integer",
                   "default": 60
                 }

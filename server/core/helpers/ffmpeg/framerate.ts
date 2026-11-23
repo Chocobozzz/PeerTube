@@ -38,8 +38,8 @@ export function computeOutputFPS (options: {
   // Cap min FPS
   fps = Math.max(fps, settings.TRANSCODED_MIN)
 
-  // Cap max FPS for non-origin video file
-  if (!isOriginResolution && fps > settings.TRANSCODED_MAX) {
+  // Cap max FPS, including the origin resolution file
+  if (fps > settings.TRANSCODED_MAX) {
     fps = getClosestFramerate({ fps, settings, type: 'HD_STANDARD' })
   }
 
