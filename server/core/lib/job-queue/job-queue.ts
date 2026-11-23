@@ -22,13 +22,13 @@ import {
   RefreshPayload,
   TranscodingJobBuilderPayload,
   VideoChannelImportPayload,
+  VideoDuplicatePayload,
   VideoFileImportPayload,
   VideoFilesLifecyclePayload,
   VideoImportPayload,
   VideoLiveEndingPayload,
   VideoRedundancyPayload,
   VideoStudioEditionPayload,
-  VideoDuplicatePayload,
   VideoTranscodingPayload,
   VideoTranscriptionPayload
 } from '@peertube/peertube-models'
@@ -85,13 +85,13 @@ import { onMoveToObjectStorageFailure, processMoveToObjectStorage } from './hand
 import { processNotify } from './handlers/notify.js'
 import { processTranscodingJobBuilder } from './handlers/transcoding-job-builder.js'
 import { processVideoChannelImport } from './handlers/video-channel-import.js'
+import { processVideoDuplicate } from './handlers/video-duplicate.js'
 import { processVideoFileImport } from './handlers/video-file-import.js'
 import { processVideoFilesLifecycle } from './handlers/video-files-lifecycle.js'
 import { processVideoImport } from './handlers/video-import.js'
 import { processVideoLiveEnding } from './handlers/video-live-ending.js'
 import { processVideosStats } from './handlers/video-stats.js'
 import { processVideoStudioEdition } from './handlers/video-studio-edition.js'
-import { processVideoDuplicate } from './handlers/video-duplicate.js'
 import { processVideoTranscoding } from './handlers/video-transcoding.js'
 import { processVideoTranscription } from './handlers/video-transcription.js'
 
@@ -355,7 +355,10 @@ class JobQueue {
 
       logger.log(logLevel, 'Cannot execute job %s in queue %s.', job.id, handlerName, { payload: job.data, err })
 
-      if (job.attemptsMade < job.opts.attempts && errorHandlers[handlerName]) {
+      // Don't check attempts made if it's cancelled (UnrecoverableError)
+      const isFinalFailure = job.attemptsMade >= (job.opts.attempts ?? 1) || err?.name === 'UnrecoverableError'
+
+      if (isFinalFailure && errorHandlers[handlerName]) {
         errorHandlers[handlerName](job, err)
           .catch(err => logger.error('Cannot run error handler for job failure %d in queue %s.', job.id, handlerName, { err }))
       }
