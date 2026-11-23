@@ -31,23 +31,28 @@ type ConfirmOptions =
 @Injectable()
 export class ConfirmService {
   showConfirm = new Subject<ConfirmOptions>()
-  confirmResponse = new Subject<{ confirmed: boolean, value?: string }>()
+  // cancelled is true only if the user clicked on the cancel button
+  // (not if the modal was closed with the cross, the escape key or a click outside)
+  confirmResponse = new Subject<{ confirmed: boolean, cancelled?: boolean, value?: string }>()
 
   confirm (
     message: string,
     title = '',
     options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>> = {}
   ) {
-    this.showConfirm.next({
-      type: 'confirm',
-      title,
-      message,
-      confirmButtonText: options.confirmButtonText,
-      moreInfo: options.moreInfo,
-      cancelButtonText: options.cancelButtonText
-    })
+    return firstValueFrom(this.extractConfirmed(this.showSimpleConfirm(message, title, options)))
+  }
 
-    return firstValueFrom(this.extractConfirmed(this.confirmResponse.asObservable()))
+  // Same as confirm() but also tells if the user explicitly clicked on the cancel button
+  confirmWithCancelInfo (
+    message: string,
+    title = '',
+    options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>> = {}
+  ) {
+    const obs = this.showSimpleConfirm(message, title, options)
+      .pipe(map(({ confirmed, cancelled }) => ({ confirmed, cancelled: cancelled === true })))
+
+    return firstValueFrom(obs)
   }
 
   confirmWithPassword (options: {
@@ -69,6 +74,23 @@ export class ConfirmService {
     this.showConfirm.next({ type: 'confirm-expected-input', title, message, inputLabel, expectedInputValue, confirmButtonText })
 
     return firstValueFrom(this.extractConfirmed(this.confirmResponse.asObservable()))
+  }
+
+  private showSimpleConfirm (
+    message: string,
+    title: string,
+    options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>>
+  ) {
+    this.showConfirm.next({
+      type: 'confirm',
+      title,
+      message,
+      confirmButtonText: options.confirmButtonText,
+      moreInfo: options.moreInfo,
+      cancelButtonText: options.cancelButtonText
+    })
+
+    return this.confirmResponse.asObservable()
   }
 
   private extractConfirmed (obs: Observable<{ confirmed: boolean }>) {

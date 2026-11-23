@@ -26,13 +26,15 @@ export class CanDeactivateGuard {
 
     const text = result.text || $localize`All unsaved data will be lost, are you sure you want to leave this page?`
 
-    return this.confirmService.confirm(
+    // "Stay on page" is the primary/default button so we don't leave the page by accident
+    // Only leave the page if the user explicitly clicked on "Leave page" (not on the cross, the escape key or outside the modal)
+    return this.confirmService.confirmWithCancelInfo(
       text,
       $localize`Warning`,
       {
         confirmButtonText: $localize`Stay on page`,
         cancelButtonText: $localize`Leave page`
       }
-    ).then(result => !result) // Inverse the result, "stay on page" is the primary/default button so we don't leave the page by accident
+    ).then(({ cancelled }) => cancelled)
   }
 }

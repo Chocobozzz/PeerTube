@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrate
 import { FormsModule } from '@angular/forms'
 import { HtmlRendererService } from '@app/core'
 import { ConfirmService } from '@app/core/confirm/confirm.service'
-import { POP_STATE_MODAL_DISMISS } from '@app/helpers'
+import { CANCEL_BUTTON_MODAL_DISMISS, POP_STATE_MODAL_DISMISS } from '@app/helpers'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { InputTextComponent } from '../shared/shared-forms/input-text.component'
 
@@ -16,6 +16,8 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
   imports: [ GlobalIconComponent, FormsModule, InputTextComponent ]
 })
 export class ConfirmComponent implements OnInit {
+  readonly CANCEL_BUTTON_MODAL_DISMISS = CANCEL_BUTTON_MODAL_DISMISS
+
   private modalService = inject(NgbModal)
   private html = inject(HtmlRendererService)
   private confirmService = inject(ConfirmService)
@@ -107,7 +109,11 @@ export class ConfirmComponent implements OnInit {
       .catch((reason: string) => {
         // If the reason was that the user used the back button, we don't care about the confirm dialog result
         if (!reason || reason !== POP_STATE_MODAL_DISMISS) {
-          this.confirmService.confirmResponse.next({ confirmed: false, value: this.inputValue })
+          this.confirmService.confirmResponse.next({
+            confirmed: false,
+            cancelled: reason === CANCEL_BUTTON_MODAL_DISMISS,
+            value: this.inputValue
+          })
         }
       })
   }
