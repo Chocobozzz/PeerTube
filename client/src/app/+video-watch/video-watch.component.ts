@@ -548,8 +548,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       },
       error: async err => {
         if (err.body.code === ServerErrorCode.VIDEO_REQUIRES_PASSWORD || err.body.code === ServerErrorCode.INCORRECT_VIDEO_PASSWORD) {
-          const { confirmed, password } = await this.handleVideoPasswordError(err)
+          const { confirmed, reason, password } = await this.handleVideoPasswordError(err)
 
+          // The user already left the page using the browser history
+          if (reason === 'pop-state') return
           if (confirmed === false) return this.location.back()
 
           this.loadVideo({ ...options, videoPassword: password })
@@ -646,10 +648,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
   }
 
-  private async isDisplayCancelledBecauseNSFW (video: VideoDetails, loggedInOrAnonymousUser: User) {
-    if (!video.isNSFWHiddenForUser(loggedInOrAnonymousUser, this.serverConfig)) return false
+  private async confirmNSFWDisplay (video: VideoDetails, loggedInOrAnonymousUser: User): Promise<'display' | 'cancel' | 'pop-state'> {
+    if (!video.isNSFWHiddenForUser(loggedInOrAnonymousUser, this.serverConfig)) return 'display'
 
-    const res = await this.confirmService.confirm(
+    const reason = await this.confirmService.confirmWithReason(
       $localize`This video contains sensitive content. Are you sure you want to display the video page?`,
       $localize`Sensitive video`,
       {
@@ -664,7 +666,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }
     )
 
-    return res === false
+    if (reason === 'confirm-button') return 'display'
+    if (reason === 'pop-state') return 'pop-state'
+
+    return 'cancel'
   }
 
   private async onVideoFetched (options: {
@@ -710,9 +715,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.restoreTranscriptionWidgetIfNeeded()
 
-    if (await this.isDisplayCancelledBecauseNSFW(video, loggedInOrAnonymousUser) === true) {
-      return this.location.back()
-    }
+    const nsfwResult = await this.confirmNSFWDisplay(video, loggedInOrAnonymousUser)
+    // The user already left the page using the browser history
+    if (nsfwResult === 'pop-state') return
+    if (nsfwResult === 'cancel') return this.location.back()
 
     this.restoreModalFromQueryParamIfNeeded()
 
