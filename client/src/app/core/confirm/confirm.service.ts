@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { firstValueFrom, map, Observable, Subject } from 'rxjs'
+import { firstValueFrom, Subject } from 'rxjs'
 
 type ConfirmOptions =
   & {
@@ -28,58 +28,32 @@ type ConfirmOptions =
     }
   )
 
+// * confirm-button: the user clicked on the confirm button
+// * cancel-button: the user clicked on the cancel button
+// * dismiss: the user closed the modal using the cross, the escape key or a click outside
+// * pop-state: the modal was closed because the user navigated in the browser history (back/forward button)
+export type ConfirmCloseReason = 'confirm-button' | 'cancel-button' | 'dismiss' | 'pop-state'
+
 @Injectable()
 export class ConfirmService {
   showConfirm = new Subject<ConfirmOptions>()
-  // cancelled is true only if the user clicked on the cancel button
-  // (not if the modal was closed with the cross, the escape key or a click outside)
-  confirmResponse = new Subject<{ confirmed: boolean, cancelled?: boolean, value?: string }>()
+  confirmResponse = new Subject<{ reason: ConfirmCloseReason, value?: string }>()
 
-  confirm (
+  async confirm (
     message: string,
     title = '',
     options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>> = {}
   ) {
-    return firstValueFrom(this.extractConfirmed(this.showSimpleConfirm(message, title, options)))
+    const reason = await this.confirmWithReason(message, title, options)
+
+    return reason === 'confirm-button'
   }
 
-  // Same as confirm() but also tells if the user explicitly clicked on the cancel button
-  confirmWithCancelInfo (
+  // Same as `confirm()` but tells how the modal was closed
+  async confirmWithReason (
     message: string,
     title = '',
     options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>> = {}
-  ) {
-    const obs = this.showSimpleConfirm(message, title, options)
-      .pipe(map(({ confirmed, cancelled }) => ({ confirmed, cancelled: cancelled === true })))
-
-    return firstValueFrom(obs)
-  }
-
-  confirmWithPassword (options: {
-    message: string
-    title?: string
-    confirmButtonText?: string
-    errorMessage?: string
-  }) {
-    const { message, title = '', confirmButtonText, errorMessage } = options
-    this.showConfirm.next({ type: 'confirm-password', title, message, confirmButtonText, errorMessage })
-
-    const obs = this.confirmResponse.asObservable()
-      .pipe(map(({ confirmed, value }) => ({ confirmed, password: value })))
-
-    return firstValueFrom(obs)
-  }
-
-  confirmWithExpectedInput (message: string, inputLabel: string, expectedInputValue: string, title = '', confirmButtonText?: string) {
-    this.showConfirm.next({ type: 'confirm-expected-input', title, message, inputLabel, expectedInputValue, confirmButtonText })
-
-    return firstValueFrom(this.extractConfirmed(this.confirmResponse.asObservable()))
-  }
-
-  private showSimpleConfirm (
-    message: string,
-    title: string,
-    options: Partial<Pick<ConfirmOptions, 'confirmButtonText' | 'cancelButtonText' | 'moreInfo'>>
   ) {
     this.showConfirm.next({
       type: 'confirm',
@@ -90,10 +64,34 @@ export class ConfirmService {
       cancelButtonText: options.cancelButtonText
     })
 
-    return this.confirmResponse.asObservable()
+    const { reason } = await this.waitResponse()
+
+    return reason
   }
 
-  private extractConfirmed (obs: Observable<{ confirmed: boolean }>) {
-    return obs.pipe(map(({ confirmed }) => confirmed))
+  async confirmWithPassword (options: {
+    message: string
+    title?: string
+    confirmButtonText?: string
+    errorMessage?: string
+  }) {
+    const { message, title = '', confirmButtonText, errorMessage } = options
+    this.showConfirm.next({ type: 'confirm-password', title, message, confirmButtonText, errorMessage })
+
+    const { reason, value } = await this.waitResponse()
+
+    return { confirmed: reason === 'confirm-button', reason, password: value }
+  }
+
+  async confirmWithExpectedInput (message: string, inputLabel: string, expectedInputValue: string, title = '', confirmButtonText?: string) {
+    this.showConfirm.next({ type: 'confirm-expected-input', title, message, inputLabel, expectedInputValue, confirmButtonText })
+
+    const { reason } = await this.waitResponse()
+
+    return reason === 'confirm-button'
+  }
+
+  private waitResponse () {
+    return firstValueFrom(this.confirmResponse)
   }
 }

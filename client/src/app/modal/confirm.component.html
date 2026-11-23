@@ -45,13 +45,13 @@
   <div class="modal-footer inputs">
     <input
       type="button" role="button" [value]="cancelButtonText" class="peertube-button secondary-button"
-      (click)="dismiss(CANCEL_BUTTON_MODAL_DISMISS)" (key.enter)="dismiss(CANCEL_BUTTON_MODAL_DISMISS)"
+      (click)="cancel()"
       >
 
     <input
       ngbAutofocus
       type="submit" [value]="confirmButtonText" class="peertube-button primary-button" [disabled]="isConfirmationDisabled()"
-      (click)="close()" (key.enter)="confirm()"
+      (click)="confirm()"
       >
   </div>
 </ng-template>

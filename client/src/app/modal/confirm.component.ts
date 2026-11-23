@@ -1,12 +1,14 @@
-import { Component, ElementRef, OnInit, inject, viewChild, ChangeDetectionStrategy } from '@angular/core'
+import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, viewChild } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { HtmlRendererService } from '@app/core'
-import { ConfirmService } from '@app/core/confirm/confirm.service'
-import { CANCEL_BUTTON_MODAL_DISMISS, POP_STATE_MODAL_DISMISS } from '@app/helpers'
+import { ConfirmCloseReason, ConfirmService } from '@app/core/confirm/confirm.service'
+import { POP_STATE_MODAL_DISMISS } from '@app/helpers'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { InputTextComponent } from '../shared/shared-forms/input-text.component'
 
 import { GlobalIconComponent } from '../shared/shared-icons/global-icon.component'
+
+const CANCEL_BUTTON_MODAL_DISMISS = 'cancel button dismiss'
 
 @Component({
   selector: 'my-confirm',
@@ -16,8 +18,6 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
   imports: [ GlobalIconComponent, FormsModule, InputTextComponent ]
 })
 export class ConfirmComponent implements OnInit {
-  readonly CANCEL_BUTTON_MODAL_DISMISS = CANCEL_BUTTON_MODAL_DISMISS
-
   private modalService = inject(NgbModal)
   private html = inject(HtmlRendererService)
   private confirmService = inject(ConfirmService)
@@ -87,6 +87,10 @@ export class ConfirmComponent implements OnInit {
     if (this.openedModal) this.openedModal.close()
   }
 
+  cancel () {
+    if (this.openedModal) this.openedModal.dismiss(CANCEL_BUTTON_MODAL_DISMISS)
+  }
+
   isConfirmationDisabled () {
     // No input validation
     if (!this.inputLabel || !this.expectedInputValue) return false
@@ -97,24 +101,26 @@ export class ConfirmComponent implements OnInit {
   hasError () {
     return this.errorMessage
   }
+
   showModal () {
     this.inputValue = ''
 
     this.openedModal = this.modalService.open(this.confirmModal(), { centered: true })
 
+    // Always send a response, so the caller promise is settled and does not catch the response of the next confirm modal
     this.openedModal.result
-      .then(() => {
-        this.confirmService.confirmResponse.next({ confirmed: true, value: this.inputValue })
-      })
-      .catch((reason: string) => {
-        // If the reason was that the user used the back button, we don't care about the confirm dialog result
-        if (!reason || reason !== POP_STATE_MODAL_DISMISS) {
-          this.confirmService.confirmResponse.next({
-            confirmed: false,
-            cancelled: reason === CANCEL_BUTTON_MODAL_DISMISS,
-            value: this.inputValue
-          })
-        }
-      })
+      .then(() => this.sendResponse('confirm-button'))
+      .catch((dismissReason: unknown) => this.sendResponse(this.getCloseReason(dismissReason)))
+  }
+
+  private sendResponse (reason: ConfirmCloseReason) {
+    this.confirmService.confirmResponse.next({ reason, value: this.inputValue })
+  }
+
+  private getCloseReason (dismissReason: unknown): ConfirmCloseReason {
+    if (dismissReason === CANCEL_BUTTON_MODAL_DISMISS) return 'cancel-button'
+    if (dismissReason === POP_STATE_MODAL_DISMISS) return 'pop-state'
+
+    return 'dismiss'
   }
 }

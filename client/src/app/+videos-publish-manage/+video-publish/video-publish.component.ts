@@ -146,8 +146,13 @@ export class VideoPublishComponent implements OnInit, CanComponentDeactivate {
     for (const component of components) {
       if (!component) continue
 
+      const result = await this.canDeactivateGuard.confirmDeactivate(component)
+
+      // The browser history navigation will update the URL, don't reset or redirect
+      if (result === 'pop-state') return
+
       // Restore old URL
-      if (!await this.canDeactivateGuard.canDeactivate(component)) {
+      if (result === 'stay') {
         if (this.publishedIdQuery) {
           this.manageController.silentRedirectOnManage(this.publishedIdQuery, this.route)
         } else if (this.uploadingQuery) {
