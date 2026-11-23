@@ -11,6 +11,7 @@ import {
   setAccessTokensToServers
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
+import { hostname } from 'os'
 
 describe('Test the processes listed by the debug endpoint', function () {
   if (areMockObjectStorageTestsDisabled()) return
@@ -49,6 +50,25 @@ describe('Test the processes listed by the debug endpoint', function () {
       expect(p.version).to.equal(serverVersion)
       expect(new Date(p.startedAt).getTime()).to.be.at.most(new Date(p.lastSeenAt).getTime())
       expect(Date.now() - new Date(p.lastSeenAt).getTime()).to.be.below(10000)
+    }
+  })
+
+  it('Should tag logs with the process role and host', async function () {
+    for (
+      const { server, role } of [
+        { server: primary, role: 'primary' },
+        { server: secondary1, role: 'secondary' },
+        { server: secondary2, role: 'secondary' }
+      ]
+    ) {
+      const content = (await server.servers.getLogContent()).toString()
+      const lines = content.split('\n').filter(l => !!l).map(l => JSON.parse(l))
+
+      expect(lines).to.not.be.empty
+
+      for (const line of lines) {
+        expect(line.tags).to.include.members([ role, hostname() + ':' + server.port ])
+      }
     }
   })
 

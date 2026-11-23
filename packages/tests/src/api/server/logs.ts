@@ -11,6 +11,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
+import { hostname } from 'os'
 
 describe('Test logs', function () {
   let server: PeerTubeServer
@@ -109,6 +110,29 @@ describe('Test logs', function () {
         for (const line of body) {
           expect(line.tags).to.contain(uuid)
         }
+      }
+    })
+
+    it('Should tag logs with the process role and host', async function () {
+      const now = new Date()
+
+      await server.videos.upload({ attributes: { name: 'video process tags' } })
+      await waitJobs([ server ])
+
+      const hostTag = hostname() + ':' + server.port
+
+      {
+        const body = await logsCommand.getLogs({ startDate: now, level: 'debug' })
+        expect(body).to.not.have.lengthOf(0)
+
+        for (const line of body) {
+          expect(line.tags).to.include.members([ 'primary', hostTag ])
+        }
+      }
+
+      {
+        const body = await logsCommand.getLogs({ startDate: now, level: 'debug', tagsOneOf: [ hostTag ] })
+        expect(body).to.not.have.lengthOf(0)
       }
     })
 

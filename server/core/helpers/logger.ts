@@ -3,6 +3,7 @@ import { arrayify } from '@peertube/peertube-core-utils'
 import { isShortUUID, isTestOrDevInstance } from '@peertube/peertube-node-utils'
 import { AsyncLocalStorage } from 'async_hooks'
 import { stat } from 'fs/promises'
+import { hostname } from 'os'
 import { join } from 'path'
 import { format as sqlFormat } from 'sql-formatter'
 import { isatty } from 'tty'
@@ -11,6 +12,7 @@ import { FileTransportOptions } from 'winston/lib/winston/transports/index.js'
 import { isMainThread } from 'worker_threads'
 import { CONFIG } from '../initializers/config.js'
 import { LOG_FILENAME } from '../initializers/constants.js'
+import { getProcessRole } from '../initializers/process-role.js'
 import { toCompleteUUID } from './custom-validators/misc.js'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
@@ -47,6 +49,17 @@ export const labelFormatter: (suffix?: string) => ReturnType<typeof format.print
     label: suffix ? `${label} ${suffix}` : label
   })
 }
+
+const processTags: LoggerTag[] = [ getProcessRole(), hostname() + ':' + CONFIG.LISTEN.PORT ]
+
+const processTagsFormat = format(info => {
+  // Copy: tags may be the array of the async logger context, that we must not mutate
+  info.tags = info.tags
+    ? [ ...arrayify(info.tags as LoggerTag | LoggerTag[]), ...processTags ]
+    : processTags.slice()
+
+  return info
+})
 
 export function buildWinstonLogger (options: {
   labelSuffix?: string
@@ -111,6 +124,7 @@ export function buildWinstonLogger (options: {
       : undefined,
     format: format.combine(
       labelFormatter(labelSuffix),
+      processTagsFormat(),
       format.splat()
     ),
     transports: loggerTransports
