@@ -1,7 +1,8 @@
 import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityHtmlUrlObject } from '@peertube/peertube-models'
-import validator from 'validator'
+import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { createLogger } from '@server/helpers/logger.js'
+import validator from 'validator'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, MIMETYPES } from '../../../initializers/constants.js'
 import { exists, isArray } from '../misc.js'
 import { isUrlValid } from '../urls.js'
@@ -46,6 +47,22 @@ export function setValidAttributedTo (obj: any) {
   })
 
   return true
+}
+
+export function setValidRemoteSupport (
+  entity: { support?: string },
+  constraints: { min: number, max: number }
+) {
+  if (!entity.support || typeof entity.support !== 'string') {
+    entity.support = null
+    return
+  }
+
+  entity.support = peertubeTruncate(entity.support, { length: constraints.max })
+
+  if (entity.support.length < constraints.min) {
+    entity.support = null
+  }
 }
 
 export function setValidRemoteIcon (entity: any) {

@@ -74,21 +74,21 @@ export const VIDEO_TAGS_ARRAY_VALIDATOR: BuildFormValidator = {
 export const VIDEO_SUPPORT_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.minLength(3), Validators.maxLength(1000) ],
   MESSAGES: {
-    minlength: $localize`Video support must be at least 3 characters long.`,
-    maxlength: $localize`Video support cannot be more than 1000 characters long.`
+    minlength: $localize`Support text must be at least 3 characters long.`,
+    maxlength: $localize`Support text cannot be more than 1000 characters long.`
   }
 }
 
 export function videoSupportValidator (support: SchemaPath<string>) {
-  minLength(support, 3, { message: $localize`Support must be at least 3 characters long.` })
-  maxLength(support, 1000, { message: $localize`Support cannot be more than 1000 characters long.` })
+  minLength(support, 3, { message: $localize`Support text must be at least 3 characters long.` })
+  maxLength(support, 1000, { message: $localize`Support text cannot be more than 1000 characters long.` })
 }
 
 export const VIDEO_NSFW_SUMMARY_VALIDATOR: BuildFormValidator = {
   VALIDATORS: [ Validators.minLength(3), Validators.maxLength(250) ],
   MESSAGES: {
-    minlength: $localize`Video support must be at least 3 characters long.`,
-    maxlength: $localize`Video support cannot be more than 250 characters long.`
+    minlength: $localize`Sensitive content description must be at least 3 characters long.`,
+    maxlength: $localize`Sensitive content description cannot be more than 250 characters long.`
   }
 }
 

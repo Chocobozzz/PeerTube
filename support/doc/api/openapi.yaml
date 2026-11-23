@@ -4068,6 +4068,9 @@ paths:
                   description: A text tell the audience how to support the video creator
                   example: Please support our work on https://soutenir.framasoft.org/en/ <3
                   type: string
+                  nullable: true
+                  minLength: 3
+                  maxLength: 1000
                 nsfw:
                   description: Whether or not this video contains sensitive content
                   type: boolean
@@ -4683,6 +4686,9 @@ paths:
                   description: A text tell the audience how to support the creator
                   example: Please support our work on https://soutenir.framasoft.org/en/ <3
                   type: string
+                  nullable: true
+                  minLength: 3
+                  maxLength: 1000
                 nsfw:
                   description: Whether or not this live video/replay contains sensitive content
                   type: boolean
@@ -13541,6 +13547,9 @@ components:
           description: A text tell the audience how to support the video creator
           example: Please support our work on https://soutenir.framasoft.org/en/ <3
           type: string
+          nullable: true
+          minLength: 3
+          maxLength: 1000
         nsfw:
           description: Whether or not this video contains sensitive content
           type: boolean
@@ -14542,11 +14551,22 @@ components:
     VideoChannelEdit:
       properties:
         displayName:
+          type: string
           description: Channel display name
+          minLength: 1
+          maxLength: 120
         description:
+          type: string
+          nullable: true
           description: Channel description
+          minLength: 3
+          maxLength: 1000
         support:
+          type: string
+          nullable: true
           description: How to support/fund the channel
+          minLength: 3
+          maxLength: 1000
         publicEmail:
           type: string
           format: email

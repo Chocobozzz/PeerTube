@@ -39,7 +39,8 @@ import {
   isActivityPubVideoDurationValid,
   isBaseActivityValid,
   setValidAttributedTo,
-  setValidRemoteIcon
+  setValidRemoteIcon,
+  setValidRemoteSupport
 } from './misc.js'
 
 const logger = createLogger()
@@ -60,6 +61,7 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (!setValidRemoteTags(video)) return fail('tags')
   if (!setValidRemoteVideoUrls(video)) return fail('urls')
   if (!setRemoteVideoContent(video)) return fail('content')
+  setValidRemoteSupport(video, CONSTRAINTS_FIELDS.VIDEOS.SUPPORT)
   if (!setValidAttributedTo(video)) return fail('attributedTo')
   if (!setValidRemoteCaptions(video)) return fail('captions')
   if (!setValidRemoteIcon(video) || video.icon.length === 0) return fail('icons')

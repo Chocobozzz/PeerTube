@@ -5,7 +5,13 @@ import validator from 'validator'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, WEBSERVER } from '../../../initializers/constants.js'
 import { exists, isArray, isDateValid } from '../misc.js'
 import { isHostValid } from '../servers.js'
-import { isActivityPubHTMLUrlValid, isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc.js'
+import {
+  isActivityPubHTMLUrlValid,
+  isActivityPubUrlValid,
+  isBaseActivityValid,
+  setValidAttributedTo,
+  setValidRemoteSupport
+} from './misc.js'
 
 export function isActorEndpointsObjectValid (endpointObject: any) {
   if (endpointObject?.sharedInbox) {
@@ -135,6 +141,7 @@ function normalizeActor (actor: ActivityPubActor) {
   setValidActorImages(actor, 'icon')
   setValidActorImages(actor, 'image')
   setValidDescription(actor)
+  setValidRemoteSupport(actor, CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT)
   setValidEmail(actor)
 
   if (!isDateValid(actor.published)) actor.published = undefined
