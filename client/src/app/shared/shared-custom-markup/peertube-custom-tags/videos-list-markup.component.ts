@@ -38,6 +38,7 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   readonly languageOneOf = input<string[]>(undefined)
   readonly count = input<number>(undefined)
   readonly onlyDisplayTitle = input<boolean>(undefined)
+  readonly displayDate = input<boolean>(undefined)
   readonly isLocal = input<boolean>(undefined)
   readonly isLive = input<boolean>(undefined)
   readonly maxRows = input<number>(undefined)
@@ -80,6 +81,10 @@ export class VideosListMarkupComponent implements CustomMarkupComponent, OnInit 
   }
 
   ngOnInit () {
+    if (this.displayDate()) {
+      this.displayOptions.date = true
+    }
+
     if (this.onlyDisplayTitle()) {
       for (const key of objectKeysTyped(this.displayOptions)) {
         this.displayOptions[key] = false

@@ -42,6 +42,7 @@ export type ChannelMiniatureMarkupData = {
 
 export type VideosListMarkupData = {
   onlyDisplayTitle?: StringBoolean
+  displayDate?: StringBoolean
   maxRows?: string // number
 
   sort?: string
