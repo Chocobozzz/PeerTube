@@ -18,6 +18,16 @@ $chapter-marker-size: 9px;
   }
 }
 
+// VideoJS hides the mouse display (time/chapter tooltip) on touch-enabled devices,
+// but some web browser spoofs navigator.maxTouchPoints to prevent fingerprinting (and touchscreen laptops also have a mouse)
+@media (hover: hover) and (pointer: fine) {
+  .video-js.vjs-touch-enabled:not(.vjs-scrubbing):not(.vjs-user-inactive) .vjs-progress-control:hover .vjs-mouse-display {
+    visibility: visible;
+    opacity: 1;
+    transition: none;
+  }
+}
+
 .vjs-chapter-marker {
   position: absolute;
 
