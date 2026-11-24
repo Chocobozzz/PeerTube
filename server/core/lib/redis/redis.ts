@@ -28,6 +28,7 @@ import {
   quitRedisClient,
   StatKind
 } from './redis-client.js'
+import * as remoteAbuses from './remote-abuses.js'
 import * as remoteVideoStats from './remote-video-stats.js'
 import * as sharedInstanceConfig from './shared-instance-config.js'
 import * as signupClient from './signup-client.js'
@@ -236,6 +237,12 @@ export class Redis {
 
   incrementRemoteDownloadsOfHost (options: { host: string, videoId: number }) {
     return remoteVideoStats.incrementRemoteDownloadsOfHost(options)
+  }
+
+  /* ************ Remote abuses ************ */
+
+  incrementRemoteAbusesOfHost (host: string) {
+    return remoteAbuses.incrementRemoteAbusesOfHost(host)
   }
 
   /* ************ Local video stats buffer ************ */

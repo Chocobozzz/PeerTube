@@ -6,6 +6,7 @@ import { VideoShareModel } from '../../../models/video/video-share.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorSignature } from '../../../types/models/index.js'
 import { Notifier } from '../../notifier/index.js'
+import { runWithAPObjectLock } from '../ap-object-lock.js'
 import { forwardVideoRelatedActivity } from '../send/shared/send-utils.js'
 import { checkUrlsSameHost } from '../url.js'
 import { canVideoBeFederated, maybeGetOrCreateAPVideo } from '../videos/index.js'
@@ -49,31 +50,37 @@ async function processVideoShare (actorAnnouncer: MActorSignature, activity: Act
     return
   }
 
-  await runTransaction(async t => {
-    // Add share entry
+  await runWithAPObjectLock('share-' + actorAnnouncer.url + '-' + video.url, () => {
+    return runTransaction(async t => {
+      const existingShare = await VideoShareModel.load(actorAnnouncer.id, video.id, t)
+      if (existingShare && existingShare.url !== activity.id) {
+        logger.debug('Ignoring announce %s: actor %s already shared video %s.', activity.id, actorAnnouncer.url, video.url)
+        return
+      }
 
-    const share = {
-      actorId: actorAnnouncer.id,
-      videoId: video.id,
-      url: activity.id
-    }
+      // Add share entry
 
-    const [ , created ] = await VideoShareModel.findOrCreate({
-      where: {
+      const share = {
+        actorId: actorAnnouncer.id,
+        videoId: video.id,
         url: activity.id
-      },
-      defaults: share,
-      transaction: t
+      }
+
+      const [ , created ] = await VideoShareModel.findOrCreate({
+        where: {
+          url: activity.id
+        },
+        defaults: share,
+        transaction: t
+      })
+
+      if (video.isLocal() && created === true) {
+        // Don't resend the activity to the sender
+        const exceptions = [ actorAnnouncer ]
+
+        await forwardVideoRelatedActivity({ activity, transaction: t, followersException: exceptions, video, parallelizable: false })
+      }
     })
-
-    if (video.isLocal() && created === true) {
-      // Don't resend the activity to the sender
-      const exceptions = [ actorAnnouncer ]
-
-      await forwardVideoRelatedActivity({ activity, transaction: t, followersException: exceptions, video, parallelizable: false })
-    }
-
-    return undefined
   })
 
   if (videoCreated && notify) Notifier.Instance.notifyOnNewVideoOrLiveIfNeeded(video)

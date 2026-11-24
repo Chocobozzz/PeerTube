@@ -707,6 +707,12 @@ export const REMOTE_DOWNLOADS = {
   MAX_PER_HOST_PER_VIDEO: 500
 }
 
+export const REMOTE_ABUSES = {
+  RATE_LIMIT_LIFETIME: 60000 * 60, // 1 hour
+  // Max abuses we accept from a specific instance in RATE_LIMIT_LIFETIME
+  MAX_PER_HOST: 50
+}
+
 export const REMOTE_VIEWS = {
   DEDUPLICATION_LIFETIME: 60000 * 60 // 1 hour
 }
@@ -1451,7 +1457,11 @@ export const WORKER_THREADS = {
 
 export const REDUNDANCY = {
   VIDEOS: {
-    RANDOMIZED_FACTOR: 5
+    RANDOMIZED_FACTOR: 5,
+
+    // Remote instances that may duplicate the same streaming playlist (one redundancy per instance)
+    // Bounds the number of redundancy URLs the player may try
+    MAX_REMOTE_PER_STREAMING_PLAYLIST: 5
   }
 }
 
@@ -1557,6 +1567,7 @@ if (process.env.PRODUCTION_CONSTANTS !== 'true') {
     AP_CLEANER.PERIOD = 5000
 
     REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
+    REDUNDANCY.VIDEOS.MAX_REMOTE_PER_STREAMING_PLAYLIST = 1
 
     CONTACT_FORM_LIFETIME = 1000 // 1 second
 

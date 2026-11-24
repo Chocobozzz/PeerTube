@@ -2,8 +2,9 @@ import { abusePredefinedReasonsMap, arrayify, uniqify } from '@peertube/peertube
 import { AbuseState, ActivityFlag } from '@peertube/peertube-models'
 import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { isAbuseReasonValid } from '@server/helpers/custom-validators/abuses.js'
-import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, REMOTE_ABUSE_DEFAULT_REASON } from '@server/initializers/constants.js'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, REMOTE_ABUSE_DEFAULT_REASON, REMOTE_ABUSES } from '@server/initializers/constants.js'
 import { createAccountAbuse, createVideoAbuse, createVideoCommentAbuse } from '@server/lib/moderation.js'
+import { Redis } from '@server/lib/redis/index.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { VideoChannelModel } from '@server/models/video/video-channel.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
@@ -56,6 +57,8 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
   const endAt = flag.endAt
 
   for (const uri of objectUrls.slice(0, ACTIVITY_PUB.MAX_FLAG_OBJECTS)) {
+    let limitReached = false
+
     try {
       logger.debug('Reporting remote abuse for object %s.', uri)
 
@@ -73,6 +76,13 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
 
         if (!video && !videoComment && !flaggedAccount) {
           logger.warn('Cannot flag unknown entity %s.', uri)
+          return
+        }
+
+        if (await isAbuseLimitOfHostReached(byActor)) {
+          logger.warn(`Too many abuses sent by the host of ${byActor.url}, ignoring flag ${flag.id} of ${uri} and its next objects.`)
+
+          limitReached = true
           return
         }
 
@@ -116,7 +126,18 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
     } catch (err) {
       logger.debug('Cannot process report of %s', uri, { err })
     }
+
+    if (limitReached) break
   }
+}
+
+// Each abuse notifies moderators: limit how many an instance can send us
+async function isAbuseLimitOfHostReached (byActor: MActorSignature) {
+  const host = new URL(byActor.url).host.toLowerCase()
+
+  const total = await Redis.Instance.incrementRemoteAbusesOfHost(host)
+
+  return total > REMOTE_ABUSES.MAX_PER_HOST
 }
 
 function getFlagReason (flag: ActivityFlag) {
