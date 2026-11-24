@@ -66,12 +66,9 @@ textarea {
   }
 }
 
-.disabled-checkbox-extra {
-  &,
-  ::ng-deep label {
-    opacity: 0.5;
-    pointer-events: none;
-  }
+.disabled-form-section {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 my-actor-banner-edit {

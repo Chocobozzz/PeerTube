@@ -21,6 +21,11 @@ import {
   FormReactiveMessagesTyped
 } from '@app/shared/form-validators/form-validator.model'
 import { USER_VIDEO_QUOTA_DAILY_VALIDATOR, USER_VIDEO_QUOTA_VALIDATOR } from '@app/shared/form-validators/user-validators'
+import {
+  DisabledFormSectionControlDirective,
+  DisabledFormSectionDirective,
+  getFormValueToSubmit
+} from '@app/shared/shared-forms/disabled-form-section.directive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { AlertComponent } from '@app/shared/shared-main/common/alert.component'
 import { VideoService } from '@app/shared/shared-main/video/video.service'
@@ -244,6 +249,8 @@ type Form = {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    DisabledFormSectionDirective,
+    DisabledFormSectionControlDirective,
     RouterLink,
     SelectCustomValueComponent,
     PeertubeCheckboxComponent,
@@ -536,76 +543,56 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
   }
 
   doesTrendingVideosAlgorithmsEnabledInclude (algorithm: string) {
-    const enabled = this.form.value.trending.videos.algorithms.enabled
+    const enabled = this.form.getRawValue().trending.videos.algorithms.enabled
     if (!Array.isArray(enabled)) return false
 
     return !!enabled.find((e: string) => e === algorithm)
   }
 
   getUserVideoQuota () {
-    return this.form.value.user.videoQuota
+    return this.form.getRawValue().user.videoQuota
   }
 
   isExportUsersEnabled () {
-    return this.form.value.export.users.enabled === true
-  }
-
-  getDisabledExportUsersClass () {
-    return { 'disabled-checkbox-extra': !this.isExportUsersEnabled() }
+    return this.form.getRawValue().export.users.enabled === true
   }
 
   isSignupEnabled () {
-    return this.form.value.signup.enabled === true
-  }
-
-  getDisabledSignupClass () {
-    return { 'disabled-checkbox-extra': !this.isSignupEnabled() }
+    return this.form.getRawValue().signup.enabled === true
   }
 
   isImportVideosHttpEnabled (): boolean {
-    return this.form.value.import.videos.http.enabled === true
+    return this.form.getRawValue().import.videos.http.enabled === true
   }
 
   importSynchronizationChecked () {
-    return this.isImportVideosHttpEnabled() && this.form.value.import.videoChannelSynchronization.enabled
+    return this.isImportVideosHttpEnabled() && this.form.getRawValue().import.videoChannelSynchronization.enabled
   }
 
   hasUnlimitedSignup () {
-    return this.form.value.signup.limit === -1
+    return this.form.getRawValue().signup.limit === -1
   }
 
   isSearchIndexEnabled () {
-    return this.form.value.search.searchIndex.enabled === true
-  }
-
-  getDisabledSearchIndexClass () {
-    return { 'disabled-checkbox-extra': !this.isSearchIndexEnabled() }
+    return this.form.getRawValue().search.searchIndex.enabled === true
   }
 
   // ---------------------------------------------------------------------------
 
   isTranscriptionEnabled () {
-    return this.form.value.videoTranscription.enabled === true
-  }
-
-  getTranscriptionRunnerDisabledClass () {
-    return { 'disabled-checkbox-extra': !this.isTranscriptionEnabled() }
+    return this.form.getRawValue().videoTranscription.enabled === true
   }
 
   // ---------------------------------------------------------------------------
 
   isStoryboardEnabled () {
-    return this.form.value.storyboards.enabled === true
-  }
-
-  getStoryboardRunnerDisabledClass () {
-    return { 'disabled-checkbox-extra': !this.isStoryboardEnabled() }
+    return this.form.getRawValue().storyboards.enabled === true
   }
 
   // ---------------------------------------------------------------------------
 
   isAutoFollowIndexEnabled () {
-    return this.form.value.followings.instance.autoFollowIndex.enabled === true
+    return this.form.getRawValue().followings.instance.autoFollowIndex.enabled === true
   }
 
   buildLandingPageOptions () {
@@ -674,7 +661,7 @@ export class AdminConfigGeneralComponent implements OnInit, OnDestroy, CanCompon
       currentConfig: this.customConfig,
       form: this.form,
       formConfig: merge(
-        this.form.value,
+        getFormValueToSubmit(this.form),
         {
           defaults: {
             publish: {

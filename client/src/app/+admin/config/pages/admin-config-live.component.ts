@@ -17,6 +17,11 @@ import {
   FormReactiveErrorsTyped,
   FormReactiveMessagesTyped
 } from '@app/shared/form-validators/form-validator.model'
+import {
+  DisabledFormSectionControlDirective,
+  DisabledFormSectionDirective,
+  getFormValueToSubmit
+} from '@app/shared/shared-forms/disabled-form-section.directive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { CustomConfig } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '@pt-types'
@@ -79,6 +84,8 @@ type Form = {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    DisabledFormSectionDirective,
+    DisabledFormSectionControlDirective,
     PeertubeCheckboxComponent,
     PeerTubeTemplateDirective,
     SelectOptionsComponent,
@@ -209,35 +216,27 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
   }
 
   isLiveEnabled () {
-    return this.form.value.live.enabled === true
+    return this.form.getRawValue().live.enabled === true
   }
 
   isDvrEnabled () {
-    return this.form.value.live.dvr.enabled === true
+    return this.form.getRawValue().live.dvr.enabled === true
   }
 
   isRemoteRunnerLiveEnabled () {
-    return this.form.value.live.transcoding.remoteRunners.enabled === true
-  }
-
-  getDisabledLiveClass () {
-    return { 'disabled-checkbox-extra': !this.isLiveEnabled() }
-  }
-
-  getDisabledLiveDVRClass () {
-    return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isDvrEnabled() }
-  }
-
-  getDisabledLiveTranscodingClass () {
-    return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isLiveTranscodingEnabled() }
-  }
-
-  getDisabledLiveLocalTranscodingClass () {
-    return { 'disabled-checkbox-extra': !this.isLiveEnabled() || !this.isLiveTranscodingEnabled() || this.isRemoteRunnerLiveEnabled() }
+    return this.form.getRawValue().live.transcoding.remoteRunners.enabled === true
   }
 
   isLiveTranscodingEnabled () {
-    return this.form.value.live.transcoding.enabled === true
+    return this.form.getRawValue().live.transcoding.enabled === true
+  }
+
+  isLiveTranscodingDisabled () {
+    return !this.isLiveEnabled() || !this.isLiveTranscodingEnabled()
+  }
+
+  isLiveLocalTranscodingDisabled () {
+    return this.isLiveTranscodingDisabled() || this.isRemoteRunnerLiveEnabled()
   }
 
   getTotalTranscodingThreads () {
@@ -245,25 +244,27 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
       transcoding: this.customConfig.transcoding,
       live: {
         transcoding: {
-          enabled: this.form.value.live.transcoding.enabled,
-          threads: this.form.value.live.transcoding.threads
+          enabled: this.form.getRawValue().live.transcoding.enabled,
+          threads: this.form.getRawValue().live.transcoding.threads
         }
       }
     })
   }
 
   save () {
+    const formValue = getFormValueToSubmit(this.form)
+    const { enabled: dvrEnabled, maxWindow } = formValue.live.dvr
+
     const value = {
-      ...this.form.value,
+      ...formValue,
 
       live: {
-        ...this.form.value.live,
+        ...formValue.live,
 
-        dvr: {
-          maxWindow: this.form.value.live.dvr.enabled && this.form.value.live.dvr.maxWindow
-            ? this.form.value.live.dvr.maxWindow * 60
-            : 0
-        }
+        // Max window omitted because invalid in a disabled section: keep the current server value
+        dvr: dvrEnabled && maxWindow === undefined
+          ? undefined
+          : { maxWindow: dvrEnabled && maxWindow ? maxWindow * 60 : 0 }
       }
     }
 
@@ -279,8 +280,8 @@ export class AdminConfigLiveComponent implements OnInit, OnDestroy, CanComponent
     return this.adminConfigService.checkTranscodingConsistentOptions({
       transcoding: this.customConfig.transcoding,
       live: {
-        enabled: this.form.value.live.enabled,
-        allowReplay: this.form.value.live.allowReplay
+        enabled: this.form.getRawValue().live.enabled,
+        allowReplay: this.form.getRawValue().live.allowReplay
       }
     })
   }

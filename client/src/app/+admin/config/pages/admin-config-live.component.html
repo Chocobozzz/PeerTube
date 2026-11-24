@@ -32,7 +32,7 @@
 
             <ng-container ngProjectAs="extra">
 
-              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+              <div class="form-group" [myDisabledFormSection]="!isLiveEnabled()">
                 <my-peertube-checkbox
                   inputName="liveAllowReplay" formControlName="allowReplay"
                   i18n-labelText labelText="Allow your users to automatically publish a replay of their live"
@@ -40,19 +40,19 @@
                 </my-peertube-checkbox>
               </div>
 
-              <div formGroupName="dvr" class="form-group" [ngClass]="getDisabledLiveClass()">
+              <div formGroupName="dvr" class="form-group" [myDisabledFormSection]="!isLiveEnabled()">
                 <my-peertube-checkbox
                   inputName="liveAllowDVR" formControlName="enabled"
                   i18n-labelText labelText="Allow your users to enable DVR (pause/rewind live)"
                   >
 
                   <ng-container ngProjectAs="extra">
-                    <div class="form-group" [ngClass]="getDisabledLiveDVRClass()">
+                    <div class="form-group" [myDisabledFormSection]="!isDvrEnabled()">
                       <label i18n for="liveDvrMaxWindow">Allow video streamers to set the DVR window up to</label>
 
                       <div class="number-with-unit">
                         <input type="number" id="liveDvrMaxWindow" formControlName="maxWindow" />
-                        <span i18n>{form.value.live.dvr.maxWindow, plural, =1 {minute} other {minutes}}</span>
+                        <span i18n>{form.getRawValue().live.dvr.maxWindow, plural, =1 {minute} other {minutes}}</span>
                       </div>
 
                       @if (formErrors.live.dvr.maxWindow) {
@@ -63,7 +63,7 @@
                 </my-peertube-checkbox>
               </div>
 
-              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+              <div class="form-group" [myDisabledFormSection]="!isLiveEnabled()">
                 <my-peertube-checkbox
                   inputName="liveSaveReplay" [formControl]="defaultsLiveSaveReplayControl"
                   i18n-labelText labelText="Automatically publish a replay by default"
@@ -74,7 +74,7 @@
                 </my-peertube-checkbox>
               </div>
 
-              <div class="form-group" formGroupName="latencySetting" [ngClass]="getDisabledLiveClass()">
+              <div class="form-group" formGroupName="latencySetting" [myDisabledFormSection]="!isLiveEnabled()">
                 <my-peertube-checkbox
                   inputName="liveLatencySettingEnabled" formControlName="enabled"
                   i18n-labelText labelText="Allow your users to change live latency"
@@ -85,14 +85,14 @@
                 </my-peertube-checkbox>
               </div>
 
-              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+              <div class="form-group" [myDisabledFormSection]="!isLiveEnabled()">
                 <label i18n for="liveMaxInstanceLives">Max simultaneous lives created on your platform</label>
 
                 <span i18n class="ms-2 small muted">(-1 for "unlimited")</span>
 
                 <div class="number-with-unit">
                   <input type="number" id="liveMaxInstanceLives" formControlName="maxInstanceLives" />
-                  <span i18n>{form.value.live.maxInstanceLives, plural, =1 {live} other {lives}}</span>
+                  <span i18n>{form.getRawValue().live.maxInstanceLives, plural, =1 {live} other {lives}}</span>
                 </div>
 
                 @if (formErrors.live.maxInstanceLives) {
@@ -100,13 +100,13 @@
                 }
               </div>
 
-              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+              <div class="form-group" [myDisabledFormSection]="!isLiveEnabled()">
                 <label i18n for="liveMaxUserLives">Max simultaneous lives created per user</label>
                 <span i18n class="ms-2 small muted">(-1 for "unlimited")</span>
 
                 <div class="number-with-unit">
                   <input type="number" id="liveMaxUserLives" formControlName="maxUserLives" />
-                  <span i18n>{form.value.live.maxUserLives, plural, =1 {live} other {lives}}</span>
+                  <span i18n>{form.getRawValue().live.maxUserLives, plural, =1 {live} other {lives}}</span>
                 </div>
 
                 @if (formErrors.live.maxUserLives) {
@@ -114,7 +114,7 @@
                 }
               </div>
 
-              <div class="form-group" [ngClass]="getDisabledLiveClass()">
+              <div class="form-group" [myDisabledFormSection]="!isLiveEnabled()">
                 <label i18n for="liveMaxDuration">Max live duration</label>
 
                 <my-select-options inputId="liveMaxDuration" [items]="liveMaxDurationOptions" formControlName="maxDuration"></my-select-options>
@@ -144,7 +144,7 @@
       <ng-container formGroupName="live">
         <ng-container formGroupName="transcoding">
 
-          <div class="form-group" [ngClass]="getDisabledLiveClass()">
+          <div class="form-group" [myDisabledFormSection]="!isLiveEnabled()">
             <my-peertube-checkbox
               inputName="liveTranscodingEnabled" formControlName="enabled"
               >
@@ -157,7 +157,7 @@
           <div class="callout callout-light pt-2 mt-2 pb-0">
             <h3 class="callout-title" i18n>Output formats</h3>
 
-            <div [ngClass]="getDisabledLiveTranscodingClass()">
+            <div [myDisabledFormSection]="isLiveTranscodingDisabled()">
 
               <div class="form-group" formGroupName="fps">
                 <label i18n for="liveTranscodingFPSMax">Max live FPS</label>
@@ -211,7 +211,7 @@
             </div>
           </div>
 
-          <div class="form-group mt-4" formGroupName="remoteRunners" [ngClass]="getDisabledLiveTranscodingClass()">
+          <div class="form-group mt-4" formGroupName="remoteRunners" [myDisabledFormSection]="isLiveTranscodingDisabled()">
             <my-peertube-checkbox
               inputName="liveTranscodingRemoteRunnersEnabled" formControlName="enabled"
               i18n-labelText labelText="Enable remote runners for lives"
@@ -223,7 +223,7 @@
             </my-peertube-checkbox>
           </div>
 
-          <div class="form-group" [ngClass]="getDisabledLiveLocalTranscodingClass()">
+          <div class="form-group" [myDisabledFormSection]="isLiveLocalTranscodingDisabled()">
             <label i18n id="liveTranscodingThreadsLabel" for="liveTranscodingThreads">Live transcoding threads</label>
 
             <span class="small muted ms-1">
@@ -252,7 +252,7 @@
             }
           </div>
 
-          <div class="form-group mt-4" [ngClass]="getDisabledLiveLocalTranscodingClass()">
+          <div class="form-group mt-4" [myDisabledFormSection]="isLiveLocalTranscodingDisabled()">
             <label i18n for="liveTranscodingProfile">Live transcoding profile</label>
             <span class="small muted ms-1" i18n>new live transcoding profiles can be added by PeerTube plugins</span>
 

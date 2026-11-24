@@ -200,7 +200,7 @@
             <ng-container ngProjectAs="extra">
               <div class="form-group">
                 <my-peertube-checkbox
-                  [ngClass]="getDisabledSignupClass()"
+                  [myDisabledFormSection]="!isSignupEnabled()"
                   inputName="signupRequiresApproval"
                   formControlName="requiresApproval"
                   i18n-labelText
@@ -210,7 +210,7 @@
 
               <div class="form-group">
                 <my-peertube-checkbox
-                  [ngClass]="getDisabledSignupClass()"
+                  [myDisabledFormSection]="!isSignupEnabled()"
                   inputName="signupRequiresEmailVerification"
                   formControlName="requiresEmailVerification"
                   i18n-labelText
@@ -218,7 +218,7 @@
                 ></my-peertube-checkbox>
               </div>
 
-              <div [ngClass]="getDisabledSignupClass()">
+              <div [myDisabledFormSection]="!isSignupEnabled()">
                 <label i18n for="signupLimit">Signup limit</label>
                 <span i18n class="small muted ms-1"
                 >When the total number of users in your platform reaches this limit, registrations are disabled. -1 = unlimited</span>
@@ -232,7 +232,7 @@
                     formControlName="limit"
                     [ngClass]="{ 'input-error': formErrors.signup.limit }"
                   >
-                  <span i18n>{form.value.signup.limit, plural, =1 {user} other {users}}</span>
+                  <span i18n>{form.getRawValue().signup.limit, plural, =1 {user} other {users}}</span>
                 </div>
 
                 @if (formErrors.signup.limit) {
@@ -244,7 +244,7 @@
                 }
               </div>
 
-              <div [ngClass]="getDisabledSignupClass()" class="mt-3">
+              <div [myDisabledFormSection]="!isSignupEnabled()" class="mt-3">
                 <label i18n for="signupMinimumAge">Minimum required age to create an account</label>
 
                 <div class="number-with-unit">
@@ -256,7 +256,7 @@
                     formControlName="minimumAge"
                     [ngClass]="{ 'input-error': formErrors.signup.minimumAge }"
                   >
-                  <span i18n>{form.value.signup.minimumAge, plural, =1 {year old} other {years old}}</span>
+                  <span i18n>{form.getRawValue().signup.minimumAge, plural, =1 {year old} other {years old}}</span>
                 </div>
 
                 @if (formErrors.signup.minimumAge) {
@@ -404,7 +404,7 @@
                 formControlName="maxPerUser"
                 [ngClass]="{ 'input-error': formErrors['import']['videoChannelSynchronization']['maxPerUser'] }"
               >
-              <span i18n>{form.value.import.videoChannelSynchronization.maxPerUser, plural, =1 {sync} other {syncs}}</span>
+              <span i18n>{form.getRawValue().import.videoChannelSynchronization.maxPerUser, plural, =1 {sync} other {syncs}}</span>
             </div>
 
             @if (formErrors.import.videoChannelSynchronization.maxPerUser) {
@@ -465,7 +465,7 @@
             </ng-container>
 
             <ng-container ngProjectAs="extra">
-              <div class="form-group" formGroupName="remoteRunners" [ngClass]="getStoryboardRunnerDisabledClass()">
+              <div class="form-group" formGroupName="remoteRunners" [myDisabledFormSection]="!isStoryboardEnabled()">
                 <my-peertube-checkbox
                   inputName="storyboardsRemoteRunnersEnabled"
                   formControlName="enabled"
@@ -492,7 +492,7 @@
             </ng-container>
 
             <ng-container ngProjectAs="extra">
-              <div class="form-group" formGroupName="remoteRunners" [ngClass]="getTranscriptionRunnerDisabledClass()">
+              <div class="form-group" formGroupName="remoteRunners" [myDisabledFormSection]="!isTranscriptionEnabled()">
                 <my-peertube-checkbox
                   inputName="videoTranscriptionRemoteRunnersEnabled"
                   formControlName="enabled"
@@ -586,7 +586,7 @@
             formControlName="maxPerUser"
             [ngClass]="{ 'input-error': formErrors.videoChannels.maxPerUser }"
           >
-          <span i18n>{form.value.videoChannels.maxPerUser, plural, =1 {channel} other {channels}}</span>
+          <span i18n>{form.getRawValue().videoChannels.maxPerUser, plural, =1 {channel} other {channels}}</span>
         </div>
 
         @if (formErrors.videoChannels.maxPerUser) {
@@ -700,7 +700,7 @@
                 </ng-container>
 
                 <ng-container ngProjectAs="extra">
-                  <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled() }">
+                  <div [myDisabledFormSection]="!isAutoFollowIndexEnabled()">
                     <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
                     <input
                       type="text"
@@ -825,7 +825,7 @@
               </ng-container>
 
               <ng-container ngProjectAs="extra">
-                <div [ngClass]="getDisabledSearchIndexClass()">
+                <div [myDisabledFormSection]="!isSearchIndexEnabled()">
                   <label i18n for="searchIndexUrl">Search index URL</label>
 
                   <div i18n class="form-group-description">
@@ -848,7 +848,7 @@
 
                 <div class="mt-3">
                   <my-peertube-checkbox
-                    [ngClass]="getDisabledSearchIndexClass()"
+                    [myDisabledFormSection]="!isSearchIndexEnabled()"
                     inputName="searchIndexDisableLocalSearch"
                     formControlName="disableLocalSearch"
                     i18n-labelText
@@ -858,7 +858,7 @@
 
                 <div class="mt-3">
                   <my-peertube-checkbox
-                    [ngClass]="getDisabledSearchIndexClass()"
+                    [myDisabledFormSection]="!isSearchIndexEnabled()"
                     inputName="searchIndexIsDefaultSearch"
                     formControlName="isDefaultSearch"
                     i18n-labelText
@@ -905,7 +905,7 @@
               </ng-container>
 
               <ng-container ngProjectAs="extra">
-                <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
+                <div class="form-group" [myDisabledFormSection]="!isExportUsersEnabled()">
                   <label i18n id="exportUsersMaxUserVideoQuota" for="exportUsersMaxUserVideoQuota">Max user video quota allowed to generate the export</label>
 
                   <span i18n class="ms-2 small muted">If the user decides to include the video files in the archive</span>
@@ -926,7 +926,7 @@
                   }
                 </div>
 
-                <div class="form-group" [ngClass]="getDisabledExportUsersClass()">
+                <div class="form-group" [myDisabledFormSection]="!isExportUsersEnabled()">
                   <label i18n for="exportUsersExportExpiration">User export expiration</label>
 
                   <my-select-options

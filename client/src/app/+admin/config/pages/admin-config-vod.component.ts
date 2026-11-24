@@ -14,6 +14,11 @@ import {
   FormReactiveErrorsTyped,
   FormReactiveMessagesTyped
 } from '@app/shared/form-validators/form-validator.model'
+import {
+  DisabledFormSectionControlDirective,
+  DisabledFormSectionDirective,
+  getFormValueToSubmit
+} from '@app/shared/shared-forms/disabled-form-section.directive'
 import { FormReactiveService } from '@app/shared/shared-forms/form-reactive.service'
 import { CustomConfig } from '@peertube/peertube-models'
 import { SelectOptionsItem } from '@pt-types'
@@ -79,6 +84,8 @@ type Form = {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    DisabledFormSectionDirective,
+    DisabledFormSectionControlDirective,
     PeertubeCheckboxComponent,
     PeerTubeTemplateDirective,
     RouterLink,
@@ -202,43 +209,31 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
   }
 
   isRemoteRunnerVODEnabled () {
-    return this.form.value.transcoding.remoteRunners.enabled === true
+    return this.form.getRawValue().transcoding.remoteRunners.enabled === true
   }
 
   isTranscodingEnabled () {
-    return this.form.value.transcoding.enabled === true
+    return this.form.getRawValue().transcoding.enabled === true
   }
 
   isHLSEnabled () {
-    return this.form.value.transcoding.hls.enabled === true
+    return this.form.getRawValue().transcoding.hls.enabled === true
   }
 
   isStudioEnabled () {
-    return this.form.value.videoStudio.enabled === true
+    return this.form.getRawValue().videoStudio.enabled === true
   }
 
-  getTranscodingDisabledClass () {
-    return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() }
-  }
-
-  getHLSDisabledClass () {
-    return { 'disabled-checkbox-extra': !this.isHLSEnabled() }
-  }
-
-  getLocalTranscodingDisabledClass () {
-    return { 'disabled-checkbox-extra': !this.isTranscodingEnabled() || this.isRemoteRunnerVODEnabled() }
-  }
-
-  getStudioRunnerDisabledClass () {
-    return { 'disabled-checkbox-extra': !this.isStudioEnabled() }
+  isLocalTranscodingDisabled () {
+    return !this.isTranscodingEnabled() || this.isRemoteRunnerVODEnabled()
   }
 
   getTotalTranscodingThreads () {
     return this.adminConfigService.getTotalTranscodingThreads({
       live: this.customConfig.live,
       transcoding: {
-        enabled: this.form.value.transcoding.enabled,
-        threads: this.form.value.transcoding.threads
+        enabled: this.form.getRawValue().transcoding.enabled,
+        threads: this.form.getRawValue().transcoding.threads
       }
     })
   }
@@ -295,7 +290,7 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
     this.adminConfigService.saveAndUpdateCurrent({
       currentConfig: this.customConfig,
       form: this.form,
-      formConfig: this.form.value,
+      formConfig: getFormValueToSubmit(this.form),
       success: $localize`VOD configuration updated.`
     })
   }
@@ -303,7 +298,7 @@ export class AdminConfigVODComponent implements OnInit, OnDestroy, CanComponentD
   checkTranscodingConsistentOptions () {
     return this.adminConfigService.checkTranscodingConsistentOptions({
       transcoding: {
-        enabled: this.form.value.transcoding.enabled
+        enabled: this.form.getRawValue().transcoding.enabled
       },
       live: this.customConfig.live
     })
