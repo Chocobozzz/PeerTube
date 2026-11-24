@@ -130,10 +130,6 @@ export class VideoTableAttributes {
     return [ 'id', 'name' ]
   }
 
-  getVideoTagAttributes () {
-    return [ 'videoId', 'tagId', 'createdAt', 'updatedAt' ]
-  }
-
   getBlacklistedAttributes () {
     return [ 'id', 'reason', 'unfederated' ]
   }
@@ -194,15 +190,6 @@ export class VideoTableAttributes {
 
   getTrackerAttributes () {
     return [ 'id', 'url' ]
-  }
-
-  getVideoTrackerAttributes () {
-    return [
-      'videoId',
-      'trackerId',
-      'createdAt',
-      'updatedAt'
-    ]
   }
 
   getVideoAutoTagAttributes () {

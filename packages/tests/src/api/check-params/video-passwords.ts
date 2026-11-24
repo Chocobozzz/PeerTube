@@ -194,6 +194,18 @@ describe('Test video passwords validator', function () {
       })
     })
 
+    it('Should fail with a password protected privacy and too many passwords', async function () {
+      const videoPasswords = Array.from({ length: 101 }, (_, i) => 'password ' + i)
+
+      await checkVideoPasswordOptions({
+        server,
+        token: server.accessToken,
+        videoPasswords,
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400,
+        mode
+      })
+    })
+
     it('Should fail with a password protected privacy and duplicated passwords', async function () {
       const videoPasswords = [ 'password', 'password' ]
 
@@ -691,6 +703,13 @@ describe('Test video passwords validator', function () {
       for (const token of [ server.accessToken, editorToken ]) {
         await server.videoPasswords.addOne({ password: token, videoId: video.id })
       }
+    })
+
+    it('Should fail when the video already has the max number of passwords', async function () {
+      const passwords = Array.from({ length: 100 }, (_, i) => 'password-' + i)
+      await server.videoPasswords.updateAll({ videoId: video.id, passwords })
+
+      await server.videoPasswords.addOne({ password: newPassword, videoId: video.id, expectedStatus: HttpStatusCode.BAD_REQUEST_400 })
     })
   })
 

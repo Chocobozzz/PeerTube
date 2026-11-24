@@ -1,4 +1,3 @@
-import { uniqify } from '@peertube/peertube-core-utils'
 import {
   HttpStatusCode,
   LiveVideoCreate,
@@ -11,12 +10,12 @@ import {
 import { areLiveSchedulesValid, isLiveDvrWindowValid, isLiveLatencyModeValid } from '@server/helpers/custom-validators/video-lives.js'
 import { getVideoWithAttributes } from '@server/helpers/video.js'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { getReachedLiveLimit } from '@server/lib/live/live-limits.js'
 import { VideoLoadType } from '@server/lib/model-loaders/video.js'
 import { isLocalLiveVideoAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { VideoLiveSessionModel } from '@server/models/video/video-live-session.js'
 import { VideoLiveModel } from '@server/models/video/video-live.js'
-import { VideoModel } from '@server/models/video/video.js'
 import express from 'express'
 import { body } from 'express-validator'
 import { exists, isBooleanValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../../helpers/custom-validators/misc.js'
@@ -148,36 +147,29 @@ export const videoLiveAddValidator = getCommonVideoEditAttributes().concat([
       return cleanUpReqFiles(req)
     }
 
-    if (CONFIG.LIVE.MAX_INSTANCE_LIVES !== -1) {
-      const totalInstanceLives = await VideoModel.countLives({ remote: false, mode: 'not-ended' })
+    const reachedLiveLimit = await getReachedLiveLimit({
+      userAccountId: res.locals.oauth.token.User.Account.id,
+      channelAccountId: res.locals.videoChannel.accountId
+    })
 
-      if (totalInstanceLives >= CONFIG.LIVE.MAX_INSTANCE_LIVES) {
-        cleanUpReqFiles(req)
+    if (reachedLiveLimit === 'instance') {
+      cleanUpReqFiles(req)
 
-        return res.fail({
-          status: HttpStatusCode.FORBIDDEN_403,
-          message: req.t('Cannot create this live because the max instance lives limit is reached.'),
-          type: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED
-        })
-      }
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: req.t('Cannot create this live because the max instance lives limit is reached.'),
+        type: ServerErrorCode.MAX_INSTANCE_LIVES_LIMIT_REACHED
+      })
     }
 
-    if (CONFIG.LIVE.MAX_USER_LIVES !== -1) {
-      const user = res.locals.oauth.token.User
+    if (reachedLiveLimit === 'user') {
+      cleanUpReqFiles(req)
 
-      // Lives are counted on the account that owns the channel: a collaborator must not bypass the limit of the channel owner
-      const accountIds = uniqify([ user.Account.id, res.locals.videoChannel.accountId ])
-      const totals = await Promise.all(accountIds.map(accountId => VideoModel.countLivesOfAccount(accountId)))
-
-      if (totals.some(total => total >= CONFIG.LIVE.MAX_USER_LIVES)) {
-        cleanUpReqFiles(req)
-
-        return res.fail({
-          status: HttpStatusCode.FORBIDDEN_403,
-          message: req.t('Cannot create this live because the max user lives limit is reached.'),
-          type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED
-        })
-      }
+      return res.fail({
+        status: HttpStatusCode.FORBIDDEN_403,
+        message: req.t('Cannot create this live because the max user lives limit is reached.'),
+        type: ServerErrorCode.MAX_USER_LIVES_LIMIT_REACHED
+      })
     }
 
     if (!await isLiveVideoAccepted(req, res)) return cleanUpReqFiles(req)

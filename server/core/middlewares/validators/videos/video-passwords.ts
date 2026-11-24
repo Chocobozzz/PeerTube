@@ -1,6 +1,8 @@
-import { UserRight } from '@peertube/peertube-models'
+import { HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { isIdValid } from '@server/helpers/custom-validators/misc.js'
 import { isValidPasswordProtectedPrivacy } from '@server/helpers/custom-validators/videos.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { VideoPasswordModel } from '@server/models/video/video-password.js'
 import express from 'express'
 import { body, param } from 'express-validator'
 import {
@@ -69,6 +71,7 @@ export const addVideoPasswordValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return
     if (!await checkAddOrUpdatePasswords(req, res)) return
+    if (!await checkVideoPasswordsLimit(req, res)) return
 
     return next()
   }
@@ -114,6 +117,22 @@ async function checkAddOrUpdatePasswords (req: express.Request, res: express.Res
       checkIsOwner: false
     })
   ) return false
+
+  return true
+}
+
+// The password list endpoints check the max number of passwords on the request body, but here we add a single password
+async function checkVideoPasswordsLimit (req: express.Request, res: express.Response) {
+  const max = CONSTRAINTS_FIELDS.VIDEOS.PASSWORDS.max
+  const count = await VideoPasswordModel.countByVideoId(res.locals.videoWithRights.id)
+
+  if (count >= max) {
+    res.fail({
+      status: HttpStatusCode.BAD_REQUEST_400,
+      message: req.t('A video cannot have more than {max} passwords', { max })
+    })
+    return false
+  }
 
   return true
 }

@@ -322,9 +322,11 @@ describe('Test abuses API validators', function () {
     })
 
     it('Should fail with a wrong predefined reason', async function () {
-      const fields = { video: server.store.videoCreated, reason: 'my super reason', predefinedReasons: [ 'wrongPredefinedReason' ] }
+      for (const predefinedReason of [ 'wrongPredefinedReason', 'constructor', 'toString', '__proto__' ]) {
+        const fields = { video: server.store.videoCreated, reason: 'my super reason', predefinedReasons: [ predefinedReason ] }
 
-      await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
+        await makePostBodyRequest({ url: server.url, path, token: userToken, fields })
+      }
     })
 
     it('Should fail with negative timestamps', async function () {

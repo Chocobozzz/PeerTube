@@ -179,6 +179,10 @@ export async function prepareImportExportTests (options: {
 
   await remoteServer.config.enableMinimumTranscoding()
 
+  // Imported lives depend on the live configuration of the instance
+  await remoteServer.config.enableLive({ allowReplay: true })
+  if (blockedServer) await blockedServer.config.enableLive()
+
   await Promise.all([
     doubleFollow(server, remoteServer),
 

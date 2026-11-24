@@ -1,4 +1,4 @@
-import { abusePredefinedReasonsMap } from '@peertube/peertube-core-utils'
+import { abusePredefinedReasonsMap, uniqify } from '@peertube/peertube-core-utils'
 import { AbuseCreate, AbuseState, HttpStatusCode, UserRight } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { auditLog, buildAbuseAuditEntity, buildAbuseMessageAuditEntity, getAuditActorFromRes } from '@server/lib/audit-log/index.js'
@@ -208,7 +208,9 @@ async function reportAbuse (req: express.Request, res: express.Response) {
     const skipNotification = user.hasRight(UserRight.MANAGE_ABUSES)
 
     const reporterAccount = await AccountModel.load(user.Account.id, t)
-    const predefinedReasons = body.predefinedReasons?.map(r => abusePredefinedReasonsMap[r])
+    const predefinedReasons = body.predefinedReasons
+      ? uniqify(body.predefinedReasons).map(r => abusePredefinedReasonsMap[r])
+      : undefined
 
     const baseAbuse = {
       reporterAccountId: reporterAccount.id,

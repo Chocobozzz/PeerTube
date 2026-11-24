@@ -43,8 +43,12 @@ async function processCreateAbuse (flag: ActivityFlag, byActor: MActorSignature)
   }
 
   const tags = Array.isArray(flag.tag) ? flag.tag : []
-  const predefinedReasons = tags.map(tag => abusePredefinedReasonsMap[tag.name])
-    .filter(v => !isNaN(v))
+  // Stored in an array column: keep each predefined reason once
+  const predefinedReasons = uniqify(
+    tags.map(tag => tag?.name)
+      .filter(name => typeof name === 'string' && Object.hasOwn(abusePredefinedReasonsMap, name))
+      .map(name => abusePredefinedReasonsMap[name])
+  )
 
   const reason = getFlagReason(flag)
 

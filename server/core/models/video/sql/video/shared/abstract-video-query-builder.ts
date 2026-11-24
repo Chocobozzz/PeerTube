@@ -229,18 +229,20 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
   }
 
   protected includeTags () {
+    const attributes = this.buildJSONAttributes('tag', this.tables.getTagAttributes())
+
     this.addJoin(
-      'LEFT OUTER JOIN (' +
-        '"videoTag" AS "Tags->VideoTagModel" INNER JOIN "tag" AS "Tags" ON "Tags"."id" = "Tags->VideoTagModel"."tagId"' +
-        ') ' +
-        'ON "video"."id" = "Tags->VideoTagModel"."videoId"'
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg(jsonb_build_object(${attributes}) ORDER BY "tag"."name" ASC) AS "tags" ` +
+        `FROM "videoTag" INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ` +
+        `WHERE "videoTag"."videoId" = "video"."id"` +
+        `) AS "TagsJSON" ON TRUE`
     )
 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('Tags', this.tables.getTagAttributes()),
-      ...this.buildAttributesObject('Tags->VideoTagModel', this.tables.getVideoTagAttributes())
+      '"TagsJSON"."tags"': '"TagsJSON"'
     }
   }
 
@@ -307,15 +309,19 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
   }
 
   protected includeLiveSchedules () {
+    const attributes = this.buildJSONAttributes('videoLiveSchedule', this.tables.getLiveScheduleAttributes())
+
     this.addJoin(
-      'LEFT OUTER JOIN "videoLiveSchedule" AS "VideoLive->VideoLiveSchedules" ' +
-        'ON "VideoLive->VideoLiveSchedules"."liveVideoId" = "VideoLive"."id"'
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg(jsonb_build_object(${attributes}) ORDER BY "videoLiveSchedule"."id" ASC) AS "schedules" ` +
+        `FROM "videoLiveSchedule" WHERE "videoLiveSchedule"."liveVideoId" = "VideoLive"."id"` +
+        `) AS "VideoLive->LiveSchedulesJSON" ON TRUE`
     )
 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('VideoLive->VideoLiveSchedules', this.tables.getLiveScheduleAttributes())
+      '"VideoLive->LiveSchedulesJSON"."schedules"': '"VideoLive.LiveSchedulesJSON"'
     }
   }
 
@@ -350,18 +356,20 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
   }
 
   protected includeTrackers () {
+    const attributes = this.buildJSONAttributes('tracker', this.tables.getTrackerAttributes())
+
     this.addJoin(
-      'LEFT OUTER JOIN (' +
-        '"videoTracker" AS "Trackers->VideoTrackerModel" ' +
-        'INNER JOIN "tracker" AS "Trackers" ON "Trackers"."id" = "Trackers->VideoTrackerModel"."trackerId"' +
-        ') ON "video"."id" = "Trackers->VideoTrackerModel"."videoId"'
+      `LEFT JOIN LATERAL (` +
+        `SELECT json_agg(jsonb_build_object(${attributes})) AS "trackers" ` +
+        `FROM "videoTracker" INNER JOIN "tracker" ON "tracker"."id" = "videoTracker"."trackerId" ` +
+        `WHERE "videoTracker"."videoId" = "video"."id"` +
+        `) AS "TrackersJSON" ON TRUE`
     )
 
     this.attributes = {
       ...this.attributes,
 
-      ...this.buildAttributesObject('Trackers', this.tables.getTrackerAttributes()),
-      ...this.buildAttributesObject('Trackers->VideoTrackerModel', this.tables.getVideoTrackerAttributes())
+      '"TrackersJSON"."trackers"': '"TrackersJSON"'
     }
   }
 
@@ -412,6 +420,10 @@ export class AbstractVideoQueryBuilder extends AbstractRunQuery {
 
   protected buildServerInclude (prefixKey: string) {
     return this.buildAttributesObject(prefixKey, this.tables.getServerAttributes())
+  }
+
+  protected buildJSONAttributes (tableName: string, attributeKeys: string[]) {
+    return attributeKeys.map(attr => `'${attr}', "${tableName}"."${attr}"`).join(', ')
   }
 
   protected buildAttributesObject (prefixKey: string, attributeKeys: string[]) {

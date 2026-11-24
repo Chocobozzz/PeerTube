@@ -1,4 +1,4 @@
-import { pick } from '@peertube/peertube-core-utils'
+import { pick, uniqify } from '@peertube/peertube-core-utils'
 import { ffprobePromise, getVideoStreamDuration } from '@peertube/peertube-ffmpeg'
 import {
   LiveVideoLatencyMode,
@@ -38,7 +38,8 @@ import {
 } from '@server/helpers/custom-validators/videos.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, USER_IMPORT } from '@server/initializers/constants.js'
+import { getReachedLiveLimit } from '@server/lib/live/live-limits.js'
 import { LocalVideoCreator } from '@server/lib/local-video-creator.js'
 import { isLocalVideoFileAccepted } from '@server/lib/moderation.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
@@ -94,6 +95,11 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     return json.videos
   }
 
+  // Video exports are not limited
+  protected getMaxImportObjects () {
+    return USER_IMPORT.MAX_ITEMS
+  }
+
   protected sanitize (o: ImportObject) {
     if (!isVideoNameValid(o.name)) return undefined
     if (!isVideoDurationValid(o.duration + '')) return undefined
@@ -128,38 +134,26 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     if (!o.publishedAt || !isVideoPublicationDateValid(o.publishedAt)) o.publishedAt = null
     if (!o.originallyPublishedAt || !isVideoPublicationDateValid(o.originallyPublishedAt)) o.originallyPublishedAt = null
 
+    // Apply the same limits as the REST API
     if (!o.videoEmbedPrivacy) o.videoEmbedPrivacy = { policy: VideoEmbedPrivacyPolicy.ALL_ALLOWED, domains: [] }
     if (!isVideoEmbedPrivacyPolicyValid(o.videoEmbedPrivacy.policy)) o.videoEmbedPrivacy.policy = VideoEmbedPrivacyPolicy.ALL_ALLOWED
+    if (isArray(o.videoEmbedPrivacy.domains)) {
+      o.videoEmbedPrivacy.domains = uniqify(o.videoEmbedPrivacy.domains).slice(0, CONSTRAINTS_FIELDS.VIDEOS.EMBED_PRIVACY_DOMAINS.max)
+    }
     if (!areVideoEmbedPrivacyDomainsValid(o.videoEmbedPrivacy.domains)) o.videoEmbedPrivacy.domains = []
 
     if (!isArray(o.tags)) o.tags = []
     if (!isArray(o.captions)) o.captions = []
     if (!isArray(o.chapters)) o.chapters = []
 
-    o.tags = o.tags.filter(t => isVideoTagValid(t))
+    o.tags = uniqify(o.tags.filter(t => isVideoTagValid(t)))
+      .slice(0, CONSTRAINTS_FIELDS.VIDEOS.TAGS.max)
 
-    o.captions = o.captions.filter(c => isVideoCaptionLanguageValid(c.language))
-    o.chapters = o.chapters.filter(c => isVideoChapterTimecodeValid(c.timecode) && isVideoChapterTitleValid(c.title))
+    o.captions = o.captions.filter(c => isVideoCaptionLanguageValid(c?.language))
+    o.chapters = this.sanitizeChapters(o.chapters)
 
     if (o.isLive) {
-      if (!o.live) return undefined
-      if (!isBooleanValid(o.live.permanentLive)) return undefined
-
-      if (!isBooleanValid(o.live.saveReplay)) o.live.saveReplay = false
-      if (o.live.saveReplay && !isVideoReplayPrivacyValid(o.live.replaySettings.privacy)) return undefined
-
-      if (!isLiveDvrWindowValid(o.live.dvrWindow, CONFIG.LIVE.DVR.MAX_WINDOW)) {
-        o.live.dvrWindow = CONFIG.LIVE.DVR.MAX_WINDOW
-      }
-
-      if (!o.live.latencyMode || !isLiveLatencyModeValid(o.live.latencyMode)) o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
-
-      if (!o.live.streamKey) o.live.streamKey = buildUUID()
-      else if (!isUUIDValid(o.live.streamKey)) return undefined
-
-      if (!isArray(o.live.schedules)) o.live.schedules = []
-
-      o.live.schedules = o.live.schedules.filter(s => isLiveScheduleValid(s))
+      if (!this.sanitizeLive(o)) return undefined
     }
 
     if (o.playerSettings) {
@@ -168,7 +162,11 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
 
     if (o.privacy === VideoPrivacy.PASSWORD_PROTECTED) {
       if (!isArray(o.passwords)) return undefined
+
+      o.passwords = uniqify(o.passwords)
+
       // Refuse the import rather than handle only a portion of the passwords, which can be difficult for video owners to debug
+      if (o.passwords.length === 0 || o.passwords.length > CONSTRAINTS_FIELDS.VIDEOS.PASSWORDS.max) return undefined
       if (o.passwords.some(p => !isPasswordValid(p))) return undefined
     }
 
@@ -204,6 +202,63 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     ])
   }
 
+  private sanitizeChapters (chapters: ImportObject['chapters']) {
+    const timecodes = new Set<number>()
+
+    return chapters
+      .filter(c => {
+        if (!isVideoChapterTimecodeValid(c?.timecode) || !isVideoChapterTitleValid(c.title)) return false
+
+        // Chapters must have unique timecodes
+        if (timecodes.has(c.timecode)) return false
+        timecodes.add(c.timecode)
+
+        return true
+      })
+      .slice(0, CONSTRAINTS_FIELDS.VIDEO_CHAPTERS.CHAPTERS.max)
+  }
+
+  private sanitizeLive (o: ImportObject) {
+    if (CONFIG.LIVE.ENABLED !== true) {
+      logger.warn(`Do not import live ${o.name} because live is not enabled on this instance`)
+      return false
+    }
+
+    if (!o.live) return false
+    if (!isBooleanValid(o.live.permanentLive)) return false
+
+    if (!isBooleanValid(o.live.saveReplay) || CONFIG.LIVE.ALLOW_REPLAY !== true) o.live.saveReplay = false
+
+    if (o.live.saveReplay) {
+      if (!isVideoReplayPrivacyValid(o.live.replaySettings?.privacy)) return false
+    } else {
+      o.live.replaySettings = undefined
+    }
+
+    if (!isLiveDvrWindowValid(o.live.dvrWindow, CONFIG.LIVE.DVR.MAX_WINDOW)) {
+      o.live.dvrWindow = CONFIG.LIVE.DVR.MAX_WINDOW
+    }
+
+    if (
+      !o.live.latencyMode ||
+      !isLiveLatencyModeValid(o.live.latencyMode) ||
+      CONFIG.LIVE.LATENCY_SETTING.ENABLED !== true
+    ) {
+      o.live.latencyMode = LiveVideoLatencyMode.DEFAULT
+    }
+
+    if (!o.live.streamKey) o.live.streamKey = buildUUID()
+    else if (!isUUIDValid(o.live.streamKey)) return false
+
+    if (!isArray(o.live.schedules)) o.live.schedules = []
+
+    o.live.schedules = o.live.schedules
+      .filter(s => isLiveScheduleValid(s))
+      .slice(0, CONSTRAINTS_FIELDS.VIDEO_LIVES.SCHEDULES.max)
+
+    return true
+  }
+
   protected async importObject (videoImportData: SanitizedObject) {
     const videoFilePath = !videoImportData.isLive
       ? this.getSafeArchivePathOrThrow(videoImportData.archiveFiles.videoFile)
@@ -219,6 +274,14 @@ export class VideosImporter extends AbstractUserImporter<VideoExportJSON, Import
     if (existingVideo && Math.abs(existingVideo.duration - videoImportData.duration) <= 1) {
       logger.info(`Do not import video ${videoImportData.name} that already exists in the account`)
       return { duplicate: true }
+    }
+
+    if (videoImportData.isLive) {
+      const reachedLiveLimit = await getReachedLiveLimit({ userAccountId: this.user.Account.id, channelAccountId: videoChannel.accountId })
+
+      if (reachedLiveLimit) {
+        throw new Error(`Cannot import live ${videoImportData.name} because the max ${reachedLiveLimit} lives limit is reached`)
+      }
     }
 
     const videoSize = videoFilePath

@@ -4723,6 +4723,7 @@ paths:
                   type: boolean
                 schedules:
                   type: array
+                  maxItems: 10
                   items:
                     $ref: '#/components/schemas/LiveSchedule'
               required:
@@ -5636,6 +5637,7 @@ paths:
                   $ref: '#/components/schemas/VideoEmbedPrivacy'
                 domains:
                   type: array
+                  maxItems: 500
                   items:
                     type: string
                     example: 'example.com'
@@ -15169,6 +15171,7 @@ components:
           $ref: '#/components/schemas/LiveVideoDVRWindow'
         schedules:
           type: array
+          maxItems: 10
           items:
             $ref: '#/components/schemas/LiveSchedule'
 
@@ -15201,6 +15204,7 @@ components:
             **PeerTube >= 8.2** How far back viewers can rewind the live, in seconds. `0` means DVR is disabled.
         schedules:
           type: array
+          maxItems: 10
           items:
             $ref: '#/components/schemas/LiveSchedule'
 
@@ -15725,6 +15729,7 @@ components:
               $ref: '#/components/schemas/VideoPassword'
     AddVideoPasswords:
       type: array
+      maxItems: 100
       items:
         $ref: "#/components/schemas/VideoPassword/properties/password"
       uniqueItems: true

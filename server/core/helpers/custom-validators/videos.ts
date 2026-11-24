@@ -199,6 +199,9 @@ export function isValidPasswordProtectedPrivacy (req: Request, res: Response) {
 
   if (passwords.length === 0) return fail('At least one video password is required.')
 
+  const maxPasswords = CONSTRAINTS_FIELDS.VIDEOS.PASSWORDS.max
+  if (passwords.length > maxPasswords) return fail(`A video cannot have more than ${maxPasswords} passwords.`)
+
   if (new Set(passwords).size !== passwords.length) return fail('Duplicate video passwords are not allowed.')
 
   for (const password of passwords) {

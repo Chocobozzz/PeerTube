@@ -589,7 +589,12 @@ export const CONSTRAINTS_FIELDS = {
     FILE_SIZE: { min: -1 },
     PARTIAL_UPLOAD_SIZE: { max: 50 * 1024 * 1024 * 1024 }, // 50GB
     URL: { min: 3, max: 2000 }, // Length
-    PASSWORD: { min: 2, max: 100 } // Length
+    PASSWORD: { min: 2, max: 100 }, // Length
+    PASSWORDS: { min: 1, max: 100 }, // Number of passwords of a video
+    EMBED_PRIVACY_DOMAINS: { max: 500 } // Number of allowed embed domains of a video
+  },
+  VIDEO_LIVES: {
+    SCHEDULES: { max: 10 } // Number of schedules of a live
   },
   VIDEO_SOURCE: {
     FILENAME: { min: 1, max: 1000 } // Length
@@ -722,7 +727,11 @@ export const VIDEO_RATE_TYPES: { [id: string]: VideoRateType } = {
 }
 
 export const USER_IMPORT = {
-  MAX_PLAYLIST_ELEMENTS: 1000
+  MAX_PLAYLIST_ELEMENTS: 1000,
+  // Max objects we import from a single JSON file of the archive (videos, following, likes...)
+  MAX_ITEMS: 10_000,
+  // Max size of a JSON file of the archive, we load it in memory
+  MAX_JSON_FILE_SIZE: 100 * 1024 * 1024 // 100MB
 }
 
 export const FFMPEG_NICE = {

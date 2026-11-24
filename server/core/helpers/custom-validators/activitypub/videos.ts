@@ -66,6 +66,7 @@ export function sanitizeAndCheckVideoTorrentObject (video: VideoObject) {
   if (!setValidRemoteCaptions(video)) return fail('captions')
   if (!setValidRemoteIcon(video) || video.icon.length === 0) return fail('icons')
   if (!setValidStoryboard(video)) return fail('preview (storyboard)')
+  setValidRemoteLiveSchedules(video)
   if (!setValidLicence(video)) return fail('licence')
 
   // Default attributes
@@ -198,6 +199,23 @@ function setValidRemoteTags (video: VideoObject) {
   })
 
   return true
+}
+
+function setValidRemoteLiveSchedules (video: VideoObject) {
+  if (!Array.isArray(video.schedules)) {
+    video.schedules = []
+    return
+  }
+
+  const max = CONSTRAINTS_FIELDS.VIDEO_LIVES.SCHEDULES.max
+
+  if (video.schedules.length > max) {
+    logger.debug('Truncating remote live schedules array from %d to %d entries.', video.schedules.length, max)
+
+    video.schedules = video.schedules.slice(0, max)
+  }
+
+  video.schedules = video.schedules.filter(s => typeof s?.startDate === 'string' && isDateValid(s.startDate))
 }
 
 function setValidRemoteCaptions (video: VideoObject) {

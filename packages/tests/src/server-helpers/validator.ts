@@ -9,9 +9,18 @@ import {
 import { isActivityPubUrlValid, setValidRemoteIcon } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/misc.js'
 import { sanitizeAndCheckVideoChaptersObject } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/video-chapters.js'
 import { sanitizeAndCheckVideoCommentObject } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/video-comments.js'
+import { isWatchActionObjectValid } from '@peertube/peertube-server/core/helpers/custom-validators/activitypub/watch-action.js'
+import { areAbusePredefinedReasonsValid } from '@peertube/peertube-server/core/helpers/custom-validators/abuses.js'
 import { isUrlValid } from '@peertube/peertube-server/core/helpers/custom-validators/urls.js'
+import { areVideoEmbedPrivacyDomainsValid } from '@peertube/peertube-server/core/helpers/custom-validators/video-embed-privacy.js'
+import { areLiveSchedulesValid } from '@peertube/peertube-server/core/helpers/custom-validators/video-lives.js'
 import { areVideoChaptersValid } from '@peertube/peertube-server/core/helpers/custom-validators/video-chapters.js'
-import { ACTIVITY_PUB, CONSTRAINTS_FIELDS, WEBSERVER } from '@peertube/peertube-server/core/initializers/constants.js'
+import {
+  ACTIVITY_PUB,
+  CONSTRAINTS_FIELDS,
+  MAX_LOCAL_VIEWER_WATCH_SECTIONS,
+  WEBSERVER
+} from '@peertube/peertube-server/core/initializers/constants.js'
 import { expect } from 'chai'
 
 describe('Validators', function () {
@@ -266,6 +275,54 @@ describe('Validators', function () {
 
       expect(sanitizeAndCheckVideoCommentObject(comment)).to.be.true
       expect(comment.content).to.have.lengthOf(ACTIVITY_PUB.MAX_COMMENT_TEXT_LENGTH)
+    })
+  })
+
+  describe('Array length limits', function () {
+    it('Should limit the number of local live schedules', async function () {
+      const build = (length: number) => Array.from({ length }, (_, i) => ({ startAt: new Date(Date.now() + (i + 1) * 1000).toISOString() }))
+      const max = CONSTRAINTS_FIELDS.VIDEO_LIVES.SCHEDULES.max
+
+      expect(areLiveSchedulesValid(build(max))).to.be.true
+      expect(areLiveSchedulesValid(build(max + 1))).to.be.false
+    })
+
+    it('Should not throw on a non string live schedule date', async function () {
+      expect(areLiveSchedulesValid([ { startAt: 123 } ])).to.be.false
+      expect(areLiveSchedulesValid([ { startAt: { toString: () => '2030-01-01' } } ])).to.be.false
+    })
+
+    it('Should limit the number of embed privacy domains', async function () {
+      const build = (length: number) => Array.from({ length }, (_, i) => `example${i}.com`)
+      const max = CONSTRAINTS_FIELDS.VIDEOS.EMBED_PRIVACY_DOMAINS.max
+
+      expect(areVideoEmbedPrivacyDomainsValid(build(max))).to.be.true
+      expect(areVideoEmbedPrivacyDomainsValid(build(max + 1))).to.be.false
+    })
+
+    it('Should limit the number of remote watch sections', async function () {
+      const build = (length: number): any => ({
+        type: 'WatchAction',
+        id: 'https://example.com/views/1',
+        duration: 'PT10S',
+        startTime: new Date().toISOString(),
+        endTime: new Date().toISOString(),
+        uuid: '7a6d3a6e-5b8a-4f0a-9a0e-3c1a1b8d7e4f',
+        object: 'https://example.org/videos/watch/1',
+        actionStatus: 'CompletedActionStatus',
+        watchSections: Array.from({ length }, (_, i) => ({ startTimestamp: i, endTimestamp: i + 1 }))
+      })
+
+      expect(isWatchActionObjectValid(build(MAX_LOCAL_VIEWER_WATCH_SECTIONS))).to.be.true
+      expect(isWatchActionObjectValid(build(MAX_LOCAL_VIEWER_WATCH_SECTIONS + 1))).to.be.false
+    })
+
+    it('Should only accept known abuse predefined reasons', async function () {
+      expect(areAbusePredefinedReasonsValid([ 'spamOrMisleading', 'serverRules' ])).to.be.true
+
+      for (const reason of [ 'constructor', 'toString', '__proto__', 'hasOwnProperty' ]) {
+        expect(areAbusePredefinedReasonsValid([ reason as any ])).to.be.false
+      }
     })
   })
 })

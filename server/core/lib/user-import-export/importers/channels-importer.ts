@@ -8,9 +8,10 @@ import {
   isVideoChannelSupportValid,
   isVideoChannelUsernameValid
 } from '@server/helpers/custom-validators/video-channels.js'
-import { createLogger } from '@server/helpers/logger.js'
-import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { runTransaction } from '@server/helpers/database-utils.js'
+import { createLogger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
+import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { updateLocalActorImageFiles } from '@server/lib/local-actor.js'
 import { createLocalVideoChannelWithoutKeys } from '@server/lib/video-channel.js'
@@ -55,6 +56,12 @@ export class ChannelsImporter extends AbstractUserImporter<ChannelExportJSON, Ch
     if (existingChannel) {
       logger.info(`Do not import channel ${existingChannel.name} that already exists on this PeerTube instance`)
     } else {
+      const count = await VideoChannelModel.countByAccount(account.id)
+      const maxChannels = CONFIG.VIDEO_CHANNELS.MAX_PER_USER
+      if (count >= maxChannels) {
+        throw new Error(`Cannot import channel ${channelImportData.name}: user cannot have more than ${maxChannels} channels`)
+      }
+
       const videoChannelCreated = await runTransaction(async t => {
         return createLocalVideoChannelWithoutKeys(
           pick(channelImportData, [ 'displayName', 'name', 'description', 'support', 'publicEmail' ]),

@@ -3,8 +3,8 @@ import { ActivityTagObject, VideoChaptersObject, VideoObject, VideoStreamingPlay
 import { sanitizeAndCheckVideoChaptersObject } from '@server/helpers/custom-validators/activitypub/video-chapters.js'
 import { deleteAllModels, filterNonExistingModels, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
 import { removeRedundanciesOfStreamingPlaylist } from '@server/lib/redundancy.js'
+import { updateRemoteVideoThumbnail } from '@server/lib/thumbnail.js'
 import { replaceChapters } from '@server/lib/video-chapters.js'
 import { setVideoTags } from '@server/lib/video.js'
 import { StoryboardModel } from '@server/models/video/storyboard.js'
@@ -128,13 +128,12 @@ export abstract class APVideoAbstractBuilder {
     const [ videoLive ] = await VideoLiveModel.upsert(attributes, { transaction, returning: true })
 
     await VideoLiveScheduleModel.deleteAllOfLiveId(videoLive.id, transaction)
-    videoLive.LiveSchedules = []
 
-    for (const scheduleAttributes of getLiveSchedulesAttributesFromObject(videoLive, this.videoObject)) {
-      const scheduleModel = new VideoLiveScheduleModel(scheduleAttributes)
-
-      videoLive.LiveSchedules.push(await scheduleModel.save({ transaction }))
-    }
+    // bulkCreate skips model validation: schedules are sanitized by sanitizeAndCheckVideoTorrentObject
+    videoLive.LiveSchedules = await VideoLiveScheduleModel.bulkCreate(
+      getLiveSchedulesAttributesFromObject(videoLive, this.videoObject),
+      { transaction }
+    )
   }
 
   protected async setWebVideoFiles (video: MVideoFull, t: Transaction) {

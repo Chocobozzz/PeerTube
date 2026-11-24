@@ -3,6 +3,7 @@ import { getFileSize } from '@peertube/peertube-node-utils'
 import { Awaitable } from '@peertube/peertube-typescript-utils'
 import { createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
+import { USER_EXPORT_MAX_ITEMS, USER_IMPORT } from '@server/initializers/constants.js'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos/get.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideoImmutable } from '@server/types/models/index.js'
@@ -122,6 +123,12 @@ export abstract class AbstractUserImporter<
   }
 
   async import () {
+    // The JSON file is entirely loaded in memory
+    const jsonFileSize = await getFileSize(this.jsonFilePath)
+    if (jsonFileSize > USER_IMPORT.MAX_JSON_FILE_SIZE) {
+      throw new Error(`JSON file ${this.jsonFilePath} is too big (${jsonFileSize} > ${USER_IMPORT.MAX_JSON_FILE_SIZE})`)
+    }
+
     const importData: ROOT_OBJECT = await readJSON(this.jsonFilePath)
     const summary = {
       duplicates: 0,
@@ -129,7 +136,18 @@ export abstract class AbstractUserImporter<
       errors: 0
     }
 
-    for (const importObject of this.getImportObjects(importData)) {
+    let importObjects = this.getImportObjects(importData)
+    if (!Array.isArray(importObjects)) throw new Error(`Invalid import objects in ${this.jsonFilePath}`)
+
+    const maxImportObjects = this.getMaxImportObjects()
+    if (importObjects.length > maxImportObjects) {
+      logger.warn(`Only import the first ${maxImportObjects} objects of ${this.jsonFilePath} (${importObjects.length} objects)`)
+
+      summary.errors += importObjects.length - maxImportObjects
+      importObjects = importObjects.slice(0, maxImportObjects)
+    }
+
+    for (const importObject of importObjects) {
       try {
         const sanitized = this.sanitize(importObject)
 
@@ -153,6 +171,12 @@ export abstract class AbstractUserImporter<
     }
 
     return summary
+  }
+
+  // Exports of these objects are limited to USER_EXPORT_MAX_ITEMS
+  // Override it for objects that are not limited in exports
+  protected getMaxImportObjects () {
+    return USER_EXPORT_MAX_ITEMS
   }
 
   protected abstract getImportObjects (object: ROOT_OBJECT): OBJECT[]

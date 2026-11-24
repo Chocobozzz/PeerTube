@@ -10,6 +10,7 @@ import {
   VideoCommentPolicy,
   VideoCreateResult,
   VideoEmbedPrivacyPolicy,
+  VideoExportJSON,
   VideoPlaylistPrivacy,
   VideoPlaylistType,
   VideoPrivacy,
@@ -25,6 +26,8 @@ import { MockSmtpServer } from '@tests/shared/mock-servers/mock-email.js'
 import { completeCheckHlsPlaylist } from '@tests/shared/streaming-playlists.js'
 import { completeVideoCheck } from '@tests/shared/videos.js'
 import { expect } from 'chai'
+import { readFile, writeFile } from 'fs/promises'
+import JSZip from 'jszip'
 import { join } from 'path'
 
 function runTest (withObjectStorage: boolean) {
@@ -722,6 +725,9 @@ function runTest (withObjectStorage: boolean) {
       this.timeout(120000)
 
       await server.config.enableMinimumTranscoding({ webVideo: false, hls: true, splitAudioAndVideo: true, keepOriginal: false })
+
+      // Live replay requires transcoding
+      await remoteServer.config.updateExistingConfig({ newConfig: { live: { allowReplay: false } } })
       await remoteServer.config.disableTranscoding()
 
       const { remoteToken } = await generateAndExportImport('claire1')
@@ -775,6 +781,179 @@ function runTest (withObjectStorage: boolean) {
         expect(source.resolution.id).to.equal(720)
         expect(source.size).to.equal(572456)
       }
+    })
+  })
+
+  describe('Instance limits', function () {
+    let archiveIndex = 0
+
+    // Only keep some objects of the archive, and update them
+    async function buildArchive (options: {
+      channelName: string
+      videos: Record<string, (video: VideoExportJSON['videos'][0]) => void>
+      channels?: (channels: any[]) => any[]
+    }) {
+      const { channelName, videos, channels } = options
+
+      const zip = await JSZip.loadAsync(await readFile(archivePath))
+
+      const keptJSON = new Set([ 'peertube/videos.json' ])
+      if (channels) keptJSON.add('peertube/channels.json')
+
+      for (const path of Object.keys(zip.files)) {
+        if (path.startsWith('peertube/') && path.endsWith('.json') && !keptJSON.has(path)) zip.remove(path)
+      }
+
+      const videosJSON: VideoExportJSON = JSON.parse(await zip.file('peertube/videos.json').async('string'))
+      videosJSON.videos = videosJSON.videos.filter(v => !!videos[v.name])
+
+      for (const video of videosJSON.videos) {
+        video.channel.name = channelName
+        videos[video.name](video)
+      }
+
+      zip.file('peertube/videos.json', JSON.stringify(videosJSON))
+
+      if (channels) {
+        const channelsJSON = JSON.parse(await zip.file('peertube/channels.json').async('string'))
+        channelsJSON.channels = channels(channelsJSON.channels)
+
+        zip.file('peertube/channels.json', JSON.stringify(channelsJSON))
+      }
+
+      const path = join(remoteServer.getDirectoryPath('tmp'), `archive-limits-${archiveIndex++}.zip`)
+      await writeFile(path, await zip.generateAsync({ type: 'nodebuffer' }))
+
+      return path
+    }
+
+    async function importArchive (username: string, buildOptions: Omit<Parameters<typeof buildArchive>[0], 'channelName'>) {
+      const { token, userId, userChannelName } = await remoteServer.users.generate(username)
+
+      const fixture = await buildArchive({ ...buildOptions, channelName: userChannelName })
+      await remoteServer.userImports.importArchive({ fixture, userId, token })
+      await waitJobs([ remoteServer ])
+
+      const userImport = await remoteServer.userImports.getLatestImport({ userId, token })
+      expect(userImport.state.id).to.equal(UserImportState.COMPLETED)
+
+      const { data } = await remoteServer.videos.listMyVideos({ token })
+
+      return { token, videos: data }
+    }
+
+    function futureDate (hours: number) {
+      return new Date(Date.now() + hours * 3600 * 1000).toISOString()
+    }
+
+    beforeEach(async function () {
+      await remoteServer.config.save()
+    })
+
+    afterEach(async function () {
+      await remoteServer.config.rollback()
+    })
+
+    it('Should apply the limits of the REST API to imported videos', async function () {
+      this.timeout(240000)
+
+      const { token, videos } = await importArchive('limits_user_1', {
+        videos: {
+          'noah public video': v => {
+            v.tags = Array.from({ length: 50 }, (_, i) => 'tag ' + i)
+            v.chapters = Array.from({ length: 1000 }, (_, i) => ({ timecode: i % 600, title: 'chapter ' + i }))
+            v.videoEmbedPrivacy = {
+              policy: VideoEmbedPrivacyPolicy.ALLOWLIST,
+              domains: Array.from({ length: 1000 }, (_, i) => `example${i}.com`)
+            }
+          },
+          'noah password video': v => {
+            v.passwords = Array.from({ length: 200 }, (_, i) => 'password ' + i)
+          },
+          'noah live video': v => {
+            v.live.schedules = Array.from({ length: 50 }, (_, i) => ({ startAt: futureDate(i + 1) as any }))
+          }
+        }
+      })
+
+      // Too many passwords: the video is not imported
+      expect(videos.map(v => v.name)).to.have.members([ 'noah public video', 'noah live video' ])
+
+      {
+        const videoId = videos.find(v => v.name === 'noah public video').uuid
+
+        const video = await remoteServer.videos.get({ id: videoId })
+        expect(video.tags).to.deep.equal([ 'tag 0', 'tag 1', 'tag 2', 'tag 3', 'tag 4' ])
+
+        const { chapters } = await remoteServer.chapters.list({ videoId, token })
+        expect(chapters).to.have.lengthOf(500)
+        expect(new Set(chapters.map(c => c.timecode)).size).to.equal(500)
+
+        const embedPrivacy = await remoteServer.videoEmbedPrivacy.get({ videoId, token })
+        expect(embedPrivacy.domains).to.have.lengthOf(500)
+      }
+
+      {
+        const videoId = videos.find(v => v.name === 'noah live video').uuid
+
+        const live = await remoteServer.live.get({ videoId, token })
+        expect(live.schedules).to.have.lengthOf(10)
+      }
+    })
+
+    it('Should apply the live configuration of the instance', async function () {
+      this.timeout(240000)
+
+      await remoteServer.config.updateExistingConfig({
+        newConfig: {
+          live: {
+            allowReplay: false,
+            latencySetting: { enabled: false }
+          }
+        }
+      })
+
+      const { token, videos } = await importArchive('limits_user_2', { videos: { 'noah live video': () => {} } })
+      expect(videos).to.have.lengthOf(1)
+
+      const live = await remoteServer.live.get({ videoId: videos[0].uuid, token })
+      expect(live.saveReplay).to.be.false
+      expect(live.replaySettings).to.not.exist
+      expect(live.latencyMode).to.equal(LiveVideoLatencyMode.DEFAULT)
+    })
+
+    it('Should not import lives if live is disabled', async function () {
+      this.timeout(240000)
+
+      await remoteServer.config.updateExistingConfig({ newConfig: { live: { enabled: false } } })
+
+      const { videos } = await importArchive('limits_user_3', { videos: { 'noah live video': () => {} } })
+      expect(videos).to.have.lengthOf(0)
+    })
+
+    it('Should not import lives if the max user lives limit is reached', async function () {
+      this.timeout(240000)
+
+      await remoteServer.config.updateExistingConfig({ newConfig: { live: { maxUserLives: 0 } } })
+
+      const { videos } = await importArchive('limits_user_4', { videos: { 'noah live video': () => {} } })
+      expect(videos).to.have.lengthOf(0)
+    })
+
+    it('Should not import more channels than allowed', async function () {
+      this.timeout(240000)
+
+      await remoteServer.config.updateExistingConfig({ newConfig: { videoChannels: { maxPerUser: 2 } } })
+
+      const { token } = await importArchive('limits_user_5', {
+        videos: {},
+        channels: channels => {
+          return Array.from({ length: 5 }, (_, i) => ({ ...channels[0], name: 'limits_channel_' + i, archiveFiles: {} }))
+        }
+      })
+
+      const { data } = await remoteServer.channels.listByAccount({ token, accountName: 'limits_user_5' })
+      expect(data).to.have.lengthOf(2)
     })
   })
 

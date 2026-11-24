@@ -356,7 +356,10 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with an invalid schedules', async function () {
-      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' } ]
+      const tooManySchedules = Array.from({ length: 11 }, (_, i) => {
+        return { startAt: new Date(Date.now() + (i + 1) * 3600 * 1000).toISOString() }
+      })
+      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' }, tooManySchedules ]
 
       for (const schedules of toTests) {
         const fields = { ...baseCorrectParams, schedules }
@@ -697,7 +700,10 @@ describe('Test video lives API validator', function () {
     })
 
     it('Should fail with an invalid schedules', async function () {
-      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' } ]
+      const tooManySchedules = Array.from({ length: 11 }, (_, i) => {
+        return { startAt: new Date(Date.now() + (i + 1) * 3600 * 1000).toISOString() }
+      })
+      const toTests = [ 'toto', 42, [ 'toto' ], { toto: 'toto' }, { startAt: 'toto' }, tooManySchedules ]
 
       for (const schedules of toTests) {
         const fields = { schedules } as any

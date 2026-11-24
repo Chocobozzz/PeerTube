@@ -1,10 +1,11 @@
 import { VideoEmbedPrivacyPolicy } from '@peertube/peertube-models'
-import { VIDEO_EMBED_PRIVACY_POLICIES } from '@server/initializers/constants.js'
+import { CONSTRAINTS_FIELDS, VIDEO_EMBED_PRIVACY_POLICIES } from '@server/initializers/constants.js'
 import { isArray } from './misc.js'
 import { isHostValid } from './servers.js'
 
 export function areVideoEmbedPrivacyDomainsValid (value: string[]) {
   if (!isArray(value)) return false
+  if (value.length > CONSTRAINTS_FIELDS.VIDEOS.EMBED_PRIVACY_DOMAINS.max) return false
   if (!value.every(v => isHostValid(v))) return false
 
   return true

@@ -51,8 +51,8 @@ export class VideoModelBuilder {
   private scheduleVideoUpdateDone: Set<any>
   private storyboardDone: Set<any>
 
-  private trackersDone: Set<string>
-  private tagsDone: Set<string>
+  private trackersDone: Set<number>
+  private tagsDone: Set<number>
   private autoTagsDone: Set<string>
   private captionsDone: Set<any>
 
@@ -413,16 +413,15 @@ export class VideoModelBuilder {
   }
 
   private addTag (row: SQLRow, videoModel: VideoModel) {
-    if (!row['Tags.name']) return
+    if (this.tagsDone.has(videoModel.id)) return
 
-    const key = `${row['Tags.VideoTagModel.videoId']}-${row['Tags.VideoTagModel.tagId']}`
-    if (this.tagsDone.has(key)) return
+    const tags = (row['TagsJSON'] || []) as { id: number, name: string }[]
 
-    const attributes = this.grab(row, this.tables.getTagAttributes(), 'Tags')
-    const tagModel = new TagModel(attributes, this.buildOpts)
-    videoModel.Tags.push(tagModel)
+    for (const tag of tags) {
+      videoModel.Tags.push(new TagModel(tag, this.buildOpts))
+    }
 
-    this.tagsDone.add(key)
+    this.tagsDone.add(videoModel.id)
   }
 
   private addAutoTag (row: SQLRow, videoModel: VideoModel) {
@@ -443,16 +442,15 @@ export class VideoModelBuilder {
   }
 
   private addTracker (row: SQLRow, videoModel: VideoModel) {
-    if (!row['Trackers.id']) return
+    if (this.trackersDone.has(videoModel.id)) return
 
-    const key = `${row['Trackers.VideoTrackerModel.videoId']}-${row['Trackers.VideoTrackerModel.trackerId']}`
-    if (this.trackersDone.has(key)) return
+    const trackers = (row['TrackersJSON'] || []) as { id: number, url: string }[]
 
-    const attributes = this.grab(row, this.tables.getTrackerAttributes(), 'Trackers')
-    const trackerModel = new TrackerModel(attributes, this.buildOpts)
-    videoModel.Trackers.push(trackerModel)
+    for (const tracker of trackers) {
+      videoModel.Trackers.push(new TrackerModel(tracker, this.buildOpts))
+    }
 
-    this.trackersDone.add(key)
+    this.trackersDone.add(videoModel.id)
   }
 
   private addCaption (row: SQLRow, videoModel: VideoModel) {
@@ -526,21 +524,22 @@ export class VideoModelBuilder {
   }
 
   private addLiveSchedule (row: SQLRow, videoModel: VideoModel) {
-    const id = row['VideoLive.VideoLiveSchedules.id']
-    if (!id) return
-    if (this.liveScheduleDone.has(id)) return
+    const key = 'VideoLive.LiveSchedulesJSON'
+    if (!videoModel.VideoLive || !(key in row) || this.liveScheduleDone.has(videoModel.id)) return
 
-    const videoLiveScheduleAttributes = this.grab(row, this.tables.getLiveScheduleAttributes(), 'VideoLive.VideoLiveSchedules')
+    const schedules: any[] = row[key] as any || []
 
-    const liveScheduleModel = new VideoLiveScheduleModel(videoLiveScheduleAttributes, this.buildOpts)
+    videoModel.VideoLive.LiveSchedules = schedules.map(schedule => {
+      return new VideoLiveScheduleModel({
+        ...schedule,
 
-    if (!videoModel.VideoLive.LiveSchedules) {
-      videoModel.VideoLive.LiveSchedules = []
-    }
+        startAt: schedule.startAt ? new Date(schedule.startAt) : null,
+        createdAt: schedule.createdAt ? new Date(schedule.createdAt) : null,
+        updatedAt: schedule.updatedAt ? new Date(schedule.updatedAt) : null
+      }, this.buildOpts)
+    })
 
-    videoModel.VideoLive.LiveSchedules.push(liveScheduleModel)
-
-    this.liveScheduleDone.add(id)
+    this.liveScheduleDone.add(videoModel.id)
   }
 
   private setStoryboard (row: SQLRow, videoModel: VideoModel) {

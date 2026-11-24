@@ -1,6 +1,6 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { ContextType, HttpStatusCode, VideoPlaylistPrivacy } from '@peertube/peertube-models'
+import { ContextType, HttpStatusCode, VideoPlaylistPrivacy, VideoPrivacy } from '@peertube/peertube-models'
 import {
   PeerTubeServer,
   cleanupTests,
@@ -373,6 +373,49 @@ describe('Test the checks on incoming ActivityPub activities', function () {
     })
   })
 
+  describe('Remote live schedules', function () {
+    it('Should truncate and sanitize the schedules of a remote live', async function () {
+      this.timeout(60000)
+
+      await servers[2].config.enableLive()
+
+      const { uuid } = await servers[2].live.create({
+        fields: { name: 'live with many schedules', channelId: servers[2].store.channel.id, privacy: VideoPrivacy.PUBLIC }
+      })
+      await waitJobs(servers)
+
+      const { body } = await makeActivityPubGetRequest(servers[2].url, '/videos/watch/' + uuid)
+      const videoObject = { ...body }
+      delete videoObject['@context']
+
+      const validSchedules = Array.from({ length: 50 }, (_, i) => {
+        return { startDate: new Date(Date.now() + (i + 1) * 3600 * 1000).toISOString() }
+      })
+      const schedules = [ { startDate: 'invalid' }, { startDate: 123 }, null, ...validSchedules ]
+
+      const actor = servers[2].url + '/accounts/peertube'
+
+      await sendActivity({
+        fromServerIndex: 2,
+        actorUrl: actor,
+        contextType: 'Video',
+        activity: {
+          type: 'Update',
+          id: actor + '/updates/schedules',
+          actor,
+          to: [ getAPPublicValue() ],
+          object: { ...videoObject, schedules }
+        }
+      })
+
+      // Truncated to 10 entries, then invalid entries are removed
+      const video = await servers[0].videos.get({ id: uuid })
+      expect(video.name).to.equal('live with many schedules')
+      const startDates = video.liveSchedules.map(s => new Date(s.startAt).toISOString())
+      expect(startDates).to.deep.equal(validSchedules.slice(0, 7).map(s => s.startDate))
+    })
+  })
+
   describe('Remote object owners', function () {
     let mockServer: Server
     let mockRequests = 0
@@ -507,7 +550,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       expect(total - totalBefore).to.equal(20)
     })
 
-    async function sendFlag (id: string, attributes: { content?: string, summary?: string, object: string }) {
+    async function sendFlag (id: string, attributes: { content?: string, summary?: string, object: string, tag?: any[] }) {
       const actor = servers[2].url + '/accounts/peertube'
 
       await sendActivity({
@@ -542,6 +585,25 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       const abuse = await getLastAbuse()
       expect(abuse.reason).to.equal(REMOTE_ABUSE_DEFAULT_REASON)
       expect(abuse.video.uuid).to.equal(videoUUID)
+    })
+
+    it('Should dedupe the predefined reasons of a flag', async function () {
+      this.timeout(30000)
+
+      const tag = [
+        ...Array.from({ length: 1000 }, () => ({ type: 'Hashtag', name: 'spamOrMisleading' })),
+        { type: 'Hashtag', name: 'serverRules' },
+        { type: 'Hashtag', name: 'constructor' },
+        { type: 'Hashtag', name: '__proto__' },
+        { type: 'Hashtag' },
+        null
+      ]
+
+      await sendFlag('predefined-reasons', { content: 'many reasons', object: videoUrl, tag })
+
+      const abuse = await getLastAbuse()
+      expect(abuse.reason).to.equal('many reasons')
+      expect(abuse.predefinedReasons).to.deep.equal([ 'spamOrMisleading', 'serverRules' ])
     })
 
     it('Should report the owner account of a flagged channel', async function () {

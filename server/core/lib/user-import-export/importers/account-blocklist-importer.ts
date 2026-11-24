@@ -3,6 +3,7 @@ import { BlocklistExportJSON } from '@peertube/peertube-models'
 import { isValidActorHandle } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { isHostValid } from '@server/helpers/custom-validators/servers.js'
 import { createLogger } from '@server/helpers/logger.js'
+import { USER_IMPORT } from '@server/initializers/constants.js'
 import { addAccountInBlocklist, addServerInBlocklist } from '@server/lib/blocklist.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { ServerModel } from '@server/models/server/server.js'
@@ -18,6 +19,11 @@ export class BlocklistImporter extends AbstractUserImporter<BlocklistExportJSON,
       ...json.actors.map(o => ({ handle: o.handle, host: null })),
       ...json.instances.map(o => ({ handle: null, host: o.host }))
     ]
+  }
+
+  // Blocklist exports are not limited
+  protected getMaxImportObjects () {
+    return USER_IMPORT.MAX_ITEMS
   }
 
   protected sanitize (blocklistImportData: ImportObject) {

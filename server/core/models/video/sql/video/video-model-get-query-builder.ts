@@ -194,16 +194,12 @@ export class VideosModelGetQuerySubBuilder extends AbstractVideoQueryBuilder {
 
     this.whereId(options)
 
-    this.query = this.buildQuery(options)
+    this.query = this.buildQuery()
   }
 
-  private buildQuery (options: BuildVideoGetQueryOptions) {
-    const order = tagsInclude.has(options.type)
-      ? 'ORDER BY "Tags"."name" ASC'
-      : ''
-
+  private buildQuery () {
     const from = `SELECT * FROM "video" ${this.where} LIMIT 1`
 
-    return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins} ${order}`
+    return `${this.buildSelect()} FROM (${from}) AS "video" ${this.joins}`
   }
 }

@@ -264,6 +264,13 @@ describe('Test video embed privacy validator', function () {
         domains: [ 'http://example.com' ],
         expectedStatus: HttpStatusCode.BAD_REQUEST_400
       })
+
+      await server.videoEmbedPrivacy.update({
+        videoId: video.id,
+        policy: VideoEmbedPrivacyPolicy.ALLOWLIST,
+        domains: Array.from({ length: 501 }, (_, i) => `example${i}.com`),
+        expectedStatus: HttpStatusCode.BAD_REQUEST_400
+      })
     })
 
     it('Should fail with missing domains', async function () {

@@ -12,7 +12,7 @@ function isAbuseReasonValid (value: string) {
 }
 
 function isAbusePredefinedReasonValid (value: AbusePredefinedReasonsString) {
-  return exists(value) && value in abusePredefinedReasonsMap
+  return typeof value === 'string' && Object.hasOwn(abusePredefinedReasonsMap, value)
 }
 
 function isAbuseFilterValid (value: AbuseFilter) {
@@ -20,7 +20,7 @@ function isAbuseFilterValid (value: AbuseFilter) {
 }
 
 function areAbusePredefinedReasonsValid (value: AbusePredefinedReasonsString[]) {
-  return exists(value) && isArray(value) && value.every(v => v in abusePredefinedReasonsMap)
+  return exists(value) && isArray(value) && value.every(v => isAbusePredefinedReasonValid(v))
 }
 
 function isAbuseTimestampValid (value: number) {

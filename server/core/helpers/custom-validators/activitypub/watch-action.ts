@@ -1,4 +1,5 @@
 import { WatchActionObject } from '@peertube/peertube-models'
+import { MAX_LOCAL_VIEWER_WATCH_SECTIONS } from '@server/initializers/constants.js'
 import { isDateValid, isUUIDValid } from '../misc.js'
 import { isVideoTimeValid } from '../video-view.js'
 import { isActivityPubVideoDurationValid, isObjectValid } from './misc.js'
@@ -35,7 +36,10 @@ function isLocationValid (location: any) {
 }
 
 function areWatchSectionsValid (sections: WatchActionObject['watchSections']) {
-  return Array.isArray(sections) && sections.every(s => {
-    return isVideoTimeValid(s.startTimestamp) && isVideoTimeValid(s.endTimestamp)
-  })
+  // Each section is stored as a row, and PeerTube never sends more sections than its local viewers can have
+  return Array.isArray(sections) &&
+    sections.length <= MAX_LOCAL_VIEWER_WATCH_SECTIONS &&
+    sections.every(s => {
+      return isVideoTimeValid(s?.startTimestamp) && isVideoTimeValid(s?.endTimestamp)
+    })
 }
