@@ -14,6 +14,7 @@ import { retryTransactionWrapper, runTransaction } from '@server/helpers/databas
 import { buildWinstonLogger, createLogger } from '@server/helpers/logger.js'
 import { CONFIG } from '@server/initializers/config.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
+import { getProcessRole } from '@server/initializers/process-role.js'
 import { sequelizeTypescript } from '@server/initializers/database.js'
 import { AccountModel } from '@server/models/account/account.js'
 import { getServerAccount, getServerActor } from '@server/models/application/application.js'
@@ -86,7 +87,9 @@ function buildServerHelpers (httpServer: Server) {
   return {
     getHTTPServer: () => httpServer,
 
-    getServerActor: () => getServerActor()
+    getServerActor: () => getServerActor(),
+
+    getProcessRole: () => getProcessRole()
   }
 }
 

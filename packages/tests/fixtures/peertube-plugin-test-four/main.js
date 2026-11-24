@@ -84,6 +84,10 @@ async function register ({
   }
 
   {
+    logger.info('process role is %s', peertubeHelpers.server.getProcessRole())
+  }
+
+  {
     logger.info('server url is %s', peertubeHelpers.config.getWebserverUrl())
   }
 

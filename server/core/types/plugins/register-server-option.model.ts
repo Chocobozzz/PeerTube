@@ -7,6 +7,7 @@ import {
   PluginVideoLanguageManager,
   PluginVideoLicenceManager,
   PluginVideoPrivacyManager,
+  ProcessRole,
   RegisterServerHookOptions,
   RegisterServerSettingOptions,
   ServerConfig,
@@ -141,6 +142,9 @@ export type PeerTubeHelpers = {
     getHTTPServer: () => Server
 
     getServerActor: () => Promise<ActorModel>
+
+    // PeerTube >= 9.0
+    getProcessRole: () => ProcessRole
   }
 
   socket: {

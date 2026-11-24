@@ -101,6 +101,10 @@ describe('Test plugin helpers', function () {
     it('Should get the server actor', async function () {
       await servers[0].servers.waitUntilLog('server actor name is peertube')
     })
+
+    it('Should get the process role', async function () {
+      await servers[0].servers.waitUntilLog('process role is primary')
+    })
   })
 
   describe('Socket', function () {

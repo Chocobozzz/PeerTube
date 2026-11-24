@@ -689,6 +689,15 @@ async function register ({
     await peertubeHelpers.moderation.blockServer({ byAccountId: serverActor.Account.id, hostToBlock: '...' })
   }
 
+  // Get the role of the current PeerTube process: 'primary' or 'secondary' (PeerTube >= 9.0)
+  // With horizontal scalability, the plugin is registered in every process
+  // So use it to run singleton tasks (schedulers, migrations...) on the primary process only
+  {
+    if (peertubeHelpers.server.getProcessRole() === 'primary') {
+      // ...
+    }
+  }
+
   // Load a video
   {
     const video = await peertubeHelpers.videos.loadByUrl('...')
