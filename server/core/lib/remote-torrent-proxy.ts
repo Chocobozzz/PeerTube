@@ -2,6 +2,7 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { isUrlValid } from '@server/helpers/custom-validators/urls.js'
 import { createLogger } from '@server/helpers/logger.js'
 import { doBufferRequest } from '@server/helpers/requests.js'
+import bencode from 'bencode'
 import { create as createContentDisposition } from 'content-disposition'
 import express from 'express'
 
@@ -34,10 +35,30 @@ export async function proxifyRemoteTorrent (options: {
     )
   }
 
+  if (!isTorrentContent(body)) {
+    logger.info(`Remote torrent ${remoteUrl} is not a valid torrent file`)
+
+    return res.sendStatus(HttpStatusCode.BAD_GATEWAY_502)
+  }
+
   res.status(HttpStatusCode.OK_200)
   res.setHeader('Content-Type', 'application/x-bittorrent')
   res.setHeader('Content-Disposition', createContentDisposition(downloadFilename))
   res.setHeader('X-Content-Type-Options', 'nosniff')
 
   return res.end(body)
+}
+
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function isTorrentContent (body: Uint8Array) {
+  try {
+    const decoded = bencode.decode(body)
+
+    return !!decoded && typeof decoded === 'object' && !!decoded.info && typeof decoded.info === 'object'
+  } catch {
+    return false
+  }
 }

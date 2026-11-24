@@ -1,6 +1,7 @@
+import { ActivityObject, ActivityPubActor, ActivityType, APObjectId } from '@peertube/peertube-models'
+import { isActivityPubContentType } from '@server/helpers/activity-pub-utils.js'
 import { doJSONRequest, PeerTubeRequestOptions } from '@server/helpers/requests.js'
 import { CONFIG } from '@server/initializers/config.js'
-import { ActivityObject, ActivityPubActor, ActivityType, APObjectId } from '@peertube/peertube-models'
 import { buildSignedRequestOptions } from './send/index.js'
 
 export function getAPId (object: string | { id: string }) {
@@ -52,7 +53,14 @@ export async function fetchAP<T> (url: string, moreOptions: PeerTubeRequestOptio
     ...moreOptions
   }
 
-  return doJSONRequest<T>(url, options)
+  const response = await doJSONRequest<T>(url, options)
+
+  const contentType = response.headers['content-type']
+  if (response.statusCode >= 200 && response.statusCode < 300 && !isActivityPubContentType(contentType)) {
+    throw new Error(`Response of ${url} does not have an ActivityPub content type (${contentType})`)
+  }
+
+  return response
 }
 
 export async function fetchAPObjectIfNeeded<T extends (ActivityObject | ActivityPubActor)> (object: APObjectId) {

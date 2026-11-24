@@ -69,6 +69,25 @@ export function hasAPPublic (collection: string[] | string) {
   return arrayify(collection).some(f => f === 'as:Public' || f === publicValue)
 }
 
+export function isActivityPubContentType (contentType: string) {
+  if (!contentType || typeof contentType !== 'string') return false
+
+  const [ mimeType, ...params ] = contentType.split(';').map(p => p.trim())
+
+  if (mimeType.toLowerCase() === 'application/activity+json') return true
+  if (mimeType.toLowerCase() !== 'application/ld+json') return false
+
+  // Generic JSON-LD type: require the ActivityStreams profile
+  return params.some(param => {
+    const index = param.indexOf('=')
+    if (index === -1 || param.slice(0, index).trim().toLowerCase() !== 'profile') return false
+
+    const profiles = param.slice(index + 1).trim().replace(/^"(.*)"$/, '$1')
+
+    return profiles.split(/\s+/).includes('https://www.w3.org/ns/activitystreams')
+  })
+}
+
 // ---------------------------------------------------------------------------
 // Private
 // ---------------------------------------------------------------------------

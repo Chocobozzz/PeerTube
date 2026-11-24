@@ -224,6 +224,14 @@ export class SQLCommand {
     )
   }
 
+  async setVideoCaptionFileUrlOf (uuid: string, fileUrl: string) {
+    await this.updateQuery(
+      `UPDATE "videoCaption" SET "fileUrl" = :fileUrl, "cached" = false ` +
+        `WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid)`,
+      { fileUrl, uuid }
+    )
+  }
+
   async setTorrentStorageOf (torrentFilename: string, storage: FileStorageType) {
     await this.updateQuery(
       `UPDATE "videoFile" SET "torrentStorage" = :storage WHERE "torrentFilename" = :torrentFilename`,

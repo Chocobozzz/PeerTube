@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
-import { signAndContextify } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
+import { isActivityPubContentType, signAndContextify } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
 import { isHTTPSignatureVerified, parseHTTPSignature } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
 import { compactJSONLDAndCheckSignature, signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
 import { fakeContextFilter } from '@tests/shared/requests.js'
@@ -188,6 +188,44 @@ describe('Test activity pub helpers', function () {
       const verified = await isHTTPSignatureVerified(parsed, actor as any)
 
       expect(verified).to.be.true
+    })
+  })
+
+  describe('When checking ActivityPub content types', function () {
+    it('Should accept ActivityPub content types', function () {
+      const valid = [
+        'application/activity+json',
+        'application/activity+json; charset=utf-8',
+        'Application/Activity+JSON',
+        'application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
+        'application/ld+json;profile="https://www.w3.org/ns/activitystreams"',
+        'application/ld+json; charset=utf-8; profile="https://example.com/profile https://www.w3.org/ns/activitystreams"',
+        'application/ld+json; profile=https://www.w3.org/ns/activitystreams'
+      ]
+
+      for (const contentType of valid) {
+        expect(isActivityPubContentType(contentType), contentType).to.be.true
+      }
+    })
+
+    it('Should refuse other content types', function () {
+      const invalid = [
+        undefined,
+        '',
+        'text/vtt',
+        'text/vtt; charset=utf-8',
+        'application/json',
+        'application/x-bittorrent',
+        'application/ld+json',
+        'application/ld+json; profile="https://example.com/profile"',
+        'application/ld+json; charset=utf-8',
+        'text/html; profile="https://www.w3.org/ns/activitystreams"',
+        'application/activity+jsonp'
+      ]
+
+      for (const contentType of invalid) {
+        expect(isActivityPubContentType(contentType), contentType).to.be.false
+      }
     })
   })
 })
