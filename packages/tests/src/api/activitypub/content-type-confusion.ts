@@ -56,6 +56,9 @@ describe('Test ActivityPub content type confusion', function () {
 
     remoteSQLCommand = new SQLCommand(servers[1])
 
+    // Redundancy only duplicates HLS playlists
+    await servers[0].config.enableMinimumTranscoding()
+
     const { uuid } = await servers[0].videos.quickUpload({ name: 'video' })
     videoUUID = uuid
 
@@ -139,6 +142,70 @@ describe('Test ActivityPub content type confusion', function () {
 
       mock.setFile('/remote/file.torrent', 'application/x-bittorrent', await readFile(buildAbsoluteFixturePath('video-720p.torrent')))
       await makeRawRequest({ url: torrentUrl, expectedStatus: HttpStatusCode.OK_200 })
+    })
+  })
+
+  describe('When duplicating remote videos', function () {
+    // Smallest ISO BMFF header: a "ftyp" box
+    const mp4Header = Buffer.from([ 0, 0, 0, 16, ...Buffer.from('ftypisom'), 0, 0, 2, 0 ])
+
+    let remoteVideoId: number
+
+    function setRemotePlaylist (segmentLine: string) {
+      mock.setFile('/hls/master.m3u8', 'application/vnd.apple.mpegurl', '#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1\nsub.m3u8\n')
+      mock.setFile('/hls/sub.m3u8', 'application/vnd.apple.mpegurl', `#EXTM3U\n#EXTINF:1,\n${segmentLine}\n`)
+    }
+
+    async function duplicate () {
+      await servers[1].redundancy.addVideo({ videoId: remoteVideoId })
+      await waitJobs(servers)
+
+      const { total } = await servers[1].redundancy.listVideos({ target: 'remote-videos' })
+
+      return total
+    }
+
+    before(async function () {
+      remoteVideoId = (await servers[1].videos.get({ id: videoUUID })).id
+
+      await remoteSQLCommand.setStreamingPlaylistUrlOf(videoUUID, mockUrl + '/hls/master.m3u8')
+
+      // Redundancy refreshes outdated videos, that would restore the playlist URL of the origin
+      await remoteSQLCommand.setVideoField(videoUUID, 'updatedAt', new Date(Date.now() + 3600 * 1000).toISOString())
+    })
+
+    it('Should not duplicate a remote HLS file that is not a HLS file', async function () {
+      this.timeout(60000)
+
+      const segmentUrl = servers[1].url + '/static/redundancy/hls/' + videoUUID + '/segment.mp4'
+
+      setRemotePlaylist('segment.mp4')
+      mock.setFile('/hls/segment.mp4', 'video/mp4', buildActor(segmentUrl))
+
+      expect(await duplicate()).to.equal(0)
+      await makeRawRequest({ url: segmentUrl, expectedStatus: HttpStatusCode.NOT_FOUND_404 })
+    })
+
+    it('Should not duplicate a remote HLS file of another host', async function () {
+      this.timeout(60000)
+
+      setRemotePlaylist(mockUrl.replace('127.0.0.1', 'localhost') + '/hls/valid.mp4')
+      mock.setFile('/hls/valid.mp4', 'video/mp4', mp4Header)
+
+      expect(await duplicate()).to.equal(0)
+    })
+
+    it('Should duplicate valid remote HLS files', async function () {
+      this.timeout(60000)
+
+      setRemotePlaylist('valid.mp4')
+      mock.setFile('/hls/valid.mp4', 'video/mp4', mp4Header)
+
+      expect(await duplicate()).to.equal(1)
+      await makeRawRequest({
+        url: servers[1].url + '/static/redundancy/hls/' + videoUUID + '/valid.mp4',
+        expectedStatus: HttpStatusCode.OK_200
+      })
     })
   })
 

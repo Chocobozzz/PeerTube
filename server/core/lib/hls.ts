@@ -18,13 +18,13 @@ import { open, readFile, stat, writeFile } from 'fs/promises'
 import flatten from 'lodash-es/flatten.js'
 import PQueue from 'p-queue'
 import { basename, dirname, join } from 'path'
+import { runTransaction } from '../helpers/database-utils.js'
 import { getAudioStreamCodec, getVideoStreamCodec } from '../helpers/ffmpeg/index.js'
 import { createLogger } from '../helpers/logger.js'
 import { doRequest, doRequestAndSaveToFile } from '../helpers/requests.js'
 import { generateRandomString } from '../helpers/utils.js'
 import { CONFIG } from '../initializers/config.js'
 import { P2P_MEDIA_LOADER_PEER_VERSION, REQUEST_TIMEOUTS } from '../initializers/constants.js'
-import { runTransaction } from '../helpers/database-utils.js'
 import { VideoFileModel } from '../models/video/video-file.js'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist.js'
 import { storeHLSFileFromContent } from './object-storage/index.js'
@@ -392,6 +392,10 @@ export function downloadPlaylistSegments (playlistUrl: string, destinationDir: s
 
         await doRequestAndSaveToFile(fileUrl, destPath, { bodyKBLimit: remainingBodyKBLimit, timeout: REQUEST_TIMEOUTS.REDUNDANCY })
 
+        if (await isHLSFileValid(destPath) !== true) {
+          throw new Error(`Downloaded HLS file ${fileUrl} is not a valid HLS file`)
+        }
+
         const { size } = await stat(destPath)
         remainingBodyKBLimit -= size / 1000
 
@@ -415,8 +419,8 @@ export function downloadPlaylistSegments (playlistUrl: string, destinationDir: s
       .catch(err => logger.error('Cannot delete path on HLS download error.', { err }))
   }
 
-  async function fetchUniqUrls (playlistUrl: string) {
-    const { body } = await doRequest(playlistUrl)
+  async function fetchUniqUrls (subPlaylistUrl: string) {
+    const { body } = await doRequest(subPlaylistUrl)
 
     if (!body) return []
 
@@ -431,10 +435,45 @@ export function downloadPlaylistSegments (playlistUrl: string, destinationDir: s
       .map(url => {
         if (url.startsWith('http://') || url.startsWith('https://')) return url
 
-        return `${dirname(playlistUrl)}/${url}`
+        return `${dirname(subPlaylistUrl)}/${url}`
       })
 
+    // The origin must not make us download (and then serve) files of another host
+    const masterHost = new URL(playlistUrl).host.toLowerCase()
+    const otherHostUrl = urls.find(u => new URL(u).host.toLowerCase() !== masterHost)
+    if (otherHostUrl) {
+      throw new Error(`HLS file ${otherHostUrl} is not on the same host as the master playlist ${playlistUrl}`)
+    }
+
     return uniqify(urls)
+  }
+}
+
+// Top level boxes that can start an ISO BMFF (fragmented MP4) file
+const MP4_FIRST_BOXES = new Set([ 'ftyp', 'styp', 'sidx', 'moov', 'moof', 'mdat', 'free', 'skip', 'wide', 'pdin' ])
+
+async function isHLSFileValid (path: string) {
+  if (path.endsWith('.m3u8')) {
+    return (await readFileHeader(path, 7)).toString('latin1') === '#EXTM3U'
+  }
+
+  // The first 4 bytes are the box size, then the box type
+  const header = await readFileHeader(path, 8)
+  if (header.length < 8) return false
+
+  return MP4_FIRST_BOXES.has(header.subarray(4, 8).toString('latin1'))
+}
+
+async function readFileHeader (path: string, length: number) {
+  const handle = await open(path, 'r')
+
+  try {
+    const buffer = Buffer.alloc(length)
+    const { bytesRead } = await handle.read(buffer, 0, length, 0)
+
+    return buffer.subarray(0, bytesRead)
+  } finally {
+    await handle.close()
   }
 }
 

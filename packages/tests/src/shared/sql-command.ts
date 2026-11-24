@@ -232,6 +232,14 @@ export class SQLCommand {
     )
   }
 
+  async setStreamingPlaylistUrlOf (uuid: string, playlistUrl: string) {
+    await this.updateQuery(
+      `UPDATE "videoStreamingPlaylist" SET "playlistUrl" = :playlistUrl ` +
+        `WHERE "videoId" IN (SELECT id FROM "video" WHERE uuid = :uuid)`,
+      { playlistUrl, uuid }
+    )
+  }
+
   async setTorrentStorageOf (torrentFilename: string, storage: FileStorageType) {
     await this.updateQuery(
       `UPDATE "videoFile" SET "torrentStorage" = :storage WHERE "torrentFilename" = :torrentFilename`,
