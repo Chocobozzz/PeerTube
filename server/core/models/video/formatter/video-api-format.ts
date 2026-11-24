@@ -16,10 +16,11 @@ import { getLocalVideoFileMetadataUrl } from '@server/lib/video-urls.js'
 import { generateMagnetUri } from '@server/lib/webtorrent.js'
 import { isArray } from '../../../helpers/custom-validators/misc.js'
 import {
+  REDUNDANCY,
   VIDEO_AI_USAGES,
   VIDEO_CATEGORIES,
-  VIDEO_COMMERCIAL_CONTENTS,
   VIDEO_COMMENTS_POLICY,
+  VIDEO_COMMERCIAL_CONTENTS,
   VIDEO_EMBED_PRIVACY_POLICIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
@@ -248,7 +249,9 @@ export function streamingPlaylistsModelToFormattedJSON (
       segmentsSha256Url: playlist.getSha256SegmentsUrl(video),
 
       redundancies: isArray(playlist.RedundancyVideos)
-        ? playlist.RedundancyVideos.map(r => ({ baseUrl: r.fileUrl }))
+        ? playlist.RedundancyVideos
+          .slice(0, REDUNDANCY.VIDEOS.MAX_REMOTE_PER_STREAMING_PLAYLIST + 1)
+          .map(r => ({ baseUrl: r.fileUrl }))
         : [],
 
       files: videoFilesModelToFormattedJSON(video, playlist.VideoFiles, { includePlaylistUrl: true })

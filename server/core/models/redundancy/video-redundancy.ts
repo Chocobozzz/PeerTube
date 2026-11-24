@@ -234,6 +234,52 @@ export class VideoRedundancyModel extends SequelizeModel<VideoRedundancyModel> {
     return VideoRedundancyModel.findOne(query)
   }
 
+  static loadRemoteByStreamingPlaylistAndHost (options: {
+    videoStreamingPlaylistId: number
+    host: string
+    transaction: Transaction
+  }): Promise<MVideoRedundancy> {
+    const { videoStreamingPlaylistId, host, transaction } = options
+
+    const query = {
+      where: {
+        videoStreamingPlaylistId
+      },
+      include: [
+        {
+          attributes: [],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: ServerModel.unscoped(),
+              required: true,
+              where: { host }
+            }
+          ]
+        }
+      ],
+      transaction
+    }
+
+    return VideoRedundancyModel.findOne(query)
+  }
+
+  static async countRemoteByStreamingPlaylist (videoStreamingPlaylistId: number, transaction: Transaction) {
+    const actor = await getServerActor()
+
+    return VideoRedundancyModel.count({
+      where: {
+        videoStreamingPlaylistId,
+        actorId: {
+          [Op.ne]: actor.id
+        }
+      },
+      transaction
+    })
+  }
+
   // ---------------------------------------------------------------------------
   // Select redundancy candidates
   // ---------------------------------------------------------------------------

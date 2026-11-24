@@ -61,6 +61,22 @@ describe('Test the checks on incoming ActivityPub activities', function () {
     await waitJobs(servers)
   }
 
+  function buildCacheFileCreate (id: string, actor: string) {
+    return {
+      type: 'Create',
+      id: actor + '/create/' + encodeURIComponent(id),
+      actor,
+      to: [ getAPPublicValue() ],
+      object: {
+        type: 'CacheFile',
+        id,
+        object: videoUrl,
+        expires: new Date(new Date().getTime() + 3600000).toISOString(),
+        url: { type: 'Link', mediaType: 'application/x-mpegURL', href: servers[2].url + '/redundancy/master.m3u8' }
+      }
+    }
+  }
+
   before(async function () {
     this.timeout(240000)
 
@@ -195,22 +211,6 @@ describe('Test the checks on incoming ActivityPub activities', function () {
   })
 
   describe('Cache files', function () {
-    function buildCreate (id: string, actor: string) {
-      return {
-        type: 'Create',
-        id: actor + '/create/' + encodeURIComponent(id),
-        actor,
-        to: [ getAPPublicValue() ],
-        object: {
-          type: 'CacheFile',
-          id,
-          object: videoUrl,
-          expires: new Date(new Date().getTime() + 3600000).toISOString(),
-          url: { type: 'Link', mediaType: 'application/x-mpegURL', href: servers[2].url + '/redundancy/master.m3u8' }
-        }
-      }
-    }
-
     it('Should not create a cache file whose id is on another host than the actor', async function () {
       this.timeout(30000)
 
@@ -220,7 +220,7 @@ describe('Test the checks on incoming ActivityPub activities', function () {
         fromServerIndex: 2,
         actorUrl: actor,
         contextType: 'CacheFile',
-        activity: buildCreate(servers[1].url + '/redundancy/spoofed', actor)
+        activity: buildCacheFileCreate(servers[1].url + '/redundancy/spoofed', actor)
       })
 
       expect(await sqlCommands[0].listVideoRedundancyUrls()).to.have.lengthOf(0)
@@ -232,9 +232,35 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       const actor = servers[2].url + '/accounts/peertube'
       const id = servers[2].url + '/redundancy/legit'
 
-      await sendActivity({ fromServerIndex: 2, actorUrl: actor, contextType: 'CacheFile', activity: buildCreate(id, actor) })
+      await sendActivity({ fromServerIndex: 2, actorUrl: actor, contextType: 'CacheFile', activity: buildCacheFileCreate(id, actor) })
 
       expect(await sqlCommands[0].listVideoRedundancyUrls()).to.deep.equal([ id ])
+    })
+
+    it('Should replace the previous cache file of the same host', async function () {
+      this.timeout(30000)
+
+      const actor = servers[2].url + '/accounts/peertube'
+      const id = servers[2].url + '/redundancy/legit-2'
+
+      await sendActivity({ fromServerIndex: 2, actorUrl: actor, contextType: 'CacheFile', activity: buildCacheFileCreate(id, actor) })
+
+      expect(await sqlCommands[0].listVideoRedundancyUrls()).to.deep.equal([ id ])
+    })
+
+    it('Should not exceed the max number of remote cache files of a video', async function () {
+      this.timeout(30000)
+
+      // Max remote redundancies is 1 in test mode
+      const actor = servers[1].url + '/accounts/peertube'
+      const id = servers[1].url + '/redundancy/other-instance'
+
+      await sendActivity({ fromServerIndex: 1, actorUrl: actor, contextType: 'CacheFile', activity: buildCacheFileCreate(id, actor) })
+
+      expect(await sqlCommands[0].listVideoRedundancyUrls()).to.deep.equal([ servers[2].url + '/redundancy/legit-2' ])
+
+      const video = await servers[0].videos.get({ id: videoUUID })
+      expect(video.streamingPlaylists[0].redundancies).to.have.lengthOf(1)
     })
   })
 
@@ -244,6 +270,9 @@ describe('Test the checks on incoming ActivityPub activities', function () {
 
       const actor = servers[1].url + '/accounts/peertube'
       const announce = { type: 'Announce', id: actor + '/announces/1', actor, object: videoUrl, to: [ getAPPublicValue() ] }
+
+      // Otherwise server 3 may refresh the video and its shares, removing this share that cannot be fetched
+      await sqlCommands[2].setVideoField(videoUUID, 'updatedAt', new Date().toISOString())
 
       const sharesBefore = await sqlCommands[2].getVideoShareCount()
 
@@ -259,6 +288,38 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       })
 
       expect(await sqlCommands[2].getVideoShareCount()).to.equal(sharesBefore)
+    })
+
+    it('Should create only one share per actor and video', async function () {
+      this.timeout(60000)
+
+      const actor = servers[1].url + '/accounts/peertube'
+      const sharesBefore = await sqlCommands[0].getVideoShareCount()
+
+      for (const id of [ 'first', 'second', 'third' ]) {
+        const announce = { type: 'Announce', id: actor + '/announces/' + id, actor, object: videoUrl, to: [ getAPPublicValue() ] }
+
+        await sendActivity({ fromServerIndex: 1, actorUrl: actor, contextType: 'Announce', activity: announce, ldSigned: true })
+      }
+
+      expect(await sqlCommands[0].getVideoShareCount()).to.equal(sharesBefore + 1)
+
+      // The first announce is the share
+      await sendActivity({
+        fromServerIndex: 1,
+        actorUrl: actor,
+        contextType: 'Announce',
+        ldSigned: true,
+        activity: {
+          type: 'Undo',
+          id: actor + '/undo/announces/first',
+          actor,
+          to: [ getAPPublicValue() ],
+          object: actor + '/announces/first'
+        }
+      })
+
+      expect(await sqlCommands[0].getVideoShareCount()).to.equal(sharesBefore)
     })
   })
 
@@ -616,6 +677,39 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       expect(abuse.video).to.not.exist
       expect(abuse.flaggedAccount.name).to.equal('root')
     })
+
+    it('Should limit the number of abuses an instance can send', async function () {
+      this.timeout(120000)
+
+      // Max 50 abuses per host and per hour
+      const { data } = await servers[0].comments.listThreads({ videoId: videoUUID, count: 20 })
+      const commentUrls = data.map(c => c.url)
+      expect(commentUrls).to.have.lengthOf(20)
+
+      const { total: totalBefore } = await servers[0].abuses.getAdminList()
+
+      // Server 3 sent the previous flags: server 2 has its own limit
+      const actor = servers[1].url + '/accounts/peertube'
+
+      for (let i = 0; i < 3; i++) {
+        await sendActivity({
+          fromServerIndex: 1,
+          actorUrl: actor,
+          contextType: 'Flag',
+          activity: {
+            type: 'Flag',
+            id: actor + '/flags/limit-' + i,
+            actor,
+            to: [ servers[0].url + '/accounts/peertube' ],
+            content: 'limit ' + i,
+            object: commentUrls
+          }
+        })
+      }
+
+      const { total } = await servers[0].abuses.getAdminList()
+      expect(total - totalBefore).to.equal(50)
+    })
   })
 
   describe('Undo by activity URL', function () {
@@ -728,6 +822,23 @@ describe('Test the checks on incoming ActivityPub activities', function () {
       await sendReject(followUrl)
 
       expect(await getFollowState()).to.equal('rejected')
+    })
+  })
+
+  // Last: the accepted cache file is forwarded to server 3, which then refreshes the video and its shares
+  describe('Cache files limit', function () {
+    it('Should accept the cache file of another instance when there is room', async function () {
+      this.timeout(30000)
+
+      await sqlCommands[0].deleteAll('videoRedundancy')
+
+      const actor = servers[1].url + '/accounts/peertube'
+      const id = servers[1].url + '/redundancy/other-instance'
+      const activity = { ...buildCacheFileCreate(id, actor), id: actor + '/create/retry' }
+
+      await sendActivity({ fromServerIndex: 1, actorUrl: actor, contextType: 'CacheFile', activity, ldSigned: true })
+
+      expect(await sqlCommands[0].listVideoRedundancyUrls()).to.deep.equal([ id ])
     })
   })
 

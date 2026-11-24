@@ -1,15 +1,13 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { buildAbsoluteFixturePath } from '@peertube/peertube-node-utils'
 import { HttpStatusCode } from '@peertube/peertube-models'
 import { PeerTubeServer, cleanupTests, createSingleServer, setAccessTokensToServers, waitJobs } from '@peertube/peertube-server-commands'
 import { getAPPublicValue } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
 import { getPort, randomListen, terminateServer } from '@tests/shared/mock-servers/shared.js'
-import { makeSignedPOSTAPRequest } from '@tests/shared/requests.js'
+import { buildPersonActor, loadAPKeys, trySignedPOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import express from 'express'
-import { readJsonSync } from 'fs-extra/esm'
 import { Server } from 'http'
 
 describe('Test ActivityPub fetch redirections', function () {
@@ -22,20 +20,10 @@ describe('Test ActivityPub fetch redirections', function () {
   let attackerUrl: string
   let idLoopRequests = 0
 
-  const keys = readJsonSync(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
+  const keys = loadAPKeys()
 
   function buildActor (id: string) {
-    return {
-      type: 'Person',
-      id,
-      preferredUsername: 'redirected',
-      inbox: id + '/inbox',
-      publicKey: {
-        id: id + '#main-key',
-        owner: id,
-        publicKeyPem: keys.publicKey
-      }
-    }
+    return buildPersonActor({ id, preferredUsername: 'redirected', publicKey: keys.publicKey })
   }
 
   async function sendActorUpdate (options: {
@@ -52,19 +40,13 @@ describe('Test ActivityPub fetch redirections', function () {
       object: buildActor(actorUrl)
     }
 
-    try {
-      const { statusCode } = await makeSignedPOSTAPRequest({
-        url: server.url + '/inbox',
-        activity,
-        contextType: 'Actor',
-        keyId,
-        privateKey: keys.privateKey
-      })
-
-      return statusCode
-    } catch (err) {
-      return err.statusCode as number
-    }
+    return trySignedPOSTAPRequest({
+      url: server.url + '/inbox',
+      activity,
+      contextType: 'Actor',
+      keyId,
+      privateKey: keys.privateKey
+    })
   }
 
   before(async function () {

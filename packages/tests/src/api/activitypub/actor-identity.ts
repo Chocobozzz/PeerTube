@@ -10,7 +10,7 @@ import {
   waitJobs
 } from '@peertube/peertube-server-commands'
 import { getAPPublicValue } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
-import { makeSignedPOSTAPRequest } from '@tests/shared/requests.js'
+import { loadAPKeys, trySignedPOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
 import { readJsonSync } from 'fs-extra/esm'
@@ -32,7 +32,7 @@ describe('Test ActivityPub actor identity binding', function () {
   let remoteActorUrl: string
   let remoteActorObject: any
 
-  const keys = readJsonSync(buildAbsoluteFixturePath('./ap-json/peertube/keys.json'))
+  const keys = loadAPKeys()
 
   // Send an "Update" of the remote actor, signed by that same remote actor
   async function sendActorUpdate (actorObject: any) {
@@ -44,19 +44,13 @@ describe('Test ActivityPub actor identity binding', function () {
       object: actorObject
     }
 
-    try {
-      const { statusCode } = await makeSignedPOSTAPRequest({
-        url: inboxUrl,
-        activity,
-        contextType: 'Actor',
-        keyId: remoteActorUrl,
-        privateKey: keys.privateKey
-      })
-
-      return { rejected: false, statusCode }
-    } catch (err) {
-      return { rejected: true, statusCode: err.statusCode as number }
-    }
+    return trySignedPOSTAPRequest({
+      url: inboxUrl,
+      activity,
+      contextType: 'Actor',
+      keyId: remoteActorUrl,
+      privateKey: keys.privateKey
+    })
   }
 
   // Load the cached actor of servers[1] on servers[0] using its server association, so we detect a rebound URL

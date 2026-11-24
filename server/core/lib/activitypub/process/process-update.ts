@@ -144,11 +144,11 @@ async function processUpdateCacheFile (
     return
   }
 
-  await runTransaction(async t => {
-    await createOrUpdateCacheFile(cacheFileObject, video, byActor, t)
+  const redundancy = await runTransaction(t => {
+    return createOrUpdateCacheFile(cacheFileObject, video, byActor, t)
   })
 
-  if (video.isLocal()) {
+  if (redundancy && video.isLocal()) {
     // Don't resend the activity to the sender
     const exceptions = [ byActor ]
 
