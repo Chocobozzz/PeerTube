@@ -242,7 +242,7 @@ async function addVideoJobsAfterUpload (video: MVideoFull, videoFile: MVideoFile
     await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
 
     // The video has a new file to analyze: rebuild its automatic tags before re-federating it
-    buildNonDuplicatedVideoAutomaticTagsJob({ video, moderation: 'apply' }),
+    buildNonDuplicatedVideoAutomaticTagsJob({ video, moderation: 'apply', trigger: 'new-file' }),
 
     buildNonDuplicatedFederateVideoJob({ video })
   ]

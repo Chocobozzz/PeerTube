@@ -203,7 +203,8 @@ async function onVideoDuplicated (options: {
     video,
     moderation: autoBlacklistStatus === 'held-for-auto-tags'
       ? 'release-hold'
-      : 'apply'
+      : 'apply',
+    trigger: 'new-video'
   })
 
   // The studio edition generates the storyboard

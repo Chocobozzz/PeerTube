@@ -1,5 +1,12 @@
-import { AutomaticTagPolicyType, AutomaticTagsModeration, BuildObjectAutomaticTagsPayload } from '@peertube/peertube-models'
+import {
+  AutomaticTagPolicyType,
+  AutomaticTagsModeration,
+  BuildObjectAutomaticTagsPayload,
+  CommentAutomaticTagsTrigger,
+  VideoAutomaticTagsTrigger
+} from '@peertube/peertube-models'
 import { afterCommitIfTransaction, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
+import { JOB_TTL } from '@server/initializers/constants.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
 import { AutomaticTagModel } from '@server/models/automatic-tag/automatic-tag.js'
@@ -17,6 +24,7 @@ import {
   MVideoId
 } from '@server/types/models/index.js'
 import { Transaction } from 'sequelize'
+import { acquireDistributedLock } from '../distributed-lock.js'
 import { CreateJobOptions, CreateJobTypeAndPayload, JobQueue } from '../job-queue/job-queue.js'
 import { AutomaticTagger } from './automatic-tagger.js'
 
@@ -171,14 +179,17 @@ export async function createRebuildAutomaticTagsJob (options: {
 // transaction and are allowed to take a long time (they may analyze the video files or call an external service)
 // ---------------------------------------------------------------------------
 
+// Run it under `runUnderObjectAutomaticTagsLock`
 export async function buildAndSaveVideoAutomaticTags (options: {
   video: Pick<MVideo, 'id' | 'name' | 'description'>
+  trigger: VideoAutomaticTagsTrigger
 }) {
-  const { video } = options
+  const { video, trigger } = options
 
   const automaticTagsByAccount = await new AutomaticTagger().buildVideoAutomaticTags({
     serverAccount: await getServerAccount(),
-    video
+    video,
+    trigger
   })
 
   await setAndSaveVideoAutomaticTags({ video, automaticTagsByAccount })
@@ -188,10 +199,11 @@ export async function buildAndSaveVideoAutomaticTags (options: {
 
 export async function buildAndSaveCommentAutomaticTags (options: {
   comment: MCommentVideo
+  trigger: CommentAutomaticTagsTrigger
   ofServerAccount?: boolean // default true
   ofOwnerAccount?: boolean // default true
 }) {
-  const { comment, ofServerAccount = true, ofOwnerAccount = true } = options
+  const { comment, trigger, ofServerAccount = true, ofOwnerAccount = true } = options
 
   const automaticTagsByAccount = await new AutomaticTagger().buildCommentsAutomaticTags({
     serverAccount: ofServerAccount
@@ -200,7 +212,8 @@ export async function buildAndSaveCommentAutomaticTags (options: {
     ownerAccount: ofOwnerAccount
       ? comment.Video.VideoChannel.Account
       : null,
-    text: comment.text
+    comment,
+    trigger
   })
 
   await setAndSaveCommentAutomaticTags({ comment, automaticTagsByAccount })
@@ -208,17 +221,33 @@ export async function buildAndSaveCommentAutomaticTags (options: {
   return automaticTagsByAccount
 }
 
+export async function runUnderObjectAutomaticTagsLock<T> (
+  options: Pick<BuildObjectAutomaticTagsPayload, 'objectType' | 'objectId'>,
+  fn: () => Promise<T>
+) {
+  const release = await acquireDistributedLock(`${options.objectType}-automatic-tags-${options.objectId}`, {
+    timeoutMs: JOB_TTL['build-object-automatic-tags']
+  })
+
+  try {
+    return await fn()
+  } finally {
+    await release()
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export function createVideoAutomaticTagsJob (options: {
   video: MVideoId
   moderation: AutomaticTagsModeration
+  trigger: VideoAutomaticTagsTrigger
   transaction?: Transaction
 }) {
-  const { video, moderation, transaction } = options
+  const { video, moderation, trigger, transaction } = options
 
   createBuildObjectAutomaticTagsJob({
-    payload: { objectType: 'video', objectId: video.id, moderation, notify: null },
+    payload: { objectType: 'video', objectId: video.id, moderation, notify: null, trigger },
     transaction
   })
 }
@@ -228,12 +257,13 @@ export function createVideoAutomaticTagsJob (options: {
 export function buildNonDuplicatedVideoAutomaticTagsJob (options: {
   video: MVideoId
   moderation: AutomaticTagsModeration
+  trigger: VideoAutomaticTagsTrigger
 }): CreateJobTypeAndPayload & CreateJobOptions {
-  const { video, moderation } = options
+  const { video, moderation, trigger } = options
 
   return {
     type: 'build-object-automatic-tags',
-    payload: { objectType: 'video', objectId: video.id, moderation, notify: null }
+    payload: { objectType: 'video', objectId: video.id, moderation, notify: null, trigger }
   }
 }
 
@@ -267,9 +297,13 @@ function createBuildObjectAutomaticTagsJob (options: {
   })
 }
 
-function buildAutomaticTagsJobDeduplication (options: Pick<BuildObjectAutomaticTagsPayload, 'objectType' | 'objectId'>) {
+function buildAutomaticTagsJobDeduplication (options: Pick<BuildObjectAutomaticTagsPayload, 'objectType' | 'objectId' | 'trigger'>) {
+  const suffix = options.trigger
+    ? `-${options.trigger}`
+    : ''
+
   return {
-    deduplicationId: `build-object-automatic-tags-${options.objectType}-${options.objectId}`,
+    deduplicationId: `build-object-automatic-tags-${options.objectType}-${options.objectId}${suffix}`,
     deduplicationKeepLastIfActive: true
   }
 }

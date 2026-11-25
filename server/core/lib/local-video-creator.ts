@@ -247,6 +247,7 @@ export class LocalVideoCreator {
             moderation: autoBlacklistStatus === 'held-for-auto-tags'
               ? 'release-hold'
               : 'apply',
+            trigger: 'new-video',
             transaction
           })
         }

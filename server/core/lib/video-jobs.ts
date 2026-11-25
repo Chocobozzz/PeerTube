@@ -107,7 +107,7 @@ export async function addVideoJobsAfterCreation (options: {
 
     // Before the notify/federate jobs so an auto tag block policy is applied before the video is announced
     // And before the transcoding jobs so a plugin auto tagger analyzes the input file while it is still untouched
-    buildNonDuplicatedVideoAutomaticTagsJob({ video, moderation: 'apply' }),
+    buildNonDuplicatedVideoAutomaticTagsJob({ video, moderation: 'apply', trigger: 'new-video' }),
 
     {
       type: 'notify',

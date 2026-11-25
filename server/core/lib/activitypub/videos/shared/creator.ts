@@ -61,6 +61,7 @@ export class APVideoCreator extends APVideoAbstractBuilder {
         moderation: autoBlacklistStatus === 'held-for-auto-tags'
           ? 'release-hold'
           : 'apply',
+        trigger: 'new-video',
         transaction: t
       })
 

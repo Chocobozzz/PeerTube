@@ -1,6 +1,10 @@
 import { BuildAutomaticTagsPayload } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
-import { buildAndSaveCommentAutomaticTags, buildAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
+import {
+  buildAndSaveCommentAutomaticTags,
+  buildAndSaveVideoAutomaticTags,
+  runUnderObjectAutomaticTagsLock
+} from '@server/lib/automatic-tags/automatic-tags.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { VideoCommentModel } from '@server/models/video/video-comment.js'
 import { VideoModel } from '@server/models/video/video.js'
@@ -11,6 +15,7 @@ const logger = createLogger('job-queue')
 
 const BATCH_SIZE = 250
 
+// Rebuilds the automatic tags of existing comments (and videos for the server account) after an account's watched words
 export async function processBuildAutomaticTags (job: Job): Promise<void> {
   const payload = job.data as BuildAutomaticTagsPayload
 
@@ -68,17 +73,22 @@ async function rebuildComments (options: {
     lastId = ids[ids.length - 1]
 
     for (const id of ids) {
-      const comment = await VideoCommentModel.loadByIdWithVideo(id)
-      if (!comment) continue
+      const done = await runUnderObjectAutomaticTagsLock({ objectType: 'comment', objectId: id }, async () => {
+        const comment = await VideoCommentModel.loadByIdWithVideo(id)
+        if (!comment) return false
 
-      // Only the account this job runs for changed its watched words/policies: leave the tags of the other account alone
-      await buildAndSaveCommentAutomaticTags({
-        comment,
-        ofServerAccount: isServerAccount,
-        ofOwnerAccount: !isServerAccount
+        // Only the account this job runs for changed its watched words/policies: leave the tags of the other account alone
+        await buildAndSaveCommentAutomaticTags({
+          comment,
+          trigger: 'rebuild',
+          ofServerAccount: isServerAccount,
+          ofOwnerAccount: !isServerAccount
+        })
+
+        return true
       })
 
-      rebuilt++
+      if (done) rebuilt++
     }
   }
 
@@ -96,12 +106,16 @@ async function rebuildVideos () {
     lastId = ids[ids.length - 1]
 
     for (const id of ids) {
-      const video = await VideoModel.load(id)
-      if (!video) continue
+      const done = await runUnderObjectAutomaticTagsLock({ objectType: 'video', objectId: id }, async () => {
+        const video = await VideoModel.load(id)
+        if (!video) return false
 
-      await buildAndSaveVideoAutomaticTags({ video })
+        await buildAndSaveVideoAutomaticTags({ video, trigger: 'rebuild' })
 
-      rebuilt++
+        return true
+      })
+
+      if (done) rebuilt++
     }
   }
 

@@ -19,6 +19,7 @@ import { VideoModel } from '@server/models/video/video.js'
 import { MUserId, MVideoFull, MVideoWithAllFiles, MVideoWithFile } from '@server/types/models/index.js'
 import { move, remove } from 'fs-extra/esm'
 import { basename, join } from 'path'
+import { buildNonDuplicatedVideoAutomaticTagsJob } from './automatic-tags/automatic-tags.js'
 import { JobQueue } from './job-queue/index.js'
 import { Notifier } from './notifier/index.js'
 import { buildStagingKey, downloadStagingObject, removeStagingObject, storeStagingObject } from './object-storage/staging.js'
@@ -281,6 +282,7 @@ export async function onVideoStudioEnded (options: {
 
   await JobQueue.Instance.createSequentialJobFlow(
     await buildLocalStoryboardJobIfNeeded({ video, federate: false }),
+    buildNonDuplicatedVideoAutomaticTagsJob({ video, moderation: 'apply', trigger: 'new-file' }),
     buildNonDuplicatedFederateVideoJob({ video }),
     {
       type: 'transcoding-job-builder' as 'transcoding-job-builder',

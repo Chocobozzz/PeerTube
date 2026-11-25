@@ -1,11 +1,20 @@
 import { uniqify } from '@peertube/peertube-core-utils'
-import { AutomaticTagAvailable, AutomaticTagPolicy, CommentAutomaticTagPolicies, VideoAutoTagPolicies } from '@peertube/peertube-models'
+import {
+  AutomaticTagAvailable,
+  AutomaticTagPolicy,
+  CommentAutomaticTagPolicies,
+  CommentAutomaticTagsTrigger,
+  VideoAutomaticTagsTrigger,
+  VideoAutoTagPolicies
+} from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { WEBSERVER } from '@server/initializers/constants.js'
 import { getServerAccount } from '@server/models/application/application.js'
 import { AccountAutomaticTagPolicyModel } from '@server/models/automatic-tag/account-automatic-tag-policy.js'
+import { CommentAutomaticTagModel } from '@server/models/automatic-tag/comment-automatic-tag.js'
+import { VideoAutomaticTagModel } from '@server/models/automatic-tag/video-automatic-tag.js'
 import { WatchedWordsListModel } from '@server/models/watched-words/watched-words-list.js'
-import { MAccount, MAccountId, MVideo } from '@server/types/models/index.js'
+import { MAccount, MAccountId, MComment, MVideo } from '@server/types/models/index.js'
 import { LinkifyIt } from 'linkify-it'
 import { PluginManager } from '../plugins/plugin-manager.js'
 
@@ -22,17 +31,32 @@ export class AutomaticTagger {
   async buildCommentsAutomaticTags (options: {
     serverAccount: MAccount | null
     ownerAccount: MAccount | null
-    text: string
+    comment: Pick<MComment, 'id' | 'text'>
+    trigger: CommentAutomaticTagsTrigger
   }) {
-    const { text, serverAccount, ownerAccount } = options
+    const { comment, serverAccount, ownerAccount, trigger } = options
+    const text = comment.text
 
     // accountId -> tags
     const result: Record<number, string[]> = {}
 
     try {
+      // Plugin tags are assigned to all the accounts we build the tags for, so get the current ones of these accounts
+      const currentCommentTags = await CommentAutomaticTagModel.listByAccountIdsAndCommentId({
+        commentId: comment.id,
+        accountIds: [ serverAccount, ownerAccount ].filter(a => !!a).map(a => a.id)
+      })
+      const currentTags = uniqify(currentCommentTags.map(t => t.AutomaticTag.name))
+
       const pluginAutoTags = await this.runAutoTaggers(
         PluginManager.Instance.getCommentAutoTaggers(),
-        ({ handler }) => handler({ comment: { text } })
+        ({ handler, autoTagNames }) => {
+          return handler({
+            comment: { text },
+            trigger,
+            currentTags: currentTags.filter(t => autoTagNames.includes(t))
+          })
+        }
       )
 
       if (serverAccount) {
@@ -67,19 +91,34 @@ export class AutomaticTagger {
   async buildVideoAutomaticTags (options: {
     serverAccount: MAccount
     video: Pick<MVideo, 'id' | 'name' | 'description'>
+    trigger: VideoAutomaticTagsTrigger
   }) {
-    const { video, serverAccount } = options
+    const { video, serverAccount, trigger } = options
 
     try {
+      // Let auto taggers that analyze the video files keep their previous tags when the files did not change
+      const currentVideoTags = await VideoAutomaticTagModel.listByAccountIdsAndVideoId({
+        videoId: video.id,
+        accountIds: [ serverAccount.id ]
+      })
+      const currentTags = currentVideoTags.map(t => t.AutomaticTag.name)
+
       const [ videoNameTags, videoDescriptionTags, pluginTags ] = await Promise.all([
         this.buildAutomaticTags({ account: serverAccount, text: video.name }),
         this.buildAutomaticTags({ account: serverAccount, text: video.description }),
-        this.runAutoTaggers(PluginManager.Instance.getVideoAutoTaggers(), ({ handler }) => handler({ video }))
+        this.runAutoTaggers(PluginManager.Instance.getVideoAutoTaggers(), ({ handler, autoTagNames }) => {
+          return handler({
+            video,
+            trigger,
+            currentTags: currentTags.filter(t => autoTagNames.includes(t))
+          })
+        })
       ])
 
       logger.debug('Built automatic tags for video', {
         videoName: video.name,
         videoDescription: video.description,
+        trigger,
         videoNameTags,
         videoDescriptionTags,
         pluginTags

@@ -31,6 +31,24 @@ async function register({
     }
   })
 
+  // Simulate an auto tagger that only analyzes new comments (keep the tags on rebuild)
+  const commentAutoTaggerCalls = {}
+
+  registerCommentAutoTagger({
+    autoTagNames: [ 'plugin comment trigger auto tag' ],
+
+    handler: async ({ comment, trigger, currentTags }) => {
+      if (!comment || !(comment.text || '').includes('record-trigger')) return { tags: [] }
+
+      if (!commentAutoTaggerCalls[comment.text]) commentAutoTaggerCalls[comment.text] = []
+      commentAutoTaggerCalls[comment.text].push({ trigger, currentTags })
+
+      if (trigger === 'new-comment') return { tags: [ 'plugin comment trigger auto tag' ] }
+
+      return { tags: currentTags }
+    }
+  })
+
   // Analyze the video file to decide of the tag: this runs in a job, outside of any transaction
   registerVideoAutoTagger({
     autoTagNames: [ 'plugin video file auto tag' ],
@@ -65,7 +83,37 @@ async function register({
     }
   })
 
+  // Simulate an auto tagger that only analyzes the video files when they changed (keep the tags if it's not the case)
+  const videoAutoTaggerCalls = {}
+
+  registerVideoAutoTagger({
+    autoTagNames: [ 'plugin video trigger auto tag' ],
+
+    handler: async ({ video, trigger, currentTags }) => {
+      if (!video || !(video.name || '').includes('record-trigger')) return { tags: [] }
+
+      if (!videoAutoTaggerCalls[video.id]) videoAutoTaggerCalls[video.id] = []
+      videoAutoTaggerCalls[video.id].push({ trigger, currentTags })
+
+      if (trigger === 'new-video' || trigger === 'new-file') return { tags: [ 'plugin video trigger auto tag' ] }
+
+      return { tags: currentTags }
+    }
+  })
+
   const router = getRouter()
+
+  router.get('/comment-auto-tagger-calls', async (req, res) => {
+    return res.json({
+      calls: commentAutoTaggerCalls[req.query.text] || []
+    })
+  })
+
+  router.get('/video-auto-tagger-calls/:videoId', async (req, res) => {
+    return res.json({
+      calls: videoAutoTaggerCalls[parseInt(req.params.videoId, 10)] || []
+    })
+  })
 
   router.get('/server-comment-tags/:commentId', async (req, res) => {
     const commentId = parseInt(req.params.commentId, 10)

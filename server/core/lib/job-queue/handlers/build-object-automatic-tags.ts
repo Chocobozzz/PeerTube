@@ -1,7 +1,11 @@
 import { BuildObjectAutomaticTagsPayload } from '@peertube/peertube-models'
 import { afterCommitIfTransaction, retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { buildAndSaveCommentAutomaticTags, buildAndSaveVideoAutomaticTags } from '@server/lib/automatic-tags/automatic-tags.js'
+import {
+  buildAndSaveCommentAutomaticTags,
+  buildAndSaveVideoAutomaticTags,
+  runUnderObjectAutomaticTagsLock
+} from '@server/lib/automatic-tags/automatic-tags.js'
 import { Notifier } from '@server/lib/notifier/index.js'
 import { autoBlacklistVideoByAutoTagPolicyIfNeeded, resolvePendingAutoTagBlacklist } from '@server/lib/video-blacklist.js'
 import { approveComment, getCommentHoldStatus } from '@server/lib/video-comment.js'
@@ -19,14 +23,18 @@ export async function processBuildObjectAutomaticTags (job: Job): Promise<void> 
 
   logger.info('Processing build automatic tags of %s %d in job %s.', payload.objectType, payload.objectId, job.id)
 
-  if (payload.objectType === 'video') await buildOfVideo(payload)
-  else await buildOfComment(payload)
+  await runUnderObjectAutomaticTagsLock(payload, () => {
+    if (payload.objectType === 'video') return buildOfVideo(payload)
+
+    return buildOfComment(payload)
+  })
 
   logger.info('Processed build automatic tags of %s %d in job %s.', payload.objectType, payload.objectId, job.id)
 }
 
 // ---------------------------------------------------------------------------
 
+// Called under the automatic tags lock of the object
 async function buildOfVideo (payload: BuildObjectAutomaticTagsPayload) {
   // Auto taggers only need the id/name/description: plugins load/analyze anything else (files included) themselves
   const video = await VideoModel.load(payload.objectId)
@@ -35,7 +43,11 @@ async function buildOfVideo (payload: BuildObjectAutomaticTagsPayload) {
     return
   }
 
-  const automaticTagsByAccount = await buildAndSaveVideoAutomaticTags({ video })
+  const automaticTagsByAccount = await buildAndSaveVideoAutomaticTags({
+    video,
+    // TODO: remove `?? ...` in PeerTube v10
+    trigger: payload.trigger ?? 'new-file'
+  })
 
   if (payload.moderation === 'none') return
 
@@ -64,7 +76,7 @@ async function buildOfComment (payload: BuildObjectAutomaticTagsPayload) {
     return
   }
 
-  const automaticTagsByAccount = await buildAndSaveCommentAutomaticTags({ comment })
+  const automaticTagsByAccount = await buildAndSaveCommentAutomaticTags({ comment, trigger: 'new-comment' })
 
   // A comment is federated as soon as it is created, so it is only held while waiting for its tags
   if (payload.moderation !== 'release-hold') return

@@ -1,4 +1,5 @@
 import { ContextType } from '../activitypub/context.js'
+import { VideoAutomaticTagsTrigger } from '../moderation/video-automatic-tags-trigger.type.js'
 import { VideoFileStreamType, VideoStateType } from '../videos/index.js'
 import { VideoStudioTaskCut } from '../videos/studio/index.js'
 import { SendEmailOptions } from './emailer.model.js'
@@ -465,4 +466,7 @@ export interface BuildObjectAutomaticTagsPayload {
 
   // Only supported for comments
   notify: boolean | null
+
+  // Only supported for videos, passed to the plugin auto taggers
+  trigger?: VideoAutomaticTagsTrigger | null
 }

@@ -88,6 +88,7 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
 
       const oldState = this.video.state
       const oldVideo = { name: this.video.name, description: this.video.description }
+      const wasLive = this.video.isLive
 
       const videoUpdated = await this.updateVideo(channelActor.VideoChannel, undefined, overrideTo)
 
@@ -104,7 +105,11 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         this.setOrDeleteLive(videoUpdated)
       ])
 
-      const rebuildAutomaticTags = this.automaticTagsNeedRebuild({ video: videoUpdated, oldVideo })
+      // A live replaced by its replay gets its first files
+      const isNewFile = (wasLive && !videoUpdated.isLive) ||
+        (!!videoUpdated.inputFileUpdatedAt && videoUpdated.inputFileUpdatedAt.getTime() !== oldInputFileUpdatedAt?.getTime())
+
+      const rebuildAutomaticTags = isNewFile || this.automaticTagsNeedRebuild({ video: videoUpdated, oldVideo })
 
       await runInReadCommittedTransaction(t => this.setCaptions(videoUpdated, t))
 
@@ -118,12 +123,18 @@ export class APVideoUpdater extends APVideoAbstractBuilder {
         user: undefined,
         isRemote: true,
         isNew: false,
-        isNewFile: oldInputFileUpdatedAt !== videoUpdated.inputFileUpdatedAt,
+        isNewFile,
         transaction: undefined
       })
 
       if (rebuildAutomaticTags) {
-        createVideoAutomaticTagsJob({ video: videoUpdated, moderation: 'apply' })
+        createVideoAutomaticTagsJob({
+          video: videoUpdated,
+          moderation: 'apply',
+          trigger: isNewFile
+            ? 'new-file'
+            : 'metadata'
+        })
       }
 
       await updateVideoRates(videoUpdated, this.videoObject)

@@ -395,7 +395,8 @@ async function afterImportSuccess (options: {
     video,
     moderation: autoBlacklistStatus === 'held-for-auto-tags'
       ? 'release-hold'
-      : 'apply'
+      : 'apply',
+    trigger: 'new-video'
   })
 
   Notifier.Instance.notifyOnFinishedVideoImport({ videoImport: Object.assign(videoImport, { Video: video }), success: true })

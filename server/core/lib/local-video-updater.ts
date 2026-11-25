@@ -225,7 +225,7 @@ export class LocalVideoUpdater {
         })
 
         if (rebuildAutomaticTags) {
-          createVideoAutomaticTagsJob({ video, moderation: 'apply', transaction: t })
+          createVideoAutomaticTagsJob({ video, moderation: 'apply', trigger: 'metadata', transaction: t })
         }
 
         if (this.auditActor) {

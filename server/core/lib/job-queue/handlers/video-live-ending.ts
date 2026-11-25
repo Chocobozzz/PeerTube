@@ -4,6 +4,7 @@ import { peertubeTruncate } from '@peertube/peertube-node-utils'
 import { CONSTRAINTS_FIELDS } from '@server/initializers/constants.js'
 import { getLocalVideoActivityPubUrl } from '@server/lib/activitypub/url.js'
 import { scheduleVideoFederation } from '@server/lib/activitypub/videos/index.js'
+import { createVideoAutomaticTagsJob } from '@server/lib/automatic-tags/automatic-tags.js'
 import {
   cleanupAndDestroyPermanentLive,
   cleanupTMPLiveFiles,
@@ -248,6 +249,8 @@ async function saveReplayToExternalVideo (options: {
     await createStoryboardJob(replayVideo)
     await createTranscriptionTaskIfNeeded(replayVideo)
 
+    createVideoAutomaticTagsJob({ video: replayVideo, moderation: 'apply', trigger: 'new-video' })
+
     await moveToNextState({ video: replayVideo })
   })
 }
@@ -364,6 +367,8 @@ async function replaceLiveByReplay (options: {
 
   await createStoryboardJob(videoWithFiles)
   await createTranscriptionTaskIfNeeded(videoWithFiles)
+
+  createVideoAutomaticTagsJob({ video: videoWithFiles, moderation: 'apply', trigger: 'new-file' })
 }
 
 async function assignReplayFilesToVideo (options: {
