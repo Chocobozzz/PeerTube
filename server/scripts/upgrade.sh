@@ -2,7 +2,43 @@
 
 set -eu
 
-PEERTUBE_PATH=${1:-/var/www/peertube}
+usage() {
+  echo "Usage: ./upgrade.sh [--nightly] [PATH]"
+  echo ""
+  echo "    PATH        PeerTube installation path (default: /var/www/peertube)"
+  echo "    --nightly   install the latest nightly build of the develop branch instead of a release"
+}
+
+INSTALL_NIGHTLY="false"
+PEERTUBE_PATH=""
+
+for arg in "$@"; do
+  case "$arg" in
+    --nightly ) INSTALL_NIGHTLY="true";;
+    -h|--help )
+      usage
+      exit 0
+      ;;
+    -* )
+      echo "Error - unknown option \"$arg\""
+      echo ""
+      usage
+      exit 1
+      ;;
+    * )
+      if [ -n "$PEERTUBE_PATH" ]; then
+        echo "Error - unexpected argument \"$arg\""
+        echo ""
+        usage
+        exit 1
+      fi
+
+      PEERTUBE_PATH="$arg"
+      ;;
+  esac
+done
+
+PEERTUBE_PATH=${PEERTUBE_PATH:-/var/www/peertube}
 
 # Fingerprint: 0336 DF98 1C56 F778 51CC  4FB7 3BEF 14A3 B157 4BA7
 RELEASE_KEY_FINGERPRINT="0336DF981C56F77851CC4FB73BEF14A3B1574BA7"
@@ -189,47 +225,104 @@ else
   echo "pg_dump not found. Cannot make a SQL backup!"
 fi
 
-# If there is a pre-release, give the user a choice which one to install.
-RELEASE_VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4)
-PRE_RELEASE_VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases | grep tag_name | head -1 | cut -d '"' -f 4)
+NIGHTLY_BUILDS_URL="https://builds.joinpeertube.org/nightly"
 
-if [ "$RELEASE_VERSION" != "$PRE_RELEASE_VERSION" ]; then
-  printf "Which version do you want to install?\n[1] %s (stable) \n[2] %s (pre-release)\n" "$RELEASE_VERSION" "$PRE_RELEASE_VERSION"
-  read choice
-  case $choice in
-      [1]* ) VERSION="$RELEASE_VERSION";;
-      [2]* ) VERSION="$PRE_RELEASE_VERSION";;
-      * ) exit;
-  esac
-else
-  VERSION="$RELEASE_VERSION"
-fi
+if [ "$INSTALL_NIGHTLY" = "true" ]; then
+  # Nightly archives are named peertube-nightly-YYYY-MM-DD.tar.xz: the lexicographic order is the chronological one
+  VERSION=$(curl -s --connect-timeout 10 --max-time 30 "$NIGHTLY_BUILDS_URL/" | grep -o 'peertube-nightly-[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\.tar\.xz' | sort -u | tail -1 | sed 's/^peertube-\(.*\)\.tar\.xz$/\1/')
 
-if [ -z "$VERSION" ]; then
-  echo "Error - could not determine the version to install"
+  if [ -z "$VERSION" ]; then
+    echo "Error - could not find a nightly build on $NIGHTLY_BUILDS_URL"
+    echo ""
+    echo "Please retry in a few minutes."
+    exit 1
+  fi
+
   echo ""
-  echo "This usually means the GitHub API call failed (rate limit, network issue,"
-  echo "or unexpected response). Please retry in a few minutes."
-  exit 1
+  echo "Warning: nightly builds are built every day from the develop branch: they are not tested like releases and may be broken."
+  echo "Their database migrations cannot be reverted: you will not be able to go back to a release older than this build."
+  echo ""
+  printf "Type \"yes\" to install %s: " "$VERSION"
+  read confirm || confirm=""
+  if [ "$confirm" != "yes" ]; then
+    echo "Aborting"
+    exit 1
+  fi
+else
+  # If there is a pre-release, give the user a choice which one to install.
+  RELEASE_VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4)
+  PRE_RELEASE_VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases | grep tag_name | head -1 | cut -d '"' -f 4)
+
+  if [ "$RELEASE_VERSION" != "$PRE_RELEASE_VERSION" ]; then
+    printf "Which version do you want to install?\n[1] %s (stable) \n[2] %s (pre-release)\n" "$RELEASE_VERSION" "$PRE_RELEASE_VERSION"
+    read choice || choice=""
+    case "$choice" in
+      1 ) VERSION="$RELEASE_VERSION";;
+      2 ) VERSION="$PRE_RELEASE_VERSION";;
+      "" )
+        echo "No version selected, aborting"
+        exit 1
+        ;;
+      * )
+        echo "Invalid choice \"$choice\", aborting"
+        exit 1
+        ;;
+    esac
+  else
+    VERSION="$RELEASE_VERSION"
+  fi
+
+  if [ -z "$VERSION" ]; then
+    echo "Error - could not determine the version to install"
+    echo ""
+    echo "This usually means the GitHub API call failed (rate limit, network issue,"
+    echo "or unexpected response). Please retry in a few minutes."
+    exit 1
+  fi
 fi
 
 echo "Installing Peertube version $VERSION"
 
-ZIP_PATH="$PEERTUBE_PATH/versions/peertube-${VERSION}.zip"
-RELEASE_DOWNLOAD_URL="https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip"
-
-wget -q "$RELEASE_DOWNLOAD_URL" -O "$ZIP_PATH"
-# Do not stop the script if the signature is missing: verify_release_signature handles it
-wget -q "$RELEASE_DOWNLOAD_URL.asc" -O "$ZIP_PATH.asc" || true
-
-verify_release_signature "$ZIP_PATH" "$ZIP_PATH.asc"
-rm -f "$ZIP_PATH.asc"
-
 cd "$PEERTUBE_PATH/versions"
-unzip -q -o "peertube-${VERSION}.zip"
-rm -f "peertube-${VERSION}.zip"
 
-RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/releases/tag/${VERSION}"
+if [ "$INSTALL_NIGHTLY" = "true" ]; then
+  if [ ! -x "$(command -v xz)" ]; then
+    echo "Error - xz not found: it is required to extract nightly builds (install the xz-utils package)"
+    exit 1
+  fi
+
+  ARCHIVE_NAME="peertube-${VERSION}.tar.xz"
+  ARCHIVE_PATH="$PEERTUBE_PATH/versions/$ARCHIVE_NAME"
+
+  wget -q "$NIGHTLY_BUILDS_URL/$ARCHIVE_NAME" -O "$ARCHIVE_PATH"
+
+  if [ "$SIGNATURE_CHECK_MODE" = "skip" ]; then
+    echo "Warning - skipping the signature check of the release (PEERTUBE_UPGRADE_SIGNATURE_CHECK=skip)"
+  else
+    signature_check_failed "nightly builds are not signed" "$ARCHIVE_PATH" "$ARCHIVE_PATH.asc"
+  fi
+
+  tar -xJf "$ARCHIVE_NAME"
+  rm -f "$ARCHIVE_NAME"
+
+  RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/blob/develop/CHANGELOG.md"
+else
+  ZIP_PATH="$PEERTUBE_PATH/versions/peertube-${VERSION}.zip"
+  RELEASE_DOWNLOAD_URL="https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip"
+
+  wget -q "$RELEASE_DOWNLOAD_URL" -O "$ZIP_PATH"
+  # Do not stop the script if the signature is missing: verify_release_signature handles it
+  wget -q "$RELEASE_DOWNLOAD_URL.asc" -O "$ZIP_PATH.asc" || true
+
+  verify_release_signature "$ZIP_PATH" "$ZIP_PATH.asc"
+  rm -f "$ZIP_PATH.asc"
+
+  unzip -q -o "peertube-${VERSION}.zip"
+  rm -f "peertube-${VERSION}.zip"
+
+  RELEASE_PAGE_URL="https://github.com/Chocobozzz/PeerTube/releases/tag/${VERSION}"
+fi
+
 LATEST_VERSION_DIRECTORY="$PEERTUBE_PATH/versions/peertube-${VERSION}"
 cd "$LATEST_VERSION_DIRECTORY"
 
