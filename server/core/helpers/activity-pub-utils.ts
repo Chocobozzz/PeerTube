@@ -136,7 +136,7 @@ const contextStore: { [id in ContextType]: (string | { [id: string]: string })[]
       '@id': 'pt:tileHeight'
     },
     tileDuration: {
-      '@type': 'sc:Number',
+      '@type': 'sc:Duration',
       '@id': 'pt:tileDuration'
     },
     aspectRatio: {
