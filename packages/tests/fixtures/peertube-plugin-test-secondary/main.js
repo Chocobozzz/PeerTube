@@ -1,5 +1,37 @@
-async function register ({ registerHook, registerSetting, settingsManager, peertubeHelpers }) {
+async function register ({
+  registerHook,
+  registerSetting,
+  registerPrimaryHandler,
+  registerWebSocketRoute,
+  settingsManager,
+  peertubeHelpers
+}) {
   const { logger } = peertubeHelpers
+  const role = peertubeHelpers.server.getProcessRole()
+
+  registerPrimaryHandler({
+    name: 'get-process-role',
+    handler: payload => ({ role: peertubeHelpers.server.getProcessRole(), payload })
+  })
+
+  registerPrimaryHandler({
+    name: 'fail',
+    handler: () => {
+      throw new Error('Primary handler failure')
+    }
+  })
+
+  // Not awaited, so a failure cannot prevent the registration
+  for (const name of [ 'get-process-role', 'fail', 'unknown' ]) {
+    peertubeHelpers.server.callPrimary({ name, payload: { from: role } })
+      .then(result => logger.info(`Primary handler ${name} called by ${role} answered: ${result.role} received ${result.payload.from}`))
+      .catch(err => logger.info(`Primary handler ${name} called by ${role} failed: ${err.message}`))
+  }
+
+  registerWebSocketRoute({
+    route: '/test',
+    handler: (_request, socket) => socket.end('HTTP/1.1 403 Forbidden\r\nConnection: close\r\nContent-Length: 0\r\n\r\n')
+  })
 
   registerSetting({
     name: 'suffix',

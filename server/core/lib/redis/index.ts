@@ -1,6 +1,6 @@
 export * from './redis.js'
 
-export { currentProcessId, RedisChannels } from './redis-channels.js'
+export { buildPluginPrimaryResponsesChannel, currentProcessId, RedisChannels } from './redis-channels.js'
 export type {
   JobCancelPayload,
   JobQueueStatePayload,
@@ -8,6 +8,8 @@ export type {
   LocalFilesMove,
   ModelCacheInvalidationPayload,
   PluginChangePayload,
+  PluginPrimaryRequestPayload,
+  PluginPrimaryResponsePayload,
   TokenInvalidationPayload,
   WatchedWordsInvalidationPayload
 } from './redis-channels.js'

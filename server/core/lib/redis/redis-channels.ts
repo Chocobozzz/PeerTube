@@ -43,6 +43,24 @@ export type PluginChangePayload =
   // The sender already ran its callbacks
   | { type: 'plugin-settings-changed', npmName: string, senderId: string }
 
+// A plugin asks the primary to run one of its handlers (see `PluginPrimaryRPC`)
+export type PluginPrimaryRequestPayload = {
+  requestId: string
+  // The primary answers on the responses channel of this process
+  senderId: string
+
+  npmName: string
+  name: string
+  payload: unknown
+}
+
+export type PluginPrimaryResponsePayload = {
+  requestId: string
+
+  result?: unknown
+  error?: string
+}
+
 // Secondary processes check whether every local file is in object storage
 // The primary notifies them when files are moved, so they can check it again
 export type LocalFilesMove = 'moved-to-object-storage' | 'moved-to-file-system'
@@ -70,7 +88,12 @@ export const RedisChannels = {
   liveSessionStop: new RedisChannel<LiveSessionStopPayload>('live-session-stop'),
   modelCacheInvalidation: new RedisChannel<ModelCacheInvalidationPayload>('model-cache-invalidation'),
   pluginChanges: new RedisChannel<PluginChangePayload>('plugin-changes'),
+  pluginPrimaryRequests: new RedisChannel<PluginPrimaryRequestPayload>('plugin-primary-requests'),
   localFilesMoved: new RedisChannel<LocalFilesMove>('local-files-moved'),
   tokenInvalidation: new RedisChannel<TokenInvalidationPayload>('token-invalidation'),
   watchedWordsInvalidation: new RedisChannel<WatchedWordsInvalidationPayload>('watched-words-invalidation')
+}
+
+export function buildPluginPrimaryResponsesChannel (processId: string) {
+  return new RedisChannel<PluginPrimaryResponsePayload>('plugin-primary-responses-' + processId)
 }

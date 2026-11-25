@@ -40,6 +40,7 @@ import {
   rebuildNativePluginsIfABIChanged,
   removeNpmPlugin
 } from './package-manager.js'
+import { PluginPrimaryRPC } from './plugin-primary-rpc.js'
 import { RegisterHelpers } from './register-helpers.js'
 
 const logger = createLogger()
@@ -115,6 +116,12 @@ export class PluginManager implements ServerHook {
 
       const matched = url.match(`/plugins/([^/]+)/([^/]+/)?ws(/.*)`)
       if (!matched) return
+
+      // Like plugin routes, plugin websockets are served by the primary: the reverse proxy replays the request on it
+      if (isSecondaryProcess()) {
+        socket.end('HTTP/1.1 421 Misdirected Request\r\nConnection: close\r\nContent-Length: 0\r\n\r\n')
+        return
+      }
 
       const npmName = PluginModel.buildNpmName(matched[1], PluginType.PLUGIN)
       const subRoute = matched[3]
@@ -387,6 +394,8 @@ export class PluginManager implements ServerHook {
     this.deleteTranslations(plugin.npmName)
 
     if (plugin.type === PluginType.PLUGIN) {
+      PluginPrimaryRPC.Instance.unregisterHandlers(plugin.npmName)
+
       await plugin.unregister()
 
       // Remove hooks of this plugin
@@ -588,6 +597,10 @@ export class PluginManager implements ServerHook {
   // The primary installs the plugins itself, but their settings can be updated by a secondary
   async listenForPluginSettingsChanges () {
     await RedisChannels.pluginChanges.subscribe(payload => this.onPluginSettingsChangeMessage(payload))
+  }
+
+  async listenForPrimaryHandlerCalls () {
+    await PluginPrimaryRPC.Instance.listenForRequestsOnPrimary()
   }
 
   private onPluginSettingsChangeMessage (payload: PluginChangePayload) {
@@ -796,6 +809,9 @@ export class PluginManager implements ServerHook {
     const { registerOptions, registerStore } = this.getRegisterHelpers(npmName, plugin)
 
     await ensureDir(registerOptions.peertubeHelpers.plugin.getDataDirectoryPath())
+
+    // A previous registration may have failed before the plugin could be unregistered
+    PluginPrimaryRPC.Instance.unregisterHandlers(npmName)
 
     await library.register(registerOptions)
 

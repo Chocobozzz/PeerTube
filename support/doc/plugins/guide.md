@@ -338,6 +338,48 @@ The `my-websocket-route` route can be accessed using:
  * `/plugins/:pluginName/:pluginVersion/ws/my-websocket-route`
  * Or `/plugins/:pluginName/ws/my-websocket-route`
 
+With horizontal scalability, WebSocket routes are only served by the primary process (secondary processes answer `421 Misdirected Request`).
+
+#### Run code on the primary process
+
+**PeerTube >= 9.0**
+
+With horizontal scalability, PeerTube runs a primary process and secondary processes. Your plugin is registered in every process, but some work must be done by the primary process.
+Routes created using `getRouter` and WebSocket routes are only served by the primary process, but hooks run in the process that handles the request.
+
+Use `registerPrimaryHandler` to register a handler, and `peertubeHelpers.server.callPrimary` to run it on the primary process.
+Called on the primary process, `callPrimary` runs the handler directly, so you don't need to check the process role:
+
+```js
+async function register ({
+  registerHook,
+  registerPrimaryHandler,
+  peertubeHelpers
+}) {
+  // Register it in every process: only the primary process runs it
+  registerPrimaryHandler({
+    name: 'video-updated',
+    handler: async ({ videoId }) => {
+      // Write something in the data directory of the primary process...
+
+      return { done: true }
+    }
+  })
+
+  registerHook({
+    target: 'action:api.video.updated',
+    handler: ({ video }) => {
+      peertubeHelpers.server.callPrimary({ name: 'video-updated', payload: { videoId: video.id } })
+        .catch(err => peertubeHelpers.logger.error('Cannot update the video on the primary process', { err }))
+    }
+  })
+}
+```
+
+ * The payload and the result must be serializable in JSON
+ * `callPrimary` rejects if the handler throws an error, if the primary process is not running, or if it does not answer before `timeout` (30 seconds by default)
+ * A plugin can only call its own handlers
+
 #### Add external auth methods
 
 If you want to add a classic username/email and password auth method (like [LDAP](https://framagit.org/framasoft/peertube/official-plugins/-/tree/master/peertube-plugin-auth-ldap) for example):
@@ -593,7 +635,11 @@ async function register ({
     autoTagNames: [ 'spam' ],
 
     // Only comment.text is provided
-    handler: async ({ comment }) => {
+    // `trigger` and `currentTags`: PeerTube >= 9.0
+    handler: async ({ comment, trigger, currentTags }) => {
+      // The comment did not change (only the watched words): don't call the spam service again
+      if (trigger === 'rebuild') return { tags: currentTags }
+
       if (await isSpam(comment.text)) return { tags: [ 'spam' ] }
 
       return { tags: [] }
@@ -604,7 +650,11 @@ async function register ({
     autoTagNames: [ 'short-video' ],
 
     // Only video.id, video.name and video.description are provided
-    handler: async ({ video }) => {
+    // `trigger` and `currentTags`: PeerTube >= 9.0
+    handler: async ({ video, trigger, currentTags }) => {
+      // The video files did not change (only its name/description, or the instance watched words): keep the current tags
+      if (trigger === 'metadata' || trigger === 'rebuild') return { tags: currentTags }
+
       const files = await peertubeHelpers.videos.getFiles(video.id)
       const file = [ ...(files?.webVideo?.videoFiles || []), ...(files?.hls?.videoFiles || []) ][0]
 
@@ -629,8 +679,15 @@ How auto taggers work:
  * The handler can only assign tags declared in `autoTagNames`. PeerTube ignores any other tag the handler returns
  * Video tags are assigned to the instance. Comment tags are assigned to both the instance and the video owner
  * Auto taggers run in a job, outside of any database transaction, so they can take time to return (for example to analyze video files or call an external service)
- * Video auto taggers run when a local or remote video is created or updated, imported, or when its source file is replaced. A live video has no file yet when its auto taggers run
- * Comment auto taggers run when a local or remote comment is created
+ * Video auto taggers run when a local or remote video is created, imported, when its name or description is updated, when its file is replaced (source file replacement or studio edition), when a live replay is saved, or when the instance watched words change. A live video has no file yet when its auto taggers run: they run again when its replay is saved
+ * **PeerTube >= 9.0**: the video handler receives a `trigger` explaining why it runs:
+   * `new-video`: the video has just been created (upload, import, duplication, new remote video, live, replay of a permanent live)
+   * `new-file`: the file of the video has been replaced (source file replacement, studio edition, live replaced by its replay), locally or on the remote instance. Studio editions of remote videos are not detected
+   * `metadata`: the name or the description of the video changed, but not its files
+   * `rebuild`: the instance watched words changed, so PeerTube rebuilds the tags of all its videos
+ * **PeerTube >= 9.0**: `currentTags` contains the tags of your `autoTagNames` the video currently has. The tags returned by the handler replace them, so return `currentTags` if you skip the analysis of the video files. `currentTags` is empty both for a video your auto tagger has never analyzed (for example a video created before the installation of your plugin) and for a video it analyzed without assigning a tag: use the storage manager if you need to know which videos you already analyzed
+ * Comment auto taggers run when a local or remote comment is created, or when the watched words of the instance or of the video owner change
+ * **PeerTube >= 9.0**: the comment handler receives a `trigger` (`new-comment` or `rebuild` when the watched words changed) and `currentTags`, the tags of your `autoTagNames` the comment currently has
 
 To remove an auto tagger, pass the same options object (the `handler` reference is used for comparison) to `unregisterVideoAutoTagger` or `unregisterCommentAutoTagger`.
 

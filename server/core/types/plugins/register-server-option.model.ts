@@ -145,6 +145,13 @@ export type PeerTubeHelpers = {
 
     // PeerTube >= 9.0
     getProcessRole: () => ProcessRole
+
+    // PeerTube >= 9.0
+    // Run on the primary process a handler this plugin registered with `registerPrimaryHandler`
+    // If called on the primary process, it runs the handler directly
+    // The payload and the result must be serializable in JSON. Rejects if the handler throws or does not answer in time
+    // Main goal of this function is to help plugins to support PeerTube horizontal scalability
+    callPrimary: <T = any>(options: { name: string, payload?: any, timeout?: number }) => Promise<T>
   }
 
   socket: {
@@ -250,6 +257,10 @@ export type RegisterServerOptions = {
   //  * /plugins/:pluginName/:pluginVersion/ws/...
   //  * /plugins/:pluginName/ws/...
   registerWebSocketRoute: (options: RegisterServerWebSocketRouteOptions) => void
+
+  // PeerTube >= 9.0
+  // See `peertubeHelpers.server.callPrimary`
+  registerPrimaryHandler: (options: { name: string, handler: (payload: any) => any }) => void
 
   peertubeHelpers: PeerTubeHelpers
 }

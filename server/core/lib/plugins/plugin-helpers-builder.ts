@@ -39,6 +39,7 @@ import { PeerTubeSocket } from '../peertube-socket.js'
 import { ServerConfigManager } from '../server-config-manager.js'
 import { blacklistVideo, unblacklistVideo } from '../video-blacklist.js'
 import { VideoPathManager } from '../video-path-manager.js'
+import { PluginPrimaryRPC } from './plugin-primary-rpc.js'
 
 const logger = createLogger('plugin')
 
@@ -51,7 +52,7 @@ function buildPluginHelpers (httpServer: Server, pluginModel: MPlugin, npmName: 
 
     config: buildConfigHelpers(),
 
-    server: buildServerHelpers(httpServer),
+    server: buildServerHelpers(httpServer, npmName),
 
     moderation: buildModerationHelpers(npmName),
 
@@ -83,13 +84,17 @@ function buildDatabaseHelpers () {
   }
 }
 
-function buildServerHelpers (httpServer: Server) {
+function buildServerHelpers (httpServer: Server, npmName: string) {
   return {
     getHTTPServer: () => httpServer,
 
     getServerActor: () => getServerActor(),
 
-    getProcessRole: () => getProcessRole()
+    getProcessRole: () => getProcessRole(),
+
+    callPrimary: (options: { name: string, payload?: any, timeout?: number }) => {
+      return PluginPrimaryRPC.Instance.call({ ...options, npmName }) as Promise<any>
+    }
   }
 }
 

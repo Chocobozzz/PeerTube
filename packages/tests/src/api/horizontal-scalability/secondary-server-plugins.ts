@@ -17,6 +17,7 @@ import {
 import { expect } from 'chai'
 import { pathExists, readJSON } from 'fs-extra/esm'
 import { join } from 'path'
+import WebSocket from 'ws'
 
 describe('Test plugins of a secondary server process', function () {
   if (areMockObjectStorageTestsDisabled()) return
@@ -71,6 +72,44 @@ describe('Test plugins of a secondary server process', function () {
       const secondaryList = await secondary.videos.list()
 
       expect(secondaryList.total).to.equal(primaryList.total)
+    })
+  })
+
+  describe('Primary only features', function () {
+
+    async function getWebSocketStatus (server: PeerTubeServer) {
+      return new Promise<number>((resolve, reject) => {
+        const ws = new WebSocket(`ws://${server.host}/plugins/test-secondary/ws/test`)
+
+        ws.on('unexpected-response', (_req, res) => resolve(res.statusCode))
+        ws.on('open', () => reject(new Error('The websocket should have been refused')))
+        ws.on('error', err => reject(err))
+      })
+    }
+
+    it('Should run on the primary the handlers called by the secondary', async function () {
+      await secondary.servers.waitUntilLog('Primary handler get-process-role called by secondary answered: primary received secondary', 1, false)
+    })
+
+    it('Should run the handlers directly when called by the primary', async function () {
+      await primary.servers.waitUntilLog('Primary handler get-process-role called by primary answered: primary received primary', 1, false)
+    })
+
+    it('Should forward the errors of the handlers', async function () {
+      for (const [ server, role ] of [ [ primary, 'primary' ], [ secondary, 'secondary' ] ] as const) {
+        await server.servers.waitUntilLog(`Primary handler fail called by ${role} failed: Primary handler failure`, 1, false)
+
+        await server.servers.waitUntilLog(
+          `Primary handler unknown called by ${role} failed: Unknown primary handler unknown of plugin ${npmName}`,
+          1,
+          false
+        )
+      }
+    })
+
+    it('Should serve the plugin websockets on the primary only', async function () {
+      expect(await getWebSocketStatus(primary)).to.equal(HttpStatusCode.FORBIDDEN_403)
+      expect(await getWebSocketStatus(secondary)).to.equal(HttpStatusCode.MISDIRECTED_REQUEST_421)
     })
   })
 

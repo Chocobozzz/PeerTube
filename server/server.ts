@@ -558,6 +558,7 @@ async function startApplication () {
           await PluginManager.Instance.listenForPluginChanges({ onDivergedFromPrimary: exitOnPluginDivergence })
         } else {
           await PluginManager.Instance.listenForPluginSettingsChanges()
+          await PluginManager.Instance.listenForPrimaryHandlerCalls()
         }
       } catch (err) {
         logger.error('Cannot register plugins and themes.', { err })

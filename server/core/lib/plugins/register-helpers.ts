@@ -25,6 +25,7 @@ import express from 'express'
 import { Server } from 'http'
 import { VideoTranscodingProfilesManager } from '../transcoding/default-transcoding-profiles.js'
 import { buildPluginHelpers } from './plugin-helpers-builder.js'
+import { PluginPrimaryHandler, PluginPrimaryRPC } from './plugin-primary-rpc.js'
 
 const logger = createLogger()
 
@@ -77,6 +78,7 @@ export class RegisterHelpers {
 
     const getRouter = this.buildGetRouter()
     const registerWebSocketRoute = this.buildRegisterWebSocketRoute()
+    const registerPrimaryHandler = this.buildRegisterPrimaryHandler()
 
     const settingsManager = this.buildSettingsManager()
     const storageManager = this.buildStorageManager()
@@ -99,6 +101,7 @@ export class RegisterHelpers {
 
       getRouter,
       registerWebSocketRoute,
+      registerPrimaryHandler,
 
       settingsManager,
       storageManager,
@@ -215,6 +218,17 @@ export class RegisterHelpers {
   private buildRegisterWebSocketRoute () {
     return (options: RegisterServerWebSocketRouteOptions) => {
       this.webSocketRoutes.push(options)
+    }
+  }
+
+  private buildRegisterPrimaryHandler () {
+    return (options: { name: string, handler: PluginPrimaryHandler }) => {
+      if (!options?.name || typeof options.name !== 'string' || typeof options.handler !== 'function') {
+        logger.error('Cannot register primary handler of plugin %s: name or handler are not valid.', this.npmName)
+        return
+      }
+
+      PluginPrimaryRPC.Instance.registerHandler(this.npmName, options.name, options.handler)
     }
   }
 
