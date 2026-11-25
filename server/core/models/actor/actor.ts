@@ -2,6 +2,7 @@ import { findAppropriateImage, forceNumber, maxBy } from '@peertube/peertube-cor
 import { ActivityIconObject, ActorImageType, ActorImageType_Type, type ActivityPubActorType } from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
+import { createPrivateAndPublicKeys } from '@server/helpers/peertube-crypto.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { Op, QueryTypes, Transaction, col, fn, literal, where } from 'sequelize'
@@ -343,11 +344,13 @@ export class ActorModel extends SequelizeModel<ActorModel> {
   @BeforeDestroy
   static async reserveActor (instance: ActorModel, options) {
     if (instance.isLocal()) {
+      const { publicKey, privateKey } = await ActorModel.getOrCreateKeysForReservation(instance, options.transaction)
+
       await ActorReservedModel.create({
         preferredUsername: instance.preferredUsername,
         url: instance.url,
-        publicKey: instance.publicKey,
-        privateKey: instance.privateKey,
+        publicKey,
+        privateKey,
         actorId: instance.id,
         accountId: instance.accountId,
         videoChannelId: instance.videoChannelId
@@ -355,6 +358,18 @@ export class ActorModel extends SequelizeModel<ActorModel> {
     }
 
     return undefined
+  }
+
+  // Keys of a local actor are generated asynchronously
+  // Reserved actors need keys to sign the Delete activity sent after the actor deletion
+  private static async getOrCreateKeysForReservation (instance: ActorModel, transaction: Transaction) {
+    if (instance.publicKey && instance.privateKey) return { publicKey: instance.publicKey, privateKey: instance.privateKey }
+
+    // The instance may be stale if the job generated the keys after its load
+    const fromDB = await ActorModel.unscoped().findByPk(instance.id, { attributes: [ 'publicKey', 'privateKey' ], transaction })
+    if (fromDB?.publicKey && fromDB?.privateKey) return { publicKey: fromDB.publicKey, privateKey: fromDB.privateKey }
+
+    return createPrivateAndPublicKeys()
   }
 
   // ---------------------------------------------------------------------------

@@ -11,6 +11,15 @@ export async function processActorKeys (job: Job) {
   logger.info('Processing actor keys in job %s.', job.id)
 
   const actor = await ActorModel.load(payload.actorId)
+  if (!actor) {
+    logger.info('Do not generate keys of actor %d that does not exist anymore.', payload.actorId)
+    return
+  }
+
+  if (actor.publicKey && actor.privateKey) {
+    logger.info('Do not generate keys of actor %d that already has keys.', payload.actorId)
+    return
+  }
 
   await generateAndSaveActorKeys(actor)
 }

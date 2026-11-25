@@ -645,6 +645,24 @@ describe('Test video channels', function () {
     expect(videoChannel.name).to.equal('third_user_channel')
   })
 
+  it('Should delete a video channel whose actor keys have not been generated yet', async function () {
+    this.timeout(60000)
+
+    await servers[0].jobs.pauseJobQueue()
+
+    try {
+      await servers[0].channels.create({ attributes: { name: 'channel_without_keys' } })
+      await servers[0].channels.delete({ channelName: 'channel_without_keys' })
+    } finally {
+      await servers[0].jobs.resumeJobQueue()
+    }
+
+    await waitJobs(servers)
+
+    const body = await servers[0].jobs.list({ state: 'failed', jobType: 'actor-keys' })
+    expect(body.total).to.equal(0)
+  })
+
   after(async function () {
     for (const sqlCommand of sqlCommands) {
       await sqlCommand.cleanup()
