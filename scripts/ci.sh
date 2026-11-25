@@ -147,8 +147,9 @@ elif [ "$1" = "client" ]; then
     miscFiles="./packages/tests/dist/misc-endpoints.js ./packages/tests/dist/nginx.js"
     # Not in their own task, they need an index.html
     pluginFiles="./packages/tests/dist/plugins/html-injection.js ./packages/tests/dist/api/server/plugins.js"
+    moderationFiles="./packages/tests/dist/api/moderation/blocklist-video-access.js"
 
-    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $feedsFiles $miscFiles $pluginFiles $clientFiles
+    MOCHA_PARALLEL=true runJSTest "$1" $((2*$speedFactor)) $feedsFiles $miscFiles $pluginFiles $moderationFiles $clientFiles
 
     # Use TS tests directly because we import server files
     helperFiles=$(findTestFiles ./packages/tests/src/server-helpers)
@@ -214,7 +215,8 @@ elif [ "$1" = "api-moderation-notifications" ]; then
     npm run build:server
     npm run build:tests
 
-    moderationFiles=$(findTestFiles ./packages/tests/dist/api/moderation)
+    # blocklist-video-access test needs an HTML file
+    moderationFiles=$(findTestFiles ./packages/tests/dist/api/moderation blocklist-video-access.js)
     notificationsFiles=$(findTestFiles ./packages/tests/dist/api/notifications)
 
     MOCHA_PARALLEL=true runJSTest "$1" $((3*$speedFactor)) $moderationFiles $notificationsFiles
