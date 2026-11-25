@@ -1,8 +1,9 @@
 import { Activity, ActivityType } from '@peertube/peertube-models'
+import { isActivityTypeAllowedFromMutedServer, isUrlHostMutedByServer } from '@server/lib/blocklist.js'
 import { StatsManager } from '@server/lib/stat-manager.js'
-import { ACTIVITY_PUB } from '../../../initializers/constants.js'
 import { createLogger } from '../../../helpers/logger.js'
 import { getRemoteErrorLogLevel } from '../../../helpers/remote-errors.js'
+import { ACTIVITY_PUB } from '../../../initializers/constants.js'
 import { APProcessorOptions } from '../../../types/activitypub-processor.model.js'
 import { MActorDefault, MActorSignature } from '../../../types/models/index.js'
 import { getAPId } from '../activity.js'
@@ -13,6 +14,7 @@ import { processAnnounceActivity } from './process-announce.js'
 import { processCreateActivity } from './process-create.js'
 import { processDeleteActivity } from './process-delete.js'
 import { processDislikeActivity } from './process-dislike.js'
+import { processDownloadActivity } from './process-download.js'
 import { processFlagActivity } from './process-flag.js'
 import { processFollowActivity } from './process-follow.js'
 import { processLikeActivity } from './process-like.js'
@@ -21,7 +23,6 @@ import { processReplyApprovalFactory } from './process-reply-approval.js'
 import { processUndoActivity } from './process-undo.js'
 import { processUpdateActivity } from './process-update.js'
 import { processViewActivity } from './process-view.js'
-import { processDownloadActivity } from './process-download.js'
 
 const logger = createLogger('ap')
 
@@ -90,6 +91,13 @@ export async function processActivities (
 
       if (outboxUrl && checkUrlsSameHost(outboxUrl, actorUrl) !== true) {
         logger.warn('Host mismatch between outbox URL %s and actor URL %s, skipping.', outboxUrl, actorUrl)
+        continue
+      }
+
+      // Checked before getting the actor, so we don't fetch it from the muted server
+      // Inbox requests of muted servers are already dropped by the signature middleware: this covers fetched activities
+      if (!isActivityTypeAllowedFromMutedServer(activity.type) && await isUrlHostMutedByServer(actorUrl)) {
+        logger.debug('Ignoring activity %s (type: %s) of %s, muted by the instance.', activity.id, activity.type, actorUrl)
         continue
       }
 

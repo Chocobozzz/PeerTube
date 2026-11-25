@@ -25,6 +25,7 @@ import {
   asyncRetryTransactionMiddleware,
   authenticate,
   checkVideoFollowConstraints,
+  checkVideoOwnerMuteConstraints,
   commonVideosFiltersValidatorFactory,
   optionalAuthenticate,
   paginationValidator,
@@ -110,6 +111,7 @@ videosRouter.get(
   optionalAuthenticate,
   asyncMiddleware(videoGetValidatorFactory('for-api')),
   asyncMiddleware(checkVideoFollowConstraints),
+  asyncMiddleware(checkVideoOwnerMuteConstraints),
   asyncMiddleware(getVideo)
 )
 

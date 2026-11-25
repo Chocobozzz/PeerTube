@@ -7,7 +7,13 @@ import { WEBSERVER } from '@server/initializers/constants.js'
 import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { isLocalUrl } from '@server/lib/activitypub/url.js'
-import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
+import {
+  buildMutedForSearchIndex,
+  isSearchHostBlocked,
+  isSearchIndexSearch,
+  isSearchResultBlocked,
+  isURISearch
+} from '@server/lib/search.js'
 import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
@@ -125,6 +131,9 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
   const canSearchRemoteURI = isUserAbleToSearchRemoteURI(res)
 
   if (!isURISearch(search)) {
+    const handleHost = search.replace(/^@/, '').split('@')[1]
+    if (await isSearchHostBlocked({ host: handleHost }, res)) return res.json({ total: 0, data: [] })
+
     try {
       // Only users able to search remote URIs can trigger an outbound webfinger lookup
       uri = canSearchRemoteURI
@@ -140,7 +149,10 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
   // Local URLs are resolved from the database: federation refuses to fetch local actors
   if (canSearchRemoteURI && !isLocalUrl(uri)) {
     try {
+      if (await isSearchHostBlocked({ url: uri }, res)) return res.json({ total: 0, data: [] })
+
       const latestUri = await findLatestAPRedirection(uri)
+      if (await isSearchHostBlocked({ url: latestUri }, res)) return res.json({ total: 0, data: [] })
 
       const actor = await getOrCreateAPActor(latestUri, 'all', true, true)
       videoChannel = actor.VideoChannel
@@ -150,6 +162,8 @@ async function searchVideoChannelURI (search: string, res: express.Response) {
   } else {
     videoChannel = await searchLocalUrl(sanitizeLocalUrl(uri), url => VideoChannelModel.loadByUrlAndPopulateAccount(url))
   }
+
+  if (videoChannel && await isSearchResultBlocked(videoChannel.Account, res)) videoChannel = undefined
 
   return res.json({
     total: videoChannel ? 1 : 0,

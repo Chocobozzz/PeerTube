@@ -138,6 +138,15 @@ export class SQLCommand {
     return parseInt(total, 10)
   }
 
+  async countVideoCommentsByText (text: string) {
+    const [ { total } ] = await this.selectQuery<{ total: string }>(
+      `SELECT COUNT(*) AS total FROM "videoComment" WHERE "text" = :text`,
+      { text }
+    )
+
+    return parseInt(total, 10)
+  }
+
   async countVideoViewsOf (uuid: string) {
     const query = 'SELECT SUM("videoStat"."views") AS "total" FROM "videoStat" ' +
       `INNER JOIN "video" ON "video"."id" = "videoStat"."videoId" WHERE "video"."uuid" = :uuid`

@@ -8,7 +8,13 @@ import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { getOrCreateAPVideo } from '@server/lib/activitypub/videos/index.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { isLocalUrl } from '@server/lib/activitypub/url.js'
-import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
+import {
+  buildMutedForSearchIndex,
+  isSearchHostBlocked,
+  isSearchIndexSearch,
+  isSearchResultBlocked,
+  isURISearch
+} from '@server/lib/search.js'
 import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
@@ -158,8 +164,13 @@ async function searchVideoURI (url: string, req: express.Request, res: express.R
         refreshVideo: false
       }
 
+      if (await isSearchHostBlocked({ url }, res)) return res.json({ total: 0, data: [] })
+
+      const latestUrl = await findLatestAPRedirection(url)
+      if (await isSearchHostBlocked({ url: latestUrl }, res)) return res.json({ total: 0, data: [] })
+
       const result = await getOrCreateAPVideo({
-        videoObject: await findLatestAPRedirection(url),
+        videoObject: latestUrl,
         syncParam
       })
       video = result ? result.video : undefined
@@ -169,6 +180,8 @@ async function searchVideoURI (url: string, req: express.Request, res: express.R
   } else {
     video = await searchLocalUrl(sanitizeLocalUrl(url), url => VideoModel.loadByUrlAndPopulateAccountAndFiles(url))
   }
+
+  if (video && await isSearchResultBlocked(video.VideoChannel.Account, res)) video = undefined
 
   // The resolved video may still be a local private/internal/password protected
   if (video && !await checkCanSeeVideo({ req, res, video, paramId: video.uuid })) return

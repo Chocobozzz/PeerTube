@@ -4,6 +4,7 @@ import { isActorDeleteActivityValid, isActorTypeValid } from '@server/helpers/cu
 import { isHTTPSignatureDigestValid, isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/peertube-crypto.js'
 import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { getAPId } from '@server/lib/activitypub/activity.js'
+import { isActivityTypeAllowedFromMutedServer, isHostMutedByServer } from '@server/lib/blocklist.js'
 import { wrapWithSpanAndContext } from '@server/lib/opentelemetry/tracing.js'
 import { NextFunction, Request, Response } from 'express'
 import { createLogger } from '../helpers/logger.js'
@@ -111,8 +112,13 @@ async function checkHttpSignature (req: Request, res: Response) {
     logger.debug('Checking HTTP signature of actor %s...', keyId)
 
     let [ actorUrl ] = keyId.split('#')
+
+    if (await ignoreIfMutedServer(req, res, actorUrl)) return false
+
     if (actorUrl.startsWith('acct:')) {
       actorUrl = await loadActorUrlOrGetFromWebfinger(actorUrl.replace(/^acct:/, ''))
+
+      if (await ignoreIfMutedServer(req, res, actorUrl)) return false
     }
 
     const actor = await getOrCreateAPActor(actorUrl)
@@ -135,6 +141,40 @@ async function checkHttpSignature (req: Request, res: Response) {
     res.locals.signature = { actor }
     return true
   })
+}
+
+async function ignoreIfMutedServer (req: Request, res: Response, actorUrlOrHandle: string) {
+  if (getInboxActivityTypes(req.body).some(type => isActivityTypeAllowedFromMutedServer(type))) return false
+  if (!await isHostMutedByServer(getActorHost(actorUrlOrHandle))) return false
+
+  logger.debug('Ignoring inbox request signed by %s, its server is muted by the instance.', actorUrlOrHandle)
+
+  res.status(HttpStatusCode.NO_CONTENT_204).end()
+  return true
+}
+
+// The body is not validated yet
+function getInboxActivityTypes (body: any): string[] {
+  if (!body || typeof body !== 'object') return []
+
+  let activities: any[] = [ body ]
+
+  if ([ 'Collection', 'CollectionPage' ].includes(body.type)) activities = body.items
+  else if ([ 'OrderedCollection', 'OrderedCollectionPage' ].includes(body.type)) activities = body.orderedItems
+
+  if (!Array.isArray(activities)) return []
+
+  return activities.map(a => a?.type).filter(t => typeof t === 'string')
+}
+
+function getActorHost (actorUrlOrHandle: string) {
+  if (actorUrlOrHandle.startsWith('acct:')) return actorUrlOrHandle.split('@')[1]
+
+  try {
+    return new URL(actorUrlOrHandle).host
+  } catch {
+    return undefined
+  }
 }
 
 function checkInboxRequest (req: Request, res: Response) {
@@ -202,6 +242,8 @@ async function checkJsonLDSignature (req: Request, res: Response) {
     const [ creator ] = signatureObject.creator.split('#')
 
     logger.debug('Checking JsonLD signature of actor %s...', creator)
+
+    if (await ignoreIfMutedServer(req, res, creator)) return false
 
     const actor = await getOrCreateAPActor(creator)
     const verified = await compactJSONLDAndCheckSignature(actor, req)

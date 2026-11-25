@@ -2,6 +2,7 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { CachePromiseFactory } from '@server/helpers/promise-cache.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
+import { isUrlHostMutedByServer } from '@server/lib/blocklist.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { MActorFull, MActorOutdated, MActorUrl } from '@server/types/models/index.js'
@@ -57,6 +58,11 @@ async function refreshInLock (actorArg: MActorFull | MActorOutdated): RefreshRes
   const actor = await ActorModel.loadAndPopulateAccountAndChannel(actorArg.id)
   if (!actor) return { actor: undefined, refreshed: false }
   if (!actor.isOutdated()) return { actor, refreshed: false }
+
+  if (await isUrlHostMutedByServer(actor.url)) {
+    logger.debug('Not refreshing actor %s of a server muted by the instance.', actor.url)
+    return { actor, refreshed: false }
+  }
 
   logger.info('Refreshing actor %s.', actor.url)
 

@@ -5,6 +5,7 @@ import {
   AbuseState,
   CustomConfig,
   HttpStatusCode,
+  HttpStatusCodeType,
   Job,
   LiveVideoError,
   RunnerJobState,
@@ -61,15 +62,22 @@ describe('Test the write endpoints of a secondary server process', function () {
     secondary = await createSecondaryServer(primary)
   })
 
-  // The secondary applies the configuration published by the primary asynchronously
-  async function waitUntilSecondaryConfig (check: (config: CustomConfig) => boolean) {
+  async function waitUntil (check: () => Promise<boolean>, errorMessage: string) {
     for (let i = 0; i < 100; i++) {
-      if (check(await secondary.config.getCustomConfig())) return
+      if (await check()) return
 
       await wait(100)
     }
 
-    throw new Error('The secondary did not apply the configuration published by the primary')
+    throw new Error(errorMessage)
+  }
+
+  // The secondary applies the configuration published by the primary asynchronously
+  function waitUntilSecondaryConfig (check: (config: CustomConfig) => boolean) {
+    return waitUntil(
+      async () => check(await secondary.config.getCustomConfig()),
+      'The secondary did not apply the configuration published by the primary'
+    )
   }
 
   describe('Video interactions', function () {
@@ -502,6 +510,28 @@ describe('Test the write endpoints of a secondary server process', function () {
 
       await secondary.blocklist.removeFromServerBlocklist({ account: 'user_1' })
     })
+
+    it('Should apply immediately on the primary a mute and unmute of the platform made on the secondary', async function () {
+      const { uuid } = await primary.videos.quickUpload({ name: 'video of user_1', token: userToken })
+
+      // Put the accounts muted by the platform in the in memory cache of the primary
+      await primary.videos.get({ id: uuid })
+
+      await secondary.blocklist.addToServerBlocklist({ account: 'user_1' })
+      await waitUntilVideoStatusOnPrimary(uuid, HttpStatusCode.NOT_FOUND_404)
+
+      await secondary.blocklist.removeFromServerBlocklist({ account: 'user_1' })
+      await waitUntilVideoStatusOnPrimary(uuid, HttpStatusCode.OK_200)
+    })
+
+    // The invalidation is broadcasted asynchronously through Redis, but must not wait for the cache TTL (30s)
+    function waitUntilVideoStatusOnPrimary (uuid: string, expectedStatus: HttpStatusCodeType) {
+      return waitUntil(
+        async () =>
+          (await makeGetRequest({ url: primary.url, path: '/api/v1/videos/' + uuid, expectedStatus: null })).status === expectedStatus,
+        `The primary did not return ${expectedStatus} for video ${uuid}`
+      )
+    }
   })
 
   describe('Instance homepage', function () {

@@ -1428,7 +1428,8 @@ export const MEMOIZE_TTL = {
   LIVE_CHECK_SOCKET_HEALTH: 1000 * 60, // 1 minute
   GET_STATS_FOR_OPEN_TELEMETRY_METRICS: 1000 * 60, // 1 minute
   EMBED_HTML: 1000 * 10, // 10 seconds
-  VIDEO_SEO: 1000 * 10 // 10 seconds
+  VIDEO_SEO: 1000 * 10, // 10 seconds
+  MUTED_BY_SERVER: 1000 * 30 // 30 seconds
 }
 
 export const MEMOIZE_LENGTH = {

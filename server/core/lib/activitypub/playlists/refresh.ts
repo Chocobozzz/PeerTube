@@ -2,6 +2,7 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
+import { isUrlHostMutedByServer } from '@server/lib/blocklist.js'
 import { JobQueue } from '@server/lib/job-queue/index.js'
 import { MVideoPlaylist, MVideoPlaylistOwnerDefault } from '@server/types/models/index.js'
 import { runWithAPObjectLock } from '../ap-object-lock.js'
@@ -26,6 +27,13 @@ export async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylis
     if (!videoPlaylist.isOutdated()) {
       logger.debug('Playlist ' + videoPlaylist.url + ' is not outdated, no need to refresh it.')
 
+      return videoPlaylist
+    }
+
+    if (await isUrlHostMutedByServer(videoPlaylist.url)) {
+      logger.debug('Not refreshing playlist %s of a server muted by the instance.', videoPlaylist.url)
+
+      await videoPlaylist.setAsRefreshed()
       return videoPlaylist
     }
 

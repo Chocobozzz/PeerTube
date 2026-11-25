@@ -211,6 +211,7 @@ import {
 } from './core/controllers/index.js'
 import { ConfigDistribution } from './core/initializers/config/config-distribution.js'
 import { installPrimary, installSecondary } from './core/initializers/installer.js'
+import { listenForMutedByServerInvalidations } from './core/lib/blocklist.js'
 import { TokensCache } from './core/lib/auth/tokens-cache.js'
 import { initDatabaseReadReplicas } from './core/lib/database-replicas/database-replicas.js'
 import { Emailer } from './core/lib/emailer.js'
@@ -440,6 +441,7 @@ async function startApplication () {
   // Keep model cache in sync with the changes handled by the other ones
   await ModelCache.Instance.listenForInvalidations()
   await WatchedWordsListModel.listenForRegexCacheInvalidations()
+  await listenForMutedByServerInvalidations()
   await ServerConfigManager.Instance.listenForHomepageChanges()
 
   ModelCache.Instance.registerCacheTypeClearedHandler('server-account', () => {

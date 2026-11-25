@@ -128,6 +128,28 @@ export class ServerBlocklistModel extends SequelizeModel<ServerBlocklistModel> {
     return ServerBlocklistModel.findOne(query)
   }
 
+  static listServersBlockedBy (accountIds: number[]): Promise<{ id: number, host: string }[]> {
+    const query = {
+      attributes: [ 'targetServerId' ],
+      where: {
+        accountId: {
+          [Op.in]: accountIds
+        }
+      },
+      include: [
+        {
+          attributes: [ 'host' ],
+          model: ServerModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+
+    return ServerBlocklistModel.unscoped()
+      .findAll(query)
+      .then(entries => entries.map(e => ({ id: e.targetServerId, host: e.BlockedServer.host })))
+  }
+
   static listHostsBlockedBy (accountIds: number[]): Promise<string[]> {
     const query = {
       attributes: [],

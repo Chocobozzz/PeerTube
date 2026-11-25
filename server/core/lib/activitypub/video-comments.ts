@@ -13,6 +13,7 @@ import {
   MVideoAccountLightBlacklistAllFiles
 } from '../../types/models/video/index.js'
 import { createCommentAutomaticTagsJob } from '../automatic-tags/automatic-tags.js'
+import { isUrlHostMutedByServer } from '../blocklist.js'
 import { isRemoteVideoCommentAccepted } from '../moderation.js'
 import { Hooks } from '../plugins/hooks.js'
 import { CommentHoldStatus, getCommentHoldStatus } from '../video-comment.js'
@@ -247,6 +248,11 @@ async function resolveRemoteParentComment (params: ResolveThreadParams) {
   // Guard against unbounded/malicious inReplyTo chains
   if (comments.length > ACTIVITY_PUB.MAX_RECURSION_COMMENTS) {
     throw new Error('Recursion limit reached when resolving a thread')
+  }
+
+  // For example: a non muted actor replying to a comment of a muted server, or comments crawled from a video
+  if (await isUrlHostMutedByServer(url)) {
+    throw new Error(`Cannot fetch remote comment ${url}: its server is muted by the instance`)
   }
 
   const { body } = await fetchAP<any>(url)

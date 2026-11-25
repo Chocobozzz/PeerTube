@@ -200,6 +200,20 @@ export class AccountBlocklistModel extends SequelizeModel<AccountBlocklistModel>
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
+  static listAccountIdsBlockedBy (accountIds: number[]): Promise<number[]> {
+    return AccountBlocklistModel.unscoped()
+      .findAll({
+        attributes: [ 'targetAccountId' ],
+        where: {
+          accountId: {
+            [Op.in]: accountIds
+          }
+        },
+        raw: true
+      })
+      .then(rows => rows.map(r => r.targetAccountId))
+  }
+
   static listHandlesBlockedBy (accountIds: number[]): Promise<string[]> {
     const query = {
       attributes: [ 'id' ],

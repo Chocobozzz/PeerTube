@@ -72,6 +72,7 @@ import {
   checkCanManageVideo,
   checkCanModerateVideoOwner,
   checkCanSeeVideo,
+  checkCanSeeVideoOfMutedOwner,
   checkUserQuota,
   doesChannelIdExist,
   doesVideoExist,
@@ -296,6 +297,12 @@ export const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     return next()
   }
 ])
+
+export async function checkVideoOwnerMuteConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!await checkCanSeeVideoOfMutedOwner({ req, res, video: res.locals.videoAPI })) return
+
+  return next()
+}
 
 export async function checkVideoFollowConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video = getVideoWithAttributes(res)

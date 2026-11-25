@@ -1,6 +1,7 @@
 import { APObjectId } from '@peertube/peertube-models'
 import { retryTransactionWrapper } from '@server/helpers/database-utils.js'
 import { createLogger } from '@server/helpers/logger.js'
+import { isUrlHostMutedByServer } from '@server/lib/blocklist.js'
 import { loadVideoByUrl } from '@server/lib/model-loaders/index.js'
 import { AutoBlacklistStatus } from '@server/lib/video-blacklist.js'
 import { MVideoAccountLightBlacklistAllFiles, MVideoImmutable, MVideoThumbnails, MVideoWithBlacklist } from '@server/types/models/index.js'
@@ -82,6 +83,11 @@ async function getOrCreateAPVideoInternal (
       }
 
       return { video: videoFromDatabase, created: false }
+    }
+
+    // For example: a non muted actor announcing a video of a muted server
+    if (await isUrlHostMutedByServer(videoUrl)) {
+      throw new Error('Cannot fetch remote video ' + videoUrl + ': its server is muted by the instance')
     }
 
     const { videoObject } = await fetchRemoteVideo(videoUrl)

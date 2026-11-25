@@ -18,6 +18,14 @@ import {
 } from '@peertube/peertube-server-commands'
 import { expect } from 'chai'
 
+// The search index may serve remote images through its proxy: https://<index>/images-proxy/<signature>/<base64url original URL>
+function getProxiedImageUrl (url: string) {
+  const matches = url.match(/\/images-proxy\/[^/]+\/([^/?#]+)$/)
+  if (!matches) return url
+
+  return Buffer.from(matches[1], 'base64url').toString()
+}
+
 describe('Test index search', function () {
   const localVideoName = 'local video' + new Date().toISOString()
 
@@ -107,8 +115,10 @@ describe('Test index search', function () {
       expect(video.licence.label).to.equal('Attribution - Share Alike')
       expect(video.privacy.label).to.equal('Public')
       expect(video.duration).to.equal(113)
-      // oxlint-disable-next-line @typescript-eslint/no-deprecated
-      expect(video.thumbnailUrl.startsWith('https://framatube.org/lazy-static/thumbnails')).to.be.true
+      expect(video.thumbnails).to.have.length.greaterThan(0)
+      for (const thumbnail of video.thumbnails) {
+        expect(getProxiedImageUrl(thumbnail.fileUrl).startsWith('https://framatube.org/lazy-static/thumbnails/')).to.be.true
+      }
 
       expect(video.account.host).to.equal('framatube.org')
       expect(video.account.name).to.equal('framasoft')

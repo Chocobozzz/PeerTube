@@ -1,5 +1,6 @@
 import { HttpStatusCode, ServerErrorCode, UserRight, UserRightType, VideoPrivacy } from '@peertube/peertube-models'
 import { exists } from '@server/helpers/custom-validators/misc.js'
+import { BlocklistTargetAccount, getCachedMuteOfServer } from '@server/lib/blocklist.js'
 import { VideoLoadType, loadVideo } from '@server/lib/model-loaders/index.js'
 import { isUserQuotaValid } from '@server/lib/user.js'
 import { VideoTokensManager } from '@server/lib/video-tokens-manager.js'
@@ -118,6 +119,36 @@ export async function checkCanSeeVideo (options: {
   }
 
   throw new Error('Unknown video privacy when checking video right ' + video.url)
+}
+
+// Videos of accounts or servers muted by the instance are hidden, except for moderators and the video managers
+// Uses the in memory mutes of the instance, so it doesn't add a database query for non muted videos
+export async function checkCanSeeVideoOfMutedOwner (options: {
+  req: Request
+  res: Response
+  video: MVideoId & { VideoChannel: { Account: BlocklistTargetAccount } }
+}) {
+  const { req, res, video } = options
+
+  const mute = await getCachedMuteOfServer(video.VideoChannel.Account)
+  if (!mute) return true
+
+  const user = res.locals.oauth?.token.User
+  if (user) {
+    const right = mute === 'server'
+      ? UserRight.MANAGE_SERVER_SERVERS_BLOCKLIST
+      : UserRight.MANAGE_SERVER_ACCOUNTS_BLOCKLIST
+
+    const videoWithRights = await getVideoWithRights(video as MVideoWithRights)
+    if (await canUserManageProtectedVideo({ user, req, video: videoWithRights, right })) return true
+  }
+
+  res.fail({
+    status: HttpStatusCode.NOT_FOUND_404,
+    message: 'Video not found'
+  })
+
+  return false
 }
 
 async function checkCanSeeUserAuthVideo (options: {

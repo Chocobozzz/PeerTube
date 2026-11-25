@@ -1,6 +1,7 @@
 import { addQueryParams, escapeHTML } from '@peertube/peertube-core-utils'
 import { HttpStatusCode, VideoPrivacy, VideoResolution } from '@peertube/peertube-models'
 import { Memoize } from '@server/helpers/memoize.js'
+import { getCachedMuteOfServer } from '@server/lib/blocklist.js'
 import { getVideoRSSFeeds } from '@server/lib/rss.js'
 import { VideoCaptionModel } from '@server/models/video/video-caption.js'
 import express from 'express'
@@ -32,7 +33,7 @@ export class VideoHtml {
     }
 
     // Let Angular application handle errors
-    if (!this.canBuildVideoTags(video, videoId)) {
+    if (!await this.canBuildVideoTags(video, videoId)) {
       res.status(HttpStatusCode.NOT_FOUND_404)
       return html
     }
@@ -57,7 +58,7 @@ export class VideoHtml {
 
     const [ html, video ] = await Promise.all([ PageHtml.getEmbedHTML(), videoPromise ])
 
-    if (!this.canBuildVideoTags(video, videoId)) {
+    if (!await this.canBuildVideoTags(video, videoId)) {
       return buildEmptyEmbedHTML({ html, video })
     }
 
@@ -79,11 +80,13 @@ export class VideoHtml {
   // Private
   // ---------------------------------------------------------------------------
 
-  private static canBuildVideoTags (video: MVideoSeo, videoId: string) {
+  private static async canBuildVideoTags (video: MVideoSeo, videoId: string) {
     if (!video || isVideoInPrivateDirectory(video.privacy) || video.VideoBlacklist) return false
 
     // Unlisted videos can only be fetched using their UUID
     if (video.privacy === VideoPrivacy.UNLISTED && !validator.default.isUUID(videoId, 4)) return false
+
+    if (await getCachedMuteOfServer(video.VideoChannel.Account)) return false
 
     return true
   }

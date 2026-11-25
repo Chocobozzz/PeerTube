@@ -71,6 +71,11 @@ export type TokenInvalidationPayload = {
   tokenException?: string
 }
 
+// Servers or accounts muted by the instance changed: the processes clear their in memory list
+export type MutedByServerInvalidationPayload = {
+  type: 'servers' | 'accounts'
+}
+
 export type WatchedWordsInvalidationPayload = {
   accountId: number
 }
@@ -87,6 +92,7 @@ export const RedisChannels = {
   jobQueueState: new RedisChannel<JobQueueStatePayload>('job-queue-state'),
   liveSessionStop: new RedisChannel<LiveSessionStopPayload>('live-session-stop'),
   modelCacheInvalidation: new RedisChannel<ModelCacheInvalidationPayload>('model-cache-invalidation'),
+  mutedByServerInvalidation: new RedisChannel<MutedByServerInvalidationPayload>('muted-by-server-invalidation'),
   pluginChanges: new RedisChannel<PluginChangePayload>('plugin-changes'),
   pluginPrimaryRequests: new RedisChannel<PluginPrimaryRequestPayload>('plugin-primary-requests'),
   localFilesMoved: new RedisChannel<LocalFilesMove>('local-files-moved'),

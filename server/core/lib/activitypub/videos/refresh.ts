@@ -2,6 +2,7 @@ import { HttpStatusCode } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
 import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
+import { isUrlHostMutedByServer } from '@server/lib/blocklist.js'
 import { JobQueue } from '@server/lib/job-queue/job-queue.js'
 import { VideoModel } from '@server/models/video/video.js'
 import { MVideo, MVideoAccountLightBlacklistAllFiles, MVideoThumbnails } from '@server/types/models/index.js'
@@ -37,6 +38,13 @@ export async function refreshVideoIfNeeded (options: {
       const video = await VideoModel.loadByUrlAndPopulateAccountAndFiles(videoUrl)
       if (!video) return { video: undefined, updated: false }
       if (!video.isOutdated()) return { video, updated: false }
+
+      if (await isUrlHostMutedByServer(videoUrl)) {
+        logger.debug('Not refreshing video %s of a server muted by the instance.', videoUrl)
+
+        await video.setAsRefreshed()
+        return { video, updated: false }
+      }
 
       logger.info('Refreshing video %s.', videoUrl)
 

@@ -1,5 +1,6 @@
 import { AutoMuteList, BlocklistLogAction, HttpStatusCode, UserRight, UserRole } from '@peertube/peertube-models'
 import { createLogger } from '@server/helpers/logger.js'
+import { CONFIG } from '@server/initializers/config.js'
 import {
   auditLog,
   buildAccountBlockAuditEntity,
@@ -7,7 +8,6 @@ import {
   buildServerBlockAuditEntity,
   getAuditActorFromRes
 } from '@server/lib/audit-log/index.js'
-import { CONFIG } from '@server/initializers/config.js'
 import { fetchAndValidateAutoMuteList } from '@server/lib/blocklist-subscriptions.js'
 import { getServerActor } from '@server/models/application/application.js'
 import express from 'express'
@@ -16,6 +16,8 @@ import { getFormattedObjects } from '../../../helpers/utils.js'
 import {
   addAccountInBlocklist,
   addServerInBlocklist,
+  clearAccountsMutedByServerCache,
+  clearHostsMutedByServerCache,
   removeAccountFromBlocklist,
   removeServerFromBlocklist
 } from '../../../lib/blocklist.js'
@@ -300,6 +302,9 @@ async function deleteBlocklistSubscription (req: express.Request, res: express.R
   const subscription = res.locals.blocklistSubscription
 
   await subscription.destroy()
+  // Also removes the mutes created by this subscription
+  clearHostsMutedByServerCache()
+  clearAccountsMutedByServerCache()
 
   auditLog.delete(getAuditActorFromRes(res), () => buildBlocklistSubscriptionAuditEntity(subscription))
 

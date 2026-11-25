@@ -11,7 +11,13 @@ import { findLatestAPRedirection } from '@server/lib/activitypub/activity.js'
 import { getOrCreateAPVideoPlaylist } from '@server/lib/activitypub/playlists/get.js'
 import { Hooks } from '@server/lib/plugins/hooks.js'
 import { isLocalUrl } from '@server/lib/activitypub/url.js'
-import { buildMutedForSearchIndex, isSearchIndexSearch, isURISearch } from '@server/lib/search.js'
+import {
+  buildMutedForSearchIndex,
+  isSearchHostBlocked,
+  isSearchIndexSearch,
+  isSearchResultBlocked,
+  isURISearch
+} from '@server/lib/search.js'
 import { withReplicaReadsFromRes } from '@server/middlewares/replica-reads.js'
 import { getServerActor } from '@server/models/application/application.js'
 import { VideoPlaylistModel } from '@server/models/video/video-playlist.js'
@@ -116,7 +122,10 @@ async function searchVideoPlaylistsURI (search: string, req: express.Request, re
   // Local URLs are resolved from the database: federation refuses to fetch local playlists
   if (isUserAbleToSearchRemoteURI(res) && !isLocalUrl(search)) {
     try {
+      if (await isSearchHostBlocked({ url: search }, res)) return res.json({ total: 0, data: [] })
+
       const url = await findLatestAPRedirection(search)
+      if (await isSearchHostBlocked({ url }, res)) return res.json({ total: 0, data: [] })
 
       videoPlaylist = await getOrCreateAPVideoPlaylist(url)
     } catch (err) {
@@ -125,6 +134,8 @@ async function searchVideoPlaylistsURI (search: string, req: express.Request, re
   } else {
     videoPlaylist = await searchLocalUrl(sanitizeLocalUrl(search), url => VideoPlaylistModel.loadByUrlWithAccountAndChannelSummary(url))
   }
+
+  if (videoPlaylist && await isSearchResultBlocked(videoPlaylist.OwnerAccount, res)) videoPlaylist = undefined
 
   // The resolved playlist may still be private
   if (videoPlaylist && !await checkCanSeePlaylist({ req, res, videoPlaylist })) return

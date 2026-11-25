@@ -1,9 +1,10 @@
-import express from 'express'
-import { CONFIG } from '@server/initializers/config.js'
-import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
-import { getServerActor } from '@server/models/application/application.js'
-import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
 import { SearchTargetQuery } from '@peertube/peertube-models'
+import { CONFIG } from '@server/initializers/config.js'
+import { getServerActor } from '@server/models/application/application.js'
+import { AccountBlocklistModel } from '@server/models/blocklist/account-blocklist.js'
+import { ServerBlocklistModel } from '@server/models/blocklist/server-blocklist.js'
+import express from 'express'
+import { BlocklistTargetAccount, isBlockedByServerOrAccount, isHostBlockedByServerOrAccount } from './blocklist.js'
 
 function isSearchIndexSearch (query: SearchTargetQuery) {
   if (query.searchTarget === 'search-index') return true
@@ -42,8 +43,31 @@ function isURISearch (search: string) {
   return search.startsWith('http://') || search.startsWith('https://')
 }
 
+// ---------------------------------------------------------------------------
+
+function isSearchHostBlocked (options: { url?: string, host?: string }, res: express.Response) {
+  let host = options.host
+
+  if (options.url) {
+    try {
+      host = new URL(options.url).host
+    } catch {
+      return Promise.resolve(false)
+    }
+  }
+
+  return isHostBlockedByServerOrAccount(host, res.locals.oauth?.token.User.Account)
+}
+
+// The resolved object may be owned by another server than the searched URL (redirection, attribution) or by a muted account
+function isSearchResultBlocked (account: BlocklistTargetAccount, res: express.Response) {
+  return isBlockedByServerOrAccount(account, res.locals.oauth?.token.User.Account)
+}
+
 export {
-  isSearchIndexSearch,
   buildMutedForSearchIndex,
+  isSearchHostBlocked,
+  isSearchIndexSearch,
+  isSearchResultBlocked,
   isURISearch
 }
