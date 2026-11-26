@@ -8,6 +8,7 @@ import { InstanceFollowService } from '@app/shared/shared-instance/instance-foll
 import { ButtonComponent } from '@app/shared/shared-main/buttons/button.component'
 import { PluginSelectorDirective } from '@app/shared/shared-main/plugins/plugin-selector.directive'
 import { Actor, ServerStats } from '@peertube/peertube-models'
+import { logger } from '@root-helpers/logger'
 import { SortMeta } from 'primeng/api'
 import { FollowerImageComponent } from './follower-image.component'
 import { SubscriptionImageComponent } from './subscription-image.component'
@@ -52,6 +53,7 @@ export class AboutFollowsComponent implements OnInit {
   }
 
   serverStats: ServerStats
+  serverStatsError = false
 
   private loadingFollowers = false
   private loadingSubscriptions = false
@@ -67,7 +69,16 @@ export class AboutFollowsComponent implements OnInit {
 
     this.instanceName = this.server.getHTMLConfig().instance.name
 
-    this.server.getServerStats().subscribe(stats => this.serverStats = stats)
+    this.server.getServerStats()
+      .subscribe({
+        next: stats => this.serverStats = stats,
+
+        error: err => {
+          logger.error('Cannot load server stats', err)
+
+          this.serverStatsError = true
+        }
+      })
   }
 
   buildLink (host: string) {

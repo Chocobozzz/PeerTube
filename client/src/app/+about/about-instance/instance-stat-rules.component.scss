@@ -61,6 +61,15 @@ h4 {
     @include font-size(14px);
   }
 
+  .rule-content-placeholder {
+    width: 15rem;
+    max-width: 100%;
+    height: 14px;
+    margin-top: 0.25rem;
+
+    @include loading-placeholder;
+  }
+
   .icon-container {
     position: relative;
 

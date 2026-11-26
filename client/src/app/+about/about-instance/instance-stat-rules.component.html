@@ -1,52 +1,86 @@
 <div class="root">
 
-  <div class="stats-block">
-    <h4 i18n>Our platform in figures</h4>
+  @if (!statsError()) {
+    <div class="stats-block">
+      <h4 i18n>Our platform in figures</h4>
 
-    <div class="blocks" myPluginSelector pluginSelectorId="about-instance-statistics">
-      <div class="stat">
-        <strong>{{ stats().totalModerators + stats().totalAdmins | number }}</strong>
-        <div i18n>moderators</div>
-        <my-global-icon iconName="moderation"></my-global-icon>
-      </div>
+      <div class="blocks" myPluginSelector pluginSelectorId="about-instance-statistics" [attr.aria-busy]="!stats()">
+        <div class="stat">
+          @if (stats()) {
+            <strong>{{ stats().totalModerators + stats().totalAdmins | number }}</strong>
+          } @else {
+            <ng-container *ngTemplateOutlet="statValuePlaceholder" />
+          }
+          <div i18n>moderators</div>
+          <my-global-icon iconName="moderation"></my-global-icon>
+        </div>
 
-      <div class="stat">
-        <strong>{{ stats().totalUsers | number }}</strong>
-        <div i18n>users</div>
-        <my-global-icon iconName="user"></my-global-icon>
-      </div>
+        <div class="stat">
+          @if (stats()) {
+            <strong>{{ stats().totalUsers | number }}</strong>
+          } @else {
+            <ng-container *ngTemplateOutlet="statValuePlaceholder" />
+          }
+          <div i18n>users</div>
+          <my-global-icon iconName="user"></my-global-icon>
+        </div>
 
-      <div class="stat">
-        <strong>{{ stats().totalLocalVideos | number }}</strong>
-        <a routerLink="/videos/browse" [queryParams]="{ scope: 'local' }" i18n>videos</a>
-        <my-global-icon iconName="videos"></my-global-icon>
-      </div>
+        <div class="stat">
+          @if (stats()) {
+            <strong>{{ stats().totalLocalVideos | number }}</strong>
+          } @else {
+            <ng-container *ngTemplateOutlet="statValuePlaceholder" />
+          }
+          <a routerLink="/videos/browse" [queryParams]="{ scope: 'local' }" i18n>videos</a>
+          <my-global-icon iconName="videos"></my-global-icon>
+        </div>
 
-      <div class="stat">
-        <strong>{{ stats().totalLocalVideoViews | number }}</strong>
-        <div i18n>views</div>
-        <my-global-icon iconName="eye-open"></my-global-icon>
-      </div>
+        <div class="stat">
+          @if (stats()) {
+            <strong>{{ stats().totalLocalVideoViews | number }}</strong>
+          } @else {
+            <ng-container *ngTemplateOutlet="statValuePlaceholder" />
+          }
+          <div i18n>views</div>
+          <my-global-icon iconName="eye-open"></my-global-icon>
+        </div>
 
-      <div class="stat">
-        <strong>{{ stats().totalLocalVideoDownloads | number }}</strong>
-        <div i18n>downloads</div>
-        <my-global-icon iconName="download"></my-global-icon>
-      </div>
+        <div class="stat">
+          @if (stats()) {
+            <strong>{{ stats().totalLocalVideoDownloads | number }}</strong>
+          } @else {
+            <ng-container *ngTemplateOutlet="statValuePlaceholder" />
+          }
+          <div i18n>downloads</div>
+          <my-global-icon iconName="download"></my-global-icon>
+        </div>
 
-      <div class="stat">
-        <strong>{{ stats().totalLocalVideoComments | number }}</strong>
-        <div i18n>comments</div>
-        <my-global-icon iconName="message-circle"></my-global-icon>
-      </div>
+        <div class="stat">
+          @if (stats()) {
+            <strong>{{ stats().totalLocalVideoComments | number }}</strong>
+          } @else {
+            <ng-container *ngTemplateOutlet="statValuePlaceholder" />
+          }
+          <div i18n>comments</div>
+          <my-global-icon iconName="message-circle"></my-global-icon>
+        </div>
 
-      <div class="stat">
-        <strong>{{ stats().totalLocalVideoFilesSize | bytes:1 }}</strong>
-        <div i18n>hosted videos</div>
-        <my-global-icon iconName="film"></my-global-icon>
+        <div class="stat">
+          @if (stats()) {
+            <strong>{{ stats().totalLocalVideoFilesSize | bytes:1 }}</strong>
+          } @else {
+            <ng-container *ngTemplateOutlet="statValuePlaceholder" />
+          }
+          <div i18n>hosted videos</div>
+          <my-global-icon iconName="film"></my-global-icon>
+        </div>
       </div>
     </div>
-  </div>
+  }
+
+  <ng-template #statValuePlaceholder>
+    <strong class="stat-value-placeholder" aria-hidden="true"></strong>
+  </ng-template>
 
   <div class="usage-rules-block">
     <h4 i18n>Usage rules</h4>
@@ -93,8 +127,10 @@
             @if (config().signup.requiresApproval) {
               <strong i18n>You can <a routerLink="/signup">request an account</a> on our platform</strong>
 
-              @if (stats().averageRegistrationRequestResponseTimeMs) {
+              @if (stats()?.averageRegistrationRequestResponseTimeMs) {
                 <div class="rule-content" i18n>Our moderator will validate it within a {{ stats().averageRegistrationRequestResponseTimeMs | myDaysDurationFormatter }}.</div>
+              } @else if (!stats() && !statsError()) {
+                <div class="rule-content-placeholder" aria-hidden="true"></div>
               } @else {
                 <div class="rule-content" i18n>Our moderator will validate it within a few days.</div>
               }

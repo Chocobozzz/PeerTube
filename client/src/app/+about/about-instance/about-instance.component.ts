@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, OnInit, inject, viewChi
 import { ActivatedRoute, RouterOutlet } from '@angular/router'
 import { AboutHTML } from '@app/shared/shared-main/instance/instance.service'
 import { HorizontalMenuComponent, HorizontalMenuEntry } from '@app/shared/shared-main/menu/horizontal-menu.component'
-import { ServerConfig, ServerStats } from '@peertube/peertube-models'
+import { ServerConfig } from '@peertube/peertube-models'
 import { ResolverData } from './about-instance.resolver'
 import { InstanceStatRulesComponent } from './instance-stat-rules.component'
 
@@ -23,7 +23,6 @@ export class AboutInstanceComponent implements OnInit {
   readonly descriptionWrapper = viewChild<ElementRef<HTMLInputElement>>('descriptionWrapper')
 
   aboutHTML: AboutHTML
-  serverStats: ServerStats
   serverConfig: ServerConfig
   menuEntries: HorizontalMenuEntry[] = []
 
@@ -31,11 +30,9 @@ export class AboutInstanceComponent implements OnInit {
     const {
       about,
       aboutHTML,
-      serverStats,
       serverConfig
     }: ResolverData = this.route.snapshot.data.instanceData
 
-    this.serverStats = serverStats
     this.serverConfig = serverConfig
 
     this.aboutHTML = aboutHTML

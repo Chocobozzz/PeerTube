@@ -2,6 +2,24 @@
 @use "_variables" as *;
 @use "_mixins" as *;
 
+@mixin loading-placeholder {
+  display: block;
+  border-radius: 4px;
+  background-color: pvar(--bg-secondary-500);
+  opacity: 0.5;
+  animation: loading-placeholder-pulse 1.5s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+
+  @keyframes loading-placeholder-pulse {
+    50% {
+      opacity: 0.2;
+    }
+  }
+}
+
 @mixin stats-card {
   position: relative;
   border: 1px solid pvar(--border-secondary);
@@ -31,6 +49,15 @@
     font-size: 18px;
     color: pvar(--fg-200);
     display: block;
+  }
+
+  // Same height as the stat value, using its font size
+  strong.stat-value-placeholder {
+    width: 2.5em;
+    height: 1.2em;
+    margin: 0 auto;
+
+    @include loading-placeholder;
   }
 
   my-global-icon {

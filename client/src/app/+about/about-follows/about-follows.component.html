@@ -35,19 +35,27 @@
       }
     </div>
 
-    @if (serverStats) {
+    @if (!serverStatsError) {
       <div class="stats mt-4">
         <h4 i18n>Our network in figures</h4>
 
-        <div myPluginSelector pluginSelectorId="about-instance-network-statistics">
+        <div myPluginSelector pluginSelectorId="about-instance-network-statistics" [attr.aria-busy]="!serverStats">
           <div class="stat">
-            <strong>{{ serverStats.totalVideos | number }}</strong>
+            @if (serverStats) {
+              <strong>{{ serverStats.totalVideos | number }}</strong>
+            } @else {
+              <strong class="stat-value-placeholder" aria-hidden="true"></strong>
+            }
             <a routerLink="/videos/browse" [queryParams]="{ scope: 'federated' }" i18n>total videos</a>
             <my-global-icon iconName="videos"></my-global-icon>
           </div>
 
           <div class="stat">
-            <strong>{{ serverStats.totalVideoComments | number }}</strong>
+            @if (serverStats) {
+              <strong>{{ serverStats.totalVideoComments | number }}</strong>
+            } @else {
+              <strong class="stat-value-placeholder" aria-hidden="true"></strong>
+            }
             <div i18n>total comments</div>
             <my-global-icon iconName="message-circle"></my-global-icon>
           </div>
