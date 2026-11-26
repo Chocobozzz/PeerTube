@@ -4,6 +4,9 @@ import { FFmpegCommandWrapper, FFmpegCommandWrapperOptions } from './ffmpeg-comm
 export class FFmpegContainer {
   private readonly commandWrapper: FFmpegCommandWrapper
 
+  private started = false
+  private killRequested = false
+
   constructor (options: FFmpegCommandWrapperOptions) {
     this.commandWrapper = new FFmpegCommandWrapper(options)
   }
@@ -52,11 +55,21 @@ export class FFmpegContainer {
       .format('mp4')
       .output(output)
 
+    // The process is spawned asynchronously: kill it as soon as it starts if forceKill() was called before
+    command.on('start', () => {
+      this.started = true
+
+      if (this.killRequested) command.kill('SIGKILL')
+    })
+
     return this.commandWrapper.runCommand({ silent: !logError })
   }
 
   forceKill () {
-    if (!this.commandWrapper) return
+    this.killRequested = true
+
+    // Not spawned yet: the 'start' listener of mergeInputs will kill it
+    if (!this.started) return
 
     this.commandWrapper.getCommand().kill('SIGKILL')
   }

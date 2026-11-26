@@ -40,7 +40,12 @@ export interface PeerTubeRequestError extends Error {
 }
 
 export type PeerTubeRequestOptions = {
+  // Timeout of the entire request, or only until the response headers are received if idleTimeout is set
   timeout?: number
+
+  // Socket inactivity timeout once the response is received, instead of a timeout of the entire request
+  idleTimeout?: number
+
   activityPub?: boolean
   bodyKBLimit?: number // 1MB
 
@@ -334,13 +339,22 @@ function buildGotOptions (options: PeerTubeRequestOptions): OptionsOfUnknownResp
     headers = { ...headers, accept: ACTIVITY_PUB.ACCEPT_HEADER }
   }
 
+  const timeout = options.timeout ?? REQUEST_TIMEOUTS.DEFAULT
+
   return {
     method: options.method,
     dnsCache: true,
     resolveBodyOnly: false,
-    timeout: {
-      request: options.timeout ?? REQUEST_TIMEOUTS.DEFAULT
-    },
+    timeout: options.idleTimeout
+      ? {
+        lookup: timeout,
+        connect: timeout,
+        secureConnect: timeout,
+        send: timeout,
+        response: timeout,
+        socket: options.idleTimeout
+      }
+      : { request: timeout },
     json: options.json,
     searchParams: options.searchParams,
     followRedirect: options.followRedirect,

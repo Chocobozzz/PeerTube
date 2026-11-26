@@ -1,25 +1,33 @@
 import { FFmpegContainer } from '@peertube/peertube-ffmpeg'
-import { FileStorage } from '@peertube/peertube-models'
+import { FileStorage, HttpStatusCode } from '@peertube/peertube-models'
 import { getFFmpegCommandWrapperOptions } from '@server/helpers/ffmpeg/ffmpeg-options.js'
 import { createLogger } from '@server/helpers/logger.js'
-import { buildRequestError, doRequestAndSaveToFile, generateRequestStream } from '@server/helpers/requests.js'
+import { buildRequestError, doRequestAndSaveToFile, generateRequestStream, PeerTubeRequestError } from '@server/helpers/requests.js'
 import { ThrottleStream } from '@server/helpers/stream-throttle.js'
-import { REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
+import { LRU_CACHE, REQUEST_TIMEOUTS } from '@server/initializers/constants.js'
 import { isWebVideoFile, MVideoFile, MVideoThumbnails } from '@server/types/models/index.js'
 import { createReadStream } from 'fs'
 import { remove } from 'fs-extra/esm'
+import { LRUCache } from 'lru-cache'
 import { PassThrough, Readable, Writable } from 'stream'
 import { pipeline } from 'stream/promises'
+import { scheduleVideoRefreshIfNeeded } from './activitypub/videos/refresh.js'
+import { makeCommonFileAvailableIn } from './object-storage/common-files.js'
 import {
   getHLSFileReadStream,
   getWebVideoFileReadStream,
   makeHLSFileAvailable,
   makeWebVideoFileAvailable
 } from './object-storage/videos.js'
-import { makeCommonFileAvailableIn } from './object-storage/common-files.js'
 import { VideoPathManager } from './video-path-manager.js'
 
 const logger = createLogger('video-download')
+
+// Remote hosts that recently failed -> error message
+const remoteHostFailures = new LRUCache<string, string>({
+  max: LRU_CACHE.REMOTE_HOST_FAILURES.MAX_SIZE,
+  ttl: LRU_CACHE.REMOTE_HOST_FAILURES.TTL
+})
 
 export class VideoDownload {
   static totalDownloads = 0
@@ -31,6 +39,9 @@ export class VideoDownload {
 
   private readonly video: MVideoThumbnails
   private readonly videoFiles: MVideoFile[]
+
+  // Aborted on cleanup, to cancel pending remote requests and stop the background run() as soon as possible
+  private readonly abortController = new AbortController()
 
   private cleanupPromise: Promise<void>
   private allowDirectSending = true
@@ -58,9 +69,20 @@ export class VideoDownload {
         rejectOnStreamError = rej
       })
 
-      const run = async () => {
-        VideoDownload.totalDownloads++
+      // The client may abort the download while we are still preparing inputs (waiting for remote servers...)
+      // Don't wait for run() to notice it
+      let onOutputClose: () => void
+      const outputClosedPromise = new Promise<void>(res => {
+        onOutputClose = () => {
+          if (output.writableFinished) return
 
+          logger.info(`Client aborted download of video ${this.video.url}`)
+          res()
+        }
+      })
+      output.once('close', onOutputClose)
+
+      const run = async () => {
         const maxResolution = await this.buildMuxInputs(rejectOnStreamError)
 
         // Include cover to audio file?
@@ -69,8 +91,11 @@ export class VideoDownload {
           : { coverPath: undefined, isTmpDestination: false }
 
         if (coverPath && isTmpDestination) {
-          this.tmpDestinations.push(coverPath)
+          this.addTmpDestination(coverPath)
         }
+
+        // We may have been aborted while building inputs, don't spawn anything
+        this.throwIfAborted()
 
         // Prefer sending the file directly if possible
         if (this.allowDirectSending && !coverPath && this.inputs.length === 1) {
@@ -136,6 +161,9 @@ export class VideoDownload {
             return
           }
 
+          // Killed by cleanup(): the reason (input error, client abort...) has already been handled
+          if (this.isAborted()) return
+
           if (err.inputStreamError) {
             err.inputStreamError = buildRequestError(err.inputStreamError)
           }
@@ -144,16 +172,23 @@ export class VideoDownload {
 
           throw err
         } finally {
+          // ffmpegContainer.forceKill() also kills the process if it has not been spawned yet
           // cleanup() may already have force killed and unset ffmpegContainer if a stream errored and won the race below
           this.ffmpegContainer?.forceKill()
         }
       }
 
+      VideoDownload.totalDownloads++
+      // Release the download slot after run() that may still be doing work that cannot be aborted
+      const runPromise = run().finally(() => VideoDownload.totalDownloads--)
+
       try {
-        // If a stream errors, don't wait for run() to notice: reject immediately so the caller isn't stuck
-        // run() keeps executing in the background but will abort once cleanup() destroys its streams/ffmpeg process
-        await Promise.race([ run(), streamErrorPromise ])
+        // If a stream errors or the client aborts the download, don't wait for run() to notice: settle immediately
+        // run() keeps executing in the background but will abort once cleanup() aborts its requests and destroys its streams/ffmpeg process
+        await Promise.race([ runPromise, streamErrorPromise, outputClosedPromise ])
       } finally {
+        output.off('close', onOutputClose)
+
         this.cleanup()
           .catch(cleanupErr => logger.error('Cannot cleanup after mux error', { err: cleanupErr }))
       }
@@ -179,6 +214,9 @@ export class VideoDownload {
       const { input, isTmpDestination } = await this.buildMuxInput(
         videoFile,
         errArg => {
+          // Expected error: we aborted the request ourselves
+          if (this.isAborted()) return
+
           const err = buildRequestError(errArg as any)
 
           logger.warn(`Cannot build mux input of video ${this.video.url}`, {
@@ -191,9 +229,7 @@ export class VideoDownload {
         }
       )
 
-      this.inputs.push(input)
-
-      if (isTmpDestination === true) this.tmpDestinations.push(input)
+      this.addInput(input, isTmpDestination)
     }
 
     return maxResolution
@@ -218,28 +254,48 @@ export class VideoDownload {
   }
 
   private async buildMuxRemoteInput (videoFile: MVideoFile, onStreamError: (err: Error) => void) {
-    const timeout = REQUEST_TIMEOUTS.VIDEO_FILE
+    const url = videoFile.fileUrl
+    const signal = this.abortController.signal
+
+    throwIfRecentRemoteHostFailure(url)
 
     const videoSizeKB = videoFile.size / 1000
     const bodyKBLimit = videoSizeKB + 0.1 * videoSizeKB
 
-    // FFmpeg doesn't support multiple input streams, so download the audio file on disk directly
-    if (videoFile.isAudio()) {
-      const destination = VideoPathManager.Instance.buildTMPDestination(videoFile.filename)
-
-      // > 1GB
-      if (bodyKBLimit > 1000 * 1000) {
-        throw new Error('Cannot download remote video file > 1GB')
-      }
-
-      await doRequestAndSaveToFile(videoFile.fileUrl, destination, { timeout, bodyKBLimit })
-
-      return { input: destination, isTmpDestination: true as const }
+    // FFmpeg doesn't support multiple input streams, so the audio file is downloaded on disk
+    if (videoFile.isAudio() && bodyKBLimit > 1000 * 1000) {
+      throw new Error('Cannot download remote audio file > 1GB')
     }
 
-    return {
-      input: generateRequestStream(videoFile.fileUrl, { timeout, bodyKBLimit }).on('error', onStreamError),
-      isTmpDestination: false as const
+    try {
+      if (videoFile.isAudio()) {
+        const destination = VideoPathManager.Instance.buildTMPDestination(videoFile.filename)
+
+        await doRequestAndSaveToFile(url, destination, { timeout: REQUEST_TIMEOUTS.GENERATE_DOWNLOAD.AUDIO_FILE, bodyKBLimit, signal })
+
+        return { input: destination, isTmpDestination: true as const }
+      }
+
+      const stream = generateRequestStream(url, {
+        timeout: REQUEST_TIMEOUTS.GENERATE_DOWNLOAD.VIDEO_STREAM_UNTIL_RESPONSE,
+        idleTimeout: REQUEST_TIMEOUTS.GENERATE_DOWNLOAD.VIDEO_STREAM_INACTIVITY,
+        bodyKBLimit,
+        signal
+      }).on('error', onStreamError)
+
+      // Wait for the remote response so request errors (HTTP error, DNS, connection refused...) are thrown before we write to the output
+      // Otherwise the direct sending pipeline destroys the HTTP response before sending headers, and the reverse proxy returns a 502
+      // It also prevents spawning a useless ffmpeg process
+      await new Promise<void>((res, rej) => {
+        stream.once('response', () => res())
+        stream.once('error', err => rej(buildRequestError(err as any)))
+      })
+
+      return { input: stream, isTmpDestination: false as const }
+    } catch (err) {
+      if (!this.isAborted()) this.handleRemoteFailure(url, err)
+
+      throw err
     }
   }
 
@@ -301,13 +357,68 @@ export class VideoDownload {
     if (thumbnail?.fileUrl) {
       const destination = VideoPathManager.Instance.buildTMPDestination(thumbnail.filename)
 
-      await doRequestAndSaveToFile(thumbnail.fileUrl, destination)
+      await doRequestAndSaveToFile(thumbnail.fileUrl, destination, { signal: this.abortController.signal })
 
       return { coverPath: destination, isTmpDestination: true }
     }
 
     return { coverPath: undefined }
   }
+
+  // ---------------------------------------------------------------------------
+
+  private addInput (input: string | Readable, isTmpDestination: boolean) {
+    this.inputs.push(input)
+
+    if (isTmpDestination === true) this.addTmpDestination(input as string)
+    else this.releaseResourcesIfAborted()
+  }
+
+  private addTmpDestination (destination: string) {
+    this.tmpDestinations.push(destination)
+
+    this.releaseResourcesIfAborted()
+  }
+
+  // run() keeps executing in the background after cleanup(): release resources it creates afterwards and stop it
+  private releaseResourcesIfAborted () {
+    if (!this.isAborted()) return
+
+    this.releaseResources()
+      .catch(err => logger.error('Cannot release resources of aborted download', { err }))
+
+    this.throwIfAborted()
+  }
+
+  private isAborted () {
+    return this.abortController.signal.aborted
+  }
+
+  private throwIfAborted () {
+    if (this.isAborted()) throw new Error(`Download of video ${this.video.url} aborted`)
+  }
+
+  // ---------------------------------------------------------------------------
+
+  private handleRemoteFailure (url: string, err: PeerTubeRequestError) {
+    const statusCode = err?.statusCode
+
+    // Outdated remote video?
+    if (statusCode === HttpStatusCode.NOT_FOUND_404 || statusCode === HttpStatusCode.GONE_410) {
+      scheduleVideoRefreshIfNeeded(this.video)
+      return
+    }
+
+    if (!isRemoteHostFailure(err)) return
+
+    // Don't request this host again for a while
+    const host = getURLHost(url)
+    if (!host) return
+
+    remoteHostFailures.set(host, err?.message || 'Unknown error')
+  }
+
+  // ---------------------------------------------------------------------------
 
   private inputsToLog () {
     return this.inputs.map(i => {
@@ -326,9 +437,17 @@ export class VideoDownload {
   }
 
   private async _doCleanup () {
-    VideoDownload.totalDownloads--
+    // Cancel pending remote requests
+    this.abortController.abort()
 
-    for (const destination of this.tmpDestinations) {
+    await this.releaseResources()
+
+    logger.debug(`Cleaned muxing for video ${this.video.url}`, { inputs: this.inputsToLog() })
+  }
+
+  // Can be called multiple times
+  private async releaseResources () {
+    for (const destination of this.tmpDestinations.splice(0)) {
       await remove(destination)
         .catch(err => logger.error('Cannot remove tmp destination', { err, destination }))
     }
@@ -343,7 +462,64 @@ export class VideoDownload {
       this.ffmpegContainer.forceKill()
       this.ffmpegContainer = undefined
     }
+  }
+}
 
-    logger.debug(`Cleaned muxing for video ${this.video.url}`, { inputs: this.inputsToLog() })
+// ---------------------------------------------------------------------------
+// Private
+// ---------------------------------------------------------------------------
+
+function throwIfRecentRemoteHostFailure (url: string) {
+  const host = getURLHost(url)
+  if (!host) return
+
+  const message = remoteHostFailures.get(host)
+  if (message === undefined) return
+
+  logger.debug(`Skip request of remote file ${url}: host ${host} recently failed`, { message })
+
+  throw new Error(`Remote host ${host} recently failed (${message}), try again later`)
+}
+
+const REMOTE_HOST_NETWORK_ERROR_CODES = new Set([
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'ECONNREFUSED',
+  'ECONNRESET',
+  'ECONNABORTED',
+  'ETIMEDOUT',
+  'EHOSTUNREACH',
+  'EHOSTDOWN',
+  'ENETUNREACH',
+  'EPIPE',
+  'DEPTH_ZERO_SELF_SIGNED_CERT',
+  'SELF_SIGNED_CERT_IN_CHAIN',
+  'UNABLE_TO_VERIFY_LEAF_SIGNATURE',
+  'UNABLE_TO_GET_ISSUER_CERT_LOCALLY'
+])
+
+// Only errors caused by the remote host itself, before it sent a valid response
+function isRemoteHostFailure (err: PeerTubeRequestError) {
+  const statusCode = err?.statusCode
+
+  if (statusCode) {
+    return statusCode >= 500 || statusCode === HttpStatusCode.TOO_MANY_REQUESTS_429
+  }
+
+  // No response: network error (that can take time to fail: DNS, connection timeout...)
+  const code = err?.code
+  if (!code) return false
+
+  return REMOTE_HOST_NETWORK_ERROR_CODES.has(code) ||
+    code.startsWith('CERT_') ||
+    code.startsWith('ERR_TLS_') ||
+    code.startsWith('ERR_SSL_')
+}
+
+function getURLHost (url: string) {
+  try {
+    return new URL(url).host
+  } catch {
+    return undefined
   }
 }

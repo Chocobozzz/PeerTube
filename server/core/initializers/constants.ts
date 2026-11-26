@@ -447,8 +447,15 @@ export const AP_CLEANER = {
 export const REQUEST_TIMEOUTS = {
   DEFAULT: 7000, // 7 seconds
   FILE: 30000, // 30 seconds
-  VIDEO_FILE: 60000, // 1 minute
-  REDUNDANCY: JOB_TTL['video-redundancy']
+  REDUNDANCY: JOB_TTL['video-redundancy'],
+
+  GENERATE_DOWNLOAD: {
+    VIDEO_STREAM_UNTIL_RESPONSE: 30000, // 30 seconds to receive the response headers
+    VIDEO_STREAM_INACTIVITY: 60000, // 1 minute without receiving data once the response is received
+
+    // The audio file is entirely downloaded on disk before muxing
+    AUDIO_FILE: 60000 // 1 minute
+  }
 }
 
 // Container runtimes send a SIGKILL if we take too long to exit (docker waits 10 seconds, kubernetes 30 seconds)
@@ -1327,6 +1334,10 @@ export const LRU_CACHE = {
   MODEL_CACHE: {
     MAX_SIZE: 10_000,
     TTL: parseDurationToMs('1 hour') // If the process misses an invalidation
+  },
+  REMOTE_HOST_FAILURES: {
+    MAX_SIZE: 1000,
+    TTL: parseDurationToMs('1 minute')
   }
 }
 

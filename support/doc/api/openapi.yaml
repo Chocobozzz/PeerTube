@@ -644,6 +644,8 @@ paths:
       responses:
         '200':
           description: successful operation
+        '403':
+          description: '**PeerTube >= 9.0** remote video that does not respect follow constraints (see `does_not_respect_follow_constraints` error code)'
 
   '/feeds/video-comments.{format}':
     get:

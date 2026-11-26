@@ -33,6 +33,7 @@ import { DOWNLOAD_PATHS, WEBSERVER } from '../initializers/constants.js'
 import {
   asyncMiddleware,
   buildRateLimiter,
+  checkVideoFollowConstraints,
   optionalAuthenticate,
   originalVideoFileDownloadValidator,
   userExportDownloadValidator,
@@ -81,6 +82,7 @@ downloadRouter.use(
   optionalAuthenticate,
   asyncMiddleware(videosDownloadValidator),
   videosGenerateDownloadValidator,
+  asyncMiddleware(checkVideoFollowConstraints),
   asyncMiddleware(downloadGeneratedVideoFile)
 )
 

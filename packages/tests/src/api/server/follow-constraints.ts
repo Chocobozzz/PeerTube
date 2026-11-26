@@ -1,6 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { HttpStatusCode, PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
+import { getAllFiles } from '@peertube/peertube-core-utils'
+import { HttpStatusCode, HttpStatusCodeType, PeerTubeProblemDocument, ServerErrorCode } from '@peertube/peertube-models'
 import {
   cleanupTests,
   createMultipleServers,
@@ -17,6 +18,19 @@ describe('Test follow constraints', function () {
   let video1UUID: string
   let video2UUID: string
   let userToken: string
+
+  async function generateDownload (options: {
+    videoId: string
+    token: string | null
+    expectedStatus?: HttpStatusCodeType
+  }) {
+    const { videoId, token, expectedStatus } = options
+
+    const video = await servers[0].videos.getWithToken({ id: videoId })
+    const file = getAllFiles(video)[0]
+
+    return servers[0].videos.generateDownload({ videoId, videoFileIds: [ file.id ], token, expectedStatus })
+  }
 
   before(async function () {
     this.timeout(240000)
@@ -53,6 +67,10 @@ describe('Test follow constraints', function () {
 
       it('Should get the remote video', async function () {
         await servers[0].videos.get({ id: video2UUID })
+      })
+
+      it('Should generate a download of the remote video', async function () {
+        await generateDownload({ videoId: video2UUID, token: null })
       })
 
       it('Should list local account videos', async function () {
@@ -154,6 +172,17 @@ describe('Test follow constraints', function () {
         expect(error.originUrl).to.contains(servers[1].url)
       })
 
+      it('Should generate a download of the local video', async function () {
+        await generateDownload({ videoId: video1UUID, token: null })
+      })
+
+      it('Should not generate a download of the remote video', async function () {
+        const body = await generateDownload({ videoId: video2UUID, token: null, expectedStatus: HttpStatusCode.FORBIDDEN_403 })
+        const error = JSON.parse(Buffer.from(body).toString()) as PeerTubeProblemDocument
+
+        expect(error.code).to.equal(ServerErrorCode.DOES_NOT_RESPECT_FOLLOW_CONSTRAINTS)
+      })
+
       it('Should list local account videos', async function () {
         const { total, data } = await servers[0].videos.listByAccount({
           token: null,
@@ -198,6 +227,10 @@ describe('Test follow constraints', function () {
 
       it('Should get the remote video', async function () {
         await servers[0].videos.getWithToken({ token: userToken, id: video2UUID })
+      })
+
+      it('Should generate a download of the remote video', async function () {
+        await generateDownload({ videoId: video2UUID, token: userToken })
       })
 
       it('Should list local account videos', async function () {

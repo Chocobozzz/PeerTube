@@ -1,7 +1,7 @@
 /* oxlint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { getHLS } from '@peertube/peertube-core-utils'
-import { HttpStatusCode, VideoDetails, VideoFile, VideoResolution } from '@peertube/peertube-models'
+import { HttpStatusCode, PeerTubeProblemDocument, VideoDetails, VideoFile, VideoResolution } from '@peertube/peertube-models'
 import { buildSUUID } from '@peertube/peertube-node-utils'
 import {
   ObjectStorageCommand,
@@ -167,6 +167,55 @@ describe('Test generate download', function () {
             ? HttpStatusCode.OK_200
             : HttpStatusCode.SERVICE_UNAVAILABLE_503
         })
+      }
+    })
+
+    it('Should return a 503 on non existing remote web video file', async function () {
+      this.timeout(120000)
+
+      await servers[0].config.enableTranscoding({ webVideo: true, hls: false, resolutions })
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'crash web video' })
+      await waitJobs(servers)
+
+      const video = await servers[1].videos.get({ id: uuid })
+      const file = video.files[0]
+
+      await remove(servers[0].getDirectoryPath('web-videos/' + basename(file.fileUrl)))
+
+      const body = await servers[1].videos.generateDownload({
+        videoId: uuid,
+        videoFileIds: [ file.id ],
+        expectedStatus: HttpStatusCode.SERVICE_UNAVAILABLE_503
+      })
+
+      const error = JSON.parse(Buffer.from(body).toString()) as PeerTubeProblemDocument
+      expect(error.detail).to.contain('status code 404')
+    })
+
+    it('Should not request again a remote host that is down', async function () {
+      this.timeout(120000)
+
+      const { uuid } = await servers[0].videos.quickUpload({ name: 'host down' })
+      await waitJobs(servers)
+
+      const video = await servers[1].videos.get({ id: uuid })
+      const file = video.files[0]
+
+      await servers[0].kill()
+
+      try {
+        for (const expectedDetail of [ 'ECONNREFUSED', 'recently failed' ]) {
+          const body = await servers[1].videos.generateDownload({
+            videoId: uuid,
+            videoFileIds: [ file.id ],
+            expectedStatus: HttpStatusCode.SERVICE_UNAVAILABLE_503
+          })
+
+          const error = JSON.parse(Buffer.from(body).toString()) as PeerTubeProblemDocument
+          expect(error.detail).to.contain(expectedDetail)
+        }
+      } finally {
+        await servers[0].run()
       }
     })
   })
