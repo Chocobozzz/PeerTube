@@ -70,8 +70,15 @@ Some of these may be optional (for example your new endpoint may not need to sen
    - Create the email template in `server/core/assets/email-templates`:
      + A text version is automatically generated from the HTML
      + Create a `html.hbs` Handlebars template in a new directory named after your template
-     + Wrap your content in the `base` partial (`{{#> base title=...}} ... {{/base}}`) that provides the common layout, greetings and signature. Partials live in `server/core/assets/email-templates/partials`
-     + Use the `t` helper to translate strings (`{{t "My text"}}`)
+     + Wrap your content in the `base` partial that provides the common layout, greetings and signature. Partials live in `server/core/assets/email-templates/partials`
+     + Use the `t` helper to translate strings:
+
+       ```handlebars
+       {{#> base title="My title"}}
+         <p>{{t "My text"}}</p>
+       {{/base}}
+       ```
+
    - If you need to associate a new table with `userNotification`:
      + Associate the new table in `UserNotificationModel` (don't forget the index)
      + Add the object property in the API model definition (`packages/models/src/users/user-notification.model.ts`)
