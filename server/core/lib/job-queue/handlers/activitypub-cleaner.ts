@@ -6,6 +6,7 @@ import {
   isLikeActivityValid
 } from '@server/helpers/custom-validators/activitypub/activity.js'
 import { sanitizeAndCheckVideoCommentObject } from '@server/helpers/custom-validators/activitypub/video-comments.js'
+import { retryTransactionWrapper, runTransaction } from '@server/helpers/database-utils.js'
 import { PeerTubeRequestError } from '@server/helpers/requests.js'
 import { AP_CLEANER } from '@server/initializers/constants.js'
 import { fetchAP } from '@server/lib/activitypub/activity.js'
@@ -33,13 +34,7 @@ async function processActivityPubCleaner (_job: Job) {
       // TODO: remove when https://github.com/mastodon/mastodon/issues/13571 is fixed
       if (rateUrl.includes('#')) return
 
-      const result = await updateObjectIfNeeded({ url: rateUrl, bodyValidator, updater, deleter })
-
-      if (result?.status === 'deleted') {
-        const { videoId, type } = result.data
-
-        await VideoModel.syncLocalRates(videoId, type, undefined)
-      }
+      await updateObjectIfNeeded({ url: rateUrl, bodyValidator, updater, deleter })
     }, { concurrency: AP_CLEANER.CONCURRENCY })
   }
 
@@ -132,27 +127,30 @@ function rateOptionsFactory () {
   return {
     bodyValidator: (body: any) => isLikeActivityValid(body) || isDislikeActivityValid(body),
 
-    updater: async (url: string, newUrl: string) => {
-      const rate = await AccountVideoRateModel.loadByUrl(url, undefined)
-      rate.url = newUrl
+    // Load and write in the same transaction
+    // A concurrent Like/Dislike activity may have changed the rate URL/type after old URL fetch, in which case the rate must not be touched
+    updater: (url: string, newUrl: string) => {
+      return retryTransactionWrapper(() => {
+        return runTransaction(async t => {
+          const rate = await AccountVideoRateModel.loadByUrl(url, t)
+          if (!rate) return
 
-      const videoId = rate.videoId
-      const type = rate.type
-
-      await rate.save()
-
-      return { videoId, type }
+          rate.url = newUrl
+          await rate.save({ transaction: t })
+        })
+      })
     },
 
-    deleter: async url => {
-      const rate = await AccountVideoRateModel.loadByUrl(url, undefined)
+    deleter: (url: string) => {
+      return retryTransactionWrapper(() => {
+        return runTransaction(async t => {
+          const rate = await AccountVideoRateModel.loadByUrl(url, t)
+          if (!rate) return
 
-      const videoId = rate.videoId
-      const type = rate.type
-
-      await rate.destroy()
-
-      return { videoId, type }
+          await rate.destroy({ transaction: t })
+          await VideoModel.syncLocalRates(rate.videoId, rate.type, t)
+        })
+      })
     }
   }
 }
@@ -163,6 +161,8 @@ function shareOptionsFactory () {
 
     updater: async (url: string, newUrl: string) => {
       const share = await VideoShareModel.loadByUrl(url, undefined)
+      if (!share) return undefined
+
       share.url = newUrl
 
       await share.save()
@@ -172,6 +172,7 @@ function shareOptionsFactory () {
 
     deleter: async url => {
       const share = await VideoShareModel.loadByUrl(url, undefined)
+      if (!share) return undefined
 
       await share.destroy()
 
@@ -186,6 +187,8 @@ function commentOptionsFactory () {
 
     updater: async (url: string, newUrl: string) => {
       const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
+      if (!comment) return undefined
+
       comment.url = newUrl
 
       await comment.save()
@@ -195,6 +198,7 @@ function commentOptionsFactory () {
 
     deleter: async url => {
       const comment = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideoAndReply(url)
+      if (!comment) return undefined
 
       await comment.destroy()
 
