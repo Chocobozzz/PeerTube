@@ -319,7 +319,10 @@ async function getVideoChannel (req: express.Request, res: express.Response) {
 
   scheduleActorRefreshIfNeeded(videoChannel.Actor)
 
-  return res.json(videoChannel.toFormattedJSON())
+  const json = videoChannel.toFormattedJSON()
+  json.totalViews = await VideoModel.getChannelPublicViews(videoChannel.id)
+
+  return res.json(json)
 }
 
 // ---------------------------------------------------------------------------

@@ -568,6 +568,13 @@ describe('Test video channels', function () {
     }
   })
 
+  it('Should display total views and creation date on the public channel endpoint', async function () {
+    const channel = await servers[0].channels.get({ channelName: servers[0].store.channel.name })
+
+    expect(channel.totalViews).to.equal(2)
+    expect(channel.createdAt).to.exist
+  })
+
   it('Should report correct videos count', async function () {
     const { data } = await servers[0].channels.listByAccount({ accountName, token: servers[0].accessToken, withStats: true })
 

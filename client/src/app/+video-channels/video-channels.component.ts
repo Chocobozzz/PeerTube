@@ -1,4 +1,4 @@
-import { NgClass, NgTemplateOutlet } from '@angular/common'
+import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common'
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChild } from '@angular/core'
 import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router'
 import { AuthService, Hotkey, HotkeysService, MarkdownService, MetaService, RestExtractor, ScreenService, ServerService } from '@app/core'
@@ -20,6 +20,7 @@ import { GlobalIconComponent } from '../shared/shared-icons/global-icon.componen
 import { CopyButtonComponent } from '../shared/shared-main/buttons/copy-button.component'
 import { AccountBlockBadgesComponent } from '../shared/shared-moderation/account-block-badges.component'
 import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle.pipe'
+import { NumberFormatterPipe } from '@app/shared/shared-main/common/number-formatter.pipe'
 
 @Component({
   templateUrl: './video-channels.component.html',
@@ -37,7 +38,9 @@ import { DisplayHandlePipe } from '@app/shared/shared-main/common/display-handle
     HorizontalMenuComponent,
     RouterOutlet,
     SupportModalComponent,
-    DisplayHandlePipe
+    DisplayHandlePipe,
+    NumberFormatterPipe,
+    DatePipe
   ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {
