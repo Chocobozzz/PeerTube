@@ -1,14 +1,37 @@
-FROM node:22-trixie-slim
+FROM node:22-trixie-slim AS build
 
 ARG ALREADY_BUILT=0
 
-# Install dependencies
+# Build tools are only needed here (native modules, pnpm), not in the final image
 RUN apt update \
- && apt install -y --no-install-recommends openssl ffmpeg python3 python3-pip ca-certificates gnupg gosu build-essential curl git va-driver-all \
- && gosu nobody true \
+ && apt install -y --no-install-recommends python3 ca-certificates build-essential \
  && rm /var/lib/apt/lists/* -fR
 
 RUN npm install -g pnpm
+
+WORKDIR /app
+COPY . /app
+
+# Install manually client dependencies to apply our network timeout option
+RUN if [ "${ALREADY_BUILT}" = 0 ]; then \
+    npm run install-node-dependencies \
+    && npm run build; \
+  else \
+    echo "Do not build application inside Docker because of ALREADY_BUILT build argument"; \
+  fi; \
+  rm -rf ./node_modules ./client/node_modules ./client/.angular \
+  && npm run install-node-dependencies -- --production \
+  && pnpm store prune \
+  # Client sources are not needed at runtime, only client/dist is served
+  && rm -rf ./client/src ./client/e2e ./client/.angular
+
+FROM node:22-trixie-slim
+
+# Install dependencies
+RUN apt update \
+ && apt install -y --no-install-recommends openssl ffmpeg python3 ca-certificates gnupg gosu curl va-driver-all \
+ && gosu nobody true \
+ && rm /var/lib/apt/lists/* -fR
 
 # Node images hardcode the node uid to 1000 so that number is not available.
 # The "peertube" user is created as a system account which selects a UID from
@@ -24,21 +47,8 @@ RUN groupadd -r -g ${PEERTUBE_GID:-${DEFAULT_PEERTUBE_GID}} peertube \
     && useradd -r -u ${PEERTUBE_UID:-${DEFAULT_PEERTUBE_UID}} -g peertube -m peertube
 
 # Install PeerTube
-COPY --chown=peertube:peertube . /app
+COPY --from=build --chown=peertube:peertube /app /app
 WORKDIR /app
-
-USER peertube
-
-# Install manually client dependencies to apply our network timeout option
-RUN if [ "${ALREADY_BUILT}" = 0 ]; then \
-    npm run install-node-dependencies \
-    && npm run build; \
-  else \
-    echo "Do not build application inside Docker because of ALREADY_BUILT build argument"; \
-  fi; \
-  rm -rf ./node_modules ./client/node_modules ./client/.angular \
-  && npm run install-node-dependencies -- --production \
-  && pnpm store prune
 
 USER root
 
