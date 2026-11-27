@@ -226,6 +226,7 @@ export class CustomMarkupService {
 
     const model = {
       onlyDisplayTitle: this.buildBoolean(data.onlyDisplayTitle) ?? false,
+      displayDate: this.buildBoolean(data.displayDate) ?? false,
       maxRows: this.buildNumber(data.maxRows) ?? -1,
 
       sort: data.sort || undefined,
