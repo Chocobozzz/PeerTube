@@ -102,6 +102,15 @@ export class SQLCommand {
     )
   }
 
+  async getActorField (url: string, field: string) {
+    const rows = await this.selectQuery<{ value: any }>(
+      `SELECT ${this.escapeColumnName(field)} AS value FROM "actor" WHERE url = :url`,
+      { url }
+    )
+
+    return rows[0]?.value
+  }
+
   setActorField (to: string, field: string, value: string) {
     return this.updateQuery(`UPDATE actor SET ${this.escapeColumnName(field)} = :value WHERE url = :to`, { value, to })
   }

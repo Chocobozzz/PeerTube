@@ -8,6 +8,7 @@ import { getAllContext } from './activity-pub-utils.js'
 import { jsonld } from './custom-jsonld-signature.js'
 import { isArray } from './custom-validators/misc.js'
 import { createLogger } from './logger.js'
+import { addIntegrityProof, getActorEd25519KeyUrl } from './peertube-integrity-proof.js'
 import { assertIsInWorkerThread } from './threads.js'
 
 const logger = createLogger()
@@ -121,14 +122,24 @@ function fixCompacted (original: any, compacted: any, depth = 1) {
 }
 
 export async function signJsonLDObject<T> (options: {
-  byActor: { url: string, privateKey: string }
+  byActor: { url: string, privateKey: string, ed25519PrivateKey?: string }
   data: T
   disableWorkerThreadAssertion?: boolean
   created?: Date
 }) {
-  const { byActor, data, disableWorkerThreadAssertion = false, created = new Date() } = options
+  const { byActor, disableWorkerThreadAssertion = false, created = new Date() } = options
 
   if (!disableWorkerThreadAssertion) assertIsInWorkerThread()
+
+  // FEP-8b32 integrity proof must be added before the legacy JSON-LD signature
+  // Remote servers remove the JSON-LD signature before checking the integrity proof
+  const data = byActor.ed25519PrivateKey
+    ? addIntegrityProof({
+      data: options.data,
+      privateKey: byActor.ed25519PrivateKey,
+      verificationMethod: getActorEd25519KeyUrl(byActor.url)
+    })
+    : options.data
 
   const signature = {
     type: 'RsaSignature2017',

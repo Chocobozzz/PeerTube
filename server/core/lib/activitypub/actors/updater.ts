@@ -10,7 +10,7 @@ import { checkUrlsSameHost, isLocalUrl } from '../url.js'
 import { getOrCreateAPOwner } from './get.js'
 import { updateActorImages } from './image.js'
 import { fetchActorFollowsCount } from './shared/index.js'
-import { getImagesInfoFromObject } from './shared/object-to-model-attributes.js'
+import { getEd25519KeyFromObject, getImagesInfoFromObject } from './shared/object-to-model-attributes.js'
 
 const logger = createLogger()
 
@@ -133,6 +133,11 @@ export class APActorUpdater {
     actorInstance.preferredUsername = actorObject.preferredUsername
     actorInstance.url = actorObject.id
     actorInstance.publicKey = actorObject.publicKey.publicKeyPem
+
+    const ed25519Key = getEd25519KeyFromObject(actorObject)
+    actorInstance.ed25519PublicKey = ed25519Key?.publicKey ?? null
+    actorInstance.ed25519KeyUrl = ed25519Key?.url ?? null
+
     actorInstance.followersCount = followersCount
     actorInstance.followingCount = followingCount
     actorInstance.inboxUrl = actorObject.inbox

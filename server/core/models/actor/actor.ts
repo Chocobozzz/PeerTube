@@ -1,8 +1,15 @@
 import { findAppropriateImage, forceNumber, maxBy } from '@peertube/peertube-core-utils'
-import { ActivityIconObject, ActorImageType, ActorImageType_Type, type ActivityPubActorType } from '@peertube/peertube-models'
+import {
+  ActivityIconObject,
+  ActivityPubMultikey,
+  ActorImageType,
+  ActorImageType_Type,
+  type ActivityPubActorType
+} from '@peertube/peertube-models'
 import { AttributesOnly } from '@peertube/peertube-typescript-utils'
 import { activityPubContextify } from '@server/helpers/activity-pub-utils.js'
 import { createPrivateAndPublicKeys } from '@server/helpers/peertube-crypto.js'
+import { ed25519PublicKeyToMultibase, getActorEd25519KeyUrl } from '@server/helpers/peertube-integrity-proof.js'
 import { getContextFilter } from '@server/lib/activitypub/context.js'
 import { ModelCache } from '@server/models/shared/model-cache.js'
 import { Op, QueryTypes, Transaction, col, fn, literal, where } from 'sequelize'
@@ -74,6 +81,9 @@ enum ScopeNames {
 export const unusedActorAttributesForAPI: (keyof AttributesOnly<ActorModel>)[] = [
   'publicKey',
   'privateKey',
+  'ed25519PublicKey',
+  'ed25519PrivateKey',
+  'ed25519KeyUrl',
   'inboxUrl',
   'outboxUrl',
   'sharedInboxUrl',
@@ -201,6 +211,23 @@ export class ActorModel extends SequelizeModel<ActorModel> {
   @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPrivateKeyValid, 'private key', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY.max))
   declare privateKey: string
+
+  // Ed25519 keys used for FEP-8b32 integrity proofs
+  @AllowNull(true)
+  @Is('ActorEd25519PublicKey', value => throwIfNotValid(value, isActorPublicKeyValid, 'Ed25519 public key', true))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY.max))
+  declare ed25519PublicKey: string
+
+  @AllowNull(true)
+  @Is('ActorEd25519PrivateKey', value => throwIfNotValid(value, isActorPrivateKeyValid, 'Ed25519 private key', true))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY.max))
+  declare ed25519PrivateKey: string
+
+  // Id of the Ed25519 key in the assertionMethod of remote actors (local actors use getActorEd25519KeyUrl())
+  @AllowNull(true)
+  @Is('ActorEd25519KeyUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'Ed25519 key url', true))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
+  declare ed25519KeyUrl: string
 
   @AllowNull(false)
   @Is('ActorFollowersCount', value => throwIfNotValid(value, isActorFollowersCountValid, 'followers count'))
@@ -756,6 +783,7 @@ export class ActorModel extends SequelizeModel<ActorModel> {
         owner: this.url,
         publicKeyPem: this.publicKey
       },
+      assertionMethod: this.buildAssertionMethod(),
       published: this.getCreatedAt().toISOString(),
 
       indexable: true,
@@ -789,6 +817,28 @@ export class ActorModel extends SequelizeModel<ActorModel> {
 
     return ActorModel.findAll(query)
       .then(accounts => accounts.map(a => a.sharedInboxUrl))
+  }
+
+  // Verification method of FEP-8b32 integrity proofs created by this actor
+  getEd25519KeyUrl (this: MActor) {
+    if (!this.ed25519PublicKey) return undefined
+    if (this.isLocal()) return getActorEd25519KeyUrl(this.url)
+
+    return this.ed25519KeyUrl
+  }
+
+  // FEP-521a: Ed25519 public key used to verify our FEP-8b32 integrity proofs
+  buildAssertionMethod (this: MActor): ActivityPubMultikey[] {
+    if (!this.ed25519PublicKey) return undefined
+
+    return [
+      {
+        id: this.getEd25519KeyUrl(),
+        type: 'Multikey',
+        controller: this.url,
+        publicKeyMultibase: ed25519PublicKeyToMultibase(this.ed25519PublicKey)
+      }
+    ]
   }
 
   getFollowingUrl () {

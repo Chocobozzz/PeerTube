@@ -22,7 +22,14 @@ export async function computeBody<T> (
 
     try {
       body = await signAndContextify({
-        byActor: { url: actorSignature.url, privateKey: actorSignature.privateKey },
+        byActor: {
+          url: actorSignature.url,
+          privateKey: actorSignature.privateKey,
+          // Reserved actors (deleted actors) don't have Ed25519 keys
+          ed25519PrivateKey: actorSignature instanceof ActorModel
+            ? actorSignature.ed25519PrivateKey
+            : undefined
+        },
         data: payload.body,
         contextType: payload.contextType,
         contextFilter: getContextFilter(),

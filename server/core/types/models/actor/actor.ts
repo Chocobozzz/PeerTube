@@ -28,7 +28,7 @@ export type MActorWithInboxes = Pick<ActorModel, 'sharedInboxUrl' | 'inboxUrl' |
 export type MActorSignature = MActorAccountChannelId
 
 export type MActorOutdated = Pick<MActor, 'id' | 'url' | 'createdAt' | 'updatedAt' | 'isLocal' | 'serverId' | 'isOutdated'>
-export type MActorLight = Omit<MActor, 'privateKey' | 'publicKey'>
+export type MActorLight = Omit<MActor, 'privateKey' | 'publicKey' | 'ed25519PrivateKey' | 'ed25519PublicKey'>
 
 // ############################################################################
 
@@ -151,6 +151,9 @@ export type MActorAPI = Omit<
   MActorDefault,
   | 'publicKey'
   | 'privateKey'
+  | 'ed25519PublicKey'
+  | 'ed25519PrivateKey'
+  | 'ed25519KeyUrl'
   | 'inboxUrl'
   | 'outboxUrl'
   | 'sharedInboxUrl'

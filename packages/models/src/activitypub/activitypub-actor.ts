@@ -1,3 +1,4 @@
+import { ActivityPubMultikey } from './activitypub-signature.js'
 import { ActivityIconObject, ActivityPubAttributedTo, ActivityUrlObject } from './objects/common-objects.js'
 
 export type ActivityPubActorType = 'Person' | 'Application' | 'Group' | 'Service' | 'Organization'
@@ -29,6 +30,9 @@ export interface ActivityPubActor {
     owner: string
     publicKeyPem: string
   }
+
+  // FEP-521a, keys used to verify FEP-8b32 integrity proofs
+  assertionMethod?: ActivityPubMultikey | ActivityPubMultikey[]
 
   // Lemmy attribute for groups
   postingRestrictedToMods?: boolean

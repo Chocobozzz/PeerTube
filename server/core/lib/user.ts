@@ -132,6 +132,8 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
     })
     accountCreated.Actor.publicKey = accountKeys.publicKey
     accountCreated.Actor.privateKey = accountKeys.privateKey
+    accountCreated.Actor.ed25519PublicKey = accountKeys.ed25519PublicKey
+    accountCreated.Actor.ed25519PrivateKey = accountKeys.ed25519PrivateKey
     await accountCreated.Actor.save({ transaction: t })
 
     userCreated.Account = accountCreated
@@ -141,6 +143,8 @@ export async function createUserAccountAndChannelAndPlaylist (parameters: {
 
     videoChannel.Actor.publicKey = channelKeys.publicKey
     videoChannel.Actor.privateKey = channelKeys.privateKey
+    videoChannel.Actor.ed25519PublicKey = channelKeys.ed25519PublicKey
+    videoChannel.Actor.ed25519PrivateKey = channelKeys.ed25519PrivateKey
     await videoChannel.Actor.save({ transaction: t })
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
