@@ -11,12 +11,13 @@ import {
   signAndContextify
 } from '@peertube/peertube-server/core/helpers/activity-pub-utils.js'
 import { buildDigest } from '@peertube/peertube-server/core/helpers/peertube-crypto.js'
+import { addIntegrityProof } from '@peertube/peertube-server/core/helpers/peertube-integrity-proof.js'
 import { signJsonLDObject } from '@peertube/peertube-server/core/helpers/peertube-jsonld.js'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '@peertube/peertube-server/core/initializers/constants.js'
 import { fakeContextFilter, makePOSTAPRequest, makeSignedPOSTAPRequest } from '@tests/shared/requests.js'
 import { SQLCommand } from '@tests/shared/sql-command.js'
 import { expect } from 'chai'
-import { createSign } from 'crypto'
+import { createSign, generateKeyPairSync } from 'crypto'
 import { readJsonSync } from 'fs-extra/esm'
 import { request } from 'http'
 
@@ -716,6 +717,222 @@ describe('Test ActivityPub security', function () {
       } catch (err) {
         expect(err.statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
       }
+    })
+  })
+
+  describe('When checking Object Integrity Proofs (FEP-8b32)', function () {
+    let server2ActorUrl: string
+    let server2Ed25519PrivateKey: string
+
+    let server3ActorUrl: string
+    let server3Ed25519PrivateKey: string
+
+    function generateEd25519PrivateKey () {
+      return generateKeyPairSync('ed25519', {
+        publicKeyEncoding: { type: 'spki', format: 'pem' },
+        privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+      }).privateKey
+    }
+
+    function buildActivity (actorUrl = server3ActorUrl) {
+      const activity = getAnnounceWithoutContext(servers[1])
+      activity.id += '/' + new Date().getTime()
+      activity.actor = actorUrl
+
+      return activity
+    }
+
+    // By default, the HTTP request is signed by server 2: activities of server 3 are forwarded by server 2 to server 1
+    async function postActivityWithProof (body: any, options: { withHTTPSignature?: boolean } = {}) {
+      const { withHTTPSignature = true } = options
+
+      const headers = buildGlobalHTTPHeaders(body, buildDigest)
+
+      try {
+        await makePOSTAPRequest(url, body, withHTTPSignature ? baseHttpSignature() : undefined, headers)
+
+        return { fail: false }
+      } catch (err) {
+        return { fail: true, statusCode: err.statusCode }
+      }
+    }
+
+    async function buildBodyWithProof (options: {
+      actorUrl?: string
+      privateKey?: string
+      verificationMethod?: string
+    } = {}) {
+      const {
+        actorUrl = server3ActorUrl,
+        privateKey = server3Ed25519PrivateKey,
+        verificationMethod = actorUrl + '#ed25519-key'
+      } = options
+
+      return addIntegrityProof({
+        data: await activityPubContextify(buildActivity(actorUrl), 'Announce', fakeContextFilter()),
+        privateKey,
+        verificationMethod
+      })
+    }
+
+    before(async function () {
+      server2ActorUrl = servers[1].url + '/accounts/peertube'
+      server2Ed25519PrivateKey = await sqlCommands[1].getActorField(server2ActorUrl, 'ed25519PrivateKey')
+
+      server3ActorUrl = servers[2].url + '/accounts/peertube'
+      server3Ed25519PrivateKey = await sqlCommands[2].getActorField(server3ActorUrl, 'ed25519PrivateKey')
+    })
+
+    it('Should have fetched the Ed25519 public keys of remote actors', async function () {
+      for (const [ actorUrl, privateKey, sqlCommand ] of [
+        [ server2ActorUrl, server2Ed25519PrivateKey, sqlCommands[1] ],
+        [ server3ActorUrl, server3Ed25519PrivateKey, sqlCommands[2] ]
+      ] as const) {
+        expect(privateKey).to.exist
+
+        const remotePublicKey = await sqlCommands[0].getActorField(actorUrl, 'ed25519PublicKey')
+        expect(remotePublicKey).to.exist
+        expect(remotePublicKey).to.equal(await sqlCommand.getActorField(actorUrl, 'ed25519PublicKey'))
+
+        expect(await sqlCommands[0].getActorField(actorUrl, 'ed25519KeyUrl')).to.equal(actorUrl + '#ed25519-key')
+      }
+    })
+
+    it('Should fail with a proof made with another key', async function () {
+      const body = await buildBodyWithProof({ privateKey: generateEd25519PrivateKey() })
+
+      const { fail, statusCode } = await postActivityWithProof(body)
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should fail with a proof made with a key of another actor', async function () {
+      const body = await buildBodyWithProof({ verificationMethod: servers[1].url + '/accounts/peertube#ed25519-key' })
+
+      const { fail, statusCode } = await postActivityWithProof(body)
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should fail with an altered body', async function () {
+      const body = await buildBodyWithProof()
+      body.object = servers[1].url + '/videos/watch/another-video'
+
+      const { fail, statusCode } = await postActivityWithProof(body)
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should succeed with a valid proof and without JSON-LD signature', async function () {
+      const body = await buildBodyWithProof()
+      expect(body['signature']).to.not.exist
+
+      const { fail } = await postActivityWithProof(body)
+      expect(fail).to.be.false
+    })
+
+    it('Should prefer the proof over an invalid JSON-LD signature', async function () {
+      const rsaPrivateKey = generateKeyPairSync('rsa', {
+        modulusLength: 2048,
+        publicKeyEncoding: { type: 'spki', format: 'pem' },
+        privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+      }).privateKey
+
+      const body = await signAndContextify({
+        byActor: { url: server3ActorUrl, privateKey: rsaPrivateKey, ed25519PrivateKey: server3Ed25519PrivateKey },
+        data: buildActivity(),
+        contextType: 'Announce',
+        contextFilter: fakeContextFilter(),
+        signerFunction: signJsonLDObjectWithoutAssertion
+      })
+
+      expect(body['proof']).to.exist
+      expect(body['signature']).to.exist
+
+      const { fail } = await postActivityWithProof(body)
+      expect(fail).to.be.false
+    })
+
+    it('Should reject a delivered activity with an invalid proof even if the HTTP signature is valid', async function () {
+      // Server 2 activity sent by server 2
+      const body = await buildBodyWithProof({ actorUrl: server2ActorUrl, privateKey: generateEd25519PrivateKey() })
+
+      const { fail, statusCode } = await postActivityWithProof(body)
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should ignore a proof with an unknown verification method', async function () {
+      const body = await buildBodyWithProof({
+        actorUrl: server2ActorUrl,
+        privateKey: generateEd25519PrivateKey(),
+        verificationMethod: server2ActorUrl + '#unknown-key'
+      })
+
+      // Fallback to the HTTP signature
+      const { fail } = await postActivityWithProof(body)
+      expect(fail).to.be.false
+    })
+
+    it('Should ignore an expired proof', async function () {
+      const body = await buildBodyWithProof({ actorUrl: server2ActorUrl, privateKey: generateEd25519PrivateKey() })
+      body.proof.expires = '2020-01-01T00:00:00Z'
+
+      // Fallback to the HTTP signature
+      const { fail } = await postActivityWithProof(body)
+      expect(fail).to.be.false
+    })
+
+    it('Should ignore a proof that is too old', async function () {
+      const body = await buildBodyWithProof({ actorUrl: server2ActorUrl, privateKey: generateEd25519PrivateKey() })
+
+      // Re-sign the activity with an old date
+      const oldBody = addIntegrityProof({
+        data: body,
+        privateKey: generateEd25519PrivateKey(),
+        verificationMethod: server2ActorUrl + '#ed25519-key',
+        created: new Date(Date.now() - ACTIVITY_PUB.CHECK_JSON_LD_SIGNATURE.MAX_AGE - 3600 * 1000)
+      })
+
+      // Fallback to the HTTP signature
+      const { fail } = await postActivityWithProof(oldBody)
+      expect(fail).to.be.false
+    })
+
+    it('Should not accept a forwarded actor update with a valid proof', async function () {
+      const activity = {
+        type: 'Update',
+        id: server3ActorUrl + '/updates/' + new Date().getTime(),
+        actor: server3ActorUrl,
+        to: [ 'https://www.w3.org/ns/activitystreams#Public' ],
+        object: { type: 'Application', id: server3ActorUrl }
+      }
+
+      const body = addIntegrityProof({
+        data: await activityPubContextify(activity, 'Actor', fakeContextFilter()),
+        privateKey: server3Ed25519PrivateKey,
+        verificationMethod: server3ActorUrl + '#ed25519-key'
+      })
+
+      // The proof is ignored, and the forwarded activity doesn't have a JSON-LD signature
+      const { fail, statusCode } = await postActivityWithProof(body)
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
+    })
+
+    it('Should accept a valid proof without HTTP signature', async function () {
+      const body = await buildBodyWithProof()
+
+      const { fail } = await postActivityWithProof(body, { withHTTPSignature: false })
+      expect(fail).to.be.false
+    })
+
+    it('Should reject an activity without HTTP signature and with an invalid proof', async function () {
+      const body = await buildBodyWithProof({ privateKey: generateEd25519PrivateKey() })
+
+      const { fail, statusCode } = await postActivityWithProof(body, { withHTTPSignature: false })
+      expect(fail).to.be.true
+      expect(statusCode).to.equal(HttpStatusCode.FORBIDDEN_403)
     })
   })
 

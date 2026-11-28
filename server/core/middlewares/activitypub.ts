@@ -2,6 +2,7 @@ import { ParsedDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { ActivityDelete, ActivityPubSignature, HttpStatusCode } from '@peertube/peertube-models'
 import { isActorDeleteActivityValid, isActorTypeValid } from '@server/helpers/custom-validators/activitypub/actor.js'
 import { isHTTPSignatureDigestValid, isHTTPSignatureVerified, parseHTTPSignature } from '@server/helpers/peertube-crypto.js'
+import { getSupportedIntegrityProofActorUrl, isIntegrityProofVerified } from '@server/helpers/peertube-integrity-proof.js'
 import { getRemoteErrorLogLevel } from '@server/helpers/remote-errors.js'
 import { getAPId } from '@server/lib/activitypub/activity.js'
 import { isActivityTypeAllowedFromMutedServer, isHostMutedByServer } from '@server/lib/blocklist.js'
@@ -15,6 +16,15 @@ const logger = createLogger('ap')
 
 export async function checkSignature (req: Request, res: Response, next: NextFunction) {
   try {
+    if (checkInboxRequest(req, res) !== true) return
+
+    // FEP-8b32: the top-level integrity proof takes precedence over the HTTP signature (that is then dismissed)
+    // and over the legacy JSON-LD signature
+    const integrityProofResult = await checkIntegrityProof(req, res)
+    if (integrityProofResult === 'response-sent') return
+    if (integrityProofResult === 'verified') return next()
+
+    // No integrity proof, or a proof we have to ignore: use the HTTP signature and the JSON-LD signature
     const httpSignatureChecked = await checkHttpSignature(req, res)
     if (httpSignatureChecked !== true) return
 
@@ -64,8 +74,6 @@ export function executeIfActivityPub (req: Request, res: Response, next: NextFun
 
 async function checkHttpSignature (req: Request, res: Response) {
   return wrapWithSpanAndContext('peertube.activitypub.checkHTTPSignature', async () => {
-    if (checkInboxRequest(req, res) !== true) return false
-
     // Compatibility with http-signature < v1.3
     const sig = req.headers['signature'] as string
     if (sig?.startsWith('Signature ') === true) req.headers['signature'] = sig.replace(/^Signature /, '')
@@ -212,6 +220,96 @@ function checkInboxRequest (req: Request, res: Response) {
 function isRequestForThisInstance (req: Request) {
   // Compare the raw header, because this is the one used by the signature
   return req.headers['host']?.toLowerCase() === WEBSERVER.HOST.toLowerCase()
+}
+
+// FEP-8b32 integrity proof verification
+// * "ignored": no proof, or a proof we must ignore (unsupported cryptosuite, expired or too old proof, verification method
+//   we can't resolve...) so the caller has to use other authentication methods
+// * "response-sent": the request has been rejected (invalid proof) or ignored (muted server)
+// * "verified": the activity is authenticated, res.locals.signature has been set
+async function checkIntegrityProof (req: Request, res: Response): Promise<'ignored' | 'response-sent' | 'verified'> {
+  return wrapWithSpanAndContext('peertube.activitypub.checkIntegrityProof', async () => {
+    if (!req.body?.proof) return 'ignored'
+
+    // Owner of the signed activity
+    const bodyActorId = getAPId(req.body.actor)
+    if (!bodyActorId) return 'ignored'
+
+    // Prevent replaying an old profile: actor updates must be delivered by the actor itself, with an HTTP signature
+    if (req.body.type === 'Update' && isActorTypeValid(req.body.object?.type)) return 'ignored'
+
+    const proofActorUrl = getSupportedIntegrityProofActorUrl(req.body)
+    if (!proofActorUrl) {
+      logger.debug('Ignoring unsupported integrity proof', { proof: req.body.proof })
+      return 'ignored'
+    }
+
+    // The controller of the verification method must be the owner of the activity
+    if (proofActorUrl !== bodyActorId) {
+      logger.warn('Integrity proof key %s does not belong to activity actor %s', proofActorUrl, bodyActorId)
+
+      return rejectIntegrityProof(res, 'Integrity proof key does not belong to the activity actor')
+    }
+
+    // The proof can be replayed: use the same validity period as JSON-LD signatures
+    if (isJsonLDSignatureDateValid(req.body.proof.created) !== true) {
+      logger.debug('Ignoring integrity proof of %s with an invalid or too old date.', proofActorUrl, { created: req.body.proof.created })
+      return 'ignored'
+    }
+
+    // Like the other authentication methods, ignore activities authored or delivered by a muted server
+    for (const actorUrl of new Set([ proofActorUrl, getUnverifiedHTTPSignatureActorUrl(req) ])) {
+      if (actorUrl && await ignoreIfMutedServer(req, res, actorUrl)) return 'response-sent'
+    }
+
+    logger.debug('Checking integrity proof of actor %s...', proofActorUrl)
+
+    let actor: Awaited<ReturnType<typeof getOrCreateAPActor>>
+
+    try {
+      actor = await getOrCreateAPActor(proofActorUrl)
+    } catch (err) {
+      logger.log(getRemoteErrorLogLevel(err), 'Cannot get actor %s to check the integrity proof, ignoring it', proofActorUrl, { err })
+      return 'ignored'
+    }
+
+    // The verification method must be in the assertionMethod of the actor
+    const verificationMethod = req.body.proof.verificationMethod
+    if (!actor.ed25519PublicKey || actor.getEd25519KeyUrl() !== verificationMethod) {
+      logger.debug('Cannot resolve verification method %s of actor %s, ignoring the integrity proof', verificationMethod, actor.url)
+      return 'ignored'
+    }
+
+    if (isIntegrityProofVerified({ data: req.body, publicKey: actor.ed25519PublicKey }) !== true) {
+      logger.warn('Integrity proof of actor %s is invalid', actor.url)
+
+      return rejectIntegrityProof(res, 'Integrity proof could not be verified')
+    }
+
+    res.locals.signature = { actor }
+    return 'verified'
+  })
+}
+
+function rejectIntegrityProof (res: Response, message: string) {
+  res.fail({ status: HttpStatusCode.FORBIDDEN_403, message })
+
+  return 'response-sent' as const
+}
+
+// The HTTP signature is not verified: only use it to ignore requests sent by a muted server, like checkHttpSignature does
+function getUnverifiedHTTPSignatureActorUrl (req: Request) {
+  if (!req.headers['signature']) return undefined
+
+  try {
+    const keyId = parseHTTPSignature(req).value?.keyId
+    if (!keyId) return undefined
+
+    const [ actorUrl ] = keyId.split('#')
+    return actorUrl
+  } catch {
+    return undefined
+  }
 }
 
 async function checkJsonLDSignature (req: Request, res: Response) {

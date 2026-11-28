@@ -281,7 +281,7 @@ export type ForAPIOptions = {
         include: [
           {
             attributes: {
-              exclude: [ 'privateKey', 'publicKey' ]
+              exclude: [ 'privateKey', 'publicKey', 'ed25519PrivateKey', 'ed25519PublicKey' ]
             },
             model: ActorModel.unscoped(),
             required: true,
@@ -305,7 +305,7 @@ export type ForAPIOptions = {
               {
                 model: ActorModel.unscoped(),
                 attributes: {
-                  exclude: [ 'privateKey', 'publicKey' ]
+                  exclude: [ 'privateKey', 'publicKey', 'ed25519PrivateKey', 'ed25519PublicKey' ]
                 },
                 required: true,
                 include: [

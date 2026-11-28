@@ -27,7 +27,7 @@ export async function activityPubContextify<T> (data: T, type: ContextType, cont
 }
 
 export async function signAndContextify<T> (options: {
-  byActor: { url: string, privateKey: string }
+  byActor: { url: string, privateKey: string, ed25519PrivateKey?: string }
   data: T
   contextType: ContextType | null
   contextFilter: ContextFilter
@@ -92,9 +92,51 @@ export function isActivityPubContentType (contentType: string) {
 // Private
 // ---------------------------------------------------------------------------
 
-type ContextValue = { [id: string]: string | { '@type': string, '@id': string } }
+type ContextValue = { [id: string]: string | { '@type': string, '@id': string, '@container'?: string } }
 
-const contextStore: { [id in ContextType]: (string | { [id: string]: string })[] } = {
+// FEP-8b32 (Object Integrity Proofs) and FEP-521a (Multikey) terms
+// Same definitions as https://w3id.org/security/data-integrity/v2 and https://w3id.org/security/multikey/v1, except that
+// "proof" doesn't use a "@graph" container: activities forwarded to other servers can still be checked
+// using their RsaSignature2017 signature (that is computed after the proof) by PeerTube versions that reject "@graph" payloads
+const integrityProofContext: ContextValue = {
+  DataIntegrityProof: 'https://w3id.org/security#DataIntegrityProof',
+  proof: {
+    '@id': 'https://w3id.org/security#proof',
+    '@type': '@id'
+  },
+  cryptosuite: {
+    '@id': 'https://w3id.org/security#cryptosuite',
+    '@type': 'https://w3id.org/security#cryptosuiteString'
+  },
+  proofPurpose: {
+    '@id': 'https://w3id.org/security#proofPurpose',
+    '@type': '@vocab'
+  },
+  proofValue: {
+    '@id': 'https://w3id.org/security#proofValue',
+    '@type': 'https://w3id.org/security#multibase'
+  },
+  verificationMethod: {
+    '@id': 'https://w3id.org/security#verificationMethod',
+    '@type': '@id'
+  },
+  assertionMethod: {
+    '@id': 'https://w3id.org/security#assertionMethod',
+    '@type': '@id',
+    '@container': '@set'
+  },
+  Multikey: 'https://w3id.org/security#Multikey',
+  controller: {
+    '@id': 'https://w3id.org/security#controller',
+    '@type': '@id'
+  },
+  publicKeyMultibase: {
+    '@id': 'https://w3id.org/security#publicKeyMultibase',
+    '@type': 'https://w3id.org/security#multibase'
+  }
+}
+
+const contextStore: { [id in ContextType]: (string | ContextValue)[] } = {
   Video: buildContext({
     Hashtag: 'as:Hashtag',
     category: 'sc:category',
@@ -420,7 +462,9 @@ function buildContext (contextValue?: ContextValue) {
     'https://www.w3.org/ns/activitystreams',
     'https://w3id.org/security/v1',
     {
-      RsaSignature2017: 'https://w3id.org/security#RsaSignature2017'
+      RsaSignature2017: 'https://w3id.org/security#RsaSignature2017',
+
+      ...integrityProofContext
     }
   ]
 

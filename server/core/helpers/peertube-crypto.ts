@@ -1,6 +1,6 @@
 import { ParsedDraftSignature, parseRequestSignature, verifyDraftSignature } from '@misskey-dev/node-http-message-signatures'
 import { HttpStatusCode } from '@peertube/peertube-models'
-import { generateRSAKeyPairPromise, sha256 } from '@peertube/peertube-node-utils'
+import { generateED25519KeyPairPromise, generateRSAKeyPairPromise, sha256 } from '@peertube/peertube-node-utils'
 import { timingSafeEqual } from 'crypto'
 import { Request } from 'express'
 import PQueue from 'p-queue'
@@ -48,10 +48,21 @@ function createUserKeysAndPasswordHash (password: string | undefined) {
   }, CRYPTO_PRIORITY.DEFAULT)
 }
 
-function generateKeys () {
-  logger.info('Generating a RSA key...')
+async function generateKeys () {
+  logger.info('Generating RSA and Ed25519 keys...')
 
-  return generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE)
+  const [ rsaKeys, ed25519Keys ] = await Promise.all([
+    generateRSAKeyPairPromise(PRIVATE_RSA_KEY_SIZE),
+    // Used for FEP-8b32 integrity proofs
+    generateED25519KeyPairPromise()
+  ])
+
+  return {
+    publicKey: rsaKeys.publicKey,
+    privateKey: rsaKeys.privateKey,
+    ed25519PublicKey: ed25519Keys.publicKey,
+    ed25519PrivateKey: ed25519Keys.privateKey
+  }
 }
 
 // ---------------------------------------------------------------------------

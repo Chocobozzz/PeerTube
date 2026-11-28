@@ -1,5 +1,7 @@
+import { arrayify } from '@peertube/peertube-core-utils'
 import { ActivityIconObject, ActivityPubActor, ActorImageType, ActorImageType_Type } from '@peertube/peertube-models'
 import { isActivityPubUrlValid } from '@server/helpers/custom-validators/activitypub/misc.js'
+import { ed25519PublicKeyFromMultibase } from '@server/helpers/peertube-integrity-proof.js'
 import { MIMETYPES } from '@server/initializers/constants.js'
 import { ActorModel } from '@server/models/actor/actor.js'
 import { FilteredModelAttributes } from '@server/types/index.js'
@@ -10,12 +12,17 @@ function getActorAttributesFromObject (
   followersCount: number,
   followingCount: number
 ): FilteredModelAttributes<ActorModel> {
+  const ed25519Key = getEd25519KeyFromObject(actorObject)
+
   return {
     type: actorObject.type,
     preferredUsername: actorObject.preferredUsername,
     url: actorObject.id,
     publicKey: actorObject.publicKey.publicKeyPem,
     privateKey: null,
+    ed25519PublicKey: ed25519Key?.publicKey ?? null,
+    ed25519PrivateKey: null,
+    ed25519KeyUrl: ed25519Key?.url ?? null,
     followersCount,
     followingCount,
     inboxUrl: actorObject.inbox,
@@ -67,8 +74,23 @@ function getActorDisplayNameFromObject (actorObject: ActivityPubActor) {
   return actorObject.name || actorObject.preferredUsername
 }
 
+// FEP-521a: find the Ed25519 key the actor uses to create FEP-8b32 integrity proofs
+// Non conformant keys are ignored
+function getEd25519KeyFromObject (actorObject: ActivityPubActor) {
+  for (const method of arrayify(actorObject.assertionMethod ?? [])) {
+    if (!method || typeof method !== 'object') continue
+    if (method.type !== 'Multikey' || method.controller !== actorObject.id || !isActivityPubUrlValid(method.id)) continue
+
+    const publicKey = ed25519PublicKeyFromMultibase(method.publicKeyMultibase)
+    if (publicKey) return { url: method.id, publicKey }
+  }
+
+  return undefined
+}
+
 export {
   getActorAttributesFromObject,
+  getEd25519KeyFromObject,
   getImagesInfoFromObject,
   getActorDisplayNameFromObject
 }

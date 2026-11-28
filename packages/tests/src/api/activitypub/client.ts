@@ -44,6 +44,18 @@ describe('Test ActivityPub', function () {
 
   let comment: VideoComment
 
+  function testAssertionMethod (object: ActivityPubActor) {
+    // FEP-521a key used to verify FEP-8b32 integrity proofs
+    const keys = arrayify(object.assertionMethod)
+    expect(keys).to.have.lengthOf(1)
+
+    expect(keys[0].id).to.equal(object.id + '#ed25519-key')
+    expect(keys[0].type).to.equal('Multikey')
+    expect(keys[0].controller).to.equal(object.id)
+    // Multibase base58btc of an Ed25519 public key
+    expect(keys[0].publicKeyMultibase).to.match(/^z6Mk[1-9A-HJ-NP-Za-km-z]{44}$/)
+  }
+
   async function testAccount (path: string, hasIcon: boolean) {
     const res = await makeActivityPubGetRequest(servers[0].url, path)
     const object = res.body as ActivityPubActor
@@ -55,6 +67,8 @@ describe('Test ActivityPub', function () {
 
     expect(object.indexable).to.be.true
     expect(object.discoverable).to.be.true
+
+    testAssertionMethod(object)
 
     if (hasIcon) {
       expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])
@@ -84,6 +98,8 @@ describe('Test ActivityPub', function () {
 
     expect(object.indexable).to.be.true
     expect(object.discoverable).to.be.true
+
+    testAssertionMethod(object)
 
     if (hasIcon) {
       expect(arrayify(object.icon).map(i => i.width)).to.deep.equal([ 120, 48, 600, 1500 ])
